@@ -2,154 +2,277 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3744518B90
-	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 19:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1C2519CF7
+	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 12:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240766AbiECR6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 May 2022 13:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S243927AbiEDKhJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 May 2022 06:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240758AbiECR6j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 13:58:39 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4AD3B29F;
-        Tue,  3 May 2022 10:55:06 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so6326194otk.2;
-        Tue, 03 May 2022 10:55:06 -0700 (PDT)
+        with ESMTP id S1344185AbiEDKhI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 06:37:08 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B748289A3;
+        Wed,  4 May 2022 03:33:32 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 4so1091125ljw.11;
+        Wed, 04 May 2022 03:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0PBmpaAj+ZXT8mUn2eUwOeYmdH/XcbpP8zVecGViTdI=;
+        b=hG76OyB0VeC9eY4XA9NZa/CK7BUq+DGCFmtxjjQZUdUVaNYr51WNiveosVb6gsJj2U
+         LCR5sLUuptvlfRFXQG8T7CtPL1UfPzdxKdmV69ViUX6IIZy7xGjPxeWy5nqGaFN8FaXQ
+         MZCeXvLL0tKbcq5mpUxCqy2AO6yT53Erts1qhh1QYJhEjSE0RwHc8dBMPqyIQcBYV0Xv
+         GD6Xro9X1heFABSsoiIX4sYGNOI5YkVzQjG+QwMSeVZf3cDu2dqXeuRa+or9ScgUgYS6
+         a4qDEXsNatHdE17kQ83wyGZpuJzvtaeaMEhVpgGToA/v2iseIpCe3Tni6uAwyyVDGQuu
+         fpPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZZo2FBQdHNqH/5Ul07nNend7TJWI/BleYJWuwRpwI2E=;
-        b=g57sxiLYIcwv8taAMGFQnzhlyluZeFsgK8DSRNAv+3rW/G38elIghDej4iWLPu6huo
-         +9K9qSPtfkrePjahJbuQ4mqgPZwkhKB/jfzj2afdAUUTO/Bm+IUSSHjBFzKx69JSQGeR
-         hzNIqAKeMbPb8VvL6M2a9JI6qhhoAHUz9180eTh3kxpfpfLBuFUAvqJvVHEYl7oF+QgQ
-         Ad8aQSFdSN/fZEEtUYXcVp4F4Bb3L9pqdxbxhuYV6QJMAaxsxuT6mhE+tbn1/TjuCoMj
-         B654KbaWcPqCJWq/anYmW8FXSMKnWCoZqANnsVSwFjaTooMYf1HzOVyW5PGV+mVFE1O1
-         hHvA==
-X-Gm-Message-State: AOAM533Vp/GdsdXRMrmpooEnQWjBsqsVufkFAw2Og6oI1EvQX57foEnS
-        yUVDVOm2eoKmlicJ11crtA==
-X-Google-Smtp-Source: ABdhPJwdaRnHFUgHPlJemaTsR7uzxfoyu0Qkat2ke0I3c1OwbntDBxhxcWdOIlhaLbPBYWN8g4E+xg==
-X-Received: by 2002:a9d:6c93:0:b0:605:d7a8:7930 with SMTP id c19-20020a9d6c93000000b00605d7a87930mr6294448otr.254.1651600505622;
-        Tue, 03 May 2022 10:55:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y3-20020a056870e50300b000e686d13884sm130797oag.30.2022.05.03.10.55.04
+         :mime-version:content-disposition:in-reply-to;
+        bh=0PBmpaAj+ZXT8mUn2eUwOeYmdH/XcbpP8zVecGViTdI=;
+        b=X4g6WM/JqzV7z0tP11In/V/yQVXRQiGPonpQ3Mr8MkHb8pOh+jEPHlO2zAjOnnw+AI
+         oBH2nvIERki5TzwJXT/eiREFfx2H+aEw9nxt+CsN3EQjhYDmb8WX7i1pZANeGRAtNeow
+         PxrN1Ypcu/N9XIYgdRkGXzoEpog9kbAUH3bq56GKHjbU4+Qrue9q03jPR/+oZ/1PX/ZH
+         0OhDfBLHCzWp0mWfDlDzOG3ZHfuQOh09xPlZKm1+zpVYtvmLBS8Qtlz0vEuB75HzIy9z
+         Y8yTizasYqXp3mXsg4C+1lom/p19ta1+iVe1Zdn41jT2kcgRBClK2k84V1xFewfZdVLg
+         zW/A==
+X-Gm-Message-State: AOAM530CJvDbQ8bDDTnNSsCKmqiP+hCfeo235d0sq0nb0ukOqn4VSknT
+        wMwrv3JCJ1oMxHKn8a9sy/c=
+X-Google-Smtp-Source: ABdhPJw2K2mG8jaHwj/A2FFBztH+CM8T45zIS//+uJZJYE3ZZFeY34+23nbk56mtIfBPYu+0UlBL2g==
+X-Received: by 2002:a2e:54b:0:b0:24f:1055:194c with SMTP id 72-20020a2e054b000000b0024f1055194cmr11835086ljf.106.1651660410400;
+        Wed, 04 May 2022 03:33:30 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id q28-20020a2eb4bc000000b0024f3d1daea0sm1632375ljm.40.2022.05.04.03.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:55:05 -0700 (PDT)
-Received: (nullmailer pid 3955241 invoked by uid 1000);
-        Tue, 03 May 2022 17:55:04 -0000
-Date:   Tue, 3 May 2022 12:55:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Tao Ren <rentao.bupt@gmail.com>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Subject: Re: [PATCH v6 03/11] spi: spi-mem: Convert Aspeed SMC driver to
- spi-mem
-Message-ID: <YnFseFBfe5eaIqg0@robh.at.kernel.org>
-References: <20220503060634.122722-1-clg@kaod.org>
- <20220503060634.122722-4-clg@kaod.org>
+        Wed, 04 May 2022 03:33:29 -0700 (PDT)
+Date:   Wed, 4 May 2022 13:33:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     "Srikandan, Nandhini" <nandhini.srikandan@intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "Pan, Kris" <kris.pan@intel.com>,
+        "Demakkanavar, Kenchappa" <kenchappa.demakkanavar@intel.com>,
+        "Zhou, Furong" <furong.zhou@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "Vaidya, Mahesh R" <mahesh.r.vaidya@intel.com>,
+        "A, Rashmi" <rashmi.a@intel.com>
+Subject: Re: [PATCH v4 3/3] spi: dw: Add support for master mode selection
+ for DWC SSI controller
+Message-ID: <20220504103327.vykfu2kffoarlyyv@mobilestation>
+References: <20220308103331.4116-1-nandhini.srikandan@intel.com>
+ <20220308103331.4116-4-nandhini.srikandan@intel.com>
+ <20220413130249.ueisqj5xs3komhmr@mobilestation>
+ <SJ0PR11MB58160274EABEA39BFA625F5485FA9@SJ0PR11MB5816.namprd11.prod.outlook.com>
+ <20220428143454.igdqqbbtufrzrizz@mobilestation.baikal.int>
+ <SJ0PR11MB58167AE8F52DD81B68AE91A885C19@SJ0PR11MB5816.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503060634.122722-4-clg@kaod.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <SJ0PR11MB58167AE8F52DD81B68AE91A885C19@SJ0PR11MB5816.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 03, 2022 at 08:06:26AM +0200, Cédric Le Goater wrote:
-> This SPI driver adds support for the Aspeed static memory controllers
-> of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
+On Mon, May 02, 2022 at 08:51:06AM +0000, Srikandan, Nandhini wrote:
 > 
->  * AST2600 Firmware SPI Memory Controller (FMC)
->    . BMC firmware
->    . 3 chip select pins (CE0 ~ CE2)
->    . Only supports SPI type flash memory
->    . different segment register interface
->    . single, dual and quad mode.
 > 
->  * AST2600 SPI Flash Controller (SPI1 and SPI2)
->    . host firmware
->    . 2 chip select pins (CE0 ~ CE1)
->    . different segment register interface
->    . single, dual and quad mode.
-> 
->  * AST2500 Firmware SPI Memory Controller (FMC)
->    . BMC firmware
->    . 3 chip select pins (CE0 ~ CE2)
->    . supports SPI type flash memory (CE0-CE1)
->    . CE2 can be of NOR type flash but this is not supported by the driver
->    . single, dual mode.
-> 
->  * AST2500 SPI Flash Controller (SPI1 and SPI2)
->    . host firmware
->    . 2 chip select pins (CE0 ~ CE1)
->    . single, dual mode.
-> 
->  * AST2400 New Static Memory Controller (also referred as FMC)
->    . BMC firmware
->    . New register set
->    . 5 chip select pins (CE0 ∼ CE4)
->    . supports NOR flash, NAND flash and SPI flash memory.
->    . single, dual and quad mode.
-> 
-> Each controller has a memory range on which flash devices contents are
-> mapped. Each device is assigned a window that can be changed at bootime
-> with the Segment Address Registers.
-> 
-> Each SPI flash device can then be accessed in two modes: Command and
-> User. When in User mode, SPI transfers are initiated with accesses to
-> the memory segment of a device. When in Command mode, memory
-> operations on the memory segment of a device generate SPI commands
-> automatically using a Control Register for the settings.
-> 
-> This initial patch adds support for User mode. Command mode needs a little
-> more work to check that the memory window on the AHB bus fits the device
-> size. It will come later when support for direct mapping is added.
-> 
-> Single and dual mode RX transfers are supported. Other types than SPI
-> are not supported.
-> 
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-> Tested-by: Joel Stanley <joel@jms.id.au>
-> Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Signed-off-by: Cédric Le Goater <clg@kaod.org>
-> ---
->  drivers/mtd/spi-nor/controllers/aspeed-smc.c  | 921 ------------------
->  drivers/spi/spi-aspeed-smc.c                  | 717 ++++++++++++++
->  .../devicetree/bindings/mtd/aspeed-smc.txt    |  51 -
+> > -----Original Message-----
+> > From: Serge Semin <fancer.lancer@gmail.com>
+> > Sent: Thursday, April 28, 2022 8:06 PM
+> > To: Srikandan, Nandhini <nandhini.srikandan@intel.com>
+> > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>; broonie@kernel.org;
+> > robh+dt@kernel.org; linux-spi@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; devicetree@vger.kernel.org;
+> > mgross@linux.intel.com; Pan, Kris <kris.pan@intel.com>; Demakkanavar,
+> > Kenchappa <kenchappa.demakkanavar@intel.com>; Zhou, Furong
+> > <furong.zhou@intel.com>; Sangannavar, Mallikarjunappa
+> > <mallikarjunappa.sangannavar@intel.com>; Vaidya, Mahesh R
+> > <mahesh.r.vaidya@intel.com>; A, Rashmi <rashmi.a@intel.com>
+> > Subject: Re: [PATCH v4 3/3] spi: dw: Add support for master mode selection
+> > for DWC SSI controller
+> > 
+> > On Wed, Apr 27, 2022 at 09:51:47AM +0000, Srikandan, Nandhini wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Serge Semin <fancer.lancer@gmail.com>
+> > > > Sent: Wednesday, April 13, 2022 6:33 PM
+> > > > To: Srikandan, Nandhini <nandhini.srikandan@intel.com>
+> > > > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>;
+> > > > broonie@kernel.org;
+> > > > robh+dt@kernel.org; linux-spi@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org; devicetree@vger.kernel.org;
+> > > > mgross@linux.intel.com; Pan, Kris <kris.pan@intel.com>;
+> > > > Demakkanavar, Kenchappa <kenchappa.demakkanavar@intel.com>;
+> > Zhou,
+> > > > Furong <furong.zhou@intel.com>; Sangannavar, Mallikarjunappa
+> > > > <mallikarjunappa.sangannavar@intel.com>; Vaidya, Mahesh R
+> > > > <mahesh.r.vaidya@intel.com>; A, Rashmi <rashmi.a@intel.com>
+> > > > Subject: Re: [PATCH v4 3/3] spi: dw: Add support for master mode
+> > > > selection for DWC SSI controller
+> > > >
+> > > > Hello Nandhini
+> > > >
+> > > > AFAICS this patch should go before
+> > > > [PATCH v4 2/3] spi: dw: Add support for Intel Thunder Bay SPI
+> > > > controller Thus you'd perform the DWC AHB SSI Master mode conversion
+> > > > first, then introduce the new controller support. Otherwise without
+> > > > this patch applied the DW SPI driver is most likely left broken for
+> > > > the Intel SPI controllers since you drop the DW_SPI_CAP_KEEMBAY_MST
+> > > > macro usage in [PATCH 2/3] while the new DW AHB SSI Master
+> > > > functionality is introduced in the next patch [PATCH 3/3]. So please
+> > > > convert the series to the harmless configuration on each git image state.
+> > > >
+> > > Sure, I will reorder patch 2/3 and 3/3 so that the master mode conversion
+> > happens first followed by new controller support.
+> > >
+> > > > On Tue, Mar 08, 2022 at 06:33:31PM +0800,
+> > > > nandhini.srikandan@intel.com
+> > > > wrote:
+> > > > > From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> > > > >
+> > > > > Add support to select the controller mode as master mode by
+> > > > > setting Bit 31 of CTRLR0 register. This feature is supported for
+> > > > > controller versions above v1.02.
+> > > > >
+> > > > > Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> > > > > ---
+> > > > >  drivers/spi/spi-dw-core.c | 4 ++--
+> > > > >  drivers/spi/spi-dw.h      | 7 +++----
+> > > > >  2 files changed, 5 insertions(+), 6 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> > > > > index ecea471ff42c..68bfdf2c4dc7 100644
+> > > > > --- a/drivers/spi/spi-dw-core.c
+> > > > > +++ b/drivers/spi/spi-dw-core.c
+> > > > > @@ -307,8 +307,8 @@ static u32 dw_spi_prepare_cr0(struct dw_spi
+> > > > > *dws,
+> > > > struct spi_device *spi)
+> > > > >  		if (spi->mode & SPI_LOOP)
+> > > > >  			cr0 |= DW_HSSI_CTRLR0_SRL;
+> > > > >
+> > > >
+> > > > > -		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+> > > > > -			cr0 |= DW_HSSI_CTRLR0_KEEMBAY_MST;
+> > > > > +		/* CTRLR0[31] MST */
+> > > > > +		cr0 |= DW_HSSI_CTRLR0_MST;
+> > > >
+> > > > Could you please conditionally set that flag here? That's what we
+> > > > agreed to do in v3:
+> > > > https://lore.kernel.org/linux-
+> > > > spi/20211116191542.vc42cxvflzn66ien@mobilestation/
+> > > > like this:
+> > > > +	/* CTRLR0[31] MST */
+> > > > +	if (dw_spi_ver_is_ge(dws, HSSI, 102A))
+> > > > +		cr0 |= DWC_HSSI_CTRLR0_MST;
+> > > >
+> > 
+> > > In case of Keem Bay, though the version of SPI controller is shown as 1.01a
+> > from the HW register, it still needs the MST BIT31 to be set in order for
+> > controller to work in master mode.
+> > > Also since the older versions of the controller which do not need the BIT31
+> > to be set, the bit was reserved. Hence there is no impact by setting this BIT31
+> > for older versions.
+> > > So, the condition check was removed.
+> > 
+> > I am completely confused. Earlier you said that both Keem Bay and Thunder
+> > bay had v1.02a DW AHB SSI IP-core:
+> > https://patchwork.kernel.org/project/spi-devel-
+> > general/patch/20210824085856.12714-3-nandhini.srikandan@intel.com/
+> > Now you say they are based on the different versions of the core.
+> > Please clarify.
+> > 
+> > -Sergey
+> > 
 
-This belongs with the binding patch. But then it is converting rather 
-than adding a binding. You should be converting the binding and then 
-adding to it (like adding 2600 support).
+> HW IP team informed us that the version used by Keem Bay SPI controller is 1.02a. But in the IP version register it is updated as 1.01a. We are checking with the HW IP team regarding this mismatch and this will be taken care of internally. Apologies for the confusions. I will add the conditional check as per your suggestion.
 
->  MAINTAINERS                                   |   1 +
->  drivers/mtd/spi-nor/controllers/Kconfig       |  10 -
->  drivers/mtd/spi-nor/controllers/Makefile      |   1 -
->  drivers/spi/Kconfig                           |  11 +
->  drivers/spi/Makefile                          |   1 +
->  8 files changed, 730 insertions(+), 983 deletions(-)
->  delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
->  create mode 100644 drivers/spi/spi-aspeed-smc.c
->  delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
+Ok. Waiting for v5 then.
+
+-Sergey
+
+> > >
+> > > > >  	}
+> > > > >
+> > > > >  	return cr0;
+> > > > > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h index
+> > > > > d5ee5130601e..2583b7314c41 100644
+> > > > > --- a/drivers/spi/spi-dw.h
+> > > > > +++ b/drivers/spi/spi-dw.h
+> > > > > @@ -23,7 +23,7 @@
+> > > > >  	((_dws)->ip == DW_ ## _ip ## _ID)
+> > > > >
+> > > >
+> > > > >  #define __dw_spi_ver_cmp(_dws, _ip, _ver, _op) \
+> > > > > -	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ver)
+> > > > > +	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ ##
+> > > > _ver)
+> > > >
+> > > > Nice catch. My mistake. Could you please move this change into a
+> > > > dedicated patch with the next fixes tag?
+> > > > Fixes: 2cc8d9227bbb ("spi: dw: Introduce Synopsys IP-core versions
+> > > > interface")
+> > > >
+> > 
+> > > Sure, I will convert this to a dedicated patch. Just for confirmation, the
+> > patch should be a separate patch with this title "Fixes: 2cc8d9227bbb ("spi:
+> > dw: Introduce Synopsys IP-core versions interface")"
+> > > and not part of the current patch set series.
+> > 
+> > You can add that patch to this series (better to the head of it). The title can
+> > be something like: "spi: dw: Fix IP-core versions macro".
+> > The tag needs to be added in the commit log above the Signed-off-by tag.
+> > 
+> Sure, I will add the patch to the head of this series and add the tag.
+> > -Sergey
+> > 
+> > > > >
+> > > > >  #define dw_spi_ver_is(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws,
+> > > > > _ip, _ver, ==)
+> > > > >
+> > > > > @@ -31,8 +31,7 @@
+> > > > >
+> > > > >  /* DW SPI controller capabilities */
+> > > > >  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+> > > > > -#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+> > > > > -#define DW_SPI_CAP_DFS32		BIT(2)
+> > > > > +#define DW_SPI_CAP_DFS32		BIT(1)
+> > > > >
+> > > > >  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-
+> > cores) */
+> > > > >  #define DW_SPI_CTRLR0			0x00
+> > > > > @@ -100,7 +99,7 @@
+> > > >
+> > > > >   * 0: SSI is slave
+> > > > >   * 1: SSI is master
+> > > > >   */
+> > > > > -#define DW_HSSI_CTRLR0_KEEMBAY_MST		BIT(31)
+> > > > > +#define DW_HSSI_CTRLR0_MST			BIT(31)
+> > > >
+> > > > Could you please drop the redundant comment above and join the macro
+> > > > with the DW_HSSI_* macros group?
+> > > >
+> > > Sure, I will remove the comment and group the macros.
+> > > > -Sergey
+> > > >
+> > > > >
+> > > > >  /* Bit fields in CTRLR1 */
+> > > > >  #define DW_SPI_NDF_MASK				GENMASK(15,
+> > 0)
+> > > > > --
+> > > > > 2.17.1
+> > > > >
