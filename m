@@ -2,111 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898B751A426
-	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 17:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C206A51AEB1
+	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 22:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352537AbiEDPko (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 May 2022 11:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S1377851AbiEDUN3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 May 2022 16:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346350AbiEDPko (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 11:40:44 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396561659C;
-        Wed,  4 May 2022 08:37:07 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so1157959otl.0;
-        Wed, 04 May 2022 08:37:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c+491uatbBNklSf07jZRBjGyT71SmXQky++32pxlRJE=;
-        b=VkHC6cbWYvI8BT0dTRdv5td4/bPuSH1yuEXRlNqufGbaTglRLua087tf/DW/mvT0rB
-         4uqCz4tUpLAovcOWSp/k5FY1jlxEMw+iBPo7ij+sz3cCVhPnb+H4g5svNRTT7ENHmWBf
-         6JTFFiYby9ceaoV8trQv8JLge1ULL19ncV6Q3RNlOur303nXvFaOhMbGZtDBJVzFuB1P
-         2chHastE1EN/LQ4C073vuP3+3PfKuRoiQ0oJB60O+IheZ+TIeGbqvOdP7hlUeXl8f0M1
-         Ms7v+IcHAionkbzOF0zJAJ9o2bhwlPPMuVqorKLk3Yf8x182xlCqxV1PaEp4Ygj+EqF8
-         Saqg==
-X-Gm-Message-State: AOAM531Geh1S1JW5+x/Flb13B86d3jJZqKuRLCrNi4XlxI+wAv/KY0QE
-        DBY9e615lZwoJP07vSrGeHqmL3M21g==
-X-Google-Smtp-Source: ABdhPJwOA2TQTPagMyY/d/b2379s4djD8KoNRcc2UmGBn4bQGTVBpdokxfhoi0xudJn30hCjsg4d8A==
-X-Received: by 2002:a05:6830:1e18:b0:605:f631:1bed with SMTP id s24-20020a0568301e1800b00605f6311bedmr7512441otr.137.1651678626482;
-        Wed, 04 May 2022 08:37:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x108-20020a9d37f5000000b006060322123csm5109675otb.12.2022.05.04.08.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:37:06 -0700 (PDT)
-Received: (nullmailer pid 1755199 invoked by uid 1000);
-        Wed, 04 May 2022 15:37:02 -0000
-Date:   Wed, 4 May 2022 10:37:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Message-ID: <YnKdnv69vueSURiU@robh.at.kernel.org>
-References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S233682AbiEDUN0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 16:13:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36964D251;
+        Wed,  4 May 2022 13:09:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C4A3B82834;
+        Wed,  4 May 2022 20:09:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83578C385A5;
+        Wed,  4 May 2022 20:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651694987;
+        bh=iStJpBX3VysI3BJkMa+4eOTaEzUvXsP2MKiLXZmdm98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a6do+IeWTo7YZXY9hCFP+MnNkgjGWY50ZpS0AWhM6oAsu9I+c4wxET54Hq+Q0TeXP
+         uHVy8+rL81TQDqXIjaD1in0PJQ2582iQsXCsfwxQMb33/OjiaBRBZToxiBJOClLi6Z
+         JzPiN0tndFSVfFlybc3GFh0KM9Sm+Pauy87H2f3NRlls0LWJOsEkwSwCal183C5noh
+         8CzCWVRhrb6d8NXC8BNZMUmxW+Nav2cknc8FCTIJM3nE6lgksnMPaW6u7H77gIZxEu
+         BGsuDwlLiw0byBpE9B+54XIHrP+2rhihmHfZwFIFlee4uocSs1kGTP3a2JTgjVxNK2
+         JRJELIn3oVNlw==
+Date:   Wed, 4 May 2022 22:09:43 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 1/4] powerpc/52xx: Remove dead code, i.e.
+ mpc52xx_get_xtal_freq()
+Message-ID: <YnLdh96Z6S6IcaL2@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="++MSw5fknTzpn73A"
 Content-Disposition: inline
-In-Reply-To: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
-> interconnects.  This fixes dtbs_check warnings like:
-> 
->   sm8450-qrd.dtb: geniqup@8c0000: spi@880000:interconnect-names: ['qup-core', 'qup-config'] is too short
 
-I'm confused. A length of 2 was already allowed before this change.
+--++MSw5fknTzpn73A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> Fixes: 5bdcae1fe1c5 ("spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Fix for a commit in MSM/Bjorn's tree.
-> ---
->  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml          | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> index e2c7b934c50d..47e1b3ee8b1b 100644
-> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> @@ -45,12 +45,15 @@ properties:
->        - const: rx
->  
->    interconnects:
-> -    maxItems: 2
-> +    minItems: 2
-> +    maxItems: 3
->  
->    interconnect-names:
-> +    minItems: 2
->      items:
->        - const: qup-core
->        - const: qup-config
-> +      - const: qup-memory
->  
->    interrupts:
->      maxItems: 1
-> -- 
-> 2.32.0
-> 
-> 
+
+Wow, MPC5200, that was a long time ago for me...
+
+> It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
+
+Looks like it.
+
+Reviewed-by: Wolfram Sang <wsa@kernel.org>
+
+
+--++MSw5fknTzpn73A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy3XEACgkQFA3kzBSg
+KbbTjRAApraHeAflyhzKaB4HdS0SS02AfYrsPj4tQGg+OdY7fGIgt0ZNCwI8CTsE
+A+PYJ4XvUcIsL5q2RFeWnsiXSeGRLiui2WLVBILJoiVfILFsR01R6QTy6OOlwIzO
+Nx5QSUgwHQB7ODDVbjOvp8pQ8FSFvqa+TM3lOJ6zWnG4d1sSSUoQnb8iXWnQFBM1
+L6wpf1VRjbKYkLyO8/omDQDGJQd2BAn9rG1jF3pEmVEmMGY57wzaRmpyU49KnPRP
+VuKtBXNrUbZXyvk4h7IEOhvI6tSD15uOrqJ/eeSfYcDLk3amS2TTvqwHaiuZCe1E
+9PJB8ch296Sr+/LCdw3nMsLZY0v5NmrthY6K7AMZCN3eFkebsSnxkbcK1BXnuKKQ
+YHKw8BafHhoQUrYxcWanNuOp2qjVodSurENsIE4s5wjpVP9EKp562+nWsrWtHns0
+poXhMlPDYldvRG/IciRnG5p/XiMeKdX2ud4OdXgTVHulLxa8AMQEap0nVwwXFjTL
+IcP3m7MEo8L5OhGsHAaw9G/VLVutLoBnyWk3oLXdSqpRPBov9r+oyZnVV5q7z8Gz
+gjejj4ciQRm08iHn9eqJ1hvHHk2erpc1aP6takxN+owEbVSAqJpypk4B3EcAhdGp
+P3VVm1YqMbiPpzP2LhWYS8ajAwFUEuyRrJSsPTzjA34uSVu4jHI=
+=2zt3
+-----END PGP SIGNATURE-----
+
+--++MSw5fknTzpn73A--
