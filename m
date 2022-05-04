@@ -2,90 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A28251AECD
-	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 22:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8E751AFD6
+	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 22:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377918AbiEDUPD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 May 2022 16:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S1378387AbiEDU6h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 May 2022 16:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377922AbiEDUPA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 16:15:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96E414020;
-        Wed,  4 May 2022 13:11:23 -0700 (PDT)
+        with ESMTP id S1378384AbiEDU6f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 16:58:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D92C515AD;
+        Wed,  4 May 2022 13:54:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83D49B828AA;
-        Wed,  4 May 2022 20:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A07CC385A4;
-        Wed,  4 May 2022 20:11:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 536BA618BC;
+        Wed,  4 May 2022 20:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D266C385A4;
+        Wed,  4 May 2022 20:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651695081;
-        bh=Qg91tBcD1wN6wCVZbNcaVdgDsBFAx4BdW5qUv0clohE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k0nauOa1Bj1fH+nV/tCxgCm53/f50EqRFFbXX4UmFurst9ceXSnSwFo6MIkAxragh
-         5yQYzhmG8wkpd+8XsxO/UnET+q5d4bTEcRmHdIzQnV26/rAu3E5EzlLpm68LJwnnRo
-         lYxNg9htFSZF5EpfdzVr99/HpOlGOq06xKt5uFJDchy2D3xpOLl+wqOOc/4n45ledU
-         xv75a9RbRrPehvAAge7KNeOz0uOBKXeIYEMszDQ6nfZ/qjRuG0Lcm+U+vwdtnpNmLy
-         0IR3U+IyFWaJ3IHq89KI2T09mhKcBa8U25/bKRyHdLTTLQhIpR50bnUIqRKtrl0ax3
-         ACIXPXPsjTiDA==
-Date:   Wed, 4 May 2022 22:11:18 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
- mpc5xxx_get_bus_frequency() to use fwnode
-Message-ID: <YnLd5lvmlgv6LmuU@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
- <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+        s=k20201202; t=1651697697;
+        bh=5SzYt/sdxGyX0aFu3eWeIhd+krhgteWDOIQ/tDpca38=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=VaHXLHTDEvly3pOdOXT1eGVx6pr1XRcWjbzxrN6lgW8HRvQqUrt0eT7Pn5GfYTGxM
+         fHySfJ+iYz9KPkUi8n20pr+CWSY77t+TnkACcqS93b8Dan/ya/+rFVcmq4mcZqpebZ
+         TqkAXOl9mSZUqXw4wN7tGXXJzDAm3ZRmbRo2CnEgBD5JaQoloBwt4t6QP0c980ke7Y
+         valwEjh7Awtbx+l5FliNbfi1mqUZG3030Qr3isS01311g2fNbTYg0g4Ph5ua4GID7s
+         aqpXjlUWmV2iFXYmQCwTlf3CLbZyeByTf5361r/1DbHzuFpsWh8dG6FL96n038dS9h
+         r0qgWcwx920RA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, andreazanottifo@gmail.com,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20220502111300.24754-1-andreazanottifo@gmail.com>
+References: <20220502111300.24754-1-andreazanottifo@gmail.com>
+Subject: Re: [PATCH] spi: omap2-mcspi: add support for interword delay
+Message-Id: <165169769677.1749597.11425165483130918572.b4-ty@kernel.org>
+Date:   Wed, 04 May 2022 21:54:56 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5kYQ0ef1AFwxM1LW"
-Content-Disposition: inline
-In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -96,41 +52,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 2 May 2022 13:13:00 +0200, Andrea Zanotti wrote:
+> The module omap2-mcspi does not support the interword delay
+> parameter present in the spi transfer. On one side, if the module
+> is instructed to use the dma, this parameter is correctly ignored.
+> However, without the usage of the dma, that parameter should be
+> used.
+> 
+> The patch introduce the handling of such delay in the omap2-mcspi
+> module, using standard spi_delay struct. The patch has been tested
+> using as benchmark a DM3730.
+> 
+> [...]
 
---5kYQ0ef1AFwxM1LW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, May 04, 2022 at 04:44:47PM +0300, Andy Shevchenko wrote:
-> Switch mpc5xxx_get_bus_frequency() to use fwnode in order to help
-> cleaning up other parts of the kernel from OF specific code.
->=20
-> No functional change intended.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for the I2C part
+Thanks!
 
+[1/1] spi: omap2-mcspi: add support for interword delay
+      commit: 2cd757e6292e23b898791d71978c6edf60a251ad
 
---5kYQ0ef1AFwxM1LW
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy3eUACgkQFA3kzBSg
-KbZC2Q/9HAv5wUkTBzMP5daIIk3LyMvlDsqR6gGOTpeHvdPasQpBF8ncPQZ8Hxjv
-co5o3/oPS/t/Shwsks9LfPG1YkbqBjE6ETFyJEHeRaw4I9kxoGkkBZWLlB5DTSm+
-Ms19PVmw9n4YtbryC4f9hp9oJORb581zX6PCbjHtt3JmJwc/xZZRx5rHvHLFMdRP
-OiQIzpvpSPLC918gyiRWBJ2dTxoJ4C583qKzMtYm7bNHq+2Rh+aQ6tAwuKSfGOe/
-804ae0+AH9V6GH+xr0cXfNULvOW3K8YWYWeGWBJoLfsqWOQWW18bIqJibJEyfu8u
-1JNQDJHLzjozQpQmIktz+a00eabM3KLGRM3Yotg105GYl8iFhJ7OvCL03jdTTlVV
-87lzkfi3vO0IrbG2GdUsHoE8XcoXa5HbnCMhoWppczIFaxvFlNDmO8cyu78O0u11
-fDA7SVtfnYpTyZS4LvC5PNXxNrN2NVyGyLklQopXHzz0FXslFidsjALTmWvpUYbg
-xZAS+y42lmIaBMzfeqehu5vSL1VGwExjfSPPLdQfuB0zxdjboUEsop6SgKN6nBro
-bEsVptHCUWgF6d/zGaF5LaO6ydAPHwzqmfAJeEy3fDTDBrcRDciXZNf5FtYi5eP9
-jDdX2vtBqp7uwKC4fEEuIwWQoz7cmyjxI4pHaxYi4oqiDGYNp8Y=
-=F8ka
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---5kYQ0ef1AFwxM1LW--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
