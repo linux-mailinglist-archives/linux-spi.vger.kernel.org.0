@@ -2,89 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0F151C243
-	for <lists+linux-spi@lfdr.de>; Thu,  5 May 2022 16:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CB251C3E2
+	for <lists+linux-spi@lfdr.de>; Thu,  5 May 2022 17:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347208AbiEEOXj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 May 2022 10:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S1379571AbiEEPaA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 May 2022 11:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiEEOXi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 May 2022 10:23:38 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74835A581;
-        Thu,  5 May 2022 07:19:59 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id k25-20020a056830169900b00605f215e55dso3006401otr.13;
-        Thu, 05 May 2022 07:19:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DFmU3bB4XPToeXRmwdLwJrVFlyKt5rvtvjjuZuWJjM0=;
-        b=ARkgZ0w+t7zvG5RrJk7DvDiKpWRjD4AyLbUefxeADQd8hKAfqYFkWILihyMPoyfisA
-         cvpawxzToZ3KZLnswWKLc80Puuyc8gDz7jy+CAZqkFb2bXJU3IqlNo54r6o0uywt+I0s
-         uF2yIzd3X16WIf/vafvmywTwUm/X69HoJ6opy/kQBKZdTwzn+JNXyOWGqpXiyJM0+9PT
-         wsD4FHEJ4zFR54bVgakIia6gbFLUERgWpgI0itEhSBroOHGoPcAuRF9/E+LdDF5ETndg
-         pwGNDrK6RhxnJtYlCCMVg+TGZlfrsMi2E38Y9EGfomVI5tA2jb5uHNRRlGR19w8hgLIF
-         rIdw==
-X-Gm-Message-State: AOAM532FGdNNqYrlWQBmzTNINPWVXdcQGWtcL84m9PPzquTwRIP+eUyb
-        D2rxii5brlDWZOgebYRvkw==
-X-Google-Smtp-Source: ABdhPJww82Ke8WD/s2vuFaLiYXbwCJuO8OUCgIhRKNz28znZv+E5dG5ObG4va7gRi4szpcFYNLF9nA==
-X-Received: by 2002:a9d:6e83:0:b0:605:4a01:1d8c with SMTP id a3-20020a9d6e83000000b006054a011d8cmr9446080otr.174.1651760398945;
-        Thu, 05 May 2022 07:19:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b000e92295f8acsm543810oap.2.2022.05.05.07.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 07:19:58 -0700 (PDT)
-Received: (nullmailer pid 3822543 invoked by uid 1000);
-        Thu, 05 May 2022 14:19:57 -0000
-Date:   Thu, 5 May 2022 09:19:57 -0500
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S1344763AbiEEP36 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 May 2022 11:29:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D82182B;
+        Thu,  5 May 2022 08:26:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4BE961D11;
+        Thu,  5 May 2022 15:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A0F4C385A8;
+        Thu,  5 May 2022 15:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651764378;
+        bh=0k1tO5axREF/4p/FKv3ZbViryXBR4aYYf04SAPimw2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RUOT97NqXTW5U1EvAcCEkgmVXpdTPe8VucAPSAymvGiXQZ2hoxqLyvPeS2HgLGrBh
+         i1OVA/b5AZStqoFiLrbgQbd00yJg0AOOtQhBYavAxVGEZCigcVBAclXSmtsg5Zd+Xd
+         mVvIW9mIxcIF91ensVGsOhlZqqqWf5cPJfRbgBXt2WOmV4wKRISyDeOA0Bsp+YVS/G
+         401eP7/4CSNTwlZqY7lZTNL3cBdk9H5vyRl5pkzpVIa75h2SAvWEEwiCRUy2K2f6Qc
+         LHyYPpcTsoV+hZazK+7qwd1cC6s4LiFzKXjSzaA3hJkFzCSIekR9tm7q0jV9w5sCjR
+         A51apK5XBwXFg==
+Date:   Thu, 5 May 2022 16:26:12 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH qcom v2] spi: dt-bindings: qcom,spi-geni-qcom: allow
- three interconnects
-Message-ID: <YnPdDY9E2EFoonHK@robh.at.kernel.org>
-References: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
+ interconnects
+Message-ID: <YnPslKE9klw/Mair@sirena.org.uk>
+References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+ <YnKVLxmz0hhQGNzI@sirena.org.uk>
+ <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
+ <YnKZyCogvngR7zfc@sirena.org.uk>
+ <a099eb33-91a0-0262-f6c0-a77dc7aec146@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bFKPx0PKehbSOEUY"
 Content-Disposition: inline
-In-Reply-To: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <a099eb33-91a0-0262-f6c0-a77dc7aec146@linaro.org>
+X-Cookie: Real programs don't eat cache.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 05 May 2022 08:52:33 +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come also with three
-> interconnects.  This fixes dtbs_check warnings like:
-> 
->   sm8450-qrd.dtb: spi@a98000: interconnects: [[46, 1, 0, 46, 4, 0], [47, 2, 0, 48, 12, 0], [49, 1, 0, 50, 1, 0]] is too long
->   sm8450-qrd.dtb: spi@a98000: interconnect-names: ['qup-core', 'qup-config', 'qup-memory'] is too long
-> 
-> Fixes: 5bdcae1fe1c5 ("spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Fix for a commit in MSM/Bjorn's tree.
-> 
-> Changes since v1:
-> 1. Correct error msg (Rob).
-> ---
->  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml          | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--bFKPx0PKehbSOEUY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, May 05, 2022 at 11:00:26AM +0200, Krzysztof Kozlowski wrote:
+
+> I don't know, Mark. The confusion was not intended. The second patch in
+> the set depended on SPI patch, so probably after three weeks Bjorn just
+> took entire set.
+
+> https://lore.kernel.org/all/20220404064017.68634-1-krzysztof.kozlowski@linaro.org/
+
+Ah, so this was part of the pile where I was waiting for Bjorn to say if
+he was OK with adding him as a maintainer.  Bjorn, please don't just
+apply patches without some sort of handshake when people are clearly
+around and replying to mail - it causes confusion like this :(
+
+--bFKPx0PKehbSOEUY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJz7JQACgkQJNaLcl1U
+h9BI8Af+NVvL8/LWcbqmAd3UbedPPsrdmc4E7WXxCKiDCeeuC1g2+eb4Fw6w14rV
+4wtO1EZutitVEnvnAcw4V6prNrlHF3JCQxZyJiAPgmXzOf4FZCMPdsxOKLwMM8cj
+hpwl7i5dNyCnymFC08V4ZkRsuo/7QaLpqaola7PuuMCckdcNco801AG5tGoJAhaK
+iTXU/hXLxoW2xK/u/q17Cow8bawsw44X/M3WmTrmjlBA12VwAFZUBW41UVfvU/o9
+C40BBVE66Jz44aOFVA/wwZKFykCfKZLKBF8qgQmZ5WuTBVUM8v9ExOhLZl0JrqPm
+OM/8eUYLRm0bx9dni4uCzL1wh1KSlQ==
+=r72j
+-----END PGP SIGNATURE-----
+
+--bFKPx0PKehbSOEUY--
