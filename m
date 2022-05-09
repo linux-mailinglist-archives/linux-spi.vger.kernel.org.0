@@ -2,87 +2,196 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AA9520186
-	for <lists+linux-spi@lfdr.de>; Mon,  9 May 2022 17:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D938B5203E0
+	for <lists+linux-spi@lfdr.de>; Mon,  9 May 2022 19:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238492AbiEIPtz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 May 2022 11:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S239826AbiEISAc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 May 2022 14:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238533AbiEIPtu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 May 2022 11:49:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865C0EAB87;
-        Mon,  9 May 2022 08:45:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S239820AbiEISAb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 May 2022 14:00:31 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D7B54038;
+        Mon,  9 May 2022 10:56:35 -0700 (PDT)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4Kxpl33zStz4xcY;
+        Tue, 10 May 2022 03:56:31 +1000 (AEST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28A4CB8172F;
-        Mon,  9 May 2022 15:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72BBC385B1;
-        Mon,  9 May 2022 15:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652111151;
-        bh=g20W+7CygqgPEo++WiNMlzpLIcKmzLF46O4/qXIfbeE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=PXTH2xOmwnr8cyQfqMEkeiAKskYwcZvW+kQVPF7iVwN7rovAaa6Uj6CtNTOinXz1n
-         Fugmy0ob0HHRMcWBfGBhEWnqNbeOXs8YGTPysL7VVHB+XZR6Hq4Kup1rex96Lt5Pv3
-         o246cwOl3lWlZ6IBrD1P/JZ0lekB9E4QFkoHR0GBObDqN/AaDAMZxeGh9kdFYU6Ksy
-         6XpqRo1B1yZIvT+5ArLYYWJiH6ZN3W1YtnQ9J5TcgVj4BC30zCx0WQZp4MHEPXjyEr
-         38U9lpEWlcWO/lio3Je8MGdpxWGGjD80qswC7btwvcZVuahdDSfMbqnDdo1qaszUx8
-         YzZYwDABJ/7Ow==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, yangyingliang@huawei.com,
-        linux-kernel@vger.kernel.org
-Cc:     han.xu@nxp.com, Ashish.Kumar@nxp.com
-In-Reply-To: <20220505093954.1285615-1-yangyingliang@huawei.com>
-References: <20220505093954.1285615-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
-Message-Id: <165211115053.774621.2081571560850333629.b4-ty@kernel.org>
-Date:   Mon, 09 May 2022 16:45:50 +0100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kxpkr500lz4xVP;
+        Tue, 10 May 2022 03:56:20 +1000 (AEST)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH v7 00/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
+Date:   Mon,  9 May 2022 19:56:05 +0200
+Message-Id: <20220509175616.1089346-1-clg@kaod.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 5 May 2022 17:39:54 +0800, Yang Yingliang wrote:
-> It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
-> we need check the return value.
-> 
-> 
+Hi,
 
-Applied to
+This series adds a new SPI driver using the spi-mem interface for the
+Aspeed static memory controllers of the AST2600, AST2500 and AST2400
+SoCs.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+ * AST2600 Firmware SPI Memory Controller (FMC)
+ * AST2600 SPI Flash Controller (SPI1 and SPI2)
+ * AST2500 Firmware SPI Memory Controller (FMC)
+ * AST2500 SPI Flash Controller (SPI1 and SPI2)
+ * AST2400 New Static Memory Controller (also referred as FMC)
+ * AST2400 SPI Flash Controller (SPI)
 
-Thanks!
+It is based on the current OpenBMC kernel driver [1], using directly
+the MTD SPI-NOR interface and on a patchset [2] previously proposed
+adding support for the AST2600 only. This driver takes a slightly
+different approach to cover all 6 controllers.
 
-[1/1] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
-      commit: a2b331ac11e1cac56f5b7d367e9f3c5796deaaed
+It does not make use of the controller register disabling Address and
+Data byte lanes because is not available on the AST2400 SoC. We could
+introduce a specific handler for new features available on recent SoCs
+if needed. As there is not much difference on performance, the driver
+chooses the common denominator: "User mode" which has been heavily
+tested in [1]. "User mode" is also used as a fall back method when
+flash device mapping window is too small.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Problems to address with spi-mem were the configuration of the mapping
+windows and the calibration of the read timings. The driver handles
+them in the direct mapping handler when some knowledge on the size of
+the flash device is know. It is not perfect but not incorrect either.
+The algorithm is one from [1] because it doesn't require the DMA
+registers which are not available on all controllers.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Direct mapping for writes is not supported (yet). I have seen some
+corruption with writes and I preferred to use the safer and proven
+method of the initial driver [1]. We can improve that later.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+The driver supports Quad SPI RX transfers on the AST2600 SoC but it
+didn't have the expected results. Therefore it is not activated yet.
+There are some issues on the pinctrl to investigate first. 
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Tested on:
+ 
+ * OpenPOWER Palmetto (AST2400)
+ * Facebook Wedge 100 BMC (AST2400) by Tao Ren <rentao.bupt@gmail.com>
+ * Evaluation board (AST2500) 
+ * Inspur FP5280G2 BMC (AST2500) by John Wang <wangzq.jn@gmail.com>
+ * Facebook Backpack CMM BMC (AST2500) by Tao Ren <rentao.bupt@gmail.com>
+ * OpenPOWER Witherspoon (AST2500)
+ * Evaluation board (AST2600 A0 and A3)
+ * Rainier board (AST2600)
+ 
+[1] https://github.com/openbmc/linux/blob/dev-5.15/drivers/mtd/spi-nor/controllers/aspeed-smc.c
+[2] https://patchwork.ozlabs.org/project/linux-aspeed/list/?series=212394
 
 Thanks,
-Mark
+
+C. 
+
+Changes in v7:
+
+  - Moved removal of the old binding desccription in the binding patch 
+
+Changes in v6:
+
+  - Removed tabs for aspeed,ast2600-fmc.yaml
+
+Changes in v5:
+
+  - Rebased on 5.18-rc5
+  - More AST2600 tests from Jae Hyun Yoo
+  - Cleanups of aspeed,ast2600-fmc.yaml
+  - Modified aspeed_spi_send_cmd_addr() routine to return an error  
+  - Simplified conditions in exec_op() handler when computing
+    the controller setting
+  - Dropped the use of memcpy_fromio for the SFDP address space
+
+Changes in v4:
+
+  - Rebased on 5.18 
+  - Removal of the SPI-NOR base driver (we had enough tests)
+  - Fix for small size flash devices on AST2600 (Potin)
+
+Changes in v3:
+
+ - Fixed compile warning on aspeed_spi_dirmap_read() prototype reported
+   by kernel test robot 
+ - Removed unnecessary entry in ast2600-fmc.yaml
+ - New patch from Tao to set spi-max-frequency on all FMC devices
+
+Changes in v2:
+
+ - Fixed dt_binding_check warnings (Rob)
+ - New entry in MAINTAINERS 
+ - Addressed Lukas comments regarding the SPI controller registration
+   and device removal. Checked with driver bind/unbind   
+ - Introduced setup and cleanup handlers and removed routine looping
+   on the DT children properties (Pratyush)
+ - Clarified in commit log requirements for training.
+ - Removed defconfig changes of patch 1 since they were reverted in
+   the last patch (Joel)
+
+Cédric Le Goater (9):
+  ARM: dts: aspeed: Adjust "reg" property of FMC/SPI controllers
+  dt-bindings: spi: Convert the Aspeed SMC controllers device tree
+    binding
+  spi: spi-mem: Convert Aspeed SMC driver to spi-mem
+  spi: aspeed: Add support for direct mapping
+  spi: aspeed: Adjust direct mapping to device size
+  spi: aspeed: Workaround AST2500 limitations
+  spi: aspeed: Add support for the AST2400 SPI controller
+  spi: aspeed: Calibrate read timings
+  ARM: dts: aspeed: Enable Dual SPI RX transfers
+
+Potin Lai (1):
+  mtd: spi-nor: aspeed: set the decoding size to at least 2MB for
+    AST2600
+
+Tao Ren (1):
+  ARM: dts: aspeed-g4: Set spi-max-frequency for all flashes
+
+ drivers/mtd/spi-nor/controllers/aspeed-smc.c  |  921 -------------
+ drivers/spi/spi-aspeed-smc.c                  | 1210 +++++++++++++++++
+ .../devicetree/bindings/mtd/aspeed-smc.txt    |   51 -
+ .../bindings/spi/aspeed,ast2600-fmc.yaml      |   82 ++
+ MAINTAINERS                                   |   10 +
+ arch/arm/boot/dts/aspeed-g4.dtsi              |   16 +-
+ arch/arm/boot/dts/aspeed-g5.dtsi              |   16 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi              |   17 +-
+ drivers/mtd/spi-nor/controllers/Kconfig       |   10 -
+ drivers/mtd/spi-nor/controllers/Makefile      |    1 -
+ drivers/spi/Kconfig                           |   11 +
+ drivers/spi/Makefile                          |    1 +
+ 12 files changed, 1347 insertions(+), 999 deletions(-)
+ delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
+ create mode 100644 drivers/spi/spi-aspeed-smc.c
+ delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+
+-- 
+2.35.1
+
