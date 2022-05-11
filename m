@@ -2,146 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED1952323C
-	for <lists+linux-spi@lfdr.de>; Wed, 11 May 2022 13:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89F3523CDB
+	for <lists+linux-spi@lfdr.de>; Wed, 11 May 2022 20:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236984AbiEKLzX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 May 2022 07:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S239684AbiEKSuC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 May 2022 14:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240902AbiEKLzW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 May 2022 07:55:22 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78912438E1;
-        Wed, 11 May 2022 04:55:21 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24BBtIwB035581;
-        Wed, 11 May 2022 06:55:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652270118;
-        bh=f0uhcvsc+1kbeZtPp/p/m0PHcJZMWJuiePiXoa4pIJs=;
-        h=From:To:CC:Subject:Date;
-        b=o6QAvTD2dy4L5RAa4v/2ENw5yO4p7PNiDDi/azRcfv86SOgVtHtCCWDpDlmPyIBsz
-         vH4DVWGWXe3Uk414mehjqj5z9NyOeS+vKMuxO3JkoRBFTYPezaLqCO2tfSIoG/qmKH
-         ehqc2lo/srBLFe7/13oPvKoxFdvgSS/qgZZzsa6g=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24BBtI3x094140
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 11 May 2022 06:55:18 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 11
- May 2022 06:55:18 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 11 May 2022 06:55:18 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24BBtG9n039452;
-        Wed, 11 May 2022 06:55:17 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <vigneshr@ti.com>, <p.yadav@ti.com>, <j-keerthy@ti.com>,
-        <vaishnav.a@ti.com>
-Subject: [PATCH] drivers: spi: cadence-quadspi: Handle spi_unregister_master() in remove()
-Date:   Wed, 11 May 2022 17:25:16 +0530
-Message-ID: <20220511115516.14894-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229954AbiEKSuC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 May 2022 14:50:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837671ACFAC;
+        Wed, 11 May 2022 11:50:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C137360F2F;
+        Wed, 11 May 2022 18:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1788C340EE;
+        Wed, 11 May 2022 18:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652294999;
+        bh=1/F7wsDez0z3wrk2Ax/t4Z3pU9oQk4PfJkSQFlB07kQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=cDqvRFyyAsMQPyM+khdB7N1GbvetpBwd8gw7x9bIgfAfpQNYRE1n6r/kuH2fdisZg
+         p6jpzPYr30KC6DqpclR9v9tZzG3vbscidCN78WL38Zp/YbYgW9yuhxEIs2nsboIgqQ
+         3QQiJYl798OmTnUS2DFlN9Q9dDg5IbLRLTf83HeaBWc9XcA3f08TWaM02S4KzVJ6ek
+         wsW2nF2upA4jm84EIDyps12Xb/KmAt4HSQdsiEk4m41cC7Cb92dZG71GNa0L0kfyFv
+         f/S1UTOD3IuHq0s76crG73KqsbLA5u1mEwBb3RQBYFh+VvNaZUbZI3T9I30fLo2uog
+         0cNAkNhAZ0Ncg==
+From:   Mark Brown <broonie@kernel.org>
+To:     alexandre.torgue@foss.st.com, patrice.chotard@foss.st.com
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220511074644.558874-1-patrice.chotard@foss.st.com>
+References: <20220511074644.558874-1-patrice.chotard@foss.st.com>
+Subject: Re: [PATCH 0/3] spi: stm32-qspi: flags management fixes
+Message-Id: <165229499740.364474.10772649163744226308.b4-ty@kernel.org>
+Date:   Wed, 11 May 2022 19:49:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Currently devres managed removal of the spi_controller happens after
-removing the power domain of the host platform_device.While this
-does not affect the clean removal of the controller, but affects
-graceful removal of the child devices if the child  device removal
-requires issuing commands over SPI.
+On Wed, 11 May 2022 09:46:41 +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+> 
+> This series update flags management in the following cases:
+>   - In APM mode, don't take care of TCF and TEF flags
+>   - Always check TCF flag in stm32_qspi_wait_cmd()
+>   - Don't check BUSY flag when sending new command
+> 
+> [...]
 
-Eg. flash device being soft reset to 1S-1S-1S mode before removal
-so that on next probe operations in 1S-1S-1S mode is successful.
+Applied to
 
-Failure is seen when `rmmod spi-cadence-quadspi` is performed:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-root@j7-evm:~# rmmod spi_cadence_quadspi
-[ 49.230996] cadence-qspi 47050000.spi: QSPI is still busy after 500ms timeout.
-[ 49.238209] spi-nor spi1.0: operation failed with -110
-[ 49.244457] spi-nor spi1.0: Software reset failed: -110
+Thanks!
 
-and on subsequent modprobe the OSPI flash probe fails as it
-is in 8D-8D-8D mode since the previous soft reset did not happen.
+[1/3] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
+      commit: d83d89ea68b4726700fa87b22db075e4217e691c
+[2/3] spi: stm32-qspi: Always check SR_TCF flags in stm32_qspi_wait_cmd()
+      commit: 0cf8d32600cf5660ee45d421f1b6e3a129ca58b6
+[3/3] spi: stm32-qspi: Remove SR_BUSY bit check before sending command
+      commit: ae16cc18f37bcdea7d4ef57a5e526a60b09a1506
 
-root@j7-evm:~# modprobe spi_cadence_quadspi
-[ 73.253536] spi-nor spi0.0: unrecognized JEDEC id bytes: ff ff ff ff ff ff
-[ 73.260476] spi-nor: probe of spi0.0 failed with error -2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-This commit adds necessary changes to perform spi_unregister_master()
-in the host device remove() so that the child devices are gracefully
-removed before the power domain is removed.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-changes tested on J721E with mt35xu512aba flash.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/spi/spi-cadence-quadspi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 19686fb47bb3..baf8559b553b 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -62,7 +62,7 @@ struct cqspi_flash_pdata {
- 
- struct cqspi_st {
- 	struct platform_device	*pdev;
--
-+	struct spi_master	*master;
- 	struct clk		*clk;
- 	unsigned int		sclk;
- 
-@@ -1639,7 +1639,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	int ret;
- 	int irq;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(*cqspi));
-+	master = devm_spi_alloc_master(&pdev->dev, sizeof(*cqspi));
- 	if (!master) {
- 		dev_err(&pdev->dev, "spi_alloc_master failed\n");
- 		return -ENOMEM;
-@@ -1652,6 +1652,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	cqspi = spi_master_get_devdata(master);
- 
- 	cqspi->pdev = pdev;
-+	cqspi->master = master;
- 	platform_set_drvdata(pdev, cqspi);
- 
- 	/* Obtain configuration from OF. */
-@@ -1784,7 +1785,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 			goto probe_setup_failed;
- 	}
- 
--	ret = devm_spi_register_master(dev, master);
-+	ret = spi_register_master(master);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to register SPI ctlr %d\n", ret);
- 		goto probe_setup_failed;
-@@ -1807,6 +1808,7 @@ static int cqspi_remove(struct platform_device *pdev)
- {
- 	struct cqspi_st *cqspi = platform_get_drvdata(pdev);
- 
-+	spi_unregister_master(cqspi->master);
- 	cqspi_controller_enable(cqspi, 0);
- 
- 	if (cqspi->rx_chan)
--- 
-2.17.1
-
+Thanks,
+Mark
