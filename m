@@ -2,92 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C05521DCC
-	for <lists+linux-spi@lfdr.de>; Tue, 10 May 2022 17:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E715522B2A
+	for <lists+linux-spi@lfdr.de>; Wed, 11 May 2022 06:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241000AbiEJPPq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 May 2022 11:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S238868AbiEKEjk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 May 2022 00:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345246AbiEJPPD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 May 2022 11:15:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98DF1A448F;
-        Tue, 10 May 2022 07:49:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C39E6197B;
-        Tue, 10 May 2022 14:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26016C385C2;
-        Tue, 10 May 2022 14:49:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652194184;
-        bh=It5LLlICcgWLjJuklqPrLH1pvoYxAaNwnpQSgLllmnU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b11528v5YQ8ayowHOlkGxTtGo++/KZ3UDF8Z7W5+1uQRupdqQzm2vtjiKE0Pvqjp9
-         aAI7MXj4AvAiuUj+n/9b1yZSfDnthP2jSU1zop+EWCHo95IXjv5gkpmlyw7fqWdjFE
-         956KAiKoyf/SXtitwqPuqcfe4aulZeyvK3GtgNa9vwUWPyya9CRBcAyYhoNFRjIvZH
-         unbCETr3l28jC7D7ukm9ioNygeQ2W8oADjSIyt6Lf5IV0Ta2JOFSdiit2CQSyHUKDw
-         emrmnEjuficE1nvnau4EV2LecUHRdM1Yxk3XYUJImWcy+QV7sVEkPg0IHmf0z51PqH
-         QpzZ4vjGtQgrg==
-From:   Mark Brown <broonie@kernel.org>
-To:     abbotti@mev.co.uk, linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220510115141.212779-1-abbotti@mev.co.uk>
-References: <20220510115141.212779-1-abbotti@mev.co.uk>
-Subject: Re: [PATCH 0/2] spi: cadence-quadspi: a couple of minor cleanups
-Message-Id: <165219418387.389013.6193637410235087757.b4-ty@kernel.org>
-Date:   Tue, 10 May 2022 15:49:43 +0100
+        with ESMTP id S238899AbiEKEj0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 May 2022 00:39:26 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6930014D784
+        for <linux-spi@vger.kernel.org>; Tue, 10 May 2022 21:39:23 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso1510395fac.1
+        for <linux-spi@vger.kernel.org>; Tue, 10 May 2022 21:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nixtoJcwOLc/k44flwqDYdGeKyA86ydUd6LBWI3DhPbGVARbFyFDxQ9aAjLPqd60Y3
+         MN2Y9qXQk69dmY1kYDrjfrR6UYNee97kMOv6lr9amK4BHsOonGVSU3bTHxEtV6nZzk6z
+         hleUtj+LMXqgkbNelOrWWnNGlvwdPcd5p9so3RoOKwC97vmbWdPwIw/ZE5xI4M+j0DRR
+         svIOwJt8ClDAz/tAKELg1/VtdIu9Qd4qEduOfbhPIOAbtoWCu8MilQ2pYXO5Y1/qhgI6
+         tRDHDEZ/mbCEGrSE7VIcEGrP8P0dV1cUcnoFj442uYbJ8zp/K46WTrgn/7co/MbPgI5B
+         HLiw==
+X-Gm-Message-State: AOAM533c2+ZXlPzHarKC/2L+aCB4vXVHHLdnP2J28aepvqxQZE5I9toq
+        KmMvPjhlrVdxGWyIdpeeiowxc1AYEzluSxuapS7xqH5v6qQakw==
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 10 May 2022 12:51:39 +0100, Ian Abbott wrote:
-> Just a couple of trivial source code cleanups.
-> 
-> Ian Abbott (2):
->   spi: cadence-quadspi: Add missing blank line in
->     cqspi_request_mmap_dma()
->   spi: cadence-quadspi: remove unnecessary (void *) casts
-> 
-> [...]
+Our Ref: BG/WA0151/2022
 
-Applied to
+Dear Beneficiary
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Subject: An Estate of US$15.8 Million
 
-Thanks!
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
 
-[1/2] spi: cadence-quadspi: Add missing blank line in cqspi_request_mmap_dma()
-      commit: 76159e2f9a0fa29fd9fccb262687d95282985b49
-[2/2] spi: cadence-quadspi: remove unnecessary (void *) casts
-      commit: 0d8688298d6a43f2e187dad1e45871248123764f
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Our service fee of 10% will be paid to us after you have received the estate.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
 
-Thanks,
-Mark
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
