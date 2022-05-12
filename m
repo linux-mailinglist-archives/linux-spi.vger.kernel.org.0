@@ -2,301 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4707D52509E
-	for <lists+linux-spi@lfdr.de>; Thu, 12 May 2022 16:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6E5525040
+	for <lists+linux-spi@lfdr.de>; Thu, 12 May 2022 16:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345370AbiELOwA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 May 2022 10:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S244143AbiELOgv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 May 2022 10:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355631AbiELOvB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 May 2022 10:51:01 -0400
-X-Greylist: delayed 966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 07:50:56 PDT
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D122C2D1F5
-        for <linux-spi@vger.kernel.org>; Thu, 12 May 2022 07:50:53 -0700 (PDT)
+        with ESMTP id S236997AbiELOgu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 May 2022 10:36:50 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5379549F29;
+        Thu, 12 May 2022 07:36:49 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so4974282pfb.4;
+        Thu, 12 May 2022 07:36:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:message-id:subject:cc:to:
-         from:date:from;
-        bh=9ekpzF3jYn/kEujr+rEe+H+oidDP0NgfPGgN82Dz238=;
-        b=J6GgBiuJJc/IzGC4H6D11R7b2DYPyyWVzaEPZSPnBj+LjCLUfQm4gH+2aPag79sirG0lpxGNONSRc
-         ol1YEe9DyPn8Env8gqi2Bq5lglzgR5dOUWJBXOfrbNCdeOdxi+ySePN/EZNOB+YsnDPJFxtkzfidyR
-         P2E25IFAQ6cbQqlckCO+JIfW72YtSEjwuCZ6O0QkOT79WYGi+d4StwI2TIJ6eZaJcpKizCyMbO4r3H
-         apGs4RuA0JxKOA8qWCTNOVpI2RnQ/CBF0ZwvEcUgo7bz9lUnAPaxqEjhksS9/qvAC26frT50ssRwNk
-         +xVAYRmVfDRRKWgTbumpZGKfOmAbOsA==
-X-MSG-ID: ab9cffcd-d200-11ec-b450-0050569d3a82
-Date:   Thu, 12 May 2022 16:34:45 +0200
-From:   David Jander <david@protonic.nl>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oleksij Rempel <ore@pengutronix.de>
-Subject: [RFC] A new SPI API for fast, low-latency regmap peripheral access
-Message-ID: <20220512163445.6dcca126@erd992>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:from:content-transfer-encoding;
+        bh=vBCXkB1qSkIS16SbYowUF9XTh+lgeGc7WrxqFAqEQoI=;
+        b=eBimJOVi0jjQ+6pApezhKgthZsHwrX7D9plBjpPTiXj/EUp0KISAnLqaLVa/XsQzPp
+         4YQR0iUuMEGkifs4cR3ISAlXK26e3rdWYoyiqJ5626WmXqV/SUp6+FYgfQfkaxhclqYD
+         4pSyHHwkasI1X2uoRuDphQdXJwz1YbMQj61PqIzFwea02bPZ3JXbKXv6PTqOv30D/4en
+         iaRgVeC0sDAkpxrGjZwETPuZgi4tWTxCMkZhnak85iM1WizhLU7Gp5cGRQOvmL1q0eIY
+         eoxugRVI+yOoeuq8xArZLF+1zjjv2o24r6gcC5MBApFYZrsdCZRz5XIWcnjdvo0RB8Yl
+         nloQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:from:content-transfer-encoding;
+        bh=vBCXkB1qSkIS16SbYowUF9XTh+lgeGc7WrxqFAqEQoI=;
+        b=IrLfUpr8l+KIgRuhU6sdRkJzQi4thugCRChRwR0T9NHtHqf228VmCOcI8inbExyNEj
+         7C4AWJwTEq0sNOuybLKZbTV2a7HPtAeszL4CqWdKxKLRhIxPzvB94AKi8u0V00LMYtvM
+         AzErfNYBrgKDrhCmn+Qwra2G5DQsKLzS3O2khnxKs1+9uZqcffOA+osfgjsUUIw9DqQy
+         wRPPpU0QpOiYiclt1N4CkNlSQ7/Qhx+OZQWJTAekkzeUznNz/clvJVegHSMGOyJpTvFW
+         5o4YFo0bgRJ1Z60kPOjkAq/A4uGKPyW1GsPcnFhyokxoz57ncW9SVJ6CFrOC9lUiD6xK
+         36DA==
+X-Gm-Message-State: AOAM533IW+1CpASUcU23vp5nhflSmW87z4iNNzjwd1KmqNQILYdqppvG
+        ye2CaiRArND7gXQ+fKOBzW+n7Yw9lkIkmQ==
+X-Google-Smtp-Source: ABdhPJxG5hF3kDe8iW+C+xsOfGGd5qLYzePD4+p24NcnZ2gfawl52ThXEi7FlM7pl2q3JeqAMBC7sw==
+X-Received: by 2002:a63:c057:0:b0:3db:2558:3ea with SMTP id z23-20020a63c057000000b003db255803eamr35829pgi.222.1652366208755;
+        Thu, 12 May 2022 07:36:48 -0700 (PDT)
+Received: from [192.168.0.107] ([103.249.234.205])
+        by smtp.gmail.com with ESMTPSA id a78-20020a621a51000000b0050dc76281easm3876334pfa.196.2022.05.12.07.36.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 07:36:48 -0700 (PDT)
+Message-ID: <4e6187a4-d0f8-4750-e407-e09cc1c91789@gmail.com>
+Date:   Thu, 12 May 2022 20:06:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH] spi: Doc fix - Describe add_lock and dma_map_dev in
+ spi_controller
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Shuah Khan (Linux)" <skhan@linuxfoundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Siddh Raman Pant <siddhpant.gh@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This fixes the corresponding warnings during building the docs.
 
-Hi Mark, all,
+Signed-off-by: Siddh Raman Pant <siddhpant.gh@gmail.com>
+---
+ include/linux/spi/spi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sorry for sending an RFC without actual patches. What I am about to propose
-would require a lot of work, and I am sure I will not get it right without
-first asking for comments. I also assume that I might not be the only one
-asking/proposing this, and may ignore the existence of discussions that may
-have happened in the past. If I am committing a crime, please accept my
-apologies and let me know.
-
-TL;DR: drivers/spi/spi.c API has too much overhead for some use cases.
-
-1. How did I get here?
-----------------------
-
-Software involved: Linux v5.18-rc1:
- drivers/spi/spi.c
- drivers/spi/spi-imx.c (note in text for extra patches)
- drivers/net/can/spi/mcp251xfd/*
-
-Hardware involved:
- i.MX8MP SoC with external SPI CAN controller MCP2518FD.
-
-Using an i.MX8MP SoC with an external CAN interface via SPI, the mcp2518fd
-controller, I noticed suspiciously high latency when running a simple tool that
-would just echo CAN messages back. After applying Marc Kleine-Budde's patches
-here [1], things got a lot better, but I was already looking too close.
-Analyzing the SPI/CAN timing on a scope, I noticed at first a big delay from
-CS to the start of the actual SPI transfer and started digging to find out
-what caused this delay.
-
-2. What did I do?
------------------
-
-Looking at spi.c, I noticed a lot of code that is being executed even for the
-SYNC code-path, that should avoid the workqueue, doing statistics mainly,
-involving quite a few spinlocks. I wanted to know what the impact of all of
-that code was, so I hacked together a new API postfixed with *_fast that did
-roughly the same as the spi_sync_* API, but without all of this accounting
-code. Specifically, I created substitutes for the following functions, which
-are all SPI API calls used by the MCP2518FD driver:
-
- spi_sync()
- spi_sync_transfer()
- spi_write()
- spi_write_then_read()
- spi_async() (replaced with a sync equivalent)
-
-3. Measurement results
-----------------------
-
-I distinguish between 3 different kernels in the following measurement results:
-
- kernel A: Vanilla Linux 5.18-rc1
- kernel B: Linux 5.18-rc1 with Marc's polling patches from linux-next applied
- to spi-imx.c [1]
- kernel C: Linux 5.18-rc1 with polling patches and hacked *_fast SPI API.
-
-The measurements were conducted by running "canecho.c" [2] on the target
-board, while executing the following command on another machine connected via
-CAN (baud-rate 250kBaud):
-
-$ cangen can0 -g 10 -n 1000 -p 2 -I 0x077 -L 8 -D r
-
-For CPU load measurements, the following command was used instead:
-
-$ cangen can0 -g 0 -n 50000 -p 2 -I 0x077 -L 8 -D r
-
-The machine running cangen is able to load the CAN bus to 100% capacity
-consistently this way.
-
-3.1. SPI signal timing measurements
-
-Scope images are available on request.
-
-3.1.1. Gap between RX CAN frame EOF and TX echo response SOF:
-
-Kernel A: 380us
-Kernel B: 310us
-Kernel C: 152us
-
-3.1.2. Total time the SPI controller IRQ line is low:
-
-Kernel A: 160us
-Kernel B: 144us
-Kernel C: 55us
-
-3.1.3. Time from SPI CS active to actual start of transfer:
-
-Kernel A: ca. 10us
-Kernel B: 9.8us
-Kernel C: 2.6us
-
-3.1.4. Time of CS high between 1st and 2nd SPI sync access from IRQ thread:
-
-kernel A: ca 25us
-kernel B: ca 30us
-kernel C: 5us
-
-3.2. CPU usage measurements with 100% bus load running canecho at 250kBaud:
-
-kernel A: 13.3% [irq/210-spi2.0], 78.5% idle
-kernel B: 10.2% [irq/210-spi2.0], 81.6% idle
-kernel C: 4.4%  [irq/210-spi2.0], 92.9% idle
-
-Overall performance improvements from kernel B to kernel C:
-
-CAN message round trip time: 50% faster
-CPU load: 61% less
-
-4. Rationale
-------------
-
-There are many use-cases for SPI in the Linux kernel, and they all have
-special requirements and trade-offs: On one side one wants to transfer large
-amount of data to the peripheral efficiently (FLASH memory) and without
-blocking. On the opposite side there is the need to modify registers in a
-SPI-mapped peripheral, ideally using regmap.
-There are two APIs already: sync and async, that should cover these use-cases.
-Unfortunately both share a large portion of the code path, which causes the
-sync use-case for small, fast register manipulation to be bogged down by all
-the accounting and statistics code. There's also sometimes memcpy()'s involved
-to put buffers into DMA space (driver dependent), even though DMA isn't used.
-
-So a "peripheral" driver (the P from SPI coincidentally), that accesses a
-SPI-based regmap doing register manipulation, leading to several very short
-and small, fast transfers end's up with an unreasonable CPU load and access
-latency, even when using the *sync* API.
-
-Assuming the *sync* API cannot be changed, this leads to the need to introduce
-a new API optimized specifically for this use-case. IMHO it is also reasonable
-to say that when accessing registers on a peripheral device, the whole
-statistics and accounting machinery in spi.c isn't really so valuable, and
-definitely not worth its overhead in a production system.
-
-5. Details of the SPI transfers involved
-----------------------------------------
-
-The MCP2518FD CAN driver does a series of small SPI transfers when running a
-single CAN message from cangen to canecho and back:
-
- 1. CAN message RX, IRQ line asserted
- 2. Hard IRQ empty, starts IRQ thread
- 3. IRQ thread interrogates MCP2518FD via register access:
- 3.1. SPI transfer 1: CS low, 72bit xfer, CS high
- 3.2. SPI transfer 2: CS low, 200bit xfer, CS high
- 3.3. SPI transfer 3: CS low, 72bit xfer, CS high
- 3.4. SPI transfer 4: CS low, 104bit xfer, CS high
- 4. IRQ thread ended, RX message gets delivered to user-space
- 5. canecho.c recv()
- 6. canecho.c send()
- 7. TX message gets delivered to CAN driver
- 8. CAN driver does spi_async to queue 2 xfers (replace by spi_sync equivalent
- in kernel C):
- 8.1. SPI message 1: CS low, 168bit xfer, CS high, CS low, 48bit xfer, CS high
- 9. CAN message SOF starts appearing on the bus just before last CS high.
-
-6. Some regions of code that were inspected
--------------------------------------------
-
-The code in spi.c that gets executed contains a lot of ifs and foresees a lot
-of different situations, so it might not be trivial to look at a single place
-and find a smoking gun. It is more the sum of everything that just takes a
-long time to execute, even on this relatively fast ARM Cortex-A53 running at
-1.2GHz.
-Some places I tried to single out:
-
-6.1. Accounting spinlocks:
-
-Spinlocks are supposed to be fast, especially for the case that they are not
-contested, but in such critical paths their impact shouldn't be neglected.
-
-SPI_STATISTICS_ADD_TO_FIELD: This macro defined in spi.h has a spinlock, and
-it is used 4 times directly in __spi_sync(). It is also used in
-spi_transfer_one_message() which is called from there. Removing the spinlocks
-(thus introducing races) makes the code measurably faster (several us).
-
-spi_statistics_add_transfer_stats(): Called twice from
-spi_transfer_one_message(), and also contains a spinlock. Removing these again
-has a measurable impact of several us.
-
-6.2. Misc other places:
-
-ptp_read_system_prets(): Called once, since the hardware lacks a usable TS
-counter. Removing this did not have a significant impact, although it was
-still detectable, but barely so.
-
-spi_set_cs(): Removing all delay code and leaving the bare minimum for GPIO
-based CS activation again has a measurable impact. Most (all?) simple SPI
-peripheral chips don't have any special CS->clock->CS timing requirements, so
-it might be a good idea to have a simpler version of this function.
-
-7. Requirements and compromises for the new API
------------------------------------------------
-
-Since this hypothetical new API would be used only for very short, very fast
-transfers where latency and overhead should be minimized, the best way to do
-it is obviate all scheduling work and do it strictly synchronous and based on
-polling. The context switch of even a hard-IRQ can quickly cost a lot more CPU
-cycles than busy waiting for 48 bits to be shifted through the transmitter at
-20+MHz clock. This requires that SPI drivers offer low-level functions that do
-such simple transfers on polling basis. The patches [1] from Marc Kleine-Budde
-already do this, but it is the SPI driver that choses whether to use polling or
-IRQ based transfers based on heuristics calculating the theoretical transfer
-time given the clock frequency and its size. While it improves the performance
-in a lot of cases already, peripheral drivers have no choice but to still go
-through all the heavy code in spi.c.
-Since these are low-latency applications, chances are very high that the
-hardware is also designed for low-latency access, which implies that CS
-control via GPIO most probably uses local GPIO controllers instead of I2C GPIO
-expanders for example, so CS access can be assumed to be fast and direct and
-not involve any context switches. It could be argued that it might even be
-beneficial to have an API that can be called from hard IRQ context, but
-experiments in this case showed that the gain of doing the CAN message read
-out directly in hard-IRQ and removing the IRQ thread is minimal. But better
-use-cases could be conceived, so this possibility might need consideration
-also.
-Obviously all statistics accounting should be skipped for this API, since it
-simply impacts performance far too much.
-Care should be taken to solve locking in such a way, that it doesn't impact
-performance for the fast API, while still allowing safe concurrency with
-spi_sync and spi_async. I did not go as far as to solve this issue. I just
-used a simple spinlock and carefully avoided using any call to the old API for
-doing these proof-of-concept measurements.
-
-8. Conclusion
--------------
-
-Performance of spi.c API for the specified use-cases is not ideal.
-Unfortunately there is no single smoking gun to be pointed at, but instead
-many different bits which are not needed for the given use-case that add to
-the bloat and ultimately have a big combined performance impact.
-The stated usage scenario is fairly common in the Linux kernel. A simple
-investigation counted 60+ IIO drivers and 9 input drivers alone that use
-spi_sync*() for example, up to a total of 171 .c files. In contrast only 11 .c
-files use the spi_async*() calls. This does not account for all users of
-regmap_spi.
-Due to this, IMHO one can ask for a better, simpler, more efficient API for
-these use-cases, am I want to propose to create it.
-
-Thanks a lot if you read this far. Please let me know if such a thing is even
-thinkable in mainline Linux.
-
-
-[1] https://lore.kernel.org/all/20220502175457.1977983-9-mkl@pengutronix.de/
-[2] https://github.com/linux-can/can-tests/blob/master/raw/canecho.c
-
-Best regards,
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index f0177f9b6..d361ba262 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -349,6 +349,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @max_message_size: function that returns the max message size for
+  *	a &spi_device; may be %NULL, so the default %SIZE_MAX will be used.
+  * @io_mutex: mutex for physical bus access
++ * @add_lock: mutex to avoid adding devices to the same chipselect
+  * @bus_lock_spinlock: spinlock for SPI bus locking
+  * @bus_lock_mutex: mutex for exclusion of multiple callers
+  * @bus_lock_flag: indicates that the SPI bus is locked for exclusive use
+@@ -363,6 +364,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @transfer: adds a message to the controller's transfer queue.
+  * @cleanup: frees controller-specific state
+  * @can_dma: determine whether this controller supports DMA
++ * @dma_map_dev: device which can be used for DMA mapping
+  * @queued: whether this controller is providing an internal message queue
+  * @kworker: pointer to thread struct for message pump
+  * @pump_messages: work struct for scheduling work to the message pump
 -- 
-David Jander
-Protonic Holland.
+2.35.1
