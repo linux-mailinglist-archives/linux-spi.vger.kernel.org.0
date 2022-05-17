@@ -2,168 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69EF52A1A7
-	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 14:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A4552A2BD
+	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 15:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243491AbiEQMh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 May 2022 08:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S1346243AbiEQNJO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 May 2022 09:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiEQMhZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 08:37:25 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B984A3D5;
-        Tue, 17 May 2022 05:37:20 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CE49DC000A;
-        Tue, 17 May 2022 12:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652791039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CNk04l4NOC/ZJltN0oDjVZ65rbHSyBSEB0Mh7KZb4cs=;
-        b=OKixoUAzBr0gjNgzwuuG4zDfpZTtIoGcuyz32KgTQOL5Mfi1xjZ3bxpVMYENvIMfEWjIow
-        DuMjb7DygiJTTAKOtK1OZ2Uq97GgnHKuRqV0sHmvATc1wocToGkA7df1t79N2f/Pm45YUh
-        Oreu5M87LqSYIjJwhEsON/UF/1iWRVrqxIPfUGzPLbFwFF3OE/SefLKxQsPz2y5fYHMRoO
-        ev5RYWF495gBDLTRZnJdXRGA0UKZ7s6oQ5CfYlxlWZfMvfB0S3Z3VuxhpQVfur7qxNFskI
-        k5asL+EjpMo2FEvhuDOr+BSajbrGL/n5qOkypWHkEEhBpBbqVXnkuOAJzlwB8Q==
-Date:   Tue, 17 May 2022 14:37:13 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>
-Cc:     Pratyush Yadav <p.yadav@ti.com>, Mark Brown <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <andrew@aj.id.au>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <richard@nod.at>,
-        <joel@jms.id.au>, <tudor.ambarus@microchip.com>,
-        <chin-ting_kuo@aspeedtech.com>, <linux-aspeed@lists.ozlabs.org>,
-        <vigneshr@ti.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: (subset) [PATCH v7 00/11] spi: spi-mem: Convert Aspeed SMC
- driver to spi-mem
-Message-ID: <20220517143713.47676b4c@xps-13>
-In-Reply-To: <a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org>
-References: <20220509175616.1089346-1-clg@kaod.org>
-        <165272636363.750911.14933122170662994904.b4-ty@kernel.org>
-        <20220517110509.2e6xbwot63yl6a3c@ti.com>
-        <a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S235536AbiEQNJN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 09:09:13 -0400
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5CB35267
+        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 06:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=Xw3aFIo+cwT9D9vr0fZxk2o7vMX09g2lWIwWcXgUkv4=;
+        b=hYY27fya96oZ/moF3890fhmStySiB1p6ax5h1hN++R6AR5SfTZs/ykOxZNvt4yjv0n6AkCYk2tZ6W
+         jQQzrUq0l2KkWsnuYaVlCbsLRPRhLhUlcZ69Rg/lKTaFIV/XYRpOnj01GqdVh+U5PvwVF5pQNAvCB5
+         oSphOMflIgbc548ffH6+R/aCS48dQ8qTwQZgiUqmG5tmoyNZykr0gC68yXdfl2VsGqhhNnahQFexGl
+         2SyLLDc42x1GFLmnUdVjdWt5XkdDoiRk3PDBD+qSv1y0uR68LPk8V8VrHyQm+xsP/fjEbuMNp8Xo6X
+         /JA6/iBczF8aEULggDhb4CiLfZuxirQ==
+X-MSG-ID: 88ab6c0f-d5e2-11ec-9896-0050569d2c73
+Date:   Tue, 17 May 2022 15:09:06 +0200
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
+        Oleksij Rempel <ore@pengutronix.de>
+Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
+ access
+Message-ID: <20220517150906.09a16a47@erd992>
+In-Reply-To: <YoONngxX/jdTjSOH@sirena.org.uk>
+References: <20220512163445.6dcca126@erd992>
+        <Yn1wE4TLyXCIm9GF@sirena.org.uk>
+        <20220513144645.2d16475c@erd992>
+        <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
+        <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
+        <YoKN/lqrgKJbVBVq@sirena.org.uk>
+        <20220517122439.744cf30c@erd992>
+        <YoONngxX/jdTjSOH@sirena.org.uk>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi C=C3=A9dric,
+On Tue, 17 May 2022 12:57:18 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-clg@kaod.org wrote on Tue, 17 May 2022 14:03:02 +0200:
+> On Tue, May 17, 2022 at 12:24:39PM +0200, David Jander wrote:
+> 
+> > (mainly in spi.c for now). Time interrupt line stays low:  
+> 
+> >  1. Kernel 5.18-rc1 with only polling patches from spi-next: 135us  
+> 
+> >  2. #if 0 around all stats and accounting calls: 100us  
+> 
+> >  3. The _fast API of my original RFC: 55us  
+> 
+> > This shows that the accounting code is a bit less than half of the dispensable
+> > overhead for my use-case. Indeed an easy target.  
+> 
+> Good.
+> 
+> > on, so I wonder whether there is something to gain if one could just call
+> > spi_bus_lock() at the start of several such small sync transfers and use
+> > non-locking calls (skip the queue lock and io_mutex)? Not sure that would have
+> > a meaningful impact, but to get an idea, I replaced the bus_lock_spinlock and
+> > queue_lock in __spi_sync() and __spi_queued_transfer() with the bare code in
+> > __spi_queued_transfer(), since it won't submit work to the queue in this case
+> > anyway. The resulting interrupt-active time decreased by another 4us, which is
+> > approximately 5% of the dispensable overhead. For the record, that's 2us per
+> > spinlock lock/unlock pair.  
+> 
+> I do worry about how this might perform under different loads where
+> there are things coming in from more than one thread.
 
-> Pratyush,
->=20
-> On 5/17/22 13:05, Pratyush Yadav wrote:
-> > Hi Cedric,
-> >=20
-> > On 16/05/22 07:39PM, Mark Brown wrote: =20
-> >> On Mon, 9 May 2022 19:56:05 +0200, C=C3=A9dric Le Goater wrote: =20
-> >>> This series adds a new SPI driver using the spi-mem interface for the
-> >>> Aspeed static memory controllers of the AST2600, AST2500 and AST2400
-> >>> SoCs.
-> >>>
-> >>>   * AST2600 Firmware SPI Memory Controller (FMC)
-> >>>   * AST2600 SPI Flash Controller (SPI1 and SPI2)
-> >>>   * AST2500 Firmware SPI Memory Controller (FMC)
-> >>>   * AST2500 SPI Flash Controller (SPI1 and SPI2)
-> >>>   * AST2400 New Static Memory Controller (also referred as FMC)
-> >>>   * AST2400 SPI Flash Controller (SPI)
-> >>>
-> >>> [...] =20
-> >>
-> >> Applied to
-> >>
-> >>     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git fo=
-r-next
-> >>
-> >> Thanks!
-> >>
-> >> [02/11] dt-bindings: spi: Convert the Aspeed SMC controllers device tr=
-ee binding
-> >>          commit: ce9858ea499da025684a7a5f19823c2c3f14bdce
-> >> [03/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
-> >>          commit: 9c63b846e6df43e5b3d31263f7db545f32deeda3
-> >> [04/11] spi: aspeed: Add support for direct mapping
-> >>          commit: 9da06d7bdec7dad8018c23b180e410ef2e7a4367
-> >> [05/11] spi: aspeed: Adjust direct mapping to device size
-> >>          commit: bb084f94e1bca4a5c4f689d7aa9b410220c1ed71
-> >> [06/11] spi: aspeed: Workaround AST2500 limitations
-> >>          commit: 5785eedee42c34cfec496199a80fa8ec9ddcf7fe
-> >> [07/11] spi: aspeed: Add support for the AST2400 SPI controller
-> >>          commit: 53526ab27d9c256504f267713aea60db7af18fb0
-> >> [08/11] spi: aspeed: Calibrate read timings
-> >>          commit: eeaec1ea05c0e0f08e04c6844f20cc24a2fcc0f4 =20
-> >=20
-> > I have repeatedly objected to this patch [0][1][2] and you have
-> > repeatedly decided to not address my objections.  =20
-> That's a very harsh way of saying things. I did not decide anything
-> or ignore your comments. I answered your questions and acknowledged
-> that indeed the read training was done under the dirmap handler but
-> this was not a concern today since we had all the required information
-> from spimem.
->=20
-> We waited _together_, 5 or 6 weeks, for more inputs on how to address
-> the concerns you raised regarding the sustainability of this method.
->=20
-> > I won't spend any more time fighting it.  =20
-> This is not a fight. I don't know why you interpret it that way.
->=20
-> Now, since you object so explicitly, and since this patchset has
-> not reached the Linux kernel yet, we should consider dropping it.
-> I rather do that than push crap in mainline. But then, please,
-> provide solutions and not only objections !
->=20
-> > But I will say that you should not expect any
-> > guarantees that SPI NOR or SPI NAND will not break your calibration in
-> > the future if they decide to move the dirmap_create() call around. =20
->=20
-> If that's the case one day, we have multiple solutions :
->=20
->    - stop doing the training
+I understand your concern. The biggest issue is probably the fact that client
+drivers can claim exclusive access to the bus this way, and who knows if they
+take care to not claim it for too long?
+In the end, if multiple latency-sensitive client drivers share the same SPI
+bus, besides this being a questionable HW design, this will be asking for
+trouble. But I agree that usage of spi_bus_lock() by client drivers is
+probably not a good idea.
 
-Not really an option, isn't it?
+> > > One thing that might be useful would be if we could start the initial
+> > > status read message from within the hard interrupt handler of the client
+> > > driver with the goal that by the time it's threaded interrupt handler
+> > > runs we might have the data available.  That could go wrong on a lightly
+> > > loaded system where we might end up running the threaded handler while
+> > > the transfer is still running, OTOH if it's lightly loaded that might
+> > > not matter.  Or perhaps just use a completion from the SPI operation and
+> > > not bother with the threaded handler at all.  
+> 
+> > You mean ("ctx" == context switch):  
+> 
+> >  1. hard-IRQ, queue msg --ctx--> SPI worker, call msg->complete() which does
+> >  thread IRQ work (but can only do additional sync xfers from this context).  
+> 
+> > vs.  
+> 
+> >  2. hard-IRQ, queue msg --ctx--> SPI worker, call completion --ctx--> IRQ
+> >  thread wait for completion and does more xfers...  
+> 
+> > vs (and this was my idea).  
+> 
+> >  3. hard-IRQ, pump FIFO (if available) --ctx--> IRQ thread, poll FIFO, do more
+> >  sync xfers...  
+> 
+> Roughly 1, but with a lot of overlap with option 3.  I'm unclear what
+> you mean by "queue message" here.
 
->    - move the training to the appropriate handler if it exists
+In the above, I meant:
 
-Sorry for jumping in so late, but why not using this solution already
-if there are concerns about the current location? It does not look like
-a complex solution to implement, but I might be overlooking something.
+ "queue message": 
+	list_add_tail(&msg->queue, &ctlr->queue);
+	kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
 
-This can also be done for the next kernel release.
+ "pump FIFO":
+	A special function in the spi driver that fills the TX FIFO so that a
+	transfer starts and returns immediately.
 
->    - use a default value
->   >> [11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB =
-for AST2600
-> >>          commit: 73ae97e3cabb580639f02f12a192324a53c4bebb
-> >> =20
-> >=20
-> > [0] https://patchwork.kernel.org/project/spi-devel-general/patch/202203=
-25100849.2019209-9-clg@kaod.org/
-> > [1] https://patchwork.kernel.org/project/spi-devel-general/patch/202202=
-14094231.3753686-9-clg@kaod.org/
-> > [2] https://lore.kernel.org/all/20220208190636.h6dubktkmuosvdxo@ti.com/=
- =20
->=20
-> Regards,
->=20
-> C=C3=A9dric.
+ "poll FIFO": 
+	Busy-loop wait until TX-FIFO is empty and RX-FIFO has the
+	complete RX message.
 
+> > Option 3 would require a separation of spi_sync_transfer into two halves. One
+> > half just activates CS (non-sleep GPIO api!) and fills the FIFO. The second
+> > half polls the FIFO for transfer completion. This path could only be chosen if
+> > the SPI controller has a FIFO that can hold the whole message. In other words a
+> > lot of spacial case handling for what it is worth probably... but still
+> > interesting.  
+> 
+> Yes, that's the whole point.  This also flows nicely when you've got a
+> queue since you can restart the hardware from the interrupt context
+> without waiting to complete the transfer that just finished.
 
-Thanks,
-Miqu=C3=A8l
+Ack. Only caveat I see is the requirement for CS to be settable in a
+non-sleepable context. Not all GPIO pins have gpiod_set_value(). Some might
+only have gpiod_set_value_cansleep(). Although the latter case is not a good
+choice for a CS signal, so I doubt it can be found in the wild.
+Example: I2C GPIO expanders. In such a (very unlikely) case, the spi subsystem
+would need to fall back to the worker-queue, so probably not a big deal.
+
+> > Option 2 is probably not that bad if the SPI worker can run on another core?  
+> 
+> Pretty much anything benefits with another core.
+
+Ack. But there are still quite a few single-core SoCs out there, and for
+those, Option 2 is the worst.
+
+Best regards,
+
+-- 
+David Jander
