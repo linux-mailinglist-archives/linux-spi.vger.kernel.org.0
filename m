@@ -2,166 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128C652A3BD
-	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 15:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FC452A41E
+	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 16:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348057AbiEQNoN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 May 2022 09:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S1346587AbiEQOCk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 May 2022 10:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348088AbiEQNoL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 09:44:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA1A4CD68
-        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 06:44:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CFF9B81870
-        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 13:44:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90587C385B8;
-        Tue, 17 May 2022 13:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652795043;
-        bh=WfMM/hE56N+CuLESXpJo0esdNV1oVYoiTDKP20WMdAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K4fAm04oPx3p53kDeXojgvsn+QJODlTAD/2dVENTPHuptEweSa82dUNX1L77YrNlp
-         At4yzxXmh1WUkJKcJXW66+0HYMpNLAC5ThBeYpTiJLkvDuAc5CzY0Vgtx5MUpWKU0B
-         rKwkzVsbXH6gzV87A/1Y5S2YDmqw2WObSzOR6/nWu2xR3IyWjK0iM+tde+TvbW1Fxi
-         pXcomhvqJ8bYHSU6cqdHJV9wkqE0F00hp0Ne9KvwVkvo/tP/UWLAxNdogtEM8qKLrL
-         91dFXj16ou4Ek+ur+It5RZrM6aoM7hFBvAZYtq7MslMmT9vnGFOkyUZkzSsk5y7Ynw
-         JxCr/j6l71HLA==
-Date:   Tue, 17 May 2022 14:43:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
-        Oleksij Rempel <ore@pengutronix.de>
-Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
- access
-Message-ID: <YoOmn1k6yEtJofe5@sirena.org.uk>
-References: <20220512163445.6dcca126@erd992>
- <Yn1wE4TLyXCIm9GF@sirena.org.uk>
- <20220513144645.2d16475c@erd992>
- <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
- <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
- <YoKN/lqrgKJbVBVq@sirena.org.uk>
- <20220517122439.744cf30c@erd992>
- <YoONngxX/jdTjSOH@sirena.org.uk>
- <20220517150906.09a16a47@erd992>
+        with ESMTP id S1348239AbiEQOCc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 10:02:32 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4A3CFDC;
+        Tue, 17 May 2022 07:02:30 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5A6B9C000A;
+        Tue, 17 May 2022 14:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652796149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AFYtPsh6s9dzHCZdoQzXiCPCMhM47AP7OmBzXLX/B4I=;
+        b=HX3COE9t4BRjmNMfjKgyvM1XLP0ODDvStZTU9hi+qbFefEzb79wkyXSKSQ0swG9xtgopkp
+        kb7BtpESwuOEj9NiHLMXQh7vzERBwIDFqVsEXb2o5tUrd/4HAhgCi9d/tPP+WsuM9+ADvb
+        pXz+EhPuk8RNXC4x4/Pz7cJ1/lsu/BuoJvQOHeCWerF4kvc3BcLs0XV18/B/N3F/nHNlqo
+        aKdG+rRP5Q6cwMAcSeS3UXQszTUk+Hj4MNKBWgsbFp+fqlESJEqFbmwzM2AOcPMUcSVwVz
+        mL6e0HBgioq6t9FeejYiruQ6+O6DUlqHUkC8kWqR+koXOTxDkmfWo/xFvbmFBw==
+Date:   Tue, 17 May 2022 16:02:26 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: Re: [RFC PATCH 3/6] mtd: spi-nor: core: run calibration when
+ initialization is done
+Message-ID: <20220517160226.4107f282@xps-13>
+In-Reply-To: <20210311191216.7363-4-p.yadav@ti.com>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+        <20210311191216.7363-4-p.yadav@ti.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="R6aljjPloSPnfSZZ"
-Content-Disposition: inline
-In-Reply-To: <20220517150906.09a16a47@erd992>
-X-Cookie: Fats Loves Madelyn.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Pratyush,
 
---R6aljjPloSPnfSZZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+p.yadav@ti.com wrote on Fri, 12 Mar 2021 00:42:13 +0530:
 
-On Tue, May 17, 2022 at 03:09:06PM +0200, David Jander wrote:
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Tue, May 17, 2022 at 12:24:39PM +0200, David Jander wrote:
-
-> > > on, so I wonder whether there is something to gain if one could just =
-call
-> > > spi_bus_lock() at the start of several such small sync transfers and =
-use
-> > > non-locking calls (skip the queue lock and io_mutex)? Not sure that w=
-ould have
-
-> > I do worry about how this might perform under different loads where
-> > there are things coming in from more than one thread.
-
-> I understand your concern. The biggest issue is probably the fact that cl=
-ient
-> drivers can claim exclusive access to the bus this way, and who knows if =
-they
-> take care to not claim it for too long?
-
-Yes, claiming the bus for a long time.
-
-> In the end, if multiple latency-sensitive client drivers share the same S=
-PI
-> bus, besides this being a questionable HW design, this will be asking for
-> trouble. But I agree that usage of spi_bus_lock() by client drivers is
-> probably not a good idea.
-
-I think the worst case would be mixing latency sensitive and throughput
-sensitive devices, or possibly tasks on a device.  As you say there's an
-element of system design here.
-
-> > >  1. hard-IRQ, queue msg --ctx--> SPI worker, call msg->complete() whi=
-ch does
-> > >  thread IRQ work (but can only do additional sync xfers from this con=
-text). =20
-> >=20
-> > > vs. =20
-> >=20
-> > >  2. hard-IRQ, queue msg --ctx--> SPI worker, call completion --ctx-->=
- IRQ
-> > >  thread wait for completion and does more xfers... =20
-> >=20
-> > > vs (and this was my idea). =20
-> >=20
-> > >  3. hard-IRQ, pump FIFO (if available) --ctx--> IRQ thread, poll FIFO=
-, do more
-> > >  sync xfers... =20
-> >=20
-> > Roughly 1, but with a lot of overlap with option 3.  I'm unclear what
-> > you mean by "queue message" here.
+> Once the flash is initialized tell the controller it can run
+> calibration procedures if needed. This can be useful when calibration is
+> needed to run at higher clock speeds.
 >=20
-> In the above, I meant:
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> ---
+>  drivers/mtd/spi-nor/core.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 88888df009f0..e0cbcaf1be89 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -3650,6 +3650,7 @@ static int spi_nor_probe(struct spi_mem *spimem)
+>  	 * checking what's really supported using spi_mem_supports_op().
+>  	 */
+>  	const struct spi_nor_hwcaps hwcaps =3D { .mask =3D SNOR_HWCAPS_ALL };
+> +	struct spi_mem_op op;
+>  	char *flash_name;
+>  	int ret;
+> =20
+> @@ -3709,8 +3710,15 @@ static int spi_nor_probe(struct spi_mem *spimem)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	return mtd_device_register(&nor->mtd, data ? data->parts : NULL,
+> -				   data ? data->nr_parts : 0);
+> +	ret =3D mtd_device_register(&nor->mtd, data ? data->parts : NULL,
+> +				  data ? data->nr_parts : 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	op =3D spi_nor_spimem_get_read_op(nor);
 
->  "queue message":=20
-> 	list_add_tail(&msg->queue, &ctlr->queue);
-> 	kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
+Isn't this too specific? I really don't know much about spi-nors, but I
+find odd to have this op being created here, why not moving this into
+the _do_calibration() helper?
 
-OK, no - I'm proposing actually putting the message onto the hardware
-=66rom interrupt context.
+> +	spi_mem_do_calibration(nor->spimem, &op);
 
-> > Yes, that's the whole point.  This also flows nicely when you've got a
-> > queue since you can restart the hardware from the interrupt context
-> > without waiting to complete the transfer that just finished.
+A warning/info upon calibration error (not on the absence of the hook)
+would be nice?
 
-> Ack. Only caveat I see is the requirement for CS to be settable in a
-> non-sleepable context. Not all GPIO pins have gpiod_set_value(). Some mig=
-ht
-> only have gpiod_set_value_cansleep(). Although the latter case is not a g=
-ood
-> choice for a CS signal, so I doubt it can be found in the wild.
-> Example: I2C GPIO expanders. In such a (very unlikely) case, the spi subs=
-ystem
-> would need to fall back to the worker-queue, so probably not a big deal.
+> +
+> +	return 0;
+>  }
+> =20
+>  static int spi_nor_remove(struct spi_mem *spimem)
 
-Yes, there's a bunch of things where we have to fall back on a queue.
-There's fully bitbanged controllers, excessively large messages or delay
-requirements, clock reprogramming and other things.
+Otherwise I like the overall idea.
 
---R6aljjPloSPnfSZZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKDpp4ACgkQJNaLcl1U
-h9BQ6wf/TKSPg8J3JGIJPtLlZkkxF03xICRcAGoSoZ1fDc6uagj/mVepOVz5ZLre
-hMF+ImsscATG4UROkx9nwnHATII9HiWpUE/PP5GL4700mNF+FQsbmjamtuNIo6eq
-/KxqM4x947QghjujCiVKrecPjB7dwutpPfhz4CtgdQgtk2t2CIDhFcnX0xPdI9F/
-wakFBsKDQppI0kLcGv00kRxY1Ul8NslDI34X2xqjfMFm4Gw2D8ZSLH/88yVjkW6Z
-Fnx/0PnNAwpHFHwGyhD/Iihuth7fuDOwCwumo1rG0eqBMOOK5Td18AqofUZwJEnM
-c6Pl+EGJmKcC1EGqDBEi26Hl7ZkZ9Q==
-=6Y7+
------END PGP SIGNATURE-----
-
---R6aljjPloSPnfSZZ--
+Thanks,
+Miqu=C3=A8l
