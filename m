@@ -2,192 +2,168 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A391952A197
-	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69EF52A1A7
+	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 14:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243528AbiEQMe2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 May 2022 08:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S243491AbiEQMh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 May 2022 08:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242745AbiEQMe1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 08:34:27 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0534B876;
-        Tue, 17 May 2022 05:34:26 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HCXiuX090876;
-        Tue, 17 May 2022 07:33:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652790824;
-        bh=jX/75826u0dAvndf/WCTgLn1BPxJ18FVo/2uucSrT3Y=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ksCA4A3K9ssPA9nasc1mvGNYBJRLlfv+cVMJ1NgTBdWUOI9f/I3BARSCJtQewvqIi
-         xkA9MBYoWj2ZVU4RmoTY4etI9m6jghCOtHMUdCZOmvs4Rg47zPO9VoNGJ4otocPobm
-         w5d9sFsBjpbZYMq1I/G37MsCJv1o0CLcWvkcX13U=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HCXi48070260
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 07:33:44 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 07:33:44 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 07:33:44 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HCXh78095767;
-        Tue, 17 May 2022 07:33:44 -0500
-Date:   Tue, 17 May 2022 18:03:43 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
-CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <andrew@aj.id.au>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        with ESMTP id S232779AbiEQMhZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 08:37:25 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B984A3D5;
+        Tue, 17 May 2022 05:37:20 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CE49DC000A;
+        Tue, 17 May 2022 12:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652791039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CNk04l4NOC/ZJltN0oDjVZ65rbHSyBSEB0Mh7KZb4cs=;
+        b=OKixoUAzBr0gjNgzwuuG4zDfpZTtIoGcuyz32KgTQOL5Mfi1xjZ3bxpVMYENvIMfEWjIow
+        DuMjb7DygiJTTAKOtK1OZ2Uq97GgnHKuRqV0sHmvATc1wocToGkA7df1t79N2f/Pm45YUh
+        Oreu5M87LqSYIjJwhEsON/UF/1iWRVrqxIPfUGzPLbFwFF3OE/SefLKxQsPz2y5fYHMRoO
+        ev5RYWF495gBDLTRZnJdXRGA0UKZ7s6oQ5CfYlxlWZfMvfB0S3Z3VuxhpQVfur7qxNFskI
+        k5asL+EjpMo2FEvhuDOr+BSajbrGL/n5qOkypWHkEEhBpBbqVXnkuOAJzlwB8Q==
+Date:   Tue, 17 May 2022 14:37:13 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>
+Cc:     Pratyush Yadav <p.yadav@ti.com>, Mark Brown <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <andrew@aj.id.au>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <richard@nod.at>,
         <joel@jms.id.au>, <tudor.ambarus@microchip.com>,
-        <miquel.raynal@bootlin.com>, <chin-ting_kuo@aspeedtech.com>,
-        <linux-aspeed@lists.ozlabs.org>, <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>
+        <chin-ting_kuo@aspeedtech.com>, <linux-aspeed@lists.ozlabs.org>,
+        <vigneshr@ti.com>, <linux-kernel@vger.kernel.org>
 Subject: Re: (subset) [PATCH v7 00/11] spi: spi-mem: Convert Aspeed SMC
  driver to spi-mem
-Message-ID: <20220517123343.5cust7y6uqeeamjs@ti.com>
-References: <20220509175616.1089346-1-clg@kaod.org>
- <165272636363.750911.14933122170662994904.b4-ty@kernel.org>
- <20220517110509.2e6xbwot63yl6a3c@ti.com>
- <a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Message-ID: <20220517143713.47676b4c@xps-13>
 In-Reply-To: <a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220509175616.1089346-1-clg@kaod.org>
+        <165272636363.750911.14933122170662994904.b4-ty@kernel.org>
+        <20220517110509.2e6xbwot63yl6a3c@ti.com>
+        <a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Cedric,
+Hi C=C3=A9dric,
 
-On 17/05/22 02:03PM, Cédric Le Goater wrote:
+clg@kaod.org wrote on Tue, 17 May 2022 14:03:02 +0200:
+
 > Pratyush,
-> 
+>=20
 > On 5/17/22 13:05, Pratyush Yadav wrote:
 > > Hi Cedric,
-> > 
-> > On 16/05/22 07:39PM, Mark Brown wrote:
-> > > On Mon, 9 May 2022 19:56:05 +0200, Cédric Le Goater wrote:
-> > > > This series adds a new SPI driver using the spi-mem interface for the
-> > > > Aspeed static memory controllers of the AST2600, AST2500 and AST2400
-> > > > SoCs.
-> > > > 
-> > > >   * AST2600 Firmware SPI Memory Controller (FMC)
-> > > >   * AST2600 SPI Flash Controller (SPI1 and SPI2)
-> > > >   * AST2500 Firmware SPI Memory Controller (FMC)
-> > > >   * AST2500 SPI Flash Controller (SPI1 and SPI2)
-> > > >   * AST2400 New Static Memory Controller (also referred as FMC)
-> > > >   * AST2400 SPI Flash Controller (SPI)
-> > > > 
-> > > > [...]
-> > > 
-> > > Applied to
-> > > 
-> > >     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> > > 
-> > > Thanks!
-> > > 
-> > > [02/11] dt-bindings: spi: Convert the Aspeed SMC controllers device tree binding
-> > >          commit: ce9858ea499da025684a7a5f19823c2c3f14bdce
-> > > [03/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
-> > >          commit: 9c63b846e6df43e5b3d31263f7db545f32deeda3
-> > > [04/11] spi: aspeed: Add support for direct mapping
-> > >          commit: 9da06d7bdec7dad8018c23b180e410ef2e7a4367
-> > > [05/11] spi: aspeed: Adjust direct mapping to device size
-> > >          commit: bb084f94e1bca4a5c4f689d7aa9b410220c1ed71
-> > > [06/11] spi: aspeed: Workaround AST2500 limitations
-> > >          commit: 5785eedee42c34cfec496199a80fa8ec9ddcf7fe
-> > > [07/11] spi: aspeed: Add support for the AST2400 SPI controller
-> > >          commit: 53526ab27d9c256504f267713aea60db7af18fb0
-> > > [08/11] spi: aspeed: Calibrate read timings
-> > >          commit: eeaec1ea05c0e0f08e04c6844f20cc24a2fcc0f4
-> > 
+> >=20
+> > On 16/05/22 07:39PM, Mark Brown wrote: =20
+> >> On Mon, 9 May 2022 19:56:05 +0200, C=C3=A9dric Le Goater wrote: =20
+> >>> This series adds a new SPI driver using the spi-mem interface for the
+> >>> Aspeed static memory controllers of the AST2600, AST2500 and AST2400
+> >>> SoCs.
+> >>>
+> >>>   * AST2600 Firmware SPI Memory Controller (FMC)
+> >>>   * AST2600 SPI Flash Controller (SPI1 and SPI2)
+> >>>   * AST2500 Firmware SPI Memory Controller (FMC)
+> >>>   * AST2500 SPI Flash Controller (SPI1 and SPI2)
+> >>>   * AST2400 New Static Memory Controller (also referred as FMC)
+> >>>   * AST2400 SPI Flash Controller (SPI)
+> >>>
+> >>> [...] =20
+> >>
+> >> Applied to
+> >>
+> >>     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git fo=
+r-next
+> >>
+> >> Thanks!
+> >>
+> >> [02/11] dt-bindings: spi: Convert the Aspeed SMC controllers device tr=
+ee binding
+> >>          commit: ce9858ea499da025684a7a5f19823c2c3f14bdce
+> >> [03/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
+> >>          commit: 9c63b846e6df43e5b3d31263f7db545f32deeda3
+> >> [04/11] spi: aspeed: Add support for direct mapping
+> >>          commit: 9da06d7bdec7dad8018c23b180e410ef2e7a4367
+> >> [05/11] spi: aspeed: Adjust direct mapping to device size
+> >>          commit: bb084f94e1bca4a5c4f689d7aa9b410220c1ed71
+> >> [06/11] spi: aspeed: Workaround AST2500 limitations
+> >>          commit: 5785eedee42c34cfec496199a80fa8ec9ddcf7fe
+> >> [07/11] spi: aspeed: Add support for the AST2400 SPI controller
+> >>          commit: 53526ab27d9c256504f267713aea60db7af18fb0
+> >> [08/11] spi: aspeed: Calibrate read timings
+> >>          commit: eeaec1ea05c0e0f08e04c6844f20cc24a2fcc0f4 =20
+> >=20
 > > I have repeatedly objected to this patch [0][1][2] and you have
-> > repeatedly decided to not address my objections.
-> 
+> > repeatedly decided to not address my objections.  =20
 > That's a very harsh way of saying things. I did not decide anything
 > or ignore your comments. I answered your questions and acknowledged
 > that indeed the read training was done under the dirmap handler but
 > this was not a concern today since we had all the required information
 > from spimem.
-
-I think the correct thing to do here would be to move this patch out of 
-your main series. Since the old driver did not have this feature anyway, 
-it is not necessary for the conversion to achieve feature parity. Then 
-have a separate series to drive the conversation on how to best 
-implement this contentious feature.
-
-> 
+>=20
 > We waited _together_, 5 or 6 weeks, for more inputs on how to address
 > the concerns you raised regarding the sustainability of this method.
-> 
-> > I won't spend any more time fighting it.
-> 
+>=20
+> > I won't spend any more time fighting it.  =20
 > This is not a fight. I don't know why you interpret it that way.
-
-I interpret it this way because I feel you have ignored my comments and 
-have kept this patch in regardless. But maybe I _am_ being too harsh. So 
-apologies if I have interpreted things wrong.
-
-> 
+>=20
 > Now, since you object so explicitly, and since this patchset has
 > not reached the Linux kernel yet, we should consider dropping it.
 > I rather do that than push crap in mainline. But then, please,
 > provide solutions and not only objections !
-
-Yes please. I would like to have this patch dropped, and then reopen 
-this discussion in a separate thread.
-
-I have provided solutions before but maybe you missed them. Please see 
-[3]. Specifically patches 1 and 3. These are still not very refined and 
-might not be accepted in their current state (especially patch 3 since 
-it does the calibration after registering the device with MTD), but they 
-should be a good starting point for discussion.
-
-And we might end up deciding to just use the dirmap_create() hook to do 
-the calibration, but it is important to have this conversation 
-separately and clearly instead of it being missed as part of a large 
-patch series.
-
-> 
+>=20
 > > But I will say that you should not expect any
 > > guarantees that SPI NOR or SPI NAND will not break your calibration in
-> > the future if they decide to move the dirmap_create() call around.
-> 
+> > the future if they decide to move the dirmap_create() call around. =20
+>=20
 > If that's the case one day, we have multiple solutions :
-> 
->   - stop doing the training
->   - move the training to the appropriate handler if it exists
+>=20
+>    - stop doing the training
 
-This is my preferred option, [3] is a good starting point for proposing 
-that handler.
+Not really an option, isn't it?
 
->   - use a default value
-> > > [11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
-> > >          commit: 73ae97e3cabb580639f02f12a192324a53c4bebb
-> > > 
-> > 
-> > [0] https://patchwork.kernel.org/project/spi-devel-general/patch/20220325100849.2019209-9-clg@kaod.org/
-> > [1] https://patchwork.kernel.org/project/spi-devel-general/patch/20220214094231.3753686-9-clg@kaod.org/
-> > [2] https://lore.kernel.org/all/20220208190636.h6dubktkmuosvdxo@ti.com/
-[3] https://patchwork.ozlabs.org/project/linux-mtd/list/?series=233504&state=%2A&archive=both
+>    - move the training to the appropriate handler if it exists
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Sorry for jumping in so late, but why not using this solution already
+if there are concerns about the current location? It does not look like
+a complex solution to implement, but I might be overlooking something.
+
+This can also be done for the next kernel release.
+
+>    - use a default value
+>   >> [11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB =
+for AST2600
+> >>          commit: 73ae97e3cabb580639f02f12a192324a53c4bebb
+> >> =20
+> >=20
+> > [0] https://patchwork.kernel.org/project/spi-devel-general/patch/202203=
+25100849.2019209-9-clg@kaod.org/
+> > [1] https://patchwork.kernel.org/project/spi-devel-general/patch/202202=
+14094231.3753686-9-clg@kaod.org/
+> > [2] https://lore.kernel.org/all/20220208190636.h6dubktkmuosvdxo@ti.com/=
+ =20
+>=20
+> Regards,
+>=20
+> C=C3=A9dric.
+
+
+Thanks,
+Miqu=C3=A8l
