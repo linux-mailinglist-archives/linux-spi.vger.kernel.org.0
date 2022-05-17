@@ -2,67 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A092A529FF4
-	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 13:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8C252A0E4
+	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 13:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344838AbiEQLGR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 May 2022 07:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S233682AbiEQL5b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 May 2022 07:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344916AbiEQLGK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 07:06:10 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2445FD2;
-        Tue, 17 May 2022 04:06:07 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HB5B9Y067885;
-        Tue, 17 May 2022 06:05:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652785511;
-        bh=hDsJq/b0VuKRFUYgX46+pCCeUUg4Uzz56vD30lAdDWc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=C+/lmMp4a8s3j9ztwdKfi7X1KsqIIY1E5422WCsWEqlsAcsrl0AdPawNsRP35HaPH
-         P2WrLbLq1j3T6P2cYbplwX1Y6xPVhdgFY+ffLq6IfmaUZbNSMlNpb1Io98yAIR5Czv
-         1/WsUufFlJhznkoSNZkcQLWY5SxOiHUWJqH0l7TY=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HB5BGR079369
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 06:05:11 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 06:05:10 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 06:05:10 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HB5Ahl014403;
-        Tue, 17 May 2022 06:05:10 -0500
-Date:   Tue, 17 May 2022 16:35:09 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <clg@kaod.org>, <andrew@aj.id.au>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <richard@nod.at>,
-        <joel@jms.id.au>, <tudor.ambarus@microchip.com>,
-        <miquel.raynal@bootlin.com>, <chin-ting_kuo@aspeedtech.com>,
-        <linux-aspeed@lists.ozlabs.org>, <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: (subset) [PATCH v7 00/11] spi: spi-mem: Convert Aspeed SMC
- driver to spi-mem
-Message-ID: <20220517110509.2e6xbwot63yl6a3c@ti.com>
-References: <20220509175616.1089346-1-clg@kaod.org>
- <165272636363.750911.14933122170662994904.b4-ty@kernel.org>
+        with ESMTP id S244349AbiEQL51 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 07:57:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D7936310
+        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 04:57:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D6E560B71
+        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 11:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E207C385B8;
+        Tue, 17 May 2022 11:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652788642;
+        bh=//Hu2gdNvx1/B5dqxRrO15ydpHXcHeRuei09+1t2Ftg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BKAME4/mqfQe/IS4KmeJJKc/1iJIID8EklsY70b0BxnCgtUBu7NkAZMIIlf8cbTK8
+         5e5ZZhz5qxmSGKVzf+pbsLxblG0A5kqkxUv38LlcGQiP6bfg0LjiRrL2mxsE7na0YT
+         fKGE89fPuTBMfqZXPaGaTy+f50vuD7/39YXDILaCCbkkRWGtpyN2eweLbMwSw0GzI2
+         KsGe3l896MDY1ORGUu3YTyYhmrXRmf/UpX+NjE/J+IWTkBc4ceONhUStLO67aGOkEh
+         nPgbAINSS5TbkjXCrtITNrgvMcUI0C2Jvx1ZWGs3cMEK7EYD0yD/SI8qSQCGxGQjCl
+         Cl4jNga7tlLYg==
+Date:   Tue, 17 May 2022 12:57:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
+        Oleksij Rempel <ore@pengutronix.de>
+Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
+ access
+Message-ID: <YoONngxX/jdTjSOH@sirena.org.uk>
+References: <20220512163445.6dcca126@erd992>
+ <Yn1wE4TLyXCIm9GF@sirena.org.uk>
+ <20220513144645.2d16475c@erd992>
+ <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
+ <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
+ <YoKN/lqrgKJbVBVq@sirena.org.uk>
+ <20220517122439.744cf30c@erd992>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qEXEam9aqxKJ/j7N"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <165272636363.750911.14933122170662994904.b4-ty@kernel.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220517122439.744cf30c@erd992>
+X-Cookie: Fats Loves Madelyn.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,59 +62,94 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Cedric,
 
-On 16/05/22 07:39PM, Mark Brown wrote:
-> On Mon, 9 May 2022 19:56:05 +0200, Cédric Le Goater wrote:
-> > This series adds a new SPI driver using the spi-mem interface for the
-> > Aspeed static memory controllers of the AST2600, AST2500 and AST2400
-> > SoCs.
-> > 
-> >  * AST2600 Firmware SPI Memory Controller (FMC)
-> >  * AST2600 SPI Flash Controller (SPI1 and SPI2)
-> >  * AST2500 Firmware SPI Memory Controller (FMC)
-> >  * AST2500 SPI Flash Controller (SPI1 and SPI2)
-> >  * AST2400 New Static Memory Controller (also referred as FMC)
-> >  * AST2400 SPI Flash Controller (SPI)
-> > 
-> > [...]
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> 
-> Thanks!
-> 
-> [02/11] dt-bindings: spi: Convert the Aspeed SMC controllers device tree binding
->         commit: ce9858ea499da025684a7a5f19823c2c3f14bdce
-> [03/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
->         commit: 9c63b846e6df43e5b3d31263f7db545f32deeda3
-> [04/11] spi: aspeed: Add support for direct mapping
->         commit: 9da06d7bdec7dad8018c23b180e410ef2e7a4367
-> [05/11] spi: aspeed: Adjust direct mapping to device size
->         commit: bb084f94e1bca4a5c4f689d7aa9b410220c1ed71
-> [06/11] spi: aspeed: Workaround AST2500 limitations
->         commit: 5785eedee42c34cfec496199a80fa8ec9ddcf7fe
-> [07/11] spi: aspeed: Add support for the AST2400 SPI controller
->         commit: 53526ab27d9c256504f267713aea60db7af18fb0
-> [08/11] spi: aspeed: Calibrate read timings
->         commit: eeaec1ea05c0e0f08e04c6844f20cc24a2fcc0f4
+--qEXEam9aqxKJ/j7N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have repeatedly objected to this patch [0][1][2] and you have 
-repeatedly decided to not address my objections. I won't spend any more 
-time fighting it. But I will say that you should not expect any 
-guarantees that SPI NOR or SPI NAND will not break your calibration in 
-the future if they decide to move the dirmap_create() call around.
+On Tue, May 17, 2022 at 12:24:39PM +0200, David Jander wrote:
 
-> [11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
->         commit: 73ae97e3cabb580639f02f12a192324a53c4bebb
-> 
+> (mainly in spi.c for now). Time interrupt line stays low:
 
-[0] https://patchwork.kernel.org/project/spi-devel-general/patch/20220325100849.2019209-9-clg@kaod.org/
-[1] https://patchwork.kernel.org/project/spi-devel-general/patch/20220214094231.3753686-9-clg@kaod.org/
-[2] https://lore.kernel.org/all/20220208190636.h6dubktkmuosvdxo@ti.com/
+>  1. Kernel 5.18-rc1 with only polling patches from spi-next: 135us
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+>  2. #if 0 around all stats and accounting calls: 100us
+
+>  3. The _fast API of my original RFC: 55us
+
+> This shows that the accounting code is a bit less than half of the dispensable
+> overhead for my use-case. Indeed an easy target.
+
+Good.
+
+> on, so I wonder whether there is something to gain if one could just call
+> spi_bus_lock() at the start of several such small sync transfers and use
+> non-locking calls (skip the queue lock and io_mutex)? Not sure that would have
+> a meaningful impact, but to get an idea, I replaced the bus_lock_spinlock and
+> queue_lock in __spi_sync() and __spi_queued_transfer() with the bare code in
+> __spi_queued_transfer(), since it won't submit work to the queue in this case
+> anyway. The resulting interrupt-active time decreased by another 4us, which is
+> approximately 5% of the dispensable overhead. For the record, that's 2us per
+> spinlock lock/unlock pair.
+
+I do worry about how this might perform under different loads where
+there are things coming in from more than one thread.
+
+> > One thing that might be useful would be if we could start the initial
+> > status read message from within the hard interrupt handler of the client
+> > driver with the goal that by the time it's threaded interrupt handler
+> > runs we might have the data available.  That could go wrong on a lightly
+> > loaded system where we might end up running the threaded handler while
+> > the transfer is still running, OTOH if it's lightly loaded that might
+> > not matter.  Or perhaps just use a completion from the SPI operation and
+> > not bother with the threaded handler at all.
+
+> You mean ("ctx" == context switch):
+
+>  1. hard-IRQ, queue msg --ctx--> SPI worker, call msg->complete() which does
+>  thread IRQ work (but can only do additional sync xfers from this context).
+
+> vs.
+
+>  2. hard-IRQ, queue msg --ctx--> SPI worker, call completion --ctx--> IRQ
+>  thread wait for completion and does more xfers...
+
+> vs (and this was my idea).
+
+>  3. hard-IRQ, pump FIFO (if available) --ctx--> IRQ thread, poll FIFO, do more
+>  sync xfers...
+
+Roughly 1, but with a lot of overlap with option 3.  I'm unclear what
+you mean by "queue message" here.
+
+> Option 3 would require a separation of spi_sync_transfer into two halves. One
+> half just activates CS (non-sleep GPIO api!) and fills the FIFO. The second
+> half polls the FIFO for transfer completion. This path could only be chosen if
+> the SPI controller has a FIFO that can hold the whole message. In other words a
+> lot of spacial case handling for what it is worth probably... but still
+> interesting.
+
+Yes, that's the whole point.  This also flows nicely when you've got a
+queue since you can restart the hardware from the interrupt context
+without waiting to complete the transfer that just finished.
+
+> Option 2 is probably not that bad if the SPI worker can run on another core?
+
+Pretty much anything benefits with another core.
+
+--qEXEam9aqxKJ/j7N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKDjZ0ACgkQJNaLcl1U
+h9CNeQf9GZX3cb6QFaZynG6VutAASXVUXGfwDXZnYO1/OvdUrPcH4WtgIYxOv9Hv
+NBbwFAW8xnuQTy/CeviMXBpFIwjNwvpJYLkJdyJ73eKbaOKYbaP10VO+RjSNE3Sj
+V/NyyhocKTh6fh4FBxK5vIbBXJI6Fe9AgNb8zdwuKAXgDdUzJYo6UyFMcPIYd/hy
+SBt05+bBMazimr2f6wtBt3Nxr/xyfUSva0B7o+fNoNV0aUgKIMYLceYZ5tSUMdER
+VlY2BCfOCxsjJrjb2zYlQ5xPCILehKch32I/HmFRxOiz8hXwRqAckLOP8yT90I95
+lYY2gxuoJOHEjnE6+BOkH1gXaE5erg==
+=qqv8
+-----END PGP SIGNATURE-----
+
+--qEXEam9aqxKJ/j7N--
