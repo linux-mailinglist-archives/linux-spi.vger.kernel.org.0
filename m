@@ -2,138 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D58C52A7EF
-	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 18:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE1152AA6B
+	for <lists+linux-spi@lfdr.de>; Tue, 17 May 2022 20:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350903AbiEQQaS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 May 2022 12:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S240667AbiEQSSB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 May 2022 14:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiEQQaQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 12:30:16 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D7227FCB;
-        Tue, 17 May 2022 09:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652805015; x=1684341015;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0NqJ5VwhtJ3tBjditXPJfSf+c2F9/tHzdRAp1qZ01bI=;
-  b=j3AfRc0u6OCgoEwPQjh4bdI+1qJ1h9afmuYsbH6RsFzvEOkr7hoc7J5o
-   LXchL9r5h3bxJIrV6QosV5BwOqn6TZZlg9nM8veaGnrzGUeGsNzA4FWzM
-   HkYg/B+aEdQ8ZkO/MUdJqUV4GiRarnhm/uDSPW/YXPny2ZYSr7NUyi+oB
-   aVify6KIhjZbva7ea+b2o37ilAq9NdOmu9Rr/smq2t/fyinqrzgTo7rzW
-   X1X9W3YRH3bty1uTDFyQzRo58JAFiep9vEiTPJYx60NY1pYBtg/Llc5xs
-   sZFY/lPSTwlwdwk5Hmoux4dlQfFZTDOHuL2dtNASITWI8qKmzhCEwglKN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271364116"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="271364116"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:30:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="626561602"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:30:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nr05E-0008C4-Vy;
-        Tue, 17 May 2022 19:30:04 +0300
-Date:   Tue, 17 May 2022 19:30:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mark Brown <broonie@kernel.org>,
-        chris.packham@alliedtelesis.co.nz,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>
-Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
-Message-ID: <YoPNjPp3LMF2+qKS@smile.fi.intel.com>
-References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
- <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
- <877d6l7fmy.fsf@mpe.ellerman.id.au>
- <YoJaGGwfoSYhaT13@smile.fi.intel.com>
- <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
- <874k1p6oa7.fsf@mpe.ellerman.id.au>
+        with ESMTP id S230408AbiEQSSA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 May 2022 14:18:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A21C506EA
+        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 11:17:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDC8D6152A
+        for <linux-spi@vger.kernel.org>; Tue, 17 May 2022 18:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50997C385B8;
+        Tue, 17 May 2022 18:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652811478;
+        bh=tOx6DnCZqEr+cuUS9nNKdlblUW/gMkJ1CZKULb6l3Wo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzsiwTJLO7msXZB4/c11qDiCH2CaIc0W+OboCtezjLG+rnJ+yslOtZeQLTTV/AM8Q
+         6ZPHmgO3OdmJPGmpxXEnfcziJ5GXONub1So8ZyqqYF76I594+YJaek3HFwQ/g3xDBt
+         oXF89AReDMHQeeF2MY8lsM67q/jQcRXHr9hniCCWwbZNn/fwsCBb7vdOY6m7XeI8XR
+         nm2HVA/ty13e551YJ4YCtD1U1gJ37dTR/yhMHJuBUIP3TlApMmM5a2Ks9qp0rZ5QvV
+         bzoSSXRID8uVk06uihtU8VEbHozOPSyucWoBN6NhwpFO0qbTZVFxK/2UgwBHvmB/K5
+         bRT3bGV5bsPrw==
+Date:   Tue, 17 May 2022 19:17:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
+        Oleksij Rempel <ore@pengutronix.de>
+Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
+ access
+Message-ID: <YoPm0qDaMEogH8n2@sirena.org.uk>
+References: <Yn1wE4TLyXCIm9GF@sirena.org.uk>
+ <20220513144645.2d16475c@erd992>
+ <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
+ <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
+ <YoKN/lqrgKJbVBVq@sirena.org.uk>
+ <20220517122439.744cf30c@erd992>
+ <YoONngxX/jdTjSOH@sirena.org.uk>
+ <20220517150906.09a16a47@erd992>
+ <YoOmn1k6yEtJofe5@sirena.org.uk>
+ <20220517171626.51d50e74@erd992>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GmxkPEcevblijayb"
 Content-Disposition: inline
-In-Reply-To: <874k1p6oa7.fsf@mpe.ellerman.id.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220517171626.51d50e74@erd992>
+X-Cookie: Fats Loves Madelyn.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:38:56AM +1000, Michael Ellerman wrote:
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> > On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
-> >> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
-> >> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> >> > > We may convert the GPT driver to use fwnode API for the sake
-> >> > > of consistency of the used APIs inside the driver.
-> >> > 
-> >> > I'm not sure about this one.
-> >> > 
-> >> > It's more consistent to use fwnode in this driver, but it's very
-> >> > inconsistent with the rest of the powerpc code. We have basically no
-> >> > uses of the fwnode APIs at the moment.
-> >> 
-> >> Fair point!
-> >> 
-> >> > It seems like a pretty straight-forward conversion, but there could
-> >> > easily be a bug in there, I don't have any way to test it. Do you?
-> >> 
-> >> Nope, only compile testing. The important part of this series is to
-> >> clean up of_node from GPIO library, so since here it's a user of
-> >> it I want to do that. This patch is just ad-hoc conversion that I
-> >> noticed is possible. But there is no any requirement to do so.
-> >> 
-> >> Lemme drop this from v3.
-> >
-> > I just realize that there is no point to send a v3. You can just apply
-> > first 3 patches. Or is your comment against entire series?
-> 
-> No, my comment is just about this patch.
-> 
-> I don't mind converting to new APIs when it's blocking some other
-> cleanup. But given the age of this code I think it's probably better to
-> just leave the rest of it as-is, unless someone volunteers to test it.
-> 
-> So yeah I'll just take patches 1-3 of this v2 series, no need to resend.
 
-Thanks!
+--GmxkPEcevblijayb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One note though, the fwnode_for_each_parent_node() is not yet available in
-upstream, but will be after v5.19-rc1. It means the patch 3 can't be applied
-without that. That's why LKP complained on patch 4 in this series.
+On Tue, May 17, 2022 at 05:16:26PM +0200, David Jander wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-That said, the easiest way is to postpone it till v5.19-rc1 is out.
+> > I think the worst case would be mixing latency sensitive and throughput
+> > sensitive devices, or possibly tasks on a device.  As you say there's an
+> > element of system design here.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Sure. I have combined NOR-flash chips on the same SPI bus with an MCP2515=
+ CAN
+> controller in the past. But I knew that the NOR-flash chip would only eve=
+r be
+> accessed during a firmware update or from the bootloader. Never together =
+with
+> CAN communication. If I did, I would have lost CAN messages guaranteed. So
+> you can have compromises. I (as HW designer) in this case would never exp=
+ect
+> the kernel to try to make this work concurrently, and IMHO we (as
+> kernel developers) shouldn't try in such extreme cases either.
 
+Part of the worry here is if we manage to do something that plays badly
+with tools like real time scheduling that allows people to manage this
+stuff, causing problems for something that otherwise works fine.
 
+> > OK, no - I'm proposing actually putting the message onto the hardware
+> > from interrupt context.
+
+> Nice! I like that idea. Do you want to somehow extend spi_async() to do t=
+his
+> transparently? So we just need to introduce a second function
+> ("spi_async_await()" ?) which would wait for completion and collect the RX
+> buffer?
+
+We shouldn't need a new API to wait for the async operation to complete,
+hopefully the existing one is fine.
+
+> To sum up all possible patches you would accept if I understood correctly:
+
+>  1. Make the stats/accounting code be NOP with a sysfs or similar toggle.
+
+Or otherwise make it unobtrusive (eg, with similar techniques to those
+used by the networking API).
+
+>  2. Enable the re-use of messages with once in lifetime prepare/map/valid=
+ate.
+>=20
+>  3. Introduce spi_async_await() (or similar), to wait for completion of an
+>  async message.
+>=20
+>  4. Enable SPI drivers to tell the core (spi.c) under which conditions it=
+ can
+>  fire a message asynchronously without the need for the worker queue and
+>  implement support for those cases. Conditions involve max. transfer size=
+, CS
+>  non-sleep access, etc... but it should probably be up to the SPI driver =
+to
+>  decide I guess (ctlr->can_send_uninterruptible(msg)).
+>=20
+> Do I miss something?
+
+That's roughly it, plus a general push to optimise the hot path.
+
+> Minor concern about 4. above: Hopefully the decision can be made very qui=
+ckly
+> (i.e. without trying and failing). Maybe this decision result can be cach=
+ed in
+> the struct spi_message, so it can be re-used (see point 2)? Maybe as part=
+ of
+> prepare or validate?
+
+Yes, we need to do this at validation time to play with the reuse I
+think.
+
+> I feel confident that these 4 modifications will have enough of a perform=
+ance
+> impact if fully exploited by the MCP2518FD driver, that overhead will no
+> longer be a concern.
+
+Just the small matter of implementing them then :/
+
+--GmxkPEcevblijayb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKD5tEACgkQJNaLcl1U
+h9ASMAf9Fa3Jo7xS4FWOpoJE0tn00Ussn6LhjnSZ5bIzdWyjH5tFgLV2fAADfxdi
+cbeehVGWfzzNyKlyiyNbBRCmEGA1HhMBSsTl79j7Mrk8EPHKGudpof2OfqZfIf16
+pVHDeI+qhDyXXUZ6FDDlyF+wp8dpucSKQRsNzGrrprWPXz5bByA2yA42QpQso06+
+flr/a/zT4FmMtOwN6nzV7K1fndg6HAhBM+tF/HIqhUWwbyOWyLj0tM6AqS0WoTHx
+//KFSi7mQZldaEVZ9u96yqcD/rVS8IEAY6N7PEYb2RIySCWQ+E19JmOA/HVrQL5p
+nkRKTiqxZMqiBpRzGGZ0bL1pVNyNOQ==
+=YQaW
+-----END PGP SIGNATURE-----
+
+--GmxkPEcevblijayb--
