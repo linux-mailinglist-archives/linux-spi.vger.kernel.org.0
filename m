@@ -2,132 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EE452DC26
-	for <lists+linux-spi@lfdr.de>; Thu, 19 May 2022 19:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1FD52E3DF
+	for <lists+linux-spi@lfdr.de>; Fri, 20 May 2022 06:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243409AbiESR6i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 May 2022 13:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S1345297AbiETEg2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 May 2022 00:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242864AbiESR6h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 May 2022 13:58:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CDDD02BD;
-        Thu, 19 May 2022 10:58:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30815619CF;
-        Thu, 19 May 2022 17:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2DFC385AA;
-        Thu, 19 May 2022 17:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652983115;
-        bh=qPSL3nOy4ors8i7I3XUDymDpFTxUdxPWn9rsFvTq4IU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z0B6c12RB7rnU3d3fbpR59AQwMBiYIHh01cWkCVFWoFxG4S/5WQslaQxF6a2ndlaT
-         SS9SbflaP4pIgkWayhUQVBIGeGX24a5SGPnYCvyhxaqImBQq7zRl2lPettkBow1Y9u
-         BFOpWBdSpUXBEsA9RZp5inbVjsq2ATV62zYtK8E2arym0VFrfChrfTH9vzdu9wDgW9
-         FNiUNiJf/5StVBcsWkvpyOsRYIzO5YoPX47FtapAKwFRlJjnMVsfDT0XtOl7hNa/hq
-         3bF55LsX9RF+l7PNlMiCks5Kxp6YukONvO7HhczXJ1szKkvlRkCRa9Gz0fsv2ugsqN
-         XD3AjDZ/T+/4w==
-Date:   Thu, 19 May 2022 23:28:31 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     "broonie@kernel.org" <broonie@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "plyatov@gmail.com" <plyatov@gmail.com>,
-        "sean.nyekjaer@prevas.dk" <sean.nyekjaer@prevas.dk>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH v1 03/15] Revert "dmaengine: imx-sdma: refine to load
- context only once"
-Message-ID: <YoaFR/Nd9fv0xbKA@matsya>
-References: <1556027045-5269-1-git-send-email-yibin.gong@nxp.com>
- <1556027045-5269-4-git-send-email-yibin.gong@nxp.com>
+        with ESMTP id S231559AbiETEgZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 May 2022 00:36:25 -0400
+X-Greylist: delayed 925 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 May 2022 21:36:01 PDT
+Received: from CN01-SHA-obe.outbound.protection.partner.outlook.cn (mail-shahn0102.outbound.protection.partner.outlook.cn [42.159.164.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EF91CB05;
+        Thu, 19 May 2022 21:35:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GXEcO+Pdq/n1WvMeexF9+Z31kqpVfOcFE3Aesh90bbg+/7P+xsxoBW/DLK5bvP90mOjIaElKZoGTskWbdu5jIqk9cvMs3/vbugqPO8AvHvxeEE1yLrZqMqzbBhJhedfDsI9Zfsz8m8IdhuKnHW5gqeJFIwLeNl6D1/Auqj+xWrQA7OdYI+5QGHBZC27kh/aNklxYOsQ3Amn99jgXzKhKMGMEZwp7xS9Ksz5Bg02yCr8YNpj/6JTYlWjtEE5pcKrrN7bRXWpkOIY1jI0a76frjYIWJyKSZe+hnd6OLMuNpXnMMTKQEMLBH9h4blcawroZ1SehuszmClTKEgDmDnoyjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XHa7Vpxtm/u3S4otqoZTmpXUuVJNGmaT4A6UJUMDuKo=;
+ b=ILTGm3Q6NIH5XdXAZ+IfHIETfVywtvN/v3gcaxksgAM3mS3PNnQ+WVtyGZMG0n7tVq2MNchb9cHvNyJyDrgk3Bb5mIMu/iMp48EKEDODBLB0oh04yJ2t6n/cXh8BliF/fz77Fi+J/ysPbUhf8IBnEvDVLHbhueNYnNcxmvHJaKySq9FjPWhj+6oM76PWesTEtYCp+HCGjVUPJ7Kj5P8rv/tIP2w+J/uUT9lY4vHFbhnbYx95/NE0E1Rpb6Kdg/uZTllP+XnE0AbtZBQsNw8dNARiGq/n6e6UF3pNrse0k12/p1MN0lzXRJ2g3UYcj7KcS3I2LG+TH/6NtdcJ7pX39Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
+ dkim=pass header.d=gientech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XHa7Vpxtm/u3S4otqoZTmpXUuVJNGmaT4A6UJUMDuKo=;
+ b=jTCnGgYd5svKDIgJS9NV/88sq8Y9hmymhPgnlZZjNOCxqr//9M3N2QMl57U55yJktd+owUV7q4boMlhawhy3dEQ0gbZxcD8SgAR/XRlpKXDgvr9z7vBgXBVvFaWczZCiKk6YpkGpfSzryh0TJFvz08wRvNrUcBBduTxZrD6Bc5GOVhCI1mbV+hx+P9AwGjmEXny/JpGIFaZCHs3/kT/Zva3BPssgsLtH2jXFcV2pTHQdvHI9gs6GExlSE004piC+eVNLKiTiwc5znWZefjtLGeDvhYPFsBFH1LM06/3hnuTuR/n+zQjd4vcQbGjCM5N00TRE7zbqDw49XuW2mTt56w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gientech.com;
+Received: from SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn (10.43.110.19) by
+ SHXPR01MB0575.CHNPR01.prod.partner.outlook.cn (10.43.109.207) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.15; Fri, 20 May 2022 04:19:19 +0000
+Received: from SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn ([10.43.110.19])
+ by SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn ([10.43.110.19]) with mapi
+ id 15.20.5273.017; Fri, 20 May 2022 04:19:18 +0000
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Ree
+To:     Recipients <cuidong.liu@gientech.com>
+From:   "J Wu" <cuidong.liu@gientech.com>
+Date:   Wed, 18 May 2022 21:19:16 +0000
+Reply-To: contact@jimmywu.online
+X-ClientProxiedBy: BJSPR01CA0008.CHNPR01.prod.partner.outlook.cn
+ (10.43.34.148) To SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn
+ (10.43.110.19)
+Message-ID: <SHXPR01MB0623E230C4C6B93FC36AEA8A89D19@SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1556027045-5269-4-git-send-email-yibin.gong@nxp.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9e838114-9218-4390-0b40-08da39141e52
+X-MS-TrafficTypeDiagnostic: SHXPR01MB0575:EE_
+X-Microsoft-Antispam-PRVS: <SHXPR01MB05756F79FD9BAB2C43C4105389D39@SHXPR01MB0575.CHNPR01.prod.partner.outlook.cn>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?cDc3RMniuYXuNYZ7JQwjTu5F8HvWC5XYKB4cujm5KVV147U6AG93bkHoOL?=
+ =?iso-8859-1?Q?fzSWaGsm+QTvATZmM8pNOO07H01F/eHp0dV9/akZeOY3k428Hd3+1fvpvS?=
+ =?iso-8859-1?Q?ByJBIH2Lb7/0zSGebK+UuaHyVADhrIcGw0eL9NsvTNgQhzE2BWMpws8fNt?=
+ =?iso-8859-1?Q?TKBeKuW8esCnwO63bEMk5wApwQjSI0BMJ6Y+2kC4xB1NCsiWTSqZbYLxSt?=
+ =?iso-8859-1?Q?NzMaArLcsNe4/aTH6CI3LOYaqVziTv/YFnvJe9/hCccru/LZxoLddoyxwe?=
+ =?iso-8859-1?Q?qQey5cTMM13ZJQ/jDCW/gz5iOucIMS5P0X0N2Jk2n2ynmk8Vh2dqnK48ph?=
+ =?iso-8859-1?Q?dk+pUrwqYxqOEQXJkfe8ai4jU0R1GiqxW00Gt/KLm0QlZux03a2EAqLg2V?=
+ =?iso-8859-1?Q?CkfORNJNJpPTPyBsHJOlQYDLcutp8EtBc+vs1Wm9J/tRPMjkcBF7XmB/bD?=
+ =?iso-8859-1?Q?yqb2UbPpt1jUof7s0Bq7nTiXQ01WvpbyLe4p8bo7oXUzIpk2e1T9XsLREH?=
+ =?iso-8859-1?Q?jkq4JUq694l/oaEcPMM8hrkKefQKnaCC2dmri/sKVd3L04cmWqBOHBm0DL?=
+ =?iso-8859-1?Q?c5B+7vwDaZzdZbWRkSey69NrdLVKaSUxjawgvIToBuqwzTYlSwnuE1U9Ou?=
+ =?iso-8859-1?Q?52yujYKcxzpVHDeCIl8+Ky9qDhEdTLVCbRTo1xVJvY8+cZVaOyP7qxgzl8?=
+ =?iso-8859-1?Q?fwRBlmP7eUBADQBRSXTYdlmJeUzo7hsqNBTRykFQplmB48Q+F1dDLXMHVn?=
+ =?iso-8859-1?Q?H7O8faOSoml+g80qeZByq8zZvNA7ckrHexNSbkVBPTLJg7C+cYZ8DZaJC6?=
+ =?iso-8859-1?Q?9+78SZZLEWnBk0dWANZbOanlUG4u5dQDN7atZs1mFp/D44RkPeYAnqUZeg?=
+ =?iso-8859-1?Q?dEQtof3QrmQurLwLBsXcuiWmtElS6oyNFxrw921HbAR/01pe1066DfJBNK?=
+ =?iso-8859-1?Q?LD60m9PK82U1QbZcAoQqlLo/G+FROFQ6qOWONrEB5EdmdWe7du9+XLSyYT?=
+ =?iso-8859-1?Q?EQQ5pp6Eja/ctpvIkYuvk6KN5Ixc7vy21ktPf6MhyCJZmWobqxg0P+m40e?=
+ =?iso-8859-1?Q?6w=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(7696005)(52116002)(40160700002)(19618925003)(38100700002)(6200100001)(558084003)(38350700002)(26005)(8936002)(8676002)(4270600006)(40180700001)(9686003)(6862004)(66946007)(7406005)(66556008)(7416002)(55016003)(7366002)(66476007)(186003)(86362001)(2906002)(508600001)(7116003)(3480700007)(33656002)(62346012);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?AGwfZK7TovS4xeVVHEyToXgBBA7/cl3q9gERs1/gudfOZtwEitm5+D9BmE?=
+ =?iso-8859-1?Q?lJEAEjt3XpTs6TQQF38cYPhOhC0gSVKDom4op8B+T9mD3f3qeW1SEdZNRo?=
+ =?iso-8859-1?Q?J1A/xXu9jMwpEnzvBBUhksUoc24JercKG+lzFOxlqr58GMouHyReIgxs3p?=
+ =?iso-8859-1?Q?Zi9esPFmo5hWwHlk0Fy94BRZjnRhi9Txn+gtrm5dtZA4J0gu1zxo5ppPfF?=
+ =?iso-8859-1?Q?DoUx6WZ8IbBYGltIFDJAdAKVfVTswSwOSxXkS9JncvA8QqowMkv0FKkVRl?=
+ =?iso-8859-1?Q?PeFJfIeNhBb0w4N7QjlWfS0da7GJcW8mGPAhORTyWMmMuUJwjRA16JuzRn?=
+ =?iso-8859-1?Q?B23v0c4IkglY6t9IYFZ8Wi6AvdIwlV7lScLCgkkNTBzwpzls11UAOwwiio?=
+ =?iso-8859-1?Q?IDjRL4+xWF0QjJew2x4LVjHmxWFYUQ/EWn4CCYESjAvUdoj8Qwa9ZVYUST?=
+ =?iso-8859-1?Q?FYKrg1bFjuNwlGE4mfAEua9O5Fk6woExeWJvZs8Mn6CBI2tzjDJwJYpx52?=
+ =?iso-8859-1?Q?4hCOZMW8ozfTEOeu95Y0oXsPmCQil3SdaGULRd8Wjg6yRddM9nH/1RWjR1?=
+ =?iso-8859-1?Q?KPOdaup0ZiF+lpp8JjQ0vz7KbIeLiD3Nf6f+djFxJtfo/Tx4i4q+3LHbOa?=
+ =?iso-8859-1?Q?IfqrVRi/NcdI/0QzfFq/t6JDYMSxiEEtJKjNZzTsfAirwdsABhCJDeVCHe?=
+ =?iso-8859-1?Q?DOtvBQ81BoX3THumlEfPCkvU2SasnIwUHaqNKpM1E+OOxG+09jPt4cozex?=
+ =?iso-8859-1?Q?PP21g21qbJlbDW7y0Dln48TNfin4La3q7XPWK/Y0+n7sulVxvAmGozTlry?=
+ =?iso-8859-1?Q?a/ndxmoCRWjZ6h9u89I8QQ0DXR0t+iIpIkJdO80vynlfJvz7dHPBzCCOiL?=
+ =?iso-8859-1?Q?YcHeCFcZH40IBwuHPJU0zAtoKnAl6O/nNKo+swTlC4IATkI5XJiCJqgLQ4?=
+ =?iso-8859-1?Q?ARQDiivNf2fHnvzzF6LgNcJMBwmEzI3u+u6XQCJ30nshYtiaYb4rDVT4JF?=
+ =?iso-8859-1?Q?oBcN3PRFaZGjJTvwc8kmAf4M6TAGQ8h3OMdIjwyPQD3C0M3NWVwNOff7f8?=
+ =?iso-8859-1?Q?ATBrqqDcyMRGMxlL5fUZx41XwXN/jHcXDwUPbhJmIO/zWhTdRafCDNjgCm?=
+ =?iso-8859-1?Q?UmbB6tV13gVYE+5ToOiB5XWb3HYclvDS4jOxHmiICodEpbCQTdLjNnbdcg?=
+ =?iso-8859-1?Q?mglnvKn/jaHF2DAKhyT2Pg475M02dSZ+kETcKTsWVhIstIjpeExnLRfJZW?=
+ =?iso-8859-1?Q?55XG8Y2V0LTO5k1aReCMrY123LAZ84GXTMYloiIJZmSLYqNHOOZ7uPubUS?=
+ =?iso-8859-1?Q?mLLGVohhDaCKYiBfG7NWOCHcy538lyZMzzqirahUuOihYijYiB/e0+1MJ8?=
+ =?iso-8859-1?Q?5pusmQOHNf7zrK5TnaQMRfkQQ689sL02p1ZbKECYttBMarthbQ3vJWTuJo?=
+ =?iso-8859-1?Q?gL/lc4G+auQ2/uY32AZjL23aHgbG1/7lj0iXY7/3fhEDVJvOUXYoBD+s0K?=
+ =?iso-8859-1?Q?s51wSdE3da125p78VKYlI5p/McXJqDdKUVJ1hhtttgShoG9oKHprI7UIPU?=
+ =?iso-8859-1?Q?U3NkMgQ8CgXQxpI23VR38i7VWEC8GJcwtMwDgsDFNUAD5xz6QosecTFY+T?=
+ =?iso-8859-1?Q?UiLddoHdM4IesAAv5FIl9Pcl9FiMv8eBtfldr3FfniZQ2rEIB+sWeQlZNX?=
+ =?iso-8859-1?Q?lTwuG3NaHYsPmjWphb+c2FCsCYgjkaRYWeckFAd/HzU/V5+Cn/fc3gteyj?=
+ =?iso-8859-1?Q?/mSA=3D=3D?=
+X-OriginatorOrg: gientech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e838114-9218-4390-0b40-08da39141e52
+X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 21:19:39.8731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zh2GH8s2+4RaH5c0tMXXLj0gCEgjTuabiFo6QUsl13iB5g/D14AkHPjth4X5FFA4hQjtxgwgCAnriDQuWaFKfXmab4a6omW5EKTaHMtuNAI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0575
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
+        DKIM_INVALID,DKIM_SIGNED,RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 23-04-19, 13:50, Robin Gong wrote:
-> This reverts commit ad0d92d7ba6aecbe2705907c38ff8d8be4da1e9c, because
-
-Please fix this as well
-
-> in spi-imx case, burst length may be changed dynamically.
-
-So what is the solution to handle different burst lengths, pls
-explain...
-
-> 
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> ---
->  drivers/dma/imx-sdma.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 99d9f43..407a56e 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -377,7 +377,6 @@ struct sdma_channel {
->  	unsigned long			watermark_level;
->  	u32				shp_addr, per_addr;
->  	enum dma_status			status;
-> -	bool				context_loaded;
->  	struct imx_dma_data		data;
->  	struct work_struct		terminate_worker;
->  };
-> @@ -988,9 +987,6 @@ static int sdma_load_context(struct sdma_channel *sdmac)
->  	int ret;
->  	unsigned long flags;
->  
-> -	if (sdmac->context_loaded)
-> -		return 0;
-> -
->  	if (sdmac->direction == DMA_DEV_TO_MEM)
->  		load_address = sdmac->pc_from_device;
->  	else if (sdmac->direction == DMA_DEV_TO_DEV)
-> @@ -1033,8 +1029,6 @@ static int sdma_load_context(struct sdma_channel *sdmac)
->  
->  	spin_unlock_irqrestore(&sdma->channel_0_lock, flags);
->  
-> -	sdmac->context_loaded = true;
-> -
->  	return ret;
->  }
->  
-> @@ -1074,7 +1068,6 @@ static void sdma_channel_terminate_work(struct work_struct *work)
->  	sdmac->desc = NULL;
->  	spin_unlock_irqrestore(&sdmac->vc.lock, flags);
->  	vchan_dma_desc_free_list(&sdmac->vc, &head);
-> -	sdmac->context_loaded = false;
->  }
->  
->  static int sdma_disable_channel_async(struct dma_chan *chan)
-> -- 
-> 2.7.4
-> 
-
--- 
-~Vinod
+Can you do a job with me?
