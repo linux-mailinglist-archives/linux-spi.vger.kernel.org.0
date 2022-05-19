@@ -2,76 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA35452D757
-	for <lists+linux-spi@lfdr.de>; Thu, 19 May 2022 17:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA6552DC17
+	for <lists+linux-spi@lfdr.de>; Thu, 19 May 2022 19:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240814AbiESPWJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 May 2022 11:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S243429AbiESR5o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 May 2022 13:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240801AbiESPWJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 May 2022 11:22:09 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED275EDEF
-        for <linux-spi@vger.kernel.org>; Thu, 19 May 2022 08:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=P4fzTYa22woHFq/f4jvQVWsujdbz9aCf3xBckQk17fY=; b=vkaHffHMDPEUUIBMsgC7jXDeUB
-        ivLWeUHx6kAy3NQrZMNHL7bN4pjARtn7kdodlYLL+KIT4ivwvJxacr9sqUnus1j3L3S109WCELQKL
-        fgtZ8ar7P6RSVSzwVY/mtYPHmQrpwxrn7aZigMj8utLDnScYVhMm6WrM8rZQmhdMI/24=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrhyR-003VXw-Ee; Thu, 19 May 2022 17:21:59 +0200
-Date:   Thu, 19 May 2022 17:21:59 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Jander <david@protonic.nl>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-spi@vger.kernel.org, Oleksij Rempel <ore@pengutronix.de>
-Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
- access
-Message-ID: <YoZgl5xMmt+SCS2L@lunn.ch>
-References: <YoKN/lqrgKJbVBVq@sirena.org.uk>
- <20220517122439.744cf30c@erd992>
- <YoONngxX/jdTjSOH@sirena.org.uk>
- <20220517150906.09a16a47@erd992>
- <YoOmn1k6yEtJofe5@sirena.org.uk>
- <20220517171626.51d50e74@erd992>
- <YoPm0qDaMEogH8n2@sirena.org.uk>
- <20220519101238.516c5f9e@erd992>
- <YoY0mMOfXyf35Y3o@lunn.ch>
- <20220519163327.606295d2@erd992>
+        with ESMTP id S234458AbiESR5n (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 May 2022 13:57:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E44CEBB6;
+        Thu, 19 May 2022 10:57:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A58FB8276B;
+        Thu, 19 May 2022 17:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487A0C385AA;
+        Thu, 19 May 2022 17:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652983060;
+        bh=1WhWo2wQ3FT8dbfxI7lWLnvz36XoW1FAMZWWg7Av3iw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AmeGerv93gdZ1NZvXG1KagNIYABw/VlX37bb9cUnqCjXtHwGWg1pCUDV/haZyy0iI
+         SuOs2F2X/+98QszPfJnChJXAUxJhA9R6dlDFHlF677D++dRSeJo+bNDKd9yg49p3z/
+         tyLGZ/RXWnOtrjHrPTIsDlh1kRFq59DyE0MaX3cUnV0fC10/4DpbogNQVaT5vsRWUS
+         8wyBce0l6CfR7vrSvGjFirLFFTbVa6+OE5IUsuFe389W9bBz2NmlbIUXoE6xhSXNe4
+         IPIluxIJX5U4mfDA9RNcds3WSf7BUq0fUotAIdhBGvYJgTiKDQ15NBaJsDQiY+rW/f
+         1TW7fC/DKKkzw==
+Date:   Thu, 19 May 2022 23:27:36 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "sean.nyekjaer@prevas.dk" <sean.nyekjaer@prevas.dk>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v1 01/15] Revert "ARM: dts: imx6q: Use correct SDMA
+ script for SPI5 core"
+Message-ID: <YoaFEM/jaHecERsG@matsya>
+References: <1556027045-5269-1-git-send-email-yibin.gong@nxp.com>
+ <1556027045-5269-2-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519163327.606295d2@erd992>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1556027045-5269-2-git-send-email-yibin.gong@nxp.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> Since I am already moving the stats to per-cpu structs, wouldn't atomic_inc()
-> be sufficient and even faster for uint32 stats on 32bit systems?
+On 23-04-19, 13:50, Robin Gong wrote:
+> This reverts commit df07101e1c4a29e820df02f9989a066988b160e6.
 
-atomic is expensive, because it needs to synchronise across all
-CPUs. And that synchoniszation across all CPUs is pointless when you
-are doing per-cpu counters.
+Please add the commit title in canonical format. Also explain why this
+should be reverted
 
-> I still would like to hear Mark's idea on the exact types. All bytes stats
-> were ULL and transfer counter values were UL. Possibly the reason behind this
-> was to make the transfer counters as efficient to increment as possible for
-> the given platform, as should be the case for "unsigned long".
+> 
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> ---
+>  arch/arm/boot/dts/imx6q.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/imx6q.dtsi b/arch/arm/boot/dts/imx6q.dtsi
+> index d038f41..7175898 100644
+> --- a/arch/arm/boot/dts/imx6q.dtsi
+> +++ b/arch/arm/boot/dts/imx6q.dtsi
+> @@ -172,7 +172,7 @@
+>  					clocks = <&clks IMX6Q_CLK_ECSPI5>,
+>  						 <&clks IMX6Q_CLK_ECSPI5>;
+>  					clock-names = "ipg", "per";
+> -					dmas = <&sdma 11 8 1>, <&sdma 12 8 2>;
+> +					dmas = <&sdma 11 7 1>, <&sdma 12 7 2>;
+>  					dma-names = "rx", "tx";
+>  					status = "disabled";
+>  				};
+> -- 
+> 2.7.4
+> 
 
-That efficiency argument is however broken by the use of a spinlock,
-which is much more expensive than the actually increment. Except for a
-UP machine when it becomes a NOP. But UP machines are becoming less
-and less common.
-
-      Andrew
+-- 
+~Vinod
