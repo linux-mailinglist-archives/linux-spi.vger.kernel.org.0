@@ -2,39 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F081E52CE40
-	for <lists+linux-spi@lfdr.de>; Thu, 19 May 2022 10:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476A52D234
+	for <lists+linux-spi@lfdr.de>; Thu, 19 May 2022 14:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbiESIYO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 May 2022 04:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S237792AbiESMO0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 May 2022 08:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiESIYO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 May 2022 04:24:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9E6A035
-        for <linux-spi@vger.kernel.org>; Thu, 19 May 2022 01:24:13 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrbS4-0006ll-QM; Thu, 19 May 2022 10:24:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AD97881DDC;
-        Thu, 19 May 2022 08:24:07 +0000 (UTC)
-Date:   Thu, 19 May 2022 10:24:07 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S237834AbiESMOV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 May 2022 08:14:21 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5BC6BFE7
+        for <linux-spi@vger.kernel.org>; Thu, 19 May 2022 05:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=F4jCWtSIvtXajyHKb5ke6UfFMUPOAkIRMPSjgeXD7aQ=; b=S9KESA5y+TZ4ZUjdwfY6Wgzlgn
+        n5eXOKU6SLTPcWE/aR1WZ+ivi2uNNRY8lvEzx8lkJL/+OqmlkNcixuDyIpwwGcCVGXlzrcIxZIUjM
+        ml/vAFZyWbvB8N6z+9mLtlLFoDDiKHSqMpdr1mis2CQAj4K5+10fsqLkDyDlvpMdF2ug=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nrf2m-003Tor-I0; Thu, 19 May 2022 14:14:16 +0200
+Date:   Thu, 19 May 2022 14:14:16 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     David Jander <david@protonic.nl>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Oleksij Rempel <ore@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-spi@vger.kernel.org, Oleksij Rempel <ore@pengutronix.de>
 Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
  access
-Message-ID: <20220519082407.ef2ys6pnbb2meyiq@pengutronix.de>
+Message-ID: <YoY0mMOfXyf35Y3o@lunn.ch>
 References: <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
  <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
  <YoKN/lqrgKJbVBVq@sirena.org.uk>
@@ -46,69 +45,50 @@ References: <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
  <YoPm0qDaMEogH8n2@sirena.org.uk>
  <20220519101238.516c5f9e@erd992>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ijhapdtmu5jufvpz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220519101238.516c5f9e@erd992>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---ijhapdtmu5jufvpz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 19.05.2022 10:12:38, David Jander wrote:
-> I just tried this out by re-writing the statistics code using u64_stats_s=
-ync
-> and per-cpu statistics, which get totaled on sysfs read access as Andrew =
-Lunn
+> > Or otherwise make it unobtrusive (eg, with similar techniques to those
+> > used by the networking API).
+> 
+> I just tried this out by re-writing the statistics code using u64_stats_sync
+> and per-cpu statistics, which get totaled on sysfs read access as Andrew Lunn
 > suggested.
 > The results are truly amazing!
->=20
-> The overhead caused by statistics in my test dropped from 43us to just 1-=
-2us.
+> 
+> The overhead caused by statistics in my test dropped from 43us to just 1-2us.
 
-\o/
+When you are potentially dealing with 10 million packets a second, you
+cannot spend long on each individual packet incrementing a counter...
 
-> This was tested on a 64-bit machine though, so I don't know how it will a=
-ffect
+> This was tested on a 64-bit machine though, so I don't know how it will affect
 > 32-bit systems. Nor do I have an easy means of testing this. Any ideas?
 
-Test on an imx6 :)
+It does make a difference. On a 64 system, you can increment a counter
+in a single instruction so you either see the old value, or the new
+value. With 32 bit systems, which needs multiple instructions to
+increment the counter, so the code takes are you cannot see anything
+odd when it needs to overflow from the lower 32bits into the upper 32
+bits. So 32bit systems will be a little bit more expensive. However,
+not by a lot.
 
-Marc
+> Also, I have converted all the struct spi_statistics members to u64_stats_t.
+> It was easier to test this way. Some of the original types were unsigned long,
+> which can have different sizes on 64bit or 32bit systems... is that
+> intentional?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+You can keep with uint32, if you want to, and keep with the sequence
+counter style locking. For networking, 32bit counters can wrap around
+pretty fast, so the main counters are 64 bit. But the concept works
+O.K. for smaller types.
 
---ijhapdtmu5jufvpz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKF/qQACgkQrX5LkNig
-012ktwgAnABOqGnSH78Wn6Ix/ZPYb9LVatXP0Vc+6BVfXGpO0fnnavckY3GZWaHW
-mhk2nwnJ3oihwyRfHVMFBVGBeUGQjxBURpkg7TyRAToRuJWu8Z3NU9bI0HTCt2wD
-MAo5YYtSrEUd+a1wLNfz3jkjmhEDOt8nl/QRcb6Su5X6iEbCQzsxHoLl5nf6p/rX
-azfhbiSrZTdbvSdPQxrocDd5kreJoD27bN7tFbtr0pnCmv3xs/RrDmJ159w19bR3
-i4JwkNYaXro7wKd+/S9C+utHxkdfEGzasjarBV9BI6np4kYrywAQffjRWEFV6HPg
-PHALie+8B39Dg/DYAmGOyZmqepzyJA==
-=Y1YN
------END PGP SIGNATURE-----
-
---ijhapdtmu5jufvpz--
+     Andrew
