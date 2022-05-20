@@ -2,123 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9193052EB70
-	for <lists+linux-spi@lfdr.de>; Fri, 20 May 2022 14:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F2852EF03
+	for <lists+linux-spi@lfdr.de>; Fri, 20 May 2022 17:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348952AbiETMCg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 May 2022 08:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S1350748AbiETPWS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 May 2022 11:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348947AbiETMCf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 May 2022 08:02:35 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A11149156;
-        Fri, 20 May 2022 05:02:26 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id eq14so6519377qvb.4;
-        Fri, 20 May 2022 05:02:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=65WlQ7s8g42M5C+5yY3Awf+CpXZTfjugQxcprooIu8U=;
-        b=H4H5LtAxlH368rGbeiAUynQDnrh/BXQmBONueTt/4LyjcN0gRD5Imh2Eb1wviOUidU
-         ZaUNCljmMzVu97ucZAG88dMS1MttqTcGDsQg/Rb9zRXxOIaCK4FpqBsOOe5VSv2HoqYc
-         Vx0WW/UDHb0QINToSOROo7wHOHxDBuqASpjNZFd7K2gObbkr8/fnsjW4eRin9K9KDgOV
-         gyxvmRiOwG423nqWVrpdKsGvq11JuIGYl8MwC2xCyIhHWZ/mH+Cs9XJGGAP8zlPclR5P
-         oJWG5EpI//w3ll3p3pi3fskRX3aLUEkm4BytvupZnexgrlQaJ9qf6FJb9hqoLY4RiTQs
-         FOWw==
-X-Gm-Message-State: AOAM533pCWAUb2WxgWalUoN0CfNCLXzZ91kz5YqhhFQEsX/XgtJlT/bk
-        LZmaI5VWbgGA95xXxOnYDWb7VQbtBurznw==
-X-Google-Smtp-Source: ABdhPJzxbJUSuKDtFmliNY60ckeR9FwT0HpsWozJ6nrAa6f+qH4bHHCc+oxtXwpVW4zfaDztnxiYAg==
-X-Received: by 2002:a05:6214:500c:b0:435:6b7d:5bc3 with SMTP id jo12-20020a056214500c00b004356b7d5bc3mr7641794qvb.92.1653048144744;
-        Fri, 20 May 2022 05:02:24 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id he17-20020a05622a601100b002f39b99f6c3sm2850201qtb.93.2022.05.20.05.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:02:24 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id t26so13825047ybt.3;
-        Fri, 20 May 2022 05:02:23 -0700 (PDT)
-X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
- p131-20020a254289000000b0064d746f5311mr8586423yba.89.1653048143666; Fri, 20
- May 2022 05:02:23 -0700 (PDT)
+        with ESMTP id S229864AbiETPWR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 May 2022 11:22:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E86580DE
+        for <linux-spi@vger.kernel.org>; Fri, 20 May 2022 08:22:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B343EB82C36
+        for <linux-spi@vger.kernel.org>; Fri, 20 May 2022 15:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A47C385A9;
+        Fri, 20 May 2022 15:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653060133;
+        bh=ICwlxezcm59NDEsz0g6ZaZPyw2CIGXjUg/pyuhjQ7y8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VYYOyGgSRacVbpJ+bpUQuCvMKBOMxNA1e7HQvo4w9pp8V855p6zKIszr1i6Sj24UG
+         pPHIbjeikIZ0YwQOvJN7YAu8fZDaIxa+beFyuArBTwpCL/+Rna9maqIkEgED8jKPjz
+         YvjP6ZVikVXCS+hfU9L3O7TaM+GHgSeBffRQksQGXRYYC8Z2mSc5f16mGXv9hPqSYd
+         gh4OLWPRbutV1ghXui46QFxl2UfLXfLD6AP1admzKOppAhBJRFtuaJNU38Ml9HpXy/
+         bY+clQGn5M/el21iUB4GJ4ECYwn097KBYwLPm3H1MsQTosUE9cKhIZDkTYddkrui8s
+         7Kebsqt9riiiQ==
+Date:   Fri, 20 May 2022 16:22:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
+        Oleksij Rempel <ore@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [RFC] A new SPI API for fast, low-latency regmap peripheral
+ access
+Message-ID: <YoeyIG+RGpRBm9Cc@sirena.org.uk>
+References: <Yn6zU3mdgaSNy4Hc@sirena.org.uk>
+ <20220516162851.fhczlq4qfqhu6jht@pengutronix.de>
+ <YoKN/lqrgKJbVBVq@sirena.org.uk>
+ <20220517122439.744cf30c@erd992>
+ <YoONngxX/jdTjSOH@sirena.org.uk>
+ <20220517150906.09a16a47@erd992>
+ <YoOmn1k6yEtJofe5@sirena.org.uk>
+ <20220517171626.51d50e74@erd992>
+ <YoPm0qDaMEogH8n2@sirena.org.uk>
+ <20220519101238.516c5f9e@erd992>
 MIME-Version: 1.0
-References: <20220520091602.179078-1-javierm@redhat.com>
-In-Reply-To: <20220520091602.179078-1-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 May 2022 14:02:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVmFGjGbHz1yo7tOzqtUbMTDkUxaMo2fVSp1HMU=_1emA@mail.gmail.com>
-Message-ID: <CAMuHMdVmFGjGbHz1yo7tOzqtUbMTDkUxaMo2fVSp1HMU=_1emA@mail.gmail.com>
-Subject: Re: [PATCH] drm/st7735r: Fix module autoloading for Okaya RH128128T
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        David Lechner <david@lechnology.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AZcG5ogteVlEPsio"
+Content-Disposition: inline
+In-Reply-To: <20220519101238.516c5f9e@erd992>
+X-Cookie: Happy feast of the pig!
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Javier,
 
-CC spi
+--AZcG5ogteVlEPsio
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 20, 2022 at 11:16 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> The SPI core always reports a "MODALIAS=spi:<foo>", even if the device was
-> registered via OF. This means that the st7735r.ko module won't autoload if
-> a DT has a node with a compatible "okaya,rh128128t" string.
->
-> In that case, kmod expects a "MODALIAS=of:N*T*Cokaya,rh128128t" uevent but
-> instead will get a "MODALIAS=spi:rh128128t", which is not present in the
-> list of aliases:
->
->   $ modinfo drivers/gpu/drm/tiny/st7735r.ko | grep alias
->   alias:          of:N*T*Cokaya,rh128128tC*
->   alias:          of:N*T*Cokaya,rh128128t
->   alias:          of:N*T*Cjianda,jd-t18003-t01C*
->   alias:          of:N*T*Cjianda,jd-t18003-t01
->   alias:          spi:jd-t18003-t01
->
-> To workaround this issue, add in the SPI table an entry for that device.
->
-> Fixes: d1d511d516f7 ("drm: tiny: st7735r: Add support for Okaya RH128128T")
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+On Thu, May 19, 2022 at 10:12:38AM +0200, David Jander wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Tue, May 17, 2022 at 05:16:26PM +0200, David Jander wrote:
+> > > Mark Brown <broonie@kernel.org> wrote: =20
 
-Thanks for your patch!
-We really need to fix this at the subsystem level.
+> > > Nice! I like that idea. Do you want to somehow extend spi_async() to =
+do this
+> > > transparently? So we just need to introduce a second function
+> > > ("spi_async_await()" ?) which would wait for completion and collect t=
+he RX
+> > > buffer? =20
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > We shouldn't need a new API to wait for the async operation to complete,
+> > hopefully the existing one is fine.
 
+> Maybe there is something I am not seeing then. The client needs to make t=
+wo
+> function calls. One to fill the FIFO and start the transfer, and a second=
+ one
+> to poll the FIFO and read out the RX data. With the existing API, I can o=
+nly
+> think of these options:
 
-> --- a/drivers/gpu/drm/tiny/st7735r.c
-> +++ b/drivers/gpu/drm/tiny/st7735r.c
-> @@ -174,6 +174,7 @@ MODULE_DEVICE_TABLE(of, st7735r_of_match);
->
->  static const struct spi_device_id st7735r_id[] = {
->         { "jd-t18003-t01", (uintptr_t)&jd_t18003_t01_cfg },
-> +       { "rh128128t", (uintptr_t)&rh128128t_cfg },
->         { },
->  };
->  MODULE_DEVICE_TABLE(spi, st7735r_id);
+The client just submits a message using spi_async() and can use the
+complete() callback like spi_sync() does to find out when the transfer
+is done.  The core is responsible for actually interacting with the
+device.
 
-Gr{oetje,eeting}s,
+>  2. Use a completion or callback. But I don't see how that will work with=
+out a
+>  context switch to some code that completes the completion or calls the
+>  callback, which is what we are trying to avoid having in the first place.
 
-                        Geert
+If the core doesn't need to context switch then the core should just be
+able to complete without context switching hopefully.  At most we'd need
+a mechanism to say that the completion is OK to call from atomic
+context.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > Or otherwise make it unobtrusive (eg, with similar techniques to those
+> > used by the networking API).
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> I just tried this out by re-writing the statistics code using u64_stats_s=
+ync
+> and per-cpu statistics, which get totaled on sysfs read access as Andrew =
+Lunn
+> suggested.
+> The results are truly amazing!
+
+> The overhead caused by statistics in my test dropped from 43us to just 1-=
+2us.
+
+Ah, cool.  I look forward to the patches.
+
+> This was tested on a 64-bit machine though, so I don't know how it will a=
+ffect
+> 32-bit systems. Nor do I have an easy means of testing this. Any ideas?
+
+Hopefully someone with a 32 bit system who's concerned about performance
+can test.
+
+> Also, I have converted all the struct spi_statistics members to u64_stats=
+_t.
+> It was easier to test this way. Some of the original types were unsigned =
+long,
+> which can have different sizes on 64bit or 32bit systems... is that
+> intentional?
+
+I don't think so.
+
+--AZcG5ogteVlEPsio
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKHsh8ACgkQJNaLcl1U
+h9C8Pgf+Ot0UNDKYW2DenCOD/OIwQbeTrPaGiONtkZIgvlLxevbC0ryYiHovoGGf
+ynwhh9eAO/+yjZN9HEsHShyNofkh2vg/qTUUUcQkviOfqmIMne8fQZPth/C0ZjR4
+YDOMtagYHVbXxi9W/imn8MYbQcRcbZ3ALh3WyiYruc/CaIrbCjemZ0rO2E9a0Ut8
+A18cgWNg2fvoO7sxrkPELNzSSxWVIJs3Va1kuCLrTgFr7netCwzg4gdrJbjVpTFf
+O7BRKMv0E0K+gUGWJnpL8+2Y7sezqC7ejP+ItignR7WqNsRs/mv6jcjWXyhMy/TK
+dy3ErhOfjsl9RUT3f+f3F67pvqelCw==
+=tAw1
+-----END PGP SIGNATURE-----
+
+--AZcG5ogteVlEPsio--
