@@ -2,69 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5836252F974
-	for <lists+linux-spi@lfdr.de>; Sat, 21 May 2022 08:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9E752FAEF
+	for <lists+linux-spi@lfdr.de>; Sat, 21 May 2022 13:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiEUG7o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 21 May 2022 02:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S1352200AbiEULMR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 21 May 2022 07:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbiEUG7n (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 21 May 2022 02:59:43 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E988317EC35
-        for <linux-spi@vger.kernel.org>; Fri, 20 May 2022 23:59:42 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id sJ5QntxL2dfessJ5QnlRCH; Sat, 21 May 2022 08:59:41 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 21 May 2022 08:59:41 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+        with ESMTP id S242272AbiEULMB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 21 May 2022 07:12:01 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E66528E33;
+        Sat, 21 May 2022 04:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xvf42Wq/qiT5QgcMM2HMSHpMZcoeDbMnj9kopc37qO8=;
+  b=tB63a4m/lVFWXVNz4HNaTZtH+vvs5yeot9jAtqY6cZR3lfIit87u8oKq
+   5Pzf//atJd21Spnipjxu7TgGT/gbHD7SpTuUTh0F4APZxLTo80E+j16ug
+   P9lPLu68sN00zzxso1DGOSYjLNe0Xo+GLBXvtyIuwZoPZ+ElY8UOI9YNf
+   k=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
+   d="scan'208";a="14727908"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:54 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: intel: Use correct order for the parameters of devm_kcalloc()
-Date:   Sat, 21 May 2022 08:59:35 +0200
-Message-Id: <d114558dd0351b863ced8cc01b31754a5a4b960d.1653116362.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Cc:     kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:23 +0200
+Message-Id: <20220521111145.81697-13-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We should have 'n', then 'size', not the opposite.
-This is harmless because the 2 values are just multiplied, but having
-the correct order silence a (unpublished yet) smatch warning.
+Spelling mistake (triple letters) in comment.
+Detected with the help of Coccinelle.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+
 ---
- drivers/spi/spi-intel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/spi/spi.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index 50f42983b950..66063687ae27 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -1236,8 +1236,8 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
- 		return -ENOMEM;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index d361ba26203b..eadfd3ba3cbc 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -1127,7 +1127,7 @@ spi_max_transfer_size(struct spi_device *spi)
+ 	if (ctlr->max_transfer_size)
+ 		tr_max = ctlr->max_transfer_size(spi);
  
- 	pdata->nr_parts = 1;
--	pdata->parts = devm_kcalloc(ispi->dev, sizeof(*pdata->parts),
--				    pdata->nr_parts, GFP_KERNEL);
-+	pdata->parts = devm_kcalloc(ispi->dev, pdata->nr_parts,
-+				    sizeof(*pdata->parts), GFP_KERNEL);
- 	if (!pdata->parts)
- 		return -ENOMEM;
+-	/* transfer size limit must not be greater than messsage size limit */
++	/* transfer size limit must not be greater than message size limit */
+ 	return min(tr_max, msg_max);
+ }
  
--- 
-2.34.1
 
