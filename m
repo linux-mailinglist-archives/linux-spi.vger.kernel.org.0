@@ -2,206 +2,470 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5846953261F
-	for <lists+linux-spi@lfdr.de>; Tue, 24 May 2022 11:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9834753263A
+	for <lists+linux-spi@lfdr.de>; Tue, 24 May 2022 11:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiEXJH7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 May 2022 05:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S235272AbiEXJSf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 May 2022 05:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbiEXJH6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 May 2022 05:07:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808CE8AE55;
-        Tue, 24 May 2022 02:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653383277; x=1684919277;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=BtpxMMnupYkHx8WoHXf53hXBNIAbH4rx8lCkV1DIYb8=;
-  b=Xxgp0MZmY/BLSBAHMgh038wamZJRXTj+UODUr++Jv/o+/xt4bzh6GbDH
-   Ts0BPg4xG8S7TQNSuu+ZZHEzLy6f7UTGkrisfdhXUagbykAGPe/zhJjuZ
-   jQUiAxxLvtTpaaIKjcXvUytk8l6ZMP5EPmWVKxBu59xMpCXy2TB7bRQ+5
-   U6vLfEBxrQWoySPoxeDedsFR+s7Btb2E+OO6w5NPA87WLdRh6l7l5FJxO
-   Ibefq3e2oa9RtpwgsiUKi3n9EAwCzo2N7X28spwWYlT1y4PjW/uoc2jMF
-   8EI7U5naW6DHlC+h231nJLtb0o6kyT+en/vc1keWX79ZqTP+cflYfNvSZ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="157324943"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2022 02:07:56 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 24 May 2022 02:07:55 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 24 May 2022 02:07:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b57Vn/8VEa+MHO1FCCdklMd8B2rb3Kj/EBExyMc63w9wBB7rpvFv+ggUspeO1xuNRSdbpMDTktqe2+Tk+vTjrxnN/DQV2+thcTcVzKXJh1Ys8IGqNwTSMhlHgjAOL4zMwOdwEU2ykzo0QRNQNSlo9j1WFeXSdyoNgjwdQTG/4i/e/PFO62y+8brOLW25n7XvGrxEZxpDBi3VU+Y7BGZJQKrV4RnfkIFw5Hc8MivipZ+PYs6TPPSvreOBHGnd+bVVhYKrZK8HBNMFI+y5/sMZ7ehPCma8vuuFY+m5YRDsoqvO1GFfjSsAxaLtLidic2cN9UJHeuFS/ztV9UXc64gUWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BtpxMMnupYkHx8WoHXf53hXBNIAbH4rx8lCkV1DIYb8=;
- b=MUczPa4L8lNBJtx9pYuuQNSGdfncgQP8f4xOS+ITR7wBT1TaRzM6tfTCg41o5r9khXwTcgVaxDYicv5T4282nUg9y5x0jMs9ZhXnj1cnQ3t26GB9DJGkwOn8byqd0mIAQCSoaN6m1O+thPSLn2ga5xs6n3rX43MENdPQbw87NNXkESbW0KdA0zDuscRvSnCIT3b8yqYfLNBz5oRW6gh3QTUOZ0ouSlHaUSsM6xwfmx3pHWsvTm6Z2MbbEA2m81lULd5dib9ndlYVrLW4inkIfmaUcSv6AR4RHIMxZSVogS60G2OmRy5E3ObTuXLV808hg+RGIRcl7fbAd2hBHHOM4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        with ESMTP id S233643AbiEXJSe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 May 2022 05:18:34 -0400
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CAD5F278
+        for <linux-spi@vger.kernel.org>; Tue, 24 May 2022 02:18:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BtpxMMnupYkHx8WoHXf53hXBNIAbH4rx8lCkV1DIYb8=;
- b=SVAl5SQYe2vbIl9shO22ldmo2KZy2/k5arfDFolxw6anOAbziCHM1OpK4eIsRO7xtvjKOM3EuECNWkg5ey5ufUqXzaws0Tk+JGKgHEMld80PMY53YeHXIRUNenlfYArl1mT83K3IMYvFUE/K49i+jEZ8ZsBFiLFVSRlch7TEwOU=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by SJ0PR11MB5939.namprd11.prod.outlook.com (2603:10b6:a03:42e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.23; Tue, 24 May
- 2022 09:07:54 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::816a:10bd:7c5e:355b]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::816a:10bd:7c5e:355b%8]) with mapi id 15.20.5273.023; Tue, 24 May 2022
- 09:07:53 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>, <broonie@kernel.org>
-CC:     <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <Ludovic.Desroches@microchip.com>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] spi: atmel-quadspi: Add support for sama7g5 QSPI
-Thread-Topic: [PATCH] spi: atmel-quadspi: Add support for sama7g5 QSPI
-Thread-Index: AQHYb03AEFKWREbvSkuCYAxCaZRxlA==
-Date:   Tue, 24 May 2022 09:07:53 +0000
-Message-ID: <a4ea35ec-38c7-b3c9-b0ee-6cbd822a53f9@microchip.com>
-References: <20211214133404.121739-1-tudor.ambarus@microchip.com>
-In-Reply-To: <20211214133404.121739-1-tudor.ambarus@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 78837d24-f8f1-42f0-c661-08da3d64e2da
-x-ms-traffictypediagnostic: SJ0PR11MB5939:EE_
-x-microsoft-antispam-prvs: <SJ0PR11MB593926BB381FB747227E99FE87D79@SJ0PR11MB5939.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D294gbXgjsXgsJ72vOzowK9qYPHYj9dvpBNJ1ZLtHQZKspsRLMi5GSQsuANgEAlrs52F48WAIE7cBoFmRQ6chl6TjeUG1ECMGPCMw2c4CGVj1qnd0mU4sUZvK3WPthsPUCny9lqkdT2syp7bXBT08BMvIGPAQI4LF9z7TtdNTz1lAPAXax6L5n2mS/2QeR2JAdb9qNH2Fpd4FNm1KtpPrGyBe9j3em+8Ee2HH5/Penmme2qlFmXFzyOttWuT8TahXafgeG4BvtjcGXrD2Aq9lc5Bl2fhUm2927CoWqZ1ncwFMCeFrynFZ+tKbFT+CnDgZh3P0FoFxXwJMxfADkcy7jKOhett0+E/CHK7LGhjd2esU5aQKnie+BO1wXbvnIhR5BH3jGOSPUk7zXbM1Ag3nMgBUmRqXJqmWW+5WuzMI7H+7Vg3gyOKtuYuoGDq/dgWU5lduAz8KD7S1/Bq1jnhHVS1TnoICBKbKkD/FWudBDGswN9ikEg50VNNKMoBu2NYnlqSrcFxHsMmNHaB191B4fY3SBUGUEUo5yMJCsvgtdSoLSIX8pIgIAbvV+C2Z8e/bfWHnAyUhgDFke2ZbKE27OEaKMcNNrsVu1tIKaOYeF6XfD/mjGE2Z1Na2XY2EoQpSTKMzeTtbigD8HooTyNDpdAxSmCnUpXUzk6Vmc5COlm6wRRubZxnUi4jmOYPVzF/NXjNm6cSbHuIGlenGZi5yhPCcII5hob8k8ZIo9pIvrTk6vHaLR7gMZCxZ52eK4uZLhkNhKMxApkb5UQhYb6flNQJHugWQKUTmh3pnUYLYfQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(64756008)(122000001)(6512007)(8936002)(26005)(31686004)(71200400001)(508600001)(316002)(6506007)(53546011)(6486002)(110136005)(54906003)(36756003)(38100700002)(31696002)(91956017)(2616005)(76116006)(186003)(86362001)(66476007)(66946007)(66446008)(66556008)(5660300002)(2906002)(38070700005)(4326008)(8676002)(87944003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y09xelhJOGhJMFdhQXF3ellyWWFvdVFnZHplb2wvc0FpeXNkcEtOQ3FSVlYw?=
- =?utf-8?B?UHlUTWUvOUo2ZjhhT3lpVW1LMUN3YVJydWkxbmdRRHpUNyswWnFHUlFVaVl0?=
- =?utf-8?B?ckFCTGlRRnAzUmU3V3B4WW1HL1p2RkYvV2pkaE5BOEdpRGNBL3NTTmI1dm1L?=
- =?utf-8?B?R0p4a3QwK0J6TFBtdWppWUNjLzA2N01pMThrai8va1dWd0trVmhWRlIvVXB0?=
- =?utf-8?B?UlpsWS9UWWZOci9mZk11cVBNOEFIb3lSN3dJb0ZFMnpjQW13eFZ5cEJrRWMw?=
- =?utf-8?B?YmxXTkcxM2kycENmdURRSGE4M3ZZbmVrays5bGM0ZHJmd3VCeTgxdWszUkh3?=
- =?utf-8?B?S3lMTGNUL013RE5OKzBzZVVOTUVJZ0sxT3NocWF5WCtDcEJsY1dscDYyaUFl?=
- =?utf-8?B?Q0R2VDgxTkFGelN0Wm5zN0VhdThPMi94VEEwWUc3M0M5Ukh3WnRpaURPaXM3?=
- =?utf-8?B?N0hqTXVCdVFyb0pmT2s5SkR4Z0ZqTm9lbmRxdUNWTEFwcEJxTTE3NkFUWkRE?=
- =?utf-8?B?SDJvU2pqOGFUTzdCOHNxY1R5dVhXVDA4cFlTMXdJeUFFNnJRRE5QYU4vTlVs?=
- =?utf-8?B?M2R0ZDVoU05aaTBzSW9ocHVSL3U3d2hFRTFVSTRYNjVpcitvQXhEczFka3h5?=
- =?utf-8?B?QWhpOW8xUzNPMXJrUms0ZzI0VkRRSWNXaHFUeVV3TlBUVzB1YmR4UGNuZWky?=
- =?utf-8?B?WCtvRWhNdWllVGw4T0RWUmIrRXR2ejBnK094SVhHcmtqKzRkRUJrcWs5NDMz?=
- =?utf-8?B?M0Z3TW0wN3NYSWtPVnI0aW13cHc1T011V01ja080Sld2dldjTUNST3huOVJo?=
- =?utf-8?B?NTErUTlHM2padURXSG5yQTk0VkFhVnRqbllyT2E1VDBxVE9jSStzWTlZWmpx?=
- =?utf-8?B?dHYxNFdNa2YwQW9EaDNhWTEvL0JiL1VBaS9Wcm45YU9TRi9XRCtRNWxGZXhE?=
- =?utf-8?B?eU1ON2VWTnJZaTBYTUNXQ2RHT2dhRFhmU3FnWkEycGZCNS9GUWFOQ0paN3pn?=
- =?utf-8?B?VmNINC9UYXNHWnJ5SENiK2x5akYvQkhwK3hPS2FzV050ZjZ6bTNLRnFCY0FQ?=
- =?utf-8?B?Qys1Zlh5cHFhVFVpWTFCQ3NsbjBBaHV5ZDJIMGtRcWx1aXF2QnpTbHFaeDBk?=
- =?utf-8?B?YkpXbCsvV0NhbnhKdDJSZm1WOU85ZUhKYTJXL3hZaktaOFg0TEhnZU5OV0p1?=
- =?utf-8?B?NGozWDBDV0M3TnBocjlsRnhaVVZ2aUJpOUVOVW44MXgwdzAwR2xPV21KM1Ri?=
- =?utf-8?B?b291UDI5NlZWcytGSG1NaDNwd0xFS2RIcnpIbms0Nm9XRXVTVlJPTUlhaFRQ?=
- =?utf-8?B?Ym42WkZzTmJYWDNibE9sVktKK1RFdVRHVE92YmYvQ2hWM1gybCtReGdEb0JT?=
- =?utf-8?B?Z1A3N2g4eE1raGczaEw3akFOajZIbU1oZHNZdE1xQ2dleDVselVHVVdLK1lr?=
- =?utf-8?B?OFNiYzcxWnRldWhJVWxzNWJVNU1hQ05kQXhETXBmTmhrOXYyWXVBeGY5WTA5?=
- =?utf-8?B?UEhHcXVEdGF3cURvd25RV21WZmJocXJ0QTJaNG5IdGw4ZVNySlcvMjlQcWxj?=
- =?utf-8?B?V3BCNm5Tb051RHVzSGxUbkp0WGh3a09UTGRlTlBPNnAvSDB0WFlmNnNEckg3?=
- =?utf-8?B?UFVEVVFwYUFQc29XcGlDSko0a2wvd01Ob0t6Z1FIZjF0NVorL21mQ1J5SWU0?=
- =?utf-8?B?R3JtS21DSWhSUjc5OGVKa0dOQ0VwQWhoRFV6Nlh1ZTNBL1JLN2szK2JpamFt?=
- =?utf-8?B?OW1lcEo3SzZTREh3L1RwVjlSbmZnZ1FyUDdyMWwzUmVUZFNqSkFGd2VnZGpp?=
- =?utf-8?B?OUpWZzFBMWkyN2tEeFd4bzg2NUFWaThIOCtJVU45S21nZ3dOekVUbWJveHNU?=
- =?utf-8?B?Tll2M2tWWmRMbDkyeDI2TUVYbGRFcTNTMlJFQlM2VTNRQmRnbjBENGJleUo4?=
- =?utf-8?B?Y2dYVmFjc092Nmh6ZkZKSndZaStRQm5iQ1B4a2NFZGpEREd6emJFcnNaMHNq?=
- =?utf-8?B?SmU4WE5uWVVweFp4TStZaUg3U2lOS05na3R0SnlWMFZEZnF6VmsxLzBaSUdN?=
- =?utf-8?B?WGxYSnNKS0NyMGpVVHFETDAwRHRmTy9OUy8zRGFHWlJCU25udldmR0hZWU55?=
- =?utf-8?B?eUN1anVSUUNvay8zR0F3VVptV3A4YUhrQlRlemtLQitIK0IwV0N3VXh2TlI2?=
- =?utf-8?B?SWh4Y0ZzWkdmK2xZWXRXNnNublg0emJ2MlRlRlcrd25hUW82VzZnWjVsS2Qy?=
- =?utf-8?B?Q2ZXZ0pxN21FOWlDU2d5SUQwUmQvRGFrWityanZHMEEvTHZBOGVEYmY4elVy?=
- =?utf-8?B?bzNHVU11ay9ja0VaRkRSbUxTNmxrN3hUTWh3YWpDSGQ3ZFdmZG9pK1BLbmxp?=
- =?utf-8?Q?+IMvUiFB5t7Z8Ei8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F2507F267CD06E478887A8AE3C3AB106@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=rOuYPuBtZDGTsIiMh5TLQ4cW7+K2W46xfG8q0JlbNcA=;
+        b=mLn3GF4ZtpjMOrprs8w02mWJOzQ6v59jlV9q68C6Y/F4CztlqRid3uuSMHjyy8j69B7vtOFAEW/RQ
+         W2KMLpyAYt8gSGpbLrk9ACi1Y8/fufaSIHs9faR+2ry9K9jul5dLf3e5DNSCU93E6QuTOPvOVRSFm/
+         7qUVWIc+WfL1o9KOLFw1itmcaVSKHKRXt6YHNQFZCBHe1Dw5+bQ/gaLrl5CeeUTbi7cpNVRVV1ujtr
+         7NYkgacCuR36HelIXmzc93S65fa2mtWuo1Y02p9K6hKlhdtt8qAAB1f8YP5+K0knE2iNhBn8nba+XS
+         6tu1WqmECpro+Loi49uPOORo4NizU9g==
+X-MSG-ID: 77bde75d-db42-11ec-9896-0050569d2c73
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Jander <david@protonic.nl>
+Subject: [PATCH v2] drivers: spi: spi.c: Convert statistics to per-cpu u64_stats_t
+Date:   Tue, 24 May 2022 11:18:08 +0200
+Message-Id: <20220524091808.2269898-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78837d24-f8f1-42f0-c661-08da3d64e2da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 09:07:53.7733
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hW9iuCFRjQLy1YMhHc9kSt1Ku/Pva7WJtmdIrxebcy+C8pZdQc2ZegHN91aJ7dQKLxZfP+7PAWQLuZTM75ldVHl5BFdTToklIbGZuK8BnMg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5939
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGksIFR1ZG9yLA0KDQpPbiAxNC4xMi4yMDIxIDE1OjM0LCBUdWRvciBBbWJhcnVzIHdyb3RlOg0K
-PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMg
-dW5sZXNzIHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFRoZSBzYW1hN2c1IFFT
-UEkgY29udHJvbGxlciB1c2VzIGRlZGljYXRlZCBjbG9ja3MgZm9yIHRoZQ0KPiBRU1BJIENvbnRy
-b2xsZXIgSW50ZXJmYWNlIGFuZCB0aGUgUVNQSSBDb250cm9sbGVyIENvcmUsIGFuZA0KPiByZXF1
-aXJlcyBzeW5jaHJvbml6YXRpb24gYmVmb3JlIGFjY2Vzc2luZyByZWdpc3RlcnMgb3IgYml0DQo+
-IGZpZWxkcy4NCj4gDQo+IFFTUElfU1IuU1lOQ0JTWSBtdXN0IGJlIHplcm8gYmVmb3JlIGFjY2Vz
-c2luZyBhbnkgb2YgdGhlIGJpdHM6DQo+IFFTUElfQ1IuUVNQSUVOLCBRU1BJX0NSLlFTUElESVMs
-IFFTUElfQ1IuU1JGUlNILCBRU1BJX0NSLlNXUlNULA0KPiBRU1BJX0NSLlVQRENGRywgUVNQSV9D
-Ui5TVFRGUiwgUVNQSV9DUi5SVE9VVCwgUVNQSV9DUi5MQVNUWEZFUi4NCj4gDQo+IEFsc28sIHRo
-ZSBRU1BJIGNvbnRyb2xsZXIgY29yZSBjb25maWd1cmF0aW9uIGNhbiBiZSB1cGRhdGVkIGJ5DQo+
-IHdyaXRpbmcgdGhlIFFTUElfQ1IuVVBEQ0ZHIGJpdCB0byDigJgx4oCZLiBUaGlzIGlzIG5lZWRl
-ZCBieSB0aGUNCj4gZm9sbG93aW5nIHJlZ2lzdGVyczogUVNQSV9NUiwgUVNQSV9TQ1IsIFFTUElf
-SUFSLCBRU1BJX1dJQ1IsDQo+IFFTUElfSUZSLCBRU1BJX1JJQ1IsIFFTUElfU01SLCBRU1BJX1NL
-UixRU1BJX1JFRlJFU0gsIFFTUElfV1JBQ05UDQo+IFFTUElfUENBTENGRy4NCj4gDQo+IFRoZSBP
-Y3RhbCBTUEkgc3VwcG9ydHMgZnJlcXVlbmNpZXMgdXAgdG8gMjAwIE1IWiBERFIuIFRoZSBuZWVk
-DQo+IGZvciBvdXRwdXQgaW1wZWRhbmNlIGNhbGlicmF0aW9uIGFyaXNlcy4gVG8gYXZvaWQgdGhl
-IGRlZ3JhZGF0aW9uDQo+IG9mIHRoZSBzaWduYWwgcXVhbGl0eSwgYSBQQUQgY2FsaWJyYXRpb24g
-Y2VsbCBpcyB1c2VkIHRvIGFkanVzdA0KPiB0aGUgb3V0cHV0IGltcGVkYW5jZSB0byB0aGUgZHJp
-dmVuIEkvT3MuDQo+IA0KPiBUaGUgdHJhbnNtaXNzaW9uIGZsb3cgcmVxdWlyZXMgZGlmZmVyZW50
-IHNlcXVlbmNlcyBmb3Igc2V0dGluZw0KPiB0aGUgY29uZmlndXJhdGlvbiBhbmQgZm9yIHRoZSBh
-Y3R1YWwgdHJhbnNmZXIsIHRoYW4gd2hhdCBpcyBpbg0KPiB0aGUgc2FtYTVkMiBhbmQgc2FtOXg2
-MCB2ZXJzaW9ucyBvZiB0aGUgSVAuIERpZmZlcmVudCBpbnRlcnJ1cHRzDQo+IGFyZSBoYW5kbGVk
-LiBhcS0+b3BzLT5zZXRfY2ZnKCkgYW5kIGFxLT5vcHMtPnRyYW5zZmVyKCkgYXJlDQo+IGludHJv
-ZHVjZWQgdG8gaGVscCBkaWZmZXJlbnRpYXRpbmcgdGhlIGZsb3dzLg0KPiANCj4gVGVzdGVkIHNp
-bmdsZSBhbmQgb2N0YWwgU1BJIG1vZGUgd2l0aCBteDY2bG0xZzQ1Zy4NCj4gDQo+IFNpZ25lZC1v
-ZmYtYnk6IFR1ZG9yIEFtYmFydXMgPHR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbT4NCj4gLS0t
-DQo+ICBkcml2ZXJzL3NwaS9hdG1lbC1xdWFkc3BpLmMgfCA5MjEgKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKy0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgODY5IGluc2VydGlvbnMoKyks
-IDUyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL2F0bWVsLXF1
-YWRzcGkuYyBiL2RyaXZlcnMvc3BpL2F0bWVsLXF1YWRzcGkuYw0KPiBpbmRleCA5MmQ5NjEwZGYx
-ZmQuLjg5ODBhNzI5ZGQ1MyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zcGkvYXRtZWwtcXVhZHNw
-aS5jDQo+ICsrKyBiL2RyaXZlcnMvc3BpL2F0bWVsLXF1YWRzcGkuYw0KPiBAQCAtMTEsMTEgKzEx
-LDE1IEBADQo+ICAgKiBUaGlzIGRyaXZlciBpcyBiYXNlZCBvbiBkcml2ZXJzL210ZC9zcGktbm9y
-L2ZzbC1xdWFkc3BpLmMgZnJvbSBGcmVlc2NhbGUuDQo+ICAgKi8NCg0KWyBjdXQgXQ0KDQo+ICt9
-DQo+ICsNCj4gIHN0YXRpYyBpbnQgYXRtZWxfcXNwaV9yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2Rl
-dmljZSAqcGRldikNCj4gIHsNCj4gICAgICAgICBzdHJ1Y3Qgc3BpX2NvbnRyb2xsZXIgKmN0cmwg
-PSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsNCj4gICAgICAgICBzdHJ1Y3QgYXRtZWxfcXNw
-aSAqYXEgPSBzcGlfY29udHJvbGxlcl9nZXRfZGV2ZGF0YShjdHJsKTsNCj4gDQo+ICAgICAgICAg
-c3BpX3VucmVnaXN0ZXJfY29udHJvbGxlcihjdHJsKTsNCj4gKw0KPiArICAgICAgIGlmIChhcS0+
-Y2Fwcy0+aGFzX2djbGspDQo+ICsgICAgICAgICAgICAgICByZXR1cm4gYXRtZWxfcXNwaV9zYW1h
-N2c1X3N1c3BlbmQoYXEpOw0KPiArDQo+ICsgICAgICAgaWYgKGFxLT5jYXBzLT5oYXNfZG1hKQ0K
-PiArICAgICAgICAgICAgICAgYXRtZWxfcXNwaV9kbWFfcmVsZWFzZShhcSk7DQo+ICsNCg0KVGhl
-IG9yZGVyIGhlcmUgc2hvdWxkIGJlIHJldmVyc2VkLiBPdGhlcndpc2UgRE1BIGNoYW5uZWwgd2ls
-bCBub3QgYmUNCnJlbGVhc2VkIGluIGNhc2UgYXEtPmNhcHMtPmhhc19nY2xrIGlzIHRydWUuDQoN
-ClRoYW5rIHlvdSwNCkNsYXVkaXUgQmV6bmVhDQo=
+This change gives a dramatic performance improvement in the hot path,
+since many costly spin_lock_irqsave() calls can be avoided.
+
+On an i.MX8MM system with a MCP2518FD CAN controller connected via SPI,
+the time the driver takes to handle interrupts, or in other words the time
+the IRQ line of the CAN controller stays low is mainly dominated by the
+time it takes to do 3 relatively short sync SPI transfers. The effect of
+this patch is a reduction of this time from 136us down to only 98us.
+
+Suggested-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David Jander <david@protonic.nl>
+---
+v2:
+ - Add measurement results to commit message
+ - Remove format string in sysfs statistics macros
+ - Add error checking to percpu alloc results
+ - Free non-managed percpu allocation of struct spi_statistics
+ - Convert 2 percpu_alloc macros to a single static function
+---
+ drivers/spi/spi.c       | 141 +++++++++++++++++++++++++++-------------
+ include/linux/spi/spi.h |  52 ++++++++-------
+ 2 files changed, 125 insertions(+), 68 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index c4dd1200fe99..842434d544fe 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -33,6 +33,7 @@
+ #include <linux/idr.h>
+ #include <linux/platform_data/x86/apple.h>
+ #include <linux/ptp_clock_kernel.h>
++#include <linux/percpu.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/spi.h>
+@@ -49,6 +50,7 @@ static void spidev_release(struct device *dev)
+ 
+ 	spi_controller_put(spi->controller);
+ 	kfree(spi->driver_override);
++	free_percpu(spi->pcpu_statistics);
+ 	kfree(spi);
+ }
+ 
+@@ -111,6 +114,47 @@ static ssize_t driver_override_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(driver_override);
+ 
++static struct spi_statistics *spi_alloc_pcpu_stats(struct device *dev)
++{
++	struct spi_statistics __percpu *pcpu_stats;
++
++	if (dev)
++		pcpu_stats = devm_alloc_percpu(dev, struct spi_statistics);
++	else
++		pcpu_stats = alloc_percpu_gfp(struct spi_statistics, GFP_KERNEL);
++
++	if (pcpu_stats) {
++		int cpu;
++
++		for_each_possible_cpu(cpu) {
++			struct spi_statistics *stat;
++
++			stat = per_cpu_ptr(pcpu_stats, cpu);
++			u64_stats_init(&stat->syncp);
++		}
++	}
++	return pcpu_stats;
++}
++
++#define spi_pcpu_stats_totalize(ret, in, field)				\
++do {									\
++	int i;								\
++	ret = 0;							\
++	for_each_possible_cpu(i) {					\
++		const struct spi_statistics *pcpu_stats;		\
++		u64 inc;						\
++		unsigned int start;					\
++		pcpu_stats = per_cpu_ptr(in, i);			\
++		do {							\
++			start = u64_stats_fetch_begin_irq(		\
++					&pcpu_stats->syncp);		\
++			inc = u64_stats_read(&pcpu_stats->field);	\
++		} while (u64_stats_fetch_retry_irq(			\
++					&pcpu_stats->syncp, start));	\
++		ret += inc;						\
++	}								\
++} while (0)
++
+ #define SPI_STATISTICS_ATTRS(field, file)				\
+ static ssize_t spi_controller_##field##_show(struct device *dev,	\
+ 					     struct device_attribute *attr, \
+@@ -118,7 +161,7 @@ static ssize_t spi_controller_##field##_show(struct device *dev,	\
+ {									\
+ 	struct spi_controller *ctlr = container_of(dev,			\
+ 					 struct spi_controller, dev);	\
+-	return spi_statistics_##field##_show(&ctlr->statistics, buf);	\
++	return spi_statistics_##field##_show(ctlr->pcpu_statistics, buf); \
+ }									\
+ static struct device_attribute dev_attr_spi_controller_##field = {	\
+ 	.attr = { .name = file, .mode = 0444 },				\
+@@ -129,47 +172,46 @@ static ssize_t spi_device_##field##_show(struct device *dev,		\
+ 					char *buf)			\
+ {									\
+ 	struct spi_device *spi = to_spi_device(dev);			\
+-	return spi_statistics_##field##_show(&spi->statistics, buf);	\
++	return spi_statistics_##field##_show(spi->pcpu_statistics, buf); \
+ }									\
+ static struct device_attribute dev_attr_spi_device_##field = {		\
+ 	.attr = { .name = file, .mode = 0444 },				\
+ 	.show = spi_device_##field##_show,				\
+ }
+ 
+-#define SPI_STATISTICS_SHOW_NAME(name, file, field, format_string)	\
++#define SPI_STATISTICS_SHOW_NAME(name, file, field)			\
+ static ssize_t spi_statistics_##name##_show(struct spi_statistics *stat, \
+ 					    char *buf)			\
+ {									\
+-	unsigned long flags;						\
+ 	ssize_t len;							\
+-	spin_lock_irqsave(&stat->lock, flags);				\
+-	len = sysfs_emit(buf, format_string "\n", stat->field);		\
+-	spin_unlock_irqrestore(&stat->lock, flags);			\
++	u64 val;							\
++	spi_pcpu_stats_totalize(val, stat, field);			\
++	len = sysfs_emit(buf, "%llu\n", val);				\
+ 	return len;							\
+ }									\
+ SPI_STATISTICS_ATTRS(name, file)
+ 
+-#define SPI_STATISTICS_SHOW(field, format_string)			\
++#define SPI_STATISTICS_SHOW(field)					\
+ 	SPI_STATISTICS_SHOW_NAME(field, __stringify(field),		\
+-				 field, format_string)
++				 field)
+ 
+-SPI_STATISTICS_SHOW(messages, "%lu");
+-SPI_STATISTICS_SHOW(transfers, "%lu");
+-SPI_STATISTICS_SHOW(errors, "%lu");
+-SPI_STATISTICS_SHOW(timedout, "%lu");
++SPI_STATISTICS_SHOW(messages);
++SPI_STATISTICS_SHOW(transfers);
++SPI_STATISTICS_SHOW(errors);
++SPI_STATISTICS_SHOW(timedout);
+ 
+-SPI_STATISTICS_SHOW(spi_sync, "%lu");
+-SPI_STATISTICS_SHOW(spi_sync_immediate, "%lu");
+-SPI_STATISTICS_SHOW(spi_async, "%lu");
++SPI_STATISTICS_SHOW(spi_sync);
++SPI_STATISTICS_SHOW(spi_sync_immediate);
++SPI_STATISTICS_SHOW(spi_async);
+ 
+-SPI_STATISTICS_SHOW(bytes, "%llu");
+-SPI_STATISTICS_SHOW(bytes_rx, "%llu");
+-SPI_STATISTICS_SHOW(bytes_tx, "%llu");
++SPI_STATISTICS_SHOW(bytes);
++SPI_STATISTICS_SHOW(bytes_rx);
++SPI_STATISTICS_SHOW(bytes_tx);
+ 
+ #define SPI_STATISTICS_TRANSFER_BYTES_HISTO(index, number)		\
+ 	SPI_STATISTICS_SHOW_NAME(transfer_bytes_histo##index,		\
+ 				 "transfer_bytes_histo_" number,	\
+-				 transfer_bytes_histo[index],  "%lu")
++				 transfer_bytes_histo[index])
+ SPI_STATISTICS_TRANSFER_BYTES_HISTO(0,  "0-1");
+ SPI_STATISTICS_TRANSFER_BYTES_HISTO(1,  "2-3");
+ SPI_STATISTICS_TRANSFER_BYTES_HISTO(2,  "4-7");
+@@ -188,7 +230,7 @@ SPI_STATISTICS_TRANSFER_BYTES_HISTO(14, "16384-32767");
+ SPI_STATISTICS_TRANSFER_BYTES_HISTO(15, "32768-65535");
+ SPI_STATISTICS_TRANSFER_BYTES_HISTO(16, "65536+");
+ 
+-SPI_STATISTICS_SHOW(transfers_split_maxsize, "%lu");
++SPI_STATISTICS_SHOW(transfers_split_maxsize);
+ 
+ static struct attribute *spi_dev_attrs[] = {
+ 	&dev_attr_modalias.attr,
+@@ -285,30 +327,30 @@ static const struct attribute_group *spi_master_groups[] = {
+ 	NULL,
+ };
+ 
+-static void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
++static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
+ 					      struct spi_transfer *xfer,
+ 					      struct spi_controller *ctlr)
+ {
+-	unsigned long flags;
+ 	int l2len = min(fls(xfer->len), SPI_STATISTICS_HISTO_SIZE) - 1;
++	struct spi_statistics *stats = this_cpu_ptr(pcpu_stats);
+ 
+ 	if (l2len < 0)
+ 		l2len = 0;
+ 
+-	spin_lock_irqsave(&stats->lock, flags);
++	u64_stats_update_begin(&stats->syncp);
+ 
+-	stats->transfers++;
+-	stats->transfer_bytes_histo[l2len]++;
++	u64_stats_inc(&stats->transfers);
++	u64_stats_inc(&stats->transfer_bytes_histo[l2len]);
+ 
+-	stats->bytes += xfer->len;
++	u64_stats_add(&stats->bytes, xfer->len);
+ 	if ((xfer->tx_buf) &&
+ 	    (xfer->tx_buf != ctlr->dummy_tx))
+-		stats->bytes_tx += xfer->len;
++		u64_stats_add(&stats->bytes_tx, xfer->len);
+ 	if ((xfer->rx_buf) &&
+ 	    (xfer->rx_buf != ctlr->dummy_rx))
+-		stats->bytes_rx += xfer->len;
++		u64_stats_add(&stats->bytes_rx, xfer->len);
+ 
+-	spin_unlock_irqrestore(&stats->lock, flags);
++	u64_stats_update_end(&stats->syncp);
+ }
+ 
+ /*
+@@ -537,14 +579,19 @@ struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
+ 		return NULL;
+ 	}
+ 
++	spi->pcpu_statistics = spi_alloc_pcpu_stats(NULL);
++	if (!spi->pcpu_statistics) {
++		kfree(spi);
++		spi_controller_put(ctlr);
++		return NULL;
++	}
++
+ 	spi->master = spi->controller = ctlr;
+ 	spi->dev.parent = &ctlr->dev;
+ 	spi->dev.bus = &spi_bus_type;
+ 	spi->dev.release = spidev_release;
+ 	spi->mode = ctlr->buswidth_override_bits;
+ 
+-	spin_lock_init(&spi->statistics.lock);
+-
+ 	device_initialize(&spi->dev);
+ 	return spi;
+ }
+@@ -1239,8 +1286,8 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
+ 			     struct spi_message *msg,
+ 			     struct spi_transfer *xfer)
+ {
+-	struct spi_statistics *statm = &ctlr->statistics;
+-	struct spi_statistics *stats = &msg->spi->statistics;
++	struct spi_statistics *statm = ctlr->pcpu_statistics;
++	struct spi_statistics *stats = msg->spi->pcpu_statistics;
+ 	u32 speed_hz = xfer->speed_hz;
+ 	unsigned long long ms;
+ 
+@@ -1396,8 +1443,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	struct spi_transfer *xfer;
+ 	bool keep_cs = false;
+ 	int ret = 0;
+-	struct spi_statistics *statm = &ctlr->statistics;
+-	struct spi_statistics *stats = &msg->spi->statistics;
++	struct spi_statistics *statm = ctlr->pcpu_statistics;
++	struct spi_statistics *stats = msg->spi->pcpu_statistics;
+ 
+ 	spi_set_cs(msg->spi, true, false);
+ 
+@@ -3042,7 +3089,11 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		}
+ 	}
+ 	/* add statistics */
+-	spin_lock_init(&ctlr->statistics.lock);
++	ctlr->pcpu_statistics = spi_alloc_pcpu_stats(dev);
++	if (!ctlr->pcpu_statistics) {
++		dev_err(dev, "Error allocating per-cpu statistics\n");
++		goto destroy_queue;
++	}
+ 
+ 	mutex_lock(&board_lock);
+ 	list_add_tail(&ctlr->list, &spi_controller_list);
+@@ -3055,6 +3106,8 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	acpi_register_spi_devices(ctlr);
+ 	return status;
+ 
++destroy_queue:
++	spi_destroy_queue(ctlr);
+ free_bus_id:
+ 	mutex_lock(&board_lock);
+ 	idr_remove(&spi_master_idr, ctlr->bus_num);
+@@ -3380,9 +3433,9 @@ static int __spi_split_transfer_maxsize(struct spi_controller *ctlr,
+ 	*xferp = &xfers[count - 1];
+ 
+ 	/* increment statistics counters */
+-	SPI_STATISTICS_INCREMENT_FIELD(&ctlr->statistics,
++	SPI_STATISTICS_INCREMENT_FIELD(ctlr->pcpu_statistics,
+ 				       transfers_split_maxsize);
+-	SPI_STATISTICS_INCREMENT_FIELD(&msg->spi->statistics,
++	SPI_STATISTICS_INCREMENT_FIELD(msg->spi->pcpu_statistics,
+ 				       transfers_split_maxsize);
+ 
+ 	return 0;
+@@ -3769,8 +3822,8 @@ static int __spi_async(struct spi_device *spi, struct spi_message *message)
+ 
+ 	message->spi = spi;
+ 
+-	SPI_STATISTICS_INCREMENT_FIELD(&ctlr->statistics, spi_async);
+-	SPI_STATISTICS_INCREMENT_FIELD(&spi->statistics, spi_async);
++	SPI_STATISTICS_INCREMENT_FIELD(ctlr->pcpu_statistics, spi_async);
++	SPI_STATISTICS_INCREMENT_FIELD(spi->pcpu_statistics, spi_async);
+ 
+ 	trace_spi_message_submit(message);
+ 
+@@ -3917,8 +3970,8 @@ static int __spi_sync(struct spi_device *spi, struct spi_message *message)
+ 	message->context = &done;
+ 	message->spi = spi;
+ 
+-	SPI_STATISTICS_INCREMENT_FIELD(&ctlr->statistics, spi_sync);
+-	SPI_STATISTICS_INCREMENT_FIELD(&spi->statistics, spi_sync);
++	SPI_STATISTICS_INCREMENT_FIELD(ctlr->pcpu_statistics, spi_sync);
++	SPI_STATISTICS_INCREMENT_FIELD(spi->pcpu_statistics, spi_sync);
+ 
+ 	/*
+ 	 * If we're not using the legacy transfer method then we will
+@@ -3941,9 +3994,9 @@ static int __spi_sync(struct spi_device *spi, struct spi_message *message)
+ 	if (status == 0) {
+ 		/* Push out the messages in the calling context if we can */
+ 		if (ctlr->transfer == spi_queued_transfer) {
+-			SPI_STATISTICS_INCREMENT_FIELD(&ctlr->statistics,
++			SPI_STATISTICS_INCREMENT_FIELD(ctlr->pcpu_statistics,
+ 						       spi_sync_immediate);
+-			SPI_STATISTICS_INCREMENT_FIELD(&spi->statistics,
++			SPI_STATISTICS_INCREMENT_FIELD(spi->pcpu_statistics,
+ 						       spi_sync_immediate);
+ 			__spi_pump_messages(ctlr, false);
+ 		}
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 5f8c063ddff4..29c889825a96 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -17,6 +17,7 @@
+ 
+ #include <uapi/linux/spi/spi.h>
+ #include <linux/acpi.h>
++#include <linux/u64_stats_sync.h>
+ 
+ struct dma_chan;
+ struct software_node;
+@@ -59,37 +60,42 @@ extern struct bus_type spi_bus_type;
+  *                 maxsize limit
+  */
+ struct spi_statistics {
+-	spinlock_t		lock; /* lock for the whole structure */
++	struct u64_stats_sync	syncp;
+ 
+-	unsigned long		messages;
+-	unsigned long		transfers;
+-	unsigned long		errors;
+-	unsigned long		timedout;
++	u64_stats_t		messages;
++	u64_stats_t		transfers;
++	u64_stats_t		errors;
++	u64_stats_t		timedout;
+ 
+-	unsigned long		spi_sync;
+-	unsigned long		spi_sync_immediate;
+-	unsigned long		spi_async;
++	u64_stats_t		spi_sync;
++	u64_stats_t		spi_sync_immediate;
++	u64_stats_t		spi_async;
+ 
+-	unsigned long long	bytes;
+-	unsigned long long	bytes_rx;
+-	unsigned long long	bytes_tx;
++	u64_stats_t		bytes;
++	u64_stats_t		bytes_rx;
++	u64_stats_t		bytes_tx;
+ 
+ #define SPI_STATISTICS_HISTO_SIZE 17
+-	unsigned long transfer_bytes_histo[SPI_STATISTICS_HISTO_SIZE];
++	u64_stats_t	transfer_bytes_histo[SPI_STATISTICS_HISTO_SIZE];
+ 
+-	unsigned long transfers_split_maxsize;
++	u64_stats_t	transfers_split_maxsize;
+ };
+ 
+-#define SPI_STATISTICS_ADD_TO_FIELD(stats, field, count)	\
+-	do {							\
+-		unsigned long flags;				\
+-		spin_lock_irqsave(&(stats)->lock, flags);	\
+-		(stats)->field += count;			\
+-		spin_unlock_irqrestore(&(stats)->lock, flags);	\
++#define SPI_STATISTICS_ADD_TO_FIELD(pcpu_stats, field, count)		\
++	do {								\
++		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
++		u64_stats_update_begin(&__lstats->syncp);		\
++		u64_stats_add(&__lstats->field, count);			\
++		u64_stats_update_end(&__lstats->syncp);			\
+ 	} while (0)
+ 
+-#define SPI_STATISTICS_INCREMENT_FIELD(stats, field)	\
+-	SPI_STATISTICS_ADD_TO_FIELD(stats, field, 1)
++#define SPI_STATISTICS_INCREMENT_FIELD(pcpu_stats, field)		\
++	do {								\
++		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
++		u64_stats_update_begin(&__lstats->syncp);		\
++		u64_stats_inc(&__lstats->field);			\
++		u64_stats_update_end(&__lstats->syncp);			\
++	} while (0)
+ 
+ /**
+  * struct spi_delay - SPI delay information
+@@ -192,7 +198,7 @@ struct spi_device {
+ 	struct spi_delay	cs_inactive;
+ 
+ 	/* the statistics */
+-	struct spi_statistics	statistics;
++	struct spi_statistics __percpu	*pcpu_statistics;
+ 
+ 	/*
+ 	 * likely need more hooks for more protocol options affecting how
+@@ -643,7 +649,7 @@ struct spi_controller {
+ 	s8			max_native_cs;
+ 
+ 	/* statistics */
+-	struct spi_statistics	statistics;
++	struct spi_statistics __percpu	*pcpu_statistics;
+ 
+ 	/* DMA channels for use with core dmaengine helpers */
+ 	struct dma_chan		*dma_tx;
+-- 
+2.32.0
+
