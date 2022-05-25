@@ -2,72 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D1A534115
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 18:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25101534187
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 18:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237180AbiEYQLL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 May 2022 12:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S245457AbiEYQbX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 12:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbiEYQLK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 12:11:10 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25102B41ED
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:11:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id f2so30826799wrc.0
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:11:05 -0700 (PDT)
+        with ESMTP id S245335AbiEYQbX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 12:31:23 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8841736E0A
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 206-20020a1c02d7000000b00397345f2c6fso988053wmc.4
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7CPLQ14WaiCX+ILz1Hrgp1Qbb/fI6CZrPndnwjE4cb0=;
-        b=bjg0YEnXgGSPysZv/QsYyuc6SlwU0HsbcG+2lJ5biIG8XUTtXJ0IXRooICluaTFiZW
-         x/71ssLox5GE5C/gYtX7JF+/RAI1gXUQZcbiWYoiX7XPUpEHQ0sMkLug5EA1s1kKTfw2
-         i5e8L5FPS6gqKufi+55OhSiYsUZ7FmsPvniCP8tIr7XAgRFWXc8WFXY9tFnH0EIMo/Cs
-         QHgcL9TGiij1Y1zK9tGsBql9Y5Ng4cmMrDJMzD+xLcSsG5KEL4ihtvtyLPWiXDtFoMuq
-         vEifY77fl88ZfD27gYLuc3vVulnB2AaWjw2MPlkVaAWdUEtXHk0H5UBf75+ExeCEDjvf
-         x6jg==
+        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
+        b=iiwDTfeN13tL6fGE8/O/41RxuguehByAsXlBv9b9A01c7ZAdTpYS5aHEDpDso1Bu8i
+         kgxKRcKgKhgdGd2vhyTjOKPHBaEWdj2HpQSVJQGGYQQtqyCZteYEFylu+SAto+2sZGmQ
+         TIMe4hYZkvCtphweI93uLlhDGw2X/mIXtW4rcrWnuB26scIT9PZTO9a/7nUydvxGGl/n
+         Tg5m2jtF3h9nn+t8Z0Wj5O1upTZIQcgwL8hln0PFBx5MIgtzPoADsg5J67ysbfmAfhkQ
+         nNjKl5AeJaAYUFQYiyK14bxuDtMDYvnrSSSZuzQIfiShrsucyeJYAgf1Of9gVi3ahuMf
+         hgVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7CPLQ14WaiCX+ILz1Hrgp1Qbb/fI6CZrPndnwjE4cb0=;
-        b=qAZUbNQHaSo5GBdI273Td8vfG5IThEWUprHyNHgzSQXFIFVEGqBuPuECarapY2XEcr
-         F+JnK4C6zEKydVguqItB6N82qVYpKgrWcPI8nhxHwVMoA22lr7wXqYTuikxIr63KLZhW
-         m/OMTINTt7RXU3Rdra7UTki2hZ/urLREXurjb84MJFuVAzkGa0/phebjr71LbKkV0weg
-         V+j/nNI5hVRcggx9m789SEyMDwVg2NseJ+ceLs690pDUGPGTIVfk4I9fdizdhoKTonx5
-         rZlzEaQMrL1PO3Tx/uD5FbjIPK00/Kqy1tnngSLRIUc1cYhPsj7vo/XbGlmo5u/dANi4
-         8K9w==
-X-Gm-Message-State: AOAM533Zl6SkKAPqrRbYZLb9WSMJm3K+PM1HDM8pLkax0bjlnLsq9VM1
-        QiBrW3JMWGafISd+1M/eWKSpgFFdW6ECCcbGO/sgnA==
-X-Google-Smtp-Source: ABdhPJya9POSR16TPN0e/q8mW1cFMbbUYlTzpoiumLvvphZabXWlEbHKhIWt0nAFBXWP7vgbnXf7hUJ4jmzGIiL3yGc=
-X-Received: by 2002:a5d:5954:0:b0:20c:4d55:1388 with SMTP id
- e20-20020a5d5954000000b0020c4d551388mr27861460wri.90.1653495063669; Wed, 25
- May 2022 09:11:03 -0700 (PDT)
+        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
+        b=LF+2PS3eLS3pJOhQdFPlEcOeF/9IFsqWwhzofb3MTaScLEA/wDMKM3Wkaa+ek2+ee2
+         AF7lubTUlUzdqOTowMheG3A1OxVZAMoFWuwyUM/IbP1Uqvz+wmhiPBgKq0mNrJ8p6cCI
+         XwrTDjpI9v2HlNgzCffgt/RvOrgKT+pzqcqof7U5yRihnycPUm0bG5xUi95PlmSD8zgH
+         81tF8xBLmEW0zjt43BSxupm0JC/j6qqIuUNfRpbpDTffcnzm56W7BGBK/WXAkZuDMayt
+         IL27bgNFWdRMuvPhI/DHJ3riUUTsbyMjBXO6dlSklVLBc4yoIPcCiGWFR6A68DgH/cXP
+         I5oA==
+X-Gm-Message-State: AOAM531H6yb+O7lbCvMFu5sfCTLpyRpMkLuy+2bS+3QnNuthHYg7e6zH
+        wDLOk2TEDNasz3EluiMT6w9i3/gbshgvi5rUzBxLZA==
+X-Google-Smtp-Source: ABdhPJwz1YBHr2nIviBFJqClOiHWUWpdPAd4Ni20+aGv2NLGkrG68huw8L/+YWlQH8LdBrC5DevZ27OB4Uat2ZkcfBM=
+X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id
+ v187-20020a1cacc4000000b003929dd4fbccmr8895701wme.78.1653496276038; Wed, 25
+ May 2022 09:31:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-10-brad@pensando.io>
- <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
- <3c8e94e1-fb8e-0d8f-4e79-b8313a1da5cb@intel.com> <CAK9rFnwsMd1+oQ8cg8Biw7HM=R6aOudfK7Ja+E+iGVgfrvC9Gg@mail.gmail.com>
- <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
-In-Reply-To: <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-2-brad@pensando.io>
+ <05febd3f-bfdb-13c2-8cce-b9dc422c5eae@linaro.org> <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
+ <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
+In-Reply-To: <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
 From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 09:10:52 -0700
-Message-ID: <CAK9rFnzBDgBCFN+UJJnpkEPFGwbjkwAcjGjM2E_yF43iMDs+2Q@mail.gmail.com>
-Subject: Re: [PATCH 09/11] mmc: sdhci-cadence: Add Pensando Elba SoC support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+Date:   Wed, 25 May 2022 09:31:05 -0700
+Message-ID: <CAK9rFnw9+seK_j3gcMrDOqCWcj7C4-eKVGziFF5_J=TnxWx06Q@mail.gmail.com>
+Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
         Serge Semin <fancer.lancer@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
         David Clear <dac2@pensando.io>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
@@ -79,59 +80,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Arnd,
+Hi Krzysztof,
 
-On Thu, Apr 7, 2022 at 1:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Sat, Apr 9, 2022 at 3:40 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On Thu, Apr 7, 2022 at 7:06 PM Brad Larson <brad@pensando.io> wrote:
-> > On Thu, Apr 7, 2022 at 12:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > >
-> > > What is the relationship between cadence and pensando elba?
+> On 09/04/2022 04:19, Brad Larson wrote:
+> > On Thu, Apr 7, 2022 at 11:45 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>> Change from V3:
+> >>> - Add description and board compatible
+> >>
+> >> That's a bit confusing... the subject is for v1.
 > >
-> > Pensando licensed the cadence controller, its 100% cadence IP.  The
-> > integration issue we ran into was with the accessors where we have the
-> > workaround.  The initial patch added a separate Elba driver file but
-> > the feedback was the Elba support didn't justify doing that and to add
-> > to sdhci-cacence.c.
+> > Goal was to identify in the cover letter patch the key changes from
+> > the V3 patchset to this V4 patchset.  Then in each patch that had a
+> > material change highlight that in the patch itself.  Will try and make
+> > it more clear.
 >
-> I looked back at the earlier reviews now, I think the main problem with
-> versions 1 and 2 was that it had the abstraction the wrong way around,
-> so you added the complexity of having multiple files, without the benefits.
+> This is fine, I am talking about the subject - it is marked as a v1, so
+> it's confusing to see a changelog.
 >
-> I still think that the cleanest approach would be to have it the way I
-> suggested in my reply to v1, with an elba specific platform driver
-> that calls into the generic cadence code, but the generic code knowing
-> nothing about the front-end.
->
-> Then again, it sounds like there was already an agreement about
-> the approach you took here, so let's stay with that and hope we don't
-> get any other chips with the same IP block in the future.
+> One way to achieve this is: "git format-patch -v4 -11 ..."
 
-Thanks for looking this over.  I won't change for now in the patch
-update in process.  This will likely get another look as I've added a
-node to the device tree to enable an added reset driver which can
-hardware reset the emmc.  The current cadence sdhci driver does not
-include this and I've currently added filling out
-mmc_host_ops.card_hw_reset like below, yet one more thing different
-for our platforms not in the common driver.
-
-@@ -404,6 +550,17 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-        if (ret)
-                goto free;
-
-+       if (host->mmc->caps & MMC_CAP_HW_RESET) {
-+               priv->rst_hw =
-devm_reset_control_get_optional_exclusive(dev, "hw");
-+               if (IS_ERR(priv->rst_hw)) {
-+                       ret = PTR_ERR(priv->rst_hw);
-+                       if (ret == -ENOENT)
-+                               priv->rst_hw = NULL;
-+               } else {
-+                       host->mmc_host_ops.card_hw_reset = sdhci_mmc_hw_reset;
-+               }
-+       }
-+
-        ret = sdhci_add_host(host);
+That was the problem, thanks!  Missed including -v4 in last use of
+format-patch.  Sorry for the confusion.
 
 Regards,
 Brad
