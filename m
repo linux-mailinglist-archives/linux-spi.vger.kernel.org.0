@@ -2,74 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6D553337B
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 00:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85AB533F31
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 16:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242583AbiEXW1m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 May 2022 18:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S236645AbiEYO3n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 10:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242579AbiEXW1l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 May 2022 18:27:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB3D35855;
-        Tue, 24 May 2022 15:27:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28FCDB81B89;
-        Tue, 24 May 2022 22:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E27B6C36AE5;
-        Tue, 24 May 2022 22:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653431257;
-        bh=EVLhcI3nTTHBdnbs81/n4xNy7Kq6g7ROnAa4U0ui7YA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=DdntslbgOylp2lcRP1QonaK73RsXnycXwiyUPH4X8HR93vqGAbWB4ATver6zqOswO
-         tYxaoA6T7wRH3u8YiVa83Lzwt5L5kHQkjuwjcumRrLqNzgPx0wW/zdcXcYaEZxak5m
-         5FQsBpz7h9KACyfI7J7RHztwN9o7Ih7aDGR2cZwrlOfCGuZOQYuZHSJAE9SfPzUOyR
-         fjGoXAixrJi6LVowAe7eHaSI9qxqGB1/KIM7BAX8DV6CuYeo+0tWulwJ3A50ywSwEz
-         ByslPY00zSHuKmWh7VhIYUJuhnmP7/XPZ2DSJQS+aMNPGY50eo+mycalc2HisP0zQx
-         6eDUcYef4DKTQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C485DF03938;
-        Tue, 24 May 2022 22:27:37 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220523131250.90060C385A9@smtp.kernel.org>
-References: <20220523131250.90060C385A9@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220523131250.90060C385A9@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.19
-X-PR-Tracked-Commit-Id: 9c63b846e6df43e5b3d31263f7db545f32deeda3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d8e0f976f104a0258c0426b3805b057411cd0bd2
-Message-Id: <165343125780.3997.12946616294694080663.pr-tracker-bot@kernel.org>
-Date:   Tue, 24 May 2022 22:27:37 +0000
+        with ESMTP id S234442AbiEYO3m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 10:29:42 -0400
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26E91146B
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 07:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=JRIU1D2gVcE7WecOJZLB+34H02WFFD/z9G1eWPodXic=;
+        b=GuX6QWZNDLFctSE6rgNjQSpma1ITjY5bO/uK4vb5py5/8kEi+O3D/1rYET4QtWsLuVGOAzUG9FEO8
+         dlKOolxOXDn5NwQiIndkXjEnwLEID1fg7NA69yJuX6Dv7pHU46b+KYLhu/w+hqtWHBebdu7QT7zw8r
+         kwFXp5jhoaGj9xnNnvI8HzSEIsnyRYM82PK0pkpHRxni+FbijDMr1UiHw5GN/i08Np0E4SJuOCvlkd
+         u6HWE0UuoCIwvvKfH0FpwsjOnVyWo1MXqtCeFllmEU+RHLm8KFrXCWqNX29Isrn44+NpQmUa6hupqc
+         ZV6X94iGmy/qyA/wsyLXflGwXWNpOyg==
+X-MSG-ID: 1a68e90c-dc37-11ec-b450-0050569d3a82
+From:   David Jander <david@protonic.nl>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Jander <david@protonic.nl>
+Subject: [RFC] [PATCH 0/3] Optimize spi_sync path
+Date:   Wed, 25 May 2022 16:29:25 +0200
+Message-Id: <20220525142928.2335378-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 23 May 2022 14:12:36 +0100:
+These patches optimize the spi_sync call for the common case that the
+worker thread is idle and the queue is empty. It also opens the
+possibility to potentially further optimize the async path also, since
+it doesn't need to take into account the direct sync path anymore.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.19
+As an example for the performance gain, on an i.MX8MM SoC with a SPI CAN
+controller attached (MCP2518FD), the time the interrupt line stays
+active (which corresponds roughly with the time it takes to send 3
+relatively short consecutive spi_sync messages) is reduced from 98us to
+only 72us by this patch.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d8e0f976f104a0258c0426b3805b057411cd0bd2
+Unfortunately though, this optimization requires a small and hopefully
+innocuous API change. This change is contained in the first patch, and
+it replaces the function spi_finalize_current_message() with
+spi_finalize_message(), which takes the message instead of its
+controller as argument. Without this change, it is not possible to avoid
+touching the controller message queue, which is what this is all about.
 
-Thank you!
+A note about message ordering:
+
+This patch series should not change the behavior of message ordering when
+coming from the same context. This means that if a client driver issues
+one or more spi_async() messages immediately followed by a spi_sync()
+message in the same context, it can still rely on these messages being
+sent out in the order they were fired.
+
+David Jander (3):
+  drivers: spi: API: spi_finalize_current_message ->
+    spi_finalize_message
+  drivers: spi: spi.c: Move ctlr->cur_msg_prepared to struct spi_message
+  drivers: spi: spi.c: Don't use the message queue if possible in
+    spi_sync
+
+ Documentation/spi/spi-summary.rst             |   4 +-
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c |   2 +-
+ drivers/media/usb/msi2500/msi2500.c           |   2 +-
+ drivers/spi/spi-amd.c                         |   2 +-
+ drivers/spi/spi-ar934x.c                      |   2 +-
+ drivers/spi/spi-axi-spi-engine.c              |   2 +-
+ drivers/spi/spi-bcm63xx-hsspi.c               |   2 +-
+ drivers/spi/spi-bcm63xx.c                     |   2 +-
+ drivers/spi/spi-cavium.c                      |   2 +-
+ drivers/spi/spi-falcon.c                      |   2 +-
+ drivers/spi/spi-fsi.c                         |   2 +-
+ drivers/spi/spi-fsl-dspi.c                    |   2 +-
+ drivers/spi/spi-fsl-espi.c                    |   2 +-
+ drivers/spi/spi-fsl-spi.c                     |   2 +-
+ drivers/spi/spi-mpc512x-psc.c                 |   2 +-
+ drivers/spi/spi-mt7621.c                      |   2 +-
+ drivers/spi/spi-mtk-nor.c                     |   2 +-
+ drivers/spi/spi-mux.c                         |   2 +-
+ drivers/spi/spi-mxs.c                         |   2 +-
+ drivers/spi/spi-omap-100k.c                   |   2 +-
+ drivers/spi/spi-pic32-sqi.c                   |   2 +-
+ drivers/spi/spi-pl022.c                       |   4 +-
+ drivers/spi/spi-sc18is602.c                   |   2 +-
+ drivers/spi/spi-sh-hspi.c                     |   2 +-
+ drivers/spi/spi-tegra114.c                    |   2 +-
+ drivers/spi/spi-tegra20-sflash.c              |   2 +-
+ drivers/spi/spi-tegra210-quad.c               |   2 +-
+ drivers/spi/spi-ti-qspi.c                     |   2 +-
+ drivers/spi/spi-xcomm.c                       |   2 +-
+ drivers/spi/spi.c                             | 269 ++++++++++--------
+ drivers/staging/greybus/spilib.c              |   2 +-
+ include/linux/spi/spi.h                       |  21 +-
+ 32 files changed, 206 insertions(+), 148 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.32.0
+
