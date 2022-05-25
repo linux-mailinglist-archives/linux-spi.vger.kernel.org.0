@@ -2,88 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE62534291
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 19:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBBC5344AB
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 22:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiEYRz0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 May 2022 13:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S1344595AbiEYUGp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 16:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237324AbiEYRz0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 13:55:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65550E012;
-        Wed, 25 May 2022 10:55:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D743B81E95;
-        Wed, 25 May 2022 17:55:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE34BC385B8;
-        Wed, 25 May 2022 17:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653501322;
-        bh=JQT1FQkqijFrYs4Q5gXkVwd/6EItAgBP5Qqc1g0WVt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=adkySraLTQOiDVOQjecG2dUr5S6OEQQPD7G1lYfAYgWxjS13MaYz1HvXts2EpE44d
-         edzL8KOgtKksDncP5Mjp4s09UN6lJr2Rdi66+r1FJzt9cn4eKIXi0iwRYRBwlg3Be+
-         FwHg1sQVKUGpA1phHL9BpYqXUJ5/JxTNjcfqKkmydc1U0THsuBbUguHseU8Q5wPLtZ
-         0AA+q2s4fmmF46x9Oa3s2p+TBRQZDgoaJWGOek4AaUqFwNK1UulNm5x1DkeL6ZBtA/
-         lKpsDYXcJX1q0IZcFiy+q4v+uLl4sZlzifexvxFVgWtjVxJjWXOLRoUQKt8ci/XNzA
-         cPF2+FFBSniGQ==
-Date:   Wed, 25 May 2022 18:55:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: fsi: Fix spurious timeout
-Message-ID: <Yo5thr6nAgNEqJTn@sirena.org.uk>
-References: <20220525165852.33167-1-eajames@linux.ibm.com>
- <20220525165852.33167-2-eajames@linux.ibm.com>
+        with ESMTP id S242501AbiEYUGh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 16:06:37 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934FD5F40
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 13:06:35 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bg25so13090976wmb.4
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 13:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5MlRh8v/O/wHhNLDVqNAGwAJO3u/nvYhL6suQln4qMM=;
+        b=aOtG+77g4SUVZr8bbvfMI4s7jJQI5gdHfJc7aakPzg+lNkGNOOQVJV9iG4Yu/jIe3/
+         QbmCPdfeXzcf5y/4GD8DI74dKjylTbj6yE5dszfna3WO92tO3psktxusV3598aleUFYq
+         6H1cCeAlBOFu3Va+kmZhuRKXO39pTz4MvBX3soqViH7SE3lZthU3f7oHiFWMBQ0Mc3k+
+         nSwL7XWWbT3FArlMgP4a3hyS7DfL6PQZDPlYYkm+NsWMmmjAr3cXFnn9+kjPnlIb1n6d
+         qwgLFiy3/gBjTWnjPyLyJOmMCNivCq0vgmMJcwttRd3X2eybN1mqziJcEI/6rKIvaeeh
+         7K2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5MlRh8v/O/wHhNLDVqNAGwAJO3u/nvYhL6suQln4qMM=;
+        b=LaPcbHEKaVrk1LSGqWtLZfffLl9NxLIAEE5VDHBHhrmqplCYf62Y6N/ngnar0GKFvI
+         rp6r3XJX2br8ehQXwFBNgnRay1Y7Nba6eyhheC1yHPbYhHWZtw0hWMFkPuk4NMkz2tw+
+         Anp89EN83ZZMOo12Eyyr4+CM7+/O+dnPWG2VIwZWmCIPRA5knE8B21VNLc7vqpMMN1SQ
+         vjsv0lFWBsHf91V1QA+FZPEGtmhuX/s+M0o6lr30G6oBXdaHks6a2Y22BVbJ+rcVLmK1
+         Gdp3aGbfz10tIOryqh5DjAgaHo6oujGuyfHvRhfWkLiXfAWoQ8sFSHHJR56DSSuQcRTV
+         8p/A==
+X-Gm-Message-State: AOAM533qci9Zv0mD9W7FydaJ/6A+iFa9Ycs6Tl8pim5fTdjjg7ygEF7m
+        xFXFo+5vcTO4qqbLQehM9kjuqxMpMI5FtIBxMQlHJg==
+X-Google-Smtp-Source: ABdhPJzwmm4iFgAvq41IWkRIMaeSW61oQACieHYUK5Pp+Z5/usjraflqW/p2zQWTbtlA0quoR70s8kdRGnwXUQJemek=
+X-Received: by 2002:a05:600c:3515:b0:394:8c7e:fbde with SMTP id
+ h21-20020a05600c351500b003948c7efbdemr9559357wmq.165.1653509194127; Wed, 25
+ May 2022 13:06:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mrFfS6EXyohewE7W"
-Content-Disposition: inline
-In-Reply-To: <20220525165852.33167-2-eajames@linux.ibm.com>
-X-Cookie: The revolution will not be televised.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-12-brad@pensando.io>
+ <20220412112239.cucvqqlfsdpjnzju@mobilestation>
+In-Reply-To: <20220412112239.cucvqqlfsdpjnzju@mobilestation>
+From:   Brad Larson <brad@pensando.io>
+Date:   Wed, 25 May 2022 13:06:23 -0700
+Message-ID: <CAK9rFnz9a_21Bc9yyUqqmQET_o6g5XK6=mfZVv9jUp4dNxCx4w@mail.gmail.com>
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        David Clear <dac2@pensando.io>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Sergey,
 
---mrFfS6EXyohewE7W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Apr 12, 2022 at 4:22 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> On Wed, Apr 06, 2022 at 04:36:48PM -0700, Brad Larson wrote:
 
-On Wed, May 25, 2022 at 11:58:51AM -0500, Eddie James wrote:
+> > +             spi0: spi@2800 {
+> > +                     compatible = "pensando,elba-spi";
+> > +                     reg = <0x0 0x2800 0x0 0x100>;
+>
+> > +                     pensando,syscon-spics = <&mssoc 0x2468>;
+>
+> I am wondering do you really need to define the
+> "pensando,syscon-spics" property as accepting a phandle with an
+> additional argument? That would have been justified if you had at
+> least two SPI controllers with different CS override registers. AFAICS
+> you've got only one here. So you can simplify the bindings by defining
+> the property like "pensando,syscon" (with no "spics" suffix) which
+> accepts the syscon phandle alone. Respective SPICS offset can be
+> locally declared in the driver as a macro with respective name.
 
->  I have one concern still, that if the kernel is very busy, it may
->  schedule other work for the entire timeout period between assigning
->  "end" and checking if timed out in the do/while loop... Is it worth
->  worrying about this case?
+Yes this can be simplified and doing that in updated patchset.  Only this
+API call is needed in dw_spi_elba_init().
 
-I'm not sure we can entirely avoid there being a gap, but with it being
-a busy loop you'd have to be very unlucky to hit that case.  If you come
-up with a fix that'd be nice.
+syscon_regmap_lookup_by_phandle(np, "pensando,syscon");
 
---mrFfS6EXyohewE7W
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKObYUACgkQJNaLcl1U
-h9D8vAf+P7OpuDaqfvgm3ycOW3LdYGgtTETWfRNzmyKpwwUsSPJ719zIRw7VZzEH
-ux1xJToX4RtwLF5+vBtDKXcVlwoD3AVP3LbfTbzAbIsvU0DZpeeFZvFKYxsQ7YuD
-EgbYigYf5LP7UlK22dAPT3bRAYURz2bDK/FKJePk6N1nOm5YP0NA9gn7T1BIbKIm
-e8a2pfbqXVpcH9syKautZYrMEs5of247mBB+o4pvzp8WhJsjVcgSfbn5xhclSHDG
-54EX7xzTGNYEV8kXP5QjP7RofcdDyVPfDa+6AbadPyM1yU3F3yiIWHEzPgvd4bpc
-MRCwycH3ZqYXyPh5NpDppPyvy8iQ6Q==
-=rjry
------END PGP SIGNATURE-----
-
---mrFfS6EXyohewE7W--
+Regards,
+Brad
