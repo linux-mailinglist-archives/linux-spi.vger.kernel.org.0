@@ -2,57 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25101534187
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 18:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6425341D1
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 18:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245457AbiEYQbX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 May 2022 12:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S245540AbiEYQ7E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 12:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245335AbiEYQbX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 12:31:23 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8841736E0A
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 206-20020a1c02d7000000b00397345f2c6fso988053wmc.4
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
+        with ESMTP id S245530AbiEYQ7C (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 12:59:02 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388E8A502E
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:59:00 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id p10so12324389wrg.12
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 09:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
-        b=iiwDTfeN13tL6fGE8/O/41RxuguehByAsXlBv9b9A01c7ZAdTpYS5aHEDpDso1Bu8i
-         kgxKRcKgKhgdGd2vhyTjOKPHBaEWdj2HpQSVJQGGYQQtqyCZteYEFylu+SAto+2sZGmQ
-         TIMe4hYZkvCtphweI93uLlhDGw2X/mIXtW4rcrWnuB26scIT9PZTO9a/7nUydvxGGl/n
-         Tg5m2jtF3h9nn+t8Z0Wj5O1upTZIQcgwL8hln0PFBx5MIgtzPoADsg5J67ysbfmAfhkQ
-         nNjKl5AeJaAYUFQYiyK14bxuDtMDYvnrSSSZuzQIfiShrsucyeJYAgf1Of9gVi3ahuMf
-         hgVw==
+        bh=BuZEGOxN6s+QpJ7ff5N18tZNmtTRq26kp+p3466K8F8=;
+        b=PN7c+ZsciJ/kEOjPj7CShyBj/DLMdY+SeuzKoJuV+aZs00rsfGtKPxXYuXkDBJ+S65
+         +uM95I3LPBfkBnNJtlsq3Hb54Vee//W2JCMtzVXiGtQO50V488NIYCi61azqiCWc6O3c
+         Q5lU3W83LYTjnEIjbwpSasu8MmFtG9SIpezhIsHVO5szkxK6XNck9CfoRN9NbVUaLhQ8
+         rYnP9qSQ9RsaMMG4frzZhL/yat5iLtRzzgeCf/MMbJh08/WMAAcFYYbFqaqpNUYbIOLm
+         zw8NrHxtN81kOAdgF/FzYqXwubENk2rIRCDyHk6nuO2yj17cVhEWMQAi40vrNhwTac3X
+         RwsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
-        b=LF+2PS3eLS3pJOhQdFPlEcOeF/9IFsqWwhzofb3MTaScLEA/wDMKM3Wkaa+ek2+ee2
-         AF7lubTUlUzdqOTowMheG3A1OxVZAMoFWuwyUM/IbP1Uqvz+wmhiPBgKq0mNrJ8p6cCI
-         XwrTDjpI9v2HlNgzCffgt/RvOrgKT+pzqcqof7U5yRihnycPUm0bG5xUi95PlmSD8zgH
-         81tF8xBLmEW0zjt43BSxupm0JC/j6qqIuUNfRpbpDTffcnzm56W7BGBK/WXAkZuDMayt
-         IL27bgNFWdRMuvPhI/DHJ3riUUTsbyMjBXO6dlSklVLBc4yoIPcCiGWFR6A68DgH/cXP
-         I5oA==
-X-Gm-Message-State: AOAM531H6yb+O7lbCvMFu5sfCTLpyRpMkLuy+2bS+3QnNuthHYg7e6zH
-        wDLOk2TEDNasz3EluiMT6w9i3/gbshgvi5rUzBxLZA==
-X-Google-Smtp-Source: ABdhPJwz1YBHr2nIviBFJqClOiHWUWpdPAd4Ni20+aGv2NLGkrG68huw8L/+YWlQH8LdBrC5DevZ27OB4Uat2ZkcfBM=
-X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id
- v187-20020a1cacc4000000b003929dd4fbccmr8895701wme.78.1653496276038; Wed, 25
- May 2022 09:31:16 -0700 (PDT)
+        bh=BuZEGOxN6s+QpJ7ff5N18tZNmtTRq26kp+p3466K8F8=;
+        b=SdLk2GelXNhteGgt8HDl6IaEnRX/ijWXB8DwXnDGiN1/8R+UNubAKopM3va2ChZF06
+         am4qA2YVr17kNnYtHelqs1Ib16Wt6vzi2ml56HmebGCD/RSIZMuDe2j2PmLTZQatq+oS
+         DRCNRYqhUT31WPOQpj4urgJCvr+e4pB7D59CsaVj/Gsk0+bMmCVg5wG1OqPauMoRe4+j
+         H9g0EZNtGGO6o4KkEZPqGpEjyxJ9Qaejbv88KsT2hj3rsRIKa5a5Wo/wubCaxpDLq4qG
+         e2WXRi1pSgx5COg2amu5bGscK2RKHdYTqUZ/jvoDYd6rqUn0acCJ0+5vHZbYAbGicg1k
+         8NHg==
+X-Gm-Message-State: AOAM5306Bwi1DFVK8cvcqbpID8gzJ4ktjHYBTNflg1XOTWxFwzXnQ2Zz
+        HIND7fxLDitCB+Gy2HSv4Elxi1Gf1yrJ8XUAK9iJ6g==
+X-Google-Smtp-Source: ABdhPJybIyWNzIkBX1luV1MnU9OIiN8pAZht74AaILdEoJbIQZLlkTffZeSVmkFeLQons+gYVBsMhKaLpMV+YAPqwYA=
+X-Received: by 2002:a5d:5954:0:b0:20c:4d55:1388 with SMTP id
+ e20-20020a5d5954000000b0020c4d551388mr28019559wri.90.1653497938850; Wed, 25
+ May 2022 09:58:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-2-brad@pensando.io>
- <05febd3f-bfdb-13c2-8cce-b9dc422c5eae@linaro.org> <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
- <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
-In-Reply-To: <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-5-brad@pensando.io>
+ <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
+In-Reply-To: <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
 From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 09:31:05 -0700
-Message-ID: <CAK9rFnw9+seK_j3gcMrDOqCWcj7C4-eKVGziFF5_J=TnxWx06Q@mail.gmail.com>
-Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
+Date:   Wed, 25 May 2022 09:58:47 -0700
+Message-ID: <CAK9rFnzHOTg9BR-KY7rQttN2Cu2SYqAXfjXLYsH+RKYO8Su01g@mail.gmail.com>
+Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba SoC
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -82,29 +81,26 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Krzysztof,
 
-On Sat, Apr 9, 2022 at 3:40 AM Krzysztof Kozlowski
+On Thu, Apr 7, 2022 at 11:59 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 09/04/2022 04:19, Brad Larson wrote:
-> > On Thu, Apr 7, 2022 at 11:45 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>> Change from V3:
-> >>> - Add description and board compatible
-> >>
-> >> That's a bit confusing... the subject is for v1.
+> On 07/04/2022 01:36, Brad Larson wrote:
+> > Document the cadence qspi controller compatible for Pensando Elba SoC
+> > boards.  The Elba qspi fifo size is 1024.
 > >
-> > Goal was to identify in the cover letter patch the key changes from
-> > the V3 patchset to this V4 patchset.  Then in each patch that had a
-> > material change highlight that in the patch itself.  Will try and make
-> > it more clear.
->
-> This is fine, I am talking about the subject - it is marked as a v1, so
-> it's confusing to see a changelog.
->
-> One way to achieve this is: "git format-patch -v4 -11 ..."
 
-That was the problem, thanks!  Missed including -v4 in last use of
-format-patch.  Sorry for the confusion.
+> > @@ -48,7 +49,7 @@ properties:
+> >      description:
+> >        Size of the data FIFO in words.
+> >      $ref: "/schemas/types.yaml#/definitions/uint32"
+> > -    enum: [ 128, 256 ]
+> > +    enum: [ 128, 256, 1024 ]
+>
+> Is 1024 valid for other controllers? If not, then probably this should
+> be further constraint in allOf:if:then...
+
+I'll change this to allOf:if:then so that the 1024 deep FIFO is
+specific to Elba SoC.
 
 Regards,
 Brad
