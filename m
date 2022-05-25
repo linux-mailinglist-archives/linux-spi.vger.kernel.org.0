@@ -2,107 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6485B53451D
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 22:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4EC53457A
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 23:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243790AbiEYUkp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 May 2022 16:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S1344443AbiEYVBJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 17:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237578AbiEYUkn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 16:40:43 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6197CB0D15
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 13:40:42 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id g72so10202368ybf.0
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 13:40:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=LDBqQh/PztHeiDiV9Pr0v62BTTaDnPQyU98FGi1REkw=;
-        b=bnw+bpAeGJgTMC9sGeBXwX6bAEcKbfsKIkAeZKSYpNE55sGquq/RNoAbgZ86ZUgzKy
-         vzwfHN+NHm8ZBL4flQyh33g04fzxfDtykcGxTi+bVW97u2D5h/2mwwLqYdp62qZhKLME
-         d/rBiB6L6WWAgzyfBeUgTZOwXzACB06J0FXHmI4tPCXIB+hugpaVPKihd9GSBW7VdY2/
-         Xj1For/SATTen2tfEsGG8F2SzyvwkOd2HZprMqwjK4/2v6J8pYCDeVAzlbPTLF4hyZlM
-         toQPLjm9n42iJggMSVXMx03k+Du9H14h6Yoh3EtBA0Lg3PHM/edDghzi0MLYHMk6TRu/
-         RKTg==
+        with ESMTP id S232245AbiEYVBB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 17:01:01 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B977BBA55E;
+        Wed, 25 May 2022 14:01:00 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f2cd424b9cso1778590fac.7;
+        Wed, 25 May 2022 14:01:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LDBqQh/PztHeiDiV9Pr0v62BTTaDnPQyU98FGi1REkw=;
-        b=d/FG00SWqJFxhturhUFcP9XJnbNivcdLJuuSLjc2AFNfanqMCt2hExvOqvonMImIiA
-         GMlB8/V+TEIrTo0SAe4v3OWhj3OGqyyxer/xxykxRu6moqzkJMzsUqPA4h0/yZmIPbEc
-         D80AMie5rXocJZzrHDIM6FIGx1u+diq2macIfPQvGfdc/7EMppLYPy2AHKn3fUoL8sMj
-         kun8apTB1XXDk7yBT/yqktbxiIvWBdtcdj+RGQwuyZiN6vEIlwvO2QHMwutNzQ5Fa8Tl
-         IHz6lEJM8wAMUoErvYuwACEuBAy5kA6OxoZOsa9bmiAd1SsSyY3h4VEX6TevncE/tRnk
-         xgWQ==
-X-Gm-Message-State: AOAM530xBAgClRg2Esv26GrPStlCMZ7JeaC6BsOFHhqy1x6nWypC/KLh
-        wdYCzs9s7eBBkb21QSJULXGvbjjsaiRiAJl9x0w=
-X-Google-Smtp-Source: ABdhPJw2b8SqDQM1jKtNIGJ71RNOLsX48Ub006RLAolgTDKgPV5ZPuOlMUWoTCzRkqjJoBARJ7ylBwMhjaodTyjAy9w=
-X-Received: by 2002:a05:6902:52f:b0:655:371e:b088 with SMTP id
- y15-20020a056902052f00b00655371eb088mr8201895ybs.60.1653511241651; Wed, 25
- May 2022 13:40:41 -0700 (PDT)
+        bh=V2DEce3yf8Bq8D8CEXpzcdntBLjIJseRwV+OWWl1tVA=;
+        b=P589UFF6O/n6814+n9r2o91aMLQCSQbr/y27tPlrgivUUBmjHwG7JWvDYnpIKHMfCp
+         +7onFl7ywJeyeQvOteB3VTvLEUqFOZtymVQnZslNpY42iGQOFwpmTLiM1vLy4LzDs3ya
+         DuhBPZpp/sYS98hTfdnjudvwFTelb68hcTZVw6SXfjnO6UDC/RvT8tY2Co/aj2A/j4X1
+         uDzN0En599S41aOjfPX1EanoSMTtSUYVP/S6e+b1bjYjFVf1OC/o+uSp1fudWTKe1X/m
+         W68l91jDrMjQEsT/3rA5b7rNonI7NzKt8FBQHt740i9O4KClGRXuMDI4DDWo0xvoRt7C
+         Nv3A==
+X-Gm-Message-State: AOAM531lREKxhuRnXHHgZrJLW3b9Gqnxd4RuKNnEH3YoMr9m7kewTZo0
+        hznbF8DjLdA83dCuegg2sQXE/6x0Ig==
+X-Google-Smtp-Source: ABdhPJwDI6vnmIjILt2FYz6J9nEAMoufgBi+0k3uylK50VLk+6BYH3YU9OOsQ8X/Eu+Ce+MjAHVSGQ==
+X-Received: by 2002:a05:6870:e991:b0:f2:cd2b:f82 with SMTP id r17-20020a056870e99100b000f2cd2b0f82mr1463756oao.81.1653512459991;
+        Wed, 25 May 2022 14:00:59 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id k22-20020a056870959600b000f2c0ec657asm1110201oao.0.2022.05.25.14.00.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 14:00:59 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: Move 'rx-sample-delay-ns' to spi-peripheral-props.yaml
+Date:   Wed, 25 May 2022 16:00:53 -0500
+Message-Id: <20220525210053.2488756-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a5b:506:0:0:0:0:0 with HTTP; Wed, 25 May 2022 13:40:41 -0700 (PDT)
-From:   Deterin Falcao <falcaodeterin@gmail.com>
-Date:   Wed, 25 May 2022 22:40:41 +0200
-Message-ID: <CABCO4Z1FA_Bn-B9nBuxa6E3RCFQRimjieim9MHX5ysGtsfXVHw@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Guten Tag,
+SPI bus per device properties must be defined in spi-peripheral-props.yaml
+for unevaluatedProperties checks to work correctly on device nodes.
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+This has the side effect of promoting 'rx-sample-delay-ns' to be a
+common property, but functionally it's no different if it was defined in
+a Synopsys specific schema file.
 
-haben ?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/spi/snps,dw-apb-ssi.yaml          | 18 +++++++++---------
+ .../bindings/spi/spi-peripheral-props.yaml     |  5 +++++
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
-Ich habe versucht, Sie per E-Mail zu erreichen.
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index d7e08b03e204..e25d44c218f2 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -124,9 +124,16 @@ properties:
+ 
+   rx-sample-delay-ns:
+     default: 0
+-    description: Default value of the rx-sample-delay-ns property.
++    description: |
++      Default value of the rx-sample-delay-ns property.
+       This value will be used if the property is not explicitly defined
+-      for a SPI slave device. See below.
++      for a SPI slave device.
++
++      SPI Rx sample delay offset, unit is nanoseconds.
++      The delay from the default sample time before the actual sample of the
++      rxd input signal occurs. The "rx_sample_delay" is an optional feature
++      of the designware controller, and the upper limit is also subject to
++      controller configuration.
+ 
+ patternProperties:
+   "^.*@[0-9a-f]+$":
+@@ -142,13 +149,6 @@ patternProperties:
+       spi-tx-bus-width:
+         const: 1
+ 
+-      rx-sample-delay-ns:
+-        description: SPI Rx sample delay offset, unit is nanoseconds.
+-          The delay from the default sample time before the actual
+-          sample of the rxd input signal occurs. The "rx_sample_delay"
+-          is an optional feature of the designware controller, and the
+-          upper limit is also subject to controller configuration.
+-
+ unevaluatedProperties: false
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 5e32928c4fc3..6ffb74352bef 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -71,6 +71,11 @@ properties:
+     description:
+       Delay, in microseconds, after a read transfer.
+ 
++  rx-sample-delay-ns:
++    description: SPI Rx sample delay offset, unit is nanoseconds.
++      The delay from the default sample time before the actual
++      sample of the rxd input signal occurs.
++
+   spi-tx-bus-width:
+     description:
+       Bus width to the SPI bus used for write transfers.
+-- 
+2.34.1
 
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Falcao Deterin
-
-falcaodeterin@gmail.com
-
-
-
-
-
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Falcao Deterin
-
-falcaodeterin@gmail.com
