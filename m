@@ -2,63 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5F45341F0
-	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 19:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBB953422D
+	for <lists+linux-spi@lfdr.de>; Wed, 25 May 2022 19:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245501AbiEYREE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 May 2022 13:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S245682AbiEYR2T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 May 2022 13:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245498AbiEYRED (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 13:04:03 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541C854011
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 10:04:00 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id i9so807803wrc.13
-        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 10:04:00 -0700 (PDT)
+        with ESMTP id S245678AbiEYR2T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 May 2022 13:28:19 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651E9AF1D6
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 10:28:15 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso1528735wma.0
+        for <linux-spi@vger.kernel.org>; Wed, 25 May 2022 10:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=loFo61ZrCr4QaTZkLYB3/JVJBU50T2JZCagmaC/lyAw=;
-        b=Z0B1Dtj6jth9CjXTTNew6KleYGbdoUTXOF3eLdqZhHVQRSY9Ky2118o70pkPI06R9P
-         SCqgbQIPZdZ8A+6XSqyr1osIbRUQ8jpfM1SQtn6RlB5oIv/W8tbxbnvk+47CA+AWjest
-         fU9lJTgzqMVV2QPEjcYrGH5PygljPkdVEauDmiwPjEtRcpCDBLpc0PmAXeWfj4pPKG7P
-         pCI4ZM59v4xHiw267rYLRgaUgXjxAGW8u6XvjRKmXusnMKtuWVLzpPYgToPdkIedX47q
-         k/L2+ukcxX0kz9hd85M5bc1W9/J2LevtOKtA1eKU2NrffXaDBmtVE2rifIsoXEy8zF78
-         gDxw==
+        bh=5wN5Z1sp0tdcSIvXWY7HQoJeIR7CM7NXDblhbKWMdgk=;
+        b=mFI1Wp+Y3Cx5vpGRNPwKaQ7c2A1hROuIUOJG+McCGpIuG0xM+ehtyZ/T6SKyypafAx
+         oPrmJnVM0/wt1tgCIe5Nt2Oe6rjTwF6aNrJlYUGDp3uoI0dOyOfhVfve5iB48qAX0zre
+         f64IRWsxbTTPK6ONiOw1srs14BAxBnCe0LhiKSL4txovloLEWdmSwRBlxkO91tHj6SFh
+         6Qp71YV0tY0UO5OTt2UCizL+n3IJ4fAStWIvm2hGhrJJN/NL2+oN7gyQ0d86pQeVvEkS
+         ck32xhDsjfkz8lsbqQnIFxjD0mfSpAXmSGeZTfSveMRavywgmVWW4G4aQM37JxkawkmU
+         1D2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=loFo61ZrCr4QaTZkLYB3/JVJBU50T2JZCagmaC/lyAw=;
-        b=w8UU16pjiZ8paTyhZo4p0Qm3NyUCWgEd0w3+j5eoo6u0254iJZLWR8NMPq1fEdZd2L
-         YsocTZQ6olZ5/mUHChJXhtvvzEPHudM66rfLYhks6vO+RT00q4AfRJo7jqHA4Y7bgA/d
-         XEybEcLZChtCCt96Z+dR+iebb6E64G6RsUiJFCpEjOq+ZRTDGHAln2cMrLwRY/Q2/gIK
-         wAUspUtX+ioGXn8BJsp588c+wb1VJbvA8G2F/HA/7SaIevwFIco1vCQpckxrwYhqoUJa
-         DTZS/7NgtqZO633QE7NVXTop8pyeoHpXlJL+JNoWwX5XpHJd0sqmhyqyeafzxA+TFwcH
-         BgWA==
-X-Gm-Message-State: AOAM531u0C3+EBJ9easPjusGNXx9g+SwctqrTwNcMjc2c77kkr5WRP53
-        /WxCdLnODi5jhFlWz2fiyiIDR3cjrHlLE3VlGlL5BA==
-X-Google-Smtp-Source: ABdhPJzNHPfJp1XyqZV7qhrWcbxNk3IfEfV32VUdXbe3pQf8/N0AgRWU30h5jOGOB2lixvKXXGLLczV8CTTR/5Arbjg=
-X-Received: by 2002:a5d:5954:0:b0:20c:4d55:1388 with SMTP id
- e20-20020a5d5954000000b0020c4d551388mr28040155wri.90.1653498238868; Wed, 25
- May 2022 10:03:58 -0700 (PDT)
+        bh=5wN5Z1sp0tdcSIvXWY7HQoJeIR7CM7NXDblhbKWMdgk=;
+        b=d1IJUYIMwAPUXY2p+TFLlzVcvGZBIc1xeK84KO7sZkjdFXt0CKMu3tFxbXdwaVgP4V
+         Q2+2qS77A4E3tlbqPS4XFl6YgWT6Xy6XzGvSDx4VgjfIguyTarUP/ngJxwNFfsXTnaaA
+         0HupVa8W8fbc6Mq0kFf22XNlYqcjdD+xhahMV7PPfY5vi5KVVXjaQj7DyiOEl4Yk2oSW
+         MM+OKFJytvMGJlROVteZs2MuYSDQPWyeneyJQOpu5smOQOSvymifaUnudaF6v+uX+dt4
+         YTtgkmilNX8MSsYIWEHdi/MVafSjGO6MKIM5dXFSuVZ5Pzbu7cELI8ML+MUMs+A0MbKd
+         SHuA==
+X-Gm-Message-State: AOAM530I1K15jgcPVaMCz2LHKpW2+xboDUYQ4G+Ybzk+lpa11l775Pjv
+        mUClEn0jxpVwe/bBg7Cj8xjKOdJHahEkF4X2RC3nQQ==
+X-Google-Smtp-Source: ABdhPJx6DRtgAoKLyjqFjkaaX34xnnuGV9Xtj2C2Yh02kMXEfEL4eCaCfewk5Rpm9nkxm+tIIC4hFL0K9GY/vHY4Nes=
+X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id
+ v187-20020a1cacc4000000b003929dd4fbccmr9101955wme.78.1653499693969; Wed, 25
+ May 2022 10:28:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-5-brad@pensando.io>
- <20220412113739.xczqscungojcitrm@mobilestation>
-In-Reply-To: <20220412113739.xczqscungojcitrm@mobilestation>
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-12-brad@pensando.io>
+ <9c08f621be28dba65e811bc9cdedc882@kernel.org> <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
+ <87tub21uoz.wl-maz@kernel.org>
+In-Reply-To: <87tub21uoz.wl-maz@kernel.org>
 From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 10:03:48 -0700
-Message-ID: <CAK9rFnx98FCVd9-HHdxMCwp_M9a7C5yd_pkA7TvrMLGM=kkOww@mail.gmail.com>
-Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba SoC
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+Date:   Wed, 25 May 2022 10:28:02 -0700
+Message-ID: <CAK9rFnzbexhS7htxkO9S4-kBF_nTeUkryE7DGTq=a1GHDLwcEQ@mail.gmail.com>
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
@@ -79,21 +80,30 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergey,
+Hi Marc,
 
-On Tue, Apr 12, 2022 at 4:37 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+On Sat, Apr 9, 2022 at 2:18 AM Marc Zyngier <maz@kernel.org> wrote:
 >
-> > [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba SoC
->
-> I think you need to be more specific in the patch title to what bindings
-> you are adding the new compatible string. Something like this
-> "dt-bindings: spi: cdns: ..."
-> The same concerns the patch "[PATCH 03/11] dt-bindings: mmc: Add Pensando
-> Elba SoC binding".
-> Otherwise it isn't clear to what schema you are adding the Elba SoC
-> support to.
+> On Sat, 09 Apr 2022 03:38:55 +0100,
+> Brad Larson <brad@pensando.io> wrote:
+> >
 
-Thanks for the review, I'll add more specifics to the bindings patch title.
+> > > You are still missing the GICV and GICH regions that are
+> > > provided by the CPU. I already pointed that out in [1].
+> > >
+> > > The Cortex-A72 TRM will tell you where to find them (at
+> > > an offset from PERIPHBASE).
+> >
+> > Hi Marc,
+> >
+> > Got the addresses, neither region is used, and will be included in the
+> > next submission.
+>
+> Not sure what you mean by these regions being unused here (the Linux
+> kernel definitely makes use of them). Note that you'll also need to
+> add GICC (which I forgot to mention above).
+
+Added missing GICV, GICH and GICC regions.
 
 Regards,
 Brad
