@@ -2,53 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E768E5351A9
-	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 17:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DE6535355
+	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 20:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiEZPv2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 May 2022 11:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S241097AbiEZSbn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 May 2022 14:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232235AbiEZPv1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 11:51:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEEA2873E;
-        Thu, 26 May 2022 08:51:26 -0700 (PDT)
+        with ESMTP id S241367AbiEZSbi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 14:31:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398E245B6;
+        Thu, 26 May 2022 11:31:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E675B81EBC;
-        Thu, 26 May 2022 15:51:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9D4C385A9;
-        Thu, 26 May 2022 15:51:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 93E29CE237A;
+        Thu, 26 May 2022 18:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF58C34114;
+        Thu, 26 May 2022 18:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653580284;
-        bh=bLNoPbPwCmwyCR+NJ+TRrrvs2lHwOgW0hzEn8QBEVNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gq1gShDXXAc3MRDX8bc9A29ZQz+jpzlUhUpGggL0GJI/FIB376XuRhxScUASRpuI4
-         7k8G7yE4HEqSqqrupxU36uT/7C3AwFbXPImLoLqFffJ3NFZXj/wZrw0A6L2H7k59NF
-         bZsK7k7oUcq6Mj58XK7L73nPb37OW15hJMqbx0s9SkQnU94qEOkF/vvqwWabUtubOp
-         A4PpxYpCSCzlxSFpGcOOnssuegCVxDGdJ5Es6nf/fpDnpgAM5G11NgxUPFt9+UjgkX
-         rNINPznMwAQWCw60asMbvZ8EG0CsIieX0UtMSoC4TZycKG5DWtsYa7qXlx+0VbsLC2
-         Iu3UVtQJbx8SQ==
-Date:   Thu, 26 May 2022 16:51:18 +0100
+        s=k20201202; t=1653589891;
+        bh=u6QRn5T0x1Kw7yKo4gf6qe/2MhS9IdZC71xDGcCMdiQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Fl6d2qpvdzkvsHowTRn9K+XxrIkljDiz+I4tfbSYjlkMUj6jqnK48OdFaACmr/rJV
+         PN0dMF4goIu9P2PWvqpLVBEjZ98/CIo9i5CUKPLgM1S6WwXeRqu0qXB+czKtM1k7Q5
+         AMh/T5Ey+gRBg48hiRIn4d9K8OybRqyErFo4T4SWQdutQgbMQHf0gJjO+tq3N3tv/C
+         DaRVMEzht704h9RPGV8ER/MB/HrZoZKJQm/0Zyo41cJM1T67o+RPMytYQokgthWUAR
+         ppcimrVsXsZCRG9T647ywZhelC22vvktDMY8qn55EW51EhaoVryM9ZuWxFDqdk/S+M
+         SZ6Pnv+H2aTXw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH v1] spi: imx: mx51-ecspi: fix clk polarity and phase
- configuration for CS > 4
-Message-ID: <Yo+h9ssyWfb19aey@sirena.org.uk>
-References: <20220523073143.778664-1-o.rempel@pengutronix.de>
+To:     eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220525165852.33167-1-eajames@linux.ibm.com>
+References: <20220525165852.33167-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH 0/2] spi: fsi: Fix spurious timeout
+Message-Id: <165358989010.3223918.18351915520044853463.b4-ty@kernel.org>
+Date:   Thu, 26 May 2022 19:31:30 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l5Gf4wftgSOCveZ2"
-Content-Disposition: inline
-In-Reply-To: <20220523073143.778664-1-o.rempel@pengutronix.de>
-X-Cookie: A grammarian's life is always in tense.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,30 +52,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 25 May 2022 11:58:50 -0500, Eddie James wrote:
+> The driver may return a timeout error even if the status register
+> indicates that the transfer may proceed. Fix this by restructuring
+> the polling loop.
+> Also include a patch to display the error return code when failing
+> to transfer one message, which would have been very helpful in
+> debugging this issue.
+> 
+> [...]
 
---l5Gf4wftgSOCveZ2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, May 23, 2022 at 09:31:43AM +0200, Oleksij Rempel wrote:
-> Fix support for boards with more then 4 chip select lines. Other wise if
-> CS > 4 is used, we will write trash to the clk configuration register.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This doesn't apply against current code, please check and resend.
+Thanks!
 
---l5Gf4wftgSOCveZ2
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/2] spi: fsi: Fix spurious timeout
+      commit: 61bf40ef51aa73f6216b33563271b6acf7ea8d70
+[2/2] spi: core: Display return code when failing to transfer message
+      commit: ebf2a3521738520e12849b221fea24928b3f61ff
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKPofYACgkQJNaLcl1U
-h9D3yQf+OV2CFz1fNbHBV9KYOKYh3/BqWU4qz96kpVbPgijVSOvPKKQWiGzLRGWt
-cT2VFbQ2+UW0lX1Z6Rj/uLzOg26hswFHadI3sQeLHaUZF6uOBddUOWemoTSznXtL
-pCOY8/RXsix9BdVv37OBcHzpJthASh66WILcCPwEAN0R/zImB7AOSL9ZfD2dCV8z
-boiWBKKOn/DCZSSY8JffowmUE15KRTxtwvQwvgJ/VYUA/i19vJqvsVqWg5y4GhoX
-SbvDl+r06pmfHicBFOXa/OjNKF7t54mbmUMn0UzvJJkj4kVGlD83zah7z0pQ32nW
-Afylf4DwCbahIgh4zfF+4OAv258VdQ==
-=u4BK
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---l5Gf4wftgSOCveZ2--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
