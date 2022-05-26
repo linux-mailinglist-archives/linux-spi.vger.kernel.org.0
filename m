@@ -2,109 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AE2534E31
-	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 13:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079E8534E61
+	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 13:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243208AbiEZLn1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 May 2022 07:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S1346653AbiEZLo7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 May 2022 07:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiEZLn0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 07:43:26 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86A1393E2
-        for <linux-spi@vger.kernel.org>; Thu, 26 May 2022 04:43:24 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w3so1202143plp.13
-        for <linux-spi@vger.kernel.org>; Thu, 26 May 2022 04:43:24 -0700 (PDT)
+        with ESMTP id S1347322AbiEZLoy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 07:44:54 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2B9CFE25
+        for <linux-spi@vger.kernel.org>; Thu, 26 May 2022 04:44:38 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id j21so1107387pga.13
+        for <linux-spi@vger.kernel.org>; Thu, 26 May 2022 04:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kq02GySVi94nZ9Mc+L7RCzpSrSe7oKjAYDJQaI+i1/M=;
-        b=jozl4ktxfx3kr41Xwo8mDlqT0z+gvOtnOWlJyYgee9yUgxgyfuOYUr1lx4RnOCQ6/1
-         EBChnizEhkGg98Qpb9CpWmqjZ9uwiJaLdKFSO74efjp/2WlLeF/PdqTf24D+LPN1P8LG
-         ut0mRRmlv8336aUyZvx8kApwOfcK8sDhtM7WuIfl2MBmS6ZuL17nr1XnMweom7zSFLQr
-         SU1LW9cXuv0oj342u5+FBEYK8zvWP3Ncp6alE6PlZBLutNfav0Wkn2mPAAiG73k05zRM
-         KXagAGOXvyhZJWcXTLNF9MpM0OMfwxpf1lgKnc+SiFLpACDo558o3HfUfDT5kBkmCL4j
-         kpBQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sbZ69EBj+CLxahhE5rw5q494M5c4cxGAZWpQHb2IOAc=;
+        b=CYrVjUIuWd0zfRIJSi8HO31AD9AB7Z/b4ZGo/R1bvdZBPaGfQHMVsp9no9MCPRLZSu
+         Rx1UKPigFvdWFI3gG/HlfhuEFFhdBc8tINuYmFZ2So48AD+5LQVHGJMBlzObMv8wxjVS
+         yxTShzVoWieKyQP/hK9o+Iv3sCcjl67EpSLJ4d2H1lHxljTM5NdTslfMlya8H+j/wS4D
+         5jzP9DwrV/aPT9HOxUtxo26dGuXTskGfoJK1LPz5Wf7KLcG8wn5snDKw2cATPMw3anCP
+         5FnfmuUON+mH1UD1VSlbTe1asCjQWGQZLQNt973KfqWmp4KKOCgcij5STXxI/EUUQ76d
+         2vrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kq02GySVi94nZ9Mc+L7RCzpSrSe7oKjAYDJQaI+i1/M=;
-        b=HNAKzBOiGRbjg1uxTt9D45ta6bGG0OEVwRgo3OD622kDZFz1+lghUqeAnK7Y2IMQt6
-         mjCZWCKL/xbRrc1YY1Mk+wv1fYjJHHXawvw4vZrB5IbfVSSOozYE6PC1crX4m1RMZtIl
-         PaN6NuQ2k4ZPuQVk6I0Om+cU6r8hzo4i6tDYhsibpqeTi/57odetlueo94v/unFcGEau
-         G2MU9I5XQGdPh08C066cGajVnn5aM86AcYPpwK6VUvxj8fhB2KbI7VhBxdY3eyK8dS1c
-         3Va9qK82i1UH2dwG4TpqnBz3JWknmXbVJUU+6+5RuvsFu1tZxpeV9UtP9RE3VlYverTC
-         qE3Q==
-X-Gm-Message-State: AOAM531NlOEYNhfNfDIdlJtUBHPSIw8koIr2NAK1QJCPn1DSWaZ66B5s
-        XQtLjdpZoTbBsj/XSLq1LimKAg==
-X-Google-Smtp-Source: ABdhPJxfALbrt1KmDbthK4aKVj2I9eMN8ID458hdF4feL14JAdfjm2AEeZoz0NS/AVyWmIjpPI7ETg==
-X-Received: by 2002:a17:902:7781:b0:161:c85a:8fff with SMTP id o1-20020a170902778100b00161c85a8fffmr37569596pll.97.1653565404194;
-        Thu, 26 May 2022 04:43:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sbZ69EBj+CLxahhE5rw5q494M5c4cxGAZWpQHb2IOAc=;
+        b=iqjoEm2Rb8ASgbkKYDm1+isOOZ0gfMDv/b9MimJCMcK2C86JZH1BL/8GaJOi4mTSq3
+         yaDQqgG3FRkjGmHKj0DQtofGRUlBQ2/lCrdjnRIA6GPr1MTzoR270dB+ZUTWspHEbemC
+         4ofsAAL4dtNEN6tgoZ740E+RujoEPRt6aHIr2VM9/UptvWJJ9io0LJ9TfqVZyZ3BXkbc
+         HWH/bbMcHfyTw/SEsuYRkMQu6eDN+E8Mf5nzlGBbYXJflzHOTJk15mX272CrSG4muE1q
+         mAhMN4pHiPUdVagJUh44XbRvy5ko+f8pR9iqlSpNg3nzQEDxqWw9J5DbgGmsp41LU+iT
+         p5jQ==
+X-Gm-Message-State: AOAM532yb20S+I1aPkk0z9poBQ62lmsqKpJpmnaFWiTO8zznttkFY0y1
+        CPcbvRBLc0eXZPZjaNfTWwmHsg==
+X-Google-Smtp-Source: ABdhPJyI36Xh7JTRb61yxLCPh2nssAdsbatU80ZBS3PRQ6y4gvF9EpP1vtaAGYqIfWJADbOhRY1hSw==
+X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr38397886pfl.61.1653565478103;
+        Thu, 26 May 2022 04:44:38 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id a16-20020aa78650000000b0050dc7628137sm1320375pfo.17.2022.05.26.04.43.22
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902c18400b001637d72b314sm1231655pld.10.2022.05.26.04.44.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 04:43:23 -0700 (PDT)
+        Thu, 26 May 2022 04:44:37 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Andy Gross <agross@kernel.org>,
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, NXP Linux Team <linux-imx@nxp.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Qiang Yu <yuq825@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sean Paul <sean@poorly.run>, Shawn Guo <shawnguo@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        lima@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH 00/31] OPP: Add new configuration interface: dev_pm_opp_set_config()
-Date:   Thu, 26 May 2022 17:11:59 +0530
-Message-Id: <cover.1653564321.git.viresh.kumar@linaro.org>
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 23/31] spi: qcom: Migrate to dev_pm_opp_set_config()
+Date:   Thu, 26 May 2022 17:12:22 +0530
+Message-Id: <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1653564321.git.viresh.kumar@linaro.org>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,102 +76,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+The OPP core now provides a unified API for setting all configuration
+types, i.e. dev_pm_opp_set_config().
 
-We have too many configuration specific APIs currently, six of them already,
-like dev_pm_opp_set_regulators(). This makes it complex/messy for both the OPP
-core and its users to manage. There is also code redundancy in these API, in the
-way they add/manage the OPP table specific stuff.
+Lets start using it.
 
-This patch series is an attempt to simplify these interfaces by adding a single
-interface, dev_pm_opp_set_config(), which replaces all the existing ones. This
-also migrates the users to the new API.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/spi/spi-geni-qcom.c | 5 ++++-
+ drivers/spi/spi-qcom-qspi.c | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-The first two patches help get the API in place, followed by patches to migrate
-the end users. Once all the users are migrated, the last few patches remove the
-now unused interfaces.
-
-I have lightly tested this on Hikey960 for now and also getting help from
-various build/boot bots, gitlab and lkp, to get these tested. It would be
-helpful if someone with access to the affected platforms can give it a try.
-
-This is pushed here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
-
-The entire patchset shall get merged via the OPP tree in 5.20-rc1, please do not
-merge individual patches.
-
-Thanks.
-
---
-Viresh
-
-Viresh Kumar (31):
-  OPP: Track if clock name is configured by platform
-  OPP: Add dev_pm_opp_set_config() and friends
-  cpufreq: dt: Migrate to dev_pm_opp_set_config()
-  cpufreq: imx: Migrate to dev_pm_opp_set_config()
-  cpufreq: qcom-nvmem: Migrate to dev_pm_opp_set_config()
-  cpufreq: sti: Migrate to dev_pm_opp_set_config()
-  cpufreq: sun50i: Migrate to dev_pm_opp_set_config()
-  cpufreq: tegra20: Migrate to dev_pm_opp_set_config()
-  cpufreq: ti: Migrate to dev_pm_opp_set_config()
-  devfreq: exynos: Migrate to dev_pm_opp_set_config()
-  devfreq: sun8i: Migrate to dev_pm_opp_set_config()
-  devfreq: tegra30: Migrate to dev_pm_opp_set_config()
-  drm/lima: Migrate to dev_pm_opp_set_config()
-  drm/msm: Migrate to dev_pm_opp_set_config()
-  drm/panfrost: Migrate to dev_pm_opp_set_config()
-  drm/tegra: Migrate to dev_pm_opp_set_config()
-  media: venus: Migrate to dev_pm_opp_set_config()
-  media: tegra: Migrate to dev_pm_opp_set_config()
-  mmc: sdhci-msm: Migrate to dev_pm_opp_set_config()
-  OPP: ti: Migrate to dev_pm_opp_set_config()
-  soc/tegra: Remove the call to devm_pm_opp_set_clkname()
-  soc/tegra: Migrate to dev_pm_opp_set_config()
-  spi: qcom: Migrate to dev_pm_opp_set_config()
-  serial: qcom: Migrate to dev_pm_opp_set_config()
-  OPP: Remove dev_pm_opp_set_regulators() and friends
-  OPP: Remove dev_pm_opp_set_supported_hw() and friends
-  OPP: Remove dev_pm_opp_set_clkname() and friends
-  OPP: Remove dev_pm_opp_register_set_opp_helper() and friends
-  OPP: Remove dev_pm_opp_attach_genpd() and friends
-  OPP: Remove dev_pm_opp_set_prop_name() and friends
-  OPP: Rearrange dev_pm_opp_set_config() and friends
-
- drivers/cpufreq/cpufreq-dt.c                  |  14 +-
- drivers/cpufreq/imx-cpufreq-dt.c              |  12 +-
- drivers/cpufreq/qcom-cpufreq-nvmem.c          | 107 +---
- drivers/cpufreq/sti-cpufreq.c                 |  22 +-
- drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  11 +-
- drivers/cpufreq/tegra20-cpufreq.c             |  12 +-
- drivers/cpufreq/ti-cpufreq.c                  |  38 +-
- drivers/devfreq/exynos-bus.c                  |  14 +-
- drivers/devfreq/sun8i-a33-mbus.c              |   7 +-
- drivers/devfreq/tegra30-devfreq.c             |   8 +-
- drivers/gpu/drm/lima/lima_devfreq.c           |  11 +-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   8 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  10 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   5 +-
- drivers/gpu/drm/msm/dp/dp_ctrl.c              |   5 +-
- drivers/gpu/drm/msm/dsi/dsi_host.c            |   5 +-
- drivers/gpu/drm/panfrost/panfrost_devfreq.c   |   9 +-
- drivers/gpu/drm/tegra/gr3d.c                  |   6 +-
- .../media/platform/qcom/venus/pm_helpers.c    |  16 +-
- drivers/memory/tegra/tegra124-emc.c           |  14 +-
- drivers/mmc/host/sdhci-msm.c                  |   5 +-
- drivers/opp/core.c                            | 540 +++++++-----------
- drivers/opp/opp.h                             |   2 +
- drivers/opp/ti-opp-supply.c                   |   6 +-
- drivers/soc/tegra/common.c                    |  14 +-
- drivers/soc/tegra/pmc.c                       |   8 +-
- drivers/spi/spi-geni-qcom.c                   |   5 +-
- drivers/spi/spi-qcom-qspi.c                   |   5 +-
- drivers/tty/serial/qcom_geni_serial.c         |   5 +-
- include/linux/pm_opp.h                        | 118 ++--
- 30 files changed, 444 insertions(+), 598 deletions(-)
-
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 4e83cc5b445d..d869f270dcca 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -892,6 +892,9 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	void __iomem *base;
+ 	struct clk *clk;
+ 	struct device *dev = &pdev->dev;
++	struct dev_pm_opp_config config = {
++		.clk_name = "se",
++	};
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+@@ -922,7 +925,7 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	mas->se.base = base;
+ 	mas->se.clk = clk;
+ 
+-	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
++	ret = devm_pm_opp_set_config(&pdev->dev, &config);
+ 	if (ret)
+ 		return ret;
+ 	/* OPP table is optional */
+diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
+index c334dfec4117..5ab3ae406ef7 100644
+--- a/drivers/spi/spi-qcom-qspi.c
++++ b/drivers/spi/spi-qcom-qspi.c
+@@ -458,6 +458,9 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 	struct device *dev;
+ 	struct spi_master *master;
+ 	struct qcom_qspi *ctrl;
++	struct dev_pm_opp_config config = {
++		.clk_name = "core",
++	};
+ 
+ 	dev = &pdev->dev;
+ 
+@@ -529,7 +532,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 	master->handle_err = qcom_qspi_handle_err;
+ 	master->auto_runtime_pm = true;
+ 
+-	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
++	ret = devm_pm_opp_set_config(&pdev->dev, &config);
+ 	if (ret)
+ 		return ret;
+ 	/* OPP table is optional */
 -- 
 2.31.1.272.g89b43f80a514
 
