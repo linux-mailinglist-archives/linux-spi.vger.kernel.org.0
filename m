@@ -2,94 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FC1534F76
-	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 14:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F6853503B
+	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 15:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232883AbiEZMlq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 May 2022 08:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S1345235AbiEZNyI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 May 2022 09:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiEZMlp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 08:41:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760B275FE;
-        Thu, 26 May 2022 05:41:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E57661A41;
-        Thu, 26 May 2022 12:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E89AC385A9;
-        Thu, 26 May 2022 12:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653568902;
-        bh=wTJaY6UYeSQMpyCf6Zoa3Et0K39VOxkxRDN0JzGNRuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pi94MKiQV/HcCpM68GJEhEfgg8b/8JIMYc91v+ya7OvQRIcWDTm7B4xOMdHhFJeak
-         mAoQV3kIbM7RLMwKm46KUf30aZngTCAV+TuI4iq3YrGWuVpyosfq+GPpfiuxSeavEK
-         SdCSRT3acHUqRWm8eHEX+qgUDbOAASeYnoYQwW/HiLVQagZXaEBU6xW/+0cgAX9X8h
-         yEtw8udj1vpnBEl45XwQTSwmHFSDhxOTzPIzA2yRhMjiNxN/08LuzuVo4ik2AmIHBp
-         vcIHN0qe3rzZk/Ns/ZMiLeExiVsWT7UsBPP22NnfQJrmbj1sq/x9oQ0RwDpCqiopnV
-         uS1OW9z5luLBg==
-Date:   Thu, 26 May 2022 13:41:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        with ESMTP id S237784AbiEZNyH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 09:54:07 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A2150E00;
+        Thu, 26 May 2022 06:54:07 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so997771otm.9;
+        Thu, 26 May 2022 06:54:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tWtkq+ZgB9S1oTbgzHdEwf/ab9DFJtwyJBbeHOUfdrU=;
+        b=5+ocknvTOtzVIYPBjlC6i8+Pkej96bVA/TOTRGdeRmwM5M8JCxEkxqyzgzyUMNlWgy
+         UoWNOfYkQnMNWIsFPbRU5Vvsnc4nTWrUX9TxKQvmYya7D0Fe92QbVwufkGxpxTJC4ujT
+         UMumRj+p7XE3f9nVyBM5mWBiXv2wvFIxoJD3q1Ln0n/2NOwD/VkcuoOAyJHKaTvapKvn
+         K+Q6fL0fPMLhJjH7tdzIVt6QUAObWS0E/+iHt6I/jujNFRZpZXmpqbOOIgUn9lQ29zEW
+         LhHRSHO1rjFDRs22TBf6Ssm1MBHGUlTK5fXfUXsvulwJA82RG4pQhxX2ZpmPpE4Mm/iO
+         5BGg==
+X-Gm-Message-State: AOAM531N7F4KIAvAJUNMjehWWzMbCqJ3+oxBi+sNrx9KADD6EShYpBNn
+        0LHIsJ2VA0UHWU4eAKjOBg==
+X-Google-Smtp-Source: ABdhPJyyGTmbEtWbp66qoLi7HJ1+T/K9+fgEDHCLCEfMAAot8n/7o5EARMzXzZdYyNHVM8nb9sy6Jw==
+X-Received: by 2002:a05:6830:44a4:b0:60b:39e7:ab22 with SMTP id r36-20020a05683044a400b0060b39e7ab22mr2274296otv.148.1653573246266;
+        Thu, 26 May 2022 06:54:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g7-20020a9d6a07000000b0060603221279sm591495otn.73.2022.05.26.06.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 06:54:05 -0700 (PDT)
+Received: (nullmailer pid 3906910 invoked by uid 1000);
+        Thu, 26 May 2022 13:54:04 -0000
+Date:   Thu, 26 May 2022 08:54:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/31] spi: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <Yo91gCrJR1Hkw3tl@sirena.org.uk>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH] spi: dt-bindings: Move 'rx-sample-delay-ns' to
+ spi-peripheral-props.yaml
+Message-ID: <20220526135404.GA3831942-robh@kernel.org>
+References: <20220525210053.2488756-1-robh@kernel.org>
+ <20220526054642.zw44mgw2bd2u5v76@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0tXUzCv+bLIQI/l6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
-X-Cookie: Money is the root of all wealth.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220526054642.zw44mgw2bd2u5v76@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, May 26, 2022 at 11:16:42AM +0530, Pratyush Yadav wrote:
+> Hi Rob,
+> 
+> On 25/05/22 04:00PM, Rob Herring wrote:
+> > SPI bus per device properties must be defined in spi-peripheral-props.yaml
+> > for unevaluatedProperties checks to work correctly on device nodes.
+> > 
+> > This has the side effect of promoting 'rx-sample-delay-ns' to be a
+> > common property, but functionally it's no different if it was defined in
+> > a Synopsys specific schema file.
+> 
+> Functionally it is no different, but does this property make sense for 
+> other controllers? If not then I don't see why we should pollute the 
+> common list with controller-specific ones. For one, this now no longer 
+> makes it obvious that this property should only be used with the 
+> Synopsys controller. And if you keep making small exceptions for other 
+> controllers too, soon the common list will be full of controller 
+> properties and it will be a mess finding out what belongs to who.
 
---0tXUzCv+bLIQI/l6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There's at least one other case already:
 
-On Thu, May 26, 2022 at 05:12:22PM +0530, Viresh Kumar wrote:
-> The OPP core now provides a unified API for setting all configuration
-> types, i.e. dev_pm_opp_set_config().
->=20
-> Lets start using it.
+  cdns,read-delay:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    description:
+      Delay for read capture logic, in clock cycles.
 
-Acked-by: Mark Brown <broonie@kernel.org>
 
---0tXUzCv+bLIQI/l6
-Content-Type: application/pgp-signature; name="signature.asc"
+Too many common properties is not a problem we have. Too many custom 
+properties doing the same thing is the problem.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKPdX8ACgkQJNaLcl1U
-h9DhFwf/cYBqrNp3vBqv2DwNXoefB9v8zUwrtWUHRECmnkVJekcGzC8pl0wlqPQZ
-mw3r4zVDugva/Pd8iZM/TwvrQI7l8kFA2H5T40RwRFgrPfsSQ8d62X4MyJbZfVJB
-JqlGIKXBZF9gt7q9NwulTbln0eFC+BJFnrRwtjo+LY4lzf8WItIlgk02r+q98uwD
-PXTtOFxJ3S2KMqSo50/rGpp79KR46I1LqekgucI6gkKaohCzgthfPEPoylByPUu2
-uCWqHcVw1IwYxf0MnGPwEQYKsWbUMe3rUL/BBDV0r8xywH5nFNLhu4fr9nO8AG28
-hDnTtPs9ekk6QkqD2kWrOJZpDr27Ng==
-=cGQq
------END PGP SIGNATURE-----
-
---0tXUzCv+bLIQI/l6--
+Rob
