@@ -2,92 +2,164 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DE6535355
-	for <lists+linux-spi@lfdr.de>; Thu, 26 May 2022 20:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AF1535D75
+	for <lists+linux-spi@lfdr.de>; Fri, 27 May 2022 11:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241097AbiEZSbn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 May 2022 14:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S1344795AbiE0JdR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 May 2022 05:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241367AbiEZSbi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 May 2022 14:31:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398E245B6;
-        Thu, 26 May 2022 11:31:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 93E29CE237A;
-        Thu, 26 May 2022 18:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF58C34114;
-        Thu, 26 May 2022 18:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653589891;
-        bh=u6QRn5T0x1Kw7yKo4gf6qe/2MhS9IdZC71xDGcCMdiQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Fl6d2qpvdzkvsHowTRn9K+XxrIkljDiz+I4tfbSYjlkMUj6jqnK48OdFaACmr/rJV
-         PN0dMF4goIu9P2PWvqpLVBEjZ98/CIo9i5CUKPLgM1S6WwXeRqu0qXB+czKtM1k7Q5
-         AMh/T5Ey+gRBg48hiRIn4d9K8OybRqyErFo4T4SWQdutQgbMQHf0gJjO+tq3N3tv/C
-         DaRVMEzht704h9RPGV8ER/MB/HrZoZKJQm/0Zyo41cJM1T67o+RPMytYQokgthWUAR
-         ppcimrVsXsZCRG9T647ywZhelC22vvktDMY8qn55EW51EhaoVryM9ZuWxFDqdk/S+M
-         SZ6Pnv+H2aTXw==
-From:   Mark Brown <broonie@kernel.org>
-To:     eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20220525165852.33167-1-eajames@linux.ibm.com>
-References: <20220525165852.33167-1-eajames@linux.ibm.com>
-Subject: Re: [PATCH 0/2] spi: fsi: Fix spurious timeout
-Message-Id: <165358989010.3223918.18351915520044853463.b4-ty@kernel.org>
-Date:   Thu, 26 May 2022 19:31:30 +0100
+        with ESMTP id S1349617AbiE0JdP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 May 2022 05:33:15 -0400
+X-Greylist: delayed 1277 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 02:33:14 PDT
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C293056F
+        for <linux-spi@vger.kernel.org>; Fri, 27 May 2022 02:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=2KENB/wyLji4a4mmkeA6tfkVslizT3V4TXr8Z6HlsW4=; b=Kp8uKmu0uyV3/rXRym37FuBFeR
+        kWFgOHQX1Q7uboTZAFFJrueN+DHpQ8sihu/073FL/Mi/cWSdXnteQRkpw8oV9XUZpX5jAXQV70Pwd
+        As/SMJ5mfzCyHtC+8N3AApSw+PgRet6klmT6MxWpwFS2LAS0FQE5YV+Dj46SJ1yKivsHWVjHMeWan
+        TZhwfEI+tYUalSiHER59XvfwCByQXa5+hLoaR2iXRPcDVxFumB9AGqfPkWRN+WLwtCISKSHtfRjAX
+        1vZrWSgLe+Q+OwHj4Bvx1B7f+Bs/27limZ0Yo8w98uNKrkj/0TZOOXQkswsLBQp9vHYokiol1KeoI
+        BUrl6yWA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1nuW0e-000Ejr-HW; Fri, 27 May 2022 11:11:52 +0200
+Received: from [2001:a61:2ba3:7b01:9e5c:8eff:fe01:8578] (helo=lars-desktop.fritz.box)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1nuW0e-000EbJ-Ah; Fri, 27 May 2022 11:11:52 +0200
+From:   Lars-Peter Clausen <lars@metafoo.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Janek Kotas <jank@cadence.com>, linux-spi@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH] spi: cadence: Detect transmit FIFO depth
+Date:   Fri, 27 May 2022 11:11:43 +0200
+Message-Id: <20220527091143.3780378-1-lars@metafoo.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26554/Fri May 27 10:04:35 2022)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 25 May 2022 11:58:50 -0500, Eddie James wrote:
-> The driver may return a timeout error even if the status register
-> indicates that the transfer may proceed. Fix this by restructuring
-> the polling loop.
-> Also include a patch to display the error return code when failing
-> to transfer one message, which would have been very helpful in
-> debugging this issue.
-> 
-> [...]
+The depth of the transmit FIFO for the Cadence SPI controller is currently
+hardcoded to 128. But the depth is a synthesis configuration parameter of
+the core and can vary between different SoCs.
 
-Applied to
+If the configured FIFO size is less than 128 the driver will busy loop in
+the cdns_spi_fill_tx_fifo() function waiting for FIFO space to become
+available.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Depending on the length and speed of the transfer it can spin for a
+significant amount of time. The cdns_spi_fill_tx_fifo() function is called
+from the drivers interrupt handler, so it can leave interrupts disabled for
+a prolonged amount of time.
 
-Thanks!
+In addition the read FIFO will also overflow and data will be discarded.
 
-[1/2] spi: fsi: Fix spurious timeout
-      commit: 61bf40ef51aa73f6216b33563271b6acf7ea8d70
-[2/2] spi: core: Display return code when failing to transfer message
-      commit: ebf2a3521738520e12849b221fea24928b3f61ff
+To avoid this detect the actual size of the FIFO and use that rather than
+the hardcoded value.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+To detect the FIFO size the FIFO threshold register is used. The register
+is sized so that it can hold FIFO size - 1 as its maximum value. Bits that
+are not needed to hold the threshold value will always read 0. By writing
+0xffff to the register and then reading back the value in the register we
+get the FIFO size.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+---
+ drivers/spi/spi-cadence.c | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index a23d4f6329f5..2a70cdcc051e 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -92,9 +92,6 @@
+ #define CDNS_SPI_ER_ENABLE	0x00000001 /* SPI Enable Bit Mask */
+ #define CDNS_SPI_ER_DISABLE	0x0 /* SPI Disable Bit Mask */
+ 
+-/* SPI FIFO depth in bytes */
+-#define CDNS_SPI_FIFO_DEPTH	128
+-
+ /* Default number of chip select lines */
+ #define CDNS_SPI_DEFAULT_NUM_CS		4
+ 
+@@ -110,6 +107,7 @@
+  * @rx_bytes:		Number of bytes requested
+  * @dev_busy:		Device busy flag
+  * @is_decoded_cs:	Flag for decoder property set or not
++ * @tx_fifo_depth:	Depth of the TX FIFO
+  */
+ struct cdns_spi {
+ 	void __iomem *regs;
+@@ -123,6 +121,7 @@ struct cdns_spi {
+ 	int rx_bytes;
+ 	u8 dev_busy;
+ 	u32 is_decoded_cs;
++	unsigned int tx_fifo_depth;
+ };
+ 
+ /* Macros for the SPI controller read/write */
+@@ -304,7 +303,7 @@ static void cdns_spi_fill_tx_fifo(struct cdns_spi *xspi)
+ {
+ 	unsigned long trans_cnt = 0;
+ 
+-	while ((trans_cnt < CDNS_SPI_FIFO_DEPTH) &&
++	while ((trans_cnt < xspi->tx_fifo_depth) &&
+ 	       (xspi->tx_bytes > 0)) {
+ 
+ 		/* When xspi in busy condition, bytes may send failed,
+@@ -463,6 +462,24 @@ static int cdns_unprepare_transfer_hardware(struct spi_master *master)
+ 	return 0;
+ }
+ 
++/**
++ * cdns_spi_detect_fifo_depth - Detect the FIFO depth of the hardware
++ * @xspi:	Pointer to the cdns_spi structure
++ *
++ * The depth of the TX FIFO is a synthesis configuration parameter of the SPI
++ * IP. The FIFO threshold register is sized so that its maximum value can be the
++ * FIFO size - 1. This is used to detect the size of the FIFO.
++ */
++static void cdns_spi_detect_fifo_depth(struct cdns_spi *xspi)
++{
++	/* The MSBs will get truncated giving us the size of the FIFO */
++	cdns_spi_write(xspi, CDNS_SPI_THLD, 0xffff);
++	xspi->tx_fifo_depth = cdns_spi_read(xspi, CDNS_SPI_THLD) + 1;
++
++	/* Reset to default */
++	cdns_spi_write(xspi, CDNS_SPI_THLD, 0x1);
++}
++
+ /**
+  * cdns_spi_probe - Probe method for the SPI driver
+  * @pdev:	Pointer to the platform_device structure
+@@ -535,6 +552,8 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		xspi->is_decoded_cs = 0;
+ 
++	cdns_spi_detect_fifo_depth(xspi);
++
+ 	/* SPI controller initializations */
+ 	cdns_spi_init_hw(xspi);
+ 
+-- 
+2.30.2
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
