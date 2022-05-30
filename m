@@ -2,49 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3825537F45
-	for <lists+linux-spi@lfdr.de>; Mon, 30 May 2022 16:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47F8538206
+	for <lists+linux-spi@lfdr.de>; Mon, 30 May 2022 16:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiE3OMh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 30 May 2022 10:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S237613AbiE3OVe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 30 May 2022 10:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240135AbiE3OGg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 May 2022 10:06:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9383B2BF;
-        Mon, 30 May 2022 06:42:01 -0700 (PDT)
+        with ESMTP id S241178AbiE3ORU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 May 2022 10:17:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043761146BC;
+        Mon, 30 May 2022 06:44:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9407460F9E;
-        Mon, 30 May 2022 13:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A9BC3411E;
-        Mon, 30 May 2022 13:41:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C871B80D83;
+        Mon, 30 May 2022 13:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782DDC36AE5;
+        Mon, 30 May 2022 13:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918120;
-        bh=63KEk9VLTggDHYa7uCWhw1ThCahBRf68liu0x9+Y4Q8=;
+        s=k20201202; t=1653918284;
+        bh=irNiHLPnjDX5xM02HqZO7BlPyD+MMDTayUwBSi+oCtk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TTcW2MYvIkbIbrzn/OE2PDUCuW3r3PB2V0fSjrYachInBVGD695908LeEbx1X/c1v
-         RIjTN/XRGQLJDs8zr+jm0OGr7C3rL4UO5lEMNKd8Oudd7OIzlckkPXKIB6xogxAwxU
-         QlqIVImJ3wxbHn5MGu9bmuiyivq6K9YvdscAxV1a63JyLychr8SvBZz3piV4DTVOcH
-         Cvrn4vYOR+xoyy4D9cNQHmyvGUONbuYJ6LC1iP/tIIWxLOWH51O7bbE43ob98t124K
-         aRuwNrBQXF4ir9BBVbmPTnn82tsejVOTmZ28yjkkC60E3rI9Kq+e1DhVdDsjrTM6CS
-         lHZscwjPDH9JA==
+        b=kmiEZ/UL2yfwSm8616iKA5kxgnBTYKyCnk7QT+hgvotaV3QKdPWauGIZl3z++D6Br
+         RM+UD/P0G0RF763r+yULFmdz9j3PAZf9KxJ9Ilpjb9XeSIExJ/4JFvo97GCTrE9/IU
+         rl4ssvaF7b/mtpvjR0lmqz5qtM6u+q0vM20UEqiBD2BDxy9acuPdvAMbZ5UM/wiiPo
+         ceGJL6gdRrKoiBjxvQB/1xozCqpeW5jJJCJL6FctjEYfy9Ap8geByeJ/AslLNuSHCc
+         sJ4XUx/mFW5ALkMZ0jTMB+GjHlUs1z5MqyGvqdHa90d0Q7knig126p4LCS0iBMGDYq
+         BzRyaVGSG6VXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        eberhard.stoll@kontron.de, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 068/109] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
-Date:   Mon, 30 May 2022 09:37:44 -0400
-Message-Id: <20220530133825.1933431-68-sashal@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 17/76] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
+Date:   Mon, 30 May 2022 09:43:07 -0400
+Message-Id: <20220530134406.1934928-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
+References: <20220530134406.1934928-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,36 +58,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-[ Upstream commit d83d89ea68b4726700fa87b22db075e4217e691c ]
+[ Upstream commit 6f381481a5b236cb53d6de2c49c6ef83a4d0f432 ]
 
-In APM mode, TCF and TEF flags are not set. To avoid timeout in
-stm32_qspi_wait_cmd(), don't check if TCF/TEF are set.
+The direction field in the DMA config is deprecated. The rspi driver
+sets {src,dst}_{addr,addr_width} based on the DMA direction and
+it results in dmaengine_slave_config() failure as RZ DMAC driver
+validates {src,dst}_addr_width values independent of DMA direction.
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Reported-by: eberhard.stoll@kontron.de
-Link: https://lore.kernel.org/r/20220511074644.558874-2-patrice.chotard@foss.st.com
+This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
+values independent of DMA direction.
+
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Suggested-by: Vinod Koul <vkoul@kernel.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220411173115.6619-1-biju.das.jz@bp.renesas.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-stm32-qspi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-rspi.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index ffdc55f87e82..dd38cb8ffbc2 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -308,7 +308,8 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
- 	if (!op->data.nbytes)
- 		goto wait_nobusy;
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index e39fd38f5180..ea03cc589e61 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -1107,14 +1107,11 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
+ 	}
  
--	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
-+	if ((readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF) ||
-+	    qspi->fmode == CCR_FMODE_APM)
- 		goto out;
+ 	memset(&cfg, 0, sizeof(cfg));
++	cfg.dst_addr = port_addr + RSPI_SPDR;
++	cfg.src_addr = port_addr + RSPI_SPDR;
++	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
++	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+ 	cfg.direction = dir;
+-	if (dir == DMA_MEM_TO_DEV) {
+-		cfg.dst_addr = port_addr;
+-		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+-	} else {
+-		cfg.src_addr = port_addr;
+-		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+-	}
  
- 	reinit_completion(&qspi->data_completion);
+ 	ret = dmaengine_slave_config(chan, &cfg);
+ 	if (ret) {
+@@ -1145,12 +1142,12 @@ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
+ 	}
+ 
+ 	ctlr->dma_tx = rspi_request_dma_chan(dev, DMA_MEM_TO_DEV, dma_tx_id,
+-					     res->start + RSPI_SPDR);
++					     res->start);
+ 	if (!ctlr->dma_tx)
+ 		return -ENODEV;
+ 
+ 	ctlr->dma_rx = rspi_request_dma_chan(dev, DMA_DEV_TO_MEM, dma_rx_id,
+-					     res->start + RSPI_SPDR);
++					     res->start);
+ 	if (!ctlr->dma_rx) {
+ 		dma_release_channel(ctlr->dma_tx);
+ 		ctlr->dma_tx = NULL;
 -- 
 2.35.1
 
