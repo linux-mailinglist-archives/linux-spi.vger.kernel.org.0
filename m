@@ -2,84 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FFC537026
-	for <lists+linux-spi@lfdr.de>; Sun, 29 May 2022 09:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DED537A59
+	for <lists+linux-spi@lfdr.de>; Mon, 30 May 2022 14:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiE2HRR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 29 May 2022 03:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S236035AbiE3MGM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 30 May 2022 08:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiE2HRQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 29 May 2022 03:17:16 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3191B1A3B3
-        for <linux-spi@vger.kernel.org>; Sun, 29 May 2022 00:17:14 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.191.102])
-        by smtp.orange.fr with ESMTPA
-        id vDAjnJygkOXCyvDAjnpj0X; Sun, 29 May 2022 09:17:12 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 29 May 2022 09:17:12 +0200
-X-ME-IP: 90.11.191.102
-Message-ID: <097dca7f-12ba-ddbc-7380-05f3278fe40b@wanadoo.fr>
-Date:   Sun, 29 May 2022 09:17:09 +0200
+        with ESMTP id S229715AbiE3MGM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 May 2022 08:06:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B3155207
+        for <linux-spi@vger.kernel.org>; Mon, 30 May 2022 05:06:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77D79B80D7A
+        for <linux-spi@vger.kernel.org>; Mon, 30 May 2022 12:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD86DC385B8;
+        Mon, 30 May 2022 12:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653912369;
+        bh=NT3b4UniTwZjM3Am7ldS7pvUS70BR3cLBOs4qsTq4mA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=knZzaaiMfeik8Ug1n299qN7i0K433MCRwbrMh9i5oR+q2/PshnwqLYM2lBODRorai
+         cUBJmO5NWdKPUmkJEKbh7/qzE7wuDRu7GoW7ZSG2vFGjOIrtZUaeAar2wZAanbLa7o
+         cL07b0dZ8K+xNtM+WeFhbPZshK94hiRyVyMiddg0HFw92tJyqiyYyzMSxWJj0AJLLa
+         dgsqHcXya0AkwoY7YZwNii1uznrRanzSf16aGftUZKX80XEyvqJGL2RGMXr/JfwlrE
+         FW0H+xId8goJAkOI4uwBwBRS9EZWtOZH/MGv1avRju378dJfgYp0/At5tK7yJNK3eI
+         /RRpeLlUozM4w==
+Date:   Mon, 30 May 2022 14:06:09 +0200
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [RFC] [PATCH 0/3] Optimize spi_sync path
+Message-ID: <YpR6QyuuA1+833Uv@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] spi: rockchip: Fix a resource that is put twice in
- rockchip_spi_remove()
-Content-Language: fr
-To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        addy ke <addy.ke@rock-chips.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Mark Brown <broonie@linaro.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <df2f4ae902474574ccdb0a8696ce51db39fbd239.1653808056.git.christophe.jaillet@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <df2f4ae902474574ccdb0a8696ce51db39fbd239.1653808056.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GMi7NQtmLqt38miI"
+Content-Disposition: inline
+In-Reply-To: <20220525142928.2335378-1-david@protonic.nl>
+X-Cookie: May your camel be as swift as the wind.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Le 29/05/2022 à 09:07, Christophe JAILLET a écrit :
-> spi_controller_put() is already called as part of
-> spi_unregister_controller(). The latter is called automatically because
-> the controller has been registered with the devm_ function.
-> 
-> Remove the duplicate call.
-> 
-> Fixes: 64e36824b32b ("spi/rockchip: add driver for Rockchip RK3xxx SoCs integrated SPI")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/spi/spi-rockchip.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-> index a08215eb9e14..70777731b20e 100644
-> --- a/drivers/spi/spi-rockchip.c
-> +++ b/drivers/spi/spi-rockchip.c
-> @@ -963,8 +963,6 @@ static int rockchip_spi_remove(struct platform_device *pdev)
->   	if (ctlr->dma_rx)
->   		dma_release_channel(ctlr->dma_rx);
->   
-> -	spi_controller_put(ctlr);
-> -
->   	return 0;
->   }
->   
 
-NAK.
+--GMi7NQtmLqt38miI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There is a spi_controller_get() call a few lines above, so this 
-additional spi_controller_put() is needed.
+On Wed, May 25, 2022 at 04:29:25PM +0200, David Jander wrote:
 
-CJ
+> Unfortunately though, this optimization requires a small and hopefully
+> innocuous API change. This change is contained in the first patch, and
+> it replaces the function spi_finalize_current_message() with
+> spi_finalize_message(), which takes the message instead of its
+> controller as argument. Without this change, it is not possible to avoid
+> touching the controller message queue, which is what this is all about.
+
+You're right it needs at least a bit of thought here -
+unfortunately I'm out of the office this week so I'm not sure
+I'll have bandwidth to review this properly until next week.
+
+--GMi7NQtmLqt38miI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKUsy0ACgkQJNaLcl1U
+h9AIQAf+JZhhzhuR994IONO/9ylqy1RyKZ/m/SWM/mg/GaKxrzmoUFuAWVcp2JM9
+ks5wh0T3C2v9uh15yJYThJd10oxEBzUFJ1mB7NFnk9L96dRyjt0zea1Nigp+gf7Y
+qIAr707jWGIArS94RTU8iq0qVtoCJURvLqe8l54RZYdPXxzqkI4kbi9eEwPwtSv9
+zssQx0yUGZJbkdx+v0tGGXsyz6vWMif/Jfd4EHwl/W9UKtByaul3wG/KC32CRPBn
+J0ijnXDIf9YIIY0vb5Zf/9/xKYQwIOcRNtJdPQHFgRt4QvyAAM2lYkcamyttJI2j
+76Jlo1qZ46v1wqHXXXDDIzvMmAw4nA==
+=3TZl
+-----END PGP SIGNATURE-----
+
+--GMi7NQtmLqt38miI--
