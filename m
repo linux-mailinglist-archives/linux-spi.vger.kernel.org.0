@@ -2,45 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47F8538206
+	by mail.lfdr.de (Postfix) with ESMTP id 597B1538205
 	for <lists+linux-spi@lfdr.de>; Mon, 30 May 2022 16:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237613AbiE3OVe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 30 May 2022 10:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S241323AbiE3OVf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 30 May 2022 10:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241178AbiE3ORU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 May 2022 10:17:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043761146BC;
-        Mon, 30 May 2022 06:44:46 -0700 (PDT)
+        with ESMTP id S241371AbiE3ORc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 May 2022 10:17:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EABD8FF82;
+        Mon, 30 May 2022 06:45:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C871B80D83;
-        Mon, 30 May 2022 13:44:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782DDC36AE5;
-        Mon, 30 May 2022 13:44:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF8C460FCD;
+        Mon, 30 May 2022 13:45:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324D4C3411E;
+        Mon, 30 May 2022 13:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918284;
-        bh=irNiHLPnjDX5xM02HqZO7BlPyD+MMDTayUwBSi+oCtk=;
+        s=k20201202; t=1653918357;
+        bh=e3Pj9Oc9GnV/XZYemN+b6N2C1L9t//9yQ3EA+uvjl6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmiEZ/UL2yfwSm8616iKA5kxgnBTYKyCnk7QT+hgvotaV3QKdPWauGIZl3z++D6Br
-         RM+UD/P0G0RF763r+yULFmdz9j3PAZf9KxJ9Ilpjb9XeSIExJ/4JFvo97GCTrE9/IU
-         rl4ssvaF7b/mtpvjR0lmqz5qtM6u+q0vM20UEqiBD2BDxy9acuPdvAMbZ5UM/wiiPo
-         ceGJL6gdRrKoiBjxvQB/1xozCqpeW5jJJCJL6FctjEYfy9Ap8geByeJ/AslLNuSHCc
-         sJ4XUx/mFW5ALkMZ0jTMB+GjHlUs1z5MqyGvqdHa90d0Q7knig126p4LCS0iBMGDYq
-         BzRyaVGSG6VXQ==
+        b=K6fTg3nk0xs1CFimSU7tI0xYQt8VUAzuyDi5S9KgieJaoZgMHa9SaALeNB6q+5GCg
+         n7gPaag5BvHQUz6dMwilESNu0S3+zQNGicvAnwo76qMR7mTxjKffkhUYh/KOW3l9cP
+         NnanxD5VriZuZ+fFW8bKgEpG1zcgbqQiCqTHSC6hx9w3Hf/uBqEoSefRGOo2BrbZVH
+         W4KHEjXP5Nm+2tXfqa6x/BsJYOW7X5b/o8voUrH4wnsI4FkBpQJr7yIHu4oFwRPt4n
+         WNfxF0GEROJfHrHm5bR4pME3clat7HFsfHV7lfpTzfZ2nI9Y2l/rov+MiKdVn40tqA
+         /nmAjZ1iNQjFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 17/76] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
-Date:   Mon, 30 May 2022 09:43:07 -0400
-Message-Id: <20220530134406.1934928-17-sashal@kernel.org>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        eberhard.stoll@kontron.de, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 49/76] spi: stm32-qspi: Fix wait_cmd timeout in APM mode
+Date:   Mon, 30 May 2022 09:43:39 -0400
+Message-Id: <20220530134406.1934928-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
 References: <20220530134406.1934928-1-sashal@kernel.org>
@@ -58,68 +59,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-[ Upstream commit 6f381481a5b236cb53d6de2c49c6ef83a4d0f432 ]
+[ Upstream commit d83d89ea68b4726700fa87b22db075e4217e691c ]
 
-The direction field in the DMA config is deprecated. The rspi driver
-sets {src,dst}_{addr,addr_width} based on the DMA direction and
-it results in dmaengine_slave_config() failure as RZ DMAC driver
-validates {src,dst}_addr_width values independent of DMA direction.
+In APM mode, TCF and TEF flags are not set. To avoid timeout in
+stm32_qspi_wait_cmd(), don't check if TCF/TEF are set.
 
-This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
-values independent of DMA direction.
-
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Suggested-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220411173115.6619-1-biju.das.jz@bp.renesas.com
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reported-by: eberhard.stoll@kontron.de
+Link: https://lore.kernel.org/r/20220511074644.558874-2-patrice.chotard@foss.st.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rspi.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/spi/spi-stm32-qspi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index e39fd38f5180..ea03cc589e61 100644
---- a/drivers/spi/spi-rspi.c
-+++ b/drivers/spi/spi-rspi.c
-@@ -1107,14 +1107,11 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
- 	}
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 4f24f6392212..9c58dcd7b324 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -295,7 +295,8 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+ 	if (!op->data.nbytes)
+ 		goto wait_nobusy;
  
- 	memset(&cfg, 0, sizeof(cfg));
-+	cfg.dst_addr = port_addr + RSPI_SPDR;
-+	cfg.src_addr = port_addr + RSPI_SPDR;
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
- 	cfg.direction = dir;
--	if (dir == DMA_MEM_TO_DEV) {
--		cfg.dst_addr = port_addr;
--		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	} else {
--		cfg.src_addr = port_addr;
--		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
--	}
+-	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
++	if ((readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF) ||
++	    qspi->fmode == CCR_FMODE_APM)
+ 		goto out;
  
- 	ret = dmaengine_slave_config(chan, &cfg);
- 	if (ret) {
-@@ -1145,12 +1142,12 @@ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
- 	}
- 
- 	ctlr->dma_tx = rspi_request_dma_chan(dev, DMA_MEM_TO_DEV, dma_tx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_tx)
- 		return -ENODEV;
- 
- 	ctlr->dma_rx = rspi_request_dma_chan(dev, DMA_DEV_TO_MEM, dma_rx_id,
--					     res->start + RSPI_SPDR);
-+					     res->start);
- 	if (!ctlr->dma_rx) {
- 		dma_release_channel(ctlr->dma_tx);
- 		ctlr->dma_tx = NULL;
+ 	reinit_completion(&qspi->data_completion);
 -- 
 2.35.1
 
