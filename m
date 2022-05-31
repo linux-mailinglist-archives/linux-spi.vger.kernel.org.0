@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C388539255
-	for <lists+linux-spi@lfdr.de>; Tue, 31 May 2022 15:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1FA539290
+	for <lists+linux-spi@lfdr.de>; Tue, 31 May 2022 15:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345113AbiEaNvt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 May 2022 09:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S238343AbiEaNwa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 May 2022 09:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345033AbiEaNv3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 May 2022 09:51:29 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F772985B6
-        for <linux-spi@vger.kernel.org>; Tue, 31 May 2022 06:50:57 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 129-20020a1c0287000000b003974edd7c56so1291452wmc.2
-        for <linux-spi@vger.kernel.org>; Tue, 31 May 2022 06:50:57 -0700 (PDT)
+        with ESMTP id S242710AbiEaNvs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 May 2022 09:51:48 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD22986ED
+        for <linux-spi@vger.kernel.org>; Tue, 31 May 2022 06:50:59 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u3so18782637wrg.3
+        for <linux-spi@vger.kernel.org>; Tue, 31 May 2022 06:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Wl0eUhfQkf22AJDmTLSjt67Vrs4AO/BddtK22iFmA/I=;
-        b=YZO96mhcYG0MG87d8UPaolLiT4EBhzbYR+2tvzycFKH95/lqHD4Jvzk66jQVmww9GM
-         Kfuya/cPBUoxIoak9XlXW8H5NmofpLD8gqIUsA33sVyo/Yuc72GVVUFaMBT1tI9z/EKt
-         NS0T+fZwjd0jYvUswsjsKudEOEmH7IyunZjW0vI6BwdFL1QiOfrQQQndMC6y+6yEGjoo
-         WUJ3xntSihv5qvWX5bY6EsT4t/XTIGneUSkxDd+JFVeUG0kyU5v35dRrRxEPhkSvKohE
-         Q/wmLZ/0Dfhgbn0UZjwaY0AWfzaLcCmgbdayY/VxweaTPGhE8DjhUj3npWKQfucbxM0R
-         2K/Q==
+        bh=uQC4VQ4WPzHEK/K/bvUrrtdGhjy2EyWTwZNKtRp+iyw=;
+        b=3zIN1i390joEcWbbq2lEOHhXMbqplBLfG3SD7Gn+0anr4jkoPd2gwnoMEaZyMG8yla
+         79QJeDtdsmbhvTN0aVi5ShWLg923FwOfwzsJscVxwTBck9XRvgDLMf1YBLIGIMtHLxp/
+         2fx/3yU5USgbjMKAZuKyerFEXHn9DkEkkIQcxl7/VfGcrIpsxQUqsiMBkPIUbw5ELdWP
+         LaEcasNOwwN6Hgwjt+9noUuQw6IjSIkKmqo07es5YJAW1c2FQFNg2FXnXV8QrSZU7KcI
+         E/wqN9qZKk0nK7AO5t9fdLwAoMhU9MFxIRULSYgcApWN7dji4+sJeKwaQnjXe2jGwzNH
+         ekoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Wl0eUhfQkf22AJDmTLSjt67Vrs4AO/BddtK22iFmA/I=;
-        b=Cr+MavNsJlD5DnnsuQwytlK0eYFwCD5+RHUXMwxtyU2FEG1Xi0baoFPke9c2IEJVLd
-         uOvvGlF7qM2s5P2rf/qoO39tT60IOxa+/njkQN867qluh94+OORDhV8NkZuQbBK2GVjD
-         dayPklqD0FVVaJJgaAVaO4UW978t2AZLgc5LDZPQyWBf2wtp3C9YMVfenzDQHGq+Vuut
-         6W/xp70ZiFxkH3zd280m/S4gpecJZJD9pkdteXXIzHZ1p8kUp1TQ01lxuYVt2UE7JELI
-         aly40W1bbfRbdJb20ZgSe5URi6S2wDZSRGZqrb2kUOsfVs23OgTwYpIspuJ+WR14fQk+
-         wz/A==
-X-Gm-Message-State: AOAM531T7T348PiEYonJFRz3mMxuj9vAk15V8hjm/U8daRUZ76avZWU/
-        MtmCubD5WEOHrpeqaAQo/HWv/w==
-X-Google-Smtp-Source: ABdhPJzY1EA1gKYAjC0/wFLQ8zOis9WUaThFryPbsCAa6HYcRuwOQnBjCPCWIyToQh8i4anN2+EsDQ==
-X-Received: by 2002:a05:600c:2182:b0:397:58f5:c6cf with SMTP id e2-20020a05600c218200b0039758f5c6cfmr23289080wme.86.1654005057059;
-        Tue, 31 May 2022 06:50:57 -0700 (PDT)
+        bh=uQC4VQ4WPzHEK/K/bvUrrtdGhjy2EyWTwZNKtRp+iyw=;
+        b=XLzf4aZfZKFCpUpDqZkqk3RxUOOLcJ2A+P2gKXkIUQFg2CJXvCC9DWKesmUkBfoaqm
+         +dVQrDEf7C0dhCnq/4RnLRuF5xz7QbXku7BoZDjP75q4Pp9RbWGXDPl3I6lzfTtv+KsV
+         ThKH1zMgwb2Uf/PYH/uYGhP092QsRkhK0Nf15fH8Jai8U5k7Nbp9O9c5D2miBU04DQuA
+         xVMTs0Ol76GBT9RMsaNG6GbI9NwrLKeaPIzx9MU+nMdkJ8PJXaBr5xK9iZbjyRo7pcuq
+         4ATEsTZBC4p7/w+nx5RXs69xGW0q03wXWpY/3KiPZpoXt2fdItsx9fGysduhz9atm7nG
+         uGRA==
+X-Gm-Message-State: AOAM530PG0HDJC7BNd35iwWeinAiRp5wWVSyld+wE5msDDFDQVp4J/LL
+        g2jvCnOee0ljYxo7rse91+45cw==
+X-Google-Smtp-Source: ABdhPJzt2aaYFVPwdsiueoPDpTiBXsJc2pSW2BEWEyPMk06DY6DCbjp2yLb2MuUyFpuwoIgosOJPOA==
+X-Received: by 2002:adf:ed86:0:b0:20e:6f48:a194 with SMTP id c6-20020adfed86000000b0020e6f48a194mr48087877wro.290.1654005059022;
+        Tue, 31 May 2022 06:50:59 -0700 (PDT)
 Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.50.55
+        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.50.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:50:56 -0700 (PDT)
+        Tue, 31 May 2022 06:50:58 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
@@ -54,7 +54,9 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
         chunfeng.yun@mediatek.com, broonie@kernel.org,
         wim@linux-watchdog.org, linux@roeck-us.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -63,9 +65,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Fabien Parent <fparent@baylibre.com>
-Subject: [PATCH 10/17] dt-bindings: serial: mediatek: add MT8365 bindings
-Date:   Tue, 31 May 2022 15:50:19 +0200
-Message-Id: <20220531135026.238475-11-fparent@baylibre.com>
+Subject: [PATCH 11/17] dt-bindings: phy: mediatek,dsi-phy: Add MT8365 SoC bindings
+Date:   Tue, 31 May 2022 15:50:20 +0200
+Message-Id: <20220531135026.238475-12-fparent@baylibre.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
 References: <20220531135026.238475-1-fparent@baylibre.com>
@@ -85,21 +87,24 @@ Add binding documentation for the MT8365 SoC.
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-index 4ff27d6d4d5b..71e78f285e47 100644
---- a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-@@ -44,6 +44,7 @@ properties:
-               - mediatek,mt8186-uart
-               - mediatek,mt8192-uart
-               - mediatek,mt8195-uart
-+              - mediatek,mt8365-uart
-               - mediatek,mt8516-uart
-           - const: mediatek,mt6577-uart
- 
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+index 6e4d795f9b02..9c2a7345955d 100644
+--- a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+@@ -24,6 +24,10 @@ properties:
+           - enum:
+               - mediatek,mt7623-mipi-tx
+           - const: mediatek,mt2701-mipi-tx
++      - items:
++          - enum:
++              - mediatek,mt8365-mipi-tx
++          - const: mediatek,mt8183-mipi-tx
+       - const: mediatek,mt2701-mipi-tx
+       - const: mediatek,mt8173-mipi-tx
+       - const: mediatek,mt8183-mipi-tx
 -- 
 2.36.1
 
