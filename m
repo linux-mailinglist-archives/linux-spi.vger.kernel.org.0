@@ -2,107 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AD55393A9
-	for <lists+linux-spi@lfdr.de>; Tue, 31 May 2022 17:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A3D5393E7
+	for <lists+linux-spi@lfdr.de>; Tue, 31 May 2022 17:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbiEaPKe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 May 2022 11:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S1345632AbiEaPZ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 May 2022 11:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiEaPKe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 May 2022 11:10:34 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0837A554AB;
-        Tue, 31 May 2022 08:10:32 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id r65so12693860oia.9;
-        Tue, 31 May 2022 08:10:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RBXm9/Esfsyjt1r/aC8kkjNZpxuz6CMibBZbCrct5sU=;
-        b=fg8/p6zXxw6/SKsaovjlb0ENruHxX7IGCJ0/xRjlU+lDf4afG4PYZF9O2WgeRKRUnB
-         5Kch9S/8UGK4SEBmR4kEYCDKh3j0StvY/xmf+LTPx/voyeDkIkgw3NskKB9i0hc+5B9p
-         HkVsuSjEHJY9nZNQt24bZG05MADitnYdsPDhqsWQ7hhQBsDOBzgJNO0edBLUe2sB93Ha
-         I4SvaeTAvCEF/DzV0/0IML5dR8bOVlETpt90LDaJOFCtupAQzl2+ZlhcwZzEqorntyk3
-         LvJCgAgkh74NV4Olg2JyCjgf+cR4jcHD2UYCBvk3b5do/F1HEfW6Lce2UZhR2CiX41pe
-         GZTw==
-X-Gm-Message-State: AOAM531MHpnIkoiLg3mORBK/tsAOMSFCougQd5Gj8tOYJyVUMQAgA2Sz
-        5jYkolM6akkrGhrCduwkVQ==
-X-Google-Smtp-Source: ABdhPJzoAp+Z3IQUZKoxH1jPa/vqFRWyugKv6Lj1GOazPZZ8U2duOMOyCfWEUTN10HNxmAg8d9kt7A==
-X-Received: by 2002:a05:6808:2005:b0:32b:23a1:e6fd with SMTP id q5-20020a056808200500b0032b23a1e6fdmr12605499oiw.59.1654009831912;
-        Tue, 31 May 2022 08:10:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056830080d00b0060603221245sm6410657ots.21.2022.05.31.08.10.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 08:10:31 -0700 (PDT)
-Received: (nullmailer pid 1770063 invoked by uid 1000);
-        Tue, 31 May 2022 15:10:30 -0000
-Date:   Tue, 31 May 2022 10:10:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: Move 'rx-sample-delay-ns' to
- spi-peripheral-props.yaml
-Message-ID: <20220531151030.GC1742958-robh@kernel.org>
-References: <20220525210053.2488756-1-robh@kernel.org>
- <20220526054642.zw44mgw2bd2u5v76@ti.com>
- <20220526135404.GA3831942-robh@kernel.org>
- <20220527113226.x62neigmrnljxtph@mobilestation>
+        with ESMTP id S1345597AbiEaPZ3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 May 2022 11:25:29 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C6D3617B;
+        Tue, 31 May 2022 08:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654010728; x=1685546728;
+  h=message-id:date:mime-version:to:cc:from:subject:
+   content-transfer-encoding;
+  bh=9K90yt7gi0QZROB3GtfrYs5hCiia1w1A1JaJHab+plo=;
+  b=xLiUL/CSd4PnpzMlvc5uC8RsseA3pdVQ1nRwkFwoQKbKON97BIwCLqRp
+   iaHoAZ7EOtHJQeiP3YuVfgObZUXCk6aM1MJgVqd0i+SEz73irrbGXakgG
+   K0AKSB3ymXrs2tWzkINzA5U+dOFeMWzpF9uB92l6QRqL3JMHxjBBtrGYg
+   I=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 May 2022 08:25:27 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 08:25:27 -0700
+Received: from [10.110.116.173] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 31 May
+ 2022 08:25:26 -0700
+Message-ID: <78873437-3b35-0711-a1dc-219b9f316fac@quicinc.com>
+Date:   Tue, 31 May 2022 08:25:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527113226.x62neigmrnljxtph@mobilestation>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     <linux-spi@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <broonie@kernel.org>, <wsa@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+From:   Prasad Sodagudi <quic_psodagud@quicinc.com>
+Subject: [Query] Looking for comments on CONFIG_SPI_SPIDEV and
+ CONFIG_I2C_CHARDEV interfaces security
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 27, 2022 at 02:32:26PM +0300, Serge Semin wrote:
-> On Thu, May 26, 2022 at 08:54:04AM -0500, Rob Herring wrote:
-> > On Thu, May 26, 2022 at 11:16:42AM +0530, Pratyush Yadav wrote:
-> > > Hi Rob,
-> > > 
-> > > On 25/05/22 04:00PM, Rob Herring wrote:
-> > > > SPI bus per device properties must be defined in spi-peripheral-props.yaml
-> > > > for unevaluatedProperties checks to work correctly on device nodes.
-> > > > 
-> > > > This has the side effect of promoting 'rx-sample-delay-ns' to be a
-> > > > common property, but functionally it's no different if it was defined in
-> > > > a Synopsys specific schema file.
-> > > 
-> > > Functionally it is no different, but does this property make sense for 
-> > > other controllers? If not then I don't see why we should pollute the 
-> > > common list with controller-specific ones. For one, this now no longer 
-> > > makes it obvious that this property should only be used with the 
-> > > Synopsys controller. And if you keep making small exceptions for other 
-> > > controllers too, soon the common list will be full of controller 
-> > > properties and it will be a mess finding out what belongs to who.
-> > 
-> 
-> > There's at least one other case already:
-> > 
-> >   cdns,read-delay:
-> >     $ref: /schemas/types.yaml#/definitions/uint32
-> >     description:
-> >       Delay for read capture logic, in clock cycles.
-> 
-> What about creating the schemas hierarchy for the device-specific
-> properties as I already suggested in the other thread? Like this:
-> 
-> https://lore.kernel.org/linux-ide/20220527101057.b5z7ase6y4naoxvk@mobilestation
+Hi All,
 
-Because that doesn't work. I'll explain in that thread.
+I am working on an IoT solution and would like to understand security 
+impact of these two CONFIG_SPI_SPIDEV and CONFIG_I2C_CHARDEV interfaces 
+of Linux. If a driver is developed from userspace for  /dev/spiX.Y or 
+/dev/i2c interfaces,  are there any security concerns ?
 
-Rob
+Userspace driver is to control external SPI slave on board. I heard that 
+these interfaces allows access to any of these type of devices on board. 
+  How to avoid accessing any of these type of unwanted device access 
+from userspace ?  Can Selinux or any mechanism control access to other 
+these type of devices from user-space ?
+
+Please share your comments/findings on these two interfaces related to 
+security. If community had posted any security related discussions with 
+these interfaces, please share details to improve understanding.
+
+-Thanks, Prasad
