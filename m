@@ -2,66 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4CC53A1F4
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Jun 2022 12:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C699D53A229
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Jun 2022 12:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347840AbiFAKGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Jun 2022 06:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S1351886AbiFAKNF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Jun 2022 06:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351809AbiFAKEx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Jun 2022 06:04:53 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AE83617E
-        for <linux-spi@vger.kernel.org>; Wed,  1 Jun 2022 03:03:29 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id jx22so2624396ejb.12
-        for <linux-spi@vger.kernel.org>; Wed, 01 Jun 2022 03:03:29 -0700 (PDT)
+        with ESMTP id S1351989AbiFAKMp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Jun 2022 06:12:45 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8258E4C790
+        for <linux-spi@vger.kernel.org>; Wed,  1 Jun 2022 03:12:36 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id o10so1498957edi.1
+        for <linux-spi@vger.kernel.org>; Wed, 01 Jun 2022 03:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=92onIsfnQU4QWfZIhdpAqRgE4HYf0xEpGZfJ1tdg0UY=;
-        b=gHr7AuP5mdT/9AXsHRh38QGrskKD2LKcexs69b9Rdu7QOjJax5QX/GZeEMJJ3NwmMP
-         kH1pp5EgK+KcgNv0eHLHkFcn1jT5YEJ2eAJSS0ldtTgos9WxRqAPkFecGVlCi002jWJ8
-         cOGjgKKWpJzcVCRADRLhpuG+7rOrocG1+NfhV9BdB0dEugHub+fWC6fnm+briys+8Vjd
-         siI+ZXvklNVBzj/4deHJNWLlJieWpxia1x5YTeXRD/Pq8e9TljHLrz6rEHpc26dEPTUv
-         eSFtMGIg7W5Qex7E9dLRKNwqv4ngl+/gQZ3tYfu0Qcjv6lumesRbznxeGpy/FuRDyAV2
-         ANqw==
+        bh=OGHEh5EflFJ5JP3LQKty6QMpN7VhyP1gug8Yda8OW5A=;
+        b=RdNA06eZU3yur7GOEDYb/UfDCCZsD85cyaXv5fd/COilGbz32N1RnyYy1z8gcwDzkY
+         mAVL49ZJa57+GiLqP6rh2AGmpF8gqhrRsXiys799/vPHu0F2re5olFzUntYNr45K98Of
+         IvfZ0COVWTtulHvL2/uNU/wARd3MbMn8PJMnhD9FDes0cd4hB4Fm01kmWpL7n/2TsKN1
+         6Y6UL1QXpu5HgehbvpAToUxztbyruB1E0Jw53mKfHg9a4gGeZcz4G5lMKLn67rO8ipla
+         QAu5clsvjq2bNfKqwPAXMTT8nA1D22YnF30L1q5El2UGtHD+vSF1E0cIoVf36llXBhl3
+         ff2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=92onIsfnQU4QWfZIhdpAqRgE4HYf0xEpGZfJ1tdg0UY=;
-        b=DN8kU34u2fyEWsRz1MzzbcjsLo2VKLJ0Nh+AnpQF++AF32dcFIuR5bJVHvs3H99E9X
-         tI31ZSNfCFP/gr0TQFCv+0gmwyZ37G/NgR7utuIt8yvIhIRPFQ3Oyask2yYimehxjoer
-         523Ptrk9icG7xcI3DdcVJeB4PtYi/V99WVF088M0C1iIhwKoI11pc5zeH2k2vn59VpRy
-         4TOIPFzLI2lBFnri1qqWOwpaAwovTkHFbq2NLihk/UPZKRIXSK25kuOuRF3/L1SzFpy+
-         KxfKAAi62GADLWQv249cGal/o6Yq2mLKf1FrFNBvPfGZQpyZiRCkFdUutcTv6W7UmNY1
-         5E/Q==
-X-Gm-Message-State: AOAM532RmZvAbyHUMpGLl6KExBr2c9KwDsPFNCOb70PQ91cGi6r7SXE9
-        f2ON2uMClVOqXE6080w1IriK3Q==
-X-Google-Smtp-Source: ABdhPJwsJCUv/SqbvzjiYBS6yN4lVmi+3xJ5LLsHbHg+hdAs1UqqGr3udpbhfrS2ZnyB0x3mxgD/gw==
-X-Received: by 2002:a17:907:3c81:b0:6e6:cf3e:6e14 with SMTP id gl1-20020a1709073c8100b006e6cf3e6e14mr57688342ejc.181.1654077808486;
-        Wed, 01 Jun 2022 03:03:28 -0700 (PDT)
+        bh=OGHEh5EflFJ5JP3LQKty6QMpN7VhyP1gug8Yda8OW5A=;
+        b=b+KcYRjE61jzsWJVsdZ0qdmAzRTbia3tgKxXa+QxGW/VWQjZPa1DcA+CMeOmyvyxSB
+         G57gj13QQaNdsQ66w/aKCrxO1KXpAAWUmVsdHv1HihNXZjVdiNMV6qV/4kvT3De9hMIv
+         hmLui7iZizXe93e+f3wj/4uJcPNoxUhVQLF5whhsXLnlD4fahu5xGclwiZJ7R9LbWPhK
+         4Y1kJ9UK3/vSq4R0V3lVbBcgzodmGTa3Rsku0j0pPFA6fpWeI1WX/7QEZfzZOYMbuTp4
+         1llbi0iI1hxoKm+rBAFh49j652/wGQrQB6lykG7xXfUP+abbNQz4auSuhoDgj4y7f7y8
+         veOw==
+X-Gm-Message-State: AOAM530nljZpHns5dirxVXGp1P7Hdv/RFyOHxluBtTpmpSjISD3WJEY1
+        iqbIPAbsg0xGzm6E+DRaXedC9A==
+X-Google-Smtp-Source: ABdhPJz1Iw3aklyf+Hl4aU2S4N3wtkB5v1M5a6xE+R+Ctu54ed/8biBVX/Tgf6wfycHD4EafkrobCg==
+X-Received: by 2002:a05:6402:424b:b0:42b:3871:75fa with SMTP id g11-20020a056402424b00b0042b387175famr58104048edb.92.1654078355157;
+        Wed, 01 Jun 2022 03:12:35 -0700 (PDT)
 Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w7-20020a056402070700b0042aa153e73esm719655edx.12.2022.06.01.03.03.26
+        by smtp.gmail.com with ESMTPSA id e26-20020a50ec9a000000b0042ad0358c8bsm721575edr.38.2022.06.01.03.12.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 03:03:27 -0700 (PDT)
-Message-ID: <54f64086-5ff0-1295-af5a-4989ceff128e@linaro.org>
-Date:   Wed, 1 Jun 2022 12:03:26 +0200
+        Wed, 01 Jun 2022 03:12:34 -0700 (PDT)
+Message-ID: <c6b6b255-0793-c833-8af5-2e2c98c71db7@linaro.org>
+Date:   Wed, 1 Jun 2022 12:12:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 08/17] dt-bindings: watchdog: mtk-wdt: Add MT8365 SoC
- bindings
+Subject: Re: [PATCH 10/17] dt-bindings: serial: mediatek: add MT8365 bindings
 Content-Language: en-US
 To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
         qii.wang@mediatek.com, matthias.bgg@gmail.com, jic23@kernel.org,
         chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
         srinivas.kandagatla@linaro.org, chunfeng.yun@mediatek.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -70,9 +70,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20220531135026.238475-1-fparent@baylibre.com>
- <20220531135026.238475-9-fparent@baylibre.com>
+ <20220531135026.238475-11-fparent@baylibre.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531135026.238475-9-fparent@baylibre.com>
+In-Reply-To: <20220531135026.238475-11-fparent@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,27 +90,11 @@ On 31/05/2022 15:50, Fabien Parent wrote:
 > 
 > Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
 >  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> index a97418c74f6b..0e63c4ba3785 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> @@ -19,6 +19,7 @@ Required properties:
->  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
->  	"mediatek,mt8192-wdt": for MT8192
->  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
-> +	"mediatek,mt8365-wdt", "mediatek,mt6589-wdt": for MT8365
 
-Just for curiosity - how does this (and previous binding patches) depend
-on your big list:
-"This series has dependencies on the following series:"
-?
 
->  
->  - reg : Specifies base physical address and size of the registers.
->  
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
