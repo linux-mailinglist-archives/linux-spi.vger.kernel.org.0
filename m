@@ -2,122 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7AC53B4E5
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Jun 2022 10:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DC553B57A
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Jun 2022 10:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbiFBIXW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jun 2022 04:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S232578AbiFBI42 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Jun 2022 04:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiFBIXV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jun 2022 04:23:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC1F65AE
-        for <linux-spi@vger.kernel.org>; Thu,  2 Jun 2022 01:23:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6u-0001YT-9J; Thu, 02 Jun 2022 10:23:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6u-005zgh-Fz; Thu, 02 Jun 2022 10:23:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6s-00DhT4-Cw; Thu, 02 Jun 2022 10:23:14 +0200
-Date:   Thu, 2 Jun 2022 10:22:50 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: core: Display return code when failing to
- transfer message
-Message-ID: <20220602082250.s4llxsng4fecduhc@pengutronix.de>
-References: <20220525165852.33167-1-eajames@linux.ibm.com>
- <20220525165852.33167-3-eajames@linux.ibm.com>
+        with ESMTP id S232031AbiFBI41 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jun 2022 04:56:27 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A071A8E17;
+        Thu,  2 Jun 2022 01:56:25 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2528k8tv032217;
+        Thu, 2 Jun 2022 10:56:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=B4TQo6lZfzJdRFdBCfEZqydC5FD70BlyNWZ9oCSp3pY=;
+ b=6u+xn+UwC6mQPCVGx+40UEfB5C2oB7l50HhaPPr895y/+Cgf5GaXfzxTCebv0Ifvhnua
+ OpYBuJ1KVsg02CaIG1/98ZGb4qdu6hXq5HISlkgW1AqjeZjpqY9VWcfkMX2UhAj2N9+Y
+ Kyo6QqsHlRNtaFtN/Cj5oMp3PqyKzm68Y9fksmTuxJnLG3AkEUg00BhIBps5J+68xIk4
+ 8wZ/9w5jwvNgIYqId8cMXD2M/OcvQGZqizroi/wy2EpiOya4U0PdLkMEDDql8/zaRahm
+ XbPvDuLfzW8U+dpxaZd1NR1fHdkoAdia1l7oa1GdzH9CXcEcnuWqbDbFeYMDvShNhSYP QQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3get03g253-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 10:56:05 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BB4E510002A;
+        Thu,  2 Jun 2022 10:56:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A610E216EF2;
+        Thu,  2 Jun 2022 10:56:04 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
+ 2022 10:56:04 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>
+Subject: [0/2] spi: stm32-qspi: Remove unused parameters
+Date:   Thu, 2 Jun 2022 10:55:54 +0200
+Message-ID: <20220602085556.348139-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b6nldfoupl3pmrdy"
-Content-Disposition: inline
-In-Reply-To: <20220525165852.33167-3-eajames@linux.ibm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_01,2022-06-01_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
---b6nldfoupl3pmrdy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series cleans up spi-stm32-qspi driver by removing unused parameters
 
-Hello,
+Patrice Chotard (2):
+  spi: stm32-qspi: Remove stm32_qspi_get_mode() unused parameter
+  spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
 
-On Wed, May 25, 2022 at 11:58:52AM -0500, Eddie James wrote:
-> All the other calls to the controller driver display the error
-> return code. The return code is helpful to understand what went
-> wrong, so include it when failing to transfer one message.
->=20
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/spi/spi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 481edea77c62..ea09d1b42bf6 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1654,7 +1654,8 @@ static void __spi_pump_messages(struct spi_controll=
-er *ctlr, bool in_kthread)
->  	ret =3D ctlr->transfer_one_message(ctlr, msg);
->  	if (ret) {
->  		dev_err(&ctlr->dev,
-> -			"failed to transfer one message from queue\n");
-> +			"failed to transfer one message from queue: %d\n",
-> +			ret);
+ drivers/spi/spi-stm32-qspi.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-(I know it's too late, just stumbled over this commit in mainline by
-chance. So maybe just a suggestion for the next similar change...)
+-- 
+2.25.1
 
-A tad nicer would be to use %pe instead of %d that results in
-
-	mydev mybus: failed to transfer one message from queue: -EIO
-
-instead of
-
-	mydev mybus: failed to transfer one message from queue: -5
-
-and so is more descriptive. (Note you need ERR_PTR(ret) for %pe.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---b6nldfoupl3pmrdy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKYc1EACgkQwfwUeK3K
-7AlvuQf/SW2QRJEmHhltTqXdJ0dLZ3pvlWA9CtOkNfO3QuJKbG0TablgBoHJptN4
-hmxrdQeEM3ISXL2OlJ4wMf41i20G6TXVrcNGHduZ3sPP7AiiGIhG1ZbxC1aWJqo+
-H86PLgo8C5MX1WcpayJoJBMnAI5TtkMB3ubeWU4eputBkfCO3udWYZbCGagaxt4K
-4u5MoHo7I9q9TaVkVaKfeGR8k4vh4f9nrh2ZfEuIeb6CV6uBVm1LyAg7NMaWemE4
-LkIDcotB0J60DnwEH8oDnDVdimwO3U3SPEjwbqjge22A2vch5tAi6TtRsG+q5T/V
-sncY0W+KoLI3P7k94X+gGTCG/Y5dIg==
-=xFn8
------END PGP SIGNATURE-----
-
---b6nldfoupl3pmrdy--
