@@ -2,91 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED57253B68B
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Jun 2022 12:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650AD53CB77
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jun 2022 16:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiFBKEM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jun 2022 06:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S244108AbiFCOXu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Jun 2022 10:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiFBKEL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jun 2022 06:04:11 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCE6115A44;
-        Thu,  2 Jun 2022 03:04:08 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25284Kim018004;
-        Thu, 2 Jun 2022 12:03:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=m0BCmY6bXRbzWS6fl2Ve4Vs/Ccc1sRTGBDBIBXY+c6I=;
- b=WuSnLnG4D/Nyv0VWP2j0eZCiGe4+MtuCxmfGBXIjUuT300iA5DMyBu16vgOYMMXyuzVZ
- /wQJJN9wdjxKbCkgows4BOhXmAhImz6jd1ozt1CVmbruf6v0PEyy0mCAIWf9rOrV8Ys8
- O8AHt1liciMBHMmpD/YyaGwY/O8Rndmcv1ovlDCsScNq8Cbg73Qcm/mdJNV0oeVqVP3h
- 8nY9oQRFPcE5npbIjJWu6zG0ifPk9Rw0/CP/B9YGDBnQC1Hl/tRE6jCrO0GyWAb3EDIz
- hGEouAukzQj+qjQKmiDUd9P4ZAfsdQecyTUlRvPo8wdzsDwCOQlKGQqMC+dqeWcTc6Nu Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc2vy4kb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 12:03:52 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A7BFB10003A;
-        Thu,  2 Jun 2022 12:03:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2432E21A20C;
-        Thu,  2 Jun 2022 12:03:51 +0200 (CEST)
-Received: from [10.211.11.162] (10.75.127.48) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
- 2022 12:03:50 +0200
-Message-ID: <63e621b9-78e8-e53c-21dc-b1011ea2a15b@foss.st.com>
-Date:   Thu, 2 Jun 2022 12:03:49 +0200
+        with ESMTP id S230293AbiFCOXt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Jun 2022 10:23:49 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5DA5044D
+        for <linux-spi@vger.kernel.org>; Fri,  3 Jun 2022 07:23:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id o10so10373875edi.1
+        for <linux-spi@vger.kernel.org>; Fri, 03 Jun 2022 07:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xjth9sumjNSb3AO9iyWCT7fwgeSWmJ+LjXs/gu7PTR8=;
+        b=Sd0/9ztQMWmcIvF8Jo6Vha2Ov5iaokZz3RFZnieC5EKvdnaKSaaW9O0QtjRVv7QgUF
+         /Ty8AZUaT8mMMcXHqi7N3eDIGcMCxmEkOWjGAViOTP1/4wXmYdFDMGb8DDprS2x4JH9t
+         4uDvtsY0H/bzwM+a7Lp2Iw306Hy+B6pfGGX4+kcNujacpX5W44o5IIMxQ4+0GSfZKG5e
+         YSq48nxFVbm1GrKBzAxcTu3tcoLhjt/N1V/s2aXr36x419eyswmn+IAJhyt/NLr7naxW
+         TvBrOB2YGLQ1+WbAqZFAnYgQ0MOOHFV70iqYkXqWi4AWMU4oO4PPWqEgUT6aY+Oic4ex
+         5k+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xjth9sumjNSb3AO9iyWCT7fwgeSWmJ+LjXs/gu7PTR8=;
+        b=Y9WVoQJ2xvA+9tOU53ofsMcQKUnPZS3xxlGf3/oK0zq9Z8+TffBSHdMtzU3DabrTv2
+         lLvBqruUCjKW8gj/s8VXWOmgKZ62Rc7y13Ii+pvBIxTkOmOLde/u7EKUeAbb7i/Zfz0r
+         ZViXlYkHDvTssVldUo/VB41+UTGsOwAX9Sw23zDP5HZbriJUwwj+f7B2JHfQB32gPofy
+         mWTJZ+SLgLVxBlk3tDKfAk/xEukKehL0riOHKJ9T+lru912lBUhZYAh9Epik9Xoexk/c
+         M2EzCpeC0kQF9AD4k+/tifKFfHMV7GCkFDFet5HQwBAt/a3cXLS57TMcdSBb6a6udhWE
+         SXhg==
+X-Gm-Message-State: AOAM530fUwXqMg+upQytumgHE84alsC+4VeLnpcYZrH/xpvVSTtAfLLM
+        mRWiYiuOzJd20WTZKsp7pnEKH5Q3IAcUNMBQ
+X-Google-Smtp-Source: ABdhPJz5YtZ6/3ZAtJglYwJjyClJRFoKEBHDGITpS3vnA6RvsLlZ5RRKKOaSaKJuXmkAhtShD2LzGw==
+X-Received: by 2002:a05:6402:26c5:b0:42e:1708:c09a with SMTP id x5-20020a05640226c500b0042e1708c09amr8038247edd.133.1654266223628;
+        Fri, 03 Jun 2022 07:23:43 -0700 (PDT)
+Received: from localhost.localdomain (customer-212-237-96-113.ip4.gigabit.dk. [212.237.96.113])
+        by smtp.gmail.com with ESMTPSA id j22-20020a1709066dd600b006fea2705d18sm2810948ejt.210.2022.06.03.07.23.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 Jun 2022 07:23:43 -0700 (PDT)
+From:   Jens Lindahl <jensctl@gmail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Jens Lindahl <jensctl@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+Subject: [PATCH] check if dma is active before attempting to terminate
+Date:   Fri,  3 Jun 2022 16:23:40 +0200
+Message-Id: <20220603142340.42271-1-jensctl@gmail.com>
+X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/2] spi: stm32-qspi: Remove unused parameters
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-References: <20220602085918.350613-1-patrice.chotard@foss.st.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20220602085918.350613-1-patrice.chotard@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_01,2022-06-02_01,2022-02-23_01
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-A v2 as been sent, as a patch was missing
+---
+ drivers/spi/spi-bcm2835.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-PAtrice
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 775c0bf2f..84e72b8dd 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1138,10 +1138,14 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	dmaengine_terminate_sync(ctlr->dma_tx);
+-	bs->tx_dma_active = false;
+-	dmaengine_terminate_sync(ctlr->dma_rx);
+-	bs->rx_dma_active = false;
++	if (bs->tx_dma_active) {
++		dmaengine_terminate_sync(ctlr->dma_tx);
++		bs->tx_dma_active = false;
++	}
++	if (bs->rx_dma_active) {
++		dmaengine_terminate_sync(ctlr->dma_rx);
++		bs->rx_dma_active = false;
++	}
+ 	bcm2835_spi_undo_prologue(bs);
+ 
+ 	/* and reset */
+-- 
+2.20.1 (Apple Git-117)
 
-On 6/2/22 10:59, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> This series cleans up spi-stm32-qspi driver by removing unused parameters
-> 
-> Patrice Chotard (2):
->   spi: stm32-qspi: Remove stm32_qspi_get_mode() unused parameter
->   spi: stm32-qspi: Remove stm32_qspi_wait_cmd() unused parameter
-> 
->  drivers/spi/spi-stm32-qspi.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
