@@ -2,46 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752E253E928
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 19:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0B453E9D7
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 19:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241628AbiFFQNj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jun 2022 12:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S241629AbiFFQNk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jun 2022 12:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241592AbiFFQNf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 12:13:35 -0400
+        with ESMTP id S241505AbiFFQNh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 12:13:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FF410053B;
-        Mon,  6 Jun 2022 09:13:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2E31248EB
+        for <linux-spi@vger.kernel.org>; Mon,  6 Jun 2022 09:13:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA50260C96;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A11760C84
+        for <linux-spi@vger.kernel.org>; Mon,  6 Jun 2022 16:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2B8C385A9;
         Mon,  6 Jun 2022 16:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADA68C3411D;
-        Mon,  6 Jun 2022 16:13:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654532014;
-        bh=WtLr248+J7VRb1dQKlsA2bJrbWka+yrYlrb3vKRa3bk=;
+        s=k20201202; t=1654532015;
+        bh=+xr80Vpbs2TijbS81n9+0qPVzBZaewSLO14zypLYQPs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rOiSpAV8rl4fpjVsZ2A+wbNptvo9Rt0NP8DnKg4Ob9JjuyMnef2usBKN1lEpg2SbJ
-         8/z62jfj9z+BAd0yDqDOZqLFGS65aHTMlEzG4o3+wpraI0RJpJz+5TXhKAmnfWLc7p
-         PFnYKBBtbTy6+x2HKVtuzR3te00KOPG7KoD+Jst1Q3E4iwve0miQGDsaO+hEQ7Vrv4
-         qQnGdQG6gGWJ0OV8/NevHANxoJ43N8JuT/3kZLhrGfSV+u+afy59ueKFeBPq16+9pj
-         doKdSQUWhFAESksZzp4i3X70816DTWZWnAKFyU72OsJMbYuqBq3Vu2LAnFYyhtutyR
-         KBPY0hcTQMOFA==
+        b=JSgnIK6ZQhTG9oU8IS4y9rxs4fQMf8Myh/Vt7sN3rV5CfXNgCbFOSJAT4UG0ePLK7
+         9VwsE6SstNvZ/VlhvM/+TxllV2+qkhFVyim/0RqJMAgmnjUv/cstPjgJ4Hb+8T36L+
+         t6YVpKO6DqKEd0F0u38JZMUjcp9RaXzqNgv6xyFwydB0i4N3qd1Yddtr8mGrk6akee
+         BC/N278VRhBwLWXlWTGrd/4QNCv31q3geWo9NEeNjGtMHQ4LBPjClXGUeLO46MRL/c
+         GeVdIjZyiS2BgTQ6wrhn0Sa1mZnoMaCFTZ0IyOECpnIRKR19XtpCGXTqoJ5MRQigpu
+         xEZI3cwPilh6Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     alexandre.torgue@foss.st.com, patrice.chotard@foss.st.com
-Cc:     christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220602091022.358127-1-patrice.chotard@foss.st.com>
-References: <20220602091022.358127-1-patrice.chotard@foss.st.com>
-Subject: Re: [PATCH 1/1] spi: spi-mem: Fix spi_mem_poll_status()
-Message-Id: <165453201241.2010189.6032534787869283638.b4-ty@kernel.org>
-Date:   Mon, 06 Jun 2022 17:13:32 +0100
+To:     lars@metafoo.de
+Cc:     linux-spi@vger.kernel.org, jank@cadence.com,
+        amit.kumar-mahapatra@xilinx.com
+In-Reply-To: <20220527091143.3780378-1-lars@metafoo.de>
+References: <20220527091143.3780378-1-lars@metafoo.de>
+Subject: Re: [PATCH] spi: cadence: Detect transmit FIFO depth
+Message-Id: <165453201441.2010189.9671814020789329583.b4-ty@kernel.org>
+Date:   Mon, 06 Jun 2022 17:13:34 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,14 +53,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 2 Jun 2022 11:10:22 +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Fri, 27 May 2022 11:11:43 +0200, Lars-Peter Clausen wrote:
+> The depth of the transmit FIFO for the Cadence SPI controller is currently
+> hardcoded to 128. But the depth is a synthesis configuration parameter of
+> the core and can vary between different SoCs.
 > 
-> In spi_mem_exec_op(), in case cs_gpiod descriptor is set, exec_op()
-> callback can't be used.
-> The same must be applied in spi_mem_poll_status(), poll_status()
-> callback can't be used, we must use the legacy path using
-> read_poll_timeout().
+> If the configured FIFO size is less than 128 the driver will busy loop in
+> the cdns_spi_fill_tx_fifo() function waiting for FIFO space to become
+> available.
 > 
 > [...]
 
@@ -72,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-mem: Fix spi_mem_poll_status()
-      commit: 2283679f4c468df367830b7eb8f22d48a6940e19
+[1/1] spi: cadence: Detect transmit FIFO depth
+      commit: 7b40322f7183a92c4303457528ae7cda571c60b9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
