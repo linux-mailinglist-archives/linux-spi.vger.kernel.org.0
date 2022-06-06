@@ -2,76 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875AC53F17C
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 23:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61FD53F19B
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 23:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiFFVSK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jun 2022 17:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229457AbiFFVWZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jun 2022 17:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiFFVSG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 17:18:06 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4612612
-        for <linux-spi@vger.kernel.org>; Mon,  6 Jun 2022 14:18:02 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n18so13135597plg.5
-        for <linux-spi@vger.kernel.org>; Mon, 06 Jun 2022 14:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/Qe8oW+p+BGt/u9zN5VKDridalVYiz6PdWuaHuIAfYU=;
-        b=pqQtS44k5xWEUVxMkH5j4p8QagUDe4bybT62BFuWs8YH93O6u037sMfTEBev+tJdm1
-         Ab6PwY+WRduG7iTOvB+zrtQyZTOLWmsyUPanuMDwt5Ir54diXtUp+TZUoQBava4yiAB3
-         yxxlrAody+C83svOWk3ZhHSx4ewqrle3LPk98uOXLiL3cAJnMAjE9LK+7oBkJbc7KLBo
-         I9e/9F8lqpixKHZKiUXOJmt5ysXQpUg2Jwzr+JjWAWRAacGzyGD3+S0cZvm72u2SUZkF
-         iDVIJ7XWE/Y6e6LjvBin3hMvNou+l5TTLJjRiuks8OrppfJehOPoFailKqqP++9fXeRs
-         Cj6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/Qe8oW+p+BGt/u9zN5VKDridalVYiz6PdWuaHuIAfYU=;
-        b=vFE3nvUXG73ws2+h5d9fCV8LySF4iGYw2OOTFsD9so4+F/uA72HRcIixKNERadbMnj
-         6iJT0H27ff6TpTPsQ7mRPFcYjcRZ+jvkiHV2l6/dGwqP84ESGBSZlSPjx/pd6RqCC29e
-         /kbVUhTaBHlbMq5xMIuPFcsJ82pT6xVsijg6ey0DK4ZbHvaMyASrlc1RvzP8b2MQJPKR
-         fzvzlEB3pFjzItFFP1Gd2pAOMqqrFFC/+jHGXeLIp1yDybJsEvOXX+FU/OPcNwNlItkG
-         Agi0r6tIw3MIeWSnKVpZEng56zEQsNPTGj/KPzV4UBRD5jI0C7/RAOKCEyGQ/IulvxTc
-         KrKw==
-X-Gm-Message-State: AOAM530vAcQrW1PGFmnQtSvgr4UsnjIa3A5Ia5GN/4rwZ/RowziwOh4h
-        QoCGOOMBmnkycPm3haqL9NU=
-X-Google-Smtp-Source: ABdhPJxVMP5xEcX4McBoWG7aS+meh2ip2GuWd3WQic6BgDuBdo9w+FKQFk7lz6EU/dDuDYYE+DY1Jw==
-X-Received: by 2002:a17:902:e5cb:b0:165:1500:a69b with SMTP id u11-20020a170902e5cb00b001651500a69bmr26105958plf.29.1654550282368;
-        Mon, 06 Jun 2022 14:18:02 -0700 (PDT)
-Received: from [192.168.1.22] (lfbn-nan-1-24-142.w90-49.abo.wanadoo.fr. [90.49.119.142])
-        by smtp.gmail.com with ESMTPSA id h17-20020a63df51000000b003fc704c250dsm3731183pgj.94.2022.06.06.14.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 14:18:01 -0700 (PDT)
-Message-ID: <6dae1c9d-89be-e1e5-2ea6-d6dbb56b8343@gmail.com>
-Date:   Mon, 6 Jun 2022 23:17:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] check if dma is active before attempting to terminate
-Content-Language: en-US
-To:     Jens Lindahl <jensctl@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        with ESMTP id S233146AbiFFVWX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 17:22:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF23BA5C
+        for <linux-spi@vger.kernel.org>; Mon,  6 Jun 2022 14:22:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFB02B81BD2
+        for <linux-spi@vger.kernel.org>; Mon,  6 Jun 2022 21:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC66C34119;
+        Mon,  6 Jun 2022 21:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654550539;
+        bh=ub6EGcUvASjzeNwLuZ7ab6V3ZBelEtwF8m0Uep1XdLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YGsoPAisGN5qOTOHr/wTXXObm8n17isp8R4lW2+ESpYA2SDTur6Qs1c3aBKeq7hnL
+         woi9AU+s4xio4kno4jy/HoUH6KJnftRCrHDhJW/bEpdl9BW5vt+ODhVFNMAtj6/VlJ
+         zELch55wjqxAvDnx+aoSDWWDs1/TCSvfQlDINYhaHk2c8oSs+steM8ujK4qd0giH2N
+         pl30YaOZrkE4KH5W36gA701SVJ1iIDZ+IiC/mleNoMesPriXhyHJ09xMCuOercyJ8W
+         4O+3C1B73ikNmm+WNHKNZe58ixhfcPImom0XgUiVqZmJCIA7Nf3hobV/bm/voAWPtc
+         2cbamK8Lbyy+Q==
+Date:   Mon, 6 Jun 2022 22:22:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Jens Lindahl <jensctl@gmail.com>, linux-spi@vger.kernel.org,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
         Nicolas Saenz Julienne <nsaenz@kernel.org>
+Subject: Re: [PATCH] check if dma is active before attempting to terminate
+Message-ID: <Yp5wBlOQfpTbUV/5@sirena.org.uk>
 References: <20220603142340.42271-1-jensctl@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220603142340.42271-1-jensctl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <6dae1c9d-89be-e1e5-2ea6-d6dbb56b8343@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EW6z/slH+Bt7oN+e"
+Content-Disposition: inline
+In-Reply-To: <6dae1c9d-89be-e1e5-2ea6-d6dbb56b8343@gmail.com>
+X-Cookie: Have an adequate day.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,14 +61,42 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--EW6z/slH+Bt7oN+e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/3/2022 4:23 PM, Jens Lindahl wrote:
-> ---
->   drivers/spi/spi-bcm2835.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+On Mon, Jun 06, 2022 at 11:17:57PM +0200, Florian Fainelli wrote:
+>=20
+>=20
+> On 6/3/2022 4:23 PM, Jens Lindahl wrote:
+> > ---
+> >   drivers/spi/spi-bcm2835.c | 12 ++++++++----
+> >   1 file changed, 8 insertions(+), 4 deletions(-)
+>=20
+> Your patch looks reasonable but is not properly formed:
+>=20
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-Your patch looks reasonable but is not properly formed:
+In particular:
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
--- 
-Florian
+You've not provided a Signed-off-by for this so I can't do anything with
+it, please see Documentation/process/submitting-patches.rst for details
+on what this is and why it's important.
+
+--EW6z/slH+Bt7oN+e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKecAUACgkQJNaLcl1U
+h9CQMwf5AYyqRPUWILWl9gwTdIiQUtIECNHut0oj0VTGpjRLRxnQjR88rUpdQwq8
+8JOJK7rSPWwN11Tq11aM0smLfq93Wp4G3UnaYRsX/1UYRGkdzwRbyPuAL6iYbvM2
+RN9BU4yKPIETxV87EeX6EPFWL3RKtjlqNs3NSAm9ty98gJJQXRMZvXmakSsTUCQQ
+rnfCE2/y/ExXj3WYntAlO2Tp1iENzlAWfSgbfA7O0OtgQzCs1CvMk5nRCq3chxnb
+ncgk+SQOHBoDcxRvMi1mA/jaIdDQxi9rn3/lTrXha7W2iQFXaQV9tJ9bS2HL7g1Z
+wY/z6Zh5P/i+kLoLpoq0uIE/xMRB4g==
+=wqOF
+-----END PGP SIGNATURE-----
+
+--EW6z/slH+Bt7oN+e--
