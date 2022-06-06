@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6247953E377
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 10:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD053E90D
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jun 2022 19:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiFFGZh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jun 2022 02:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S235401AbiFFL0Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jun 2022 07:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiFFGZg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 02:25:36 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2046.outbound.protection.outlook.com [40.107.102.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A5527CE0;
-        Sun,  5 Jun 2022 23:25:34 -0700 (PDT)
+        with ESMTP id S235357AbiFFL0Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jun 2022 07:26:24 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2088.outbound.protection.outlook.com [40.107.95.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D72123884;
+        Mon,  6 Jun 2022 04:26:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L9M+b6mLXFwTuFsHjCBkmdbQgIibQrQcCkwzkYGUcO1JrXJKMGBOGKU/ZTIktBxVTPlKR4DycJ9xDEefN/0KqvCyFx6fM5lI65mTbSCutgKU9pkYuDI47sHbnMP7Q6AHY3RRk6UDJIUqg3zsBRfzyjfCYpiusowOFhjwsoBthgdhpy73Y0UL8J+0pDUU/3j9sBC0Zf5YtZWAs2Avk4TEq2jInQ16AxF3yOxHoE/euyyEaWCplvYn3FWnQM0CeFvCJqPGUBNsZlYnrga/3/o+KXMe6I1IkELMrjo9FhjaLZxrPk1RY4tgnDWPF1Ap4Dgr2wj8uune4lp1ipr1GDJMEg==
+ b=erc0TpAEdY+FIb0aGMGfO11Ha9nVRmYpCGwICrPTT41SfTZkQW+PzJD3ED+L2lIM7AGmcrRy9dHcGODsK8u+vsu+cwcUz1V13UDtiEHdGYOhl/gY0UZPO4meA+HKjiUu1qUyqxreS29IrEnaqpOxCOi05WhVmCKwxIKOb3a0K7QnBQGiovKj+8hFgDJdd+3vXNeamHuv9DcypKYXiUHzv9jm4fcvcLHEAuqaJpgqCMBHIL6i5PBlgdmmswAAHmX4IJz28IkQndq94vL7bLaCuZ45Tqoqc+3OmpkqF6+UR7J7Y/9aw+qrWdYBb7+7ja1h38gYksugz1wPKZV2MPEtJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L9d+CR7WUEhe4icN5ji3Xa14Ku0gFC459XBB6TTv1Hc=;
- b=PdE7VFNvqfmlvF3pfnFIjta7GFDDD2xa7P5jn/lE1txJ7LEZJJ6DQ+cM5iVbDFBjEgdueW0XdL7xx+zUjlgiGA+eiIsU6hzUryJeo9SWj05upHx6ls3yc2Xf6YE2dNhwWAQ3BR+DwLYw8aimMnddkoHVX4P+HeM983F3FQbF1xlnhOtvPr5K1OBEB20lPHxTXbBSU/jj9bucjDyOoWHFRDkyFU35TK8PDPngxUyHkfXBMejBHAKItVPj/jP0xDrx+E+J+fHoWVW2JFkXUzMwiIVOFQSBZv4Qm1vFL2U3PBs74rJ5X7w4WXHV0QllHEi5qkJovBEkBvGi/0Y5c3IJIQ==
+ bh=RQNi6+nRCuD9tAryUrXQYztjDu9fT3dlG0qO5h6x6bM=;
+ b=gadeZCpcEWNrbwUQMCYgGNVNJBtk5YDyVe3ySKQc3EY5QGvMuiyB1vJrnvga+YWjELBy+UI0ANcUom5BsJs4P8aB4bJvjKSg1HrD1ziim+Ash+6zY5LO1vCDRH0s0vOaDyg1rKUpfkwJCZKPXMgE9hUbDA4yAkGTAdyHy6NdzR9bkthhI75GwZhzEpFY5+zJxw/KsE/G8EegP8kVM0UYa+WhmVr08Bf34DBx4X7O2YvQdT/Pgj154C85RvGQlJ0QTiuUbJBAFR6JbjZVFYi1XjyJXXT/FEGLs+ol9+58to86VXf3OAeGqVDA/jdd84j+xynmb59hGkhXSUDYlw/KAw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -28,18 +28,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L9d+CR7WUEhe4icN5ji3Xa14Ku0gFC459XBB6TTv1Hc=;
- b=EfYzKXYqqK7fNo4xxnS8+3h/f32q4UvCh8v+7RRcXA7snuQtrFjArr6mzVYMyqWpGqNyGYu4AB+QlN2J2wbcs021lRX4+ZESdwK02b3vTgruwCJ/cD0NdrstuU40D6HU4xO1upgoLJTlWwWg9hRGE446NYhwJyXnkrCxpMGL8sg=
-Received: from DS7PR03CA0288.namprd03.prod.outlook.com (2603:10b6:5:3ad::23)
- by PH0PR02MB8550.namprd02.prod.outlook.com (2603:10b6:510:de::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Mon, 6 Jun
- 2022 06:25:31 +0000
-Received: from DM3NAM02FT050.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:3ad:cafe::23) by DS7PR03CA0288.outlook.office365.com
- (2603:10b6:5:3ad::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12 via Frontend
- Transport; Mon, 6 Jun 2022 06:25:31 +0000
+ bh=RQNi6+nRCuD9tAryUrXQYztjDu9fT3dlG0qO5h6x6bM=;
+ b=oE9v1ZpbXxqczKETS2WPoL9gGV85IbgApIYgM4R55tEK0i9BCr8xQBWavKB6znmuOMBz3ZhTISvk1qGAxIMk9gqneQFNRQTRi9vCzum3q9lifcyYhlf5sp8qAS6pMXrLZ4NDqm/5l0zBWSLn7/c3KAFQy39DUByQzg65UR+LqKk=
+Received: from SN4PR0801CA0016.namprd08.prod.outlook.com
+ (2603:10b6:803:29::26) by SN6PR02MB4127.namprd02.prod.outlook.com
+ (2603:10b6:805:30::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Mon, 6 Jun
+ 2022 11:26:20 +0000
+Received: from SN1NAM02FT0012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:29:cafe::11) by SN4PR0801CA0016.outlook.office365.com
+ (2603:10b6:803:29::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
+ Transport; Mon, 6 Jun 2022 11:26:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -47,57 +47,67 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT050.mail.protection.outlook.com (10.13.5.53) with Microsoft SMTP
+ SN1NAM02FT0012.mail.protection.outlook.com (10.97.4.93) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5314.12 via Frontend Transport; Mon, 6 Jun 2022 06:25:31 +0000
+ 15.20.5314.12 via Frontend Transport; Mon, 6 Jun 2022 11:26:20 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Sun, 5 Jun 2022 23:25:30 -0700
+ 15.1.2176.14; Mon, 6 Jun 2022 04:26:19 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Sun, 5 Jun 2022 23:25:30 -0700
+ 15.1.2176.14 via Frontend Transport; Mon, 6 Jun 2022 04:26:19 -0700
 Envelope-to: git@xilinx.com,
  broonie@kernel.org,
+ p.yadav@ti.com,
+ miquel.raynal@bootlin.com,
+ richard@nod.at,
+ vigneshr@ti.com,
  linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=43118 helo=xhdlakshmis40.xilinx.com)
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ michael@walle.cc,
+ linux-mtd@lists.infradead.org
+Received: from [10.140.6.18] (port=43350 helo=xhdlakshmis40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1ny6B8-0007aL-1H; Sun, 05 Jun 2022 23:25:30 -0700
+        id 1nyAsE-0000SR-Qt; Mon, 06 Jun 2022 04:26:19 -0700
 From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <broonie@kernel.org>
-CC:     <git@xilinx.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+To:     <broonie@kernel.org>, <p.yadav@ti.com>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <git@xilinx.com>, <michal.simek@xilinx.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>,
         Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH] spi: spi-cadence: Fix SPI CS gets toggling sporadically
-Date:   Mon, 6 Jun 2022 11:55:25 +0530
-Message-ID: <20220606062525.18447-1-amit.kumar-mahapatra@xilinx.com>
+Subject: [RFC PATCH 0/2] spi: Add support for stacked/parallel memories
+Date:   Mon, 6 Jun 2022 16:56:05 +0530
+Message-ID: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8ef5f96d-bd3d-474d-b299-08da47855b79
-X-MS-TrafficTypeDiagnostic: PH0PR02MB8550:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR02MB8550ABEBC7C195CD5156D6F6BAA29@PH0PR02MB8550.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 28d63e8f-bab4-46ae-9f9b-08da47af6174
+X-MS-TrafficTypeDiagnostic: SN6PR02MB4127:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR02MB4127F056CFFA38DD08E6E9EEBAA29@SN6PR02MB4127.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sxpsj1eneA0qCPcczWhle8U2qvQd/1wuZ4yzCe3SZEGdhI+swKVKYk7Cbc+QI9t2sdcQerZC6KJzwjS9uVCm4wPvR8O4urol2k5gmclAHfnTg/XGbDFYEpg99Ks4lF9T8l5Si/CgrXTUGR0gyaoxpok+gNsuB9zzHdsvBiHt9kRe21SOPhHB2L60+Sobmy03YQbOBmFGE8O8Pmv6IO6O9SoGlSZYEWGiMQw2HVSfXey3+ky5rhlB01aUG6lTdJUWOnRSEgTxKuI79pLHZKoXfNDs9XKHEkEPLrLsjO/Bz33HcQsx0f6UcVeGrWBSr4VhWkYPNLLX8tb8fzbhDw9tX2Og6GtcbEXCv6yh/o8+z8RE2ewZllLiVJRzH2eAmTD7QQKg3Cs4RLxs10NXCenBcCVnR5P+WESUYkyDb1dlmRZ8T+BQUhh9nzkaF+vjXjauZp1weWOiICm6pwRBrYwu6KfQvfkpTrSlF6nwRVCYgAVXoEw3+7ztJ4DAY+qJGkpJkQSpXo/r1zzXHBhqNEPdKdn8SWqHCzz9xqiq8/TIDlYPj9f5SlAzsBQuBW3VdeXu428ud+a6plkRyaixQ1MZ6HPJc35ujVifhE49i7LrE1QK0+pAXe71jcgkvweHv2emLyCV6aYGUf0cyIeQjag+bltfr5m1qZzeN4L46xeccBwphschNWkrCXds/BjY6Tyu4MRQLjTSOoc+X+k7EtzbLw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36756003)(6916009)(7636003)(54906003)(508600001)(9786002)(356005)(83380400001)(8936002)(316002)(5660300002)(26005)(107886003)(2616005)(2906002)(70586007)(1076003)(186003)(70206006)(36860700001)(8676002)(47076005)(336012)(426003)(4326008)(40460700003)(6666004)(82310400005)(7696005)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0D/AkC3Vz8HJH3MC7+GjH1cHJ5v97vJ+Uo3AjQ4vMMNV7N8J3LyRARQBw/AoJiMV6DlIcI0rVy0gGyfsdTRGynFUX2a/LgH4b9KE7eLsdO46RVMvsd2icyUqmH+9SiMSbF/Cff6MW4eRMVcbNfEqx+Fn7rY/i3HPbTSIMTRhMACIg8on3S+EwehvUE/NCw3MSGb8WS3ir1uAKDIbr8+UO9wfew2ji+KtixiUA4/Ik2Avai/9X1ymvO6lt5WqfUyr/TIaK42nIwwo4/BVMoxoHiBmHpfw5CwYEWrgWoN/12GskaPox73KgncJdAb3l18jUahGQmDqqPflYp5mM3nkODWX9NBjE+Rr2faxx2XgPfisheP814EnPX7+GOqTQH7vmKBOuCCBItsThNxPQfJnpQ18/pcypQFqCdteyPaHqh8jVh3Wv4w8/DhHtWe3ezYDmpcpN7kLLyGOCcTjxdYL2HU//dk4kk4Vcgb7UQfoMpd7MxgQnx7+hoPQGu0O8bmvO6Gh7OSuS24MSrAHqmEdkjuOKPLoMXTy24NAhj6aULaCyV1DJgrXIqQqjk4TbSx+ofJabRNiDW9jty4U1BXEt4LCQEVQFJyKhg5soRGF83uj0UwJODbCz85K+bFCOk4oAuyR11E6HfUlEsJPedQSiJ5rVIzHgAcdel7m/TuzPYuNF5oNXoCF8zsviMt2slHLVBy8fcstGZL62QpQIO4ngA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36860700001)(36756003)(83380400001)(8676002)(40460700003)(70206006)(26005)(110136005)(54906003)(70586007)(9786002)(8936002)(356005)(5660300002)(7416002)(508600001)(7636003)(47076005)(426003)(336012)(4326008)(2906002)(2616005)(6666004)(82310400005)(316002)(107886003)(1076003)(7696005)(186003)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 06:25:31.6333
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 11:26:20.5447
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ef5f96d-bd3d-474d-b299-08da47855b79
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28d63e8f-bab4-46ae-9f9b-08da47af6174
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT050.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0012.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8550
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4127
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -107,62 +117,52 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+This RFC is the continuation to the discussion which happened on
+'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+adding dtbinding support  for stacked/parallel memories.
 
-As part of unprepare_transfer_hardware, SPI controller will be disabled
-which will indirectly deassert the CS line. This will create a problem
-in some of the devices where message will be transferred with
-cs_change flag set(CS should not be deasserted).
-As per SPI controller implementation, if SPI controller is disabled then
-all output enables are inactive and all pins are set to input mode which
-means CS will go to default state high(deassert). This leads to an issue
-when core explicitly ask not to deassert the CS (cs_change = 1). This
-patch fix the above issue by checking the Slave select status bits from
-configuration register before disabling the SPI.
+The purpose of this patch series is to demonstrate the changes in spi-nor,
+spi core and ZynqMP GQSPI driver w.r.t to stacked/parallel memories
+support.Please go through the series and share you comments.
 
-Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To support stacked/parallel configuration following changes are done to spi
+core and spi-nor.
+
+- The chip select member (chip_select) of the spi_device structure is changed
+to an array (chip_select[2]). This array is used to store the CS values coming
+form the "reg" DT property.
+
+- Added a new member (cs_index_mask) in the spi_device structure to hold the
+index information of above chip_select array. SPI-NOR is not aware of the
+chip_select values, For any incoming request SPI-NOR will decide the flash
+index with the help of individual flash size and the configuration type
+(single/stacked/parallel). SPI-NOR will pass on the flash index information
+to the SPI core by setting the appropriate bit(s) of "cs_index_mask".
+For example if nth bit of "cs_index_mask" is set then the driver would
+assert chip_slect[n].
+
+- The flash parameter member(*params) of the spi_nor structure is changed
+to an array (*params[2]). The array is used to store the parameters of each
+flash connected in stacked/parallel configuration.
+
+This patch series targets flashes of same make connected in stacked
+configuration and for parallel configuration both the flashes should be
+identical.
 ---
 BRANCH: mtd/next
 ---
- drivers/spi/spi-cadence.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Amit Kumar Mahapatra (2):
+  spi: Add multiple CS support for a single SPI device
+  mtd: spi-nor: Add support for stacked/parallel memories
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index b509eefe16a8..e832ae09e0cd 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -69,6 +69,7 @@
- #define CDNS_SPI_BAUD_DIV_SHIFT		3 /* Baud rate divisor shift in CR */
- #define CDNS_SPI_SS_SHIFT		10 /* Slave Select field shift in CR */
- #define CDNS_SPI_SS0			0x1 /* Slave Select zero */
-+#define CDNS_SPI_NOSS			0x3C /* No Slave select */
- 
- /*
-  * SPI Interrupt Registers bit Masks
-@@ -449,15 +450,20 @@ static int cdns_prepare_transfer_hardware(struct spi_master *master)
-  * @master:	Pointer to the spi_master structure which provides
-  *		information about the controller.
-  *
-- * This function disables the SPI master controller.
-+ * This function disables the SPI master controller when no slave selected.
-  *
-  * Return:	0 always
-  */
- static int cdns_unprepare_transfer_hardware(struct spi_master *master)
- {
- 	struct cdns_spi *xspi = spi_master_get_devdata(master);
-+	u32 ctrl_reg;
- 
--	cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
-+	/* Disable the SPI if slave is deselected */
-+	ctrl_reg = cdns_spi_read(xspi, CDNS_SPI_CR);
-+	ctrl_reg = (ctrl_reg & CDNS_SPI_CR_SSCTRL) >>  CDNS_SPI_SS_SHIFT;
-+	if (ctrl_reg == CDNS_SPI_NOSS)
-+		cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
- 
- 	return 0;
- }
+ drivers/mtd/spi-nor/core.c     | 104 +++++++++++++++++++++++++++++----
+ drivers/mtd/spi-nor/core.h     |   5 ++
+ drivers/spi/spi-zynqmp-gqspi.c |  30 ++++++++--
+ drivers/spi/spi.c              |  10 +++-
+ include/linux/mtd/spi-nor.h    |   8 ++-
+ include/linux/spi/spi.h        |  10 +++-
+ 6 files changed, 146 insertions(+), 21 deletions(-)
+
 -- 
 2.17.1
 
