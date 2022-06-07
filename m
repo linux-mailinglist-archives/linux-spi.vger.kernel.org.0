@@ -2,104 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF333542475
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB385423D9
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 08:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiFHAiq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 20:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S229459AbiFHAio (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 20:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389901AbiFGWyE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 18:54:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075B52EA412;
-        Tue,  7 Jun 2022 12:49:37 -0700 (PDT)
+        with ESMTP id S1389878AbiFGWx5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 18:53:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53282E93F4;
+        Tue,  7 Jun 2022 12:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654631379; x=1686167379;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=U7jCZ/xTLZ6IZ4AqpjCoJuga0NHMpqo/MjLVXSIcWIc=;
-  b=QjvW2RV5juTFUm3GrMoq8VHOxdFf5JdzIYPu+vaNgH4XpoF/e/GioC0W
-   DzQsPN/bbKESsZRF1sJmnt0/PDOJwgNIIzh421c38qecPNitp9z3LmCLw
-   /vQeI0QiRirJa99BgiJQbcgGpDgeL07tx4cwKOMMPpoog9KNpjwUoeo0n
-   yTkwCfQPrWttazC9TNuHjBBuA9UL2bBW33ulgLXp3R4bjoANFckeDXWfa
-   T2GCD3CFgOE2oUGyaJ02yeodZETkV2oxtJEUcx6wn+ZrwEijq+1bLKHxH
-   szxq6z7hdV/ftwAsU3RAp5zP314CgUtcZnJ3DGopr0hYzXfcyz8j4vz56
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="265343600"
+  t=1654631375; x=1686167375;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=0MGJANZmWUnpCpze3iYseISZvaFBDIUwvfaKvGZBEhc=;
+  b=HlldldWDFVq2K80AtluzAiGMNv7SmwXFSiE2whZ/qkhC4A6WiQfnPFcY
+   fuBifpayGpgfVJdtbHqI2oLMwQztFrexEZ06UT07yDPvmiCRImxefie7d
+   4ulnQm93+xtzk5mRZYFEOS1i/RcG4gUh+X/FkZOxRFJhBBw7SjQevhzhj
+   5KwtEho0irF38vCwKOkP2Z9tNvoFggvzWwygbhpqNEvvQM0uL+/iq8aFJ
+   NKWavt9TxqJK1DNXP9w9gEGFjMfYq+NLM7ofqZYaoP+t/B3siqEgNp5Xd
+   LkAHk5RFV9+7Tp15/sS4ZnPIE3EisUCTI9ij5LePij/Z3R27DXf2wUISt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257184956"
 X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="265343600"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 12:06:01 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="257184956"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 12:49:34 -0700
 X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="584342057"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2022 12:05:59 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BD49E109; Tue,  7 Jun 2022 22:06:02 +0300 (EEST)
+   d="scan'208";a="636298348"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 12:49:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nyfCl-000W1G-3i;
+        Tue, 07 Jun 2022 22:49:31 +0300
+Date:   Tue, 7 Jun 2022 22:49:30 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Replace match_true() by device_match_any()
-Date:   Tue,  7 Jun 2022 22:06:01 +0300
-Message-Id: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH v1 1/1] spi: Replace match_true() by device_match_any()
+Message-ID: <Yp+rymvjN2KzsMz/@smile.fi.intel.com>
+References: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have already a helper to match any device, use it and drop match_true().
+On Tue, Jun 07, 2022 at 10:06:01PM +0300, Andy Shevchenko wrote:
+> We have already a helper to match any device, use it and drop match_true().
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Scratch this, it seems I compiled against wrong config and haven't noticed
+types mismatch.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ea09d1b42bf6..24440cd4aa5e 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_slave_abort);
- 
--static int match_true(struct device *dev, void *data)
--{
--	return 1;
--}
--
- static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 						   dev);
- 	struct device *child;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_child(&ctlr->dev, NULL, device_match_any);
- 	return sprintf(buf, "%s\n",
- 		       child ? to_spi_device(child)->modalias : NULL);
- }
-@@ -2644,7 +2639,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
- 	if (rc != 1 || !name[0])
- 		return -EINVAL;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_child(&ctlr->dev, NULL, device_match_any);
- 	if (child) {
- 		/* Remove registered slave */
- 		device_unregister(child);
+We can't use the proposed helper since it's only for for_each type of
+functions.
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
