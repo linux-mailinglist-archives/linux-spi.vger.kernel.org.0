@@ -2,47 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC565406F6
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 19:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A645414CA
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 22:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344986AbiFGRla (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 13:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S1359367AbiFGUWU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 16:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348150AbiFGRkh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 13:40:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9086B003;
-        Tue,  7 Jun 2022 10:33:55 -0700 (PDT)
+        with ESMTP id S1376277AbiFGUVX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 16:21:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB91D5003
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 11:31:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4AFB614D8;
-        Tue,  7 Jun 2022 17:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2948BC385A5;
-        Tue,  7 Jun 2022 17:33:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 969B260DDA
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 18:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1C7C385A2;
+        Tue,  7 Jun 2022 18:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654623214;
-        bh=Lk4+xjJRHwdFc/LovKppznE7yFQsbzVIbVHDMQnayTs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=l4aDlf+uVpJEHdQOfzIMYm09KQjrAuAw2erK07aLAfug5ApRDy1XlakPrXXiRYdjx
-         H16vDx4r+ESt+hngYJXiiLR+NzX5bjXB+UX50eIiQHeC1sQOeRnW2ql7bkXl2FhIFY
-         zvqjlWqXvCxzwZUuRJ47iIY8Sl6vBWGvDk87EojOv2ovl5aTPm4MAW5/Qof+2ZHvIF
-         sQ1u65bcdOaqbZkxoIVS+cTTL3OofM4gnByabptzabArXTJKGrA6Wv1ovXhL0cBfn4
-         TEbO/RAHe4ZpSpMwoI+6bGvSgkXl30yo3ZJb4OBym2lEY88l++N09PII2NnRNC9/7N
-         J8WhjYZ+EDjYg==
+        s=k20201202; t=1654626660;
+        bh=RDFo9eWQm26fRAJChJpzZZ8J2U7ZYqlKI/miL/sv/ak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fQ67BFKaWIfxPXTdc6koeGHT13fMnMyqUemhwKKrgBjB4H8q2dE/q2wqKvSGQ4tJA
+         3JXu4wrr1tQLrTnZzEZYNtQNtfjNOfIfV220KIMFE0+CAGleu5t7r1NWcxfaDohl8L
+         3gJdqhna1MiE2M68KpU93chCBg//SpcNzO+ZwvasIfNqrRNrLSGgWWTA8xMmvuIrAQ
+         76AGtSQoX5iH5e4tXS4hWkpvgxcTwstyaQfwAu3P80hBz3haN67ZjP4SdJwRBsNzml
+         /KhADeeTKZhRfRQU7O3Nd64Cm/1/Owb02U/pXtfDnSFt4YCAbE/KJIKB0Oyf6aYAkJ
+         CjlkdcizUn9xg==
+Date:   Tue, 7 Jun 2022 19:30:55 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com
-In-Reply-To: <20220607073833.2331539-1-conor.dooley@microchip.com>
-References: <20220607073833.2331539-1-conor.dooley@microchip.com>
-Subject: Re: [PATCH 0/2] Add support for PolarFire SoC's spi controllers
-Message-Id: <165462321288.3040195.2196860226827286633.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 18:33:32 +0100
+To:     David Jander <david@protonic.nl>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
+ <20220525142928.2335378-4-david@protonic.nl>
+ <20220525164603.57c98a0a@erd992>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="W57iizh/FGCnvrfL"
+Content-Disposition: inline
+In-Reply-To: <20220525164603.57c98a0a@erd992>
+X-Cookie: Where's SANDY DUNCAN?
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,44 +58,52 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 7 Jun 2022 08:38:32 +0100, Conor Dooley wrote:
-> Hey Mark,
-> 
-> As it says on the tin, here's a patch adding support for the spi
-> controllers on PolarFire SoC. The binding for them was already
-> added in 5.18.
-> 
-> Thanks,
-> Conor.
-> 
-> [...]
 
-Applied to
+--W57iizh/FGCnvrfL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Wed, May 25, 2022 at 04:46:03PM +0200, David Jander wrote:
+> David Jander <david@protonic.nl> wrote:
 
-Thanks!
+> > +static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct spi_message *msg)
+> > +{
+> > +	bool was_busy;
+> > +	int ret;
+> > +
+> > +	mutex_lock(&ctlr->io_mutex);
+> > +
+> > +	/* If another context is idling the device then wait */
+> > +	while (ctlr->idling) {
+> > +		printk(KERN_INFO "spi sync message processing: controller is idling!\n");
+> > +		usleep_range(10000, 11000);
+> > +	}
 
-[1/2] spi: add support for microchip fpga spi controllers
-      commit: 9ac8d17694b66d54b13e9718b25c14ca36dbebbd
-[2/2] MAINTAINERS: add spi to PolarFire SoC entry
-      commit: f303c6b26cede1aa137dc3e10eee78a80cde9999
+> This is dead ugly of course, and it needs to be removed. Not yet sure how,
+> hence the RFC. Maybe the idle -> not busy transition can be included inside
+> the io_mutex? That way this while will never be hit and can be removed...
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+I'm not sure it's even quite right from a safety point of view - idling
+is protected by queue_lock but this now only takes io_mutex.  Moving
+idling (and all the was_busy stuff) within the io_mutex would definitely
+resolve the issue, the async submission context is the only one that
+really needs the spinlock and it doesn't care about idling.  I can't
+think what you could do with the io_mutex when idling so it seems to
+fit.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--W57iizh/FGCnvrfL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKfmV4ACgkQJNaLcl1U
+h9CFlwf+Nn/MS4du0jwtfEcjCUEWC2tk0GpFoUCoPsUtCLcGrrFc7dV/2sRCGYhi
+sG3gnomYnjTf6FofVQHwIjaozBVVqQVWY1Q0Dtti1GF3fh3eCCAJgs/C2IErjeB8
+ULj/v276TzZ3SoTdaTUDhksHnuK4Bxsu8akc2vH8GBZ1+nGhxNVVbDct6ilUDB4j
+aDwx3tXTrwE4fHEkl4ggT/AHDeB2A10yLkogvHWVrdVl+1hxpU5MBALgYDtlbU8U
+eGYPx5CEiMzghSBPGnSeLwQ0QgmwiF1K+JF1Sbu1gn3tn6Bg+orF3DwskzIrn/yS
+oveXPXde9E9W87VKI1Xv/om3+dFIZg==
+=XU8W
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
+--W57iizh/FGCnvrfL--
