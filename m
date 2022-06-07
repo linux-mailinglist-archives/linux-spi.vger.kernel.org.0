@@ -2,54 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696A253FBF3
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 12:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B20053FBF9
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 12:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241922AbiFGKsR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 06:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S241745AbiFGKsX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 06:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241695AbiFGKr4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 06:47:56 -0400
+        with ESMTP id S241761AbiFGKsB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 06:48:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADAFED7A9;
-        Tue,  7 Jun 2022 03:46:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5732AED7B1;
+        Tue,  7 Jun 2022 03:46:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6177B61577;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E699B6156A;
+        Tue,  7 Jun 2022 10:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B51C3411E;
         Tue,  7 Jun 2022 10:46:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D994EC34119;
-        Tue,  7 Jun 2022 10:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598813;
-        bh=hlj2Yw+EG0pWKoO3cXlRjHbXss4PXj721LR0qzOjcRQ=;
+        s=k20201202; t=1654598815;
+        bh=tm1TflPGmEDKpwON1qC2bgKQuglKGcgo+mlL9tjn+28=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=lLjZE/ozDwyHnNNLv6KyRqV2xvU5uJJz9u7TCauhLkOPhBG38x6MdtEwI+8UIDQGw
-         uwtQiaJiwSNPU3upK6sgPC39kbtNdgB+CJfvt4RS1u1WkKKQpLeo6s5YlC3hEycLWK
-         DZ8Pjgv0h7TbVz5Vt1jDWfcTuWpK/D09EzsT4BVhx4hbG2e1VCKQHVGbNkyCNRk8sg
-         k6i/de3UcYlJTd5vP0lgvg+Z56k+nzRjJukId3zcOJcHo7YFPUDXs4S3klIjdIoaFE
-         QhfEG8FvKM9beX57uQhEHDZQEfg+6mZSxo/qgqEJSsXBAY9yR2jt850+wpSUTN7I+A
-         ZsaWxiF+LqPiw==
+        b=LENGS2wVb8Y+9BHDPiC+24SQKag1/003HSb8AxcA53DSzgbcIX1JMId6xZE8Js11n
+         7TNK1mmpSlBg3IHILW63qLKh+AZDCQMxi6SQ3jczaTmrXErUbYBN86e4e+j1SEY0kL
+         LxuE+8joHznqMzsOtfzPDkyWOtIhexnYg582u8P30K8OAr0jtWpEy4eyfJhMRfoD27
+         9OUoWJYAPJAnIGY1TeSL0mj9wcRMujskIJIj4zK8R6JaVAGoelgH+muJrdyL/JomT5
+         EumxoomfejAaJODzZXbyha0r9N8jJR0pKluxC7xdE8iekMzwNrXwNvypmDjby11hn+
+         iXDbbV2Z/CCeA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux@roeck-us.net, robh+dt@kernel.org, vkoul@kernel.org,
-        matthias.bgg@gmail.com, jic23@kernel.org,
-        srinivas.kandagatla@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        chunfeng.yun@mediatek.com, fparent@baylibre.com,
-        ulf.hansson@linaro.org, wim@linux-watchdog.org,
-        qii.wang@mediatek.com, chaotian.jing@mediatek.com
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-mediatek@lists.infradead.org
-In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
-References: <20220531135026.238475-1-fparent@baylibre.com>
-Subject: Re: (subset) [PATCH 00/17] Add support for MT8365 EVK board
-Message-Id: <165459880859.302078.17715085151206065145.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:48 +0100
+To:     christophe.jaillet@wanadoo.fr, matthew.gerlach@linux.intel.com
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+In-Reply-To: <0607bb59f4073f86abe5c585d35245aef0b045c6.1653805901.git.christophe.jaillet@wanadoo.fr>
+References: <0607bb59f4073f86abe5c585d35245aef0b045c6.1653805901.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: spi-altera-dfl: Fix an error handling path
+Message-Id: <165459881400.302078.16808587662616763292.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:54 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,23 +53,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 31 May 2022 15:50:09 +0200, Fabien Parent wrote:
-> This patch series adds support for the MT8365 EVK board.
+On Sun, 29 May 2022 08:31:53 +0200, Christophe JAILLET wrote:
+> The spi_alloc_master() call is not undone in all error handling paths.
+> Moreover, there is no .remove function to release the allocated memory.
 > 
-> This series has dependencies on the following series:
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646256
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646091
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646083
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646081
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646076
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646068
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646020
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646052
-> https://lore.kernel.org/r/20220504091923.2219-2-rex-bc.chen@mediatek.com
-> https://lore.kernel.org/r/20220512062622.31484-2-chunfeng.yun@mediatek.com
-> https://lore.kernel.org/r/20220512062622.31484-1-chunfeng.yun@mediatek.com
-> https://lore.kernel.org/r/20220524115019.97246-1-angelogioacchino.delregno@collabora.com
-> https://lore.kernel.org/all/20220127015857.9868-1-biao.huang@mediatek.com/
+> In order to fix both this issues, switch to devm_spi_alloc_master().
+> 
+> This allows further simplification of the probe.
 > 
 > [...]
 
@@ -89,8 +69,8 @@ Applied to
 
 Thanks!
 
-[09/17] dt-bindings: spi: mt65xx: add MT8365 SoC bindings
-        commit: 901fc8e8079e401f3240006cab6629e65579701c
+[1/1] spi: spi-altera-dfl: Fix an error handling path
+      commit: 8e3ca32f46994e74b7f43c57731150b2aedb2630
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
