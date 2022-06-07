@@ -2,48 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F545403A2
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 18:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC565406F6
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 19:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236662AbiFGQUq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 12:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1344986AbiFGRla (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 13:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343753AbiFGQUp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 12:20:45 -0400
+        with ESMTP id S1348150AbiFGRkh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 13:40:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556610191B;
-        Tue,  7 Jun 2022 09:20:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9086B003;
+        Tue,  7 Jun 2022 10:33:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B847B617BF;
-        Tue,  7 Jun 2022 16:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B83C385A5;
-        Tue,  7 Jun 2022 16:20:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4AFB614D8;
+        Tue,  7 Jun 2022 17:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2948BC385A5;
+        Tue,  7 Jun 2022 17:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654618844;
-        bh=l9olBdY8XoPM0wf1tBtpXR5ucJg+To7Pu36qgJqjaqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQP8+i8X1y17vNEFOscgQI0w77IuDZF+Fb0YMAmNub+87rZKCbc2s99eyXz5dGYu1
-         MquzbeVwpnRq5KWaarHllVfoQm8s1AlgXzJqvUk0XOp67mQUfq/PIsNjPWiax2/moO
-         6DTcoJuGX6paPBFBEA8dGQsb+kZtnaqsL/GuGy230fi7CBoMZUN4bPcMqRXksb449K
-         6r8kuPAm5yNYp+1HAzVUJMzdNzUHRiW8/hkqPal4utd29p11Fm82TaTn+QxBYioZ/k
-         TDvuhv/igCZjMlx67qcqv5HIgW6qVLSBqRtGGI2KPjBPb1G4UaZUGiNow2kjPif8QM
-         Rd3SlDZ6Y2APA==
-Date:   Tue, 7 Jun 2022 17:20:39 +0100
+        s=k20201202; t=1654623214;
+        bh=Lk4+xjJRHwdFc/LovKppznE7yFQsbzVIbVHDMQnayTs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=l4aDlf+uVpJEHdQOfzIMYm09KQjrAuAw2erK07aLAfug5ApRDy1XlakPrXXiRYdjx
+         H16vDx4r+ESt+hngYJXiiLR+NzX5bjXB+UX50eIiQHeC1sQOeRnW2ql7bkXl2FhIFY
+         zvqjlWqXvCxzwZUuRJ47iIY8Sl6vBWGvDk87EojOv2ovl5aTPm4MAW5/Qof+2ZHvIF
+         sQ1u65bcdOaqbZkxoIVS+cTTL3OofM4gnByabptzabArXTJKGrA6Wv1ovXhL0cBfn4
+         TEbO/RAHe4ZpSpMwoI+6bGvSgkXl30yo3ZJb4OBym2lEY88l++N09PII2NnRNC9/7N
+         J8WhjYZ+EDjYg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi: fix use after free in of_spi_notify
-Message-ID: <Yp961zPy064+ouF0@sirena.org.uk>
-References: <20220607155233.27235-1-xiaohuizhang@ruc.edu.cn>
+To:     conor.dooley@microchip.com
+Cc:     linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com
+In-Reply-To: <20220607073833.2331539-1-conor.dooley@microchip.com>
+References: <20220607073833.2331539-1-conor.dooley@microchip.com>
+Subject: Re: [PATCH 0/2] Add support for PolarFire SoC's spi controllers
+Message-Id: <165462321288.3040195.2196860226827286633.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 18:33:32 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TVcPyVtbuby/o9WR"
-Content-Disposition: inline
-In-Reply-To: <20220607155233.27235-1-xiaohuizhang@ruc.edu.cn>
-X-Cookie: Where's SANDY DUNCAN?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,44 +53,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 7 Jun 2022 08:38:32 +0100, Conor Dooley wrote:
+> Hey Mark,
+> 
+> As it says on the tin, here's a patch adding support for the spi
+> controllers on PolarFire SoC. The binding for them was already
+> added in 5.18.
+> 
+> Thanks,
+> Conor.
+> 
+> [...]
 
---TVcPyVtbuby/o9WR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, Jun 07, 2022 at 11:52:33PM +0800, Xiaohui Zhang wrote:
-> We can't use "ctlr->dev" after it has been freed.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
->  		spi =3D of_register_spi_device(ctlr, rd->dn);
-> -		put_device(&ctlr->dev);
-> =20
->  		if (IS_ERR(spi)) {
->  			pr_err("%s: failed to create for '%pOF'\n",
->  					__func__, rd->dn);
-> +			put_device(&ctlr->dev);
->  			of_node_clear_flag(rd->dn, OF_POPULATED);
->  			return notifier_from_errno(PTR_ERR(spi));
->  		}
-> +		put_device(&ctlr->dev);
->  		break;
+Thanks!
 
-Could you be more explicit about where the problematic use of ctlr->dev
-is please?
+[1/2] spi: add support for microchip fpga spi controllers
+      commit: 9ac8d17694b66d54b13e9718b25c14ca36dbebbd
+[2/2] MAINTAINERS: add spi to PolarFire SoC entry
+      commit: f303c6b26cede1aa137dc3e10eee78a80cde9999
 
---TVcPyVtbuby/o9WR
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKfetcACgkQJNaLcl1U
-h9DqjQf/Sqhd8EwOOC3Tz3LWmIt8e8a9/0Tz3BKJ+BnMEu0OvgpypqYFAKkwmKo5
-eus+x+63OYod/Gv6nZplOOdo7hCwTvG2Cfw8RSpp+2NQiSl3repfVb/OXdFlizm6
-xCS39kszeGsWNTE4lZ6c4ivseeJD1niCQ8WjYbB94ozvqVZbm5/YvQWzxG7PT2c+
-SvkAaeNkh1OV3GbRCSLu8ANLTHePt4iBnq1L3bcQnxXC+V7N+NRWMb3L67wSzvNj
-lAoyl+jUKniAg8d0kcV+j5H3cS95usOnNGDAqeXQtjcGDX846lPsGVhJQ5g0RU4E
-kftauAlFT43fOlYnU3VOX9HvhXtRbQ==
-=Sbkt
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---TVcPyVtbuby/o9WR--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
