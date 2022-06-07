@@ -2,131 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388A353F9B4
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEC853FBE4
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 12:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239460AbiFGJ2b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 05:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S241708AbiFGKrq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 06:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239531AbiFGJ2O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 05:28:14 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DB517DB
-        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 02:28:11 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id x187so2588810ybe.2
-        for <linux-spi@vger.kernel.org>; Tue, 07 Jun 2022 02:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
-         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
-         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
-         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
-         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
-         O14A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=H5nbwSxPiZbvRPifBi1GpWL1NiLBu5DDBpfQRkv5L4s5Yhis1ZYQgd3foAA9ELyDLC
-         P+kKTMGZGhEobGWn+BCcreOulBduMwjTkoGZPWFNbRMufBN4fY0nCvjILVMWYuWzaMEN
-         GvZ+glQvOIKfjmSaPV9mXSijh1Ctq/epoeqXNdsuJ8HF95cBW0CmX9G0Tutv5LxL6puq
-         dt10OTgROVSk/37oFY89Qv0hfuqbUoM7bqsIqH70XZM0zCgpkuajOFbxZ8coxqaBAca/
-         Ol8YclnxrscyKqfdfgmaTzGNw0rfjJyKaI+o/G9q3vtw3Kh1MQkSGtuN62h3XeBLffKQ
-         45Jg==
-X-Gm-Message-State: AOAM532YGtQYqkEsGDODt4iSmOyIOEW9ORft/eEnA9d3hf034SgXDaXh
-        nOaCCnWUgqCzSH3JgW7Y9HxFNNLkFuS9NmxJnvy8Oq6ivp14Ngff
-X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
-X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
- v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
- Jun 2022 02:28:00 -0700 (PDT)
+        with ESMTP id S241657AbiFGKrQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 06:47:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1876FED8EC
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 03:46:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0FD861578
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 10:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6EBC385A5;
+        Tue,  7 Jun 2022 10:46:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654598794;
+        bh=XJSvNxP/cCTuGJd8rGeLIDzzinZCcilSQsaKZwfDgbU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LKQqg7Q1jOw5iG/+r4I81P/diLCtBeoghHsnMNMX9QbckhBzmvlCRvExswc3QPFxn
+         4bc+sUIhphtiGDAa/ctB8PQrN41fq3F7e4/O8dfU7p/jMaSlpDbWkMqemXfq9cRKg8
+         XZYTE2VjRG0MzH1YI9eabT5b6jjNZwG8PjemVUoLo/GzazPHAztD6a5ce6MjdYEt5R
+         vbQkMp585yHQJzVfQqAiipy9i9UiPGo/z/XLxrzqztI8+F8Llxn9z3fsmPyMd6TOsy
+         lYijmRABeMTyquii3P5zuGssFHiAjt/w+WEmJTgpO6Yca6N3OE8GVOU9AkW2e7emZn
+         6JZtSaCpygtOw==
+From:   Mark Brown <broonie@kernel.org>
+To:     atsushi.nemoto@sord.co.jp, linux-spi@vger.kernel.org
+Cc:     vigneshr@ti.com
+In-Reply-To: <20220519.084604.966119051165023533.atsushi.nemoto@sord.co.jp>
+References: <20220519.084604.966119051165023533.atsushi.nemoto@sord.co.jp>
+Subject: Re: [PATCH v2] spi: spi-ti-qspi: Support per-transfer and per-slave speed_hz settings
+Message-Id: <165459879309.302078.14745978315135953159.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:33 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
- 02:28:00 -0700 (PDT)
-Reply-To: robertbaileys_spende@aol.com
-From:   Robert Baileys <mercymiji.j@gmail.com>
-Date:   Tue, 7 Jun 2022 11:28:00 +0200
-Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mercymiji.j[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=20
-Hallo, lieber Beg=C3=BCnstigter,
+On Thu, 19 May 2022 08:46:04 +0900 (JST), Atsushi Nemoto wrote:
+> The spi-ti-qspi driver initializes its spi clock by the
+> spi-max-frequency property from the controller node, and ignores
+> per-transfer (and per-slave) speed_hz settings.
+> 
+> Isolate clock settings out from ti_qspi_setup() and call it from
+> ti_qspi_start_transfer_one() and ti_qspi_exec_mem_op(), using
+> per-transfer speed_hz and per-slave max_speed_hz settings.
+> 
+> [...]
 
-Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
-bin ein pensionierter Regierungsangestellter aus Harlem und ein
-Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
-bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
-ttery
-in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
-und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
-Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
-Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
-um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
-Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
-machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
-e
-Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
-gegen=C3=BCberstehen.
-https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
-t-in-new-york-history/Sie
-Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
-Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
-e
-Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
-Euro beginnen kann.
-Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
-Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
-erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
+Applied to
 
-Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Powerball-Jackpot-Gewinner
-E-Mail: robertbaileys_spende@aol.com
+Thanks!
+
+[1/1] spi: spi-ti-qspi: Support per-transfer and per-slave speed_hz settings
+      commit: 8d0b512844fdee83b6299647aa178828a4ebfc3b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
