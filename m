@@ -2,108 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A645414CA
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 22:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF333542475
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359367AbiFGUWU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 16:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S231265AbiFHAiq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 20:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376277AbiFGUVX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 16:21:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB91D5003
-        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 11:31:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 969B260DDA
-        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 18:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1C7C385A2;
-        Tue,  7 Jun 2022 18:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654626660;
-        bh=RDFo9eWQm26fRAJChJpzZZ8J2U7ZYqlKI/miL/sv/ak=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fQ67BFKaWIfxPXTdc6koeGHT13fMnMyqUemhwKKrgBjB4H8q2dE/q2wqKvSGQ4tJA
-         3JXu4wrr1tQLrTnZzEZYNtQNtfjNOfIfV220KIMFE0+CAGleu5t7r1NWcxfaDohl8L
-         3gJdqhna1MiE2M68KpU93chCBg//SpcNzO+ZwvasIfNqrRNrLSGgWWTA8xMmvuIrAQ
-         76AGtSQoX5iH5e4tXS4hWkpvgxcTwstyaQfwAu3P80hBz3haN67ZjP4SdJwRBsNzml
-         /KhADeeTKZhRfRQU7O3Nd64Cm/1/Owb02U/pXtfDnSFt4YCAbE/KJIKB0Oyf6aYAkJ
-         CjlkdcizUn9xg==
-Date:   Tue, 7 Jun 2022 19:30:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
- queue if possible in spi_sync
-Message-ID: <Yp+ZX4XITW7bQtjn@sirena.org.uk>
-References: <20220525142928.2335378-1-david@protonic.nl>
- <20220525142928.2335378-4-david@protonic.nl>
- <20220525164603.57c98a0a@erd992>
+        with ESMTP id S1389901AbiFGWyE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 18:54:04 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075B52EA412;
+        Tue,  7 Jun 2022 12:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654631379; x=1686167379;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U7jCZ/xTLZ6IZ4AqpjCoJuga0NHMpqo/MjLVXSIcWIc=;
+  b=QjvW2RV5juTFUm3GrMoq8VHOxdFf5JdzIYPu+vaNgH4XpoF/e/GioC0W
+   DzQsPN/bbKESsZRF1sJmnt0/PDOJwgNIIzh421c38qecPNitp9z3LmCLw
+   /vQeI0QiRirJa99BgiJQbcgGpDgeL07tx4cwKOMMPpoog9KNpjwUoeo0n
+   yTkwCfQPrWttazC9TNuHjBBuA9UL2bBW33ulgLXp3R4bjoANFckeDXWfa
+   T2GCD3CFgOE2oUGyaJ02yeodZETkV2oxtJEUcx6wn+ZrwEijq+1bLKHxH
+   szxq6z7hdV/ftwAsU3RAp5zP314CgUtcZnJ3DGopr0hYzXfcyz8j4vz56
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="265343600"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="265343600"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 12:06:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="584342057"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2022 12:05:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BD49E109; Tue,  7 Jun 2022 22:06:02 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] spi: Replace match_true() by device_match_any()
+Date:   Tue,  7 Jun 2022 22:06:01 +0300
+Message-Id: <20220607190601.47363-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W57iizh/FGCnvrfL"
-Content-Disposition: inline
-In-Reply-To: <20220525164603.57c98a0a@erd992>
-X-Cookie: Where's SANDY DUNCAN?
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+We have already a helper to match any device, use it and drop match_true().
 
---W57iizh/FGCnvrfL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-On Wed, May 25, 2022 at 04:46:03PM +0200, David Jander wrote:
-> David Jander <david@protonic.nl> wrote:
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index ea09d1b42bf6..24440cd4aa5e 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
+ }
+ EXPORT_SYMBOL_GPL(spi_slave_abort);
+ 
+-static int match_true(struct device *dev, void *data)
+-{
+-	return 1;
+-}
+-
+ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
+ {
+@@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
+ 						   dev);
+ 	struct device *child;
+ 
+-	child = device_find_child(&ctlr->dev, NULL, match_true);
++	child = device_find_child(&ctlr->dev, NULL, device_match_any);
+ 	return sprintf(buf, "%s\n",
+ 		       child ? to_spi_device(child)->modalias : NULL);
+ }
+@@ -2644,7 +2639,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
+ 	if (rc != 1 || !name[0])
+ 		return -EINVAL;
+ 
+-	child = device_find_child(&ctlr->dev, NULL, match_true);
++	child = device_find_child(&ctlr->dev, NULL, device_match_any);
+ 	if (child) {
+ 		/* Remove registered slave */
+ 		device_unregister(child);
+-- 
+2.35.1
 
-> > +static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct spi_message *msg)
-> > +{
-> > +	bool was_busy;
-> > +	int ret;
-> > +
-> > +	mutex_lock(&ctlr->io_mutex);
-> > +
-> > +	/* If another context is idling the device then wait */
-> > +	while (ctlr->idling) {
-> > +		printk(KERN_INFO "spi sync message processing: controller is idling!\n");
-> > +		usleep_range(10000, 11000);
-> > +	}
-
-> This is dead ugly of course, and it needs to be removed. Not yet sure how,
-> hence the RFC. Maybe the idle -> not busy transition can be included inside
-> the io_mutex? That way this while will never be hit and can be removed...
-
-I'm not sure it's even quite right from a safety point of view - idling
-is protected by queue_lock but this now only takes io_mutex.  Moving
-idling (and all the was_busy stuff) within the io_mutex would definitely
-resolve the issue, the async submission context is the only one that
-really needs the spinlock and it doesn't care about idling.  I can't
-think what you could do with the io_mutex when idling so it seems to
-fit.
-
---W57iizh/FGCnvrfL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKfmV4ACgkQJNaLcl1U
-h9CFlwf+Nn/MS4du0jwtfEcjCUEWC2tk0GpFoUCoPsUtCLcGrrFc7dV/2sRCGYhi
-sG3gnomYnjTf6FofVQHwIjaozBVVqQVWY1Q0Dtti1GF3fh3eCCAJgs/C2IErjeB8
-ULj/v276TzZ3SoTdaTUDhksHnuK4Bxsu8akc2vH8GBZ1+nGhxNVVbDct6ilUDB4j
-aDwx3tXTrwE4fHEkl4ggT/AHDeB2A10yLkogvHWVrdVl+1hxpU5MBALgYDtlbU8U
-eGYPx5CEiMzghSBPGnSeLwQ0QgmwiF1K+JF1Sbu1gn3tn6Bg+orF3DwskzIrn/yS
-oveXPXde9E9W87VKI1Xv/om3+dFIZg==
-=XU8W
------END PGP SIGNATURE-----
-
---W57iizh/FGCnvrfL--
