@@ -2,86 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFF753F766
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 09:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388A353F9B4
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237766AbiFGHko (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 03:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S239460AbiFGJ2b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jun 2022 05:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbiFGHkk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 03:40:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1198DBA9AF;
-        Tue,  7 Jun 2022 00:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654587641; x=1686123641;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IIzNUwsPeY1RReNMe2C/kRZYXKUGZUuwGKlpnOb09GU=;
-  b=gjZ1obDUZYNS781Nv58/MYHOv4P92esQog21y7pZGsOLBfaZ/VPLeefq
-   SJ275WezUENGVEqvaUlWhJYjHU7ukwtGZ5LZBibnJDsm0yT0dAFxmTU8Q
-   KiF8BtSNSxtCHzeOmTYZAJbNPBIhJKDGc+06TOdaR3dRlxelOP0/k1epe
-   70Q+u5R/u/tXnGFdkjpyQVvFzc2+IQt6FOdA3+YspW9raoP38fXzZ90d2
-   2TT/mnJ4vPJvkRGw5s6IRM1CAq+Ru+iZdHlWywQAOxc8MQUAE1uaBqqn8
-   75BHpagjDOkSh2c58GY5tMsw5FPNm0pcUGvbqf/8kdlzRxvVJWdTPFccl
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="167043056"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2022 00:40:39 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 7 Jun 2022 00:40:38 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 7 Jun 2022 00:40:36 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH 2/2] MAINTAINERS: add spi to PolarFire SoC entry
-Date:   Tue, 7 Jun 2022 08:38:34 +0100
-Message-ID: <20220607073833.2331539-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607073833.2331539-1-conor.dooley@microchip.com>
-References: <20220607073833.2331539-1-conor.dooley@microchip.com>
+        with ESMTP id S239531AbiFGJ2O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 05:28:14 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DB517DB
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jun 2022 02:28:11 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id x187so2588810ybe.2
+        for <linux-spi@vger.kernel.org>; Tue, 07 Jun 2022 02:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
+         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
+         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
+         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
+         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
+         O14A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=H5nbwSxPiZbvRPifBi1GpWL1NiLBu5DDBpfQRkv5L4s5Yhis1ZYQgd3foAA9ELyDLC
+         P+kKTMGZGhEobGWn+BCcreOulBduMwjTkoGZPWFNbRMufBN4fY0nCvjILVMWYuWzaMEN
+         GvZ+glQvOIKfjmSaPV9mXSijh1Ctq/epoeqXNdsuJ8HF95cBW0CmX9G0Tutv5LxL6puq
+         dt10OTgROVSk/37oFY89Qv0hfuqbUoM7bqsIqH70XZM0zCgpkuajOFbxZ8coxqaBAca/
+         Ol8YclnxrscyKqfdfgmaTzGNw0rfjJyKaI+o/G9q3vtw3Kh1MQkSGtuN62h3XeBLffKQ
+         45Jg==
+X-Gm-Message-State: AOAM532YGtQYqkEsGDODt4iSmOyIOEW9ORft/eEnA9d3hf034SgXDaXh
+        nOaCCnWUgqCzSH3JgW7Y9HxFNNLkFuS9NmxJnvy8Oq6ivp14Ngff
+X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
+X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
+ v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
+ Jun 2022 02:28:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
+ 02:28:00 -0700 (PDT)
+Reply-To: robertbaileys_spende@aol.com
+From:   Robert Baileys <mercymiji.j@gmail.com>
+Date:   Tue, 7 Jun 2022 11:28:00 +0200
+Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mercymiji.j[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the newly introduced spi driver to the existing PolarFire SoC entry.
+--=20
+Hallo, lieber Beg=C3=BCnstigter,
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
+bin ein pensionierter Regierungsangestellter aus Harlem und ein
+Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
+bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
+ttery
+in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
+und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
+Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
+Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
+um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
+Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
+machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
+e
+Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
+gegen=C3=BCberstehen.
+https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
+t-in-new-york-history/Sie
+Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
+Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
+e
+Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
+Euro beginnen kann.
+Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
+Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
+erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f468864fd268..279a25065942 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16955,6 +16955,7 @@ S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
-+F:	drivers/spi/spi-microchip-core.c
- F:	include/soc/microchip/mpfs.h
- 
- RNBD BLOCK DRIVERS
--- 
-2.36.1
+Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
 
+Powerball-Jackpot-Gewinner
+E-Mail: robertbaileys_spende@aol.com
