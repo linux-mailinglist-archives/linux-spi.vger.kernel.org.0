@@ -2,97 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB20542980
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 10:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B81D542A27
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 10:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiFHIe2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jun 2022 04:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S231898AbiFHI7Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jun 2022 04:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiFHIdj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 04:33:39 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3821D4212
-        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 00:54:12 -0700 (PDT)
+        with ESMTP id S233475AbiFHI61 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 04:58:27 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028CD3E864C;
+        Wed,  8 Jun 2022 01:19:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kq6so26870804ejb.11;
+        Wed, 08 Jun 2022 01:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=GFg8a8+PE2JXQf+k0Lr4vhUL4bzq17cjgsh0Jjr1I8s=;
-        b=okoIWawoVDgmU+pTjaRcOdKIItSU2XeLkGWvGb4vjSp8+XUHszUkWvnk5q72eMxjDbckjBmF/YxdE
-         hPNumJrX5lQXImywiyZmya6M7WcBoZ8zG6GbjkvdKV2b0cE0wrRBUpLM4eJdvh7H9D+WXkdjC4SNmA
-         8q2bMfIo42NwE2Ff4IS2pZ0FkWQoW9w1SXzcwMSmjHpV/NOxjNXpqWg4lrKgDs0vUjQGdxJ3Fv9B9F
-         8n117iMNuMTA+G+NJUl1yilNUkQ/ArmYFm5ooFkeiwzDJfEbjhgLuK+gbfYzSVIE6ZOaytfrR5Iz9E
-         FXNOVtZtSxoh2mYgFvWVgHrG9ZbGm9A==
-X-MSG-ID: 2da5bd9e-e700-11ec-a2aa-0050569d11ae
-Date:   Wed, 8 Jun 2022 09:54:09 +0200
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
- queue if possible in spi_sync
-Message-ID: <20220608095409.2d8c46fb@erd992>
-In-Reply-To: <Yp+ZX4XITW7bQtjn@sirena.org.uk>
-References: <20220525142928.2335378-1-david@protonic.nl>
-        <20220525142928.2335378-4-david@protonic.nl>
-        <20220525164603.57c98a0a@erd992>
-        <Yp+ZX4XITW7bQtjn@sirena.org.uk>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oKwjyaH0RghwN0hJKqnq9RMPrTrxsm8tLBDPz0gqc1I=;
+        b=EwCy6VHhTYRZJrodfK0ASZnyaCp8ApVDFmi2lMUB70XrB724PIdPEdrzGgh2AzWQ+U
+         l+kdbomO18EUwN684FRx3mvOP+ucCczjPS+erMmfR+w7KjgmC8FmPLRUhn4h5Ff70j84
+         sUKfpMubQ6IqXKFRLwQWO8Z3y/5XFZCcz7clEYeaFLaCvhWoAbst75xThURqiBfdeqwu
+         0/RzTtLG3IMQ5deQv/l9Btr7zU+QGLzM7bE+MUC3vViODYTVGHI0pCfGsplCJUB87vIV
+         Zb3KnCoNwmap+6ZnaQucozGA34U9esESnZFgRGnunNPFHsYfDVh3L3HFBgbZFhuYOGyD
+         YN8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oKwjyaH0RghwN0hJKqnq9RMPrTrxsm8tLBDPz0gqc1I=;
+        b=N4zNfCujb80Chh6+hipLsLL5z3ImNbgNP9vYv/YVa9QFDGUrn7rda4eeRhwM942cqA
+         F+HEj+/WXJvivZjbawVgHJZuO4kLgJ6qx/CPEZUG7Jvir4H6FzRc6YLlGR2PNXY9GFa+
+         sIpHbuZW5yFczGSAA2VZC0J8ZpMF3/Oy+OxHvllp698e+N11sItIWtRvXsOUepu8JZpO
+         cvDK5doN+lRsWDOQ0jQRBk29ln4UShhD5PuLYf5FdElo2f15dy2cF42CZguDQCMoS/FK
+         4HaXoU65oEgGNej/LZWi+JM+rZRoT0S6m1jjxdSSrDfvDVvjaFI6fLoFpMM6JeIyIMGu
+         4fDQ==
+X-Gm-Message-State: AOAM530TziMrrTO9tBt0QoTviOrL0HCGVt6KxLQEWxxLzwaCVE+3Mvhn
+        +ggtLBD2/8rzwvR+xJodp4Y=
+X-Google-Smtp-Source: ABdhPJxffay0XJhs8bDRwafqDDC7xdEu2XfWekNGL183hIUb8K95AJZ9EfKBiHPSdOQVwqcJlLazxA==
+X-Received: by 2002:a17:907:3f8b:b0:6ff:4721:3cf3 with SMTP id hr11-20020a1709073f8b00b006ff47213cf3mr29848587ejc.48.1654676354832;
+        Wed, 08 Jun 2022 01:19:14 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k24-20020aa7c398000000b0042dcac2afc6sm11717403edq.72.2022.06.08.01.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 01:19:13 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] spi: s3c64xx: Fix spelling mistake "hannel" -> "channel"
+Date:   Wed,  8 Jun 2022 09:19:12 +0100
+Message-Id: <20220608081912.2083086-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 7 Jun 2022 19:30:55 +0100
-Mark Brown <broonie@kernel.org> wrote:
+There is a spelling mistake in a dev_err message. Fix it.
 
-> On Wed, May 25, 2022 at 04:46:03PM +0200, David Jander wrote:
-> > David Jander <david@protonic.nl> wrote:  
-> 
-> > > +static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct spi_message *msg)
-> > > +{
-> > > +	bool was_busy;
-> > > +	int ret;
-> > > +
-> > > +	mutex_lock(&ctlr->io_mutex);
-> > > +
-> > > +	/* If another context is idling the device then wait */
-> > > +	while (ctlr->idling) {
-> > > +		printk(KERN_INFO "spi sync message processing: controller is idling!\n");
-> > > +		usleep_range(10000, 11000);
-> > > +	}  
-> 
-> > This is dead ugly of course, and it needs to be removed. Not yet sure how,
-> > hence the RFC. Maybe the idle -> not busy transition can be included inside
-> > the io_mutex? That way this while will never be hit and can be removed...  
-> 
-> I'm not sure it's even quite right from a safety point of view - idling
-> is protected by queue_lock but this now only takes io_mutex.  
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/spi/spi-s3c64xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-True. This is broken.
-
-> Moving idling (and all the was_busy stuff) within the io_mutex would
-> definitely resolve the issue, the async submission context is the only one
-> that really needs the spinlock and it doesn't care about idling.  I can't
-> think what you could do with the io_mutex when idling so it seems to
-> fit.
-
-Ok, so we could agree on a way to fix this particular issue: put the idling
-transition into the io_mutex. Thanks.
-
-Looking forward to read comments on the rest of the code, and the general idea
-of what I am trying to accomplish.
-
-Best regards,
-
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 82558e37c735..f56d9c819a76 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -360,7 +360,7 @@ static int s3c64xx_spi_prepare_transfer(struct spi_master *spi)
+ 
+ 	sdd->tx_dma.ch = dma_request_chan(&sdd->pdev->dev, "tx");
+ 	if (IS_ERR(sdd->tx_dma.ch)) {
+-		dev_err(&sdd->pdev->dev, "Failed to get TX DMA hannel\n");
++		dev_err(&sdd->pdev->dev, "Failed to get TX DMA channel\n");
+ 		dma_release_channel(sdd->rx_dma.ch);
+ 		sdd->tx_dma.ch = 0;
+ 		sdd->rx_dma.ch = 0;
 -- 
-David Jander
+2.35.3
+
