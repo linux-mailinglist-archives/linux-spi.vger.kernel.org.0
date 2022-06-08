@@ -2,94 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BD8543034
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 14:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA894543056
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 14:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiFHMYB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jun 2022 08:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S238918AbiFHM3j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jun 2022 08:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239180AbiFHMYA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 08:24:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7A71F187E;
-        Wed,  8 Jun 2022 05:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654691034; x=1686227034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogrZ4q/o6zXk4o+X+qsQgG9Jvd4n3nuZ6xC2HGV8zrk=;
-  b=kvBLEWJsGPQDfk7TE0f9NvqrnEJmCsp1v7u35ztFYtsinNzYllYIWB39
-   8ag/ONIAg4jW5XCCYxmpWFnJEoHQaFoKTSVDeHHgcaRoztaV2EjSC0I5K
-   y4an3DpC5Ct0rCex/xN03ts7MurRaNNK86wBTqedUqOY0BRLJyg4RklwK
-   XlUEWcfW6DXAkues4wqKh3yf23oZxhmWNhQ+CNsa8mbPnVvysKnNUopoP
-   aDvdlAVOS0QALZoGI/zy2rdVR0Deazo1rkYDS9PrGo4ES0z6MuEKrOsQs
-   1JshFS1adeyZN8rDquLl5VY4Pv7DcvsZ1e/ofmTH34MaD/r3ZDkdMsh/R
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="256707085"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="256707085"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 05:23:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="580034303"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 05:23:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nyuid-000X0F-EK;
-        Wed, 08 Jun 2022 15:23:27 +0300
-Date:   Wed, 8 Jun 2022 15:23:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 2/2] spi: Use device_find_first_child() instead of
- custom approach
-Message-ID: <YqCUv2tSwzALSVsm@smile.fi.intel.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
- <20220607202058.8304-2-andriy.shevchenko@linux.intel.com>
- <YqCJsRqrCRiIBm1P@kroah.com>
- <YqCMunw+2WHIinOP@smile.fi.intel.com>
- <YqCQFFRXyaaQNSWv@kroah.com>
+        with ESMTP id S238751AbiFHM3i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 08:29:38 -0400
+Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEBE250256
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 05:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=vTMdtugGnM584xfHBfo4nxQBMNqaBwaPOIcXdoD7whU=;
+        b=REGfi+758xN+f1Ie3nbnSv2+F8c5C+rXbVp1UTXplbPa7yJMT7nogbP0UFO41VgIzD6mHX/7G10WI
+         63pLfykULb+h0c5JHTB93BCgk3eenlroPRF0YS30oxucEu/tYWtxyaAM9pw25dosFKculZqa4/35rt
+         /KJZ392VD43UAiUzwyxuiqGG/4EQn3DJhGEGY+DD+dTHig1Me/PmmxM1clfLVw1T4SCDgQMxCPs2DZ
+         EP+FfcSnXhlon84f7MhjXR+HnAyBny4KPIoy01jTMlYVCctQQbgrnOjmDlf7wi6rsQ9enWWCFdX1PT
+         QwaaOhYqK+Ps88rdW+jS0Ejr57jpZzA==
+X-MSG-ID: a6fb1b21-e726-11ec-a2aa-0050569d11ae
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Jander <david@protonic.nl>
+Subject: [PATCH] include: linux: spi: spi.h: Add missing documentation for struct members
+Date:   Wed,  8 Jun 2022 14:29:17 +0200
+Message-Id: <20220608122917.2892953-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqCQFFRXyaaQNSWv@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:03:32PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 08, 2022 at 02:49:14PM +0300, Andy Shevchenko wrote:
+Fixes "make htmldocs" warnings.
 
-...
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: David Jander <david@protonic.nl>
+---
+ include/linux/spi/spi.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> Why not exactly?  match_true() above and device_match_any() have the
-> same signature from what I can tell:
-> 	static int match_true(struct device *dev, void *data)
-> 	int device_match_any(struct device *dev, const void *unused)
-> 
-> What am I missing, the const?
-
-Yep! Compiler is very unhappy about it.
-
-> > I agree that all thing should be using _any instead of _first.
-> 
-> Yes, so let's fix it please, don't propagate bad patterns.
-
-Will do, thanks!
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index eac8d3caf954..2e63b4935deb 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -35,7 +35,8 @@ extern struct bus_type spi_bus_type;
+ 
+ /**
+  * struct spi_statistics - statistics for spi transfers
+- * @lock:          lock protecting this structure
++ * @syncp:         seqcount to protect members in this struct for per-cpu udate
++ *                 on 32-bit systems
+  *
+  * @messages:      number of spi-messages handled
+  * @transfers:     number of spi_transfers handled
+@@ -155,7 +156,7 @@ extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
+  * @cs_inactive: delay to be introduced by the controller after CS is
+  *	deasserted. If @cs_change_delay is used from @spi_transfer, then the
+  *	two delays will be added up.
+- * @statistics: statistics for the spi_device
++ * @pcpu_statistics: statistics for the spi_device
+  *
+  * A @spi_device is used to interchange data between an SPI slave
+  * (usually a discrete chip) and CPU memory.
+@@ -439,7 +440,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @max_native_cs: When cs_gpiods is used, and this field is filled in,
+  *	spi_register_controller() will validate all native CS (including the
+  *	unused native CS) against this value.
+- * @statistics: statistics for the spi_controller
++ * @pcpu_statistics: statistics for the spi_controller
+  * @dma_tx: DMA transmit channel
+  * @dma_rx: DMA receive channel
+  * @dummy_rx: dummy receive buffer for full-duplex devices
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.32.0
 
