@@ -2,85 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF075431CF
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 15:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CEC5435CB
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 17:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240732AbiFHNqD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jun 2022 09:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S242083AbiFHPAK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jun 2022 11:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbiFHNp7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 09:45:59 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5C4279C11;
-        Wed,  8 Jun 2022 06:45:52 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y19so41577977ejq.6;
-        Wed, 08 Jun 2022 06:45:52 -0700 (PDT)
+        with ESMTP id S243796AbiFHO61 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 10:58:27 -0400
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC3D3ED16
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 07:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NSdLO2hwc6gApB99u/8axPIg7znZ9rABRELorqWsHlQ=;
-        b=cHM8fPNmR54d0HizUEb5n05LBKW9qncZzsdp+Hku/LayRA3hvCST+p7Fym+tkMj8Xt
-         2pnCMsJh23PGNy3s/Ana+27NXFSlmdL45KGdr3CXG19nfqVlKrJ0Q2y+GUvcZrLC7lj8
-         i6MpeJ/JukYMHu6HXpbGxvbt3LuD7V1o6/cJ6PY/jy8bnKYfstIi7wF7GzAVVznQD2tG
-         RActwGf0/GQIYGHHHPXVrECgUnBoiFhHeQMn9oLlB3ZbMtZ1yGMn9L/qiFssv0K3JCul
-         Txi8flPmGQKm3vGxrBs2XWB11Gtm8NWxyk2eQk8zzrujnwm/YJGzvfu9JQm6VnAyyGAz
-         eIOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NSdLO2hwc6gApB99u/8axPIg7znZ9rABRELorqWsHlQ=;
-        b=6hCxy0u06ICxA2YdD848+EpcKMPIbQnVygPP4KyybIBcwqOJkevXd2Q+pzGCztdeEn
-         q+2RVHeryal7ctTeYiRkDLx1z3WreZNYP9Leg4/+iCriR2EyZSWF79p/F+VtnKxFeV3G
-         BkLKK+FBQn6e9mzc6xhcTi13eTHaRNzbbBM3axT1nYwV7GHZssoNzyEcDTvryoydvrQx
-         1aS3/qHsf6ItErFOuG57NYWhsmp+lGh5mqbHHanyfSf3bybkLKhYWpACH3m+0vLK2vMk
-         4Y9SP7dpJcU3ll63G0NGVU83cR2VUzOFB6u/jzX4Xmi32aVnrDoUGgi05gjYlh2HSQ8I
-         RWdA==
-X-Gm-Message-State: AOAM530Xn6r8iVdjmFYTNbFHj8oSNcEU2f3SD+nv+LLW8R7FAJk8OVvF
-        KS4DhJtBJSUc9MEr4mJJFsiZL5LM5Qfbs5E1BeaLcYpWLJp0iw==
-X-Google-Smtp-Source: ABdhPJxdAgQLgv4Y7iW7Q9tSkS4LWbeyWmQ0jijWqcVLHF5CfUfjZ2skbLtltjxnC30hwn1PG2uNVtJDSQibMprBI1U=
-X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
- cr16-20020a170906d55000b007047ba69854mr31055717ejc.579.1654695950609; Wed, 08
- Jun 2022 06:45:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220608122917.2892953-1-david@protonic.nl>
-In-Reply-To: <20220608122917.2892953-1-david@protonic.nl>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 8 Jun 2022 15:45:14 +0200
-Message-ID: <CAHp75Vffx8EbQ48+B-LOKxE3-JA6kuPMZwacA-=y-kqScQHfbQ@mail.gmail.com>
-Subject: Re: [PATCH] include: linux: spi: spi.h: Add missing documentation for
- struct members
-To:     David Jander <david@protonic.nl>
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=Sv+LKb0K45pAUtKWZjNiRz3hn9bdKxU+R/JutXHtSDw=;
+        b=iGaC3vBfR0PpQa6JE/fx12aFw4UGfanK3aS0XKxBw3NlIXr48tMb0OKcMTLV+XGZ/BHNHMKGKOnlr
+         vcIlNFUC+mChm81XKOVFG+ydle++d7fdlZQwqlkKuH7hXdac89DBT0fvJT0xLtp3XIn1zSTRy1DMvH
+         qvGMW5EMR1blPq05gY5u+pqKmAfZnpzvNZ80v2GEWB4B0JlmwGjQY0llPum/64VOtM+D4wDeyEnR0F
+         wFNb/aDEPEjC4kaej/x3j3PfPPY9L9MhvWydcILpJMFnPT3oewwI/9IjKnwWcIQsLG4TuAs5yA8mWQ
+         Vw922bKV5jybG4fQscayqrTb6Fboq+A==
+X-MSG-ID: 04660b35-e73b-11ec-9896-0050569d2c73
+Date:   Wed, 8 Jun 2022 16:55:20 +0200
+From:   David Jander <david@protonic.nl>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+        Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <20220608165520.0ec0c31c@erd992>
+In-Reply-To: <CAHp75VcsOmyuSbwJjrAgA-MB-i05WPKX7C-qDgusF_eZ4ak0cA@mail.gmail.com>
+References: <20220525142928.2335378-1-david@protonic.nl>
+        <20220525142928.2335378-4-david@protonic.nl>
+        <CAHp75VcsOmyuSbwJjrAgA-MB-i05WPKX7C-qDgusF_eZ4ak0cA@mail.gmail.com>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 2:56 PM David Jander <david@protonic.nl> wrote:
->
-> Fixes "make htmldocs" warnings.
+On Wed, 8 Jun 2022 15:43:22 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Can you provide the warnings?
+> On Thu, May 26, 2022 at 2:46 AM David Jander <david@protonic.nl> wrote:
+> >
+> > The interaction with the controller message queue and its corresponding
+> > auxiliary flags and variables requires the use of the queue_lock which is
+> > costly. Since spi_sync will transfer the complete message anyway, and not
+> > return until it is finished, there is no need to put the message into the
+> > queue if the queue is empty. This can save a lot of overhead.
+> >
+> > As an example of how significant this is, when using the MCP2518FD SPI CAN
+> > controller on a i.MX8MM SoC, the time during which the interrupt line
+> > stays active (during 3 relatively short spi_sync messages), is reduced
+> > from 98us to 72us by this patch.  
+> 
+> ...
+> 
+> > +       /* If another context is idling the device then wait */
+> > +       while (ctlr->idling) {
+> > +               printk(KERN_INFO "spi sync message processing: controller is idling!\n");  
+> 
+> printk() when we have a device pointer, why (despite of pr_info() existence)?
 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Sorry for that. I often use printk() explicitly to remind me of things that
+need to get removed, but in this case I left this broken piece of code on
+purpose for the discussion and immediately addressed it in a reply to this
+patch (hence the RFC tag in the subject).
+Thanks for being vigilant, and sorry for the noise.
 
-Perhaps a Fixes tag?
+> > +               usleep_range(10000, 11000);
+> > +       }
+> > +
+> > +       was_busy = READ_ONCE(ctlr->busy);
+> > +
+> > +       ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+> > +       if (ret)
+> > +               goto out;
+> > +
+> > +       if (!was_busy) {
+> > +               kfree(ctlr->dummy_rx);
+> > +               ctlr->dummy_rx = NULL;
+> > +               kfree(ctlr->dummy_tx);
+> > +               ctlr->dummy_tx = NULL;
+> > +               if (ctlr->unprepare_transfer_hardware &&
+> > +                   ctlr->unprepare_transfer_hardware(ctlr))
+> > +                       dev_err(&ctlr->dev,
+> > +                               "failed to unprepare transfer hardware\n");
+> > +               spi_idle_runtime_pm(ctlr);
+> > +       }  
+> 
 
-> Signed-off-by: David Jander <david@protonic.nl>
+Best regards,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+David Jander
