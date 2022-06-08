@@ -2,109 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127C6542349
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 08:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB20542980
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 10:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235594AbiFHAib (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jun 2022 20:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S230458AbiFHIe2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jun 2022 04:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445247AbiFGXD0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jun 2022 19:03:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856C3508A2;
-        Tue,  7 Jun 2022 13:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654633292; x=1686169292;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hj4Bi9Kc6WsQtRSs1xjE/8Rm+BZ4jVZvSsyYrBi4QgI=;
-  b=LgipjXroiOlg7jBQvGbQTHB8KYEa3pA6NzA+PMNNBxQFiXafJFMi7zTA
-   vg4Y5uLt4xfmnhPoGaA5Lf+pjnyU9kngDfZqtZDrznCisOwXDBNikOb6y
-   be4+d7lClFJMC616wzpM5sCJaYyYOi0+bRR7LqOCOWcyHjxkZxH2jaF9J
-   YpkhZIPKF6RvF5xGQz0ggpFbVHKUWYR1MDFo+5OIuSTSiVJQXg8xC2Bu7
-   A3gGqn0yG+yLkCkarbNbhPQ1k16PmaBKnDyIAoAR/5zR6RL4iv7Q1CnNi
-   ph1S7wu2S2D4IVEfT49Q9rKKKm56FLyPexJOkhCe7W3nxXC3brwxQkNJQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275518398"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="275518398"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 13:21:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="532772013"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jun 2022 13:20:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2B63649; Tue,  7 Jun 2022 23:21:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] spi: Use device_find_first_child() instead of custom approach
-Date:   Tue,  7 Jun 2022 23:20:58 +0300
-Message-Id: <20220607202058.8304-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
-References: <20220607202058.8304-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S232221AbiFHIdj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 04:33:39 -0400
+Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3821D4212
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 00:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=GFg8a8+PE2JXQf+k0Lr4vhUL4bzq17cjgsh0Jjr1I8s=;
+        b=okoIWawoVDgmU+pTjaRcOdKIItSU2XeLkGWvGb4vjSp8+XUHszUkWvnk5q72eMxjDbckjBmF/YxdE
+         hPNumJrX5lQXImywiyZmya6M7WcBoZ8zG6GbjkvdKV2b0cE0wrRBUpLM4eJdvh7H9D+WXkdjC4SNmA
+         8q2bMfIo42NwE2Ff4IS2pZ0FkWQoW9w1SXzcwMSmjHpV/NOxjNXpqWg4lrKgDs0vUjQGdxJ3Fv9B9F
+         8n117iMNuMTA+G+NJUl1yilNUkQ/ArmYFm5ooFkeiwzDJfEbjhgLuK+gbfYzSVIE6ZOaytfrR5Iz9E
+         FXNOVtZtSxoh2mYgFvWVgHrG9ZbGm9A==
+X-MSG-ID: 2da5bd9e-e700-11ec-a2aa-0050569d11ae
+Date:   Wed, 8 Jun 2022 09:54:09 +0200
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <20220608095409.2d8c46fb@erd992>
+In-Reply-To: <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
+        <20220525142928.2335378-4-david@protonic.nl>
+        <20220525164603.57c98a0a@erd992>
+        <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have already a helper to get the first child device, use it and
-drop custom approach.
+On Tue, 7 Jun 2022 19:30:55 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+> On Wed, May 25, 2022 at 04:46:03PM +0200, David Jander wrote:
+> > David Jander <david@protonic.nl> wrote:  
+> 
+> > > +static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct spi_message *msg)
+> > > +{
+> > > +	bool was_busy;
+> > > +	int ret;
+> > > +
+> > > +	mutex_lock(&ctlr->io_mutex);
+> > > +
+> > > +	/* If another context is idling the device then wait */
+> > > +	while (ctlr->idling) {
+> > > +		printk(KERN_INFO "spi sync message processing: controller is idling!\n");
+> > > +		usleep_range(10000, 11000);
+> > > +	}  
+> 
+> > This is dead ugly of course, and it needs to be removed. Not yet sure how,
+> > hence the RFC. Maybe the idle -> not busy transition can be included inside
+> > the io_mutex? That way this while will never be hit and can be removed...  
+> 
+> I'm not sure it's even quite right from a safety point of view - idling
+> is protected by queue_lock but this now only takes io_mutex.  
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ea09d1b42bf6..87dc8773108b 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_slave_abort);
- 
--static int match_true(struct device *dev, void *data)
--{
--	return 1;
--}
--
- static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 						   dev);
- 	struct device *child;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_first_child(&ctlr->dev);
- 	return sprintf(buf, "%s\n",
- 		       child ? to_spi_device(child)->modalias : NULL);
- }
-@@ -2644,7 +2639,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
- 	if (rc != 1 || !name[0])
- 		return -EINVAL;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_first_child(&ctlr->dev);
- 	if (child) {
- 		/* Remove registered slave */
- 		device_unregister(child);
+True. This is broken.
+
+> Moving idling (and all the was_busy stuff) within the io_mutex would
+> definitely resolve the issue, the async submission context is the only one
+> that really needs the spinlock and it doesn't care about idling.  I can't
+> think what you could do with the io_mutex when idling so it seems to
+> fit.
+
+Ok, so we could agree on a way to fix this particular issue: put the idling
+transition into the io_mutex. Thanks.
+
+Looking forward to read comments on the rest of the code, and the general idea
+of what I am trying to accomplish.
+
+Best regards,
+
 -- 
-2.35.1
-
+David Jander
