@@ -2,48 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CEC5435CB
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 17:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8EE543772
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jun 2022 17:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242083AbiFHPAK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jun 2022 11:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S243922AbiFHPdt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jun 2022 11:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243796AbiFHO61 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 10:58:27 -0400
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC3D3ED16
-        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 07:55:24 -0700 (PDT)
+        with ESMTP id S244439AbiFHPdp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jun 2022 11:33:45 -0400
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E916D260F
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jun 2022 08:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=Sv+LKb0K45pAUtKWZjNiRz3hn9bdKxU+R/JutXHtSDw=;
-        b=iGaC3vBfR0PpQa6JE/fx12aFw4UGfanK3aS0XKxBw3NlIXr48tMb0OKcMTLV+XGZ/BHNHMKGKOnlr
-         vcIlNFUC+mChm81XKOVFG+ydle++d7fdlZQwqlkKuH7hXdac89DBT0fvJT0xLtp3XIn1zSTRy1DMvH
-         qvGMW5EMR1blPq05gY5u+pqKmAfZnpzvNZ80v2GEWB4B0JlmwGjQY0llPum/64VOtM+D4wDeyEnR0F
-         wFNb/aDEPEjC4kaej/x3j3PfPPY9L9MhvWydcILpJMFnPT3oewwI/9IjKnwWcIQsLG4TuAs5yA8mWQ
-         Vw922bKV5jybG4fQscayqrTb6Fboq+A==
-X-MSG-ID: 04660b35-e73b-11ec-9896-0050569d2c73
-Date:   Wed, 8 Jun 2022 16:55:20 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=sgOi0wZt64PvzV9T5wbU6JWnzoPTwGt8hGmYzxvQxks=;
+        b=XhApxaLiOKxmY7hz7GCGsdSFSBwfcy172V0MF8dc3NEUeoWVLgLHjCsguV4DEXCaSRcf/E1VadzjN
+         qGknx8qlia51glFKSXpDO2rRf3KY+uij7yYXwDptqaWRL9ZxJFZPDhJxT6eeCDTOtBob6Lwfu0Aco8
+         c6MB3JV2S7dXkDh8j6NrR7/SvQPutEIo1lCk8L+bObgEE2m0mRSqucQC3p4CRXY/AIf8XFQLzq3E0b
+         MbRznsiP9w+F2VFRZ/dAVDqRNQxIv25kVwS1WWzfWs94A93FADRvpF6Ts6/oqUKp7fsmF1o2SHaeU0
+         VrCZM+z9UyBhWL/KFIWkCUeoqGtzVrQ==
+X-MSG-ID: 5f31577c-e740-11ec-b450-0050569d3a82
 From:   David Jander <david@protonic.nl>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
- queue if possible in spi_sync
-Message-ID: <20220608165520.0ec0c31c@erd992>
-In-Reply-To: <CAHp75VcsOmyuSbwJjrAgA-MB-i05WPKX7C-qDgusF_eZ4ak0cA@mail.gmail.com>
-References: <20220525142928.2335378-1-david@protonic.nl>
-        <20220525142928.2335378-4-david@protonic.nl>
-        <CAHp75VcsOmyuSbwJjrAgA-MB-i05WPKX7C-qDgusF_eZ4ak0cA@mail.gmail.com>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        David Jander <david@protonic.nl>
+Subject: [PATCH v2] spi: <linux/spi/spi.h>: Add missing documentation for struct members
+Date:   Wed,  8 Jun 2022 17:33:09 +0200
+Message-Id: <20220608153309.2899565-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -53,59 +47,56 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 8 Jun 2022 15:43:22 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Fixes these "make htmldocs" warnings:
 
-> On Thu, May 26, 2022 at 2:46 AM David Jander <david@protonic.nl> wrote:
-> >
-> > The interaction with the controller message queue and its corresponding
-> > auxiliary flags and variables requires the use of the queue_lock which is
-> > costly. Since spi_sync will transfer the complete message anyway, and not
-> > return until it is finished, there is no need to put the message into the
-> > queue if the queue is empty. This can save a lot of overhead.
-> >
-> > As an example of how significant this is, when using the MCP2518FD SPI CAN
-> > controller on a i.MX8MM SoC, the time during which the interrupt line
-> > stays active (during 3 relatively short spi_sync messages), is reduced
-> > from 98us to 72us by this patch.  
-> 
-> ...
-> 
-> > +       /* If another context is idling the device then wait */
-> > +       while (ctlr->idling) {
-> > +               printk(KERN_INFO "spi sync message processing: controller is idling!\n");  
-> 
-> printk() when we have a device pointer, why (despite of pr_info() existence)?
+include/linux/spi/spi.h:82: warning: Function parameter or member 'syncp' not described in 'spi_statistics'
+include/linux/spi/spi.h:213: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_device'
+include/linux/spi/spi.h:676: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_controller'
 
-Sorry for that. I often use printk() explicitly to remind me of things that
-need to get removed, but in this case I left this broken piece of code on
-purpose for the discussion and immediately addressed it in a reply to this
-patch (hence the RFC tag in the subject).
-Thanks for being vigilant, and sorry for the noise.
+Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: David Jander <david@protonic.nl>
+---
+v2:
+ - Correct patch subject line style
+ - Add the text of the actual warnings that are being fixed
+ - Add a Fixes: tag
+---
+ include/linux/spi/spi.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> > +               usleep_range(10000, 11000);
-> > +       }
-> > +
-> > +       was_busy = READ_ONCE(ctlr->busy);
-> > +
-> > +       ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
-> > +       if (ret)
-> > +               goto out;
-> > +
-> > +       if (!was_busy) {
-> > +               kfree(ctlr->dummy_rx);
-> > +               ctlr->dummy_rx = NULL;
-> > +               kfree(ctlr->dummy_tx);
-> > +               ctlr->dummy_tx = NULL;
-> > +               if (ctlr->unprepare_transfer_hardware &&
-> > +                   ctlr->unprepare_transfer_hardware(ctlr))
-> > +                       dev_err(&ctlr->dev,
-> > +                               "failed to unprepare transfer hardware\n");
-> > +               spi_idle_runtime_pm(ctlr);
-> > +       }  
-> 
-
-Best regards,
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index eac8d3caf954..2e63b4935deb 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -35,7 +35,8 @@ extern struct bus_type spi_bus_type;
+ 
+ /**
+  * struct spi_statistics - statistics for spi transfers
+- * @lock:          lock protecting this structure
++ * @syncp:         seqcount to protect members in this struct for per-cpu udate
++ *                 on 32-bit systems
+  *
+  * @messages:      number of spi-messages handled
+  * @transfers:     number of spi_transfers handled
+@@ -155,7 +156,7 @@ extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
+  * @cs_inactive: delay to be introduced by the controller after CS is
+  *	deasserted. If @cs_change_delay is used from @spi_transfer, then the
+  *	two delays will be added up.
+- * @statistics: statistics for the spi_device
++ * @pcpu_statistics: statistics for the spi_device
+  *
+  * A @spi_device is used to interchange data between an SPI slave
+  * (usually a discrete chip) and CPU memory.
+@@ -439,7 +440,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @max_native_cs: When cs_gpiods is used, and this field is filled in,
+  *	spi_register_controller() will validate all native CS (including the
+  *	unused native CS) against this value.
+- * @statistics: statistics for the spi_controller
++ * @pcpu_statistics: statistics for the spi_controller
+  * @dma_tx: DMA transmit channel
+  * @dma_rx: DMA receive channel
+  * @dummy_rx: dummy receive buffer for full-duplex devices
 -- 
-David Jander
+2.32.0
+
