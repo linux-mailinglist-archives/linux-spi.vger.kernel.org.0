@@ -2,134 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C451545205
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 18:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2D7545356
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 19:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344261AbiFIQbc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 12:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S1345114AbiFIRuK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 13:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244063AbiFIQbb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 12:31:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5E536A658
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 09:31:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B7956113E
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 16:31:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6395C34114;
-        Thu,  9 Jun 2022 16:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654792288;
-        bh=tVO6VEzqoUeJuflpDHYuBudhIBmayXrgLlweC8UNRFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O/GpSdiQ1UnOX1EUkdlDMdHV8p4SOf8I2fzkwQIxffBwTqxRCqiL4mcmWpl8qXS7p
-         Ya/wIU32jxQmfZLfzcaU3QGr8HsnSGJobkySyHgR3+zTmHlgEQ/Yxb17cPXp8f/YXj
-         fCInXcmjKoaEMCKL6E2Sr5ygM6N9uLcGTNyC+Oiq0wuf8OE2lM545yjwsnNz5uQWi9
-         sMUEfqdr+5GnSrszpSjO5NNwBocJGZ5ZQVN0ICIvVYaIcyBNPyiGosTKRgMw+Bo3xr
-         LrMbThJl/kGF832NWFkLMV8ksCTMCq7Qu4HnRte2ChCN8IDWP3JXgjhHybQ2q72GFk
-         0cp+tx+QltOhQ==
-Date:   Thu, 9 Jun 2022 17:31:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
- queue if possible in spi_sync
-Message-ID: <YqIgXDZAHPAQ1Y4O@sirena.org.uk>
-References: <20220525142928.2335378-1-david@protonic.nl>
- <20220525142928.2335378-4-david@protonic.nl>
- <20220525164603.57c98a0a@erd992>
- <Yp+ZX4XITW7bQtjn@sirena.org.uk>
- <20220608095409.2d8c46fb@erd992>
- <YqCIDNHjFP4p9xxs@sirena.org.uk>
- <20220609173421.437fe1c4@erd992>
+        with ESMTP id S1345110AbiFIRuG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 13:50:06 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB12A3A35
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 10:50:04 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id h18so17026553qvj.11
+        for <linux-spi@vger.kernel.org>; Thu, 09 Jun 2022 10:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=VmKJJeFJ/KpF94CjEx2z9QMo8W5JAOrBhtUecqJOMf9RpCQXqOgyLBmK+0MGMtvKgG
+         d383zpVuUCLAtexvVAQp6Dw5M/5BJ2Bh2dYFnfeV+vZ+fORy+klYMeCc/+rQvLh+Mezh
+         4USK9Md/f77a7IXs/q+ICXKUeCPt6UlZELPsq8/aLoun08cbrWV6qKg9TauEWfP3bICV
+         vl05I+cvjEaXNPK4Y4xArpbGFqsKiuRKii8UK6XjKxX7dorcHkd73qFlEK1TFvGEj3Xb
+         UwZroqOGGE+AsWCjx91SQiws3Q6VVgFyNLeKFK1wvcr6sFcgSP/whXFj2e3AL02wvoFw
+         0NoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=K+cPQ3QYMLfzNzNJlbmp1JnaLqeiH04M4IDppkUQp/qk9qjE3MAr3hjR45lJ+dRP5B
+         NT+C3FtDlYK7TlfZtnY4p+tExJUcA/0n86ioOxWrDFeh+s/nOFYHsy+Hd+A7PwaSzxNy
+         PDQpPAAmlpNva9YtsFRGfm3SFO+tQZcJY5yri2Da2K7Pf2GEaYh8nYo6jBTKDhI6jUbm
+         63bLALohcIFylGdG9rcYZdY/ZYiChep/6XbLFK2bHy/A10rPVfS7J3kJQxnCnApS2Xly
+         XysfM9Bj6CIHyf/QqitQFr4ttVEFt/S1t8avVTDP4y5cdW+wdazwXE1u8hQUB6M7sUQc
+         VHQg==
+X-Gm-Message-State: AOAM533sDqG9K7/svSaHgy4V4rC6FgQGjbxLmXYRm//SZ6I2anT6Oybe
+        yEK2u18pkIYgiDKxYzJ/hoEJISe+V2sL3LTTO7U=
+X-Google-Smtp-Source: ABdhPJy00pd3ZYGHsJSDqW9XsYBDB1hWGyWJ8WvXwUJCZUS3xCW4nAYhM7ez+pRufSm71ks8L6GoTQd+pzdP2m5H0tM=
+X-Received: by 2002:a05:6214:5296:b0:464:4d6d:afe2 with SMTP id
+ kj22-20020a056214529600b004644d6dafe2mr44588326qvb.70.1654797003980; Thu, 09
+ Jun 2022 10:50:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wi94CegXoQyVlfvV"
-Content-Disposition: inline
-In-Reply-To: <20220609173421.437fe1c4@erd992>
-X-Cookie: Space is limited.
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: mihirpat56@gmail.com
+Sender: charlesjuntikka2204@gmail.com
+Received: by 2002:a05:6214:234a:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:50:03
+ -0700 (PDT)
+From:   "Mr. Mihir Patel" <ij261347@gmail.com>
+Date:   Thu, 9 Jun 2022 10:50:03 -0700
+X-Google-Sender-Auth: lrm3pJEjGuhz9CMPhyphcr2Uatg
+Message-ID: <CAEOqroo4fPUsT_30zD2YjHDYXk-5HmVWmHQx0pAnY_o3eBGGXg@mail.gmail.com>
+Subject: Greetings to you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5022]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [charlesjuntikka2204[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [charlesjuntikka2204[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mihirpat56[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Greetings,
 
---wi94CegXoQyVlfvV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 09, 2022 at 05:34:21PM +0200, David Jander wrote:
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Wed, Jun 08, 2022 at 09:54:09AM +0200, David Jander wrote:
-> > > Mark Brown <broonie@kernel.org> wrote: =20
+I am contacting you for us to work together on a profitable business
+because you bear the same last name with a late client of our bank. I
+want to present you as his true next of kin to inherit his fund in our
+bank. As his account officer I have some necessary documents in my
+disposal to achieve this.
 
-> > I think the rest of it is fine or at least I'm finding it difficult to
-> > see anything beyond the concurrency issues.  I think we need to do an
-> > audit to find any users that are doing a spi_sync() to complete a
-> > sequence of spi_async() operations but I'm not aware of any and if it
-> > delivers the performance benefits it's probably worth changing that
-> > aspect of the driver API.
 
-> I just discovered a different issue (hit upon by Oleksij Rempel while
-> assisting with testing):
+I therefore reckoned that you could receive this fund as you are
+qualified by your last name. All the legal papers will be processed in
+your name as the deceased's true next of kin.
 
-> Apparently some drivers tend to rely on the fact that master->cur_msg is =
-not
-> NULL and always points to the message being transferred.
-> This could be a show-stopper to this patch set, if it cannot be solved.
-> I am currently analyzing the different cases, to see if and how they could
-> eventually get fixed. The crux of the issue is the fact that there are two
-> different API's towards the driver:
+Please revert back to me for further details if you can handle this with me.
 
-That seems resolvable?  If we have two things actually handling a
-message at once then we're in for a bad time so we should be able to
-arrange for cur_msg to be set in the sync path - the usage in the
-message pump between popping off the queue and getting to actually
-starting the transfer could be a local variable with the changes to the
-sync path I think?
 
->  1. transfer_one(): This call does not provide a reference to the message=
- that
->  contains the transfers. So all information stored only in the underlying
->  spi_message are not accessible to the driver. Apparently some work around
->  this by accessing master->cur_msg.
-
->  2. transfer_one_message(): I suspect this is a newer API. It takes the
->  spi_message as argument, thus giving the driver access to all informatio=
-n it
->  needs (like return status, and the complete list of transfers).
-
-It's the other way around - transfer_one() is the result of providing a
-transfer_one_message() which factors out more of the code given that a
-huge proportion of drivers are for hardware which works at the transfer
-level and doesn't understand messages, just as transfer_one_message()
-and the message queue are factoring out code which was originally open
-coded in drivers.
-
---wi94CegXoQyVlfvV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKiIFsACgkQJNaLcl1U
-h9AzrAf+LEqEuOWgmlrA0DdnfKzTVgG98OpZ3UVoywuiVmQztfTYKxlLU3ZbUUy0
-bEWR/qxDM1wjmC88qcEK8slOjrdxU4swKcxKzWAVfcjh1dgcrBlz3bajfN6xBDa+
-OSp1wGp6mZyx6LV6W+5Olp7X8GtvhdbfA4dl/MrxRvUcQesSd3YK9QamdJmbqJTC
-H/l1Fx9KaR5/XIA4GQsSB5ql2JOBHakawlQT85zg3F3vZ5G0Obt2T3mV7HWZ5O+u
-9/gPCFR3lIwDBVlYAgfBMu1sesGbfCbZ2wy9f9FjepyXkTJcae6qkonSGcEv6DJF
-60/7U0UkSNu8CBPBHr/DPGDiq0zCAA==
-=VU6h
------END PGP SIGNATURE-----
-
---wi94CegXoQyVlfvV--
+Mr. Mihir Patel
+Customer relation officer
