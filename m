@@ -2,69 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1572544489
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 09:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27246544534
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 09:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbiFIHM7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 03:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S235294AbiFIH4e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 03:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiFIHM6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 03:12:58 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2160E2428ED;
-        Thu,  9 Jun 2022 00:12:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VFrcIPJ_1654758771;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VFrcIPJ_1654758771)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Jun 2022 15:12:52 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next v2] spi: Return true/false (not 1/0) from bool function
-Date:   Thu,  9 Jun 2022 15:12:50 +0800
-Message-Id: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S234155AbiFIH4c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 03:56:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8882F0
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 00:56:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC03DB82C43
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 07:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BAA8C34114;
+        Thu,  9 Jun 2022 07:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654761388;
+        bh=mzq6TwRjNHGZf1ppI3/K91RXmvXLmv/EPAWRtbvykNQ=;
+        h=Subject:From:Date:To:From;
+        b=lV82aE4D6+rrLYqCWQ9pVPEe4igOtZVA7aCGLpcDHPvGAZ5ZGuPeiVBqoSSGJWTNB
+         eogYaRV/2hRhtAUr/0WArrLUFm+k1cifsEj6ckCpcqlYekErqQaX8CsB6rREd86w4F
+         cfPtF0I4GjqYUzR8GkyL23rPWFwvNil9g7fFBSYoNk6B7qFTKFs9qLjjcGMAYa65mu
+         PKympU9XJd3o4VYNkyPnmdjZ88ofVUxhPidIalFPEnmyQD5zreyG+KA73+Q59FSKOs
+         Wz8L0nWeoDOX/7tTeIttmh1mwgp+VElrEqt3oHGpidLN6OrFgnwTbwFi/tKAkOBhWO
+         uq7cHDhMfAvWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36558E737E8;
+        Thu,  9 Jun 2022 07:56:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165476138816.13738.7332721142654316160.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 09 Jun 2022 07:56:28 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-function.
+Latest series: [v2] spi: Return true/false (not 1/0) from bool function (2022-06-09T07:12:50)
+  Superseding: [v1] spi: Return true/false (not 1/0) from bool function (2022-06-09T06:03:23):
+    [-next] spi: Return true/false (not 1/0) from bool function
 
-As reported by coccicheck:
-./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
-'s3c64xx_spi_can_dma' with return type bool
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/spi/spi-s3c64xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 82558e37c735..28e7b7cb68a7 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -382,7 +382,7 @@ static bool s3c64xx_spi_can_dma(struct spi_master *master,
- 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
- 		return xfer->len > (FIFO_LVL_MASK(sdd) >> 1) + 1;
- 	} else {
--		return 0;
-+		return false;
- 	}
- 
- }
 -- 
-2.20.1.7.g153144c
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
