@@ -2,110 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C505449B8
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 13:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF524544B0F
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 13:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiFILHC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 07:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S243941AbiFILyh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 07:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiFILHC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 07:07:02 -0400
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7626223F219
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 04:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=w353nuApGt8vtX5Jn2h0hJmZSjbzHdw8HL6417uaAWc=;
-        b=O3HjyoOWUe+4/MSt6rA1m+4Ki0ELha15Mmbo1hF0xX6EkrnTYlsMjADocS4uqwuPH9zvFtNMQwpZg
-         GjBLSvp7snQJwbX9GLhnNG+ZA4jl/nd5xSN//1OtmfID3zXwOj3eVZ+2bjHU7XQSjWHfSN1dOP1IRU
-         o28SRmPPDBwmsdtzHcnAl5KbGg9WgLW9yzFmtCIj9z7PkMCikyodpQVJe7JhUK4tVkcMIgPVXmN7zb
-         WfSAvmp4MeFQkIi9V+HQX4868FXXsY4eBFEhUjPGumpletK0SfAqF+5nCX/8YEUXwsr3VYeBhAO5eO
-         dZqnJYEH+hh7XfjLwoEZh4/Y8cZUlhw==
-X-MSG-ID: 4639d699-e7e4-11ec-9896-0050569d2c73
-Date:   Thu, 9 Jun 2022 13:06:55 +0200
-From:   David Jander <david@protonic.nl>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>, ore@pengutronix.de,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2] drivers: spi: spi.c: Convert statistics to per-cpu
- u64_stats_t
-Message-ID: <20220609130655.3912bf63@erd992>
-In-Reply-To: <20220609093251.22l6farvsmggttz3@pengutronix.de>
-References: <20220524091808.2269898-1-david@protonic.nl>
-        <20220609093251.22l6farvsmggttz3@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S235123AbiFILyg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 07:54:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EBE2AF5;
+        Thu,  9 Jun 2022 04:54:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CF65B82D2A;
+        Thu,  9 Jun 2022 11:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE14C34114;
+        Thu,  9 Jun 2022 11:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654775671;
+        bh=W1JWHnccUeXeAdpiFbBoUz5WTQ95dDENGZmMGVO/HCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qxvUp7I06JbQcQ1Ts5s+jxq7RgLhlztPitqQElHUmbhCwAWbQXoEveAJnO+fb2JPn
+         KZCr7755OH2Sk8WSRFRBfvlItBmyYUM4as4j38U6BAtI/79y5dx9BXM9gtpPWITv6T
+         VT0nnQ0KpsL98b6uDPT/y3hwhcQBq9a8DUyOdNC18vzxOpfz8ozjE/YYAdzeaspgOM
+         XBLv4lEP5GnSCpAnkoxeCGTZkagXQLcbRs9PQeli3RCV4xHYAlnZ12ukx0fqK5Pwj/
+         1HOt52OjyRureUhAHb135ViPF6n1fOE9PzN6wABgWe70eBcQ71n00TcXxaYyCczjAk
+         oskBBB3AEwoEw==
+Date:   Thu, 9 Jun 2022 12:54:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, git@xilinx.com, michal.simek@xilinx.com,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, michael@walle.cc,
+        linux-mtd@lists.infradead.org
+Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
+ device
+Message-ID: <YqHfccvhy7e5Bc6m@sirena.org.uk>
+References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
+ <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jdtMuzYKequAryYb"
+Content-Disposition: inline
+In-Reply-To: <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
+X-Cookie: Space is limited.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 9 Jun 2022 11:32:51 +0200
-Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-> On 24.05.2022 11:18:08, David Jander wrote:
-> > This change gives a dramatic performance improvement in the hot path,
-> > since many costly spin_lock_irqsave() calls can be avoided.
-> >
-> > On an i.MX8MM system with a MCP2518FD CAN controller connected via SPI,
-> > the time the driver takes to handle interrupts, or in other words the time
-> > the IRQ line of the CAN controller stays low is mainly dominated by the
-> > time it takes to do 3 relatively short sync SPI transfers. The effect of
-> > this patch is a reduction of this time from 136us down to only 98us.
-> >
-> > Suggested-by: Andrew Lunn <andrew@lunn.ch>
-> > Signed-off-by: David Jander <david@protonic.nl>  
-> 
-> This patch (cherry picked on top of v5.19-rc1) explodes on 32-bit SMP
-> ARMv7 (imx6q) with:
-> 
-> | [    0.397493] BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-> | [    0.397514] caller is debug_smp_processor_id+0x18/0x24
-> | [    0.397544] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-> | [    0.397559] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> | [    0.397566] Backtrace:
-> | [    0.397576]  dump_backtrace from show_stack+0x20/0x24
-> | [    0.397616]  r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
-> | [    0.397621]  show_stack from dump_stack_lvl+0x60/0x78
-> | [    0.397644]  dump_stack_lvl from dump_stack+0x14/0x1c
-> | [    0.397664]  r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
-> | [    0.397669]  dump_stack from check_preemption_disabled+0xc8/0xf0
-> | [    0.397690]  check_preemption_disabled from debug_smp_processor_id+0x18/0x24
-> | [    0.397714]  r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
-> | [    0.397719]  debug_smp_processor_id from __spi_sync+0x78/0x220
-> | [    0.397746]  __spi_sync from spi_sync+0x34/0x4c
-> | [    0.397772]  r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
-> | [    0.397779]  r4:819f4c00
-> | [    0.397784]  spi_sync from spi_mem_exec_op+0x338/0x370
-> | [    0.397810]  r5:000000b4 r4:c083d910
-> | [    0.397815]  spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
-> | [    0.397846]  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
-> | [    0.397852]  r4:819f7c40
-> | [    0.397856]  spi_nor_read_id from spi_nor_detect+0x38/0x114
-> | [    0.397878]  r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
-> | [    0.397883]  spi_nor_detect from spi_nor_scan+0x11c/0xbec
-> | [    0.397910]  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
-> | [    0.397916]  r4:819f7c40
-> | [    0.397921]  spi_nor_scan from spi_nor_probe+0x10c/0x2d0
-> | [    0.397946]  r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
-> | [    0.397952]  r4:819f7c40
+--jdtMuzYKequAryYb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-*ouch*. Thanks for reporting. Fix coming up asap... apparently I forgot to
-get_cpu/put_cpu around the per-cpu operations :-(
+On Mon, Jun 06, 2022 at 04:56:06PM +0530, Amit Kumar Mahapatra wrote:
 
-Best regards,
+> ---
+>  drivers/spi/spi-zynqmp-gqspi.c | 30 ++++++++++++++++++++++++++----
+>  drivers/spi/spi.c              | 10 +++++++---
+>  include/linux/spi/spi.h        | 10 +++++++++-
+>  3 files changed, 42 insertions(+), 8 deletions(-)
 
--- 
-David Jander
+Please split the core and driver support into separate patches, they are
+separate things.
+
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -2082,6 +2082,8 @@ static int of_spi_parse_dt(struct spi_controller *c=
+tlr, struct spi_device *spi,
+>  {
+>  	u32 value;
+>  	int rc;
+> +	u32 cs[SPI_CS_CNT_MAX];
+> +	u8 idx;
+> =20
+>  	/* Mode (clock phase/polarity/etc.) */
+>  	if (of_property_read_bool(nc, "spi-cpha"))
+
+This is changing the DT binding but doesn't have any updates to the
+binding document.  The binding code also doesn't validate that we don't
+have too many chip selects.
+
+> +	/* Bit mask of the chipselect(s) that the driver
+> +	 * need to use form the chipselect array.
+> +	 */
+> +	u8			cs_index_mask : 2;
+
+Why make this a bitfield? =20
+
+I'm also not seeing anything here that checks that the driver supports
+multiple chip selects - it seems like something that's going to cause
+issues and we should probably have something to handle that situation.
+
+--jdtMuzYKequAryYb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKh33AACgkQJNaLcl1U
+h9CsYAf+K7KXAUBJmbfepS1Fpu01afQQATn4uiX25nly77oXZeedKRHFW8DxNljZ
+YrOPvrEgZ1RifDvfB2rXf7nqI1vbnPYs7V5fDbXEmY+CHgkkuoQTVmEI68woVgmh
+bLGBMoegY4LCy9p+WVKdQNQ+qVjLC+DZvfzdvhCnWfNtvPV0dwyAZfkrtzzwLNdn
+r2gtsF0vRwXeWXXWf4SzYdEhwjgGjJDM8ZRI/BIx4Q5Qzi80xTQIhy6lpps/YmTk
+BgCy9wXOjDysA5+pPv9JB+V4n75ReIyNCVcYTztEmdGEJZPVswnKgzjUC0Da1h9K
+uH3JL+kR4RFtVVb5+a6522VKxKGNdg==
+=xJNv
+-----END PGP SIGNATURE-----
+
+--jdtMuzYKequAryYb--
