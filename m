@@ -2,88 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFA254463A
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 10:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECED544668
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 10:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242355AbiFIInG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 04:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S232405AbiFIIvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 04:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242380AbiFIIlE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 04:41:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26440E69;
-        Thu,  9 Jun 2022 01:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654764028; x=1686300028;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Oaa6POuTrFoq1Nmz2rF5KjdgtPVUEHRqWrgwki6jQ5E=;
-  b=Z2btZrDIRvEtqHVoo2hUsJ0+3Ft6WQkj3m1w1FRncRtzxIzW2UZdMzUr
-   s1WBWZt/wYAwVJ5Owz2XnZIZU0TYTdq9xoF2hDjsLr4pdYRUTYluvDS12
-   LRRSNaaVENSolBdiEQEe2fG12cvxHaA9QYWUjbVSKNghvCmXARKFHVHrs
-   FEwo6uJg1faO67hVbFkyd3jZ+XYl0dljbWXsvmQ6ul+82SeXy5hbh5YLc
-   Shl0ENqcRWZ/oXrEWCPD60C4+Wcrlx8xhT/HOarmtMhHdIbadgPVPsHMC
-   C3Sm+xxlt/yORXD4qhc2IYfAzfZDjGqhg6Rr2OxOxaCbtin9sNph4pS18
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="167405374"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 01:40:28 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Jun 2022 01:40:26 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 01:40:23 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <broonie@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <tudor.ambarus@microchip.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 3/3] spi: atmel-quadspi: align condition to parenthesis
-Date:   Thu, 9 Jun 2022 11:42:46 +0300
-Message-ID: <20220609084246.1795419-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220609084246.1795419-1-claudiu.beznea@microchip.com>
-References: <20220609084246.1795419-1-claudiu.beznea@microchip.com>
+        with ESMTP id S241596AbiFIIum (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 04:50:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADA4149A96
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 01:48:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id h23so35020495ejj.12
+        for <linux-spi@vger.kernel.org>; Thu, 09 Jun 2022 01:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
+        b=KMK4oI5Fxe0qAHQkJ9CRo4IKa3GThd6bcTMU9rPxWbxZqBQFMskPd+ihFJHP4JcnZ3
+         XmY244lJqm4jhVPAye8YmfOGsXd/Bvvxjp0Fv9phkeVEFmoa81HLkTohIxs6I62s2ehf
+         GHtq8jUZKG3ijDVptmfLjIlJWIMxE0PgMbMlQLjQJjgwSfsxXoIKXDNU2nSLpAHJx89S
+         0o7tM13z5DXSV/8hRHefRz56S5a2PyGLBn7q/ETGU40Ym5n0UH7P1vHnbfcvJtT4++6o
+         5C8rLdB+EO/p9c2aw6/9lyHwuY7Bu/V4QDKR92OXSqeOnii9+OajsSWAZbWuo0mdkoMQ
+         U/rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
+        b=UzXRW3VhOHUh/EbWLUJDM+Oh6SNVH4vmInO5LTZ3zy5R4gTwkKEU7/m7UEryA0L3jz
+         urgAz7UYlZmRm60GwVqphHMwk3VrIarWpcAWlI/YvJ9MrrucJHsfiofpQHkdt8259Zy6
+         fss6KcKC+GbA9NFU8xv91yRgsI3pbuwc/r09zOnK4hbkuYkgveC0pA3hNNyf9jq2M3md
+         QaOIwV90UCizi4iuiyv5UsCu9UPxkElYRrad6rJe4JhDWfJJ/gmQflnIn9hQZ0oKxX9q
+         H2iCJ6TLX6FP57rBCvLPQTJPazAVblX/psOzD/D5gvwFxGCFTuVb/VeZbVm4Zfli9rr/
+         ismQ==
+X-Gm-Message-State: AOAM532fFnOHUJy3g/G4699QmcQrRAGRHvQlJd0zPo0fTDBLAnxlzDuN
+        sYYqiIm7Cf/pd8vz72nxjTMfSQ==
+X-Google-Smtp-Source: ABdhPJy8eOac2SjmBWPxOPqIBIeeBstXz50bOn/9Q8cluK6jx974GoDpH/JlagK8BogFTdJyDpkODw==
+X-Received: by 2002:a17:907:94c8:b0:711:d864:fd84 with SMTP id dn8-20020a17090794c800b00711d864fd84mr15226830ejc.18.1654764526284;
+        Thu, 09 Jun 2022 01:48:46 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y24-20020a170906071800b006feed200464sm10407049ejb.131.2022.06.09.01.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 01:48:45 -0700 (PDT)
+Message-ID: <dbf1416d-03ab-dfb2-434c-3cab879afd59@linaro.org>
+Date:   Thu, 9 Jun 2022 10:48:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next v2] spi: Return true/false (not 1/0) from bool
+ function
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Align condition to parenthesis.
+On 09/06/2022 09:12, Yang Li wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> function.
+> 
+> As reported by coccicheck:
+> ./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
+> 's3c64xx_spi_can_dma' with return type bool
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/spi/atmel-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index dea8a0311aaa..976a217e356d 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -286,7 +286,7 @@ static bool atmel_qspi_supports_op(struct spi_mem *mem,
- 
- 	/* special case not supported by hardware */
- 	if (op->addr.nbytes == 2 && op->cmd.buswidth != op->addr.buswidth &&
--		op->dummy.nbytes == 0)
-+	    op->dummy.nbytes == 0)
- 		return false;
- 
- 	return true;
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Best regards,
+Krzysztof
