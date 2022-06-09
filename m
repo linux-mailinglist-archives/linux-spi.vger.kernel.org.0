@@ -2,194 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2DC5450D6
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 17:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC835450E8
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 17:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243182AbiFIP35 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 11:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S237765AbiFIPe3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 11:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236403AbiFIP34 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 11:29:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D0CA44B;
-        Thu,  9 Jun 2022 08:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654788595; x=1686324595;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=HwHigHJcniU9knds2UCoBpDmY8FH768qOYTwChm0uQY=;
-  b=AoVuaz/2gLdVgX1xGdc6GnHemvgIsaZch+pKKELVJCvwzgFGT0+/eBpr
-   J/mW/RwPRgf8QI9HE69yurF9pjJuSHOptp2qkU0FFZwcCyEpCHONOi1/D
-   BxDT6DQ3PO5CvM8SPOBOOhYZ4M5BjRiviJTH4kHs76NSgU3y0BvDtFyYX
-   6UUQVuGZk/hs+HuCVQLYaNXOY9vSwEZKJDcDDm15To6i/88KFm7K6Qj/j
-   xA3MU5XLwKvQwPgk0oQLVkrQ55Q+twdfR6xmqgVl3BcVelyVdhUlwlaa1
-   4sb1hHNGl9tigpm2LCCDJT0d3tqGhQwefkgLpcSHf70mXtRxQPhJ/PRfl
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="167780113"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2022 08:28:24 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Jun 2022 08:28:24 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Jun 2022 08:28:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PVbJd1oPhCeQmNTqKbYdFw0gF6XMVXNmjupnGCm3/mUdjOdtZXSmFdPXKBVXrP+uEdIazS+HIrZcvnHyuB0ZKSyls5X7Cnd6s/CVH8T1HyHRf8qwx+F9PmUtSwI1C0MPE0Im8EoiJ6GWFxQYup8b0p1sEWtN8xuOO5nGY1LJ4yzcaFQpBzXQR6osZU7mFy9IjULb6s886bU9d2zJ0r8FBHF+TMuVFjxds+6/4oGNkssfIi/NvHu4hX/lG96KzgLrkjBYj7+PN93nzoeehDh0bRc0RM+H9kmtvVYZ4HCDPCmslZfeYBRoLfjc46PqnTFc4HNP4BKFhmncuq3X4UqocQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HwHigHJcniU9knds2UCoBpDmY8FH768qOYTwChm0uQY=;
- b=mXRcQnb0LxcAyesL5cS8d/u6v7mA11XvBGda0AM6KTqcSpaCcFoF09/FSuj6MgE5rtP011G9rpFgllQvQTuhcMJ59c3Iqwzx5VbusQa936T/uWjahzgYdxDEfMq6nMKPVGrlIrjtTrFx7fSQDf/ffgOp0sK0/nJVPPBdKkpJwMY+LQrrJw+7KhgdjK1xSWEIA9of5GrjW7yUrWEu2Nooe2Mn/C/5JeEFdgseW2Cilr493uZn3Mbhedp4HT6Xh4DUQaOmtqu1cSfkwWBcVKZLPaB61A6jReJzDl5MPB4Wx1NRNBCCr/ovhoEXuHKFBRX6Vs1/dycFe9uNsctX3HHBJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        with ESMTP id S237688AbiFIPe1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 11:34:27 -0400
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9641E1F77F1
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 08:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HwHigHJcniU9knds2UCoBpDmY8FH768qOYTwChm0uQY=;
- b=TvrPLV7sd2B2RTCS03NPGlQYJBYxgQJv/zIIl1d//EDhBldJH78PJ8Nhe96KSEjTribpixujRjo5q7Cf3yaZ81+CHyFhWD8nghF6TnAtQ0nls/5uXzi8DUWX+ZzUZhTSeAhbKlhgP/y8AEYRcJOBposwak3uwBNIEOGIkGHSTRo=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by BN6PR1101MB2084.namprd11.prod.outlook.com (2603:10b6:405:50::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Thu, 9 Jun
- 2022 15:28:10 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5314.019; Thu, 9 Jun 2022
- 15:28:10 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <krzysztof.kozlowski@linaro.org>, <yang.lee@linux.alibaba.com>
-CC:     <andi@etezian.org>, <broonie@kernel.org>,
-        <alim.akhtar@samsung.com>, <linux-spi@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] spi: Return true/false (not 1/0) from bool function
-Thread-Topic: [PATCH -next] spi: Return true/false (not 1/0) from bool
- function
-Thread-Index: AQHYfBWGK6vLozsMNkCTl//OwTjqNg==
-Date:   Thu, 9 Jun 2022 15:28:10 +0000
-Message-ID: <e28c0a30-9d49-f366-9562-f5a254bb4b09@microchip.com>
-References: <20220609060323.106095-1-yang.lee@linux.alibaba.com>
- <c0062aad-50f2-a9ea-ad04-8af9e70f8bba@linaro.org>
-In-Reply-To: <c0062aad-50f2-a9ea-ad04-8af9e70f8bba@linaro.org>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8d04134b-2875-41d7-0cb5-08da4a2ca951
-x-ms-traffictypediagnostic: BN6PR1101MB2084:EE_
-x-microsoft-antispam-prvs: <BN6PR1101MB2084B718402F8AE1679371E598A79@BN6PR1101MB2084.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ffihogz63wwatbw2t5cYFogzDVyc1WrxKUA+oMB3dkRAtWALB+NXwLbgTmjezSzE1GMAQUa1lSeVn2b1x6gynJXQe0jyLYmY65dC2eUy5LFaLschZoCeMvce/KKP13socLCgMdDfyrg1ioWetgrmpGZc+i8ytAHzvC/5jSXCTJ+vY+G7gO9+PfEeNUBhunoIoR2kGCEkf5287NKp0G9JdZeK7oyn4iL7dYkfrn9k53WsAgssT46I5/dZ2Y1XcVVb/6MeEYTk0HZHOubTRNPEkdcT1Hzvti24SavP8CwJ+yQyM6FR8ZUp22ySnCaRPQbR7SyEGoTGsxfRqpan2mzSxLkWbvGRsU1v22oSbOBpEBwB6ymOLvMTQ/R9CCGBiXD1Ezb4KpIKVUyMorqM6pEKIWLMjoS1C7sq+p14PHU8G5H0XtiqIUFEG09n9rFv0N/UP42uqGnHyFO4p2wU1gw8NmvsoYPFtQEU9y0Lxltx8/9qTednnVmmdCPDwALxSD8WymoP1SQaK6SMnNs16p8k7BaDHoIdJi53hJNlW4NV9tdmGGydz3WztIWQsnVw1Ap/PgeLYAMxNbXY2c9IzrRTOYp4ybBVodZctX5yeUARo3RgPGY2mrLksoYkmR4nJ4WdRU8XY9FeVFlAGG14grbJR7oXXsf16Ii7tq+9pwxE1GsG/KoLZJxqYCV4RiruNEPeiT4ijKRhG69Y/FcV4CXuomR0n8PlH27nSZZlBaV27LHN1uQiUHYvppAX8JnzrMK+y7KQMH7+K9n2NzZEwfpdCg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(31696002)(86362001)(38100700002)(122000001)(38070700005)(5660300002)(508600001)(7416002)(2906002)(6486002)(316002)(54906003)(71200400001)(91956017)(4326008)(64756008)(66476007)(186003)(8676002)(66446008)(66556008)(66946007)(76116006)(83380400001)(53546011)(6506007)(2616005)(26005)(6512007)(31686004)(110136005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T3dOaWQrbDB1RUo2OTlTeDNqaE1vc1hmTHJSYkpjNzVvT0UyRnJiTFpkTGVL?=
- =?utf-8?B?VXp2Sk0vK1JWRDdLaVptUSt5cGY0OEhTRkY4NG5wOGdCMXhXVitZWFFMbU5N?=
- =?utf-8?B?YkQzK1I1QVJRR3d4MWZwUVBIVWZKR0drTFNWVkNyVGN3dVBkY3Zram1HS29C?=
- =?utf-8?B?VVI1dURpa1E0TTlvNTlRdVlyOXNLQTBOYVc0aW1xNURFSU9xUXZIYnJwcG83?=
- =?utf-8?B?aFZGa3IzRWZiWVhPWlpzb29nWlJNeXFXSUNFNzh6M0RzOU1MaTJsZ21hOFhS?=
- =?utf-8?B?a2UzZTFCNE9COUUyOGJhQXdKMjlsUDNDazhSSFFyZ3loeTdobiszMlN1ZWdn?=
- =?utf-8?B?bkxEejhWaTJLRnovOEN4c0FNU3lMZnBGNUwyV3B1MDRkRHVRdTRVanA2V1NO?=
- =?utf-8?B?QlhFM3BtbUJ4OGQ0anI3aGNNTzE0djhKOVhydktESjFObEFDM2s3RDZDRldJ?=
- =?utf-8?B?YU5JS29ycllydWI5VGpYdE9mOGFTNjgvK1NTS1p0cytheDJ6K09PeUF2OGln?=
- =?utf-8?B?ZU9odXZQRWlsRUVlbzVBdnVCdFNRNC9rT0pRV2UxbWtQSXB4a05PTWJObHhC?=
- =?utf-8?B?K0VyMDJHN3hoZytYcHJ6WjVlcTNEWnM4NTErTjZ6QUowZHYrOGZmWWcvckJW?=
- =?utf-8?B?bHI2V09FcktyUC81YUZjZnZqQm5Ddmc3VGlJY1NLYWRXSml1dDV0UnlHTldW?=
- =?utf-8?B?TVlWMGR1cjNMSXFZWWNsVVdMQ3lHSkxualdCWXYrRTdzc2ZJdjhhZGhQQUlJ?=
- =?utf-8?B?dHBEeEZnYy8zNktGcHc0OUJoYU5hZ1VzZ3dVQ1VJS0VLNEQwY01rdUtuUVFK?=
- =?utf-8?B?ZXB6ZGtJYktld0dzTFg2Z2FkdDhTam5relU2VXpZMElWUlpDdGVBYkUyMm8w?=
- =?utf-8?B?TVY2ZmY1RmlFcVY1ZitMZzVWVEZBbGpUYWxlNXlGVkZKQ3g4L2diM0FDYWZV?=
- =?utf-8?B?VFoxSmh5SnVvMmtlOGgzQ05YN0hxSGc4dlplaHNZZzV1OVE1cUQwSFd5a2ZU?=
- =?utf-8?B?ZE9xK2xreFdyTWw3STEySkVEWi96bFhZTnMvRWlMckl4UlBWNVpDcEc0d0pZ?=
- =?utf-8?B?WUZLQXpzZ2pxc2JTckl2MDFtUXBDYXFTSnFtbHNRVWc3ZnJVOXZmZTk0em5V?=
- =?utf-8?B?WWtJampTUWtzQ0krS3dFVnlYUTJBUERoUEFFczZ4a1hDVWcwdTVHaG9abER5?=
- =?utf-8?B?NnlaWnpKVlcxZXFxL2M1SUZMbEtpaXFpMm1PZkV3TC8vVzZtWTdLS1JQMmlh?=
- =?utf-8?B?bll4T0hZVUp6YXR5bFFQaHhNWTYwK2VBQkY1UGZWTmN0R0tMQjIxTzNPaEhp?=
- =?utf-8?B?MnNRREhuM0FFVHp6RzlCMzZmSWtBWExwLzR3TEdPaVZGMXNPWkxhU1lUMldM?=
- =?utf-8?B?NkhQQzhrcjN3RGxtcUxjcmwyYjVaT3pIT2FFUWJXcGxpNnczMnRFZUVvN2NV?=
- =?utf-8?B?cm5KMkIrWEIxdDY4TG93YWFyWk1YN3IvRS9mdlY5UkMxcEdqMDNLSWtmNmJj?=
- =?utf-8?B?bXRBL05uSjA5a3hXaUNSdFF1bVZveTNRbVM4SktHazl5M0s0YTBsQis3dDhu?=
- =?utf-8?B?VVpQazlqaE8xZjBVYkpjQ3A5SEtrUHFaRjNMM0U3bUtxMjBmYXhaOHFOUFNS?=
- =?utf-8?B?eVYzYnhOQm5Va1Y1L2o2Q2oyZVBEdlJ4Vk9XdDEyTzVySHZrYmQ5ekJHSVZQ?=
- =?utf-8?B?LzFnRzFnYkJqNFhuTVJjWmFyWGJMeXlwRGQwWks3ZG9LZS9lblJ1NTBXY0I4?=
- =?utf-8?B?cU9YOXBROVVnVnVDUEFjVzRNZlAzK29IWjVLQnMzY0ZmS1JKNld1am85d1J1?=
- =?utf-8?B?UzhhakwzRmNIcUszbHA2Ri9QK1JyTzNEWjN6d0RRSTJBcjV3WTdvcDVFNEYx?=
- =?utf-8?B?OENwY1ZqaHN1SWszeTY2VU5yVTd3S2ZVS1pXd3F6MXdteS9HNk5HM2dZdGlo?=
- =?utf-8?B?UmU2MXFDMERDekhNL3BYN0NQUlJZandteE9MODZIUGVteHpTQU50UHpJWmps?=
- =?utf-8?B?WU8va09hYWVNWk5KdHhyVEk3UE5RbTE4R1NBNVZOYklZdHMyR0JYb2NHYXpH?=
- =?utf-8?B?VU14bU1mUHFrYklNajMwOHBvODVoQ3V0YkVMWUhWL3NMQVBab0h2djBPKy83?=
- =?utf-8?B?MCt0MmdlQmY2eS9Kd0p6OGUzd1l5VU54S00wazVqam1JWWpOQUxZQ3J1RzJQ?=
- =?utf-8?B?bkRBdGZJT2RGS1E1Y3F1TFZwelY0UzltWW8raENsWTZEaFNuYkNUZnRrcUlT?=
- =?utf-8?B?QW82eVNDbFJOMXo5MWZCUkE1aVJZMmhocUh6RlZhcXFFM3RtOFZUOUtXcDc1?=
- =?utf-8?B?dnpWUEpiYnVtVUNYd2hDTTAzWVduV1Qwc2gxMTJrVzNSalhEK0lUWnBOWVBL?=
- =?utf-8?Q?4SW2QhU9Pk6P4sBU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D5AAA620887EA24589E8D543CB2BC40D@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=qdu4XM0nz3ow8T9J21jsRD7dha7OFcnJOpY87IHpafc=;
+        b=Wc9b5RD4cb1IUxsLG2xz437F0++5zwHfYC+Z8uawMCnaiNyivaSrdJhzKogEhGT8u5DJrtJ3HIl1J
+         rfKJrieWuxEuo7xVuLnS/WU44hofFsjdNwSgbwPeOolT4ebad2j1yG0N2M06gl6pDBNNncoiB/WRD3
+         qsPElN9APzIkOXHLcE3Kgk+ClGR2R52CxZlGnepoWF3JshGCEI9QkBU/EDIUOc2NNRyIPteqjK3dav
+         +79Vsyia/grJz1N78RYotCZvneJp5UzRLlXMJyI8ia/xzoeUz6ERLjk3ZmVw9rerGut5wVbSQvqYUE
+         UntTE5/XWiHPokmIbRJzmyz6iXjb+ZA==
+X-MSG-ID: a2732132-e809-11ec-9896-0050569d2c73
+Date:   Thu, 9 Jun 2022 17:34:21 +0200
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <20220609173421.437fe1c4@erd992>
+In-Reply-To: <YqCIDNHjFP4p9xxs@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
+        <20220525142928.2335378-4-david@protonic.nl>
+        <20220525164603.57c98a0a@erd992>
+        <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+        <20220608095409.2d8c46fb@erd992>
+        <YqCIDNHjFP4p9xxs@sirena.org.uk>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d04134b-2875-41d7-0cb5-08da4a2ca951
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2022 15:28:10.5555
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QSNGPvKxv1r0TDarWv59weVp7OcE3DD7/Tk//LMeJSb5GNpbUBYfgNTczf7mKAbeakhFVG2tbZmnWdYQNoSYMlX2s+gG0+m2BwunipyrxOA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2084
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gMDkvMDYvMjAyMiAwNzozNiwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMDkv
-MDYvMjAyMiAwODowMywgWWFuZyBMaSB3cm90ZToNCj4+IFJldHVybiBib29sZWFuIHZhbHVlcyAo
-InRydWUiIG9yICJmYWxzZSIpIGluc3RlYWQgb2YgMSBvciAwIGZyb20gYm9vbA0KPj4gZnVuY3Rp
-b24uIFRoaXMgZml4ZXMgdGhlIGZvbGxvd2luZyB3YXJuaW5ncyBmcm9tIGNvY2NpY2hlY2s6DQo+
-Pg0KPj4gLi9kcml2ZXJzL3NwaS9zcGktczNjNjR4eC5jOjM4NTo5LTEwOiBXQVJOSU5HOiByZXR1
-cm4gb2YgMC8xIGluIGZ1bmN0aW9uDQo+PiAnczNjNjR4eF9zcGlfY2FuX2RtYScgd2l0aCByZXR1
-cm4gdHlwZSBib29sDQo+Pg0KPj4gUmVwb3J0ZWQtYnk6IEFiYWNpIFJvYm90IDxhYmFjaUBsaW51
-eC5hbGliYWJhLmNvbT4NCj4gDQo+IEl0IHdhcyByZXBvcnRlZCBieSBjb2NjaW5lbGxlLCBub3Qg
-cm9ib3QsIHdhc24ndCBpdD8NCj4gDQo+IEkgY2Fubm90IGZpbmQgdGhpcyByZXBvcnQuIA0KDQpZ
-ZWFoLCBJIHdhcyBzaW1pbGFybHkgY29uZnVzZWQgYnkgdGhlIHBhdGNoZXMgb24gbXkgZHJpdmVy
-Lg0KU3BlbnQgc29tZSB0aW1lIGRpZ2dpbmcgdGhyb3VnaCBxdWFyYW50aW5lIHN5c3RlbXMgZXRj
-IHRvDQp0cnkgYW5kIGZpbmQgdGhlIHJlcG9ydCAmIGNvdWxkbid0Lg0KDQpJIGhvcGUgSSBkaWRu
-J3QgbWlzcyBzb21ldGhpbmcuDQoNCj4gVGhpcyBpcyBhbiBvcGVuIHNvdXJjZSB3b3JrIGFuZCBw
-dWJsaWMNCj4gY29sbGFib3JhdGlvbi4gVGhlICJSZXBvcnRlZC1ieSIgdXN1YWxseSBtZWFucyB0
-aGF0IHRoZSBpc3N1ZSB3YXMNCj4gcmVwb3J0ZWQuIFVzdWFsbHkgaW4gcHVibGljLiBDYW4gd2Ug
-c2VlIHRoZSByZXBvcnQ/DQo+IE90aGVyd2lzZSBhZGRpbmcgbm9uLXB1YmxpYyByZXBvcnRzIGlz
-IHVzZWxlc3MgYW5kIGNsdXR0ZXJzIG91cg0KPiByZXBvcnQtY3JlZGl0LXN5c3RlbS4NCj4gDQo+
-IA0KPiANCj4+IFNpZ25lZC1vZmYtYnk6IFlhbmcgTGkgPHlhbmcubGVlQGxpbnV4LmFsaWJhYmEu
-Y29tPg0KPj4gLS0tDQo+PiAgZHJpdmVycy9zcGkvc3BpLXMzYzY0eHguYyB8IDIgKy0NCj4+ICAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4+DQo+PiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9zcGkvc3BpLXMzYzY0eHguYyBiL2RyaXZlcnMvc3BpL3NwaS1zM2M2
-NHh4LmMNCj4+IGluZGV4IDgyNTU4ZTM3YzczNS4uMjhlN2I3Y2I2OGE3IDEwMDY0NA0KPj4gLS0t
-IGEvZHJpdmVycy9zcGkvc3BpLXMzYzY0eHguYw0KPj4gKysrIGIvZHJpdmVycy9zcGkvc3BpLXMz
-YzY0eHguYw0KPj4gQEAgLTM4Miw3ICszODIsNyBAQCBzdGF0aWMgYm9vbCBzM2M2NHh4X3NwaV9j
-YW5fZG1hKHN0cnVjdCBzcGlfbWFzdGVyICptYXN0ZXIsDQo+PiAgCWlmIChzZGQtPnJ4X2RtYS5j
-aCAmJiBzZGQtPnR4X2RtYS5jaCkgew0KPj4gIAkJcmV0dXJuIHhmZXItPmxlbiA+IChGSUZPX0xW
-TF9NQVNLKHNkZCkgPj4gMSkgKyAxOw0KPj4gIAl9IGVsc2Ugew0KPj4gLQkJcmV0dXJuIDA7DQo+
-PiArCQlyZXR1cm4gZmFsc2U7DQo+PiAgCX0NCj4+ICANCj4+ICB9DQo+IA0KPiANCj4gUmV2aWV3
-ZWQtYnk6IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9y
-Zz4NCj4gDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0K
+On Wed, 8 Jun 2022 12:29:16 +0100
+Mark Brown <broonie@kernel.org> wrote:
+
+> On Wed, Jun 08, 2022 at 09:54:09AM +0200, David Jander wrote:
+> > Mark Brown <broonie@kernel.org> wrote:  
+> 
+> > > Moving idling (and all the was_busy stuff) within the io_mutex would
+> > > definitely resolve the issue, the async submission context is the only one
+> > > that really needs the spinlock and it doesn't care about idling.  I can't
+> > > think what you could do with the io_mutex when idling so it seems to
+> > > fit.  
+> 
+> > Ok, so we could agree on a way to fix this particular issue: put the idling
+> > transition into the io_mutex. Thanks.  
+> 
+> > Looking forward to read comments on the rest of the code, and the general idea
+> > of what I am trying to accomplish.  
+> 
+> I think the rest of it is fine or at least I'm finding it difficult to
+> see anything beyond the concurrency issues.  I think we need to do an
+> audit to find any users that are doing a spi_sync() to complete a
+> sequence of spi_async() operations but I'm not aware of any and if it
+> delivers the performance benefits it's probably worth changing that
+> aspect of the driver API.
+
+I just discovered a different issue (hit upon by Oleksij Rempel while
+assisting with testing):
+
+Apparently some drivers tend to rely on the fact that master->cur_msg is not
+NULL and always points to the message being transferred.
+This could be a show-stopper to this patch set, if it cannot be solved.
+I am currently analyzing the different cases, to see if and how they could
+eventually get fixed. The crux of the issue is the fact that there are two
+different API's towards the driver:
+
+ 1. transfer_one(): This call does not provide a reference to the message that
+ contains the transfers. So all information stored only in the underlying
+ spi_message are not accessible to the driver. Apparently some work around
+ this by accessing master->cur_msg.
+
+ 2. transfer_one_message(): I suspect this is a newer API. It takes the
+ spi_message as argument, thus giving the driver access to all information it
+ needs (like return status, and the complete list of transfers).
+
+One driver in particular spi-atmel.c, still used the deprecated
+master->cur_msg->is_dma_mapped flag. This is trivially fixed by replacing this
+with master->cur_msg_mapped, which is still available even in the sync path. It
+is still kinda ugly though, since it is a rather indirect way of obtaining
+information about the current transfer buffers it is handling.
+
+Some drivers look at master->cur_msg in interrupt mode if there was an error
+interrupt, to decide whether there is an ongoing transfer and sometimes also
+to store the error code in master->cur_msg->status. This could be solved by
+storing a reference to the current message in the private struct, but like in
+the other cases, there is no way to obtain that spi_message pointer from the
+transfer_one() call.
+
+In other words, there seem to be both a spi_transfer based API and a
+spi_message based API, but problems occur when the spi_transfer based calls
+need to know things about the underlying spi_message, which is sometimes
+artificially generated in functions like spi_sync_transfer(), so it always
+exists.
+
+Any suggestion which is the most desirable course of action?
+Try to fix the API inconsistency of wanting to access spi_message when all you
+asked for is a spi_transfer, try to work around it or just toss this patch,
+give up and call it a failed attempt because the impact is too big?
+
+Best regards,
+
+-- 
+David Jander
