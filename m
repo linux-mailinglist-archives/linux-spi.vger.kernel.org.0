@@ -2,152 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B82544B78
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 14:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C01544E79
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 16:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245209AbiFIMOV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 08:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
+        id S238677AbiFIONY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 10:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiFIMOU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 08:14:20 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B3926AEB
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 05:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=B/M5r4B90mbTkpJzac0CttJDuKdqEl0o8kb84irHerE=;
-        b=o6HzE3W8Ij5m1xQnFcTjjKq6lS2+eQtAgGGHD6sihovrqSSJJnxOzaQglQ4byIMoZwkIAbd7RGY5g
-         37hFqf6tCbEURL8luaZQG2i89IQVM0owNP2JV/hT5o5ZVOU0ncfJZRnSCLLRsZYkJrJzAsx4dDOe7m
-         /UNeWQcZr4imCE6RaYw+Bs15bDAepftCPzslHmzXnxdYe9XFTPvA8zHbX87ZuwcsCdhpS+xz6PkWVd
-         mVOMga98vqwcYxw52YXTNk53FxncTVGYm1109IKlHIxG+h0sdTip7HFeX+nhMa13hxiic1x5mwwv98
-         rW9c19Zlw6CJRuAclIa6PFb6y0RVITA==
-X-MSG-ID: ae2393fb-e7ed-11ec-a2aa-0050569d11ae
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
-Date:   Thu,  9 Jun 2022 14:13:34 +0200
-Message-Id: <20220609121334.2984808-1-david@protonic.nl>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S238611AbiFIONY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 10:13:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF44703E7;
+        Thu,  9 Jun 2022 07:13:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D77C7B82DFE;
+        Thu,  9 Jun 2022 14:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB63C3411B;
+        Thu,  9 Jun 2022 14:13:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654783998;
+        bh=/Jb5puY1IwHHQl2pvtto5BvzvEL2zeQNG34C1ZK0RVs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=a1QKtQ3nr3lj0XZvJ7QXDxrIDq2RN1M2ZSfhWMpm0T4jjwCkL7hB6wCnqXucgyx5J
+         DqThJeiD7o6u1/wNV3qxpNyMUUEdgWvtkVH7M6KKhrndUV3+hQcPqzJ/YCn9YY6BNr
+         kIUo7CBEGZy5pEowLnj18uIV0KBTZ5rOpz2GLhGEA+4hRN4yv6A3H4WrZ770Eww291
+         OZus9PmoHC7hn+nQwJsyBAnFNorXmrzKbqeI03qHuHDC3MW2ugccVZPqM0IYXQfwI/
+         Hztzd7a+4clC9M9nuLTvCsfhp+QwzZELOwkyAZUARNgKuQfh6Z++VAazafm12Mtr3G
+         xnsF5lSP4PsnQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     yang.lee@linux.alibaba.com, krzysztof.kozlowski@linaro.org
+Cc:     linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com
+In-Reply-To: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+References: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next v2] spi: Return true/false (not 1/0) from bool function
+Message-Id: <165478399683.1092145.4129788000879075205.b4-ty@kernel.org>
+Date:   Thu, 09 Jun 2022 15:13:16 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 32 bit systems, the following kernel BUG is hit:
+On Thu, 9 Jun 2022 15:12:50 +0800, Yang Li wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> function.
+> 
+> As reported by coccicheck:
+> ./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
+> 's3c64xx_spi_can_dma' with return type bool
+> 
+> [...]
 
-BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-caller is debug_smp_processor_id+0x18/0x24
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-Backtrace:
- dump_backtrace from show_stack+0x20/0x24
- r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
- show_stack from dump_stack_lvl+0x60/0x78
- dump_stack_lvl from dump_stack+0x14/0x1c
- r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
- dump_stack from check_preemption_disabled+0xc8/0xf0
- check_preemption_disabled from debug_smp_processor_id+0x18/0x24
- r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
- debug_smp_processor_id from __spi_sync+0x78/0x220
- __spi_sync from spi_sync+0x34/0x4c
- r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
- r4:819f4c00
- spi_sync from spi_mem_exec_op+0x338/0x370
- r5:000000b4 r4:c083d910
- spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
- r4:819f7c40
- spi_nor_read_id from spi_nor_detect+0x38/0x114
- r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
- spi_nor_detect from spi_nor_scan+0x11c/0xbec
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
- r4:819f7c40
- spi_nor_scan from spi_nor_probe+0x10c/0x2d0
- r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
- r4:819f7c40
+Applied to
 
-per-cpu access needs to be guarded against preemption.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: David Jander <david@protonic.nl>
----
- drivers/spi/spi.c       |  5 ++++-
- include/linux/spi/spi.h | 10 ++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
+Thanks!
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index d94822bf3cec..ac61824b87b5 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -314,11 +314,13 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 					      struct spi_controller *ctlr)
- {
- 	int l2len = min(fls(xfer->len), SPI_STATISTICS_HISTO_SIZE) - 1;
--	struct spi_statistics *stats = this_cpu_ptr(pcpu_stats);
-+	struct spi_statistics *stats;
- 
- 	if (l2len < 0)
- 		l2len = 0;
- 
-+	get_cpu();
-+	stats = this_cpu_ptr(pcpu_stats);
- 	u64_stats_update_begin(&stats->syncp);
- 
- 	u64_stats_inc(&stats->transfers);
-@@ -333,6 +335,7 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 		u64_stats_add(&stats->bytes_rx, xfer->len);
- 
- 	u64_stats_update_end(&stats->syncp);
-+	put_cpu();
- }
- 
- /*
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 2e63b4935deb..c96f526d9a20 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -84,18 +84,24 @@ struct spi_statistics {
- 
- #define SPI_STATISTICS_ADD_TO_FIELD(pcpu_stats, field, count)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_add(&__lstats->field, count);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- #define SPI_STATISTICS_INCREMENT_FIELD(pcpu_stats, field)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_inc(&__lstats->field);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- /**
--- 
-2.32.0
+[1/1] spi: Return true/false (not 1/0) from bool function
+      commit: 0356163e5883e298b518cd16517be633824987f9
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
