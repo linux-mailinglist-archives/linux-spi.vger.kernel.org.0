@@ -2,100 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECED544668
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 10:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4187C54479D
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 11:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiFIIvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 04:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S241000AbiFIJdD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jun 2022 05:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241596AbiFIIum (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 04:50:42 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADA4149A96
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 01:48:47 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id h23so35020495ejj.12
-        for <linux-spi@vger.kernel.org>; Thu, 09 Jun 2022 01:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
-        b=KMK4oI5Fxe0qAHQkJ9CRo4IKa3GThd6bcTMU9rPxWbxZqBQFMskPd+ihFJHP4JcnZ3
-         XmY244lJqm4jhVPAye8YmfOGsXd/Bvvxjp0Fv9phkeVEFmoa81HLkTohIxs6I62s2ehf
-         GHtq8jUZKG3ijDVptmfLjIlJWIMxE0PgMbMlQLjQJjgwSfsxXoIKXDNU2nSLpAHJx89S
-         0o7tM13z5DXSV/8hRHefRz56S5a2PyGLBn7q/ETGU40Ym5n0UH7P1vHnbfcvJtT4++6o
-         5C8rLdB+EO/p9c2aw6/9lyHwuY7Bu/V4QDKR92OXSqeOnii9+OajsSWAZbWuo0mdkoMQ
-         U/rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0FrUfxGjJdLOSXTrxUdjkVL6nrlzjO3+JUo/vnRLcSA=;
-        b=UzXRW3VhOHUh/EbWLUJDM+Oh6SNVH4vmInO5LTZ3zy5R4gTwkKEU7/m7UEryA0L3jz
-         urgAz7UYlZmRm60GwVqphHMwk3VrIarWpcAWlI/YvJ9MrrucJHsfiofpQHkdt8259Zy6
-         fss6KcKC+GbA9NFU8xv91yRgsI3pbuwc/r09zOnK4hbkuYkgveC0pA3hNNyf9jq2M3md
-         QaOIwV90UCizi4iuiyv5UsCu9UPxkElYRrad6rJe4JhDWfJJ/gmQflnIn9hQZ0oKxX9q
-         H2iCJ6TLX6FP57rBCvLPQTJPazAVblX/psOzD/D5gvwFxGCFTuVb/VeZbVm4Zfli9rr/
-         ismQ==
-X-Gm-Message-State: AOAM532fFnOHUJy3g/G4699QmcQrRAGRHvQlJd0zPo0fTDBLAnxlzDuN
-        sYYqiIm7Cf/pd8vz72nxjTMfSQ==
-X-Google-Smtp-Source: ABdhPJy8eOac2SjmBWPxOPqIBIeeBstXz50bOn/9Q8cluK6jx974GoDpH/JlagK8BogFTdJyDpkODw==
-X-Received: by 2002:a17:907:94c8:b0:711:d864:fd84 with SMTP id dn8-20020a17090794c800b00711d864fd84mr15226830ejc.18.1654764526284;
-        Thu, 09 Jun 2022 01:48:46 -0700 (PDT)
-Received: from [192.168.0.195] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y24-20020a170906071800b006feed200464sm10407049ejb.131.2022.06.09.01.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 01:48:45 -0700 (PDT)
-Message-ID: <dbf1416d-03ab-dfb2-434c-3cab879afd59@linaro.org>
-Date:   Thu, 9 Jun 2022 10:48:44 +0200
+        with ESMTP id S234852AbiFIJdC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 05:33:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722B8374EE6
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jun 2022 02:33:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nzEX7-0002mY-1C; Thu, 09 Jun 2022 11:32:53 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BC3AD8FEFA;
+        Thu,  9 Jun 2022 09:32:51 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 11:32:51 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     David Jander <david@protonic.nl>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>, ore@pengutronix.de,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2] drivers: spi: spi.c: Convert statistics to per-cpu
+ u64_stats_t
+Message-ID: <20220609093251.22l6farvsmggttz3@pengutronix.de>
+References: <20220524091808.2269898-1-david@protonic.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next v2] spi: Return true/false (not 1/0) from bool
- function
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     andi@etezian.org, broonie@kernel.org, alim.akhtar@samsung.com,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220609071250.59509-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="67porcnrpubyut32"
+Content-Disposition: inline
+In-Reply-To: <20220524091808.2269898-1-david@protonic.nl>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/06/2022 09:12, Yang Li wrote:
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> function.
-> 
-> As reported by coccicheck:
-> ./drivers/spi/spi-s3c64xx.c:385:9-10: WARNING: return of 0/1 in function
-> 's3c64xx_spi_can_dma' with return type bool
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
+--67porcnrpubyut32
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 24.05.2022 11:18:08, David Jander wrote:
+> This change gives a dramatic performance improvement in the hot path,
+> since many costly spin_lock_irqsave() calls can be avoided.
+>
+> On an i.MX8MM system with a MCP2518FD CAN controller connected via SPI,
+> the time the driver takes to handle interrupts, or in other words the time
+> the IRQ line of the CAN controller stays low is mainly dominated by the
+> time it takes to do 3 relatively short sync SPI transfers. The effect of
+> this patch is a reduction of this time from 136us down to only 98us.
+>
+> Suggested-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: David Jander <david@protonic.nl>
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+This patch (cherry picked on top of v5.19-rc1) explodes on 32-bit SMP
+ARMv7 (imx6q) with:
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+| [    0.397493] BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
+| [    0.397514] caller is debug_smp_processor_id+0x18/0x24
+| [    0.397544] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
+| [    0.397559] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+| [    0.397566] Backtrace:
+| [    0.397576]  dump_backtrace from show_stack+0x20/0x24
+| [    0.397616]  r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
+| [    0.397621]  show_stack from dump_stack_lvl+0x60/0x78
+| [    0.397644]  dump_stack_lvl from dump_stack+0x14/0x1c
+| [    0.397664]  r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
+| [    0.397669]  dump_stack from check_preemption_disabled+0xc8/0xf0
+| [    0.397690]  check_preemption_disabled from debug_smp_processor_id+0x18/0x24
+| [    0.397714]  r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
+| [    0.397719]  debug_smp_processor_id from __spi_sync+0x78/0x220
+| [    0.397746]  __spi_sync from spi_sync+0x34/0x4c
+| [    0.397772]  r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
+| [    0.397779]  r4:819f4c00
+| [    0.397784]  spi_sync from spi_mem_exec_op+0x338/0x370
+| [    0.397810]  r5:000000b4 r4:c083d910
+| [    0.397815]  spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
+| [    0.397846]  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
+| [    0.397852]  r4:819f7c40
+| [    0.397856]  spi_nor_read_id from spi_nor_detect+0x38/0x114
+| [    0.397878]  r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
+| [    0.397883]  spi_nor_detect from spi_nor_scan+0x11c/0xbec
+| [    0.397910]  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
+| [    0.397916]  r4:819f7c40
+| [    0.397921]  spi_nor_scan from spi_nor_probe+0x10c/0x2d0
+| [    0.397946]  r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
+| [    0.397952]  r4:819f7c40
 
-If a tag was not added on purpose, please state why and what changed.
+Marc
 
+--
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Best regards,
-Krzysztof
+--67porcnrpubyut32
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKhvkAACgkQrX5LkNig
+013s1ggAlLIe2Y2WSmR9QRJcxw0uo3de57ZltDusBoZdQN2ARl+++2qp0HMmcpQn
+Ay3Uvf/IkzYxT9Xwwkg8pFdYsCEUAuGV36Hw6CfHDtGhjMJd3htpcf5PXTMG5t16
+2T027o/qFMGM3w+ixgsWheg/esgcj0/8AiAc2w3xItJMEroYH8nxeZXC3wFWo3Ng
+4jHd+AaLsr7ejSUGTKqJ8uhTdrax8R0JCgivtGkC1Z/PI9GH3KcZX7q/LW/BuEnI
+agr8npMztVuYnUlyYAFLQgt455XVbI9rP+/y9voD1ea2J5alercj28FgIAt7ojq9
+OtXJa+oZgp4Dp5q7gSkiiYaOvCVtPQ==
+=pr55
+-----END PGP SIGNATURE-----
+
+--67porcnrpubyut32--
