@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C516654562E
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jun 2022 23:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD74545D60
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 09:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345366AbiFIVI2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jun 2022 17:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S1343879AbiFJH2E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 03:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343754AbiFIVI1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jun 2022 17:08:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B94426CE50;
-        Thu,  9 Jun 2022 14:08:26 -0700 (PDT)
-Received: from notapiano (unknown [169.150.201.35])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B67F56601691;
-        Thu,  9 Jun 2022 22:08:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654808905;
-        bh=wYeX97LtF96VJpDARGz/GPWf65EoYfMupPmpSXKKEU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NIFn3AiPH2Rh1sHlyWAlRt1D2a524FB0g3k34Q1THAnAUOVUsU0SumpfnlhzQrUGX
-         qmutXUZoMMPUWJB1JUF+CWs4a1c0cOq+p4E3TsGTrK5+NmjQ9aN8eRE8RLuQwb9mjO
-         KmeIja69jkQ8XQpi3mViWvsQ3J3JO+Qs3UR4C/al2e+TRonk9RjJf33IzKL53E1VYF
-         XNZjX8omDzuZtuKsQ+qgYSQN+JcGUFMQq9z0yUNj26va4kHOJEUjYOoOvUxlhP/bCU
-         WothVV7XPZdfXxeit5NZwbtKH630XEJd533V3s9nWxjEKNhU98NUefAyvzkTmDJh98
-         aDiubNDDc5hPA==
-Date:   Thu, 9 Jun 2022 17:08:18 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     David Jander <david@protonic.nl>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
-Message-ID: <20220609210818.eysyw4rjy7gd3lq2@notapiano>
-References: <20220609121334.2984808-1-david@protonic.nl>
+        with ESMTP id S1343902AbiFJH2D (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 03:28:03 -0400
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF4C3669A
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 00:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=Ablhtd/H3mbMh2/nLPtjUF6myRO3X5LxkQs75FcSoPs=;
+        b=u7yiciBucZ9AlkdUn8APfYol6gNbrIA504NgtYIxYMOlYhw9OuVhzHaNmLKAKxKFF+4IdhnvhW4vT
+         SOzK+C7zu6DpgLvBL/RsiaOQNZHOzqgHUbP/MpcD/Dszia5yKv3f3yYZ/Hk77d9LBxzwqQ6eZCH13c
+         +YddY6W47peOVr/QOF41u8EVc04TggyvZUfIcKHOqFP4UEukD2vnMX9w/RvK9gWevXlkJcfyhGCZ2r
+         Cq2q8/At+9skL9yxnUA2Jk4MFpKl3jO/7kc0bMIxcH2GxsGeo1Q0k+e40nbZV6Ar7wrymJpierU5cu
+         SQj7TBkuSOlew0aZlc9RQJDIEhhocpQ==
+X-MSG-ID: d735f1aa-e88e-11ec-b450-0050569d3a82
+Date:   Fri, 10 Jun 2022 09:27:53 +0200
+From:   David Jander <david@protonic.nl>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <20220610092753.6e6c9e59@erd992>
+In-Reply-To: <YqIgXDZAHPAQ1Y4O@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
+        <20220525142928.2335378-4-david@protonic.nl>
+        <20220525164603.57c98a0a@erd992>
+        <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+        <20220608095409.2d8c46fb@erd992>
+        <YqCIDNHjFP4p9xxs@sirena.org.uk>
+        <20220609173421.437fe1c4@erd992>
+        <YqIgXDZAHPAQ1Y4O@sirena.org.uk>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220609121334.2984808-1-david@protonic.nl>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,52 +58,74 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 02:13:34PM +0200, David Jander wrote:
-> On 32 bit systems, the following kernel BUG is hit:
+On Thu, 9 Jun 2022 17:31:24 +0100
+Mark Brown <broonie@kernel.org> wrote:
+
+> On Thu, Jun 09, 2022 at 05:34:21PM +0200, David Jander wrote:
+> > Mark Brown <broonie@kernel.org> wrote:  
+> > > On Wed, Jun 08, 2022 at 09:54:09AM +0200, David Jander wrote:  
+> > > > Mark Brown <broonie@kernel.org> wrote:    
 > 
-> BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-> caller is debug_smp_processor_id+0x18/0x24
-> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> Backtrace:
->  dump_backtrace from show_stack+0x20/0x24
->  r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
->  show_stack from dump_stack_lvl+0x60/0x78
->  dump_stack_lvl from dump_stack+0x14/0x1c
->  r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
->  dump_stack from check_preemption_disabled+0xc8/0xf0
->  check_preemption_disabled from debug_smp_processor_id+0x18/0x24
->  r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
->  debug_smp_processor_id from __spi_sync+0x78/0x220
->  __spi_sync from spi_sync+0x34/0x4c
->  r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
->  r4:819f4c00
->  spi_sync from spi_mem_exec_op+0x338/0x370
->  r5:000000b4 r4:c083d910
->  spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
->  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
->  r4:819f7c40
->  spi_nor_read_id from spi_nor_detect+0x38/0x114
->  r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
->  spi_nor_detect from spi_nor_scan+0x11c/0xbec
->  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
->  r4:819f7c40
->  spi_nor_scan from spi_nor_probe+0x10c/0x2d0
->  r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
->  r4:819f7c40
+> > > I think the rest of it is fine or at least I'm finding it difficult to
+> > > see anything beyond the concurrency issues.  I think we need to do an
+> > > audit to find any users that are doing a spi_sync() to complete a
+> > > sequence of spi_async() operations but I'm not aware of any and if it
+> > > delivers the performance benefits it's probably worth changing that
+> > > aspect of the driver API.  
 > 
-> per-cpu access needs to be guarded against preemption.
+> > I just discovered a different issue (hit upon by Oleksij Rempel while
+> > assisting with testing):  
 > 
-> Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: David Jander <david@protonic.nl>
+> > Apparently some drivers tend to rely on the fact that master->cur_msg is not
+> > NULL and always points to the message being transferred.
+> > This could be a show-stopper to this patch set, if it cannot be solved.
+> > I am currently analyzing the different cases, to see if and how they could
+> > eventually get fixed. The crux of the issue is the fact that there are two
+> > different API's towards the driver:  
+> 
+> That seems resolvable?  If we have two things actually handling a
+> message at once then we're in for a bad time so we should be able to
+> arrange for cur_msg to be set in the sync path - the usage in the
+> message pump between popping off the queue and getting to actually
+> starting the transfer could be a local variable with the changes to the
+> sync path I think?
 
-Hi, the issue isn't 32-bit specific. I'm seeing it on an aarch64 machine
-(mt8192-asurada-spherion) running next-20220609.
+Ok, I first thought that this wouldn't be possible without taking the
+necessary spinlock, but looking a little closer, I think I understand now.
+One question to confirm I understand the code correctly:
+An SPI driver that implements its own transfer_one_message() is required to
+_always_ call spi_finalize_current_message() _before_ returning, right?
+If this is a guarantee and we take the io_mutex at the beginning of
+__spi_pump_messages(), then ctlr->cur_msg is only manipulated with the
+io_mutex held, and that would make it safe to be used in the sync path, which
+is also behind the io_mutex.
+Would appreciate if you could confirm this, just to be sure I understand the
+code correctly.
+The fact that spi_finalize_current_message() is a separate API function, and
+not called directly from __spi_pump_messages() had me confused that it might
+be called in a different context (from IRQ thread or something like that)
+possibly after __spi_pump_messages() had already returned. But that doesn't
+make much sense... right?
 
-The fix did work for me, so
+> >  1. transfer_one(): This call does not provide a reference to the message that
+> >  contains the transfers. So all information stored only in the underlying
+> >  spi_message are not accessible to the driver. Apparently some work around
+> >  this by accessing master->cur_msg.
+> 
+> >  2. transfer_one_message(): I suspect this is a newer API. It takes the
+> >  spi_message as argument, thus giving the driver access to all information it
+> >  needs (like return status, and the complete list of transfers).
+> 
+> It's the other way around - transfer_one() is the result of providing a
+> transfer_one_message() which factors out more of the code given that a
+> huge proportion of drivers are for hardware which works at the transfer
+> level and doesn't understand messages, just as transfer_one_message()
+> and the message queue are factoring out code which was originally open
+> coded in drivers.
 
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Ah, thanks for the context. This makes sense or course.
 
-Thanks!
-Nícolas
+Best regards,
+
+-- 
+David Jander
