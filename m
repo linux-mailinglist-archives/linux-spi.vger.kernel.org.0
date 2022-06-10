@@ -2,48 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9135467CA
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 15:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE49D546807
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 16:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349171AbiFJNzH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 09:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S231620AbiFJOFs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 10:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349372AbiFJNy0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 09:54:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF7E515B9;
-        Fri, 10 Jun 2022 06:54:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13F5DB83537;
-        Fri, 10 Jun 2022 13:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A03C3411F;
-        Fri, 10 Jun 2022 13:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654869262;
-        bh=mPg6bfZMXXacmXro0sQ+0OEfahDPZlcqrGsx38/fb8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vkuritKrLb753MyMAs+tWvofUCRWHuqtMkc8hu088Y24qkbonNV3/gwcol+jpi7UV
-         gyl65+RTgzJUES7BFn0JznyZ6O3K3xK5h+dZDDu1N/JFXw3iSM0j6AKU2cG5gFjNcN
-         KYMNWuf47VMpob673gcq2frd76YnFDDKWF03yV1w=
-Date:   Fri, 10 Jun 2022 15:54:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/2] driver core: Introduce device_find_any_child()
- helper
-Message-ID: <YqNNDOpPNB5r0SYN@kroah.com>
-References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229974AbiFJOFr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 10:05:47 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C5D21B112;
+        Fri, 10 Jun 2022 07:05:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u12so53721495eja.8;
+        Fri, 10 Jun 2022 07:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YbP9gsqB3qLAoNU77kEBLK9K01UViT8sDRAizGOWGnQ=;
+        b=nWkjQLJG1m1S4r5WE2Gtw3EP/pIxjJTHgF1eR8+KokXXsSNNpb+SqC94VTcD0tAMp3
+         tkefAzAetwJHDH0kmJ24rFsU/5cVNdS+HmLXBqyfZHdCJSzPGrYFZ+CiwmIjrt2VFFjO
+         xCuFSR8HaLcnWttMLCYSLjvH/J4NgGKk7sgLQJbCSIaUdFhpFRip6jwyCCspYMD5ZMuB
+         ya848z4SH/f4Uralab+xCGDpPzTAt7O294CzkXjb4pj7qCEVzUXU4Rit5EzWc1Sc39Yb
+         OoWIOUVgZ1uEDRlPM6LKkrSXL1AkCoVY/mi6aFcPn3wPYc5s3QeDbEpR4edSLelxDVRT
+         Zgig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YbP9gsqB3qLAoNU77kEBLK9K01UViT8sDRAizGOWGnQ=;
+        b=Y5fXsNsnTucKuVdZWkb4ewN9X+e1l3+addHk6G8UzIhKyd2aFMGoiHThRBiW3hVBpK
+         8yti8jP47UNQ8IrTpKMVcq3iLpK9JFHs8byRz0x+mib2wsk7l73jjOxuZot3riUSZMXg
+         sZn94Uc5B0h9qXbiNA5v5X70mJ6WTGrqrT/ncGZqTUuTZjcvw8bmCD64I8Tzsxv5+O5r
+         3bgEwOJZCgcYQRZSmlnAaT4CgG+HbLCEOb15GV/0UQYl/KPSFTuvdrdHcbZ9wQA1R3aW
+         MWojWKdzQnDgjEyn/600RjDWsGUMrnJi2sIlq3msvsmHwqxpXArw+rq3qA8/RtSknvAe
+         dtPg==
+X-Gm-Message-State: AOAM533YyMCMijcvEV84w8CT/1hRLYvJC5oBKmZP2DD6tWAdWB+UvtQq
+        G4V1dBzZrq17YoqY9Vf09hXUgEr6VDowMZzMiOM=
+X-Google-Smtp-Source: ABdhPJwdT1ddg6Z7ftgUrjujTENenz0urdV1b3U/bCuWXcAIRq+FIlp8WEY+sC9/bq1VeoLtxTiU4RFuGbwHqkQXIL0=
+X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
+ cr16-20020a170906d55000b007047ba69854mr40122920ejc.579.1654869945337; Fri, 10
+ Jun 2022 07:05:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220609121334.2984808-1-david@protonic.nl>
+In-Reply-To: <20220609121334.2984808-1-david@protonic.nl>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 10 Jun 2022 16:05:06 +0200
+Message-ID: <CAHp75VeA72YLPbPipx+MQCHdkgXy5dnCbADm=CMjgA5NpJE44g@mail.gmail.com>
+Subject: Re: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
+To:     David Jander <david@protonic.nl>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,14 +68,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 03:02:18PM +0300, Andy Shevchenko wrote:
-> There are several places in the kernel where this kind of functionality is
-> being used. Provide a generic helper for such cases.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: renamed method (Greg), refactored it (Rafael)
+On Thu, Jun 9, 2022 at 2:29 PM David Jander <david@protonic.nl> wrote:
+>
+> On 32 bit systems, the following kernel BUG is hit:
+>
+> BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
 
-Much nicer, thanks, I'll go queue this up now.
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#backtraces-in-commit-mesages
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
