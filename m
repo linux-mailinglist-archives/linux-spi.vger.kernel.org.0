@@ -2,87 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A6954665E
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE98E546771
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 15:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242459AbiFJMQk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 08:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S232839AbiFJNkj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 09:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235247AbiFJMQj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:16:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DF43B2B2;
-        Fri, 10 Jun 2022 05:16:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7523CB834E1;
-        Fri, 10 Jun 2022 12:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B861EC34114;
-        Fri, 10 Jun 2022 12:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654863396;
-        bh=zB3k8TqYI+NLDCnckqerXX2X3aCo7zmeZE9wRHMRpuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=og1OdUK1MEcxYSR7cQpq966zbZ2CCjLdGq9dARdRx4/tdhxzdl39YW95T0bwIx7QI
-         FeLWGkkfH4dhfM7UXdkrCG8KzdXFaZPtSUzbQe1P9/g0knunqp2p2t9Wa7VZZJUDQN
-         zG7iGhcvq1n6f84728p3geqcUUg0Oxn/h2lzDIpof6SIR8EHXCnY3wPBTUn1EiMJF2
-         8PqDBJcteEXquFTunLwc535Dvy+c/fikAc5yUWmtCC1uptnBJEyNFOXp10Ed9jOgBn
-         Az+eWtfEfvLfxv5ksUDSSJhcdRiA7piPq2yZerKUTTJK6a9QiwgLs9BFXt0eoFhWWc
-         nSjLSXwEpwblA==
-Date:   Fri, 10 Jun 2022 13:16:31 +0100
-From:   Mark Brown <broonie@kernel.org>
+        with ESMTP id S229516AbiFJNkh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 09:40:37 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF2D3A71F;
+        Fri, 10 Jun 2022 06:40:35 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-30c143c41e5so272569497b3.3;
+        Fri, 10 Jun 2022 06:40:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uBdKtGW7fZxQ5+SFCWAo4vdz+hLcnONQN5dsbtogcvQ=;
+        b=EQDv10Q6xw+t2P4ruF4bxC1Uc+Tuwu75xeYNfsEf1JpfGugYU3q0xT9PnB++Vd9R1W
+         CT0XQYMZGfbyfn6c2yz6EH2aJjey8cqX39EWeRPTQYukDJs06q9TyqcSI8jDsO2bwTG8
+         3zQYvDfRuAFpOqKoCJUPrW8QsKaInDww0xFe+Rt42c7g67wcaXGSl153ed+udoHoo1I+
+         ab4qPgV1L1p+DC3e3NQXpityh16Pmp9TwCUT1DMICHrXRDF3CuWkbwTJ6efyWhAlpC/7
+         1n87jcseJYHoApnAbQ04afL8m2z/ZbQiPmJ/pDCMiJAcK6Zsoo/mOVmpcWitdD6WDqK4
+         MaNg==
+X-Gm-Message-State: AOAM530ZzpwS0w9hfst28oiFthTtnn/n2sReVHbMAsa8kVmZU/cHeUee
+        AEJTgFS/Rl6Flv5XR3Rnux1zo0yUhj4NvoU7ONE=
+X-Google-Smtp-Source: ABdhPJx9RtNllu+NXEiCLNeoJWKFqffkqoy+hzByxzxKYvlx2QwooTOEmnPA588AgZzx8m+n2clldb+8qAjVgl/ZBEY=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr48706250ywm.149.1654868434983; Fri, 10
+ Jun 2022 06:40:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Jun 2022 15:40:23 +0200
+Message-ID: <CAJZ5v0g3pHDNkVu6YqANO7yM4s_CPih0nBXcgz3OBmrRSjLh2A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Introduce device_find_any_child() helper
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 2/2] spi: Use device_find_any_child() instead of
- custom approach
-Message-ID: <YqM2H8iG5Y2MKrNK@sirena.org.uk>
-References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
- <20220610120219.18988-2-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lLUmA+2Xem4TZBVE"
-Content-Disposition: inline
-In-Reply-To: <20220610120219.18988-2-andriy.shevchenko@linux.intel.com>
-X-Cookie: Teachers have class.
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Jun 10, 2022 at 2:02 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> There are several places in the kernel where this kind of functionality is
+> being used. Provide a generic helper for such cases.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: renamed method (Greg), refactored it (Rafael)
+>  drivers/base/core.c    | 20 ++++++++++++++++++++
+>  include/linux/device.h |  2 ++
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 7cd789c4985d..a519307fda60 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -3832,6 +3832,26 @@ struct device *device_find_child_by_name(struct device *parent,
+>  }
+>  EXPORT_SYMBOL_GPL(device_find_child_by_name);
+>
+> +static int match_any(struct device *dev, void *unused)
+> +{
+> +       return 1;
+> +}
+> +
+> +/**
+> + * device_find_any_child - device iterator for locating a child device, if any.
+> + * @parent: parent struct device
+> + *
+> + * This is similar to the device_find_child() function above, but it
+> + * returns a reference to a child device, if any.
+> + *
+> + * NOTE: you will need to drop the reference with put_device() after use.
+> + */
+> +struct device *device_find_any_child(struct device *parent)
+> +{
+> +       return device_find_child(parent, NULL, match_any);
+> +}
+> +EXPORT_SYMBOL_GPL(device_find_any_child);
 
---lLUmA+2Xem4TZBVE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I would call it device_get_any_child() to indicate the reference
+counting, but that's a very minor nit.
 
-On Fri, Jun 10, 2022 at 03:02:19PM +0300, Andy Shevchenko wrote:
-> We have already a helper to get the first child device, use it and
-> drop custom approach.
+Regardless of the above
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---lLUmA+2Xem4TZBVE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjNh4ACgkQJNaLcl1U
-h9AK6gf+JOkepmDgAErfr3ruTqIWTWi3qZ9vVXOdiFmPpmTKjdmBq/AoWTaYuw7H
-dV5yx3vu4TztiGhf4p4X9KM/gswe+Ybr2BrxmlYMuqNVowDHAOCNZnlzTlqutOkr
-+Rj8aS47joDZr80IdEr8RfX2bkWmZxiYHPuwocxJeTn5dCRHyXqyD4i/4XrBSNr7
-CEeFd1gMDRlYF0gy0qK/PvMEzIYvdBWp3DQW633A7oFtEgpDH9GOzgdoA8uNv0GP
-ge5IfF15siva4tnWvxBvdmurCLl7O5M1R5L8t9rJCCkLkNrXVI8RNpR7n2OyHyNJ
-4Nnrh/VmWTcQp7Z2F6DtwqhP/LRvXg==
-=X6d1
------END PGP SIGNATURE-----
-
---lLUmA+2Xem4TZBVE--
+> +
+>  int __init devices_init(void)
+>  {
+>         devices_kset = kset_create_and_add("devices", &device_uevent_ops, NULL);
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index dc941997795c..424b55df0272 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -905,6 +905,8 @@ struct device *device_find_child(struct device *dev, void *data,
+>                                  int (*match)(struct device *dev, void *data));
+>  struct device *device_find_child_by_name(struct device *parent,
+>                                          const char *name);
+> +struct device *device_find_any_child(struct device *parent);
+> +
+>  int device_rename(struct device *dev, const char *new_name);
+>  int device_move(struct device *dev, struct device *new_parent,
+>                 enum dpm_order dpm_order);
+> --
+> 2.35.1
+>
