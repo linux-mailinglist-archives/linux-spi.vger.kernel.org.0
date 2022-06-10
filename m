@@ -2,50 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67736546579
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 13:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E9254662C
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344921AbiFJLYr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 07:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S1346723AbiFJMCV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 08:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiFJLYq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 07:24:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81CB19299;
-        Fri, 10 Jun 2022 04:24:44 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260717744"
+        with ESMTP id S1346799AbiFJMCV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:02:21 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3A3E0EA;
+        Fri, 10 Jun 2022 05:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654862540; x=1686398540;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cAnK+F86CV/moe3BVaa7l+Gx92UVQLrvBwjZH561G94=;
+  b=W+uI3vh7CjD+Pg172FaBvAi3Omeg5peDjhpwJNKFRLSoEDWAI04QERqi
+   4jIPTeL0L+BHG0KI0D3E6kOk18aA7LE8pHVssjiLJ0h8LpvHOXYZdunZr
+   8Fc5DzPRLRNIkCjIOvYXPTegQE9sU+7W/v/gFk1BqUrE2pUQFLcfdkji+
+   X+NSqh4RBkIYrcZikBQ2JTbBkQiddMgeo2EXG2XfLozDg1f5F2ykgvdaZ
+   n7nFjJ1WFFjfxF7SVc1XzEI38FEeFcbMdddchI4rMRSmCbddamvPllFCZ
+   cEgLGcFz+oMqTVVTLbTNQ4HHJO/tJjKdZFxR06EzSVuZU+0MGI6dPW9vn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266376380"
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="260717744"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:44 -0700
+   d="scan'208";a="266376380"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:02:19 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="649791280"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 04:24:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nzcii-000Yiq-Fy;
-        Fri, 10 Jun 2022 14:22:28 +0300
-Date:   Fri, 10 Jun 2022 14:22:28 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Add deferred DMA-channels setup support
-Message-ID: <YqMpdEitU/84oUWV@smile.fi.intel.com>
-References: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+   d="scan'208";a="684508487"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Jun 2022 05:02:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 01FDD18F; Fri, 10 Jun 2022 15:02:20 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/2] driver core: Introduce device_find_any_child() helper
+Date:   Fri, 10 Jun 2022 15:02:18 +0300
+Message-Id: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,110 +62,60 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:50:06AM +0300, Serge Semin wrote:
-> Currently if the source DMA device isn't ready to provide the channels
-> capable of the SPI DMA transfers, the DW SSI controller will be registered
-> with no DMA support. It isn't right since all what the driver needs to do
-> is to postpone the probe procedure until the DMA device is ready. Let's
-> fix that in the framework of the DWC SSI generic DMA implementation. First
-> we need to use the dma_request_chan() method instead of the
-> dma_request_slave_channel() function, because the later one is deprecated
-> and most importantly doesn't return the failure cause but the
-> NULL-pointer. Second we need to stop the DW SSI controller probe procedure
-> if the -EPROBE_DEFER error is returned on the DMA initialization. The
-> procedure will resume later when the channels are ready to be requested.
+There are several places in the kernel where this kind of functionality is
+being used. Provide a generic helper for such cases.
 
-One nit-pick below
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: renamed method (Greg), refactored it (Rafael)
+ drivers/base/core.c    | 20 ++++++++++++++++++++
+ include/linux/device.h |  2 ++
+ 2 files changed, 22 insertions(+)
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/spi/spi-dw-core.c |  5 ++++-
->  drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
->  2 files changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index ecea471ff42c..911ea9bddbee 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  
->  	if (dws->dma_ops && dws->dma_ops->dma_init) {
->  		ret = dws->dma_ops->dma_init(dev, dws);
-> -		if (ret) {
-> +		if (ret == -EPROBE_DEFER) {
-> +			goto err_free_irq;
-> +		} else if (ret) {
->  			dev_warn(dev, "DMA init failed\n");
->  		} else {
->  			master->can_dma = dws->dma_ops->can_dma;
-> @@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  	if (dws->dma_ops && dws->dma_ops->dma_exit)
->  		dws->dma_ops->dma_exit(dws);
->  	dw_spi_enable_chip(dws, 0);
-> +err_free_irq:
->  	free_irq(dws->irq, master);
->  err_free_master:
->  	spi_controller_put(master);
-> diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-> index 63e5260100ec..1322b8cce5b7 100644
-> --- a/drivers/spi/spi-dw-dma.c
-> +++ b/drivers/spi/spi-dw-dma.c
-> @@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  
->  static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  {
-> -	dws->rxchan = dma_request_slave_channel(dev, "rx");
-> -	if (!dws->rxchan)
-> -		return -ENODEV;
-> +	int ret;
->  
-> -	dws->txchan = dma_request_slave_channel(dev, "tx");
-> -	if (!dws->txchan) {
-> -		dma_release_channel(dws->rxchan);
-> +	dws->rxchan = dma_request_chan(dev, "rx");
-> +	if (IS_ERR(dws->rxchan)) {
-> +		ret = PTR_ERR(dws->rxchan);
->  		dws->rxchan = NULL;
-
-> -		return -ENODEV;
-> +		goto err_exit;
-
-This change doesn't bring anything...
-
-> +	}
-> +
-> +	dws->txchan = dma_request_chan(dev, "tx");
-> +	if (IS_ERR(dws->txchan)) {
-> +		ret = PTR_ERR(dws->txchan);
-> +		dws->txchan = NULL;
-> +		goto free_rxchan;
->  	}
->  
->  	dws->master->dma_rx = dws->rxchan;
-> @@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  	dw_spi_dma_sg_burst_init(dws);
->  
->  	return 0;
-> +
-> +free_rxchan:
-> +	dma_release_channel(dws->rxchan);
-> +	dws->rxchan = NULL;
-
-> +err_exit:
-
-...and this too.
-
-> +	return ret;
->  }
->  
->  static void dw_spi_dma_exit(struct dw_spi *dws)
-> -- 
-> 2.35.1
-> 
-
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 7cd789c4985d..a519307fda60 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3832,6 +3832,26 @@ struct device *device_find_child_by_name(struct device *parent,
+ }
+ EXPORT_SYMBOL_GPL(device_find_child_by_name);
+ 
++static int match_any(struct device *dev, void *unused)
++{
++	return 1;
++}
++
++/**
++ * device_find_any_child - device iterator for locating a child device, if any.
++ * @parent: parent struct device
++ *
++ * This is similar to the device_find_child() function above, but it
++ * returns a reference to a child device, if any.
++ *
++ * NOTE: you will need to drop the reference with put_device() after use.
++ */
++struct device *device_find_any_child(struct device *parent)
++{
++	return device_find_child(parent, NULL, match_any);
++}
++EXPORT_SYMBOL_GPL(device_find_any_child);
++
+ int __init devices_init(void)
+ {
+ 	devices_kset = kset_create_and_add("devices", &device_uevent_ops, NULL);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index dc941997795c..424b55df0272 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -905,6 +905,8 @@ struct device *device_find_child(struct device *dev, void *data,
+ 				 int (*match)(struct device *dev, void *data));
+ struct device *device_find_child_by_name(struct device *parent,
+ 					 const char *name);
++struct device *device_find_any_child(struct device *parent);
++
+ int device_rename(struct device *dev, const char *new_name);
+ int device_move(struct device *dev, struct device *new_parent,
+ 		enum dpm_order dpm_order);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
