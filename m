@@ -2,48 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4409546643
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A6954665E
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239722AbiFJMFQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 08:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S242459AbiFJMQk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 08:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344552AbiFJMFO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:05:14 -0400
+        with ESMTP id S235247AbiFJMQj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:16:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FF83F319
-        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 05:05:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DF43B2B2;
+        Fri, 10 Jun 2022 05:16:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58FA5B834DC
-        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 12:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79C4C34114;
-        Fri, 10 Jun 2022 12:05:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7523CB834E1;
+        Fri, 10 Jun 2022 12:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B861EC34114;
+        Fri, 10 Jun 2022 12:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654862711;
-        bh=JQIUQi3FYPOM/5+V1s4u6ksZweZ8UJi2AXqWfYnQVQQ=;
+        s=k20201202; t=1654863396;
+        bh=zB3k8TqYI+NLDCnckqerXX2X3aCo7zmeZE9wRHMRpuE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqn4z2ZER6HNZyzpomIs29vPaD+hSOq+n76XJIxOHwa1y8Tn8MzUN3GdG2GsXQ3VG
-         MphFVuXs6vlFa0AdRc04+1OEPu2ROpRx8WTaE4Vu6N8/7izXK0uDB/cPx+zB0b2hyb
-         c+0TH6REpq8RlA3iBhvffls/M9mTswM84x2IA8B2bhLb430wcHInJs4aY9fr7rzc82
-         PYZO2vdTNTxVDwhZfYcadwizbqyt6UPNnlI2kXr3xeRtLOuscB5iDDTOL8dDQjXKRB
-         yk9ZsONSt91eXxNL92IWFsYb877oQBSOhM7OCSiXQob+wAHcjfdgwuvBwBVtbP2C9p
-         Em39HKqL0QNbQ==
-Date:   Fri, 10 Jun 2022 13:05:06 +0100
+        b=og1OdUK1MEcxYSR7cQpq966zbZ2CCjLdGq9dARdRx4/tdhxzdl39YW95T0bwIx7QI
+         FeLWGkkfH4dhfM7UXdkrCG8KzdXFaZPtSUzbQe1P9/g0knunqp2p2t9Wa7VZZJUDQN
+         zG7iGhcvq1n6f84728p3geqcUUg0Oxn/h2lzDIpof6SIR8EHXCnY3wPBTUn1EiMJF2
+         8PqDBJcteEXquFTunLwc535Dvy+c/fikAc5yUWmtCC1uptnBJEyNFOXp10Ed9jOgBn
+         Az+eWtfEfvLfxv5ksUDSSJhcdRiA7piPq2yZerKUTTJK6a9QiwgLs9BFXt0eoFhWWc
+         nSjLSXwEpwblA==
+Date:   Fri, 10 Jun 2022 13:16:31 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Chiu <andy.chiu@sifive.com>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH next 0/1] Add simple PM operations to sifive-spi
-Message-ID: <YqMzcn9/otXYDdin@sirena.org.uk>
-References: <20220610074459.3261383-1-andy.chiu@sifive.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v2 2/2] spi: Use device_find_any_child() instead of
+ custom approach
+Message-ID: <YqM2H8iG5Y2MKrNK@sirena.org.uk>
+References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+ <20220610120219.18988-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3vaPCi6nLk0w+oct"
+        protocol="application/pgp-signature"; boundary="lLUmA+2Xem4TZBVE"
 Content-Disposition: inline
-In-Reply-To: <20220610074459.3261383-1-andy.chiu@sifive.com>
+In-Reply-To: <20220610120219.18988-2-andriy.shevchenko@linux.intel.com>
 X-Cookie: Teachers have class.
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -56,36 +60,29 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---3vaPCi6nLk0w+oct
+--lLUmA+2Xem4TZBVE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 10, 2022 at 03:44:58PM +0800, Andy Chiu wrote:
-> The patch has been tested on Unmatched using pm_test. The Unmatched board
-> uses SD over SPI and it was tested by initiating S2RAM cycles for all
-> devices while reading/writing files at the same time. We found no dropped
-> connection to the card or corrupted filesystem during test cycles.
+On Fri, Jun 10, 2022 at 03:02:19PM +0300, Andy Shevchenko wrote:
+> We have already a helper to get the first child device, use it and
+> drop custom approach.
 
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
+Acked-by: Mark Brown <broonie@kernel.org>
 
---3vaPCi6nLk0w+oct
+--lLUmA+2Xem4TZBVE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjM3EACgkQJNaLcl1U
-h9CwlAgAhv4owb1PAnbvVwhUGI8V47GKerrok6xW4Q+WaWi8eq+WWOz0XH7sBPaA
-p6+ZbSgfN9eAh+hHS1H6pMZLB3Gmt4Fwk/f+3heUhZvOjVrG+KSWU5kjbqHRqd/v
-JOU3B5o1I30lCRrlzh54pWh8+9KC72P7CMFvezTa7LYIEakda2WKrt14zIbRdmkV
-Rj7IKzJFvj2jNqseaWZA4Y2F9/yu/7ov1OKO0J6G1FiOS0PprkzRzEQP+eIcD/vi
-JRGsx55Xi62O+Q0Vz1V8n+/WQp4J2i861X+nXM8tE0fes+vnI608ZEjIMjN/+H2S
-mFk5imuzfVWWdnGpNLWz0JMlTnoIGQ==
-=wmFq
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjNh4ACgkQJNaLcl1U
+h9AK6gf+JOkepmDgAErfr3ruTqIWTWi3qZ9vVXOdiFmPpmTKjdmBq/AoWTaYuw7H
+dV5yx3vu4TztiGhf4p4X9KM/gswe+Ybr2BrxmlYMuqNVowDHAOCNZnlzTlqutOkr
++Rj8aS47joDZr80IdEr8RfX2bkWmZxiYHPuwocxJeTn5dCRHyXqyD4i/4XrBSNr7
+CEeFd1gMDRlYF0gy0qK/PvMEzIYvdBWp3DQW633A7oFtEgpDH9GOzgdoA8uNv0GP
+ge5IfF15siva4tnWvxBvdmurCLl7O5M1R5L8t9rJCCkLkNrXVI8RNpR7n2OyHyNJ
+4Nnrh/VmWTcQp7Z2F6DtwqhP/LRvXg==
+=X6d1
 -----END PGP SIGNATURE-----
 
---3vaPCi6nLk0w+oct--
+--lLUmA+2Xem4TZBVE--
