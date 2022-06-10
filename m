@@ -2,137 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F71545DC3
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 09:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C393C545DF4
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 10:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243620AbiFJHs0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 03:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S1347055AbiFJH77 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 03:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346980AbiFJHsR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 03:48:17 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF40015351D
-        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 00:48:15 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id cx11so23394528pjb.1
-        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 00:48:15 -0700 (PDT)
+        with ESMTP id S1346754AbiFJH74 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 03:59:56 -0400
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 00:59:51 PDT
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A91182065F9
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 00:59:49 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id A88E416A0;
+        Fri, 10 Jun 2022 10:51:02 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com A88E416A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iwNedQtGOZXHXrHclp0knXCOxOkJDdvfjVXBpc4Ke9U=;
-        b=hHvfCnoUqcNw9dd11VWopU7ksI+F8D23d4JnaKSbox5rgaZkmf2VLMPCHqGARu8NNa
-         gkPmi16g1BpC5FYyqRX9uMYMxgBZXNVaWYaKagHQt5oz4YhEFQWV9K6LYxLOn6uRHrCP
-         t3nmi4VUckKKnfAHYuvqz+TehSlBLUTNP3hRa92w9QV5YgG4Uoa/9dpSKhNlNm8XDr87
-         icJUK+94cWYSIRC1TtengKcmhKayBMgoBN7g7qQXDe72gnMI6Q2c2hdKvN70WbDjEZ9p
-         aRAioCdmdQNm3cNP6alX6Mt5r+dJRjI1pOL+zZ47SxgrPIFzc6K3hjYzrnIK8GtKbqIR
-         SkwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iwNedQtGOZXHXrHclp0knXCOxOkJDdvfjVXBpc4Ke9U=;
-        b=s0ozflLNPdC7FvVZeNLUWIeU19t0WoXIjAes8ibvChmx8R3j/Hvais7hc5BDz2Uk/n
-         YvpVBPdNBbQcyvTJcHy7dpYSFC2KeL4RA8gEDlbx8pO+jzQJH+UZLfesslLdVqVgokXH
-         7IXzN+j2u+mRAt7R+Y+A5/Xf+U6cgWPExxQyd+F+K1jaQdv/Wia3pwLRwY7i5/PgftVw
-         e2W2WpFV83U3Zxcv4/l3XoJ61F/SWvtGyE4RNwEp2NiZTRF4NU0nL1+Z5MqnIPHffsUB
-         kCyKqWV4omrK9lsgqs02t+mtNJFPt4FTRWKfxSqFXRxZzeY+HFTA7w1VRAPRUFAwvHxD
-         6mmw==
-X-Gm-Message-State: AOAM530GPDMOKvRayWgHnDyh9lpU8HGJ0K+nGY30nIFgYBEk1INroiRT
-        zeWovRITNOGn4nI0rBZ2uW4qXA==
-X-Google-Smtp-Source: ABdhPJwJWAfaspiqoR+Yu/SQptPCml+Zlui2mwQ9BihL1m/z6FGRlh8JFZn9PaBqRFOeWBrle3fHaw==
-X-Received: by 2002:a17:902:ea0b:b0:164:595:affa with SMTP id s11-20020a170902ea0b00b001640595affamr42313653plg.22.1654847295344;
-        Fri, 10 Jun 2022 00:48:15 -0700 (PDT)
-Received: from archlinux.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id r72-20020a632b4b000000b003c14af5060fsm15902394pgr.39.2022.06.10.00.48.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 00:48:14 -0700 (PDT)
-From:   Andy Chiu <andy.chiu@sifive.com>
-To:     broonie@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Andy Chiu <andy.chiu@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>
-Subject: [PATCH next 1/1] spi: sifive: add PM callbacks to support suspend/resume
-Date:   Fri, 10 Jun 2022 15:44:59 +0800
-Message-Id: <20220610074459.3261383-2-andy.chiu@sifive.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220610074459.3261383-1-andy.chiu@sifive.com>
-References: <20220610074459.3261383-1-andy.chiu@sifive.com>
+        d=baikalelectronics.ru; s=mail; t=1654847462;
+        bh=w5FH76gWEQ4AnYJI+MYraAyan6YWIE7deOEkKSQuq2o=;
+        h=From:To:CC:Subject:Date:From;
+        b=H95TjMygvgbqaHloc0Flrv+grJWgCD0R8QCe5N/LeD3gRi+To4peFsn6lD8Ee0Tsr
+         r/DbYO6QiPlXReDtLWImwzOfm268jt8RcBDZmUTJsEtijaaRMg6Es+aO/0zaFANOWH
+         4fHvWxvtH4atHevmM5wXjs2lHoa5hrM6fNoEc7TI=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 10:50:10 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: dw: Add deferred DMA-channels setup support
+Date:   Fri, 10 Jun 2022 10:50:06 +0300
+Message-ID: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
----
- drivers/spi/spi-sifive.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Currently if the source DMA device isn't ready to provide the channels
+capable of the SPI DMA transfers, the DW SSI controller will be registered
+with no DMA support. It isn't right since all what the driver needs to do
+is to postpone the probe procedure until the DMA device is ready. Let's
+fix that in the framework of the DWC SSI generic DMA implementation. First
+we need to use the dma_request_chan() method instead of the
+dma_request_slave_channel() function, because the later one is deprecated
+and most importantly doesn't return the failure cause but the
+NULL-pointer. Second we need to stop the DW SSI controller probe procedure
+if the -EPROBE_DEFER error is returned on the DMA initialization. The
+procedure will resume later when the channels are ready to be requested.
 
-diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
-index f7c1e20432e0..e29e85cee88a 100644
---- a/drivers/spi/spi-sifive.c
-+++ b/drivers/spi/spi-sifive.c
-@@ -427,6 +427,44 @@ static int sifive_spi_remove(struct platform_device *pdev)
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+---
+ drivers/spi/spi-dw-core.c |  5 ++++-
+ drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
+ 2 files changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index ecea471ff42c..911ea9bddbee 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 
+ 	if (dws->dma_ops && dws->dma_ops->dma_init) {
+ 		ret = dws->dma_ops->dma_init(dev, dws);
+-		if (ret) {
++		if (ret == -EPROBE_DEFER) {
++			goto err_free_irq;
++		} else if (ret) {
+ 			dev_warn(dev, "DMA init failed\n");
+ 		} else {
+ 			master->can_dma = dws->dma_ops->can_dma;
+@@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (dws->dma_ops && dws->dma_ops->dma_exit)
+ 		dws->dma_ops->dma_exit(dws);
+ 	dw_spi_enable_chip(dws, 0);
++err_free_irq:
+ 	free_irq(dws->irq, master);
+ err_free_master:
+ 	spi_controller_put(master);
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index 63e5260100ec..1322b8cce5b7 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ {
+-	dws->rxchan = dma_request_slave_channel(dev, "rx");
+-	if (!dws->rxchan)
+-		return -ENODEV;
++	int ret;
+ 
+-	dws->txchan = dma_request_slave_channel(dev, "tx");
+-	if (!dws->txchan) {
+-		dma_release_channel(dws->rxchan);
++	dws->rxchan = dma_request_chan(dev, "rx");
++	if (IS_ERR(dws->rxchan)) {
++		ret = PTR_ERR(dws->rxchan);
+ 		dws->rxchan = NULL;
+-		return -ENODEV;
++		goto err_exit;
++	}
++
++	dws->txchan = dma_request_chan(dev, "tx");
++	if (IS_ERR(dws->txchan)) {
++		ret = PTR_ERR(dws->txchan);
++		dws->txchan = NULL;
++		goto free_rxchan;
+ 	}
+ 
+ 	dws->master->dma_rx = dws->rxchan;
+@@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 	dw_spi_dma_sg_burst_init(dws);
+ 
  	return 0;
++
++free_rxchan:
++	dma_release_channel(dws->rxchan);
++	dws->rxchan = NULL;
++err_exit:
++	return ret;
  }
  
-+static int sifive_spi_suspend(struct device *dev)
-+{
-+	struct spi_master *master = dev_get_drvdata(dev);
-+	struct sifive_spi *spi = spi_master_get_devdata(master);
-+	int ret;
-+
-+	ret = spi_master_suspend(master);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable all the interrupts just in case */
-+	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
-+
-+	clk_disable_unprepare(spi->clk);
-+
-+	return ret;
-+}
-+
-+static int sifive_spi_resume(struct device *dev)
-+{
-+	struct spi_master *master = dev_get_drvdata(dev);
-+	struct sifive_spi *spi = spi_master_get_devdata(master);
-+	int ret;
-+
-+	ret = clk_prepare_enable(spi->clk);
-+	if (ret)
-+		return ret;
-+	ret = spi_master_resume(master);
-+	if (ret)
-+		clk_disable_unprepare(spi->clk);
-+
-+	return ret;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(sifive_spi_pm_ops,
-+				sifive_spi_suspend, sifive_spi_resume);
-+
-+
- static const struct of_device_id sifive_spi_of_match[] = {
- 	{ .compatible = "sifive,spi0", },
- 	{}
-@@ -438,6 +476,7 @@ static struct platform_driver sifive_spi_driver = {
- 	.remove = sifive_spi_remove,
- 	.driver = {
- 		.name = SIFIVE_SPI_DRIVER_NAME,
-+		.pm = &sifive_spi_pm_ops,
- 		.of_match_table = sifive_spi_of_match,
- 	},
- };
+ static void dw_spi_dma_exit(struct dw_spi *dws)
 -- 
-2.36.0
+2.35.1
 
