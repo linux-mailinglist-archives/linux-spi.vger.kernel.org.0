@@ -2,113 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAB054662F
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2CE54663D
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 14:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347511AbiFJMCY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 08:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S242326AbiFJMEr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 08:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347368AbiFJMCW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:02:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE433E5C3;
-        Fri, 10 Jun 2022 05:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654862541; x=1686398541;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fUe1OfJHggHu1g9C1q0AXthmCAvU/GJYCK0MIj3eotA=;
-  b=eKhyQ9eX4yWT98PEUBrCDKrenfoR6RXfvGPnp5dP2QWwJHm4WR8VUjU6
-   c4GVO7i6KtUb8GPGk91fp70ULjLS0mtv7IJt9GDaRA11NK9+g3ViaKz2R
-   /w2DCyoCM60yH9sMSyFkJoUIfO4I5Bep/JsjoqLPM2ypFQEbpPo7SKO+p
-   BOavdVKnfgHV7boGYxCRy53Ncj4WbVuS2MJuM5JDjbZKKngEw03Yb9rus
-   xWDuEibzBcYWYAtIl5NqmQ9KrSmKAYjFKDZywzeG4yJK9XRiLgiDGux40
-   txdvoof4vpYdze0ciwmC05K2pZcs7J+RSUThefor6nwPJJ9HCuLUJkx+G
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="302985841"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="302985841"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:02:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="534054638"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 10 Jun 2022 05:02:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0FF61F8; Fri, 10 Jun 2022 15:02:21 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v2 2/2] spi: Use device_find_any_child() instead of custom approach
-Date:   Fri, 10 Jun 2022 15:02:19 +0300
-Message-Id: <20220610120219.18988-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
-References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S243556AbiFJMEq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 08:04:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5553EB97
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 05:04:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D056216D
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 12:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B73DC34114;
+        Fri, 10 Jun 2022 12:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654862684;
+        bh=Y7U05lDA8BRgzCDC/Tmj1GEdicb87DiN3T0aBgPmwE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NI9tynBf3FiwPQbJrhwd2bfGp/1vw7iRkNSF/OxeHNVuGSZ3OObIIO98rsftOQGi2
+         hCeUjoM+HM2DyqsiNxCLheR4JKGxJhyg7F8m14Z+Q6J/pt82P6NZi418drYs1JwW+O
+         TN/+CSf8y5AUI2WVdCROYrQMp+JNHmRYsqtAMKHDpyIxt7IaZxbNFVXCZ4Wm+Rhuby
+         ykQLhHIywt4MrVxLUG86oALYhgmmUqlNj/piEb+8iU/clJyBNzBXoC6TvnXfE5x+4r
+         ZbmGaadUcIYWuKQRtpg915adYImB6TXevN/H8+sAamhh+4fdunhxZQ8vMnGfY30QoA
+         UD8jUXil9jW9A==
+Date:   Fri, 10 Jun 2022 13:04:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Chiu <andy.chiu@sifive.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Greentime Hu <greentime.hu@sifive.com>
+Subject: Re: [PATCH next 1/1] spi: sifive: add PM callbacks to support
+ suspend/resume
+Message-ID: <YqMzV/kXeHso3QW+@sirena.org.uk>
+References: <20220610074459.3261383-1-andy.chiu@sifive.com>
+ <20220610074459.3261383-2-andy.chiu@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="padlAlf46HdwYK6i"
+Content-Disposition: inline
+In-Reply-To: <20220610074459.3261383-2-andy.chiu@sifive.com>
+X-Cookie: Teachers have class.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have already a helper to get the first child device, use it and
-drop custom approach.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-v2: added tag (Rafael)
- drivers/spi/spi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+--padlAlf46HdwYK6i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ea09d1b42bf6..b04be04dddfa 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2613,11 +2613,6 @@ int spi_slave_abort(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_slave_abort);
- 
--static int match_true(struct device *dev, void *data)
--{
--	return 1;
--}
--
- static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -2625,7 +2620,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 						   dev);
- 	struct device *child;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_any_child(&ctlr->dev);
- 	return sprintf(buf, "%s\n",
- 		       child ? to_spi_device(child)->modalias : NULL);
- }
-@@ -2644,7 +2639,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
- 	if (rc != 1 || !name[0])
- 		return -EINVAL;
- 
--	child = device_find_child(&ctlr->dev, NULL, match_true);
-+	child = device_find_any_child(&ctlr->dev);
- 	if (child) {
- 		/* Remove registered slave */
- 		device_unregister(child);
--- 
-2.35.1
+On Fri, Jun 10, 2022 at 03:44:59PM +0800, Andy Chiu wrote:
 
+> +static int sifive_spi_suspend(struct device *dev)
+> +{
+> +	struct spi_master *master = dev_get_drvdata(dev);
+> +	struct sifive_spi *spi = spi_master_get_devdata(master);
+> +	int ret;
+> +
+> +	ret = spi_master_suspend(master);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Disable all the interrupts just in case */
+> +	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
+> +
+> +	clk_disable_unprepare(spi->clk);
+
+Seems like the clock managemnet could usefully be done as runtime PM
+too?  In any case, that can be done as an incremental change.
+
+--padlAlf46HdwYK6i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjM1YACgkQJNaLcl1U
+h9CpAgf+ICpsIexQGWxgh/zE1CZJy/k0JC6GLWHRVLjR6HBCGcB/HzaZ3uspueEP
+HfglvPUC2qXkO45fodYPfXMb1ByQtDXnQPBBwLZVKNUD+BLD0jlQogYK6PynhTj+
+XA4+1FZG0hsfy/68yPu5eM+5GpcHsQkxXYWryRIznz4IiX0S8vY4hoxnbTYGHiFy
+N3PJG3eRrmOolV1Oh6oqXt14UqXPgb5QBee6U8Cd/MJaQdu98Pvez02kvVRlEloc
+YLrpxLscFWt/W36RHr5+hpCYh6r98hgsSKNjxgIyRnYrFChvWri1SC8J53GvuzFK
+TalUGA+3s+6cPsTUJhqbC9wShj+fZw==
+=sTjx
+-----END PGP SIGNATURE-----
+
+--padlAlf46HdwYK6i--
