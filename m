@@ -2,126 +2,141 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE98E546771
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 15:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D130154677A
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jun 2022 15:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiFJNkj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jun 2022 09:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S234848AbiFJNlj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jun 2022 09:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiFJNkh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 09:40:37 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF2D3A71F;
-        Fri, 10 Jun 2022 06:40:35 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-30c143c41e5so272569497b3.3;
-        Fri, 10 Jun 2022 06:40:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uBdKtGW7fZxQ5+SFCWAo4vdz+hLcnONQN5dsbtogcvQ=;
-        b=EQDv10Q6xw+t2P4ruF4bxC1Uc+Tuwu75xeYNfsEf1JpfGugYU3q0xT9PnB++Vd9R1W
-         CT0XQYMZGfbyfn6c2yz6EH2aJjey8cqX39EWeRPTQYukDJs06q9TyqcSI8jDsO2bwTG8
-         3zQYvDfRuAFpOqKoCJUPrW8QsKaInDww0xFe+Rt42c7g67wcaXGSl153ed+udoHoo1I+
-         ab4qPgV1L1p+DC3e3NQXpityh16Pmp9TwCUT1DMICHrXRDF3CuWkbwTJ6efyWhAlpC/7
-         1n87jcseJYHoApnAbQ04afL8m2z/ZbQiPmJ/pDCMiJAcK6Zsoo/mOVmpcWitdD6WDqK4
-         MaNg==
-X-Gm-Message-State: AOAM530ZzpwS0w9hfst28oiFthTtnn/n2sReVHbMAsa8kVmZU/cHeUee
-        AEJTgFS/Rl6Flv5XR3Rnux1zo0yUhj4NvoU7ONE=
-X-Google-Smtp-Source: ABdhPJx9RtNllu+NXEiCLNeoJWKFqffkqoy+hzByxzxKYvlx2QwooTOEmnPA588AgZzx8m+n2clldb+8qAjVgl/ZBEY=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr48706250ywm.149.1654868434983; Fri, 10
- Jun 2022 06:40:34 -0700 (PDT)
+        with ESMTP id S236777AbiFJNlj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jun 2022 09:41:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF433A5D3
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 06:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F038CE3606
+        for <linux-spi@vger.kernel.org>; Fri, 10 Jun 2022 13:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C411C34114;
+        Fri, 10 Jun 2022 13:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654868494;
+        bh=dEnDF1HNFjNXldYZ/p0EErWQeF7TYh0V0Uffx11psVY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gDoOUX7xz5edNPz9LsIJExSKbIUvfFcd8nXaE2QNQvoZlouyVby0tQ+eBj4JzxC1i
+         al6krOpgiVFZPMHX0ek3c6uj4Y9qnACmnOjGZXTh8B9HWBjoZzRaVgKlxDT6vLMKCy
+         9hIWTji5EKehDBz8raxsSCiQ5toZJDWq0EdEywjtG0Kx7yZBNWXXISy+umjgcTTuBL
+         GRZEf/qvzElmMhK+YleXVH+8yeln7RKPKCirWsLWiH4lFep7v+rKjcCdk9P3k13FeB
+         K3sQgA7SCqXSSoyjtdDWAYrZodVMavLFpA+RUSJGPBxRiGsNOeFDbbxyiEHSdvaCkv
+         8tWttHEGvb1Hg==
+Date:   Fri, 10 Jun 2022 14:41:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [RFC] [PATCH 3/3] drivers: spi: spi.c: Don't use the message
+ queue if possible in spi_sync
+Message-ID: <YqNKCegdejr522lH@sirena.org.uk>
+References: <20220525142928.2335378-1-david@protonic.nl>
+ <20220525142928.2335378-4-david@protonic.nl>
+ <20220525164603.57c98a0a@erd992>
+ <Yp+ZX4XITW7bQtjn@sirena.org.uk>
+ <20220608095409.2d8c46fb@erd992>
+ <YqCIDNHjFP4p9xxs@sirena.org.uk>
+ <20220609173421.437fe1c4@erd992>
+ <YqIgXDZAHPAQ1Y4O@sirena.org.uk>
+ <20220610092753.6e6c9e59@erd992>
 MIME-Version: 1.0
-References: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220610120219.18988-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Jun 2022 15:40:23 +0200
-Message-ID: <CAJZ5v0g3pHDNkVu6YqANO7yM4s_CPih0nBXcgz3OBmrRSjLh2A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] driver core: Introduce device_find_any_child() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cmWDPz9A+bAtb22j"
+Content-Disposition: inline
+In-Reply-To: <20220610092753.6e6c9e59@erd992>
+X-Cookie: Teachers have class.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 2:02 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> There are several places in the kernel where this kind of functionality is
-> being used. Provide a generic helper for such cases.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: renamed method (Greg), refactored it (Rafael)
->  drivers/base/core.c    | 20 ++++++++++++++++++++
->  include/linux/device.h |  2 ++
->  2 files changed, 22 insertions(+)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 7cd789c4985d..a519307fda60 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -3832,6 +3832,26 @@ struct device *device_find_child_by_name(struct device *parent,
->  }
->  EXPORT_SYMBOL_GPL(device_find_child_by_name);
->
-> +static int match_any(struct device *dev, void *unused)
-> +{
-> +       return 1;
-> +}
-> +
-> +/**
-> + * device_find_any_child - device iterator for locating a child device, if any.
-> + * @parent: parent struct device
-> + *
-> + * This is similar to the device_find_child() function above, but it
-> + * returns a reference to a child device, if any.
-> + *
-> + * NOTE: you will need to drop the reference with put_device() after use.
-> + */
-> +struct device *device_find_any_child(struct device *parent)
-> +{
-> +       return device_find_child(parent, NULL, match_any);
-> +}
-> +EXPORT_SYMBOL_GPL(device_find_any_child);
 
-I would call it device_get_any_child() to indicate the reference
-counting, but that's a very minor nit.
+--cmWDPz9A+bAtb22j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regardless of the above
+On Fri, Jun 10, 2022 at 09:27:53AM +0200, David Jander wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Thu, Jun 09, 2022 at 05:34:21PM +0200, David Jander wrote:
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Apparently some drivers tend to rely on the fact that master->cur_msg is not
+> > > NULL and always points to the message being transferred.
+> > > This could be a show-stopper to this patch set, if it cannot be solved.
 
-> +
->  int __init devices_init(void)
->  {
->         devices_kset = kset_create_and_add("devices", &device_uevent_ops, NULL);
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index dc941997795c..424b55df0272 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -905,6 +905,8 @@ struct device *device_find_child(struct device *dev, void *data,
->                                  int (*match)(struct device *dev, void *data));
->  struct device *device_find_child_by_name(struct device *parent,
->                                          const char *name);
-> +struct device *device_find_any_child(struct device *parent);
-> +
->  int device_rename(struct device *dev, const char *new_name);
->  int device_move(struct device *dev, struct device *new_parent,
->                 enum dpm_order dpm_order);
-> --
-> 2.35.1
->
+> > That seems resolvable?  If we have two things actually handling a
+
+> Ok, I first thought that this wouldn't be possible without taking the
+> necessary spinlock, but looking a little closer, I think I understand now.
+> One question to confirm I understand the code correctly:
+> An SPI driver that implements its own transfer_one_message() is required to
+> _always_ call spi_finalize_current_message() _before_ returning, right?
+
+Yes, it should.
+
+> If this is a guarantee and we take the io_mutex at the beginning of
+> __spi_pump_messages(), then ctlr->cur_msg is only manipulated with the
+> io_mutex held, and that would make it safe to be used in the sync path, which
+> is also behind the io_mutex.
+> Would appreciate if you could confirm this, just to be sure I understand the
+> code correctly.
+
+I think that should work.  If there's something missed it should be
+possible to make things work that way.
+
+> The fact that spi_finalize_current_message() is a separate API function, and
+> not called directly from __spi_pump_messages() had me confused that it might
+> be called in a different context (from IRQ thread or something like that)
+> possibly after __spi_pump_messages() had already returned. But that doesn't
+> make much sense... right?
+
+It *can* be called from interrupt context, the driver can signal the
+caller that the message completed without having to bounce up to the
+message pump first which helps minimise context switching in the async
+case, whatever was waiting for the message can get on with things
+without us having to switch through the SPI thread.  However something
+should still be in io_mutex when the completion happens at present.  A
+brief audit of drivers suggests that this is not in fact reliably the
+case though and we've got drivers that were never tested with any queued
+transfers AFAICT.  I'll look at that.
+
+Notionally the idea was that we'd be able to start the next transfer
+directly from interrupt context on suitable hardware, however nothing I
+had access to at the time I was working on this was actually capable of
+doing that so I never implemented anything.
+
+Actually, on that point - are you aware of any boards (ideally not
+requiring some non-standard DT) that are readily and affordably
+available and have useful CAN controllers?  I'm looking to improve my
+test setup and they keep coming up.
+
+--cmWDPz9A+bAtb22j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjSgkACgkQJNaLcl1U
+h9BBRAf+OzJ9xXbmt/PwjrWJ4jbinXtacej8j06mzWSrGlPBObXa0yJgoCNta8gY
+nwtF7a/aPRRPJ3uObA2sod2rPwP1zz3Uo0VuiT0TScyqqT6ghZ0H4P3uRL7piMOi
+ywKG20PTfuREk6D0b3zf+SU3Gcf+QOOXVM4JVycpj1VvzUAXsh4UaXPIpI2QnFYf
+Vl6ufKlBwt6UBGYnwU/HuOONl5yzYYNkYBrYHTuRnfCOQvZIp5rsPkw80SkhBLd8
+KJ6w8YmNO8J8LKz09dhOgAzE/BsfMl+rPSV2qwxSlcw8O4x2UEHCTKIUCNcSpQh7
+aSn2xAmlaOvBr40tR3UKc4JKEmJkLQ==
+=9Mmm
+-----END PGP SIGNATURE-----
+
+--cmWDPz9A+bAtb22j--
