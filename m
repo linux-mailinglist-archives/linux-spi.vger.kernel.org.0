@@ -2,100 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9380D5473D3
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Jun 2022 12:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C68547BFC
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Jun 2022 22:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiFKKjr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 11 Jun 2022 06:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S234948AbiFLUed (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Jun 2022 16:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiFKKjq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 11 Jun 2022 06:39:46 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60827FCA;
-        Sat, 11 Jun 2022 03:39:45 -0700 (PDT)
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4LKvTq5Txzz4xXh;
-        Sat, 11 Jun 2022 20:39:43 +1000 (AEST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKvTg4kn6z4xXg;
-        Sat, 11 Jun 2022 20:39:35 +1000 (AEST)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Ian Woloschin <ian.woloschin@akamai.com>
-Subject: [PATCH] spi: aspeed: Fix division by zero
-Date:   Sat, 11 Jun 2022 12:39:29 +0200
-Message-Id: <20220611103929.1484062-1-clg@kaod.org>
+        with ESMTP id S231891AbiFLUec (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Jun 2022 16:34:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7445331213;
+        Sun, 12 Jun 2022 13:34:31 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h19so1630226wrc.12;
+        Sun, 12 Jun 2022 13:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pLO4+liZettN7NhTXRO4r2yJBN1H2FVkqYbOicYerBo=;
+        b=X5OBdH28x9HgFoBcWsY3ulpULpoUF3jFjFVlEFMpFgUx3IREZW/hJYT/c1iQaKfxeq
+         ndL1X8IFDh05l0q3leMTlePr/vGN8J4dEo8G+CyygvfkLz2o7s4amu4W2jQtVS+l/+u3
+         NyvQqX6LDPRcdgV4mvF2uUchiySoVVwzxWGSLQqHaI7zPvUHqoQKt3DJdxyhBRI8hlmL
+         doKoD3lVtTzZiJMkNHOQWQMo5R3/7bdvwG7hKlSw2IIZ9jq77ku8z9/xjLrxbvX4ElfV
+         QWFetwJJlZQjHNiar2TR1PWGQ9VjKsKQZ5t+95CF2b9gbmDJ/HFSFo8KxDtJ+xSEmNmL
+         E6QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pLO4+liZettN7NhTXRO4r2yJBN1H2FVkqYbOicYerBo=;
+        b=yy50jzTzyzKPN3uPFqRTW/zjIJavrERh40GeVMGaY9UayUuv0kFUPctCNQHGW4sBIU
+         0ynWzrlXXM4Qh5CnbZ63DSE5rmid+p8lUqRreR/FB0b3+xGPF8c9VC3shQERFlEuEVng
+         UUi0s8psLfnjTJIKYwnT9gjQBXtajXDuyjJxAkNkLZl7r+f3SJEWjjd0LSPY3swZPTm7
+         MguiV3yFpo/xCIY7HLwitWgoT/LdHzgLVAp7yK3b2pJpEcVnOaUj/ehiUz128VHzLwMG
+         tRdiFF3eVLsRqsN85Ag+jmm2MyMlOCyEe8U6jeS6FnYoZ1O0nQOpFHIGMv80CwPbTqwg
+         TzRw==
+X-Gm-Message-State: AOAM531ELvHnr9ASbADmKwPGyXsMZ4YunDG5cVyGZtXTxScLcUxvJVFA
+        hcbVXXJwrDbztONvoyVnHjn0YgLZbn6vUg==
+X-Google-Smtp-Source: ABdhPJzUlKOUvC8cBsTg326yD2TNlhEPA2C1hFzYli75wU1R8FclFOC5cNtWRhXNszJsuzDOQrKDfQ==
+X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id c5-20020adffb05000000b0020ae1138f3fmr53765523wrr.534.1655066069955;
+        Sun, 12 Jun 2022 13:34:29 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id e10-20020a5d4e8a000000b00210320d9fbfsm7706817wru.18.2022.06.12.13.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 13:34:29 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] spi: s3c64xx: set pointers to null using NULL rather than 0
+Date:   Sun, 12 Jun 2022 21:34:28 +0100
+Message-Id: <20220612203428.2754823-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When using the normal read operation for data transfers, the dummy bus
-width is zero. In that case, they are no dummy bytes to transfer and
-setting the dummy field in the controller register becomes useless.
+There are pointers being set to null using use. Use NULL instead.
 
-Issue was found on a custom "Bifrost" board with a AST2500 SoC and
-using a MX25L51245GMI-08G SPI Flash.
-
-Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Reported-by: Ian Woloschin <ian.woloschin@akamai.com>
-Fixes: 54613fc6659b ("spi: aspeed: Add support for direct mapping")
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/spi/spi-aspeed-smc.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/spi/spi-s3c64xx.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 496f3e1e9079..3e891bf22470 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -558,6 +558,14 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
- 	u32 ctl_val;
- 	int ret = 0;
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 0ce58105dbac..819b660dae82 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -354,7 +354,7 @@ static int s3c64xx_spi_prepare_transfer(struct spi_master *spi)
+ 	sdd->rx_dma.ch = dma_request_chan(&sdd->pdev->dev, "rx");
+ 	if (IS_ERR(sdd->rx_dma.ch)) {
+ 		dev_err(&sdd->pdev->dev, "Failed to get RX DMA channel\n");
+-		sdd->rx_dma.ch = 0;
++		sdd->rx_dma.ch = NULL;
+ 		return 0;
+ 	}
  
-+	dev_dbg(aspi->dev,
-+		"CE%d %s dirmap [ 0x%.8llx - 0x%.8llx ] OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x\n",
-+		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
-+		desc->info.offset, desc->info.offset + desc->info.length,
-+		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
-+		op->dummy.buswidth, op->data.buswidth,
-+		op->addr.nbytes, op->dummy.nbytes);
-+
- 	chip->clk_freq = desc->mem->spi->max_speed_hz;
+@@ -362,8 +362,8 @@ static int s3c64xx_spi_prepare_transfer(struct spi_master *spi)
+ 	if (IS_ERR(sdd->tx_dma.ch)) {
+ 		dev_err(&sdd->pdev->dev, "Failed to get TX DMA channel\n");
+ 		dma_release_channel(sdd->rx_dma.ch);
+-		sdd->tx_dma.ch = 0;
+-		sdd->rx_dma.ch = 0;
++		sdd->tx_dma.ch = NULL;
++		sdd->rx_dma.ch = NULL;
+ 		return 0;
+ 	}
  
- 	/* Only for reads */
-@@ -574,9 +582,11 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
- 	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
- 	ctl_val |= aspeed_spi_get_io_mode(op) |
- 		op->cmd.opcode << CTRL_COMMAND_SHIFT |
--		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
- 		CTRL_IO_MODE_READ;
+@@ -808,8 +808,8 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+ 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
+ 		dma_release_channel(sdd->rx_dma.ch);
+ 		dma_release_channel(sdd->tx_dma.ch);
+-		sdd->rx_dma.ch = 0;
+-		sdd->tx_dma.ch = 0;
++		sdd->rx_dma.ch = NULL;
++		sdd->tx_dma.ch = NULL;
+ 	}
  
-+	if (op->dummy.nbytes)
-+		ctl_val |= CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth);
-+
- 	/* Tune 4BYTE address mode */
- 	if (op->addr.nbytes) {
- 		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
+ 	return status;
 -- 
 2.35.3
 
