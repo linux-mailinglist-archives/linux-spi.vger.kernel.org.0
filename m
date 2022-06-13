@@ -2,51 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865C45499CA
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Jun 2022 19:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D4E549D53
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Jun 2022 21:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241057AbiFMRWt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Jun 2022 13:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S1346748AbiFMTT6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Jun 2022 15:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241346AbiFMRWa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jun 2022 13:22:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2175B31206;
-        Mon, 13 Jun 2022 05:37:21 -0700 (PDT)
+        with ESMTP id S1351257AbiFMTTa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jun 2022 15:19:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F8C53711;
+        Mon, 13 Jun 2022 10:24:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 812B8B80D5F;
-        Mon, 13 Jun 2022 12:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE52AC34114;
-        Mon, 13 Jun 2022 12:37:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F3260C7C;
+        Mon, 13 Jun 2022 17:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE14C34114;
+        Mon, 13 Jun 2022 17:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655123839;
-        bh=UMvOIPZylUDWOPgDJ/rl41H35ct9oHGP3/eHpRwcWOE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WzXjo5MSmOk9g72+Nf19OcnSzaHjqiB72gyem2FudjwA4PJI8wgxZxF58TIuUyZXw
-         r7hHelOpg55WPF5O1myAJKx/XwqxWjW4tfEZuGUT3YQTT+8ZsQllNHwAoFpDYhxUJ5
-         +zHAd/O/gKOj2Ca2obgMr5fAoTk4i3FjFBvgqkIqGP09y2GGP0V35cUpmOKrzU7JC7
-         3HjiZZ6iUJWxpI+/FtkT6QT59Xq+AvnCS239YV7MRNJA+gfSmUAS0f3DHwwBfdB+fg
-         ROGveSAXpy8ONgbjKX6ROejQ4JJQxQ+MWqi/PPBvPEdjMiKNpEDDgU6PH8z1br52Yr
-         GsaB8IbNBZBTw==
-Date:   Mon, 13 Jun 2022 13:37:14 +0100
+        s=k20201202; t=1655141069;
+        bh=Ytg1O0ZnWN5OTWz6shxsOZCb9jEbZHGc71Fqqpj9HYQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=VOZ9whWtDqTEXBLPpw8fAFY9Z/rPqKNVKU0ybnGewq4UL9zWOJLSxkUfE7LmrQ0uI
+         7MpviS+7JyCy7DVqy/pc5UfFJrfp+Y6QEknhDSo+NxofDb2ZyIlmxf1PJehTlUcqP3
+         7loQ9SucdK6itgT+7Q96NhEwONdaArUDSLdCSROwjTd/vMuPl8+mSvW1+DybJ2Jjxv
+         BP4G8R44bEEaBhQPCGHjWUBvo9iYNVZ1AF+C95A44K7Q69QM7CcQloeHg5rA+l+ZcU
+         Lgqw+mt08B+6wXOWpabL5sG+3qL06ms68AMJXUp6vhT55bc97wYJbL33kmCyX7Kwt+
+         2feBQiG5DG0hQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: rockchip: Disable local irq when pio write out of
- interrupt service
-Message-ID: <YqcveggUU7yaXuk1@sirena.org.uk>
-References: <20220613092744.9726-1-jon.lin@rock-chips.com>
+To:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        ashishsingha@nvidia.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, thierry.reding@gmail.com,
+        kyarlagadda@nvidia.com
+Cc:     skomatineni@nvidia.com, devicetree@vger.kernel.org,
+        ldewangan@nvidia.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20220513080828.22079-1-kyarlagadda@nvidia.com>
+References: <20220513080828.22079-1-kyarlagadda@nvidia.com>
+Subject: Re: [Patch V2 0/3] spi: tegra quad: Add Tegra Grace features
+Message-Id: <165514106736.671611.17346483728237955492.b4-ty@kernel.org>
+Date:   Mon, 13 Jun 2022 18:24:27 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YJipID2wFlKZ6wCT"
-Content-Disposition: inline
-In-Reply-To: <20220613092744.9726-1-jon.lin@rock-chips.com>
-X-Cookie: innovate, v.:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,46 +56,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 13 May 2022 13:38:25 +0530, Krishna Yarlagadda wrote:
+> Add multiple chip select lines supported on Tegra 241
+> 
+> Changes in v2:
+> Split Wait polling changes to be handled later
+> Change chip name to convention followed (Grace to 241)
+> Add tegra qspi peripherals yaml file
+> 
+> [...]
 
---YJipID2wFlKZ6wCT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Jun 13, 2022 at 05:27:44PM +0800, Jon Lin wrote:
-> Avoid interrupt come and interrupt the pio_writer.
->=20
-> +	spin_lock_irqsave(&rs->lock, flags);
-> +	tx_free =3D rs->fifo_len - readl_relaxed(rs->regs + ROCKCHIP_SPI_TXFLR);
-> +	words =3D min(rs->tx_left, tx_free);
->  	rs->tx_left -=3D words;
->  	for (; words; words--) {
->  		u32 txw;
-> @@ -308,6 +313,7 @@ static void rockchip_spi_pio_writer(struct rockchip_s=
-pi *rs)
->  		writel_relaxed(txw, rs->regs + ROCKCHIP_SPI_TXDR);
->  		rs->tx +=3D rs->n_bytes;
->  	}
-> +	spin_unlock_irqrestore(&rs->lock, flags);
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-So this is effectively just disabling interrupts during PIO, there's no
-other users of the lock which is rather heavyweight.  What's the actual
-issue here?  We should also have something saying what's going on in the
-code since right now the lock just looks redundant.
+Thanks!
 
---YJipID2wFlKZ6wCT
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/3] spi: tegra210-quad: Multi-cs support
+      commit: b76134178168b5104851b3c72d9b1092b7414ff9
+[2/3] spi: dt-bindings: split peripheral prods
+      commit: e23917822d3cb1f5270ab0d327da713cda72f8f2
+[3/3] spi: dt-bindings: Add compatible for Tegra241 QSPI
+      commit: 4f37809f4cdf0cdb8d4431e779f56d1f0dec3fb5
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKnL3kACgkQJNaLcl1U
-h9DoiAf/b64OqEDIdLubTDZqH06s6sri2Q8Bq4h69DmbLEXUe2ciQ52gVQ7JQKaQ
-ZXxCS8HlRTroirPGfdcwOByaUWEW9DIMO1nrqU0wRytXkeuVj/dfA+6jQBkKaUIy
-cM7lgZdxMTZ5ezuXKvPmzFUaWQvgRGDI4wybCd++7eFgj+bx5l9g3YODTUfVmFVo
-mQbqkP3l/ovLgVz11vw7aiqYLpQQ+dDDNMx7alWOayLxypGTGA03xF/3LlzbFG84
-OAF0d2cTKHC9Ok7T6bCJzRufu6ZPrmnD85MiDEVoGGE3oAetE7xthoSgUxES0KAn
-0bFz4uLtQdcxXeJSrCqeQtCjiNJ5gg==
-=bWwU
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---YJipID2wFlKZ6wCT--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
