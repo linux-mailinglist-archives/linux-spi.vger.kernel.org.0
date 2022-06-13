@@ -2,191 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEF8547E5C
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Jun 2022 06:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26491547F71
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Jun 2022 08:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiFMELe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Jun 2022 00:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S236518AbiFMGTK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Jun 2022 02:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbiFMELd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jun 2022 00:11:33 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17236E12
-        for <linux-spi@vger.kernel.org>; Sun, 12 Jun 2022 21:11:25 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220613041120epoutp0226963663c9d8b1bb5d781cf0829eca07~4EsBFEtda1340913409epoutp02h
-        for <linux-spi@vger.kernel.org>; Mon, 13 Jun 2022 04:11:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220613041120epoutp0226963663c9d8b1bb5d781cf0829eca07~4EsBFEtda1340913409epoutp02h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1655093480;
-        bh=SBIzwu2YUiz3ad3PTWMRf8V68ma4mBuWe6+GzoVy6tQ=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=oFe3RwefKg49yife0cAdY7/3lWtS2Bt9bSvgnmsYmRPobV5ei1ZGszjat/8E6afe7
-         TnpsMJBbd+JYrZEC0Wkin1wprEbAYjJLO6idU2mPkomnwYk/LnDHwSz7qg4vpTbzfU
-         KwtQqdMtSaXARXhvxwp7cODzgSt/XmwyjqT9S5qY=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220613041119epcas5p4fb6d5c475f361ed67e82169634ae88de~4EsAtPA9G3176031760epcas5p4l;
-        Mon, 13 Jun 2022 04:11:19 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LLymj1cVwz4x9Q7; Mon, 13 Jun
-        2022 04:11:17 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        24.29.09762.0E8B6A26; Mon, 13 Jun 2022 13:11:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220613041111epcas5p426ea95c3b26a5507b1a0d23e82b926a0~4Er5jzrxA3176031760epcas5p4E;
-        Mon, 13 Jun 2022 04:11:11 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220613041111epsmtrp204ced861682ba2d541e6a8ecdbd82e91~4Er5i7Fte0853108531epsmtrp2W;
-        Mon, 13 Jun 2022 04:11:11 +0000 (GMT)
-X-AuditID: b6c32a4b-1fdff70000002622-1a-62a6b8e021c4
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0D.2C.08924.FD8B6A26; Mon, 13 Jun 2022 13:11:11 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220613041110epsmtip1abf95802df5da28f86f4b5d9be1a280e~4Er4JxrwH1718617186epsmtip1X;
-        Mon, 13 Jun 2022 04:11:10 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Colin Ian King'" <colin.i.king@gmail.com>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Andi Shyti'" <andi@etezian.org>,
-        "'Mark Brown'" <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220612203428.2754823-1-colin.i.king@gmail.com>
-Subject: RE: [PATCH][next] spi: s3c64xx: set pointers to null using NULL
- rather than 0
-Date:   Mon, 13 Jun 2022 09:41:09 +0530
-Message-ID: <006901d87edb$9dbd5c00$d9381400$@samsung.com>
+        with ESMTP id S232326AbiFMGS5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jun 2022 02:18:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351219F93;
+        Sun, 12 Jun 2022 23:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655101119; x=1686637119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RI6qAwFkvyfDJbNSty7ikmbQQ/e8na613HjB1kmUOqU=;
+  b=WeXnuC3UbWR6a+8d+HiMBnio2FQ80b9Nk+futyypGOcq5XOqaRyl8ooo
+   QaLBofjKD0MA5VWOqB74N/yXv91qlE6pjf4cl7Yf33A5VjMcywREtQfIF
+   1HABdlVG58jAOkaLPa0DIQuZAITJdGFDheHV1m5Z3bp1fByT+FgdyixmA
+   F19f9RioFSBxX9PuWcKDBBkEQ54k8M83ziN36Mc4PltEY8AwpSdFmXh/t
+   HG/pQfdc4NiFYlfQy9wfvzbcackkKNQs0OdB3ma7on99tMEo1Mhupj36/
+   Vn5bnC2kkkQ8m+23OpO5a32vmQ6/Oz0I7rdhEq0qPmQ1lLayCo+bBLPFX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="364508178"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="364508178"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 23:18:39 -0700
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="673098050"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 23:18:34 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 13 Jun 2022 09:18:31 +0300
+Date:   Mon, 13 Jun 2022 09:18:31 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Oleksandr Ocheretnyi <oocheret@cisco.com>
+Cc:     tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
+        p.yadav@ti.com, michael@walle.cc, richard@nod.at, vigneshr@ti.com,
+        broonie@kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, mauro.lima@eclypsium.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        xe-linux-external@cisco.com
+Subject: Re: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
+Message-ID: <YqbWt9f3of+7Z76e@lahna>
+References: <YmZUCIE/ND82BlNh@lahna>
+ <20220610191548.3626218-1-oocheret@cisco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEk9w57DWWeRR+saBNtUt2pHf6gBQH2xDQurqQSkYA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmpu6DHcuSDCZs5bdY/OM5k8XUh0/Y
-        LCa1f2G12HpL2mLv663sFpseX2O1uLxrDpvFjPP7mCwaP95kd+D0uL7kE7PHzll32T02repk
-        87hzbQ+bx+Yl9R6fN8kFsEVl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl
-        5qbaKrn4BOi6ZeYA3aSkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0u
-        zUvXy0stsTI0MDAyBSpMyM64+fcHa8EugYpD04MbGN/wdjFyckgImEgcn97B2MXIxSEksJtR
-        4sflk1DOJ0aJX3+fMYNUCQl8ZpSYPaG4i5EDrGPXn2KIml2MEssPTYSqecko0b46GsRmE9CV
-        2LG4jQ2kSERgIZNE/6V77CAJZgFXiTtn7rGC2JwCdhJnVnUxgtjCAhESfb07mEBsFgFViX07
-        LoHFeQUsJRZcmskOYQtKnJz5hAVijrzE9rdzmCFeUJD4+XQZ2EwRASuJJd3LoHaJS7w8eoQd
-        5AgJgZUcEtsmP2WBaHCRePn9OhOELSzx6vgWdghbSuLzu71sEF96SCz6IwURzpB4u3w9I4Rt
-        L3HgyhwWkBJmAU2J9bv0IVbxSfT+fsIE0ckr0dEmBFGtKtH87irUUmmJid3drBC2h8T6Ld/Z
-        JzAqzkLy2Cwkj81C8sAshGULGFlWMUqmFhTnpqcWmxYY56WWwyM7OT93EyM4uWp572B89OCD
-        3iFGJg7GQ4wSHMxKIrwBtxclCfGmJFZWpRblxxeV5qQWH2I0BYb2RGYp0eR8YHrPK4k3NLE0
-        MDEzMzOxNDYzVBLnFfjfmCQkkJ5YkpqdmlqQWgTTx8TBKdXANO3YmRMnb9o8dUq/vVxcNPOD
-        u2zvKjO9tSr+2VrbZ8iu+78qOHRy8a599ydtPHPUlHXjD6/9Li2Cimmx5sfmTGC1ebZobdO8
-        SsG2E6v6/jB82RDg6zu5z+7X7tzp5+Kl/zuV/RU5tmP6id4NS8vDRKR1TC/pRCxZdkLg0rFl
-        hy5rlEVfD6v0tpRntelWP3vgS6ePc9BDK24XufenHDeXp+kVXXUNWWPOmLiTa5XiG4+1fAd9
-        wnTt/81Yu0HBaPmq+40vk25dPRu+4nj+tpVHW34sZGT20b4ouZ418kIi1wOBmtZqjzbB9HOM
-        yV3rVRgsO3dNazXZY3bCq5z11tFOy21LNHQOOB42uvc9od3tghJLcUaioRZzUXEiAL/f+a83
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJTvf+jmVJBkeXm1ks/vGcyWLqwyds
-        FpPav7BabL0lbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj56y77B6bVnWy
-        edy5tofNY/OSeo/Pm+QC2KK4bFJSczLLUov07RK4Mm7+/cFasEug4tD04AbGN7xdjBwcEgIm
-        Erv+FHcxcnIICexglHi1vBTElhCQlri+cQI7hC0ssfLfcyCbC6jmOaPE/+XT2UASbAK6EjsW
-        t7GBJEQEljNJbP27nhkkwSzgLjGtaScjxNR+RomTlwJBbE4BO4kzq7rA4sICYRLzz/aDDWIR
-        UJXYt+MSWJxXwFJiwaWZ7BC2oMTJmU9YIGZqS/Q+bGWEsOUltr+dwwxxnYLEz6fLWEFsEQEr
-        iSXdy9ghasQlXh49wj6BUXgWklGzkIyahWTULCQtCxhZVjFKphYU56bnFhsWGOWllusVJ+YW
-        l+al6yXn525iBEeZltYOxj2rPugdYmTiYDzEKMHBrCTCG3B7UZIQb0piZVVqUX58UWlOavEh
-        RmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTK4lx2q+ufLqTlhU+2Kt2cGoL0fv/A4/
-        +uaoljnXBJdEe84NqutaeoM0tk+dmr61eK8q11buw+sXsbi9uFnz2MTjyR2tINFaNV2FXINF
-        0rILS4QaFsZKpj+70VXktM43+IZO4elrtxZG7Q9o+5J58vPXCAu1HZ9Tf4e7VhWcFHyaUMmb
-        H3Xpy1I98XcvazI1uz6smr48etqk7X8Xn9kx9dO12tefot/bXMvq75S5p613ynbPqv7uOI+y
-        pgARpcoXT/Vfd1RoPrnkrxAYZBRf9eHFvrM/F0xofT3ZbpZdr/jq4q+b9l7aqOyn4/vLbkbt
-        uoNb6/Pef7i40szHRtOyU11jf8mb/pxqoXoZ160afkosxRmJhlrMRcWJAJvB7mohAwAA
-X-CMS-MailID: 20220613041111epcas5p426ea95c3b26a5507b1a0d23e82b926a0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220612203434epcas5p3f44780ebc5f34f5fd3f55362cbe21a2e
-References: <CGME20220612203434epcas5p3f44780ebc5f34f5fd3f55362cbe21a2e@epcas5p3.samsung.com>
-        <20220612203428.2754823-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610191548.3626218-1-oocheret@cisco.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
+On Fri, Jun 10, 2022 at 12:15:48PM -0700, Oleksandr Ocheretnyi wrote:
+> Commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q* entries")
+> and following one 8f93826 ("mtd: spi-nor: micron-st: convert USE_FSR
+> to a manufacturer flag") enables SPINOR_OP_RDFSR opcode handling ability,
+> however some controller drivers still cannot handle it properly in
+> the micron_st_nor_ready() call what breaks some mtd callbacks with
+> next error logs:
+> 
+> mtdblock: erase of region [address1, size1] on "BIOS" failed
+> mtdblock: erase of region [address2, size2] on "BIOS" failed
+> 
+> Just skip subsequent processing of the SPINOR_OP_RDFSR opcode's results
+> because of -ENOTSUPP return value of the micron_st_nor_read_fsr()
+> if there is no proper handling of that opcode as it's been before
+> commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q* entries")
+> 
+> Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
 
->-----Original Message-----
->From: Colin Ian King [mailto:colin.i.king@gmail.com]
->Sent: Monday, June 13, 2022 2:04 AM
->To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Andi Shyti
-><andi@etezian.org>; Mark Brown <broonie@kernel.org>; Alim Akhtar
-><alim.akhtar@samsung.com>; linux-spi@vger.kernel.org; linux-samsung-
->soc@vger.kernel.org; linux-arm-kernel@lists.infradead.org
->Cc: kernel-janitors@vger.kernel.org; linux-kernel@vger.kernel.org
->Subject: [PATCH][next] spi: s3c64xx: set pointers to null using NULL rather
->than 0
->
->There are pointers being set to null using use. Use NULL instead.
->
-Nit: s/using use / using zero
+I sent similar patch some time ago here:
 
->Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->---
+https://lore.kernel.org/linux-mtd/20220506105158.43613-1-mika.westerberg@linux.intel.com/#t
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+but so far it has not been picked up by the maintainers. I'm fine if we
+go with your patch instead, just one minor comment:
 
-> drivers/spi/spi-s3c64xx.c | 10 +++++-----
-> 1 file changed, 5 insertions(+), 5 deletions(-)
->
->diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c index
->0ce58105dbac..819b660dae82 100644
->--- a/drivers/spi/spi-s3c64xx.c
->+++ b/drivers/spi/spi-s3c64xx.c
->@@ -354,7 +354,7 @@ static int s3c64xx_spi_prepare_transfer(struct
->spi_master *spi)
-> 	sdd->rx_dma.ch = dma_request_chan(&sdd->pdev->dev, "rx");
-> 	if (IS_ERR(sdd->rx_dma.ch)) {
-> 		dev_err(&sdd->pdev->dev, "Failed to get RX DMA
->channel\n");
->-		sdd->rx_dma.ch = 0;
->+		sdd->rx_dma.ch = NULL;
-> 		return 0;
-> 	}
->
->@@ -362,8 +362,8 @@ static int s3c64xx_spi_prepare_transfer(struct
->spi_master *spi)
-> 	if (IS_ERR(sdd->tx_dma.ch)) {
-> 		dev_err(&sdd->pdev->dev, "Failed to get TX DMA
->channel\n");
-> 		dma_release_channel(sdd->rx_dma.ch);
->-		sdd->tx_dma.ch = 0;
->-		sdd->rx_dma.ch = 0;
->+		sdd->tx_dma.ch = NULL;
->+		sdd->rx_dma.ch = NULL;
-> 		return 0;
-> 	}
->
->@@ -808,8 +808,8 @@ static int s3c64xx_spi_transfer_one(struct spi_master
->*master,
-> 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
-> 		dma_release_channel(sdd->rx_dma.ch);
-> 		dma_release_channel(sdd->tx_dma.ch);
->-		sdd->rx_dma.ch = 0;
->-		sdd->tx_dma.ch = 0;
->+		sdd->rx_dma.ch = NULL;
->+		sdd->tx_dma.ch = NULL;
-> 	}
->
-> 	return status;
->--
->2.35.3
+> ---
+>  drivers/mtd/spi-nor/micron-st.c | 6 +++++-
+>  drivers/spi/spi-intel.c         | 3 ++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+> index a96f74e0f568..507e675d81e0 100644
+> --- a/drivers/mtd/spi-nor/micron-st.c
+> +++ b/drivers/mtd/spi-nor/micron-st.c
+> @@ -399,8 +399,12 @@ static int micron_st_nor_ready(struct spi_nor *nor)
+>  		return sr_ready;
+>  
+>  	ret = micron_st_nor_read_fsr(nor, nor->bouncebuf);
+> -	if (ret)
+> +	if (ret < 0) {
+> +		/* Check if read FSR is supported. If not, skip it. */
+> +		if (ret == -ENOTSUPP)
+> +			return sr_ready;
+>  		return ret;
+> +	}
+>  
+>  	if (nor->bouncebuf[0] & (FSR_E_ERR | FSR_P_ERR)) {
+>  		if (nor->bouncebuf[0] & FSR_E_ERR)
+> diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+> index 50f42983b950..f0313a718d1b 100644
+> --- a/drivers/spi/spi-intel.c
+> +++ b/drivers/spi/spi-intel.c
+> @@ -352,7 +352,8 @@ static int intel_spi_hw_cycle(struct intel_spi *ispi, u8 opcode, size_t len)
+>  		val |= HSFSTS_CTL_FCYCLE_RDSR;
+>  		break;
+>  	default:
+> -		return -EINVAL;
+> +		dev_dbg(ispi->dev, "%#x not supported\n", opcode);
+> +		return -ENOTSUPP;
 
+I don't think this is necessary because we already return -EOPNOTSUPP in
+intel_spi_exec_mem_op() so we can just check that one in
+micron_st_nor_ready().
 
+With that changed feel free to add my,
+
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
