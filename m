@@ -2,96 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7444354D0B1
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 20:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261AD54D15E
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 21:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245362AbiFOSKc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jun 2022 14:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S243975AbiFOTL5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jun 2022 15:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiFOSKb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 14:10:31 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85A84B403;
-        Wed, 15 Jun 2022 11:10:30 -0700 (PDT)
-Received: from [127.0.0.1] (nyx.walle.cc [158.255.213.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 73E5B22249;
-        Wed, 15 Jun 2022 20:10:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1655316627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TS3jYFS6YTAvU3pgkMvxRJI/YD6CxfyrTdrG5rg9tDU=;
-        b=OlchZqjIeXpxF5LKa+OEpi2uZeC6CUN/XH0rxxwQ/x/J6nLbOgm5MbIm2Z9R9PJXpyqyWh
-        ITd9PIHV0TBR+EcsaFzL0mjm/aMwRtzQ1p1ctjGfEYFVgvSbeoDaUZi2Gr+pYPueUu74xN
-        GK5/IzzwgjecRTSUsCYOo2rolRVGf+4=
-Date:   Wed, 15 Jun 2022 20:10:13 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
-        <oocheret@cisco.com>
-CC:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
-Subject: Re: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YqmrIsOEsFoKTwEK@lahna>
-References: <YmZUCIE/ND82BlNh@lahna> <20220610191548.3626218-1-oocheret@cisco.com> <YqbWt9f3of+7Z76e@lahna> <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com> <YqmrIsOEsFoKTwEK@lahna>
-Message-ID: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
+        with ESMTP id S233519AbiFOTL4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 15:11:56 -0400
+Received: from alln-iport-4.cisco.com (alln-iport-4.cisco.com [173.37.142.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49EC41985;
+        Wed, 15 Jun 2022 12:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2629; q=dns/txt; s=iport;
+  t=1655320316; x=1656529916;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Vnvt0MqP5LNDaqxR7L6ZH2qCRCr8hhIb7hMFw1y0Sp0=;
+  b=WjjCodkFJQ2BckZ9hvdPmbAJmQcwgFlpgKlhV1hhFoRocNRM2mkTKZ+K
+   Gurwf/mjZruVVFxGOGvvv9VA9Jegb3dhKid1KXLgg4AqxdQ+unRTFojD9
+   Wtz0ARY2YrWQaHBryZEXj9+GL6+qlMdEzZbrCHA4oLxYoXRsyCh1FsdpW
+   4=;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647302400"; 
+   d="scan'208";a="862238780"
+Received: from alln-core-2.cisco.com ([173.36.13.135])
+  by alln-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 15 Jun 2022 19:11:55 +0000
+Received: from sjc-ads-3421.cisco.com (sjc-ads-3421.cisco.com [171.68.249.119])
+        by alln-core-2.cisco.com (8.15.2/8.15.2) with ESMTP id 25FJBrvQ017942;
+        Wed, 15 Jun 2022 19:11:54 GMT
+From:   Oleksandr Ocheretnyi <oocheret@cisco.com>
+To:     mika.westerberg@linux.intel.com, tudor.ambarus@microchip.com,
+        miquel.raynal@bootlin.com, p.yadav@ti.com, michael@walle.cc,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Cc:     mauro.lima@eclypsium.com, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, oocheret@cisco.com,
+        xe-linux-external@cisco.com
+Subject: [PATCH v2] mtd: spi-nor: handle unsupported FSR opcodes properly
+Date:   Wed, 15 Jun 2022 12:11:53 -0700
+Message-Id: <20220615191153.3017939-1-oocheret@cisco.com>
+X-Mailer: git-send-email 2.26.2.Cisco
+In-Reply-To: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
+References: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 171.68.249.119, sjc-ads-3421.cisco.com
+X-Outbound-Node: alln-core-2.cisco.com
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 15=2E Juni 2022 11:49:22 OEZ schrieb Mika Westerberg <mika=2Ewesterberg@=
-linux=2Eintel=2Ecom>:
->Hi,
->
->On Tue, Jun 14, 2022 at 05:56:54PM +0000, Oleksandr Ocheretnyi -X (oocher=
-et - GLOBALLOGIC INC at Cisco) wrote:
->>    Hello Mika,
->>=20
->>    in my case (I work with memory chip n25q128a13 for recent kernels) I=
-'m
->>    getting return value -ENOTSUPP from spi_mem_exec_op() call in the
->>    micron_st_nor_read_fsr() method
->>    [[1]https://elixir=2Ebootlin=2Ecom/linux/v5=2E19-rc2/source/drivers/=
-spi/spi-m
->>    em=2Ec#L326]=2E So I decided to provide the same errorcode to
->>    intel_spi_hw_cycle() method because older kernel versions throw the
->>    error there=2E It is fine to use -EOPNOTSUPP return value instead=2E
->>=20
->>    I suspect we need to cover both cases to check -ENOTSUPP as well as
->>    -EOPNOTSUPP to let the driver work properly=2E
->>=20
->>    if (ret =3D=3D -ENOTSUPP || ret =3D=3D -EOPNOTSUPP)
->
->I think we should follow the same in the Intel driver and return
->-ENOTSUPP too=2E
+Originally commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q*
+entries") and following one 8f93826 ("mtd: spi-nor: micron-st: convert
+USE_FSR to a manufacturer flag") enabled SPINOR_OP_RDFSR opcode handling
+ability, however some controller drivers still cannot handle it properly
+in the micron_st_nor_ready() call what breaks some mtd callbacks with
+next error logs:
 
-AFAIK ENOTSUPP is for nfs and shouldn't be used=2E
+mtdblock: erase of region [address1, size1] on "BIOS" failed
+mtdblock: erase of region [address2, size2] on "BIOS" failed
 
--michael
+The Intel SPI controller does not support low level operations, like
+reading the flag status register (FSR). It only exposes a set of high
+level operations for software to use. For this reason check the return
+value of micron_st_nor_read_fsr() and if the operation was not
+supported, use the status register value only. This allows the chip to
+work even when attached to Intel SPI controller (there are such systems
+out there).
+
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
+Link: https://lore.kernel.org/lkml/YmZUCIE%2FND82BlNh@lahna/
+---
+ drivers/mtd/spi-nor/micron-st.c | 12 ++++++++++--
+ drivers/spi/spi-intel.c         |  3 ++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+index a96f74e0f568..fd52e8feea44 100644
+--- a/drivers/mtd/spi-nor/micron-st.c
++++ b/drivers/mtd/spi-nor/micron-st.c
+@@ -399,8 +399,16 @@ static int micron_st_nor_ready(struct spi_nor *nor)
+ 		return sr_ready;
+ 
+ 	ret = micron_st_nor_read_fsr(nor, nor->bouncebuf);
+-	if (ret)
+-		return ret;
++	if (ret < 0) {
++		/*
++		 * Some controllers, such as Intel SPI, do not support low
++		 * level operations such as reading the flag status
++		 * register. They only expose small amount of high level
++		 * operations to the software. If this is the case we use
++		 * only the status register value.
++		 */
++		return (ret == -ENOTSUPP || ret == -EOPNOTSUPP) ? sr_ready : ret;
++	}
+ 
+ 	if (nor->bouncebuf[0] & (FSR_E_ERR | FSR_P_ERR)) {
+ 		if (nor->bouncebuf[0] & FSR_E_ERR)
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 50f42983b950..2659c8337937 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -352,7 +352,8 @@ static int intel_spi_hw_cycle(struct intel_spi *ispi, u8 opcode, size_t len)
+ 		val |= HSFSTS_CTL_FCYCLE_RDSR;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		dev_dbg(ispi->dev, "%#x not supported\n", opcode);
++		return -EOPNOTSUPP;
+ 	}
+ 
+ 	if (len > INTEL_SPI_FIFO_SZ)
+-- 
+2.26.2.Cisco
+
