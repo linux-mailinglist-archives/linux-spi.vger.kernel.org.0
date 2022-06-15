@@ -2,82 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1013754CAF4
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 16:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0257954CB2A
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 16:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235206AbiFOOOX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jun 2022 10:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S245031AbiFOOWn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jun 2022 10:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353163AbiFOOOB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 10:14:01 -0400
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4FC192A5
-        for <linux-spi@vger.kernel.org>; Wed, 15 Jun 2022 07:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=cU63ym4X53fKIlrrBQ5m80vzLbOrXAj7eH4jQuBfPhk=;
-        b=rZ8G/A5cANaBOWo4GVlXVEeUnFjD8b9XrMjf22SJBxIeVipXMcePbxrPNZGtowJ42iuLFOISsjPL2
-         8QlIRvVq5/HA24GOyYAjbkpFm5DWd9e5LpNBK78kv5HExvj1b8s/QZVD5flsM7DB3EH0pY8Al4ZLwl
-         QKH9HutLgnd4eZD3zxsUi24J9ZEaocpYVt43layo8RTuRzkNQg++Gf5f3Sp9P1DdVcmHSJG4mGk4sa
-         6UtwMEDSQbeTocZPH8DgbGgBBvcbrOT7FeKhAyd/utPxoNziBT0ZFiiFxKguKhaDfkXQC1xpm80cF/
-         H69P1PdmSNZMyFW/0bIEHRZDcz0KE/g==
-X-MSG-ID: 653125ad-ecb5-11ec-ba03-0050569d3a82
-Date:   Wed, 15 Jun 2022 16:13:56 +0200
-From:   David Jander <david@protonic.nl>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [RFC] [PATCH v2 00/11] Optimize spi_sync path
-Message-ID: <20220615161356.21bf749d@erd992>
-In-Reply-To: <20220615133113.ylwenlzpkv2na25z@pengutronix.de>
-References: <20220615124634.3302867-1-david@protonic.nl>
-        <20220615133113.ylwenlzpkv2na25z@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S242702AbiFOOWn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 10:22:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AB3C0F;
+        Wed, 15 Jun 2022 07:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655302959; x=1686838959;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9qyp6+bi5a1Nfggtjv4LRguWeuVmJJ6PLYs6RLiuRn4=;
+  b=CnNz3jjRaTFLeQZJGK59xXwRfVNRuTlNlNNdL0RQ2cYHPHK4Byncaytv
+   cX1JwiHqDTn+jF1VCr2NfAsvoFe+WSrwWensiHrI96uTN9t29UJ/7oa0Y
+   oCdtPHa2JEuaP4gbWEHk18xLR8BlL6mj0SimJ5nG6aL64mxuXKNHZO6KH
+   7QrPbb2SLzml3qjuHcYYnXkLw463qKs2wUiFwOg2nwEs892sxEkPlIxbs
+   MDbzfkbAeaVlFH6gpOq9KAEZTBhkiqg1qFZVgdEwrP/7HLMkf3yTWfAKe
+   pIpeGXtm5fGpq5TkRJ9kWR+3mLq1cpZweY0sTc5TXpoH8Js7NlvPluYb9
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="178078168"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 07:22:38 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Jun 2022 07:22:37 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Jun 2022 07:22:35 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v2] spi: microchip-core: fix passing zero to PTR_ERR warning
+Date:   Wed, 15 Jun 2022 15:20:29 +0100
+Message-ID: <20220615142028.2991915-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 15 Jun 2022 15:31:13 +0200
-Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+It is possible that the error case for devm_clk_get() returns NULL,
+in which case zero will be passed to PTR_ERR() as shown by the Smatch
+static checker warning:
+drivers/spi/spi-microchip-core.c:557 mchp_corespi_probe()
+warn: passing zero to 'PTR_ERR'
 
-> On 15.06.2022 14:46:23, David Jander wrote:
-> > These patches optimize the spi_sync call for the common case that the
-> > worker thread is idle and the queue is empty. It also opens the
-> > possibility to potentially further optimize the async path also, since
-> > it doesn't need to take into account the direct sync path anymore.
-> > 
-> > As an example for the performance gain, on an i.MX8MM SoC with a SPI CAN
-> > controller attached (MCP2518FD), the time the interrupt line stays
-> > active (which corresponds roughly with the time it takes to send 3
-> > relatively short consecutive spi_sync messages) is reduced from 98us to
-> > only 72us by this patch.
-> > 
-> > A note about message ordering:
-> > 
-> > This patch series should not change the behavior of message ordering when
-> > coming from the same context. This means that if a client driver issues
-> > one or more spi_async() messages immediately followed by a spi_sync()
-> > message in the same context, it can still rely on these messages being
-> > sent out in the order they were fired.  
-> 
-> Which git branch to use as the base?
+Remove the NULL check and carry on with a dummy clock in case of an
+error. To avoid a potential div zero, abort calculating clkgen if
+clk_get_rate(spi->clk) is zero.
 
-Sorry, forgot to mention: spi for-next:
-git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/linux-spi/20220615091633.GI2168@kadam/
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+v2: drop the NULL check entirely rather than returning -ENXIO if NULL
+---
+ drivers/spi/spi-microchip-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This is because it relies on previous patches that have been applied there.
-
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index 5b2aee30fa04..d866a831104c 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -433,6 +433,8 @@ static int mchp_corespi_calculate_clkgen(struct mchp_corespi *spi,
+ 	unsigned long clk_hz, spi_hz, clk_gen;
+ 
+ 	clk_hz = clk_get_rate(spi->clk);
++	if (!clk_hz)
++		return -EINVAL;
+ 	spi_hz = min(target_hz, clk_hz);
+ 
+ 	/*
+@@ -553,7 +555,7 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	spi->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (!spi->clk || IS_ERR(spi->clk)) {
++	if (IS_ERR(spi->clk)) {
+ 		ret = PTR_ERR(spi->clk);
+ 		dev_err(&pdev->dev, "could not get clk: %d\n", ret);
+ 		goto error_release_master;
 -- 
-David Jander
+2.36.1
+
