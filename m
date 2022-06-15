@@ -2,96 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEF654C515
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 11:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE9554C78B
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jun 2022 13:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243233AbiFOJtd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jun 2022 05:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S1348065AbiFOLdK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jun 2022 07:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347658AbiFOJtb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 05:49:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF8549695;
-        Wed, 15 Jun 2022 02:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655286569; x=1686822569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fgoP/mzTE5gjuDZ8g87/11obiI4NZu5ZOraq//7+Q64=;
-  b=JocYUTMKdwhiWynLO13suZIe9lUH5gs9DtMczfQOPoD6anOd1cw+xy6k
-   NwPVZ/t0pI82uEO07/oR6gS9PJZosa5kXya7QKH4io2mhIKqECsIYjuyQ
-   ZuTNk+oBF8mrUU/LWABE+vaV9Pq3Gv5wo8Cj1j+Ze9pDlTJ0xz0mhXOrs
-   EnIpC+wBnix3KjVkF+ZghfbmhhTricdpda4MTq0AHV1SgD1f/ifRVQGFo
-   uj+qrm+Y9pbawIabWFg1MSyZpkDO94yqZC7bW36qD1A1JWSUcZ9pdEylR
-   jZFKK9keXMsXGF+3Ka3DqhIi1V3Lp4G03XwUObZA4Hp09L57R6mDMdu0E
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="365250969"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="365250969"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:49:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="618386934"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:49:24 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 15 Jun 2022 12:49:22 +0300
-Date:   Wed, 15 Jun 2022 12:49:22 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
-        <oocheret@cisco.com>
-Cc:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
-Subject: Re: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
-Message-ID: <YqmrIsOEsFoKTwEK@lahna>
-References: <YmZUCIE/ND82BlNh@lahna>
- <20220610191548.3626218-1-oocheret@cisco.com>
- <YqbWt9f3of+7Z76e@lahna>
- <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com>
+        with ESMTP id S1345296AbiFOLdF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jun 2022 07:33:05 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3112C433B0;
+        Wed, 15 Jun 2022 04:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655292785; x=1686828785;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J2xeVFHRhS32YajK2SQJsuNx2FZegiEhlRercXHKr34=;
+  b=pPksHNOvxVQktD+GcAmcawkCYt9qVp5vG8s1gtFbOyz5o4CKPEdSeH5n
+   dHeHBNCCqikkWjd6XXlqLBCiPBe8pDddFe3Pi0bLUib1MJFk0O3mjkZAA
+   Ixmjwsfagq6R0aP902UB0TSQQ2bc8wHqLJtwr3sWDblFXOYMxB5wN0pM1
+   iy//o/C0eH6EazuB0Vs3wLbgHTPTPej3vP7ODasx0mmdwDKdnRPhKttRE
+   ysbnBBbK4Rly8+QIK/sPPbr1H1inxUI0XvPIcNjCk629mmrCs/ij5cP85
+   7NZsH7SXE/E2TXOheHtnLKCQwPgd8tkEK3WpWG1Ivc4ThBH3iuduhGiGb
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="168507967"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 04:33:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Jun 2022 04:33:04 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Jun 2022 04:33:02 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
+Date:   Wed, 15 Jun 2022 12:30:22 +0100
+Message-ID: <20220615113021.2493586-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+It is possible that the error case for devm_clk_get() returns NULL,
+in which case zero will be passed to PTR_ERR() as shown by the Smatch
+static checker warning:
+drivers/spi/spi-microchip-core.c:557 mchp_corespi_probe()
+warn: passing zero to 'PTR_ERR'
 
-On Tue, Jun 14, 2022 at 05:56:54PM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
->    Hello Mika,
-> 
->    in my case (I work with memory chip n25q128a13 for recent kernels) I'm
->    getting return value -ENOTSUPP from spi_mem_exec_op() call in the
->    micron_st_nor_read_fsr() method
->    [[1]https://elixir.bootlin.com/linux/v5.19-rc2/source/drivers/spi/spi-m
->    em.c#L326]. So I decided to provide the same errorcode to
->    intel_spi_hw_cycle() method because older kernel versions throw the
->    error there. It is fine to use -EOPNOTSUPP return value instead.
-> 
->    I suspect we need to cover both cases to check -ENOTSUPP as well as
->    -EOPNOTSUPP to let the driver work properly.
-> 
->    if (ret == -ENOTSUPP || ret == -EOPNOTSUPP)
+Fix the warning by explicitly returning an error if devm_clk_get()
+returns NULL.
 
-I think we should follow the same in the Intel driver and return
--ENOTSUPP too.
+Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/linux-spi/20220615091633.GI2168@kadam/
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ drivers/spi/spi-microchip-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index 5b2aee30fa04..d44663cca071 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -554,7 +554,7 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+ 
+ 	spi->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (!spi->clk || IS_ERR(spi->clk)) {
+-		ret = PTR_ERR(spi->clk);
++		ret = !spi->clk ? -ENXIO : PTR_ERR(spi->clk);
+ 		dev_err(&pdev->dev, "could not get clk: %d\n", ret);
+ 		goto error_release_master;
+ 	}
+-- 
+2.36.1
+
