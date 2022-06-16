@@ -2,80 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A855A54DBC8
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jun 2022 09:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1B54DCA9
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jun 2022 10:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359583AbiFPHdH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jun 2022 03:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S1359138AbiFPIR5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jun 2022 04:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359543AbiFPHco (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jun 2022 03:32:44 -0400
-Received: from me-region.ru (email.mesg-online.ru [178.238.126.75])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D0A642601
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jun 2022 00:32:40 -0700 (PDT)
-Received: from rmail.major-express.ru (rmail [127.0.0.1])
-        by me-region.ru (Postfix) with ESMTP id 1CEA42B1662
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jun 2022 10:32:39 +0300 (MSK)
-Authentication-Results: rmail.major-express.ru (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=me-region.ru
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=me-region.ru; h=
-        reply-to:date:date:from:from:to:subject:subject
-        :content-description:content-transfer-encoding:mime-version
-        :content-type:content-type; s=dkim; t=1655364758; x=1656228759;
-         bh=q+AB6wTcFowTQDN3yBj6V7w56hj7BQnkh6i5A0MwiTQ=; b=YI6hNFOB7+Lk
-        8EC+oyDYIJlEN6TNPKci21ySuMdNJ2i+6QrPAGqGGcrdBq32NvZRaG8pfLBmPia9
-        0oArp1PAG/Dq0i8/YMF1l6OwuTNX3uXSRDuDTTyDlqjU12gtq/4RRmHLTMjh7DUE
-        thwx2EjDLL9sv8oCiGTKeotvM2MgxNE=
-X-Virus-Scanned: Debian amavisd-new at rmail
-Received: from me-region.ru ([127.0.0.1])
-        by rmail.major-express.ru (rmail.major-express.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ONuis9v3HcRS for <linux-spi@vger.kernel.org>;
-        Thu, 16 Jun 2022 10:32:38 +0300 (MSK)
-Received: from [2.56.59.106] (unknown [2.56.59.106])
-        by me-region.ru (Postfix) with ESMTPSA id 2B7DC2B1451;
-        Wed, 15 Jun 2022 12:33:09 +0300 (MSK)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229462AbiFPIRz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jun 2022 04:17:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C2713CE7;
+        Thu, 16 Jun 2022 01:17:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE3BA61D29;
+        Thu, 16 Jun 2022 08:17:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68449C34114;
+        Thu, 16 Jun 2022 08:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655367473;
+        bh=XoJ4+rFkSAX4O5qYIqK5h8B/dlR8CbRJGdER6wLYAg8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VeSUTIggYN810w8JCA1g7TGpTRWOa9WbH3c5dRxNFna+XrzdVydsFSgYQyONOaxEt
+         w9W+YGVqVi/i8tGuiOpPx73ynWAJipXxXg6B70UfFGD4o/kjGwym+kW3V6qdOpoX+/
+         NKI58usFqFmnOzEbhzrxEqpIxwWMB29P8vTmO93RP9bXrnJ3jJEes9IlSSUGHiXUBm
+         11RkFhYK9BCSZxBfA9SRdLH3gLkRYA6Jt8ZJa1vPBoVG+PZmSF/BkBlKY08Wwd4dUh
+         opgk7Xw5Ci5jvRY3svNJ7tfZHg7SyoAk0Ml2NRnaEDteGr21MNVqASZ7aahFB7W2cm
+         W0NyF6YInU/wg==
+Date:   Thu, 16 Jun 2022 09:17:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-doc@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: efm32: remove bindings for deleted platform
+Message-ID: <YqrnKtkm4Xdl8vTy@sirena.org.uk>
+References: <20220615210720.6363-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Good day, 93.189.94.68
-To:     Recipients <postmaster@me-region.ru>
-From:   "Lynn Page" <postmaster@me-region.ru>
-Date:   Wed, 15 Jun 2022 02:33:03 -0700
-Reply-To: lewislekan@outlook.com
-Message-Id: <20220616073239.1CEA42B1662@me-region.ru>
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?2.56.59.106>]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [178.238.126.75 listed in wl.mailspike.net]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [178.238.126.75 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gF7RWUCch1/TUW4O"
+Content-Disposition: inline
+In-Reply-To: <20220615210720.6363-1-wsa@kernel.org>
+X-Cookie: Pass with care.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Good day,
 
-This email will come to your as surprise, i will like to discuss Business P=
-roposal with u Kindly get back to me asap
+--gF7RWUCch1/TUW4O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Mrs.Lynn Page
+On Wed, Jun 15, 2022 at 11:07:19PM +0200, Wolfram Sang wrote:
+> Commit cc6111375cec ("ARM: drop efm32 platform") removed the platform,
+> so no need to still carry the bindings.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--gF7RWUCch1/TUW4O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKq5yoACgkQJNaLcl1U
+h9D6Bgf9FsWZbqfrpPz05MqsAP5L5zXrH6+wVnlkfyL60hVYPRq4/YkegM0Ttbjm
+uU+opIQjjzpOCx7uPPqovy+19nZ1WXEk7oL8yHmjp35I9wzEAflDpj2VhJqROabZ
+hJSF+yEWSSh3mIhD4AkvMtz/Jo4unndHxzC/sRsRWdQJLVsX6d9etfXNHOPKVmc+
+XNiD+z27IMfgqM5f6Ax1AziQwVKPMtu/FszTUWQt1UIPNLq2hv/R5MdF13of/gM6
+gwwGJJuLTaPNhvHF0b1T8RdyyWzJnc3KPO5zED3DpHhKGDz6u8OBAHDrQXLQeeEc
+aufEoFD8GNwShKIK9ai+ouZEkFscHQ==
+=DN3x
+-----END PGP SIGNATURE-----
+
+--gF7RWUCch1/TUW4O--
