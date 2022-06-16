@@ -2,118 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE5D54E610
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jun 2022 17:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08D054E8FE
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jun 2022 20:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiFPPaJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jun 2022 11:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S233838AbiFPSBA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jun 2022 14:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238245AbiFPPaI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jun 2022 11:30:08 -0400
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472912DAAE
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jun 2022 08:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=M8cwt95/16+C08lklXx/RzuG5ugKSdoUn/bTjMAeUpw=;
-        b=eMMuoujX2jIpMfk5QUlyQKwtCP8a198Um2P9CWAQhlxAPweh/4weMu5R9l7kezxGLgbSiXUkUWMcE
-         A3uV5MEjziyvDfpBJLWElroi8IdVtVcqiOl+notrFipOVcpPIRteULHubS1kuWr7qohNGIqn/P4qS3
-         x3NW5HUpqsqOkO28VQN0EuU3af1Dr+gVU6F3cBF95pNEPr6XXGLuiUmcBwCZqAYixLlHg6csR554Gz
-         mlGWgnyR2wzFAJBCzKYkVhJcUIzibM7fqUb4TqsvQ/T/PsQv2sfQ+cRONsfvfyrBArFqyXu46U7GmU
-         jgKtYDxOHqwwmFcUr10T+bE+4lqhYGA==
-X-MSG-ID: 318a9c96-ed89-11ec-ba03-0050569d3a82
-Date:   Thu, 16 Jun 2022 17:30:03 +0200
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [RFC] [PATCH v2 00/11] Optimize spi_sync path
-Message-ID: <20220616173003.7202d19a@erd992>
-In-Reply-To: <YqtEYTgL+wJXp9QU@sirena.org.uk>
-References: <20220615124634.3302867-1-david@protonic.nl>
-        <YqsuhfN1I54J+1gw@sirena.org.uk>
-        <20220616161323.7f1b9e84@erd992>
-        <YqtEYTgL+wJXp9QU@sirena.org.uk>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229561AbiFPSA6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jun 2022 14:00:58 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EFF13F44;
+        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id a10so2249450ioe.9;
+        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fQXZSJhht4X5yNvw03hLRu3BZWLlJCfLhF7rU9SmcRw=;
+        b=SBDuUIjY3V9QWdkZKbh/lMHW/CKxuk9YPjIQ+0wyD0H2Pq3wQA3BIljWG4eU4hU42U
+         vuN1cP6Vge93K9x+1axw9YeKyMz3aOtOtBBbZp39N7xDDsqnZFJ6OJ/XRJqfI7Pgst/K
+         g88Jf5BJyhp0grG+ZP2z6I/mo/lWghnC2C+8n1bF0ogeQ/Gm176HIM47IITFJ7dAje6p
+         7iFOt9OVF1RJ2wpvDU9DP7xMoyBfOhtZ2i9YbMyhdHiWFp4dJ1QJ9ywfP2tgMsoeLIi5
+         4Oa+tTaTHmpXQWx2fytKf5oNYNvSL+5/13Vz0STCiBJOstG4lLaHTTuOI0zJTsyP5Rfl
+         JnYg==
+X-Gm-Message-State: AJIora/JK/aPjNXZfiKvSUxpaeBwUVHWaTWZjlaSeF1VpCkjgCVy9m93
+        UUfj9RKnoSFz+R8+d9t8FQ==
+X-Google-Smtp-Source: AGRyM1spQJ7T8UrCvJ5pQYvBWRSSImqT+IRmKQ5FRE4451GZSxPWdZRJu8178mpfIlKesP0Ydg80uw==
+X-Received: by 2002:a05:6602:2c4c:b0:64f:a897:80cb with SMTP id x12-20020a0566022c4c00b0064fa89780cbmr3138193iov.139.1655402457088;
+        Thu, 16 Jun 2022 11:00:57 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y203-20020a6bc8d4000000b00669c07fbcb5sm1457589iof.5.2022.06.16.11.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 11:00:56 -0700 (PDT)
+Received: (nullmailer pid 3729785 invoked by uid 1000);
+        Thu, 16 Jun 2022 18:00:54 -0000
+Date:   Thu, 16 Jun 2022 12:00:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-serial@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-spi@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] dt-bindings: efm32: remove bindings for deleted platform
+Message-ID: <20220616180054.GA3728782-robh@kernel.org>
+References: <20220615210720.6363-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615210720.6363-1-wsa@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 16 Jun 2022 15:55:29 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> On Thu, Jun 16, 2022 at 04:13:23PM +0200, David Jander wrote:
-> > Mark Brown <broonie@kernel.org> wrote:  
-> > > On Wed, Jun 15, 2022 at 02:46:23PM +0200, David Jander wrote:  
+On Wed, 15 Jun 2022 23:07:19 +0200, Wolfram Sang wrote:
+> Commit cc6111375cec ("ARM: drop efm32 platform") removed the platform,
+> so no need to still carry the bindings.
 > 
-> > > I've given this a first pass and it looks sensible so far - I'll need to
-> > > give it a more thorough look but I'd expect it should be fine.  The
-> > > numbers certainly look good.  
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> ---
+>  .../devicetree/bindings/clock/efm32-clock.txt | 11 -----
+>  .../devicetree/bindings/i2c/i2c-efm32.txt     | 33 --------------
+>  .../devicetree/bindings/serial/efm32-uart.txt | 20 ---------
+>  .../devicetree/bindings/spi/efm32-spi.txt     | 39 -----------------
+>  include/dt-bindings/clock/efm32-cmu.h         | 43 -------------------
+>  5 files changed, 146 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/efm32-clock.txt
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-efm32.txt
+>  delete mode 100644 Documentation/devicetree/bindings/serial/efm32-uart.txt
+>  delete mode 100644 Documentation/devicetree/bindings/spi/efm32-spi.txt
+>  delete mode 100644 include/dt-bindings/clock/efm32-cmu.h
 > 
-> > The current patch set probably needs to get partly squashed, since there are a
-> > few patches that undo changes from a previous patch. I left them like this in
-> > order to hopefully make the step by step mutation more clear for review.  
-> 
-> Yes, there's a bit of stuff.  I think it's based off your previous
-> proposed patch too?
 
-Yes, in big part. I removed the API change, and all further optimizations and
-improvements are done step by step on top, like your suggestion to introduce
-the completion in __pump_messages and after that optimizing it further. Ideally
-I should maybe have tried to split up patch 2 a bit more.
-
-> > I had some doubts about patch 11, since it introduces 2 new members to struct
-> > spi_controller. I was trying to keep the pollution down, but I couldn't find a
-> > better way to do this optimization. Any suggestions? Maybe a better name/place
-> > for these flags?  
-> 
-> Not really - I'm not too concerned about individual flags since we don't
-> have so many SPI controllers in a system, it's not like it's a per task
-> overhead or similar.
-
-Ok, then we leave it as is. I was looking for a place that grouped "private"
-or "internal" struct members, but couldn't fine one really. SPI drivers
-looking at these wouldn't make sense I guess.
-
-> > Ideally this would get as much different hardware testing as possible before
-> > going further upstream. Do you have access to some platforms suitable for
-> > stressing SPI with multiple clients simultaneously? Known "problematic"
-> > controllers maybe?  
-> 
-> Well, the fastest way to get it into a wide range of CI is for me to
-> apply it so people who test -next will start covering it...  I was going
-> to kick it into my test branch KernelCI once I've got it reviewed
-> properly which will get at least some boot testing on a bunch of
-> platforms.
-
-Ah, great. I will see if I can get it tested on some more other platforms from
-our side.
-
-> For testing the main thing that'd be nice for testing would probably be
-> coverage of controllers that don't block in transfer_one_message() and
-> those that complete in interrupt context while blocking in there.
-
-Ah, yes, that would be ideal. spi-pl022.c and spi-axi-spi-engine.c do this
-AFAIK.
-Also, if someone could make some independent performance comparisons of
-before/after this series and the per-cpu stats patch, that would be very
-interesting. I don't like people having to trust me on my word about the
-gains ;-)
-
-Best regards,
-
--- 
-David Jander
-
+Deletions are automatically applied, thanks! ;)
