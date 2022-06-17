@@ -2,83 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303A154F7C1
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 14:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A0C54F7C9
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbiFQMm7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jun 2022 08:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S233234AbiFQMq2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jun 2022 08:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234937AbiFQMm7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 08:42:59 -0400
+        with ESMTP id S232477AbiFQMq1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 08:46:27 -0400
 Received: from mail-m12736.qiye.163.com (mail-m12736.qiye.163.com [115.236.127.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAFD5FFA;
-        Fri, 17 Jun 2022 05:42:55 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m12736.qiye.163.com (Hmail) with ESMTPA id EC3797E01CA;
-        Fri, 17 Jun 2022 20:42:53 +0800 (CST)
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     broonie@kernel.org
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278B2DD72;
+        Fri, 17 Jun 2022 05:46:26 -0700 (PDT)
+Received: from [172.16.12.167] (unknown [58.22.7.114])
+        by mail-m12736.qiye.163.com (Hmail) with ESMTPA id CE3957E01C7;
+        Fri, 17 Jun 2022 20:46:24 +0800 (CST)
+Message-ID: <41af9d13-fff5-a416-87cc-4f69e77d6409@rock-chips.com>
+Date:   Fri, 17 Jun 2022 20:46:24 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] spi: rockchip: Disable local irq when pio write out of
+ interrupt service
+To:     Mark Brown <broonie@kernel.org>
 Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jon Lin <jon.lin@rock-chips.com>
-Subject: [PATCH] spi: rockchip: Unmask IRQ at the final to avoid preemption
-Date:   Fri, 17 Jun 2022 20:42:51 +0800
-Message-Id: <20220617124251.5051-1-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220613092744.9726-1-jon.lin@rock-chips.com>
+ <YqcveggUU7yaXuk1@sirena.org.uk>
+ <b97ee70c-70ee-6b15-65d6-a176125dcfd8@rock-chips.com>
+ <YqxpTqvaQb4cohTh@sirena.org.uk>
+From:   Jon Lin <jon.lin@rock-chips.com>
+In-Reply-To: <YqxpTqvaQb4cohTh@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTkkYVkoZHkJPHhhNTkNJTVUTARMWGhIXJB
-        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITkhVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OhQ6EBw5MT09VkkSARY#Exg1
-        Pk0wChlVSlVKTU5OT01CTExPT0NDVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-        QVlOQ1VJSVVMVUpKT1lXWQgBWUFJS0xMNwY+
-X-HM-Tid: 0a8171b01537b20fkuuuec3797e01ca
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGkpMVh0fQkNNHx9PH01DS1UTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MUk6Fxw4Hz06F0kdARdREyMP
+        DEMKCitVSlVKTU5OT01CQkNOSEpJVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
+        QVlOQ1VJSVVMVUpKT1lXWQgBWUFITk9PNwY+
+X-HM-Tid: 0a8171b34ce8b20fkuuuce3957e01c7
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Avoid pio_write process is preempted, resulting in abnormal state.
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Signed-off-by: Jon <jon.lin@rock-chips.com>
----
 
- drivers/spi/spi-rockchip.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+On 2022/6/17 19:45, Mark Brown wrote:
+> On Fri, Jun 17, 2022 at 02:24:10PM +0800, Jon Lin wrote:
+>> On 2022/6/13 20:37, Mark Brown wrote:
+>>> On Mon, Jun 13, 2022 at 05:27:44PM +0800, Jon Lin wrote:
+> 
+>>>> +	spin_unlock_irqrestore(&rs->lock, flags);
+> 
+>>> So this is effectively just disabling interrupts during PIO, there's no
+>>> other users of the lock which is rather heavyweight.  What's the actual
+>>> issue here?  We should also have something saying what's going on in the
+>>> code since right now the lock just looks redundant.
+> 
+>> For lock: In order to avoid special situations, such as when the CPU
+>> frequency drops to close to the IO rate, the water line interrupt is
+>> triggered during FIFO filling (triggered by other CPUs), resulting in
+>> critical resources still not being protected in place. For local IRQ
+> 
+> So essentially we're so slow in filling the FIFO when starting a
+> transfer that the interrupt triggers in the middle of the initial FIFO
+> fill?  Something that tricky *really* needs a comment adding.
+> 
+> Ideally we'd just leave the interrupt masked until the FIFO is filled
+> though, looking at the driver I see that there is an interrupt mask
+> register which seems to have some level of masking available and I do
+> note that in rockchip_spi_prepare_irq() we unmask interrupts before we
+> start filling the FIFO rather than afterwards.  Would reversing the
+> unmask order there address the issue more cleanly?
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index a08215eb9e14..79242dc5272d 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -381,15 +381,18 @@ static int rockchip_spi_prepare_irq(struct rockchip_spi *rs,
- 	rs->tx_left = rs->tx ? xfer->len / rs->n_bytes : 0;
- 	rs->rx_left = xfer->len / rs->n_bytes;
- 
--	if (rs->cs_inactive)
--		writel_relaxed(INT_RF_FULL | INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
--	else
--		writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
-+	writel_relaxed(0xffffffff, rs->regs + ROCKCHIP_SPI_ICR);
-+
- 	spi_enable_chip(rs, true);
- 
- 	if (rs->tx_left)
- 		rockchip_spi_pio_writer(rs);
- 
-+	if (rs->cs_inactive)
-+		writel_relaxed(INT_RF_FULL | INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
-+	else
-+		writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
-+
- 	/* 1 means the transfer is in progress */
- 	return 1;
- }
--- 
-2.17.1
+This idea is workable, and it's more efficient than previous code, So I 
+send a new commit:
+https://patchwork.kernel.org/project/spi-devel-general/patch/20220617124251.5051-1-jon.lin@rock-chips.com/
+> 
+>> disable: Turning off the local interrupt is mainly to prevent the CPU
+>> schedule from being interrupted when filling FIFO.
+> 
+> If it were just this then there's preempt_disable(), but what's the
+> problem with being preempted during the FIFO fill?
 
+I think
