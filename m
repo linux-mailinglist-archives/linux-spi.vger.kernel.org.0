@@ -2,68 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD61454F66D
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 13:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472B454F6E7
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 13:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382216AbiFQLKr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jun 2022 07:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S1380553AbiFQLp2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jun 2022 07:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382294AbiFQLKo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 07:10:44 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B3C6CA8A
-        for <linux-spi@vger.kernel.org>; Fri, 17 Jun 2022 04:10:43 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id h36so6393398lfv.9
-        for <linux-spi@vger.kernel.org>; Fri, 17 Jun 2022 04:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
-        b=a5lpETF3CiAr1MD9se/qBuFLxUdbv1nm7l/Zsrl8+yFWc+taBtqRwVrI6CqWZSio6N
-         0R/GxqHbvDQYj/NFN2n8p1JwVkJmrnXUdjSQO83PN/MBS+ysc4iceW595H54x1i710Ll
-         FYx5ZZAK9JZFLQ388FDL1dy5cLZ8kaR60jD92as27qEgEZi+hgrqiMNy6YJ32fuLDcv/
-         hHQUlzUmpEy3/3IvlKi6iUfcHVNZ534NgRf6wGQ+47jrqIWVg4cKYbRWiWMI3T4Jhi+Q
-         Xq75cJ0pks/g/mxbKfe8Ak1RRS8ULqz1aa/d5BiKENEqkdtik2+BLOvWTy6WDtpEs+z0
-         fGpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
-        b=jnHS05Daswh8XEEtaJt7y2Jrzjuq0t2xFkVQwQV3ViCt9oh7Z7/S2ExerzRJVtfuvq
-         gjM3GxQVO0HW0VDtmyorVNQd1WGWR+emAJvCWUJsrI3cFVeYKm7kZzs4QZguJdRQtQDj
-         FXxcqhTOm/UrXbJ/K0dexfqI44pLCpG/31AR/TmxmRCn3OQJDZgUEGjeC0DQm9+8BxaL
-         ErIRptJeDDx7Ka+TjVxhbnZv5Er+qhY2rRSZENOukacgGCoXl88wqWjYOX/kXRujT6vz
-         F9WB0zAUDeY/8uVbyWbXE5l0F8SFcg02ClzJVpZf5P7XLne2GwgxNV55kjpRo3ElBJO6
-         IX2A==
-X-Gm-Message-State: AJIora8uA2m4/4/xlJi3OcofggbmeqPL0Sr277KCKUF0g4YLZuAj3jHE
-        pnXW6NHPrnNdE26Q6VirIK2+/LMACCU4ljGrm6c=
-X-Google-Smtp-Source: AGRyM1v1wDuvX6n4XY7KoVwHSQTKQ+o32cf0zrXSJNM55HDBk1s+fYaML8/ymRMvfw9zftl0EfSWJ1FIxJgS2pf1fHY=
-X-Received: by 2002:a05:6512:2286:b0:479:7a60:5e42 with SMTP id
- f6-20020a056512228600b004797a605e42mr5253740lfu.625.1655464242205; Fri, 17
- Jun 2022 04:10:42 -0700 (PDT)
+        with ESMTP id S234717AbiFQLp0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 07:45:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E926CF45;
+        Fri, 17 Jun 2022 04:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 551EDB829CF;
+        Fri, 17 Jun 2022 11:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9898DC3411B;
+        Fri, 17 Jun 2022 11:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655466323;
+        bh=G02EHsP0i0hcRdjLFNd0iVg8HQg/SfUQ/ToemVQl0rE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mgqIzxXuf+ImZ4rEI3dxKP09dcoIV8IiXHXBXN/k0t56pc6yCwEg3N/KK1HII5Gsp
+         XRN+yN3qdfqaTZ4bKG6acyLDhwQlav7x8as3HOsA4JC0QMSrKZ0942b/KADOey6suN
+         37hagpMtaEunJPklqJSGldFvBP87RfrTk2xLWU0vZ0qU87BHq8bRBpq1tXestMvyAt
+         hdLic6IPyk3hNXUcL9Qxq2BRHx5Q6VF1LsUXRmzV1SyIvHshV99/Y+RGnvOkgLVKws
+         9d5VP/UAAuwc8hvhy4wR0S8JLfeoJYhvxTHEsqtetcvk0gT/O2ZarZnYVXP0VOnpKR
+         KM95Xhnstdlmg==
+Date:   Fri, 17 Jun 2022 12:45:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: rockchip: Disable local irq when pio write out of
+ interrupt service
+Message-ID: <YqxpTqvaQb4cohTh@sirena.org.uk>
+References: <20220613092744.9726-1-jon.lin@rock-chips.com>
+ <YqcveggUU7yaXuk1@sirena.org.uk>
+ <b97ee70c-70ee-6b15-65d6-a176125dcfd8@rock-chips.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:680f:0:0:0:0:0 with HTTP; Fri, 17 Jun 2022 04:10:41
- -0700 (PDT)
-Reply-To: sj7209917@gmail.com
-From:   Joseph smith <maelyskpeta@gmail.com>
-Date:   Fri, 17 Jun 2022 04:10:41 -0700
-Message-ID: <CACKGxpx1qvVYtiHHrZyM5G0z9SCjvAsXsGNJ81Ure7BFu2ZoKQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CLGvc6v7On6xFTSG"
+Content-Disposition: inline
+In-Reply-To: <b97ee70c-70ee-6b15-65d6-a176125dcfd8@rock-chips.com>
+X-Cookie: 98% lean.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi   are you available to  speak now
-Thanks
+
+--CLGvc6v7On6xFTSG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Jun 17, 2022 at 02:24:10PM +0800, Jon Lin wrote:
+> On 2022/6/13 20:37, Mark Brown wrote:
+> > On Mon, Jun 13, 2022 at 05:27:44PM +0800, Jon Lin wrote:
+
+> > > +	spin_unlock_irqrestore(&rs->lock, flags);
+
+> > So this is effectively just disabling interrupts during PIO, there's no
+> > other users of the lock which is rather heavyweight.  What's the actual
+> > issue here?  We should also have something saying what's going on in the
+> > code since right now the lock just looks redundant.
+
+> For lock: In order to avoid special situations, such as when the CPU
+> frequency drops to close to the IO rate, the water line interrupt is
+> triggered during FIFO filling (triggered by other CPUs), resulting in
+> critical resources still not being protected in place. For local IRQ
+
+So essentially we're so slow in filling the FIFO when starting a
+transfer that the interrupt triggers in the middle of the initial FIFO
+fill?  Something that tricky *really* needs a comment adding.
+
+Ideally we'd just leave the interrupt masked until the FIFO is filled
+though, looking at the driver I see that there is an interrupt mask
+register which seems to have some level of masking available and I do
+note that in rockchip_spi_prepare_irq() we unmask interrupts before we
+start filling the FIFO rather than afterwards.  Would reversing the
+unmask order there address the issue more cleanly?
+
+> disable: Turning off the local interrupt is mainly to prevent the CPU
+> schedule from being interrupted when filling FIFO.
+
+If it were just this then there's preempt_disable(), but what's the
+problem with being preempted during the FIFO fill?
+
+--CLGvc6v7On6xFTSG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKsaU0ACgkQJNaLcl1U
+h9B+Lgf/aLgqdBeHId+v7ymWQ/Ek1vdJ2rjI0CAdGbF8OAmLPqjmOXm8neX8rAJc
+OSrQaiXEUmHSsWanCg2AuyX2kQ++TDePT55bA1wCTMwR8ICHSdK6GbdQaxUg7hk3
+H2uyaPCZWr9bEsH0xM2//kgl26MqQ1PZhO/rirE+E3OHi0AOjeX/wSipAOn/X6+4
+YNz/UW3cvbYWO+Oa8Lz5m2AB56Med0qOswwl65jp/jyF9f16UuwUfEyCbdY469/m
+yUpz2PdongU1+0DVlaB8a4nUsUlOCENQzYmy+aPVIRp888Tbz4OYBq9ISjbPY2zU
+WIleNV4RTnqq6TcM6o3thBpkJGuW/w==
+=fIJJ
+-----END PGP SIGNATURE-----
+
+--CLGvc6v7On6xFTSG--
