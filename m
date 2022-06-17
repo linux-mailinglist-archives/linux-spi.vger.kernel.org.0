@@ -2,120 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF3654F067
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 07:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1841C54F0D8
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 07:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379708AbiFQFEw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jun 2022 01:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S1380203AbiFQF5s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jun 2022 01:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbiFQFEt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 01:04:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95650666BD;
-        Thu, 16 Jun 2022 22:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655442288; x=1686978288;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=KlkNvpHU3FLlFN/0ZiH/YdtckeEa9++ioBrEqdPOl1k=;
-  b=jmGdZedNcosBL8oDwbVkJCQ3fVhMifHbrIv4xl/0h7D0nZXl7ONQWRtM
-   JGuwEhhteQeHQ7Gzt8L52UBCsxtdWLHit51w1A3M2cr6gvRfq3H9M9Ybi
-   6khxR4xkD/g+1YC8Ml2GFBJ6EU0hWnP5kdO5DfZ+16C6LFGA0pX0/lahk
-   0rVsjCUmzVLP8QnmNoovIwgeX1JtZjrgm/F3BNJ+VBriPmiCpJi/3OA00
-   oAnLcHn2ymyfmWATho6WL+Muaevv1VzuKE6a6+PbJMmm5+BMPjYlcGkZ9
-   8aJjCHkJbomTiWjP4F2lyw1WSGtXrzIrvQKhxeEtTh6DWVaPvd21dkA+/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280453126"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280453126"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 22:04:47 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="619145570"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 22:04:43 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 17 Jun 2022 08:04:40 +0300
-Date:   Fri, 17 Jun 2022 08:04:40 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
-        <oocheret@cisco.com>
-Cc:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
-Subject: Re: [PATCH v2] mtd: spi-nor: handle unsupported FSR opcodes properly
-Message-ID: <YqwLaIvjdRBsNRuU@lahna>
-References: <YqsHcL5NPcZ4De77@lahna>
- <20220616121446.293408-1-oocheret@cisco.com>
- <YqsjGx54+Gd8Aws/@lahna>
- <BYAPR11MB2757CEBE99C3A0861928CD43CDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
- <YqspM2Sw+Fu9y56Z@lahna>
- <BYAPR11MB2757BD90C63B9F6A31E0600ACDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
+        with ESMTP id S1380206AbiFQF5p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 01:57:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C41B4A3
+        for <linux-spi@vger.kernel.org>; Thu, 16 Jun 2022 22:57:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o24yq-0001Mj-TF; Fri, 17 Jun 2022 07:57:16 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o24yn-00109t-8f; Fri, 17 Jun 2022 07:57:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o24yo-00GttI-0N; Fri, 17 Jun 2022 07:57:14 +0200
+Date:   Fri, 17 Jun 2022 07:57:10 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-doc@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: efm32: remove bindings for deleted platform
+Message-ID: <20220617055710.d4wnya5aclskpqjg@pengutronix.de>
+References: <20220615210720.6363-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="olp76qajcz2msgae"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BYAPR11MB2757BD90C63B9F6A31E0600ACDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220615210720.6363-1-wsa@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Thu, Jun 16, 2022 at 08:26:33PM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
->    Hi Mika,
-> 
->    >    ​However I remember you caught situation where
->    micron_st_nor_read_fsr()
->    >    returns -EOPNOTSUPP
->    >    (intel_spi_exec_mem_op callback returns -EOPNOTSUPP), according to
->    your
->    >    patch
->    >
->    [3]https://lore.kernel.org/linux-mtd/20220506105158.43613-1-mika.wester
->    >    berg@linux.intel.com/ I've noted in description body. So I think I
->    have
->    >    to cover both errorcodes, haven't I?
->    I was thinking that you change the both functions in Intel SPI to
->    return
-> 
->    -ENOTSUPP, not just one.
-> 
->    ​you know 'drivers/mtd/spi-nor' sources use -EOPNOTSUPP errorcode only,
->    however
-> 
->    'drivers/spi' modules (where intel driver is located as well as
->    spi-mem.c) use both errorcodes many times
-> 
->    (-EOPNOTSUPP and -ENOTSUPP).
+--olp76qajcz2msgae
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oh, indeed. I remembered that SPI-NOR core was using ENOTSUP but it was
-SPI-MEM instead.
+On Wed, Jun 15, 2022 at 11:07:19PM +0200, Wolfram Sang wrote:
+> Commit cc6111375cec ("ARM: drop efm32 platform") removed the platform,
+> so no need to still carry the bindings.
+>=20
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> ---
+>  .../devicetree/bindings/clock/efm32-clock.txt | 11 -----
+>  .../devicetree/bindings/i2c/i2c-efm32.txt     | 33 --------------
+>  .../devicetree/bindings/serial/efm32-uart.txt | 20 ---------
+>  .../devicetree/bindings/spi/efm32-spi.txt     | 39 -----------------
+>  include/dt-bindings/clock/efm32-cmu.h         | 43 -------------------
+>  5 files changed, 146 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/efm32-clock.t=
+xt
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-efm32.txt
+>  delete mode 100644 Documentation/devicetree/bindings/serial/efm32-uart.t=
+xt
+>  delete mode 100644 Documentation/devicetree/bindings/spi/efm32-spi.txt
+>  delete mode 100644 include/dt-bindings/clock/efm32-cmu.h
 
->    So maybe it is better to use -EOPNOTSUPP for intel driver file (what
->    uses -EOPNOTSUPP everywhere) and
-> 
->    update the spi-mem.c with -EOPNOTSUPP as return value, how do you
->    think?
+I didn't do that back then wondering if the bindings are sensible to
+keep even for removed arch (or more general drivers). In this case the
+chip isn't old and unavailable, but just too small for sensible Linux
+usage.
 
-Yes, I think this is the correct approach. You need to be careful though
-to make sure the callers of SPI-MEM functions do not get unexpected
-values.
+OTOH I'm not aware of any dtb usage on efm32.
+
+No hard feelings here, if you consider it not useful to keep the binding
+around, go on and remove them.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--olp76qajcz2msgae
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKsF7IACgkQwfwUeK3K
+7AmlkAgAkeP7ubk1SId4jZw5jRCgEtryr8uSSJbLjLngkCCk9Tk4niLiq7RE9svU
+ogytTFnt0i4WSXrORBidg644EcgoWZrpUDA1ULORe/EbRS3k6bupHQneGP7BkXgo
+GiNgDvJ+ufdcLrI0Nj+jH/C5PxNqOa1sH7GnRE5viYXpbpB6kwyqR18v6G2CAUin
+E3b2QRB32jCAXTYlitLmbjLweY/Qz0pW8yTY4pwhLoG3w+wDshQVwRqSt778yqZN
+dLwli2Zv0+zs2EBKBZgST0hruHpcZ3HJXQy/6UhnXTCdHbxm2pI0AdQo5nIxrYe6
+/oWYm+u40EbHnR0PPhQFCKeOW1OExg==
+=4gVo
+-----END PGP SIGNATURE-----
+
+--olp76qajcz2msgae--
