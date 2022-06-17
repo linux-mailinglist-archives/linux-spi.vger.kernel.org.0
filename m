@@ -2,120 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1841C54F0D8
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 07:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD61454F66D
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 13:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380203AbiFQF5s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jun 2022 01:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S1382216AbiFQLKr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jun 2022 07:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380206AbiFQF5p (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 01:57:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C41B4A3
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jun 2022 22:57:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o24yq-0001Mj-TF; Fri, 17 Jun 2022 07:57:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o24yn-00109t-8f; Fri, 17 Jun 2022 07:57:14 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o24yo-00GttI-0N; Fri, 17 Jun 2022 07:57:14 +0200
-Date:   Fri, 17 Jun 2022 07:57:10 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-doc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: efm32: remove bindings for deleted platform
-Message-ID: <20220617055710.d4wnya5aclskpqjg@pengutronix.de>
-References: <20220615210720.6363-1-wsa@kernel.org>
+        with ESMTP id S1382294AbiFQLKo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 07:10:44 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B3C6CA8A
+        for <linux-spi@vger.kernel.org>; Fri, 17 Jun 2022 04:10:43 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id h36so6393398lfv.9
+        for <linux-spi@vger.kernel.org>; Fri, 17 Jun 2022 04:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
+        b=a5lpETF3CiAr1MD9se/qBuFLxUdbv1nm7l/Zsrl8+yFWc+taBtqRwVrI6CqWZSio6N
+         0R/GxqHbvDQYj/NFN2n8p1JwVkJmrnXUdjSQO83PN/MBS+ysc4iceW595H54x1i710Ll
+         FYx5ZZAK9JZFLQ388FDL1dy5cLZ8kaR60jD92as27qEgEZi+hgrqiMNy6YJ32fuLDcv/
+         hHQUlzUmpEy3/3IvlKi6iUfcHVNZ534NgRf6wGQ+47jrqIWVg4cKYbRWiWMI3T4Jhi+Q
+         Xq75cJ0pks/g/mxbKfe8Ak1RRS8ULqz1aa/d5BiKENEqkdtik2+BLOvWTy6WDtpEs+z0
+         fGpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
+        b=jnHS05Daswh8XEEtaJt7y2Jrzjuq0t2xFkVQwQV3ViCt9oh7Z7/S2ExerzRJVtfuvq
+         gjM3GxQVO0HW0VDtmyorVNQd1WGWR+emAJvCWUJsrI3cFVeYKm7kZzs4QZguJdRQtQDj
+         FXxcqhTOm/UrXbJ/K0dexfqI44pLCpG/31AR/TmxmRCn3OQJDZgUEGjeC0DQm9+8BxaL
+         ErIRptJeDDx7Ka+TjVxhbnZv5Er+qhY2rRSZENOukacgGCoXl88wqWjYOX/kXRujT6vz
+         F9WB0zAUDeY/8uVbyWbXE5l0F8SFcg02ClzJVpZf5P7XLne2GwgxNV55kjpRo3ElBJO6
+         IX2A==
+X-Gm-Message-State: AJIora8uA2m4/4/xlJi3OcofggbmeqPL0Sr277KCKUF0g4YLZuAj3jHE
+        pnXW6NHPrnNdE26Q6VirIK2+/LMACCU4ljGrm6c=
+X-Google-Smtp-Source: AGRyM1v1wDuvX6n4XY7KoVwHSQTKQ+o32cf0zrXSJNM55HDBk1s+fYaML8/ymRMvfw9zftl0EfSWJ1FIxJgS2pf1fHY=
+X-Received: by 2002:a05:6512:2286:b0:479:7a60:5e42 with SMTP id
+ f6-20020a056512228600b004797a605e42mr5253740lfu.625.1655464242205; Fri, 17
+ Jun 2022 04:10:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="olp76qajcz2msgae"
-Content-Disposition: inline
-In-Reply-To: <20220615210720.6363-1-wsa@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab3:680f:0:0:0:0:0 with HTTP; Fri, 17 Jun 2022 04:10:41
+ -0700 (PDT)
+Reply-To: sj7209917@gmail.com
+From:   Joseph smith <maelyskpeta@gmail.com>
+Date:   Fri, 17 Jun 2022 04:10:41 -0700
+Message-ID: <CACKGxpx1qvVYtiHHrZyM5G0z9SCjvAsXsGNJ81Ure7BFu2ZoKQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---olp76qajcz2msgae
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 15, 2022 at 11:07:19PM +0200, Wolfram Sang wrote:
-> Commit cc6111375cec ("ARM: drop efm32 platform") removed the platform,
-> so no need to still carry the bindings.
->=20
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  .../devicetree/bindings/clock/efm32-clock.txt | 11 -----
->  .../devicetree/bindings/i2c/i2c-efm32.txt     | 33 --------------
->  .../devicetree/bindings/serial/efm32-uart.txt | 20 ---------
->  .../devicetree/bindings/spi/efm32-spi.txt     | 39 -----------------
->  include/dt-bindings/clock/efm32-cmu.h         | 43 -------------------
->  5 files changed, 146 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/efm32-clock.t=
-xt
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-efm32.txt
->  delete mode 100644 Documentation/devicetree/bindings/serial/efm32-uart.t=
-xt
->  delete mode 100644 Documentation/devicetree/bindings/spi/efm32-spi.txt
->  delete mode 100644 include/dt-bindings/clock/efm32-cmu.h
-
-I didn't do that back then wondering if the bindings are sensible to
-keep even for removed arch (or more general drivers). In this case the
-chip isn't old and unavailable, but just too small for sensible Linux
-usage.
-
-OTOH I'm not aware of any dtb usage on efm32.
-
-No hard feelings here, if you consider it not useful to keep the binding
-around, go on and remove them.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---olp76qajcz2msgae
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKsF7IACgkQwfwUeK3K
-7AmlkAgAkeP7ubk1SId4jZw5jRCgEtryr8uSSJbLjLngkCCk9Tk4niLiq7RE9svU
-ogytTFnt0i4WSXrORBidg644EcgoWZrpUDA1ULORe/EbRS3k6bupHQneGP7BkXgo
-GiNgDvJ+ufdcLrI0Nj+jH/C5PxNqOa1sH7GnRE5viYXpbpB6kwyqR18v6G2CAUin
-E3b2QRB32jCAXTYlitLmbjLweY/Qz0pW8yTY4pwhLoG3w+wDshQVwRqSt778yqZN
-dLwli2Zv0+zs2EBKBZgST0hruHpcZ3HJXQy/6UhnXTCdHbxm2pI0AdQo5nIxrYe6
-/oWYm+u40EbHnR0PPhQFCKeOW1OExg==
-=4gVo
------END PGP SIGNATURE-----
-
---olp76qajcz2msgae--
+Hi   are you available to  speak now
+Thanks
