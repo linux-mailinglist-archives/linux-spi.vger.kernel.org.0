@@ -2,94 +2,164 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A0C54F7C9
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jun 2022 14:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F5F550471
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Jun 2022 14:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiFQMq2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jun 2022 08:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S234090AbiFRMcD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 18 Jun 2022 08:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbiFQMq1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jun 2022 08:46:27 -0400
-Received: from mail-m12736.qiye.163.com (mail-m12736.qiye.163.com [115.236.127.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278B2DD72;
-        Fri, 17 Jun 2022 05:46:26 -0700 (PDT)
-Received: from [172.16.12.167] (unknown [58.22.7.114])
-        by mail-m12736.qiye.163.com (Hmail) with ESMTPA id CE3957E01C7;
-        Fri, 17 Jun 2022 20:46:24 +0800 (CST)
-Message-ID: <41af9d13-fff5-a416-87cc-4f69e77d6409@rock-chips.com>
-Date:   Fri, 17 Jun 2022 20:46:24 +0800
+        with ESMTP id S232215AbiFRMcC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Jun 2022 08:32:02 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0B214D3F
+        for <linux-spi@vger.kernel.org>; Sat, 18 Jun 2022 05:32:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id o16so8802665wra.4
+        for <linux-spi@vger.kernel.org>; Sat, 18 Jun 2022 05:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cxrfrrOtT2Oa/bD+7FBstHMfLsi5+SmAhxAWzjAkyZ0=;
+        b=S2mJhG/EP2bvAoovp3+1EX915fqgCN7s5TTHRtk6gjrtEqOI/5G9b2iqkP8Hp2fPJT
+         Xv7w9JM5mIzSBmUBnG5veKqEPc/MaxIruLrav0YlVhnIQlMG/M+wTnbgpcN0tcmr+tr2
+         or89IY4gglZ6yWfGfoA+jfJEq4JsK9dvMaD2rRItnHWPYoJkG7IkTqJN1pM8cYB5TpdM
+         9bGqfIt5FOQFRPbbNCxOn37acP1sIBQPp6tl26reXViVZmDuywOt0O5V9tWi+koaQg4c
+         DJEmvefmmDhAvEMjrhz9P1n7uaAObdu8xiUcENoorbn9u8vIjZNy1IW7RHROc+mSnsUJ
+         yKqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cxrfrrOtT2Oa/bD+7FBstHMfLsi5+SmAhxAWzjAkyZ0=;
+        b=k2f+scamxk6VU/cDfW72Cua/KfJnrRvlSKUWhAzCZnLXAC9bF3p4cOOe0irkqaxuLT
+         wnYldhk7HZzlD7wxQ3efKC3c3/lPS0K3Lx3mlo9YHUad95WMZNEolgQQD9nqr6sCtGi4
+         +rShudx875iQw4ueKPfqBkIAEVIszq5YPx1xwjdKYT5NDkudBmjjhs2rl/cNVt5ya5ll
+         hz8gpqBDNR5qlvoisFiPcI3XtkNWQO3kDLBrJPARcDt3LMLICw+VoTDs21f90EP85Fbe
+         zIU94UnvUeTO+21bHqMM8jkeYWhsRBP/KIQ4lUZ0fLl/B6kA06ekvCEUnvVlV8KZ71aj
+         6eVQ==
+X-Gm-Message-State: AJIora+tzLm6oZrYINYrmy/Bhn0qd6fL3rUpbo2b2iIpD4reDQUI8bVI
+        Hjccep4kvyiPK8fqe8tyelPjIA==
+X-Google-Smtp-Source: AGRyM1vo09vBquhwF3XuUkIoGOLL2MXJBKKEyvgcE2QTAi/5UKplOA45WdH+tRLIApC05LNQOZn4qQ==
+X-Received: by 2002:adf:fd0f:0:b0:210:32d7:4cb5 with SMTP id e15-20020adffd0f000000b0021032d74cb5mr13971427wrr.565.1655555519244;
+        Sat, 18 Jun 2022 05:31:59 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id az10-20020adfe18a000000b00210396b2eaesm9292305wrb.45.2022.06.18.05.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 05:31:58 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 00/14] Canaan devicetree fixes
+Date:   Sat, 18 Jun 2022 13:30:22 +0100
+Message-Id: <20220618123035.563070-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] spi: rockchip: Disable local irq when pio write out of
- interrupt service
-To:     Mark Brown <broonie@kernel.org>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220613092744.9726-1-jon.lin@rock-chips.com>
- <YqcveggUU7yaXuk1@sirena.org.uk>
- <b97ee70c-70ee-6b15-65d6-a176125dcfd8@rock-chips.com>
- <YqxpTqvaQb4cohTh@sirena.org.uk>
-From:   Jon Lin <jon.lin@rock-chips.com>
-In-Reply-To: <YqxpTqvaQb4cohTh@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGkpMVh0fQkNNHx9PH01DS1UTARMWGhIXJB
-        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MUk6Fxw4Hz06F0kdARdREyMP
-        DEMKCitVSlVKTU5OT01CQkNOSEpJVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-        QVlOQ1VJSVVMVUpKT1lXWQgBWUFITk9PNwY+
-X-HM-Tid: 0a8171b34ce8b20fkuuuce3957e01c7
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Conor Dooley <conor.dooley@microchip.com>
+
+Hey all,
+This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+based boards (well, unless you enable W=1 but that's another days work).
+I *DO NOT* have any Canaan hardware so I have not tested any of this in
+anger. I based the series on next-20220617.
+
+For the bindings, I am never sure about which of {unevaluated,additional}
+Properties is correct to use, but the if statements in the binding didn't
+work with additional so I used unevaluated...
+
+@Mark, for your two bindings I was not sure about the properties that I
+made depend on the compatible, but I looked in tree and was not able to
+find other users to contradict what's in the Canaan devicetrees nor did
+I get that much help from their docs.
+
+@Rob, yesterday's removal of ilitek,ili9341.txt is moved to ths series
+since I was editing the dt-schema binding here anyway.
+
+Finally, @Palmer:
+This + Atul's stuff + the sifive dts watchdog patch will get us sorted
+in terms of dtbs_check errors. To make keeping it that way a little
+easier, I changed the Canaan devicetree Makefile so that it would build
+all of the devicetrees in the directory if SOC_CANAAN. Hopefully someone
+with a device can test it - but my build log *looked* fine but that's
+not exactly sufficient.
+
+Thanks,
+Conor.
+
+Conor Dooley (14):
+  dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+  dt-bindings: display: panel: allow ilitek,ili9341 in isolation
+  ASoC: dt-bindings: convert designware-i2s to dt-schema
+  dt-bindings: dma: add Canaan k210 to Synopsys DesignWare DMA
+  dt-bindings: timer: add Canaan k210 to Synopsys DesignWare timer
+  spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width for dwc-ssi
+  riscv: dts: canaan: fix the k210's memory node
+  riscv: dts: canaan: add a specific compatible for k210's dma
+  riscv: dts: canaan: add a specific compatible for k210's timers
+  riscv: dts: canaan: fix mmc node names
+  riscv: dts: canaan: fix kd233 display spi frequency
+  riscv: dts: canaan: use custom compatible for k210 i2s
+  riscv: dts: canaan: remove spi-max-frequency from controllers
+  riscv: dts: canaan: build all devicetress if SOC_CANAAN
+
+ .../bindings/display/ilitek,ili9341.txt       | 27 ------
+ .../display/panel/ilitek,ili9341.yaml         | 60 ++++++++----
+ .../bindings/dma/snps,dw-axi-dmac.yaml        | 35 +++++--
+ .../bindings/sound/designware-i2s.txt         | 35 -------
+ .../bindings/sound/snps,designware-i2s.yaml   | 93 +++++++++++++++++++
+ .../bindings/spi/snps,dw-apb-ssi.yaml         | 48 +++++++---
+ .../bindings/timer/snps,dw-apb-timer.yaml     | 28 ++++--
+ arch/riscv/boot/dts/canaan/Makefile           | 10 +-
+ arch/riscv/boot/dts/canaan/canaan_kd233.dts   |  4 +-
+ arch/riscv/boot/dts/canaan/k210.dtsi          | 25 ++---
+ .../riscv/boot/dts/canaan/sipeed_maix_bit.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maix_dock.dts      |  2 +-
+ arch/riscv/boot/dts/canaan/sipeed_maix_go.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maixduino.dts      |  2 +-
+ 14 files changed, 239 insertions(+), 134 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+ delete mode 100644 Documentation/devicetree/bindings/sound/designware-i2s.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/snps,designware-i2s.yaml
 
 
-On 2022/6/17 19:45, Mark Brown wrote:
-> On Fri, Jun 17, 2022 at 02:24:10PM +0800, Jon Lin wrote:
->> On 2022/6/13 20:37, Mark Brown wrote:
->>> On Mon, Jun 13, 2022 at 05:27:44PM +0800, Jon Lin wrote:
-> 
->>>> +	spin_unlock_irqrestore(&rs->lock, flags);
-> 
->>> So this is effectively just disabling interrupts during PIO, there's no
->>> other users of the lock which is rather heavyweight.  What's the actual
->>> issue here?  We should also have something saying what's going on in the
->>> code since right now the lock just looks redundant.
-> 
->> For lock: In order to avoid special situations, such as when the CPU
->> frequency drops to close to the IO rate, the water line interrupt is
->> triggered during FIFO filling (triggered by other CPUs), resulting in
->> critical resources still not being protected in place. For local IRQ
-> 
-> So essentially we're so slow in filling the FIFO when starting a
-> transfer that the interrupt triggers in the middle of the initial FIFO
-> fill?  Something that tricky *really* needs a comment adding.
-> 
-> Ideally we'd just leave the interrupt masked until the FIFO is filled
-> though, looking at the driver I see that there is an interrupt mask
-> register which seems to have some level of masking available and I do
-> note that in rockchip_spi_prepare_irq() we unmask interrupts before we
-> start filling the FIFO rather than afterwards.  Would reversing the
-> unmask order there address the issue more cleanly?
+base-commit: 07dc787be2316e243a16a33d0a9b734cd9365bd3
+-- 
+2.36.1
 
-This idea is workable, and it's more efficient than previous code, So I 
-send a new commit:
-https://patchwork.kernel.org/project/spi-devel-general/patch/20220617124251.5051-1-jon.lin@rock-chips.com/
-> 
->> disable: Turning off the local interrupt is mainly to prevent the CPU
->> schedule from being interrupted when filling FIFO.
-> 
-> If it were just this then there's preempt_disable(), but what's the
-> problem with being preempted during the FIFO fill?
-
-I think
