@@ -2,91 +2,191 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDF05524B9
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jun 2022 21:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635AA55262E
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jun 2022 22:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245054AbiFTTmB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Jun 2022 15:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S235364AbiFTU7U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Jun 2022 16:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245011AbiFTTl7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Jun 2022 15:41:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814E81C91C
-        for <linux-spi@vger.kernel.org>; Mon, 20 Jun 2022 12:41:56 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u12so23067744eja.8
-        for <linux-spi@vger.kernel.org>; Mon, 20 Jun 2022 12:41:56 -0700 (PDT)
+        with ESMTP id S236831AbiFTU6V (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Jun 2022 16:58:21 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2CB237F3;
+        Mon, 20 Jun 2022 13:56:59 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id b23so4647627ljh.7;
+        Mon, 20 Jun 2022 13:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=irViqR2aLfIqGGKI3mM+On/x/6a/N5wukKqpLu13A/Q=;
-        b=oh56rtalDW1TUqG2EIUDC0sdz/BYCDO2Yj6mpfwBJwAbongOSsPpXZ69AzbzKaI4uA
-         XoObsFJRGIFBGuqvSx79HfYzLyPbHBYzk8k765c9ASel25i81VseNnGUbep3A32IZakG
-         zRgHuUFVNfrO0okeamMaxlwQIqE32I/TlCJr0xAhwP6EXHuIFR6LHsGZmGNZZSK4wUc3
-         lKGMwn/MB32cfP20f/C3lbBVgeTVDKFlpNxeVO6Ka0lIRptU+9Yqj2BtOIyqbdtgZhdt
-         ldpGbvBqwlE14eB3yi2euFPgWVw9hgWcNjaMoQE0ZO7wo37zImAPpYFwHoHI3/G3cfyl
-         7C5Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I1q6whSBjY67mrzgmnGkRh2MNzKa13E3jo+SVBhTEQg=;
+        b=XqDUXO3E0jN9GQ9iGhmoxij0PahkYfXP61nSCTKCx/fvSoFpRgDWoLiqAgCUJw1PnX
+         GdUgZ6dYoT0Uit7ykMaMR28omMbZ7gDLoi3NlWPpOtwarIrAKYFsFwlDEOerY9w8oIh9
+         rbNjhalyLNI+e+pBOTtZlMUNIOGbQPKrYkgGGE49HLjM86guD1yX+eIVXs28qYEpQbEL
+         6u9TJxb58aw5NaSuOkvrVJyyneGqycdZCp/nKqOuDGx84SLdx3Jj79iGAZlYRrBgW6bm
+         FIeQBMEkq8FhjglPxtSJNnSUrVC7AertpkEpoopILkV/YW/Fu3kY37aS2zC50BoszzoE
+         3eOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=irViqR2aLfIqGGKI3mM+On/x/6a/N5wukKqpLu13A/Q=;
-        b=ddE20HXvefu/S0daQ9xidA7RDb1DlCBUYEf46+X5c0yO3oxbcdzZprF9jgNnXoUvyr
-         sevKm5HIpP0nOnSg2DAS0LXgOVyi2F1BF3Sr6bvNvJa21fpriKTIpEP5h30VIqpAkY9D
-         30zZeVuA48I6Naz0WtlmAAvYlAwvxFPcUF696IuxblNR7k5AoH4bezpMvRRnbk79BMam
-         5dapDg3mM7Ey0gxNkIO2YDuZtLcL0ZpY8RBIypT/Qlw0243XGc/Y8LKMrnoWj9rSyjcZ
-         e9509oLFeA29B+Pta5NevulJOFs+mq7FZeVoY3SGaJyNdFkPMv5dRMWgZvqvoRem+Gi3
-         i0CA==
-X-Gm-Message-State: AJIora863ZAvq/fij0nKs27S9niurCOFsi2Usv4PqDoN2qaJojdTykPk
-        gyaonBgxCWhozymlng3N9Lb7Tw==
-X-Google-Smtp-Source: AGRyM1t4c91x+8SrrBIG4J0iDuTJ5rar7wRCFbMJTSLdXZq/f6hGZFPc5DijwkwkgRiJ1zY2qK3flg==
-X-Received: by 2002:a17:906:51de:b0:712:23e0:df84 with SMTP id v30-20020a17090651de00b0071223e0df84mr22029675ejk.453.1655754115078;
-        Mon, 20 Jun 2022 12:41:55 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o18-20020a056402439200b0042fbc23bfcesm11448549edc.46.2022.06.20.12.41.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I1q6whSBjY67mrzgmnGkRh2MNzKa13E3jo+SVBhTEQg=;
+        b=fVeinxp5aaWTvUGdfrPpd7mRoHUu/AH3fG4ZS87T/TrrETruzfxS4dXXs4W99daUvo
+         lFZeN4swwddKQ8pCyiPdX4oNVEmQKn4vKrJw/bRar/44k29MBweVUqoFQNNjn6Uo5StP
+         XK6JkkUDopHN5Yll0JFxNqj6P4AMr6cwTshnpIEs7/nnsjaWm/A2GEW0mSckC3yH2a1E
+         1bDI4/T8fML6djs0C+Xw1KP62irMxiNJsNAncNU4KV8tpeyA7wtz1hF+Z9BeF9ns7Jgz
+         YFtbjeYqxBosncUrkYgNKlB7uYyi/flxQuzl1tmYyDwnE8aq/ELzRESo8/wdFfJ95bXd
+         tQ2Q==
+X-Gm-Message-State: AJIora/gy/kJD74Q2/uTDIrU7gqrelxm7i6XtD3nCFKsv9BVNDbtuIps
+        vE4ZZR2WMzwmDwd2/OraoZk=
+X-Google-Smtp-Source: AGRyM1to9l7DPfbxuwJzqkPzvrt6m3YRq/lqE+tbkd+LRqyrjxLhnrSzMA6Azd9ZVxOZ5l1LL1DhCQ==
+X-Received: by 2002:a05:651c:2107:b0:255:beb0:9969 with SMTP id a7-20020a05651c210700b00255beb09969mr12785405ljq.157.1655758617786;
+        Mon, 20 Jun 2022 13:56:57 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id i17-20020ac25b51000000b004778632bff6sm1893799lfp.59.2022.06.20.13.56.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 12:41:54 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        broonie@kernel.org, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH qcom v2] spi: dt-bindings: qcom,spi-geni-qcom: allow three interconnects
-Date:   Mon, 20 Jun 2022 21:41:47 +0200
-Message-Id: <165575403864.144830.16259521514833113384.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
-References: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
+        Mon, 20 Jun 2022 13:56:57 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 23:56:54 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width for dwc-ssi
+Message-ID: <20220620205654.g7fyipwytbww5757@mobilestation>
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-7-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618123035.563070-7-mail@conchuod.ie>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 5 May 2022 08:52:33 +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come also with three
-> interconnects.  This fixes dtbs_check warnings like:
+On Sat, Jun 18, 2022 at 01:30:28PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
->   sm8450-qrd.dtb: spi@a98000: interconnects: [[46, 1, 0, 46, 4, 0], [47, 2, 0, 48, 12, 0], [49, 1, 0, 50, 1, 0]] is too long
->   sm8450-qrd.dtb: spi@a98000: interconnect-names: ['qup-core', 'qup-config', 'qup-memory'] is too long
+> snps,dwc-ssi-1.01a has a single user - the Canaan k210, which uses a
+> width of 4 for spi-{r,t}x-bus-width. Update the binding to reflect
+> this.
 > 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 48 ++++++++++++++-----
+>  1 file changed, 35 insertions(+), 13 deletions(-)
 > 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index e25d44c218f2..f2b9e3f062cd 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -135,19 +135,41 @@ properties:
+>        of the designware controller, and the upper limit is also subject to
+>        controller configuration.
+>  
+> -patternProperties:
+> -  "^.*@[0-9a-f]+$":
+> -    type: object
+> -    properties:
+> -      reg:
+> -        minimum: 0
+> -        maximum: 3
+> -
+> -      spi-rx-bus-width:
+> -        const: 1
+> -
+> -      spi-tx-bus-width:
+> -        const: 1
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: snps,dwc-ssi-1.01a
+> +
+> +then:
+> +  patternProperties:
+> +    "^.*@[0-9a-f]+$":
+> +      type: object
+> +      properties:
+> +        reg:
+> +          minimum: 0
+> +          maximum: 3
+> +
+> +        spi-rx-bus-width:
+> +          const: 4
+> +
+> +        spi-tx-bus-width:
+> +          const: 4
+> +
+> +else:
+> +  patternProperties:
+> +    "^.*@[0-9a-f]+$":
+> +      type: object
+> +      properties:
+> +        reg:
+> +          minimum: 0
+> +          maximum: 3
+> +
+> +        spi-rx-bus-width:
+> +          const: 1
+> +
+> +        spi-tx-bus-width:
+> +          const: 1
 
-Applied, thanks!
+You can just use a more relaxed constraint "enum: [1 2 4 8]" here
+irrespective from the compatible string. The modern DW APB SSI
+controllers of v.4.* and newer also support the enhanced SPI Modes too
+(Dual, Quad and Octal). Since the IP-core version is auto-detected at
+run-time there is no way to create a DT-schema correctly constraining
+the Rx/Tx SPI bus widths. So let's keep the
+compatible-string-independent "patternProperties" here but just extend
+the set of acceptable "spi-rx-bus-width" and "spi-tx-bus-width"
+properties values.
 
-[1/1] spi: dt-bindings: qcom,spi-geni-qcom: allow three interconnects
-      https://git.kernel.org/krzk/linux-dt/c/56cf5b7fde546f0203a91e002e1cfb3f51804db4
+Note the DW APB SSI/AHB SSI driver currently doesn't support the
+enhanced SPI modes. So I am not sure whether the multi-lines Rx/Tx SPI
+bus indeed works for Canaan K210 AHB SSI controller. AFAICS from the
+DW APB SSI v4.01a manual the Enhanced SPI mode needs to be properly
+activated by means of the corresponding CSR. So most likely the DW AHB
+SSI controllers need some specific setups too.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-Sergey
+
+>  
+>  unevaluatedProperties: false
+>  
+> -- 
+> 2.36.1
+> 
