@@ -2,148 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8926155337E
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 15:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5685533D1
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 15:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351315AbiFUNXS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jun 2022 09:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S1351611AbiFUNjV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jun 2022 09:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351358AbiFUNWj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 09:22:39 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A9E267C
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:22:34 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by albert.telenet-ops.be with bizsmtp
-        id lpNW2700Q4C55Sk06pNWmX; Tue, 21 Jun 2022 15:22:31 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o3dpt-000BW8-Rh; Tue, 21 Jun 2022 15:22:29 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o3dpt-006K0S-Aw; Tue, 21 Jun 2022 15:22:29 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Brad Bishop <bradleyb@fuzziesquirrel.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Eddie James <eajames@linux.ibm.com>, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] eeprom: at25: Rework buggy read splitting
-Date:   Tue, 21 Jun 2022 15:22:26 +0200
-Message-Id: <7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1351703AbiFUNiO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 09:38:14 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A22BB1C
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:37:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z19so2571505edb.11
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=teV9/LHsIcT7kFIRVS3tS6YlV3h6OdDoM3Pe9unkBBY=;
+        b=H+jafnxrKxLDb2H/13yn4Oc7TaMdxR89Nu+ZQ7h8dIkRgcpT/o+u2RVFbd45mwxv4H
+         IcHiy2cBOsQb3pYSEZxrHbt26sQZqVVxzwXREcedYdH6PdCALMEmjosFc02L7pA1+oPE
+         0EQN4vBTloYkVMp8OVEjsUErC34LYpBSFI9osC9roujlg3WqXIOonQfWaeCh7U/IBmgE
+         odn08Ou6Z2/W/ReVRnm4RVnm5dem57e7A66MOsRBzwtyHV+g8+XN38BMvzX1AgBvhn50
+         sliZwgoGiicgw5g6YrB+NBWutSmVn3GGL/LZVngQ25rKN0WkhTzxwy58wVi/j19sGbbO
+         dA2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=teV9/LHsIcT7kFIRVS3tS6YlV3h6OdDoM3Pe9unkBBY=;
+        b=yfQYEvB9BAhKf/18bMGwkT5Ki6NN0H7V+6CqdB/SJ9F8ZmMH8p4pDO9XcNu1kPLH3P
+         1rYKBzdiaY4lrzYkeqeXSqBugtQ6y9fT9+Q/k47AgnrZNZeVmpL8FaTzPJQ4t0JTuEex
+         iU6hVFGHummIgot1IZB7R9Tp8RNVe0V89a15ohyIAtG3k8cyvZl6ttk2d/1UDIfG2sFn
+         uvwuFfHzpodW/4yPWfJKsDMXj9TwtMS7iKXXDLYTsN2JfwR6TiQkCFVDUejv3FfUU/5M
+         ct9N77LIYbx8NAtrIXWKaVrjShquflS4/NVBphLQTakg5rVJjN4bEL3Z7zM5Yfdz5HlN
+         68wQ==
+X-Gm-Message-State: AJIora+wYdCzXBMfZ+4DnbZoP1Y2RUbVAzNYeWGzPL/Q6TIR/zTu7SSt
+        2vdb9KYhU1cdNrMgXca1tcEjqPRru89M43cjiY8=
+X-Google-Smtp-Source: AGRyM1uTxVMwyiJ00UDnFKQIZNLE42xWEiwgDcmWWu4K+RnyzbvCkNxgGyGTney5PPLTx5HDXuNrl79qxj6yzqm1V6k=
+X-Received: by 2002:a50:9f6a:0:b0:435:5804:e07 with SMTP id
+ b97-20020a509f6a000000b0043558040e07mr30700778edf.178.1655818619751; Tue, 21
+ Jun 2022 06:36:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220621061234.3626638-1-david@protonic.nl> <20220621061234.3626638-4-david@protonic.nl>
+In-Reply-To: <20220621061234.3626638-4-david@protonic.nl>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 21 Jun 2022 15:36:23 +0200
+Message-ID: <CAHp75VeHcdcRMYxsJ3At+YyFZEauDPp-+deXbsBpcqKdxaicfg@mail.gmail.com>
+Subject: Re: [PATCH v3 03/11] spi: Lock controller idling transition inside
+ the io_mutex
+To:     David Jander <david@protonic.nl>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The recent change to split reads into chunks has several problems:
-  1. If an SPI controller has no transfer size limit, max_chunk is
-     SIZE_MAX, and num_msgs becomes zero, causing no data to be read
-     into the buffer, and exposing the original contents of the buffer
-     to userspace,
-  2. If the requested read size is not a multiple of the maximum
-     transfer size, the last transfer reads too much data, overflowing
-     the buffer,
-  3. The loop logic differs from the write case.
+On Tue, Jun 21, 2022 at 8:15 AM David Jander <david@protonic.nl> wrote:
+>
+> This way, the spi sync path does not need to deal with the idling
+> transition.
 
-Fix the above by:
-  1. Keeping track of the number of bytes that are still to be
-     transferred, instead of precalculating the number of messages and
-     keeping track of the number of bytes tranfered,
-  2. Calculating the transfer size of each individual message, taking
-     into account the number of bytes left,
-  3. Switching from a "while"-loop to a "do-while"-loop, and renaming
-     "msg_count" to "segment".
+...
 
-While at it, drop the superfluous cast from "unsigned int" to "unsigned
-int", also from at25_ee_write(), where it was probably copied from.
+> -       mutex_lock(&ctlr->io_mutex);
+>         ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+>         mutex_unlock(&ctlr->io_mutex);
+>
+>         /* Prod the scheduler in case transfer_one() was busy waiting */
 
-Fixes: 0a35780c755ccec0 ("eeprom: at25: Split reads into chunks and cap write size")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Tested on Ebisu-4D with 25LC040 EEPROM.
----
- drivers/misc/eeprom/at25.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+>         if (!ret)
+>                 cond_resched();
 
-diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
-index c9c56fd194c1301f..bdffc6543f6f8b7f 100644
---- a/drivers/misc/eeprom/at25.c
-+++ b/drivers/misc/eeprom/at25.c
-@@ -80,10 +80,9 @@ static int at25_ee_read(void *priv, unsigned int offset,
- 	struct at25_data *at25 = priv;
- 	char *buf = val;
- 	size_t max_chunk = spi_max_transfer_size(at25->spi);
--	size_t num_msgs = DIV_ROUND_UP(count, max_chunk);
--	size_t nr_bytes = 0;
--	unsigned int msg_offset;
--	size_t msg_count;
-+	unsigned int msg_offset = offset;
-+	size_t bytes_left = count;
-+	size_t segment;
- 	u8			*cp;
- 	ssize_t			status;
- 	struct spi_transfer	t[2];
-@@ -97,9 +96,8 @@ static int at25_ee_read(void *priv, unsigned int offset,
- 	if (unlikely(!count))
- 		return -EINVAL;
- 
--	msg_offset = (unsigned int)offset;
--	msg_count = min(count, max_chunk);
--	while (num_msgs) {
-+	do {
-+		segment = min(bytes_left, max_chunk);
- 		cp = at25->command;
- 
- 		instr = AT25_READ;
-@@ -131,8 +129,8 @@ static int at25_ee_read(void *priv, unsigned int offset,
- 		t[0].len = at25->addrlen + 1;
- 		spi_message_add_tail(&t[0], &m);
- 
--		t[1].rx_buf = buf + nr_bytes;
--		t[1].len = msg_count;
-+		t[1].rx_buf = buf;
-+		t[1].len = segment;
- 		spi_message_add_tail(&t[1], &m);
- 
- 		status = spi_sync(at25->spi, &m);
-@@ -142,10 +140,10 @@ static int at25_ee_read(void *priv, unsigned int offset,
- 		if (status)
- 			return status;
- 
--		--num_msgs;
--		msg_offset += msg_count;
--		nr_bytes += msg_count;
--	}
-+		msg_offset += segment;
-+		buf += segment;
-+		bytes_left -= segment;
-+	} while (bytes_left > 0);
- 
- 	dev_dbg(&at25->spi->dev, "read %zu bytes at %d\n",
- 		count, offset);
-@@ -229,7 +227,7 @@ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
- 	do {
- 		unsigned long	timeout, retries;
- 		unsigned	segment;
--		unsigned	offset = (unsigned) off;
-+		unsigned	offset = off;
- 		u8		*cp = bounce;
- 		int		sr;
- 		u8		instr;
+In the similar way
+
+
+ret = ...
+if (ret)
+  goto out_unlock;
+
+mutex_unlock();
+cond_resched();
+return;
+
+> +       return;
+> +
+> +out_unlock:
+> +       mutex_unlock(&ctlr->io_mutex);
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko
