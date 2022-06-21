@@ -2,76 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E8155383C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 18:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFD45538CE
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 19:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbiFUQyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jun 2022 12:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S238516AbiFURV7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jun 2022 13:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiFUQyt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 12:54:49 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513191BE9E
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 09:54:48 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id o9so10969919edt.12
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 09:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=qlxENLnbklGcRkYZw6cAWMaJQwobFdqlr9is6uduh1o=;
-        b=ly1qihap0sGX0PIS3iAfuLJUHpD9wuspMszfKODA7PKB43LafqCHyJyEI0WeLsP8PV
-         Rhw+Fui+DFcsboCvMcHTuQDBRtmLtLivCZP+D4a2+3dJvPUHUKFDDw0civwdx2tepv9+
-         MARcFST50JjOk4BJZWyvgAbZcRTedmG9s1GfT3uQ016HrVRsWKXBCOjxpnhWLyyEedAc
-         cB+ufh5m0avsqb/9fxfkJnJ+Tw7UxHRgOfaFfrQQ7o/96Ax7dYRifI3fSaZwOuAbrsun
-         PL+OpmQL2XkJ9ecEUIf5StGRHU9nzI8xNrBK/GxpN5YcxMeaqU1ksI3mL3bIzKZmgmbA
-         zyFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qlxENLnbklGcRkYZw6cAWMaJQwobFdqlr9is6uduh1o=;
-        b=2DFp9TIZWv6k29nV52yLWj2XbWP+3yLRfyuygr2e13bi7MCqPUgnWBoZs38/ZeBDgd
-         13cKI0yUGE23CdGGSI4wyxDAi1hk38UB1hNVbFa7P9njo4z6IvBPGIYMOhfqgk5P3vay
-         eD8DRT71JU2+ite/B9uN0QqMv0b95X81Cy+x+nmDAy8yu248nfpwiGtvdSk44EDeIrXZ
-         3PWXZ5bTo4Hmf+DM4li8XC6iG7SQB7VQO2Mk0JrSQh1g0poKyR/fbIzB0DNU5i72wtpk
-         ZMemdZQtzRfTKywQnpGickCLrjMlGZDrNbvyGexhvfur7xkhSKV3Szqhyj6MyUDTiWX4
-         BISw==
-X-Gm-Message-State: AJIora9E3mnAB4dZoMcywEkbDSVV8WEDUfHIawNpzDR5ECTCrBAE+0ix
-        ov+qrCH8YggIs0TNdpMk+cSkIjxS2yP0I2uVqek=
-X-Google-Smtp-Source: AGRyM1uDbI9Gqskqqmjau9huEdiT5lwW2DfSg/O3YvWRvCj0fZduJaX417M+i+bVerZ3roJduXPpK+OboyZSi02J+F8=
-X-Received: by 2002:a05:6402:2c4:b0:435:8ce0:aef8 with SMTP id
- b4-20020a05640202c400b004358ce0aef8mr9344835edx.140.1655830486841; Tue, 21
- Jun 2022 09:54:46 -0700 (PDT)
+        with ESMTP id S234333AbiFURV7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 13:21:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153EB2CDDA
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 10:21:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7431615C1
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 17:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C17CC3411C;
+        Tue, 21 Jun 2022 17:21:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655832117;
+        bh=8/Z94xLNTAXq2QJxZzqQeshJjANBZWHqzkX7FOCs6YQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gU4iqGt2XuzphOTnm15lAQVbozhVYrZKrLjJ/TMT24q6OUm0ifM5gAP2Qpt3TWtMM
+         2r0dhriPZxM4QtLzOIO5q1xJB8iOX3pfranHoT2RlvlUj7/FKZNQN5k+PXNiSsiZBB
+         CPyLGBwEuq6ihus7N6sQgjrswFvZu25oSzj+H20okK3sj4sAoKMaUzfb1mGs1whX90
+         aDOJulVlSbOvJi1E8NXNbb8E8nNk2Y/f387AfIZ55O5gPeEn/qk2GjTlsKtdmDF5RB
+         AII2jbpIImPzTeuj+3uHScnW8+Lrb7P5LfBTBvAH8v1C3Aa6VojWXrg5P+FYan8WGM
+         oGq12WScox33g==
+Date:   Tue, 21 Jun 2022 18:21:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 00/11] Optimize spi_sync path
+Message-ID: <YrH+MJDJJ4x/CYIQ@sirena.org.uk>
+References: <20220621061234.3626638-1-david@protonic.nl>
 MIME-Version: 1.0
-Received: by 2002:a55:db8d:0:b0:18a:97f9:6882 with HTTP; Tue, 21 Jun 2022
- 09:54:46 -0700 (PDT)
-Reply-To: olsonfinancial.de@gmail.com
-From:   OLSON FINANCIAL GROUP <ambroseobialor@gmail.com>
-Date:   Tue, 21 Jun 2022 09:54:46 -0700
-Message-ID: <CAFb5_E0zCrVTLCQ2_7-xkUEjCydPu8vd3xgihhFP9x+WN9f1rg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gs5xcBZoWaL7RpDu"
+Content-Disposition: inline
+In-Reply-To: <20220621061234.3626638-1-david@protonic.nl>
+X-Cookie: Edited for television.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=20
-Guten Tag Herr/Frau,
-Ben=C3=B6tigen Sie dringend einen Kredit, um ein Auto zu kaufen? oder
-investieren? Ein neues Unternehmen gr=C3=BCnden, Rechnungen bezahlen?
-und uns auf Wunsch in Installationen zur=C3=BCckzahlen? Wir bieten einen
-zuverl=C3=A4ssigen Kredit nur f=C3=BCr den Zeitraum von 1 bis 40 Jahren zu =
-einem
-sehr niedrigen Zinssatz von 2%. F=C3=BCr mehr Informationen
-mailen Sie uns an: olsonfinancial.de@gmail.com....
+
+--gs5xcBZoWaL7RpDu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jun 21, 2022 at 08:12:23AM +0200, David Jander wrote:
+> These patches optimize the spi_sync call for the common case that the
+> worker thread is idle and the queue is empty. It also opens the
+> possibility to potentially further optimize the async path also, since
+> it doesn't need to take into account the direct sync path anymore.
+
+I've pushed this on a branch for testing in KernelCI at
+
+	https://linux.kernelci.org/test/job/broonie-misc/branch/for-kernelci/kernel/v5.19-rc1-50-g71b086bc92064/
+
+It's still running, while it's not going to get great coverage of SPI
+it'll get some just through initialising things a boot (and a few
+ethernet controllers IIRC which do get heavily used) and it will cover a
+wide variety of hardware which is pretty useful even if the coverage is
+only light.
+
+--gs5xcBZoWaL7RpDu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKx/jAACgkQJNaLcl1U
+h9APaAf+IqDXWcsus5b/oufliGoXlFou2xB1EYNAYtDuzyHJaGJjdoT5z39wiL9p
+uJQzusiVvGWIfbuJ9qj9Y4z8NnL7pYlt4SzUtvIXydkoGh+hLTU8xwmKJL8BFZy3
+E99yNfMjm3OpAa9cRPhb+uElNPi++re6TE7+DUGIlXKlEWVs4tm8D9E0WDGxPugS
+5sYsU+l0+/EXgal9Jb0i4GBvGn7ZODcCWQ5cxffslUW2DufSsJyD4WH46rg+H7YV
+inoSH+8LPY60oHuuviavMtrRbMjsILClTor2DajcTT/BavneVd55djur83RTrjJ9
+QBCAnKWNy5Jm1YiLHSbQISmIXTrZig==
+=wVmx
+-----END PGP SIGNATURE-----
+
+--gs5xcBZoWaL7RpDu--
