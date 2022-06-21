@@ -2,56 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5685533D1
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 15:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBCF5533E5
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 15:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351611AbiFUNjV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jun 2022 09:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S1350928AbiFUNmg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jun 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351703AbiFUNiO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 09:38:14 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A22BB1C
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:37:01 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id z19so2571505edb.11
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:37:01 -0700 (PDT)
+        with ESMTP id S230177AbiFUNme (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 09:42:34 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04E425E2
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:42:33 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id es26so17730881edb.4
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=teV9/LHsIcT7kFIRVS3tS6YlV3h6OdDoM3Pe9unkBBY=;
-        b=H+jafnxrKxLDb2H/13yn4Oc7TaMdxR89Nu+ZQ7h8dIkRgcpT/o+u2RVFbd45mwxv4H
-         IcHiy2cBOsQb3pYSEZxrHbt26sQZqVVxzwXREcedYdH6PdCALMEmjosFc02L7pA1+oPE
-         0EQN4vBTloYkVMp8OVEjsUErC34LYpBSFI9osC9roujlg3WqXIOonQfWaeCh7U/IBmgE
-         odn08Ou6Z2/W/ReVRnm4RVnm5dem57e7A66MOsRBzwtyHV+g8+XN38BMvzX1AgBvhn50
-         sliZwgoGiicgw5g6YrB+NBWutSmVn3GGL/LZVngQ25rKN0WkhTzxwy58wVi/j19sGbbO
-         dA2g==
+        bh=BjpHxT7USNlYVm3C7xBkw6xiQAd1RnMTssjkHBLRh0o=;
+        b=US7HpyEbOiF7iafkNiVoDnjaqiGwvrg5wfm7u6W+wZPNME6eh9STWMhZ7gU/JAXkHq
+         VpQwZ7XamnxlbxZBirTQmRoVtAbRP2XMgpLiylfX9/Wx9+2awNuWFKzFFdDTyqgF3nhY
+         IkqJObSgRTIRuH2fui2MeSjzF20I4JB2w8Zu6ewIKqa6XMeRl8IG89Da7gB0N7GvGJTT
+         yVyaxhI7Z1MA9byAA1shnIaibwvNyG6R4jwMgSUCdTMXc9zmrwGfb82b6Ux6MrTmYpoZ
+         8PWWb6SWN/wyyBVQJ7qYrf0/6DIYhhNTF+VK5d08cPYMpYH5LLskRWd70cTwFxKXb2mb
+         veMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=teV9/LHsIcT7kFIRVS3tS6YlV3h6OdDoM3Pe9unkBBY=;
-        b=yfQYEvB9BAhKf/18bMGwkT5Ki6NN0H7V+6CqdB/SJ9F8ZmMH8p4pDO9XcNu1kPLH3P
-         1rYKBzdiaY4lrzYkeqeXSqBugtQ6y9fT9+Q/k47AgnrZNZeVmpL8FaTzPJQ4t0JTuEex
-         iU6hVFGHummIgot1IZB7R9Tp8RNVe0V89a15ohyIAtG3k8cyvZl6ttk2d/1UDIfG2sFn
-         uvwuFfHzpodW/4yPWfJKsDMXj9TwtMS7iKXXDLYTsN2JfwR6TiQkCFVDUejv3FfUU/5M
-         ct9N77LIYbx8NAtrIXWKaVrjShquflS4/NVBphLQTakg5rVJjN4bEL3Z7zM5Yfdz5HlN
-         68wQ==
-X-Gm-Message-State: AJIora+wYdCzXBMfZ+4DnbZoP1Y2RUbVAzNYeWGzPL/Q6TIR/zTu7SSt
-        2vdb9KYhU1cdNrMgXca1tcEjqPRru89M43cjiY8=
-X-Google-Smtp-Source: AGRyM1uTxVMwyiJ00UDnFKQIZNLE42xWEiwgDcmWWu4K+RnyzbvCkNxgGyGTney5PPLTx5HDXuNrl79qxj6yzqm1V6k=
-X-Received: by 2002:a50:9f6a:0:b0:435:5804:e07 with SMTP id
- b97-20020a509f6a000000b0043558040e07mr30700778edf.178.1655818619751; Tue, 21
- Jun 2022 06:36:59 -0700 (PDT)
+        bh=BjpHxT7USNlYVm3C7xBkw6xiQAd1RnMTssjkHBLRh0o=;
+        b=VuVyvDpmhczW3jjKZSv5o2q2DO8s21zzvuug9m5yKjqNKZvcNG3kocjPzswRgvMCNz
+         wLRGT8Uqcu9px9FN0C9YbDik6XBQ14G4/trY8bx4kylAms8Dr0KUiu+rEK5CTPVAS4sN
+         UhB2jP5EovCG8uowQECaakeaZaSlHt/fWsmCvCdX9D47Hi7L5s25sCEx02ZFK0p4uUcX
+         mm08YB193SS3emBMnp1DtGG2hB8YY0jvYl5JJbzEDDlPwu/hnz0QE4/o+kbOB12FrFwV
+         TPbEzV7ktLpbXDI47VYYGEC1RB7MDh+DbyrmfRksxOSm21o3RCPOC5BIyuic0bKaFwdv
+         hP1Q==
+X-Gm-Message-State: AJIora++9IBu2r1Pl+Nop3+a1++vIPuXDO+unqSjYwOqWoF/f856426q
+        5buk6z9EvghsdFck/lVqu7a7C8K8P/ovtdS9gt2cFq03liit0Q==
+X-Google-Smtp-Source: AGRyM1uK9lxvF43pVEgezPAmxC2hb+yVq7ylrzMTcMhGnVmtvE2pa79MRPxUj4kZgFE91/W9MlQdXjPpUJC+sEDT0Cg=
+X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id
+ eh13-20020a0564020f8d00b004356df2068amr21312640edb.209.1655818952545; Tue, 21
+ Jun 2022 06:42:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621061234.3626638-1-david@protonic.nl> <20220621061234.3626638-4-david@protonic.nl>
-In-Reply-To: <20220621061234.3626638-4-david@protonic.nl>
+References: <20220621061234.3626638-1-david@protonic.nl> <20220621061234.3626638-11-david@protonic.nl>
+In-Reply-To: <20220621061234.3626638-11-david@protonic.nl>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Jun 2022 15:36:23 +0200
-Message-ID: <CAHp75VeHcdcRMYxsJ3At+YyFZEauDPp-+deXbsBpcqKdxaicfg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] spi: Lock controller idling transition inside
- the io_mutex
+Date:   Tue, 21 Jun 2022 15:41:56 +0200
+Message-ID: <CAHp75VeoNg-+VYF=W=Y2KrHBUPNgVfQf9M0TDaJwW44ZxAiexw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/11] spi: Ensure the io_mutex is held until spi_finalize_current_message()
 To:     David Jander <david@protonic.nl>
 Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -68,37 +67,55 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 8:15 AM David Jander <david@protonic.nl> wrote:
+On Tue, Jun 21, 2022 at 8:16 AM David Jander <david@protonic.nl> wrote:
 >
-> This way, the spi sync path does not need to deal with the idling
-> transition.
+> This patch introduces a completion that is completed in
+> spi_finalize_current_message() and waited for in
+> __spi_pump_transfer_message(). This way all manipulation of ctlr->cur_msg
+> is done with the io_mutex held and strictly ordered:
+> __spi_pump_transfer_message() will not return until
+> spi_finalize_current_message() is done using ctlr->cur_msg, and its
+> calling context is only touching ctlr->cur_msg after returning.
+> Due to this, we can safely drop the spin-locks around ctlr->cur_msg.
 
 ...
 
-> -       mutex_lock(&ctlr->io_mutex);
+> +       reinit_completion(&ctlr->cur_msg_completion);
+>         ret = ctlr->transfer_one_message(ctlr, msg);
+>         if (ret) {
+>                 dev_err(&ctlr->dev,
+>                         "failed to transfer one message from queue\n");
+>                 return ret;
+> +       } else {
+
+Redundant.
+
+if (ret) {
+ ...
+ return ...;
+}
+
+...do other stuff...
+
+> +               wait_for_completion(&ctlr->cur_msg_completion);
+>         }
+
+...
+
 >         ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
->         mutex_unlock(&ctlr->io_mutex);
->
->         /* Prod the scheduler in case transfer_one() was busy waiting */
-
->         if (!ret)
->                 cond_resched();
-
-In the similar way
-
-
-ret = ...
-if (ret)
-  goto out_unlock;
-
-mutex_unlock();
-cond_resched();
-return;
-
-> +       return;
 > +
-> +out_unlock:
-> +       mutex_unlock(&ctlr->io_mutex);
+
+No need to add a blank line here.
+
+> +       if (!ret)
+> +               kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
+
+> +       ctlr->cur_msg = NULL;
+> +       ctlr->fallback = false;
+
+Does ->pump_messages() use any of these two?
+
+>         mutex_unlock(&ctlr->io_mutex);
 
 -- 
 With Best Regards,
