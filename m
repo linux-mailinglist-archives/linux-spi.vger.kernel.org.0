@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B1A552AD3
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 08:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF5B552AD9
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 08:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345583AbiFUGMs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jun 2022 02:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S1345590AbiFUGMr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jun 2022 02:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345600AbiFUGMo (ORCPT
+        with ESMTP id S1345583AbiFUGMo (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 02:12:44 -0400
-Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC6818341
+Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BE71DA46
         for <linux-spi@vger.kernel.org>; Mon, 20 Jun 2022 23:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=protonic.nl; s=202111;
         h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
          subject:cc:to:from:from;
-        bh=SgpqjMAEVJLKSwqAw6RLOsp1PydTE3FJ3MKPVMhSyRY=;
-        b=eVqReuxAtAK60xGFvDJvfwFmGzXq9lsM6SOcS8pWDyWtfONaqBRK2X0dCKYWIdCwsQPOiLakBPLUC
-         ffPjmRXQHybQl8HjLRR0bTb9vp2PCC9XJTUNIywMYIiymT9tRMZf3IPT88Fp2Dz1rvapx4KR9tuRiO
-         CXwm23s/aY0e1k6eZCwTwrcxZ+sSFshYezt4QtV/pIPlan/1qE0Krwt6zn/vY91IYc7NaKAYmr7Qq/
-         1zXDSja+nZYpj8GDow+O8xjQqmMtiiBwR8qjhf/ba7xbRzzgFLwMkfYP42sdHptArdUWXd874qX+rB
-         keOFP+qld94W0VJsUWSC/oEOSSnAzvw==
-X-MSG-ID: 267e0d32-f129-11ec-ba03-0050569d3a82
+        bh=K27EsJYcV5D6XaF1RNfZBWqOwfz0qgxJ/954VGvD+DA=;
+        b=LJhROd9lEl5z4+uwE2F+yTkc+67hC4CB+BT6vaEFAxhtn9+VsngjCee7Dkqyz3v4Aq7K/2ZOOIrp2
+         aawzQWoXbbiY74YfzZSdIF0voUgx3vgSDpvrYPdGtxCSq20odO45fRfGHSsjslMJg/EvwU4qw0qPVJ
+         +X6HPQGoqDg/3LCaWH84tS/EQ6dqro8MF5XbgSpYpJbhp0ZFe4+z5gDQcyj8lpP552ns3hzfWFUd8D
+         GV2ipkn0xllmHpRSCpzESF5smj0FJGISrgLxp1/iAaVTpnhn6NZXQE5utfNwB5TyXnqnZgZnTRvmLz
+         6/LH2RC7u/QgrUszc78NUyjkVoa+EbA==
+X-MSG-ID: 267edf0d-f129-11ec-8a45-0050569d11ae
 From:   David Jander <david@protonic.nl>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Andrew Lunn <andrew@lunn.ch>, David Jander <david@protonic.nl>
-Subject: [PATCH v3 07/11] spi: Remove the now unused ctlr->idling flag
-Date:   Tue, 21 Jun 2022 08:12:30 +0200
-Message-Id: <20220621061234.3626638-8-david@protonic.nl>
+Subject: [PATCH v3 08/11] spi: Remove unneeded READ_ONCE for ctlr->busy flag
+Date:   Tue, 21 Jun 2022 08:12:31 +0200
+Message-Id: <20220621061234.3626638-9-david@protonic.nl>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220621061234.3626638-1-david@protonic.nl>
 References: <20220621061234.3626638-1-david@protonic.nl>
@@ -46,55 +46,26 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The ctlr->idling flag is never checked now, so we don't need to set it
-either.
+Now this flag is written entirely in the mutex, so no need for READ_ONCE
 
 Signed-off-by: David Jander <david@protonic.nl>
 ---
- drivers/spi/spi.c       | 2 --
- include/linux/spi/spi.h | 2 --
- 2 files changed, 4 deletions(-)
+ drivers/spi/spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 71b767a9ad77..52736e339645 100644
+index 52736e339645..29f42753ef0f 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -1674,7 +1674,6 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
- 		}
+@@ -3955,7 +3955,7 @@ static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct s
  
- 		ctlr->busy = false;
--		ctlr->idling = true;
- 		spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+ 	mutex_lock(&ctlr->io_mutex);
  
- 		kfree(ctlr->dummy_rx);
-@@ -1689,7 +1688,6 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
- 		trace_spi_controller_idle(ctlr);
+-	was_busy = READ_ONCE(ctlr->busy);
++	was_busy = ctlr->busy;
  
- 		spin_lock_irqsave(&ctlr->queue_lock, flags);
--		ctlr->idling = false;
- 		ctlr->queue_empty = true;
- 		goto out_unlock;
- 	}
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 74261a83b5fa..c58f46be762f 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -383,7 +383,6 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @pump_messages: work struct for scheduling work to the message pump
-  * @queue_lock: spinlock to syncronise access to message queue
-  * @queue: message queue
-- * @idling: the device is entering idle state
-  * @cur_msg: the currently in-flight message
-  * @cur_msg_mapped: message has been mapped for DMA
-  * @last_cs: the last chip_select that is recorded by set_cs, -1 on non chip
-@@ -616,7 +615,6 @@ struct spi_controller {
- 	spinlock_t			queue_lock;
- 	struct list_head		queue;
- 	struct spi_message		*cur_msg;
--	bool				idling;
- 	bool				busy;
- 	bool				running;
- 	bool				rt;
+ 	ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+ 	if (ret)
 -- 
 2.32.0
 
