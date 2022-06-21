@@ -2,80 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC434552ADF
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 08:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E150B552B5A
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jun 2022 08:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiFUGPI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jun 2022 02:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S242913AbiFUG4c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jun 2022 02:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245662AbiFUGPI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 02:15:08 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EE415FFE
-        for <linux-spi@vger.kernel.org>; Mon, 20 Jun 2022 23:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=bqpep5BO3Fgrgfa4SevToaHV4dxvvPs+OL/uN42J6KI=;
-        b=rC/AiccRKYHvaVBoO//EqM2revXXiZa2HPQjGxvDUhuoLUGvQwf1X3kBqY7pyFoXWx0GhDQqRS4Zw
-         Q7m/keJWHF+5rlXZ23dYeb/aboXs+XEzomP+QOdS7EX/UD9LGkJ9R6sHQ/7xkvhAJt+GxIFTjL9tOl
-         Er+foE3auCMT6p/7Uok378tMySlHVypMFivi/V7UxHOD9dUNe4zzfThTeiVpPTlNcDjcRZCtDB71j+
-         CJ4rxW493mmJz/oGkixzvwbSXWG77pyJ+jbaNyWni2HstrwUNrY+b+ZXg89SqYVK6YH64vL7wLiGv5
-         /4BZ5F0e10LXtdMy0TzeZAtRx1MzqfA==
-X-MSG-ID: 7da0ca29-f129-11ec-8a45-0050569d11ae
-Date:   Tue, 21 Jun 2022 08:15:04 +0200
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [RFC] [PATCH v2 00/11] Optimize spi_sync path
-Message-ID: <20220621081504.3c4e712c@erd992>
-In-Reply-To: <YrC5MX4osVCET0la@sirena.org.uk>
-References: <20220615124634.3302867-1-david@protonic.nl>
-        <20220615133113.ylwenlzpkv2na25z@pengutronix.de>
-        <20220615161356.21bf749d@erd992>
-        <YrC5MX4osVCET0la@sirena.org.uk>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231830AbiFUG4c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jun 2022 02:56:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087B91CFCF
+        for <linux-spi@vger.kernel.org>; Mon, 20 Jun 2022 23:56:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C62C60B7D
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jun 2022 06:56:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0619FC3411D;
+        Tue, 21 Jun 2022 06:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655794591;
+        bh=Ytm6Ke3QiUMQEdIrRuvWvFkqe6b0vTz/GaQaFKlTk40=;
+        h=Subject:From:Date:To:From;
+        b=GRNEbzEaaixZKMuEPyFQIg5gqY+mLwpLVD3ALqcUcD9MWkYDPD964ibuP5VvmyS/T
+         LeGavSBDsdP9VGlgwqdNbMzE2N+VAVFG12AGKyrrTgrTYrlQQXZFMD2F8GEpIwogRZ
+         2uebdnRDD+ITNLGOJJk7sWDHj3eS24agTXKpN0nlXYr9O8lob+Y8eSn6uf+x6LwhZk
+         dFWa0gg9F8DCY6kRFnncxYoNzXHdtYwtB9B6qNFFiTYke5sOeO1kDlp6eEXou5Ueok
+         sVrLXoVc3emauJVV5Sak9AOwwJnVjmVM+0FhNflbUBZ87jwOA+M/6MrxhNFfHqviJe
+         7aastSaqCeGhg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4A79E73856;
+        Tue, 21 Jun 2022 06:56:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165579459081.25801.7986346731425103128.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 21 Jun 2022 06:56:30 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 20 Jun 2022 19:15:13 +0100
-Mark Brown <broonie@kernel.org> wrote:
+Latest series: [v3] Optimize spi_sync path (2022-06-21T06:12:27)
+  Superseding: [v2] Optimize spi_sync path (2022-06-15T12:46:29):
+    [RFC,v2,01/11] spi: Move ctlr->cur_msg_prepared to struct spi_message
+    [FRC,v2,02/11] spi: Don't use the message queue if possible in spi_sync
+    [RFC,v2,03/11] spi: Lock controller idling transition inside the io_mutex
+    [RFC,v2,04/11] spi: __spi_pump_messages: Consolidate spin_unlocks to goto target
+    [RFC,v2,05/11] spi: Remove check for controller idling in spi sync path
+    [RFC,v2,06/11] spi: Remove check for idling in __spi_pump_messages()
+    [RFC,v2,07/11] spi: Remove the now unused ctlr->idling flag
+    [RFC,08/11] spi: Remove unneeded READ_ONCE for ctlr->busy flag
+    [RFC,v2,09/11] spi: Set ctlr->cur_msg also in the sync transfer case
+    [RFC,v2,10/11] spi: Ensure the io_mutex is held until spi_finalize_current_message()
+    [RFC,v2,11/11] spi: opportunistically skip ctlr->cur_msg_completion
 
-> On Wed, Jun 15, 2022 at 04:13:56PM +0200, David Jander wrote:
-> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:  
-> 
-> > > Which git branch to use as the base?  
-> 
-> > Sorry, forgot to mention: spi for-next:
-> > git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git  
-> 
-> > This is because it relies on previous patches that have been applied there.  
-> 
-> It looks like something changed underneath the series unfortunately -
-> I'm getting failures applying even the first patch.  Can you rebase
-> please?  It looks good to start trying to throw at CI, ideally we'd get
-> more on list review but most of the active work recently has been around
-> the MTD stuff which is all about trying to use hardware offload for
-> flash operations and therefore should be minimally affected by the
-> actual SPI data path.
-
-I just rebased v3 onto current spi-next branch. No other changes.
-
-Best regards,
 
 -- 
-David Jander
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
