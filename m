@@ -2,63 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB0655480F
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jun 2022 14:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED73855474C
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jun 2022 14:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbiFVKZo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Jun 2022 06:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S236619AbiFVK1F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jun 2022 06:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiFVKZk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jun 2022 06:25:40 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A163A5C7
-        for <linux-spi@vger.kernel.org>; Wed, 22 Jun 2022 03:25:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u15so5535991ejc.10
-        for <linux-spi@vger.kernel.org>; Wed, 22 Jun 2022 03:25:37 -0700 (PDT)
+        with ESMTP id S235031AbiFVK07 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jun 2022 06:26:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37683A5D5;
+        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id eq6so15895608edb.6;
+        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/zjn2NcRExPUTirGFzxTZgP9NjWgoGUMnDJgEV1lu04=;
-        b=I8En5bsxXFmfyfyTiI0mscFffKVay0IZWSa1/HbfosWxmP06Si3VoiX7GN+9/ngIoZ
-         USVmJPDOedjMHazgmdeuL3VoaaygtCusUFGxUFBuK9Z7cgNnLTxHjcVbm4vkABgBwyIK
-         NG3W44lMeXVbV/0RTyg1PA8n59n1mShKWNXzwwwTPzsXvD0O5cHSfArjPlRDthOeJ6ti
-         vFEsPXGjUAUYHV7Z4sfnSXby8Apt9E4Nz+06p3HWVOFjZCGeL0tx5+8amBuX/oaSSP/B
-         HjHFQig9XpSOm6qySIaguAesWRQRTnGhYo45M1LxmdSddAw+3arct4hynn//FAjML28i
-         ByVA==
+         :cc:content-transfer-encoding;
+        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
+        b=HSqzpI56Wd/maCsUqAm6GW+vL3gDlxXpbeI5QmlV2sj6irWKRsz51o7VAbYl1Wpn7u
+         9Qvs50rqTlPfin6a86lUOvc2lOY1nAAwv0y+4iOmYDOd0x5QutPpPYamxVm6TgPELYmi
+         gzCgiliyXbrOuvFzQa4gIqPdvnpa8kEENRl1NiSetyJHJ7s5F81a4xyM1HKRhbhxAyJf
+         VniU9LZPctrAhCMMfajUERbfulXQabhYVLoue398el8ZQgWqWiiGg560nHtTFI4rtuvQ
+         zAIy5xLcytDz1ZutL5bs3KTPb5FK91rPHo6D2lBA0kgj5CEwk59d7KwiaVNiW2o2eyy2
+         r6Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/zjn2NcRExPUTirGFzxTZgP9NjWgoGUMnDJgEV1lu04=;
-        b=1kXjQ6Wh4b3GgKxirJ1b8dMLFFpIiG+Nm2bvDSGmaYAwKBSTRMWQ3gbgk6bydfdHIE
-         AV8GIbe6e0pBdk5eK0NXaNHDuFR/lfk2Up0Rsx3OoOPfYGaBiEAtdSa3BrFSt4yCmG3Q
-         LGejGDGcjp72ki7zO5gvoBvp9BqBBw6M4GKBOvj+YYmEC/KRpHmJFHl6bKH5o71FbjG+
-         ymOn6KxkZ/53bz7POnZiPsfAo7rIo11+0knQIefo816soWH8xJqXtoRVsZHdQgSv57pd
-         ENXOg03sJ2wXgejGggQ/UOe8f0ICqjnb3Ati8fBQL1Hb4ZI7mANyFiY6W57sBwuBAX6Y
-         1YHg==
-X-Gm-Message-State: AJIora9QJe3ARJla5lI9wzzBhLuLsPbB8W4Ncb6/+jqCXiQ/kN+PuHll
-        49+LKX14riMVZkqL7/yJyxVjQd3FB6y+YIBk6yY=
-X-Google-Smtp-Source: AGRyM1vULSENe1QE1XKOk2zwFzPPyWuwL3467lJNApluODeMEqHk4UQbjn/vq2B1beA3apf4wvRk6XKWiu4Q7fHRftg=
-X-Received: by 2002:a17:906:149:b0:711:fca6:bc2f with SMTP id
- 9-20020a170906014900b00711fca6bc2fmr2446013ejh.497.1655893535896; Wed, 22 Jun
- 2022 03:25:35 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
+        b=GJHss/V5Ioy93Ju5vgyYr0k8xpq5mYQMzU7GXQaSbCabUjxecNzH1bjesBlOqnKWuf
+         JOe1GzeEERMUQZzDuAYOUmiHpRt6YNRUEWhmEPm6mNPatPOW8uiOH+UE20jOBFJpHwFQ
+         y8gh2sMoudcjU+DkTWP511tcyCZsZovSIUmI35wogXLo3rEQDHTPYwPiSTuGzqTG1RNh
+         QjE5xHmTYtOQiRbsP0nZ+p/pman9CikvOfB+/fURMqqOoVUadPR2RiLlF76w0ZuB8IQh
+         zxUZqhLxA6Ny0eJapklJYcvSDTlK2IYP7omQEJ97FBgZHw8vG1P1SFmZFkhijFl3yE8E
+         yv9Q==
+X-Gm-Message-State: AJIora/aJrHIGdsiTx7BOg9gaEHMlqx3Vo4MfyuVeNlO3uP2waHK+Peg
+        A9Z2nSYtJ//IZ5x/1rYI9RPEwYzY2BSuTTVfQeY=
+X-Google-Smtp-Source: AGRyM1v4azWWigiOn++l1Dtbx1fdOaa+R6QIGQ/aTOrCshjNUsBD3TDZWJE10f1vEBfdq0j3iu2c+b/URbfaYfSI9+k=
+X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id
+ eh13-20020a0564020f8d00b004356df2068amr3330060edb.209.1655893616422; Wed, 22
+ Jun 2022 03:26:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610074459.3261383-1-andy.chiu@sifive.com> <20220610074459.3261383-2-andy.chiu@sifive.com>
-In-Reply-To: <20220610074459.3261383-2-andy.chiu@sifive.com>
+References: <20220622094233.3681843-1-clg@kaod.org> <20220622094233.3681843-2-clg@kaod.org>
+In-Reply-To: <20220622094233.3681843-2-clg@kaod.org>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jun 2022 12:24:58 +0200
-Message-ID: <CAHp75Vfeh+jpft0sCdVqz+nJAP83LGhQvA_62aQptzt8a4M+gw@mail.gmail.com>
-Subject: Re: [PATCH next 1/1] spi: sifive: add PM callbacks to support suspend/resume
-To:     Andy Chiu <andy.chiu@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Greentime Hu <greentime.hu@sifive.com>
+Date:   Wed, 22 Jun 2022 12:26:19 +0200
+Message-ID: <CAHp75VdBO1yPVH6NCEj8ZSYF2-6q0soE=8qNGrh7G=t7adRBZw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] spi: aspeed: Add pr_debug in aspeed_spi_dirmap_create()
+To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,24 +75,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:05 AM Andy Chiu <andy.chiu@sifive.com> wrote:
+On Wed, Jun 22, 2022 at 11:46 AM C=C3=A9dric Le Goater <clg@kaod.org> wrote=
+:
 >
+> It helps to analyze the default setting of the control register.
 
-Missed changelog.
+Replace "It" with a slightly more descriptive "what is it?".
 
-> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-> Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+Also make the subject aligned with the contents of the patch.
 
->         .driver = {
->                 .name = SIFIVE_SPI_DRIVER_NAME,
-> +               .pm = &sifive_spi_pm_ops,
-
-Missed pm_sleep_ptr(). Have you compiled it with CONFIG_PM_SLEEP=n?
-Have you got warnings of unused functions?
-
->                 .of_match_table = sifive_spi_of_match,
->         },
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
