@@ -2,72 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED73855474C
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jun 2022 14:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9936554994
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jun 2022 14:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbiFVK1F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Jun 2022 06:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S1349872AbiFVKeS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jun 2022 06:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235031AbiFVK07 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jun 2022 06:26:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37683A5D5;
-        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eq6so15895608edb.6;
-        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
-        b=HSqzpI56Wd/maCsUqAm6GW+vL3gDlxXpbeI5QmlV2sj6irWKRsz51o7VAbYl1Wpn7u
-         9Qvs50rqTlPfin6a86lUOvc2lOY1nAAwv0y+4iOmYDOd0x5QutPpPYamxVm6TgPELYmi
-         gzCgiliyXbrOuvFzQa4gIqPdvnpa8kEENRl1NiSetyJHJ7s5F81a4xyM1HKRhbhxAyJf
-         VniU9LZPctrAhCMMfajUERbfulXQabhYVLoue398el8ZQgWqWiiGg560nHtTFI4rtuvQ
-         zAIy5xLcytDz1ZutL5bs3KTPb5FK91rPHo6D2lBA0kgj5CEwk59d7KwiaVNiW2o2eyy2
-         r6Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
-        b=GJHss/V5Ioy93Ju5vgyYr0k8xpq5mYQMzU7GXQaSbCabUjxecNzH1bjesBlOqnKWuf
-         JOe1GzeEERMUQZzDuAYOUmiHpRt6YNRUEWhmEPm6mNPatPOW8uiOH+UE20jOBFJpHwFQ
-         y8gh2sMoudcjU+DkTWP511tcyCZsZovSIUmI35wogXLo3rEQDHTPYwPiSTuGzqTG1RNh
-         QjE5xHmTYtOQiRbsP0nZ+p/pman9CikvOfB+/fURMqqOoVUadPR2RiLlF76w0ZuB8IQh
-         zxUZqhLxA6Ny0eJapklJYcvSDTlK2IYP7omQEJ97FBgZHw8vG1P1SFmZFkhijFl3yE8E
-         yv9Q==
-X-Gm-Message-State: AJIora/aJrHIGdsiTx7BOg9gaEHMlqx3Vo4MfyuVeNlO3uP2waHK+Peg
-        A9Z2nSYtJ//IZ5x/1rYI9RPEwYzY2BSuTTVfQeY=
-X-Google-Smtp-Source: AGRyM1v4azWWigiOn++l1Dtbx1fdOaa+R6QIGQ/aTOrCshjNUsBD3TDZWJE10f1vEBfdq0j3iu2c+b/URbfaYfSI9+k=
-X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id
- eh13-20020a0564020f8d00b004356df2068amr3330060edb.209.1655893616422; Wed, 22
- Jun 2022 03:26:56 -0700 (PDT)
+        with ESMTP id S234868AbiFVKeS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jun 2022 06:34:18 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0DF338B7;
+        Wed, 22 Jun 2022 03:34:16 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id AF7B461EA1928;
+        Wed, 22 Jun 2022 12:34:13 +0200 (CEST)
+Message-ID: <babc9b4e-7f6c-6ca2-1132-b4571f524eb8@molgen.mpg.de>
+Date:   Wed, 22 Jun 2022 12:34:12 +0200
 MIME-Version: 1.0
-References: <20220622094233.3681843-1-clg@kaod.org> <20220622094233.3681843-2-clg@kaod.org>
-In-Reply-To: <20220622094233.3681843-2-clg@kaod.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jun 2022 12:26:19 +0200
-Message-ID: <CAHp75VdBO1yPVH6NCEj8ZSYF2-6q0soE=8qNGrh7G=t7adRBZw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] spi: aspeed: Add pr_debug in aspeed_spi_dirmap_create()
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] spi: aspeed: Add pr_debug in
+ aspeed_spi_dirmap_create()
+Content-Language: en-US
+To:     =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+Cc:     linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220622094233.3681843-1-clg@kaod.org>
+ <20220622094233.3681843-2-clg@kaod.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220622094233.3681843-2-clg@kaod.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,15 +52,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:46 AM C=C3=A9dric Le Goater <clg@kaod.org> wrote=
-:
->
+Dear Cédric,
+
+
+Am 22.06.22 um 11:42 schrieb Cédric Le Goater:
 > It helps to analyze the default setting of the control register.
 
-Replace "It" with a slightly more descriptive "what is it?".
+Maybe paste the new log line to the commit message.
 
-Also make the subject aligned with the contents of the patch.
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>   drivers/spi/spi-aspeed-smc.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+> index 496f3e1e9079..ac64be289e59 100644
+> --- a/drivers/spi/spi-aspeed-smc.c
+> +++ b/drivers/spi/spi-aspeed-smc.c
+> @@ -558,6 +558,14 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>   	u32 ctl_val;
+>   	int ret = 0;
+>   
+> +	dev_dbg(aspi->dev,
 
---=20
-With Best Regards,
-Andy Shevchenko
+The commit message summary says `pr_debug()`.
+
+> +		"CE%d %s dirmap [ 0x%.8llx - 0x%.8llx ] OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x\n",
+> +		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
+> +		desc->info.offset, desc->info.offset + desc->info.length,
+> +		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+> +		op->dummy.buswidth, op->data.buswidth,
+> +		op->addr.nbytes, op->dummy.nbytes);
+> +
+>   	chip->clk_freq = desc->mem->spi->max_speed_hz;
+>   
+>   	/* Only for reads */
+
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+
+
+Kind regards,
+
+Paul
