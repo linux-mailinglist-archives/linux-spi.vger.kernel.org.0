@@ -2,68 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787F35579FA
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 14:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B59557A7E
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 14:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiFWMGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Jun 2022 08:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S231657AbiFWMlZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Jun 2022 08:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiFWMGt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 08:06:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EF54CD74;
-        Thu, 23 Jun 2022 05:06:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4EFA61B2A;
-        Thu, 23 Jun 2022 12:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EBAC3411B;
-        Thu, 23 Jun 2022 12:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655986004;
-        bh=prkXv/FDwz/GNUNq4CHR2FoAxl/6BZb1iYEJL1xkbaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BFnXBFdhJh1lEppnNulL0vqhHWZWx3C8ZD67sU1TgrAwaYtOH4/87ZNE3kfl6RhGY
-         VprvQ0XT8HPsHF/VKWzTXJ3s6oquywH0ZdvixsR30Exe3b3QkNLud0IilTZLokMLI+
-         0a19osOwz6YrhaCp5r+2yJX/4eNELQIosHptPcP5RddDIrRBywULlaufWQUIK+E+83
-         du/wLbirZfbF6ACqL0YrxqvEcdIHToOL1uloveFoRRLCT4+TTMRwpwKCNNS6s6ceWg
-         rwcFLM+ve6t0AR/d4fCFB4r0JK6cdnmyX1j0lYaT+9NHLKtdZDP2zCnQaVJqNUvP90
-         /gkdWTIiOvzAQ==
-Date:   Thu, 23 Jun 2022 13:06:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "git@xilinx.com" <git@xilinx.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Message-ID: <YrRXTrYN3BuShbzg@sirena.org.uk>
-References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
- <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
- <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
+        with ESMTP id S231341AbiFWMlY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 08:41:24 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A34991E
+        for <linux-spi@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id q15so10959632wmj.2
+        for <linux-spi@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
+        b=UMP6RCyZP4CD6hOpGQbkX9Cj3bPk1ibYJbn4nsdNdndZTqQfI3/vZ8bIRLgJSIms8u
+         CPePjkJfaFGkLpAH9WY7iFv9pbNYvYe5jqqSz8sj+2Qf4GfYVFiKObOiaJ7J+qH1bGvP
+         VbLXbFzeDNL3kV5xpFgi8EPl9utzHo/yeUTmYj0EJVSqHBEOLi9N+dZTEkBtSiT1ZYoV
+         E4fQE+A+R2BHBwNPUeWkzfyaoJLLBH+EMoSWnr4Qer7+DC8yHJI0iUtL7cob5S1ocket
+         H2qCHNsne4oMOwFRLI9UMKSLvjNlpdi8dU2fdlh1bFht6a2RH8lnI13E785t9rZnNwvq
+         L5OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
+        b=QIN1jpDKAsBBiI0O2YbHQe4env2oF6yZdsuCpgJbb60udTCfN6Dwmd1WB6paC3KewA
+         4iallLBhJ5ROkmHcrQW4BYT4uEMkzUBA1YN0g1FYfS0RSvE/HV5vFVOpyB4QmKgXSN1Z
+         VoK65AM+UHG5TiReU1UMIHxlIw7Ql57zNypZZYBpeDcgX6QOUNTNuO7JiYbbaGyf5hrj
+         FGxrVIWE6eVkYhjQgn+NScKtWDzTzBpdobckZOq2UZoNsNL814rBeox1XNO8rtq2K9jV
+         /wdYHDc4uxOA4xOxgmf3siZnDFU81g2+UQpK5E+vo509UdKlCzyBe2I3/MGR9NY8HzuT
+         HN7Q==
+X-Gm-Message-State: AJIora/qodPJuJzCqjhDXzdZhtorMY8akYdKPim3CKrTIsV8gsEluDbL
+        RfN3s7ryaHuj26rIjBNbMRt/Aw==
+X-Google-Smtp-Source: AGRyM1sX86vrrjVPPP1yUcwx/sZIRbQprpzXl44FYJKuAjsvw6TD5Ua2hBw6xE35bd62RibFYqBp1g==
+X-Received: by 2002:a05:600c:2c46:b0:39c:55a0:9533 with SMTP id r6-20020a05600c2c4600b0039c55a09533mr4015082wmg.104.1655988081094;
+        Thu, 23 Jun 2022 05:41:21 -0700 (PDT)
+Received: from [192.168.149.129] ([80.233.63.220])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d4201000000b0021a36955493sm23104159wrq.74.2022.06.23.05.41.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 05:41:20 -0700 (PDT)
+Message-ID: <4a76c7aa-62e8-385c-15a0-9992ec566de5@conchuod.ie>
+Date:   Thu, 23 Jun 2022 13:41:15 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GX1MXlGRjMnY7i3+"
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
-X-Cookie: I had pancake makeup for brunch!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width for dwc-ssi
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>, Conor.Dooley@microchip.com
+Cc:     damien.lemoal@opensource.wdc.com, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        sam@ravnborg.org, Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, daniel.lezcano@linaro.org,
+        palmer@dabbelt.com, palmer@rivosinc.com, tglx@linutronix.de,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        masahiroy@kernel.org, geert@linux-m68k.org, niklas.cassel@wdc.com,
+        dillon.minfei@gmail.com, jee.heng.sia@intel.com,
+        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-7-mail@conchuod.ie>
+ <20220620205654.g7fyipwytbww5757@mobilestation>
+ <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
+ <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
+ <a2d85598-76d1-c9dc-d50d-e5aa815997cf@conchuod.ie>
+ <c272728f-f610-77df-bd9b-c9fee6b727f8@opensource.wdc.com>
+ <bd2547f8-e069-60a2-a223-9f694457636d@microchip.com>
+ <20220623102502.jiksqr3m6y733haq@mobilestation>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220623102502.jiksqr3m6y733haq@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,63 +94,37 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---GX1MXlGRjMnY7i3+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 23, 2022 at 11:39:19AM +0000, Mahapatra, Amit Kumar wrote:
+On 23/06/2022 11:25, Serge Semin wrote:
+> On Tue, Jun 21, 2022 at 04:06:21PM +0000, Conor.Dooley@microchip.com wrote:
+>> On 21/06/2022 00:17, Damien Le Moal wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On 6/21/22 07:49, Conor Dooley wrote:
+>>>>
+>> ---8<---
+>>>>>>
+>>>>>> hmm, well I'll leave that up to people that have Canaan hardware!
+>>>>>
+>>>>> I will test this series.
+>>>>>
+>>>>
+>>>> Cool, thanks.
+>>>> I'll try to get a respin out tomorrow w/ the memory node "unfixed".
+>>>
+>>> OK. I will test that then :)
+>>
+>> Since the memory node hit that dt-schema snag, I have not sent a v2.
+>> Going to be AFK for a few days, so I dropped the memory node change,
+>> changed the spi binding & put the series on:
+>> git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ canaan
+>>
+> 
+>> If you get a chance to look at it great, if not I'll send a v2 once
+>> the memory node is figured out.
+> 
+> commit 84df6ca0f277 ("spi: dt-bindings: dw-apb-ssi: update
+> spi-{r,t}x-bus-width") looks good to me. Feel free to add my ack tag
+> to v2 of that patch.
 
-> > >  	/* Mode (clock phase/polarity/etc.) */
-> > >  	if (of_property_read_bool(nc, "spi-cpha"))
-
-> > This is changing the DT binding but doesn't have any updates to the bin=
-ding
-> > document.  The binding code also doesn't validate that we don't have too
-> > many chip selects.
-
-> The following updates are done in the binding documents for adding multip=
-le
-> CS support:
-> In jedec,spi-nor.yaml file " maxItems " of the "reg" DT property has been=
-=20
-> updated to accommodate two CS per SPI device. =20
-
-This is a change to a binding for a specific driver, this is changing
-the SPI core.
-
-> > I'm also not seeing anything here that checks that the driver supports
-> > multiple chip selects - it seems like something that's going to cause i=
-ssues
-> > and we should probably have something to handle that situation.
-
-> In my approach the chip select member (chip_select) of the spi_device str=
-ucture=20
-> is changed to an array (chip_select[2]). This array is used to store the =
-CS values=20
-> coming from the "reg" DT property.=20
-> In case of multiple chip selects  spi->chip_slect[0] will hold CS0 value =
-&=20
-> spi->chip_select[1] wil hold CS1 value.
-> In case of single chip select the spi->chip_select[0] will hold the chip =
-select value.
-
-That doesn't address the issue, the issue is checking that the driver
-can support multiple chip selects.
-
---GX1MXlGRjMnY7i3+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK0V00ACgkQJNaLcl1U
-h9AeAgf9E2LUCkDCU4E/2lFo/mvDwRRmJroZIW6fnmZOrL88syRRlTBEw96cjlS2
-cgtKnuJ8e5/r4IMyfvsZJHClZeZS21E1T0gXmiwtc1XuU7IVYVXQwo2ym0ifW0TU
-+9pQUS+jkxcAbrSW2b6JnvwS9vHL+8XM9SgJdI53BjPqiwU2S0PJH3S+Cgfk8JYU
-/KRGRLoSSn6sKLxosXks+8wzQ9hLuEOWo/RuqPAhL7vsqU7CON4YYnljmdY4cjlW
-QgGEvIjq7CmOJ/Z8gPm84gA2Fr8Z7B1c8CfqRr2CxGUCSWa03xHKyGu5PcYrUdRy
-42MCtduzSpT5hAJ3WXITBE2g0LGQng==
-=2Knv
------END PGP SIGNATURE-----
-
---GX1MXlGRjMnY7i3+--
+Sure, thanks!
