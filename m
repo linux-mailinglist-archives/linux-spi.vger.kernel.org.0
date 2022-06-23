@@ -2,129 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B59557A7E
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 14:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5DD557D79
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 16:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiFWMlZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Jun 2022 08:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S231463AbiFWOGE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Jun 2022 10:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiFWMlY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 08:41:24 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A34991E
-        for <linux-spi@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id q15so10959632wmj.2
-        for <linux-spi@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
-        b=UMP6RCyZP4CD6hOpGQbkX9Cj3bPk1ibYJbn4nsdNdndZTqQfI3/vZ8bIRLgJSIms8u
-         CPePjkJfaFGkLpAH9WY7iFv9pbNYvYe5jqqSz8sj+2Qf4GfYVFiKObOiaJ7J+qH1bGvP
-         VbLXbFzeDNL3kV5xpFgi8EPl9utzHo/yeUTmYj0EJVSqHBEOLi9N+dZTEkBtSiT1ZYoV
-         E4fQE+A+R2BHBwNPUeWkzfyaoJLLBH+EMoSWnr4Qer7+DC8yHJI0iUtL7cob5S1ocket
-         H2qCHNsne4oMOwFRLI9UMKSLvjNlpdi8dU2fdlh1bFht6a2RH8lnI13E785t9rZnNwvq
-         L5OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
-        b=QIN1jpDKAsBBiI0O2YbHQe4env2oF6yZdsuCpgJbb60udTCfN6Dwmd1WB6paC3KewA
-         4iallLBhJ5ROkmHcrQW4BYT4uEMkzUBA1YN0g1FYfS0RSvE/HV5vFVOpyB4QmKgXSN1Z
-         VoK65AM+UHG5TiReU1UMIHxlIw7Ql57zNypZZYBpeDcgX6QOUNTNuO7JiYbbaGyf5hrj
-         FGxrVIWE6eVkYhjQgn+NScKtWDzTzBpdobckZOq2UZoNsNL814rBeox1XNO8rtq2K9jV
-         /wdYHDc4uxOA4xOxgmf3siZnDFU81g2+UQpK5E+vo509UdKlCzyBe2I3/MGR9NY8HzuT
-         HN7Q==
-X-Gm-Message-State: AJIora/qodPJuJzCqjhDXzdZhtorMY8akYdKPim3CKrTIsV8gsEluDbL
-        RfN3s7ryaHuj26rIjBNbMRt/Aw==
-X-Google-Smtp-Source: AGRyM1sX86vrrjVPPP1yUcwx/sZIRbQprpzXl44FYJKuAjsvw6TD5Ua2hBw6xE35bd62RibFYqBp1g==
-X-Received: by 2002:a05:600c:2c46:b0:39c:55a0:9533 with SMTP id r6-20020a05600c2c4600b0039c55a09533mr4015082wmg.104.1655988081094;
-        Thu, 23 Jun 2022 05:41:21 -0700 (PDT)
-Received: from [192.168.149.129] ([80.233.63.220])
-        by smtp.gmail.com with ESMTPSA id n1-20020a5d4201000000b0021a36955493sm23104159wrq.74.2022.06.23.05.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 05:41:20 -0700 (PDT)
-Message-ID: <4a76c7aa-62e8-385c-15a0-9992ec566de5@conchuod.ie>
-Date:   Thu, 23 Jun 2022 13:41:15 +0100
+        with ESMTP id S231228AbiFWOGD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 10:06:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235723617E;
+        Thu, 23 Jun 2022 07:06:03 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NDX0RA022616;
+        Thu, 23 Jun 2022 14:05:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Mw1yMl/fD0Zq4j57ePRRUlJo/uPSNz1EziavS2iH/jc=;
+ b=jJ2bidPwp9R2ANaPIbPe8VXRMM9WytY8XUbVMZiF/eSoKE56k0iUenCEZMWWQV9Cy8QL
+ a9FVmP3yWkOcHv/6OBAoxuBxdqIi8tBJaVZnSFwv1VrWxl+tqKizYO2SnIOrFAZ2tNwc
+ LCc4hl4gHi+NayeZNWkwTQtERTwFg8uXaUxxwMjZeCNb00Wl9+mjj5+FMku6l7caElbh
+ MS2e1MxMQ3ydS/+Q7lXdesEMgK2NJIhC77hl2HbjJCEbC3FaQUDB60fiDFwhW32tfO3N
+ jev6CgMOIL0cflPqrmlD96EoifrEL9fwbp5BahNZHL36e2E5qX9jFLs43o0yj/xDMr4I pw== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvs5grv3s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 14:05:53 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25NDo2N8010852;
+        Thu, 23 Jun 2022 14:05:53 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04dal.us.ibm.com with ESMTP id 3gs6badqxv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 14:05:52 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25NE5qir40305066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jun 2022 14:05:52 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2384F124055;
+        Thu, 23 Jun 2022 14:05:52 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C0BD124052;
+        Thu, 23 Jun 2022 14:05:51 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.65.248.89])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Jun 2022 14:05:51 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-spi@vger.kernel.org
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] spi: fsi: Increase timeout and ensure status is checked
+Date:   Thu, 23 Jun 2022 09:05:47 -0500
+Message-Id: <20220623140547.71762-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
- spi-{r,t}x-bus-width for dwc-ssi
-Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>, Conor.Dooley@microchip.com
-Cc:     damien.lemoal@opensource.wdc.com, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
-        sam@ravnborg.org, Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org, daniel.lezcano@linaro.org,
-        palmer@dabbelt.com, palmer@rivosinc.com, tglx@linutronix.de,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        masahiroy@kernel.org, geert@linux-m68k.org, niklas.cassel@wdc.com,
-        dillon.minfei@gmail.com, jee.heng.sia@intel.com,
-        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-7-mail@conchuod.ie>
- <20220620205654.g7fyipwytbww5757@mobilestation>
- <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
- <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
- <a2d85598-76d1-c9dc-d50d-e5aa815997cf@conchuod.ie>
- <c272728f-f610-77df-bd9b-c9fee6b727f8@opensource.wdc.com>
- <bd2547f8-e069-60a2-a223-9f694457636d@microchip.com>
- <20220623102502.jiksqr3m6y733haq@mobilestation>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220623102502.jiksqr3m6y733haq@mobilestation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6rgb2-LiSM2YP9eR6IkVWYVYufM7ExEH
+X-Proofpoint-ORIG-GUID: 6rgb2-LiSM2YP9eR6IkVWYVYufM7ExEH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-23_05,2022-06-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ adultscore=0 phishscore=0 impostorscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206230055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Only timeout after at least one iteration of checking the
+status registers. In addition, increase the transfer timeout
+to 1 second.
 
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/spi/spi-fsi.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-On 23/06/2022 11:25, Serge Semin wrote:
-> On Tue, Jun 21, 2022 at 04:06:21PM +0000, Conor.Dooley@microchip.com wrote:
->> On 21/06/2022 00:17, Damien Le Moal wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>
->>> On 6/21/22 07:49, Conor Dooley wrote:
->>>>
->> ---8<---
->>>>>>
->>>>>> hmm, well I'll leave that up to people that have Canaan hardware!
->>>>>
->>>>> I will test this series.
->>>>>
->>>>
->>>> Cool, thanks.
->>>> I'll try to get a respin out tomorrow w/ the memory node "unfixed".
->>>
->>> OK. I will test that then :)
->>
->> Since the memory node hit that dt-schema snag, I have not sent a v2.
->> Going to be AFK for a few days, so I dropped the memory node change,
->> changed the spi binding & put the series on:
->> git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ canaan
->>
-> 
->> If you get a chance to look at it great, if not I'll send a v2 once
->> the memory node is figured out.
-> 
-> commit 84df6ca0f277 ("spi: dt-bindings: dw-apb-ssi: update
-> spi-{r,t}x-bus-width") looks good to me. Feel free to add my ack tag
-> to v2 of that patch.
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index 72ab066ce552..cf1e4f9ebd72 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -24,8 +24,7 @@
+ #define FSI2SPI_IRQ			0x20
+ 
+ #define SPI_FSI_BASE			0x70000
+-#define SPI_FSI_INIT_TIMEOUT_MS		1000
+-#define SPI_FSI_STATUS_TIMEOUT_MS	100
++#define SPI_FSI_TIMEOUT_MS		1000
+ #define SPI_FSI_MAX_RX_SIZE		8
+ #define SPI_FSI_MAX_TX_SIZE		40
+ 
+@@ -299,6 +298,7 @@ static void fsi_spi_sequence_init(struct fsi_spi_sequence *seq)
+ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 				 struct spi_transfer *transfer)
+ {
++	int loops;
+ 	int rc = 0;
+ 	unsigned long end;
+ 	u64 status = 0ULL;
+@@ -317,9 +317,10 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 			if (rc)
+ 				return rc;
+ 
+-			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
++			loops = 0;
++			end = jiffies + msecs_to_jiffies(SPI_FSI_TIMEOUT_MS);
+ 			do {
+-				if (time_after(jiffies, end))
++				if (loops++ && time_after(jiffies, end))
+ 					return -ETIMEDOUT;
+ 
+ 				rc = fsi_spi_status(ctx, &status, "TX");
+@@ -335,9 +336,10 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 		u8 *rx = transfer->rx_buf;
+ 
+ 		while (transfer->len > recv) {
+-			end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
++			loops = 0;
++			end = jiffies + msecs_to_jiffies(SPI_FSI_TIMEOUT_MS);
+ 			do {
+-				if (time_after(jiffies, end))
++				if (loops++ && time_after(jiffies, end))
+ 					return -ETIMEDOUT;
+ 
+ 				rc = fsi_spi_status(ctx, &status, "RX");
+@@ -359,6 +361,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+ 
+ static int fsi_spi_transfer_init(struct fsi_spi *ctx)
+ {
++	int loops = 0;
+ 	int rc;
+ 	bool reset = false;
+ 	unsigned long end;
+@@ -369,9 +372,9 @@ static int fsi_spi_transfer_init(struct fsi_spi *ctx)
+ 		SPI_FSI_CLOCK_CFG_SCK_NO_DEL |
+ 		FIELD_PREP(SPI_FSI_CLOCK_CFG_SCK_DIV, 19);
+ 
+-	end = jiffies + msecs_to_jiffies(SPI_FSI_INIT_TIMEOUT_MS);
++	end = jiffies + msecs_to_jiffies(SPI_FSI_TIMEOUT_MS);
+ 	do {
+-		if (time_after(jiffies, end))
++		if (loops++ && time_after(jiffies, end))
+ 			return -ETIMEDOUT;
+ 
+ 		rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, &status);
+-- 
+2.31.1
 
-Sure, thanks!
