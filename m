@@ -2,48 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB59557E16
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 16:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74139557EE5
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Jun 2022 17:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiFWOsF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Jun 2022 10:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S231846AbiFWPsv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Jun 2022 11:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbiFWOr7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 10:47:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064B8B4B9;
-        Thu, 23 Jun 2022 07:47:59 -0700 (PDT)
+        with ESMTP id S231825AbiFWPsu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Jun 2022 11:48:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B25731357;
+        Thu, 23 Jun 2022 08:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE5D3B82426;
-        Thu, 23 Jun 2022 14:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D57CC341D3;
-        Thu, 23 Jun 2022 14:47:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3183961EDA;
+        Thu, 23 Jun 2022 15:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC4CC3411B;
+        Thu, 23 Jun 2022 15:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655995676;
-        bh=cVW/kgQpXJWCmFWawpulENWZ9nuTYJwKw90J2PcvUho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WwvRRPERU7/n1H9x83+cRvjgAYhmsAkEqz32DJNqc1/MQ0fkJP7Jel7G11snM/vEN
-         ++VccnxAVGMQ4qQO3599ZkiW2xPghx5zi3e6MJxDdWRXCbvrIgWTnPkj6BEfar8nT7
-         Qm+YRYznpVQQm7ifdWEIPs77wgd0kpIMHXldr/Dr22RNOPFK06yHLdydHROs/WmLd9
-         fG42R2XYnq3MuJkc1uYumA3127YhPbnU8sDuE2UW4+uI64eMJZhoSQtf3qswU7nOZv
-         yA8l1g2bcvzXdQJqSceOIS4kqq2bbOpT+UoaxMiXpuv3xqQTs80GKw3+rzn6TdwNKF
-         xBzFCn6mk1pZA==
-Date:   Thu, 23 Jun 2022 15:47:52 +0100
+        s=k20201202; t=1655999328;
+        bh=tP5tWUbsTQDyyLj7te8Y5iEraMYYD/V8xlcCjt/tgjk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ScTvqzj5l8QF3PH8z2ERvm3+5OVyM3Db3ljY0oRdGehYt6kg8o5tu6DVPf3Xi4Wiv
+         ZFHu7rNT4FC07+x2qoXkAZbA44Sk9hKggDPTvU/hj2YIs7YSrWcGtJ6tSHgWbr90P6
+         8g8XvfSPnAsmCGC3uSLdF+QPcLprkf0XULgnQnPAZHHcifRRTxAlgIYYeNgV3hNPWA
+         uRNJaTPz1OVoJ+u/K3KGsw97V4nEjxF0dcv4VjVUEcqxwbPgCMvqDLnAZxWvy9R78v
+         OIISyzWc5mpf7zATk291xcwkIl3p5L28EG2D8s1ZeIxVu5gh1eQUx8ySgid7zda93x
+         k0JDtEryl4M1w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: fsi: Increase timeout and ensure status is checked
-Message-ID: <YrR9GJFANKvbx8Vy@sirena.org.uk>
-References: <20220623140547.71762-1-eajames@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M67xyN3jrJNiPOtR"
-Content-Disposition: inline
+To:     linux-spi@vger.kernel.org, eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org
 In-Reply-To: <20220623140547.71762-1-eajames@linux.ibm.com>
-X-Cookie: Honi soit la vache qui rit.
+References: <20220623140547.71762-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH] spi: fsi: Increase timeout and ensure status is checked
+Message-Id: <165599932743.321829.1888055158569368470.b4-ty@kernel.org>
+Date:   Thu, 23 Jun 2022 16:48:47 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,32 +52,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---M67xyN3jrJNiPOtR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Jun 23, 2022 at 09:05:47AM -0500, Eddie James wrote:
+On Thu, 23 Jun 2022 09:05:47 -0500, Eddie James wrote:
 > Only timeout after at least one iteration of checking the
 > status registers. In addition, increase the transfer timeout
 > to 1 second.
+> 
+> 
 
-For bonus fun points the timeout could be based off the expected time
-taken for the transfer to complete.
+Applied to
 
---M67xyN3jrJNiPOtR
-Content-Type: application/pgp-signature; name="signature.asc"
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
------BEGIN PGP SIGNATURE-----
+Thanks!
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK0fRcACgkQJNaLcl1U
-h9CGFAf/T6DCZY56eE7eLZc1a5MLOluTdugRinBQMf6Wmmv5A0TpJ/BnWMXziFAg
-P7JQLMnytObw+DkvFpt9Gu50uEByyyE0tQhPKPi2l0tbW/ZQ+FOCGpZSbERDd9j7
-VbiDhy58/ytVd85Dv3mLMLRi2njonmm5PfP1SsIVbX403EW6KhxiWnj9DomRkX/a
-KIZ5iIoltOLm6J2xtr1JkiGx7N94Fs2d1HfRUsbj2uo0oUcy6kwdSWNd0nKj8jBO
-bN4NFidN3RVZFBgG5/HH5yttviNeDuGG2+9bG/6WQy0Xhlo1RwiL9bzc7HPwVRhU
-y2RALLof9gHCxBDDGpsJb6oxom3AJg==
-=YBjI
------END PGP SIGNATURE-----
+[1/1] spi: fsi: Increase timeout and ensure status is checked
+      commit: 40308f9642a85c30fa7cc5ab8672020cb96ecb66
 
---M67xyN3jrJNiPOtR--
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
