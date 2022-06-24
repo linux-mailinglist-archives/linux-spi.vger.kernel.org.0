@@ -2,98 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C69D55A2A2
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jun 2022 22:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B7755A346
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jun 2022 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiFXUb0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Jun 2022 16:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S230451AbiFXVHD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Jun 2022 17:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFXUb0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jun 2022 16:31:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C74A6F791
-        for <linux-spi@vger.kernel.org>; Fri, 24 Jun 2022 13:31:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26E76B82994
-        for <linux-spi@vger.kernel.org>; Fri, 24 Jun 2022 20:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DC5C34114;
-        Fri, 24 Jun 2022 20:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656102682;
-        bh=Kitz44+gTdhs7R91m5ZLvZ4b0SokkRRbiM5SW/OhZwc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OINcwm6U8Jdkr/gffBvsyYBvchWQXStn2OGOVH03aqNxcFu+IQjxvRm3z/vuXQJye
-         1LLGwFzJ6iBMUi+GIAYdOm1BMk1Js3d7JBE7ZM7eNnbmAnOxJRpfDJo/5W3hoOxqNq
-         gKJO78Oq4R7sDHREeEOYy7tgdezWealFwWC4Xld0+sA2M4viJgRI3fwYrNedUXuppA
-         HK+AHbKq3KNMBfGFX49bjXNn5jJxnSEs2XkUv3waOPr+DJrvBk8O5zlhnOPhRe/zjR
-         Fhr6KsQsRcLwyV66a0Hkg+QXsr7ua0g37twsLyRedqYwqUVAhp+SX4BgbGHntbkdrO
-         VzfAS2VK5UqaQ==
-Date:   Fri, 24 Jun 2022 21:31:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 00/11] Optimize spi_sync path
-Message-ID: <YrYfFiiYuvazKBtu@sirena.org.uk>
-References: <20220621061234.3626638-1-david@protonic.nl>
+        with ESMTP id S231654AbiFXVG7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jun 2022 17:06:59 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4A2185797;
+        Fri, 24 Jun 2022 14:06:44 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id D969116CC;
+        Sat, 25 Jun 2022 00:07:59 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D969116CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1656104880;
+        bh=AQ9cVhH28ibWIJ71leU3acpoUyEPQOPDWXZEPyFlp7k=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=ZOTFESwnyYYXTTlxnltvttHCrpDkZ+gM62/MylYrnld75ppQszb+xmFKTKBxhp051
+         BJiv2FZltkXIHmW3pdEVagToIFs9gaJZ2VeLV5hbIdpz573kVX2NfhkadnFkOe8O3A
+         x5NRG+2w3wjHaNQyHyXrbOaapqK/Gi2mCN02oIE4=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 25 Jun 2022 00:06:37 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v2] spi: dw: Add deferred DMA-channels setup support
+Date:   Sat, 25 Jun 2022 00:06:23 +0300
+Message-ID: <20220624210623.6383-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nxV27VCFTPOJRpj5"
-Content-Disposition: inline
-In-Reply-To: <20220621061234.3626638-1-david@protonic.nl>
-X-Cookie: Love America -- or give it back.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Currently if the source DMA device isn't ready to provide the channels
+capable of the SPI DMA transfers, the DW SSI controller will be registered
+with no DMA support. It isn't right since all what the driver needs to do
+is to postpone the probe procedure until the DMA device is ready. Let's
+fix that in the framework of the DWC SSI generic DMA implementation. First
+we need to use the dma_request_chan() method instead of the
+dma_request_slave_channel() function, because the later one is deprecated
+and most importantly doesn't return the failure cause but the
+NULL-pointer. Second we need to stop the DW SSI controller probe procedure
+if the -EPROBE_DEFER error is returned on the DMA initialization. The
+procedure will resume later when the channels are ready to be requested.
 
---nxV27VCFTPOJRpj5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On Tue, Jun 21, 2022 at 08:12:23AM +0200, David Jander wrote:
-> These patches optimize the spi_sync call for the common case that the
-> worker thread is idle and the queue is empty. It also opens the
-> possibility to potentially further optimize the async path also, since
-> it doesn't need to take into account the direct sync path anymore.
->=20
-> As an example for the performance gain, on an i.MX8MM SoC with a SPI CAN
-> controller attached (MCP2518FD), the time the interrupt line stays
-> active (which corresponds roughly with the time it takes to send 3
-> relatively short consecutive spi_sync messages) is reduced from 98us to
-> only 72us by this patch.
+---
 
-This seems to be testing fine so far so I'm thinking it's probably a
-good idea to get it into -next which will hopefully trigger wider
-testing, unless someone shouts I'll look into that early next week.  The
-only feedback I've seen was Andy's review which is broadly stylistic so
-can safely be addressed incrementally (like the improvement in patch 4
-already does for example), I didn't see any comments there which went to
-correctness.
+Link: https://lore.kernel.org/linux-spi/20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Just resend.
+- Rebase onto the kernel v5.19-rcX.
+---
+ drivers/spi/spi-dw-core.c |  5 ++++-
+ drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
+ 2 files changed, 22 insertions(+), 8 deletions(-)
 
---nxV27VCFTPOJRpj5
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index ecea471ff42c..911ea9bddbee 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 
+ 	if (dws->dma_ops && dws->dma_ops->dma_init) {
+ 		ret = dws->dma_ops->dma_init(dev, dws);
+-		if (ret) {
++		if (ret == -EPROBE_DEFER) {
++			goto err_free_irq;
++		} else if (ret) {
+ 			dev_warn(dev, "DMA init failed\n");
+ 		} else {
+ 			master->can_dma = dws->dma_ops->can_dma;
+@@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (dws->dma_ops && dws->dma_ops->dma_exit)
+ 		dws->dma_ops->dma_exit(dws);
+ 	dw_spi_enable_chip(dws, 0);
++err_free_irq:
+ 	free_irq(dws->irq, master);
+ err_free_master:
+ 	spi_controller_put(master);
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index 63e5260100ec..1322b8cce5b7 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ {
+-	dws->rxchan = dma_request_slave_channel(dev, "rx");
+-	if (!dws->rxchan)
+-		return -ENODEV;
++	int ret;
+ 
+-	dws->txchan = dma_request_slave_channel(dev, "tx");
+-	if (!dws->txchan) {
+-		dma_release_channel(dws->rxchan);
++	dws->rxchan = dma_request_chan(dev, "rx");
++	if (IS_ERR(dws->rxchan)) {
++		ret = PTR_ERR(dws->rxchan);
+ 		dws->rxchan = NULL;
+-		return -ENODEV;
++		goto err_exit;
++	}
++
++	dws->txchan = dma_request_chan(dev, "tx");
++	if (IS_ERR(dws->txchan)) {
++		ret = PTR_ERR(dws->txchan);
++		dws->txchan = NULL;
++		goto free_rxchan;
+ 	}
+ 
+ 	dws->master->dma_rx = dws->rxchan;
+@@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 	dw_spi_dma_sg_burst_init(dws);
+ 
+ 	return 0;
++
++free_rxchan:
++	dma_release_channel(dws->rxchan);
++	dws->rxchan = NULL;
++err_exit:
++	return ret;
+ }
+ 
+ static void dw_spi_dma_exit(struct dw_spi *dws)
+-- 
+2.35.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK2HxMACgkQJNaLcl1U
-h9BzeQf4hmqV/v8iZsiZFzW3pob0oY3kGn3mo5H3tvfcho4HeU7p/GG3uuRGIfP2
-0oKlY2snI4v73kenQSyR7OH/HrMfCUpeUCqnQlCAh0E7Prp+L0FhocpN8FIUEezt
-qujxD3lLYeRXIKO7aPYxOghPy5BeCcCDBhCQx1T2GvimFREwSYrMmpMiGTxnS6Xo
-Lt0+BNnPXcl2022zQ6f5pL0n0LP3NOw5L7xMbGS6P7sHujHNVk1mpbc7DQXksvZO
-tPdWvc0b/aoLmGQ5CI4YLygZsnqx52nJpxlpMwaZ1CcFrJQp8KIbI8F3irtKWE/i
-tZEXu46fEbTj7Tmf32MjT6tAmN3a
-=hCJC
------END PGP SIGNATURE-----
-
---nxV27VCFTPOJRpj5--
