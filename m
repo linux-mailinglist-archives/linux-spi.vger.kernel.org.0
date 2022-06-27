@@ -2,77 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F6755DC8F
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D1755DCE3
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234072AbiF0JrB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jun 2022 05:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S233805AbiF0Kg0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jun 2022 06:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233775AbiF0JrA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 05:47:00 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2CB63E4
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 02:46:58 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c65so12153915edf.4
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 02:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HHdosOs39o38BChR9emscNODdZBptdPe7N1Ku8GWR4k=;
-        b=azcgu63Ik/VtroUohhLpZxUR9DERx1bU09MOj4tbkEu23vvYn7EBlJosUjm/E6cAUm
-         mju28meLIHiGPyHms5sL05Oxbj239p1GXoC29oiOBietQAAXAeRdmswylVAjtp1VMHbx
-         o/hsJ4+Z0RnW18+LcOpL+0u/N5v6h/+Xz8ko9ejwGiTl1OPSfmlnGRQcfsw/ds5vmqc8
-         xIj5FCxSRN1h01OwnjonkuvlLROikDUMGetATplTArkGVadDkU1nAOr+Jji8EQIMKNl0
-         sP7Fl8EueRMyZvIoynIHiIw6OIhHbi2pcnKFNtsCWfxlcgwiUK2dsuUxV/ZnE8t6Y6Pb
-         /yqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HHdosOs39o38BChR9emscNODdZBptdPe7N1Ku8GWR4k=;
-        b=w4hUdkXqRZYSUXe5o2164aIW/wITD/qSoWa4UpdlJFO7M6CsGUoWjJKQz7tMaGj5wL
-         XMa6tVrnK6XqM2DqIPGeIJsNcGOoFmSwCf0VP7rj+1yDAhJl3UT43fcwktZFWI/VHmbj
-         7t7RgdkIXHmEmL6d4Nyd8JblHRx3ly+f8tdS0jjuJrfKOiFttN9X8Z6Rbmtc0CGV2haK
-         LnomioMmCq8XcJdibbUAdTFkMqI35/nMI40VTiRecDDXr8vZeK3jIMfMJ44rgYkSgiST
-         zgr6dbcUsH/0FS5HcYBxa98MfQg2CFm0ZU6kPMXk0JerUCUsh7zmAzp4TSmz3a8sUyS/
-         VLlw==
-X-Gm-Message-State: AJIora/tSqbsJgLL1ijgbn8ILIRlRJnBg8a8GWP1ftqG5RCoWHBkqTs5
-        4gVayGp6+mzznK7CC1rPRqCQIg==
-X-Google-Smtp-Source: AGRyM1t6/gfotl2CU2szWClM+pyQl+8yGEzM6POYUCGhui7Z0nKt/DRapclROxQUx1vgj3P6b6/7Sw==
-X-Received: by 2002:a50:ce4a:0:b0:435:c543:87e8 with SMTP id k10-20020a50ce4a000000b00435c54387e8mr15388117edj.295.1656323217429;
-        Mon, 27 Jun 2022 02:46:57 -0700 (PDT)
-Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id dn7-20020a05640222e700b0042617ba6396sm7209623edb.32.2022.06.27.02.46.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 02:46:56 -0700 (PDT)
-Message-ID: <f18a141b-b0bd-0efb-498a-1ab7745a3702@linaro.org>
-Date:   Mon, 27 Jun 2022 11:46:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/5] spi: s3c64xx: add spi port configuration for Exynos
- Auto v9 SoC
-Content-Language: en-US
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        with ESMTP id S233588AbiF0KgZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 06:36:25 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB19063CE;
+        Mon, 27 Jun 2022 03:36:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25RAZuUw045156;
+        Mon, 27 Jun 2022 05:35:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656326156;
+        bh=9F5SoVyG6vTy+xKAz4DQZx53RbUN3yIhlnK2kgDE/aY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=dpPzAC8DcT+V80prGXqI2Pb+UikO8Gj3gOigyw3Jr+xfD4G3o4E1tYU19q4JqG1tK
+         bvtspUtIk+gdUj7BQ5V+NcpOJ7T30+hd7apgZVLO33UpG+Gl6W/aY0j2plpRiqfc3K
+         DhCUfF7vr3Q0Nz+S2oW0u3RTgidGg4vyACDH5YnQ=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25RAZuF3087355
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Jun 2022 05:35:56 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
+ Jun 2022 05:35:56 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 27 Jun 2022 05:35:56 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25RAZtBd091967;
+        Mon, 27 Jun 2022 05:35:55 -0500
+Date:   Mon, 27 Jun 2022 16:05:54 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220627064707.138883-1-chanho61.park@samsung.com>
- <CGME20220627064931epcas2p19407c5c3da3319cfb55dcb2c6d517256@epcas2p1.samsung.com>
- <20220627064707.138883-6-chanho61.park@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220627064707.138883-6-chanho61.park@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [RFC PATCH 3/6] mtd: spi-nor: core: run calibration when
+ initialization is done
+Message-ID: <20220627103554.hcvvu4r7bebd2qum@ti.com>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+ <20210311191216.7363-4-p.yadav@ti.com>
+ <20220517160226.4107f282@xps-13>
+ <20220518060640.os5fp5rez4ie7qc4@ti.com>
+ <20220518091931.279c5398@xps-13>
+ <20220518075651.mvdhfnfbgutecgyq@ti.com>
+ <b3bfa5a6-caac-94ed-6741-04db9c2a9ee0@kaod.org>
+ <20220627091404.54257obrdazcjhre@ti.com>
+ <82015d89-cab5-3e9a-a40e-e5dafa17ec0c@kaod.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <82015d89-cab5-3e9a-a40e-e5dafa17ec0c@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,27 +82,59 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/06/2022 08:47, Chanho Park wrote:
-> Add exynosautov9 spi port configuration. It supports up to 12 spis and
-> has DIV_4 as the default internal clock divider. The spi also has
-> an internal loopback mode to run a loopback test.
+On 27/06/22 11:43AM, Cédric Le Goater wrote:
+> On 6/27/22 11:14, Pratyush Yadav wrote:
+> > On 18/05/22 10:51AM, Cédric Le Goater wrote:
+[...]
 > 
-> Signed-off-by: Chanho Park <chanho61.park@samsung.com>
-> ---
->  drivers/spi/spi-s3c64xx.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> > > > This series does that by looking at the MTD
+> > > > partitions. For that to happen, we need to create those partitions
+> > > > first, which happens after mtd_device_register().
+> > > 
+> > > hmm, that might work for some boards. This is not at all the case for
+> > > the BMC boards. Vendors can put any kind of flash model and/or layout
+> > > and the driver needs to be more generic.
+> > 
+> > Yes, vendors can choose any layout, but one partition on that layout
+> > would be your calibration pattern. I think you can use a different
+> > compatible for that partition.
 > 
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index dd5fc8570bce..67b1fecf6fc6 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -1447,6 +1447,19 @@ static const struct s3c64xx_spi_port_config exynos5433_spi_port_config = {
->  	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
->  };
->  
-> +static struct s3c64xx_spi_port_config exynosautov9_spi_port_config = {
+> OK. and that it would become more generic then.
+> 
+> > I have not thought this through yet though.
+> 
+> If a partition is required, that's a dependency on mtdpart.
+> 
+> It could be done from spi_nor_probe() after mtd_device_register() with
+> some spimem handler using the 'struct mtd_partition' for the {size,offset}
+> parameters.
 
-This should be const.
+Hmm, yes but I've got this feedback from multiple people that we should 
+not do the calibration after mtd_device_register() since at that point 
+the device is usable from userspace. Maybe we can come up with an API 
+from MTD parsers that can just return us a list of partitions but not 
+actually register them?
 
-Best regards,
-Krzysztof
+> 
+> > > 
+> > > > But I am planning to use device tree to get that information now so this
+> > > > should no longer be needed and we can do calibration before registering
+> > > > the device with MTD.
+> > > 
+> > > Perfect, we can move the calibration hook in spi_nor_create_read_dirmap()
+> > > then, or in devm_spi_mem_dirmap_create(), which would make more sense IMHO.
+> > 
+> > Sorry, I still don't get why you want to tie dirmap and calibration
+> > together. Just let them be independent and let flash drivers take care
+> > of when to call what. SPI MEM should not care.
+> 
+> I know you would prefer a specific handler and that can still be done.
+> 
+> Thanks,
+> 
+> C.
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
