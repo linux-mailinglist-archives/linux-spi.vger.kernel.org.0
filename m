@@ -2,75 +2,161 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6363555D452
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78BF55C8C3
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 14:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbiF0T4f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jun 2022 15:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S236091AbiF0UV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jun 2022 16:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235212AbiF0T4f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 15:56:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930321ADB7
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 12:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D3A616A6
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 19:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97739C34115;
-        Mon, 27 Jun 2022 19:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656359793;
-        bh=mBWZ0hoOzJ1slguTevljBv+xCuNqULlnZ/IiZzt3D3Y=;
-        h=Subject:From:Date:To:From;
-        b=ftUlMW24oOSAt/2Ue5v85njiRYL0815CgcFK+yKpDt+DVJxYn4tj4KZsuRxE2cdND
-         2hPGJ/rjHeIFotgJzvp1KMQMLRtgl2awXYMttoqjKmU7I/WwXxWW+zzMjjRUf5TZW6
-         6GZ1rnfz8GtmQGcqSIsiXhoV/c0s9izbbHbJgqkOCXJLs9QhzOMOZonulW63M34DJe
-         rA2ATsTp829TGUgJQ6H41J9ZuK7+hf4qG5mxsLC4jo5QB0wX/XNopLoLZppGtPRSRs
-         p3yCQE4WYTbnMf+xyn7rqcrwVrLKdMNWVC3s2KV7AiT35Ez2heZqxiGYO5xCBk9ow1
-         T1SLf4Uv73ZLA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7544CE49BBA;
-        Mon, 27 Jun 2022 19:56:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S239122AbiF0UV4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 16:21:56 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601F31EC62;
+        Mon, 27 Jun 2022 13:21:55 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z13so18483555lfj.13;
+        Mon, 27 Jun 2022 13:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aEWNCuKRy84iEbBoB1dMIfYVeUetfldA1vTgDU/ZzpE=;
+        b=geDEG3yd1mYJXt6c1aZqzKWP/aSMvf/tfBT02vnFiFO+9ETRIt4umK1PW+NPrV4xAH
+         IPwGcjymmEkEzhhk9+XfpXmXGl1Hw9JVqezOplwRathZX7199rU+Z7wL341nIIuFtkZf
+         rX2nPa+o+ldHMvBiVu03vmITAtU3+Jlc/PAYiJ2mr2uSfK25+/LYPfwM6msaBK3V5YU+
+         /HKZtnsRBNWbAUETnWCFuG2fuIB/wg1zNavS4iltt3gKSZOGaTwwTY6EMCMZedVNKp41
+         XYAPLMzh0ibM9cjqHXGiaOyXJy6HDQQZ/imNX5A24xcPor78JRMcqOv2q4TJSZyyxRKh
+         dSnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aEWNCuKRy84iEbBoB1dMIfYVeUetfldA1vTgDU/ZzpE=;
+        b=G5n+ibalo6kWzvu9biI9vVVdqC/sCltrUBOma2Ozo7U+cefhIjt9Bq8fXaeAVMweX1
+         CXYRWQGCnP5oSVDpPni7lL4DtIl+u88a/y4dJ21ayaIUEkKGNiBkWH8lXGvqo5T54e0o
+         iN3SWBLWesFhLG5mA/Y6qdOJXPAaT/gga8jUKvWG6La7tSXijcraNXokC9fxaXKL2wrN
+         7dJ2nfEa8FtOxl5vUyHITIBrqTC3b5lChYm+FJ8K+/vxzFZgvt9jjNKwdv5xx0F8AEwK
+         dWB8ryUomKAgkPNpu/TJE9tSrnO8V658gQbAiCrXlmfFrvH2Zk92Mvd5Yd4ARD4VezUD
+         8uNQ==
+X-Gm-Message-State: AJIora/iVPLuBt0qRlLn2xAY4G4DJzJOIaNq6kvOOS0ajqrOj2h5HNz0
+        HfCsyRGcq1mmnRom2PQLHS0=
+X-Google-Smtp-Source: AGRyM1va63TpZ/BKlBrasRzo3hQuwImYd1Viwhj3pBKVD/eIotL0NPskkSjb7q5nOJbI3zAauoeozw==
+X-Received: by 2002:a05:6512:3d8f:b0:47f:a083:a989 with SMTP id k15-20020a0565123d8f00b0047fa083a989mr9505126lfv.646.1656361313593;
+        Mon, 27 Jun 2022 13:21:53 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id q4-20020a0565123a8400b004796e1555eesm1917694lfu.199.2022.06.27.13.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 13:21:52 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 23:21:49 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 04/16] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width
+Message-ID: <20220627202149.624eu7w2gzw7jchd@mobilestation>
+References: <20220627194003.2395484-1-mail@conchuod.ie>
+ <20220627194003.2395484-5-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165635979347.3756.18167328056798110626.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 27 Jun 2022 19:56:33 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627194003.2395484-5-mail@conchuod.ie>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Canaan devicetree fixes (2022-06-27T19:39:48)
-  Superseding: [v1] Canaan devicetree fixes (2022-06-18T12:30:22):
-    [01/14] dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
-    [02/14] dt-bindings: display: panel: allow ilitek,ili9341 in isolation
-    [03/14] ASoC: dt-bindings: convert designware-i2s to dt-schema
-    [04/14] dt-bindings: dma: add Canaan k210 to Synopsys DesignWare DMA
-    [05/14] dt-bindings: timer: add Canaan k210 to Synopsys DesignWare timer
-    [06/14] spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width for dwc-ssi
-    [07/14] riscv: dts: canaan: fix the k210's memory node
-    [08/14] riscv: dts: canaan: add a specific compatible for k210's dma
-    [09/14] riscv: dts: canaan: add a specific compatible for k210's timers
-    [10/14] riscv: dts: canaan: fix mmc node names
-    [11/14] riscv: dts: canaan: fix kd233 display spi frequency
-    [12/14] riscv: dts: canaan: use custom compatible for k210 i2s
-    [13/14] riscv: dts: canaan: remove spi-max-frequency from controllers
-    [14/14] riscv: dts: canaan: build all devicetress if SOC_CANAAN
+On Mon, Jun 27, 2022 at 08:39:52PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Most users of dw-apb-ssi use spi-{r,t}x-bus-width of 1, however the
+> Canaan k210 is wired up for a width of 4.
+> Quoting Serge:
+> The modern DW APB SSI controllers of v.4.* and newer also support the
+> enhanced SPI Modes too (Dual, Quad and Octal). Since the IP-core
+> version is auto-detected at run-time there is no way to create a
+> DT-schema correctly constraining the Rx/Tx SPI bus widths.
+> /endquote
+> 
+> As such, drop the restriction on only supporting a bus width of 1.
+> 
+> Link: https://lore.kernel.org/all/20220620205654.g7fyipwytbww5757@mobilestation/
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Serge, I dropped your R-b when I swapped to the default
+> property since it changed the enum.
+> ---
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index e25d44c218f2..0a43d6e0ef91 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -143,12 +143,6 @@ patternProperties:
+>          minimum: 0
+>          maximum: 3
+>  
 
+> -      spi-rx-bus-width:
+> -        const: 1
+> -
+> -      spi-tx-bus-width:
+> -        const: 1
+> -
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+My comment was:
+> > > You can just use a more relaxed constraint "enum: [1 2 4 8]" here
+> >
+> > 8 too? sure.
+Then Rob said:
+> Then no constraints needed because the common definition already has
+> this presumably.
 
+IMO preserving the device-specific constraints even if they match the
+generic ones has some maintainability benefits. What if you get to
+discover a new HW which supports Hexal mode? Then you would have
+needed to update the common schema constraints. But that would have
+caused permitting the unsupported bus-mode for all the schemas, which
+isn't correct. So as I see it the explicit bus-width enumeration would
+be ok to have here. But I'll leave it for Rob to make a final
+decision.
+
+Rob
+
+>  unevaluatedProperties: false
+>  
+>  required:
+> -- 
+> 2.36.1
+> 
