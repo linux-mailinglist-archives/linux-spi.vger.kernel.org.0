@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2F655D1AB
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D66C55D299
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240575AbiF0TmE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jun 2022 15:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S240584AbiF0TmH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jun 2022 15:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240582AbiF0Tlq (ORCPT
+        with ESMTP id S240585AbiF0Tlq (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 15:41:46 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814AC18387
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 12:41:43 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id o16so14513071wra.4
-        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 12:41:43 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2455B17063
+        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 12:41:45 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o16so14513070wra.4
+        for <linux-spi@vger.kernel.org>; Mon, 27 Jun 2022 12:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AQ9wIHwlRmT7tO1Hd8om5LpzXV8vNgzmPbgMU2oiknY=;
-        b=B5C/Gw1koJ2gCfNSuN+oniQsxKz/C0BbgCMWl8rQMBYqrHqfXovlJGRG6EhbKDmSUI
-         YMrDLvEKPR9I0xmZ6/f2UkBdvxHfzIFOCu/+tXXA400uNFasRF2Y5Rw3V4t8exfluRsl
-         pDrVCx2/y3GyUEYGpK1TCxM/gQf1o4TtNjiohPthJ+tyggDe+vxCZqFMZp1iemAhJKUy
-         KSoBOo6zKZnIFSTr/b+WCGZwNY/WRUWR4JU5U/op5XzoBDI7nlRb87RvgWMkI41Uf2mC
-         De6OwVU/r5tClMepVijT6V+kPZ/riqI+R5m1lGoFaN+/TWN3PGYd3lIy7cYtXlUQ7b2n
-         ouTA==
+        bh=ZPnaNl2N6OCS49bYwYg25LRRooD0U5t+6njnQfYqn3w=;
+        b=MOohgr19HljbByTvyNxJnTzuFRc+80XEY83slSBV3T38pJReWc/r2vS/nOk5tM3fgh
+         o0PeEHbIXwdYX8w8o/2Z+tOWI/pblKRMqN6cWcuVmoSgQJcUM4k7o3KZ8Bga/IW3cMxn
+         htf5vt82qgwz2AdmKcvtLew4WTHJpzSLNlFEtSdw1lUDBPfmzQ6VPma4Ihqx416iMO9q
+         OjG2BfW5Fb/pMNNGTa0W3lzf/5Uj3IdmCXYm0bDti+q5Vvni3wozuVRvHSs4b2osYT2/
+         INsrbelKnz8FWtbN/E4RVTXkbha41T/RhTGSoWBux0TT5r20qWoUKgEs96eGFAOTBcM3
+         SHKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AQ9wIHwlRmT7tO1Hd8om5LpzXV8vNgzmPbgMU2oiknY=;
-        b=ib+l9ogVRrfDk+dY/N7FU5acWTxhclqo4wtVLwJ2d9NFmlkC03RtF5Wzk6xtrzsyAr
-         lWHTRAz3I2gAojIcHu5F9uZLbTrOzQkkSa3sL8l6iqVSTXvgx5ADLNVCg54S95ouZ1O+
-         pspTlQv7otPOjPomZyetpvHT743wfnNZqffZr8UbWaKh2KvX2ovQK1E8Q+Phis5bA2x5
-         Fvg4dGub3o+40ZlbjMAYRp3vfenlfBiWLy62J5BUz+CGhaD1KuDwR63vwCMt1Kmb1mkY
-         oSwWAXdl8BZ6yABWBciQgdsEdMOsMe0KJVbR0u6fQy9H8Hht3qNp/cCj/Sl8e6uRKErw
-         dgKQ==
-X-Gm-Message-State: AJIora8o2txzPrRJbqYUDCOo6JPw8rEs+Ydf1TBTYXWrp42LUUo0SWmW
-        DlLKHu/z8t0t4jep6YkGHWiK4Q==
-X-Google-Smtp-Source: AGRyM1v27GhUxgqPtyg8Cu4ponuVEz4YhpnLDi4l6+vjZ86LHo5Wws49r6JewDbqir0IgLXBgCXSdg==
-X-Received: by 2002:a5d:6883:0:b0:21b:9408:8ba0 with SMTP id h3-20020a5d6883000000b0021b94088ba0mr14086640wru.419.1656358903073;
-        Mon, 27 Jun 2022 12:41:43 -0700 (PDT)
+        bh=ZPnaNl2N6OCS49bYwYg25LRRooD0U5t+6njnQfYqn3w=;
+        b=gVI+cmWoqmucooqeUdLQ2tUnBQla2zUoMWk40YTvFw7+IaHshEh/aaFmgzAIlkxkYB
+         EsdTuokCQyDck2AU4t8+8pJNINppXNiF3cOXNKouSEB+4Z9iunSFzhaDBl5vGpeId1xS
+         VXnNGsd1IY8ODB87ngAwmtNJ2v92zpHrZSE3eILfejZy4CJalqgI7to7gJ2z1auBq7h3
+         T2frK1utk1SMY77pzleHUICpZ63/h/1qINq9JvxMLaez485+pXkpRMf+yv4Owk2DACE3
+         mT4V7JKz8NPFhM0aJKgoyOFYhJWAFc4kJut4A70IJMAL1hltuekxEWFckl+mnEzXrchZ
+         mTxQ==
+X-Gm-Message-State: AJIora8IKGdCfKTtpBrrVq5RYNZ1C/olBAHNp26mzhOMGbBGQmap6ihf
+        4/NAu5xn6M5Kpjm/E/E1LYByrQ==
+X-Google-Smtp-Source: AGRyM1tRVPClRCoBOM+0dnNBF8Xh0WBUSfTyTPIl0mjH8CFu3Jd18gFLSGXlP3EBu9PNI15KlSes5w==
+X-Received: by 2002:a5d:500a:0:b0:21b:8274:9ddc with SMTP id e10-20020a5d500a000000b0021b82749ddcmr14053574wrt.251.1656358904731;
+        Mon, 27 Jun 2022 12:41:44 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm11428047wru.47.2022.06.27.12.41.41
+        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm11428047wru.47.2022.06.27.12.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 12:41:42 -0700 (PDT)
+        Mon, 27 Jun 2022 12:41:44 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 15/16] riscv: dts: canaan: fix bus {ranges,reg} warnings
-Date:   Mon, 27 Jun 2022 20:40:03 +0100
-Message-Id: <20220627194003.2395484-16-mail@conchuod.ie>
+Subject: [PATCH v2 16/16] riscv: dts: canaan: build all devicetress if SOC_CANAAN
+Date:   Mon, 27 Jun 2022 20:40:04 +0100
+Message-Id: <20220627194003.2395484-17-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627194003.2395484-1-mail@conchuod.ie>
 References: <20220627194003.2395484-1-mail@conchuod.ie>
@@ -86,7 +86,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,53 +96,33 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-The k210 devicetrees warn about missing/empty reg and/or ranges
-properties:
-arch/riscv/boot/dts/canaan/k210.dtsi:408.22-460.5: Warning (unit_address_vs_reg): /soc/bus@52000000: node has a unit name, but no reg or ranges property
-arch/riscv/boot/dts/canaan/k210.dtsi:352.22-406.5: Warning (simple_bus_reg): /soc/bus@50400000: missing or empty reg/ranges property
-
-Add reg and ranges properties that naively cap the buses after the
-allocation of their last devices.
+Testing & checking the Canaan devicetrees is inconvenient as only the
+devicetree corresponding to SOC_CANAAN_K210_DTB_BUILTIN will be built.
+Change the Makefile so that all devicetrees are built by default if
+SOC_CANAAN but only the one specified by SOC_CANAAN_K210_DTB_BUILTIN
+gets built as an object.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/canaan/k210.dtsi | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/riscv/boot/dts/canaan/Makefile | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-index 84a7ab363d72..337ce2b879e7 100644
---- a/arch/riscv/boot/dts/canaan/k210.dtsi
-+++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-@@ -163,7 +163,8 @@ apb0: bus@50200000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			compatible = "simple-pm-bus";
--			ranges;
-+			regs = <0x50200000 0x200000>;
-+			ranges = <0x50200000 0x50200000 0x200000>;
- 			clocks = <&sysclk K210_CLK_APB0>;
- 
- 			gpio1: gpio@50200000 {
-@@ -352,7 +353,8 @@ apb1: bus@50400000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			compatible = "simple-pm-bus";
--			ranges;
-+			regs = <0x50400000 0x40100>;
-+			ranges = <0x50400000 0x50400000 0x40100>;
- 			clocks = <&sysclk K210_CLK_APB1>;
- 
- 			wdt0: watchdog@50400000 {
-@@ -407,7 +409,8 @@ apb2: bus@52000000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			compatible = "simple-pm-bus";
--			ranges;
-+			regs = <0x52000000 0x2000200>;
-+			ranges = <0x52000000 0x52000000 0x2000200>;
- 			clocks = <&sysclk K210_CLK_APB2>;
- 
- 			spi0: spi@52000000 {
+diff --git a/arch/riscv/boot/dts/canaan/Makefile b/arch/riscv/boot/dts/canaan/Makefile
+index c61b08ac8554..befe4eb7527b 100644
+--- a/arch/riscv/boot/dts/canaan/Makefile
++++ b/arch/riscv/boot/dts/canaan/Makefile
+@@ -1,3 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += $(addsuffix .dtb, $(CONFIG_SOC_CANAAN_K210_DTB_SOURCE))
+-obj-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += $(addsuffix .o, $(dtb-y))
++dtb-$(CONFIG_SOC_CANAAN) += canaan_kd233.dtb
++dtb-$(CONFIG_SOC_CANAAN) += k210_generic.dtb
++dtb-$(CONFIG_SOC_CANAAN) += sipeed_maix_bit.dtb
++dtb-$(CONFIG_SOC_CANAAN) += sipeed_maix_dock.dtb
++dtb-$(CONFIG_SOC_CANAAN) += sipeed_maix_go.dtb
++dtb-$(CONFIG_SOC_CANAAN) += sipeed_maixduino.dtb
++
++obj-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += $(addsuffix .dtb.o, $(CONFIG_SOC_CANAAN_K210_DTB_SOURCE))
 -- 
 2.36.1
 
