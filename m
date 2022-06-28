@@ -2,51 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701E755CC65
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A75B55C173
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 14:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344894AbiF1Kbh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jun 2022 06:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S1344898AbiF1Kbf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jun 2022 06:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244644AbiF1Kbf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 06:31:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC172F3B4
-        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 03:31:34 -0700 (PDT)
+        with ESMTP id S1344894AbiF1Kbd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 06:31:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF66C2F3B4;
+        Tue, 28 Jun 2022 03:31:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C57D618EC
-        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 10:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8FBC3411D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7AB618EC;
         Tue, 28 Jun 2022 10:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D279C341CA;
+        Tue, 28 Jun 2022 10:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656412293;
-        bh=LgdZ688Ow16OcfaGO1xOFFHHZA21YTBwPSIPxlPDrU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VeGJ2Bq7F6tVRAgoP60UpINTCRV1PGvwzUdxMh/lStimcKzolUlAQOZoQqrNaaRWA
-         C9Ty/wXeyypdI0YPRItyOvjlbjI15anp6ltawjijdF8UWU9JP0+WzLSdA5dCZmzdWU
-         /le7SgzzoyOIgQQZNnEGG24jPLqOdB11t1BebVSLelpa0e27yYs4IMfZyd+VQ8oQJU
-         23K3V82jgXVGiJo3uL5TxQCDuLNh4iF/8hX5OY6tJZdsB6XX/k/aimSRggizQHaz2v
-         PVd55VACMPWBLRKi/8sDRtI0+0LSoyPYeiG+8z9mUmV8cy19eNoCRFkXsvgBM4Mxl1
-         TRGUW6PZFmdHQ==
-Date:   Tue, 28 Jun 2022 11:31:29 +0100
+        s=k20201202; t=1656412291;
+        bh=DC3SosWVleDuC54lFe3RBAgCx3NcMzRvnRRfzT1qGeQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=I/SdXgOHd3IxZuzYEpEWShovO3gHPUUR4oa9GuFrk1qd7XHI7VOQZDGMxJBHAaFNU
+         9pAczmA6K8YTtGecVZznCtWHsr+x1Bo9Bp4y95Q+trG7mgRkiijbpTvIENLSLkSRin
+         oTeiuj+3TULfsgp8qa9tE+wz4fWVihEGKreZ+QGcA8IHtT8T0JUMNA1Lf7OMzLZKx4
+         XljrYYsOPapZxG5KgWjb+LHiCCyhzjbnIWqc4xCFRnquCPkApxDE9sF25dN04m6Ray
+         UbJHiLWScWPddkBQFt6q9VnVJe2yOfQKkOQYaj0thZuZ8VrlU11XDs2jfseUCtZo3B
+         8mVv8c3Qxln5g==
 From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 00/11] Optimize spi_sync path
-Message-ID: <YrrYgVALI8XKvPPJ@sirena.org.uk>
-References: <20220621061234.3626638-1-david@protonic.nl>
- <YrYfFiiYuvazKBtu@sirena.org.uk>
- <20220628083214.566e76da@erd992>
+To:     chanho61.park@samsung.com, krzysztof.kozlowski@linaro.org,
+        andi@etezian.org
+Cc:     alim.akhtar@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adithya.kv@samsung.com
+In-Reply-To: <20220627013845.138350-1-chanho61.park@samsung.com>
+References: <CGME20220627014049epcas2p1fd6b4dddf5b40cd334708043a08ac2f9@epcas2p1.samsung.com> <20220627013845.138350-1-chanho61.park@samsung.com>
+Subject: Re: [PATCH] spi: s3c64xx: move dma_release_channel to unprepare
+Message-Id: <165641229004.254742.10031368402707043673.b4-ty@kernel.org>
+Date:   Tue, 28 Jun 2022 11:31:30 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Z7rkyUCGgfk5yEuO"
-Content-Disposition: inline
-In-Reply-To: <20220628083214.566e76da@erd992>
-X-Cookie: I like your SNOOPY POSTER!!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,32 +55,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 27 Jun 2022 10:38:45 +0900, Chanho Park wrote:
+> This fixes the sequence of dma_release_channel.
+> Since commit f52b03c70744 ("spi: s3c64xx: requests spi-dma channel only
+> during data transfer"),
+> dma_release_channel has been located in the s3c64xx_spi_transfer_one
+> but this makes invalid return of can_dma callback.
+> __spi_unmap_msg will check whether the request is requested by dma or
+> not via can_dma callback. When it is calling to check it, the channels
+> will be already released at the end of s3c64xx_spi_transfer_one so the
+> callback function will return always "false". So, they can't be unmapped
+> from __spi_unmap_msg call. To fix this, we need to add
+> unprepare_transfer_hardware callback and move the dma_release_channel
+> from s3c64xx_spi_transfer_one to there.
+> 
+> [...]
 
---Z7rkyUCGgfk5yEuO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Jun 28, 2022 at 08:32:14AM +0200, David Jander wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Great. So I will wait for this series to hit -next and then send incremental
-> patches to address Andy's feedback, or do you prefer I re-submit a v4 with
-> Andy's comments addressed right away?
+Thanks!
 
-Incremental please - it should be in -next tomorrow.
+[1/1] spi: s3c64xx: move dma_release_channel to unprepare
+      commit: 82295bc0d192d7e35e0568b18ca66da2c3058fd5
 
---Z7rkyUCGgfk5yEuO
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK62IAACgkQJNaLcl1U
-h9AMTAf+KI4VgGe+8BmNXy4zY5NXHueKVNrYyIavZDaEH4RGMqMpzbbxksGDuqVD
-vXMnJJiY+kM15niglOUgwbVYNAM0L7BVnN1RuSIUj4sd2gAE006udnCBLPHtZ2Ze
-e8ndjhRGw4hoFOEqRBoPyFhpPLFDzmmogZmpoF4pmK1AiVb0oYe1DIljJAktX4kS
-CUiBiEzzG1t/JAuUdQMrr3l/SFGAu4B1ZbZQOhDxBSoLzBmFZWqBYgYfSAwqHGxD
-zhTAZi9yLAEoUvDT6NfIZZz+3F5sPZwyl88RoRnsN6Niq/Qt/yECiA+EXkOiZ+PK
-HqXbwWIocdDXOWfqleKpdzK7UEbTjg==
-=O4ap
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---Z7rkyUCGgfk5yEuO--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
