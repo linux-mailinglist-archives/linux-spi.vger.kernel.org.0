@@ -2,47 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B216D55D761
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701E755CC65
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344896AbiF1Kbe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jun 2022 06:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1344894AbiF1Kbh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jun 2022 06:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344900AbiF1Kbd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 06:31:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751F331DF2
-        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 03:31:32 -0700 (PDT)
+        with ESMTP id S244644AbiF1Kbf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 06:31:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC172F3B4
+        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 03:31:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2404DB81DD1
-        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 10:31:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59CFC3411D;
-        Tue, 28 Jun 2022 10:31:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C57D618EC
+        for <linux-spi@vger.kernel.org>; Tue, 28 Jun 2022 10:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8FBC3411D;
+        Tue, 28 Jun 2022 10:31:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656412289;
-        bh=UwMfvTzxCbRskfDzXTHBNCOc93HIFJ0LrHKhe1ivZos=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kHFH5iWt4lFyR//vf5el+n+0ayyvEJOnwkGNxmObaGK4Cc0e+0Ir68Th4VtNB2CMj
-         aGtZlaE/UV7mGSjhMywmK34X9re1h87+7fCv45IQK+VZAmM4qE6U9q2hyBs7bwjcAw
-         /SIawBNlqWJns76VydPqDGFUUlrF1PNQ7jny8mYt1ffk5o2yf/X7IbNy34S6Y80jL+
-         x7BRwmGk9moHcr34mXJ/E24W6KhAX+3Y0v+J1qMwYx1qJ5OVXiGT6xVJjV2AmY89Dk
-         pJT7gNDsi3hGY39JZBqwTq9Jx8wSkVvdOSQHbQxdoOq6n60gehekBZJvPHsepYxIpC
-         AkLojWlRKKEzw==
+        s=k20201202; t=1656412293;
+        bh=LgdZ688Ow16OcfaGO1xOFFHHZA21YTBwPSIPxlPDrU8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VeGJ2Bq7F6tVRAgoP60UpINTCRV1PGvwzUdxMh/lStimcKzolUlAQOZoQqrNaaRWA
+         C9Ty/wXeyypdI0YPRItyOvjlbjI15anp6ltawjijdF8UWU9JP0+WzLSdA5dCZmzdWU
+         /le7SgzzoyOIgQQZNnEGG24jPLqOdB11t1BebVSLelpa0e27yYs4IMfZyd+VQ8oQJU
+         23K3V82jgXVGiJo3uL5TxQCDuLNh4iF/8hX5OY6tJZdsB6XX/k/aimSRggizQHaz2v
+         PVd55VACMPWBLRKi/8sDRtI0+0LSoyPYeiG+8z9mUmV8cy19eNoCRFkXsvgBM4Mxl1
+         TRGUW6PZFmdHQ==
+Date:   Tue, 28 Jun 2022 11:31:29 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     guomengqi3@huawei.com, masahisa.kojima@linaro.org,
-        jaswinder.singh@linaro.org, linux-spi@vger.kernel.org
-Cc:     xuqiang36@huawei.com
-In-Reply-To: <20220624005614.49434-1-guomengqi3@huawei.com>
-References: <20220624005614.49434-1-guomengqi3@huawei.com>
-Subject: Re: [PATCH-next] drivers/spi: Add missing clk_disable_unprepare()
-Message-Id: <165641228853.254742.12887457813004361833.b4-ty@kernel.org>
-Date:   Tue, 28 Jun 2022 11:31:28 +0100
+To:     David Jander <david@protonic.nl>
+Cc:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 00/11] Optimize spi_sync path
+Message-ID: <YrrYgVALI8XKvPPJ@sirena.org.uk>
+References: <20220621061234.3626638-1-david@protonic.nl>
+ <YrYfFiiYuvazKBtu@sirena.org.uk>
+ <20220628083214.566e76da@erd992>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Z7rkyUCGgfk5yEuO"
+Content-Disposition: inline
+In-Reply-To: <20220628083214.566e76da@erd992>
+X-Cookie: I like your SNOOPY POSTER!!
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,35 +57,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 24 Jun 2022 08:56:14 +0800, Guo Mengqi wrote:
-> Add missing clk_disable_unprepare() in synquacer_spi_resume().
-> 
-> 
 
-Applied to
+--Z7rkyUCGgfk5yEuO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Tue, Jun 28, 2022 at 08:32:14AM +0200, David Jander wrote:
 
-Thanks!
+> Great. So I will wait for this series to hit -next and then send incremental
+> patches to address Andy's feedback, or do you prefer I re-submit a v4 with
+> Andy's comments addressed right away?
 
-[1/1] drivers/spi: Add missing clk_disable_unprepare()
-      commit: 917e43de2a56d9b82576f1cc94748261f1988458
+Incremental please - it should be in -next tomorrow.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--Z7rkyUCGgfk5yEuO
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK62IAACgkQJNaLcl1U
+h9AMTAf+KI4VgGe+8BmNXy4zY5NXHueKVNrYyIavZDaEH4RGMqMpzbbxksGDuqVD
+vXMnJJiY+kM15niglOUgwbVYNAM0L7BVnN1RuSIUj4sd2gAE006udnCBLPHtZ2Ze
+e8ndjhRGw4hoFOEqRBoPyFhpPLFDzmmogZmpoF4pmK1AiVb0oYe1DIljJAktX4kS
+CUiBiEzzG1t/JAuUdQMrr3l/SFGAu4B1ZbZQOhDxBSoLzBmFZWqBYgYfSAwqHGxD
+zhTAZi9yLAEoUvDT6NfIZZz+3F5sPZwyl88RoRnsN6Niq/Qt/yECiA+EXkOiZ+PK
+HqXbwWIocdDXOWfqleKpdzK7UEbTjg==
+=O4ap
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--Z7rkyUCGgfk5yEuO--
