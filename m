@@ -2,56 +2,26 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA83455D9AE
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCB755E8E0
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 18:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345236AbiF1LGQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jun 2022 07:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S1347311AbiF1PBe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jun 2022 11:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiF1LGN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 07:06:13 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384231933;
-        Tue, 28 Jun 2022 04:06:11 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b19so1704289ljf.6;
-        Tue, 28 Jun 2022 04:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=74ZknYvbAERmU3fgiRR2mY3FgoTL84vsypu6NISs3NA=;
-        b=dDWLan8xSf2psi8Ku75yN5OgwcTLoIo4QLRQchGf/tnOHIEErsIqClR6R6jj0hHnE1
-         glxdqv+Q+oNFas8s3KUFWDNz6pCfCPGtgu3GDRYlMy8tJSqLISPSkAXtSSB18Fc1cBl9
-         K3i6ywdqZ7ooQdcDjGUO7jYYHtuMLkvdmJ0B7dpE8NaXa1Etww0PTwkNOS43/A+TUy5U
-         fbSKJaRnMnBzQpBS8IlH8etIJaUkiMjzJuedU3YNzOd/a7muD3ZZ5O3Ejx5xtKj1NDNE
-         X0K/TmyZEHl6Tx4YK+iB9mRmODqCTxt7r/nNT2QWhS3fceeeluPSUjYTDUwqbKQzyWX0
-         vMoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=74ZknYvbAERmU3fgiRR2mY3FgoTL84vsypu6NISs3NA=;
-        b=gNZM+u0meoetZWsJHDwXsjTX3v5M9Dzb3b9NI6A8g89MHlTJbbFPvQi/MDcXR1jsAn
-         kUv8mpLQE+A7u5mHflL+lMMyMcsDhJjMheOnwX4ySBTrDAhl6/YzqSM2hf3w63xh72/r
-         fUq/aoRkf5nXfjeIexo5l/NyGwgo4Y+HheLyZfZmoerDZCgUA0lu0PxQ7hXyNY61nyc9
-         llmAbKwbnPZWdvvwRfdEpm0aH7yXt/C2uaNAPXFw0R6sbM++uBSg2EOeIJNnlJ7/FXxJ
-         kkx/I1uBeP+8/cvtg9+LgYIfkZIdVdyf68J1hrm3/VaAW91vQsfS7nPQyqA8ngkzcNAp
-         cSww==
-X-Gm-Message-State: AJIora9Zu0/pgia4zjzt3KeJA0h0/7Q7zmNxUavwtiAo9oAjV4O3D8wb
-        fnoH8iki9JqD6/bj/8qxxKE=
-X-Google-Smtp-Source: AGRyM1uuwEf2Hbf380gJgJC1h2WOLcL2fEEXBsO7Ix96Zj9MMadTRjHIHgo7LzQz1OVzJUoUH5Gl+w==
-X-Received: by 2002:a2e:b88a:0:b0:25b:c698:eede with SMTP id r10-20020a2eb88a000000b0025bc698eedemr4258515ljp.205.1656414369905;
-        Tue, 28 Jun 2022 04:06:09 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056512371400b0047f9f075e04sm2156981lfr.296.2022.06.28.04.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 04:06:09 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 14:06:06 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        with ESMTP id S1346312AbiF1PBd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jun 2022 11:01:33 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CBE2F64E;
+        Tue, 28 Jun 2022 08:01:30 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o6Ci1-0005Gn-Sy; Tue, 28 Jun 2022 17:00:57 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -59,10 +29,12 @@ Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
         Vinod Koul <vkoul@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv@lists.infradead.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Conor Dooley <conor.dooley@microchip.com>,
@@ -76,116 +48,173 @@ Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 05/14] dt-bindings: timer: add Canaan k210 to Synopsys
- DesignWare timer
-Message-ID: <20220628110606.5xdzqxwrrqwymgvn@mobilestation>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-6-mail@conchuod.ie>
- <20220627233025.GA3167724-robh@kernel.org>
+        linux-riscv@lists.infradead.org, Conor Dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v2 01/16] dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+Date:   Tue, 28 Jun 2022 17:00:56 +0200
+Message-ID: <3361801.QJadu78ljV@diego>
+In-Reply-To: <20220627194003.2395484-2-mail@conchuod.ie>
+References: <20220627194003.2395484-1-mail@conchuod.ie> <20220627194003.2395484-2-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627233025.GA3167724-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+Hi Conor,
 
-On Mon, Jun 27, 2022 at 05:30:25PM -0600, Rob Herring wrote:
-> On Sat, Jun 18, 2022 at 01:30:27PM +0100, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > The Canaan k210 apparently has a Sysnopsys Designware timer but
-> > according to the documentation & devicetree it has 2 interrupts rather
-> > than the standard one. Add a custom compatible that supports the 2
-> > interrupt configuration and falls back to the standard binding (which
-> > is currently the one in use in the devicetree entry).
-> > 
-> > Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  .../bindings/timer/snps,dw-apb-timer.yaml     | 28 +++++++++++++++----
-> >  1 file changed, 22 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > index d33c9205a909..9a76acc7a66f 100644
-> > --- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > @@ -12,6 +12,9 @@ maintainers:
-> >  properties:
-> >    compatible:
-> >      oneOf:
-> > +      - items:
-> > +          - const: canaan,k210-apb-timer
-> > +          - const: snps,dw-apb-timer
-> >        - const: snps,dw-apb-timer
-> >        - enum:
-> >            - snps,dw-apb-timer-sp
-> > @@ -21,9 +24,6 @@ properties:
-> >    reg:
-> >      maxItems: 1
-> >  
-> > -  interrupts:
-> > -    maxItems: 1
-> > -
-> >    resets:
-> >      maxItems: 1
-> >  
-> > @@ -41,7 +41,23 @@ properties:
-> >  
-> >    clock-frequency: true
-> >  
-> > -additionalProperties: false
-> > +unevaluatedProperties: false
-> > +
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: canaan,k210-apb-timer
-> > +
-> > +then:
-> > +  properties:
-> > +    interrupts:
-> > +      maxItems: 2
+Am Montag, 27. Juni 2022, 21:39:49 CEST schrieb Conor Dooley:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> A dt-schema binding for the Ilitek ili9341 was created as
+> panel/ilitek,ili9341.yaml but the txt binding was ignored in the
+> process. Move the remaining items in the txt binding to the yaml one &
+> delete it.
+> 
+> The example in the txt binding has a spi-max-frequency which disagrees
+> with the yaml replacement (and its own documentation) so change that to
+> conform with the binding. There are no users in tree of the Adafruit
+> yx240qv29 to check against.
+> 
+> Link: https://cdn-learn.adafruit.com/assets/assets/000/046/879/original/SPEC-YX240QV29-T_Rev.A__1_.pdf
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+in your v1 you already got a [0]
+Reviewed-by: Rob Herring <robh@kernel.org>
+for this patch
+
+Looking at the diffstat, which didn't change, you should
+include such tags in followup revisions, to prevent
+reviewers from double efforts.
+
+Heiko
+
+
+[0] https://lore.kernel.org/r/20220627232054.GA3155668-robh@kernel.org
+
+> ---
+>  .../bindings/display/ilitek,ili9341.txt       | 27 -----------
+>  .../display/panel/ilitek,ili9341.yaml         | 48 +++++++++++++------
+>  2 files changed, 34 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt b/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+> deleted file mode 100644
+> index 169b32e4ee4e..000000000000
+> --- a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+> +++ /dev/null
+> @@ -1,27 +0,0 @@
+> -Ilitek ILI9341 display panels
+> -
+> -This binding is for display panels using an Ilitek ILI9341 controller in SPI
+> -mode.
+> -
+> -Required properties:
+> -- compatible:	"adafruit,yx240qv29", "ilitek,ili9341"
+> -- dc-gpios:	D/C pin
+> -- reset-gpios:	Reset pin
+> -
+> -The node for this driver must be a child node of a SPI controller, hence
+> -all mandatory properties described in ../spi/spi-bus.txt must be specified.
+> -
+> -Optional properties:
+> -- rotation:	panel rotation in degrees counter clockwise (0,90,180,270)
+> -- backlight:	phandle of the backlight device attached to the panel
+> -
+> -Example:
+> -	display@0{
+> -		compatible = "adafruit,yx240qv29", "ilitek,ili9341";
+> -		reg = <0>;
+> -		spi-max-frequency = <32000000>;
+> -		dc-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
+> -		reset-gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>;
+> -		rotation = <270>;
+> -		backlight = <&backlight>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> index 6058948a9764..94ca92878434 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> @@ -23,6 +23,7 @@ properties:
+>        - enum:
+>            # ili9341 240*320 Color on stm32f429-disco board
+>            - st,sf-tc240t-9370-t
+> +          - adafruit,yx240qv29
+>        - const: ilitek,ili9341
+>  
+>    reg: true
+> @@ -47,31 +48,50 @@ properties:
+>    vddi-led-supply:
+>      description: Voltage supply for the LED driver (1.65 .. 3.3 V)
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  required:
+>    - compatible
+>    - reg
+>    - dc-gpios
+> -  - port
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - st,sf-tc240t-9370-t
+> +then:
+> +  required:
+> +    - port
+>  
+>  examples:
+>    - |+
+> +    #include <dt-bindings/gpio/gpio.h>
+>      spi {
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+>          panel: display@0 {
+> -                 compatible = "st,sf-tc240t-9370-t",
+> -                              "ilitek,ili9341";
+> -                 reg = <0>;
+> -                 spi-3wire;
+> -                 spi-max-frequency = <10000000>;
+> -                 dc-gpios = <&gpiod 13 0>;
+> -                 port {
+> -                         panel_in: endpoint {
+> -                           remote-endpoint = <&display_out>;
+> -                      };
+> -                 };
+> -             };
+> +            compatible = "st,sf-tc240t-9370-t",
+> +                         "ilitek,ili9341";
+> +            reg = <0>;
+> +            spi-3wire;
+> +            spi-max-frequency = <10000000>;
+> +            dc-gpios = <&gpiod 13 0>;
+> +            port {
+> +                panel_in: endpoint {
+> +                    remote-endpoint = <&display_out>;
+> +                };
+> +            };
+> +        };
+> +        display@1{
+> +            compatible = "adafruit,yx240qv29", "ilitek,ili9341";
+> +            reg = <1>;
+> +            spi-max-frequency = <10000000>;
+> +            dc-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
+> +            reset-gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>;
+> +            rotation = <270>;
+> +            backlight = <&backlight>;
+>          };
+> +    };
+>  ...
 > 
 
-> When more than 1, you need to define what they are and the order.
 
-Please see my note to v2 of this patch:
-Link: https://lore.kernel.org/lkml/20220627211314.dc2hempelyl5ayjg@mobilestation/
 
--Sergey
 
-> 
-> > +
-> > +else:
-> > +  properties:
-> > +    interrupts:
-> > +      maxItems: 1
-> >  
-> >  required:
-> >    - compatible
-> > @@ -60,8 +76,8 @@ oneOf:
-> >  examples:
-> >    - |
-> >      timer@ffe00000 {
-> > -      compatible = "snps,dw-apb-timer";
-> > -      interrupts = <0 170 4>;
-> > +      compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
-> > +      interrupts = <0 170 4>, <0 170 4>;
-> >        reg = <0xffe00000 0x1000>;
-> >        clocks = <&timer_clk>, <&timer_pclk>;
-> >        clock-names = "timer", "pclk";
-> > -- 
-> > 2.36.1
-> > 
-> > 
