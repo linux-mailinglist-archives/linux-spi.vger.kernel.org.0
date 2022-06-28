@@ -2,47 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9938155C563
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 14:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC1F55E2F2
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jun 2022 15:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244131AbiF1CXD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jun 2022 22:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S244275AbiF1CYU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jun 2022 22:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243878AbiF1CWZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 22:22:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AE724BFB;
-        Mon, 27 Jun 2022 19:21:55 -0700 (PDT)
+        with ESMTP id S244133AbiF1CXH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jun 2022 22:23:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBDA24943;
+        Mon, 27 Jun 2022 19:22:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8D57CE1BD3;
-        Tue, 28 Jun 2022 02:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A40C36AF2;
-        Tue, 28 Jun 2022 02:21:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA3DD6185C;
+        Tue, 28 Jun 2022 02:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC1BC34115;
+        Tue, 28 Jun 2022 02:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656382912;
-        bh=NiB08PHBrGbxEHA9x3A6NC5XZ6j/Z0J8wAaPOiplP7w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L/A5hOL4GTXKlaAdwHaizBhDbsAM30pqAkshQMeO3mC+37AYm6vWx7IWqcu1p0jm0
-         2pKtfKqix53ahdJWcGHqExN7+EKvBTUWyIofCEGAt2h+Xbl0vAEN0uvZbXZBiv/nHX
-         PlJPF8O+DZfNqvYKdHfERQxJslQwaxIPuHS5TerWZYI/qcahpJ1bvZeBNGB+nVJDsB
-         cGaL+bT3tbyIr5Xfu/EeqSBORfy0+lD3TotTX8ZO9ipPRewLIYwVmSpko+6iFgTvhs
-         cMXLyN8wti8WP3g5yEj9WiSVGuczGmcgXSHyF30gXgsQG0UTL0+Jb/3dfPFKiNLJ88
-         NA9l5F/WyhU6Q==
+        s=k20201202; t=1656382964;
+        bh=1lnzaHrP8/Nz40BDmWvhOM2XuhI02Wl0KrII2CAXXCU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aeMvU36yIXCqEijvlelJCe1C60yQ2uubCn/jMLzU1bQlms62onpBYDIZjEg1ESLr+
+         gVa+4Tgq3Gw4lm6t/P+Z7hGe56MTW2S4zLNFjPnmKTOskPoBDgKJ1wvb/d9yrxS/IZ
+         Lj4h5putrO09EhYr4h0K5Btc4KuHotxNXALohe2Y9fza/sm/dTJy0a1SFK0T1CiFdA
+         kjk3ZT/PEJ3grJOU/i3D5ymkzcWJ58UZSATLEwhhqof4NXSE75XDYBCD8Pr/3to/U9
+         2q3DS0xX1lduZ+UDvNuCu8WCP1w95E9HYmNiU3OsR5+sarvU72PBa1zRa0l43MkqQu
+         vOJJ3ZmxJ/o2A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jon Lin <jon.lin@rock-chips.com>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, heiko@sntech.de,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 19/41] spi: rockchip: Unmask IRQ at the final to avoid preemption
-Date:   Mon, 27 Jun 2022 22:20:38 -0400
-Message-Id: <20220628022100.595243-19-sashal@kernel.org>
+Cc:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 01/34] spi: spi-cadence: Fix SPI CS gets toggling sporadically
+Date:   Mon, 27 Jun 2022 22:22:08 -0400
+Message-Id: <20220628022241.595835-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022100.595243-1-sashal@kernel.org>
-References: <20220628022100.595243-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,47 +55,64 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Jon Lin <jon.lin@rock-chips.com>
+From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
 
-[ Upstream commit 419bc8f681a0dc63588cee693b6d45e7caa6006c ]
+[ Upstream commit 21b511ddee09a78909035ec47a6a594349fe3296 ]
 
-Avoid pio_write process is preempted, resulting in abnormal state.
+As part of unprepare_transfer_hardware, SPI controller will be disabled
+which will indirectly deassert the CS line. This will create a problem
+in some of the devices where message will be transferred with
+cs_change flag set(CS should not be deasserted).
+As per SPI controller implementation, if SPI controller is disabled then
+all output enables are inactive and all pins are set to input mode which
+means CS will go to default state high(deassert). This leads to an issue
+when core explicitly ask not to deassert the CS (cs_change = 1). This
+patch fix the above issue by checking the Slave select status bits from
+configuration register before disabling the SPI.
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Signed-off-by: Jon <jon.lin@rock-chips.com>
-Link: https://lore.kernel.org/r/20220617124251.5051-1-jon.lin@rock-chips.com
+Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Link: https://lore.kernel.org/r/20220606062525.18447-1-amit.kumar-mahapatra@xilinx.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-rockchip.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cadence.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index b721b62118e1..7880a4f25284 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -380,15 +380,18 @@ static int rockchip_spi_prepare_irq(struct rockchip_spi *rs,
- 	rs->tx_left = rs->tx ? xfer->len / rs->n_bytes : 0;
- 	rs->rx_left = xfer->len / rs->n_bytes;
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index ceb16e70d235..90b18c32f859 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -69,6 +69,7 @@
+ #define CDNS_SPI_BAUD_DIV_SHIFT		3 /* Baud rate divisor shift in CR */
+ #define CDNS_SPI_SS_SHIFT		10 /* Slave Select field shift in CR */
+ #define CDNS_SPI_SS0			0x1 /* Slave Select zero */
++#define CDNS_SPI_NOSS			0x3C /* No Slave select */
  
--	if (rs->cs_inactive)
--		writel_relaxed(INT_RF_FULL | INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
--	else
--		writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
-+	writel_relaxed(0xffffffff, rs->regs + ROCKCHIP_SPI_ICR);
-+
- 	spi_enable_chip(rs, true);
+ /*
+  * SPI Interrupt Registers bit Masks
+@@ -449,15 +450,20 @@ static int cdns_prepare_transfer_hardware(struct spi_master *master)
+  * @master:	Pointer to the spi_master structure which provides
+  *		information about the controller.
+  *
+- * This function disables the SPI master controller.
++ * This function disables the SPI master controller when no slave selected.
+  *
+  * Return:	0 always
+  */
+ static int cdns_unprepare_transfer_hardware(struct spi_master *master)
+ {
+ 	struct cdns_spi *xspi = spi_master_get_devdata(master);
++	u32 ctrl_reg;
  
- 	if (rs->tx_left)
- 		rockchip_spi_pio_writer(rs);
+-	cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
++	/* Disable the SPI if slave is deselected */
++	ctrl_reg = cdns_spi_read(xspi, CDNS_SPI_CR);
++	ctrl_reg = (ctrl_reg & CDNS_SPI_CR_SSCTRL) >>  CDNS_SPI_SS_SHIFT;
++	if (ctrl_reg == CDNS_SPI_NOSS)
++		cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
  
-+	if (rs->cs_inactive)
-+		writel_relaxed(INT_RF_FULL | INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
-+	else
-+		writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
-+
- 	/* 1 means the transfer is in progress */
- 	return 1;
+ 	return 0;
  }
 -- 
 2.35.1
