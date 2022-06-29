@@ -2,134 +2,210 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204A25600DF
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 15:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34655560137
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 15:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiF2NJH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 09:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S233812AbiF2NX6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 09:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233717AbiF2NI7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 09:08:59 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C884228736
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 06:08:39 -0700 (PDT)
+        with ESMTP id S232506AbiF2NX5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 09:23:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D89121815
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 06:23:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sb34so32501207ejc.11
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 06:23:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=E22hEsQQEhp8rllmIq6qsrG6cDBcu8vSFULr13J89jI=;
-        b=WCEs7nL5WgRz6VD+/qp2xVYs9gP1qcrMDUKgiZu/qhlycsk07AqQy9ruenu0jrH+XhWvGEHERwSwE
-         ijavQRd355tlDkF+mDhkzQeZ2jbRMfvnh6RxnGegY41fLUX3lPKYeG/0AVfLGXvrt76WiuZ+B8q1lm
-         Zv2XbwLBIpDmiuE23RRjEQVmUXASaUlLflZ/tgT/GNb+4ttfpGRfV3r5RxtXiQtXGmquEmG7Deh5vV
-         pVqAQ0WgZY65amOF2zkO3Q9jKuvi9jfDSj80itUCK8x9MQzrxWSQZby4V9kdnD/vWILdUx5cAOzmZd
-         kvBNfpmjda0ASaVypGW1nbuYPK4gcHQ==
-X-MSG-ID: 8b2b3cc4-f7ac-11ec-8a45-0050569d11ae
-Date:   Wed, 29 Jun 2022 15:08:17 +0200
-From:   David Jander <david@protonic.nl>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 03/11] spi: Lock controller idling transition inside
- the io_mutex
-Message-ID: <20220629150817.159ee022@erd992>
-In-Reply-To: <CAHp75VeHcdcRMYxsJ3At+YyFZEauDPp-+deXbsBpcqKdxaicfg@mail.gmail.com>
-References: <20220621061234.3626638-1-david@protonic.nl>
-        <20220621061234.3626638-4-david@protonic.nl>
-        <CAHp75VeHcdcRMYxsJ3At+YyFZEauDPp-+deXbsBpcqKdxaicfg@mail.gmail.com>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bTc+9vraxg+Jp5bKZOKnmt3sZm7i9sLfDA3h0E40ZE0=;
+        b=kuTZc/BMdKAqCExUt2A8qTipZw8vfXBlk3C1NkvhN1p+yEqZmGRE8a1vRdzbc9HFHw
+         sJgEJreP4zorhl7lPCqvI4GvePU7NY9g3Q43XF2R6PBKJq074n7/I59hGjoGUHCDwSN/
+         rfAN3r9Ca8oan4l+NphL4xHs+QVMSBYWtqXWY5lHjakGRYWpFPX5iq0K/Oa/So+G7ihV
+         dnzn3CEbyb/ECUR/BsKu2rXe+Oc6DXNOB/+wGb4ld0OzLSbl6ipOXyIkekI+eKDJTvNW
+         D7WECRmatbLhomSFBeMGgEFnd+JYg7eX/itdHpvb/EmeDTUYbeMfGGFzcWK6vFgtb1bK
+         LCPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bTc+9vraxg+Jp5bKZOKnmt3sZm7i9sLfDA3h0E40ZE0=;
+        b=BMYT+s4HxUvABdIcylqcnrji+a/xXWAiC1yQdiifKjlX6cCVCe+1sVPwfJubBXnn0s
+         OrUJtS0spqIxK5BlhI5kgNOuQPUnZWIRzLweAWzUYtc68jCm199IAD9MPzUpd7WnLP/J
+         S0jOOIPgpf8epPGab1Iurn0GJXMdsaTA5hlsSdoS2IrnfpNBuzMD6OoNuXQjIMct74B6
+         qmHOkOHXYrw+zcdVlLLlvfttZTxKjHJsppZ3yKKvGgyXgt4oIQevR4QexV0jJT5P13eU
+         jvidTLfHUT8+10q7srecpP1DciZSKbIf+k9Rv6FCGmnfmmggg9lerPC9w6lW7CXyFLB2
+         LPUA==
+X-Gm-Message-State: AJIora+4oG1VG2qMnkV98jmojpYmSpUoBCbOAzcHfplpaVjqLmUCMHHq
+        3Gzg5B47c7hzv7W+U2DFbcOYJQ==
+X-Google-Smtp-Source: AGRyM1v11VnSNbZ6+il0NcaTX8oa+GpOwQoB5uOk6h/4PSodDcPkMaY3ClrXxIlnVUVvaEiCBXZdvQ==
+X-Received: by 2002:a17:906:58cf:b0:722:e4e1:c174 with SMTP id e15-20020a17090658cf00b00722e4e1c174mr3326097ejs.85.1656509034201;
+        Wed, 29 Jun 2022 06:23:54 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i25-20020a056402055900b00435681476c7sm11456559edx.10.2022.06.29.06.23.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 06:23:53 -0700 (PDT)
+Message-ID: <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
+Date:   Wed, 29 Jun 2022 15:23:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kavyasree.Kotagiri@microchip.com, UNGLinuxDriver@microchip.com
+References: <20220629125804.137099-1-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629125804.137099-1-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 21 Jun 2022 15:36:23 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-
-> On Tue, Jun 21, 2022 at 8:15 AM David Jander <david@protonic.nl> wrote:
-> >
-> > This way, the spi sync path does not need to deal with the idling
-> > transition.  
+On 29/06/2022 14:58, Sergiu Moga wrote:
+> Convert SPI binding for Atmel/Microchip SoCs to Device Tree Schema
+> format.
 > 
-> ...
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+>  .../devicetree/bindings/spi/atmel,spi.yaml    | 82 +++++++++++++++++++
+>  .../devicetree/bindings/spi/spi_atmel.txt     | 36 --------
+>  2 files changed, 82 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/atmel,spi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi_atmel.txt
 > 
-> > -       mutex_lock(&ctlr->io_mutex);
-> >         ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
-> >         mutex_unlock(&ctlr->io_mutex);
-> >
-> >         /* Prod the scheduler in case transfer_one() was busy waiting */  
-> 
-> >         if (!ret)
-> >                 cond_resched();  
-> 
-> In the similar way
-> 
-> 
-> ret = ...
-> if (ret)
->   goto out_unlock;
-> 
-> mutex_unlock();
-> cond_resched();
-> return;
+> diff --git a/Documentation/devicetree/bindings/spi/atmel,spi.yaml b/Documentation/devicetree/bindings/spi/atmel,spi.yaml
+> new file mode 100644
+> index 000000000000..751618a47235
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/atmel,spi.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/atmel,spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel SPI device
+> +
+> +maintainers:
+> +  - Mark Brown <broonie@kernel.org>
 
-Trying to add this change as an incremental patch to the whole series now that
-it hit linux-next, I am not so sure about how to do this, since this code has
-changed:
+This should be rather someone from Microchip.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/spi/spi.c?id=dc3029056b02414c29b6627e3dd7b16624725ae9#n1729
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
 
-I understand that the blank line at line 1730 should go after 1732, so that
-the ret = ... and the if (!ret) kthread... are not separated by a blank line.
+No need for quotes.
 
-So far so good, but modifying the rest of the code into this "if (!ret)
-goto..." idiom will mess that up, since the code in lines 1733 and 1734 is now
-common to both paths, so the simplest way I see it is to move those two lines
-in between the "ret = ..." and "if (!ret)...". Is that more desirable than not
-having the "if (!ret) goto" idiom?
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: atmel,at91rm9200-spi
+> +      - items:
 
-Code would look like this:
+These are not items, just single entry. Should be combined with above
+and made an 'enum'.
 
-	ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
-	ctlr->cur_msg = NULL;
-	ctlr->fallback = false;
-	if (!ret) {
-		kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
-		goto out_mutex;
-	}
+> +          - const: microchip,sam9x60-spi
+> +      - items:
+> +          - const: microchip,sam9x60-spi
+> +          - const: atmel,at91rm9200-spi
 
-	mutex_unlock(&ctlr->io_mutex);
+This is wrong. Either this is a fallback or it is not. It's not the
+Schroedinger's cat... Maybe your DTS are wrong.
 
-	/* Prod the scheduler in case transfer_one() was busy waiting */
-	cond_resched();
-	return;
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  cs-gpios: true
 
-out_unlock:
-	spin_unlock_irqrestore(&ctlr->queue_lock, flags);
-out_mutex:
-	mutex_unlock(&ctlr->io_mutex);
-}
+No need, coming from spi-controller.yaml.
 
-Please advice: is this really more desirable to what it is now? Or can I
-better leave it as is and only move the blank line?
+> +
+> +  clock-names:
+> +    description:
+> +      Tuple listing input clock names, "spi_clk" is a required element.
 
-> > +       return;
-> > +
-> > +out_unlock:
-> > +       mutex_unlock(&ctlr->io_mutex);  
-> 
+Skip description.
+
+> +    contains:
+> +      const: spi_clk
+> +    additionalItems: true
+
+no additionalItems.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  atmel,fifo-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Maximum number of data the RX and TX FIFOs can store for FIFO
+> +      capable SPI controllers.
+
+minimum and maximum for values, if it is known.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clock-names
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi1: spi@fffcc000 {
+> +        compatible = "atmel,at91rm9200-spi";
+> +        reg = <0xfffcc000 0x4000>;
+> +        interrupts = <13 IRQ_TYPE_LEVEL_HIGH 5>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        clocks = <&spi1_clk>;
+> +        clock-names = "spi_clk", "str2";
+
+This does not make really sense. You have one clock.
+
+> +        cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>;
+> +        atmel,fifo-size = <32>;
+> +
+> +        mmc@0 {
+> +            compatible = "mmc-spi-slot";
+> +            reg = <0>;
+> +            gpios = <&pioC 4 GPIO_ACTIVE_HIGH>;    /* CD */
+> +            spi-max-frequency = <25000000>;
+> +        };
+
 
 Best regards,
-
--- 
-David Jander
+Krzysztof
