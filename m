@@ -2,94 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2820655FE4A
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 13:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A41555FEB8
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 13:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiF2LN0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 07:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S232889AbiF2LeB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 07:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiF2LN0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 07:13:26 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21D227FEE
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 04:13:24 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id cw10so31889747ejb.3
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 04:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WTJzaDemVNa9GYFB/sPvmJvxvrpUgdWnsJ/tNPCGDvI=;
-        b=vYTJfO9pcIBdilCwjej+17FriFRXXILl/9U5HAxSf9Sg1OQTL2U0W7KOjUpeg5dzkA
-         ebX/b5msKkNZ/rXK4DJUrcLdCM/LIcKKAQEcEA9lzVTbpasbvL761Ga5hBbsoz50UTPV
-         T/FyXiqQJLfNeGHWzask1bkSyU/aZr24FoezFcpXqTt+a1F+WkeR+//UxrjS7ugsnoQh
-         Aa/iQ7elkxvyDlhZzOwSnbkqy22H+OZf7S3x4J/XLJQtpBQgGd1J1xJxnX05Yfs6VL5B
-         ETFjbgrTaBZFPlGdDAdZvl8oCA/dTMr/P38Gfx/lZsjilUdG0y9I0VYG36Mk4ZPzuOxb
-         pDSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WTJzaDemVNa9GYFB/sPvmJvxvrpUgdWnsJ/tNPCGDvI=;
-        b=rLVqzBk9b+I0ASQ6x4E0I0B5KSvLbHO3c2TKYdfyvP4GjaM/RyGBVSNIDUJr9a7ES7
-         LOfU0zTL/REJCJTqpt/xoZfveDPiQ0vNFq5QqDqWPwgI9D5uIhKJlBcrfxPVgOlOrdOw
-         NOPvf3TDVtNa7dVNgO63YGpAPKKl+t3WQd7di1S09mY4DGClIMIIIHi4yozH6fdEkOyi
-         zCvYoZ9Oy2OM9XAgDm/jINU4z+CqU2iHsHHd44T9yaYz2w/ZFYEmB5g8+ZFsmJzOyRjI
-         rj+GrvI2GMuK3baIW61IKC4NkDxMkZqbWkWXYtyGo7076njRtuU/WTXB4T4yin4ebkiH
-         mosw==
-X-Gm-Message-State: AJIora9GeZ6dZ8j8AZtoOEd469FzZc6coo3wna4d7Td6coWCr3AoiYkM
-        jCL4f/p9c9fexx/kGuGXoZOL8g==
-X-Google-Smtp-Source: AGRyM1uW38gvajhhxsuhUb91ole75s+h/dmDc/2trxOPZMZLAK6PPPdZmiJVFjWfLKR3uiRlamReMw==
-X-Received: by 2002:a17:906:58d5:b0:722:fc0b:305a with SMTP id e21-20020a17090658d500b00722fc0b305amr2707332ejs.251.1656501203540;
-        Wed, 29 Jun 2022 04:13:23 -0700 (PDT)
-Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ci3-20020a170906c34300b00722ea7a7aeesm7576041ejb.51.2022.06.29.04.13.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 04:13:22 -0700 (PDT)
-Message-ID: <e2d6a3ee-e0d4-07d8-d74a-d06b3e917fd6@linaro.org>
-Date:   Wed, 29 Jun 2022 13:13:21 +0200
+        with ESMTP id S232783AbiF2LeB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 07:34:01 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D484D271A
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 04:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656502440; x=1688038440;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KoX3ELsb74RYlahxkEYdL0FoTHasgp8HP1UPomYmgCo=;
+  b=PMavHJIRy6yJUxMJu9j4rPAG7mZU2bUFc8xr/HBX80YbqzMPehJf5huI
+   5iLg8X4mAbNEk4DEV6ouEY3vU2PU436MVU5j1NxUhjsZd98PJq+BPJfxr
+   pLlQ9BDMEF9ryM4zlk5hUevqKemcrIipITej1omduznKcCefjgVgzhKTY
+   +9sEzwlHVNmRksWZElyEF7TuxcR98yzaVrZAZBAJmdhihnfEiIZCJthAH
+   gGzKiwSZ4TyGGuHAz17I0+CuLn/3PmS3Rd/NOyJ3J9ZR0jcnPmFY50fAA
+   uI/N+Mrreo9f7knGHQ8xP4dRmxBJyDtV5qTCl+K26diGUxO+v0xGQGjfK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282741643"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="282741643"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:33:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="540829930"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 29 Jun 2022 04:33:57 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id B4C2EF1; Wed, 29 Jun 2022 14:34:03 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: intel: Add support for Intel Meteor Lake-P SPI serial flash
+Date:   Wed, 29 Jun 2022 14:34:03 +0300
+Message-Id: <20220629113403.79942-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/4] spi: s3c64xx: support custom value of internal
- clock divider
-Content-Language: en-US
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629102304.65712-1-chanho61.park@samsung.com>
- <CGME20220629102527epcas2p42e99f44d529d215623bd0e12a082d1dd@epcas2p4.samsung.com>
- <20220629102304.65712-3-chanho61.park@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629102304.65712-3-chanho61.park@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/06/2022 12:23, Chanho Park wrote:
-> Modern exynos SoCs such as Exynos Auto v9 have different internal clock
-> divider, for example "4". To support this internal value, this adds
-> clk_div of the s3c64xx_spi_port_config and assign "2" as the default
-> value to existing s3c64xx_spi_port_config.
-> 
+Intel Meteor Lake-P has the same SPI serial flash controller as Alder
+Lake-P. Add Meteor Lake-P PCI ID to the driver list of supported
+devices.
 
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/spi/spi-intel-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index f6eec7a869b6..f0d532ea40e8 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -74,6 +74,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0x7e23), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa0a4), (unsigned long)&bxt_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa1a4), (unsigned long)&bxt_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa224), (unsigned long)&bxt_info },
+-- 
+2.35.1
 
-
-Best regards,
-Krzysztof
