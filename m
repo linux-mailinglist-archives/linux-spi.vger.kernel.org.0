@@ -2,98 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83BD55FEBD
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 13:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F6255FF37
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 14:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiF2LhF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 07:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S229716AbiF2MHH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 08:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiF2LhD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 07:37:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251E4FD34;
-        Wed, 29 Jun 2022 04:37:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A76A5619AF;
-        Wed, 29 Jun 2022 11:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE976C34114;
-        Wed, 29 Jun 2022 11:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656502622;
-        bh=dSIdq7JC6ZEBfIR3l2QmQJOHZZDgsMua0zlvIzt80VI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IV64jujEl1lfHCsDBW591Z3BuiCMrIU1O+WBuUGXrYJCNxyJjoJttqABwpFMZ3Y81
-         hFgcFrRiBEfZ79QE0+MzKYtiLyU0qTgQq5hm8iOxqNhI0IOxEnpjZV37yn/2P0qkME
-         uwtMyolDR98EaqjZsUdOPDFMuxIgi+yYB9RCZy6SJ69jtsyHqDoLzDkmcxfqyCkMod
-         ZonjXv/6q4AiNDqGREDG36d4clUnuH1uY0tbpFNnBJrFC66UeZVdoEj/X2L3fUVQvi
-         QKQx/AyuetBLk+hSJnkXVLgBvo3+6z370tYOGoY6Mdr/h5byfIStAK6WjrqdadfPlZ
-         4pl75ifwn9iwQ==
-Date:   Wed, 29 Jun 2022 12:36:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chanho Park <chanho61.park@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/4] spi: s3c64xx: support custom value of internal
- clock divider
-Message-ID: <Yrw5WKWq6sMEKBmn@sirena.org.uk>
-References: <20220629102304.65712-1-chanho61.park@samsung.com>
- <CGME20220629102527epcas2p42e99f44d529d215623bd0e12a082d1dd@epcas2p4.samsung.com>
- <20220629102304.65712-3-chanho61.park@samsung.com>
+        with ESMTP id S229609AbiF2MHH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 08:07:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDA837021
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 05:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656504425; x=1688040425;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oWkQdAH3/vAEzwnHDG0O6heHzVv0U+QMPWPQG2cHuuU=;
+  b=GeqHIC763lYGm7qFp+VGfdmALoHXFdJJ1am1C1gNm5SzfMMkqhqTf1wj
+   6nx0CMXCert5KT6vbJvwHOwBYoj9U809kDJlWphn8xOULkOvhEb9SGS6R
+   I8LESg/oLNODVHkojAPPNjXHf/+IQLl7uI3E33ZSSEzH9iLfR6Idwz8zu
+   WfziCeBqd4h1kISmFttRiXBq7ZATcIE9Xrwx7JXxdygg1uXyO+p+kvJHL
+   ShtyFdhnJQpH6LNNkg0ySzf3n4VTVTN/mrLq+4ERm30GKxMJli8RAvtWb
+   8DjdMmsM7sYsLxiWrrqGOKCFC9Ac7xf3AQ+/CU9fCNvWj4iTK4YXgirMK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280776025"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="280776025"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 05:07:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="588287112"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.55])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 05:07:03 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Ap Kamal <kamal.ap@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] spi: pxa2xx: Add support for Intel Meteor Lake PCH-P
+Date:   Wed, 29 Jun 2022 15:07:00 +0300
+Message-Id: <20220629120700.620108-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HAtCNg6OqyvUsmZi"
-Content-Disposition: inline
-In-Reply-To: <20220629102304.65712-3-chanho61.park@samsung.com>
-X-Cookie: Booths for two or more.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Add support for LPSS SPI on Intel Meteor Lake PCH-P. It has three
+controllers each having two chip selects.
 
---HAtCNg6OqyvUsmZi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This squashes a fix from Ap, Kamal <kamal.ap@intel.com> fixing incorrect
+PCI ID of 3rd controller.
 
-On Wed, Jun 29, 2022 at 07:23:02PM +0900, Chanho Park wrote:
-> Modern exynos SoCs such as Exynos Auto v9 have different internal clock
-> divider, for example "4". To support this internal value, this adds
-> clk_div of the s3c64xx_spi_port_config and assign "2" as the default
-> value to existing s3c64xx_spi_port_config.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/spi/spi-pxa2xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index edb42d08857d..838d12e65144 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1404,6 +1404,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x7aab), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x7af9), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x7afb), LPSS_CNL_SSP },
++	/* MTL-P */
++	{ PCI_VDEVICE(INTEL, 0x7e27), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x7e30), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x7e46), LPSS_CNL_SSP },
+ 	/* CNL-LP */
+ 	{ PCI_VDEVICE(INTEL, 0x9daa), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x9dab), LPSS_CNL_SSP },
+-- 
+2.35.1
 
---HAtCNg6OqyvUsmZi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8OVcACgkQJNaLcl1U
-h9AXKQgAg14h9aGv1DqGvTWdAbzqKiPCrC+YB/liN+o0njPpCkRImRxdJePYOZMC
-rneJPQfxB4/o+cchNoMZ1c9j18GOeg2eunlGA2PZ8T8ZLq7j8b0F0b4smTquLJiY
-QmSR1kO/Ml+3dlG9Ct/iW2MMoWIEBVpl8jN/oHhr6PcHMAJ6xCTEIgap78HwV7XP
-0IL+i0NfvKI7KzB6aXgQj+06JPfdoo29e8sn+skc2M2lQGJcnCHnPSMUjZKkOkB2
-KNDO3Ur3bAh+CVdfpzgrcOaH5l7Y3tlGdfnrrlypYU5hcN4LGeich8y3m3ROYUfD
-hefzVZwI+AGqT5gaimihDj27rxsyqQ==
-=+CO7
------END PGP SIGNATURE-----
-
---HAtCNg6OqyvUsmZi--
