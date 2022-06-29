@@ -2,130 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEE05609B5
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 20:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E335609D4
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 20:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiF2Ssp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 14:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S229776AbiF2S4l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 14:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiF2Sso (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 14:48:44 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BEB247;
-        Wed, 29 Jun 2022 11:48:43 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id z16so7884945qkj.7;
-        Wed, 29 Jun 2022 11:48:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cXKqNI+/sqOYyJuUtCM7197IW3EKPfuEBZYWu6etnmg=;
-        b=M4SNyZjW4IzQcuaBqTFBabSuxMLLHrjNVv1/t2tJVW7A61Emscbyip/hReCLVTIfn+
-         4Rb7HBhh3dmZ5CdZG2ga4S8CLDttey8GJ0rtfuMmSMxItTh6iX/Cpg4KgGfGBFj1R/NI
-         98xWnR6pC1uLnOVrJ2PR9IVQD2XXBQASTMzsxYy8+gQIJC/DIsygfWbwkxBN2wRsB0MV
-         T4c2lJXqDiHNk4P2I366rwmpRF1GLpKIKL/opmyP74tGqEc+BBiB/pjfyf9HM6eXQuE6
-         dZqb9xqvc3OUHFk6d6Cl8Aqr5SiWzNPL5L0mCDecAuMG9nAu8OWAcA6AzfkxDlGcYrsW
-         Oaxg==
-X-Gm-Message-State: AJIora9HucIgJuMBr8G8PKj/r18slFuQkVOlfP/2lF3V+WCfhRT17PL3
-        7GcSGuu8YhtZCy7VM+BQdYzXsxj6Dw41pQ==
-X-Google-Smtp-Source: AGRyM1s1By5yDx+300u2B15JLMsSVppEMwZN6nwhHMO4gA752p84dVRPsz4OZnJsXDcAY6Fp3ihK2w==
-X-Received: by 2002:a05:620a:13b4:b0:6b1:17a5:a489 with SMTP id m20-20020a05620a13b400b006b117a5a489mr3216805qki.144.1656528522410;
-        Wed, 29 Jun 2022 11:48:42 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id t16-20020a37aa10000000b006a760640118sm13774927qke.27.2022.06.29.11.48.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 11:48:41 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id o19so23023730ybg.2;
-        Wed, 29 Jun 2022 11:48:41 -0700 (PDT)
-X-Received: by 2002:a05:6902:1246:b0:66d:5b0b:19b0 with SMTP id
- t6-20020a056902124600b0066d5b0b19b0mr4728646ybu.365.1656528520803; Wed, 29
- Jun 2022 11:48:40 -0700 (PDT)
+        with ESMTP id S229752AbiF2S4k (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 14:56:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AB72E0A4
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 11:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 797C461FF1
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 18:56:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9F69C341CC;
+        Wed, 29 Jun 2022 18:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656528998;
+        bh=BkYlt+VDJe3+yxhHxOGWZORQhD8LKoLHf7rU1aF0NYo=;
+        h=Subject:From:Date:To:From;
+        b=OAjtVG0q6cFQbo3Lu6us8IwvtMuQNudqrAjCSyim6umuaRaxYGTikW1/6L0xFB/b9
+         bQpRa/TgmjSVrWW2t7dzmK27IwNFEIyat6RgyVB+xyqq8pfXSGZe0Wm6lrrzVAVd9v
+         EkPWJ/bwEe0J/mjRruhjoU/f+V5S/IF2K5jWkYIh1Cg8vKoV3PUKYD0nll3++icTJd
+         G/Ea9+T3+i/et24nJxqVBdgjJdeAS6uOh8uEt0qkHZKQsu8Bi89D332UCjkjpmEjiT
+         f+zvmjj0tjJodZ/p6JxP+V9BFo9HI/0ESRIxw5PEbF515Jjkpmgt3m9yzvTMwMYbcK
+         bIjjFE1cCz6LA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B02DFE49BBA;
+        Wed, 29 Jun 2022 18:56:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <cover.1656341824.git.geert+renesas@glider.be> <2fd9b9e3f60fe555d9dcad499c90e3ec869aa96e.1656341824.git.geert+renesas@glider.be>
- <c65d6a94-b5c2-e2e4-6fdb-b7982d291e01@linaro.org> <CAMuHMdW=s42sfFwimizTsNjyKue+W9NasTOG0jgjkgkoKv3wfw@mail.gmail.com>
- <bab4d845-330e-c7f0-5dac-a96caa93a39e@linaro.org>
-In-Reply-To: <bab4d845-330e-c7f0-5dac-a96caa93a39e@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 29 Jun 2022 20:48:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUuU4qtfYh=hpY9bWMLKAnz83Oj8f=M9_iUxmR+Zetsow@mail.gmail.com>
-Message-ID: <CAMuHMdUuU4qtfYh=hpY9bWMLKAnz83Oj8f=M9_iUxmR+Zetsow@mail.gmail.com>
-Subject: Re: [PATCH 5/7] memory: renesas-rpc-if: Move resource acquisition to .probe()
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165652899864.15444.929884380234471536.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 29 Jun 2022 18:56:38 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
+Latest series: [v3] Canaan devicetree fixes (2022-06-29T18:43:29)
+  Superseding: [v2] Canaan devicetree fixes (2022-06-27T19:39:48):
+    [v2,01/16] dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+    [v2,02/16] dt-bindings: display: panel: allow ilitek,ili9341 in isolation
+    [v2,03/16] ASoC: dt-bindings: convert designware-i2s to dt-schema
+    [v2,04/16] spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
+    [v2,05/16] dt-bindings: dma: add Canaan k210 to Synopsys DesignWare DMA
+    [v2,06/16] dt-bindings: timer: add Canaan k210 to Synopsys DesignWare timer
+    [v2,07/16] dt-bindings: memory-controllers: add canaan k210 sram controller
+    [v2,08/16] riscv: dts: canaan: fix the k210's memory node.
+    [v2,09/16] riscv: dts: canaan: add a specific compatible for k210's dma
+    [v2,10/16] riscv: dts: canaan: add a specific compatible for k210's timers
+    [v2,11/16] riscv: dts: canaan: fix mmc node names
+    [v2,12/16] riscv: dts: canaan: fix kd233 display spi frequency
+    [v2,13/16] riscv: dts: canaan: use custom compatible for k210 i2s
+    [v2,14/16] riscv: dts: canaan: remove spi-max-frequency from controllers
+    [v2,15/16] riscv: dts: canaan: fix bus {ranges,reg} warnings
+    [v2,16/16] riscv: dts: canaan: build all devicetress if SOC_CANAAN
 
-On Wed, Jun 29, 2022 at 8:26 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 29/06/2022 19:55, Geert Uytterhoeven wrote:
-> > On Wed, Jun 29, 2022 at 7:44 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >> On 27/06/2022 17:31, Geert Uytterhoeven wrote:
-> >>> While the acquired resources are tied to the lifetime of the RPC-IF core
-> >>> device (through the use of managed resource functions), the actual
-> >>> resource acquisition is triggered from the HyperBus and SPI child
-> >>> drivers.  Due to this mismatch, unbinding and rebinding the child
-> >>> drivers manually fails with -EBUSY:
-> >>>
-> >>>     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/unbind
-> >>>     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/bind
-> >>>     rpc-if ee200000.spi: can't request region for resource [mem 0xee200000-0xee2001ff]
-> >>>     rpc-if-hyperflash: probe of rpc-if-hyperflash failed with error -16
-> >>>
-> >>> Fix this by moving all resource acquisition to the core driver's probe
-> >>> routine.
-> >>>
-> >>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >>
-> >> This looks like a fix, so how about putting it as first in the series,
-> >> so backporting is easy/automatic?
-> >
-> > Unfortunately that is not as simple as it sounds, as this really
-> > depends on patch 4.
->
-> You sure? Except rebasing I don't see that. rpcif_sw_init() received the
-> rpcif so it had access to all fields.
 
-Yes I am, don't be misguided by the name of the local variable.
-The rpcif structure is allocated by the HF or SPI child driver,
-and thus not available in the RPC core driver's .probe() function.
-The rpc_priv structure (as of patch 4) is allocated by the RPC core driver.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> > I agree patches 1-3 could be moved later, if you think it is worthwhile.
->
-> This would not be enough, it has to be first patch to be backportable.
-
-I can make it second? ;-)
-Note that that still precludes (easily) backporting s2ram support.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
