@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F6255FF37
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 14:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBFF55FFAF
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 14:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiF2MHH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 08:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S232342AbiF2MQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 08:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiF2MHH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 08:07:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDA837021
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 05:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656504425; x=1688040425;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oWkQdAH3/vAEzwnHDG0O6heHzVv0U+QMPWPQG2cHuuU=;
-  b=GeqHIC763lYGm7qFp+VGfdmALoHXFdJJ1am1C1gNm5SzfMMkqhqTf1wj
-   6nx0CMXCert5KT6vbJvwHOwBYoj9U809kDJlWphn8xOULkOvhEb9SGS6R
-   I8LESg/oLNODVHkojAPPNjXHf/+IQLl7uI3E33ZSSEzH9iLfR6Idwz8zu
-   WfziCeBqd4h1kISmFttRiXBq7ZATcIE9Xrwx7JXxdygg1uXyO+p+kvJHL
-   ShtyFdhnJQpH6LNNkg0ySzf3n4VTVTN/mrLq+4ERm30GKxMJli8RAvtWb
-   8DjdMmsM7sYsLxiWrrqGOKCFC9Ac7xf3AQ+/CU9fCNvWj4iTK4YXgirMK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280776025"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="280776025"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 05:07:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="588287112"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.55])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 05:07:03 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Ap Kamal <kamal.ap@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH] spi: pxa2xx: Add support for Intel Meteor Lake PCH-P
-Date:   Wed, 29 Jun 2022 15:07:00 +0300
-Message-Id: <20220629120700.620108-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S233263AbiF2MQ1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 08:16:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CE31927;
+        Wed, 29 Jun 2022 05:16:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LY0mv4Wyzz4xD8;
+        Wed, 29 Jun 2022 22:16:15 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-ide@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        netdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-spi@vger.kernel.org, linux-can@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Dumazet <edumazet@google.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Anatolij Gustschin <agust@denx.de>
+In-Reply-To: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Message-Id: <165650492719.3004956.10259665965182865650.b4-ty@ellerman.id.au>
+Date:   Wed, 29 Jun 2022 22:15:27 +1000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +60,18 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support for LPSS SPI on Intel Meteor Lake PCH-P. It has three
-controllers each having two chip selects.
+On Sat, 7 May 2022 13:01:44 +0300, Andy Shevchenko wrote:
+> It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
+> 
+> 
 
-This squashes a fix from Ap, Kamal <kamal.ap@intel.com> fixing incorrect
-PCI ID of 3rd controller.
+Patches 1-3 applied to powerpc/next.
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 4 ++++
- 1 file changed, 4 insertions(+)
+[1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+      https://git.kernel.org/powerpc/c/6d056b7254f9954522b7bb9947c8779a013d189f
+[2/4] powerpc/mpc5xxx: Switch mpc5xxx_get_bus_frequency() to use fwnode
+      https://git.kernel.org/powerpc/c/de06fba62af64144aca6f8a8bedbc848d2e5b440
+[3/4] powerpc/52xx: Get rid of of_node assignment
+      https://git.kernel.org/powerpc/c/00bcb550dc60f73d593d2dbb718c4f521c7d7be8
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index edb42d08857d..838d12e65144 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1404,6 +1404,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
- 	{ PCI_VDEVICE(INTEL, 0x7aab), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0x7af9), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0x7afb), LPSS_CNL_SSP },
-+	/* MTL-P */
-+	{ PCI_VDEVICE(INTEL, 0x7e27), LPSS_CNL_SSP },
-+	{ PCI_VDEVICE(INTEL, 0x7e30), LPSS_CNL_SSP },
-+	{ PCI_VDEVICE(INTEL, 0x7e46), LPSS_CNL_SSP },
- 	/* CNL-LP */
- 	{ PCI_VDEVICE(INTEL, 0x9daa), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0x9dab), LPSS_CNL_SSP },
--- 
-2.35.1
-
+cheers
