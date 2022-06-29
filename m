@@ -2,110 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4735C5604B6
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 17:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D369560702
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 19:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbiF2PgB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 11:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S229944AbiF2RJw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 13:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiF2Pf7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 11:35:59 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C452FE72
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 08:35:58 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id g4so17085095ybg.9
-        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 08:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yW0eUyCLx9NY1BpaMyboaJ9/MpwhYRH4whENi4LPOtk=;
-        b=MjKA9WdmLf6bWRWBoFrRrWuYy/pWZKX9zw6M4FfYvvBchQ+XfOfIum8biHAiobRuaV
-         7qbEj19dQCo4R7bhbw9yY+Ild1uJfheybOCbuTFsKh5BpP+HHGGcXv9kyFae21PBHWKj
-         6ZN2f7D6TYtB4FfpKW7Bg/E6QG2TLE0WI/vM/d3utA/mYnwuNojvOsRLmUac/25Q79Bq
-         VvcumEazN7LoTQwJnfcFb6fPXLNXnIrmRrWWIkNXk6xj2zqDE5OsBrTZ1bBusP8g7rcL
-         RVDndbvpuR2/97uwhL42+fjEe7Xai/xTaus7n9n/UqSCZENqp4pVwJG21o87tlF1tJtl
-         Wh5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yW0eUyCLx9NY1BpaMyboaJ9/MpwhYRH4whENi4LPOtk=;
-        b=SGSyRl+4UTnsJv4zx+7rIctgwD9OLOnpUxtGGxtKXdgo5YLTHd4o67OxuZbeGVUuPK
-         q+IWadhCd+6htWlxluN6sOhss5gJ/ijXo90Pl0L/8dklw5RslqeXY0UnxRpm8KfxX+K+
-         9CfT4wI3ksB3n5km1BYowf6M37exPkXQ9vjyHcjE0fSLBpelETjCWQJ/UPproAbUvgNz
-         ia/9bV0JQSk8Cg92rqmZoBbseBEJ2RrVn1C4OxhpJOYkfzWcgahNrAcaFhLeGsHyGCjq
-         QSGH3oR+OioblKCFjnswSt2tmk8xtEpiYPXFVbz1EtIE+OYa/G90zZ6Hqd5lzRFoStx7
-         XQ7A==
-X-Gm-Message-State: AJIora+Ycj46Ci+nmUa4ISbmHtBI9tYZoPSt8Tt+moZEGgFGmuzNTVtM
-        70kuzXvNmGaZsDoVGMzW9GMX74s7eBHGE3bJ2gE=
-X-Google-Smtp-Source: AGRyM1taASU3sYiq6P9Ailv0sKs1kG6elEq7FMhXdhj1OcJ4LnreFlYp1GXfmaV+DpLzHHr7dbL3xI30+cpxavWfSYc=
-X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
- u125-20020a25dd83000000b0066c8d8d4f5fmr4014703ybg.79.1656516956696; Wed, 29
- Jun 2022 08:35:56 -0700 (PDT)
+        with ESMTP id S230034AbiF2RJv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 13:09:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE80B1A05E;
+        Wed, 29 Jun 2022 10:09:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE72B82603;
+        Wed, 29 Jun 2022 17:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D836C341C8;
+        Wed, 29 Jun 2022 17:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656522588;
+        bh=4bJvFFx7ZcxPoQfjBr9hzR8NIRYqurDvP08BnkCGIfk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SO91+wnwTa89hRSXSoTp79ezg57zJGwf8HGqcEEn7epijpLCS8vAZnSLxA1x8CO1Q
+         aqCGDCX5pkN23N6MvilsV0Q6lrH9TJpR0IDCuqxqyjp3eqXRg0x6v6B0v6AxlNDSHj
+         69szh3v2AH/ZCtAN4xlDy0tkGdKPEHhFc3AbwR5f0LEAn5y0b8tc1oghqnIexY+GtR
+         nBnPKxStD/oTzMF6q8w00jjgjYZAh1F8L5Bw1b+10G5oOiB8RDRpfL3GM9sFmGeDEC
+         DllLL4qEZueiq4lG8pEqsgbgsovUv20WBC10MWYX9hbuEuaCNhspurOOu/oQebSZ+Y
+         PqGWCfgpLCtXg==
+Date:   Wed, 29 Jun 2022 18:09:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ian Woloschin <ian.woloschin@akamai.com>,
+        Ian Woloschin <iwolosch@akamai.com>
+Subject: Re: [PATCH v3 2/2] spi: aspeed: Fix division by zero
+Message-ID: <YryHVsrqNlhdwKzq@sirena.org.uk>
+References: <20220622161617.3719096-1-clg@kaod.org>
+ <20220622161617.3719096-3-clg@kaod.org>
 MIME-Version: 1.0
-References: <20220629120700.620108-1-jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220629120700.620108-1-jarkko.nikula@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 29 Jun 2022 17:35:19 +0200
-Message-ID: <CAHp75VdhGDR0cGt2Aky=sRRDB=u4mwxWZgQ+DGL08QZFBMKiAg@mail.gmail.com>
-Subject: Re: [PATCH] spi: pxa2xx: Add support for Intel Meteor Lake PCH-P
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Ap Kamal <kamal.ap@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mK7klt+5JZlbXfIT"
+Content-Disposition: inline
+In-Reply-To: <20220622161617.3719096-3-clg@kaod.org>
+X-Cookie: Victory or defeat!
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 2:09 PM Jarkko Nikula
-<jarkko.nikula@linux.intel.com> wrote:
->
-> Add support for LPSS SPI on Intel Meteor Lake PCH-P. It has three
-> controllers each having two chip selects.
->
-> This squashes a fix from Ap, Kamal <kamal.ap@intel.com> fixing incorrect
-> PCI ID of 3rd controller.
 
-With PCH removed from the commit message (including subject)
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+--mK7klt+5JZlbXfIT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> ---
->  drivers/spi/spi-pxa2xx.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-> index edb42d08857d..838d12e65144 100644
-> --- a/drivers/spi/spi-pxa2xx.c
-> +++ b/drivers/spi/spi-pxa2xx.c
-> @@ -1404,6 +1404,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
->         { PCI_VDEVICE(INTEL, 0x7aab), LPSS_CNL_SSP },
->         { PCI_VDEVICE(INTEL, 0x7af9), LPSS_CNL_SSP },
->         { PCI_VDEVICE(INTEL, 0x7afb), LPSS_CNL_SSP },
-> +       /* MTL-P */
-> +       { PCI_VDEVICE(INTEL, 0x7e27), LPSS_CNL_SSP },
-> +       { PCI_VDEVICE(INTEL, 0x7e30), LPSS_CNL_SSP },
-> +       { PCI_VDEVICE(INTEL, 0x7e46), LPSS_CNL_SSP },
->         /* CNL-LP */
->         { PCI_VDEVICE(INTEL, 0x9daa), LPSS_CNL_SSP },
->         { PCI_VDEVICE(INTEL, 0x9dab), LPSS_CNL_SSP },
-> --
-> 2.35.1
->
+On Wed, Jun 22, 2022 at 06:16:17PM +0200, C=E9dric Le Goater wrote:
 
+> Fixes: 54613fc6659b ("spi: aspeed: Add support for direct mapping")
 
--- 
-With Best Regards,
-Andy Shevchenko
+This commit isn't in mainline.
+
+--mK7klt+5JZlbXfIT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8h1UACgkQJNaLcl1U
+h9AVewf/WQAmOe0+ScAYOGgcQEmnOEp4TS1cWQo0BAxd7OgZqLodwQqLfeM2CaMK
+SXelE3kPHJunj/B2YC11bTbsgi8nvoA03dS6BXF8i2LPRzQq7+294VdOgkdap5ei
+WA7lqQRSDAyaA4hAAJQqKSSM2zT9RYoXlVUXf/VUXX7KyLhMBjFuO2MuioX6Pzxg
+VCcwaTnaximxm/beko5YUoaDgiixxbSA6L5yLAXckzD7OZ7xDhXllZSfd5A9/xe8
+o9JRYNo8tutfLxLjCwBK0qRLgu9cPy++YF4qX8HfdayxRE1GXd23BH4GK0+8EhNe
+vxvDGPtY4UV7LSZAFXFDociwrctE8A==
+=Ag5J
+-----END PGP SIGNATURE-----
+
+--mK7klt+5JZlbXfIT--
