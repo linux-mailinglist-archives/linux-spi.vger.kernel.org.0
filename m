@@ -2,61 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BC4560758
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 19:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B225156078D
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jun 2022 19:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiF2R1x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Jun 2022 13:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S229932AbiF2RoQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Jun 2022 13:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiF2R1v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 13:27:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3D83BFBB;
-        Wed, 29 Jun 2022 10:27:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35DCD61E69;
-        Wed, 29 Jun 2022 17:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED50C34114;
-        Wed, 29 Jun 2022 17:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656523669;
-        bh=x0EesMyFaiSD8rylLmQqTGs3zzcIl/WKMbvu1LL/AV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pBPcDs7ZbJTPSInPM7tyCB+0SAxPf6O8wnPrY5bQ5hRcG4wj0bJhBAyLc+KNDe6H8
-         BfgwTzTPSlzVSvZLpfo4x+chPeMxywDFj6xQe3nbAYrZWGgEqRy3woZ0OkgcdvLe4H
-         Ad+Ni3xu4hsPYt9WeMy7doyJbTIccWokzoOXS8HQPttWMDEyueU6zlzIqy7p9SN4my
-         I+3ACBSudHDC2Br/wXSfR9TFqWe6iTHpECDA9v1F+scmxqE4aDOMixSxWvsuOkEMgM
-         UVvzq3MhzMlLPoJTpWGWNkJzL8hI34sIW/A2CdP1/4IHGw7HB2yIV0YJo4GDv152Qu
-         nTlqF0xa2Y9Ow==
-Date:   Wed, 29 Jun 2022 18:27:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ian Woloschin <ian.woloschin@akamai.com>,
-        Ian Woloschin <iwolosch@akamai.com>
-Subject: Re: [PATCH v3 2/2] spi: aspeed: Fix division by zero
-Message-ID: <YryLj6iWVkqWowDg@sirena.org.uk>
-References: <20220622161617.3719096-1-clg@kaod.org>
- <20220622161617.3719096-3-clg@kaod.org>
- <YryHVsrqNlhdwKzq@sirena.org.uk>
- <59b82730-f09f-f7e5-0e2f-4ad1765f0f6e@kaod.org>
+        with ESMTP id S229573AbiF2RoQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Jun 2022 13:44:16 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB4634663
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 10:44:14 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eq6so23186799edb.6
+        for <linux-spi@vger.kernel.org>; Wed, 29 Jun 2022 10:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tVekIMrtplwlYMH10GYN3NLEVF7rPzw2Ll0nVajDUj0=;
+        b=w9vxn/UmjXGR/AxVPDa1AWAET4ZJSi/d7RKxJWbXb7NdzNnJmBooZ3j04DTGg2aRmv
+         tLPrXK0sXmcc+VPM9SnLizG97ehS7Wgm5m2GgA5Y/E4F+mSUJXnfqgUkhNW1qbd9Vbuk
+         3Ku48VOLtWJW7RyymLVXW+QViJ949T9Cpv5uNHg8Ii5/eClbUPoeb/EK4c4PddVjOiOc
+         lmCz+tWzOphiK7etLDCgy2KJd1B0za2hnkJ1Uis67labgAnMFEuqxFukByyYRGGnZeI/
+         EZx8HDGnCJdPxUiYOf3z4h9gyfvL/maNLCyHKmpGAIbAO0fCEmF0pKDKQjKy6BtB7Hlb
+         aNZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tVekIMrtplwlYMH10GYN3NLEVF7rPzw2Ll0nVajDUj0=;
+        b=ExDqhcRoq5MmgzDhF417aREC01ekNUsetxkHpxeNgA16vctFuCUzSQyJREqMAWps3E
+         dpG//wp2lejxkryZP/kjvKz6bAB10KJCml+2mhRpYUy1Iz1E7TVVXwmnhARNVKGojSPw
+         kNXfvz30/S35k7wDo7HE0wGlPtTIBeJvkV9UTy+eAxXRNFiWqO3BiHrydkC/K4gbyt3e
+         0/7B50RzPc1E4+Sr0ER7tRhgq23uTKGtyTedffSC9N5Mh95Pn2XDlxPl9DIY0gZ30NVE
+         tnCMlbDAdpQCwfpLTempDqHuICBxhEfHuu34AZAoy4JFH+OY7nmaP3Fwx6hlU1uHGnWx
+         /85w==
+X-Gm-Message-State: AJIora+hzR/rcKMRCfeuZUeuorW5j8VvYd1pkIBJL9OnPUAj7ONugcBX
+        xX9+ww+4VJxbozqrxthZ7gT1Oi9e+Z1VVw==
+X-Google-Smtp-Source: AGRyM1ua6BwpBragxQEeeAoYqEOJa4FdY4s48iFIdywyOYpjX3jiRhNVEbP0A5P0HdINP+n6ybuMGw==
+X-Received: by 2002:a05:6402:847:b0:437:62bd:bbc0 with SMTP id b7-20020a056402084700b0043762bdbbc0mr5713257edz.285.1656524653206;
+        Wed, 29 Jun 2022 10:44:13 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j12-20020a1709062a0c00b00722e1bca239sm8074199eje.204.2022.06.29.10.44.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 10:44:12 -0700 (PDT)
+Message-ID: <c65d6a94-b5c2-e2e4-6fdb-b7982d291e01@linaro.org>
+Date:   Wed, 29 Jun 2022 19:44:11 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VkJUd9CeU3kUqltG"
-Content-Disposition: inline
-In-Reply-To: <59b82730-f09f-f7e5-0e2f-4ad1765f0f6e@kaod.org>
-X-Cookie: Booths for two or more.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/7] memory: renesas-rpc-if: Move resource acquisition to
+ .probe()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1656341824.git.geert+renesas@glider.be>
+ <2fd9b9e3f60fe555d9dcad499c90e3ec869aa96e.1656341824.git.geert+renesas@glider.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2fd9b9e3f60fe555d9dcad499c90e3ec869aa96e.1656341824.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +82,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 27/06/2022 17:31, Geert Uytterhoeven wrote:
+> While the acquired resources are tied to the lifetime of the RPC-IF core
+> device (through the use of managed resource functions), the actual
+> resource acquisition is triggered from the HyperBus and SPI child
+> drivers.  Due to this mismatch, unbinding and rebinding the child
+> drivers manually fails with -EBUSY:
+> 
+>     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/unbind
+>     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/bind
+>     rpc-if ee200000.spi: can't request region for resource [mem 0xee200000-0xee2001ff]
+>     rpc-if-hyperflash: probe of rpc-if-hyperflash failed with error -16
+> 
+> Fix this by moving all resource acquisition to the core driver's probe
+> routine.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
---VkJUd9CeU3kUqltG
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This looks like a fix, so how about putting it as first in the series,
+so backporting is easy/automatic? Plus a fixes tag?
 
-On Wed, Jun 29, 2022 at 07:21:08PM +0200, C=E9dric Le Goater wrote:
-> On 6/29/22 19:09, Mark Brown wrote:
-> > On Wed, Jun 22, 2022 at 06:16:17PM +0200, C=E9dric Le Goater wrote:
-> >=20
-> > > Fixes: 54613fc6659b ("spi: aspeed: Add support for direct mapping")
-> >=20
-> > This commit isn't in mainline.
-
-> drat. It's the OpenBMC kernel. I will resend. Sorry about that.
-
-It's OK, I fixed it up locally.
-
---VkJUd9CeU3kUqltG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8i48ACgkQJNaLcl1U
-h9D0+gf4tcfx+ldgEy2Wvrii45VbLbXw8yUXIxKQWcg1Ekf6E/5WrCYwVz5ZzRyj
-DwH03bKdCTk598u1GbdxhugIaqvp76wQNbHJZ1kxVZd7a2i0cocCFjwaLlLQmdcv
-BM0VmWsVJgA77QfAcdZJGdBtkqeObaAp7Uf/TZyg7Lq73fBK83hv9YyDp0JLSNla
-TLwlT9Z7ot5cLFfBMOGiYRAsoPI/+6uf2u0zptUsnM105ArmVcC6WiOgbDB8eeDf
-p9fFawvvtYgH5/pvK3WJjRehd+/KW/O2AAjJQmy2yhCMTsty3/4NCyUl/XFH7ymV
-j8kcUIm7NlXWxsi45lGgDn2KlMNq
-=K6NB
------END PGP SIGNATURE-----
-
---VkJUd9CeU3kUqltG--
+Best regards,
+Krzysztof
