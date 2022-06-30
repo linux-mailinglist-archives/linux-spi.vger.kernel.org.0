@@ -2,46 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EE7561C40
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 15:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CC0561DFF
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 16:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiF3Ny6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Jun 2022 09:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S235969AbiF3Od4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Jun 2022 10:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235779AbiF3Ny3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 09:54:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C7558FC5
-        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 06:50:19 -0700 (PDT)
+        with ESMTP id S237077AbiF3Odp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 10:33:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8271544756
+        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 07:17:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB3E6B82AF5
-        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 13:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E02CC3411E;
-        Thu, 30 Jun 2022 13:50:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26A54621C6
+        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 14:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F30C34115;
+        Thu, 30 Jun 2022 14:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656597015;
-        bh=7DYYAMY40II0eSZ3Yt3rIXv/sVwjolFL1o+kePvRncE=;
-        h=Subject:From:Date:To:From;
-        b=XEbC1CKGGCXWiYYIClPCgB+0YPrK8bdyJpICfVzTNfLVzssrub4sGV/gZ1e58iIgd
-         AgGn2nbOUmLU4kzwSLp/cRlSPdGKH5iJpSQFUhnXlD0sutydfWKNgPLpiamo3lRRiw
-         wv26M29p/xo3Kgb6puIuBT/Osl0JiPkeXDD+DBqY3Gn4ztsODTmyHo7lO7usnujhfk
-         vw9Q1QqzuVNxuOxoOxh2RahZkXix5/cTaEpVGLe1hQTdxdLCZdgmSa/Z0yxQ3ZvcxS
-         MhKavGxkatu1JlcyEIIiwf5Yo/W2K8WOI6WMdtRi80J8T2zfKStUymjfFwJptlMd6n
-         RDOaSyblFo28g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21A53E49BBA;
-        Thu, 30 Jun 2022 13:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1656598663;
+        bh=DMARbHWICjlHAAjX7xlU9O+Gkn32rmMGhUsWAGmk9bg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=PjrN5OBMcMapOlIMZb/kmVTUhoagATx/uk9wq9O8zYYWDKr6d3fLhkWmMXa16e0FR
+         SwQvVX1tIb7TyJAFy0fhCay11MhwCC69EJo0xgINHyqDyScqoOZ0Cxjz+Hx5Oo/zZi
+         Em1k2QAQBzKByH5A5OU9UAsoixkqL3GX4m8usH2j9C+nTq7pvpt8qIBlUf7BKNbBqu
+         0eKUQbEvPEb9wAK5JWD/pJood4PELzM4WeEAh1iCqZ4Oyp0D8f0eMCpwyu+6imdgdt
+         dpw0mzG8Qbdz+Z80eNJ4HXrMBaZBdFdlaabF7ZTiQkmFD4RHHBM7QhvKmpWuTz/kt4
+         GE9BpieTuySjg==
+From:   Mark Brown <broonie@kernel.org>
+To:     david@protonic.nl
+Cc:     andy.shevchenko@gmail.com, linux-spi@vger.kernel.org
+In-Reply-To: <20220629142519.3985486-1-david@protonic.nl>
+References: <20220629142519.3985486-1-david@protonic.nl>
+Subject: Re: [PATCH 0/3] Fix some coding style issues
+Message-Id: <165659866258.602102.6154448463517417589.b4-ty@kernel.org>
+Date:   Thu, 30 Jun 2022 15:17:42 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165659701505.22307.11511595273413522325.git-patchwork-summary@kernel.org>
-Date:   Thu, 30 Jun 2022 13:50:15 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,28 +52,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Wed, 29 Jun 2022 16:25:16 +0200, David Jander wrote:
+> This series fixes some coding style issues. No functional change.
+> 
+> David Jander (3):
+>   spi: spi.c: White-space fix in __spi_pump_messages()
+>   spi: spi.c: Fix comment style
+>   spi: spi.c: Remove redundant else block
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: spi: pxa2xx: Add support for Intel Meteor Lake PCH-P
-  Submitter: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=654991
-  Lore link: https://lore.kernel.org/r/20220629120700.620108-1-jarkko.nikula@linux.intel.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Patch: [v2] spi: pxa2xx: Add support for Intel Meteor Lake-P
-  Submitter: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=655290
-  Lore link: https://lore.kernel.org/r/20220630073305.632850-1-jarkko.nikula@linux.intel.com
+Thanks!
 
+[1/3] spi: spi.c: White-space fix in __spi_pump_messages()
+      commit: c191543e99fc03a36ccf7869392957a7182e0ada
+[2/3] spi: spi.c: Fix comment style
+      commit: 95c8222f0e52b09b7607616274e7cae84d519a9b
+[3/3] spi: spi.c: Remove redundant else block
+      commit: 31d4c1bdf157421b26d51f61a4da95dd20d171e2
 
-Total patches: 2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
