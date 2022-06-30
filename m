@@ -2,46 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270EC561997
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 13:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0AC561B9E
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 15:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiF3LuU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Jun 2022 07:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S232621AbiF3Nor (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Jun 2022 09:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbiF3LuT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 07:50:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D668A340F0
-        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 04:50:18 -0700 (PDT)
+        with ESMTP id S235119AbiF3Noq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 09:44:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5945DC33
+        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 06:44:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88C29B82A2A
-        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 11:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B7A9C34115;
-        Thu, 30 Jun 2022 11:50:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BA563CE2EC0
+        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 13:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD85CC3411E;
+        Thu, 30 Jun 2022 13:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656589816;
-        bh=/xHo/5CgPF1bziZIjZa8CjNs0GyDlW/iXEB+BoUfBpY=;
-        h=Subject:From:Date:To:From;
-        b=p/ZkNe9y5h4zLHuDYmXrx9yk6cbBpNHo48Fa4mRxQSF7NBaKoH8okML3a7z394oOv
-         cSKOG0l7N/3+YPdbtohZjYW8miUsQki1y49GHy5iI8O6cNyYL34wrSKH7PxrdKqt0b
-         ZZuFTP5XDBDpp9uZPuWlhMC4DZoSzjb26hmx5m5tPCb2RkMH0Va+pnimRPL7gtxT3T
-         d9Oj6XVMQ0KFsbtz9W4W2tkM6E0YAv6QCLLe11/u2SiQy/eKOYOTciWENwUq2sqkGT
-         wOgc8tX9ZNPHMpHm656yIiSOEdXpOumavHiA1ZwfcJJOVT9az0PwoYm+xB0YdInsfx
-         NOq7xgd6tsIbw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1482EE49BBB;
-        Thu, 30 Jun 2022 11:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1656596682;
+        bh=gOapZKPagxR5YPBGWkDlKG7e7Jaka4zB/fFrnEhreDg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Mqj4XpO++FEy7oJLwM5E8G+L1ViypVH/0euQqI7kxsbPE5tJmfK0LqBIDRo3yTk6T
+         G5AhJFGmTUv6tJdphqiRj4dOxCo4pq0XjSh2H9s7pjn3QPtDnU98LX3JMH54Kpcdgj
+         mlSWWCkc9aQSBBsPhXjiVmrz3NgLsXa8f/Ugm0iu1mLk3xNZYgWemQeZ7MvgS3Ifbh
+         phrrRGMio4mDa7+7FCbDrrpQEUiuk7/uAe7aAq01/x7HCdUwThsgX58YtjIS83UjCm
+         TShMfUwQAJAiX16efnKstlAM4iMwXq2+lpX0Fe0KsWRkhqDpjCNIzke4guwjjdBwJ4
+         IXM9CcpmbkGxA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, jarkko.nikula@linux.intel.com
+Cc:     haojian.zhuang@gmail.com, kamal.ap@intel.com,
+        andy.shevchenko@gmail.com, robert.jarzmik@free.fr,
+        daniel@zonque.org
+In-Reply-To: <20220630073305.632850-1-jarkko.nikula@linux.intel.com>
+References: <20220630073305.632850-1-jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH v2] spi: pxa2xx: Add support for Intel Meteor Lake-P
+Message-Id: <165659668048.559112.12956890819194351645.b4-ty@kernel.org>
+Date:   Thu, 30 Jun 2022 14:44:40 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165658981602.24632.13597398865917792129.git-patchwork-summary@kernel.org>
-Date:   Thu, 30 Jun 2022 11:50:16 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,24 +54,40 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Thu, 30 Jun 2022 10:33:05 +0300, Jarkko Nikula wrote:
+> Add support for LPSS SPI on Intel Meteor Lake-P. It has three
+> controllers each having two chip selects.
+> 
+> This squashes a fix from Ap, Kamal <kamal.ap@intel.com> fixing incorrect
+> PCI ID of 3rd controller.
+> 
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: spi: aspeed: Fix division by zero
-  Submitter: Cédric Le Goater <clg@kaod.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=652857
-  Lore link: https://lore.kernel.org/r/20220622161617.3719096-1-clg@kaod.org
-    Patches: [v3,1/2] spi: aspeed: Add dev_dbg() to dump the spi-mem direct mapping descriptor
-             [v3,2/2] spi: aspeed: Fix division by zero
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 2
+[1/1] spi: pxa2xx: Add support for Intel Meteor Lake-P
+      commit: 3190d4be3764fd847d57e26197158940e89272ae
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
