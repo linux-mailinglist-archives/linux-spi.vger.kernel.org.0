@@ -2,85 +2,170 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114115612E3
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 09:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31AA56132F
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Jun 2022 09:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiF3HDu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Jun 2022 03:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S230407AbiF3H0K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Jun 2022 03:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiF3HDt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 03:03:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5738033E28
-        for <linux-spi@vger.kernel.org>; Thu, 30 Jun 2022 00:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656572629; x=1688108629;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3T71yGI3xgqjMqu8DLOwct4gWhun0znIsxahv38rovc=;
-  b=k2Ip/9rmw5UZYJBrc4D3EWOVZMqgzS8fqi2hhBycSntaZ874N48dHVMh
-   0swpA+Az3dG3E1HwZXo5Fg8N5ADt+GoZ4DFqw4i/YTL912yPFp3iHWMRz
-   BUwm13Q0sExlr1a114pYfT2jzz+2ZzcY2C3WnBJQLhMXFdWBadKV4GC3e
-   p0SrptIEK1bMlCTEYERWFuLblIFuorohwBAf4ap+3fKl/LdxUMYruivLG
-   S2HzMR2nh/s+z0gmOBK19Q2cd6N5YAouRsy+H3SxT2Knfiar4EIvRSG9G
-   OZE35ZMjsY3qrrZaw2mdLYKsIn07w257POsaup9X4UWWrjhfsu64HJmi8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279810867"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="279810867"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:03:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="647762585"
-Received: from mylly.fi.intel.com (HELO [10.237.72.55]) ([10.237.72.55])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2022 00:03:47 -0700
-Message-ID: <6e0bd3a8-65a4-2066-79f2-d59e6bb2b7ea@linux.intel.com>
-Date:   Thu, 30 Jun 2022 10:03:46 +0300
+        with ESMTP id S230160AbiF3H0K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Jun 2022 03:26:10 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBAA3879C;
+        Thu, 30 Jun 2022 00:26:08 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5C3B810000C;
+        Thu, 30 Jun 2022 07:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656573966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RbHADpDXYr/X5U7Qq4I3DXnnwEmjtF/efxJQ5ykP7Io=;
+        b=VherGTDEfCbIuQysIFuAAJsl6Ygh2UoZMdw+yIdXK2X5fZ8d11J5vIhR/7MQtz3xKOt73Y
+        K9iEIF+mDDrNpg3TX0aMXuLLE/O/nfzayqXQ/mBvf5ITXEE7cCyzKOguOiTyhaHVoZ8RNq
+        yjI3bEpAgxb0qxcHG7QwnMDWdGB9eEqB1NtvIRevfN1BSKWnSHhFvPBgoFt/TYPePBlYAc
+        BygPdlDjczkRo9yZCNecazZuGo+pE1TSxp/532OeL3UjaZ7izxi2jFf4lgjHIg7JfBlBc2
+        e21eQOgI9zwOz8TA+mBYNx/5PRKQDgGfhKq/Dr1p3oa2cs7pVD9FnHIKbdA/Mg==
+Date:   Thu, 30 Jun 2022 09:25:52 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] memory: renesas-rpc-if: Pass device instead of
+ rpcif to rpcif_*()
+Message-ID: <20220630092552.68a8b3ff@xps-13>
+In-Reply-To: <e313b7f9a856fd8546aabb20d44d10e3af6676c6.1656341824.git.geert+renesas@glider.be>
+References: <cover.1656341824.git.geert+renesas@glider.be>
+        <e313b7f9a856fd8546aabb20d44d10e3af6676c6.1656341824.git.geert+renesas@glider.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] spi: pxa2xx: Add support for Intel Meteor Lake PCH-P
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Ap Kamal <kamal.ap@intel.com>
-References: <20220629120700.620108-1-jarkko.nikula@linux.intel.com>
- <CAHp75VdhGDR0cGt2Aky=sRRDB=u4mwxWZgQ+DGL08QZFBMKiAg@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <CAHp75VdhGDR0cGt2Aky=sRRDB=u4mwxWZgQ+DGL08QZFBMKiAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 6/29/22 18:35, Andy Shevchenko wrote:
-> On Wed, Jun 29, 2022 at 2:09 PM Jarkko Nikula
-> <jarkko.nikula@linux.intel.com> wrote:
->>
->> Add support for LPSS SPI on Intel Meteor Lake PCH-P. It has three
->> controllers each having two chip selects.
->>
->> This squashes a fix from Ap, Kamal <kamal.ap@intel.com> fixing incorrect
->> PCI ID of 3rd controller.
-> 
-> With PCH removed from the commit message (including subject)
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-Hmm, right. Thanks Andy, Meteor Lake -P seems to integrate PCH die 
-functionality into a SoC.
+Hi Krzysztof,
 
-Jarkko
+geert+renesas@glider.be wrote on Mon, 27 Jun 2022 17:31:13 +0200:
+
+> Most rpcif_*() API functions do not need access to any other fields in
+> the rpcif structure than the device pointer.  Simplify dependencies by
+> passing the device pointer instead.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/memory/renesas-rpc-if.c | 32 ++++++++++++++++----------------
+>  drivers/mtd/hyperbus/rpc-if.c   | 18 +++++++++---------
+
+[...]
+
+> diff --git a/drivers/mtd/hyperbus/rpc-if.c b/drivers/mtd/hyperbus/rpc-if.c
+> index d00d302434030b20..41734e337ac00e40 100644
+> --- a/drivers/mtd/hyperbus/rpc-if.c
+> +++ b/drivers/mtd/hyperbus/rpc-if.c
+> @@ -56,7 +56,7 @@ static void rpcif_hb_prepare_read(struct rpcif *rpc, vo=
+id *to,
+>  	op.data.nbytes =3D len;
+>  	op.data.buf.in =3D to;
+> =20
+> -	rpcif_prepare(rpc, &op, NULL, NULL);
+> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>  }
+> =20
+>  static void rpcif_hb_prepare_write(struct rpcif *rpc, unsigned long to,
+> @@ -70,7 +70,7 @@ static void rpcif_hb_prepare_write(struct rpcif *rpc, u=
+nsigned long to,
+>  	op.data.nbytes =3D len;
+>  	op.data.buf.out =3D from;
+> =20
+> -	rpcif_prepare(rpc, &op, NULL, NULL);
+> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>  }
+> =20
+>  static u16 rpcif_hb_read16(struct hyperbus_device *hbdev, unsigned long =
+addr)
+> @@ -81,7 +81,7 @@ static u16 rpcif_hb_read16(struct hyperbus_device *hbde=
+v, unsigned long addr)
+> =20
+>  	rpcif_hb_prepare_read(&hyperbus->rpc, &data, addr, 2);
+> =20
+> -	rpcif_manual_xfer(&hyperbus->rpc);
+> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+> =20
+>  	return data.x[0];
+>  }
+> @@ -94,7 +94,7 @@ static void rpcif_hb_write16(struct hyperbus_device *hb=
+dev, unsigned long addr,
+> =20
+>  	rpcif_hb_prepare_write(&hyperbus->rpc, addr, &data, 2);
+> =20
+> -	rpcif_manual_xfer(&hyperbus->rpc);
+> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+>  }
+> =20
+>  static void rpcif_hb_copy_from(struct hyperbus_device *hbdev, void *to,
+> @@ -105,7 +105,7 @@ static void rpcif_hb_copy_from(struct hyperbus_device=
+ *hbdev, void *to,
+> =20
+>  	rpcif_hb_prepare_read(&hyperbus->rpc, to, from, len);
+> =20
+> -	rpcif_dirmap_read(&hyperbus->rpc, from, len, to);
+> +	rpcif_dirmap_read(hyperbus->rpc.dev, from, len, to);
+>  }
+> =20
+>  static const struct hyperbus_ops rpcif_hb_ops =3D {
+> @@ -130,9 +130,9 @@ static int rpcif_hb_probe(struct platform_device *pde=
+v)
+> =20
+>  	platform_set_drvdata(pdev, hyperbus);
+> =20
+> -	rpcif_enable_rpm(&hyperbus->rpc);
+> +	rpcif_enable_rpm(hyperbus->rpc.dev);
+> =20
+> -	error =3D rpcif_hw_init(&hyperbus->rpc, true);
+> +	error =3D rpcif_hw_init(hyperbus->rpc.dev, true);
+>  	if (error)
+>  		goto out_disable_rpm;
+> =20
+> @@ -150,7 +150,7 @@ static int rpcif_hb_probe(struct platform_device *pde=
+v)
+>  	return 0;
+> =20
+>  out_disable_rpm:
+> -	rpcif_disable_rpm(&hyperbus->rpc);
+> +	rpcif_disable_rpm(hyperbus->rpc.dev);
+>  	return error;
+>  }
+
+This will only apply on top of mtd/next, because that
+rpcif_disable_rpm() balance call was very recently contributed by Geert:
+https://lore.kernel.org/linux-mtd/f3070e1af480cb252ae183d479a593dbbf947685.=
+1655457790.git.geert+renesas@glider.be/
+
+So we need to first share an immutable tag on the current mtd/next
+branch. Richard, that is my vacation gift for you :)
+
+Otherwise,
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l
