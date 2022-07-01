@@ -2,72 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EB9562DE2
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jul 2022 10:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7F4563166
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jul 2022 12:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiGAIXK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jul 2022 04:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S233496AbiGAKbZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jul 2022 06:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236346AbiGAIWe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jul 2022 04:22:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9012E72EF5
-        for <linux-spi@vger.kernel.org>; Fri,  1 Jul 2022 01:21:49 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p14so1779318pfh.6
-        for <linux-spi@vger.kernel.org>; Fri, 01 Jul 2022 01:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RyxNHb/WQ8LrNXSqNKNJKWjupHwbyKneSV+LOjKKPXE=;
-        b=uOVQ4n4h08T7IuN6KoAE+gQY7eWAHlRu5SCNDJLjFwYc5drt5YI6uQaz8KcufNiKYo
-         ReQ9iDTSUK6OYYym6wlYwFFWXMXQKoYXLa9JzGzdGN4LHUeN2bllMjQZpGGOR0IdPaBT
-         CkMH1PSTSlpDWIM4FG5C8nfWbqI4yKAr9TPy8mQnKY2wwRXaFEUoDegc5dj+8B13E4YE
-         tS1IUkWYhr8gJdRQnSiunLrXqtLhEyhOTNyf/Bv2kdZ/POyi8Rvi3s8EJ6RfPR754XoE
-         IqUMnYlSo+xUHUVmR4/7HTK4HJWHUCfWXWxk4CktXB42mQit+a8gjc2yWOqogvALGr90
-         4yuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RyxNHb/WQ8LrNXSqNKNJKWjupHwbyKneSV+LOjKKPXE=;
-        b=ZtfMDptHQDugzXRC+NZ/SSjd/TzwIyGtXRP5eOWjT7u/HVmzZKMsEk8319nac5G7Xb
-         2hn0yw1ZCMmjflObAANj/h03mrxxn9T05CkQlTlp3CVV2KzeJ1+4a9I+AAmNZNscwe3C
-         I3A8r1h82bM1pm421jSHSiChPLEASJDDsHiqwUWLjdSTisYy8zKK3Ntfox9NcS8SP941
-         nBmAxo0yc73s3BjGQ4k+CYdz6cKosmuFgn/ZjyFZ4I+6aGfJMQuLM1bzSXlDGeq5VQp5
-         jFY4UumcLtNJtouf1DNJ3e2WLZ66JZ5PUIsCC6hmjK4meq5GUmk4itrLEMgAiD6b9G0G
-         gz3w==
-X-Gm-Message-State: AJIora9vh8KOF0KIE2knENPCCNJKeBtu4oIgxn4FI9uGZFSVtSMOUQAM
-        x5VWrQkxAkEkK6RVn/AhjXvKkQ==
-X-Google-Smtp-Source: AGRyM1uSv2NbtHLEM0xY2pfQz10qfkB5qmBDotngIRAO8ceMzGxHfOY0DUW/Ub5fB+AniWRE/Wqv6w==
-X-Received: by 2002:a63:7448:0:b0:40c:7d4b:e7c6 with SMTP id e8-20020a637448000000b0040c7d4be7c6mr11292239pgn.140.1656663709116;
-        Fri, 01 Jul 2022 01:21:49 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c3c400b00163f5028fd6sm14979185plj.5.2022.07.01.01.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:48 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 23/30] spi: qcom: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:18 +0530
-Message-Id: <b89064460c8b0e5366f29b22c6c5bce1258dd495.1656660185.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
-References: <cover.1656660185.git.viresh.kumar@linaro.org>
+        with ESMTP id S232328AbiGAKbY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jul 2022 06:31:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715C76942;
+        Fri,  1 Jul 2022 03:31:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 906FEB82F4D;
+        Fri,  1 Jul 2022 10:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58122C3411E;
+        Fri,  1 Jul 2022 10:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656671480;
+        bh=PzSQe20vyGgKjj7bh4FY+eUYxZ15YBI0Skb7DjyLz/8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=kwBlRyc/+7zHK/+D1Orop4T33zg2uPrmUjsGkNZAU52FjlKmpsb++xU1wPmV1Sdrw
+         k4lB1lGBPqolSXmaVZcNAGFjgST13USJwcNorRHO0OGx/hzi0VABG7ZTo8N7/TuHE2
+         HxaECpn986NnZFTn1yzoeBsf+ZI4OSJnoey0UsvUno7oDZ+pMXkeNnXKR1PwQQv7H/
+         N9kuWrxo5c2iCitQqKmW068YiY9uPx4FEOea91RPuRZGwW8oY4qU7G4DXYqbe8FC8m
+         c/Z3X/cBEeVfPh/ZqshT/s0Jav6xLxcoMGxNTeEs/B5Wuklqf7C6n5RtWyUg6RAJla
+         6Gx1v1dJgB63g==
+From:   Mark Brown <broonie@kernel.org>
+To:     mail@conchuod.ie, palmer@dabbelt.com, palmer@rivosinc.com,
+        lgirdwood@gmail.com, thierry.reding@gmail.com,
+        fancer.lancer@gmail.com, daniel.lezcano@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        daniel@ffwll.ch, sam@ravnborg.org, vkoul@kernel.org,
+        airlied@linux.ie, Eugeniy.Paltsev@synopsys.com
+Cc:     conor.dooley@microchip.com, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        niklas.cassel@wdc.com, linux-kernel@vger.kernel.org,
+        damien.lemoal@opensource.wdc.com, dmaengine@vger.kernel.org,
+        aou@eecs.berkeley.edu, joabreu@synopsys.com, tglx@linutronix.de,
+        dillon.minfei@gmail.com, alsa-devel@alsa-project.org,
+        geert@linux-m68k.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, masahiroy@kernel.org
+In-Reply-To: <20220629184343.3438856-1-mail@conchuod.ie>
+References: <20220629184343.3438856-1-mail@conchuod.ie>
+Subject: Re: (subset) [PATCH v3 00/15] Canaan devicetree fixes
+Message-Id: <165667147407.1756128.12037224598634241859.b4-ty@kernel.org>
+Date:   Fri, 01 Jul 2022 11:31:14 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +64,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The OPP core now provides a unified API for setting all configuration
-types, i.e. dev_pm_opp_set_config().
+On Wed, 29 Jun 2022 19:43:29 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Hey all,
+> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+> based boards. To make keeping it that way a little easier, I changed the
+> Canaan devicetree Makefile so that it would build all of the devicetrees
+> in the directory if SOC_CANAAN.
+> 
+> [...]
 
-Lets start using it.
+Applied to
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Mark, I have kept your Ack as the diff is really small, clk_names is an array
-now.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
- drivers/spi/spi-geni-qcom.c | 6 +++++-
- drivers/spi/spi-qcom-qspi.c | 6 +++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 4e83cc5b445d..428585bae6a8 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -892,6 +892,10 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	struct clk *clk;
- 	struct device *dev = &pdev->dev;
-+	struct dev_pm_opp_config config = {
-+		.clk_names = (const char *[]){ "se" },
-+		.clk_count = 1,
-+	};
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-@@ -922,7 +926,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	mas->se.base = base;
- 	mas->se.clk = clk;
- 
--	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
-+	ret = devm_pm_opp_set_config(&pdev->dev, &config);
- 	if (ret)
- 		return ret;
- 	/* OPP table is optional */
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index c334dfec4117..7e7732d61b25 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -458,6 +458,10 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	struct device *dev;
- 	struct spi_master *master;
- 	struct qcom_qspi *ctrl;
-+	struct dev_pm_opp_config config = {
-+		.clk_names = (const char *[]){ "core" },
-+		.clk_count = 1,
-+	};
- 
- 	dev = &pdev->dev;
- 
-@@ -529,7 +533,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->handle_err = qcom_qspi_handle_err;
- 	master->auto_runtime_pm = true;
- 
--	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
-+	ret = devm_pm_opp_set_config(&pdev->dev, &config);
- 	if (ret)
- 		return ret;
- 	/* OPP table is optional */
--- 
-2.31.1.272.g89b43f80a514
+[04/15] spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
+        commit: 8b037cabc4966b010c44a76e05a43d276318bc49
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
