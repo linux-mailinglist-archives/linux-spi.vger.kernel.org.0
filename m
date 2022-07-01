@@ -2,70 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2588256325A
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jul 2022 13:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE352563A39
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jul 2022 21:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbiGALOV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jul 2022 07:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S230009AbiGATiU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jul 2022 15:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiGALOT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jul 2022 07:14:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF22E1E3FB;
-        Fri,  1 Jul 2022 04:14:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE8FA1424;
-        Fri,  1 Jul 2022 04:14:18 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 551EF3F66F;
-        Fri,  1 Jul 2022 04:14:13 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 12:14:10 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Conor Dooley <mail@conchuod.ie>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        with ESMTP id S229534AbiGATiT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jul 2022 15:38:19 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D221CD;
+        Fri,  1 Jul 2022 12:38:16 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id p128so3236814iof.1;
+        Fri, 01 Jul 2022 12:38:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oYGwea+9Dc5qlyJ44ffM89yyXqLnWemdQ1bnBNc3VDk=;
+        b=6QOA9ax1kJ8lkvv7TbUOkArIBVr509K1DVj7ov9NudWzDoZ/76i0t0514oVY23C9HL
+         cUFsbPL2bDjYLGVGIe1m3p75/Z46VR2itFkRrcisIh3BuSzEIAtnnDOcJvBLRIpzdlCS
+         ig/xwG+m2OYOIgBuMR2rNnwn8To6fvbFdN7X7lVtei4PoIRTgDrG9hxrKYvOadS77K4v
+         s6P8tZpXpQL/nBxF6o8yZ3qFEPyWeYwGmJBcgPoPnZd5xzewxcNCn5KO7Mgj3fCWSjCG
+         7goLcJo64Plmu6B+aOZJIEjlujTKx3kLIiqUO+jtufzY+Z0Vo8uXkwbf2FOJmzU4cBz7
+         P/Lw==
+X-Gm-Message-State: AJIora/XWL19NAAWnEz02E5YZrtidnUeLstev22l9xQZQwtaTmcpHkdI
+        Ha62FMqts5lrGjosGGKN/g==
+X-Google-Smtp-Source: AGRyM1uejcIwzsBE+pycB2Qnm2yYV9wtrnyFGLocbsLu1VxbRBag5KlqP0ugvtvcy/HrL02BZGM2Jw==
+X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id m13-20020a0566022e8d00b0064fb683c70dmr8094734iow.62.1656704295753;
+        Fri, 01 Jul 2022 12:38:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id v1-20020a92c801000000b002d8f1269e97sm9277818iln.42.2022.07.01.12.38.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 12:38:15 -0700 (PDT)
+Received: (nullmailer pid 1385506 invoked by uid 1000);
+        Fri, 01 Jul 2022 19:38:12 -0000
+Date:   Fri, 1 Jul 2022 13:38:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Rob Herring <robh+dt@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        devicetree@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Dillon Min <dillon.minfei@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 00/15] Canaan devicetree fixes
-Message-ID: <20220701111410.mzfgmdabzmfubygm@bogus>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        David Airlie <airlied@linux.ie>, alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-riscv@lists.infradead.org, Daniel Vetter <daniel@ffwll.ch>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>
+Subject: Re: [PATCH v3 02/15] dt-bindings: display: ili9341: document canaan
+ kd233's lcd
+Message-ID: <20220701193812.GA1385448-robh@kernel.org>
 References: <20220629184343.3438856-1-mail@conchuod.ie>
- <Yr3PKR0Uj1bE5Y6O@x1-carbon>
- <20220630175318.g2zmu6ek7l5iakve@bogus>
- <f228057b-7c17-e536-ce6f-6597e263f06d@opensource.wdc.com>
+ <20220629184343.3438856-3-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f228057b-7c17-e536-ce6f-6597e263f06d@opensource.wdc.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220629184343.3438856-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +85,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 06:16:14AM +0900, Damien Le Moal wrote:
-> On 7/1/22 02:53, Sudeep Holla wrote:
-> > On Thu, Jun 30, 2022 at 04:28:26PM +0000, Niklas Cassel wrote:
-> >> On Wed, Jun 29, 2022 at 07:43:29PM +0100, Conor Dooley wrote:
-> >>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>
-> >>> Hey all,
-> >>> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
-> >>> based boards. To make keeping it that way a little easier, I changed the
-> >>> Canaan devicetree Makefile so that it would build all of the devicetrees
-> >>> in the directory if SOC_CANAAN.
-> >>>
-> >>> I *DO NOT* have any Canaan hardware so I have not tested any of this in
-> >>> action. Since I sent v1, I tried to buy some since it's cheap - but could
-> >>> out of the limited stockists none seemed to want to deliver to Ireland :(
-> >>> I based the series on next-20220617.
-> >>>
-> >>
-> >> I first tried to apply your series on top of next-20220630,
-> >> but was greeted by a bunch of different warnings on boot,
-> >> including endless RCU stall warnings.
-> >> However, even when booting next-20220630 without your patches,
-> >> I got the same warnings and RCU stall.
-> >>
-> > 
-> > Is it possible to share the boot logs please ?
-> > Conor is having issues with my arch_topology/cacheinfo updates in -next.
-> > I would like to know if your issue is related to that or not ?
+On Wed, 29 Jun 2022 19:43:31 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> FYI, I see rcu warnings on boot on my dual-socket 8-cores Xeon system, but
-> the same kernel does not have the rcu warnings with an AMD Epyc single
-> socket 16-cores box.
+> The Canaan KD233 development board has a built in LCD.
+> Add a specific compatible for it.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml        | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-And any chances of seeing the logs ?
-
--- 
-Regards,
-Sudeep
+Reviewed-by: Rob Herring <robh@kernel.org>
