@@ -2,128 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF87567389
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 17:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5753456759E
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 19:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiGEPwQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jul 2022 11:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        id S232929AbiGER1P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jul 2022 13:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiGEPvs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 11:51:48 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2053.outbound.protection.outlook.com [40.107.21.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF351E3CF;
-        Tue,  5 Jul 2022 08:50:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TaFOGMI6+RvSN33pShQYA0bZ8U6MGBLp5RH5QDba1q7qmnOoCTqoGl2xB6KkzTDYmhxW8aFDK7Ao0q+2UX6B61TvZAZWlFzoyiFhfvsBlmY0W3QUo6W2LyheSRV/ymT3ALflkuzGmEIYDs1DN4f1T+ljK2vyyES9HyPAnjppTjwjvi/3RmDagbKBBet723rYV+tkDf6fxuseWOVZT+OvM9OwfS6MovUIC9ufZcebsBnBxSPzVto+cpfkfeVtGsDawctoOGsO9L0SP+K1ueIsMN25wFFEMoel20HPBJLj6HnIPgINlWITu03aB6IqIcatx1exf1CprYYSXmxaUJvoFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ew1u1ODITEMy6g8Dy8clqRvrkYxspm6QD3C86Cx7Vxk=;
- b=Vv5mYGbwQKsAkxh3cd/rD+CTxVm2tSje++2KC6+6EXw2VaFOVbcitKO3qkvwDa8CDehaHm+P0MGmkhehODqyX2yGZdq0uQYXmoKwU/mjaireZNSohvv1VMQh3yv0v4vrAYfxzj5yrqAIYrKWfCZ9emzqQQvbegVyurvq95tLyBuOXaJzr7pNTyqyjiAGEYGCLTqaYJgNV5XUR7IFGq+KNXmnpkl/jQ50A3iiUr60XorYzCabW+uFOA57I3aI9o4DwhGPT6LM3TPOPPEqyFuQ9lowAfW5gbIRjJ4dJeD3qXx7AQYHmbr3GA5ksOOhTAKOuTOOpe6yrPoU/hIcxWlZwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ew1u1ODITEMy6g8Dy8clqRvrkYxspm6QD3C86Cx7Vxk=;
- b=krhq+vuXj0HDzCI0LyxfKiShAuG0OQQdzH1W0+U7fpKsKciVkvKvGIzvxkM2Cjl2giXtuKtiUXeKfExOqB+l8WY+pbOLOtVrBfX5W8y7mdlVyqlob9LLlxM0kyNvZlbdDuG3uwbNpC10kYPsNfIB77WlwC64SP4MVD1lPqmWJ2A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com (2603:10a6:10:2e1::21)
- by DB7PR04MB4442.eurprd04.prod.outlook.com (2603:10a6:5:35::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Tue, 5 Jul
- 2022 15:50:38 +0000
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::5c49:dd85:a8d0:2907]) by DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::5c49:dd85:a8d0:2907%3]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 15:50:38 +0000
-Date:   Tue, 5 Jul 2022 10:50:31 -0500
-From:   Han Xu <han.xu@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Walle <michael@walle.cc>, Bough Chen <haibo.chen@nxp.com>,
-        ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        singh.kuldeep87k@gmail.com, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org, festevam@gmail.com,
-        dl-linux-imx <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-Message-ID: <20220705155031.zk36jsq4q2ac2ow4@umbrella>
-References: <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
- <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
- <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
- <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
- <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
- <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
- <20220705145226.tarpvub6bh67tj63@umbrella>
- <0bd271e9-8d9b-7388-2d9b-65cc39a54f8c@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bd271e9-8d9b-7388-2d9b-65cc39a54f8c@linaro.org>
-User-Agent: NeoMutt/20171215
-X-ClientProxiedBy: SJ0PR13CA0175.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::30) To DU2PR04MB8774.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::21)
+        with ESMTP id S232877AbiGER1O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 13:27:14 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20BC201A4
+        for <linux-spi@vger.kernel.org>; Tue,  5 Jul 2022 10:27:12 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id h19so14692608qtp.6
+        for <linux-spi@vger.kernel.org>; Tue, 05 Jul 2022 10:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=LZhqPStqk7RMo9IbzNFzEEPoby4RShbvRSjUDYRP+KA=;
+        b=LkxcYdhaQ5t09jyQxg/LaC1sauO+F4s6rdpX8AWtkAZZczzUW/xz1kvg4GVixypZ0R
+         UR/DrT8o2dt3OcC5YzEtNiLAFIC5MObwtdhIRiEViAoOK/whfnfO61EE8xERA0WOlyIT
+         dDjuesIYAZVtv8IhlaK88kSKeT+pFdGLZsIBY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=LZhqPStqk7RMo9IbzNFzEEPoby4RShbvRSjUDYRP+KA=;
+        b=diRNYFdKGuC3vX/7GcaxSv5dOH7YPVKiqxabiK3mlWR/5RY1Qjkg2U/qlxLYgAtXkO
+         tZpBBmYCeAjOYrmekZpoWZW9f2ISsiMfaRRBOBiHh9olsI/DD6pyPv3BSaPiSw+R+YXi
+         vt1PBK3Vhhcb5XgFZKm9bqm8pe9xoUexyrdoEG/BW/wTNsoZt9rTXjymcorc6FEIbU0E
+         TZQ5OkvvA1Axw7/BLp79ih8NVSrYw9aupZcqf+P+BWLa9xZjP44ppcEaCpbp9ya22Cjh
+         K4ICa4Wj2ZLrkUdm4Qirekb2dxfNIkD0qUzX3EG+lp3DCcQyOmizb0w/jIuotkv04p7b
+         qNWw==
+X-Gm-Message-State: AJIora+7rWz8SWyKky5B+hG5lYjKaQey8xNFW8pXJWLXfjXqyoowy+d9
+        wY9jHKuxEW7p8s9EGfDZ4YAazA==
+X-Google-Smtp-Source: AGRyM1vOVkXysb0YxR84eHakGgsbHGQgGl1iVwbyjJOjUVtejkZXor5EdPQQsA1F1Wx/mschZEKEQA==
+X-Received: by 2002:a05:6214:250c:b0:472:6e5e:e2f3 with SMTP id gf12-20020a056214250c00b004726e5ee2f3mr32999791qvb.45.1657042031661;
+        Tue, 05 Jul 2022 10:27:11 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id d8-20020ac85ac8000000b00304e70585f9sm24439851qtd.72.2022.07.05.10.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 10:27:10 -0700 (PDT)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
+        f.fainelli@gmail.com, anand.gore@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jie Deng <jie.deng@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Michael Walle <michael@walle.cc>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, soc@kernel.org
+Subject: [PATCH 0/9] arm: bcmbca: Move BCM63138 SoC support under ARCH_BCMBCA
+Date:   Tue,  5 Jul 2022 10:26:04 -0700
+Message-Id: <20220705172613.21152-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 59b41f85-7619-4b19-8dca-08da5e9e1b2d
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4442:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oeH28k31DTubtUw2pOoFxIk1qgHeBXEe1GEHyQAmi2uIIFkKa5NSUqdXR3Inod3moePwvOn/ui5EeRCcjkAei7hkWtISvn6UjRkr82ZAnybWZuuwczKe1XarcUP08jwqP0BCsyvCNbmXHA9cagws04qOMqvp8NlGIJ9F0CO6+Ivx2Sn2EMjNE4wGTBZ5Si0t9Vu4JyCFFKw1SCFX7N9qYMDY5KP36Jxs9zlwrA8Gtkt1s5b5ta/c1hTfBNh+dEFfsh9pIGmuTvxi7r/2MFbzfzhKufdcKcgnLNNV5JHgKJx9aDa2V+JTLmrF98jDYd7vncyD0fSTVBqAJNKQiJNdidzh5iGZYwN3GfVkVv0A0xyLj3nKIhInHXdLM44+oX962MVgQUp2LKpJcpkXZxb6hfcYWIe7tkW9/LIAvgFR7mg2PcEQOo2kbOeTynvTFz8W/nD3HNDposNDxcz1hewR5/ZN+K85551v84m7qO6Rl1qAMXaFq9vdur1NWDwegyPqukOj/nySYpZVdrvjUdKOINBoMip9pTvpN52ORJQV4UjX12q4KeGaTf06oYE8wwXwM1VpzfXgCsSZjjy4r4ySqLRdEPPTriNvts9ZD0L9IasV+9IKidwgZvusk8OxZVkTEUNWsnQNFEwb1cw/ZGmwkeZgIrsh7S4IDSBmZBfI+JXY2QmfaNTLp+KfakjpjEDEo4afFXHcxc1MKih9I0Bd9rQUkR4om4S+rIKA8yQbbSOWkQw3aqaudwM9RX1ycqXA/V5C8dH0Q2tfeMb2MYUbDpDARellR9/XQRs7pdeQrBd1CuAy9gX8EBOqCABK+Uj1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8774.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(9686003)(6486002)(86362001)(53546011)(6512007)(26005)(316002)(33716001)(66946007)(66476007)(4326008)(8676002)(6666004)(6916009)(54906003)(478600001)(66556008)(52116002)(41300700001)(6506007)(186003)(1076003)(83380400001)(38350700002)(7416002)(8936002)(44832011)(2906002)(38100700002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?izpXDcYcb5pnfdx9miKPYlPfaDhoxXFXBQ+GryqtXb1aU4FUdMLsLvkrCKg+?=
- =?us-ascii?Q?84JEwpWAkOgRICT0ETg7fLDfoKcgpFYmAY5hwNKeJc414hnm88KE/3kqNP59?=
- =?us-ascii?Q?LEJ44JRTdkSFLMYR9z9nu0S2Q86STCI0POKONoBBWQT5JH3XrlW0Yn/ktToc?=
- =?us-ascii?Q?5OvXFzGmEGJosanqSZhphQUp/THhjHe8yb+p9Wls1CrlCS4TnWJ1wrhOg1eG?=
- =?us-ascii?Q?5lgNQ78Muypk0kG06redSwae8qs/ELkBaOmY0XjickO+DkW2lqPGjy2yCaC9?=
- =?us-ascii?Q?iOlv1y74jc8r9JW3GoUZKG4s9BRJ8JT7Wpi3OHKtjQOQgt2swp/j1d7vvhFU?=
- =?us-ascii?Q?qtFnmopLzIyqDkYCOrZzgtCH7zJ6gKrWLBVQJoGpkZAdI2hCKsHk0tdbCjIB?=
- =?us-ascii?Q?ioHzXcGj2OTLIpI6dqW1NdYWIAZqXvv4FyB8EJCME/1+2WqR8ZuOnnrIBt6n?=
- =?us-ascii?Q?7bchuNRfq/Gw9hvSLwtT+WKtHW6rIh8YSrXVoJz6/NJswAFhejUbaDVXsN8w?=
- =?us-ascii?Q?KtqWNXEGZlj2EAHSCVwwDW6iSZTym8miCu4EmjVSYrhI85qpBcYFOmkDfpjX?=
- =?us-ascii?Q?pOhNVBLf+u9AlTH/ZsYJRRRQNYvcHoPgapFxHjp5pi8BETitK95CByKq9Eq5?=
- =?us-ascii?Q?5/g+h9UvY9lAk7IxG8ggOp+QLXKEy55RsxII8/zMfYObpnujJ0oaluutFjQn?=
- =?us-ascii?Q?D+m2Y5C9oXt2mc9q1ngicT5uBbwhTM8rpIVWb2FszFRNqiGX5tLhyj0hEAXq?=
- =?us-ascii?Q?cSNlqsN5QD3AhYIU80yfIO45B667c9cFd0u1aJdJtSRrEpRK7axfYpBx2Y2K?=
- =?us-ascii?Q?MtwOfdazSshrdh+KX9AgINk/NnFqdNeJC60mDMk03UizTwO4jh+YQxogyAC0?=
- =?us-ascii?Q?KPPel/EiZqImqT6is8vIF/biy5FPBBykO1z+I/Hcl76HU6BInOS9OHuzhaDg?=
- =?us-ascii?Q?HbLNUbL8op8anYng6hyYxsPjcr8TEBBOvzht59xCUu8nFJbLENIfsclxCbVb?=
- =?us-ascii?Q?+b8XhtdcvS5MDOhNxdisS6zV+wmdJFCAGIQzBZzaMtmvbT18OTXMW3ptqVN0?=
- =?us-ascii?Q?rTqbtfeFmgYtaelBNf5qC/DDvGbMgrB0dnl56t1ypmz88gCDN7fOqrTg1kJ9?=
- =?us-ascii?Q?G12fAQBWSTGlfldykC69Zr+5tRPS4IBt+xW07q8tPKu1bhm02qJbUADpcpoC?=
- =?us-ascii?Q?ykq6bRRV5cXz1Tf6phMwsb3nZb/aAZ9s35Hzj6iSiPFBMOOEJo9oy2pKWbsi?=
- =?us-ascii?Q?bQZr3UmppsR2kkX9BmhAYpKJC0+WkRqn5mTh2rPapLMFBAm+OvewAJLgkYNw?=
- =?us-ascii?Q?Iute7873BqxNtqNO5Pyc0FgpTIrZWL3yOM+oZhIkSg0rhsHLnwUsDvpN4r/p?=
- =?us-ascii?Q?XcwNHmY7nwknYiSLpnMkgJhJuQKmELFshPsdLjDGMdCEg9jaErCGhUo6yIrz?=
- =?us-ascii?Q?Pq/9XEI7CXWxzmh7qrLO6gWt85aTZlgzGf272/2F9hQFNPMvNf5hM2TNizwl?=
- =?us-ascii?Q?cGlCDOckJCaBGwwkXZ6SPuqNCyoc1BTiuITWAGhGn0HXiyGejHx6GCVcTlLC?=
- =?us-ascii?Q?raEJZ2zvKvG6/ErNzFpqTSEBNAPO6RqZ95E2Npxg?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59b41f85-7619-4b19-8dca-08da5e9e1b2d
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8774.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 15:50:38.2820
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7beKaNqnieQRfX/zz8df9Cb7yVA9J3OpwIcH0aGNfYL+6j4k2yySazGJ+GM2bwTK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4442
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b1f2e605e3122913"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,62 +115,131 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22/07/05 05:38PM, Krzysztof Kozlowski wrote:
-> On 05/07/2022 16:52, Han Xu wrote:
-> > On 22/07/05 04:12PM, Krzysztof Kozlowski wrote:
-> >> On 05/07/2022 16:06, Michael Walle wrote:
-> >>>
-> >>>>>
-> >>>>> I think you could use here clock cycles or clock phase, but then it 
-> >>>>> has to be obvious
-> >>>>> it is that unit.
-> >>>>
-> >>>> Hi Krzysztof,
-> >>>>
-> >>>> Let me clarify it, in the document a term "delay cell" was used to
-> >>>> descript this register bit. Each delay cell equals "1/32 clock phase",
-> >>>> so the unit of delay cell is clock phase. The value user need set in
-> >>>> DT just number to define how many delay cells needed.
-> >>>
-> >>> Then should the unit be "-degrees" and the possible range 0-180?
-> >>
-> >> Thanks. We don't have it documented currently, but the unit seems
-> >> reasonable.
-> > 
-> > IMO, use the unit "-degrees" makes it more complicate. Personaly I would
-> > calculate how many clock cycle delay needed, such as 1/4 clock cycle or half
-> > clock cycle. Using degree brings extra calculation.
-> 
-> And what if the next device uses a bit different divider? Like 1/16?
-> This is why we have standard units so people won't push register values
-> into the bindings.
-> 
-> > 
-> > The granularity of the clock phase change is 1/32 of 180 degree, but the range
-> > 0-180 make people feel it can be set in any degree in range.
-> 
-> Yes, because that's how the bindings are being written - allowing any
-> reasonable value, not register-specific value, to be used because it is
-> the most flexible, hardware-independent and allows further customization
-> of bindings (e.g. new devices). Embedding device programming model into
-> the bindings contradicts it.
-> 
-> Second, nothing stops you from narrowing the acceptable values with an
-> enum. This still allows extension. Your 1/32 does not.
-> 
-> > 
-> > If I describe all details of the relation between "nxp,fspi-dll-slvdly" and
-> > "delay cell" in patch v2, do you think it's clear for users?
-> 
-> 1/32 could be a nice unit, but degrees is better. Just like uV is better
-> than 1/32 of V. Like 1 us is better than 1/32 of ms.
-> 
-> Do you see  in the bindings many other values like time, potential,
-> current or power described in 1/32 units?
+--000000000000b1f2e605e3122913
+Content-Transfer-Encoding: 8bit
 
-That make sense. I will use degree as the unit and round to register proper
-value in driver as Michael suggested. Thanks for all comments.
+Now that Broadcom Broadband arch ARCH_BCMBCA is in the kernel, this change
+migrates the existing broadband chip BCM63138 support to ARCH_BCMBCA. It also
+delete the old ARCH_BCM_63XX config as no other chip uses it.
 
-> 
-> Best regards,
-> Krzysztof
+Verified on BCM963138REF board with ramdisk boot.
+
+
+William Zhang (9):
+  dt-bindings: arm: add BCM63138 SoC
+  ARM: dts: Move BCM963138DVT board dts to ARCH_BCMBCA
+  ARM: dts: update dts files for bcmbca SoC BCM63138
+  ARM: dts: Add BCM63138 generic board dts
+  arm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+  arm: bcmbca: Move BCM63138 ARCH_BCM_63XX config to ARCH_BCMBCA
+  arm: bcmbca: Add BCMBCA sub platforms
+  MAINTAINERS: Move BCM63138 to bcmbca arch entry
+  ARM: multi_v7_defconfig: Update configs for BCM63138
+
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |  8 +++
+ MAINTAINERS                                   | 10 +--
+ arch/arm/Kconfig.debug                        |  2 +-
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ arch/arm/boot/dts/bcm63138.dtsi               | 18 +++---
+ arch/arm/boot/dts/bcm963138.dts               | 26 ++++++++
+ arch/arm/boot/dts/bcm963138dvt.dts            |  8 +--
+ arch/arm/configs/multi_v7_defconfig           |  4 +-
+ arch/arm/mach-bcm/Kconfig                     | 61 +++++++++++++------
+ arch/arm/mach-bcm/Makefile                    |  7 +--
+ arch/arm/mach-bcm/bcm63xx.c                   | 17 ------
+ drivers/ata/Kconfig                           |  2 +-
+ drivers/char/hw_random/Kconfig                |  2 +-
+ drivers/clk/bcm/Kconfig                       |  4 +-
+ drivers/i2c/busses/Kconfig                    |  2 +-
+ drivers/phy/broadcom/Kconfig                  |  2 +-
+ drivers/spi/Kconfig                           |  2 +-
+ drivers/tty/serial/Kconfig                    |  4 +-
+ 18 files changed, 108 insertions(+), 75 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm963138.dts
+ delete mode 100644 arch/arm/mach-bcm/bcm63xx.c
+
+-- 
+2.34.1
+
+
+--000000000000b1f2e605e3122913
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJzZcMrLCPErIibvl0hXUANg4zg4
+ed6ZN3tb0yJx/4VmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwNTE3MjcxMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQDPYP0sJ5RAbvzNwmxKl8TGITAELC7t1EGKP4PsS/8TDFYx
+hM59y1oFRsk7qUSxg0SrfBoZ57bwGwIl8orZRhNAgcZn11Vnxf2R6kORMjXIC0NKe71aYQREY2wj
+WmJz0dea3cGwKbsNIFXlCq4YXjp3oPu2dmv9VDW/N7vlhOcbfCSPP+EeoPAVQrmJ3Fn+MJLOCGOW
+7I5hwg0faEcbj32AEOJPha681Gg/vWlsGuc2itYJkoRbHtdZPpvTOIlQ6WO2O1xwqr60tQi3w8uo
+K/P0yViS5O3/zrmMxnbgxDYy04KdGP/D3Gi4Nx2btrbS+wQ6H0huen6PqIELW6E3sKvZ
+--000000000000b1f2e605e3122913--
