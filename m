@@ -2,123 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82EB566951
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 13:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479E5566FD2
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 15:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiGELcH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jul 2022 07:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S232723AbiGENtX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jul 2022 09:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiGELcG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 07:32:06 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF301403F;
-        Tue,  5 Jul 2022 04:32:05 -0700 (PDT)
+        with ESMTP id S232661AbiGENss (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 09:48:48 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2043.outbound.protection.outlook.com [40.107.22.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B7A20F41;
+        Tue,  5 Jul 2022 06:20:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KC+InPfdxLGyJG11Edv2MAGATIydlh0GKcpCV9wm6JgFsyWV9P5otupPkw9YCUCApNZNgn9t34RTV6fQUgmlnmFLKHZ5j2T9r79622Ic5mcV540D8eoms+eDvs/WvSZwzriq9UAtCHirlyeCyYK0tB5x09G8BuJPRSeYL2YT3y0J4wdZ2E73s1n0SduJOd/cvCPvxXC+pzJaCXZYF3WaxYxzPi76stBBgafqxfyJSNS8qKDGU+bEtFr/+Lu/XWm5nwExFW7CFrOXdx4fB4AYXNSEBDA5NAG/PetePDRoAPtmgRec/2Q0aKVojxzGoruaZRYmPUklNY2glnz6C1J6BQ==
+ b=KtslqcbqGHQglcejAiA59NSCcsroLSF5mZ+Zuex7NSnZRuiruKdW7NHu1yFe1YBEn2AM83VR09mdFkLREV+wLs5zNtzFO5/YCZIurH0UoT1R862kLqJY+eRfEE3cvs6wP1USfFtEmlbPgrC4m/TkgQ4wHA02y2YFnH09rT4oGpqjQsjYXA5DOFwPGFxXwNk5ol6kDSy+iiZbHtbVtucLo47e04h3otnBq+pAd+MQ5LswrkjiOs2Q8QTnS0P4/x5X2pW2eJxy7Qo2Qa7+2N/Uor9aopFyr4vTt7xWVjdwyCMJU+kBT01FnlFMxoKHfHeB614O58+Cfl96kdF+5fGIUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2dQq2xIz3pS0uEbEibeKv1yy1ioyUYZTIYE0HyoHvs=;
- b=bZ3mU2aC12zp2qekFu94mvP1THv5iQhOyjA0fBdBAzpcdRBCweqBWj+sfrJ9Xo6Nr820eWb843uQfxFL9jCNcyM5FX8Ehq3f02pdCfl5DJr6+N5Y2JndCZEJSafUjKkU9CJDQ02zdB8vAwDyLYsi4t9gy1ZZSjHozhG+leDabF58j82emCe7z4LTmLa+LMZuGclFS6Bpsnrqp3u4j/WgdUzSCe1WWCuBxyfrMqmzsucOzk59MSQpbbr9EEUK7tFraoRtXTjmMdAsdyRbGGUWBj9e4iIouplBHr7RdmlrP2ovUXqeqXmzF+rxY9HyII1UwfEdlw0fmYaLf109ar9L0A==
+ bh=djszGhgmEGTOjGiHwqjgYU0W3s5z2S/6KEqIalhNKOo=;
+ b=bj6KYyg3meeS/m80Fz1Mg5K/pShIeCEcPKPeisVANgFypYR80d8AQtDXGoB1xAlNGmv63gj0lDNR8Zn7FI06D9vH925KVWFgpML/NoN1fKG1s+P2HbTfbCl45YOsakKTX+xYmD+llBIfS3rOSKWh0bN+QjOsCHe5ZYcibKWRHpMT+At8Wzzn/CqNDi1mPP1q3VwW0Nv17PuN8wUw5ZhNZUwW43YBHOMXMWTzBSxJA54UGPLWT0EUsCjPZkMt02tYO5iWnJLAw0eKvrwGkL1o5PdTBI8nouK61GEZjwkIWj+fTTM2aWQvLkFhkBRCDsxKfI+jFtf2cwWEqdhpnKAhpw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q2dQq2xIz3pS0uEbEibeKv1yy1ioyUYZTIYE0HyoHvs=;
- b=16PBdHyAyHAz9aI7K8JIzirpG+BMyfK8UxabCGlh9bnP/29Ww7uquSoHqeCBinWCl6tafp4LQQomKAkZL6vwgn0wgAN5tMj3tY6+AoDA9MRonhtQWIYOvHqbKOSZjEakaFnki1CU4p1teIeTVacCQgyoNxq8NRUBkTxAxzHpgX8=
-Received: from BY5PR12MB4258.namprd12.prod.outlook.com (2603:10b6:a03:20d::10)
- by BN6PR12MB1940.namprd12.prod.outlook.com (2603:10b6:404:fd::18) with
+ bh=djszGhgmEGTOjGiHwqjgYU0W3s5z2S/6KEqIalhNKOo=;
+ b=hcu/kjVo8rJq9rC1uPtN4n66D5KDLza+jGLhYj9dH4mAtZPq2JHHbPgnkOX3TDRnkMoss60B/jZzdI+7U5fipXu8OUoULrTcxOdyx/EQ9f3S7bhnhSL+BAAUBSquomycJY02UNbKoHwxm10a1Gnbgm/u7PULEJ0f4GSgV6oBtYw=
+Received: from DU2PR04MB8774.eurprd04.prod.outlook.com (2603:10a6:10:2e1::21)
+ by VI1PR04MB7103.eurprd04.prod.outlook.com (2603:10a6:800:123::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Tue, 5 Jul
- 2022 11:31:59 +0000
-Received: from BY5PR12MB4258.namprd12.prod.outlook.com
- ([fe80::28ea:aeb4:301e:c253]) by BY5PR12MB4258.namprd12.prod.outlook.com
- ([fe80::28ea:aeb4:301e:c253%4]) with mapi id 15.20.5395.022; Tue, 5 Jul 2022
- 11:31:56 +0000
-From:   "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Tue, 5 Jul
+ 2022 13:19:57 +0000
+Received: from DU2PR04MB8774.eurprd04.prod.outlook.com
+ ([fe80::5c49:dd85:a8d0:2907]) by DU2PR04MB8774.eurprd04.prod.outlook.com
+ ([fe80::5c49:dd85:a8d0:2907%3]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
+ 13:19:56 +0000
+From:   Han Xu <han.xu@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bough Chen <haibo.chen@nxp.com>,
+        "ashish.kumar@nxp.com" <ashish.kumar@nxp.com>,
+        "yogeshgaur.83@gmail.com" <yogeshgaur.83@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "singh.kuldeep87k@gmail.com" <singh.kuldeep87k@gmail.com>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Michal Simek <michals@xilinx.com>,
-        Radhey Shyam Pandey <radheys@xilinx.com>,
-        "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
-        Sai Krishna Potthuri <lakshmis@xilinx.com>,
-        "Goud, Srinivas" <srinivas.goud@amd.com>
-Subject: RE: [PATCH 2/2] spi: cadence-quadspi: Add support for OSPI device
- reset
-Thread-Topic: [PATCH 2/2] spi: cadence-quadspi: Add support for OSPI device
- reset
-Thread-Index: AQHYSNyT5AQVGFEfc0CeWm5NB0lZxazhsf2AgFc3IxCAISRtAIAWId9Q
-Date:   Tue, 5 Jul 2022 11:31:56 +0000
-Message-ID: <BY5PR12MB4258E660A6D54DFBED7DACD0DB819@BY5PR12MB4258.namprd12.prod.outlook.com>
-References: <1649156437-15609-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
- <1649156437-15609-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
- <20220405191757.3rzc6q477reusywp@ti.com>
- <PH0PR02MB7189C07E60A93426764C688EBDDC9@PH0PR02MB7189.namprd02.prod.outlook.com>
- <20220621091650.ktuluymgpdgxghd7@ti.com>
-In-Reply-To: <20220621091650.ktuluymgpdgxghd7@ti.com>
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "zhengxunli@mxic.com.tw" <zhengxunli@mxic.com.tw>
+Subject: RE: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
+ nxp,fspi-dll-slvdly
+Thread-Topic: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
+ nxp,fspi-dll-slvdly
+Thread-Index: AQHYkFF0qJujufsOTUOD0eIhHoBTUq1viBIAgAALOQCAAAJgAIAAKZ1g
+Date:   Tue, 5 Jul 2022 13:19:56 +0000
+Message-ID: <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
+References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
+ <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
+ <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
+ <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
+ <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
+In-Reply-To: <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f15ab685-b345-4d46-36fb-08da5e79f779
-x-ms-traffictypediagnostic: BN6PR12MB1940:EE_
+x-ms-office365-filtering-correlation-id: 6623e09c-720e-4804-7986-08da5e890e1f
+x-ms-traffictypediagnostic: VI1PR04MB7103:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8mr9Prfl4L2/3UFWQw6cGJuVRI0eTc2ChhPh+13hymXMR9pQJ4A959rfYfJp1WM+q/bhSy+u4LjWKgZGa6MAPeXrr4OgmNfdXsAvErYSfFXzUjYu1xBDH3mRt2hfrS9tCPC9vnQlcjNeX9Hud7J/3EPK/LRjv9IOQnpj+LNhox0C86dtZKtghHxaMfFWOakHgU363M/b2Hg3DOTq05bMOYb3vPwESCQbW7s/ujjKE39CvGzaTiLhT0uki/RKd/LiHuLo6XK0n6D6raykJOvd8OVPooEwSwwC13oq4LNcAUbIYdL/7RgsJE7DL5eecCDjJzYNvUA+ddPe/ayJggkzih6rtCAHxlrmKSjFPvofrnlAT6nih4bBeruV7TAotNx2U8MUASUlvKE0iOpFr1djxtchG5dn5Nql60SsO0YdllvkF/AFKw4hdl2QEaPAGoGF6bEosjBYfywIbtfRyXpXYwzVCQMi1X5ReJyUGWkux5yKwqkidx9IeKdYEu0939BolyZYA0sMA2UyAq+7haGHsLHo1LnbrzgsA5tzy9bU5rEdIR7UBcE8GZQrL0v4owp+T6kBbx7rdFgqCFF5ND6QbZ1HmDG5q7fU5E9TG4/KJC8DmfJkRDbDl/o+HfuBuv3rEt0yUO1v3C3ZL+xEH/guXB27LyMrA/mrfAyV1VN4KuGMv/SSSwgMSBJBaATor/QU64sqKT1jMy1MAEs1ZTNcwxWttslr7OzdYISmi/kBmwuIWD+bhWFlqW+/kRx5qdqlgtge/C2ruJPWe0FAh/58icrnyKazRxgrzR8u8Oeh/EIMmrNVSwLWpeaxl+7cM9btyf8aCgTslegTCbJ6o2sS0tIBi5ut6cayKtJcNMiha/E=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4258.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(83380400001)(186003)(71200400001)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(33656002)(478600001)(52536014)(86362001)(966005)(8936002)(5660300002)(26005)(38070700005)(122000001)(9686003)(38100700002)(2906002)(41300700001)(55016003)(53546011)(7696005)(6506007)(54906003)(6916009)(316002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: MmbikJxpBorj/zrXfLTmYbO3xhZPmsKk4BIQaN4uTA/5l2RNIJKq/oQxrZvNbxPCcsBJWD6i1jVMCAESsdDYKJqGCmGxEwNe0ZDtbkjmgGyoX4cZ8ozlkfbVkWpNK3fsOYFSBmtSmnwBi/amcSnST/YqAoisoQ8n5mije7GG2/g81l5ABjXdCPXqVu5A3E5QoQcos9ul7iZPBpVo98heTcdgtCn/1geYimt1viEwBGOH/ddqVe1TwRP1KIdBD96xdvU8N7H2at1RoCNwTWmSD/3RX77nsoRw84s1SeRxFnpDTvPvfbvjqTiIUHGRvgfl5rhJYMEyfjvu/a0YGbPw/rJGf6EGSex1xN0ROSkGflNcP3H3wIfMEJDkNOjEkn0eeIGMZ01CHkDaAy/Nu+WJm2wZyQMwtA/YAuV/rcxFuGjYNy3fPJ6V4LhBHS/mM0UmMd01f4LtmacsK+0kpWtVtcTvPQwskq/YC46JBUMrSQoaQ2QYANqJKqchzoF/0ZupJ3Wl7ckSqJ9JRODVAxxDvTu9lsKVFPQLuUNddGlaFjEHaHtP6ETABxIY7Au180x6y+Rk5s+e7C1B7FfgZHX1Q470GTmuaJ/zqOJQ+V8Y5eB8wDoCuAqQF4t9CtGDCRlrkI0OtZ2sxos8FUHfBYo7TgGNmhP0r93ePtU6qW6KxFhWJdCil3QQxYWtJ5+sqM6HgkSpee6CObU+UJdwBnvoYhmfRooZoEtmn9oxyjvTMbtqqS+sRUx2vFIGBXL+BZEKgaYlIj1JuJzqwaZrGh6PV6mHXgy7qN7JhGML/SsTqnlZWzSR/VoLjDpRvTAyAl5Tr0qvYJOeEO9zUKVya9TCDw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8774.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(396003)(346002)(39860400002)(66476007)(64756008)(8676002)(4326008)(66556008)(66446008)(5660300002)(7416002)(52536014)(8936002)(76116006)(2906002)(66946007)(44832011)(55016003)(86362001)(33656002)(38100700002)(921005)(122000001)(38070700005)(71200400001)(83380400001)(41300700001)(478600001)(9686003)(54906003)(110136005)(316002)(186003)(55236004)(26005)(7696005)(6506007)(53546011);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zM0b37eCUCoBsNHLks/NrCu7eCFFDxK27FRKM0CEe5r5tWnV4tkoRwvolqw5?=
- =?us-ascii?Q?BUAVl9s/tPy8XeRkpD/8cpBwFHuE5J8HoO8QrKP6oXSIleaxRVd6ZqVjMNOJ?=
- =?us-ascii?Q?+KplfmRvNNNyG0pGQr/aBVVCkvvvEz1fRck7cM+jyd94oVi/U9lJbZrwx++g?=
- =?us-ascii?Q?rNdYL0fp8oaJ95OYoYrQkJDo9YvExvymbRaCAtBYN+Uv6BW96t10HZd+nCXc?=
- =?us-ascii?Q?6Opt7PNHjcDog+dYe29s0Owa5Giae53ucimTqnmjBH8eN3E7+Px96XnKVc2f?=
- =?us-ascii?Q?apgEYsvjfu09Vna6dOPnZXP12viSPd7nS9752eH7ngcQIk3bXT5fppuIHZFr?=
- =?us-ascii?Q?PtJ5c0ykAvHyMC60vJgCxrM3yEnKP9jJP3zR2BNS8jtImlPr5qSuuNgG+JIN?=
- =?us-ascii?Q?hffHlJqrVHUIn2yTAPmMw4E20wBKesirefm+TfrG0uEFqv/DhrpWWuD8t/qs?=
- =?us-ascii?Q?ay/P5FO8kenggs7qvPtdGdkvzDbVXel/lm9DzV3VwG/z7tJ8VpeqQFavkCRu?=
- =?us-ascii?Q?0+6jNC9XI1Sujzt6ZDhI9+61w4WvRer0Dn5nB4zohtbMAmV79ym86y8L7fs4?=
- =?us-ascii?Q?8w0OobBvRZ4hvV5i30I+u3D7Zr41NYeLtRYFjqrlZMByt8lBKaVi/JBbJmAJ?=
- =?us-ascii?Q?xsGABiH4v/yN7/s0stvT5UYjYDzqOMtxe3CERBIqupRw/ZgYQCTxAJZzaqwD?=
- =?us-ascii?Q?BGaUBAP6g7kQp6Tcz9mnRNacUFTv9lVl2oEpVvbdGKrCPSHwSSMbMOELYFL5?=
- =?us-ascii?Q?QPZl12vG45iRjzF1dySst9MxsAt1SK0jA/ALUJBRTRvW+0GTIXwbjG9OQ3DW?=
- =?us-ascii?Q?wO4Zwetu6CI09qXyLPX9ngTeMxMIli/OQSc6HaNPU3I7egcW6WiySnh3U3eW?=
- =?us-ascii?Q?IreYSb4eZUt6l1+jMYq+cdo/X+WcQWQbtBallZ4FylXMB+Xh0bI32GMoFLUe?=
- =?us-ascii?Q?WtK4NfFc0U2sgVJvF0O8LjJG3AKbY33lsbihkBPaKDwyxvPoXlZyGzH7N9l2?=
- =?us-ascii?Q?DqB83duZZh33Be9V90UTZtokJw2IwmW0wde3aLGXoK5ISMkjCp1p+AQmygBh?=
- =?us-ascii?Q?ZvOrY5BIJUxQM4BZDdYVp0eveug3IM3o5gIGBlq0i0rfvFMlXTGcidKSTwMi?=
- =?us-ascii?Q?/YrAaU+usjlFjoigj43xfVtPGMGz8KAJiRZ+vvGReXJit+/K4moHa0Mj33Ie?=
- =?us-ascii?Q?7NLCwRGjpSbJIWPP3JHUpzhDlkwj0ti5k/FHj1ab0jl5lQDhwNFfM4DnFwzF?=
- =?us-ascii?Q?yfERxgMa+nMp2gpHhP+IwSsHa0YQrTOiYOnI1mp0twub2wdZJ+mnaXCKpvtI?=
- =?us-ascii?Q?hlHoFhYwIcZYKHf2ND6Oea7/15f5+BYkOipnDQ5Ct81Yh21z75ncLpmFerh0?=
- =?us-ascii?Q?JOMTnVp+DzcZJtupnA/GhiuhQ+GZgtcy+tp7a9ko4ODPdui/RvMrukgvCdIE?=
- =?us-ascii?Q?Ap5tTk0mr5b+FbMCoprihh0afm7kQzUjNgU1K+ewOCSuItCEpYKncsNRH2Zd?=
- =?us-ascii?Q?ZFpszRNL3tvWqzwucVLloe628SzKEGTBsOkUVxbPRDJVPDoN42WX6o2OWbGO?=
- =?us-ascii?Q?4gS2iq82KwgzJ6is1K0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bldoTGx2eWRFZG93MmFncnYzREIyWStDdDc0WHo3RmZEYUU4Rll0V0hHRUFM?=
+ =?utf-8?B?dDlKcHdnNFluOTZVdlY5cUQvR0tKbEE0YzZaaWJPeG02QzBpUUgrdlBvR2sv?=
+ =?utf-8?B?S1dKQ0lRYXVDWktOMjY5dDV1aVArK2hYV00zTm8rSTVJcGlVUERtWWx0aC9Z?=
+ =?utf-8?B?NU56eDVseXpRa3MxZWxNcC81ZThyRU9ORTNBMjBxajdBVEF3aW5FWVZkQ0NO?=
+ =?utf-8?B?Q2JxM2srTEFKY0pUUWN2c0FmSzI3Z292NFZOY0IyTmVjaEJSK2JLQllsNHdz?=
+ =?utf-8?B?MjcyMFlLMFVrOHM0NVhmOFdYRHpJOWVieG5nNkJ0RFpjY3hLTUx0OHV1allp?=
+ =?utf-8?B?b2IwZkt5OWExV2tEb1JCRWczUExocHlOTk14YnlDUFY4dFR2MzQrSy9nYkFW?=
+ =?utf-8?B?OWFnMTlnY0UxYkZxRUZUZ2prTGVENEp5WGRDMnBnTHhvM2hYbUJKNll1U3A3?=
+ =?utf-8?B?YXlRaVJRU293bm5DYmFPZVJRalRRT2FmdlZCNXE0WDErbTMwd2lKRnY3S1hW?=
+ =?utf-8?B?alJTYVFIcGFDazVEeWNwcnBmZjF5bDJIZC9nWkxRWHBmUmNrQXl5TVZFQkRL?=
+ =?utf-8?B?OWlVazVOc3Ayd0d5dWtNMDFqOGU5eXc5K2Fwem9oN0s5azBNQk9EL0R4VitH?=
+ =?utf-8?B?dzgxMVNmMlRpQ2JkVHNqZktjcnJqdWVPZDZCT2EyU01CZG1odGpOQTVyYXpE?=
+ =?utf-8?B?VlEyaHl3SU9qaTczTndrcVhQUlZ4RWRWT2VMRGI0UEFYSHdUdTJIWUlMUkI1?=
+ =?utf-8?B?cVZrazVBZWxscnBGM3VxbDRBQU9GSlVsQjN4aW01M2IwcHRIMHVKaE95bjgy?=
+ =?utf-8?B?MlVUWFF2RStlWjBvcytLbm43ZzBrMUZ2dUVWbjA4c1FiL2FYU3JKdXc4QWNX?=
+ =?utf-8?B?bzE3NXpxSTRPWW5SVWhZOVpvUmVYeldicnJvdStUUHFsOXVFV1MrdzVabER0?=
+ =?utf-8?B?bmQvUHJqOGgyMUFsNERiTjJSOXQyWkluTURybmlxT1FrN1c5U3V6d1JYVXlD?=
+ =?utf-8?B?V0JtVWRCQTVwMEsvR084VDFqd09jRzdEWmNxREQwQVFKdWN5TlpZTTl5MlIz?=
+ =?utf-8?B?SkM2bmRraG9LWEhEYVZpbDBZMnc0VEhLc25HbWJENzZQVTMweWNHQURaMFZO?=
+ =?utf-8?B?YklUY0VpaW92RG9aa0ZtWGhEMUEwekNzdDJLQjV6aU5LQS9FRmtlNDlna1Rs?=
+ =?utf-8?B?MC80OVVwVzdQZjdJYkZsaXROMWppM09MZjNVbks4Mk16QTNxc3VLZTBMbUVm?=
+ =?utf-8?B?bFpNMkg0Q3V4a09sWkg4SzFvdldQTXNYQ1QzVlh1RUlEMmFiWjlIZnBhZWhM?=
+ =?utf-8?B?cFVzTFpqQzExSDdzb2d5WnE2TTJUZ01UbFZhQ2VZckJYTHQ0UGQweFI1UGpL?=
+ =?utf-8?B?V0ZiZlRyUlM4azA3MWtVbDdQK2xOWXRmbERPMExWUHdtSXRMOWQ4dFVtbDgr?=
+ =?utf-8?B?cXBGZlVqMysyT1AyNW53K0lGaFo4SVAxQmh3Y1J1MjU3cVhWNW5UN1FBSWZq?=
+ =?utf-8?B?UWhldWJZREczTmRmYXZmRXFmN3VDSmRPeEhKWnVUdS9ndHpmNS9QN3lzTElZ?=
+ =?utf-8?B?VitJT2hTWWlrVGVaUFJhK1h0TU5lK1RlZHVDelhwdkk1NjBnNTVZaHY1T3pC?=
+ =?utf-8?B?VFBuUStqbk5IYTRrWkFkcTNqRWNJdEdSTXh2SGZ6RWV3R0pTWGgxMkFBQmJh?=
+ =?utf-8?B?OXlWKzFjTEZTTktkYzNQaWZmR2NTenF6VkM1ZnlkTzBIVlBiMjl6SEJUNXVO?=
+ =?utf-8?B?b1NiejJNdjhHbnRDd1FmOGZ6YXlVTGZ2eGM4TkszSW9oUUlNOEpKSzFZOXp6?=
+ =?utf-8?B?QjJ5UHZqUHlnMUZSNkJlZnpCQUxIc0RyZGRranl6ZXZiRmE5REptY1VvWSs2?=
+ =?utf-8?B?alZTWFV2VWtwUllVdU9HTWdaMXU1UW42amNGVDNSN3A4RUV2Y2ZWOGtTb1JB?=
+ =?utf-8?B?aUU0OXU5RGtIYWlYT3dLb3BVQjFRclBxS3dicENzYzY5QUcwN2VKbzFmU25z?=
+ =?utf-8?B?OVRMWHB4STV6S1YrQ3ZLMnlrWUs4U2pIdVlpU1EvN1YxcmJ3RjVlaVlLUTlj?=
+ =?utf-8?B?U2FlQTg3RXEvSlIzUGwzemxVK2tad1F3Vm5HOFpvNGRuZkxLakZFTUZMWFox?=
+ =?utf-8?Q?sIbs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4258.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f15ab685-b345-4d46-36fb-08da5e79f779
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 11:31:56.2160
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8774.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6623e09c-720e-4804-7986-08da5e890e1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 13:19:56.6507
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wuNhGqC/oWrngqxZyuLcGP4niRQwoM7MvXPJjFbNxbKoA3ab78upcAH8bEeXUkkZtRmpujO5K+xiMqLMVIfJNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1940
+X-MS-Exchange-CrossTenant-userprincipalname: IUIAx7jW4DSxWFI12A0N6V7//15VRHcqa82giLfS6nyb20XSd2KQLRT4YBd++N/o
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7103
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -129,200 +153,66 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Pratyush,
-
-> -----Original Message-----
-> From: Pratyush Yadav <p.yadav@ti.com>
-> Sent: Tuesday, June 21, 2022 2:47 PM
-> To: Sai Krishna Potthuri <lakshmis@xilinx.com>
-> Cc: Mark Brown <broonie@kernel.org>; Rob Herring <robh+dt@kernel.org>;
-> linux-kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> spi@vger.kernel.org; saikrishna12468@gmail.com; Srinivas Goud
-> <sgoud@xilinx.com>; Michal Simek <michals@xilinx.com>; Radhey Shyam
-> Pandey <radheys@xilinx.com>
-> Subject: Re: [PATCH 2/2] spi: cadence-quadspi: Add support for OSPI devic=
-e
-> reset
->=20
-> CAUTION: This message has originated from an External Source. Please use
-> proper judgment and caution when opening attachments, clicking links, or
-> responding to this email.
->=20
->=20
-> On 31/05/22 08:12AM, Sai Krishna Potthuri wrote:
-> > Hi Pratyush,
-> >
-> > > -----Original Message-----
-> > > From: Pratyush Yadav <p.yadav@ti.com>
-> > > Sent: Wednesday, April 6, 2022 12:48 AM
-> > > To: Sai Krishna Potthuri <lakshmis@xilinx.com>
-> > > Cc: Mark Brown <broonie@kernel.org>; Rob Herring
-> > > <robh+dt@kernel.org>; linux-kernel@vger.kernel.org;
-> > > devicetree@vger.kernel.org; linux- spi@vger.kernel.org; Michal Simek
-> > > <michals@xilinx.com>; git <git@xilinx.com>;
-> > > saikrishna12468@gmail.com; Srinivas Goud <sgoud@xilinx.com>
-> > > Subject: Re: [PATCH 2/2] spi: cadence-quadspi: Add support for OSPI
-> > > device reset
-> > >
-> > > On 05/04/22 04:30PM, Sai Krishna Potthuri wrote:
-> > > > Cadence OSPI controller always start in SDR mode and it doesn't
-> > > > know the current mode of the flash device (SDR or DDR). This
-> > > > creates issue during Cadence OSPI driver probe if OSPI flash device=
- is in
-> DDR mode.
-> > > > This patch add OSPI flash device reset using HW reset pin for
-> > > > Xilinx Versal platform, this will make sure both Controller and
-> > > > Flash device are in same mode (SDR).
-> > >
-> > > Is this supposed to reset the OSPI flash or the controller? If you
-> > > are resetting it in the flash then you should handle this from the
-> > > flash driver, not from here.
-> > I am handling OSPI flash reset here. Agree, controlling or issuing the
-> > flash reset should be from the flash driver and not from the
-> > controller driver but handling the reset might depends on the platform =
-and
-> should be in the controller driver.
-> > One platform might be handling the reset through GPIO and others might
-> > handle it differently via some system level control registers or even
-> controller registers.
-> > To support this platform specific implementation i am thinking to
-> > provide a "hw_reset" hook in the spi_controller_mem_ops structure and
-> > this will be accessed or called from spi-nor if  "broken-flash-reset" p=
-roperty
-> is not set.
-> > Whichever controller driver registers for hw_reset hook, they can have
-> > their own implementation to reset the flash device based on the platfor=
-m.
-> > Do you think this approach works? Please suggest.
-> >
-> > Code snippet like below.
-> >
-> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> > index 2ba044d0d5e5..b8240dfb246d 100644
-> > --- a/include/linux/spi/spi-mem.h
-> > +++ b/include/linux/spi/spi-mem.h
-> > @@ -285,6 +285,7 @@ struct spi_controller_mem_ops {
-> >                            unsigned long initial_delay_us,
-> >                            unsigned long polling_rate_us,
-> >                            unsigned long timeout_ms);
-> > +       int (*hw_reset)(struct spi_mem *mem);
-> >
-> > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c index
-> > e8de4f5017cd..9ac2c2c30443 100644
-> > --- a/drivers/spi/spi-mem.c
-> > +++ b/drivers/spi/spi-mem.c
-> > @@ -598,6 +598,27 @@ static void devm_spi_mem_dirmap_release(struct
-> device *dev, void *res)
-> >         spi_mem_dirmap_destroy(desc);
-> >  }
-> > +int spi_mem_hw_reset(struct spi_mem *mem) {
-> > +       struct spi_controller *ctlr =3D mem->spi->controller;
-> > +
-> > +       if (ctlr->mem_ops && ctlr->mem_ops->hw_reset)
-> > +               return ctlr->mem_ops->hw_reset(mem);
-> > +
-> > +       return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(spi_mem_hw_reset);
->=20
-> Hmm, wouldn't it be better to register the controller as a reset provider=
- and
-> then teach SPI NOR to call reset_control_assert()? This way you can clean=
-ly
-> handle GPIO based resets as well as MMIO register based reset using the
-> CQSPI_REG_CONFIG bit 5.
->=20
-> How I am thinking it should work in your case is you can create a GPIO ba=
-sed
-> reset controller driver (I wonder why this hasn't been done yet) that tog=
-gles a
-> given GPIO line based on reset_control_assert() or
-> reset_control_deassert() calls [0]. Then in the SPI NOR DT node you just =
-do
-> resets =3D <&your_reset device>. On a platform which supports reset via b=
-it 5
-> of CQSPI_REG_CONFIG, they can do resets =3D <&cqspi_controller>.
->=20
-> I am not particularly familiar with the details of the reset framework so=
- I
-> would like to hear what others think, but I think it is a good proposal t=
-o start
-> with.
->=20
-> [0] Or, you could register the GPIO driver itself as a reset controller.
->     I am not sure which works better.
-I found this link which does the similar implementation like adding gpio
-based reset controller driver but looks like this idea was dropped due to v=
-arious
-reasons.
-https://lore.kernel.org/lkml/322faa05-240e-0fd4-8ceb-68f77e871cf6@seco.com/=
-T/#m6c676fe25453525aecb26c71f3f3a5bad5e3e923
-
-My understanding after going through the discussion is, we should live
-with 'reset-gpios' property to register the GPIO based reset pin and make
-use of the gpio driver calls(gpiod_set_value).
-I may need to do this at SPI NOR layer instead of handling it in the driver=
-.
-
-Regards
-Sai Krishna
->=20
-> >
-> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> > index b4f141ad9c9c..2c09c733bb8b 100644
-> > --- a/drivers/mtd/spi-nor/core.c
-> > +++ b/drivers/mtd/spi-nor/core.c
-> > @@ -2966,6 +2962,7 @@ static void spi_nor_set_mtd_info(struct spi_nor
-> > *nor)  int spi_nor_scan(struct spi_nor *nor, const char *name,
-> >                  const struct spi_nor_hwcaps *hwcaps)  {
-> > +       struct device_node *np =3D spi_nor_get_flash_node(nor);
-> >         const struct flash_info *info;
-> >         struct device *dev =3D nor->dev;
-> >         struct mtd_info *mtd =3D &nor->mtd; @@ -2995,6 +2992,14 @@ int
-> > spi_nor_scan(struct spi_nor *nor, const char *name,
-> >         if (!nor->bouncebuf)
-> >                 return -ENOMEM;
-> >
-> > +       if (of_property_read_bool(np, "broken-flash-reset")) {
-> > +               nor->flags |=3D SNOR_F_BROKEN_RESET;
-> > +       } else {
-> > +               ret =3D spi_mem_hw_reset(nor->spimem);
-> > +               if (ret)
-> > +                       return ret;
-> > +       }
-> >
-> > Regards
-> > Sai Krishna
-> > >
-> > > Also, as of now at least, SPI NOR only works when the flash is in SDR
-> mode.
-> > > For TI platforms, we reset the flash in the bootloader (U-Boot),
-> > > before handing control off to the kernel. If you do want to properly
-> > > handle flashes that are handed to the kernel in DDR mode, I would
-> > > suggest you update SPI NOR instead to detect the flash mode and work
-> > > from there. This would also allow us to support flashes that boot in
-> > > DDR mode, so would still be in DDR mode even after a reset.
-> > >
-> > > > Xilinx Versal platform has a dedicated pin used for OSPI device res=
-et.
-> > > > As part of the reset sequence, configure the pin to enable
-> > > > hysteresis and set the direction of the pin to output before toggli=
-ng the
-> pin.
-> > > > Provided the required delay ranges while toggling the pin to meet
-> > > > the most of the OSPI flash devices reset pulse width, reset
-> > > > recovery and CS high to reset high timings.
-> > > >
-> > > > Signed-off-by: Sai Krishna Potthuri
-> > > > <lakshmi.sai.krishna.potthuri@xilinx.com>
-> > > [...]
-> > >
-> > > --
-> > > Regards,
-> > > Pratyush Yadav
-> > > Texas Instruments Inc.
->=20
-> --
-> Regards,
-> Pratyush Yadav
-> Texas Instruments Inc.
+DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEtyenlzenRvZiBLb3psb3dz
+a2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj5TZW50OiBUdWVzZGF5LCBKdWx5
+IDUsIDIwMjIgNTozNyBBTQ0KPlRvOiBCb3VnaCBDaGVuIDxoYWliby5jaGVuQG54cC5jb20+OyBh
+c2hpc2gua3VtYXJAbnhwLmNvbTsNCj55b2dlc2hnYXVyLjgzQGdtYWlsLmNvbTsgYnJvb25pZUBr
+ZXJuZWwub3JnOyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+a3J6eXN6dG9mLmtvemxvd3NraStkdEBs
+aW5hcm8ub3JnOyBIYW4gWHUgPGhhbi54dUBueHAuY29tPjsNCj5zaW5naC5rdWxkZWVwODdrQGdt
+YWlsLmNvbTsgdHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tOyBwLnlhZGF2QHRpLmNvbTsNCj5t
+aWNoYWVsQHdhbGxlLmNjOyBtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tOyByaWNoYXJkQG5vZC5h
+dDsgdmlnbmVzaHJAdGkuY29tOw0KPnNoYXduZ3VvQGtlcm5lbC5vcmc7IHMuaGF1ZXJAcGVuZ3V0
+cm9uaXguZGU7IGtlcm5lbEBwZW5ndXRyb25peC5kZQ0KPkNjOiBsaW51eC1zcGlAdmdlci5rZXJu
+ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPmRldmljZXRyZWVAdmdlci5r
+ZXJuZWwub3JnOyBsaW51eC1tdGRAbGlzdHMuaW5mcmFkZWFkLm9yZzsgZmVzdGV2YW1AZ21haWwu
+Y29tOw0KPmRsLWxpbnV4LWlteCA8bGludXgtaW14QG54cC5jb20+OyBsaW51eC1hcm0ta2VybmVs
+QGxpc3RzLmluZnJhZGVhZC5vcmc7DQo+emhlbmd4dW5saUBteGljLmNvbS50dw0KPlN1YmplY3Q6
+IFJlOiBbUEFUQ0ggMDcvMTFdIGR0LWJpbmRpbmdzOiBzcGk6IHNwaS1ueHAtZnNwaTogYWRkIGEg
+bmV3IHByb3BlcnR5DQo+bnhwLGZzcGktZGxsLXNsdmRseQ0KPg0KPk9uIDA1LzA3LzIwMjIgMTI6
+MjgsIEJvdWdoIENoZW4gd3JvdGU6DQo+Pj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4+
+PiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5v
+cmc+DQo+Pj4gU2VudDogMjAyMuW5tDfmnIg15pelIDE3OjQ4DQo+Pj4gVG86IEJvdWdoIENoZW4g
+PGhhaWJvLmNoZW5AbnhwLmNvbT47IGFzaGlzaC5rdW1hckBueHAuY29tOw0KPj4+IHlvZ2VzaGdh
+dXIuODNAZ21haWwuY29tOyBicm9vbmllQGtlcm5lbC5vcmc7IHJvYmgrZHRAa2VybmVsLm9yZzsN
+Cj4+PiBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc7IEhhbiBYdSA8aGFuLnh1QG54
+cC5jb20+Ow0KPj4+IHNpbmdoLmt1bGRlZXA4N2tAZ21haWwuY29tOyB0dWRvci5hbWJhcnVzQG1p
+Y3JvY2hpcC5jb207DQo+Pj4gcC55YWRhdkB0aS5jb207IG1pY2hhZWxAd2FsbGUuY2M7IG1pcXVl
+bC5yYXluYWxAYm9vdGxpbi5jb207DQo+Pj4gcmljaGFyZEBub2QuYXQ7IHZpZ25lc2hyQHRpLmNv
+bTsgc2hhd25ndW9Aa2VybmVsLm9yZzsNCj4+PiBzLmhhdWVyQHBlbmd1dHJvbml4LmRlOyBrZXJu
+ZWxAcGVuZ3V0cm9uaXguZGUNCj4+PiBDYzogbGludXgtc3BpQHZnZXIua2VybmVsLm9yZzsgbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4+PiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgtbXRkQGxpc3RzLmluZnJhZGVhZC5vcmc7DQo+Pj4gZmVzdGV2YW1AZ21haWwuY29t
+OyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPjsNCj4+PiBsaW51eC1hcm0ta2VybmVs
+QGxpc3RzLmluZnJhZGVhZC5vcmc7IHpoZW5neHVubGlAbXhpYy5jb20udHcNCj4+PiBTdWJqZWN0
+OiBSZTogW1BBVENIIDA3LzExXSBkdC1iaW5kaW5nczogc3BpOiBzcGktbnhwLWZzcGk6IGFkZCBh
+IG5ldw0KPj4+IHByb3BlcnR5IG54cCxmc3BpLWRsbC1zbHZkbHkNCj4+Pg0KPj4+IE9uIDA1LzA3
+LzIwMjIgMTE6MTEsIGhhaWJvLmNoZW5AbnhwLmNvbSB3cm90ZToNCj4+Pj4gRnJvbTogSGFpYm8g
+Q2hlbiA8aGFpYm8uY2hlbkBueHAuY29tPg0KPj4+Pg0KPj4+PiBBZGQgb25lIG9wdGlvbmFsIHBy
+b3BlcnR5IG54cCxmc3BpLWRsbC1zbHZkbHkNCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogSGFp
+Ym8gQ2hlbiA8aGFpYm8uY2hlbkBueHAuY29tPg0KPj4+PiAtLS0NCj4+Pj4gIERvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy9zcGkvc3BpLW54cC1mc3BpLnlhbWwgfCA2ICsrKysrKw0K
+Pj4+PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQ0KPj4+Pg0KPj4+PiBkaWZmIC0t
+Z2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NwaS9zcGktbnhwLWZzcGku
+eWFtbA0KPj4+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NwaS9zcGktbnhw
+LWZzcGkueWFtbA0KPj4+PiBpbmRleCAxYjU1MmMyOTgyNzcuLjZiZDYxNTY1Njg2YSAxMDA2NDQN
+Cj4+Pj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NwaS9zcGktbnhw
+LWZzcGkueWFtbA0KPj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
+c3BpL3NwaS1ueHAtZnNwaS55YW1sDQo+Pj4+IEBAIC00NSw2ICs0NSwxMiBAQCBwcm9wZXJ0aWVz
+Og0KPj4+PiAgICAgICAgLSBjb25zdDogZnNwaV9lbg0KPj4+PiAgICAgICAgLSBjb25zdDogZnNw
+aQ0KPj4+Pg0KPj4+PiArICBueHAsZnNwaS1kbGwtc2x2ZGx5Og0KPj4+PiArICAgICRyZWY6IC9z
+Y2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPj4+PiArICAgIGRlc2NyaXB0
+aW9uOiB8DQo+Pj4+ICsgICAgICBTcGVjaWZ5IHRoZSBETEwgc2xhdmUgbGluZSBkZWxheSB2YWx1
+ZS4NCj4+Pg0KPj4+IFdoYXQgYXJlIHRoZSB1bml0cz8NCj4+DQo+PiBEbyB5b3UgbWVhbiBoZXJl
+IG5lZWQgdG8gZ2l2ZSBtb3JlIGRldGFpbCBleHBsYWluIGFib3V0IHRoaXMgcHJvcGVyaXR5Pw0K
+Pj4NCj4+IEhvdyBhYm91dCBjaGFuZ2UgbGlrZSB0aGlzPw0KPj4gICAgU3BlY2lmeSB0aGUgRExM
+IHNsYXZlIGxpbmUgZGVsYXkgdmFsdWUuIFRoZSBkZWxheSB0YXJnZXQgZm9yIHNsYXZlIGRlbGF5
+IGxpbmUgaXM6DQo+KChueHAsZnNwaS1kbGwtc2x2ZGx5KzEpICogMS8zMiAqIGNsb2NrIGN5Y2xl
+IG9mIHJlZmVyZW5jZSBjbG9jayAoc2VyaWFsIHJvb3QgY2xvY2spLg0KPg0KPlRoaXMgd291bGQg
+YmUgZ29vZC4NCj4NCj4+IFRoZSByYW5nZSBvZiB0aGlzIHZhbHVlIGlzIDB+MTYuDQo+DQo+VGhp
+cyBuZWVkcyB0byBnbyB0byBzY2hlbWEgaW5zdGVhZCBhcyAibWF4aW11bTogMTYiLg0KPg0KPkJ1
+dCBzdGlsbCB0aGUgcXVlc3Rpb24gaXMgLSB3aGF0IGFyZSB0aGUgdW5pdHMgdXNlZCBpbiB0aGlz
+ICJkZWxheSI/IG1zPyB1cz8NCg0KSEkgS3J6eXN6dG9mLA0KDQpBY2NvcmRpbmcgdG8gdGhlIGZv
+cm11bGEsIHRoZSByYW5nZSBzaG91bGQgYmUgMH4xNSwgMTYgc2hvdWxkIGRvIG5vdGhpbmcgb3Ig
+bm8gZGVsYXkuDQoNClRoZSB1bml0IHNob3VsZCBiZSBjbG9jayBwaGFzZS4gSW4gb3RoZXIgd29y
+ZHMsIHRoZSBkZWxheSBjYW4gYmUgaW4gcmFuZ2Ugb2YgMS8zMn4xLzIgY2xvY2sgY3ljbGUuDQoN
+Cg0KPg0KPkJlc3QgcmVnYXJkcywNCj5Lcnp5c3p0b2YNCg==
