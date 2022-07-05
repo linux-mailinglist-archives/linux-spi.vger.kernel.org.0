@@ -2,42 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E068256707B
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 16:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23895670C2
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jul 2022 16:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiGEOM5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jul 2022 10:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S230432AbiGEORv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jul 2022 10:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbiGEOMf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 10:12:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4287243;
-        Tue,  5 Jul 2022 07:06:04 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DFACE2223E;
-        Tue,  5 Jul 2022 16:06:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657029962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j7NwS041H2A7Av1dAuyz4ev4klbMrMlMS8fdSFJVby0=;
-        b=rYoDNOwUzIU0r4i6jlRs02msbQ4lBYNejXJBFtTH49c+8b2klkF80wDkuYBDt6KJSdka//
-        5mLtI5ihr7pLQX2MNAxj1/OO9avk4/GLuPyEYiAB++2/50uxK1jeqV53JZS+nql24KlWza
-        lnmEtVGmJo3ZGK3Kzsx6PY2eJ7e1Byw=
+        with ESMTP id S232739AbiGEORP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jul 2022 10:17:15 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48661C0F
+        for <linux-spi@vger.kernel.org>; Tue,  5 Jul 2022 07:12:42 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z21so20703351lfb.12
+        for <linux-spi@vger.kernel.org>; Tue, 05 Jul 2022 07:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=96uT2/xHI+gJvTeOzSVEvKEVuYL1WzZK+F5WRMOqgPU=;
+        b=EgHA5JrPLft/X3CFmcSgTwtTvECDveakN/2eQwLizukZ1zwsResj9IHMN3FSmmNZqH
+         5esk68KrdSVQGMTMFYDbvKW8hYaxKcvG0DBhIN+03JfXtTRd4Xb/Eg5EWC6cuHTq73rL
+         jjTDdg0IDX4s+Y2Cr8LRrseVutTmDARy/lobgDKmKk9vQanpAxXEuEzAQU/HEG/tw+J5
+         /6h5DDeXqawo434PwFTi9OcOBTEVHxswPjQEzOwB8CuCRE7eLhx9/NsJJ7d2maK9ekQ6
+         CjVey19X3C1BavDYQ8HPLTDw2tVIOKNNklPMaqfkKplUCccgSYePn/a0/JFdi5eQJjsr
+         Rjag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=96uT2/xHI+gJvTeOzSVEvKEVuYL1WzZK+F5WRMOqgPU=;
+        b=D7039gW1Sel3i4Opcbpa3+suOHrfofo0tyCmRkR8P7Xh08BetG05ewSFrElaHYdTBb
+         CarGT4u+Mf0AG8mmvG5FkRjaQNmAxC4CU0fZBNAupaEnOkyL+ZTsQK10hEESyQ57vwJ/
+         7jJXGxLb/gJAG9LS6ZqwG8iN5jluQUhjBNinrHOxOmYAC3xbWa1uU105d14qYcvGVQnp
+         zLIGIGmi2mabv+55sWkbhKEKUxm50s17lJ8ySzyRRC8FfxPml3UwiKthZWhhtws8paRN
+         uHDdQtYgKbtbcVoUNWEIwBzs+iEJNI7J93GtzLvvJ6wk/8DMCH09r3HHjaTAhLbH8Omi
+         dUGA==
+X-Gm-Message-State: AJIora8Uxi4P/DsbLTeNibQJXzmF+T/BqulmuIjVZ5JoZbbBsmZJatf5
+        uSOgAyQlBG+A5P0QLWN5ppakZA==
+X-Google-Smtp-Source: AGRyM1ucI0R96J38sx4KrEcjCZdRo4b5u4rRdvgJC2EhgCpkX68hj/jPkm7aCy/l7c0q04uk3jbg7g==
+X-Received: by 2002:a05:6512:224d:b0:47f:7812:d135 with SMTP id i13-20020a056512224d00b0047f7812d135mr21506046lfu.29.1657030360658;
+        Tue, 05 Jul 2022 07:12:40 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id v6-20020a056512348600b00478f2f2f043sm5719610lfr.147.2022.07.05.07.12.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 07:12:39 -0700 (PDT)
+Message-ID: <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
+Date:   Tue, 5 Jul 2022 16:12:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 05 Jul 2022 16:06:02 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Han Xu <han.xu@nxp.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bough Chen <haibo.chen@nxp.com>, ashish.kumar@nxp.com,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
+ nxp,fspi-dll-slvdly
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Han Xu <han.xu@nxp.com>
+Cc:     Bough Chen <haibo.chen@nxp.com>, ashish.kumar@nxp.com,
         yogeshgaur.83@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, singh.kuldeep87k@gmail.com,
         tudor.ambarus@microchip.com, p.yadav@ti.com,
@@ -47,9 +67,6 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
         festevam@gmail.com, dl-linux-imx <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-In-Reply-To: <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
 References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
  <1657012303-6464-7-git-send-email-haibo.chen@nxp.com>
  <ef676df1-77e0-b8ee-3950-97eade8ddd5b@linaro.org>
@@ -58,112 +75,39 @@ References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
  <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
  <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
  <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2022-07-05 16:00, schrieb Han Xu:
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, July 5, 2022 8:29 AM
->> To: Han Xu <han.xu@nxp.com>; Bough Chen <haibo.chen@nxp.com>;
->> ashish.kumar@nxp.com; yogeshgaur.83@gmail.com; broonie@kernel.org;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> singh.kuldeep87k@gmail.com; tudor.ambarus@microchip.com; 
->> p.yadav@ti.com;
->> michael@walle.cc; miquel.raynal@bootlin.com; richard@nod.at; 
->> vigneshr@ti.com;
->> shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de
->> Cc: linux-spi@vger.kernel.org; linux-kernel@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-mtd@lists.infradead.org; 
->> festevam@gmail.com;
->> dl-linux-imx <linux-imx@nxp.com>; 
->> linux-arm-kernel@lists.infradead.org;
->> zhengxunli@mxic.com.tw
->> Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new 
->> property
->> nxp,fspi-dll-slvdly
->> 
->> On 05/07/2022 15:19, Han Xu wrote:
->>>>>>> +  nxp,fspi-dll-slvdly:
->>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>>>> +    description: |
->>>>>>> +      Specify the DLL slave line delay value.
->>>>>> 
->>>>>> What are the units?
->>>>> 
->>>>> Do you mean here need to give more detail explain about this 
->>>>> properity?
->>>>> 
->>>>> How about change like this?
->>>>>    Specify the DLL slave line delay value. The delay target for 
->>>>> slave delay line is:
->>>> ((nxp,fspi-dll-slvdly+1) * 1/32 * clock cycle of reference clock 
->>>> (serial root clock).
->>>> 
->>>> This would be good.
->>>> 
->>>>> The range of this value is 0~16.
->>>> 
->>>> This needs to go to schema instead as "maximum: 16".
->>>> 
->>>> But still the question is - what are the units used in this "delay"? 
->>>> ms? us?
->>> 
->>> HI Krzysztof,
->>> 
->>> According to the formula, the range should be 0~15, 16 should do 
->>> nothing or no
->> delay.
->> 
->> Sure, just add some constraint.
->> 
->>> 
->>> The unit should be clock phase. In other words, the delay can be in 
->>> range of
->> 1/32~1/2 clock cycle.
->> 
->> So we probably misunderstood each other... looking at the driver it 
->> also explains
->> the confusing. You encoded here register value which is pretty often 
->> wrong
->> approach.
->> 
->> This should be instead meaningful value for the user of the bindings, 
->> so usually
->> using one of property units:
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com
->> %2Fdevicetree-org%2Fdt-
->> schema%2Fblob%2Fmain%2Fdtschema%2Fschemas%2Fproperty-
->> units.yaml&amp;data=05%7C01%7Chan.xu%40nxp.com%7C0ffe3d706e064f14382
->> 108da5e8a5add%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6379262
->> 45564450475%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
->> 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Q4
->> SfVnBN%2BQ0vYKJzRf%2FXZkCA1WGyPV9doFcb%2BLSKx4w%3D&amp;reserved=0
-
-Hm, you should fix your mail server.
-
->> 
->> I think you could use here clock cycles or clock phase, but then it 
->> has to be obvious
->> it is that unit.
+On 05/07/2022 16:06, Michael Walle wrote:
 > 
-> Hi Krzysztof,
+>>>
+>>> I think you could use here clock cycles or clock phase, but then it 
+>>> has to be obvious
+>>> it is that unit.
+>>
+>> Hi Krzysztof,
+>>
+>> Let me clarify it, in the document a term "delay cell" was used to
+>> descript this register bit. Each delay cell equals "1/32 clock phase",
+>> so the unit of delay cell is clock phase. The value user need set in
+>> DT just number to define how many delay cells needed.
 > 
-> Let me clarify it, in the document a term "delay cell" was used to
-> descript this register bit. Each delay cell equals "1/32 clock phase",
-> so the unit of delay cell is clock phase. The value user need set in
-> DT just number to define how many delay cells needed.
+> Then should the unit be "-degrees" and the possible range 0-180?
 
-Then should the unit be "-degrees" and the possible range 0-180?
+Thanks. We don't have it documented currently, but the unit seems
+reasonable.
 
--michael
+Best regards,
+Krzysztof
