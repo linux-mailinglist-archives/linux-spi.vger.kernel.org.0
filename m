@@ -2,94 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584F55684B5
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 12:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D227756877A
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 13:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiGFKHJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jul 2022 06:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S233394AbiGFL6R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jul 2022 07:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiGFKG6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 06:06:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF3252A8;
-        Wed,  6 Jul 2022 03:06:56 -0700 (PDT)
-Received: from localhost (unknown [188.24.177.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S233315AbiGFL6K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 07:58:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091BE28E39;
+        Wed,  6 Jul 2022 04:58:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2ABB66019A8;
-        Wed,  6 Jul 2022 11:06:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657102015;
-        bh=0Mp3rHQ9jijT39OI8RMdTMOQmr91ofvOGZwnNCt8nFM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPV0/Vu5urmVm10fjiVkxWNBk/0R8QlN3aAu3/LZgk11NcgE7NKzaBpEgmL9LcpKb
-         pglVu3Byg2MM5/KPTGnLa9Z4NqvcycglVpMzJNE4zA5eYZY8LvM5O716GmjW3+WC3G
-         5by7/lromGDL7IFm5YfJUYnlIDlXDeRkgStD/k4D2zpmuET1hqbczHJIvZ/+6W0mt9
-         x51WtQjxU2KKh64ZeKcgBLoacWgB7BydFaRh6fa2nadHwK+uSnq6F6dr2K28jcXKiO
-         3YEShPZATRepJICflZvkgJ5sRdItZ7krewEo0e9Lto5blWiI7RAlgjOiFXq+fvDJcT
-         3Gf4W04moraSw==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Sanjay R Mehta <sanju.mehta@amd.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Anastasios Vacharakis <vacharakis@o2mail.de>,
-        cristian.ciocaltea@collabora.com
-Subject: [PATCH 5/5] spi: amd: Add struct and enum kernel-doc comments
-Date:   Wed,  6 Jul 2022 13:06:26 +0300
-Message-Id: <20220706100626.1234731-6-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
-References: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8503B81ADA;
+        Wed,  6 Jul 2022 11:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1D5C3411C;
+        Wed,  6 Jul 2022 11:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657108687;
+        bh=qLDZmf82pSEzijMgkJBI7W2YEoKytRATtV3eRCBECjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ikQuvgzLpPlwXXbdW2AHtdb6Kvu5+y9zCjct172Q2Pb6jgezFI/YlONUznm56Isju
+         i1R+rkGSMks61MkaxnYL+taHyOZl7dEWfexYF2C2dgTjcGMYxa2WZgyE1LL7rc1GrW
+         N0JDtFJgTxAxs/UBOAYYQsYeFsums3+qzj37czpL+DmGq3EvYA5EFxTqCwkseUZh95
+         2lDZHswNDMZp8/Uy22zQfpx6UMGT/slwlZ494LaFatrfA87/LKtdbum0/nPi9K3no0
+         Dgtr4jhXgsKjLrfkZ7ee7mny6wOTMhsnD9xyejOjF+KICbGrsXl6vP0RlNcWBDEiMD
+         6SZs58wWw5rdw==
+Date:   Wed, 6 Jul 2022 12:58:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     nandhini.srikandan@intel.com
+Cc:     fancer.lancer@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mgross@linux.intel.com,
+        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        mahesh.r.vaidya@intel.com, rashmi.a@intel.com
+Subject: Re: [PATCH v5 1/4] spi: dw: Fix IP-core versions macro
+Message-ID: <YsV4yU42in8qqQrw@sirena.org.uk>
+References: <20220706042039.5763-1-nandhini.srikandan@intel.com>
+ <20220706042039.5763-2-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NS/SuwMhgyH5tobI"
+Content-Disposition: inline
+In-Reply-To: <20220706042039.5763-2-nandhini.srikandan@intel.com>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Provide documentation comments in the kernel-doc format
-for enum amd_spi_versions and struct amd_spi.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- drivers/spi/spi-amd.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+--NS/SuwMhgyH5tobI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 6eddb950e1ad..08df4f8d0531 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -40,11 +40,21 @@
- #define AMD_SPI_XFER_TX		1
- #define AMD_SPI_XFER_RX		2
- 
-+/**
-+ * enum amd_spi_versions - SPI controller versions
-+ * @AMD_SPI_V1:		AMDI0061 hardware version
-+ * @AMD_SPI_V2:		AMDI0062 hardware version
-+ */
- enum amd_spi_versions {
--	AMD_SPI_V1 = 1,	/* AMDI0061 */
--	AMD_SPI_V2,	/* AMDI0062 */
-+	AMD_SPI_V1 = 1,
-+	AMD_SPI_V2,
- };
- 
-+/**
-+ * struct amd_spi - SPI driver instance
-+ * @io_remap_addr:	Start address of the SPI controller registers
-+ * @version:		SPI controller hardware version
-+ */
- struct amd_spi {
- 	void __iomem *io_remap_addr;
- 	enum amd_spi_versions version;
--- 
-2.36.1
+On Wed, Jul 06, 2022 at 12:20:36PM +0800, nandhini.srikandan@intel.com wrot=
+e:
+> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+>=20
+> Fixes: 2cc8d9227bbb ("spi: dw: Introduce Synopsys IP-core versions interf=
+ace")
+> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
+What is the problem and how does this patch fix it?
+
+--NS/SuwMhgyH5tobI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLFeMgACgkQJNaLcl1U
+h9BpHAf9H+C6F2j6Q79hU8O50TRg5YaiK2g7Xd6QwXbY08B55VQqOGYQEqVEKHP6
+j9DhIr6glSpc9yD/idZyKWQdSYh9aD+/d2mS3FBF31h2aLC+XwsunKMvX8eUJX2h
+1rjsN5kL5X/rMdkxqHaFp8baHZ849tiiQNlxFoh/lzQX+1MsBhnD3IjD9oaOF4x3
+SstVjtZ+zlXncT+yTIrRaApHb9eb9EKIC5DI1s4plB2TTm5/FoMyjLZgfX2qVOcM
+gsKvi96pEUzU2++f7IkEv0/izlRTseVn4zvdORB6Pu4t/xhmpkwsfSYfVo9dAGTK
+YTSWCwwSro52sfNJ0KdDERTQLScvLA==
+=DvNR
+-----END PGP SIGNATURE-----
+
+--NS/SuwMhgyH5tobI--
