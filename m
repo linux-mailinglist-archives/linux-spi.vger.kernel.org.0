@@ -2,78 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F71B568EB1
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 18:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9357B568FB5
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 18:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbiGFQLP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jul 2022 12:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S233847AbiGFQxE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jul 2022 12:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiGFQLO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 12:11:14 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D344E237E3;
-        Wed,  6 Jul 2022 09:11:13 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id b1so3836850ilf.8;
-        Wed, 06 Jul 2022 09:11:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xqvCFaRmeZZtgaYKxSb/zDtrg0BtbPrZr498xClMHoA=;
-        b=smYGCgckHEI2Xbbkl8cZcxfpvhBSzQQ7X9b/43khfNLiLz4Xsyt5AP24iFpJXteKSr
-         BKG2KwSNyt7VUd7XwH4HvVy8D+H6ba6awJME6qMY8P6vHuVmqm1VesbBm1wxkLkRwURt
-         e+iNEVbGgZXlyLr7HyJ+sgRcm3u8D9hmOBMDWx/lFEKhkmIJOYG0EoSIr23W0k3Fxj8+
-         hWwaZBz1ztv8jUANLws0oCB1Tz36q3c+N2D2PG5CfiG+OMWT49r32ogjRCKN+HFIem6k
-         EODdQTpQYMUnfLlZFL4PRDi8lGTuzU3XD2WZpdZeKB+rWevjGR7OKmFxBZc9gzBaO/iM
-         r+AQ==
-X-Gm-Message-State: AJIora+hrq3xky3He3HrTGwzJgA2lEbAJ6pfDFjvycWYh1VJguLAMDen
-        xnbW50rh6AVzHsuNHXR2Rg==
-X-Google-Smtp-Source: AGRyM1v8pCXB40SvhaQJFc1zm1w3F8CrTtVMAwVoNHW1OCBQIOXWP1i4ozkxVqIm7YI18B7NPIxp6A==
-X-Received: by 2002:a92:cd8f:0:b0:2d9:5d44:6a53 with SMTP id r15-20020a92cd8f000000b002d95d446a53mr24555148ilb.226.1657123872876;
-        Wed, 06 Jul 2022 09:11:12 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q25-20020a05663810d900b0032e1a07228asm16164339jad.26.2022.07.06.09.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:11:12 -0700 (PDT)
-Received: (nullmailer pid 136692 invoked by uid 1000);
-        Wed, 06 Jul 2022 16:11:10 -0000
-Date:   Wed, 6 Jul 2022 10:11:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Han Xu <han.xu@nxp.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Bough Chen <haibo.chen@nxp.com>, ashish.kumar@nxp.com,
-        yogeshgaur.83@gmail.com, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, dl-linux-imx <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
- nxp,fspi-dll-slvdly
-Message-ID: <20220706161110.GA123915-robh@kernel.org>
-References: <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
- <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
- <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
- <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
- <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
- <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
- <20220705145226.tarpvub6bh67tj63@umbrella>
- <0bd271e9-8d9b-7388-2d9b-65cc39a54f8c@linaro.org>
- <20220705155031.zk36jsq4q2ac2ow4@umbrella>
+        with ESMTP id S232574AbiGFQxC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 12:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFCF2A42D;
+        Wed,  6 Jul 2022 09:53:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1188CB81E32;
+        Wed,  6 Jul 2022 16:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB5BC3411C;
+        Wed,  6 Jul 2022 16:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657126378;
+        bh=p9+EIYiQFsEijWg7qUqn4ryIqQU2p1/cxe9Pq3LUI5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VaUuO1RwaFm+0u5ev1dM72McKyCsJgUoMfeulJYPkHososvaV+WDRIKh2rSmPq/5I
+         ycOK+fXQFhN0cAzIGuEIRUGAc72n1Dg8BvFGxp45CG3JXMdbYTikfi2jlnQVeNoBij
+         r2zfhkuKbEGjlN+md/SkAdY1aYaN4T4QB9EM0K5JZp4RG2Q+wkmpDBNq3N+VeK0/PO
+         qidIwXyZj01SxZRRmEYAqsn075IAurVDuHlFh+oh0YwLTG7MhXCwpEFRQBF5dKSyW9
+         ciX4ZrYzhQCwlQ0ADndLsxjzn5lmyyRbMban5DzpUIt/qICAYJNnuSF7Qx6E13IbEF
+         uVl1lLdxPW9uA==
+Date:   Wed, 6 Jul 2022 22:22:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
+        f.fainelli@gmail.com, anand.gore@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
+        Al Cooper <alcooperx@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jie Deng <jie.deng@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH 5/9] arm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+Message-ID: <YsW95wP010g9z1P7@matsya>
+References: <20220705172613.21152-1-william.zhang@broadcom.com>
+ <20220705172613.21152-6-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220705155031.zk36jsq4q2ac2ow4@umbrella>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220705172613.21152-6-william.zhang@broadcom.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,73 +96,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 10:50:31AM -0500, Han Xu wrote:
-> On 22/07/05 05:38PM, Krzysztof Kozlowski wrote:
-> > On 05/07/2022 16:52, Han Xu wrote:
-> > > On 22/07/05 04:12PM, Krzysztof Kozlowski wrote:
-> > >> On 05/07/2022 16:06, Michael Walle wrote:
-> > >>>
-> > >>>>>
-> > >>>>> I think you could use here clock cycles or clock phase, but then it 
-> > >>>>> has to be obvious
-> > >>>>> it is that unit.
-> > >>>>
-> > >>>> Hi Krzysztof,
-> > >>>>
-> > >>>> Let me clarify it, in the document a term "delay cell" was used to
-> > >>>> descript this register bit. Each delay cell equals "1/32 clock phase",
-> > >>>> so the unit of delay cell is clock phase. The value user need set in
-> > >>>> DT just number to define how many delay cells needed.
-> > >>>
-> > >>> Then should the unit be "-degrees" and the possible range 0-180?
-> > >>
-> > >> Thanks. We don't have it documented currently, but the unit seems
-> > >> reasonable.
-> > > 
-> > > IMO, use the unit "-degrees" makes it more complicate. Personaly I would
-> > > calculate how many clock cycle delay needed, such as 1/4 clock cycle or half
-> > > clock cycle. Using degree brings extra calculation.
-> > 
-> > And what if the next device uses a bit different divider? Like 1/16?
-> > This is why we have standard units so people won't push register values
-> > into the bindings.
-> > 
-> > > 
-> > > The granularity of the clock phase change is 1/32 of 180 degree, but the range
-> > > 0-180 make people feel it can be set in any degree in range.
-> > 
-> > Yes, because that's how the bindings are being written - allowing any
-> > reasonable value, not register-specific value, to be used because it is
-> > the most flexible, hardware-independent and allows further customization
-> > of bindings (e.g. new devices). Embedding device programming model into
-> > the bindings contradicts it.
-> > 
-> > Second, nothing stops you from narrowing the acceptable values with an
-> > enum. This still allows extension. Your 1/32 does not.
-> > 
-> > > 
-> > > If I describe all details of the relation between "nxp,fspi-dll-slvdly" and
-> > > "delay cell" in patch v2, do you think it's clear for users?
-
-What's a cell?
-
-> > 
-> > 1/32 could be a nice unit, but degrees is better. Just like uV is better
-> > than 1/32 of V. Like 1 us is better than 1/32 of ms.
-> > 
-> > Do you see  in the bindings many other values like time, potential,
-> > current or power described in 1/32 units?
+On 05-07-22, 10:26, William Zhang wrote:
+> Update ARCH_BCM_63XX in all sources to use ARCHB_BCMBCA instead.
 > 
-> That make sense. I will use degree as the unit and round to register proper
-> value in driver as Michael suggested. Thanks for all comments.
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
+> 
+>  arch/arm/Kconfig.debug         | 2 +-
+>  drivers/ata/Kconfig            | 2 +-
+>  drivers/char/hw_random/Kconfig | 2 +-
+>  drivers/clk/bcm/Kconfig        | 4 ++--
+>  drivers/i2c/busses/Kconfig     | 2 +-
+>  drivers/phy/broadcom/Kconfig   | 2 +-
 
-I'm still wondering what this is delaying? From what to what? We already 
-have numerous common delay properties for SPI. If one of those doesn't 
-work, then should this be a new common property? And if common, I think 
-time units is better to use than degrees.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-If this is vendor specific, then I'd just use the register value. 
-There's not much point in using common units unless it is a common 
-property.
 
-Rob
+
+-- 
+~Vinod
