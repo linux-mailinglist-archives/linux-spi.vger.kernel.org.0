@@ -2,105 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022D95692B5
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 21:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E225693C0
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jul 2022 23:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiGFTjQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jul 2022 15:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S233255AbiGFVAF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jul 2022 17:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiGFTjQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 15:39:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A66BE9A;
-        Wed,  6 Jul 2022 12:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229768AbiGFVAF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jul 2022 17:00:05 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE018B25;
+        Wed,  6 Jul 2022 14:00:03 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 365B4620A3;
-        Wed,  6 Jul 2022 19:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F88C341CA;
-        Wed,  6 Jul 2022 19:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657136354;
-        bh=E3mfOerdYVWrCZ85sBYMTVxIttCanPdxxYhCAoaTxh0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=siU6TN1IeX526SjcOgSuPyzEj/JgCuq+FuMuZNxyKU0OLqM6MpzgBtG8m9MsdHHlt
-         nX2FJF+Yhl0ILejyjZfTuLjOC3AuKgDWk1gv+pWvun1rqcwIwzQP+IqTlnUgAnfpCV
-         xbjBso9+oXiNgDtYyTxM6EuCqpZVKe7zM4d1Wi9ExnNbCy997XFXS/VvFkRuBb5PBL
-         T1DL0MdNwc5dCOUFZWLC0lGZCDd+37DlnuAZFzdWDfcFhcwoVN9P/BO/WEyePbdKrn
-         g6xeb/6wLbpgdO5+Iiw2gerULqS7TDVwmCbQTURnZ4UXjY98kzC8TcRoJ+sJDcZrJX
-         UWJcRNyyviwrg==
-From:   Mark Brown <broonie@kernel.org>
-To:     cristian.ciocaltea@collabora.com, sanju.mehta@amd.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vacharakis@o2mail.de, kernel@collabora.com
-In-Reply-To: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
-References: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
-Subject: Re: [PATCH 0/5] AMD SPI controller driver bug fix and cleanups
-Message-Id: <165713635311.1162444.8799219504785646991.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 20:39:13 +0100
+        by ssl.serverraum.org (Postfix) with ESMTPSA id EE5AA2223A;
+        Wed,  6 Jul 2022 22:59:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657141200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zkQ/2LCI9KeCTIUmXYEWItYqPgAG9I6lXHScBEtzG+U=;
+        b=Rjk9wO3ARsLTN7G14ofW05WjtQKKKTNWU2BOjPIYP/1zH9Ts/bI4meCOERCYEtmca5D5JZ
+        VhV5S8OT+N1m3xX7v72ntJHbl02fhZvWxZzcdsg6DopF5hDAwNjkmVMfF5bCugOiN4nkth
+        UoIciSSClSkEDRKgd1mMOyL2Mnm+lss=
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 06 Jul 2022 22:59:56 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Han Xu <han.xu@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bough Chen <haibo.chen@nxp.com>, ashish.kumar@nxp.com,
+        yogeshgaur.83@gmail.com, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, singh.kuldeep87k@gmail.com,
+        tudor.ambarus@microchip.com, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        festevam@gmail.com, dl-linux-imx <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH 07/11] dt-bindings: spi: spi-nxp-fspi: add a new property
+ nxp,fspi-dll-slvdly
+In-Reply-To: <20220706161110.GA123915-robh@kernel.org>
+References: <VI1PR04MB40167A70FBE772DF91047A4190819@VI1PR04MB4016.eurprd04.prod.outlook.com>
+ <59d360ef-5374-c7a7-2995-854ab3715b25@linaro.org>
+ <DU2PR04MB87747C9A8F18D8300461D6B197819@DU2PR04MB8774.eurprd04.prod.outlook.com>
+ <f33ad190-f5c7-d9fa-088b-5538ab1f4d59@linaro.org>
+ <DU2PR04MB877492F346BAA10B2AA7428497819@DU2PR04MB8774.eurprd04.prod.outlook.com>
+ <62f113a0cdb0d58bf04ab0b274912eb7@walle.cc>
+ <be521f90-97ce-c61d-d7d6-8f2bde24d824@linaro.org>
+ <20220705145226.tarpvub6bh67tj63@umbrella>
+ <0bd271e9-8d9b-7388-2d9b-65cc39a54f8c@linaro.org>
+ <20220705155031.zk36jsq4q2ac2ow4@umbrella>
+ <20220706161110.GA123915-robh@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <7fc2d4ba636a4995eda502ea4c66856d@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 6 Jul 2022 13:06:21 +0300, Cristian Ciocaltea wrote:
-> This patch series addresses an issue in the spi-amd driver and, while
-> there, performs some additional cleanups, like simplifying the error
-> handling in the probe function and removing an unused struct member.
+Am 2022-07-06 18:11, schrieb Rob Herring:
+> On Tue, Jul 05, 2022 at 10:50:31AM -0500, Han Xu wrote:
+>> On 22/07/05 05:38PM, Krzysztof Kozlowski wrote:
+>> > On 05/07/2022 16:52, Han Xu wrote:
+>> > > On 22/07/05 04:12PM, Krzysztof Kozlowski wrote:
+>> > >> On 05/07/2022 16:06, Michael Walle wrote:
+>> > >>>
+>> > >>>>>
+>> > >>>>> I think you could use here clock cycles or clock phase, but then it
+>> > >>>>> has to be obvious
+>> > >>>>> it is that unit.
+>> > >>>>
+>> > >>>> Hi Krzysztof,
+>> > >>>>
+>> > >>>> Let me clarify it, in the document a term "delay cell" was used to
+>> > >>>> descript this register bit. Each delay cell equals "1/32 clock phase",
+>> > >>>> so the unit of delay cell is clock phase. The value user need set in
+>> > >>>> DT just number to define how many delay cells needed.
+>> > >>>
+>> > >>> Then should the unit be "-degrees" and the possible range 0-180?
+>> > >>
+>> > >> Thanks. We don't have it documented currently, but the unit seems
+>> > >> reasonable.
+>> > >
+>> > > IMO, use the unit "-degrees" makes it more complicate. Personaly I would
+>> > > calculate how many clock cycle delay needed, such as 1/4 clock cycle or half
+>> > > clock cycle. Using degree brings extra calculation.
+>> >
+>> > And what if the next device uses a bit different divider? Like 1/16?
+>> > This is why we have standard units so people won't push register values
+>> > into the bindings.
+>> >
+>> > >
+>> > > The granularity of the clock phase change is 1/32 of 180 degree, but the range
+>> > > 0-180 make people feel it can be set in any degree in range.
+>> >
+>> > Yes, because that's how the bindings are being written - allowing any
+>> > reasonable value, not register-specific value, to be used because it is
+>> > the most flexible, hardware-independent and allows further customization
+>> > of bindings (e.g. new devices). Embedding device programming model into
+>> > the bindings contradicts it.
+>> >
+>> > Second, nothing stops you from narrowing the acceptable values with an
+>> > enum. This still allows extension. Your 1/32 does not.
+>> >
+>> > >
+>> > > If I describe all details of the relation between "nxp,fspi-dll-slvdly" and
+>> > > "delay cell" in patch v2, do you think it's clear for users?
 > 
-> For improving code readability, it also adds some kernel-doc comments.
+> What's a cell?
+
+A delay cell I presume. Which if I read the datasheet correctly is
+somewhere between 75ps and 225ps per cell *in an unlocked state*.
+
+I don't understand what the intention of this setting in the device
+tree is. I does *not* specify the delay of the DLL, rather it specifies
+the target value to be achieved by the DLL. And the RM tells the
+recommended value is 0xf. Which makes sense, because it's half a clock
+cycle and you'd want to sample in the middle of the clock (note this is
+double data rate and you are sampling on falling and rising edge). But
+and this is the catch I think, the DLL will only lock if the frequency
+is >100MHz. Now if the frequency is lower than 100MHz you can actually
+set the value manually (see above), but this is not what the driver
+does. You'd need to write the manual value into OVRDVAL, not into
+SLVDLYTARGET.
+
+So I'm confused. Why can't you just set SLVDLYTARGET to 0xf if the
+frequency is larger than 100MHz? How is this supposed to be used?
+Do I need to set the value to 0xf if the frequency is higher than
+100MHz? I see you used 4 in your device tree, why don't you use
+the recommended value?
+
+>> > 1/32 could be a nice unit, but degrees is better. Just like uV is better
+>> > than 1/32 of V. Like 1 us is better than 1/32 of ms.
+>> >
+>> > Do you see  in the bindings many other values like time, potential,
+>> > current or power described in 1/32 units?
+>> 
+>> That make sense. I will use degree as the unit and round to register 
+>> proper
+>> value in driver as Michael suggested. Thanks for all comments.
 > 
-> Cristian Ciocaltea (5):
->   spi: amd: Limit max transfer and message size
->   spi: amd: Make use of devm_spi_alloc_master()
->   spi: amd: Make use of dev_err_probe()
->   spi: amd: Drop io_base_addr member from struct amd_spi
->   spi: amd: Add struct and enum kernel-doc comments
-> 
-> [...]
+> I'm still wondering what this is delaying? From what to what? We 
+> already
+> have numerous common delay properties for SPI. If one of those doesn't
+> work, then should this be a new common property? And if common, I think
+> time units is better to use than degrees.
 
-Applied to
+It's delaying the internal sampling clock with respect to the
+internal clock (which also drivers SCK then). With that clock
+the data written by the flash device is then sampled. Now there
+is also the read strobe; I'm unsure if that can also be delayed.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Time units depend on the frequency (or changes with the frequency),
+whereas the phase angle doesn't.
 
-Thanks!
+> If this is vendor specific, then I'd just use the register value.
+> There's not much point in using common units unless it is a common
+> property.
 
-[1/5] spi: amd: Limit max transfer and message size
-      commit: 6ece49c56965544262523dae4a071ace3db63507
-[2/5] spi: amd: Make use of devm_spi_alloc_master()
-      commit: 2e063bb1d4272e7b64ef813566691ea8ea192f9c
-[3/5] spi: amd: Make use of dev_err_probe()
-      commit: deef4da8be2f7e94a0807e56f856d3e20addce4d
-[4/5] spi: amd: Drop io_base_addr member from struct amd_spi
-      commit: 1e71ffee97ac02b83b6ff75b52fa7b21b9149f7d
-[5/5] spi: amd: Add struct and enum kernel-doc comments
-      commit: 55861e36b663f6e584d1b0659c1c5cec0ce26a5d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-michael
