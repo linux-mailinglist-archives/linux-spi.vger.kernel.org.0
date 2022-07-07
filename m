@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F7D56A3A6
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jul 2022 15:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6588F56A3B8
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jul 2022 15:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235490AbiGGN3U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jul 2022 09:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S235944AbiGGNdB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jul 2022 09:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbiGGN3S (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jul 2022 09:29:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD59631906;
-        Thu,  7 Jul 2022 06:29:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id o7so1990328lfq.9;
-        Thu, 07 Jul 2022 06:29:17 -0700 (PDT)
+        with ESMTP id S235639AbiGGNc6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jul 2022 09:32:58 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484D83193C;
+        Thu,  7 Jul 2022 06:32:57 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t19so30512900lfl.5;
+        Thu, 07 Jul 2022 06:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4fH6kMVSj+qVVo/2VvoFlROqeMBn1ytSKbPmKBEfNYc=;
-        b=lttpKU+Z/8EnpQyacCUZtbg5Mr5fjFYyK/H0QjJvmzRFVlXzi537TuqI+vO+iA8n2C
-         nieNVUGziaBnxeGFEkhB59kjZnAkHIWv8xqcELeN3rl0CAk/4pOk/1R6rfOHRPBwO/J2
-         VQh2QDpnOo7biwt2qTN3iiAskVdl3Z5q6QQY/w5BmYF0peLpyTiJXvU+0yVSLAMVOHwP
-         XT97hak2KSb8c9D7VfqLtDnvNalGBr+4v4bS5z9ffK0xJeepuKGFDe44TCfhTRWsAufv
-         DCAPiGVZW918h5j7MjUCQPdkzJt9uOus80edx4VEOyI4AfLFW/El811FB/62wQ1SRUub
-         1zzQ==
+        bh=TtuCctLiUBsDg/El2R/LFu8UcsQyJ3QYHLK3i09xrZo=;
+        b=TgK5U6kdSEmWxBs+Qle+io/mX+szrObSFd6XeExsi/+ahqjy/S3i0GPj0KiFyyE+kg
+         oXrHAjM+d9nTaBLC2rIsFvLMH3mWvn5+kxo2MyWwK8Mqy4UWkUCCaUe06jfpRj98eoIy
+         6jaHQOZ7U8AuVqO/MuVJzWwwKBrBVdzNNf3SJIljeiJs+1tN4DDxyC/GG5QXNMo7QY9X
+         Jp2/fB3dJYA+9bDmU/UW/6FGZMnpCQT0KX7/zBwyP8ieGeiJ+U6HtG4cvMwvKCUPrbdF
+         oxSCZX05CLayqk92AjCSt3Jgj1ZxKmGCVy1g7jqhLOdE0ZltDFFc17FWOL2g0NPR5Vl9
+         mLSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4fH6kMVSj+qVVo/2VvoFlROqeMBn1ytSKbPmKBEfNYc=;
-        b=VRAmHWSEwNa9qEEFUp/vHLizwcyLFOStFmI2HHLQwAIkvY0tR4x3ACbMx4DureHeuX
-         U3tBoG4g/IadZzU9a4mk1EQw9OuARwDBXncRpetyQ61igqzLXBQSFtntJaE/cyVcv3ga
-         HPBXkinihwQtOTb8/+iy1VyTO4WwiNHRP0QcCa1k5WlJpDwLoljxfwxIW81G0xiq9PsA
-         wMYYmW+jm94oc3c/aTJJsi7yxz7vEMpbXKZegiPh3ia+3x4ZEZPT3ipHjWp9K2JwKO1K
-         xKMJEuHvfqFV+fIqp1VYAMucIO2mqplYgbxLPj9hKe+Wj35h3ixXhVlpo2gU2Zyrgn2z
-         91Yg==
-X-Gm-Message-State: AJIora8Y5cKy5lMw6VRovueMu9cIIp8zkikibo5/MN1SgQNVFeoQORBN
-        oHi7ioKmewuj/MgJrhhslMrHrfS7DVnXvg==
-X-Google-Smtp-Source: AGRyM1shyuVbz3i1zFPUSxzw7KF3w00dUQUUoHpc9n0+6RNjDIg52eEgYx6r1F+TP3HB9ZSlfcJdKg==
-X-Received: by 2002:a05:6512:314e:b0:47f:8341:2099 with SMTP id s14-20020a056512314e00b0047f83412099mr28906592lfi.367.1657200556195;
-        Thu, 07 Jul 2022 06:29:16 -0700 (PDT)
+        bh=TtuCctLiUBsDg/El2R/LFu8UcsQyJ3QYHLK3i09xrZo=;
+        b=BSvD8NzsNQB0N94iuLh98GwI5p4uU81l1KVoKBqOsaZcrtL9k2ThMs88LdTNfuqgYQ
+         kUkF1FZKLcMK3/DZwVV7a4I6ca265uJMy5ODXZsSBXiH+PXF+3bavZZOdbXvZ9XtT1Qw
+         I7I7LYpRtbs/kjsgEzbgB65H8z+PS87sjDgZO1Dx6oRCOAqslz1dkyo75TA5ntxoUuXT
+         sIqax2pwN/2BeD+HjlVfIinD2IfJFMLqr3wVnkdThHIMj3X4IJyM/hrEofhXVq9fn7Us
+         YxpQnwl2akOyl8bjR2BPA5pEYxJ9NTgKGeVzygWsEzXkLYX9Ui0wfoZ19illuAs8sj0I
+         4jxQ==
+X-Gm-Message-State: AJIora/wZUad9oUKGQgLTvCDWQrm24qpjQ7p09UxSS2ZklnTuO3lSTBl
+        nd2jMIHblfipga9D+H22VtzkEtReyZA72A==
+X-Google-Smtp-Source: AGRyM1vV9Ll9A0NQJjqT0fJm6rV5zJcuTNNNvEOpNpoodgBpp9bqjiPCRzKfak0FwdzMVEcFACvi+w==
+X-Received: by 2002:a05:6512:3d86:b0:47f:9adc:cc27 with SMTP id k6-20020a0565123d8600b0047f9adccc27mr29274359lfv.608.1657200774963;
+        Thu, 07 Jul 2022 06:32:54 -0700 (PDT)
 Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id y3-20020ac255a3000000b0047255d211b2sm6832722lfg.225.2022.07.07.06.29.14
+        by smtp.gmail.com with ESMTPSA id f19-20020a2eb5b3000000b0025d4866b2c7sm867045ljn.4.2022.07.07.06.32.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 06:29:14 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 16:29:12 +0300
+        Thu, 07 Jul 2022 06:32:53 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 16:32:51 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     nandhini.srikandan@intel.com
 Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
@@ -56,14 +56,15 @@ Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
         kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
         mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
         rashmi.a@intel.com
-Subject: Re: [PATCH v5 1/4] spi: dw: Fix IP-core versions macro
-Message-ID: <20220707132912.j26r4ziai4a5g2a4@mobilestation>
+Subject: Re: [PATCH v5 3/4] spi: dw: Add support for master mode selection
+ for DWC SSI controller
+Message-ID: <20220707133251.36gb5cgqygz22jl3@mobilestation>
 References: <20220706042039.5763-1-nandhini.srikandan@intel.com>
- <20220706042039.5763-2-nandhini.srikandan@intel.com>
+ <20220706042039.5763-4-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706042039.5763-2-nandhini.srikandan@intel.com>
+In-Reply-To: <20220706042039.5763-4-nandhini.srikandan@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,39 +75,59 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Nandhini
-
-On Wed, Jul 06, 2022 at 12:20:36PM +0800, nandhini.srikandan@intel.com wrote:
+On Wed, Jul 06, 2022 at 12:20:38PM +0800, nandhini.srikandan@intel.com wrote:
 > From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 > 
-> Fixes: 2cc8d9227bbb ("spi: dw: Introduce Synopsys IP-core versions interface")
+> Add support to select the controller mode as master mode by setting
+> Bit 31 of CTRLR0 register. This feature is supported for controller
+> versions above v1.02.
+> 
 > Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-As Mark already noted each patch is supposed to have a changelog [1].
-Please add a detailed explanation of the problem above the tags
-block [1].
-
-[1] "Patch formatting and changelogs" Documentation/process/5.Posting.rst
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
 -Sergey
 
 > ---
->  drivers/spi/spi-dw.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/spi/spi-dw-core.c | 5 +++--
+>  drivers/spi/spi-dw.h      | 8 +-------
+>  2 files changed, 4 insertions(+), 9 deletions(-)
 > 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index ecea471ff42c..41ae21e1b879 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -307,8 +307,9 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
+>  		if (spi->mode & SPI_LOOP)
+>  			cr0 |= DW_HSSI_CTRLR0_SRL;
+>  
+> -		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+> -			cr0 |= DW_HSSI_CTRLR0_KEEMBAY_MST;
+> +		/* CTRLR0[31] MST */
+> +		if (dw_spi_ver_is_ge(dws, HSSI, 102A))
+> +			cr0 |= DW_HSSI_CTRLR0_MST;
+>  	}
+>  
+>  	return cr0;
 > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index d5ee5130601e..79d853f6d192 100644
+> index 79d853f6d192..8b8f924ac410 100644
 > --- a/drivers/spi/spi-dw.h
 > +++ b/drivers/spi/spi-dw.h
-> @@ -23,7 +23,7 @@
->  	((_dws)->ip == DW_ ## _ip ## _ID)
+> @@ -94,13 +94,7 @@
+>  #define DW_HSSI_CTRLR0_SCPOL			BIT(9)
+>  #define DW_HSSI_CTRLR0_TMOD_MASK		GENMASK(11, 10)
+>  #define DW_HSSI_CTRLR0_SRL			BIT(13)
+> -
+> -/*
+> - * For Keem Bay, CTRLR0[31] is used to select controller mode.
+> - * 0: SSI is slave
+> - * 1: SSI is master
+> - */
+> -#define DW_HSSI_CTRLR0_KEEMBAY_MST		BIT(31)
+> +#define DW_HSSI_CTRLR0_MST			BIT(31)
 >  
->  #define __dw_spi_ver_cmp(_dws, _ip, _ver, _op) \
-> -	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ver)
-> +	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ ## _ver)
->  
->  #define dw_spi_ver_is(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws, _ip, _ver, ==)
->  
+>  /* Bit fields in CTRLR1 */
+>  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
 > -- 
 > 2.17.1
 > 
