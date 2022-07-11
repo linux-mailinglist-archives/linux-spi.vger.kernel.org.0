@@ -2,107 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FBF57063C
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 16:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28A35707DA
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 18:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiGKOwo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Jul 2022 10:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S229928AbiGKQEo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jul 2022 12:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiGKOwn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jul 2022 10:52:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B1C6F7EC;
-        Mon, 11 Jul 2022 07:52:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7FF5B81026;
-        Mon, 11 Jul 2022 14:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66C9C34115;
-        Mon, 11 Jul 2022 14:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657551160;
-        bh=T5/YgjZEyFa9qar9PBcP/h4QGGDW5ssEp2nL2da/rbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FruxfvHb7pRbBBKIhc4BZ4LRHPprizlmPVXQS1iaXTGP3mgGGgRP55lY90bNGTJnA
-         OT1+WTtiPEFSUVn2Tg5wAMGpjjG3usGRRsF6/jUH758RS/RygHWSHg/lMONF2Rqlkq
-         4X1cHCexjg+mTGOGHaJGJ6nPWWtvjhHaSnFpd3vYobOIzYlxPgZjnRkAZ/Luf40u83
-         0t9djetXzX5gMjB7V4yP0O1Gm/io7vVDjEJy3sg8p3PodwEUxchAZxGEksxtZB8Blu
-         sFcf1VXgD+ZN0cIf0lQtlo+upOC9x0DA/NjhmVkz2e4jveY5VCqFuBi3ES8Y2BtO4q
-         Tmr8GBBH/12eQ==
-Date:   Mon, 11 Jul 2022 15:52:34 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, git@xilinx.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, linux-mtd@lists.infradead.org
-Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Message-ID: <Ysw5MpvjKM5LKvWd@sirena.org.uk>
-References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
- <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
- <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+        with ESMTP id S229663AbiGKQEn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jul 2022 12:04:43 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CAB52E4C;
+        Mon, 11 Jul 2022 09:04:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so8796516pjr.4;
+        Mon, 11 Jul 2022 09:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jhU46F57Kpsm3lvGS+RUeO4HB1RQGRqBuSXGIQOZlWw=;
+        b=I29ieqbgkvvj7s6AihIwRftCxrPtgxLLxr2oSajD7qJ5iQzsmjO2Zg8PmHCYSirQjb
+         u8XHFdCHN3knKWFIqqLjNTwmyvX+s9Ik+UnpjpsRHdtOUpIwcVKvSRudmHEYjKfKyIq5
+         vAKu/mbJfO+PLvJ9NOOTr2C+8bqZQGwq5+Xmbn+/YjGAQ1rVsI+DPW0s00mmD6SkIDpw
+         eX+hgy0LDPYIBlMCtuuY5rQK/rS21jf94qDIfwRZViI2iuqnG0PD+UM21/f1opsVAyIz
+         QNO+ROsQY25yZMpqx3RHw62McW7BUPQIFeF5IcLHzpGWVt0DU+1AYPvlGd4bKVKotvhU
+         NIfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jhU46F57Kpsm3lvGS+RUeO4HB1RQGRqBuSXGIQOZlWw=;
+        b=vwHprHGH4/KKdW7N0srerOddoMSVOdMhhIniZWAhbdh9HJ1uKnDTy/cUZfpd2hyZ2G
+         iC3wS9ObCP5UcV7uhUZhE0ePOLu83VCgvo2thP+1odc1Dv+NnKc/KQFHtodgybuFQ4pK
+         fv7pzHMmHhs+2JOKh9N+f+gwV/TQywOrgJSL7m2dnsZIVj72DyPxAX8SrQABYY3goh7O
+         gLXMd/MyMOV2lY6MRBZ0ysm/LpRWu7TbQxa8XQRf4T/mNTqu31bb5MCnKY+ufF07B80R
+         soSjuruZ6abldslKMdF+Bh/dKnanygFgSCgFBdAIPGvTzy8+0hQ7TxjUSfog0JEQOWbY
+         58Cg==
+X-Gm-Message-State: AJIora/9WwA3L7wg17PhzHQMoPSjOyQUzq4xiEC/uI74IOUOKDJp91iA
+        FohnIDeazDA9uPW8Zx8U6Jo=
+X-Google-Smtp-Source: AGRyM1tE7K3zk6X7mcRkGHtHEjNhMYP1cMqA0DJkX5jLpm9sWbZe/mJY5DFIQUEvjaTSXC+k1cx1mg==
+X-Received: by 2002:a17:90b:240b:b0:1ef:8a68:1596 with SMTP id nr11-20020a17090b240b00b001ef8a681596mr18438234pjb.234.1657555482490;
+        Mon, 11 Jul 2022 09:04:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id js1-20020a17090b148100b001ef7e5f2a82sm5012057pjb.25.2022.07.11.09.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 09:04:41 -0700 (PDT)
+Message-ID: <ce3f1df4-6919-e666-a8d0-a856e5d7bc3b@gmail.com>
+Date:   Mon, 11 Jul 2022 09:04:39 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="myd8/Fo7asf/V7NN"
-Content-Disposition: inline
-In-Reply-To: <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
-X-Cookie: I am NOMAD!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH 7/8] spi: bcm63xx-hsspi: bcmbca: Replace
+ ARCH_BCM_63XX with ARCH_BCMBCA
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+ <20220707065800.261269-7-william.zhang@broadcom.com>
+ <20220711021131.3289881-1-f.fainelli@gmail.com>
+ <Ysv/PNJzSEwRnQVI@sirena.org.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Ysv/PNJzSEwRnQVI@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 7/11/22 03:45, Mark Brown wrote:
+> On Sun, Jul 10, 2022 at 07:11:31PM -0700, Florian Fainelli wrote:
+>> On Wed,  6 Jul 2022 23:57:58 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+>>> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
+>>> SPI_BCM63XX_HSSPI depending on ARCH_BCMBCA.
+> 
+>> Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+> 
+> I was rather hoping for an answer on what the situation with
+> dependencies was here...
 
---myd8/Fo7asf/V7NN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Each patch is independent from one another and there are not 
+dependencies on the Broadcom arm-soc tree(s) other than for 
+CONFIG_ARCH_BCMBCA which was introduced with v5.19 with 
+b32c613b3fda3e1c26119609f1ad6b19178f82f5. That said, I prefer to take 
+all patches via the Broadcom arm-soc tree(s) to ensure a timely 
+inclusion for our upcoming v5.20 pull request, and ensure that all 
+drivers are converted in one release cycle.
 
-On Mon, Jul 11, 2022 at 02:47:54PM +0200, Michal Simek wrote:
-> On 6/9/22 13:54, Mark Brown wrote:
-> > On Mon, Jun 06, 2022 at 04:56:06PM +0530, Amit Kumar Mahapatra wrote:
+If you want to give me your Acked-by or that I drop this and take it via 
+the spi tree, please let me know.
 
-> > > +	u32 cs[SPI_CS_CNT_MAX];
-> > > +	u8 idx;
-> > >   	/* Mode (clock phase/polarity/etc.) */
-> > >   	if (of_property_read_bool(nc, "spi-cpha"))
-
-> > This is changing the DT binding but doesn't have any updates to the
-> > binding document.  The binding code also doesn't validate that we don't
-> > have too many chip selects.
-
-> I would like to better understand your request here in connection to change
-> in the binding code for validation.
-> What exactly do you want to validate?
-> That child reg property is not bigger than num-cs in controller node?
-
-If you are adding support for multiple chip selects in the driver then
-there must be some mechanism for expressing that in the bindings which I
-would expect to see appear as a change to the binding document.
-
---myd8/Fo7asf/V7NN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLMOTEACgkQJNaLcl1U
-h9DUywf/elR3ZLKLxsB3PZJFT+KXa1Qr7NqEluE38DikQ0asVPDKT2SyDCuVZBFu
-P1WzVgQFGEAjOkRrNtJYKBi8zPlGyjCp45MoWQeXNMqI/1jyNP0O9ewCBZH8rT2x
-zhtyqxEFRWbPxdGdiNvhUodfbdnWjbE6tgt6XEgnJT+b9yqAUx13OGx5PK4tf8ql
-Bg+I0GCGybcOmQgJ1DPuTY8l1c5Hs2sd3kHCdpgjtEjnSnD7dqOtDQ0lH2vSVVzF
-1tlp1tSqbatA+jmgJSki0T/eVtXpiNHOWq/WBdjEx9nBu8YN28UR8iMVtxeua7Ni
-i8DPKRKrXRFE6Qz2NK5U6/DYNEVDVw==
-=ZBqB
------END PGP SIGNATURE-----
-
---myd8/Fo7asf/V7NN--
+Thanks!
+-- 
+Florian
