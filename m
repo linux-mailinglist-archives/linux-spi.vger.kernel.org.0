@@ -2,84 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AD356D2E2
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 04:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5178C56FFE0
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 13:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiGKCLg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 10 Jul 2022 22:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S230089AbiGKLN5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jul 2022 07:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiGKCLf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 Jul 2022 22:11:35 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEDA18386;
-        Sun, 10 Jul 2022 19:11:34 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id j12so3271476plj.8;
-        Sun, 10 Jul 2022 19:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dKyXs2M5gEl9Yy+kDXx9obgwPlNnBsHIdeS7/5Z6+y0=;
-        b=ANyA1+bavb+wPj3jrWTQhLx2uS77yjDqCXXXygZAC7O6KXmx9VWGZPt6F/NYKgS5Zz
-         jNQe0akLrOAAVeryR7dK3yR5bszQdacrYNKUt2WAx2sVkaGpaJbbenm/FFz0BoGJvPyz
-         TRg1i0lZapp5XPjVEmc/IDpnHOJbpCWMcs3W3C+Zo3YW3Wf7/MqGB9078p6yBG4yzq2e
-         zMICnjK6kEs6Ud95y3mP8jPCE05c9o/DzX9ztrpyuKXDSv0Si/qLyQLZoMn346/FuBol
-         3B6Cbf5k9pakEtnBj+hxFdW9wiGkiLa5TLRHaUhtzb4RvjQqyxuTen0A+v/feH1k1yT8
-         U3KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dKyXs2M5gEl9Yy+kDXx9obgwPlNnBsHIdeS7/5Z6+y0=;
-        b=qFkVwVwtDebuNKpxLemWBFykhyY+9kmG8jK466tJI1GyguLI74xkFO+vdkvHCv2qHY
-         iLP7eD99zYLpBaxMjUjhQ73nvWOgsktsKZtelM7bcJjUzCClz8zYsZAc3furZyPCsEQD
-         6hhelZTbVgjyPDzvxwzb7S8UtbCbCLo8ddFYLDTt0V/v2pZMu3JiasDhozx50rq4Ypcq
-         o8ZUk32Iflm5/x66ZYY8ZQgiytx4l6K2p6BBu5h1c4/GryvfD6rjxpH4SNfAPGnPz2qY
-         /RhWW2LtNi8gAl9lwXUGXLvhVMahMbVHzOOYSczlsc/uj0TjaRbUp7zXUj79qYId4vcv
-         eTAw==
-X-Gm-Message-State: AJIora+QfwPgquIaDo2DtADQA0crT26/ndBI9LU25ecDDEjaBclkxO5W
-        RcWmnl2VkMnQmoMbRZWIdWI=
-X-Google-Smtp-Source: AGRyM1s6aSzvsV90fMi4YcYdr0dkcU6oa4VXpm5EAUB/dRNgS9rN71bPwsWzqpMfGbENOhWJ3yethA==
-X-Received: by 2002:a17:902:c40a:b0:16c:408:57d6 with SMTP id k10-20020a170902c40a00b0016c040857d6mr16098167plk.157.1657505494273;
-        Sun, 10 Jul 2022 19:11:34 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b0016a4f3ca28bsm3357619plh.274.2022.07.10.19.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 19:11:33 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [RESEND PATCH 7/8] spi: bcm63xx-hsspi: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-Date:   Sun, 10 Jul 2022 19:11:31 -0700
-Message-Id: <20220711021131.3289881-1-f.fainelli@gmail.com>
+        with ESMTP id S230198AbiGKLNc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jul 2022 07:13:32 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDF21900E
+        for <linux-spi@vger.kernel.org>; Mon, 11 Jul 2022 03:28:03 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by laurent.telenet-ops.be with bizsmtp
+        id tmU22700F4C55Sk01mU22y; Mon, 11 Jul 2022 12:28:02 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAqCw-0032if-Gc; Mon, 11 Jul 2022 12:00:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAp37-004dvg-Q0; Mon, 11 Jul 2022 10:45:49 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: SPI_MICROCHIP_CORE should depend on SOC_MICROCHIP_POLARFIRE
+Date:   Mon, 11 Jul 2022 10:45:49 +0200
+Message-Id: <4e78693a87d6b83847056d22468c370e7232f390.1657529125.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707065800.261269-7-william.zhang@broadcom.com>
-References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-7-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed,  6 Jul 2022 23:57:58 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
-> SPI_BCM63XX_HSSPI depending on ARCH_BCMBCA.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
+The Microchip "hard" FPGA SPI controller is only present on Microchip
+PolarFire SoCs.  Hence add a dependency on SOC_MICROCHIP_POLARFIRE, to
+prevent asking the user about this driver when configuring a kernel
+without Microchip PolarFire SoC support.
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+Fixes: 9ac8d17694b66d54 ("spi: add support for microchip fpga spi controllers")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/spi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index e03cd16f4469079e..b1cb7fe129ff86da 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -585,6 +585,7 @@ config SPI_MESON_SPIFC
+ config SPI_MICROCHIP_CORE
+ 	tristate "Microchip FPGA SPI controllers"
+ 	depends on SPI_MASTER
++	depends on SOC_MICROCHIP_POLARFIRE || COMPILE_TEST
+ 	help
+ 	  This enables the SPI driver for Microchip FPGA SPI controllers.
+ 	  Say Y or M here if you want to use the "hard" controllers on
+-- 
+2.25.1
+
