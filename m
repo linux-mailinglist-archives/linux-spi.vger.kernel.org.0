@@ -2,152 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5B956FFF2
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 13:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9434E570022
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jul 2022 13:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiGKLPV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Jul 2022 07:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
+        id S231238AbiGKLVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jul 2022 07:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiGKLOt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jul 2022 07:14:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6C513E24;
-        Mon, 11 Jul 2022 03:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657535609; x=1689071609;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=jQJ0PsLAVVMGpecHIYsJ66cU3yPvOicuCMQl00Ndhyg=;
-  b=GspE4IoHUHByP5RVuMQoVEPtfvj/UBVxSEoYRvdoJZINlYhRiKG0lS5Y
-   ag5kWrOqiWlLbRfX2hb3zFJcmhvpUjoGZ8rnLXbbPAOjHBndPGiLIlP48
-   MoKEEjZYYcOknT5/F7Bp/yUiF296q1T2dYAfyoBF9gS9oSbrcFk5jWPSx
-   ZfQJXo0D3QVqobHKVBGY8lo3LH8f5QqShNdmT8BAQEERKvjSPEvanEkLu
-   kOdpdq+z8X9VBy+3tWyrflo2VR/iw7VCRj68EPSAD6YKwrFhAqiihpCtM
-   /FOzewb4umkQ7wU1hOHyQmPM7MHpnB6ZeDZgJ9N9oi9KdFXO02ec52bOf
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="103895437"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2022 03:33:28 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Jul 2022 03:33:27 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 11 Jul 2022 03:33:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D1+i4HDCIOUOZFckJa5JAnNnfPcUfQuESbIkU+uI0s+b40Sy4GPgoZ6Ea3xhlrApXcHC3LB5B94jSKSxYoqNNYsJQO18KcmLuIPNH+vkeew/8b/5buMsQJaxl6knkHyuzOW7Qj30NxRFsqnQibUDcMrfyVACq2Q5upu5pQz24YNIbWTEPq3rHru0/xWljN+U3Bv7bmPk7Wotp0EpSeGNHLNheJ3Miy9lxMD9o6i6dGhLVhdFb2uLe5IpXMA97ywteNivpHztFWHl9rPCQcbUH0fZlL2Bz/ch3I48mnPUHDmofPWvuJ+ep071RXeAhmqDPpDPEz1NULICtGqMtqafKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jQJ0PsLAVVMGpecHIYsJ66cU3yPvOicuCMQl00Ndhyg=;
- b=NMm4YG7Elx2NzqXaHvjKEHoxLvSX8YhMvYauQRyvqlimtGkH7FEDRWrEsVOkt1aJxqEBotKF4R1Zko83ja+aCKFLFkn+rpKn5H80fVHjSP1ap9GzxTqgPz3MUfDHv5T5swvhkkvf+Z3N9l78HpsVSP8Kc4fWdiEeYoFFyc84/cLFKYyhCYFzkCkIleInnJmQNRSCQNcz/nug06zxsnvYIcYdu81EDx6Zu+WUqhLpumjdWFBzLdV5lpRoYx2iCbVuae74OW5z4vP0xZoRRpECF/AfZ8yOvLQR4z4ANO3iVoL0VlCuPMiJej8JeMDp/mhKMdl+O6Gn3qURmrm/njDW9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jQJ0PsLAVVMGpecHIYsJ66cU3yPvOicuCMQl00Ndhyg=;
- b=YF7Md8komi6khW+QUD3Tn/457KolPdTaQ9spqsS8eF3Hl4RqrgpMGqNC07gOA15NQCXKwf0kF1e3frFQKColHGStDWTVZD96aea2kwW8ZXAhKnDgHF0ZquAE/W6KLh+bHkF7sQ5+PSL+TnN73N08P7/LqywwhP9+YQoB0sJ+1Tw=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by BN6PR11MB4052.namprd11.prod.outlook.com (2603:10b6:405:7a::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Mon, 11 Jul
- 2022 10:33:22 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::8d4a:1681:398d:9714]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::8d4a:1681:398d:9714%5]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 10:33:22 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <geert+renesas@glider.be>, <broonie@kernel.org>,
-        <Daire.McNamara@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: SPI_MICROCHIP_CORE should depend on
- SOC_MICROCHIP_POLARFIRE
-Thread-Topic: [PATCH] spi: SPI_MICROCHIP_CORE should depend on
- SOC_MICROCHIP_POLARFIRE
-Thread-Index: AQHYlRDscDs8Hw01AUS3IkiKDybfsa14+TKA
-Date:   Mon, 11 Jul 2022 10:33:22 +0000
-Message-ID: <373b74b4-657c-b6b7-9532-f6602d6b2a8e@microchip.com>
-References: <4e78693a87d6b83847056d22468c370e7232f390.1657529125.git.geert+renesas@glider.be>
-In-Reply-To: <4e78693a87d6b83847056d22468c370e7232f390.1657529125.git.geert+renesas@glider.be>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e28c752f-ea6e-464b-c8a4-08da6328c7a1
-x-ms-traffictypediagnostic: BN6PR11MB4052:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0+CC1lP7lFQcArCOIAb25W7RxUBvClN7HQ/Bww8zZn0rrdSljb5F36jRUMEJ39qmYv/hS0w7zh8dgU+ONuw1UTpM7B9o46aA0UAqxjsBn7d75H4r4Msg8mIa8ZiLJIx4I3Y44nHk1+5FRO1XYsUafCg/1e1ohWYbOUORCpdMEJ9+BUsL9nP5yyaNGt6tep7S89xWSWTke8v9+XbTqfib5Sn7Hro3cdFookS2ffdWytnUmW9ffUEbZbCkvVnBlR2yW+594dksfHdQ6SH8s64jMFJ/VYAtB0Rf9WbHJsTUzcjGfbtszkLKkpYd9rKpt5paZn//nsNkka2QYSU78EH+mJRUgeri069vK2e/1uS3pien0/bG1XQ6Qqg/QvSd2hqoZzCZv33f/EfE8zDlgGF87dpZ2jXb+kHItW6/+Eucrb2HTNMViRs+T6GUFjFzRGLQ1os+g25vUhaWIRIiZ3GsLE8Pp4pukc0H5U5AZIkHIq0LAq4LZ0Qd+YYXMvZ7T9RE4OFx6JfGyb2q/V/g3iA+x1sj+NdevUz+Nrrm7dGwJWUVwcirbjK/5CCEpx04U+99U27tIUSv6hG+C77CMhoYcimrhTNGSDitQcQMfEhDVS2C/BpoInXK5eyTIrF778stgGWFTHIzsSpe8f9GIr9f5r/vEadZK/5DOdczcN6OPh58c/2J5o2NBHNBDMX1IwYnhRvdo3+pG1J2HjEPU2Hz+BIeIuoYOxSW1/7AQu7m8FXxdaOJ3Qq59kWQSfblrdIwx3+1VeGh6AP8eBPVAvnw4VhV6UotXRM4g34lknS8n2UvzzzUuGqMw9yD46QXmi0OrKGQFYNoloUCMVq0LOhteL3EzWPwVWhQmSOO3rQfZ1kqu109hjDk2k3hblxFGlKH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(346002)(39860400002)(376002)(366004)(316002)(110136005)(71200400001)(4326008)(2906002)(31686004)(41300700001)(478600001)(6636002)(54906003)(36756003)(53546011)(6512007)(26005)(2616005)(6506007)(91956017)(64756008)(66476007)(66946007)(76116006)(66446008)(8676002)(66556008)(186003)(122000001)(31696002)(86362001)(38070700005)(8936002)(38100700002)(6486002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZmcyWlpHVXovcXlMWnFQVHFyam1NcXdOVGpVSWF0K0xOeTZsSmxvTjlhTjNj?=
- =?utf-8?B?bllPUlByVGtwaWx4dDRvdS9oTFVqcGV0QlVxaGJ4b0NqZ3Nsc1BjUHQ4SXhn?=
- =?utf-8?B?T292MjhQMThoaW9BTzR6eDlsMkE0Z2lHY2QrQVlTclBTSHBKdlJ4bDhzZTMr?=
- =?utf-8?B?NFdPVXlYbEU3cmd1WDNwMVFra1ZORTkxUUJjOVdOWldaTFdNVkxzZXJKL1J2?=
- =?utf-8?B?UFE1a2ZpQTZwR3M4dGsyS2J3MXhwYlBwaGRpS3A1c2ZVa2lmekJGNzJZTURK?=
- =?utf-8?B?c3hCOWFPalFtaVhXN3RDVUNSNjlYTUthWWlJTDBGUk9NRjVyNjFHeURmUHE2?=
- =?utf-8?B?OFZSYk9xVUdmWG8vTWp1OHlvdGN0ZGFpeUpLZVdZL2JnQW5BV1MwUnoyRWhK?=
- =?utf-8?B?RytzN1hMNVQyY2pXNjRIZThLTmpnM3MzNk1vUEFRNGpiM25wUU9BdU9Uc0pl?=
- =?utf-8?B?eWFvSzQxWmJFWHZDbVhNeForbzZPWXM0UE5CMHJRbVJBY1dHYzdYVFZ0ZDRZ?=
- =?utf-8?B?KzcyZ2E1eWRnbTE1bVVnMnJJQU9VWkFyWXJPQ2cvRm82YzRpaTdXcXJpYjdn?=
- =?utf-8?B?SzFSeDQ1bEpLZVRyK3BXV0hOVlpmZjlUWUttUGNWblAvekd4eEtzTTFlVm9w?=
- =?utf-8?B?K3ZLU1EvVi9EZWRCc2RMRm92ZzM5bHQwbzVCMDI3S2lMZWluajJETGNGSW50?=
- =?utf-8?B?TjgxdXU2N1NQYzI2Q2tnTG96NWF6eERvQU9uek5YRktYUU9XT0s5RW1VWk5W?=
- =?utf-8?B?U3JxYW5xRVBRYk15d1Job2psaHVzeFJ1MVE3dWZpcTRLMXVlT29QRk14L2Rk?=
- =?utf-8?B?NUZXeXJIWk9ScUZFUDFid3c2cEtWTU8yQ0dETVdvYVpIclNORld1RW42VW5M?=
- =?utf-8?B?WEpDQXFrQ2d2NzFCV0VRejA4c3lEVU9zZWxTZDc0SFZzTytDRlg3a0pwSlBN?=
- =?utf-8?B?Mi9maElwUUZCRG1HcTBqSzdINkZ0L2YxMHN6YWhObjhMWUhSdkd1bExaZE1p?=
- =?utf-8?B?enpuckZvYTdxT2MzNFZWVXNGNlpXTTV3d3lCREVxeURaUmRJS3NNZkJxZWU0?=
- =?utf-8?B?UTZ6aEM5djlEUk1ZZis5Q2ovSHBWcnFTMGRHSDdDNEtIOThaN3JFWis1OEtJ?=
- =?utf-8?B?djVPalg1Mk1VREhTcGxtOUFJcUc2cEs3YmtHUDA1YW1VdjFOL3lsMEhmY1Ay?=
- =?utf-8?B?MnMxOXJpQW1KT1VaNE5kaVFQR1ZCTzV4VHFFQ2JEOXpSZC9RM0RCU3UvTDV5?=
- =?utf-8?B?VDhPc1R5NGR2bUw0VkJIQTVBT0h1ZEphMUFucHZMVG1FMXlua2JwOXZRY0JQ?=
- =?utf-8?B?UmkxQUE2QlVNcjByakJJRXRsZ3BrK2dHbFVuTGFoTEdkdEljZ3hVZTQzTEtU?=
- =?utf-8?B?ZCtja24raTlkRC9SUlh4UmVRcUxLdHhlL3R2cm4rVEc5Zk5nNnpmOGxLWmlr?=
- =?utf-8?B?R3ZWTjY3OWx2ay9yWlZJUDdrWi9KTEdzYlovNkRkZm1zL0paS3Bhc0V3VzdE?=
- =?utf-8?B?eHlURmFzaVU2bkROMFpMTVg5SmtQUTI5NUpNbVNPbzEva3V5S041L3ZGT1Rs?=
- =?utf-8?B?VzJuUzMzRG9hNjhlSGptV2VGR25Ca2xvT0gzNzhTVGJMYnhsVGtiVUJrT3RF?=
- =?utf-8?B?TWxaMG1VZkNsais5SE85THptZW93dkk3bHdQakJrRDVxYTNnbmNueWE3K3N5?=
- =?utf-8?B?bHpTUHpqb05ScEh2V3BIYUYvSW1VWkltV2lxKzZIL0ZBQ3NtUUlGakh2aTdE?=
- =?utf-8?B?aElHZ01KR1kwMXZnVVpZcmZlclB1ZFBZd0VXV2pCbzV5OUJvMWNnbEZ5YzUz?=
- =?utf-8?B?bDk4MXpWMkdtSzN0RjErRzQ0SzhGUHYwUStobjdFZ01uemEvVE5qNVpxUEFz?=
- =?utf-8?B?YnFrcG5EME1VRjRFUXlobFhCK0JPdE43R2tsSkw0R2RiVWF0VmJFaVlJbm81?=
- =?utf-8?B?dFkzQWZLTWxEZ05CMzdTa0txeHNOVkJzN0RZYTA1dE1KSkJxeHpRemdVVlQx?=
- =?utf-8?B?TjJHSGljT3ZlMytmZGhlTmNzTFdWeGJ5VFhBd1Nja2pJYU8rUDBvWnozYnEw?=
- =?utf-8?B?WTJqa0pkSU9vd2FHT3RvVUI5Qk94OW54MXRJS3J6akRyblNsUi85U2tuOVpm?=
- =?utf-8?Q?yZVpXYi0U3AwSdkYkAZ1mg4tj?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BC3F3A040381B0419D3EF733627BA1A2@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231244AbiGKLU1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jul 2022 07:20:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BB8240B8;
+        Mon, 11 Jul 2022 03:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE16DB80EA6;
+        Mon, 11 Jul 2022 10:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18BE0C34115;
+        Mon, 11 Jul 2022 10:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657536322;
+        bh=JJMcpurG9hZV0JukCAE1tIk7+gBNzOKf3z22c1hNDQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FB3jpYBgsz/O96WX/z7FPWWjxtTxgEUZUkPpO1SwV/ztKVJW7OjpmZQ44P9e0YtON
+         ZHnUbXIjFFTQW8QrguecXEcOjKUaq+r4GGcTVuUSMNP4Mh6EhRPt/eT7jReALr43ZV
+         BwLP8dn6wGW/++YryiAoRQ75+pzW1330f4BUgSRrziFwQkTgBhL9iNvpx3ODsnintY
+         7O/8EV009lE2EBZ1lmCS+VO75ALlzJxh4OUopqdnRhd3Fe5fFlS5a27xfSKIQgBQIP
+         8/OE4U+5U1aq8k/mdqMLX9UEOYkF0bZ8Bvu7g7Wgx4i/qqVyPbGpwVJzHe4fCkxX8K
+         D4gv3+HhRScKA==
+Date:   Mon, 11 Jul 2022 11:45:16 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [RESEND PATCH 7/8] spi: bcm63xx-hsspi: bcmbca: Replace
+ ARCH_BCM_63XX with ARCH_BCMBCA
+Message-ID: <Ysv/PNJzSEwRnQVI@sirena.org.uk>
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+ <20220707065800.261269-7-william.zhang@broadcom.com>
+ <20220711021131.3289881-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e28c752f-ea6e-464b-c8a4-08da6328c7a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 10:33:22.4832
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eEgJx7hhK9fCgKw/Nx534eEGyMtZ8ckXd/DPCMUCrhWbz+Fb4ow0sLISwMVERrCVHDMKpBAJUx2ca1rLYo4eSIX9uAEnpP2ULSB8AY30NVk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB4052
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CPcBR/G9ERc+TFah"
+Content-Disposition: inline
+In-Reply-To: <20220711021131.3289881-1-f.fainelli@gmail.com>
+X-Cookie: I am NOMAD!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,27 +62,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gMTEvMDcvMjAyMiAwOTo0NSwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0KPiBFWFRFUk5B
-TCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlv
-dSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFRoZSBNaWNyb2NoaXAgImhhcmQiIEZQ
-R0EgU1BJIGNvbnRyb2xsZXIgaXMgb25seSBwcmVzZW50IG9uIE1pY3JvY2hpcA0KPiBQb2xhckZp
-cmUgU29Dcy4gIEhlbmNlIGFkZCBhIGRlcGVuZGVuY3kgb24gU09DX01JQ1JPQ0hJUF9QT0xBUkZJ
-UkUsIHRvDQo+IHByZXZlbnQgYXNraW5nIHRoZSB1c2VyIGFib3V0IHRoaXMgZHJpdmVyIHdoZW4g
-Y29uZmlndXJpbmcgYSBrZXJuZWwNCj4gd2l0aG91dCBNaWNyb2NoaXAgUG9sYXJGaXJlIFNvQyBz
-dXBwb3J0Lg0KPiANCj4gRml4ZXM6IDlhYzhkMTc2OTRiNjZkNTQgKCJzcGk6IGFkZCBzdXBwb3J0
-IGZvciBtaWNyb2NoaXAgZnBnYSBzcGkgY29udHJvbGxlcnMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBH
-ZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0K3JlbmVzYXNAZ2xpZGVyLmJlPg0KDQpVbnRpbCBJIGdl
-dCB0aGUgInNvZnQiIHZlcnNpb24gc29ydGVkLCBtYWtlcyBzZW5zZSB0byBtZS4NClJldmlld2Vk
-LWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KDQo+IC0tLQ0K
-PiAgIGRyaXZlcnMvc3BpL0tjb25maWcgfCAxICsNCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9LY29uZmlnIGIvZHJpdmVy
-cy9zcGkvS2NvbmZpZw0KPiBpbmRleCBlMDNjZDE2ZjQ0NjkwNzllLi5iMWNiN2ZlMTI5ZmY4NmRh
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3NwaS9LY29uZmlnDQo+ICsrKyBiL2RyaXZlcnMvc3Bp
-L0tjb25maWcNCj4gQEAgLTU4NSw2ICs1ODUsNyBAQCBjb25maWcgU1BJX01FU09OX1NQSUZDDQo+
-ICAgY29uZmlnIFNQSV9NSUNST0NISVBfQ09SRQ0KPiAgICAgICAgICB0cmlzdGF0ZSAiTWljcm9j
-aGlwIEZQR0EgU1BJIGNvbnRyb2xsZXJzIg0KPiAgICAgICAgICBkZXBlbmRzIG9uIFNQSV9NQVNU
-RVINCj4gKyAgICAgICBkZXBlbmRzIG9uIFNPQ19NSUNST0NISVBfUE9MQVJGSVJFIHx8IENPTVBJ
-TEVfVEVTVA0KPiAgICAgICAgICBoZWxwDQo+ICAgICAgICAgICAgVGhpcyBlbmFibGVzIHRoZSBT
-UEkgZHJpdmVyIGZvciBNaWNyb2NoaXAgRlBHQSBTUEkgY29udHJvbGxlcnMuDQo+ICAgICAgICAg
-ICAgU2F5IFkgb3IgTSBoZXJlIGlmIHlvdSB3YW50IHRvIHVzZSB0aGUgImhhcmQiIGNvbnRyb2xs
-ZXJzIG9uDQo+IC0tDQo+IDIuMjUuMQ0KPiANCg0K
+
+--CPcBR/G9ERc+TFah
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Sun, Jul 10, 2022 at 07:11:31PM -0700, Florian Fainelli wrote:
+> On Wed,  6 Jul 2022 23:57:58 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> > Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
+> > SPI_BCM63XX_HSSPI depending on ARCH_BCMBCA.
+
+> Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+
+I was rather hoping for an answer on what the situation with
+dependencies was here...
+
+--CPcBR/G9ERc+TFah
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLL/zsACgkQJNaLcl1U
+h9CxmQf/Zkc7j2WiGs21ddae4B5EISCvv02RbeP+N9o+QdSnpH0+yLQoLChuJ7uX
+DPByofVbcLMwKwIRlMgUHchw1siJt15kogsJAbmguw+1bEDOTz3Dv5uqmH9hO0kG
++HrxYWqiBT0J9vqw5U2nX7nTy3A7MKdyi5ULTeZM7xAYK/uH/HqOJnofSQ8NHrGK
+iRhjGno8n2f56aRMa85bD6aOfr4U5/damBRWb9Js16ZYCD1zHo77KzydO+lgrolr
+uxM4cdVZn453AqCRkKmGJXqw+NGyKbp6zgOIIiEUDmdTvSY9QiycmU0aW94fDsdG
+1NQufXfcMMZ33lV7MMJPjl8TwbUdMQ==
+=xFf/
+-----END PGP SIGNATURE-----
+
+--CPcBR/G9ERc+TFah--
