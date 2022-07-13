@@ -2,45 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A915732CE
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Jul 2022 11:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABD6573684
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Jul 2022 14:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236209AbiGMJco (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Jul 2022 05:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S230192AbiGMMmr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Jul 2022 08:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236225AbiGMJc0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Jul 2022 05:32:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EADEF6BB5;
-        Wed, 13 Jul 2022 02:31:05 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjXPH6T39zkWrM;
-        Wed, 13 Jul 2022 17:28:51 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 17:31:03 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
- 2022 17:31:03 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>
-CC:     <broonie@kernel.org>, <digetx@gmail.com>
-Subject: [PATCH] spi: tegra20-slink: fix UAF in tegra_slink_remove()
-Date:   Wed, 13 Jul 2022 17:40:23 +0800
-Message-ID: <20220713094024.1508869-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229968AbiGMMmr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Jul 2022 08:42:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB36DC88A;
+        Wed, 13 Jul 2022 05:42:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 385F761B7D;
+        Wed, 13 Jul 2022 12:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61E1C34114;
+        Wed, 13 Jul 2022 12:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657716165;
+        bh=zgu01rK9c5SNFhNzhkt3VGhcrNp7QNRsnRzbqsQTjPw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GmV9Pk7hfKqsst9MzMnyCOTYa7Fqr5fbLUqQgBAms71txwFRHOCc/oScENOZFoRN/
+         Axbaf6+La3Ucvw7ykvcJ0NKbykeyF7SRcVt0++SlhdcKUefZAkv7jtl4R1wT1cKcRn
+         mEkpQTyxdj5As3pKtKUNHGbsT1WZpmibYcfv5+vBfuDsaFXRuG1MHJ1/HWblXC5OEK
+         cCbO2QnP3uat4FImhwijjmkdGEydHMqFgQXusNofkP0iF+yumdQdoz2rKZuQPnDMex
+         exi7wfxclaBZtHTzpxGQbc7kkn2xSOp9H4+pAPEcqdze7aXOPFQeDsthjx+wcQG94Q
+         Nn4aMdyl24syQ==
+Date:   Wed, 13 Jul 2022 13:42:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] Revert "spi: simplify devm_spi_register_controller"
+Message-ID: <Ys69wVhUih0dXdQc@sirena.org.uk>
+References: <20220712135504.1055688-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DrIIh0QSaaF4ll/Y"
+Content-Disposition: inline
+In-Reply-To: <20220712135504.1055688-1-yangyingliang@huawei.com>
+X-Cookie: Positively no smoking.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,39 +54,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-After calling spi_unregister_master(), the refcount of master will
-be decrease to 0, and it will be freed in spi_controller_release(),
-the device data also will be freed, so it will lead a UAF when using
-'tspi'. To fix this, get the master before unregister and put it when
-finish using it.
 
-Fixes: 26c863418221 ("spi: tegra20-slink: Don't use resource-managed spi_register helper")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-tegra20-slink.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--DrIIh0QSaaF4ll/Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 38360434d6e9..148043d0c2b8 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1136,7 +1136,7 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 
- static int tegra_slink_remove(struct platform_device *pdev)
- {
--	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct spi_master *master = spi_master_get(platform_get_drvdata(pdev));
- 	struct tegra_slink_data	*tspi = spi_master_get_devdata(master);
- 
- 	spi_unregister_master(master);
-@@ -1151,6 +1151,7 @@ static int tegra_slink_remove(struct platform_device *pdev)
- 	if (tspi->rx_dma_chan)
- 		tegra_slink_deinit_dma_param(tspi, true);
- 
-+	spi_master_put(master);
- 	return 0;
- }
- 
--- 
-2.25.1
+On Tue, Jul 12, 2022 at 09:55:04PM +0800, Yang Yingliang wrote:
+> This reverts commit 59ebbe40fb51e307032ae7f63b2749fad2d4635a.
+>=20
+> If devm_add_action() fails in devm_add_action_or_reset(),
+> devm_spi_unregister() will be called, it decreases the
 
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--DrIIh0QSaaF4ll/Y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLOvcAACgkQJNaLcl1U
+h9BQNwf/R8wBjNGVA/XwCXWS0laSWOFE2OQ+OrkUV/2VuwiUhHnaLxXs8hmsQgYe
+XMnBiM/8JF7xNLrV5hGWMOihSetjWnKXMTimZc/22HamSInwF+dZIFyLaNMOLzkf
+R9yB8JBlpCInl6RsAIWru3udTL6XXNTgYf+2mampM74hIqt32d/xQaeIUiPPBYRF
+bAPXPRO40ZbjYymmTl/Qti09lCtTSc+vlOp9S6uoKjYuG0ekkGGZbFQUlozXx9lQ
+dtYVdktqdOp4ujXGAXMwv3zIapzVniw6S9lanFzNgP7u7ZyRZHc9LSVaH900mNNB
+O7rqRNmeRpYa8BofNMxEHRKaayuLUQ==
+=9ei7
+-----END PGP SIGNATURE-----
+
+--DrIIh0QSaaF4ll/Y--
