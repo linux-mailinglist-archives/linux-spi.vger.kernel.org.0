@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0FB57389A
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Jul 2022 16:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E1057389D
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Jul 2022 16:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiGMOUE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Jul 2022 10:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S235769AbiGMOUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Jul 2022 10:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbiGMOUB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Jul 2022 10:20:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8524B326FF;
-        Wed, 13 Jul 2022 07:20:00 -0700 (PDT)
+        with ESMTP id S236563AbiGMOUR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Jul 2022 10:20:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D704C32EE4
+        for <linux-spi@vger.kernel.org>; Wed, 13 Jul 2022 07:20:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EE1DB82011;
-        Wed, 13 Jul 2022 14:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76FFC341C0;
-        Wed, 13 Jul 2022 14:19:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F8561DBE
+        for <linux-spi@vger.kernel.org>; Wed, 13 Jul 2022 14:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6C6FC34114;
+        Wed, 13 Jul 2022 14:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657721997;
-        bh=gZlZ9XEUO5Tr8VlBA2Fy3TMHOnEzakxg3l035XJS0ew=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sXmw8e0T8l3/UhBWRTNHdZt1I2FAsDabkybIwxE8ZSVsvo3XpM7EVxvoGFoCuFFby
-         mrDnJv2plFpgTEqQUdMBC/GJad8zgFGmWr53rhHX/OhYSp8T8Z/KVSYBqRbyXlltvv
-         eMoB+bHhBaCksiIngXRQRhMY5UhMN7fTYIcuAe0vHexHuw5cURbWveLEJPqDQMvURH
-         TYBbaYkJTR10pWjb8KIuTqdaxuaoKSZ3yJICfmiN+h5C97EL3MR1vNrjhA077Ma8yo
-         FwRhDK5fBz4zyJJ4wtQx+wQ1a/DnFeUxmN7jiMgm1xLi01Hpffxeu8nc1GpI4sGCXX
-         SNwLEpeC8AOoQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, yangyingliang@huawei.com
-Cc:     daire.mcnamara@microchip.com, conor.dooley@microchip.com
-In-Reply-To: <20220713025657.3524506-1-yangyingliang@huawei.com>
-References: <20220713025657.3524506-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next v2 0/3] spi: microchip-core: fix and cleanups
-Message-Id: <165772199640.105087.16657528468194823666.b4-ty@kernel.org>
-Date:   Wed, 13 Jul 2022 15:19:56 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1657722014;
+        bh=MG88yyYpis9fnA5ZQNCCGHuLpAWcJ+Mv2XPv1uC4T4g=;
+        h=Subject:From:Date:To:From;
+        b=JENgaeAKTTKxhX77FEjdfThAEuo8X0B/KVoMYSaKyPbe7alG6bB6Ccd8admS2YmEO
+         WsUtB1QKjF93r09ONTw83FPCaAJOStuM3bu4VWOxGgyPOfmMlDG2bcdlkhIljqLlBX
+         pMay1av83YKoY7HM0qeIHjlyfZLlsQIFTXNmbs4pc/+UmMZ/Z5dCqUA+wfAGIxPws4
+         4xU0KxUaaNAuG7QFI24+m7BF1cNQo4Uu9auiO5SfwUtzHBHXFqDwq5iKddCUbIPdxg
+         kAiVZ6xF+EXRKo4/880Tl51VJ9/dkL+KXNDNF/GJO49msOIhnvYQQvVecKPQe1o9uv
+         p+RMjEbNFDuDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C983E4521F;
+        Wed, 13 Jul 2022 14:20:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165772201458.25730.10518886017941537539.git-patchwork-summary@kernel.org>
+Date:   Wed, 13 Jul 2022 14:20:14 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,48 +52,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 13 Jul 2022 10:56:54 +0800, Yang Yingliang wrote:
-> Patch #1 fix a UAF in mchp_corespi_remove().
-> Patch #2 and #3 some cleanups to simpify code.
-> 
-> v1 -> v2:
->   add patch #3 to use dev_err_probe to simpify code.
-> 
-> Yang Yingliang (3):
->   spi: microchip-core: fix UAF in mchp_corespi_remove()
->   spi: microchip-core: switch to use devm_spi_alloc_master()
->   spi: microchip-core: switch to use dev_err_probe()
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: [-next,1/2] spi: microchip-core: fix UAF in mchp_corespi_remove()
+  Submitter: Yang Yingliang <yangyingliang@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=658926
+  Lore link: https://lore.kernel.org/r/20220712135357.918997-1-yangyingliang@huawei.com
+    Patches: [-next,1/2] spi: microchip-core: fix UAF in mchp_corespi_remove()
+             [-next,2/2] spi: microchip-core: switch to use devm_spi_alloc_master()
 
-Thanks!
+Series: spi: microchip-core: fix and cleanups
+  Submitter: Yang Yingliang <yangyingliang@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=659120
+  Lore link: https://lore.kernel.org/r/20220713025657.3524506-1-yangyingliang@huawei.com
+    Patches: [-next,v2,1/3] spi: microchip-core: fix UAF in mchp_corespi_remove()
+             [-next,v2,2/3] spi: microchip-core: switch to use devm_spi_alloc_master()
 
-[1/3] spi: microchip-core: fix UAF in mchp_corespi_remove()
-      commit: e82c6d62a1f2347cde69c169fcf37e4d26f89b98
-[2/3] spi: microchip-core: switch to use devm_spi_alloc_master()
-      commit: 5d56d8974d1e5fa5d7d0761037377e03f6edcc66
-[3/3] spi: microchip-core: switch to use dev_err_probe()
-      commit: cdeaf3a99a02b6f8566bcaacc9c3501c6cceda74
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 4
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
