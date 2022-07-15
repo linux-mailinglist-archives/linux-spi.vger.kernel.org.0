@@ -2,49 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A634357647E
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Jul 2022 17:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F87576483
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Jul 2022 17:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiGOPfy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Jul 2022 11:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S229436AbiGOPgc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Jul 2022 11:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiGOPfx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Jul 2022 11:35:53 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2058.outbound.protection.outlook.com [40.107.243.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14BCCE20;
-        Fri, 15 Jul 2022 08:35:52 -0700 (PDT)
+        with ESMTP id S234928AbiGOPgb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Jul 2022 11:36:31 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2049.outbound.protection.outlook.com [40.107.212.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6763655091;
+        Fri, 15 Jul 2022 08:36:29 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bT2ITppzT+OXIdLRWGrQPdsMUMYsb19mxympZUXzvFI0Btn6SQuKaV4Qgjxkw4fNURX96Tc2UBDEYrPI1ekL1JIcrsq1AOYnwd/3GxI5YEXAtmXIkcEqlgakZIuDYie+Y2eNplF6vcBbT2TBad5mEoIfB9tHr9GC2G1l/JyycfynrP5SEVOfi79NRHwiZez1mYaZudnkSyQxtHFcedFEGDmDQ/b6kQSYUUCkDPQOoLT5U5nJq4QaCt/QBfgDA2sjq4gdHiEplzPbt5i+mIUI9C9nlv1HfAEcn1i79J3E9E+67V3OMu40W3veDO3stw2+jk2SmznRXdT8xUHcT8ka9w==
+ b=IgDvHQxlNp/DQ62JEHLCxAUdhedPRRcBes8hNR6JPLzsTUnZjBp4VEHQMXlhDJUxKtIuIkVCoFOPSurMPLUDes6W2Ta8k6Fs2+IQCn4GTLxTWkokkEYU88KB+2EQKzkYu+cVP8cSwiX2a5RtLzNNkRlfgAldDOWwkbU0MObwNQPycK0Y9fJsMJG+h5OfbYre5BjdhVJCCGHwu53sdK9ICTCYErGDWd1uPDm+Kv2PTQzMHPcvCICpaS/EXJr9iuTUjumDlt3kD7lu1ml7AbucbxVYLnrnG3pO6woERsADFlMlu4F0Rfycx2rglzblCb/P837AL8UjDB7pTLV3S+jl0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cDYmd+1FQ7QMFmpXFRip0Hi4q5QS9uZ6m1ibE3JabEo=;
- b=kFYWxzuIm1gUHakfkms/Kf1qQBHQkRqVBRzh8CKesZnX5CqKOnYWhdSpBkleNLxC+U3JL4xbni/Rq54myedZACDr2+N00zKeS47shxsJO3ZwfEpj5ie7sVV4yo8dowC2/9d59/Y+GkbkrKxy3NsGPuKr7GA3ogW2SpkYSX4tTzlwfAMD0oFuYyvFrDCnyFK4lZ5yTQ7X8y3OPfVJ4QhO75zYFi8TLH3kGNR4NPncwt00xDRR9IL8xdO1JgCWz5vBEDW8MyH29ffS7JX7B5oGaRh9O5fCbGcRDUJSNRjVkomrcb9fap1frhWoDZ2QQ4ojPvHlYYqAKpJzuOvAwxRFVA==
+ bh=MEnDKXwHMiQtef28w+sZKEDLQzVOMg9VaLmuUnp8lH8=;
+ b=iOio8FpZiNQv3D7WuN0fIO766op+DPy9q3njYm+Gdp73D4OewgtNH5kZmtoyXRFryHSg6tmI8mP7phyJP+fJ7cbq/UfbW0ICkZNLnm9TStBcL4XYVbYYQlvPwBE7OUQyt316IMB42EYlTSoQzcpR5ajenLSWuoWawOh0cSlh65Ehfkx2FiJieJe1npKFg7lSo6+sINshflr3EVkkDaKgdUeMFGy2jMZVsoNSoEbMv4dqLnYWH0XjgNM1bex7AfWaYOPZ8XVNFGsHpDnokRZm/43WsgYDH99J6CVGZmf5liUlutvF/CyDN/dxV9AHa/uZL5eMywEYvLYtiabiJ45ghQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cDYmd+1FQ7QMFmpXFRip0Hi4q5QS9uZ6m1ibE3JabEo=;
- b=HNWZxcLmRnBM1GMA0qcBuDD3uk3sfStzLhQ95DNhaa6KCUMKfP155Hg+FEzY/Vx93/9SqsuE1un+7nJu86dgZnavCgAsrH5phVyyy/zFUgCB0KdvqTftr1etErLsktJYVQebAMwVSII/+PyXefHKsSb7GVNIl6OfQJEn7QJuhd0=
+ bh=MEnDKXwHMiQtef28w+sZKEDLQzVOMg9VaLmuUnp8lH8=;
+ b=GjBtdoWKU8syj4bwwnOhEK/SKbTPROm9G9LzFx5n8nfxhU4FBNxFLs519U4Aj4QvY9hWMCXv19oQQ8N9S0+CsIBBYAilcE54teofHTu2ABUI2Am1hOqzQajgrKyPCnWq8ira63rXsLKHrc+ypiiXHkyUeXrNsi7RZKKso3TFJjQ=
 Received: from DM6PR12MB2809.namprd12.prod.outlook.com (2603:10b6:5:4a::16) by
- CH2PR12MB4937.namprd12.prod.outlook.com (2603:10b6:610:64::16) with Microsoft
+ MWHPR12MB1325.namprd12.prod.outlook.com (2603:10b6:300:f::17) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.20; Fri, 15 Jul 2022 15:35:50 +0000
+ 15.20.5438.14; Fri, 15 Jul 2022 15:36:24 +0000
 Received: from DM6PR12MB2809.namprd12.prod.outlook.com
  ([fe80::fcd1:f8aa:6c69:eacb]) by DM6PR12MB2809.namprd12.prod.outlook.com
  ([fe80::fcd1:f8aa:6c69:eacb%5]) with mapi id 15.20.5438.015; Fri, 15 Jul 2022
- 15:35:49 +0000
+ 15:36:24 +0000
 From:   "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-To:     Mark Brown <broonie@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
 CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "p.yadav@ti.com" <p.yadav@ti.com>,
         "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
         "richard@nod.at" <richard@nod.at>,
         "vigneshr@ti.com" <vigneshr@ti.com>,
         "git@xilinx.com" <git@xilinx.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
@@ -57,15 +58,15 @@ Subject: RE: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
  device
 Thread-Topic: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
  device
-Thread-Index: AQHYeZhXApErq+32kkmuJFVVfXogSAG7F8aMAeAoVR+snXQgIICishAAgCJ4JhA=
-Date:   Fri, 15 Jul 2022 15:35:49 +0000
-Message-ID: <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
+Thread-Index: AQHYeZhXApErq+32kkmuJFVVfXogSAG7F8aMAeAoVR8BtmPI/ALXxyQSrJxOXKA=
+Date:   Fri, 15 Jul 2022 15:36:23 +0000
+Message-ID: <DM6PR12MB2809BA6D4F94EA59E76E6576DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
 References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
  <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
  <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
- <YrRXTrYN3BuShbzg@sirena.org.uk>
-In-Reply-To: <YrRXTrYN3BuShbzg@sirena.org.uk>
+ <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+ <Ysw5MpvjKM5LKvWd@sirena.org.uk>
+In-Reply-To: <Ysw5MpvjKM5LKvWd@sirena.org.uk>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -73,56 +74,56 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f33014ad-b0b9-41e1-981e-08da6677b1f9
-x-ms-traffictypediagnostic: CH2PR12MB4937:EE_
+x-ms-office365-filtering-correlation-id: f8217ced-9fb9-41df-d0a6-08da6677c646
+x-ms-traffictypediagnostic: MWHPR12MB1325:EE_
 x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hF4Aui7lDDBBTgCeOE5whNL8obJ79TtUNYERNmtbs2A1mlqrMqXDwqKK8LN81rLg8O+dQE6Il2/7siPxOqi954BIFJzXAF/VMCyzmeyxrE0WLK/0kAc3JtgVOUIr0O6kTgEEE0Y+kBjMdmmbl+5pakDxzwrEuYlpnxel8jIHIPkKTv9mZBMcgze3D38ey+kiRxPiqOWA/0zhSfduNy5SdWpoUAZGNhGmSwRajGf1BTqPmbIbDXlVjSHqSjGF8bO9lpezB54jLOTD8DJc+VodqiDwvZssjJl4l2W9KYVn5NbWw5ug0OitN/MpWfrFFlWNL9UQWT+01VoyJOoPie2lkFTXJGcW/AZhx3iK7uIYD1ccu2b/fGvoGNoTVozx65nmmQf9ywM3Efk9qryHcXsEX8dPzisjBg8L96upnTb0ux3qye5rdk9Udouc5kPWikwrlAYvljs6gMJrtEdh9k7eK3eVdrNPwOMgXuolHM8g1vmabUOjDNA9jLZqLt8JnElRWMeILUqUhuXiq5luAr6P/ngPNVcrmUvVXx6nFB/59BID2N2HXRu8VPPDIbRJVMf8pi8RoXaFDRfPvmxbG7mJmnOI/JhJk5uzW+3IHqMTLd0/85iKcWxgTyybxC+zZcpVSEizmfHtto99CWTuI3LjUFZWmNxIHNzUnB9Cxo1XkHLLamr6P6hkFmvuGhnghvoZMoDK3GxNu8S5W6O9YIAu3uoxcQASYgFV/qJAtOOT7J1z/UdmyO9pPpST2oCYVnFPWoQ2ErPdeTAVuQndKFDDHxk2dzuaJ9/ceLEnYnvOk6hWMcnM8Wv2RyPLYl7JFeCq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2809.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(396003)(366004)(39860400002)(64756008)(66556008)(53546011)(8676002)(41300700001)(26005)(4326008)(2906002)(8936002)(66946007)(66446008)(6916009)(6506007)(9686003)(55016003)(478600001)(76116006)(316002)(71200400001)(66476007)(54906003)(86362001)(7696005)(38100700002)(38070700005)(122000001)(52536014)(7416002)(5660300002)(33656002)(83380400001)(186003);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: BI7rVEnq2FQO5MUIAzR/uqqI4oY6Rl69/LNYW23MHI3obV69DTNLpUC3zoloP7KSFUoToWK220wUZ4FG7sjxPWutcJNaQxOMCF4OgaZXW2UB4/PTdCkUUkKg4SE/hvIIYsViwoHbTMPKs+BwBWybHccNsWYS24/TBTPVkI3GICtGb/6JBUrK2WlF7kFMVN++GErthgrYDEf/OD3apzxwx75MwD2djAG7qiOa0WAthxVle7u77zCN0YxHKoSsRcgk1vqNAHPho10GLwflawGjpokYQE73vjcqfTBhmEtngK2jsLwQ4bo3fSIHW68NUwhWxyfGpMYhrT/TkJ03/JKX6JEjFpGNAi+PoVvDX5KmlWC+/1t6hnl1vCE9zhSHlZ9WtaD8pAmj615n+LtiqD1W4WCfMY0TYmrpepfUG49TzzIO6UDTLRdmlSCBZ9HRqSfJ0xId/iD8ZXIGD3b0Ywy9BYhwBWmDO13xetDmOXSU4ZpbltVYyDRxBFG5SGRbF7ymUHBTVKQu27qFY0tYZMGQMoY4YtmG3yK6F74QUXHz4wzANKeTYOgGIPH1d6SU9kdn0xP0XppMPioUo0M3adAkecPPwGc9DonO5QQ2slwMNH8uQhwsjYeA4kl2I1r6gR+NThaeiSb5ZoILmbf1juYbjyzbmS8O1Odikl8RDDkDp0C1OOli1wF/K12V3ice07KstmAsVdU8inWA1VGWG0b4ysIGEFPdYp4IA7ZYUtK7KEDYuvRdUTEMqC5faE3gOZgcMaNFKDGaDPXLNJeAeI3M6nYr9gBz2lgW0xvhYt9LqrCpVhoNbfRXIi6r/0yxATU7
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2809.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(136003)(39860400002)(366004)(186003)(4326008)(83380400001)(55016003)(66446008)(64756008)(71200400001)(110136005)(8676002)(76116006)(66556008)(66476007)(26005)(54906003)(2906002)(9686003)(7696005)(66946007)(53546011)(6506007)(86362001)(33656002)(38100700002)(5660300002)(38070700005)(8936002)(478600001)(122000001)(41300700001)(52536014)(7416002)(316002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?r5C9uW3wjnWG7x92+3NKg1RvDRR9R1xfuflz0iQJ+UEB+MSOB73IkXAwiIyo?=
- =?us-ascii?Q?Ijd/YvvNzF/55aHrw6HC6gKRTKCGs+w5nQcoYdpPVN4rGHAANxINDuI8vbEh?=
- =?us-ascii?Q?9VkRPZxrKDGNvF9p//IrklofYDWzsnHNsiZuf3+NmSZDnmrTvYeCjPZbZJaw?=
- =?us-ascii?Q?X9ryNtun1rUK65q86g43wt92rCETR0fhHeBxRwSp2PIJ+d6YXxq4AuWxUct/?=
- =?us-ascii?Q?IDy13Hg8p8tgLW7Rpahx6ad2iDuYIyDxAeWdKxW2ViZ9jC9XndoX/5jv9ymf?=
- =?us-ascii?Q?w45EFfzzt+CRBIj+vv7/KHbC6LUfyYpXTFopI4aFfGgYkqQYES+9+Q3oQ93e?=
- =?us-ascii?Q?jYGb3Sn0e4a+JqxuZGIvEzgRLP08qNcclLooNYGEDD0XfLRKdhQmA42s3/X9?=
- =?us-ascii?Q?rV5KSv/WtJAnaNhoVKEuz8ESbzolqpIciJX83lHd3/Lsms1uwb+7ASQpb9Qa?=
- =?us-ascii?Q?zU0YeLZk8C84aOBFph5zUcO5hzEXMjvZRlmQ4eouYzUrcyFnxmbglGmn8uUv?=
- =?us-ascii?Q?Xzl11DBEwnqU5rcj/tmkKjeR03Xz6ZOR3Irxxt7AGFeoWnG1bGWfWu4RYFkU?=
- =?us-ascii?Q?AR1asSte2G9N/Sj6uymP+R40NDOF5lpH9fjbYjrTzD+l7Jk2Dn+WTuDqOxuL?=
- =?us-ascii?Q?QzM0A4boPcICY+LGokE1ra9yCIDNnF7PtJiXfSOB3Kw3R4ewFq00wt9XtH+i?=
- =?us-ascii?Q?xB2ajQX2fDwpHgclyn3qOJfCjEuZjDdeVNEEp/p2fRpBQdQ0wngr+EBExv/e?=
- =?us-ascii?Q?+w0MZO2LBU4S2gR4PmzRKeBQGkVpFEAXPBUnfsiG1AE6vlklYMZOuxLsqVil?=
- =?us-ascii?Q?4Y6i9JxE+gVac5N83CFrwr2318M65Z1f74JzzTrsV9H+m4Wk84mcy44DkbhM?=
- =?us-ascii?Q?0wOeUYk28wAe8yX0gaPOFUKhQf7mDusYxEiYKxZqM9u5ExSdY0NpTrpEyFSw?=
- =?us-ascii?Q?T3HDcLi4kX3TOVZTCG0LlmpX/pfXrhzNBWayvuuXMriBglOgPAWddxlIWAcc?=
- =?us-ascii?Q?9a1G8IHgxhhnuvLYVSTZKdxff/of8usBXLu1OJz9GCZtoONCzXe+jklOn+me?=
- =?us-ascii?Q?eLKfYybUv9Mx/nCjWF3kPNGUkzR6WG3hajIe3JIM7nq+7HmTKL/GtZ+CNzbD?=
- =?us-ascii?Q?k9tlgE9ujVAI7jHy3sBedTkOHeLKZ1hY1PrA8rn9OZKn+nDS6omUhtNhkyRX?=
- =?us-ascii?Q?l5xAVAjlV5D77jhAuByzVTVkq6UWBIPPW/xsnf6WalHwUG0W6Lh4vWRVPJB+?=
- =?us-ascii?Q?YEL7RK3aS3ZcAp4u7Yox2QnOXeiZ3QShb7DfIJDMqtAih7LpaKDiEJM58jCI?=
- =?us-ascii?Q?D1oIhhuO2vXDr5AuEBW8Hwfj4ojxrnzjzFQQ/d0jY0dlWWwW8QdS0nhecn/6?=
- =?us-ascii?Q?B3AldaZVOo19MhnuKmiWN2ABC8Gi08CXBdVTBysaAJQ5hNB3QsWcYL+yM+iz?=
- =?us-ascii?Q?BBDdaiTVsnMbNKA283AQJOC78lN7BQNTNSuERVYRe7vpsR5emPrPGPIKYL/9?=
- =?us-ascii?Q?aW9Uk7phVWsYZ9EhpCXSmFWzijNYTZpAV3Ztiv8BSYtdpx9W83tNRKiJKzhG?=
- =?us-ascii?Q?EKlfhTHycSf03fEM0Xw=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uQGWjl/8Pi7n+dNv3G2TidaoyfyzaWXyj6EmUnJlDcBLmO6Fre2u+axNyjBv?=
+ =?us-ascii?Q?LYN+07Cxffm/oVzSzd2WXCW8FEomABc52V6ZlTztc3gklgQSoBGaZ0EYX9Cd?=
+ =?us-ascii?Q?ZS1zCDFgGoJjUyhfhQoOCRuBZLNzNsJ9BaaGT/zg/NxLTFBWV0YqIsPOztgs?=
+ =?us-ascii?Q?G4TA5tjpQbz0z1WUHTTKbH1NyQE2XGmVAWTp/aesKXnUtsZKLva+l5rKTx7g?=
+ =?us-ascii?Q?2YIq39n4OmNfRc1a6/FIT84GS6n339a6PREKOYz//akV/eil+vemSboJgZ/v?=
+ =?us-ascii?Q?WYVD0bpkF/8CHR+byo4FTkH6xEYUXgepxpWlM5zP/G3ixaOgOs8fwp5m+Uw6?=
+ =?us-ascii?Q?gD4wM8jp2C8Pz5k2znbZoaBsOEk4HR+PL2mjyc57T1PtJX9eDaGk3/q7Maqe?=
+ =?us-ascii?Q?P0Fz7LyG1ONhj+f8S1ggqQHtJsPSkTpsJDBfUDH3QU839cAFP8Zh9L4JcD6v?=
+ =?us-ascii?Q?BiMxix+icikqkfQPLW0ZHFHvDHRmV6XsRnSv/vFctHtx0pbilG0HzKfAsu41?=
+ =?us-ascii?Q?vcvzqaBdV14OVlJXkvp9cxV2GU9vQOkm6OcqPsU4PTA+jZPEjM/FJvPLMIm/?=
+ =?us-ascii?Q?bEVSL31oOYCOgG1lSdbl5SuH+WeJ5ztZ438yjaDbSMEiRzwUyrh8uYLbav5A?=
+ =?us-ascii?Q?FU7k75Jkn7KFyAzYnv6A9CY/S92jtOF0X0lTpDtv7bjWADTAT3ztMfEcnbvB?=
+ =?us-ascii?Q?b4VSkuXbh1sT1hc1EiN3VHOX+6VH48wv6MPZaFfW3tdJIc4wcJrCe2EdRN0V?=
+ =?us-ascii?Q?tr+9W872XbcE0TWT0RM4ordNb9gpptmqxdCfqWJKOW+nHBgWzukPsE6zzNQd?=
+ =?us-ascii?Q?AQ4PFz6Kh1ReDho0U+7b2vYgwO7DWO9phl91el40bYtjOM1kDevWAg1oK/7r?=
+ =?us-ascii?Q?ZELeUd4h+KZdoYSjnWdho9RnkVQY9HHRQHIAlZ9DD2vHYOlxE11YZ1m0wVkM?=
+ =?us-ascii?Q?DXGDToOFWziYLYH+BAK9MY9lch7fG8VSHlMjC9J2DvQ748JZOCfpBI3F4cPL?=
+ =?us-ascii?Q?MVp4AGEiendEUG+tN0XJnh8Iduva9ZTt6QFhovtFSt1ZAZTzO7/Tb0Upq2Z7?=
+ =?us-ascii?Q?6WfoY9VQ0CtCk64jp2S8jtoVop9NVm/IlAK5qoisYY1XzwKWtMeUAQupYSBc?=
+ =?us-ascii?Q?MUiEOUmcirNBA/JZxMIiSTg2XmlQIPo2yZ2g5QhmBV4EeaGt2KQLdcdeUJNB?=
+ =?us-ascii?Q?IsRzAgg3xQfdkI5wm1tytqqHZW80on95J7dBp0NcuVCl8wp31/OXdAwUPNIY?=
+ =?us-ascii?Q?Idzhso8yJjJhi6l/MpwiuiBZvYbd7GQYVcklFKwBEMIIvhjVpF1F/AX5fzSN?=
+ =?us-ascii?Q?Z+TIF1KYHBpK7IPX/DEmvMRkaDw619UfGEKRY6fUAwgpvHqoQEIdXmowBDKZ?=
+ =?us-ascii?Q?yFqEHksIulC7QvzENmZLb8GwbdSmlRv1Ax4PxNbR4lYah2Y87fbYk/3wKGic?=
+ =?us-ascii?Q?/Drwujw4FTuTOImOT0gYEMhsXtN1I7szrfKTQDyeU2pvF6YigsKROnM6UZ1+?=
+ =?us-ascii?Q?JGFzpYLzzT3lQQFkOkq6jhXmfO6oCaqgRUZwAxvT3mUXsHPmZtp/kr2ASsK/?=
+ =?us-ascii?Q?qAsJHnnFNn5B/AyS+/o=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2809.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f33014ad-b0b9-41e1-981e-08da6677b1f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2022 15:35:49.8787
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8217ced-9fb9-41df-d0a6-08da6677c646
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2022 15:36:23.9548
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HY7lR6YttW1uv2LwnDVu6uDdMDvIdpn/yl2iEkUZRklV4XrGQNutolKxnJbDdC9dkv4grpaJhx3hDIqcGZ+Ymw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4937
+X-MS-Exchange-CrossTenant-userprincipalname: ey4ePu/UXhVLwZmC3GXUwLJCyZ49kxaz7T6Kwphe0STYA+8r4dglpCphU6dJrgYm0hikTPMfDnQHdSqza9wU9Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1325
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -137,70 +138,50 @@ Hello Mark,
 
 > -----Original Message-----
 > From: Mark Brown <broonie@kernel.org>
-> Sent: Thursday, June 23, 2022 5:37 PM
-> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>
-> Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>;
-> p.yadav@ti.com; miquel.raynal@bootlin.com; richard@nod.at;
-> vigneshr@ti.com; git@xilinx.com; michal.simek@xilinx.com; linux-
-> spi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org; michael@walle.cc; linux-mtd@lists.infradead.org;
-> git (AMD-Xilinx) <git@amd.com>
+> Sent: Monday, July 11, 2022 8:23 PM
+> To: Michal Simek <michal.simek@xilinx.com>
+> Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>; Krzysztof
+> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; p.yadav@ti.com;
+> miquel.raynal@bootlin.com; richard@nod.at; vigneshr@ti.com;
+> git@xilinx.com; linux-spi@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; michael@walle.c=
+c;
+> linux-mtd@lists.infradead.org
 > Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SP=
 I
 > device
 >=20
-> On Thu, Jun 23, 2022 at 11:39:19AM +0000, Mahapatra, Amit Kumar wrote:
+> On Mon, Jul 11, 2022 at 02:47:54PM +0200, Michal Simek wrote:
+> > On 6/9/22 13:54, Mark Brown wrote:
+> > > On Mon, Jun 06, 2022 at 04:56:06PM +0530, Amit Kumar Mahapatra
+> wrote:
 >=20
-> > > >  	/* Mode (clock phase/polarity/etc.) */
-> > > >  	if (of_property_read_bool(nc, "spi-cpha"))
+> > > > +	u32 cs[SPI_CS_CNT_MAX];
+> > > > +	u8 idx;
+> > > >   	/* Mode (clock phase/polarity/etc.) */
+> > > >   	if (of_property_read_bool(nc, "spi-cpha"))
 >=20
 > > > This is changing the DT binding but doesn't have any updates to the
 > > > binding document.  The binding code also doesn't validate that we
 > > > don't have too many chip selects.
 >=20
-> > The following updates are done in the binding documents for adding
-> > multiple CS support:
-> > In jedec,spi-nor.yaml file " maxItems " of the "reg" DT property has
-> > been updated to accommodate two CS per SPI device.
+> > I would like to better understand your request here in connection to
+> > change in the binding code for validation.
+> > What exactly do you want to validate?
+> > That child reg property is not bigger than num-cs in controller node?
 >=20
-> This is a change to a binding for a specific driver, this is changing the=
- SPI
-> core.
->=20
-> > > I'm also not seeing anything here that checks that the driver
-> > > supports multiple chip selects - it seems like something that's
-> > > going to cause issues and we should probably have something to handle
-> that situation.
->=20
-> > In my approach the chip select member (chip_select) of the spi_device
-> > structure is changed to an array (chip_select[2]). This array is used
-> > to store the CS values coming from the "reg" DT property.
-> > In case of multiple chip selects  spi->chip_slect[0] will hold CS0
-> > value &
-> > spi->chip_select[1] wil hold CS1 value.
-> > In case of single chip select the spi->chip_select[0] will hold the chi=
-p select
-> value.
->=20
-> That doesn't address the issue, the issue is checking that the driver can
-> support multiple chip selects.
+> If you are adding support for multiple chip selects in the driver then th=
+ere
+> must be some mechanism for expressing that in the bindings which I would
+> expect to see appear as a change to the binding document.
 
-To address this issue, in spi core we will check the number of items=20
-in the "reg" property of the flash node(which is nothing but the=20
-number of chip selects) against the "num-cs" property of the spi=20
-controller(which is total number of chip selects supported by the=20
-controller). If the number of items mentioned in the "reg" property=20
-is greater than "num-cs" value then we error out.
-
-For eg.,
-
-rc =3D of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,=20
-						SPI_CS_CNT_MAX);
-if(rc > ctlr->num_chipselect) {
-	dev_err(&ctlr->dev, "%pOF has invalid 'reg' property (%d)\n",=20
-							nc, rc);
-	return -EINVAL;
-}
+Thank you for the clarification.
+As per my understanding we would not be needing a new DT=20
+property for expressing multi chip select support in the driver.
+We can use "num-cs" property of the spi controller for=20
+broadcasting multi chip select support of the driver.
+If "num-cs" value is greater than 1 then the driver can support=20
+multiple chip selects.
 
 Please let us know if you have any other approach in mind.
 
