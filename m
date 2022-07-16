@@ -2,73 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F1E576652
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Jul 2022 19:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B82A576FEF
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Jul 2022 17:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiGORpo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Jul 2022 13:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S230273AbiGPPjm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Jul 2022 11:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiGORpi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Jul 2022 13:45:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD5032051;
-        Fri, 15 Jul 2022 10:45:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48566622D1;
-        Fri, 15 Jul 2022 17:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0F11C36AE3;
-        Fri, 15 Jul 2022 17:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657907134;
-        bh=sl9S1Nd36uJ6hxsL45EvPqB72+obWxJZbjL9QOBYeYU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=XE8ZRH4tjLL/mpvBTbHyhiq7jecaaP+yFC+Lt2h75Q75VzUgt8VYHumAlG6g91dmr
-         lwl09R5E2wZlzHUKqorDsCpis212wLZhNYm0Vou5Cqzyunt44j8OaVs8xnSIqRY1P7
-         ALddiJQnnCtJYnOjOYURrPbPX2qWMgF2J9hcebs46Z/35FFn+dgEHWXH09xLdIOJhH
-         HVjWGjo+WvmJzJQxGzxWmpZKw5YyYneqPmb2jke3ZC6haU0wgVb+e1ityji5Avm/j4
-         FaP37xNHJ/xkTmhIMVg5jnJmDnsYm5b1MmEuiY6Tlpl15GJs2nmXZRck4MB2rRQVDt
-         EiohudG++A7Vw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 950E5E4521F;
-        Fri, 15 Jul 2022 17:45:34 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v5.19-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220715133200.2A098C34115@smtp.kernel.org>
-References: <20220715133200.2A098C34115@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220715133200.2A098C34115@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc4
-X-PR-Tracked-Commit-Id: 73d5fe046270281a46344e06bf986c607632f7ea
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8006112d6c4137bc48ca723261198c63d9e6d38a
-Message-Id: <165790713460.27298.2486708565414581628.pr-tracker-bot@kernel.org>
-Date:   Fri, 15 Jul 2022 17:45:34 +0000
+        with ESMTP id S229501AbiGPPjl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 Jul 2022 11:39:41 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B23F11479;
+        Sat, 16 Jul 2022 08:39:40 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,277,1650898800"; 
+   d="scan'208";a="126373289"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 17 Jul 2022 00:39:39 +0900
+Received: from localhost.localdomain (unknown [10.226.92.11])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 30CF340083F7;
+        Sun, 17 Jul 2022 00:39:36 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] spi: spi-rspi: Add force_dma variable to spi_ops
+Date:   Sat, 16 Jul 2022 16:39:34 +0100
+Message-Id: <20220716153934.292311-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Fri, 15 Jul 2022 14:31:50 +0100:
+On RZ/G2L SoCs switching from DMA to interrupt mode, causes timeout
+issue as we are not getting Rx interrupt even though SPRF bit is set in
+the status register.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc4
+But there is no issue if we don't switch between interrupt to DMA mode
+or vice versa.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8006112d6c4137bc48ca723261198c63d9e6d38a
+Performance comparison between interrupt and DMA mode on RZ/Five SMARC
+platform connected to a display module shows that performance and
+CPU utilization is much better with DMA mode compared to interrupt mode
+(1->65 fps) and (98->8%).
 
-Thank you!
+This patch introduces a variable force_dma to avoid switching between
+DMA to interrupt mode for RZ platforms.
 
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ drivers/spi/spi-rspi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index 7a014eeec2d0..f86b7b53288f 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -249,6 +249,7 @@ struct spi_ops {
+ 	u16 flags;
+ 	u16 fifo_size;
+ 	u8 num_hw_ss;
++	bool force_dma;
+ };
+ 
+ static void rspi_set_rate(struct rspi_data *rspi)
+@@ -677,7 +678,7 @@ static void qspi_receive_init(const struct rspi_data *rspi)
+ static bool __rspi_can_dma(const struct rspi_data *rspi,
+ 			   const struct spi_transfer *xfer)
+ {
+-	return xfer->len > rspi->ops->fifo_size;
++	return  rspi->ops->force_dma || (xfer->len > rspi->ops->fifo_size);
+ }
+ 
+ static bool rspi_can_dma(struct spi_controller *ctlr, struct spi_device *spi,
+@@ -1196,6 +1197,7 @@ static const struct spi_ops rspi_rz_ops = {
+ 	.flags =		SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX,
+ 	.fifo_size =		8,	/* 8 for TX, 32 for RX */
+ 	.num_hw_ss =		1,
++	.force_dma =		true,
+ };
+ 
+ static const struct spi_ops qspi_ops = {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
