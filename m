@@ -2,79 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C1D577C04
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 08:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC240577C2B
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 09:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiGRG52 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Jul 2022 02:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S233207AbiGRHId (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Jul 2022 03:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiGRG51 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 02:57:27 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDCC165B4;
-        Sun, 17 Jul 2022 23:57:25 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6D6002223A;
-        Mon, 18 Jul 2022 08:57:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1658127442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sf6PNQbhIHBDnRnau7vCcYU1WYAC0tMbQT2baM/8MoA=;
-        b=L52dwrCL7c6OlpAGESjGoH7cK9TT2avA32UJDm9VCLClr/id3A5YGEPSyxsggo0Qyp8vRH
-        /Ot8YydJqBgAkYy26aWK1ODFrsY2gbQI6bGJ/xK2GpsW39uwONd1ewkdm6tm05G4PWHmZe
-        vXW4lURrmBEmz3uL5XES166g2e8dU8s=
+        with ESMTP id S233159AbiGRHId (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 03:08:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F92175B8;
+        Mon, 18 Jul 2022 00:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658128111; x=1689664111;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/36lrqu98ICjFsab92jQzawKglUSnBRJ4IRFIwtlFVM=;
+  b=s3j1pR5gmGCDBo4wZDUJOZKCbO5KhRld3xXSLz/w9iMf1fixIIHcHrAB
+   1zWPDns14nFDc4TmZ0edLSrHYK55k+Qf7JHo7zT6RTgMayAHM0Hs/QOll
+   u+XJHHdn5wmIgN3GezEAsFcQCMuZuVj+jqS3APOhdpeZQJigbEcERomJa
+   j1l3kPNwfd+67KkkKqspuW/xbzNvhAmUx2yN0cL5/yncOqIpVzaTvMjAc
+   6hARBXJ5ZZhnWq/F+tPmkOhK6QRD/c0rKdm6lDtI8HuMkhkXEK0thYaxV
+   hvaqMxDLDcdrDLcpMiZsn+6DpgVTfkDC00w3RGPOWOIKlTwLqJ16kKLiO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="165161049"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 00:08:30 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 18 Jul 2022 00:08:30 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 18 Jul 2022 00:08:27 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <tudor.ambarus@microchip.com>, <broonie@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
+Date:   Mon, 18 Jul 2022 10:10:52 +0300
+Message-ID: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 18 Jul 2022 08:57:10 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     haibo.chen@nxp.com
-Cc:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 09/11] mtd: spi-nor: macronix: add mx25uw51345g OPI mode
- support
-In-Reply-To: <1657012303-6464-9-git-send-email-haibo.chen@nxp.com>
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-9-git-send-email-haibo.chen@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a21533017ffa0b6e6b0903d81d1cae0f@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2022-07-05 11:11, schrieb haibo.chen@nxp.com:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> mx25uw51345g has a special OPI DTR read command id, so add this
-> special fixup.
-> For RDID under OPI DTR mode, the dummy need to enlarge to 20 cycles,
-> otherwise can't get correct ID value.
+Remove #ifdef CONFIG_PM, #ifdef CONFIG_PM_SLEEP and use
+SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() macros instead which allows
+getting also rid of __maybe_unused in the code.
 
-Could you please dump the SFDP data of this flash, see [1]. I wonder
-if this command isn't described in the SFDP.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ drivers/spi/spi-atmel.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
--michael
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 9e300a932699..c4f22d50dba5 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -1631,7 +1631,6 @@ static int atmel_spi_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM
+ static int atmel_spi_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_master *master = dev_get_drvdata(dev);
+@@ -1653,7 +1652,6 @@ static int atmel_spi_runtime_resume(struct device *dev)
+ 	return clk_prepare_enable(as->clk);
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int atmel_spi_suspend(struct device *dev)
+ {
+ 	struct spi_master *master = dev_get_drvdata(dev);
+@@ -1693,17 +1691,12 @@ static int atmel_spi_resume(struct device *dev)
+ 	/* Start the queue running */
+ 	return spi_master_resume(master);
+ }
+-#endif
+ 
+ static const struct dev_pm_ops atmel_spi_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(atmel_spi_suspend, atmel_spi_resume)
+-	SET_RUNTIME_PM_OPS(atmel_spi_runtime_suspend,
+-			   atmel_spi_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(atmel_spi_suspend, atmel_spi_resume)
++	RUNTIME_PM_OPS(atmel_spi_runtime_suspend,
++		       atmel_spi_runtime_resume, NULL)
+ };
+-#define ATMEL_SPI_PM_OPS	(&atmel_spi_pm_ops)
+-#else
+-#define ATMEL_SPI_PM_OPS	NULL
+-#endif
+ 
+ static const struct of_device_id atmel_spi_dt_ids[] = {
+ 	{ .compatible = "atmel,at91rm9200-spi" },
+@@ -1715,7 +1708,7 @@ MODULE_DEVICE_TABLE(of, atmel_spi_dt_ids);
+ static struct platform_driver atmel_spi_driver = {
+ 	.driver		= {
+ 		.name	= "atmel_spi",
+-		.pm	= ATMEL_SPI_PM_OPS,
++		.pm	= pm_ptr(&atmel_spi_pm_ops),
+ 		.of_match_table	= atmel_spi_dt_ids,
+ 	},
+ 	.probe		= atmel_spi_probe,
+-- 
+2.34.1
 
-[1] 
-https://lore.kernel.org/linux-mtd/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
