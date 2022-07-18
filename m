@@ -2,48 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FB957851C
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 16:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BC757851D
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 16:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiGROQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S234434AbiGROQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Mon, 18 Jul 2022 10:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbiGROQH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 10:16:07 -0400
+        with ESMTP id S233352AbiGROQM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 10:16:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D754FBF59;
-        Mon, 18 Jul 2022 07:16:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161105FA2;
+        Mon, 18 Jul 2022 07:16:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D0FF60A39;
-        Mon, 18 Jul 2022 14:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7383DC341C0;
-        Mon, 18 Jul 2022 14:16:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A157A60A6D;
+        Mon, 18 Jul 2022 14:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8970EC341CF;
+        Mon, 18 Jul 2022 14:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658153765;
-        bh=aLKEXqH+iK0TIbbqnSk+kdHP+hrFwQ1Kd8T8kvQmRiU=;
+        s=k20201202; t=1658153770;
+        bh=anQAhzj0hNoAoDauWAq911k+RDOaRL0GEvj3qKhtGY4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qpyLZyEX+qCdhosZiguYz6Fkw6k8+mA1UaPjdTIeW1OSm2P4VD5/4ZcYxe+MDTplE
-         /rAYVDXhurNNN/zl5hEAJ8/SQ2Ru8B/7yrd3156oRLwtnRg3EuN5X8PN1/j1xuQON8
-         hb1YW3PPHxlt1ZgndPwp5uZwdweMCVumxPwxpQktJOOHTdsh8tect8539E6YAcZcJj
-         NgtipGFq1xlN44poqlyeyxvTRBAj4TaBiZT+WdLIp3fRwUzyO2ItV/Yu6f3MiwcNDu
-         Yri6ojb+N+2FzPDAfWL4j0GS9Nnfrd/yYdiA7DyGmSibZjf3dtLMwcKXgb+ah5dOHy
-         L2B2tt80Bat/g==
+        b=b/Pa9E/Jr2Gd3SQoqBG6Msxj+sN6828QlFO2lDwMzyRfpchng/INs/htM6GMgPNlh
+         ioa2jELQfHiLejSc6ItPg4PBxCmjwQkFZ0jZ5NpMBYuri7Ycq5+W2Wnu24j3i9ur3g
+         VTQ8uX8d10lEj4z3UgYzameKLbiJ7sL1kXAMbFiEHE0jyOBNhn3EmByg3YU7cMaUkW
+         Gc7bbAu6EkWuhx5zc8yZuVKUxt/ZiBDRyNuSzbcKb+Vpi0CPFu2w+GxJTTwbZpG8hz
+         odgbVtlB5vKG0lSvvFvcR4Eo8oYXc2M728bi3te0Ga6RbEx/BDEhIGXuh58le5ywFY
+         RMocPiTrjUK2Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     srinivas.kandagatla@linaro.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, johnson.wang@mediatek.com,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
+To:     claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
+        alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220715120114.4243-1-johnson.wang@mediatek.com>
-References: <20220715120114.4243-1-johnson.wang@mediatek.com>
-Subject: Re: (subset) [PATCH 1/3] spi: dt-bindings: Add compatible for MediaTek MT8188
-Message-Id: <165815376317.235243.3004661183751772073.b4-ty@kernel.org>
-Date:   Mon, 18 Jul 2022 15:16:03 +0100
+In-Reply-To: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
+References: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
+Subject: Re: [PATCH] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
+Message-Id: <165815376828.235243.1985340166357749822.b4-ty@kernel.org>
+Date:   Mon, 18 Jul 2022 15:16:08 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,9 +53,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 15 Jul 2022 20:01:12 +0800, Johnson Wang wrote:
-> This commit adds dt-binding documentation of spi bus for MediaTek MT8188
-> SoC platform.
+On Mon, 18 Jul 2022 10:10:52 +0300, Claudiu Beznea wrote:
+> Remove #ifdef CONFIG_PM, #ifdef CONFIG_PM_SLEEP and use
+> SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() macros instead which allows
+> getting also rid of __maybe_unused in the code.
 > 
 > 
 
@@ -68,8 +66,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: dt-bindings: Add compatible for MediaTek MT8188
-      commit: 0ee0ab0bdab4f9e6754cc6a294e90c46b53f565b
+[1/1] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
+      commit: a3fd35be0eda760610a63e179ad860189b890f0b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
