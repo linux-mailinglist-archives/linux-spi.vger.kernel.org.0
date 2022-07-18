@@ -2,146 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE65577D7E
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 10:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857E8578263
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 14:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbiGRI1i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Jul 2022 04:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S231283AbiGRMd5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Jul 2022 08:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiGRI1h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 04:27:37 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F26C18B3A
-        for <linux-spi@vger.kernel.org>; Mon, 18 Jul 2022 01:27:36 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id BE51A1C811C8;
-        Mon, 18 Jul 2022 16:12:41 +0800 (CST)
-Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 18
- Jul 2022 16:12:41 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS03.nuvoton.com
- (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Mon, 18 Jul
- 2022 16:12:41 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Mon, 18 Jul 2022 16:12:41 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 58E7563A20; Mon, 18 Jul 2022 11:12:40 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <broonie@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 3/3] spi: npcm-fiu: Add NPCM8XX support
-Date:   Mon, 18 Jul 2022 11:11:46 +0300
-Message-ID: <20220718081146.256070-4-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220718081146.256070-1-tmaimon77@gmail.com>
-References: <20220718081146.256070-1-tmaimon77@gmail.com>
+        with ESMTP id S231629AbiGRMd5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 08:33:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5EA5FF7;
+        Mon, 18 Jul 2022 05:33:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 331F3B80F79;
+        Mon, 18 Jul 2022 12:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4792DC341C0;
+        Mon, 18 Jul 2022 12:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658147632;
+        bh=pBFI2m2eAaRkulcEqTijxnzeyD+kWLx1e1S2e2czNuU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sH7KNQASv8ORAY5dJA7waLOkPXM5+1GWn1U8qpFYmDk3AHB/wUsFK2H6eU9JQMfif
+         rCixFcPidnwVcCPPiF51Vpfo2Pq1RgwY5b/Em97h3wHYtKVs/OLi/DY0IPDsYbb9Do
+         I7VUd7rb5ELyNm1QaybSIn8ecHOrKFQrGQGQUqxpl0UPvh/CH+Ijp1MI/DtWykTvUk
+         j+EZXyBOaiyzUpb8cScH6ttJgoKTBJZ+UaWlrQ4wKzLEIpb+SsxNaJCOQXnc1dCIZF
+         kVcLQTMpGdfwoe/9jMCONP6tbZ7wdisGLZXoiJa6GveNFtAnSyOS1a14GY26BI3xFs
+         KC+v8VA4GrH6Q==
+Date:   Mon, 18 Jul 2022 13:33:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-rspi: Add force_dma variable to spi_ops
+Message-ID: <YtVTK6Y9QRBuJPr9@sirena.org.uk>
+References: <20220716153934.292311-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fKNm85Acx/utvWsU"
+Content-Disposition: inline
+In-Reply-To: <20220716153934.292311-1-biju.das.jz@bp.renesas.com>
+X-Cookie: The greatest remedy for anger is delay.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Adding FIU NPCM8XX support to NPCM FIU driver.
-NPCM8XX FIU supports four controllers.
 
-As part of adding NPCM8XX support:
-- Add NPCM8XX specific compatible string.
-- Using an internal burst configuration register instead of a GCR
-  register.
-- Support FIU1 controller.
+--fKNm85Acx/utvWsU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- drivers/spi/spi-npcm-fiu.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On Sat, Jul 16, 2022 at 04:39:34PM +0100, Biju Das wrote:
+> On RZ/G2L SoCs switching from DMA to interrupt mode, causes timeout
+> issue as we are not getting Rx interrupt even though SPRF bit is set in
+> the status register.
+>=20
+> But there is no issue if we don't switch between interrupt to DMA mode
+> or vice versa.
 
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index d5b4fe7b9b62..49f6424e35af 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -36,6 +36,7 @@
- #define NPCM_FIU_UMA_DR1		0x34
- #define NPCM_FIU_UMA_DR2		0x38
- #define NPCM_FIU_UMA_DR3		0x3C
-+#define NPCM_FIU_CFG			0x78
- #define NPCM_FIU_MAX_REG_LIMIT		0x80
- 
- /* FIU Direct Read Configuration Register */
-@@ -151,6 +152,9 @@
- #define NPCM_FIU_UMA_DR3_RB13		GENMASK(15, 8)
- #define NPCM_FIU_UMA_DR3_RB12		GENMASK(7, 0)
- 
-+/* FIU Configuration Register */
-+#define NPCM_FIU_CFG_FIU_FIX		BIT(31)
-+
- /* FIU Read Mode */
- enum {
- 	DRD_SINGLE_WIRE_MODE	= 0,
-@@ -187,6 +191,7 @@ enum {
- 	FIU0 = 0,
- 	FIU3,
- 	FIUX,
-+	FIU1,
- };
- 
- struct npcm_fiu_info {
-@@ -214,6 +219,21 @@ static const struct fiu_data npcm7xx_fiu_data = {
- 	.fiu_max = 3,
- };
- 
-+static const struct npcm_fiu_info npxm8xx_fiu_info[] = {
-+	{.name = "FIU0", .fiu_id = FIU0,
-+		.max_map_size = MAP_SIZE_128MB, .max_cs = 2},
-+	{.name = "FIU3", .fiu_id = FIU3,
-+		.max_map_size = MAP_SIZE_128MB, .max_cs = 4},
-+	{.name = "FIUX", .fiu_id = FIUX,
-+		.max_map_size = MAP_SIZE_16MB, .max_cs = 2},
-+	{.name = "FIU1", .fiu_id = FIU1,
-+		.max_map_size = MAP_SIZE_16MB, .max_cs = 4} };
-+
-+static const struct fiu_data npxm8xx_fiu_data = {
-+	.npcm_fiu_data_info = npxm8xx_fiu_info,
-+	.fiu_max = 4,
-+};
-+
- struct npcm_fiu_spi;
- 
- struct npcm_fiu_chip {
-@@ -624,6 +644,10 @@ static int npcm_fiu_dirmap_create(struct spi_mem_dirmap_desc *desc)
- 		regmap_update_bits(gcr_regmap, NPCM7XX_INTCR3_OFFSET,
- 				   NPCM7XX_INTCR3_FIU_FIX,
- 				   NPCM7XX_INTCR3_FIU_FIX);
-+	} else {
-+		regmap_update_bits(fiu->regmap, NPCM_FIU_CFG,
-+				   NPCM_FIU_CFG_FIU_FIX,
-+				   NPCM_FIU_CFG_FIU_FIX);
- 	}
- 
- 	if (desc->info.op_tmpl.data.dir == SPI_MEM_DATA_IN) {
-@@ -664,6 +688,7 @@ static const struct spi_controller_mem_ops npcm_fiu_mem_ops = {
- 
- static const struct of_device_id npcm_fiu_dt_ids[] = {
- 	{ .compatible = "nuvoton,npcm750-fiu", .data = &npcm7xx_fiu_data  },
-+	{ .compatible = "nuvoton,npcm845-fiu", .data = &npxm8xx_fiu_data  },
- 	{ /* sentinel */ }
- };
- 
--- 
-2.33.0
+So we need this for correctness until someone can figure out what goes
+wrong :/
 
+> Performance comparison between interrupt and DMA mode on RZ/Five SMARC
+> platform connected to a display module shows that performance and
+> CPU utilization is much better with DMA mode compared to interrupt mode
+> (1->65 fps) and (98->8%).
+
+How does that look for something doing lots of short transfers (like
+register I/O for example), and what's the throughput like?  DMA probably
+is the most sensible default even so since the impact of doing PIO for
+large transfers tends to be so bad, you have to be doing a *lot* of
+small I/O before it gets to be a problem whereas basically any large
+transfer will notice PIO.
+
+> This patch introduces a variable force_dma to avoid switching between
+> DMA to interrupt mode for RZ platforms.
+
+Not that it really matters but it's not a variable, it's a flag in the
+device configuration.  I'm wondering if we might want a way to override
+this at runtime in case someone does have an application that suffers
+badly from being forced into DMA (eg, some IIO thing), that could be
+done incrementally though.
+
+--fKNm85Acx/utvWsU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLVUysACgkQJNaLcl1U
+h9BC2wf9EeVH48TIA2zDA+JSZPmzmPVpozBTPwJ+ku7Gcpc5jwIVTj+uTxC9vjix
+OoQVbdWk4mBfAlsS1YnYFx8Mr3SXP2YM2k8YTVmkddcCHoXbqmoPt+XakhtIg0it
+4wZXAYl/N01b83QMnozgdcg0vPt3Jh7tFURgbgToYX0IuqHNfQ5Tnh2SS6JAURoC
+C3f/NubwlSGqKYnHqiM87H9pjxRKVM0dhoq4CeS4VKDz1ITw71lHe4WD1+N6sG/6
+uurZX+/3YCVbN47PYJdvcnLRLXa5WV1LHN67xYQyG0jxCP4wUzLIKDEpc1Dp3cVx
+ARBOnsUswaMkB3gv7ZoF5sj3S9CF8Q==
+=2TS2
+-----END PGP SIGNATURE-----
+
+--fKNm85Acx/utvWsU--
