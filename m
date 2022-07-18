@@ -2,76 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB4E577ABA
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 08:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C1D577C04
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 08:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiGRGCL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Jul 2022 02:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S233647AbiGRG52 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Jul 2022 02:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiGRGCK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 02:02:10 -0400
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E2A1057C
-        for <linux-spi@vger.kernel.org>; Sun, 17 Jul 2022 23:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=Kanh781UymksAyGUugmQj8P1S8W1X2YktbcM9+VR/60=;
-        b=VBQ4pHVTdgeGeMKYSiX0Iu5QJpSgQ6fleLAfnAHPgtLKhB6ylKf7a4Eypl5nR5o6Hh/fqe5nt4Hhb
-         O5xHTfWoAKql5HgshsyT1LPw3N5tdHAXIau2WJZh6cPfjBtzPeAcHnM4RBFZJSscnK7UZKZLe8jdfs
-         kIiv5rTsJZAkbVX52ptH4HL/otBOH6iWZJD5IyTUz1ki5Z9FjCJlU4ZNDNfge7QKgjshBMjT6qOQ1R
-         FFbkg28OyA+CFl3sOMsGGTn4o3SbtSNoPFtICBPVotO3sn7ehS22nwFftrUJD/hYgvwmZJYq0cF5uV
-         HePpOLKBkcQRWjnaNKLSVdAyzIR369g==
-X-MSG-ID: 24694fd2-065f-11ed-9051-0050569d2c73
-Date:   Mon, 18 Jul 2022 08:02:01 +0200
-From:   David Jander <david@protonic.nl>
-To:     Thomas Kopp <thomas.kopp@microchip.com>
-Cc:     <andrew@lunn.ch>, <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, <mkl@pengutronix.de>
-Subject: Re: [PATCH v3 00/11] Optimize spi_sync path
-Message-ID: <20220718080201.5799c036@erd992>
-In-Reply-To: <20220715141342.12330-1-thomas.kopp@microchip.com>
-References: <20220621061234.3626638-1-david@protonic.nl>
-        <20220715141342.12330-1-thomas.kopp@microchip.com>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S233652AbiGRG51 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 02:57:27 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDCC165B4;
+        Sun, 17 Jul 2022 23:57:25 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6D6002223A;
+        Mon, 18 Jul 2022 08:57:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1658127442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sf6PNQbhIHBDnRnau7vCcYU1WYAC0tMbQT2baM/8MoA=;
+        b=L52dwrCL7c6OlpAGESjGoH7cK9TT2avA32UJDm9VCLClr/id3A5YGEPSyxsggo0Qyp8vRH
+        /Ot8YydJqBgAkYy26aWK1ODFrsY2gbQI6bGJ/xK2GpsW39uwONd1ewkdm6tm05G4PWHmZe
+        vXW4lURrmBEmz3uL5XES166g2e8dU8s=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 18 Jul 2022 08:57:10 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     haibo.chen@nxp.com
+Cc:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
+        tudor.ambarus@microchip.com, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH 09/11] mtd: spi-nor: macronix: add mx25uw51345g OPI mode
+ support
+In-Reply-To: <1657012303-6464-9-git-send-email-haibo.chen@nxp.com>
+References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
+ <1657012303-6464-9-git-send-email-haibo.chen@nxp.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a21533017ffa0b6e6b0903d81d1cae0f@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-Hi Thomas,
-
-On Fri, 15 Jul 2022 16:13:42 +0200
-Thomas Kopp <thomas.kopp@microchip.com> wrote:
-
-> Hi David,
->  
-> some numbers after testing your patch on a RPI 5.15.y vs 5.19rc6 and the
-> mcp2518fd:
+Am 2022-07-05 11:11, schrieb haibo.chen@nxp.com:
+> From: Haibo Chen <haibo.chen@nxp.com>
 > 
-> Two Backtoback SPI transfers with 9 byte each went from 78us to 36us! All
-> metrics improved (cs to first clock cyle, last clock cycle to cs, and delay
-> between two transfers). That's a great help for the mcp driver (or any
-> similar SPI device).
-> 
-> Thanks for your work on this!
+> mx25uw51345g has a special OPI DTR read command id, so add this
+> special fixup.
+> For RDID under OPI DTR mode, the dummy need to enlarge to 20 cycles,
+> otherwise can't get correct ID value.
 
-Thanks a lot for testing and reporting! It is very encouraging to hear first
-reports of people confirming the gains I intended to accomplish.
+Could you please dump the SFDP data of this flash, see [1]. I wonder
+if this command isn't described in the SFDP.
 
-Best regards,
+-michael
 
--- 
-David Jander
-Protonic Holland.
+[1] 
+https://lore.kernel.org/linux-mtd/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
