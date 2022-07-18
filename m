@@ -2,88 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BC757851D
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 16:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B904D578A23
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jul 2022 21:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiGROQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Jul 2022 10:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S234997AbiGRTBo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Jul 2022 15:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiGROQM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 10:16:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161105FA2;
-        Mon, 18 Jul 2022 07:16:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A157A60A6D;
-        Mon, 18 Jul 2022 14:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8970EC341CF;
-        Mon, 18 Jul 2022 14:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658153770;
-        bh=anQAhzj0hNoAoDauWAq911k+RDOaRL0GEvj3qKhtGY4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b/Pa9E/Jr2Gd3SQoqBG6Msxj+sN6828QlFO2lDwMzyRfpchng/INs/htM6GMgPNlh
-         ioa2jELQfHiLejSc6ItPg4PBxCmjwQkFZ0jZ5NpMBYuri7Ycq5+W2Wnu24j3i9ur3g
-         VTQ8uX8d10lEj4z3UgYzameKLbiJ7sL1kXAMbFiEHE0jyOBNhn3EmByg3YU7cMaUkW
-         Gc7bbAu6EkWuhx5zc8yZuVKUxt/ZiBDRyNuSzbcKb+Vpi0CPFu2w+GxJTTwbZpG8hz
-         odgbVtlB5vKG0lSvvFvcR4Eo8oYXc2M728bi3te0Ga6RbEx/BDEhIGXuh58le5ywFY
-         RMocPiTrjUK2Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
-        alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
-References: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
-Subject: Re: [PATCH] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
-Message-Id: <165815376828.235243.1985340166357749822.b4-ty@kernel.org>
-Date:   Mon, 18 Jul 2022 15:16:08 +0100
+        with ESMTP id S235151AbiGRTBc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Jul 2022 15:01:32 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB36E2FFF8
+        for <linux-spi@vger.kernel.org>; Mon, 18 Jul 2022 12:01:19 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id k85so19870196ybk.7
+        for <linux-spi@vger.kernel.org>; Mon, 18 Jul 2022 12:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=IQXHlBQ3jHSYUTt89EYBBYMpS/rXYtHBaNUJ6e2ZzB07/ETpvOJM0/ZijryokIEfDh
+         oJG0jiachEiIldTcksV5XzU+dy3csOVeMrzVRYAIpdf4PUrGYfI/KNNvcLIWjvmc8oHa
+         yWKlPWKnOFkuEw2Mq2CzZYpqcRK9kJ+LygeUXE0izxh4s3I+nauj1w40rP+480vJCi+X
+         rAPSoEvo8wXV23cydMjOZnuzBivYToT/OwjRuq1iqX/8Isb8Rqougy46FnOdoQuh9Z/u
+         z7xKihQATs9EIIDqpmGAQl/2n//vpMk3ZDpLHQioaLk/1hVBrL4som/CgeyT77yPFwbn
+         VU6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=PkL4GdbOkAf/Jankh1EQrCPXh49uMc0HSerzjiO/iLOhyljutSXsPUvwOdNNkQTxrF
+         YlOa+3CYmLfeDiyS0ORpqORyUchrzkAwG/cvoVW5ET+sMyoTCIBew/yFr+co+olVzc2X
+         Ei34/itMCkmQKX3nuoCfCS3pAzHLQIpuU+rDHekH7wt8LihbuJdfkLJ1VFLR/70iYuGn
+         OPBC+hOBNLGtKcEiNKt2QynSmjFe4wqcyaih3GeCUhvrE/ADFIjdTBQiYOQLWRVbEJ2N
+         CB7FsC9NJuGdxCyAmcWUiUjQrnsBm9togfIaOWUqQayAHkvW5CvZBhsieG1XwswLE2h6
+         abWQ==
+X-Gm-Message-State: AJIora9K6NZZGdOActCIZXdz+EL6D/BSv9xOsNrhRhBtPoevM0ECjINk
+        vn3bab8VAc1JFAT6XEqnsB4VilmuzqHjkEatBa1YNbWVdg6FCA==
+X-Google-Smtp-Source: AGRyM1sOF4caZ/Mzb7i1HwUB8dyXYAmjf9y+Pd1nVHRKiUHeMR6opOrMc10oZNu5DLkN2HS0cpkKNGEh0T+MU99Jmes=
+X-Received: by 2002:a81:5747:0:b0:31d:1bb8:65b7 with SMTP id
+ l68-20020a815747000000b0031d1bb865b7mr30830046ywb.168.1658170865217; Mon, 18
+ Jul 2022 12:01:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6919:4004:b0:cc:50ff:b3d8 with HTTP; Mon, 18 Jul 2022
+ 12:01:04 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <sgtalberts@gmail.com>
+Date:   Mon, 18 Jul 2022 11:01:04 -0800
+Message-ID: <CALPTejMFgL0Bg7jCKa7j+5KxVv_jnSM4ZPq-QhHCiUpG_ZswsQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 18 Jul 2022 10:10:52 +0300, Claudiu Beznea wrote:
-> Remove #ifdef CONFIG_PM, #ifdef CONFIG_PM_SLEEP and use
-> SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() macros instead which allows
-> getting also rid of __maybe_unused in the code.
-> 
-> 
+Hi Dear,
 
-Applied to
+My name is Dr Lily William from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-Thanks!
+Thanks
 
-[1/1] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
-      commit: a3fd35be0eda760610a63e179ad860189b890f0b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+With love
+Lily
