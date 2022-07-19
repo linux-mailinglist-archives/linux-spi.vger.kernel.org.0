@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F380D5797BC
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Jul 2022 12:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4D65797FC
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Jul 2022 12:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiGSKdw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 Jul 2022 06:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S237338AbiGSKxi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 Jul 2022 06:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235587AbiGSKdv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Jul 2022 06:33:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540C53FA3B
-        for <linux-spi@vger.kernel.org>; Tue, 19 Jul 2022 03:33:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A9D6120D
-        for <linux-spi@vger.kernel.org>; Tue, 19 Jul 2022 10:33:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7286DC341C6;
-        Tue, 19 Jul 2022 10:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658226829;
-        bh=Xn83ecU2wCOaHNwWG6uiKyygv0VhxGuq5EZQClqbeZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GnMufvbhx6r3czB1f8jD0DbncihLBN2VFYbCmn9j0r7SGLzuWqV3mGrdXJwUPuoSj
-         yIPQw0ss3fAMgKj/racccvOLr47XWnKjds5xJ88INDzNMaSWKMcdhFRSuEbGkIEsow
-         ZDoL1WuYot8VU3jLw4jcMN7zIGSS0/ClBOgVVAID9Zr2h1t1mnfAfklwCuAOg6nMLT
-         8ctBnQrqGjTyH7QR0BTF7/UT56zyc7u4G9h4CM0ADgCzuq3zO9A/XrLDfGPPlBgIIZ
-         VH+ZLLNvb6QHQkTdRsvyKV7EiL6AEjfExyC2vQ8DJtHbL4NIzTtf2iwKS0VaQphLVl
-         SCOr9MQ9crt6A==
-Date:   Tue, 19 Jul 2022 11:33:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jens Lindahl <jensctl@gmail.com>
-Subject: Re: [PATCH] spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer
- deref for non DMA transfers
-Message-ID: <YtaIh41xhArXaxJS@sirena.org.uk>
-References: <20220719072234.2782764-1-mkl@pengutronix.de>
- <20220719074701.GA26268@wunner.de>
+        with ESMTP id S237413AbiGSKxT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Jul 2022 06:53:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6AC402C7
+        for <linux-spi@vger.kernel.org>; Tue, 19 Jul 2022 03:53:16 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oDkqp-00042f-7i
+        for linux-spi@vger.kernel.org; Tue, 19 Jul 2022 12:53:15 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 41DB7B3F7A
+        for <linux-spi@vger.kernel.org>; Tue, 19 Jul 2022 10:53:14 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id BA255B3F74;
+        Tue, 19 Jul 2022 10:53:13 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f2241ab7;
+        Tue, 19 Jul 2022 10:53:13 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-spi@vger.kernel.org
+Cc:     kernel@pengutronix.de, Martin Sperl <kernel@martin.sperl.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2] spi: bcm2835: enable shared interrupt support
+Date:   Tue, 19 Jul 2022 12:53:05 +0200
+Message-Id: <20220719105305.3076354-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5WyeXN0ok3S/mr94"
-Content-Disposition: inline
-In-Reply-To: <20220719074701.GA26268@wunner.de>
-X-Cookie: We have ears, earther...FOUR OF THEM!
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,36 +58,82 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Martin Sperl <kernel@martin.sperl.org>
 
---5WyeXN0ok3S/mr94
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+BCM2711 shares an interrupt betweem 5 SPI interfaces (0, 3, 4, 5 & 6).
+Another interrupt is shared between SPI1, SPI2 and UART1, which also
+affects BCM2835/6/7. Acting on an interrupt intended for another
+interface ought to be harmless (although potentially inefficient), but
+it can cause this driver to crash - presumably because some critical
+state is not ready.
 
-On Tue, Jul 19, 2022 at 09:47:01AM +0200, Lukas Wunner wrote:
-> [+cc Jens, Florian, Stefan, Mark]
+Add a test to the spi-bcm2835 interrupt service routine that
+interrupts are enabled on this interface to avoid the crash and
+improve efficiency.
 
-Can someone send me the actual patch please?
+Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
+Link: https://github.com/raspberrypi/linux/issues/5048
+Suggested-by: https://github.com/boe-pi
+Co-developed-by: Phil Elwell <phil@raspberrypi.com>
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Hello,
 
-As documented in submitting-patches.rst please send patches to the=20
-maintainers for the code you would like to change.  The normal kernel
-workflow is that people apply patches from their inboxes, if they aren't
-copied they are likely to not see the patch at all and it is much more
-difficult to apply patches.
+I'm picking up the work of Martin Sperl et al. to bring the shared
+interrupt support for the bcm2835 driver to mainline.
 
---5WyeXN0ok3S/mr94
-Content-Type: application/pgp-signature; name="signature.asc"
+The original version of this patch was added in ecfbd3cf3b8b ("spi:
+bcm2835: Enable shared interrupt support"), but later reverted as
+d62069c22eda ("spi: bcm2835: Remove shared interrupt support").
 
------BEGIN PGP SIGNATURE-----
+Here the original version causes transfer timeouts, which lead to
+driver crashes. This is fixed by first checking if the interrupts are
+actually enabled, before serving them. The fix has been taken from the
+rapi downstream repo and squahed into this commit.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLWiIcACgkQJNaLcl1U
-h9CD8Af/UMfUaOmRTHKdlErilMuw9Qs2vuWSeCiEIk0ZoHE/6jLoqGSzfwv/4xjf
-FdvCh2x3pyT9xOlAW6qC/zBp0cx6GileQ+SljUjJGjoKo7OQAngcA1458fAEvkr6
-LTFzllvqIHTfqPBu15TMebvc7Gp/5SefrFfzVIgGvipQh+MrjlCJYPkGL8Dk1fjQ
-ut4Ji69M1xtxDUt71hbZR/AUlJw+Ov2p75jbgrblKz7QC9CVhiqCMZGjwg4IuGi3
-rR+97yHZxZb6mai96g2el/89t/15lwJt0hl0VVxWGvJJ6pWzcIbBPwtuRyLj/PWi
-ylrTXOCkBcoMn7aVJo0zYooebyXIYQ==
-=tApv
------END PGP SIGNATURE-----
+The updated version of the patch successfully runs with concurrent SPI
+accesses on SPI0 and SPI3 without problems.
 
---5WyeXN0ok3S/mr94--
+regards,
+Marc
+
+Changes since v1: https://lore.kernel.org/all/20200528185805.28991-1-nsaenzjulienne@suse.de
+- check for if interrupts are enabled before serving IRQs
+
+ drivers/spi/spi-bcm2835.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 775c0bf2f923..9bdb1b85ae08 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -372,6 +372,10 @@ static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
+ 	struct bcm2835_spi *bs = dev_id;
+ 	u32 cs = bcm2835_rd(bs, BCM2835_SPI_CS);
+
++	/* Bail out early if interrupts are not enabled */
++	if (!(cs & BCM2835_SPI_CS_INTR))
++		return IRQ_NONE;
++
+ 	/*
+ 	 * An interrupt is signaled either if DONE is set (TX FIFO empty)
+ 	 * or if RXR is set (RX FIFO >= ¾ full).
+@@ -1365,8 +1369,8 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 	bcm2835_wr(bs, BCM2835_SPI_CS,
+ 		   BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX);
+
+-	err = devm_request_irq(&pdev->dev, bs->irq, bcm2835_spi_interrupt, 0,
+-			       dev_name(&pdev->dev), bs);
++	err = devm_request_irq(&pdev->dev, bs->irq, bcm2835_spi_interrupt,
++			       IRQF_SHARED, dev_name(&pdev->dev), bs);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "could not request IRQ: %d\n", err);
+ 		goto out_dma_release;
+
+base-commit: a3fd35be0eda760610a63e179ad860189b890f0b
+--
+2.35.1
+
