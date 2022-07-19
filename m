@@ -2,53 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1400D57A5A2
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Jul 2022 19:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C078657A5D2
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Jul 2022 19:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiGSRn5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 Jul 2022 13:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S238956AbiGSRxh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 Jul 2022 13:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiGSRn5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Jul 2022 13:43:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3849255089;
-        Tue, 19 Jul 2022 10:43:56 -0700 (PDT)
+        with ESMTP id S229944AbiGSRxg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Jul 2022 13:53:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2CC5722B;
+        Tue, 19 Jul 2022 10:53:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1212616D1;
-        Tue, 19 Jul 2022 17:43:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFD4C341CB;
-        Tue, 19 Jul 2022 17:43:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E81AB81C5C;
+        Tue, 19 Jul 2022 17:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F26C341CA;
+        Tue, 19 Jul 2022 17:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658252634;
-        bh=faiqk4f3iA99RZ119mlmfTi2lShRvfggSjO/MYwB1rE=;
+        s=k20201202; t=1658253211;
+        bh=GI+gJxOPyNxkeHfU9ebTLjaH3IEL1Dm94PwYhl9hk6k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aAeKH0tpjWqxNTzuvPNBKUj1bPiKSdSEMkdJG3gKBaG1UXB0hUAEj+A1xiTSxcSKY
-         PTl07AFE8Bp0+1OyP0hAjkNP64jlNqJ4EvYKlwJumjwIYkQVih6YjE20Yx11nlPI/u
-         blILq1P59x1BO6l3gR4k6HOfy5tGI6g8Kc5lQJ8kSbO2JCW7lZrH9EyEWAlfAcDoKo
-         AXT+Fj9km1BeXnlldzGLfkywdl2q/eMclUSB7K3+ivXzqJP8jCpvlikcM5XK/Jx3bR
-         cFPge9CM9hbOyOVXYxUpw1Q7Nf9QUUUodVeq4q5+xLiyi+gZ8uDW9AgvavZYdXYpPo
-         vE66kme4VOGmQ==
-Date:   Tue, 19 Jul 2022 18:43:49 +0100
+        b=S4wPcfZb6jg68De5mTy/hkg5epiRO2WAZrtjq8IvGLKyEkLNNRjECSsWheqzbSJkO
+         z2OSXsAFvrm/xt60yBGa2+n24Cp6I5bEcBp10LNjfCJ72IrUhw4OohcW8de6YMEQXX
+         PY5fzBgKHSQ/u9kfD33STL7BIxvzSvZyj+DscB1oLUc2IejZOmu87AdItzFiTZ6jT2
+         mAQ1r3Dp1hRA9O0ciDd4YyUgmh8E4Hkcb14EctookT9o8MedApGe0cewv1Ney+yH/T
+         OSJ4DURtjjSOhT2z5sG6ViWVNSxZW7A8kpnbgC4/zT6aYd1rtGkTQR+bTk6kn+Msi1
+         QhiscTJ1aok3A==
+Date:   Tue, 19 Jul 2022 18:53:25 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     linux-spi@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] spi: spi-rspi: Add need_dmar_clr to spi_ops
-Message-ID: <YtbtVdoantbZd7lg@sirena.org.uk>
-References: <20220719150000.383722-1-biju.das.jz@bp.renesas.com>
- <20220719150000.383722-2-biju.das.jz@bp.renesas.com>
+To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
+ device
+Message-ID: <YtbvlYZoRDz6i+pS@sirena.org.uk>
+References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
+ <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
+ <YqHfccvhy7e5Bc6m@sirena.org.uk>
+ <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
+ <YrRXTrYN3BuShbzg@sirena.org.uk>
+ <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
+ <YtGNnT2cP5HIayp3@sirena.org.uk>
+ <BN7PR12MB280220006B18F06E9ADA31F5DC8F9@BN7PR12MB2802.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YSrTx8XuycLBiJKv"
+        protocol="application/pgp-signature"; boundary="goT4hZWVlB+2fFB9"
 Content-Disposition: inline
-In-Reply-To: <20220719150000.383722-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <BN7PR12MB280220006B18F06E9ADA31F5DC8F9@BN7PR12MB2802.namprd12.prod.outlook.com>
 X-Cookie: We have ears, earther...FOUR OF THEM!
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,32 +75,53 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---YSrTx8XuycLBiJKv
+--goT4hZWVlB+2fFB9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 19, 2022 at 04:00:00PM +0100, Biju Das wrote:
-> RSPI IP on RZ/{A, G2L} SoC's has the same signal for both interrupt and
-> DMA transfer request. Setting DMARS register for DMA transfer
-> makes the signal to work as a DMA transfer request signal and
-> subsequent interrupt requests to the interrupt controller
-> are masked.
+On Tue, Jul 19, 2022 at 01:21:41PM +0000, Mahapatra, Amit Kumar wrote:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> I agree, so for checking the controller multiple chip select capability(u=
+sing=20
+> more than one chip select at once) we can define a new spi controller DT=
+=20
+> property like "multi-cs-cap"(please suggest a better name).=20
+> The controller that can support multiple chip selects should have this pr=
+operty=20
+> in the spi controller DT node. The spi core will check ctlr->multi-cs-cap=
+ to=20
+> operate multiple chip select in parallel.
 
---YSrTx8XuycLBiJKv
+I'm not sure this needs to be a DT property, it's more just something we
+infer from the compatible.  The name seems fine, as does the flag in the
+controller data.
+
+> > the chip selects are available and that the controller can do something=
+ useful
+> > with them (and probably have an implementation in the core for doing so=
+ via
+> > GPIO).
+
+> Here are you referring to the usecase in which a controller implementing =
+multi CS
+> support using GPIO? =20
+
+Yes, we probably ought to.
+
+--goT4hZWVlB+2fFB9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLW7VQACgkQJNaLcl1U
-h9DvRAf/U1Dg40BIiv4vxtI2dbP/00dHEiwvD653YhJzTlYcqqCHcOim0tgEIhn2
-5zgsmGhYkbNAPZlTJ9lZ1sWeNmYuCE1ozbi0XqDrUD9MpJBwB+Ru21BuDP3kBosT
-YjBYKO9MdANpsnw6RxFUXOwfjqB+3pMoEQNJBTG71Cpc1GbxjlsNaZ2S+LTGV0qE
-fBI7t90m5wmFS6MJTRA8z4hjdI+G9hiI8OSQqK8aqsIta2M8iUG72Azo+gq6amjg
-AVnJe1sJ7I+w9Matu+wMn19XhYRFaCiMw+RWi08ltHUtNqaXGi46otTfQlwK/l5w
-WuFa6rmkLuQ3bjvWT41jvfXa8C/TMw==
-=P1qQ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLW75QACgkQJNaLcl1U
+h9CJnQf/dhICrU3mfuXOY461g8QV5eETdPaVby8yNx8MlhoRgqDFNvA2zwezWfcJ
+Vdj2/Q3LEjalNXzquO2TSl0gkTWNWi+QDzBjvETXKV7vKYwm59poI8MVBhqI7N99
+RhZyxKvL/6aHGOJP4/WD2/6iQsg1g2lMVb4M0SYM85zZAVJFoA/OuNoBPgGE7jUM
+ldycb+CE7awq5PS5RNcvtb8NWx/GrLvx+fpGG787yzBH207JvbUY0my2m26k2LCD
+gsJA7gzrrxbYjaCH+0Tdb5PMSOf5XN6eOvcq3rNq5D9AHQSPojbqLJF1gNWz+iS7
+uVUdG/qU6Mm16YocVIgnDpsb31WwnA==
+=p2xo
 -----END PGP SIGNATURE-----
 
---YSrTx8XuycLBiJKv--
+--goT4hZWVlB+2fFB9--
