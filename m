@@ -2,95 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3103857B714
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jul 2022 15:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F140B57B795
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jul 2022 15:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbiGTNND (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jul 2022 09:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S231668AbiGTNeX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jul 2022 09:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiGTNND (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jul 2022 09:13:03 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC6B5B799
-        for <linux-spi@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso1245349wms.2
-        for <linux-spi@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=hZDBwVWDP5UPXoM/26p/r+j251hc2vAqDOCERxSqp1n7sS06JhTWTNUFrAn/iDVTDd
-         sk1s9gAeT8g6iMlidLoC2ByWsp6jDzKjyGiwTrHFM+kSqmhnpOGy27aGmIOCRSPQXtjU
-         iuHcWvpuEBu/GQL3HjFfyH38HWdcfRwpw/QCs8xRs37MzT7Ik+pcHBHS4PQz7Y7kmEGs
-         2zEZT/L22GV5s5xGf/GZOt2FikEOhhfo8etSuo2R+s9KR06g6oLOKoKJ9cp2Devph4aN
-         HYnuH9yadQ7mkeUaGKIxYyw+FFFXzGLODhmRa8DXLmg2/yBLqQ88/ndcWxmAnabBH3H2
-         gPtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=cNA82VibqcdMwELn3mXEfAA83jAfZxiPh2nNSBdIJMyYLVHRwDDEYQ6SEv15ZZIG9o
-         p3ID9ueQbq/vn9z4zmOnWeDtF3U9NUeNHFM6ic30YkKsN/feo2119uPXp3Dl4rrmk0HB
-         HRcoCp5rHavgoZF8GPYuD4KqPpH48h5yB7WhBWh87eX4lsOX8eQWJG8Qi989kQo8+R65
-         H0Hhc47CJGONlvRbG51fQZHaPmfFodG22Ku6sjl64s93dUg8vC2vAdM6hBioPmNEUnZ4
-         0Vd4Kh0eEXMOkU5W1pgyQjO/NpK24fdfJq6tK/N3Qc6GoVX86J6Jth3+D7hNUJ1CCw3v
-         CgEQ==
-X-Gm-Message-State: AJIora/shw/aU2eXgesjySk72pUAy5ZVgccmJQPjoa14vLDoxFBeLDYB
-        jHuJBqPAYGB/jKvVqs4YC6HfOw==
-X-Google-Smtp-Source: AGRyM1tHJE+D+NzsNowU+goDfK+LE01p5AmV4nGBMM9nPZVjT15IP9nJaaafPk1bF4qVs2pE8TNv1A==
-X-Received: by 2002:a05:600c:3b91:b0:3a3:1cbe:d531 with SMTP id n17-20020a05600c3b9100b003a31cbed531mr3812400wms.159.1658322779330;
-        Wed, 20 Jul 2022 06:12:59 -0700 (PDT)
-Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
-        by smtp.googlemail.com with ESMTPSA id y11-20020adfc7cb000000b0021d6924b777sm16853316wrg.115.2022.07.20.06.12.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:12:58 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
-        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
-        vkoul@kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Date:   Wed, 20 Jul 2022 15:12:57 +0200
-Message-Id: <20220720131257.530168-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
-References: <20220531135026.238475-17-fparent@baylibre.com>
+        with ESMTP id S229829AbiGTNeW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jul 2022 09:34:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED57387
+        for <linux-spi@vger.kernel.org>; Wed, 20 Jul 2022 06:34:21 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oE9qF-0004tj-Bg
+        for linux-spi@vger.kernel.org; Wed, 20 Jul 2022 15:34:19 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id B6048B5EAF
+        for <linux-spi@vger.kernel.org>; Wed, 20 Jul 2022 13:34:18 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 57267B5EAA;
+        Wed, 20 Jul 2022 13:34:18 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 911f8268;
+        Wed, 20 Jul 2022 13:34:17 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-spi@vger.kernel.org
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mark Brown <broonie@kernel.org>,
+        Jens Lindahl <jensctl@gmail.com>
+Subject: [PATCH v2] spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer deref for non DMA transfers
+Date:   Wed, 20 Jul 2022 15:34:16 +0200
+Message-Id: <20220720133416.3342229-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Fabien,
+In case a IRQ based transfer times out the bcm2835_spi_handle_err()
+function is called. Since commit 1513ceee70f2 ("spi: bcm2835: Drop
+dma_pending flag") the TX and RX DMA transfers are unconditionally
+canceled, leading to NULL pointer derefs if ctlr->dma_tx or
+ctlr->dma_rx are not set.
 
-> +		tzts4: tzts4-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&thermal 4>;
-> +			trips {};
-> +			cooling-maps {};
-> +		};
+Fix the NULL pointer deref by checking that ctlr->dma_tx and
+ctlr->dma_rx are valid pointers before accessing them.
 
-AFAIK mt8365 has only 3 thermal sensors, therefore tzts4 should not be
-added.
+Fixes: 1513ceee70f2 ("spi: bcm2835: Drop dma_pending flag")
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jens Lindahl <jensctl@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
 
-Regards,
-Amjad
+Changes Since v1: https://lore.kernel.org/all/20220719072234.2782764-1-mkl@pengutronix.de
+- added Mark Brown and Jens Lindahl on Cc
+
+ drivers/spi/spi-bcm2835.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 775c0bf2f923..0933948d7df3 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1138,10 +1138,14 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	dmaengine_terminate_sync(ctlr->dma_tx);
+-	bs->tx_dma_active = false;
+-	dmaengine_terminate_sync(ctlr->dma_rx);
+-	bs->rx_dma_active = false;
++	if (ctlr->dma_tx) {
++		dmaengine_terminate_sync(ctlr->dma_tx);
++		bs->tx_dma_active = false;
++	}
++	if (ctlr->dma_rx) {
++		dmaengine_terminate_sync(ctlr->dma_rx);
++		bs->rx_dma_active = false;
++	}
+ 	bcm2835_spi_undo_prologue(bs);
+ 
+ 	/* and reset */
+
+base-commit: 73d5fe046270281a46344e06bf986c607632f7ea
+-- 
+2.35.1
+
+
