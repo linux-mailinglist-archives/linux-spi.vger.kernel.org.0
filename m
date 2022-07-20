@@ -2,102 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F28557BF05
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jul 2022 22:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D4657BF6C
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jul 2022 23:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiGTULS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jul 2022 16:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S229710AbiGTVHZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jul 2022 17:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiGTULP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jul 2022 16:11:15 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DCE3138D;
-        Wed, 20 Jul 2022 13:11:15 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KJOQGx012116;
-        Wed, 20 Jul 2022 20:10:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=M7oqZk9pIMb0OzX4meUfieagzMg+2ujqpYSxOVaae4o=;
- b=gS+IKlgBhj2ltBFivKiuhnzPC+tR3o82QIHpwQobD3Chz9a+WemmXO5zdI5uz0SwgB9x
- R6wRZpk8NxZkEYu5RvpwR4bwxjixNnO6/BVoezDve+y7A5IfV8mTwcftkhXgeTWZCqZ0
- GHEcHOG/7DKguvukItizAliuNFNQZhKr7sxvb3t7ZSx7Fhf3ZJ6jQmuxRRTF93LL+JeB
- uOhe2gd5zeW3DXoHq0zQYXrbqinMmx1almvdkTXCSjLXtDzTtxSMzpK9O4yCsDBr6cIJ
- u2HeRIiXbq36myJIet9fBR0wkqdYHxzuFuND5c2lkWJpzheHSgBkA703UuwdLbvlfldJ eQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3henjmsdcq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 20:10:51 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229449AbiGTVHY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jul 2022 17:07:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCC41A07C;
+        Wed, 20 Jul 2022 14:07:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id BD1FDD2C1;
-        Wed, 20 Jul 2022 20:10:50 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 31CFE808C08;
-        Wed, 20 Jul 2022 20:10:50 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     nick.hawkins@hpe.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
-Subject: [PATCH v1 5/5] MAINTAINERS: add spi support to GXP
-Date:   Wed, 20 Jul 2022 15:11:58 -0500
-Message-Id: <20220720201158.78068-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220720201158.78068-1-nick.hawkins@hpe.com>
-References: <20220720201158.78068-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: JffD7m1bD6H-YEVNt3XlTPnsXeJ0ktDq
-X-Proofpoint-ORIG-GUID: JffD7m1bD6H-YEVNt3XlTPnsXeJ0ktDq
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 mlxlogscore=931
- malwarescore=0 spamscore=0 phishscore=0 bulkscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200081
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0455BCE22D7;
+        Wed, 20 Jul 2022 21:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CF4C3411E;
+        Wed, 20 Jul 2022 21:07:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658351240;
+        bh=KT0MDTe4I14XJ9G4qNy1ibxlgS5Etqvlq1vDOT8v2A8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=QVyfAmegKg5T13oaAgr7O4f1JgcvZEA/5kXb9bsiUJb9gZvXeYWq9E7Nu97KbRNg2
+         C5TKVcDQmkiVshPsnmn5Ecd97Lnq+frt4+11SMn6p7+G2KzSg75JOzc8u9SylZ4SuL
+         hnF/wlSoNiGQQz1cR7bGwwzGnHIUFHL4wOtHGujcNMUX+TuhDcx8y2dXNmENo1PHsL
+         utQje8b0QNAVjiB8Dw2atXzFPBQ1KP8NtyvBlVQTUGMuAHTd4jCr+l+XPRZpFaSPw7
+         IUB1OteLYL8+3+TzM5G/USrli5RixEkf2FjZ3knqnKepx5bkbeXCObbXDuuLZwCjiT
+         1cFkf+58VuzzQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     amit.kumar-mahapatra@xilinx.com
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        lakshmi.sai.krishna.potthuri@xilinx.com,
+        linux-kernel@vger.kernel.org, amit.kumar-mahapatra@amd.com,
+        sai.krishna.potthuri@amd.com
+In-Reply-To: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
+References: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
+Subject: Re: [PATCH] spi: spi-cadence: Fix SPI NO Slave Select macro definition
+Message-Id: <165835123856.909862.1674350119538638.b4-ty@kernel.org>
+Date:   Wed, 20 Jul 2022 22:07:18 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On Wed, 13 Jul 2022 22:15:29 +0530, Amit Kumar Mahapatra wrote:
+> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+> 
+> Fix SPI NO Slave Select macro definition, when all the SPI CS bits
+> are high which means no slave is selected.
+> 
+> 
 
-Add the spi driver and dt-binding documentation
+Applied to
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6d3bd9d2a8d..f87728549ecf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2140,11 +2140,13 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/spi/hpe,gxp-spi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
- ARM/IGEP MACHINE SUPPORT
--- 
-2.17.1
+Thanks!
 
+[1/1] spi: spi-cadence: Fix SPI NO Slave Select macro definition
+      commit: e1502ba41699736c578ba9d61ae6285d49f6921b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
