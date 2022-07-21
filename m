@@ -2,361 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB1C57D0AA
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 18:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DF257D420
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 21:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiGUQE4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 12:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S232675AbiGUTaM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 15:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiGUQEx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 12:04:53 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756228874F
-        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 09:04:50 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id EYfNovWJQcdW9EYfNoUATb; Thu, 21 Jul 2022 18:04:48 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 21 Jul 2022 18:04:48 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <e75afa5a-a856-7747-cfcf-6dce5121c3af@wanadoo.fr>
-Date:   Thu, 21 Jul 2022 18:04:45 +0200
+        with ESMTP id S229479AbiGUTaL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 15:30:11 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B524E6319;
+        Thu, 21 Jul 2022 12:30:09 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id n13so1324627ilk.1;
+        Thu, 21 Jul 2022 12:30:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S5oqoZILA3qJDwFMm5veai5D2xa9Jh2FvCXN1Y4esC4=;
+        b=nTgFeGF+WKh8aJX1FBgmEISV+IMTMf+YlhImLj7qqtQWMTjUeJDkOo9fHoXAhFWA3F
+         ujIvy0eKrJgSwM7chGowqHoeQmhREbUM1bKa5x4LcWpdlwNm57CXZB4YZIOOwGkPoOT+
+         B0Q81LuFW1j3d8ZPPg5LFn43ckW9TCRJnFSmT1kvJ5/iGXRtKkMW2TnqiTnILEQ8BHEf
+         lNxJoFMuF/dhZmSrxasx1VpzSG+dGL9v7JyQYcb8/Fm7FndhWbhdEnzZ2RsPdptioXxD
+         j1qum4DbWDvfWYBYoWixyYAOoVIwQ+iEOmT7rufqpJe2QHPKLs/lmJlg9JHu23KSTBPr
+         NzBQ==
+X-Gm-Message-State: AJIora/0Ospsg15/sKCwOqAccp/XHOFpn0/h7psorxnIYZjEb+vxUcnq
+        ChpE2OMgNeeI0QPj1CwRUQ==
+X-Google-Smtp-Source: AGRyM1tXf8F5SuOd7u9OTYkcAFQnmVlNgUvsAqcBnI6RZZvikkHvaiVm4o7nZS8N3k7KCBJHQznkQQ==
+X-Received: by 2002:a05:6e02:20ca:b0:2dc:90fa:af35 with SMTP id 10-20020a056e0220ca00b002dc90faaf35mr21707489ilq.302.1658431808875;
+        Thu, 21 Jul 2022 12:30:08 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y3-20020a029503000000b0033f347c26basm1149854jah.62.2022.07.21.12.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 12:30:08 -0700 (PDT)
+Received: (nullmailer pid 1791625 invoked by uid 1000);
+        Thu, 21 Jul 2022 19:30:04 -0000
+Date:   Thu, 21 Jul 2022 13:30:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Nishant Malpani <nish.malpani25@gmail.com>,
+        Dragos Bogdan <dragos.bogdan@analog.com>,
+        Nuno Sa <nuno.sa@analog.com>,
+        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Marek Belisko <marek@goldelico.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Christian Eggers <ceggers@arri.de>,
+        Beniamin Bia <beniamin.bia@analog.com>,
+        Stefan Popa <stefan.popa@analog.com>,
+        Oskar Andero <oskar.andero@gmail.com>,
+        =?UTF-8?Q?M=C3=A5rten_Lindahl?= <martenli@axis.com>,
+        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+        Cristian Pop <cristian.pop@analog.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Matheus Tavares <matheus.bernardino@usp.br>,
+        Sankar Velliangiri <navin@linumiz.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Stefan Wahren <stefan.wahren@in-tech.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: panel: explicitly list SPI CPHA and CPOL
+Message-ID: <20220721193004.GA1783390-robh@kernel.org>
+References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
+ <20220721153155.245336-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 1/5] spi: spi-gxp: Add support for HPE GXP SoCs
-Content-Language: en-US
-To:     nick.hawkins@hpe.com
-Cc:     arnd@arndb.de, broonie@kernel.org, devicetree@vger.kernel.org,
-        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux@armlinux.org.uk,
-        robh+dt@kernel.org, verdun@hpe.com
-References: <20220720201158.78068-1-nick.hawkins@hpe.com>
- <20220720201158.78068-2-nick.hawkins@hpe.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220720201158.78068-2-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721153155.245336-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
-
-a few nitpicks below, should there be a v2.
-
-Le 20/07/2022 à 22:11, nick.hawkins-ZPxbGqLxI0U@public.gmane.org a écrit :
-> From: Nick Hawkins <nick.hawkins-ZPxbGqLxI0U@public.gmane.org>
+On Thu, Jul 21, 2022 at 05:31:50PM +0200, Krzysztof Kozlowski wrote:
+> The spi-cpha and spi-cpol properties are device specific and should be
+> accepted only if device really needs them.  Explicitly list them in
+> device bindings in preparation of their removal from generic
+> spi-peripheral-props.yaml schema.
 > 
-> The GXP supports 3 separate SPI interfaces to accommodate the system
-> flash, core flash, and other functions. The SPI engine supports variable
-> clock frequency, selectable 3-byte or 4-byte addressing and a
-> configurable x1, x2, and x4 command/address/data modes. The memory
-> buffer for reading and writing ranges between 256 bytes and 8KB. This
-> driver supports access to the core flash and bios part.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins-ZPxbGqLxI0U@public.gmane.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   drivers/spi/Kconfig   |   7 +
->   drivers/spi/Makefile  |   1 +
->   drivers/spi/spi-gxp.c | 355 ++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 363 insertions(+)
->   create mode 100644 drivers/spi/spi-gxp.c
+>  .../bindings/display/panel/lgphilips,lb035q02.yaml   | 10 ++++++++++
+>  .../bindings/display/panel/samsung,ld9040.yaml       | 10 ++++++++++
+>  .../bindings/display/panel/samsung,lms380kf01.yaml   | 12 +++++++++---
+>  .../bindings/display/panel/samsung,lms397kf04.yaml   | 12 +++++++++---
+>  .../bindings/display/panel/samsung,s6d27a1.yaml      | 12 +++++++++---
+>  .../bindings/display/panel/sitronix,st7789v.yaml     | 10 ++++++++++
+>  .../devicetree/bindings/display/panel/tpo,td.yaml    | 10 ++++++++++
+>  7 files changed, 67 insertions(+), 9 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
+> index 5e4e0e552c2f..0bd7bbad5b94 100644
+> --- a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
+> @@ -21,6 +21,16 @@ properties:
+>    enable-gpios: true
+>    port: true
+>  
+> +  spi-cpha:
+> +    type: boolean
+> +    description:
+> +      The device requires shifted clock phase (CPHA) mode.
+> +
+> +  spi-cpol:
+> +    type: boolean
+> +    description:
+> +      The device requires inverse clock polarity (CPOL) mode.
 
-[...]
+Not great duplicating the type and description everywhere.
 
-> diff --git a/drivers/spi/spi-gxp.c b/drivers/spi/spi-gxp.c
-> new file mode 100644
-> index 000000000000..85e800718d8a
-> --- /dev/null
-> +++ b/drivers/spi/spi-gxp.c
-> @@ -0,0 +1,355 @@
-> +// SPDX-License-Identifier: GPL-2.0=or-later
-> +/* Copyright (C) 2022 Hewlett-Packard Development Company, L.P. */
-> +
-> +#include <linux/iopoll.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/spi/spi.h>
+We can move the definition back to spi-controller.yaml, so then that 
+does type checking of the property, but not presence/absence checks.
 
-Same include twice.
-
-> +#include <linux/spi/spi-mem.h>
-> +
-
-[...]
-
-> +static int gxp_spi_read_reg(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
-> +{
-> +	int ret = 0;
-
-Useless initialization.
-
-> +	struct gxp_spi *spifi = chip->spifi;
-> +	void __iomem *reg_base = spifi->reg_base;
-> +	u32 value;
-> +	int cs;
-> +
-> +	cs = chip->cs;
-
-Could be set in the initialization, as for the 2 other variables.
-(if it makes sense)
-
-> +
-> +	value = readl(reg_base + OFFSET_SPIMCFG);
-> +	value &= ~(1 << 24);
-> +	value |= (cs << 24);
-> +	value &= ~(0x07 << 16);
-> +	value &= ~(0x1f << 19);
-> +	writel(value, reg_base + OFFSET_SPIMCFG);
-> +
-> +	writel(0, reg_base + OFFSET_SPIADDR);
-> +
-> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
-> +
-> +	writew(op->data.nbytes, reg_base + OFFSET_SPIDCNT);
-> +
-> +	value = readb(reg_base + OFFSET_SPIMCTRL);
-> +	value &= ~SPIMCTRL_DIR;
-> +	value |= SPIMCTRL_START;
-> +
-> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
-> +
-> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
-> +				 !(value & SPIMCTRL_BUSY),
-> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
-> +	if (ret) {
-> +		dev_warn(spifi->dev, "read reg busy time out\n");
-> +		return ret;
-> +	}
-> +
-> +	memcpy_fromio(op->data.buf.in, spifi->dat_base, op->data.nbytes);
-> +	return ret;
-> +}
-> +
-> +static int gxp_spi_write_reg(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
-> +{
-> +	int ret = 0;
-
-Useless initialization.
-
-> +	struct gxp_spi *spifi = chip->spifi;
-> +	void __iomem *reg_base = spifi->reg_base;
-> +	u32 value;
-> +	int cs;
-> +
-> +	cs = chip->cs;
-
-Could be set in the initialization, as for the 2 other variables.
-(if it makes sense)
-
-> +
-> +	value = readl(reg_base + OFFSET_SPIMCFG);
-> +	value &= ~(1 << 24);
-> +	value |= (cs << 24);
-> +	value &= ~(0x07 << 16);
-> +	value &= ~(0x1f << 19);
-> +	writel(value, reg_base + OFFSET_SPIMCFG);
-> +
-> +	writel(0, reg_base + OFFSET_SPIADDR);
-> +
-> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
-> +
-> +	memcpy_toio(spifi->dat_base, op->data.buf.in, op->data.nbytes);
-> +
-> +	writew(op->data.nbytes, reg_base + OFFSET_SPIDCNT);
-> +
-> +	value = readb(reg_base + OFFSET_SPIMCTRL);
-> +	value |= SPIMCTRL_DIR;
-> +	value |= SPIMCTRL_START;
-> +
-> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
-> +
-> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
-> +				 !(value & SPIMCTRL_BUSY),
-> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
-> +	if (ret)
-> +		dev_warn(spifi->dev, "write reg busy time out\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t gxp_spi_read(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
-> +{
-> +	int cs;
-> +	struct gxp_spi *spifi = chip->spifi;
-> +	u32 offset = op->addr.val;
-> +
-> +	cs = chip->cs;
-
-Could be set in the initialization, as for the 2 other variables.
-(if it makes sense)
-
-> +
-> +	if (cs == 0)
-> +		offset += 0x4000000;
-> +
-> +	memcpy_fromio(op->data.buf.in, spifi->dir_base + offset, op->data.nbytes);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t gxp_spi_write(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
-> +{
-> +	struct gxp_spi *spifi = chip->spifi;
-> +	void __iomem *reg_base = spifi->reg_base;
-> +	u32 write_len;
-> +	u32 value;
-> +	int cs;
-> +	int ret = 0;
-
-Useless initialization.
-
-> +
-> +	cs = chip->cs;
-
-Could be set in the initialization, as for the 2 other variables.
-(if it makes sense)
-
-> +
-> +	write_len = op->data.nbytes;
-> +	if (write_len > SPILDAT_LEN)
-> +		write_len = SPILDAT_LEN;
-> +
-> +	value = readl(reg_base + OFFSET_SPIMCFG);
-> +	value &= ~(1 << 24);
-> +	value |= (cs << 24);
-> +	value &= ~(0x07 << 16);
-> +	value |= (op->addr.nbytes << 16);
-> +	value &= ~(0x1f << 19);
-> +	writel(value, reg_base + OFFSET_SPIMCFG);
-> +
-> +	writel(op->addr.val, reg_base + OFFSET_SPIADDR);
-> +
-> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
-> +
-> +	writew(write_len, reg_base + OFFSET_SPIDCNT);
-> +
-> +	memcpy_toio(spifi->dat_base, op->data.buf.in, write_len);
-> +
-> +	value = readb(reg_base + OFFSET_SPIMCTRL);
-> +	value |= SPIMCTRL_DIR;
-> +	value |= SPIMCTRL_START;
-> +
-> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
-> +
-> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
-> +				 !(value & SPIMCTRL_BUSY),
-> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
-> +	if (ret) {
-> +		dev_warn(spifi->dev, "write busy time out\n");
-> +		return ret;
-> +	}
-> +
-> +	return write_len;
-> +}
-> +
-> +static int do_gxp_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
-> +{
-> +	struct gxp_spi *spifi = spi_controller_get_devdata(mem->spi->master);
-> +	struct gxp_spi_chip *chip = &spifi->chips[mem->spi->chip_select];
-
-Useless empty line.
-
-> +
-> +	int ret = 0;
-
-Useless initialization. (But I'm not sure the compiler is smart enough 
-to see it)
-
-> +
-> +	if (op->data.dir == SPI_MEM_DATA_IN) {
-> +		if (!op->addr.nbytes)
-> +			ret = gxp_spi_read_reg(chip, op);
-> +		else
-> +			ret = gxp_spi_read(chip, op);
-> +	} else {
-> +		if (!op->addr.nbytes)
-> +			ret = gxp_spi_write_reg(chip, op);
-> +		else
-> +			ret = gxp_spi_write(chip, op);
-> +	}
-> +
-> +	return ret;
-> +}
-
-[...]
-
-> +static int gxp_spifi_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	const struct gxp_spi_data *data;
-> +	struct spi_controller *ctlr;
-> +	struct gxp_spi *spifi;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	data = of_device_get_match_data(&pdev->dev);
-> +	if (!data) {
-> +		dev_err(&pdev->dev, "of_dev_get_match_data failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	ctlr = devm_spi_alloc_master(dev, sizeof(*spifi));
-> +	if (!ctlr) {
-> +		dev_err(&pdev->dev, "spi_alloc_master failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	spifi = spi_controller_get_devdata(ctlr);
-> +	if (!spifi) {
-> +		dev_err(&pdev->dev, "spi_controller_get_data failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, spifi);
-> +	spifi->data = data;
-> +	spifi->dev = dev;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	spifi->reg_base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(spifi->reg_base))
-> +		return PTR_ERR(spifi->reg_base);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	spifi->dat_base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(spifi->dat_base))
-> +		return PTR_ERR(spifi->dat_base);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-> +	spifi->dir_base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(spifi->dir_base))
-> +		return PTR_ERR(spifi->dir_base);
-> +
-> +	ctlr->mode_bits = data->mode_bits;
-> +	ctlr->bus_num = pdev->id;
-> +	ctlr->mem_ops = &gxp_spi_mem_ops;
-> +	ctlr->setup = gxp_spi_setup;
-> +	ctlr->num_chipselect = data->max_cs;
-> +	ctlr->dev.of_node = dev->of_node;
-> +
-> +	ret = devm_spi_register_controller(dev, ctlr);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "spi_register_controller failed\n");
-> +		return ret;
-
-Could be return dev_err_probe(), but it is mostly a matter of taste, I 
-guess.
-
-CJ
+Rob
