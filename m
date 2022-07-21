@@ -2,104 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB3757CDC3
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 16:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC2357CDDB
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 16:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiGUOgN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 10:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S230509AbiGUOjK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 10:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGUOgM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 10:36:12 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60E54A814;
-        Thu, 21 Jul 2022 07:36:11 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a23so687489lfm.10;
-        Thu, 21 Jul 2022 07:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a45XGYjGqJj1SQDNhpIFTnsS1sN/Pvl1ei9cqTikBdo=;
-        b=ZtPDqAPNcLI5BmGpzis11nE5xbKaJSqYBdhdLVwZSA9MIrBTenSJl984+CJg2un54E
-         0vOQ9dVDtygBYd2OWxt0jt320O9/Cfz5DmAre28h5pFNYVpyjnnyWq0mOd1kxYA/wQDb
-         Nk8uVDwav760RHf7Re6a4/p6aREx/utu7K/v8xQvupb6Nvdp6pLi9grUtIqDJNUC/2lk
-         TVSJ4PZPO1LxcpuZSqldEfoGfaPUbS5jXm6dPfX87s45ZNYXduJo+A2CnUyEOB6FPIVy
-         5eG5O2MPHt/BMI7s3vo5BhVu0vZsAh34ZHRP8rBvLXTcHFiq8r9dro2jAi6SIuuphkLz
-         YyTw==
+        with ESMTP id S232113AbiGUOjH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 10:39:07 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698569F19;
+        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id u19so886426ilk.7;
+        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a45XGYjGqJj1SQDNhpIFTnsS1sN/Pvl1ei9cqTikBdo=;
-        b=ubRSra4WSUlj9lG9c9Ia8pk2pFAIXGTPVq38TU4h/QIXGMWxFim1l9yVZOkaXm//MN
-         Eaxtkh71KGXsaieoyrgzbNiy7/WuD1jNGo0Z+pu8MnSIY+CST2cUsrunK/S6Q3MGa1fd
-         0qV9o+YIfp1YqCgE6LkxfWUCdWv9d8Pbzt9HNexi9kD/0OeZ1+UXje8jzVhpcNK3fq4V
-         Px3wegtmCaMvxr4cjtwo/F0OlGw9nuUkkus7oI3zYOucl0d19Tp+BJ8w5gtKzdsYfPzo
-         lY/17qMxznQnsIjgVO+iQNrl+jaHlbtyeiMPfoUcRQpLDxkTZ5KcRZrvt2toV14jNbt8
-         fJuA==
-X-Gm-Message-State: AJIora99UNZ/qWoC2prWM68GWNdfifJK9etWzFPHiUVGWNdWUYogOthp
-        v2l/1B6pAtUYmZil/rvi/jNLMiKaQ1jB9KoR95I=
-X-Google-Smtp-Source: AGRyM1tJveEikQFTfSBOWxKIFmbqGzdQVmYaRXPZa7hYzIom8WOv8CXPxQnNyXC+Eclmf8Z12KA3a8w8w+W0bZdh2FU=
-X-Received: by 2002:ac2:4897:0:b0:489:f2ad:1191 with SMTP id
- x23-20020ac24897000000b00489f2ad1191mr21118185lfc.25.1658414169880; Thu, 21
- Jul 2022 07:36:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721101556.118568-1-tmaimon77@gmail.com> <YtlES7MX6nJr8l+L@sirena.org.uk>
-In-Reply-To: <YtlES7MX6nJr8l+L@sirena.org.uk>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 21 Jul 2022 17:35:58 +0300
-Message-ID: <CAP6Zq1gB1yrqNDJROf8xyjYiCv6H-rW=Qa7J17AoFo3mv5hsLA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] spi: npcm-pspi: add Arbel NPCM8XX and full duplex support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Sm3tlB8yJNkvcnmGZzguj4nSasaetiaq3D0mjYCkJN0=;
+        b=Q+eziC9iHTKY7L9tORcfEVBuY4F4+cz9TXxFH3Ca/FpZ7c3MoS+3uYkxVzXTFpUvHF
+         OR2WhE5Nk5gkuM9ipIdZAcvLMl46EfxhhP0gsQV8oeA/D9YhF6TbcyFydOu0zX3dU9jr
+         nLZTWIC8O6u8cPXH6l9cZaqiLeEsNwlw3DpCObIl2DGDhAdHE2x7BlDnJeh34zR9bNyQ
+         T8CszXIEze6+twnayFszqSSR4CpDXlHo7TuErrKNKC4QWiR1Ul+g8BD/5Y02AO93iWF1
+         vlpxAG1Jvn0uHAHnAntUPg+kcwR6E7xxgEGT6a5byg5TNTgeOGpafibuiiWLDAn+MxhI
+         vKSw==
+X-Gm-Message-State: AJIora/QTLjhn5Fx/sQm7AwHUN/FF0yDhsLYkwn7CA+QGE8XPucyG+2x
+        fmexFgFkKvKPz7GsgUaNrg==
+X-Google-Smtp-Source: AGRyM1s3RgA4RPtEqdms0tt8gKlUtsmi8LztDesM8l1Pi2YyOtRfdM8vD2mP/jx42IXRMbzL8n5HqQ==
+X-Received: by 2002:a05:6e02:1a49:b0:2dc:7230:29fd with SMTP id u9-20020a056e021a4900b002dc723029fdmr21805427ilv.82.1658414345707;
+        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i2-20020a6bb802000000b0067bcb28e036sm911054iof.49.2022.07.21.07.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
+Received: (nullmailer pid 1363458 invoked by uid 1000);
+        Thu, 21 Jul 2022 14:39:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     devicetree@vger.kernel.org, broonie@kernel.org, robh+dt@kernel.org,
+        verdun@hpe.com, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        joel@jms.id.au, arnd@arndb.de
+In-Reply-To: <20220720201158.78068-3-nick.hawkins@hpe.com>
+References: <20220720201158.78068-1-nick.hawkins@hpe.com> <20220720201158.78068-3-nick.hawkins@hpe.com>
+Subject: Re: [PATCH v1 2/5] spi: dt-bindings: add documentation for hpe,gxp-spifi
+Date:   Thu, 21 Jul 2022 08:39:02 -0600
+Message-Id: <1658414342.342423.1363457.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+On Wed, 20 Jul 2022 15:11:55 -0500, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Create documentation for the hpe,gxp-spifi binding to support access to
+> the SPI parts
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> 
 
-Thanks for your comment, next version I will make sure to send two
-separate patches
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-On Thu, 21 Jul 2022 at 15:19, Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 21, 2022 at 01:15:54PM +0300, Tomer Maimon wrote:
->
-> > Tomer Maimon (2):
-> >   spi: npcm-pspi: add full duplex support
-> >   dt-binding: spi: npcm-pspi: Add npcm845 compatible
->
-> It is not obvious why these are a series, they appear to be entirely
-> orthogonal.  If there's no relationship between patches it's generally
-> better to send them separately, that way problems with one patch won't
-> hold up unrelated patches and reviewers aren't left wondering about why
-> things are grouped.
->
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+yamllint warnings/errors:
 
-Best regards,
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.example.dtb: spi@200: Unevaluated properties are not allowed ('interrupt-parrent' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
 
-Tomer
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
