@@ -2,98 +2,361 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B657CF4F
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 17:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB1C57D0AA
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 18:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbiGUPg0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 11:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S229632AbiGUQE4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 12:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiGUPgT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 11:36:19 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E94CDBF;
-        Thu, 21 Jul 2022 08:36:18 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id h18so1426069qvr.12;
-        Thu, 21 Jul 2022 08:36:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FNoG8qyTwtKxLZ+3ZiXPaTPcsDHAGEGbxIjDgGoHn3E=;
-        b=LqRWn+AxFXEWTq9ho2u8a6wCBxPhEIOCy5Mmm5NuJDBgvs530y8kjpUYebA3MpdCVn
-         N6x5Nx9xe2JFxzGeCxAy3+a3Wmn4RPx8MXPfFColUCrYTLgvengsGERMWyIX/pZumKYC
-         U7egeapUgf4IsvEqLmV+hTO9u5W2yXgRCUlGYBgVA4RX0600T09rsjJChna7srvK2/M9
-         4WDqoiCGwPqIDSNxcSGBfYRDnWvPiqorOT9DBEtK4ZRU+/2YtJ4sJhf+olrh+4fN+c9B
-         C01A++uWIXe3wmTBaUekpG+QeVYqGlH6xNqnuFphfe4R/0BIaEal4VLmKKzMnAu3YeJw
-         y3Tg==
-X-Gm-Message-State: AJIora8mUHUkonNwB4nMvnRtGleqA48hsRjqC7lhYNyceaO6BCJwnKFA
-        sG5SNdhuP9113wGVgU53KU+xaweRGzlB+A==
-X-Google-Smtp-Source: AGRyM1sOHiwhyj7zXsV1uyU/5YrytYiubF2yM24pU/qu8pkeMKxDg8eCipslVOJKQxGWKBnFMXHdpQ==
-X-Received: by 2002:a05:6214:2428:b0:473:5e3a:c66b with SMTP id gy8-20020a056214242800b004735e3ac66bmr34751292qvb.57.1658417777314;
-        Thu, 21 Jul 2022 08:36:17 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm1540869qtk.52.2022.07.21.08.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 08:36:17 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31e7055a61dso21099957b3.11;
-        Thu, 21 Jul 2022 08:36:16 -0700 (PDT)
-X-Received: by 2002:a81:84c1:0:b0:31e:4e05:e4f4 with SMTP id
- u184-20020a8184c1000000b0031e4e05e4f4mr17634707ywf.384.1658417776628; Thu, 21
- Jul 2022 08:36:16 -0700 (PDT)
+        with ESMTP id S229588AbiGUQEx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 12:04:53 -0400
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756228874F
+        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 09:04:50 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id EYfNovWJQcdW9EYfNoUATb; Thu, 21 Jul 2022 18:04:48 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 21 Jul 2022 18:04:48 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <e75afa5a-a856-7747-cfcf-6dce5121c3af@wanadoo.fr>
+Date:   Thu, 21 Jul 2022 18:04:45 +0200
 MIME-Version: 1.0
-References: <20220721143449.879257-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20220721143449.879257-1-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 17:36:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXQ5zx2dxuHd4q1c+KmJkvPmAPXB=s4rG7-LVBV8thNLw@mail.gmail.com>
-Message-ID: <CAMuHMdXQ5zx2dxuHd4q1c+KmJkvPmAPXB=s4rG7-LVBV8thNLw@mail.gmail.com>
-Subject: Re: [PATCH v3] spi: spi-rspi: Fix PIO fallback on RZ platforms
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 1/5] spi: spi-gxp: Add support for HPE GXP SoCs
+Content-Language: en-US
+To:     nick.hawkins@hpe.com
+Cc:     arnd@arndb.de, broonie@kernel.org, devicetree@vger.kernel.org,
+        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux@armlinux.org.uk,
+        robh+dt@kernel.org, verdun@hpe.com
+References: <20220720201158.78068-1-nick.hawkins@hpe.com>
+ <20220720201158.78068-2-nick.hawkins@hpe.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220720201158.78068-2-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 4:35 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> RSPI IP on RZ/{A, G2L} SoC's has the same signal for both interrupt
-> and DMA transfer request. Setting DMARS register for DMA transfer
-> makes the signal to work as a DMA transfer request signal and
-> subsequent interrupt requests to the interrupt controller
-> are masked.
->
-> PIO fallback does not work as interrupt signal is disabled.
->
-> This patch fixes this issue by re-enabling the interrupts by
-> calling dmaengine_synchronize().
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Hi,
+
+a few nitpicks below, should there be a v2.
+
+Le 20/07/2022 à 22:11, nick.hawkins-ZPxbGqLxI0U@public.gmane.org a écrit :
+> From: Nick Hawkins <nick.hawkins-ZPxbGqLxI0U@public.gmane.org>
+> 
+> The GXP supports 3 separate SPI interfaces to accommodate the system
+> flash, core flash, and other functions. The SPI engine supports variable
+> clock frequency, selectable 3-byte or 4-byte addressing and a
+> configurable x1, x2, and x4 command/address/data modes. The memory
+> buffer for reading and writing ranges between 256 bytes and 8KB. This
+> driver supports access to the core flash and bios part.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins-ZPxbGqLxI0U@public.gmane.org>
 > ---
-> v2->v3:
->  * dmaengine_synchronize() called unconditionally and removed need_dmar_clr.
+>   drivers/spi/Kconfig   |   7 +
+>   drivers/spi/Makefile  |   1 +
+>   drivers/spi/spi-gxp.c | 355 ++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 363 insertions(+)
+>   create mode 100644 drivers/spi/spi-gxp.c
+> 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+[...]
 
-Gr{oetje,eeting}s,
+> diff --git a/drivers/spi/spi-gxp.c b/drivers/spi/spi-gxp.c
+> new file mode 100644
+> index 000000000000..85e800718d8a
+> --- /dev/null
+> +++ b/drivers/spi/spi-gxp.c
+> @@ -0,0 +1,355 @@
+> +// SPDX-License-Identifier: GPL-2.0=or-later
+> +/* Copyright (C) 2022 Hewlett-Packard Development Company, L.P. */
+> +
+> +#include <linux/iopoll.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/spi/spi.h>
 
-                        Geert
+Same include twice.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +#include <linux/spi/spi-mem.h>
+> +
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[...]
+
+> +static int gxp_spi_read_reg(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
+> +{
+> +	int ret = 0;
+
+Useless initialization.
+
+> +	struct gxp_spi *spifi = chip->spifi;
+> +	void __iomem *reg_base = spifi->reg_base;
+> +	u32 value;
+> +	int cs;
+> +
+> +	cs = chip->cs;
+
+Could be set in the initialization, as for the 2 other variables.
+(if it makes sense)
+
+> +
+> +	value = readl(reg_base + OFFSET_SPIMCFG);
+> +	value &= ~(1 << 24);
+> +	value |= (cs << 24);
+> +	value &= ~(0x07 << 16);
+> +	value &= ~(0x1f << 19);
+> +	writel(value, reg_base + OFFSET_SPIMCFG);
+> +
+> +	writel(0, reg_base + OFFSET_SPIADDR);
+> +
+> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
+> +
+> +	writew(op->data.nbytes, reg_base + OFFSET_SPIDCNT);
+> +
+> +	value = readb(reg_base + OFFSET_SPIMCTRL);
+> +	value &= ~SPIMCTRL_DIR;
+> +	value |= SPIMCTRL_START;
+> +
+> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
+> +
+> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
+> +				 !(value & SPIMCTRL_BUSY),
+> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
+> +	if (ret) {
+> +		dev_warn(spifi->dev, "read reg busy time out\n");
+> +		return ret;
+> +	}
+> +
+> +	memcpy_fromio(op->data.buf.in, spifi->dat_base, op->data.nbytes);
+> +	return ret;
+> +}
+> +
+> +static int gxp_spi_write_reg(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
+> +{
+> +	int ret = 0;
+
+Useless initialization.
+
+> +	struct gxp_spi *spifi = chip->spifi;
+> +	void __iomem *reg_base = spifi->reg_base;
+> +	u32 value;
+> +	int cs;
+> +
+> +	cs = chip->cs;
+
+Could be set in the initialization, as for the 2 other variables.
+(if it makes sense)
+
+> +
+> +	value = readl(reg_base + OFFSET_SPIMCFG);
+> +	value &= ~(1 << 24);
+> +	value |= (cs << 24);
+> +	value &= ~(0x07 << 16);
+> +	value &= ~(0x1f << 19);
+> +	writel(value, reg_base + OFFSET_SPIMCFG);
+> +
+> +	writel(0, reg_base + OFFSET_SPIADDR);
+> +
+> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
+> +
+> +	memcpy_toio(spifi->dat_base, op->data.buf.in, op->data.nbytes);
+> +
+> +	writew(op->data.nbytes, reg_base + OFFSET_SPIDCNT);
+> +
+> +	value = readb(reg_base + OFFSET_SPIMCTRL);
+> +	value |= SPIMCTRL_DIR;
+> +	value |= SPIMCTRL_START;
+> +
+> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
+> +
+> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
+> +				 !(value & SPIMCTRL_BUSY),
+> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
+> +	if (ret)
+> +		dev_warn(spifi->dev, "write reg busy time out\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t gxp_spi_read(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
+> +{
+> +	int cs;
+> +	struct gxp_spi *spifi = chip->spifi;
+> +	u32 offset = op->addr.val;
+> +
+> +	cs = chip->cs;
+
+Could be set in the initialization, as for the 2 other variables.
+(if it makes sense)
+
+> +
+> +	if (cs == 0)
+> +		offset += 0x4000000;
+> +
+> +	memcpy_fromio(op->data.buf.in, spifi->dir_base + offset, op->data.nbytes);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t gxp_spi_write(struct gxp_spi_chip *chip, const struct spi_mem_op *op)
+> +{
+> +	struct gxp_spi *spifi = chip->spifi;
+> +	void __iomem *reg_base = spifi->reg_base;
+> +	u32 write_len;
+> +	u32 value;
+> +	int cs;
+> +	int ret = 0;
+
+Useless initialization.
+
+> +
+> +	cs = chip->cs;
+
+Could be set in the initialization, as for the 2 other variables.
+(if it makes sense)
+
+> +
+> +	write_len = op->data.nbytes;
+> +	if (write_len > SPILDAT_LEN)
+> +		write_len = SPILDAT_LEN;
+> +
+> +	value = readl(reg_base + OFFSET_SPIMCFG);
+> +	value &= ~(1 << 24);
+> +	value |= (cs << 24);
+> +	value &= ~(0x07 << 16);
+> +	value |= (op->addr.nbytes << 16);
+> +	value &= ~(0x1f << 19);
+> +	writel(value, reg_base + OFFSET_SPIMCFG);
+> +
+> +	writel(op->addr.val, reg_base + OFFSET_SPIADDR);
+> +
+> +	writeb(op->cmd.opcode, reg_base + OFFSET_SPICMD);
+> +
+> +	writew(write_len, reg_base + OFFSET_SPIDCNT);
+> +
+> +	memcpy_toio(spifi->dat_base, op->data.buf.in, write_len);
+> +
+> +	value = readb(reg_base + OFFSET_SPIMCTRL);
+> +	value |= SPIMCTRL_DIR;
+> +	value |= SPIMCTRL_START;
+> +
+> +	writeb(value, reg_base + OFFSET_SPIMCTRL);
+> +
+> +	ret = readb_poll_timeout(reg_base + OFFSET_SPIMCTRL, value,
+> +				 !(value & SPIMCTRL_BUSY),
+> +				 GXP_SPI_SLEEP_TIME, GXP_SPI_TIMEOUT);
+> +	if (ret) {
+> +		dev_warn(spifi->dev, "write busy time out\n");
+> +		return ret;
+> +	}
+> +
+> +	return write_len;
+> +}
+> +
+> +static int do_gxp_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +	struct gxp_spi *spifi = spi_controller_get_devdata(mem->spi->master);
+> +	struct gxp_spi_chip *chip = &spifi->chips[mem->spi->chip_select];
+
+Useless empty line.
+
+> +
+> +	int ret = 0;
+
+Useless initialization. (But I'm not sure the compiler is smart enough 
+to see it)
+
+> +
+> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> +		if (!op->addr.nbytes)
+> +			ret = gxp_spi_read_reg(chip, op);
+> +		else
+> +			ret = gxp_spi_read(chip, op);
+> +	} else {
+> +		if (!op->addr.nbytes)
+> +			ret = gxp_spi_write_reg(chip, op);
+> +		else
+> +			ret = gxp_spi_write(chip, op);
+> +	}
+> +
+> +	return ret;
+> +}
+
+[...]
+
+> +static int gxp_spifi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	const struct gxp_spi_data *data;
+> +	struct spi_controller *ctlr;
+> +	struct gxp_spi *spifi;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+> +	if (!data) {
+> +		dev_err(&pdev->dev, "of_dev_get_match_data failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ctlr = devm_spi_alloc_master(dev, sizeof(*spifi));
+> +	if (!ctlr) {
+> +		dev_err(&pdev->dev, "spi_alloc_master failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	spifi = spi_controller_get_devdata(ctlr);
+> +	if (!spifi) {
+> +		dev_err(&pdev->dev, "spi_controller_get_data failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, spifi);
+> +	spifi->data = data;
+> +	spifi->dev = dev;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	spifi->reg_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->reg_base))
+> +		return PTR_ERR(spifi->reg_base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	spifi->dat_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->dat_base))
+> +		return PTR_ERR(spifi->dat_base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+> +	spifi->dir_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->dir_base))
+> +		return PTR_ERR(spifi->dir_base);
+> +
+> +	ctlr->mode_bits = data->mode_bits;
+> +	ctlr->bus_num = pdev->id;
+> +	ctlr->mem_ops = &gxp_spi_mem_ops;
+> +	ctlr->setup = gxp_spi_setup;
+> +	ctlr->num_chipselect = data->max_cs;
+> +	ctlr->dev.of_node = dev->of_node;
+> +
+> +	ret = devm_spi_register_controller(dev, ctlr);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "spi_register_controller failed\n");
+> +		return ret;
+
+Could be return dev_err_probe(), but it is mostly a matter of taste, I 
+guess.
+
+CJ
