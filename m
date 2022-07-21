@@ -2,98 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC2357CDDB
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 16:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6662157CE3C
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 16:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiGUOjK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 10:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S232177AbiGUOxO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 10:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbiGUOjH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 10:39:07 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698569F19;
-        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id u19so886426ilk.7;
-        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
+        with ESMTP id S230451AbiGUOxO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 10:53:14 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7E22CE34
+        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 07:53:12 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id n18so3216857lfq.1
+        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 07:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cLo9fM7F+1waINGkNKaUX3n5snX3YK8Uq0FRboZsXyw=;
+        b=KdwEzNqwKe7/xPp05UA/JD41rUsNR9gdR6EIXYm1Lu2Qyq27M16YcsDkjo7yK7U35c
+         nmfjUAgxn0tHHcTJk5DhqZddD/SE7M1c5XukrO4krlGoJaqBwdF9oT42R+AK5mowEyoA
+         Mliz8l6lbNp2ABFYjYbUiGOPbkhmvfh5DAAeZi6nbaeMFSvwrV4QtDCnXUH63fCFaegS
+         442vJXtpxj86HGYmhnJkDFuelywiKhh2SRzUFDL7MGIlEGJUh7C6rA7fg2EAM9ER200s
+         XTyZW/+zDDHLBpwWLVZpRExOIfCLNIWLOYNVpVUbMz0v327ncQl6d7/UJurckbP/DJR1
+         1QGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Sm3tlB8yJNkvcnmGZzguj4nSasaetiaq3D0mjYCkJN0=;
-        b=Q+eziC9iHTKY7L9tORcfEVBuY4F4+cz9TXxFH3Ca/FpZ7c3MoS+3uYkxVzXTFpUvHF
-         OR2WhE5Nk5gkuM9ipIdZAcvLMl46EfxhhP0gsQV8oeA/D9YhF6TbcyFydOu0zX3dU9jr
-         nLZTWIC8O6u8cPXH6l9cZaqiLeEsNwlw3DpCObIl2DGDhAdHE2x7BlDnJeh34zR9bNyQ
-         T8CszXIEze6+twnayFszqSSR4CpDXlHo7TuErrKNKC4QWiR1Ul+g8BD/5Y02AO93iWF1
-         vlpxAG1Jvn0uHAHnAntUPg+kcwR6E7xxgEGT6a5byg5TNTgeOGpafibuiiWLDAn+MxhI
-         vKSw==
-X-Gm-Message-State: AJIora/QTLjhn5Fx/sQm7AwHUN/FF0yDhsLYkwn7CA+QGE8XPucyG+2x
-        fmexFgFkKvKPz7GsgUaNrg==
-X-Google-Smtp-Source: AGRyM1s3RgA4RPtEqdms0tt8gKlUtsmi8LztDesM8l1Pi2YyOtRfdM8vD2mP/jx42IXRMbzL8n5HqQ==
-X-Received: by 2002:a05:6e02:1a49:b0:2dc:7230:29fd with SMTP id u9-20020a056e021a4900b002dc723029fdmr21805427ilv.82.1658414345707;
-        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id i2-20020a6bb802000000b0067bcb28e036sm911054iof.49.2022.07.21.07.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
-Received: (nullmailer pid 1363458 invoked by uid 1000);
-        Thu, 21 Jul 2022 14:39:02 -0000
-From:   Rob Herring <robh@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cLo9fM7F+1waINGkNKaUX3n5snX3YK8Uq0FRboZsXyw=;
+        b=7W9oBWNOFmQ0dpMq3ba2q0nO8BSugcMrH2bte7hN31qyAPuCMiyf3b1RwQBT26W8kX
+         Cz8oNF8mY/nZ481T7I1Y8y3LF5KJd4nKkyWnv6OWE3aDWOo65Wh0rKETLEnQA+Z+ae12
+         AeJwny8mlyNdGhdwSjvx6JLnY4swBkhyuP6k6FyZvYWe7kkwqxnjthFWroV+sJeagBx/
+         /BjVh5ExlLwAjUF840lUn5H0opktE80wQzbDBAeqSTLnJU7aLSZL7NLif/mx5AIr9jUf
+         9AGWQe1xiynWENzqHUeYifVeo40UN+bwXdqF5+89Wx6vocQD/Ka7vrXahVji+QcnS/Ee
+         y7rg==
+X-Gm-Message-State: AJIora+EAkCavCP432YYbXLlTEgLZD4HAagkeUkMvrwomSZLPtwXN4gV
+        GDF70pD33qxeuXHbRNj/3D6LRw==
+X-Google-Smtp-Source: AGRyM1tM7l1nHejhj+ruxIHCF/akXifvLXeu6qiHgvMQ8WFVm7vntLxeuszZhHnthUI6uDvgxhWssA==
+X-Received: by 2002:ac2:4ec4:0:b0:48a:7144:c0ce with SMTP id p4-20020ac24ec4000000b0048a7144c0cemr1034831lfr.406.1658415191129;
+        Thu, 21 Jul 2022 07:53:11 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056512118100b004811bf4999csm479112lfr.290.2022.07.21.07.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 07:53:10 -0700 (PDT)
+Message-ID: <66e94a45-d5b8-ead2-ef76-89bb680ca00f@linaro.org>
+Date:   Thu, 21 Jul 2022 16:53:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/5] spi: spi-gxp: Add support for HPE GXP SoCs
+Content-Language: en-US
 To:     nick.hawkins@hpe.com
-Cc:     devicetree@vger.kernel.org, broonie@kernel.org, robh+dt@kernel.org,
-        verdun@hpe.com, krzysztof.kozlowski+dt@linaro.org,
+Cc:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
         linux@armlinux.org.uk, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        joel@jms.id.au, arnd@arndb.de
-In-Reply-To: <20220720201158.78068-3-nick.hawkins@hpe.com>
-References: <20220720201158.78068-1-nick.hawkins@hpe.com> <20220720201158.78068-3-nick.hawkins@hpe.com>
-Subject: Re: [PATCH v1 2/5] spi: dt-bindings: add documentation for hpe,gxp-spifi
-Date:   Thu, 21 Jul 2022 08:39:02 -0600
-Message-Id: <1658414342.342423.1363457.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
+References: <20220720201158.78068-1-nick.hawkins@hpe.com>
+ <20220720201158.78068-2-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720201158.78068-2-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Jul 2022 15:11:55 -0500, nick.hawkins@hpe.com wrote:
+On 20/07/2022 22:11, nick.hawkins@hpe.com wrote:
 > From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Create documentation for the hpe,gxp-spifi binding to support access to
-> the SPI parts
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
->  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> The GXP supports 3 separate SPI interfaces to accommodate the system
+> flash, core flash, and other functions. The SPI engine supports variable
+> clock frequency, selectable 3-byte or 4-byte addressing and a
+> configurable x1, x2, and x4 command/address/data modes. The memory
+> buffer for reading and writing ranges between 256 bytes and 8KB. This
+> driver supports access to the core flash and bios part.
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+(...)
 
-yamllint warnings/errors:
+> +static int gxp_spifi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	const struct gxp_spi_data *data;
+> +	struct spi_controller *ctlr;
+> +	struct gxp_spi *spifi;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+> +	if (!data) {
+> +		dev_err(&pdev->dev, "of_dev_get_match_data failed\n");
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.example.dtb: spi@200: Unevaluated properties are not allowed ('interrupt-parrent' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+Is it even possible to happen? I don't think so, so definitely not worth
+log message.
 
-doc reference errors (make refcheckdocs):
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ctlr = devm_spi_alloc_master(dev, sizeof(*spifi));
+> +	if (!ctlr) {
+> +		dev_err(&pdev->dev, "spi_alloc_master failed\n");
 
-See https://patchwork.ozlabs.org/patch/
+Aren't you duplicating core messages?
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+> +		return -ENOMEM;
+> +	}
+> +
+> +	spifi = spi_controller_get_devdata(ctlr);
+> +	if (!spifi) {
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Is it even possible?
 
-pip3 install dtschema --upgrade
+> +		dev_err(&pdev->dev, "spi_controller_get_data failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, spifi);
+> +	spifi->data = data;
+> +	spifi->dev = dev;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	spifi->reg_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->reg_base))
+> +		return PTR_ERR(spifi->reg_base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	spifi->dat_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->dat_base))
+> +		return PTR_ERR(spifi->dat_base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+> +	spifi->dir_base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(spifi->dir_base))
+> +		return PTR_ERR(spifi->dir_base);
+> +
+> +	ctlr->mode_bits = data->mode_bits;
+> +	ctlr->bus_num = pdev->id;
+> +	ctlr->mem_ops = &gxp_spi_mem_ops;
+> +	ctlr->setup = gxp_spi_setup;
+> +	ctlr->num_chipselect = data->max_cs;
+> +	ctlr->dev.of_node = dev->of_node;
+> +
+> +	ret = devm_spi_register_controller(dev, ctlr);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "spi_register_controller failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int gxp_spifi_remove(struct platform_device *pdev)
+> +{
+> +	return 0;
+> +}
 
-Please check and re-submit.
+It's empty, why do you need it?
 
+
+Best regards,
+Krzysztof
