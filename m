@@ -2,121 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB0B57D437
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 21:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18ED557D4DF
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 22:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiGUTf2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 15:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S230488AbiGUUir (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 16:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGUTfY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 15:35:24 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5511115D;
-        Thu, 21 Jul 2022 12:35:22 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id e69so2147643iof.5;
-        Thu, 21 Jul 2022 12:35:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wELlNsbxx1+JCD9yf/xGA7zb/NOKO+vQi/OmtkVLBls=;
-        b=vFJBPG4Y+An9/WyTBNgDAdNXiwfKwXBJMrRS39tMIj4k8O5GoP/o0f5F6isbPfMtfM
-         O7ZryzZO/WsB5yqDa0+21vAGidp0B5FE7XI3DC8AXvc3StAzVGhDku6+MQwP1XJ6BZ8F
-         5Xnr/d+DyYcLm3dgtvoJQpzZuajC6rDs0uWUMUk6A6lplBoAJcX9mzsxv0HWyitxDB+h
-         J1y9oSd7//jUNuOFpmiLSiZwsuHKLJTduG2LS9Dqewzk0TeKL6rmtPtJVLGn2mih5PT6
-         +Q6nzsRShoGKsP9COCBQ7BPGPivGo/rbCAeotgODMoNw0oECvnpYJpxERyMlaUjY5Z99
-         hEVw==
-X-Gm-Message-State: AJIora/ObO0uqo64xB5uzpk2eZgVL7eX/mNOmyay8bPf1+TN7eby4zJt
-        Mf070N4RpyW74AJ66Sbf7g==
-X-Google-Smtp-Source: AGRyM1sZvXpaofV6KHrP6nEJBBOrB/+dB8AwbfGYEa2h8d3D2/C7aFPfZcwL3IFjDFf1dLcaryTpdg==
-X-Received: by 2002:a05:6638:15ca:b0:33f:594a:52ba with SMTP id i10-20020a05663815ca00b0033f594a52bamr35159jat.217.1658432122023;
-        Thu, 21 Jul 2022 12:35:22 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a70-20020a021649000000b003415545d938sm1107557jaa.166.2022.07.21.12.35.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 12:35:21 -0700 (PDT)
-Received: (nullmailer pid 1799145 invoked by uid 1000);
-        Thu, 21 Jul 2022 19:35:16 -0000
-Date:   Thu, 21 Jul 2022 13:35:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Nuno Sa <nuno.sa@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Christian Eggers <ceggers@arri.de>,
-        Beniamin Bia <beniamin.bia@analog.com>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Oskar Andero <oskar.andero@gmail.com>,
-        =?UTF-8?Q?M=C3=A5rten_Lindahl?= <martenli@axis.com>,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        Cristian Pop <cristian.pop@analog.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Matheus Tavares <matheus.bernardino@usp.br>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Stefan Wahren <stefan.wahren@in-tech.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH 5/6] dt-bindings: net: explicitly list SPI CPHA and CPOL
-Message-ID: <20220721193516.GA1798385-robh@kernel.org>
-References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
- <20220721153155.245336-6-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229498AbiGUUir (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 16:38:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADE05D5B5;
+        Thu, 21 Jul 2022 13:38:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C7E360A6D;
+        Thu, 21 Jul 2022 20:38:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4E6C3411E;
+        Thu, 21 Jul 2022 20:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658435925;
+        bh=9t35aXgPifuH5PtTl+u6odFYmh2dHJHWft5gQDrHvPE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jGq1Qz3a1SHUQr8JE97axwZ/sX0PQDG15i6n7RV+xSsX8GomH7ebQcj0gv4gkOPsT
+         vqkfc5b78A0hPkcsfrYQ9ZbR0v7awYtBfoJVGTLTdSWVX/mrjY5cBMF25vuQpKHuLH
+         xcqaGexPKXR9xuYXj2K1tdTdtCVbUu3BF1e5Lj0jBceTVZFHYHMyVBktqdOVIWvMNW
+         juLmy55YQtk/nq90eraYj0myHbhciwQcyI6NyMkOSOu0sYe1NFRxIpeqtXtbnSXViK
+         6hkwNRIKnIS3xgozrlrGuZqxvBvzQ9zNizGtj81CvzWgO53GzwtRXrjwvZIeWRXdRi
+         Kw7K5BrvyJEYQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-spi@vger.kernel.org, Biju Das <biju.das@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>
+In-Reply-To: <20220721143449.879257-1-biju.das.jz@bp.renesas.com>
+References: <20220721143449.879257-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v3] spi: spi-rspi: Fix PIO fallback on RZ platforms
+Message-Id: <165843592359.1132948.11395615415483672270.b4-ty@kernel.org>
+Date:   Thu, 21 Jul 2022 21:38:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721153155.245336-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-d952f
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 05:31:54PM +0200, Krzysztof Kozlowski wrote:
-> The spi-cpha and spi-cpol properties are device specific and should be
-> accepted only if device really needs them.  Explicitly list them in
-> device bindings in preparation of their removal from generic
-> spi-peripheral-props.yaml schema.
+On Thu, 21 Jul 2022 15:34:49 +0100, Biju Das wrote:
+> RSPI IP on RZ/{A, G2L} SoC's has the same signal for both interrupt
+> and DMA transfer request. Setting DMARS register for DMA transfer
+> makes the signal to work as a DMA transfer request signal and
+> subsequent interrupt requests to the interrupt controller
+> are masked.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/net/nfc/marvell,nci.yaml     | 12 ++++++++++--
->  .../devicetree/bindings/net/vertexcom-mse102x.yaml   | 12 +++++++++---
->  2 files changed, 19 insertions(+), 5 deletions(-)
+> PIO fallback does not work as interrupt signal is disabled.
+> 
+> [...]
 
-This too should not be needed.
+Applied to
 
-Rob
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: spi-rspi: Fix PIO fallback on RZ platforms
+      commit: b620aa3a7be346f04ae7789b165937615c6ee8d3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
