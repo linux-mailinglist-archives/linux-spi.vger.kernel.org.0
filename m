@@ -2,46 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1088957C966
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 12:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D979357CA47
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jul 2022 14:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiGUK4l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jul 2022 06:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S233472AbiGUMJt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jul 2022 08:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiGUK4k (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 06:56:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC5E51A3F
-        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 03:56:40 -0700 (PDT)
+        with ESMTP id S233506AbiGUMJr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Jul 2022 08:09:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA8D863C2;
+        Thu, 21 Jul 2022 05:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABE58615C9
-        for <linux-spi@vger.kernel.org>; Thu, 21 Jul 2022 10:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C81FC3411E;
-        Thu, 21 Jul 2022 10:56:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4975061D2E;
+        Thu, 21 Jul 2022 12:09:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCBBBC3411E;
+        Thu, 21 Jul 2022 12:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658400999;
-        bh=zjfCFeSKbbrOufqs7xvsTMFSYZSWnTAoS8eXW21MdEo=;
-        h=Subject:From:Date:To:From;
-        b=dAyBnTat3OTxvzYvgud4Rl9eMxb2lHEw8oOAR/s8H9oaRsh7Wpto76Wd5kYNYqz4f
-         GtAjSTugS8sic87DEXTRjVaITtpFAMHpw/uaF0nESrq+NR1fF7gnxNJOAtDEkrAg5z
-         9KI7skst9sybS4NiiiUL3BUV1NFZE9AyoPrGCKQ9PQSkK70KW9putSkEq/b3tYpBvr
-         qMqQ0Kk6g8S9gftzIkB4dq8rWfFAxgbCE/gLoGjJBxqgIYKkVAv4Y+Mq/px6e6F28o
-         xdyQNmlgvZKq8ok6bjrpRqIhx82X/E5u42fFA2houwSInWaSvAy38sktNSb6IStiSr
-         u+chd+vdzHacg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7E66D9DDDD;
-        Thu, 21 Jul 2022 10:56:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1658405385;
+        bh=Is1b7K1zP/3u0FK9rRtUZbsH5NcbGby4sQBDfEtE5P0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iG7EuUC2eFEtuAh9lO7Gdb5CUn8qCMad1EgCcxOwxHzuvUoEM0rb9jyJKnagNwX4e
+         x14GZunev8iP+CVXaIXKY+Jd2fUKr64cDGB96MzonyMGUo2jhq+50mgaBU35MDTp3e
+         k10+toz3abomP3mzXn0H+Ksr7uLRyeTIjh7HU0sJO5pbTJ2WhHdnEZE7QuwwI82fKF
+         laLspgKV1boLi+I3YAW/ndz+nbYv2Uo+SLNLijH5g0/P3lXjYM9jAmP82gcsu6zhR2
+         /Cg4u83F7TDCzt4pqBdVzfSvBW11AcX8/wHLTyIeXD9hb3VuBBMN4VDUUQGAg/T/6X
+         ZAZJn755a82Pg==
+Date:   Thu, 21 Jul 2022 13:09:38 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
+Message-ID: <YtlCAvJK/pb4PbJ6@sirena.org.uk>
+References: <20220721101556.118568-1-tmaimon77@gmail.com>
+ <20220721101556.118568-3-tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165840099882.13837.18018554405170950901.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 21 Jul 2022 10:56:38 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fAOdgDIIiCA86x/O"
+Content-Disposition: inline
+In-Reply-To: <20220721101556.118568-3-tmaimon77@gmail.com>
+X-Cookie: Exercise caution in your daily affairs.
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,12 +58,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: npcm-pspi: add Arbel NPCM8XX and full duplex support (2022-07-21T10:15:54)
-  Superseding: [v1] spi: npcm-pspi: add Arbel NPCM8XX and full duplex support (2022-07-21T10:15:26):
-    [v1,1/2] spi: npcm-pspi: add full duplex support
 
+--fAOdgDIIiCA86x/O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Thu, Jul 21, 2022 at 01:15:56PM +0300, Tomer Maimon wrote:
 
+>  Required properties:
+> - - compatible : "nuvoton,npcm750-pspi" for NPCM7XX BMC
+> + - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
+> +				"nuvoton,npcm845-pspi" for Arbel NPCM8XX.
+
+You've not updated the driver to accept this compatible and this doesn't
+say anything about fallbacks.
+
+--fAOdgDIIiCA86x/O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZQgIACgkQJNaLcl1U
+h9BwuQf+MgqHMK5RNzIBd69yNdZ64oCneh+BsjdFstytLx4t07xWCOv5+XBZ68ct
+cDoz13GzxwS2bysHegbH30+oUEmGQBb6LRB3+IGyLc5XGFWIzf4idBGXQI4c25zK
+jEz8cK7i9q548YD+pwtpVzPyPW5DC2+llPoyKFIzECn8+UmaxR3OTTrFDabmV0+m
+KonNrnoWCLggYz+t/DVkVLdECAnQwbatCXOKKwSn5atkrGpzd3kHTNGzXv+FB/qp
+9pSPrfNMRFXl9tRuUISkFx0iqhiyCpMlVoJx00jZYq9Vw7Y5ZW1y/4/nRrQkqR1j
+KGsll59OiewC/YZvU8L2dM8Z9DWYCQ==
+=Pul1
+-----END PGP SIGNATURE-----
+
+--fAOdgDIIiCA86x/O--
