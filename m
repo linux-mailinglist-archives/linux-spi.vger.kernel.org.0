@@ -2,72 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5311E57E5C6
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Jul 2022 19:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F322257E5CF
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Jul 2022 19:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235627AbiGVRoJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jul 2022 13:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S235611AbiGVRrB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Jul 2022 13:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235740AbiGVRoE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jul 2022 13:44:04 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D170904F8
-        for <linux-spi@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t22so2353782lfg.1
-        for <linux-spi@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
+        with ESMTP id S232767AbiGVRrA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jul 2022 13:47:00 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDA5936B0
+        for <linux-spi@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id o12so6280776ljc.3
+        for <linux-spi@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
-        b=Rh6kq8XK5OkVXzo21OvcDTRrF04BNHykHigDPuBygYCTLIgdux2kVy94r293wxck8s
-         4qs4BUupnK1RleRnhoOOwtXEc5b3X6tbm2JNodnr9aw8Q7GRvXwkOBHmiBnJ4Nrc5WBx
-         Pt3YTbMVNR8Z/W/bIzL7KqqcB396MEw/JG8bB6SSqqx1YlH/iLHoyFR466V+lYWc4dL7
-         mKDDmDmSnKmsZh6ODpJ0dJZwO3aB/hcWPI4RmAMAC0ke212JxsfXUJWRAac4K4oWBEr8
-         jKs+6nxq5dJvGrHXjrG1bYLIxnQG8KYQVdRGDdopuJVLU1o8lcmCoMAmKYh9DqEJWOFf
-         6rNg==
+        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
+        b=k5jT7LN8Fx7VEkTi0XgPQxBYvaHMVqDhNuzeipXMEE2dmex+dbNJnlmZiPyNCJMZ2P
+         Tc+7Z/KTvjKKzxfIihpYVp7o4uYWv8G5KY6JLb6/rgmcyvOEx53QIhkMr1TcCtHZtfjU
+         kR2I+YWQCWY/iBDDjTQS8dhgAfJ/0K0bl8gJSMEbFijjb/Kz5ONZ/AnK82jGsRcYFGlo
+         ww8uAvOc28X7SUpKNAUpNfi0Zd5z6ZTs0jfeIYhKjfVlo595c17U3QvI/4ImkcJcK0D4
+         1kk3nFzKiBm/S5GpZW+EwKlIH5ZfbHo/D94C8C9+GvpeC9PIm2ry3y0jI4UQANy9q4r/
+         XeNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
-        b=qlGjSQ3WiY6+q60tmOGRf9f262rbnrHUPGpjOjeMjLW0ACEPG80VHJ8sRmru3117kH
-         exFwZkKy78nnk3g+Q21th3WFPJ18xlDpo8ZNwFrD6FG4ynSQDd6blyC1n457xQ/5D+5c
-         8YYBDLT29Y5KkOB7B3dN//HXqZft0EukjDZZUwEt7nih9j7KbCOZl+7+DCjclQmFt3ms
-         SASoFtHonC32N+ML4NaYcOsl1pJK2G7ySRHosTf9ESowcA9cD6pT3yXMrUI5Covxa9vv
-         h6wqbL8LM2asksMedG+v5w+UZWbkly1mSCltSfXb5PReDHJkkL/tANnRSahHPeVZQ9j9
-         Q9RQ==
-X-Gm-Message-State: AJIora94T8kVSOgKyttA9dF1nt2EpbJIBb78LdpQbOmydo93oUVThLPi
-        2o6rOhiX5DrUh7velOse48QTxihl3j+mh2Sx
-X-Google-Smtp-Source: AGRyM1u8Z9ofcrLGXlXYmrrX+HN6KSpLHpX2BjExY1LCBBGohOyx5gD2LPLjkWkDgVGABm1aD/B7iw==
-X-Received: by 2002:a05:6512:1381:b0:489:cd0b:3a03 with SMTP id p1-20020a056512138100b00489cd0b3a03mr389336lfa.583.1658511841445;
-        Fri, 22 Jul 2022 10:44:01 -0700 (PDT)
+        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
+        b=MfQc97/Yabhr+XQwchLav0eLu2C/KaOw2RogtKzYclPGD90n3FfeKPCHwLZtR1JXnt
+         HmihumjsQO0oAExZkKBm0Sks7gV4uOHqEiHlPVGE0+oEQCAFnDOOBYvB6Mfzaz0ieoUM
+         GJs+9dFRXrB3Z8slnVeGAmMnfCARRFMJK5tBGIUx5mLTrebfi08UBnYzeTBk/m8d8p0z
+         SGvcIiKtY40dE1N5HeAX6efS52nfQ12h9b2fHxzVS/LqNGheMz72FDTlVbBMgX28CMYd
+         s0kis82/PZvVRZz62mE2o+tVXm8klyLRGXCRKH/wi7SBvW6akHxi9c9948uscH5VsWT2
+         VPbA==
+X-Gm-Message-State: AJIora9P2ZCBxoLFV02/3JEUBh8dCIf9Xzbr63JUjfyEFZf4HWja5hdD
+        QJp64oX0rBjK54qdhf39tih38GPgy7odX7nx
+X-Google-Smtp-Source: AGRyM1sqFiGr1+mDJ9qbeVsgJ4L1DLzZ2N4yyzMkKPO7XUslPN8IvI+lN6tL17Kpq2z/VwHxUKK3hA==
+X-Received: by 2002:a2e:a5cb:0:b0:25d:7a70:2891 with SMTP id n11-20020a2ea5cb000000b0025d7a702891mr386558ljp.295.1658512013920;
+        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
 Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id bd21-20020a05651c169500b0025d6930d014sm1253726ljb.87.2022.07.22.10.43.59
+        by smtp.gmail.com with ESMTPSA id o1-20020a05651205c100b00489c7fb668dsm1163070lfo.182.2022.07.22.10.46.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:44:00 -0700 (PDT)
-Message-ID: <cd830f5c-1760-69e0-d239-3ce1f30daa43@linaro.org>
-Date:   Fri, 22 Jul 2022 19:43:58 +0200
+        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
+Message-ID: <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+Date:   Fri, 22 Jul 2022 19:46:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/5] spi: dt-bindings: add documentation for
- hpe,gxp-spifi
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
 Content-Language: en-US
-To:     nick.hawkins@hpe.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
-References: <20220722172335.33404-1-nick.hawkins@hpe.com>
- <20220722172335.33404-3-nick.hawkins@hpe.com>
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, tudor.ambarus@microchip.com,
+        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220722172335.33404-3-nick.hawkins@hpe.com>
+In-Reply-To: <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -78,84 +83,103 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22/07/2022 19:23, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
+> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
+> and the X2000 SoC from Ingenic.
 > 
-> Create documentation for the hpe,gxp-spifi binding to support access to
-> the SPI parts
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> 
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
+>  .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
 > 
-> v2:
->  *Removed extra space around < > for reg
->  *Changed interrupt-parrent to interrupt-parent
-> ---
->  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
 > new file mode 100644
-> index 000000000000..346b494ef59b
+> index 00000000..b7c4cf4
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/spi/hpe,gxp-spifi.yaml#
+> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
+
+File name should be rather based on first compatible, so
+ingenic,x1000-sfc.yaml
+
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: HPE GXP spi controller flash interface
+> +title: Bindings for SFC in Ingenic SoCs
 > +
 > +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-
-Drop the quotes - not needed.
-
+> +description:
+> +  The SPI Flash Controller in Ingenic SoCs.
 > +
+
+You miss here allOf referencing spi-controller.
+
 > +properties:
 > +  compatible:
-> +    const: hpe,gxp-spifi
+> +    oneOf:
+> +      - enum:
+> +          - ingenic,x1000-sfc
+> +          - ingenic,x1600-sfc
+> +          - ingenic,x2000-sfc
+> +      - items:
+> +          - enum:
+> +              - ingenic,x1830-sfc
+> +          - const: ingenic,x1000-sfc
 > +
 > +  reg:
-> +    items:
-> +      - description: cfg registers
-> +      - description: data registers
-> +      - description: mapped memory
+> +    maxItems: 1
 > +
 > +  interrupts:
 > +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: sfc
+
+Remove the clock-names entirely, no benefits.
+
 > +
 > +required:
 > +  - compatible
 > +  - reg
 > +  - interrupts
+> +  - clocks
+> +  - clock-names
 > +
-> +unevaluatedProperties: false
+> +additionalProperties: false
 > +
 > +examples:
 > +  - |
+> +    #include <dt-bindings/clock/ingenic,x1000-cgu.h>
 > +
-> +    spi@200 {
-> +        compatible = "hpe,gxp-spifi";
-> +        reg = <0x200 0x80>, <0xc000 0x100>, <0x38000000 0x800000>;
-> +        interrupts = <20>;
-> +        interrupt-parent = <&vic0>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
+> +	sfc: spi@13440000 {
+> +		compatible = "ingenic,x1000-sfc";
+
+
+Use 4 spaces for example indentation.
+
+> +		reg = <0x13440000 0x1000>;
 > +
-> +        flash@0 {
-> +                reg = <0>;
+> +		interrupt-parent = <&intc>;
+> +		interrupts = <7>;
+> +
+> +		clocks = <&cgu X1000_CLK_SFC>;
+> +		clock-names = "sfc";
+> +
+> +		status = "disabled";
 
-This has still wrong indentation.
+No status in example.
 
+> +	};
+> +...
 
 
 Best regards,
