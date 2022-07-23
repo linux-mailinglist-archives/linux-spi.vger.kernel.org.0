@@ -2,48 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63A657F130
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 21:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBDD57F137
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 21:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiGWT2e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Jul 2022 15:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S234512AbiGWTcY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Jul 2022 15:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236362AbiGWT2e (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 15:28:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BFC1B7BE;
-        Sat, 23 Jul 2022 12:28:33 -0700 (PDT)
+        with ESMTP id S230005AbiGWTcY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 15:32:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23391CFCC;
+        Sat, 23 Jul 2022 12:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4373B80D26;
-        Sat, 23 Jul 2022 19:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFE2C341C0;
-        Sat, 23 Jul 2022 19:28:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CD9260EE7;
+        Sat, 23 Jul 2022 19:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABA4C341C0;
+        Sat, 23 Jul 2022 19:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658604510;
-        bh=YN31doChPv4onmW3vi81LWSiAGZ5uWlj7uyzF23Fxg4=;
+        s=k20201202; t=1658604742;
+        bh=r76yhUR7QKLJMAoy6hSEb7FVeJ3UbPDQ0zjweE5Xi7c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ApHRQc1DOQ35LdpyeyfYUY5gpxvh7JFc31BtLz2uD9wP7Rdm0nD2SL/2yGN58ycjP
-         DJ2nQQgZdOUfdhuwLnsfUle54aqhrq01j7PKMWNK6oBdSGCeoTAqDZySMVDtGcd0k8
-         Ds6ZZmOlk9u6QCtqJ+eJEdiH1RYxo0sPN/nyAPixMC+Z4Kq5twwacYq4KfiOwSuQL7
-         K64z9KRjSmXf4nUmmSZECeogSHMXQwgT8CHld8oxVVQnlorR0l9rKW3jCrvMSsxDd1
-         q4shvTRpOM2kfxABr9HKMwqr3bcqhv6LENeQYYdt3K8fOmnyHGh8i20e6vZWBJ1A55
-         WCsr65UDAyN5w==
-Date:   Sat, 23 Jul 2022 20:28:26 +0100
+        b=CbCcUVRVkjXPWali+tO0le/YmpX51kLQ4oWzUFmBExYjbQC7O1nmjM8fAt2liyx10
+         c2/cunLWptyOx1cS6vkIUrjkFL+eNFHuOTMtSvwxvN0kYoba1eC+hcnGX9taFMJjJE
+         iNDaUsstaZsBr2m0Wsg+vs/hLO3k8hbLELgDPWrxM3Kzf4VEOYE1BCiUQQh265U4R+
+         2xvrgFZTGkSxSXwKvhPjOyCOE93CUKs1sqy0WoCHFD2mAIpgWwl028tVq8fvFUNt5c
+         ECpvhJ5ZCTkARqs53RovCFNakByC1TTefUmD4v88UIP4euaUJXxNeZVdNbIvIdKbiI
+         xpdfhkjtWCu7g==
+Date:   Sat, 23 Jul 2022 20:32:19 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Elad Nachman <enachman@marvell.com>, Noam <lnoam@marvell.com>
-Subject: Re: [PATCH 4/7] spi: a3700: support BE for AC5 SPI driver
-Message-ID: <YtxL2kjJhJ6IhVDA@sirena.org.uk>
-References: <20220723102237.10281-1-vadym.kochan@plvision.eu>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
+Message-ID: <YtxMwyRghFKS/vu5@sirena.org.uk>
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+ <YtrukeLk9fInqQIL@sirena.org.uk>
+ <89d22457-8c62-e441-3bf4-2734ec2a45e1@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uMGvqMQmQc2NWCGD"
+        protocol="application/pgp-signature"; boundary="kkIhzO/ccCxeVEBm"
 Content-Disposition: inline
-In-Reply-To: <20220723102237.10281-1-vadym.kochan@plvision.eu>
+In-Reply-To: <89d22457-8c62-e441-3bf4-2734ec2a45e1@wanyeetech.com>
 X-Cookie: Necessity is a mother.
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,43 +66,69 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---uMGvqMQmQc2NWCGD
-Content-Type: text/plain; charset=us-ascii
+--kkIhzO/ccCxeVEBm
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 23, 2022 at 01:22:37PM +0300, Vadym Kochan wrote:
-> From: Noam <lnoam@marvell.com>
->=20
-> Tested-by: Raz Adashi <raza@marvell.com>
-> Reviewed-by: Raz Adashi <raza@marvell.com>
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
+On Sun, Jul 24, 2022 at 01:06:16AM +0800, Zhou Yanjie wrote:
+> On 2022/7/23 =E4=B8=8A=E5=8D=882:38, Mark Brown wrote:
 
-There's no signoff here from Noam or anyone else at Marvell...
+> > > +++ b/drivers/spi/spi-ingenic-sfc.c
+> > > @@ -0,0 +1,662 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +/*
+> > > + * Ingenic SoCs SPI Flash Controller Driver
 
-You've not copied me on the rest of the series so I've no idea what's
-going on with dependencies.  When sending a patch series it is important
-to ensure that all the various maintainers understand what the
-relationship between the patches as the expecation is that there will be
-interdependencies.  Either copy everyone on the whole series or at least
-copy them on the cover letter and explain what's going on.  If there are
-no strong interdependencies then it's generally simplest to just send
-the patches separately to avoid any possible confusion.
+> > Please make the entire comment a C++ one so things look more
+> > intentional.
 
---uMGvqMQmQc2NWCGD
+> I'm sorry, I didn't understand well what you meant :(
+> Could you please explain a little more detail?
+
+The above comment block uses both C /* */ and C++ // style comments,
+please make it just use the C++ style.
+
+> > > +static irqreturn_t ingenic_sfc_irq_handler(int irq, void *data)
+> > > +{
+> > > +	struct ingenic_sfc *sfc =3D data;
+> > > +
+> > > +	writel(0x1f, sfc->base + SFC_REG_INTC);
+> > > +
+> > > +	complete(&sfc->completion);
+> > > +
+> > > +	return IRQ_HANDLED;
+> > > +}
+
+> > This doesn't pay any attention to any status registers in the chip so
+> > won't work if the interrupt is shared and won't notice any error reports
+> > from the device...
+
+> This interrupt is exclusively owned by SFC, do we still
+> need to perform the operation you said? I haven't done
+> these operations before because I want to minimize the
+> overhead and avoid affecting performance.
+
+Even if the device is not shared is there no possibility that the
+device can report an unexpected interrupt status?  It's not just
+the sharing case, it's also the fact that it looks like there's a
+status being reported but we're not checking it so if anything
+goes wrong then we're less likely to notice.  I'd worry about
+data corruption.
+
+--kkIhzO/ccCxeVEBm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcS9oACgkQJNaLcl1U
-h9BZOgf9HpwTWvNoSTfRH6YzJr/DiNP4mPykQ/GtDdWNi1hZNilJ35hUGcdrT70q
-ImZfHAFy/Gclnh6y7AES2U7Up3apuOz6LGQoaLr1Zu/snRkDUSuGxt0JH2gAgvRB
-KKRLwU0NfYZgWZV6u4OhJClYVJ5kYxnNZhsDsSSNvb1Bk4+mzqcwT/vY8t2hktFb
-hW89ygTtMQScnBX6iPfkpwaoyra1ShhqCcwxkiklEK1NuFmblQ6/UgaFq27kMmLI
-pgC20MIsliTefRYl8CjcwmR5Es1ZdM8n8Ake2/vVgLdZmBQ4/FGYBzvr4j5HuLEg
-xoLstB389moYysHm729Q8xX6u1jjWw==
-=+Lsx
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcTMIACgkQJNaLcl1U
+h9BGtQgAggYv7Qn1OTgVIXH8mGUCfK3TknrnNuKFde/MvOziGFcDFwDuHzjYQZa3
+00276bM4+r3UL3UZqxzUBDDUfDrjD++d40lyIBtMOiSoTdMAM6IAXYmrVkPwe/0D
+4A9fXEdkuFEQAB/aaQGHhlHVFSHhJG20/vTZ5n0DFVUFnT1O134ido7AZU6RUQZ3
+/9g92pmE3u8sNn0OFpGRsNoOdK1pZtrd9D0ByyY3PJy9QeM3gkGtkhdC4DISvB0U
+234iv6TDKZ/sfHTPZ7lnifdxuEKFzqVlYlPAchiu0xY0sEzq0JbxeZLCkjS3s8de
+1QRQhBSwCyXFQPsacWETl7fHXwO+2A==
+=AxAB
 -----END PGP SIGNATURE-----
 
---uMGvqMQmQc2NWCGD--
+--kkIhzO/ccCxeVEBm--
