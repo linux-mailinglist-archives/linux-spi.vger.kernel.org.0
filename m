@@ -2,73 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AE257F0B2
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 19:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F64357F0BD
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 19:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238446AbiGWRjy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Jul 2022 13:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S231578AbiGWRnN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Jul 2022 13:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238438AbiGWRjw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 13:39:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCB51EEE0;
-        Sat, 23 Jul 2022 10:39:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4824CB80D14;
-        Sat, 23 Jul 2022 17:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08AE3C341C7;
-        Sat, 23 Jul 2022 17:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658597989;
-        bh=hwDAKAk6i7Wr3vgNlTgX7ANW/JyE4NCFl/UAssaFIeY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ENeMA0TWX1wgygDKw582M4ROP/f3s0pd4kT5wk0oKAHj8w30Wry1aEH5e9UfDrL2N
-         /Sa/dTGj7trKgE0xcJY6kXCbGIivLACwxeEsXerb9Z2o2Ty3c6IoyNF9tmgCLlVVZa
-         zQuZWBEiZ7iSvqcfK3lALST8+tQaL6yC8Ye7vw/I3NkBVT+EoE6VeXkycEw/7VwPA9
-         HB1W0NxUOth0/RJf7AyzayCCF+DXsegA8ekcOE31CvHJKyGww3bcOeqVWu7JIQDoEA
-         ujXiUAhHTFbFK/FZNiU0IQ5KDfdNNDsknRwKs8cKDvxJ60rdU5BH7sqhxG07j2tRCe
-         Kg0xjSORuZBYw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E10CCD9DDDD;
-        Sat, 23 Jul 2022 17:39:48 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v5.19-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220722221236.EDF49C341C6@smtp.kernel.org>
-References: <20220722221236.EDF49C341C6@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220722221236.EDF49C341C6@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc7
-X-PR-Tracked-Commit-Id: b620aa3a7be346f04ae7789b165937615c6ee8d3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 301c8949322fe46766b334cc60ada5819b92000e
-Message-Id: <165859798891.12882.16074708628854918835.pr-tracker-bot@kernel.org>
-Date:   Sat, 23 Jul 2022 17:39:48 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235226AbiGWRnL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 13:43:11 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B0314027
+        for <linux-spi@vger.kernel.org>; Sat, 23 Jul 2022 10:43:09 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t22so5828481lfg.1
+        for <linux-spi@vger.kernel.org>; Sat, 23 Jul 2022 10:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HlHphoZuLPE3CLbqX5TxLcWzRpVyhW7sASqwVEBH1/M=;
+        b=CNGVPQBLY5Tr6aU6+prX28HGV6JBxo6xYQGD3TwyVH/5Jsc9WiP/seiZr0xjNFagpw
+         qzRG0jG3xVioEbFWKJcoXdddNRpYNkqxufPKSXUXcxfQh5HBTBrVLWl9Zue1PngXLl93
+         uOfX2gN9Ifd9Rs03FlUm6xePYlb0vSvW85v03WSNSPDKz4VkznKkD7g+FTd25k2mi1+c
+         9xBO0TTvqnc+3vjghW3VUpFB+0+aKwuVx55F8cuDBno+IlJfOGRgpo+A2d9cfeGeKYod
+         UV9JgxC+dlqX2VoZsCWJtl8XiB7DWtqfZIauLLwW5B4tjTjXx9cDGg5kOEOHFgtzzvh9
+         fmRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HlHphoZuLPE3CLbqX5TxLcWzRpVyhW7sASqwVEBH1/M=;
+        b=jXatBE4Q94sG40qUPxafG2kxvQ0aOt9Bb9mEOmGPS7o02uAyAV3MSWDvAE3AL7UGWp
+         Yp/eVelg9tfSM0+DZbHZwMlcxhnD5UmI4GTSejhHUWIBsaJKbkkc+4Dg7cozlPXqd5YX
+         CMwjTt3I3mTadvosxFcLv5YraEiPHB/76NxOEHvqNfCq27rDT5Kg+WQAuRC89gzDUbMp
+         kqUpHd1/om0XHiBBo27pHDwzxY5AX7u/ivCX02gzaiilKR3T2Bv533l25JYLhtvZ+LNd
+         IN7FC+fDhFi+n69nckafmCSLXrsEa8uMmgSjWjFUIRCCgHyd7v4oFrvCTskZC4i1sG5j
+         CCqg==
+X-Gm-Message-State: AJIora96bZPDQTBqtLl+KsQ5PYxQkVx9LihyQzh4aOqXH8+R4aQNR1hs
+        do4AzyArvungae68jJnWEHGp/A==
+X-Google-Smtp-Source: AGRyM1uQNl3x42KCq0cGc9OqDnR54QTGrXDVh1wXSEUelvPCIfB7qPr5bBayswnv+Tpu0ay0JGCmIw==
+X-Received: by 2002:a05:6512:3e0a:b0:489:e50b:1dc9 with SMTP id i10-20020a0565123e0a00b00489e50b1dc9mr2119685lfv.321.1658598187752;
+        Sat, 23 Jul 2022 10:43:07 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00482bdd14fdfsm1770938lfr.32.2022.07.23.10.43.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 10:43:07 -0700 (PDT)
+Message-ID: <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
+Date:   Sat, 23 Jul 2022 19:43:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+Content-Language: en-US
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+ <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Fri, 22 Jul 2022 23:12:27 +0100:
+On 23/07/2022 18:50, Zhou Yanjie wrote:
+> Hi Krzysztof,
+> 
+> On 2022/7/23 上午1:46, Krzysztof Kozlowski wrote:
+>> On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
+>>> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
+>>> and the X2000 SoC from Ingenic.
+>>>
+>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>> ---
+>>>   .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
+>>>   1 file changed, 64 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>> new file mode 100644
+>>> index 00000000..b7c4cf4
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>> @@ -0,0 +1,64 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
+>> File name should be rather based on first compatible, so
+>> ingenic,x1000-sfc.yaml
+> 
+> 
+> No offense, does it really need to be named that way?
+> I can't seem to find documentation with instructions on this :(
+> 
+> The use of "ingenic,sfc.yaml" indicates that this is the documentation
+> for the SFC module for all Ingenic SoCs, without misleading people into
+> thinking it's only for a specific model of SoC. And there seem to be many
+> other yaml documents that use similar names (eg. fsl,spi-fsl-qspi.yaml,
+> spi-rockchip.yaml, spi-nxp-fspi.yaml, ingenic,spi.yaml, spi-sifive.yaml,
+> omap-spi.yaml), maybe these yaml files that are not named with first
+> compatible are also for the same consideration. :)
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc7
+We have many bad examples, many poor patterns and they are never an
+argument to add one more bad pattern.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/301c8949322fe46766b334cc60ada5819b92000e
+It might never grow to new devices (because they might be different), so
+that is not really an argument.
 
-Thank you!
+All bindings are to follow this rule, so I don't understand why you
+think it is an exception for you?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Best regards,
+Krzysztof
