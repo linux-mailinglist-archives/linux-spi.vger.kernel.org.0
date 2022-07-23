@@ -2,109 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5611257EA02
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 00:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4612657ECC1
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 10:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237121AbiGVWpk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jul 2022 18:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
+        id S237141AbiGWIae (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Jul 2022 04:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237179AbiGVWpW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jul 2022 18:45:22 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24285C06C1;
-        Fri, 22 Jul 2022 15:44:58 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-10d845dcf92so7911512fac.12;
-        Fri, 22 Jul 2022 15:44:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ioVQy2I3MdZUDLSAqqkpUrVLPrHTAHelafX5k6eqdBE=;
-        b=3qpFQDM4VFFpqTSchRc+Q2xC2X2ftptDxshes6H6zEirQHIBY24GuvI/uFHDQJU54z
-         bL0KmXxMurza7KQTfd6kKPP9e3uSFwvIBUfRPAaGur2l6ITv1w0ugbFtSioFWj5xmKuO
-         gTzo/QIiRjjcowDuPKo0AlIVUBsIl9ME+WkZoE4c2F9ZThDmLUd1J5Mt+Wjur3B/i1np
-         /gUAN/fWRSc8Yx9szNYh/CsfrKav/O2d12q7Y636iHORzU9R8Q2EX7ev1kT0eKoAYqQ+
-         cb4Z0dsnuHYrhZysCbxCryhK/AsiiEkyn/jVOOMqyeBE248ghPNd40lG4ZfrLXK14k29
-         pm0A==
-X-Gm-Message-State: AJIora8Ay1snMuN7zuU0bFJNIVB2VJ1c2TGhPfhgea8mRc7ewsSS4+rr
-        a0Xgcg4zgUpLnLFawLN8wA==
-X-Google-Smtp-Source: AGRyM1u3KIvwo/7k4pN2H7zBPDtRg3eayR02wXAeGUhiinm97BPU+V7kgU8N/QSyliNRp5lNNH2orQ==
-X-Received: by 2002:a05:6870:4722:b0:10c:d04:ebcf with SMTP id b34-20020a056870472200b0010c0d04ebcfmr1124713oaq.80.1658529893918;
-        Fri, 22 Jul 2022 15:44:53 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f97-20020a9d2c6a000000b0061c87262540sm2433071otb.65.2022.07.22.15.44.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 15:44:53 -0700 (PDT)
-Received: (nullmailer pid 20307 invoked by uid 1000);
-        Fri, 22 Jul 2022 22:44:50 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com,
-        krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, linux-spi@vger.kernel.org,
-        michael@walle.cc, tmn505@gmail.com, reimu@sudomaker.com,
-        miquel.raynal@bootlin.com, paul@crapouillou.net,
-        rick.tyliu@ingenic.com, richard@nod.at, aric.pzqi@ingenic.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        aidanmacdonald.0x0@gmail.com, jinghui.liu@ingenic.com,
-        sernia.zhou@foxmail.com, dongsheng.qiu@ingenic.com, vigneshr@ti.com
-In-Reply-To: <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com> <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
-Date:   Fri, 22 Jul 2022 16:44:50 -0600
-Message-Id: <1658529890.261669.20305.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S237150AbiGWIad (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 04:30:33 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153E51836A;
+        Sat, 23 Jul 2022 01:30:29 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.80.87) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 23 Jul
+ 2022 11:30:17 +0300
+Subject: Re: [PATCH 1/3] mtd: spi-nor: Use the spi-mem poll status APIs.
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, <tudor.ambarus@microchip.com>,
+        <p.yadav@ti.com>, <michael@walle.cc>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <aidanmacdonald.0x0@gmail.com>,
+        <tmn505@gmail.com>, <paul@crapouillou.net>,
+        <dongsheng.qiu@ingenic.com>, <aric.pzqi@ingenic.com>,
+        <rick.tyliu@ingenic.com>, <jinghui.liu@ingenic.com>,
+        <sernia.zhou@foxmail.com>, <reimu@sudomaker.com>
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-2-git-send-email-zhouyanjie@wanyeetech.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <1926ce77-6de0-0d87-d676-6ae93fa5c527@omp.ru>
+Date:   Sat, 23 Jul 2022 11:30:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <1658508510-15400-2-git-send-email-zhouyanjie@wanyeetech.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [31.173.80.87]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/23/2022 08:13:55
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171890 [Jul 23 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.87 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.87 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;31.173.80.87:7.7.3,7.4.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, text}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.87
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/23/2022 08:17:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/23/2022 6:36:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 23 Jul 2022 00:48:29 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
-> and the X2000 SoC from Ingenic.
+Hello!
+
+On 7/22/22 7:48 PM, 周琰杰 (Zhou Yanjie) wrote:
+
+> With advanced controllers (such as Ingenic SFC), it is possible to poll
+> the status register of the device. This could be done to offload the CPU
+> during a erase or write operation. Make use of spi-mem poll status APIs
+> to handle this feature.
+> 
+> Previously, when erasing large area (e.g. 32MiB), in non-offload case,
+> CPU load could reach ~90% and would generate ~3.92 million interrupts,
+> now it decrease to ~15% CPU load and 0.15 million interrupts.
+> 
+> This should also fix the high CPU usage for system which don't have a
+> dedicated poll status block logic (decrease to ~80% CPU load and ~1.61
+> million interrupts.).
 > 
 > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
->  .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>  drivers/mtd/spi-nor/core.c | 42 ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 32 insertions(+), 10 deletions(-)
 > 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 502967c..6a31132 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -617,19 +617,41 @@ static int spi_nor_wait_till_ready_with_timeout(struct spi_nor *nor,
+>  	unsigned long deadline;
+>  	int timeout = 0, ret;
+>  
+> -	deadline = jiffies + timeout_jiffies;
+> +	if (nor->spimem && !nor->params->ready) {
+> +		struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR, 0),
+> +						       SPI_MEM_OP_NO_ADDR,
+> +						       SPI_MEM_OP_NO_DUMMY,
+> +						       SPI_MEM_OP_DATA_IN(1, nor->bouncebuf, 0));
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+   Strange indentation...
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/spi/ingenic,sfc.yaml:52:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+[...]
+> +		return spi_mem_poll_status(nor->spimem, &op, SR_WIP, 0, 0, 10,
+> +						       jiffies_to_msecs(timeout_jiffies));
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/spi/ingenic,sfc.example.dts'
-Documentation/devicetree/bindings/spi/ingenic,sfc.yaml:52:1: found a tab character where an indentation space is expected
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/spi/ingenic,sfc.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/spi/ingenic,sfc.yaml:52:1: found a tab character where an indentation space is expected
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml: ignoring, error parsing file
-make: *** [Makefile:1404: dt_binding_check] Error 2
+   Here as well...
 
-doc reference errors (make refcheckdocs):
+[...]
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+MBR, Sergey
