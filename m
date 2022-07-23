@@ -2,62 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C45257F129
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 21:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63A657F130
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 21:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiGWT1f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Jul 2022 15:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S229632AbiGWT2e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Jul 2022 15:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiGWT1e (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 15:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FE1056F;
-        Sat, 23 Jul 2022 12:27:33 -0700 (PDT)
+        with ESMTP id S236362AbiGWT2e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 15:28:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BFC1B7BE;
+        Sat, 23 Jul 2022 12:28:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3476C60EE7;
-        Sat, 23 Jul 2022 19:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A7DC341C0;
-        Sat, 23 Jul 2022 19:27:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4373B80D26;
+        Sat, 23 Jul 2022 19:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFE2C341C0;
+        Sat, 23 Jul 2022 19:28:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658604452;
-        bh=ZbgxQl+rg3lKvC7krfve+T2jrFIJNpWda+6LzKO5bVE=;
+        s=k20201202; t=1658604510;
+        bh=YN31doChPv4onmW3vi81LWSiAGZ5uWlj7uyzF23Fxg4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jYfTItcNNWxzBrd2FdZDyCAXbhBbBfRu6EzxX5X+STOAA/Y/i0EoAlW9TYLCmUhp5
-         j92DwmQLLnTL+z9beMk2cPqFaFWxw96Buz/TlW12WDm2X1c8xFEVhUqkLhA/hJ97qF
-         Sthq4TF8XMIIJrw99MSMgs2FYhcRhEAOa88kw+tufLbCE7Wvo6cWt/hG+F2ZH2jMeq
-         WAWi0Vhr4OgaV8diwe6XHa5F6gjUl5UebPE9nHjKzc6dAhfKafMiSUSDcMI5BGn31F
-         SHSB1SGr+T248fdxtS2BoLvAe1iW99KEgwswGV2wKRa7hSR5yQk7BEqQbt4JxdfvM6
-         onT5zTynAQeIw==
-Date:   Sat, 23 Jul 2022 20:27:28 +0100
+        b=ApHRQc1DOQ35LdpyeyfYUY5gpxvh7JFc31BtLz2uD9wP7Rdm0nD2SL/2yGN58ycjP
+         DJ2nQQgZdOUfdhuwLnsfUle54aqhrq01j7PKMWNK6oBdSGCeoTAqDZySMVDtGcd0k8
+         Ds6ZZmOlk9u6QCtqJ+eJEdiH1RYxo0sPN/nyAPixMC+Z4Kq5twwacYq4KfiOwSuQL7
+         K64z9KRjSmXf4nUmmSZECeogSHMXQwgT8CHld8oxVVQnlorR0l9rKW3jCrvMSsxDd1
+         q4shvTRpOM2kfxABr9HKMwqr3bcqhv6LENeQYYdt3K8fOmnyHGh8i20e6vZWBJ1A55
+         WCsr65UDAyN5w==
+Date:   Sat, 23 Jul 2022 20:28:26 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Mike Yang <reimu@sudomaker.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
-Message-ID: <YtxLoPOykLDTzTn9@sirena.org.uk>
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
- <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
- <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
- <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
- <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Elad Nachman <enachman@marvell.com>, Noam <lnoam@marvell.com>
+Subject: Re: [PATCH 4/7] spi: a3700: support BE for AC5 SPI driver
+Message-ID: <YtxL2kjJhJ6IhVDA@sirena.org.uk>
+References: <20220723102237.10281-1-vadym.kochan@plvision.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TbMQOSOuune2YTJx"
+        protocol="application/pgp-signature"; boundary="uMGvqMQmQc2NWCGD"
 Content-Disposition: inline
-In-Reply-To: <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+In-Reply-To: <20220723102237.10281-1-vadym.kochan@plvision.eu>
 X-Cookie: Necessity is a mother.
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -69,45 +55,43 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---TbMQOSOuune2YTJx
+--uMGvqMQmQc2NWCGD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
-> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
-> > On 23/07/2022 18:50, Zhou Yanjie wrote:
+On Sat, Jul 23, 2022 at 01:22:37PM +0300, Vadym Kochan wrote:
+> From: Noam <lnoam@marvell.com>
+>=20
+> Tested-by: Raz Adashi <raza@marvell.com>
+> Reviewed-by: Raz Adashi <raza@marvell.com>
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
 
-> >> No offense, does it really need to be named that way?
-> >> I can't seem to find documentation with instructions on this :(
+There's no signoff here from Noam or anyone else at Marvell...
 
-...
+You've not copied me on the rest of the series so I've no idea what's
+going on with dependencies.  When sending a patch series it is important
+to ensure that all the various maintainers understand what the
+relationship between the patches as the expecation is that there will be
+interdependencies.  Either copy everyone on the whole series or at least
+copy them on the cover letter and explain what's going on.  If there are
+no strong interdependencies then it's generally simplest to just send
+the patches separately to avoid any possible confusion.
 
-> > All bindings are to follow this rule, so I don't understand why you
-> > think it is an exception for you?
-
-> Zhou didn't ask you to make an exception. They have a valid
-> point and they're asking why.
-
-> You may want to avoid further incidents of this kind by stop
-> being bossy and actually writing a guideline of naming these
-> .yaml files and publish it somewhere online.
-
-Yeah, I do have to say that I was also completely unaware that
-there was any enforced convention here.
-
---TbMQOSOuune2YTJx
+--uMGvqMQmQc2NWCGD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcS6AACgkQJNaLcl1U
-h9B16Af+OB537q2iAFHtuzDZyT8beLFm5e80sPm2/JK6DK39SDS56/LU25TuqiQo
-JICSdChsFLOntnTc+3yLvssDYmtu+9niHfjBbG3zbA4IU7n2tH5zC8ks0BZnHG1y
-Ca58/ofXK99lB5wPUVB7eH9ccEVPfQ03/Ezb7gD435htmmn4ZBV3idkJkhezOxG/
-kgEJDtu7iJiaMNViADXs2AHGyCrAcgRSJKAtWByb1e8Cguh+CpuLKR6kzbs+IDGp
-fnCzAS4YOJmZGAO0P7mc4789Bxy3+v4s2mJSaZWRD2UGIZllBcoLxyWDtgAKIGB0
-FNxFe0cCP1mEKNoLaxf1rLh4gwlkZQ==
-=bYHr
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcS9oACgkQJNaLcl1U
+h9BZOgf9HpwTWvNoSTfRH6YzJr/DiNP4mPykQ/GtDdWNi1hZNilJ35hUGcdrT70q
+ImZfHAFy/Gclnh6y7AES2U7Up3apuOz6LGQoaLr1Zu/snRkDUSuGxt0JH2gAgvRB
+KKRLwU0NfYZgWZV6u4OhJClYVJ5kYxnNZhsDsSSNvb1Bk4+mzqcwT/vY8t2hktFb
+hW89ygTtMQScnBX6iPfkpwaoyra1ShhqCcwxkiklEK1NuFmblQ6/UgaFq27kMmLI
+pgC20MIsliTefRYl8CjcwmR5Es1ZdM8n8Ake2/vVgLdZmBQ4/FGYBzvr4j5HuLEg
+xoLstB389moYysHm729Q8xX6u1jjWw==
+=+Lsx
 -----END PGP SIGNATURE-----
 
---TbMQOSOuune2YTJx--
+--uMGvqMQmQc2NWCGD--
