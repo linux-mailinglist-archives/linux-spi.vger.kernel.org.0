@@ -2,169 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC70257F184
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jul 2022 22:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D993957F233
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 02:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbiGWUtb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Jul 2022 16:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S235130AbiGXAoW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Jul 2022 20:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiGWUtb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 16:49:31 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306641D300
-        for <linux-spi@vger.kernel.org>; Sat, 23 Jul 2022 13:49:30 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q41-20020a17090a1b2c00b001f2043c727aso6944297pjq.1
-        for <linux-spi@vger.kernel.org>; Sat, 23 Jul 2022 13:49:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4PnudIAj6MuFcPE4enLHz/xhLEoYtTm/viKNsN2ycOQ=;
-        b=RUhsyiy86LH9Fm86MMdX9+B8SK2E9S8eT8i1KfIYzf/FcYPmfwOR1meXyixhSn3pWv
-         Fl9H9ITkukRQhP9rlaxmWmzjIMVlMIA/B77ZkT34OAbixPajEDk4E/I358PBE8emWgeN
-         +5VAPbl2VPyeXncpjZFS46/SlsM8d08OARVmsBEsYO9WjEv9vCwVecEjPTLr0gtKYhl2
-         FfJnDq2ny/F3Gw0sOV9AEwpnaXaMIAO/h3/wxvxi7599MnKcthlj1QltFkdTJaVqSHlr
-         poFFq689alMWoAoYcrOCddNIFIhlx7zxrJOEoiPItcsT5ea6vA3TeWIPACcinpGaVzHc
-         zj+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4PnudIAj6MuFcPE4enLHz/xhLEoYtTm/viKNsN2ycOQ=;
-        b=AIu2jDK4q6jeVhAfRBOG/8Ccjgplqi6Avu9LN15fsv2HfkNCj8xvYM8W9413jD6wnV
-         Vz1B7cBQG06iJLDftLJfQSU/WlIjJrf43ZyhNLMo61y2zzi/nXDnaffPCgp3BXsmwPe4
-         tCgpXGP47Xw3czQt776Qt5dZnKVx7L88+rUPukKFkWHHagcrB1siLI/0Gc2GEJ9RMPlP
-         G3MMXTBvELzNw4K5n8bz9rJ1Z83r9fIM525YdNijq1QJP3mvErGN59Ut5dl3IIGZbX6b
-         kNapYxTLivl0Avl/Qwdk2vl9kPQP9SmxR9iocJfmuDT8TrJn7/i4Wy/hsDkiQLlQ2tDa
-         Q/ZQ==
-X-Gm-Message-State: AJIora80bU90Vgqtud1MEPCaQODHlj4XyI3BO5oZi6QMGxEPyRzN30AA
-        KruMnVzCq/zqGwfDBhEvPMZg/A==
-X-Google-Smtp-Source: AGRyM1sDNnQZWu+UZjw5MifNt4gL7DYaw4qlXqueCC3LFS/ZmtN+HdmjySKcbm4UciQi96Hckb6vDw==
-X-Received: by 2002:a17:90b:38c2:b0:1f0:59c0:55c with SMTP id nn2-20020a17090b38c200b001f059c0055cmr6675051pjb.166.1658609369617;
-        Sat, 23 Jul 2022 13:49:29 -0700 (PDT)
-Received: from [172.16.24.11] ([188.214.106.178])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a3f0800b001ef9479373fsm7974276pjc.4.2022.07.23.13.49.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 13:49:29 -0700 (PDT)
-Message-ID: <b52a8e97-3b8e-c67b-4440-2d7428edb4fa@sudomaker.com>
-Date:   Sun, 24 Jul 2022 04:49:25 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        with ESMTP id S229772AbiGXAoV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 20:44:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD71317064;
+        Sat, 23 Jul 2022 17:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658623460; x=1690159460;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=p8OqWEFGhu6pLUfSsWTBU7kSxbLrZ2r0vLX0FImwX1o=;
+  b=WIEN0zIoav+0nfx5IK14xbkAw7mvdabPFY+3vDNj9IOgQv63fTZLrm6m
+   D1wb3Zfg5deaAK+maTO+QwxrKVSkZc0EKlPzHqT27wUlXPq2TdaLhB5hm
+   /cvzfS6dlQVK7wJMeee3f48PD7ZTnSBgvP0/zRmCqbcPsy4oL97vQ4hVU
+   jqj6Naa2P3yGGyxSSIr8AAXPfXBJVItwBCHuO3cqSmMZ6f+d7eaO6Vkzr
+   j0mTCinsVvfePow4AEynHIIjkFjNTCGKHBEl4uzMPbxXhFb9Kq7LPLk0a
+   X4+BINzi387h95pF7hCX6mlkgp6H7WS+wmDKtrsAnEr8P4P51BcVxkLJN
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267895880"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="267895880"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 17:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="845131504"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Jul 2022 17:44:15 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFPjC-0003Iz-1A;
+        Sun, 24 Jul 2022 00:44:14 +0000
+Date:   Sun, 24 Jul 2022 08:43:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, tudor.ambarus@microchip.com,
+        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     kbuild-all@lists.01.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        aidanmacdonald.0x0@gmail.com, tmn505@gmail.com,
+        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
         aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
- <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
- <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
- <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
- <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
- <YtxLoPOykLDTzTn9@sirena.org.uk>
- <f05045fa-9ecd-d312-0eaa-5d19498453fc@linaro.org>
-From:   Mike Yang <reimu@sudomaker.com>
-In-Reply-To: <f05045fa-9ecd-d312-0eaa-5d19498453fc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
+Message-ID: <202207240839.YeZ8uQ0T-lkp@intel.com>
+References: <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 7/24/22 04:07, Krzysztof Kozlowski wrote:
-> On 23/07/2022 21:27, Mark Brown wrote:
->> On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
->>> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
->>>> On 23/07/2022 18:50, Zhou Yanjie wrote:
->>
->>>>> No offense, does it really need to be named that way?
->>>>> I can't seem to find documentation with instructions on this :(
->>
->> ...
->>
->>>> All bindings are to follow this rule, so I don't understand why you
->>>> think it is an exception for you?
->>
->>> Zhou didn't ask you to make an exception. They have a valid
->>> point and they're asking why.
->>
->>> You may want to avoid further incidents of this kind by stop
->>> being bossy and actually writing a guideline of naming these
->>> .yaml files and publish it somewhere online.
->>
->> Yeah, I do have to say that I was also completely unaware that
->> there was any enforced convention here.
-> 
-> Indeed, it's not a enforced pattern. But there are many other
-> insignificant ones which we also tend to forget during review, like
-> using words "Device Tree bindings" in title or using unnecessary quotes
-> around "refs" (also in ID of schema). It's not a big deal, but I ask
-> when I notice it.
+Hi "周琰杰,
 
-Good. Thanks for paying attention to these details.
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on mtd/spi-nor/next linus/master v5.19-rc7 next-20220722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> Zhou already mentioned he was unable find the naming guidelines of these .yaml files.
->>
->> Apparently you think it's unacceptable for new contributors of a certain subsystem to use existing code as examples, and/or they're responsible for figuring out what's a good example and what's a bad one in the existing codebase.
-> 
-> It's everywhere in the kernel, what can I say? If you copy existing
-> code, you might copy poor code...
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhou-Yanjie/Add-SFC-support-for-Ingenic-SoCs/20220723-005011
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220724/202207240839.YeZ8uQ0T-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0d9d0e60238025a04d428e64e18211c037229284
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhou-Yanjie/Add-SFC-support-for-Ingenic-SoCs/20220723-005011
+        git checkout 0d9d0e60238025a04d428e64e18211c037229284
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/spi/
 
-Still, it shouldn't be a responsibility of new contributors to determine the quality of an existing piece of code, unless there are clear guidelines (i.e. one should use the new "cs-gpios" attribute in SPI controllers).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
->>
->>>
->>> It might never grow to new devices (because they might be different), so
->>> that is not really an argument.
->>
->> It is an argument. A very valid one.
->>
->> "they *might* be different". You may want to get your hands on real hardware and try another word. Or at least read the datasheets instead of believing your imagination.
->>
->> I would enjoy duplicating the st,stm32-spi.yaml into st,stm32{f,h}{0..7}-spi.yaml if I'm bored at a Sunday afternoon.
->>
->>>
->>> All bindings are to follow this rule, so I don't understand why you
->>> think it is an exception for you?
->>
->> Zhou didn't ask you to make an exception. They have a valid point and they're asking why.
-> 
-> Hm, everyone has the same valid point and such recommendation is to
-> everyone, although it is nothing serious.
-> 
->> You may want to avoid further incidents of this kind by stop being bossy and actually writing a guideline of naming these .yaml files and publish it somewhere online.
-> 
-> I did not see any incident here... Process of review includes comments
-> and there is nothing bad happening when you receive a comment. No
-> incident...
+All warnings (new ones prefixed by >>):
+
+   drivers/spi/spi-ingenic-sfc.c: In function 'ingenic_sfc_exec_op_pio':
+>> drivers/spi/spi-ingenic-sfc.c:299:16: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744073709551595' to '4294967275' [-Woverflow]
+     299 |         writel(~(INTC_MASK_END | INTC_MASK_RREQ), sfc->base + SFC_REG_INTC);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-ingenic-sfc.c: In function 'ingenic_sfc_exec_op_dma':
+   drivers/spi/spi-ingenic-sfc.c:356:16: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744073709551599' to '4294967279' [-Woverflow]
+     356 |         writel(~INTC_MASK_END, sfc->base + SFC_REG_INTC);
+   drivers/spi/spi-ingenic-sfc.c: In function 'ingenic_sfc_poll_status':
+   drivers/spi/spi-ingenic-sfc.c:469:16: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744073709551599' to '4294967279' [-Woverflow]
+     469 |         writel(~INTC_MASK_END, sfc->base + SFC_REG_INTC);
 
 
-Okay. After careful inspection of the Ingenic datasheets, now I have the conclusion: The Ingenic X1000, X1021, X1500, X1501, X1520, X1600, X1800, X1830, X2000, X2100, X2500 have the same SFC controller.
+vim +299 drivers/spi/spi-ingenic-sfc.c
 
-X1600 has a newer version (let's say v2) of the SFC, and X2000-2500 have v3. Others have the original version (let's say v1). Each new version introduced new features such as arbitrary DMA sizes, and the rest features are the same.
+   267	
+   268	static int ingenic_sfc_exec_op_pio(struct ingenic_sfc *sfc, const struct spi_mem_op *op)
+   269	{
+   270		int ret, val;
+   271	
+   272		val = readl(sfc->base + SFC_REG_GLB);
+   273		u32p_replace_bits(&val, GLB_TRAN_DIR_READ, GLB_TRAN_DIR_MASK);
+   274		u32p_replace_bits(&val, GLB_OP_MODE_SLAVE, GLB_OP_MODE_MASK);
+   275		writel(val, sfc->base + SFC_REG_GLB);
+   276	
+   277		val = TRAN_CONF_CMD_EN | op->cmd.opcode;
+   278	
+   279		if (op->addr.nbytes > 0) {
+   280			val |= FIELD_PREP(TRAN_CONF_ADDR_WIDTH_MASK, op->addr.nbytes);
+   281	
+   282			writel(op->addr.val & 0xffffffff, sfc->base + SFC_REG_DEV_ADDR(0));
+   283			writel(op->addr.val >> 32, sfc->base + SFC_REG_DEV_ADDR_PLUS(0));
+   284		}
+   285	
+   286		if (op->dummy.nbytes > 0)
+   287			val |= FIELD_PREP(TRAN_CONF_DMY_BITS_MASK,
+   288					op->dummy.nbytes * 8 / op->dummy.buswidth);
+   289	
+   290		if (op->data.nbytes > 0)
+   291			val |= TRAN_CONF_DATA_EN;
+   292	
+   293		writel(val, sfc->base + SFC_REG_TRAN_CONF(0));
+   294		writel(op->data.nbytes, sfc->base + SFC_REG_TRAN_LEN);
+   295	
+   296		ingenic_sfc_set_transfer_mode(sfc, op);
+   297	
+   298		writel(0x1f, sfc->base + SFC_REG_SCR);
+ > 299		writel(~(INTC_MASK_END | INTC_MASK_RREQ), sfc->base + SFC_REG_INTC);
+   300	
+   301		writel(0, sfc->base + SFC_REG_MEM_ADDR);
+   302	
+   303		writel(TRIG_FLUSH, sfc->base + SFC_REG_TRIG);
+   304		writel(TRIG_START, sfc->base + SFC_REG_TRIG);
+   305	
+   306		ret = wait_for_completion_timeout(&sfc->completion,
+   307				msecs_to_jiffies(INGENIC_SFC_TRANSFER_TIMEOUT));
+   308		if (!ret) {
+   309			writel(0x1f, sfc->base + SFC_REG_INTC);
+   310			writel(0x1f, sfc->base + SFC_REG_SCR);
+   311			dev_err(sfc->dev, "line:%d Timeout for ACK from SFC device\n", __LINE__);
+   312			return -ETIMEDOUT;
+   313		}
+   314	
+   315		ingenic_sfc_read_rxfifo(sfc, op->data.buf.in, op->data.nbytes);
+   316		readl_poll_timeout(sfc->base + SFC_REG_SR, val, val & SR_END, 10, 0);
+   317	
+   318		writel(INTC_MASK_END | INTC_MASK_RREQ, sfc->base + SFC_REG_SCR);
+   319		writel(TRIG_STOP, sfc->base + SFC_REG_TRIG);
+   320	
+   321		return 0;
+   322	}
+   323	
 
-
-So IMO the name "ingenic,sfc.yaml" is perfectly logical.
-
-
-Regards,
-Mike Yang
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
