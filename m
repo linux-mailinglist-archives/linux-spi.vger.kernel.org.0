@@ -2,60 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB9357F428
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 10:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4778557F474
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 11:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiGXIoo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 24 Jul 2022 04:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S233186AbiGXJfx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Jul 2022 05:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXIon (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 04:44:43 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8086E140D5;
-        Sun, 24 Jul 2022 01:44:42 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id p10so6302220lfd.9;
-        Sun, 24 Jul 2022 01:44:42 -0700 (PDT)
+        with ESMTP id S232296AbiGXJfv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 05:35:51 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9277CBC8A;
+        Sun, 24 Jul 2022 02:35:50 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id y11so13888192lfs.6;
+        Sun, 24 Jul 2022 02:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lv3zYQALgYY1iSSRJ6c3vQT0Or5W0piyPXsF6s1qXTo=;
-        b=XMKD8Nu+jwF+epSxh759innZceuNK2Bbw9dU7ztnxIx45oOakZqPaox2OvzAs013QZ
-         Nh6gNZg7PGK3ONX/9CrIxeNtTjC66xDS6dT7ETZjZzOaowbI+d/6Y8+44v937IVGkSd+
-         KMPZybjD5f7ACQR7H+9/BPfgLeKXBvOGUrjrfhPB5NxftKUyig+bivm0nk3z8IUqQKu4
-         QFELteaFI5z8iPfUqizJi8x/E+Er7goe3ih38q7ECzw/OXJ0DzW3bv5xNsHdlQZ7o+1H
-         ckgRUpJAWzOWvFfHjm0IwTVnJHW51Y4aQKrZdAKWK30cLmo+zgKoKtSlnnXqKZ8WeOZh
-         Uxzw==
+        bh=kY/2lDsjH8rvyR9vI13gtj+VtHAX6pqqtYSZIT34gMQ=;
+        b=ANtyF2mKb++gC6/Y0D4BWpKx7diw7+EEqMUgh3n2P/HJ6uj8iZMx80qEQv5EMBVQOe
+         8LiZubbCg+DNm8jTrkbkv3ySYcxjjVH2DwZOdLZv1VDnYbSk6eg7BSmJF0hBg4ARvKec
+         l2cC7rPy8IhAbQStVEDF4iUsJLYL/tOcxyrL2j0u3WrMHj6P+8NlnDSjnz7vK6nNRlIA
+         wk8tRQ/ezcoNCcl3YdNwTV86qIPIPcP2MzQcIOa0nHa+Qqije50JNR2Hw39vLJUZr6rO
+         LdnlgPn94kxJrvqpIfCUGnwNtjHKyH0wgph1/du6/kjONK1CtPra9Zd1eQppoNy4ps5c
+         +HVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lv3zYQALgYY1iSSRJ6c3vQT0Or5W0piyPXsF6s1qXTo=;
-        b=7RstymHkf2GtnfbP1UcHUYZYDAZu7LXUwv4sKOqhanXu6+stqm9i77yYrVWYUbdXIa
-         +XpsNWt2ZB9QELPuVw6EMDEyGs4/6+00llFiqdbJaDdMUj74/pJsIoiHBL3VuE5eTGAc
-         Rk6paBryRA+HhWmwvUSyCOcnJYW9+3N8QDE7UgOgpUMAKkDiIrdzaxn/qPflK4HEcVIg
-         b99N0BQiY/FaLEC93BZQpTD40jZDffv2qk4ZECBLkNLTwhtoWLugEtVLRkBaCPg9fNhT
-         grz0Y4CjrN1B2RFZcTePhsTJpw1vmmlQvdYFNsTUYmWMp1/M3lj50S9i0NWMNfQjfAum
-         UZ2Q==
-X-Gm-Message-State: AJIora/pq9br31bOOndnqVzNEPwnjhlxu0bOEPDFEkGFBifxOtDb4/LH
-        s2mz2vwsHXdakRRduwn93jmFeL2H4A7LzDZau3EGlrPgzsA=
-X-Google-Smtp-Source: AGRyM1sMjnyjs4vQ7R5Dp7jQ1b/Q/TvIyjqqZKfRGL4+99ObRiyjPqebsPomLEK3FjhrAd+IKrP3ZH2PFUr+abpBM40=
-X-Received: by 2002:a19:6d0d:0:b0:48a:8b3c:e28 with SMTP id
- i13-20020a196d0d000000b0048a8b3c0e28mr304341lfc.265.1658652280751; Sun, 24
- Jul 2022 01:44:40 -0700 (PDT)
+        bh=kY/2lDsjH8rvyR9vI13gtj+VtHAX6pqqtYSZIT34gMQ=;
+        b=AnlvetoAhugBCIXg3MZEfxo0+cmcZO6CFm+7x9xNI1gHdylSwRbKtBf8MAj2CmC2F5
+         M1aObcfJXw0cxsM1cWlkxY3FtmJWmAXxG9/ZidZGVipnmv8OIQ2dz7kLFtczr9yXZWu+
+         WkMDeI7o/9JHl7Px11vj4+u1casbAvN8LPg6SPBkckxbdwDgtWK5iOiKH7c31XK/LGll
+         HZj3jBbZMTdoGwBRL+Q5YqrwF5CCoMxNwMYXSUDNa28+TZiR9xHsfIuymVUnB3vrpziS
+         LboCQX3ZQcHoWShnDrOS2XwwL+Ykdg4YkEov9ZJGINHJDJ2JSxsqJ8bIPfjfxKvuvRH0
+         BiIA==
+X-Gm-Message-State: AJIora8A3YR0DwFCXKNFCXnTlEelxae784CJ3qJqIqI+gTr1g37jsNmb
+        Hi7CQ1kznssdKNMX75VDmhe7TTj1SXKsrHPUZ/4=
+X-Google-Smtp-Source: AGRyM1ttd4MQTqOMMfzH0Y37+KPEPMu8Aswiq+gjP4iO8JKTk6mNJSA0L8DCpp4Ma/G/aSrXXw+S1m4GvlnoYIE2Jy0=
+X-Received: by 2002:a05:6512:1190:b0:48a:19d5:ef23 with SMTP id
+ g16-20020a056512119000b0048a19d5ef23mr2732227lfr.401.1658655348919; Sun, 24
+ Jul 2022 02:35:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722114136.251415-1-tmaimon77@gmail.com> <20220722114136.251415-3-tmaimon77@gmail.com>
- <afae04e0-76a3-1bcb-5b47-9944fa9ab2c0@linaro.org> <YtrvyyMGm64hFG5j@sirena.org.uk>
- <0c8688d5-b0c1-8cc1-ec27-292acbb38dfc@linaro.org> <YtrzF9BFJrXfxiz0@sirena.org.uk>
-In-Reply-To: <YtrzF9BFJrXfxiz0@sirena.org.uk>
+References: <20220721101556.118568-1-tmaimon77@gmail.com> <20220721101556.118568-2-tmaimon77@gmail.com>
+ <YtlYt/5VKIblUHBP@sirena.org.uk>
+In-Reply-To: <YtlYt/5VKIblUHBP@sirena.org.uk>
 From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Sun, 24 Jul 2022 11:44:29 +0300
-Message-ID: <CAP6Zq1iRowFv4qg=AqdVmBRRx5p4-5AaC1G-aZs=2LnOAOELXA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] spi: npcm-pspi: Add NPCM845 peripheral SPI support
+Date:   Sun, 24 Jul 2022 12:35:37 +0300
+Message-ID: <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] spi: npcm-pspi: add full duplex support
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Avi Fishman <avifishman70@gmail.com>,
+Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
@@ -78,34 +76,82 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark and Krzysztof,
+Hi Mark,
 
-Thanks for your reply,
+Thanks for your detailed explanation!
 
-On Fri, 22 Jul 2022 at 21:57, Mark Brown <broonie@kernel.org> wrote:
+On Thu, 21 Jul 2022 at 16:46, Mark Brown <broonie@kernel.org> wrote:
 >
-> On Fri, Jul 22, 2022 at 08:47:24PM +0200, Krzysztof Kozlowski wrote:
-> > On 22/07/2022 20:43, Mark Brown wrote:
+> On Thu, Jul 21, 2022 at 01:15:55PM +0300, Tomer Maimon wrote:
 >
-> > > ...with a fallback list required by the bindings so the driver actually
-> > > binds.  Note that bindings are currently not in YAML format so there'd
-> > > be even less enforcement of that than normal, and as they're currently
-> > > written the bindings don't require fallback.
+> > The NPCM PSPI handler, on TX-buffer not null, would perform a dummy read
+> > but did not save the rx-data, this was valid only for half duplex.
 >
-> > Yes, the bindings document should be rephrased but we were living like
-> > that for few years. :)
+> > This patch adds full duplex support for NPCM PSPI driver by storing all
+> > rx-data when the Rx-buffer is defined also for TX-buffer handling.
 >
-> The binding document as it stands only has one compatible, there's no
-> existing problem with it other than the YAML conversion.  If we're
-> adding something new that requires a fallback we should be explicit
-> about that rather than have something that's actively misleading where
-> previously things were clear.  I don't mind if we add the compatible to
-> the driver or document the requirement for the fallback but we should do
-> one of the two.
+> This doesn't seem to entirely correspond to what the patch does, nor to
+> what the driver currently does?  I can't see any dummy read code in the
+> current driver.
+>
+In the current handler file, in the handler function.
+static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
+....
+-       if (priv->tx_buf) {
+-               if (stat & NPCM_PSPI_STAT_RBF) {
+-                       ioread8(NPCM_PSPI_DATA + priv->base);
+the read above doing a dummy read
+-                       if (priv->tx_bytes == 0) {
+-                               npcm_pspi_disable(priv);
+-                               complete(&priv->xfer_done);
+-                               return IRQ_HANDLED;
+-                       }
+-               }
 
-is V2 good enough? adding the compatible to the driver and the document?
-Or should we use fallback?
-If fallback is choosen, can you explain how I should do it?
+
+> >  static void npcm_pspi_send(struct npcm_pspi *priv)
+> >  {
+> >       int wsize;
+> > -     u16 val;
+> > +     u16 val = 0;
+> >
+> >       wsize = min(bytes_per_word(priv->bits_per_word), priv->tx_bytes);
+> >       priv->tx_bytes -= wsize;
+> >
+> > -     if (!priv->tx_buf)
+> > -             return;
+> > -
+> >       switch (wsize) {
+> >       case 1:
+> > -             val = *priv->tx_buf++;
+> > +             if (priv->tx_buf)
+> > +                     val = *priv->tx_buf++;
+> >               iowrite8(val, NPCM_PSPI_DATA + priv->base);
+> >               break;
+>
+> These changes appaear to be trying to ensure that when _send() is called
+> we now always write something out, even if there was no transmit buffer.
+> Since the device has been supporting half duplex transfers it is not
+> clear why we'd want to do that, it's adding overhead to the PIO which
+> isn't great.  This also isn't what the changelog said, the changelog
+> said we were adding reading of data when there's a transmit buffer.
+> Similar issues apply on the read side.
+>
+> AFAICT the bulk of what the change is doing is trying make the driver
+> unconditionally do both read and writes to the hardware when it would
+> previously have only read or written data if there was a buffer
+> provided.  That's basically open coding SPI_CONTROLLER_MUST_TX and
+> SPI_CONTROLLER_MUST_RX, if that's what the hardware needs then you
+> should just set those flags and let the core fix things up.
+We will try to use SPI_CONTROLLER_MUST_TX and SPI_CONTROLLER_MUST_RX
+>
+> > +       /*
+> > +        * first we do the read since if we do the write we previous read might
+> > +        * be lost (indeed low chances)
+> > +        */
+>
+> This reordering sounds like it might be needed but should have been
+> mentioned in the changelog and is a separate patch.
 
 Best regards,
 
