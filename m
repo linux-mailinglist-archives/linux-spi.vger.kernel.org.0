@@ -2,157 +2,148 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4778557F474
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 11:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFA457F58B
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 16:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbiGXJfx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 24 Jul 2022 05:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S229839AbiGXOxK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Jul 2022 10:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiGXJfv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 05:35:51 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9277CBC8A;
-        Sun, 24 Jul 2022 02:35:50 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id y11so13888192lfs.6;
-        Sun, 24 Jul 2022 02:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kY/2lDsjH8rvyR9vI13gtj+VtHAX6pqqtYSZIT34gMQ=;
-        b=ANtyF2mKb++gC6/Y0D4BWpKx7diw7+EEqMUgh3n2P/HJ6uj8iZMx80qEQv5EMBVQOe
-         8LiZubbCg+DNm8jTrkbkv3ySYcxjjVH2DwZOdLZv1VDnYbSk6eg7BSmJF0hBg4ARvKec
-         l2cC7rPy8IhAbQStVEDF4iUsJLYL/tOcxyrL2j0u3WrMHj6P+8NlnDSjnz7vK6nNRlIA
-         wk8tRQ/ezcoNCcl3YdNwTV86qIPIPcP2MzQcIOa0nHa+Qqije50JNR2Hw39vLJUZr6rO
-         LdnlgPn94kxJrvqpIfCUGnwNtjHKyH0wgph1/du6/kjONK1CtPra9Zd1eQppoNy4ps5c
-         +HVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kY/2lDsjH8rvyR9vI13gtj+VtHAX6pqqtYSZIT34gMQ=;
-        b=AnlvetoAhugBCIXg3MZEfxo0+cmcZO6CFm+7x9xNI1gHdylSwRbKtBf8MAj2CmC2F5
-         M1aObcfJXw0cxsM1cWlkxY3FtmJWmAXxG9/ZidZGVipnmv8OIQ2dz7kLFtczr9yXZWu+
-         WkMDeI7o/9JHl7Px11vj4+u1casbAvN8LPg6SPBkckxbdwDgtWK5iOiKH7c31XK/LGll
-         HZj3jBbZMTdoGwBRL+Q5YqrwF5CCoMxNwMYXSUDNa28+TZiR9xHsfIuymVUnB3vrpziS
-         LboCQX3ZQcHoWShnDrOS2XwwL+Ykdg4YkEov9ZJGINHJDJ2JSxsqJ8bIPfjfxKvuvRH0
-         BiIA==
-X-Gm-Message-State: AJIora8A3YR0DwFCXKNFCXnTlEelxae784CJ3qJqIqI+gTr1g37jsNmb
-        Hi7CQ1kznssdKNMX75VDmhe7TTj1SXKsrHPUZ/4=
-X-Google-Smtp-Source: AGRyM1ttd4MQTqOMMfzH0Y37+KPEPMu8Aswiq+gjP4iO8JKTk6mNJSA0L8DCpp4Ma/G/aSrXXw+S1m4GvlnoYIE2Jy0=
-X-Received: by 2002:a05:6512:1190:b0:48a:19d5:ef23 with SMTP id
- g16-20020a056512119000b0048a19d5ef23mr2732227lfr.401.1658655348919; Sun, 24
- Jul 2022 02:35:48 -0700 (PDT)
+        with ESMTP id S229618AbiGXOxJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 10:53:09 -0400
+Received: from out28-97.mail.aliyun.com (out28-97.mail.aliyun.com [115.124.28.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC85BF43;
+        Sun, 24 Jul 2022 07:53:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07443763|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.00847653-0.000137917-0.991386;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.OcPER7W_1658674379;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.OcPER7W_1658674379)
+          by smtp.aliyun-inc.com;
+          Sun, 24 Jul 2022 22:53:01 +0800
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mike Yang <reimu@sudomaker.com>, tudor.ambarus@microchip.com,
+        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+ <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+ <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
+ <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+ <34bed9a9-a995-c922-c197-062c7170f6f3@linaro.org>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <aa68546e-09a2-3ed7-d9ed-6566a7c9f997@wanyeetech.com>
+Date:   Sun, 24 Jul 2022 22:52:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20220721101556.118568-1-tmaimon77@gmail.com> <20220721101556.118568-2-tmaimon77@gmail.com>
- <YtlYt/5VKIblUHBP@sirena.org.uk>
-In-Reply-To: <YtlYt/5VKIblUHBP@sirena.org.uk>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Sun, 24 Jul 2022 12:35:37 +0300
-Message-ID: <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] spi: npcm-pspi: add full duplex support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <34bed9a9-a995-c922-c197-062c7170f6f3@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+Hi Krzysztof, Mike & Mark,
 
-Thanks for your detailed explanation!
+On 2022/7/24 上午4:05, Krzysztof Kozlowski wrote:
+> On 23/07/2022 20:47, Mike Yang wrote:
+>> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
+>>> On 23/07/2022 18:50, Zhou Yanjie wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> On 2022/7/23 上午1:46, Krzysztof Kozlowski wrote:
+>>>>> On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
+>>>>>> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
+>>>>>> and the X2000 SoC from Ingenic.
+>>>>>>
+>>>>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>>>> ---
+>>>>>>    .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
+>>>>>>    1 file changed, 64 insertions(+)
+>>>>>>    create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>>>> new file mode 100644
+>>>>>> index 00000000..b7c4cf4
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>>>> @@ -0,0 +1,64 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
+>>>>> File name should be rather based on first compatible, so
+>>>>> ingenic,x1000-sfc.yaml
+>>>>
+>>>> No offense, does it really need to be named that way?
+>>>> I can't seem to find documentation with instructions on this :(
+>>>>
+>>>> The use of "ingenic,sfc.yaml" indicates that this is the documentation
+>>>> for the SFC module for all Ingenic SoCs, without misleading people into
+>>>> thinking it's only for a specific model of SoC. And there seem to be many
+>>>> other yaml documents that use similar names (eg. fsl,spi-fsl-qspi.yaml,
+>>>> spi-rockchip.yaml, spi-nxp-fspi.yaml, ingenic,spi.yaml, spi-sifive.yaml,
+>>>> omap-spi.yaml), maybe these yaml files that are not named with first
+>>>> compatible are also for the same consideration. :)
+>>> We have many bad examples, many poor patterns and they are never an
+>>> argument to add one more bad pattern.
+>> Zhou already mentioned he was unable find the naming guidelines of these .yaml files.
+>>
+>> Apparently you think it's unacceptable for new contributors of a certain subsystem to use existing code as examples, and/or they're responsible for figuring out what's a good example and what's a bad one in the existing codebase.
+> It's everywhere in the kernel, what can I say? If you copy existing
+> code, you might copy poor code...
+>
+>>> It might never grow to new devices (because they might be different), so
+>>> that is not really an argument.
+>> It is an argument. A very valid one.
+>>
+>> "they *might* be different". You may want to get your hands on real hardware and try another word. Or at least read the datasheets instead of believing your imagination.
+>>
+>> I would enjoy duplicating the st,stm32-spi.yaml into st,stm32{f,h}{0..7}-spi.yaml if I'm bored at a Sunday afternoon.
+>>
+>>> All bindings are to follow this rule, so I don't understand why you
+>>> think it is an exception for you?
+>> Zhou didn't ask you to make an exception. They have a valid point and they're asking why.
+> Hm, everyone has the same valid point and such recommendation is to
+> everyone, although it is nothing serious.
+>
+>> You may want to avoid further incidents of this kind by stop being bossy and actually writing a guideline of naming these .yaml files and publish it somewhere online.
+> I did not see any incident here... Process of review includes comments
+> and there is nothing bad happening when you receive a comment. No
+> incident...
 
-On Thu, 21 Jul 2022 at 16:46, Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 21, 2022 at 01:15:55PM +0300, Tomer Maimon wrote:
->
-> > The NPCM PSPI handler, on TX-buffer not null, would perform a dummy read
-> > but did not save the rx-data, this was valid only for half duplex.
->
-> > This patch adds full duplex support for NPCM PSPI driver by storing all
-> > rx-data when the Rx-buffer is defined also for TX-buffer handling.
->
-> This doesn't seem to entirely correspond to what the patch does, nor to
-> what the driver currently does?  I can't see any dummy read code in the
-> current driver.
->
-In the current handler file, in the handler function.
-static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
-....
--       if (priv->tx_buf) {
--               if (stat & NPCM_PSPI_STAT_RBF) {
--                       ioread8(NPCM_PSPI_DATA + priv->base);
-the read above doing a dummy read
--                       if (priv->tx_bytes == 0) {
--                               npcm_pspi_disable(priv);
--                               complete(&priv->xfer_done);
--                               return IRQ_HANDLED;
--                       }
--               }
+
+I have no intention of provoking arguments, I just did *grep -rn "first 
+compatible"* in the
+Documentation folder after you mentioned the naming rules about "first 
+compatible" before,
+but just found a "first compatible" in "Documentation/fb/sstfb.rst", but 
+It has absolutely
+nothing to do with file naming. As Mike and Mark said, my question in 
+the previous email
+was just out of curiosity about where to look for a detailed explanation 
+of the rule.
+Since it would be somewhat strange to have two "Ingenic" yaml files with 
+different naming
+rules in the SPI subsystem, maybe Rob can guide us here?
 
 
-> >  static void npcm_pspi_send(struct npcm_pspi *priv)
-> >  {
-> >       int wsize;
-> > -     u16 val;
-> > +     u16 val = 0;
-> >
-> >       wsize = min(bytes_per_word(priv->bits_per_word), priv->tx_bytes);
-> >       priv->tx_bytes -= wsize;
-> >
-> > -     if (!priv->tx_buf)
-> > -             return;
-> > -
-> >       switch (wsize) {
-> >       case 1:
-> > -             val = *priv->tx_buf++;
-> > +             if (priv->tx_buf)
-> > +                     val = *priv->tx_buf++;
-> >               iowrite8(val, NPCM_PSPI_DATA + priv->base);
-> >               break;
->
-> These changes appaear to be trying to ensure that when _send() is called
-> we now always write something out, even if there was no transmit buffer.
-> Since the device has been supporting half duplex transfers it is not
-> clear why we'd want to do that, it's adding overhead to the PIO which
-> isn't great.  This also isn't what the changelog said, the changelog
-> said we were adding reading of data when there's a transmit buffer.
-> Similar issues apply on the read side.
->
-> AFAICT the bulk of what the change is doing is trying make the driver
-> unconditionally do both read and writes to the hardware when it would
-> previously have only read or written data if there was a buffer
-> provided.  That's basically open coding SPI_CONTROLLER_MUST_TX and
-> SPI_CONTROLLER_MUST_RX, if that's what the hardware needs then you
-> should just set those flags and let the core fix things up.
-We will try to use SPI_CONTROLLER_MUST_TX and SPI_CONTROLLER_MUST_RX
->
-> > +       /*
-> > +        * first we do the read since if we do the write we previous read might
-> > +        * be lost (indeed low chances)
-> > +        */
->
-> This reordering sounds like it might be needed but should have been
-> mentioned in the changelog and is a separate patch.
+Thanks and best regards!
 
-Best regards,
 
-Tomer
+>
+> Best regards,
+> Krzysztof
