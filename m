@@ -2,160 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3937957F292
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 03:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB9357F428
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 10:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbiGXBkW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Jul 2022 21:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S231138AbiGXIoo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Jul 2022 04:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiGXBkV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Jul 2022 21:40:21 -0400
-X-Greylist: delayed 493 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Jul 2022 18:40:19 PDT
-Received: from ci74p00im-qukt09081502.me.com (ci74p00im-qukt09081502.me.com [17.57.156.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E5EA472
-        for <linux-spi@vger.kernel.org>; Sat, 23 Jul 2022 18:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1658626325;
-        bh=GsdFZK4oQNZWNc6BXkPULWSnbkpQG2ue3MdM2e30/GQ=;
-        h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:To;
-        b=0CptV9Iz/vhCxOz+MlOz1/Go5VCVLeDJ2h0pg7LmemPmrBHCrtetn8oqlaqsgIwqq
-         looD+9jRM6S3CV+hpiFh4iRqCD/A70nflY5gK3X8GhlcjLi6lEmi6iWK32/0kIhudX
-         XqftYSYdWc6stW2ougQ1PP3rmGiqhEMCLpyGAaK42G+R3HVpXnoNXupzUluP33aP9X
-         Qfi7bKp4merH8SYr+I+ITSSHyi2GYSM/dPDhEzWVJJZLO7e3K2d2PgGD+coR81M4ZJ
-         zSRf25jyzIQjyTGjfnMFNceP90tfdwq9kwq0WtyY01VrUsfonkMlfKoKjy+QcThJP8
-         YawddyCMIsEdA==
-Received: from smtpclient.apple (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
-        by ci74p00im-qukt09081502.me.com (Postfix) with ESMTPSA id 776E228400F1;
-        Sun, 24 Jul 2022 01:32:03 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Vee Page <takeiteasy27@icloud.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 0/3] Add SFC support for Ingenic SoCs.
-Date:   Sat, 23 Jul 2022 21:32:01 -0400
-Message-Id: <D7ACE3CD-3189-4988-BB44-F32514C70425@icloud.com>
-References: <MN2PR17MB33758BDD0221A0C49A13DC3DB8929@MN2PR17MB3375.namprd17.prod.outlook.com>
-Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Tudor.Ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        aidanmacdonald.0x0@gmail.com, paul@crapouillou.net,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, jinghui.liu@ingenic.com,
-        sernia.zhou@foxmail.com, reimu@sudomaker.com
-In-Reply-To: <MN2PR17MB33758BDD0221A0C49A13DC3DB8929@MN2PR17MB3375.namprd17.prod.outlook.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: iPhone Mail (19B81)
-X-Proofpoint-ORIG-GUID: L2zjtVGRKGpQPmIocJ94RIVCaPPsaP4E
-X-Proofpoint-GUID: L2zjtVGRKGpQPmIocJ94RIVCaPPsaP4E
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=855 bulkscore=0 malwarescore=0 spamscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2207240006
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        with ESMTP id S229602AbiGXIon (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 04:44:43 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8086E140D5;
+        Sun, 24 Jul 2022 01:44:42 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p10so6302220lfd.9;
+        Sun, 24 Jul 2022 01:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lv3zYQALgYY1iSSRJ6c3vQT0Or5W0piyPXsF6s1qXTo=;
+        b=XMKD8Nu+jwF+epSxh759innZceuNK2Bbw9dU7ztnxIx45oOakZqPaox2OvzAs013QZ
+         Nh6gNZg7PGK3ONX/9CrIxeNtTjC66xDS6dT7ETZjZzOaowbI+d/6Y8+44v937IVGkSd+
+         KMPZybjD5f7ACQR7H+9/BPfgLeKXBvOGUrjrfhPB5NxftKUyig+bivm0nk3z8IUqQKu4
+         QFELteaFI5z8iPfUqizJi8x/E+Er7goe3ih38q7ECzw/OXJ0DzW3bv5xNsHdlQZ7o+1H
+         ckgRUpJAWzOWvFfHjm0IwTVnJHW51Y4aQKrZdAKWK30cLmo+zgKoKtSlnnXqKZ8WeOZh
+         Uxzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lv3zYQALgYY1iSSRJ6c3vQT0Or5W0piyPXsF6s1qXTo=;
+        b=7RstymHkf2GtnfbP1UcHUYZYDAZu7LXUwv4sKOqhanXu6+stqm9i77yYrVWYUbdXIa
+         +XpsNWt2ZB9QELPuVw6EMDEyGs4/6+00llFiqdbJaDdMUj74/pJsIoiHBL3VuE5eTGAc
+         Rk6paBryRA+HhWmwvUSyCOcnJYW9+3N8QDE7UgOgpUMAKkDiIrdzaxn/qPflK4HEcVIg
+         b99N0BQiY/FaLEC93BZQpTD40jZDffv2qk4ZECBLkNLTwhtoWLugEtVLRkBaCPg9fNhT
+         grz0Y4CjrN1B2RFZcTePhsTJpw1vmmlQvdYFNsTUYmWMp1/M3lj50S9i0NWMNfQjfAum
+         UZ2Q==
+X-Gm-Message-State: AJIora/pq9br31bOOndnqVzNEPwnjhlxu0bOEPDFEkGFBifxOtDb4/LH
+        s2mz2vwsHXdakRRduwn93jmFeL2H4A7LzDZau3EGlrPgzsA=
+X-Google-Smtp-Source: AGRyM1sMjnyjs4vQ7R5Dp7jQ1b/Q/TvIyjqqZKfRGL4+99ObRiyjPqebsPomLEK3FjhrAd+IKrP3ZH2PFUr+abpBM40=
+X-Received: by 2002:a19:6d0d:0:b0:48a:8b3c:e28 with SMTP id
+ i13-20020a196d0d000000b0048a8b3c0e28mr304341lfc.265.1658652280751; Sun, 24
+ Jul 2022 01:44:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220722114136.251415-1-tmaimon77@gmail.com> <20220722114136.251415-3-tmaimon77@gmail.com>
+ <afae04e0-76a3-1bcb-5b47-9944fa9ab2c0@linaro.org> <YtrvyyMGm64hFG5j@sirena.org.uk>
+ <0c8688d5-b0c1-8cc1-ec27-292acbb38dfc@linaro.org> <YtrzF9BFJrXfxiz0@sirena.org.uk>
+In-Reply-To: <YtrzF9BFJrXfxiz0@sirena.org.uk>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Sun, 24 Jul 2022 11:44:29 +0300
+Message-ID: <CAP6Zq1iRowFv4qg=AqdVmBRRx5p4-5AaC1G-aZs=2LnOAOELXA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] spi: npcm-pspi: Add NPCM845 peripheral SPI support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-No problem!!!
-I forget to tell them. It=E2=80=99s okay though! =F0=9F=91=8C=F0=9F=91=8D
-=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=
-=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=
-=F0=9F=98=9A=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=
-=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=
-=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=
-=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=
-=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=
-=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=
-=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=
-=B8=8F=E2=98=BA=EF=B8=8F
-I=E2=80=99m blushing! Last night was fun.
+Hi Mark and Krzysztof,
 
-> On Jul 23, 2022, at 9:30 PM, Vanessa Page <Vebpe@outlook.com> wrote:
->=20
-> =EF=BB=BF=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=9A=
-=F0=9F=98=8D=F0=9F=98=9A=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D
->=20
-> Omg thank you Janika!
->=20
-> I=E2=80=99m glad to see everything is okay just tell them next time!
->=20
-> Love ya babes!
->=20
->> On Jul 23, 2022, at 9:27 PM, Zhou Yanjie <zhouyanjie@wanyeetech.com> wrot=
-e:
->>=20
->> =EF=BB=BFHi Tomasz,
->>=20
->>>> On 2022/7/23 =E4=B8=8B=E5=8D=8810:47, Tomasz Maciej Nowak wrote:
->>> W dniu 22.07.2022 o 18:48, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) pis=
-ze:
->>>> 1.Use the spi-mem poll status APIs in SPI-NOR to reduce CPU load.
->>>> 2.Add SFC support for the X1000 SoC, the X1600 SoC, and the X2000 SoC f=
-rom Ingenic.
->>>>=20
->>>> Liu Jinghui and Aidan MacDonald provided a lot of assistance during the=
- development of this driver.
->>>>=20
->>>> =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) (3):
->>>>  mtd: spi-nor: Use the spi-mem poll status APIs.
->>>>  dt-bindings: SPI: Add Ingenic SFC bindings.
->>>>  SPI: Ingenic: Add SFC support for Ingenic SoCs.
->>>>=20
->>>> .../devicetree/bindings/spi/ingenic,sfc.yaml       |  64 ++
->>>> drivers/mtd/spi-nor/core.c                         |  42 +-
->>>> drivers/spi/Kconfig                                |   9 +
->>>> drivers/spi/Makefile                               |   1 +
->>>> drivers/spi/spi-ingenic-sfc.c                      | 662 ++++++++++++++=
-+++++++
->>>> 5 files changed, 768 insertions(+), 10 deletions(-)
->>>> create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.ya=
-ml
->>>> create mode 100755 drivers/spi/spi-ingenic-sfc.c
->>>>=20
->>> Even tough it's still early in revision process, I'll add my
->>> Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
->>>=20
->>> The test was performed with Damai DM6291A SoC which is a Ingenic X1000 I=
-P
->>> but with 256 MiB RAM. No bugs yet observed on my side.
->>=20
->>=20
->> Thanks for you test!
->>=20
->>=20
->>>=20
->>=20
->> ______________________________________________________
->> Linux MTD discussion mailing list
->> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+Thanks for your reply,
+
+On Fri, 22 Jul 2022 at 21:57, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Jul 22, 2022 at 08:47:24PM +0200, Krzysztof Kozlowski wrote:
+> > On 22/07/2022 20:43, Mark Brown wrote:
+>
+> > > ...with a fallback list required by the bindings so the driver actually
+> > > binds.  Note that bindings are currently not in YAML format so there'd
+> > > be even less enforcement of that than normal, and as they're currently
+> > > written the bindings don't require fallback.
+>
+> > Yes, the bindings document should be rephrased but we were living like
+> > that for few years. :)
+>
+> The binding document as it stands only has one compatible, there's no
+> existing problem with it other than the YAML conversion.  If we're
+> adding something new that requires a fallback we should be explicit
+> about that rather than have something that's actively misleading where
+> previously things were clear.  I don't mind if we add the compatible to
+> the driver or document the requirement for the fallback but we should do
+> one of the two.
+
+is V2 good enough? adding the compatible to the driver and the document?
+Or should we use fallback?
+If fallback is choosen, can you explain how I should do it?
+
+Best regards,
+
+Tomer
