@@ -2,131 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189B157F5CD
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Jul 2022 17:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5E457FECD
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Jul 2022 14:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiGXPdR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 24 Jul 2022 11:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S234692AbiGYMPS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 25 Jul 2022 08:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGXPdR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jul 2022 11:33:17 -0400
-Received: from out28-218.mail.aliyun.com (out28-218.mail.aliyun.com [115.124.28.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5702C64;
-        Sun, 24 Jul 2022 08:33:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07456556|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0166075-7.73192e-05-0.983315;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.OcQouzA_1658676787;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.OcQouzA_1658676787)
-          by smtp.aliyun-inc.com;
-          Sun, 24 Jul 2022 23:33:09 +0800
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
-To:     Mike Yang <reimu@sudomaker.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
- <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
- <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
- <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
- <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
- <YtxLoPOykLDTzTn9@sirena.org.uk>
- <f05045fa-9ecd-d312-0eaa-5d19498453fc@linaro.org>
- <b52a8e97-3b8e-c67b-4440-2d7428edb4fa@sudomaker.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <b6232d28-8a24-c769-7d63-d4f7af493375@wanyeetech.com>
-Date:   Sun, 24 Jul 2022 23:33:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S232143AbiGYMPR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 08:15:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25179AE62;
+        Mon, 25 Jul 2022 05:15:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFF47B80E8C;
+        Mon, 25 Jul 2022 12:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C897C341C6;
+        Mon, 25 Jul 2022 12:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658751313;
+        bh=ND6sJqpmi/ZIFCyzo6WuKYHiyg2EE+4CRPxEUCsFK3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QHMLAVVLDYRp1oaAJv87qeUzZKi963pn9yJ4TdIiLgyUPXJ7maR0JSYzRCsz5bCA3
+         SIOtEFw/sCupJThINvfy+WST8Uc1ViiP37DrbnMBvOsIJzzNH+7JxvsQFPN211iR8J
+         n0x8H0/5Z9Eig7SjFQbnQC2V5g5zH/+gLClyJbX55c5TpDu3i5p3hgRpMYEewn8fwh
+         bnorhXsU/j3PhW04nzy082yFIt1nxIvdpEcwFhufodneJKMRQ8bOkgTSTh1P7yLu3V
+         CtlftF9xzaq+9tGqYAfV+xMCVhlzeFAGmMY6uti4aCaHRtYlCH5RH+3wbf9LvT1INZ
+         ZzrGzsumXOl4A==
+Date:   Mon, 25 Jul 2022 13:15:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] spi: npcm-pspi: add full duplex support
+Message-ID: <Yt6JSm3vrkdkvSpo@sirena.org.uk>
+References: <20220721101556.118568-1-tmaimon77@gmail.com>
+ <20220721101556.118568-2-tmaimon77@gmail.com>
+ <YtlYt/5VKIblUHBP@sirena.org.uk>
+ <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <b52a8e97-3b8e-c67b-4440-2d7428edb4fa@sudomaker.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xAtPP1KaYCL3Kz0X"
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
+X-Cookie: Replace with same type.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mike,
 
-On 2022/7/24 上午4:49, Mike Yang wrote:
-> On 7/24/22 04:07, Krzysztof Kozlowski wrote:
->> On 23/07/2022 21:27, Mark Brown wrote:
->>> On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
->>>> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
->>>>> On 23/07/2022 18:50, Zhou Yanjie wrote:
->>>>>> No offense, does it really need to be named that way?
->>>>>> I can't seem to find documentation with instructions on this :(
->>> ...
->>>
->>>>> All bindings are to follow this rule, so I don't understand why you
->>>>> think it is an exception for you?
->>>> Zhou didn't ask you to make an exception. They have a valid
->>>> point and they're asking why.
->>>> You may want to avoid further incidents of this kind by stop
->>>> being bossy and actually writing a guideline of naming these
->>>> .yaml files and publish it somewhere online.
->>> Yeah, I do have to say that I was also completely unaware that
->>> there was any enforced convention here.
->> Indeed, it's not a enforced pattern. But there are many other
->> insignificant ones which we also tend to forget during review, like
->> using words "Device Tree bindings" in title or using unnecessary quotes
->> around "refs" (also in ID of schema). It's not a big deal, but I ask
->> when I notice it.
-> Good. Thanks for paying attention to these details.
->
->
->>> Zhou already mentioned he was unable find the naming guidelines of these .yaml files.
->>>
->>> Apparently you think it's unacceptable for new contributors of a certain subsystem to use existing code as examples, and/or they're responsible for figuring out what's a good example and what's a bad one in the existing codebase.
->> It's everywhere in the kernel, what can I say? If you copy existing
->> code, you might copy poor code...
-> Still, it shouldn't be a responsibility of new contributors to determine the quality of an existing piece of code, unless there are clear guidelines (i.e. one should use the new "cs-gpios" attribute in SPI controllers).
->
->>>> It might never grow to new devices (because they might be different), so
->>>> that is not really an argument.
->>> It is an argument. A very valid one.
->>>
->>> "they *might* be different". You may want to get your hands on real hardware and try another word. Or at least read the datasheets instead of believing your imagination.
->>>
->>> I would enjoy duplicating the st,stm32-spi.yaml into st,stm32{f,h}{0..7}-spi.yaml if I'm bored at a Sunday afternoon.
->>>
->>>> All bindings are to follow this rule, so I don't understand why you
->>>> think it is an exception for you?
->>> Zhou didn't ask you to make an exception. They have a valid point and they're asking why.
->> Hm, everyone has the same valid point and such recommendation is to
->> everyone, although it is nothing serious.
->>
->>> You may want to avoid further incidents of this kind by stop being bossy and actually writing a guideline of naming these .yaml files and publish it somewhere online.
->> I did not see any incident here... Process of review includes comments
->> and there is nothing bad happening when you receive a comment. No
->> incident...
->
-> Okay. After careful inspection of the Ingenic datasheets, now I have the conclusion: The Ingenic X1000, X1021, X1500, X1501, X1520, X1600, X1800, X1830, X2000, X2100, X2500 have the same SFC controller.
+--xAtPP1KaYCL3Kz0X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Sun, Jul 24, 2022 at 12:35:37PM +0300, Tomer Maimon wrote:
+> On Thu, 21 Jul 2022 at 16:46, Mark Brown <broonie@kernel.org> wrote:
+> > On Thu, Jul 21, 2022 at 01:15:55PM +0300, Tomer Maimon wrote:
 
-Actually, you are also missing out the X1630 and X1660, and the upcoming 
-X2600.
+> > > This patch adds full duplex support for NPCM PSPI driver by storing all
+> > > rx-data when the Rx-buffer is defined also for TX-buffer handling.
 
+> > This doesn't seem to entirely correspond to what the patch does, nor to
+> > what the driver currently does?  I can't see any dummy read code in the
+> > current driver.
 
->
-> X1600 has a newer version (let's say v2) of the SFC, and X2000-2500 have v3. Others have the original version (let's say v1). Each new version introduced new features such as arbitrary DMA sizes, and the rest features are the same.
->
->
-> So IMO the name "ingenic,sfc.yaml" is perfectly logical.
->
->
-> Regards,
-> Mike Yang
+> In the current handler file, in the handler function.
+> static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
+
+> -       if (priv->tx_buf) {
+> -               if (stat & NPCM_PSPI_STAT_RBF) {
+> -                       ioread8(NPCM_PSPI_DATA + priv->base);
+
+> the read above doing a dummy read
+
+That's reading a single byte, not an entire buffer, and from a quick
+glance looks more like an ack.  Though perhaps you just end up with a
+lot of interrupts and do that anyway.
+
+--xAtPP1KaYCL3Kz0X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLeiUkACgkQJNaLcl1U
+h9BdCQf/QdlNiAcmCougz2zZbczwVhrOeD9z3yH0yaWm4vI2eCWPVZ8A8YdC/oYC
+hyo8qoU5Aa4cSorcJ0cTQf+P5mbi18i67ZMCTkSIhMGMpo1ozHNMX5RvD7ykhUNQ
+hMZUpNohI+yjLHhGaGzZhROgKbmuvwnacC7fBUmcOKDnwpoy7z346AgP0usZkt8w
+6tz5ffXZvBfOTBZ9iOXo7xtv+YvMekDS0DEyZCo1O92gcWlJgV/xanBOTBR+ba2E
+tDeIxu1gForYMOKwGHeHKpFG8uIy/qeNRx2gOV9YW5yV9iFtax+zdJBcjrPmFGKI
+wsXb4i/iIfSCpPAftoTR8IjOjzUGng==
+=GWj5
+-----END PGP SIGNATURE-----
+
+--xAtPP1KaYCL3Kz0X--
