@@ -2,113 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5E457FECD
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Jul 2022 14:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC357FF51
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Jul 2022 14:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiGYMPS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 25 Jul 2022 08:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S234169AbiGYMwN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 25 Jul 2022 08:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiGYMPR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 08:15:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25179AE62;
-        Mon, 25 Jul 2022 05:15:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFF47B80E8C;
-        Mon, 25 Jul 2022 12:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C897C341C6;
-        Mon, 25 Jul 2022 12:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658751313;
-        bh=ND6sJqpmi/ZIFCyzo6WuKYHiyg2EE+4CRPxEUCsFK3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QHMLAVVLDYRp1oaAJv87qeUzZKi963pn9yJ4TdIiLgyUPXJ7maR0JSYzRCsz5bCA3
-         SIOtEFw/sCupJThINvfy+WST8Uc1ViiP37DrbnMBvOsIJzzNH+7JxvsQFPN211iR8J
-         n0x8H0/5Z9Eig7SjFQbnQC2V5g5zH/+gLClyJbX55c5TpDu3i5p3hgRpMYEewn8fwh
-         bnorhXsU/j3PhW04nzy082yFIt1nxIvdpEcwFhufodneJKMRQ8bOkgTSTh1P7yLu3V
-         CtlftF9xzaq+9tGqYAfV+xMCVhlzeFAGmMY6uti4aCaHRtYlCH5RH+3wbf9LvT1INZ
-         ZzrGzsumXOl4A==
-Date:   Mon, 25 Jul 2022 13:15:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] spi: npcm-pspi: add full duplex support
-Message-ID: <Yt6JSm3vrkdkvSpo@sirena.org.uk>
-References: <20220721101556.118568-1-tmaimon77@gmail.com>
- <20220721101556.118568-2-tmaimon77@gmail.com>
- <YtlYt/5VKIblUHBP@sirena.org.uk>
- <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xAtPP1KaYCL3Kz0X"
+        with ESMTP id S234269AbiGYMwL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 08:52:11 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2115.outbound.protection.outlook.com [40.107.21.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5767363F4;
+        Mon, 25 Jul 2022 05:52:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RQ2B7jqevvD+1KssV4tm99p64PZjIjAuAconcUJPyNqxHlN7S9UrsDgCefxbtBBY5/Ou1NN05H8UPibaYqI6u1NmTZc27Vl70AFR8mQ8U6KuVsp7ERwTDg7SvSv+YaGB4g0EofJDb+sbiEhbvocaNMMdWSBiQOSQ9tE5OgvLSlX6B2E8KCRXlVBU9xgJfBqHni+FNXe42w2SDkO06J7MgWb+mduyKNeR9dEfAU9e9em3lkDtdLxHAUcUEuRaKVq2re4gFit4c0mlTqxOQhNooPKLWDxPKaSgDmGWrP2EcP3BS6O+hsbepN4C/cpyqL6Kt8rcGK5zHdOvKUEsFJAusA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fNXVl602WJVP8MaUpBciWZxu73mDg8C35PvtRJeSQAY=;
+ b=a3rbGfrQyrSSn6BwpK6GVp3Y2z0Q0YJuCMPXr0l1Jpo5G+SmwcwPwQfnUisEtdq/bxFNMiahwWllJ985njtyfbwdnGDb/tfvzRc+FNYw4nyO8zejU8ogy5VnlJDgqmZvQUGWATvgYf7j+6p7Q4maFCSCE6dvy937lz1FaJo1J1jIHJxIcgDEn43YIHoQXHyvzmde6TMy9GzDegBm3hfoqFxBeG6hD7Nt6MjvCybBJVqxb1zWwgh1WcDv4iL2rAVgLU0OJ1GuxuFK2npk81y/zWfeTsBbAjEvBnIbzWiXpLUDY65taorBh2SbRCToqHZaHkMgvCKDM2JWml75vh6juw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fNXVl602WJVP8MaUpBciWZxu73mDg8C35PvtRJeSQAY=;
+ b=Z3dpJBhalg6vjPA4TXihjuD4c7f4qgvACnMBBBappDwYQTvqQJZ88gBt15X/ufmpjFxeEjhTRFPkSpA9yWWAdyPUA6sj24KThv91bYZ4MS1M/ZX0wYbyZ/UC/FEXj/eEmjUFEEfALBnY3UwoECuKKkhAp4ZHTYtcwnUP8TJZCVw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by DU0P190MB1931.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:3bc::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.23; Mon, 25 Jul
+ 2022 12:52:06 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::5488:868f:fe1e:ab76]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::5488:868f:fe1e:ab76%6]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
+ 12:52:06 +0000
+Date:   Mon, 25 Jul 2022 15:52:02 +0300
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     broonie@kernel.org, enachman@marvell.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        lnoam@marvell.com
+Subject: Re: [PATCH 4/7] spi: a3700: support BE for AC5 SPI driver
+Message-ID: <20220725125202.GA5304@plvision.eu>
+References: <20220723102237.10281-1-vadym.kochan@plvision.eu>
+ <53b307a3-67e0-2acd-5d4a-0970f717afa7@wanadoo.fr>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAP6Zq1hu4GtFrLa5O_7gyszXwpfijJF=XU0hdw8FBbvj3Bk8Hg@mail.gmail.com>
-X-Cookie: Replace with same type.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <53b307a3-67e0-2acd-5d4a-0970f717afa7@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: GV3P280CA0114.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:8::32) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:38::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 43f5fe9d-b46d-4409-536b-08da6e3c7ad7
+X-MS-TrafficTypeDiagnostic: DU0P190MB1931:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2f6PuFA7xSP1/8rWTm081jHCSdNr7Ot2TNl34x4IjFH4jzqXIY+4bFT/rng2Ck65OSjCbtXEtipcYgXAPolgfpEt3xo4ptFB0U58QMelP5xB1HEH0w4Sg5+55KSzwO6Sr8PJiUPGtJxJ40bP2fQA4fzuhH3NftpvdROG6BPnYStBMbBjv40WuibkXfjCcK3sfJ2tZ4w6kKvHVO3XJlmrv5hX9Atiuy8wNbqPAdpWM5gUQGBSKl3yPyRIg55f1crAj9oS4DjNlXEU3o0D3is1vLfnD9KIKQLhRFMHfWUWGgGlUoEusri+aZFIltpoa1CKLIzucvsRz1AFEP17RUSix2v8CJ2INm6IaTEWXBGme9aCCrQVtIa6ez64El0d2KLdca+nhTCDKmESWWPnpvNJAHtADRGDGRq/Alxs8Cw+xA/0X+STE9+cGeEi28TSbsaA/bdvN7WAlvB1Ua+SdVL5caHfGE8vxlKoyz5fDOVkpHlEg9Hb3TC+SP5rUtJ7ABi7hlECS6Gu0Y9hGdcvtgcG73eurI1WxCyFWJyQCT1PYt599h3Agma/Ea9ZoXTX++OuTycWrcSQxEUfa69Zn/2qPqJwAX7M6XFubCYv/AgJVH+Lw98ErxtwB7x7BnvBoTBQkddaUjto/cLY5ASbjUxHWmTPWVtm5Qu1zS1wD2kBiRjcky4fkENtFj9RXUoQF+vkGxH1epb8aTCwi93T8lm1W5PgfG+eFler31F1N4JCJ0d0ucPXDmlAFZZQpdKVzfj2DknUO3aigvLtmzA344NS1+W89XKUOj9vf2ON+FmvFls=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(396003)(39830400003)(136003)(6486002)(6916009)(41300700001)(6666004)(478600001)(316002)(2906002)(66946007)(4326008)(8676002)(66556008)(66476007)(5660300002)(44832011)(83380400001)(8936002)(186003)(33656002)(36756003)(38100700002)(6506007)(1076003)(2616005)(52116002)(38350700002)(26005)(86362001)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yOQJflnkg2sKB2Iniv7t4NiE5DvKvh8HGLTgdaMNm81x3jgLRh6IaILAgK?=
+ =?iso-8859-1?Q?6nJNOpeQA7TUghin0HwqXOcyVDwCEackk+ZDyV4JBEW3LZTNRRVq7Ytpus?=
+ =?iso-8859-1?Q?WQ9SVZddCJJbEqL1eYLNnmfNDeZ4Xs8CUV0emuUcpqOARYkoC1lP7o5Nsn?=
+ =?iso-8859-1?Q?PsJEjT2tq/lBVIRdc8Sfu3TMdKUuQfTGYc6DPfo6hTS4ECuHqwfyaEIqx9?=
+ =?iso-8859-1?Q?g/h5TdgGxpw8F36s1IsqSKWYqiLH/4yeBmBFKbe7g34HobdBSopBbHCrQS?=
+ =?iso-8859-1?Q?F8jrSe7m8cyBjv7ddtv2/yjuZuuHjVRV6fyDG90JH2OXpOEN9svBbgJtPW?=
+ =?iso-8859-1?Q?BvU73/b/22IaPt7QKjP7wPGeJvq3MDUksAsGFDsw48cpCNCIXe0Bm9Mzfz?=
+ =?iso-8859-1?Q?IvxbynxE2f6jf1tRAn9a3GeWYXDTji+I4ucTjLvhhp0W1GEl2GmzlAhpoF?=
+ =?iso-8859-1?Q?ld5yqZgGDtSW/F3U/reCwDeo6/iMq9+kva2tIdBtwRWK9SAoRvd7lvI3t1?=
+ =?iso-8859-1?Q?0ESrtvUzuJayCQRotcmjqWX/uzBl/cBp+szhtnsBPEiCWv0op03O+iLcUy?=
+ =?iso-8859-1?Q?Gs9C8m9RSpHXbMidH+blmqv3W0BDMQmyTrq4sMnX4MSe+4ZmDV2H3fXTa6?=
+ =?iso-8859-1?Q?9mTngIgiUM/aQSa0qSJbUvxitnnxLCkhpo4PjwWm0vbE3RP3N3O5GehJMJ?=
+ =?iso-8859-1?Q?zLBNhpAmJYvDFmDBEguTpVtykKd4JQFSllQUetj8kADB3S7PfOz/aLLS2I?=
+ =?iso-8859-1?Q?NOtwUjB9Q/QRLm8dFj522ZOym4y1GBHWQyptOnvVygKeIFfdj099qIcF8X?=
+ =?iso-8859-1?Q?T68Q6o6LFWU+tKRXZx3v359U4IzLqPUS3dyo50rfYI49EiM9dch6u70K+E?=
+ =?iso-8859-1?Q?S47+Te9SIvFUG2lNQvQXSlAmZNQjvNf2wRRBPl7vJ9qgDXx6+gyLsdWnwe?=
+ =?iso-8859-1?Q?cCOUdvuNCd3lrWVhQ72mvNh+BNIAqhV4j/bvsEBcoUe9iuAzqcGvWZIE/G?=
+ =?iso-8859-1?Q?eNOLIhMcXo4iAMryqSdKEu4eyWLv/7rs/HnApDUF5lw+3eA/KQ0rjsCFbh?=
+ =?iso-8859-1?Q?fjNn57Iu3Ln+wfR83E5nRU92jcqmD6+a63AUvFLmnut/0BfohoJ3nx4RZu?=
+ =?iso-8859-1?Q?n2R8i/F/MpF/WctNSRlC2BtzFgE3/hEy0vc35ZujXgga797bK/HX5dYK1w?=
+ =?iso-8859-1?Q?bja5hAyPjvi+39UQ0X1XwXZjuJ2eebizFISU54ME+lEBKNnkL/I/k4J/87?=
+ =?iso-8859-1?Q?KefjqCnUO3D+++e0ed2xYhSaXY5kYsvnJmz8BdZsYpXgG/7NJ0wsYGHCFe?=
+ =?iso-8859-1?Q?DneSi5F22LLxEjL2VEiYhSSsuFEn2s8wgoHLjujoO/G/ME5JDFM94Htpty?=
+ =?iso-8859-1?Q?/8QcyW9uTnqyG9edV6I/j4xDf8cXD/eK1FnDlytL+cLRSGw/3S+AFqxHVY?=
+ =?iso-8859-1?Q?4Nmf0CDm+m+fsbD1s8oo980l8achQYZM0AVJXB4zTdsZuVn5vt5+oQABWP?=
+ =?iso-8859-1?Q?i1TbwNxi4MPennIObJkcWFgDylv1PWiIbY+ChT/YsE4ZqmDMfTEkbicp96?=
+ =?iso-8859-1?Q?Jtm3A+1JZw8jZDdmRvYh0oWdSEAReTF+9r2xvdi2hhmKByAAEeVnvmKe5K?=
+ =?iso-8859-1?Q?NJ0R5D1DAxZTwC8IYVK+SSK/ZxhQdsjLY9K9wnj4L3mMYShvJduWVSrw?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43f5fe9d-b46d-4409-536b-08da6e3c7ad7
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 12:52:06.6558
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z/3cu0OXJ8z9FRViiU7NcWb3jeB1NNLrCDWe6L5Snc4Su1AGcKrYLySWzykpTuE2E0wzbPhtfY1tAkGqc+hiYr+TG0z4bagwFlSddcaJNdM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P190MB1931
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Christophe,
 
---xAtPP1KaYCL3Kz0X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sat, Jul 23, 2022 at 12:49:55PM +0200, Christophe JAILLET wrote:
+> Le 23/07/2022 à 12:22, Vadym Kochan a écrit :
+> > From: Noam <lnoam-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
+> > 
+> > Tested-by: Raz Adashi <raza-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
+> > Reviewed-by: Raz Adashi <raza-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
+> > Signed-off-by: Vadym Kochan <vadym.kochan-Nq3fbkz6jlnsq35pWSNszA@public.gmane.org>
+> > ---
+> >   drivers/spi/spi-armada-3700.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
+> > index d8cc4b270644..386c7959ea93 100644
+> > --- a/drivers/spi/spi-armada-3700.c
+> > +++ b/drivers/spi/spi-armada-3700.c
+> > @@ -497,7 +497,7 @@ static int a3700_spi_fifo_write(struct a3700_spi *a3700_spi)
+> >   	while (!a3700_is_wfifo_full(a3700_spi) && a3700_spi->buf_len) {
+> >   		val = *(u32 *)a3700_spi->tx_buf;
+> > -		spireg_write(a3700_spi, A3700_SPI_DATA_OUT_REG, val);
+> > +		spireg_write(a3700_spi, A3700_SPI_DATA_OUT_REG, cpu_to_le32(val));
+> >   		a3700_spi->buf_len -= 4;
+> >   		a3700_spi->tx_buf += 4;
+> >   	}
+> > @@ -519,7 +519,7 @@ static int a3700_spi_fifo_read(struct a3700_spi *a3700_spi)
+> >   	while (!a3700_is_rfifo_empty(a3700_spi) && a3700_spi->buf_len) {
+> >   		val = spireg_read(a3700_spi, A3700_SPI_DATA_IN_REG);
+> >   		if (a3700_spi->buf_len >= 4) {
+> > -
+> > +			val = cpu_to_le32(val);
+> 
+> Hi,
+> 
+> even if both should generate the same code, should'nt this be le32_to_cpu()?
+> 
+> CJ
+> 
+> >   			memcpy(a3700_spi->rx_buf, &val, 4);
+> >   			a3700_spi->buf_len -= 4;
+> 
 
-On Sun, Jul 24, 2022 at 12:35:37PM +0300, Tomer Maimon wrote:
-> On Thu, 21 Jul 2022 at 16:46, Mark Brown <broonie@kernel.org> wrote:
-> > On Thu, Jul 21, 2022 at 01:15:55PM +0300, Tomer Maimon wrote:
+Thank you!
 
-> > > This patch adds full duplex support for NPCM PSPI driver by storing all
-> > > rx-data when the Rx-buffer is defined also for TX-buffer handling.
-
-> > This doesn't seem to entirely correspond to what the patch does, nor to
-> > what the driver currently does?  I can't see any dummy read code in the
-> > current driver.
-
-> In the current handler file, in the handler function.
-> static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
-
-> -       if (priv->tx_buf) {
-> -               if (stat & NPCM_PSPI_STAT_RBF) {
-> -                       ioread8(NPCM_PSPI_DATA + priv->base);
-
-> the read above doing a dummy read
-
-That's reading a single byte, not an entire buffer, and from a quick
-glance looks more like an ack.  Though perhaps you just end up with a
-lot of interrupts and do that anyway.
-
---xAtPP1KaYCL3Kz0X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLeiUkACgkQJNaLcl1U
-h9BdCQf/QdlNiAcmCougz2zZbczwVhrOeD9z3yH0yaWm4vI2eCWPVZ8A8YdC/oYC
-hyo8qoU5Aa4cSorcJ0cTQf+P5mbi18i67ZMCTkSIhMGMpo1ozHNMX5RvD7ykhUNQ
-hMZUpNohI+yjLHhGaGzZhROgKbmuvwnacC7fBUmcOKDnwpoy7z346AgP0usZkt8w
-6tz5ffXZvBfOTBZ9iOXo7xtv+YvMekDS0DEyZCo1O92gcWlJgV/xanBOTBR+ba2E
-tDeIxu1gForYMOKwGHeHKpFG8uIy/qeNRx2gOV9YW5yV9iFtax+zdJBcjrPmFGKI
-wsXb4i/iIfSCpPAftoTR8IjOjzUGng==
-=GWj5
------END PGP SIGNATURE-----
-
---xAtPP1KaYCL3Kz0X--
