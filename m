@@ -2,104 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55105807DC
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 00:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1357580808
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 01:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiGYW5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 25 Jul 2022 18:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S229801AbiGYXOO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 25 Jul 2022 19:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiGYW47 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 18:56:59 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F371EC61;
-        Mon, 25 Jul 2022 15:56:54 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso9698456otb.13;
-        Mon, 25 Jul 2022 15:56:54 -0700 (PDT)
+        with ESMTP id S231604AbiGYXOJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 19:14:09 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834FB12ADC;
+        Mon, 25 Jul 2022 16:14:08 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-10cf9f5b500so16719214fac.2;
+        Mon, 25 Jul 2022 16:14:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=8G3Mm+NgIeVbS725ckPK31yPoR4kpxEiiHwhot9k/Nc=;
-        b=HyGnRurHgjFGzkE6AJ032h8SPiAO0SR9z2mRe6skYcmbFeGVZyLNtERRR54VWE/PJl
-         cs+bk3CKFbDtVASg2Gkd2eQCo7tA+TiqZ1ilPPAhy2cDQLEbHiA9l7AivbRzpft0aHUb
-         uIpY8SaLWrVRSW00C/EnQEs0IDmhqn76lrALGxdwaohOtAjvGz2djFAFlkfXY9XL5cFw
-         e8kNTR8II+dY6ZIFsdZ0GnOfOC3KDsgeolFnZXmklGQzx3nfARt0Fe3ewG5kezRik1QM
-         55obWTW5VZWTCJI8e+4vHpqoFH0rU4ngwRhwgMP1BSlaokCxwUT5/4GRvGCEQBWTo4pR
-         pfJA==
-X-Gm-Message-State: AJIora8XyyzYPdPF4Cix/hkPQxm7KzG5PWx0Rb+f7vCEiEKi9fJ9QCuI
-        WsSWBo2Yfui1UzbyCtqbRziAMAq3bw==
-X-Google-Smtp-Source: AGRyM1uK8ktfyXTn2VznXnPkErlmaz2g0keJTy1EP9+gYpUQVBWi5vIvutDGqn2Kvhy6iuZ6pso49A==
-X-Received: by 2002:a9d:7a59:0:b0:61c:e43d:eaec with SMTP id z25-20020a9d7a59000000b0061ce43deaecmr5770927otm.7.1658789813917;
-        Mon, 25 Jul 2022 15:56:53 -0700 (PDT)
+        bh=IT9a0wSsGnU4XfNa0zlbA+WkW9Dbub1UMbz6KfLI6MY=;
+        b=pj9o3XWsClJo3/4Wppy2MdfichiXBaaaTyk2IebGc+8yQjxtS9pu47MRr0Hp/d9kDt
+         mAl9WyvUnD/jfqDFHEj6uOskHHjXGNm1rbKUdtHi0DY9Rp2q6g6LHbRqzNh6PYwY81mS
+         4+rVG7ZUIgpRJeVeXHwpCrA0Y6tD3rGJ0jIJ+prVHCym53emCzT08JXSvfoMfa89LFhs
+         Asy/Kt1xJfFiwYSwESc4nKH1jHGrnlQHlEX5XPzn4BhVhZvg8zwJ/ZIytfk4Dk3etv7W
+         f/3ylCCmcM64bJgC6vvQV+LGqe6ha6v0m+mGidxtTw3EtdffVanvTNVaaSsk/4MM+ME4
+         5jRQ==
+X-Gm-Message-State: AJIora9eDKyMIR3rZrAljGzTUmNdKUtI8RrD+WtrRmCX9v5/mAS2IUz+
+        DbHxv55Tlavg1aMxkKxwNg==
+X-Google-Smtp-Source: AGRyM1sOEaENPiaKZi6zm2YQdCZcWqFgTUzFmo56Scl3zxQjWiAN/UML1fly4p3EtWEnkVWhfcKP5g==
+X-Received: by 2002:a05:6870:9a1d:b0:10d:c9c5:e16a with SMTP id fo29-20020a0568709a1d00b0010dc9c5e16amr7700750oab.135.1658790847779;
+        Mon, 25 Jul 2022 16:14:07 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id n8-20020a0568301e8800b0061c530ec022sm5445611otr.79.2022.07.25.15.56.51
+        by smtp.gmail.com with ESMTPSA id 62-20020a4a1541000000b0041b49c19a00sm5359166oon.18.2022.07.25.16.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 15:56:53 -0700 (PDT)
-Received: (nullmailer pid 2904901 invoked by uid 1000);
-        Mon, 25 Jul 2022 22:56:50 -0000
-Date:   Mon, 25 Jul 2022 16:56:50 -0600
+        Mon, 25 Jul 2022 16:14:07 -0700 (PDT)
+Received: (nullmailer pid 2932291 invoked by uid 1000);
+        Mon, 25 Jul 2022 23:14:05 -0000
+Date:   Mon, 25 Jul 2022 17:14:05 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
-Message-ID: <20220725225650.GA2898332-robh@kernel.org>
-References: <20220722114136.251415-1-tmaimon77@gmail.com>
- <20220722114136.251415-2-tmaimon77@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Belisko <marek@goldelico.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-spi@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH v2 1/1] spi/panel: dt-bindings: drop CPHA and CPOL from
+ common properties
+Message-ID: <20220725231405.GA2931469-robh@kernel.org>
+References: <20220722191539.90641-1-krzysztof.kozlowski@linaro.org>
+ <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722114136.251415-2-tmaimon77@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 02:41:35PM +0300, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 PSPI.
+On Fri, 22 Jul 2022 21:15:39 +0200, Krzysztof Kozlowski wrote:
+> The spi-cpha and spi-cpol properties are device specific and should be
+> accepted only if device really needs them.  Drop them from common
+> spi-peripheral-props.yaml schema, mention in few panel drivers which use
+> them and include instead in the SPI controller bindings.  The controller
+> bindings will provide CPHA/CPOL type validation and one place for
+> description.  Each device schema must list the properties if they are
+> applicable.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  .../bindings/display/panel/lgphilips,lb035q02.yaml    |  3 +++
+>  .../bindings/display/panel/samsung,ld9040.yaml        |  3 +++
+>  .../bindings/display/panel/sitronix,st7789v.yaml      |  3 +++
+>  .../devicetree/bindings/display/panel/tpo,td.yaml     |  3 +++
+>  .../devicetree/bindings/spi/spi-controller.yaml       | 11 +++++++++++
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml | 10 ----------
+>  6 files changed, 23 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
-> index b98203ca656d..a4e72e52af59 100644
-> --- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
-> +++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
-> @@ -3,7 +3,8 @@ Nuvoton NPCM Peripheral Serial Peripheral Interface(PSPI) controller driver
->  Nuvoton NPCM7xx SOC support two PSPI channels.
->  
->  Required properties:
-> - - compatible : "nuvoton,npcm750-pspi" for NPCM7XX BMC
-> + - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
 
-Who/What is Polog? Board/BMC vendor? If so, that should not be in SoC 
-bindings.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> +				"nuvoton,npcm845-pspi" for Arbel NPCM8XX.
-
-Same for Arbel.
-
-To answer your question on fallback, just put:
-
-    "nuvoton,npcm845-pspi", "nuvoton,npcm750-pspi" for NPCM8XX BMC
-
-
->   - #address-cells : should be 1. see spi-bus.txt
->   - #size-cells : should be 0. see spi-bus.txt
->   - specifies physical base address and size of the register.
-> -- 
-> 2.33.0
-> 
-> 
+Unless Mark doesn't want to pick this up.
