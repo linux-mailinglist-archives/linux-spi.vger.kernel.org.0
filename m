@@ -2,52 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1168580559
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Jul 2022 22:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADCF5805F2
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Jul 2022 22:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbiGYURF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 25 Jul 2022 16:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S233079AbiGYUtw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 25 Jul 2022 16:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236805AbiGYUQv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 16:16:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AE237E4;
-        Mon, 25 Jul 2022 13:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Vam91HtFgm/m4TjFIqmlBnedpAiTbay3DqOChZgZtO4=; b=cfeHSMVcbO9fMhs5zdOdj2LtWP
-        MkNrQ/NYRJNFSCDkVsDFs+QkFonh1JTK+W9zQOhmsLtKRER5uM8A2ianh9Sasff4yT1IBpVCpKGzT
-        T/f7gf2WPfVO6dn+IsMclT0f+lpGaHNwxAXzfSddPNfa9CpOdDGL52YuiYdiQwxvoemIto4LNulG0
-        mKbA7iVs+lyG0qhGifjXZAf8QEd1+u3W4LgALtjLL8jR7MhfyGLHHWI11RwZlVcWLHvo6HYEgg698
-        LNnYBLaDllK1CF8URqhgk/mjNgj03fpXVZq4IKjYJ/2LwMoLVqHzaQgE7nsNdaPD5OWR9GZ5Iw/4b
-        xNA7npbg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oG4Uc-001nJU-Qg; Mon, 25 Jul 2022 20:15:54 +0000
-Message-ID: <7edae5b4-3561-f1d2-5b7c-c8a69f0f1ef3@infradead.org>
-Date:   Mon, 25 Jul 2022 13:15:53 -0700
+        with ESMTP id S230111AbiGYUtu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 Jul 2022 16:49:50 -0400
+X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 13:49:49 PDT
+Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A8423159
+        for <linux-spi@vger.kernel.org>; Mon, 25 Jul 2022 13:49:49 -0700 (PDT)
+Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.245]); authenticated
+        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oG4YN-0007hQ-Nw; Mon, 25 Jul 2022 22:19:47 +0200
+Message-ID: <be60acab-7dfe-6841-b176-4bd1e875d52e@birger-koblitz.de>
+Date:   Mon, 25 Jul 2022 22:19:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/5] spi: spi-gxp: Add support for HPE GXP SoCs
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
 Content-Language: en-US
-To:     nick.hawkins@hpe.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
-References: <20220725201322.41810-1-nick.hawkins@hpe.com>
- <20220725201322.41810-2-nick.hawkins@hpe.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220725201322.41810-2-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net
+References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
+From:   Birger Koblitz <mail@birger-koblitz.de>
+In-Reply-To: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-bounce-key: webpack.hosteurope.de;mail@birger-koblitz.de;1658782189;a3a81d43;
+X-HE-SMSGID: 1oG4YN-0007hQ-Nw
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +43,30 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi--
+Hi Martin,
 
-On 7/25/22 13:13, nick.hawkins@hpe.com wrote:
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 3b1044ebc400..543e4a5b5ffa 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -371,6 +371,13 @@ config SPI_FSL_QUADSPI
->  	  This controller does not support generic SPI messages. It only
->  	  supports the high-level SPI memory interface.
->  
-> +config SPI_GXP
-> +	tristate "GXP SPI driver"
-> +	depends on ARCH_HPE || COMPILE_TEST
-> +	help
-> +	 This enables support for the driver for GXP bus attached SPI
-> +	 controllers.
+On 25/07/2022 21:35, Martin Blumenstingl wrote:
+> The code seemingly tries to clear RTL_SPI_SFCSR_LEN_MASK (before then
+> setting either RTL_SPI_SFCSR_LEN1 or RTL_SPI_SFCSR_LEN4) and
+> RTL_SPI_SFCSR_CS. What it actually does is only keeping these bits and
+> clearing all other bits, even the ones which were just set before. Fix
+> the operation to clear the bits in the selected mask and keep all other
+> ones.
+> 
+> Fixes: a8af5cc2ff1e80 ("spi: realtek-rtl: Add support for Realtek RTL838x/RTL839x SPI controllers")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> I stumbled across this while reading the driver. This patch is untested
+> because I don't have any hardware with this controller.
+I believe your fix is correct. In the meantime, more information has been
+learned about this hardware, in particular, newer SoC versions and the possibility
+to have parallel IO and hardware which uses different chip selects.
+I came up with the following patch for supporting this, and it achieves
+what you also propose:
+https://github.com/bkobl/openwrt/blob/rtl8214qf_merge/target/linux/realtek/patches-5.10/317-spi-cs-support-for-spi-realtek-rtl.patch
+It is still is a bit rough, reading it I immediately saw 2 things that
+would need to be fixed, but it also improves e.g. that RTL_SPI_SFCSR
+is now configured independently of what u-boot did to it.
 
-Documentation/process/coding-style.rst says:
-
-For all of the Kconfig* configuration files throughout the source tree,
-the indentation is somewhat different.  Lines under a ``config`` definition
-are indented with one tab, while help text is indented an additional two
-spaces.
-
-thanks.
--- 
-~Randy
+Cheers,
+   Birger
