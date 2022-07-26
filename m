@@ -2,81 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87636581049
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BB2581073
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbiGZJrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jul 2022 05:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S232883AbiGZJ5L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jul 2022 05:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238492AbiGZJrR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:47:17 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B963204F
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:47:13 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so21923929lfr.2
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:47:13 -0700 (PDT)
+        with ESMTP id S237447AbiGZJ5J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:57:09 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FC32F388
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:57:08 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id d17so19797243lfa.12
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JG0xRZmWb8mvx5i0TSYuzFaz/yiY+cwQ7/x7y0JIQ+0=;
-        b=eAYkTZ4sTc+PK3E0Ok2+638pi4Yw+VDFEaWLrLgw9i2SeHuFVGjZBZ+oi0fzpCGH0L
-         TkbDzx+cV7nvJXI5zCHMM45U1BHe2cdlJxmcUXbAItFoy7zsRsnFWft9jogs+BxSyifY
-         ItkBpzVb9TIsYt5/dfXem6cQZbOId2mxD8BcRiEIdcVf5nMaxnRVKH9kWVLXhmZoLNd2
-         +rnAVIgPEcx4eR7YHId0vwmPQBLGJWdE/9n9v+meAeUqT6PPZpXo9AyvgBMUp9tM6bac
-         85/Dch0ioAmYIqDtLGVdzXjQVK+jB8cH+DE2mA3EB+i6clSIOisOd4hIyhU0LIc+BvyH
-         sqtg==
+        bh=I73BOjVPhMR1wc1m6D3pt9KtMoseeendX/4GKU5hxhU=;
+        b=uEAVBlqVVpEO4CRjG+b8EQKwATuT7yiqOEkQv2ZTiLFyrJ2jiaeYPaMsuRlf6yjGgI
+         ZJMG1YC33LrAUnOLH0nIZwePRnjLOcyXgb5hUEmvl/VN0qoOyXr476hzGEvNh9WAbOgg
+         HOmiqK27ag6K9Va5mWQyMOG4FYVmDG9FefW5OasSubq2C8mu++pER4+2qanR+JG5faBM
+         F6yTP57/+k08+9lUA2BdtAR4Baq509d11FRvQSade9qtzPtSEB/RRK9P8nD3D174hQAC
+         od5Bui/cx6nCgtoU7ZnLVGaHE73DLFShMwVJLzuV1kxlf+ShM1s8kLlPRbt3OymhUCb3
+         xB9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JG0xRZmWb8mvx5i0TSYuzFaz/yiY+cwQ7/x7y0JIQ+0=;
-        b=2vs1jvibThyE7hp98HGebP5A+83hHzkFc6Qt705ueT18qAkyhV4+IzHs4mC0QVEn3E
-         e16aQI8lOmpzZv3UVvu8tNO7ZFMuyUWIhbhT6EtK6iC/Mz11+10ZmoQpCmJRm680MSF+
-         P7Q3r5E6SJMHneqUSA9X0IcyH1KoGP24dt6y7NaP9ISDYv1RcoxcihoQ7LvhghjYpCnr
-         h0noa7AIT2nezrV8rTgVW4uMvMV1Olc6zyF8r0P8PeGC/u3qF921XbdjIfGUwpXm6zlO
-         3Qx1wE3Yv5I9Mry0bwZLkGI3vj90nvaPPMvQX5G8mQeN6tU5MbPYYGhUBJZ4NeEkafmj
-         GPRw==
-X-Gm-Message-State: AJIora+AzulwHT0ZcqIfWQKhfcZ+vltmubd1p3/2uIruHxwqqQO02l9s
-        b0pMefCyMNvkpKY+7Rj9Z3c00Q==
-X-Google-Smtp-Source: AGRyM1vRwPnG7NSomcC7bgx3FgRfofno1LdnnoS0lQ7saUTLfwKfPk7rQo02FYi52y9BfWcIRZ7fOw==
-X-Received: by 2002:a05:6512:4020:b0:48a:8d1b:c8c3 with SMTP id br32-20020a056512402000b0048a8d1bc8c3mr3589538lfb.131.1658828831837;
-        Tue, 26 Jul 2022 02:47:11 -0700 (PDT)
+        bh=I73BOjVPhMR1wc1m6D3pt9KtMoseeendX/4GKU5hxhU=;
+        b=EXjyra+PAfhhakn8neIm1lS59i34cDyoD1u/QxpfC9CZO2EnkrbZtRaRjZLdAl3aBo
+         xQfwrqiA48FPvFSMzP2WUFrCDM8nrvST+Q8i7JICYBoIgelTR4jyQP/Ie9R9U4ZcIQMO
+         kx0ghGFEYrQQp1HLjzQJ4B6WawpfYrshDlmSnWdkKHhjx88lsv9yrjzkj0yOrTNl6KYQ
+         d6+tuaXip0z5/KigMZlAMJqKfxSRPCWb1ZvNQgBUuLCoHHjw2EdLHeR0osP9Zdndo30W
+         BBMc4dd0k9Qil7TsOGfg52OxGeMBvLx1XWJwW6lWjN2hQb+HoyP75fKoFTqN86HD/crN
+         LMRw==
+X-Gm-Message-State: AJIora897JOipGA9OY73LDat6D2K7nBPLU34Drjhmp6lJ4WIU4bFcwjJ
+        v1jwoztEg0eCwRQZYgQ9xrAIng==
+X-Google-Smtp-Source: AGRyM1sK7VXFeDB7oQjs/mToNuKVBnT8UhRL+0xdhS1pEpYSUMMEDkLwMhuiBIzgXwdUH2Gx8I5lRg==
+X-Received: by 2002:a05:6512:1288:b0:48a:aa31:2838 with SMTP id u8-20020a056512128800b0048aaa312838mr424327lfs.683.1658829426372;
+        Tue, 26 Jul 2022 02:57:06 -0700 (PDT)
 Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id g31-20020a0565123b9f00b0047fb0d5e049sm3120559lfv.273.2022.07.26.02.47.10
+        by smtp.gmail.com with ESMTPSA id c20-20020a056512325400b0048a98b7bad3sm605377lfr.197.2022.07.26.02.57.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 02:47:11 -0700 (PDT)
-Message-ID: <20869b88-41f3-9e9c-347e-17c3d01baa5d@linaro.org>
-Date:   Tue, 26 Jul 2022 11:47:10 +0200
+        Tue, 26 Jul 2022 02:57:05 -0700 (PDT)
+Message-ID: <d34ff61c-d9b9-9f34-a00f-34a0304e47ee@linaro.org>
+Date:   Tue, 26 Jul 2022 11:57:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] spi: npcm-pspi: Add NPCM845 peripheral SPI support
+Subject: Re: [PATCH v2 1/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, Mark Brown <broonie@kernel.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>, Rob Herring <robh@kernel.org>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
         Nancy Yuen <yuenn@google.com>,
         Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         linux-spi@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>
 References: <20220722114136.251415-1-tmaimon77@gmail.com>
- <20220722114136.251415-3-tmaimon77@gmail.com>
- <afae04e0-76a3-1bcb-5b47-9944fa9ab2c0@linaro.org>
- <YtrvyyMGm64hFG5j@sirena.org.uk>
- <0c8688d5-b0c1-8cc1-ec27-292acbb38dfc@linaro.org>
- <YtrzF9BFJrXfxiz0@sirena.org.uk>
- <CAP6Zq1iRowFv4qg=AqdVmBRRx5p4-5AaC1G-aZs=2LnOAOELXA@mail.gmail.com>
+ <20220722114136.251415-2-tmaimon77@gmail.com>
+ <20220725225650.GA2898332-robh@kernel.org>
+ <CAP6Zq1j0pKHsX20t4ep9-6B_5pTe5MzkU__245F6tW7wFJESiw@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1iRowFv4qg=AqdVmBRRx5p4-5AaC1G-aZs=2LnOAOELXA@mail.gmail.com>
+In-Reply-To: <CAP6Zq1j0pKHsX20t4ep9-6B_5pTe5MzkU__245F6tW7wFJESiw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,41 +85,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24/07/2022 10:44, Tomer Maimon wrote:
-> Hi Mark and Krzysztof,
-> 
-> Thanks for your reply,
-> 
-> On Fri, 22 Jul 2022 at 21:57, Mark Brown <broonie@kernel.org> wrote:
->>
->> On Fri, Jul 22, 2022 at 08:47:24PM +0200, Krzysztof Kozlowski wrote:
->>> On 22/07/2022 20:43, Mark Brown wrote:
->>
->>>> ...with a fallback list required by the bindings so the driver actually
->>>> binds.  Note that bindings are currently not in YAML format so there'd
->>>> be even less enforcement of that than normal, and as they're currently
->>>> written the bindings don't require fallback.
->>
->>> Yes, the bindings document should be rephrased but we were living like
->>> that for few years. :)
->>
->> The binding document as it stands only has one compatible, there's no
->> existing problem with it other than the YAML conversion.  If we're
->> adding something new that requires a fallback we should be explicit
->> about that rather than have something that's actively misleading where
->> previously things were clear.  I don't mind if we add the compatible to
->> the driver or document the requirement for the fallback but we should do
->> one of the two.
-> 
-> is V2 good enough? adding the compatible to the driver and the document?
-> Or should we use fallback?
-> If fallback is choosen, can you explain how I should do it?
+On 26/07/2022 11:30, Tomer Maimon wrote:
 
-I propose to use fallback. The preferred way is to convert it to DT
-schema and then add new device support (so two commits). Other
-acceptable way is to rephrase the TXT so it clearly states desired
-compatibles - one for old device, two for new devices. There are plenty
-of examples in current sources.
+>> To answer your question on fallback, just put:
+>>
+>>     "nuvoton,npcm845-pspi", "nuvoton,npcm750-pspi" for NPCM8XX BMC
+> In the document?
+> because I don't remember doing so in other documents that I use fallback.
+
+If they also you fallbacks, then the other documents have now incorrect
+text.
+
+> I need to do it in ymal files as well?
+
+Depends on what you want to add and what you actually added... Let's be
+specific - point to specific commits or files in linux-next. If they
+were not applied - give lore.kernel.org link.
 
 
 Best regards,
