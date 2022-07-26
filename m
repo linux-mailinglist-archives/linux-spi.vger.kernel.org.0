@@ -2,160 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC9D581078
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C28A5811C3
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 13:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiGZJ5r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jul 2022 05:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S232707AbiGZLRK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jul 2022 07:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiGZJ5o (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:57:44 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904631DC3
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:57:15 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u5so19415424wrm.4
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iUicZLyBaZmjv2lqx7fW4HMBGqk7G7eOOVk/ONJ/4PI=;
-        b=a9jshOAIwiw5ztp0+n80iX49X5uP9g1fIPLWAKA0Oebli99rLSK1JSwbKX/TWSIEKD
-         O8RAu6x1EuYGsc6oXUYHrmfMJXvk5iAAbsgDFp3wtW13E5HsTmbU8dXiDaDJtMrBEKfo
-         BtLocFdB4gelyGOYkHzTosErUmhiDP8/zjswgy3RH2fFxA6Xdh3CA/yI5iTiW9jbWJ9K
-         oN+oMjKZdsMTijOKOP2BcUYtUHprOqVqAeK+KFkaDem1o5Ff7dUDZtyl1X5TpjYEAD8P
-         dBkE0hdxwnSaGXsfATXn6MSzu2tBqE1Ie2s0Wxg+NyX5ban32/phra4XzX8bj2k4iDT4
-         H/tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iUicZLyBaZmjv2lqx7fW4HMBGqk7G7eOOVk/ONJ/4PI=;
-        b=MrpIgND9LcyOyooT0Wt9QD8llXDUCRq3F7mbZMyWcbO6h4Z/AxTmKAU7BZ2tizWE5L
-         IaQArCoEJfqpXeX09Dzc1Y50EdwBGAbO78eJ5d8LSkVzzxZD0++cLmf5GH9NA0ch43pW
-         JRmPwGHMgMzxL2lUKchZ/I+KkuO2RdZSlMeOrr4tn5ZE9WM8StxAG4/JLdPHagzawzZz
-         8BuSPXW38KYG310oVgk+FBb3g8jyJGP1KClFfDjr0yv3uNl3goHGOvXqwb7dW3DcdU0n
-         U0IiuWS/qR8Z67HgmeOR9t7Lrb2fCRoTQwbk57fr8UBKg1I5+xaXm0dbv2FXTzY1Xwwa
-         S5QQ==
-X-Gm-Message-State: AJIora8HqpNxXSLqCW91hH6doxJeIYVhx+QDleo3eQR+cMmRcbBm1tnF
-        fGzOrpTPDvFGcS8wByw7jeLs6g==
-X-Google-Smtp-Source: AGRyM1vaVzTyQ5b+nn+RlJ42faxYO14TpuNlzllTL+nY6z4bb/G0nOBbFTz5DJTxQxp7SwpuN92A3g==
-X-Received: by 2002:adf:e84b:0:b0:21e:61cd:647e with SMTP id d11-20020adfe84b000000b0021e61cd647emr10370152wrn.715.1658829433726;
-        Tue, 26 Jul 2022 02:57:13 -0700 (PDT)
-Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id t3-20020a1c4603000000b003a2d87aea57sm21170873wma.10.2022.07.26.02.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 02:57:12 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
-        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
-        vkoul@kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Date:   Tue, 26 Jul 2022 11:57:11 +0200
-Message-Id: <20220726095711.708310-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
-References: <20220531135026.238475-17-fparent@baylibre.com>
+        with ESMTP id S232665AbiGZLRK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 07:17:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3DE30F49
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 04:17:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A256612D4
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 11:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C409C341C0;
+        Tue, 26 Jul 2022 11:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658834228;
+        bh=DW2on7dZVQwK3PwZ9Vgnbg8fpf0M6Ks8WeYNbZL/vSM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=oExBHHrAUqsdvX+lpoU5iWwX4+zPLaA/LAXGOdiD14bG2kaa7nBDfbowzYM1Z9Fqn
+         OZvUefcyvPYCP5tJFTfAno2KQzCMY3pfxO0Y/a3XfAngPBlOTQrVCwiJrsYp2KhDZ7
+         rvTfrY2RAwNKupJ+Lp1Q71+EZWUwwktqC92kXEaEDIFf2n8FdC8qRSV99AC3ZQvA0C
+         +ToUNjVlYn4fbAoj7rWt6Ahpygph+pkSyLhA7m49yg+U41TS+TmSnLN3caK7tT/89n
+         bF93ZAmSj4ZGkqZW+nMyeLnhqwmVK9U2bXTHkocQOkAqMh3njhOH4nwStAMFHsM9ay
+         BwqfhfKHJ1joA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Martin Sperl <kernel@martin.sperl.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Phil Elwell <phil@raspberrypi.com>, kernel@pengutronix.de
+In-Reply-To: <20220719105305.3076354-1-mkl@pengutronix.de>
+References: <20220719105305.3076354-1-mkl@pengutronix.de>
+Subject: Re: [PATCH v2] spi: bcm2835: enable shared interrupt support
+Message-Id: <165883422708.68856.17207191707677465295.b4-ty@kernel.org>
+Date:   Tue, 26 Jul 2022 12:17:07 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-c7731
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Fabien,
+On Tue, 19 Jul 2022 12:53:05 +0200, Marc Kleine-Budde wrote:
+> From: Martin Sperl <kernel@martin.sperl.org>
+> 
+> BCM2711 shares an interrupt betweem 5 SPI interfaces (0, 3, 4, 5 & 6).
+> Another interrupt is shared between SPI1, SPI2 and UART1, which also
+> affects BCM2835/6/7. Acting on an interrupt intended for another
+> interface ought to be harmless (although potentially inefficient), but
+> it can cause this driver to crash - presumably because some critical
+> state is not ready.
+> 
+> [...]
 
-Could you please add CPUIDLE support:
+Applied to
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-index 323c814c10cc..1df4075db58f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -59,6 +59,7 @@ cpu0: cpu@0 {
- 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
- 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
- 			clock-names = "cpu", "intermediate";
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
- 			operating-points-v2 = <&cluster0_opp>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-@@ -72,6 +73,7 @@ cpu1: cpu@1 {
- 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
- 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
- 			clock-names = "cpu", "intermediate", "armpll";
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
- 			operating-points-v2 = <&cluster0_opp>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-@@ -85,6 +87,7 @@ cpu2: cpu@2 {
- 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
- 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
- 			clock-names = "cpu", "intermediate", "armpll";
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
- 			operating-points-v2 = <&cluster0_opp>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-@@ -98,10 +101,42 @@ cpu3: cpu@3 {
- 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
- 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
- 			clock-names = "cpu", "intermediate", "armpll";
-+			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
- 			operating-points-v2 = <&cluster0_opp>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
- 		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			MCDI_CPU: mcdi-cpu {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x00010001>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <200>;
-+				min-residency-us = <1000>;
-+			};
-+
-+			MCDI_CLUSTER: mcdi-cluster {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010001>;
-+				entry-latency-us = <350>;
-+				exit-latency-us = <250>;
-+				min-residency-us = <1200>;
-+			};
-+
-+			DPIDLE: dpidle {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010004>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <800>;
-+				min-residency-us = <3300>;
-+			};
-+		};
- 	};
- 
- 	cluster0_opp: opp-table-0 {
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I have tested it on i350 evk and each idle state is used properly.
+Thanks!
 
-Regards,
-Amjad
+[1/1] spi: bcm2835: enable shared interrupt support
+      commit: 89fcdd53c2528b8f0ed34553aaf9826fe63848b5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
