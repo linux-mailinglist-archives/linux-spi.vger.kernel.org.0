@@ -2,174 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34304580B93
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 08:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECE5580F78
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbiGZGZ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jul 2022 02:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S229779AbiGZJDH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jul 2022 05:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbiGZGZP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 02:25:15 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 23:20:51 PDT
-Received: from st43p00im-zteg10073401.me.com (st43p00im-zteg10073401.me.com [17.58.63.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF542FFE0
-        for <linux-spi@vger.kernel.org>; Mon, 25 Jul 2022 23:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1658816001;
-        bh=yRHmeERdlt7oqcGU/fHpnGc2WxHp6d3zjEXgoabUAwk=;
-        h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:To;
-        b=aX+M5MX+VDddd7H88p4TecgeHOpVuobIXQ+gzJ48svYqMd/DyJwJBvhMzz32ryFMr
-         uCuEoksObANKG4RBhNqtAqqDmGNhwJmBF+txMZa72GJpwfDRAF1rUgcbBdKZ/pNfrg
-         6OklwSQwkAvNT+Yf9kdnAcHwDj1gpYp2rcjUhQsgF9J/KQRwMu+9Rfcl5zUtCAiP92
-         vh1PLmSRqkRoUyM1TLk7kFt7xttqmUxU0rDkA4RkzXPagx70Rb5NDg6grg7KqiIyM1
-         pKAQszZOLLg1C+UJjjZaroeIQ7LEytpXS78KFlSqSQ7ZuAbWkIs4TdOW7qoguBjmJS
-         i0hGGOSXKEx7Q==
-Received: from smtpclient.apple (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-zteg10073401.me.com (Postfix) with ESMTPSA id 4172DA80313;
-        Tue, 26 Jul 2022 06:13:20 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
+        with ESMTP id S229746AbiGZJDG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:03:06 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5AF29CAA
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:03:04 -0700 (PDT)
+Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 2663E301247;
+        Tue, 26 Jul 2022 11:03:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1658826183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DxRye85q48crwir7NWYtcq+eVvb1dxCVznVhQQ9au+0=;
+        b=kyaf2s9HA9nXwxRPMH9yyVDNpWTf1cJ4DNPWbMZHh25nTIfu4PblPg3ZiHPB6mb82ejGfc
+        xNVQTbm/bHaqFHtQO9ylfeOZAi742vRYys0ZVp0zSPHb5bdPLsYmZQIj23Xr7OmzJBZp2J
+        De7BcJ2qKDMXZu1Mt8f3qpfsDNV5hZ0I0/79CkujFhVaKR3U0zQe36L9q99MTjJ4Emg/Yu
+        f7ArBhxgRTxxAkFpjZbWxbH9CgQMAl8+6fZVstSP8/xfGXCxTN3drI41bS7KDVGytReZXG
+        Rx1j2SVWMNmHwFp4ATxco1f6Hrs2Mz/MUkYIAWV296h/MDvyUUgB3DC+q6BK2g==
+Message-ID: <af067c133aa410370aaa4f11e334bc910b4c21e2.camel@svanheule.net>
+Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
+Date:   Tue, 26 Jul 2022 11:03:01 +0200
+In-Reply-To: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
+References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-From:   Vee Page <takeiteasy27@icloud.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 0/3] Add SFC support for Ingenic SoCs.
-Date:   Tue, 26 Jul 2022 02:13:18 -0400
-Message-Id: <38D8BFA7-21BD-4DC1-8B6E-68FC1766B6A8@icloud.com>
-References: <D7ACE3CD-3189-4988-BB44-F32514C70425@icloud.com>
-Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Tudor.Ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        aidanmacdonald.0x0@gmail.com, paul@crapouillou.net,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, jinghui.liu@ingenic.com,
-        sernia.zhou@foxmail.com, reimu@sudomaker.com
-In-Reply-To: <D7ACE3CD-3189-4988-BB44-F32514C70425@icloud.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: iPhone Mail (19B81)
-X-Proofpoint-GUID: Ll-uXQn0_l-BYjG1NU7j_qT7ADjy8jrB
-X-Proofpoint-ORIG-GUID: Ll-uXQn0_l-BYjG1NU7j_qT7ADjy8jrB
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.883,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2020-02-14=5F02,2022-06-21=5F08,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 clxscore=1015
- bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207260023
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Y=E2=80=99all stank nasty bitch ass niggas don=E2=80=99t have nothing else t=
-o say?
+Hi Martin,
 
-What now mother fucker is it past your bedtimes?
-
-Go society a favor =E2=80=A6..go to the nearest bridge=E2=80=A6and jump in i=
-t.
-
-Y=E2=80=99all can go continue your conversation six feet under. You sick stu=
-pid fuck.
-
-
-> On Jul 23, 2022, at 9:32 PM, Vee Page <takeiteasy27@icloud.com> wrote:
+On Mon, 2022-07-25 at 21:35 +0200, Martin Blumenstingl wrote:
+> The code seemingly tries to clear RTL_SPI_SFCSR_LEN_MASK (before then
+> setting either RTL_SPI_SFCSR_LEN1 or RTL_SPI_SFCSR_LEN4) and
+> RTL_SPI_SFCSR_CS. What it actually does is only keeping these bits and
+> clearing all other bits, even the ones which were just set before. Fix
+> the operation to clear the bits in the selected mask and keep all other
+> ones.
 >=20
-> =EF=BB=BFNo problem!!!
-> I forget to tell them. It=E2=80=99s okay though! =F0=9F=91=8C=F0=9F=91=8D
-> =F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=
-=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=
-=9A=F0=9F=98=9A=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=
-=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=
-=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=
-=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=
-=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F
-> I=E2=80=99m blushing! Last night was fun.
+> Fixes: a8af5cc2ff1e80 ("spi: realtek-rtl: Add support for Realtek
+> RTL838x/RTL839x SPI controllers")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> I stumbled across this while reading the driver. This patch is untested
+> because I don't have any hardware with this controller.
 >=20
->> On Jul 23, 2022, at 9:30 PM, Vanessa Page <Vebpe@outlook.com> wrote:
->>=20
->> =EF=BB=BF=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=9A=
-=F0=9F=98=8D=F0=9F=98=9A=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D
->>=20
->> Omg thank you Janika!
->>=20
->> I=E2=80=99m glad to see everything is okay just tell them next time!
->>=20
->> Love ya babes!
->>=20
->>>> On Jul 23, 2022, at 9:27 PM, Zhou Yanjie <zhouyanjie@wanyeetech.com> wr=
-ote:
->>>=20
->>> =EF=BB=BFHi Tomasz,
->>>=20
->>>>> On 2022/7/23 =E4=B8=8B=E5=8D=8810:47, Tomasz Maciej Nowak wrote:
->>>> W dniu 22.07.2022 o 18:48, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) pi=
-sze:
->>>>> 1.Use the spi-mem poll status APIs in SPI-NOR to reduce CPU load.
->>>>> 2.Add SFC support for the X1000 SoC, the X1600 SoC, and the X2000 SoC f=
-rom Ingenic.
->>>>>=20
->>>>> Liu Jinghui and Aidan MacDonald provided a lot of assistance during th=
-e development of this driver.
->>>>>=20
->>>>> =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) (3):
->>>>> mtd: spi-nor: Use the spi-mem poll status APIs.
->>>>> dt-bindings: SPI: Add Ingenic SFC bindings.
->>>>> SPI: Ingenic: Add SFC support for Ingenic SoCs.
->>>>>=20
->>>>> .../devicetree/bindings/spi/ingenic,sfc.yaml       |  64 ++
->>>>> drivers/mtd/spi-nor/core.c                         |  42 +-
->>>>> drivers/spi/Kconfig                                |   9 +
->>>>> drivers/spi/Makefile                               |   1 +
->>>>> drivers/spi/spi-ingenic-sfc.c                      | 662 +++++++++++++=
-++++++++
->>>>> 5 files changed, 768 insertions(+), 10 deletions(-)
->>>>> create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.y=
-aml
->>>>> create mode 100755 drivers/spi/spi-ingenic-sfc.c
->>>>>=20
->>>> Even tough it's still early in revision process, I'll add my
->>>> Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
->>>>=20
->>>> The test was performed with Damai DM6291A SoC which is a Ingenic X1000 I=
-P
->>>> but with 256 MiB RAM. No bugs yet observed on my side.
->>>=20
->>>=20
->>> Thanks for you test!
->>>=20
->>>=20
->>>>=20
->>>=20
->>> ______________________________________________________
->>> Linux MTD discussion mailing list
->>> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+>=20
+> =C2=A0drivers/spi/spi-realtek-rtl.c | 4 ++--
+> =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.=
+c
+> index 866b0477dbd7..e5ad0f11996f 100644
+> --- a/drivers/spi/spi-realtek-rtl.c
+> +++ b/drivers/spi/spi-realtek-rtl.c
+> @@ -49,7 +49,7 @@ static void set_size(struct rtspi *rtspi, int size)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 value;
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value =3D readl(REG(RTL_S=
+PI_SFCSR));
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D RTL_SPI_SFCSR_LEN_M=
+ASK;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D ~RTL_SPI_SFCSR_LEN_=
+MASK;
+
+Although typically a field mask has the only the bits of that field set,
+RTL_SPI_SFCSR_LEN_MASK is already inverted. So LEN_MASK has all bits set,
+*except* for those where LEN is stored.
+
+This means the code currently is:
+	value &=3D ~(0x3 << 28);
+
+which is correct AFAICT, as it clears the LEN bits, but keeps all the other=
+s.
+
+While this part is currently not wrong, I wouldn't be opposed to a patch to=
+ make
+it less confusing by not inverting the field mask in the definition of
+RTL_SPI_SFCSR_LEN_MASK.
+
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (size =3D=3D 4)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0value |=3D RTL_SPI_SFCSR_LEN4;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (size =3D=3D 1)
+> @@ -143,7 +143,7 @@ static void init_hw(struct rtspi *rtspi)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Permanently disable CS=
+1, since it's never used */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value |=3D RTL_SPI_SFCSR_=
+CSB1;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Select CS0 for use */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D RTL_SPI_SFCSR_CS;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D ~RTL_SPI_SFCSR_CS;
+
+This macro is not inverted, so it does clear any previously set bits, and
+probably doesn't end up with RTL_SPI_SFCRS_CS set. However, is in an init c=
+all
+and it doesn't appear to cause any issues later on, right? Is this because =
+the
+SFCSR register is (unintentionally) cleared and that is actually required?
+
+Best,
+Sander
+
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(value, REG(RTL_SPI=
+_SFCSR));
+> =C2=A0}
+> =C2=A0
