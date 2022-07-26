@@ -2,134 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECE5580F78
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100EC580FEE
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jul 2022 11:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiGZJDH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jul 2022 05:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S238140AbiGZJbP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jul 2022 05:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiGZJDG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:03:06 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5AF29CAA
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jul 2022 02:03:04 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 2663E301247;
-        Tue, 26 Jul 2022 11:03:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1658826183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DxRye85q48crwir7NWYtcq+eVvb1dxCVznVhQQ9au+0=;
-        b=kyaf2s9HA9nXwxRPMH9yyVDNpWTf1cJ4DNPWbMZHh25nTIfu4PblPg3ZiHPB6mb82ejGfc
-        xNVQTbm/bHaqFHtQO9ylfeOZAi742vRYys0ZVp0zSPHb5bdPLsYmZQIj23Xr7OmzJBZp2J
-        De7BcJ2qKDMXZu1Mt8f3qpfsDNV5hZ0I0/79CkujFhVaKR3U0zQe36L9q99MTjJ4Emg/Yu
-        f7ArBhxgRTxxAkFpjZbWxbH9CgQMAl8+6fZVstSP8/xfGXCxTN3drI41bS7KDVGytReZXG
-        Rx1j2SVWMNmHwFp4ATxco1f6Hrs2Mz/MUkYIAWV296h/MDvyUUgB3DC+q6BK2g==
-Message-ID: <af067c133aa410370aaa4f11e334bc910b4c21e2.camel@svanheule.net>
-Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
-Date:   Tue, 26 Jul 2022 11:03:01 +0200
-In-Reply-To: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
-References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        with ESMTP id S238027AbiGZJbM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jul 2022 05:31:12 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0DB248CE;
+        Tue, 26 Jul 2022 02:31:10 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a23so19435944lfm.10;
+        Tue, 26 Jul 2022 02:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IL3Z4+bwdRS3yxOZTNpNZKdqvlk3APcJ7jcbsYJVSmk=;
+        b=l6SHg/J5A0OUd8PSnS43zbEUAINghMLi0ClY87M7YZJOU1SRfY0cZpGXsr1ju7YAAk
+         /DR22tO/5n9CPiQeYtI+j6BnoywwsnfcU5ICBFO2BJd/7QvwoKtUpsMqZ62BXuTSRnaK
+         iX9My8uqm5wq3kROf9GWBFLp59n+0zotuzXO8qjqLLnd3VHsivnceSKRbNhfPUSGKCcG
+         ywxKtTMFpsQz6+gSRsJRwZtdWALuA1QLRYtz+hiQqv69/mtTFr7ToR5loJxRq6vxaE8f
+         bS0YfTZaK+bdlHfd8rXL5I1J2G4v63GuRjrWQr5tzwFWcMpnA1j8lBgOVVlHoPqqWshS
+         gjpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IL3Z4+bwdRS3yxOZTNpNZKdqvlk3APcJ7jcbsYJVSmk=;
+        b=RnKMT7Tn5cm4kSNrJLjaTyTHJTQbxBpfEBYzJFbeloJV/VAYxw15ZbMuDu/8jWCOa7
+         gpuSDYFuekolXyogPjkJJgKDSHxfSoFTDtkVrT5mJAqe36lNf1l5zykbXGqo1/I2SJw4
+         lCXlIMZYe2+T52i9IF0naXQ7nIAamfCvQUaAEJJ1mGdUIFUVHW7wDPFgTdrpOi1dN3F9
+         6ZyXrBEgeYafIPVN3dK0WsxERvN3QVH93yTkFTXcpb68Q3vgweYpBRPzmsT7h+DeJkPX
+         CRebImJaPYYaEU8IjxXCeN1uMNy1h3bDDjXvF0jzXwQ3nF6SgDeGYHv/Zb2FkcuOGBE0
+         unNw==
+X-Gm-Message-State: AJIora+LqffXqVrPFqnRuJdswGgkH/hk54sXXR8f9pWb5UhOrlWbGwF+
+        6Jqqz8XZvdREM7MazPIFvF3ZFA7hYWypZ0Y+y0w=
+X-Google-Smtp-Source: AGRyM1uL6DT83C459zUSdYi1GQWszpd4iNJjtzhdOjGifSm4yOssdUqu+X+HBkYa0gNl/VFvJe/TlxbmoZl5MFHL4M0=
+X-Received: by 2002:a05:6512:693:b0:48a:7c23:1896 with SMTP id
+ t19-20020a056512069300b0048a7c231896mr6390732lfe.111.1658827869026; Tue, 26
+ Jul 2022 02:31:09 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722114136.251415-1-tmaimon77@gmail.com> <20220722114136.251415-2-tmaimon77@gmail.com>
+ <20220725225650.GA2898332-robh@kernel.org>
+In-Reply-To: <20220725225650.GA2898332-robh@kernel.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Tue, 26 Jul 2022 12:30:57 +0300
+Message-ID: <CAP6Zq1j0pKHsX20t4ep9-6B_5pTe5MzkU__245F6tW7wFJESiw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
+To:     Rob Herring <robh@kernel.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Martin,
+Hi Rob,
 
-On Mon, 2022-07-25 at 21:35 +0200, Martin Blumenstingl wrote:
-> The code seemingly tries to clear RTL_SPI_SFCSR_LEN_MASK (before then
-> setting either RTL_SPI_SFCSR_LEN1 or RTL_SPI_SFCSR_LEN4) and
-> RTL_SPI_SFCSR_CS. What it actually does is only keeping these bits and
-> clearing all other bits, even the ones which were just set before. Fix
-> the operation to clear the bits in the selected mask and keep all other
-> ones.
->=20
-> Fixes: a8af5cc2ff1e80 ("spi: realtek-rtl: Add support for Realtek
-> RTL838x/RTL839x SPI controllers")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> I stumbled across this while reading the driver. This patch is untested
-> because I don't have any hardware with this controller.
->=20
->=20
-> =C2=A0drivers/spi/spi-realtek-rtl.c | 4 ++--
-> =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.=
-c
-> index 866b0477dbd7..e5ad0f11996f 100644
-> --- a/drivers/spi/spi-realtek-rtl.c
-> +++ b/drivers/spi/spi-realtek-rtl.c
-> @@ -49,7 +49,7 @@ static void set_size(struct rtspi *rtspi, int size)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 value;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value =3D readl(REG(RTL_S=
-PI_SFCSR));
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D RTL_SPI_SFCSR_LEN_M=
-ASK;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D ~RTL_SPI_SFCSR_LEN_=
-MASK;
+Thanks for your comments.
 
-Although typically a field mask has the only the bits of that field set,
-RTL_SPI_SFCSR_LEN_MASK is already inverted. So LEN_MASK has all bits set,
-*except* for those where LEN is stored.
+On Tue, 26 Jul 2022 at 01:56, Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Jul 22, 2022 at 02:41:35PM +0300, Tomer Maimon wrote:
+> > Add a compatible string for Nuvoton BMC NPCM845 PSPI.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> > index b98203ca656d..a4e72e52af59 100644
+> > --- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> > +++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> > @@ -3,7 +3,8 @@ Nuvoton NPCM Peripheral Serial Peripheral Interface(PSPI) controller driver
+> >  Nuvoton NPCM7xx SOC support two PSPI channels.
+> >
+> >  Required properties:
+> > - - compatible : "nuvoton,npcm750-pspi" for NPCM7XX BMC
+> > + - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
+>
+> Who/What is Polog? Board/BMC vendor? If so, that should not be in SoC
+> bindings.
+>
+> > +                             "nuvoton,npcm845-pspi" for Arbel NPCM8XX.
+>
+> Same for Arbel.
+Poleg and Arbel are the name of the BMC SoC, will be removed next version.
+>
+> To answer your question on fallback, just put:
+>
+>     "nuvoton,npcm845-pspi", "nuvoton,npcm750-pspi" for NPCM8XX BMC
+In the document?
+because I don't remember doing so in other documents that I use fallback.
+I need to do it in ymal files as well?
+>
+>
+> >   - #address-cells : should be 1. see spi-bus.txt
+> >   - #size-cells : should be 0. see spi-bus.txt
+> >   - specifies physical base address and size of the register.
+> > --
+> > 2.33.0
+> >
+> >
 
-This means the code currently is:
-	value &=3D ~(0x3 << 28);
+Best regards,
 
-which is correct AFAICT, as it clears the LEN bits, but keeps all the other=
-s.
-
-While this part is currently not wrong, I wouldn't be opposed to a patch to=
- make
-it less confusing by not inverting the field mask in the definition of
-RTL_SPI_SFCSR_LEN_MASK.
-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (size =3D=3D 4)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0value |=3D RTL_SPI_SFCSR_LEN4;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (size =3D=3D 1)
-> @@ -143,7 +143,7 @@ static void init_hw(struct rtspi *rtspi)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Permanently disable CS=
-1, since it's never used */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value |=3D RTL_SPI_SFCSR_=
-CSB1;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Select CS0 for use */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D RTL_SPI_SFCSR_CS;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0value &=3D ~RTL_SPI_SFCSR_CS;
-
-This macro is not inverted, so it does clear any previously set bits, and
-probably doesn't end up with RTL_SPI_SFCRS_CS set. However, is in an init c=
-all
-and it doesn't appear to cause any issues later on, right? Is this because =
-the
-SFCSR register is (unintentionally) cleared and that is actually required?
-
-Best,
-Sander
-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(value, REG(RTL_SPI=
-_SFCSR));
-> =C2=A0}
-> =C2=A0
+Tomer
