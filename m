@@ -2,92 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218C25845F0
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Jul 2022 20:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA705849D5
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Jul 2022 04:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiG1Skk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Jul 2022 14:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S232456AbiG2CiC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Jul 2022 22:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiG1Skh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Jul 2022 14:40:37 -0400
-X-Greylist: delayed 41163 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 11:40:36 PDT
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ED61581B
-        for <linux-spi@vger.kernel.org>; Thu, 28 Jul 2022 11:40:36 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 58DC8302750;
-        Thu, 28 Jul 2022 20:40:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1659033634;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D37G27M71NdyUqIBu80G6hfFB1vGquOW3veRxv/waVQ=;
-        b=LeTfDD7TdNz0n2ucmB6EGevqdDVtqoVctKb53JI1zszTybaQ+pEPCjqHC7taH67ynY/zXl
-        d2x3ZKChkcQl0BvYpvhdaTdEF95taddNj4JjNuwP7miXkzvHY0SIKl2oYojsGb9tZD2kXq
-        J13z1scIWKbGkwYo5dOM5S6ULJV+SP4joQsNPRzWu67jLXs/Z+vZEgD0vTDRXZAkJWexkE
-        ItVjysOcMoiLIVh56xxiVMv0rRAGIEX8mYunEhmOT5Wtp5BUL+uvwhkQE1Z+txRJkgPdW3
-        DoCWwMV5ISVK/9C4My7ICBBNk9x133EnQq/XPCllipGTqDuxNQHee6PuHzF3hg==
-Message-ID: <fe43a69a23308580eac251fdfdde66d848b64381.camel@svanheule.net>
-Subject: Re: [PATCH v2 2/2] spi: realtek-rtl: Improve readability when
- clearing the size mask
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
-Date:   Thu, 28 Jul 2022 20:40:33 +0200
-In-Reply-To: <20220728152118.1429161-3-martin.blumenstingl@googlemail.com>
-References: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
-         <20220728152118.1429161-3-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S232173AbiG2CiC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Jul 2022 22:38:02 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25C463912;
+        Thu, 28 Jul 2022 19:38:01 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 210843200947;
+        Thu, 28 Jul 2022 22:38:00 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 28 Jul 2022 22:38:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659062279; x=1659148679; bh=aaUG1mcxXt
+        LJd6pJT4Mmr22bhPN8UW3nBoduqUAhorI=; b=mImxyGLELzdD7jJHUUBF3Gj4qh
+        rlz5Fhm0uibFRRSfzHRTQ/FaY2LhJOcl5WMYVDlApzE6hDzSxn3GIISPHcZLN47b
+        s8JNtNip7qccGKCFznnQuP1W6fGnefsD/gcrRH8OqPZsj/6gUI/6LWB090LOOXj1
+        ElFvtCpqzDcFAJl1E2I1NFglXACoyviYzJj1WCFwpcPCz/9fqaiZ9AMfTfRpYayD
+        +bG38jRDEzHgcpCtc98Qs9t9oS8HjbMS1fEpYfuUFWNU74osX02UHZXtg4f/R75Y
+        NJoZvKou2GfSpytooovJTBIze4mb5c7tLzqeRTetg3/IAv+S9jsj4JF16E3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659062279; x=1659148679; bh=aaUG1mcxXtLJd6pJT4Mmr22bhPN8
+        UW3nBoduqUAhorI=; b=q/prQ8epZ9Qewn+WWlYrl+kyFsw0agNBcIPxZFs7u1zy
+        u//U1XrLIGJ9cG6h22PBoiqPjGC8uGR6WJvu7ERfvk/0YoxpXtvxxY72OLHycfnf
+        uMIgVyT/Hyx2O/gKTUQZievzR4BMTHqt/VtD5ck0hMianwxs9Gx+j/R6g3RGYPSJ
+        SgcDnGzN9vIuCfxk0MXHW5R6wjwwMESI4es5swRsCTgVhoLUvTQ2lVsmsQ+RQL8b
+        CbAkJ201vq28wSZmp9MNuZI/DzYvQQplhIJpM5zHCSD9nQShRm/Fja1VtdPZNCOw
+        Hmiwj8MIp+9qwbP2LlQvDiTkyc39wyQmDAq6c3DsAQ==
+X-ME-Sender: <xms:B0jjYgOrJycyyjnFZ_TTROgwG23dByHtixnqgOpiI8ASobf3FpWRiQ>
+    <xme:B0jjYm-eQtjiu5dt3aHZ7a6QYsNpy0-c9z6ZDvQGK6WLdZOY3yAMpEZJi9sEDr0dw
+    Qe8J0cQwI_3CzaTLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:B0jjYnSHaTZbMHBPNqDww-5R_DvrFx8qxjPSIAe19rgGzCM_vx652Q>
+    <xmx:B0jjYotQdLac_0ijgykjgG14Z7LXmDWDRb5PxitBO3We8F0yaoQ92Q>
+    <xmx:B0jjYofxSjZrzSfq-iWb7SZwZiM91VECDoyNKvULkHxQwQPsM8Yg8w>
+    <xmx:B0jjYmui3MpcCVacr6fDqnUO71MaaMQOiNRD2Iy_5z5kk-9Fpj9bHw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 647541700083; Thu, 28 Jul 2022 22:37:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
+Mime-Version: 1.0
+Message-Id: <62143648-8a90-4ff4-bfe1-f311b40cd50c@www.fastmail.com>
+In-Reply-To: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
+References: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
+Date:   Fri, 29 Jul 2022 12:07:39 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Jian Zhang" <zhangjian.3032@bytedance.com>,
+        openbmc@lists.ozlabs.org, "Joel Stanley" <joel@jms.id.au>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     zhangjian_linux@163.com, "Mark Brown" <broonie@kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>
+Subject: Re: [PATCH linux dev-5.15] soc: aspeed: abr: Add sysfs attrs for flash toggle
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTA3LTI4IGF0IDE3OjIxICswMjAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
-b3RlOgo+IERlZmluZSB0aGUgYml0bWFzayBSVExfU1BJX1NGQ1NSX0xFTl9NQVNLIHNvIGl0IG9u
-bHkgc2V0cyB0aGUgYml0cyBvZgo+IHRoaXMgc3BlY2lmaWMgcGFydCBvZiB0aGUgcmVnaXN0ZXIg
-aW5zdGVhZCBvZiBzZXR0aW5nIGFsbCBiaXRzIGV4Y2VwdAo+IHRoZSByZWxldmFudCBvbmVzLiBU
-aGlzIG1ha2VzIGl0IGNvbnNpc3RlbnQgd2l0aCBzaW5nbGUgYml0IG1hY3JvcyBpbgo+IHRoZSBz
-cGktcmVhbHRlay1ydGwgZHJpdmVyIGFzIHdlbGwgYXMgd2l0aCB0aGUgYXBwcm9hY2ggdGhhdCBt
-YW55IG90aGVyCj4gZHJpdmVycyB1c2UuCj4gCj4gU3VnZ2VzdGVkLWJ5OiBTYW5kZXIgVmFuaGV1
-bGUgPHNhbmRlckBzdmFuaGV1bGUubmV0Pgo+IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBCbHVtZW5z
-dGluZ2wgPG1hcnRpbi5ibHVtZW5zdGluZ2xAZ29vZ2xlbWFpbC5jb20+CgpGV0lXClRlc3RlZC1i
-eTogU2FuZGVyIFZhbmhldWxlIDxzYW5kZXJAc3ZhbmhldWxlLm5ldD4KCm9uIG15IE5ldGdlYXIg
-R1MxMTBUUFAgdjEuCgo+IC0tLQo+IMKgZHJpdmVycy9zcGkvc3BpLXJlYWx0ZWstcnRsLmMgfCA0
-ICsrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
-Cj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL3NwaS1yZWFsdGVrLXJ0bC5jIGIvZHJpdmVy
-cy9zcGkvc3BpLXJlYWx0ZWstcnRsLmMKPiBpbmRleCA4NjZiMDQ3N2RiZDcuLjAzNzFkNDRjYmZi
-ZCAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3NwaS9zcGktcmVhbHRlay1ydGwuYwo+ICsrKyBiL2Ry
-aXZlcnMvc3BpL3NwaS1yZWFsdGVrLXJ0bC5jCj4gQEAgLTIwLDcgKzIwLDcgQEAgc3RydWN0IHJ0
-c3BpIHsKPiDCoCNkZWZpbmUgUlRMX1NQSV9TRkNTUl9DU0IxwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBCSVQoMzApCj4gwqAjZGVmaW5lIFJUTF9TUElfU0ZDU1JfUkRZwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoEJJVCgyNykKPiDCoCNkZWZpbmUgUlRMX1NQSV9TRkNTUl9DU8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoEJJVCgyNCkKPiAtI2RlZmluZSBSVExfU1BJX1NGQ1NSX0xF
-Tl9NQVNLwqDCoMKgwqDCoMKgwqDCoMKgfigweDAzIDw8IDI4KQo+ICsjZGVmaW5lIFJUTF9TUElf
-U0ZDU1JfTEVOX01BU0vCoMKgwqDCoMKgwqDCoMKgwqAoMHgwMyA8PCAyOCkKPiDCoCNkZWZpbmUg
-UlRMX1NQSV9TRkNTUl9MRU4xwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAoMHgwMCA8PCAyOCkK
-PiDCoCNkZWZpbmUgUlRMX1NQSV9TRkNTUl9MRU40wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAo
-MHgwMyA8PCAyOCkKPiDCoAo+IEBAIC00OSw3ICs0OSw3IEBAIHN0YXRpYyB2b2lkIHNldF9zaXpl
-KHN0cnVjdCBydHNwaSAqcnRzcGksIGludCBzaXplKQo+IMKgwqDCoMKgwqDCoMKgwqB1MzIgdmFs
-dWU7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgdmFsdWUgPSByZWFkbChSRUcoUlRMX1NQSV9TRkNT
-UikpOwo+IC3CoMKgwqDCoMKgwqDCoHZhbHVlICY9IFJUTF9TUElfU0ZDU1JfTEVOX01BU0s7Cj4g
-K8KgwqDCoMKgwqDCoMKgdmFsdWUgJj0gflJUTF9TUElfU0ZDU1JfTEVOX01BU0s7Cj4gwqDCoMKg
-wqDCoMKgwqDCoGlmIChzaXplID09IDQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqB2YWx1ZSB8PSBSVExfU1BJX1NGQ1NSX0xFTjQ7Cj4gwqDCoMKgwqDCoMKgwqDCoGVsc2UgaWYg
-KHNpemUgPT0gMSkKCg==
+Hi Jian Zhang,
 
+On Sun, 1 May 2022, at 20:26, Jian Zhang wrote:
+> Implement the flash toggle function in soc ast2600.
+> Add two sysfs attrs named "access_primary" and "access_backup"
+
+If you're proposing this patch for upstream then it needs to be based on
+an upstream kernel tree, not the OpenBMC kernel tree. You also should
+not use e.g. `linux dev-5.15` in the patch subject prefix, as that would
+be inappropriate for an upstream patch.
+
+As you're adding sysfs attributes you'll also need to add the
+corresponding ABI documentation.
+
+Cheers,
+
+Andrew
