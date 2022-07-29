@@ -2,51 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEE1585589
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Jul 2022 21:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB8585595
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Jul 2022 21:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238061AbiG2TXK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Jul 2022 15:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S238967AbiG2Tav (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 Jul 2022 15:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiG2TXJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Jul 2022 15:23:09 -0400
+        with ESMTP id S238987AbiG2Ta2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Jul 2022 15:30:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658E5A2C4;
-        Fri, 29 Jul 2022 12:23:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E45636D
+        for <linux-spi@vger.kernel.org>; Fri, 29 Jul 2022 12:30:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9ABF61FAD;
-        Fri, 29 Jul 2022 19:23:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35DDEC433D6;
-        Fri, 29 Jul 2022 19:23:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC66061FB3
+        for <linux-spi@vger.kernel.org>; Fri, 29 Jul 2022 19:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 365EDC433D6;
+        Fri, 29 Jul 2022 19:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659122588;
-        bh=2zs4loLiG2NHp7f2Cx4otysQzAR7dF+KLdjZ4DQy/dg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GmE3xQtsjEETj+q11L55TRTQVQY36tlsTpzRMqvZVswR8sd2D9it4gSkzBVyJwxDC
-         s9FYAsk+ZKh9nBE4AhAl3CwEHxWJ4DMjFqJh+ngIvvw/u31daeQKb8TORWuh79AE+t
-         KtklZemfZfjFsnpogab6RtGKb8TozA+gD/iGGv1c6eUznGUwh4bOXw4s+ys6LADApj
-         Tpi9/ped/PDNYXxA1L+97Djo5VEM+wkioMO9uO+mwOJZdcrDEu/xvYT+8O0LaXEe9U
-         btnpov5uWvfsFw9O07QbWlvU0/GACpu4cW8mHiTegXOOcYAj9WliwT+YNN+FKdYLwN
-         o6V4GzI114M6Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     nick.hawkins@hpe.com
-Cc:     arnd@arndb.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, verdun@hpe.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk
-In-Reply-To: <20220728161459.7738-1-nick.hawkins@hpe.com>
-References: <20220728161459.7738-1-nick.hawkins@hpe.com>
-Subject: Re: (subset) [PATCH v6 0/5] Add SPI Driver to HPE GXP Architecture
-Message-Id: <165912258592.2735119.5654882155337365652.b4-ty@kernel.org>
-Date:   Fri, 29 Jul 2022 20:23:05 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1659123014;
+        bh=KUZs3FRmGAKhaCsyXJIKURbC5REUaoGPV0zmYC7+mfE=;
+        h=Subject:From:Date:To:From;
+        b=HVVYcv/B9vpbRHrlmmAHHmNnbsW4cxq4RlR5VakIXNl1Y5O9teaVWqhzKCsFBQGPr
+         zj9pz/AIfuz+rMbKXg2vzCbODEMt9pTRzm52vly2Hu+J27c2R4vZkqLjvpNIDu/yAY
+         SrWjfQXD4w3UDg4uOUhnnxaJZMVikH/B6VznBl8tQqH+KMrcxyPe2Y1mH5pl9Wwivc
+         9wWXPvcO78e3QW+jnzZrbA49JNX9h5RrXw4SYu+1q7+be+uRAcVUcYvIdA+4ptJPt7
+         VdJ03iS/PEX385By6BRvmrxaS5GzIBCuoQuzMnfVHAQ04I3RYHL44oydz/l7Ex8Giq
+         o1TgMRWh/7OXw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0989AC43142;
+        Fri, 29 Jul 2022 19:30:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-d1cc2
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165912301398.29520.10653095196170113465.git-patchwork-summary@kernel.org>
+Date:   Fri, 29 Jul 2022 19:30:13 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,45 +51,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 28 Jul 2022 11:14:54 -0500, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> Changes since v6:
->  *Removed spaces between tags on commit descriptions
-> 
-> Changes since v5:
->  *Fixed indentation in Kconfig file
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add SPI Driver to HPE GXP Architecture
+  Submitter: Hawkins, Nick <nick.hawkins@hpe.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=663824
+  Lore link: https://lore.kernel.org/r/20220728161459.7738-1-nick.hawkins@hpe.com
+    Patches: [v6,1/5] spi: spi-gxp: Add support for HPE GXP SoCs
+             [v6,2/5] spi: dt-bindings: add documentation for hpe,gxp-spifi
+             [v6,5/5] MAINTAINERS: add spi support to GXP
 
-Thanks!
 
-[1/5] spi: spi-gxp: Add support for HPE GXP SoCs
-      commit: 730bc8ba5e9ec103065142975015a793558f09a0
-[2/5] spi: dt-bindings: add documentation for hpe,gxp-spifi
-      commit: 8cc35b86546dc35fb4f5ff7d1d163c5efc78bf0e
-[5/5] MAINTAINERS: add spi support to GXP
-      commit: a1848b0fa2517a8d0bbc2783c90aefd4b7e7567a
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
