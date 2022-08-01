@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840B85870D6
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 21:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53B85870ED
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 21:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiHATD7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Aug 2022 15:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S234537AbiHATFG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Aug 2022 15:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiHATDY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 15:03:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFFC39B8F;
-        Mon,  1 Aug 2022 12:02:55 -0700 (PDT)
+        with ESMTP id S234335AbiHATEb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 15:04:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0AE402CC;
+        Mon,  1 Aug 2022 12:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37B4FB81647;
-        Mon,  1 Aug 2022 19:02:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54541C433D7;
-        Mon,  1 Aug 2022 19:02:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B4EA61227;
+        Mon,  1 Aug 2022 19:03:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45337C433D6;
+        Mon,  1 Aug 2022 19:03:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659380573;
-        bh=PYfW4qUNcV0ql8wYHgPWd/Nrk4am9nAFnFvDd23OFxw=;
+        s=k20201202; t=1659380589;
+        bh=d/iGv3GxcSHuxsO3Syz/ugha7MoQ9UUrS+dhzXkqnuc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ejLVUnnOKEVC5jPibvjUHB63sON3CuE7lbJmdDYnPoBdiK2M6oloRHOk/ZtSDN4Y2
-         0jRQ+m6B4FodsXresVGajUQCI7dgUZUMsdasbn+bIf5EQMejjF0MxWu5cU3107KIgs
-         io4FvlxyZEe0WeHTuyXtF0Wt2FMYCkOwTB4BpM17pu9eI8biVMomMGQ87tD8Y/Wvp+
-         5hRcTbzGU0BFXkwwtOzqnbfKdFRoKd2CEwZZdNKvk+KVHEgZk+DrK9Fjumvhw2cRw0
-         ZBiagHduiVTq/+m8JWNO8TZdUOIvJoxLV/KmuI4pGK+pPZnGRFwSbvgSrjzfnfckvO
-         IweUieLEstMSQ==
+        b=usQY6CkEjKhkql7+wU8XT0ztMsMdP+K6t1QV5NVYJu3GBUi/sNjWF5p0iIILLnJ86
+         kV+rIg/s+RKjCvScIfW37JLiRXlMJsB9ivoVLvSj40fawH9PCLQ7hgX0PtE3pl0Xfu
+         VQRg4E6ICD/T+OpYOoq88ny7P02ZvjIiw/jyEeVFpDTQz6qFc7jSqyPm6WUWraCgxy
+         x7k6yidd2xtJRYoJR7NdveEHXBu4pxJBfHTar7MG2ymer5dQO+DpV19XrJV/651rlr
+         ODu3d/JvgMJ0fdDknRKHL29f0kcmACfbyj0ZHM/gOGEwpmJ7XwCLiXizUnAKvYM3+m
+         MpTml4fglUMdw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 4/8] spi: spi-rspi: Fix PIO fallback on RZ platforms
-Date:   Mon,  1 Aug 2022 15:02:39 -0400
-Message-Id: <20220801190243.3818811-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 3/7] spi: spi-rspi: Fix PIO fallback on RZ platforms
+Date:   Mon,  1 Aug 2022 15:02:57 -0400
+Message-Id: <20220801190301.3819065-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220801190243.3818811-1-sashal@kernel.org>
-References: <20220801190243.3818811-1-sashal@kernel.org>
+In-Reply-To: <20220801190301.3819065-1-sashal@kernel.org>
+References: <20220801190301.3819065-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,7 +81,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index d575c935e9f0..f634a405382c 100644
+index ea03cc589e61..4600e3c9e49e 100644
 --- a/drivers/spi/spi-rspi.c
 +++ b/drivers/spi/spi-rspi.c
 @@ -612,6 +612,10 @@ static int rspi_dma_transfer(struct rspi_data *rspi, struct sg_table *tx,
