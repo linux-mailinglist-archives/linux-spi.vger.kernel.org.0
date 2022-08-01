@@ -2,138 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566A0586416
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 08:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E475866F7
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 11:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiHAGc3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Aug 2022 02:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S230258AbiHAJnD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Aug 2022 05:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHAGc2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 02:32:28 -0400
-Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7649CE017;
-        Sun, 31 Jul 2022 23:32:27 -0700 (PDT)
-Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.113]); authenticated
-        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oIOyX-0003Ki-WD; Mon, 01 Aug 2022 08:32:26 +0200
-Message-ID: <e1537145-274d-6e9d-c6bd-d0228852b17a@birger-koblitz.de>
-Date:   Mon, 1 Aug 2022 08:32:25 +0200
+        with ESMTP id S230207AbiHAJnC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 05:43:02 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894DB3718F;
+        Mon,  1 Aug 2022 02:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659346981; x=1690882981;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=45nnWKhIy5I2t3QQIGYOl1EJ3hjjvGwnuv1MlEvAF8U=;
+  b=DcZMzCxG7WP5z2ThtWeAF0LrpQwNgqk13SA3/QRr9TuTRemoa/aws+Yq
+   yaG+n0MJCuqxMxpXYb4oGO3y2Za5DWf1K5R3VTxllkKEcf42XuDtoO+7M
+   OylqI/cu9lrrnV2Fc5ZWvodsKGj7lHyp/Kw2vQBaxZP6aEZjE7EZSlmO0
+   kK/xgPYsLJh+rq/bKoSidd+2Fl6qrSn1SK/gmCSrpafSG2bXrxEeCBCxt
+   thQ6P4l5GnaJpUDeQXEthqK8KBsmSmdOOdgPr2XX0CEdDqtbKUknIpSyx
+   nr+6XrxqapiUOlKR+lqQCSf8G9Te5sa0xR6fkZAIZ4Yoah55E1MLUdO/s
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="106988939"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Aug 2022 02:43:00 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 1 Aug 2022 02:43:00 -0700
+Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.28 via Frontend Transport; Mon, 1 Aug 2022 02:42:57 -0700
+From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+Subject: [PATCH 0/2] Add support for Microchip QSPI controller
+Date:   Mon, 1 Aug 2022 15:12:53 +0530
+Message-ID: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bert@biot.com, sander@svanheule.net
-From:   Birger Koblitz <mail@birger-koblitz.de>
-Subject: [PATCH 3/7] spi: realtek-rtl: allow use of chip-select other than CS0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;mail@birger-koblitz.de;1659335547;5dadb7f0;
-X-HE-SMSGID: 1oIOyX-0003Ki-WD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The RTL838x and RTL839x SoCs have 4 chip selects, the RTL93xx
-SoCs 2. Configure the CS for a given transfer.
-The logic of the RTL_SPI_SFCSR_CSBx bits is that if the value
-of the bit is 0, then the corresponding CS line is pulled low,
-which activates/selects the chip.
+This patch enables the Microchip's FPGA QSPI and Polarfire SoC QSPI
+controller support.
 
-Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
----
-  drivers/spi/spi-realtek-rtl.c | 39 ++++++++++++++++++++++++++++-------
-  1 file changed, 31 insertions(+), 8 deletions(-)
+Tested spi-nand (W25N01GV) and spi-nor (MT25QL256A) on Microchip's
+ICICLE kit. tested using both FPGA QSPI and Polarfie SoC QSPI.
 
-diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
-index 287ecc34e1cc..5979233522f4 100644
---- a/drivers/spi/spi-realtek-rtl.c
-+++ b/drivers/spi/spi-realtek-rtl.c
-@@ -9,6 +9,7 @@
-  struct rtspi {
-  	void __iomem *base;
-  	u32 dev_flags;
-+	u32 cs_all;
-  };
+Naga Sureshkumar Relli (2):
+  spi: dt-binding: add Microchip CoreQSPI compatible
+  spi: microchip-core-qspi: Add support for microchip fpga qspi
+    controllers
 
-  /* SPI Flash Configuration Register */
-@@ -20,6 +21,8 @@ struct rtspi {
-  #define RTL_SPI_SFCSR			0x08
-  #define RTL_SPI_SFCSR_CSB0		BIT(31)
-  #define RTL_SPI_SFCSR_CSB1		BIT(30)
-+#define RTL_SPI_SFCSR_CSB2		BIT(15)
-+#define RTL_SPI_SFCSR_CSB3		BIT(14)
-  #define RTL_SPI_SFCSR_RDY		BIT(27)
-  #define RTL_SPI_SFCSR_CS		BIT(24)
-  #define RTL_SPI_SFCSR_LEN_MASK		~(0x03 << 28)
-@@ -38,14 +41,34 @@ struct rtspi {
-  static void rt_set_cs(struct spi_device *spi, bool active)
-  {
-  	struct rtspi *rtspi = spi_controller_get_devdata(spi->controller);
-+	int cs = spi->chip_select;
-  	u32 value;
-+	u32 cs_mask;
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  10 +-
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-microchip-core-qspi.c         | 604 ++++++++++++++++++
+ 4 files changed, 621 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/spi/spi-microchip-core-qspi.c
 
--	/* CS0 bit is active low */
-  	value = readl(REG(RTL_SPI_SFCSR));
-+	value |= rtspi->cs_all | RTL_SPI_SFCSR_CS;
-+
-+	switch (cs) {
-+	case 0:
-+		cs_mask = RTL_SPI_SFCSR_CSB0;
-+		break;
-+	case 1:
-+		cs_mask = RTL_SPI_SFCSR_CSB1;
-+		break;
-+	case 2:
-+		cs_mask = RTL_SPI_SFCSR_CSB2;
-+		break;
-+	case 3:
-+		cs_mask = RTL_SPI_SFCSR_CSB3;
-+		break;
-+	}
-+
-+	/* CS bits are active low */
-  	if (active)
--		value |= RTL_SPI_SFCSR_CSB0;
-+		value |= cs_mask;
-  	else
--		value &= ~RTL_SPI_SFCSR_CSB0;
-+		value &= ~cs_mask;
-+
-  	writel(value, REG(RTL_SPI_SFCSR));
-  }
-
-@@ -144,11 +167,8 @@ static void init_hw(struct rtspi *rtspi)
-  	value |= RTL_SPI_SFCR_RBO | RTL_SPI_SFCR_WBO;
-  	writel(value, REG(RTL_SPI_SFCR));
-
--	value = readl(REG(RTL_SPI_SFCSR));
--	/* Permanently disable CS1, since it's never used */
--	value |= RTL_SPI_SFCSR_CSB1;
--	/* Select CS0 for use */
--	value &= RTL_SPI_SFCSR_CS;
-+	/* Disable CS0-CS3, enable CS */
-+	value = rtspi->cs_all | RTL_SPI_SFCSR_CS;
-  	writel(value, REG(RTL_SPI_SFCSR));
-  }
-
-@@ -183,6 +203,9 @@ static int realtek_rtl_spi_probe(struct platform_device *pdev)
-  	ctrl->set_cs = rt_set_cs;
-  	ctrl->transfer_one = transfer_one;
-  	ctrl->num_chipselect = rtspi->dev_flags & SPI_CSMAX_3?4:2;
-+	rtspi->cs_all = RTL_SPI_SFCSR_CSB0 | RTL_SPI_SFCSR_CSB1;
-+	if (rtspi->dev_flags & SPI_CSMAX_3)
-+		rtspi->cs_all |= RTL_SPI_SFCSR_CSB2 | RTL_SPI_SFCSR_CSB3;
-
-  	err = devm_spi_register_controller(&pdev->dev, ctrl);
-  	if (err) {
 -- 
 2.25.1
 
