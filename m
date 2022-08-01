@@ -2,56 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7AD5867D4
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 12:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCB5867EC
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 13:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiHAKw3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Aug 2022 06:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S231343AbiHALJW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Aug 2022 07:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiHAKw3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 06:52:29 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448EE29803;
-        Mon,  1 Aug 2022 03:52:28 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s206so9356847pgs.3;
-        Mon, 01 Aug 2022 03:52:28 -0700 (PDT)
+        with ESMTP id S230433AbiHALJW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 07:09:22 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A942BB16;
+        Mon,  1 Aug 2022 04:09:21 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r186so9379923pgr.2;
+        Mon, 01 Aug 2022 04:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=1+zvFjvjZf1WXQC9+iCFiiUb93JkcfGfa2IxHwe2fOA=;
-        b=VNUjTKm13wfj24ap78DlMZVMElCnn7kIr+3VsTjeEfZzKaARcXJMo/pJmIZSYnlIE3
-         tzUxEMhN/heggErO2Umsfls4cyDivjgNVLtqpubdYk0H2iSYMmZi1KIk+PpDrZh+iz0q
-         RIxjS5hQXd1SjDBfycx1IPxFsK0rLKzlyH6ocdy9UqViFbeMMmi1690lgslaEj8w9Ouu
-         /iiY1lYjEAG+8HREsunwtNmf+Jw36TBbWOzljWPNNh4aMCqmXMgifwpAuPdM31LL/oh8
-         8f9qoFsrlAXrOEtcYJwr1wg6LtcV3YAI7ZItpVD4KWKW3TGLL1luHH/itr/PpKkcPwGS
-         1P1w==
+        bh=ThouaRpzDngDpnhnV/sEkyZDPfhBgGJMe4A3dCp3YvY=;
+        b=eOKpwjEgaDcdGHflN0B8jI0iHFaHG/OQUne+x3jM5O0yxMoh827p7s4F3EATCbpyyF
+         PgwPuqNlRj8xpAIdRPeEPP6pHbm8okHOe/TvCR+wvewkxRrH25u6JJ2R0YkxE2/L6+qk
+         J4CHarOJFMZdYbbj9BUZwtxNpWI2ZCFN5YPg+DenKnM9SQ28RESgy9/0UIrK26qOc35Q
+         91t0pbmDZw+8NxQ7YLuPcUpHva+dYromkf7TB87MiAqEtEha42oa02LB7TCgnpzz/jI1
+         uFDUk9mvPawtr2nei51/glDDwMQvyhCyDRugcBCz+mWHt36fUG98tCm8vjvIJllNdGF7
+         fCAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=1+zvFjvjZf1WXQC9+iCFiiUb93JkcfGfa2IxHwe2fOA=;
-        b=FDzfjhxFbLVx3cwxYJ1VCtEIZrypUyD6OHHOOBIrhUgfp1ANKs3b1D88bgFvHHUO7l
-         IMKkZineyUllvt3WcCbAvhyfxdPBPdC73N1UHxU1xTxzqOBwCcgrALV0LaZgrtnbY5Za
-         J7FAlWLip4LUol444y1KA+6er5OzUpUeftwdERB7CWX/fGsfELAF+VIYSo97W7HGXiSX
-         Z8i0E+9XT0yZJUXVS4RuSTOOr83c1bmZ9bxlAEU3wioX0ilxgZ0DoZBU4azQxdTXZ0ka
-         x9OdFFvhA2VRiigepOA5+3eBod3qJkdYoYB9QtuQPpxAx7rtMXfycO9ISabxtBEgSC6z
-         EjJw==
-X-Gm-Message-State: AJIora9kbNejQG8XIrmEJRd4e4gPbZ/NwBS2Xhn28RPmMeYCaZbAiT/D
-        HF4bc+m5o08IxAgGrBN25ahm9TkB3pklYedhbVNrxd9Boxo7rQ==
-X-Google-Smtp-Source: AGRyM1sv37v5Hk+L2tOCiqUuVEMnF8+2HFUZ7PSVXSmiljZ+YdGarEsBPJrVkpXcpZhE/DSkkZonOrm7zRnG6geK0vo=
-X-Received: by 2002:a05:6a00:188e:b0:52a:af7f:e715 with SMTP id
- x14-20020a056a00188e00b0052aaf7fe715mr15495962pfh.2.1659351147607; Mon, 01
- Aug 2022 03:52:27 -0700 (PDT)
+        bh=ThouaRpzDngDpnhnV/sEkyZDPfhBgGJMe4A3dCp3YvY=;
+        b=AmBUakJ1vLJZMvdcDbGniPP5tl78ffgorQqDYh0gv5iu2G2KV35K26qN0OH4VeI0VS
+         qT/W0FP9wKkwnRcQ5kUsjpv2hCLCArL4YAyFyLORgLgQ6gBwWmbDGGIjcqZdG2OF923F
+         1PEPHEXiBlW5c87NlUy9KnVdqK7m8a0ucBsH4nPgZB1W/3Pzgfk1yHR9uQeKf/x43LYW
+         UwMHNDscqwzGZX/UuttZIf8YirQlTlOsDVnAK0UYL1vP4S1NEMsu/1KPD0J1f8qSefu3
+         bxseKNm5bv/gb9T4+rZ3uO3Bi7nxitabAee2UMWWJ9u6AtH015lSSBjVrgMSgY7NqYhz
+         YuLA==
+X-Gm-Message-State: AJIora9dm7YF+FzNocvk2l5CN38JArquPt6KctOges19hj1mBXT7q41f
+        B5A9nZhtRkVeaKilorY75tScp3Oxt4yoTr59XBo=
+X-Google-Smtp-Source: AGRyM1sRbtElPKpg/jcbtV5Lq9Rtvp6p8euUedML5vBaf910Z+3NKXmuOARbE5Fje/v3U4F6W2rrnKD+doDAYw4Np/o=
+X-Received: by 2002:a63:d90b:0:b0:41a:ff05:4808 with SMTP id
+ r11-20020a63d90b000000b0041aff054808mr13046734pgg.159.1659352160760; Mon, 01
+ Aug 2022 04:09:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com> <a431ac00-ee65-df7a-674c-27f13fc7be82@microchip.com>
-In-Reply-To: <a431ac00-ee65-df7a-674c-27f13fc7be82@microchip.com>
+ <20220801094255.664548-3-nagasuresh.relli@microchip.com> <283bdfef-cbd9-5d87-f77d-10f007c37a0c@microchip.com>
+In-Reply-To: <283bdfef-cbd9-5d87-f77d-10f007c37a0c@microchip.com>
 From:   naga sureshkumar <nagasuresh12@gmail.com>
-Date:   Mon, 1 Aug 2022 16:22:16 +0530
-Message-ID: <CAH_iE_03fHMbCwGPsE_CmbokRh5cW_bEaX8RodK1ovWeTSHuhQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
+Date:   Mon, 1 Aug 2022 16:39:09 +0530
+Message-ID: <CAH_iE_1Khx=qAKWwWcL56fLQeutP-DvYvC4VMd_zzzxKkMrJLQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: microchip-core-qspi: Add support for microchip
+ fpga qspi controllers
 To:     Conor.Dooley@microchip.com
 Cc:     Nagasuresh.Relli@microchip.com, broonie@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -70,81 +71,120 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Conor,
 
-Thanks for your review.
-
-On Mon, Aug 1, 2022 at 3:54 PM <Conor.Dooley@microchip.com> wrote:
->
-> Hey Suresh,
+On Mon, Aug 1, 2022 at 4:19 PM <Conor.Dooley@microchip.com> wrote:
 >
 > On 01/08/2022 10:42, Naga Sureshkumar Relli wrote:
-> > Add compatible string for Microchip CoreQSPI controller.
+> > Add a driver for Microchip FPGA QSPI controllers. This driver also
+> > supports "hard" QSPI controllers on Polarfire SoC.
 > >
 > > Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
 > > ---
-> >  .../devicetree/bindings/spi/microchip,mpfs-spi.yaml    | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > index 7326c0a28d16..b65f4e070796 100644
-> > --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > @@ -14,9 +14,13 @@ allOf:
-> >
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -      - microchip,mpfs-spi
-> > -      - microchip,mpfs-qspi
-> > +    oneOf:
-> > +      - description: Microchip's Polarfire SoC SPI controller.
->                                          ^
-> (This is a capital F btw)
 >
-> > +        const: microchip,mpfs-spi
-> > +      - description: Microchip's Polarfire SoC QSPI controller.
-> > +        const: microchip,mpfs-qspi
-> > +      - description: Microchip's FPGA QSPI controller.
-> > +        const: microchip,coreqspi-rtl-v2
+> ---8<---
 >
-> I am not sure that this is the correct "hierarchy". coreQSPI has a
-> subset of the registers of the "hard" QSPI & the same driver works
-> for both at the moment. The "hard" QSPI is based on the FPGA core,
-> so I think this should be changed to something like the following:
-I have added each element for each controller separately.
-but the below one hierarchy explains clearly about the cores.
-I will update the bindings.
+> > +static int mchp_coreqspi_probe(struct platform_device *pdev)
+> > +{
+> > +     struct spi_controller *ctlr;
+> > +     struct mchp_coreqspi *qspi;
+> > +     struct device *dev = &pdev->dev;
+> > +     struct device_node *np = dev->of_node;
+> > +     int ret;
+> > +
+> > +     ctlr = spi_alloc_master(&pdev->dev, sizeof(*qspi));
+> > +     if (!ctlr)
+> > +             return -ENOMEM;
 >
-> properties:
->   compatible:
->     oneOf:
->       - description: Microchip's PolarFire SoC QSPI controller
->         items:
->           - const: microchip,mpfs-qspi
->           - const: microchip,coreqspi-rtl-v2
->       - description: Microchip's fabric based QSPI IP core
->         const: microchip,coreqspi-rtl-v2
->       - description: Microchip's PolarFire SoC SPI controller
->         const: microchip,mpfs-spi
->
-> Unrelated to this patch, but a
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f4202a19faa1..887bfee5c7af 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17526,6 +17526,7 @@ F:      drivers/pci/controller/pcie-microchip-host.c
->  F:     drivers/rtc/rtc-mpfs.c
->  F:     drivers/soc/microchip/
->  F:     drivers/spi/spi-microchip-core.c
-> +F:     drivers/spi/spi-microchip-core-qspi.c
->  F:     drivers/usb/musb/mpfs.c
->  F:     include/soc/microchip/mpfs.h
->
-> Would be nice too.
+> Argh... I am sorry for not mentioning this when you asked me if
+> I thought the driver was ready to be sent upstream, but I think
+> we should try to use the devm_ versions of these functions.
 Ok.
-
-Thanks,
-Naga Sureshkumar Relli.
 >
-> Thanks,
+> > +
+> > +     qspi = spi_controller_get_devdata(ctlr);
+>
+> Is there a reason to use spi_controller_get_devdata() rather than
+> spi_master_get_devdata() ?
+Both are the same.
+https://github.com/torvalds/linux/blob/master/include/linux/spi/spi.h#L1497
+Ref: https://github.com/torvalds/linux/commit/8caab75fd2c2a92667cbb1cd315720bede3feaa9
+>
+> > +     platform_set_drvdata(pdev, qspi);
+> > +
+> > +     qspi->regs = devm_platform_ioremap_resource(pdev, 0);
+> > +     if (IS_ERR(qspi->regs)) {
+> > +             ret = PTR_ERR(qspi->regs);
+> > +             goto remove_master;
+>
+> Using devm_spi_alloc_master() above would simplify this
+> to just a return of dev_err_probe() & ditto for every
+> time we do a "goto remove_master"
+Ok. I will update to use devm_ versions.
+>
+> > +     }
+> > +
+> > +     qspi->clk = devm_clk_get(&pdev->dev, NULL);
+> > +     if (IS_ERR(qspi->clk)) {
+> > +             dev_err(&pdev->dev, "clock not found.\n");
+> > +             ret = PTR_ERR(qspi->clk);
+> > +             goto remove_master;
+> > +     }
+> > +
+> > +     ret = clk_prepare_enable(qspi->clk);
+> > +     if (ret) {
+> > +             dev_err(&pdev->dev, "failed to enable clock\n");
+> > +             goto remove_master;
+> > +     }
+> > +
+> > +     init_completion(&qspi->data_completion);
+> > +     mutex_init(&qspi->op_lock);
+> > +
+> > +     qspi->irq = platform_get_irq(pdev, 0);
+> > +     if (qspi->irq <= 0) {
+> > +             ret = qspi->irq;
+> > +             goto clk_dis_all;
+> > +     }
+> > +
+> > +     ret = devm_request_irq(&pdev->dev, qspi->irq, mchp_coreqspi_isr,
+> > +                            0, pdev->name, qspi);
+> > +     if (ret != 0) {
+> > +             dev_err(&pdev->dev, "request_irq failed %d\n", ret);
+> > +             goto clk_dis_all;
+> > +     }
+> > +
+> > +     ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+> > +     ctlr->mem_ops = &mchp_coreqspi_mem_ops;
+> > +     ctlr->setup = mchp_coreqspi_setup_op;
+> > +     ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
+> > +                       SPI_TX_DUAL | SPI_TX_QUAD;
+> > +     ctlr->dev.of_node = np;
+> > +
+> > +     ret = devm_spi_register_controller(&pdev->dev, ctlr);
+> > +     if (ret) {
+> > +             dev_err(&pdev->dev, "spi_register_controller failed\n");
+> > +             goto clk_dis_all;
+> > +     }
+> > +
+> > +     return 0;
+> > +
+> > +clk_dis_all:
+> > +     clk_disable_unprepare(qspi->clk);
+>
+> If we move the clk prepare & enable later in probe, ie after
+> getting the irq, this goto could be removed too because the
+> only place requiring teardown of the clock would be the error
+> path of devm_spi_register_controller().
+ok.
+>
+> > +remove_master:
+> > +     spi_controller_put(ctlr);
+>
+> With devm_spi_alloc_master() this put is no longer needed &
+> we can return a nice dev_err_probe() for each error :)
+ok. I will send the next version with these updates.
+>
+> > +
+> > +     return ret;
+> > +}
+>
+> Thanks Suresh.
 > Conor.
