@@ -2,55 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CDF587CE4
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Aug 2022 15:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00400588163
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Aug 2022 19:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiHBNNO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Aug 2022 09:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S233719AbiHBR6U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Aug 2022 13:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiHBNNN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Aug 2022 09:13:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DED2737;
-        Tue,  2 Aug 2022 06:13:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F35C1B81EFC;
-        Tue,  2 Aug 2022 13:13:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D47C433C1;
-        Tue,  2 Aug 2022 13:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659445989;
-        bh=nCaDyEtIbkjRMPVGtA72MurPtE7v7zbuYlbgSxCOwzc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jbZnIEPs5d5t6TfoNGHqIkchT4qm6G7Mkj4udtHDw1CKcGfezN8bBfmcEF+h9Bth1
-         eAfTEFmw8/9EpbN0TP/2FteEi6XORFBMgZSqxU3T1b2v8zSg4Ph16aZPmGRDnpU+V6
-         rehOjEvOY2QAPQFLOgeG1c91Pc0QiLs1GWNA+hEC9O9rspphdyQ0W5SMNy0Wf2YDGN
-         +5R4RcNeIjXsBBsrcz9jBWrmiRxt+KbXV4BMyz1yUyUJE8oKmRdtaMV9Mf2ZYqtrAo
-         PC07zmMh9z2Lp3rw1okcL/EvioI2OFx7StndikvU7NrE2Fs1Ioy1/yqRcmLwxrpZ2Q
-         M0ewtz6H6c4sw==
-Date:   Tue, 2 Aug 2022 14:13:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-Message-ID: <Yuki3jpCSJDdXcWA@sirena.org.uk>
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com>
- <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
+        with ESMTP id S233218AbiHBR6T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Aug 2022 13:58:19 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3661643E40
+        for <linux-spi@vger.kernel.org>; Tue,  2 Aug 2022 10:58:18 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id bk11so8953171wrb.10
+        for <linux-spi@vger.kernel.org>; Tue, 02 Aug 2022 10:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D5VB2FOmZFu7Zd41ltdFac1q4e5aLoaLQgroB4OX9/s=;
+        b=aamoHvNa6141WrHA4zpN7rbydohy1lauVLA0F4AswnJ6fgLWB2VPeU5WlX7+7en22D
+         VpNOl5B7V/AYoUbgHVnx1jiDfjPg4lK7SdoXvUKo6FT/rYhP9g9qM/Qw2bQB9Bn2PyuR
+         JjxhBUpDiomTg1xNyyL3WrCak0hUXuCIwTS0sCZpZlygha/idyNKAYA0BDKkBOOR8mxA
+         EczL8nhi5U2gTrW+XW1GS/S+QyS05o2cNw0Q8+PslQfalu6SzOYxXn4tFf5ql/eBmjFo
+         zcEE87sC6W2K+01GTE8NqeMXZ6VIALDc4dmZVLwgvUG76wYSelhiqGO0iYME2P4ZfSf5
+         Sf3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D5VB2FOmZFu7Zd41ltdFac1q4e5aLoaLQgroB4OX9/s=;
+        b=vHEE99BsceV+jqLqI/0c4G0cwfS4dsknJvTFiKdZvKt5qvLhDVITKMOfYEyXuyLJN9
+         NwIPHjyGzn9QwKk2u77uwdHoqhCuN1SF4Sm+Xy2Y9/Lv/t4nUsYpz2KXMlUXML5j1NtT
+         QVuwR5PpIPiPW9ehiXM94zBvplBa/G949xbksUEI/QJjDBt5Fi+WbGaSWjh6UffxvcBT
+         Nz8prefA2jDsbIMwTSfQeBKW9e5z1dwrMRK2Xxs/GiLExZTyfBrmSQUM5T0xuZr0A5QI
+         tcXD14n9ImLCjoV4FDpXK0EyHpB64Wi/8MfPg2YLd5sN+d+YxxQGSFT9DjwLinWKSnYi
+         2v0g==
+X-Gm-Message-State: ACgBeo2+JmVoJMUO8ZwtcIvZDHyswM5WrB2ed+gl8RDQH6bFRZm9L/cp
+        ccLxOtsSzmQYNsjeXYyx4KabvzbAZLXNpQ==
+X-Google-Smtp-Source: AA6agR6rAMlfiAvC3j2BDeH7AB7wHWhuUx276d06qGtylAw+ckAidJAvLeFkbbt7zeFLNcua1pXstQ==
+X-Received: by 2002:adf:e6d0:0:b0:21f:156d:1a8c with SMTP id y16-20020adfe6d0000000b0021f156d1a8cmr12685521wrm.177.1659463096802;
+        Tue, 02 Aug 2022 10:58:16 -0700 (PDT)
+Received: from debian.office.codethink.co.uk ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id 9-20020a05600c020900b003a3187a2d4csm23318222wmi.22.2022.08.02.10.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:58:16 -0700 (PDT)
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Subject: [PATCH 00/11] Add support for enhanced SPI for Designware SPI controllers
+Date:   Tue,  2 Aug 2022 18:57:44 +0100
+Message-Id: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FG8oGUKVhgxoIQ9N"
-Content-Disposition: inline
-In-Reply-To: <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
-X-Cookie: Stay on the trail.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +73,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Some Synopsys SSI controllers support enhanced SPI which includes
+Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+feature in enhanced SPI modes which can be used to prevent FIFO underflow
+and overflow conditions while transmitting or receiving the data respectively.
+This is only tested on controller version 1.03a.
 
---FG8oGUKVhgxoIQ9N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ben Dooks (1):
+  spi: dw-apb-ssi: add generic 1.03a version
 
-On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
-> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
+Sudip Mukherjee (10):
+  spi: dw: define capability for enhanced spi
+  spi: dw: add check for support of dual/quad/octal
+  spi: dw: define spi_frf for dual/quad/octal modes
+  spi: dw: use TMOD_RO to read in enhanced spi modes
+  spi: dw: define SPI_CTRLR0 register and its fields
+  spi: dw: update SPI_CTRLR0 register
+  spi: dw: update NDF while writing in enhanced spi mode
+  spi: dw: update buffer for enhanced spi mode
+  spi: dw: prepare the transfer routine for enhanced mode
+  spi: dw: initialize dwc-ssi-1.03a controller
 
-> > -    enum:
-> > -      - microchip,mpfs-spi
-> > -      - microchip,mpfs-qspi
-> > +    oneOf:
-> > +      - description: Microchip's Polarfire SoC SPI controller.
-> > +        const: microchip,mpfs-spi
-> > +      - description: Microchip's Polarfire SoC QSPI controller.
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+ drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
+ drivers/spi/spi-dw-mmio.c                     |  10 +
+ drivers/spi/spi-dw.h                          |  19 ++
+ 4 files changed, 291 insertions(+), 27 deletions(-)
 
-> Useless descriptions - they repeat compatible. Just keep it as enum and
-> skip descriptions. What value do they bring?
+-- 
+2.30.2
 
-Someone not familiar with the full Microchip product line might not be
-aware of the expansion of mpfs, it's not blindingly obvious.
-
---FG8oGUKVhgxoIQ9N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpIt0ACgkQJNaLcl1U
-h9COjAf/fxpLRWiWJdErAvsAeQsUJGuknUyrw2SIHq2AcHl3fZaG6JY7zA2qplg0
-sMM/s6UW+GVyBhx2T8ghJcHWqu550wxYi2TVcBsktNnrGIZZN0VOad8BJggO9MOa
-+nF1G6gIomc8Y1b9LpaWaxyNtjIwIKYPMJ8THcaiuBL5csuiQt4rDMrVjLJd+fUH
-OJXaaGAjmJzm9Cutj43JdmA95h/qtcpRc3OhCj4A1inkPGFr4f3sNdKwPROstQq2
-4xYMWLg9dinePs8LU2wK7S6cc65XAgJmJPJJf8+Q4TZWKfek23laLVZL+MXci7uL
-Wi0Kj7DGa5QTdtaYOktYxZpT+TCeZQ==
-=VsFA
------END PGP SIGNATURE-----
-
---FG8oGUKVhgxoIQ9N--
