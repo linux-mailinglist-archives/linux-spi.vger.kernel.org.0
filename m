@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE56E58820C
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Aug 2022 20:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BE4588257
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Aug 2022 21:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiHBSsK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Aug 2022 14:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S229554AbiHBTNz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Aug 2022 15:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiHBSsJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Aug 2022 14:48:09 -0400
+        with ESMTP id S229532AbiHBTNy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Aug 2022 15:13:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0042AEC;
-        Tue,  2 Aug 2022 11:48:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D7C52DCD;
+        Tue,  2 Aug 2022 12:13:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D23DCB8205C;
-        Tue,  2 Aug 2022 18:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74C8C433C1;
-        Tue,  2 Aug 2022 18:48:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55B57B8207C;
+        Tue,  2 Aug 2022 19:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F9FC433C1;
+        Tue,  2 Aug 2022 19:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659466085;
-        bh=O5FaYJYaqBUugib8EoE0cRmNpA3nJ2d0waB2Ao9BJyE=;
+        s=k20201202; t=1659467631;
+        bh=T3MBopdOtWixQ3FCkNcXkYUgaM6a+BZ5M1L3tYAPinc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VpeBjSnm9N5Y+omIZ2yIZiQi0sehNejftcxcrCOc/fvKcmnJfGkVHb6tPEEMdQaG5
-         Cwvl343AofPn4raKp7rlsg0Bir+0c3NlBCq9DQnWhA4khSu4xGM3VnBxPdN0dS03av
-         rfISXX5/dTFv5I0hyBfc9FAz3q9Z8RpGlwMZ3pxGhs8Aw7OismXJRLgHx+vKeAl6H0
-         tAq7qYoHxqm2DScZYEEc2+n7vP3+cVepIbBoHSzLof6nq+DlDPp/F4PBcHFFmf3oR5
-         ypNX8ZWCkcxN0rTrI75QgKAyll8uIMV9YAFYUr7CYY1awajmQ0YWzeteitfXkGA92q
-         ZFXSxZ5osUeEA==
-Date:   Tue, 2 Aug 2022 19:47:59 +0100
+        b=UHuxmrVZA/HqE72SdIgz/Y9s94Vyu8TDSWQQQz9mcp07n6m2w4vVfRiAnrES90+9J
+         TDd+xn849tl2BR1+rxm+XrxZ/AtElelYlUiiL1sNb+jVvoXzIOIMiKwervMN7lECCY
+         rkAHoVHnD+URn9EwSe/uaPiViJ1jmzVprTyBn+ht6dUqxbzxzKuGO/OoxxI+P91Sml
+         bK+4L5IK3sfnA+I5eeRm+WfcWdLTkDy9xdsqEnWQYeFuSttclXj1ERSH++pr1aOhAF
+         8F8BcPEtMpw96z259gEshriJuDWOB5pYolttpZudqA1e9vrE+3hd5j73wacXIpA673
+         j3NA5OOU3RzEw==
+Date:   Tue, 2 Aug 2022 20:13:44 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -42,15 +42,15 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         ben.dooks@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 01/11] spi: dw: define capability for enhanced spi
-Message-ID: <YulxX3Zo168cWhwP@sirena.org.uk>
+Subject: Re: [PATCH 04/11] spi: dw: use TMOD_RO to read in enhanced spi modes
+Message-ID: <Yul3aNP8yoBf5QWu@sirena.org.uk>
 References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-2-sudip.mukherjee@sifive.com>
+ <20220802175755.6530-5-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JCWDcbxgaPatzncw"
+        protocol="application/pgp-signature"; boundary="7HxAbNud4AYGSDtm"
 Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-2-sudip.mukherjee@sifive.com>
+In-Reply-To: <20220802175755.6530-5-sudip.mukherjee@sifive.com>
 X-Cookie: Stay on the trail.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,38 +62,51 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---JCWDcbxgaPatzncw
+--7HxAbNud4AYGSDtm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 02, 2022 at 06:57:45PM +0100, Sudip Mukherjee wrote:
+On Tue, Aug 02, 2022 at 06:57:48PM +0100, Sudip Mukherjee wrote:
+> When we are using the enhanced spi modes we can not use EEPROM Read.
+> The Synopsys datasheet mentions EEPROM Read is not applicable in
+> enhanced SPI modes. We will need to use Receive only mode.
+>=20
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 8c84a2e991b5..8e624620864f 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -727,7 +727,10 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, c=
+onst struct spi_mem_op *op)
+>  	cfg.dfs =3D 8;
+>  	cfg.freq =3D clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
+>  	if (op->data.dir =3D=3D SPI_MEM_DATA_IN) {
+> -		cfg.tmode =3D DW_SPI_CTRLR0_TMOD_EPROMREAD;
+> +		if (enhanced_spi)
+> +			cfg.tmode =3D DW_SPI_CTRLR0_TMOD_RO;
+> +		else
+> +			cfg.tmode =3D DW_SPI_CTRLR0_TMOD_EPROMREAD;
 
-> Some Synopsys SSI controllers support enhanced SPI which includes
-> Dual mode, Quad mode and Octal mode. Define the capability and mention
-> it in the controller supported modes.
+This is fixing the previous commit...
 
-> +#define DW_SPI_CAP_EXT_SPI		BIT(2)
-
-This isn't at all descriptive, it'd be better to have a capability bit
-for the various multi-line data modes (or possibly individual bits for
-them, though board setup will stop us using things that aren't supported
-in a given design anyway so it's a bit redundant) - that'd be a lot
-clearer and avoid confusion further down the line when some other
-feature gets added.
-
---JCWDcbxgaPatzncw
+--7HxAbNud4AYGSDtm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpcV4ACgkQJNaLcl1U
-h9C50Qf/S/F36nAYjerM4pLu2vLaAFMbKpfuHlweqnhHS+Gz67dQG9GstmvH2ZLi
-1l8phYLEIhvOfw4Hc2R5b+OAzitqnz11UYrMcTO1qE4LeBXt6KQrvNiI1zoLLPyj
-m0f3z9z6JFGNI3kt5+GnEnbujz+JRCg1JMWoUlrFEhDbehduJAghXu9howuP8P/6
-eS3qk1f1DNxII57wzRtTh8iF1RtWZL8a05DK0NfSEpD5SY1mZe3c7XTPVcFZa6Lk
-rp7MH/cndZwnI63WowgNFOmx53LaPxW3JoIqQkVfla+7aIuTz6oc40eTxmdxjiQ0
-8ZnSbBOna81vBdY71+ug3SdGPeEiZA==
-=8Nvd
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpd2gACgkQJNaLcl1U
+h9AdcQf/fp0qGacGXOTmxLhzXNUGajNyCyIQp3hVO43WcLLNP1qX7SwYdQqpJsWL
++Uodapi9ubYTtcuQRK/vTodDYvuYLM4lCY3uEga/7aTesUwFrYL/ExoW8eaqI67B
+HC6fmMyp44SZHhKAjp5ayY7HXg0e/eAAY8LwapbRfFC8W93kVApYWirG9hPCYS+W
+HGw+HZ80eyBcA0fQNBXzWqfD0Mr0LpIy0itNFZQU/kqcJANcBYuL23i1XkvLFhTJ
+I0sOmMtidWMjhig9BvOtfmenSOMvNMVd/PIgGdHI8o21d8f4odJJ9Meni8q4jxkE
+s1oep2Sjf6h+xyDDUGGHUoO2irGkBw==
+=mC5X
 -----END PGP SIGNATURE-----
 
---JCWDcbxgaPatzncw--
+--7HxAbNud4AYGSDtm--
