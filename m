@@ -2,99 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9905587121
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Aug 2022 21:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925E758776D
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Aug 2022 09:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbiHATHh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Aug 2022 15:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S232871AbiHBHGH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Aug 2022 03:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234480AbiHATHH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Aug 2022 15:07:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49B24505C;
-        Mon,  1 Aug 2022 12:04:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4971B8163F;
-        Mon,  1 Aug 2022 19:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB616C4347C;
-        Mon,  1 Aug 2022 19:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659380643;
-        bh=XCpuFYrf2qOm988WctfaO0Xv4CmAKWB8AYzNBTYtKiQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buMeXIzBjHCrNFEmkH2PEunNus2Zip681B9lS0y+AXeEqfxDyEcLULXJNj7v6ZfqC
-         X5/AXS5L3LODY+EwwJN8XgTTmEF5jKn5FsFo/KluCJolvZkyQtDx26NlABSEKYLT7x
-         /OocNHgvh+lCNFhC4ccDT8zgLjBCcioPo84TwsroD5bZgFAzsrqNScqtsCE6U76lKA
-         14tkE4E56VOXGh+zsfURoKDHksfVhB3yXVQenWJdJiAb1F1eCLR5Cd261w2DtgdnXo
-         bxBRO2IYM6urEPJe6D9jYWL23WlCsdXaHHLsTEQYrCKVePSpXwsfunJMhHeqoiQnNy
-         DNngs5IdF0Vbw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 2/3] spi: spi-rspi: Fix PIO fallback on RZ platforms
-Date:   Mon,  1 Aug 2022 15:03:57 -0400
-Message-Id: <20220801190359.3820214-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220801190359.3820214-1-sashal@kernel.org>
-References: <20220801190359.3820214-1-sashal@kernel.org>
+        with ESMTP id S232817AbiHBHGE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Aug 2022 03:06:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636D9B1E1;
+        Tue,  2 Aug 2022 00:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659423962; x=1690959962;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4uKslXInd/LYsZkf3rMu4R9j6IPobKre4A/4EBr2oP4=;
+  b=WNkiDPnLjTkIyJX5nfX/S7QOHWZYF2bq2NuhVlqBUT1tp/UQG8XU4T8W
+   gDuMmiA9cFJrBO3nImB7M0SmZJ2qNssDhZ7WLkEoEjbnvySBKmTuHzfbL
+   oJkjsTCa9ww0L1tqJuLo7N/fi7sjJjMujPFVyYhNLBFGedXoC3g1scA2U
+   XOetq25LCVYFVAIDgYcdo2HMpygkNscew/RiJLMQJXGCRV5WMlnS0DtmB
+   WEzS5zCXpwHd44LyxYJjGON3hhaAd9TTguxF1nOZ/WVRkvN+s1HrhxEkU
+   VwU+WpakpYDDUDMNJzb2WrzJEPbhrt/cqyeXQgdECFNctqm/BpvNclhsm
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="174531286"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2022 00:06:02 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 2 Aug 2022 00:06:00 -0700
+Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.28 via Frontend Transport; Tue, 2 Aug 2022 00:05:57 -0700
+From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+Subject: [PATCH v2 0/3] Add support for Microchip QSPI controller
+Date:   Tue, 2 Aug 2022 12:35:15 +0530
+Message-ID: <20220802070518.855951-1-nagasuresh.relli@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+This patch enables the Microchip's FPGA QSPI and Polarfire SoC QSPI
+controller support.
 
-[ Upstream commit b620aa3a7be346f04ae7789b165937615c6ee8d3 ]
+Tested spi-nand (W25N01GV) and spi-nor (MT25QL256A) on Microchip's
+ICICLE kit. tested using both FPGA QSPI and Polarfie SoC QSPI.
 
-RSPI IP on RZ/{A, G2L} SoC's has the same signal for both interrupt
-and DMA transfer request. Setting DMARS register for DMA transfer
-makes the signal to work as a DMA transfer request signal and
-subsequent interrupt requests to the interrupt controller
-are masked.
+changes in v2
+------------
+1. Replaced spi_alloc_master() with devm_spi_alloc_master()
+2. Used dev_err_probe() when devm_spi_alloc_master() fails.
+3. Added shared IRQ flag in the interrupt registration.
+4. Updated the dt_bindings so that there is a differentiation
+   between FPGA QSPI IP core and hard QSPI IP core.
+5. Updated the MAINTAINERS file.
 
-PIO fallback does not work as interrupt signal is disabled.
+Naga Sureshkumar Relli (3):
+  spi: dt-binding: add Microchip CoreQSPI compatible
+  spi: microchip-core-qspi: Add support for microchip fpga qspi
+    controllers
+  MAINTAINERS: add qspi to Polarfire SoC entry
 
-This patch fixes this issue by re-enabling the interrupts by
-calling dmaengine_synchronize().
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  12 +-
+ MAINTAINERS                                   |   1 +
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-microchip-core-qspi.c         | 609 ++++++++++++++++++
+ 5 files changed, 629 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/spi/spi-microchip-core-qspi.c
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220721143449.879257-1-biju.das.jz@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-rspi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index 07612e8c58ee..9142629b5f8d 100644
---- a/drivers/spi/spi-rspi.c
-+++ b/drivers/spi/spi-rspi.c
-@@ -602,6 +602,10 @@ static int rspi_dma_transfer(struct rspi_data *rspi, struct sg_table *tx,
- 					       rspi->dma_callbacked, HZ);
- 	if (ret > 0 && rspi->dma_callbacked) {
- 		ret = 0;
-+		if (tx)
-+			dmaengine_synchronize(rspi->ctlr->dma_tx);
-+		if (rx)
-+			dmaengine_synchronize(rspi->ctlr->dma_rx);
- 	} else {
- 		if (!ret) {
- 			dev_err(&rspi->master->dev, "DMA timeout\n");
 -- 
-2.35.1
+2.25.1
 
