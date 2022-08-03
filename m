@@ -2,56 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB106589183
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Aug 2022 19:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9497589185
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Aug 2022 19:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238107AbiHCRfJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Aug 2022 13:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S238350AbiHCRfW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Aug 2022 13:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbiHCRfI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Aug 2022 13:35:08 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7136657250
-        for <linux-spi@vger.kernel.org>; Wed,  3 Aug 2022 10:35:06 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j8so7471007ejx.9
-        for <linux-spi@vger.kernel.org>; Wed, 03 Aug 2022 10:35:06 -0700 (PDT)
+        with ESMTP id S238326AbiHCRfT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Aug 2022 13:35:19 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4AA637B
+        for <linux-spi@vger.kernel.org>; Wed,  3 Aug 2022 10:35:18 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id f22so11379805edc.7
+        for <linux-spi@vger.kernel.org>; Wed, 03 Aug 2022 10:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=39DQIGQXThBozrEjWiDrDLhudCkP9OJY7K/8OUvd6/I=;
-        b=T0ECUMDQyzHYeVYDtBxdrJfXbZ6pCVez9cmhnZRCRu5+U4KzPZUaNDD2xluVSBppE/
-         gFdLH//buvE6AMKInJkbT83OWEFjWoziInti0CnrgWH9ip5wzV5ykMwcAiGQ0SuKnsat
-         RcpOxXDWkr4mWKi0AqCe3bMiGzIFfrOiL1xdFXkNmHd2Mi8bsuLOtKK2JsCG0lBuHWt7
-         knaJo/3VYjNjxFf/fwYTRfpRSC+DiPEbImNzF2e/cRoXO8vYs24OxpfKmpLNlsHbfpVo
-         /93/MsnxblKS7iEUOuF1gRJRZrIMgZo8rjJHPeoQrYOY50XWc933rr7850HnkVhm3Snt
-         mM1w==
+        bh=t7mzK+VsqxBbknsxZ5Y86hkmSLWbQ885cOUS2ErnhsQ=;
+        b=jNNBA5NQLHsI0JyVIXzvuhIkTOOmyLoWRAHk03bJUHB6YpbpNC0an7pMlGB6lZz/ee
+         o89HDMIE3QpAs55xNUvZxZn1oPl3DF3vvQ+soHxaMVh1mRr4z4dl9iaSx23EpupA6TL7
+         pJkVZlLM9DMFjHlOyycAlG/aAP0fVcwFY3iQ80PSCCcnV+SZXRIhI9+oEvaBliFe2A91
+         MPomkiS5rMbCbgHRdkvp4vk4B8hw57pjKD3s6vomjU4Z/xyPMtwZFnB4Mm8TiCUwuIOl
+         tjKGNuEy3b37Edcu42Epg6SU3TtkwZAL3Gdy5Un8TEC5s+ZHtxOVEdVZJSNacV/nYxMf
+         PMXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=39DQIGQXThBozrEjWiDrDLhudCkP9OJY7K/8OUvd6/I=;
-        b=3DVMU+udUiVU6IbHXL/LI7bi2xTb5dQ+T/CWfFjhY5qpIDvsnFkj5Og8DV5jRinZac
-         QE34Vb3JMHwYTseKQINWK7WKssix8r2nfK+ncZk3hHOsStcJHOMnQa+MXZbKAQ0k6j6C
-         QDpNdBm1z6N64NQExtnm8Lf16ZzCDjZe651x3c/p5GCuUhQzCN6OkhuaIJlpCIIkmHBz
-         IIQDuxP/lZz6/yyNiGzf8kWaoeBj1LYhAAmMZYQDAHYF2jNbSM8jx5CoJ5pY18jKJjP9
-         oo//uF2O+j9rz6dAYGjqr7Tax7nMFKO0zPBCpfduYc9vQsYFH0AWw7uetJUqtIOL6IiS
-         WFLg==
-X-Gm-Message-State: AJIora8sgYOTTFrUwVuD08QtBY11lMn50MfqZBV4nJiy935HOTnWwSAS
-        G4AwfJ+0ZxIZH1MFWU03sktN9Th3Bm/6iab29HDCNw==
-X-Google-Smtp-Source: AGRyM1ua61ngReTCruH53k/WgeL39qAn7374O3trKod4RhmxrLdTDW1BzvH+okqkgk8HVOl/oaOepnZjb6M/dewNQEk=
-X-Received: by 2002:a17:906:a089:b0:72f:826b:e084 with SMTP id
- q9-20020a170906a08900b0072f826be084mr21382249ejy.708.1659548105017; Wed, 03
- Aug 2022 10:35:05 -0700 (PDT)
+        bh=t7mzK+VsqxBbknsxZ5Y86hkmSLWbQ885cOUS2ErnhsQ=;
+        b=PaY9xigQ11526PPb9JonGMP1bNSN18Cpxpcrvzc9rzbQbObaHEWa089wuF8rEifBfW
+         lmDLrWxntIE3XEYN2+8Mtva1P8qqmehjhDzXCj6ZJpMaT6yKV+lH1m6nDF3rud40ra0V
+         QzK691LnlJcIR/NS0kTWl0rxVVU3JA5lYbOHuyVP6inEWMcvIZUKEFb/M5m0kFV3a4AZ
+         kqu0YTPKVfSf1teK1FhrGGPnFdOzELtISMaVbRvN05NuYXcY51Xi5oz1XcW/DH3wRnyz
+         920ufF7NgZE+BO+/vX0+lyzFciUmdqxVg5dUgXBUki71ZE+l7l0fsM0grMvldcYvJFNI
+         Ej1A==
+X-Gm-Message-State: AJIora862BqDdffRly53LHnMKWTZY6DAKR9sO1UxOW2NmePKhHTkwioV
+        uoO5wuN3BHAAAA29qQfl+2DJsyeSj7+bTzyrz15n9g==
+X-Google-Smtp-Source: AGRyM1vinRALJaPLSYSNk3fACJZIJzEkUVcr5c6Q656EARzdy9R6EVN6hz5dbO4THnpK7R2eFuigKb95EoAGwHAFY/0=
+X-Received: by 2002:a05:6402:430e:b0:43d:1cf6:61ec with SMTP id
+ m14-20020a056402430e00b0043d1cf661ecmr25679481edc.194.1659548117129; Wed, 03
+ Aug 2022 10:35:17 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-2-sudip.mukherjee@sifive.com> <YulxX3Zo168cWhwP@sirena.org.uk>
-In-Reply-To: <YulxX3Zo168cWhwP@sirena.org.uk>
+ <20220802175755.6530-5-sudip.mukherjee@sifive.com> <Yul3aNP8yoBf5QWu@sirena.org.uk>
+In-Reply-To: <Yul3aNP8yoBf5QWu@sirena.org.uk>
 From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Date:   Wed, 3 Aug 2022 18:34:53 +0100
-Message-ID: <CAHyZL-dA+mFW6Jcvpds69f-9iJf6nk7PCpO6S2Au+ugSZMgisw@mail.gmail.com>
-Subject: Re: [PATCH 01/11] spi: dw: define capability for enhanced spi
+Date:   Wed, 3 Aug 2022 18:35:06 +0100
+Message-ID: <CAHyZL-f73MGxmOGZ_-082BXZs5uxtRXtXiVr39DK+__LHTjTUQ@mail.gmail.com>
+Subject: Re: [PATCH 04/11] spi: dw: use TMOD_RO to read in enhanced spi modes
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -66,35 +66,50 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 7:48 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Aug 02, 2022 at 06:57:45PM +0100, Sudip Mukherjee wrote:
->
-> > Some Synopsys SSI controllers support enhanced SPI which includes
-> > Dual mode, Quad mode and Octal mode. Define the capability and mention
-> > it in the controller supported modes.
->
-> > +#define DW_SPI_CAP_EXT_SPI           BIT(2)
->
-> This isn't at all descriptive, it'd be better to have a capability bit
-> for the various multi-line data modes (or possibly individual bits for
-> them, though board setup will stop us using things that aren't supported
-> in a given design anyway so it's a bit redundant) - that'd be a lot
-> clearer and avoid confusion further down the line when some other
-> feature gets added.
+Hi Mark,
 
-Do you mean to add separate capability bit like:
-DW_SPI_CAP_DUAL_SPI
-DW_SPI_CAP_QUAD_SPI and
-DW_SPI_CAP_OCTAL_SPI ?
+On Tue, Aug 2, 2022 at 8:13 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Aug 02, 2022 at 06:57:48PM +0100, Sudip Mukherjee wrote:
+> > When we are using the enhanced spi modes we can not use EEPROM Read.
+> > The Synopsys datasheet mentions EEPROM Read is not applicable in
+> > enhanced SPI modes. We will need to use Receive only mode.
+> >
+> > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> > ---
+> >  drivers/spi/spi-dw-core.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> > index 8c84a2e991b5..8e624620864f 100644
+> > --- a/drivers/spi/spi-dw-core.c
+> > +++ b/drivers/spi/spi-dw-core.c
+> > @@ -727,7 +727,10 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> >       cfg.dfs = 8;
+> >       cfg.freq = clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
+> >       if (op->data.dir == SPI_MEM_DATA_IN) {
+> > -             cfg.tmode = DW_SPI_CTRLR0_TMOD_EPROMREAD;
+> > +             if (enhanced_spi)
+> > +                     cfg.tmode = DW_SPI_CTRLR0_TMOD_RO;
+> > +             else
+> > +                     cfg.tmode = DW_SPI_CTRLR0_TMOD_EPROMREAD;
+>
+> This is fixing the previous commit...
 
+This was not actually meant to be a fixup patch. I intentionally made
+it separate so that "enhanced_spi" is introduced in the previous
+patch,
+and then modified the tmode read protocol in this patch based on
+enhanced_spi. But I can merge it with the previous patch like you have
+suggested.
 
 --
 Regards
