@@ -2,54 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F66C58A613
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Aug 2022 08:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552D958A616
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Aug 2022 08:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbiHEGrz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Aug 2022 02:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S231800AbiHEGtY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Aug 2022 02:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiHEGry (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Aug 2022 02:47:54 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7563618341
-        for <linux-spi@vger.kernel.org>; Thu,  4 Aug 2022 23:47:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id r14so2114070ljp.2
-        for <linux-spi@vger.kernel.org>; Thu, 04 Aug 2022 23:47:53 -0700 (PDT)
+        with ESMTP id S237410AbiHEGtX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Aug 2022 02:49:23 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB98627FE4
+        for <linux-spi@vger.kernel.org>; Thu,  4 Aug 2022 23:49:21 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id y11so2146919lfs.6
+        for <linux-spi@vger.kernel.org>; Thu, 04 Aug 2022 23:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PmFeWvuOsvFqIarJirnBQu/eQawP6gPgXVaBOBY1IN0=;
-        b=yQYu0aCVNEnx/hdbtFW3QKhXozW4BMi0Gs2M9Ccc2vka9JnK2pizgjaYlUbZSGA8ML
-         paDCYOMnbya19+hsGsX+fwRSAlF45RoMdTayxjqtBWl7I0OgZWpVBuXc4f6aUa9TedzY
-         rE/HY54wpNEezB953AsgiH/oUxgGTBxrY6A2ySGrP+HH0f4IH14A2oN+9udx4aJvei0P
-         NKGkgXExFwyPM1sLVy/A8zzKf6e8/Rh4DTjCKEjNddFA276N0xPKIfN81vFBbh2Fveqi
-         OLhaG2kVzrKhYgNEb/9i3ogfjn5wNrAS/bMKU14EfTNUKuMqY+PriaUQFTBjp4GLJeqz
-         kUQA==
+        bh=7EUN6mgYtvmab9+9xYnDik55xkpctoRpJSTqZ3obc7k=;
+        b=N6mJm80XjBqVXo/IbXj00jmu8VAkJXLCcAR8tgQ2afEMNFyI3C0xjff96RfQlNiINh
+         zT7hZdHRCUBTy05f4IheB9Xu8cDFQB9rgKHj0rXwTscEpOrP4g7DhWCr3TxFULYIP6wm
+         y3iWiJ/3iT0c7Uvxxe4Tn/Y+elBahmPXmxch3HmW0KwA4/0tFhqt6WtfmQAUIIuJ4gq+
+         74203AVzxtXsTD9jx2LtwyCmlUajZnlw5wmKDeSHn3aeSd6OpO1iBpzwQPy1ncY6DMfC
+         R5bCFoeSD7zxJ6HBWO/EafXTwnIV8ByQ/AWHBWSh1tnaRhtfzW1wh/CCKSM0zZ5frdrQ
+         rD1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PmFeWvuOsvFqIarJirnBQu/eQawP6gPgXVaBOBY1IN0=;
-        b=Bw8aMm2HRDu6chtL3YkJbd1PiYwCdBip2WSTcpTIiGARURRyWlndJeCDTDM5FFl/tZ
-         UI/ZfqwrIA4O87fN6gAQE9B8SRicHAFKkSjOpAnnqby3RaWLVMqPiXwipP0PhLHwW2NP
-         7DF9n891BculfON+3XEoV65FRr6ln1GQYZYoBn9QgqSfV45yFZzpE2mWj1pBq34khzNf
-         +5BhMEubk7lHPZcpmuZ5yynhksBCwXThS9axBiLt1zi76D35+zOr5yrt1l24CIjS76QW
-         xN1UrOelJhEv6yYH712sgqqNb+0tqL2uIvc7+nPUxdCd8UadE0oTEloaBhaum9l+aQ+T
-         NGyA==
-X-Gm-Message-State: ACgBeo0BKPfvBXs1exBX5iOvuVJKtyrKtR29QLKfEu366WnQWIakGq5i
-        iLnFJdAyM/ezlpEU8Djd5NhX0Q==
-X-Google-Smtp-Source: AA6agR5eleQqymCQPIxFfTF3U1lX2Tm7Odlj4hz/7K77cIt/DGtNBXPIFt42ojhGNG/UpSvJEXAshw==
-X-Received: by 2002:a2e:bd03:0:b0:25e:6aca:ab1c with SMTP id n3-20020a2ebd03000000b0025e6acaab1cmr1643507ljq.479.1659682071839;
-        Thu, 04 Aug 2022 23:47:51 -0700 (PDT)
+        bh=7EUN6mgYtvmab9+9xYnDik55xkpctoRpJSTqZ3obc7k=;
+        b=M4ph49tcF75DZgjpF8deXf9lfmoV5V6fbfqs3ql7+HfH0WM1/Y68diRQFYG+h/tBjY
+         mTPo9N/+G3avZZkBgTt0EizEnQdIgtmRPrrQKRolcuP5YJLMxCelcNRjPpUcLDcskqEb
+         eQ3If4Q87hbClJuhHMf2qPKk5DSKaW/sYhgZztOL+SVzV2zHDHpHxrqhgYmHUEe4tJSa
+         ZnnUBXaPEJo+lFkC1VWzuEd7c2p/0MXtf+5C7XNm2NtwlsHUUa8Ya/DAaUs8AgtXWK07
+         oB3N/YE02j+qaetCgRCcp2IYcaLrdoFXgVbgq+3NVhMz1VgJWd+lHp3EMr5IIpI2aqNV
+         0TCg==
+X-Gm-Message-State: ACgBeo1Yom7k+nNlzX3ofXpW0qcyJ6ClQUnwytNmVEzBKiZycWZhAE3I
+        XsMyYhVABkbbNGeJ1BSIFgiyGaPZR8ZggqXTwIo=
+X-Google-Smtp-Source: AA6agR47AKu8+Dquc1tvUBq64luu4Y6CBLJt42MI5yUUSbfwGNOzOKTHtmqOaeJQ19EmscutbMy61w==
+X-Received: by 2002:a05:6512:31d0:b0:48b:1262:23be with SMTP id j16-20020a05651231d000b0048b126223bemr1961478lfe.679.1659682160256;
+        Thu, 04 Aug 2022 23:49:20 -0700 (PDT)
 Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id s15-20020a056512214f00b0048b143c09c2sm359055lfr.259.2022.08.04.23.47.49
+        by smtp.gmail.com with ESMTPSA id o3-20020ac24e83000000b0047faab456cesm361251lfr.237.2022.08.04.23.49.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 23:47:50 -0700 (PDT)
-Message-ID: <86f726ab-d2a3-8ffa-87f0-2bf3dd37ae84@linaro.org>
-Date:   Fri, 5 Aug 2022 08:47:48 +0200
+        Thu, 04 Aug 2022 23:49:19 -0700 (PDT)
+Message-ID: <a83c5784-6c86-497c-78d8-1550e8add7ec@linaro.org>
+Date:   Fri, 5 Aug 2022 08:49:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
@@ -70,7 +70,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,15 +79,24 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 05/08/2022 07:30, Naga Sureshkumar Relli wrote:
-> Microchip's PolarFire SoC QSPI IP core is based on coreQSPI,
-> so add coreqspi as a fallback to mpfs-qspi.
-> 
-> Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-> ---
+> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> index a47d4923b51b..84d32c1a4d60 100644
+> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> @@ -18,10 +18,12 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - microchip,mpfs-spi
+> -      - microchip,mpfs-qspi
+> -      - microchip,coreqspi-rtl-v2 # FPGA QSPI
+> +   oneOf:
+> +    - items:
+> +        - const: microchip,mpfs-qspi
+> +        - const: microchip,coreqspi-rtl-v2
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Eh, this does not make sense after looking at your driver...
 
 Best regards,
 Krzysztof
