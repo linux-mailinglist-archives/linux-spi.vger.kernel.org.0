@@ -2,94 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1368F58A9E6
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Aug 2022 13:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F8158AA3F
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Aug 2022 13:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbiHELGZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Aug 2022 07:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S240622AbiHELkt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Aug 2022 07:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbiHELF4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Aug 2022 07:05:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595F453D39;
-        Fri,  5 Aug 2022 04:05:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E581D61956;
-        Fri,  5 Aug 2022 11:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9F7C433D7;
-        Fri,  5 Aug 2022 11:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659697555;
-        bh=pNm8o60WcrpqZNQmthJuzqcUIWAspbQ1Az0XLlsbCR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJuZIZaVcxnq3R1zc+Mvxk5dM8hFDJsPpKo3jodqU1zm49gQxVbDXPEmgFMGYBmqz
-         7K/edWHIQPqkQ+FrYyq0o7bESBNCzl4Eqed6X3DbRANZDckYsQQEW9AZVGwwPcslzy
-         7dR3+ikfm4Iq27KSWHYzMYiIydgdmZ1z8GvOT+1Ae3ZOPePfiGABJaLJ6UBpAJugDx
-         YPbgALIhD2mplZ+XkftNB1mikwQ5es9EBcxdgbXRabQ9zIARIy5A5ApQPU5NLM/TCl
-         EVzaRBuK63jnAA5xdTAP7+lUVHbXz2qjwzdMDnfT/5Q3d1NlW9ZaIaJbUZ/LWQ6M5T
-         qBc5wEl4QG2DQ==
-Date:   Fri, 5 Aug 2022 12:05:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Valentina.FernandezAlanis@microchip.com
-Subject: Re: [PATCH v3 4/4] MAINTAINERS: add qspi to Polarfire SoC entry
-Message-ID: <Yuz5jZlRLr3pBCcb@sirena.org.uk>
-References: <20220805053019.996484-1-nagasuresh.relli@microchip.com>
- <20220805053019.996484-5-nagasuresh.relli@microchip.com>
+        with ESMTP id S240645AbiHELks (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Aug 2022 07:40:48 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DC514027
+        for <linux-spi@vger.kernel.org>; Fri,  5 Aug 2022 04:40:47 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id o22so3005229edc.10
+        for <linux-spi@vger.kernel.org>; Fri, 05 Aug 2022 04:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=pCHOEWPwKqQot9WTqQQF6BvNGXvxWbDx4W7fkO7Qo8Uos+0AS2wBEMLJWI5x5Vl0iK
+         TTkX1VsayFd4stUMYapx7wq0S72SCzwblXbLKuMRyJ4k+X8QzZAWQaHOZ0JdHQ4U58DS
+         vJ0zpFPBGiRCXz1C0pGUnu49EL0oU4OzTHhocQHjgLLkAhMWbPA/2TUnnKatKnFtyVKA
+         3esrvQ4CgBihBB7/v6og5YzWSs/hO+Jd0xGkTW1FHzv3JRmKHr39IxM5dCmNiFT2uXOS
+         zsjBZZX3kOsGH72sKv9AX344PwnMQcuq+fPmkX4JqgvVYLRcQ7C8UzIsYIer6ZU1kw+l
+         AhtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=x253Sv/mYXuUGn1EMBUgFGRPRHFiiChtdQK0BSPB6gYjbFCAihy725r2BtAt9h+T58
+         OyUycIdKFVMIqi2uk4YiWASBl7TdUI2n/8y061blBOyQcV9LExbrLasz42Yd4Fb6vqe/
+         pR71LbtShS6KU4Wx87L8DQgzNiT1UQq4GAWugC/nCjzI7lry3F8HBBVo/aThZw+fUj3p
+         NY+SFbb/G/x+wm6qg3lXFGtQR9F3ZtX50d/iucU6lXrrkEU1JzJwbOgbSbq0o1YpzgWh
+         k2zlapTmIJ48bG9dSNe3Q5AOMboPzfc42B7epRpGa7T8ziT8kRXzzFp98UyRFJVtivpu
+         +M2A==
+X-Gm-Message-State: ACgBeo0wnGZqbqELtIH+9khhZ6yD3TG+Wov+unjH3AQsZ6LeTwa+JYW5
+        AdBEIDscOehQyvEntEJJf080voT0x3W00ytLY5E=
+X-Google-Smtp-Source: AA6agR6AezsnhmzqWrjzn5Rv/TUvxnElYMnKxk2iXVND+5qU2hEWP1FdcfnpRIijbsMe90npiEqpypNyVkKihw3vWMw=
+X-Received: by 2002:a05:6402:3892:b0:43b:d872:a66 with SMTP id
+ fd18-20020a056402389200b0043bd8720a66mr6169634edb.139.1659699646454; Fri, 05
+ Aug 2022 04:40:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ywua4javZ5ErbPML"
-Content-Disposition: inline
-In-Reply-To: <20220805053019.996484-5-nagasuresh.relli@microchip.com>
-X-Cookie: Do not write below this line.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:209b:b0:20:9820:bb64 with HTTP; Fri, 5 Aug 2022
+ 04:40:45 -0700 (PDT)
+Reply-To: davidnelson7702626@gmail.com
+From:   Alio Baare <aliobaare1990@gmail.com>
+Date:   Fri, 5 Aug 2022 12:40:45 +0100
+Message-ID: <CAEqq5Su8RZNWPnD_8sutOY0YrUYkCF=FOLxBUe-_MazkNRndqw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:531 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6374]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aliobaare1990[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aliobaare1990[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [davidnelson7702626[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---ywua4javZ5ErbPML
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Aug 05, 2022 at 11:00:19AM +0530, Naga Sureshkumar Relli wrote:
-> Add the qspi driver to existing Polarfire SoC entry.
-
-> +++ b/MAINTAINERS
-> @@ -17146,6 +17146,7 @@ S:	Supported
->  F:	arch/riscv/boot/dts/microchip/
->  F:	drivers/mailbox/mailbox-mpfs.c
->  F:	drivers/soc/microchip/
-> +F:	drivers/spi/spi-microchip-core-qspi.c
->  F:	drivers/spi/spi-microchip-core.c
->  F:	include/soc/microchip/mpfs.h
-
-You should also add a pattern for the DT binding here.
-
---ywua4javZ5ErbPML
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLs+Y0ACgkQJNaLcl1U
-h9CoFgf6ApZqz/NcbJDelXqvJVLB4zcDCXYR3hznM9Ywkh5FznAF6LFolO0MK+zG
-lds2OseI8K7Py83ogA5FPYyjhPiHXmKQTt8Xdpyh+MIhJy1oT4c8e9gvDyN2lP/Q
-XW24FpDFPx2pHecSBaoxo+TjLBJuZoe8ugvTIQx6E9PnCkvkCp5KIpkLJeezFmRE
-VAEu5LhY1JkECussTupRUUK+T3YXGoRmFQbWEPgnTUtR7cRr9dJu/x+0oKe/CJwp
-bg8MKAuVA18VgQ3DUPR/b8hEe66fFcLzfIwG3W/uxegdkQgxKu04bDN/99QVV42p
-dzsAoTdFJRngCH7AyaZ51fFnmutPJg==
-=NfvA
------END PGP SIGNATURE-----
-
---ywua4javZ5ErbPML--
+Hello friend, I want to send money to you to enable me invest in your
+country get back to me if you are interested.
