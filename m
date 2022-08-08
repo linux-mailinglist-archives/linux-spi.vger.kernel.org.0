@@ -2,150 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EB958BE8B
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 02:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292D758BF15
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiHHAnB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 7 Aug 2022 20:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
+        id S241987AbiHHBf5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 7 Aug 2022 21:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiHHAnA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 20:43:00 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592266589
-        for <linux-spi@vger.kernel.org>; Sun,  7 Aug 2022 17:42:57 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220808004255epoutp03b559815fca054cd17b2f256c79d32961~JN_CRqYnD0846608466epoutp038
-        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 00:42:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220808004255epoutp03b559815fca054cd17b2f256c79d32961~JN_CRqYnD0846608466epoutp038
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659919375;
-        bh=sunQ4SmkLR5K3Io954QPWJRtsZKOFHaGeJrTKKpgmYE=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=eSaBfreUkMHMqFIRYRDR1gN24QkwzIK0xABNSKqqtk7ezAUA2u6ce1mjMOiEMI8xg
-         Dv9/71P1c4ZCgeAv2kx2XIa5nY3jEWvQ3C7CJTU6sexs/z2pCfBQAZ9wBRsV/OX+QJ
-         0ejld+f5HyisoDt6UAth7ophSBWFaZfvvWT4V8HY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220808004254epcas2p2f68217532a87c088a73a13a9a9477939~JN_BrYt9G1309813098epcas2p2N;
-        Mon,  8 Aug 2022 00:42:54 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4M1HVQ1GlXz4x9Pv; Mon,  8 Aug
-        2022 00:42:54 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.68.56487.E0C50F26; Mon,  8 Aug 2022 09:42:54 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a~JN_A0TSLj2512025120epcas2p3I;
-        Mon,  8 Aug 2022 00:42:53 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220808004253epsmtrp2ef1a624a97b854b923a18a5676fc107d~JN_Azi4vo2154421544epsmtrp2j;
-        Mon,  8 Aug 2022 00:42:53 +0000 (GMT)
-X-AuditID: b6c32a46-e43ff7000000dca7-70-62f05c0ef823
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5C.31.08905.D0C50F26; Mon,  8 Aug 2022 09:42:53 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.51]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220808004253epsmtip2ea54f85bfe16342e1ee0db0896b88975~JN_AmGE1A1435014350epsmtip2K;
-        Mon,  8 Aug 2022 00:42:53 +0000 (GMT)
-From:   Chanho Park <chanho61.park@samsung.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Adithya K V <adithya.kv@samsung.com>,
-        kernel test robot <lkp@intel.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: [PATCH] spi: s3c64xx: correct dma_chan pointer initialization
-Date:   Mon,  8 Aug 2022 09:48:51 +0900
-Message-Id: <20220808004851.25122-1-chanho61.park@samsung.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S242130AbiHHBel (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:34:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184F3DF80;
+        Sun,  7 Aug 2022 18:33:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 862A7B80E06;
+        Mon,  8 Aug 2022 01:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C3CC43148;
+        Mon,  8 Aug 2022 01:32:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659922379;
+        bh=Shks8rDUt6fwvZCiVNN+z/KX40yACmnhgAaxaywLQ9Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o7VCmRnOEwav+3e6Cc3fYPavgeBOBn7Wikvnls6THVY1y0N7Di+c9nfiKCmD0frgO
+         OKhgl5WIerE+c1vmPpOdlnh2hfS4+zAowDZvPPiDaVjZvp+AVDfZ3J3wfOmKiX/7xD
+         z1t7WeCAHH8SnUJzletzXFDxb70TgBQ4xk1lyw8L3mqWgsPa5VOEU+pUYcEDYzsEiv
+         Cs1PogkCg+xpTIAB9C10IfZh3NOuy9YlgWvLHBMSEacuTYVaCk11E7geKIk6U3e7Bt
+         7UUgPJVVX+z9Yt1e+PNd42AhFV1fO66rSfVe8IFi8Z2fM3cC2O7rMxNJJJ1RDvfjbj
+         dN3StCL145glQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Guo Mengqi <guomengqi3@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, masahisa.kojima@linaro.org,
+        jaswinder.singh@linaro.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 34/58] spi: synquacer: Add missing clk_disable_unprepare()
+Date:   Sun,  7 Aug 2022 21:30:52 -0400
+Message-Id: <20220808013118.313965-34-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220808013118.313965-1-sashal@kernel.org>
+References: <20220808013118.313965-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmmS5fzIckg71P2CwOTHjFavFg3jY2
-        i8U/njNZTH0IFLu8X9ti7+ut7BabHl9jtbi8aw6bxYzz+5gsGj/eZLd41fyIzYHb4/qST8we
-        i/e8ZPLYtKqTzePOtT1sHpuX1Hv0bVnF6PF5k1wAe1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8
-        c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QiUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OIS
-        W6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Ix/E9uYC1ZyVrx4uZelgfEDexcjJ4eE
-        gInEtrcPWbsYuTiEBHYwSrS/fMAG4XxilPj54RwThPONUeLbhveMMC1zXh5ghEjsZZRY2rgT
-        yvnIKLF6xhIWkCo2AV2JLc9fgXWICFRJzHz+hhmkiFlgKZNEW+clNpCEsICbxK6fr5lBbBYB
-        VYmpX5eD2bwCdhJNt5ezQKyTl7h+sw0qLihxcuYTsDgzULx562ywoRICX9klmq59Z4VocJHY
-        OHkLlC0s8er4FqhXpSQ+v9vLBmEXSyyd9YkJormBUeLytl9QCWOJWc/agc7mANqgKbF+lz6I
-        KSGgLHHkFtRePomOw3/ZIcK8Eh1tQhCN6hIHtk+HOllWonvOZ6gLPCQufrgHFhcSiJX42tbO
-        OIFRfhaSb2Yh+WYWwt4FjMyrGMVSC4pz01OLjQqM4NGanJ+7iRGcTrXcdjBOeftB7xAjEwfj
-        IUYJDmYlEd4ja98nCfGmJFZWpRblxxeV5qQWH2I0BYbvRGYp0eR8YELPK4k3NLE0MDEzMzQ3
-        MjUwVxLn9UrZkCgkkJ5YkpqdmlqQWgTTx8TBKdXAxDeHU9IxW1Epa7vLvJSjrtZqTh83bP9S
-        mGI6eQrvixO/uqY3Rs16teKezvGpMTndsxh8VTTk+iRyJk29u+nQ38YLeiq+Fy4WZCrdKjl6
-        LeV3cVfnY60YN83WPLePLz9qvXRg/77P9FjTm617JBnM+4P7lctXLD1XUah04b4IS+XqJdUb
-        D61nT0usYtj+sJ8rl+G0XA5jSQOjraGl/wy3tZGcu7K6mwyFJkfemayrUm18r2Cn1Wz/7KbW
-        tLJUtQ3ihyNWKIdcLHXZmm84d/2dTR91ffcqrYj6JPNpovC1q5tmaUYJV97S/P3LmWl3/se4
-        FepBzoq3VW7a+U9dWZP7XEr6hvkqfoPXuvzazBpKLMUZiYZazEXFiQAEBAjpMAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSvC5vzIckgxvnNSwOTHjFavFg3jY2
-        i8U/njNZTH34hM3i8n5ti72vt7JbbHp8jdXi8q45bBYzzu9jsmj8eJPd4lXzIzYHbo/rSz4x
-        eyze85LJY9OqTjaPO9f2sHlsXlLv0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBn/JrYxF6zk
-        rHjxci9LA+MH9i5GTg4JAROJOS8PMHYxcnEICexmlGg7tIsJIiEr8ezdDqgiYYn7LUdYIYre
-        M0psX9bGDJJgE9CV2PL8FSOILSJQI3HmwlWwScwCq5kkLl1/wAaSEBZwk9j18zVYA4uAqsTU
-        r8vBbF4BO4mm28tZIDbIS1y/2QYVF5Q4OfMJWJwZKN68dTbzBEa+WUhSs5CkFjAyrWKUTC0o
-        zk3PLTYsMMxLLdcrTswtLs1L10vOz93ECA5wLc0djNtXfdA7xMjEwXiIUYKDWUmE98ja90lC
-        vCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MBnH9XikvPA9
-        3/B4S+ltmY4Sn1VcKc+vm9+ZMUer8WOqbrfIgv5PK58z/TH4XbRVcF5i2fKp68Uevzscc+Ai
-        Q+Wv+4oiNU4/nx88cbBZ/Nedq+x9j32XXDnosTsqf9fq1KRtPjFX3z5ZlWMcPP0rR5/P7txD
-        5w81uMpWf8lPT8s0VObgsjylExC78Niz/Md62j2rTY19BPRU2h4kXDWwcNNdH7PRq3fKpw5L
-        zW9uXeK1UWXXeXJFO0JzQ+rzv3U3OSWcmLPk0CzBO/e7mRyrj7Zte+Cw1sWvNHdjMmvPlyy/
-        LfPO6dr83bxu80n7b2+3ZFrddXZffHcKC6/h0ZyZ8zmmK6zyn+B8XKdJXqA0SImlOCPRUIu5
-        qDgRAOWgJsDfAgAA
-X-CMS-MailID: 20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a
-References: <CGME20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a@epcas2p3.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use NULL for dma channel pointer initialization instead of plain integer.
+From: Guo Mengqi <guomengqi3@huawei.com>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/spi/spi-s3c64xx.c:387:34: sparse: sparse: Using plain integer as NULL pointer
-   drivers/spi/spi-s3c64xx.c:388:34: sparse: sparse: Using plain integer as NULL pointer
+[ Upstream commit 917e43de2a56d9b82576f1cc94748261f1988458 ]
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 82295bc0d192 ("spi: s3c64xx: move dma_release_channel to unprepare")
-Fixes: f52b03c70744 ("spi: s3c64xx: requests spi-dma channel only during data transfer")
-Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+Add missing clk_disable_unprepare() in synquacer_spi_resume().
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
+Link: https://lore.kernel.org/r/20220624005614.49434-1-guomengqi3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-s3c64xx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-synquacer.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 7f346866614a..651c35dd9124 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -389,8 +389,8 @@ static int s3c64xx_spi_unprepare_transfer(struct spi_master *spi)
- 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
- 		dma_release_channel(sdd->rx_dma.ch);
- 		dma_release_channel(sdd->tx_dma.ch);
--		sdd->rx_dma.ch = 0;
--		sdd->tx_dma.ch = 0;
-+		sdd->rx_dma.ch = NULL;
-+		sdd->tx_dma.ch = NULL;
- 	}
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index ea706d9629cb..47cbe73137c2 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -783,6 +783,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
  
- 	return 0;
+ 		ret = synquacer_spi_enable(master);
+ 		if (ret) {
++			clk_disable_unprepare(sspi->clk);
+ 			dev_err(dev, "failed to enable spi (%d)\n", ret);
+ 			return ret;
+ 		}
 -- 
-2.37.1
+2.35.1
 
