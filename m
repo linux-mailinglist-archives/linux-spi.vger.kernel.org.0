@@ -2,53 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D4658C0DC
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C91E58C30D
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 07:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiHHBzX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 7 Aug 2022 21:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S233982AbiHHFxe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Aug 2022 01:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243408AbiHHBxw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:53:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700551AF06;
-        Sun,  7 Aug 2022 18:38:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B0760DF3;
-        Mon,  8 Aug 2022 01:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89E0C43140;
-        Mon,  8 Aug 2022 01:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922736;
-        bh=Dmx4oOnZlzw9wzNSiNks7f7+LAxIbZSjqe1MP8P4Bjw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZEaoTyaOx02LB8FdNZggkh2oo/T1MiVMm8fzwgNktU7aez7uw6v1sydJr4wxUz3r
-         Yk80ZUdt0fxd5vz/+hf5UNkS/z+Cnd8Ias6VOQiBTyMjTacFUSyeGhu8OAEv5KoHOA
-         vlLsr8igsDl4xWJHrr1w3iyZ8z1llHKe1GP10rGOyJHqcLSChsaAn0ty6ksnNM2jyh
-         ob//EoX0DpyBXHKlhjyQr8+3m4MiMhvPBRz0qIRCSJ7RDVfPy6TqCi8s3zYfLzltr5
-         XbmJQzEjYmJd7D0ltY4QFOMhBPXjdZZbY6ImDgme7q5BO1o5uKnO+UbxwOmhjl/0ZI
-         vDjjEji5c+SVA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guo Mengqi <guomengqi3@huawei.com>, Hulk Robot <hulkci@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, masahisa.kojima@linaro.org,
-        jaswinder.singh@linaro.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 13/23] spi: synquacer: Add missing clk_disable_unprepare()
-Date:   Sun,  7 Aug 2022 21:38:20 -0400
-Message-Id: <20220808013832.316381-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013832.316381-1-sashal@kernel.org>
-References: <20220808013832.316381-1-sashal@kernel.org>
+        with ESMTP id S232822AbiHHFxe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 01:53:34 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7CD108A
+        for <linux-spi@vger.kernel.org>; Sun,  7 Aug 2022 22:53:31 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bx38so8689498ljb.10
+        for <linux-spi@vger.kernel.org>; Sun, 07 Aug 2022 22:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3vnVtVwupQ8WazaZ/AL9IwhCzJFASSPI0qjJVJcoGaM=;
+        b=yjIPdxk6jpZlmk7BoHMOCo62Yfn7cAnV3oiwVY3HUfDPv5VzvqYi8VIzM8o/nd2yTd
+         JGC4Rd9g+lOBYGQLkLwp+HPpTahAEcOI1n4S1S7/FX3n+YNGqiw5ZY63vKeDJFeQA2iw
+         0ipNhEaWG4MQYKCjoegvDEeN96f4Z9A11EFwLh1DOb7OQCxdN/7baNPv1L/jGpzyRILF
+         CgHTpW/RYHmgOo5av9P8c4m+YxAVSzWU7n8Uglf2RLPWdFTA1lOHDRSK69Xl8aCip7/h
+         u1t7RerPTHjToAaK9V2cYkzc1kRG9Br4c/u9dpjazwR5mIO/mVuIo/6XTmr++gOVp95w
+         3/Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3vnVtVwupQ8WazaZ/AL9IwhCzJFASSPI0qjJVJcoGaM=;
+        b=TSKjMWX1BIPbKQaMCm6Cmas6O4qTRycS+HeCvaHGMK1BGt5vd4uPHBpR5TTmwSJToQ
+         Jw/Aa0lC31MQM5PxC+cIeieg3/et8SrMz6iZbDGLnYSErHg2WnKDvWFjl4WmexHMjQlz
+         dRX30es7zmvioTdbRNmm0bZJk0UriyXWKdycaLWR171oD2eRm50ng3Lx38DB6DWwJ/2J
+         sO4UdpJ7lg0pLwrhsC7tKV1uciD+nx1WBZ/TeHlVS+0mEtOdejvWMpeQjRG0jGaj2kS7
+         VgOk2L3Ay1LvHuunNUAESV3yi/86VWJuUz8whX+1XXGLpynwWe91YsrLa1OqZKL06ULQ
+         dJDg==
+X-Gm-Message-State: ACgBeo3v0scY5CP/mWOHWH6ceF/v5AdHubL0k+7075oMSWpiHyaeygNe
+        VP1FvzEdM/gg/TxiEe6jgTm/Ew==
+X-Google-Smtp-Source: AA6agR6Ns2dWP270jXtxfSHr7jqQAWAB2geMsLB2/0u9dfxx6EWGcJLF7DNwM6LljpdVPznto5Rl0g==
+X-Received: by 2002:a05:651c:179f:b0:25d:ba24:2e16 with SMTP id bn31-20020a05651c179f00b0025dba242e16mr5080138ljb.422.1659938009749;
+        Sun, 07 Aug 2022 22:53:29 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id j16-20020ac25510000000b0048af3154456sm1306679lfk.146.2022.08.07.22.53.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 22:53:29 -0700 (PDT)
+Message-ID: <5e61f334-4712-a41c-e270-d4cef6397112@linaro.org>
+Date:   Mon, 8 Aug 2022 08:53:26 +0300
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] spi: s3c64xx: correct dma_chan pointer initialization
+Content-Language: en-US
+To:     Chanho Park <chanho61.park@samsung.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Adithya K V <adithya.kv@samsung.com>,
+        kernel test robot <lkp@intel.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <CGME20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a@epcas2p3.samsung.com>
+ <20220808004851.25122-1-chanho61.park@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808004851.25122-1-chanho61.park@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,33 +78,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Guo Mengqi <guomengqi3@huawei.com>
+On 08/08/2022 02:48, Chanho Park wrote:
+> Use NULL for dma channel pointer initialization instead of plain integer.
+> 
+> sparse warnings: (new ones prefixed by >>)
+>>> drivers/spi/spi-s3c64xx.c:387:34: sparse: sparse: Using plain integer as NULL pointer
+>    drivers/spi/spi-s3c64xx.c:388:34: sparse: sparse: Using plain integer as NULL pointer
+> 
 
-[ Upstream commit 917e43de2a56d9b82576f1cc94748261f1988458 ]
 
-Add missing clk_disable_unprepare() in synquacer_spi_resume().
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
-Link: https://lore.kernel.org/r/20220624005614.49434-1-guomengqi3@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-synquacer.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
-index 785e7c445123..1e10af6e10a9 100644
---- a/drivers/spi/spi-synquacer.c
-+++ b/drivers/spi/spi-synquacer.c
-@@ -784,6 +784,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
- 
- 		ret = synquacer_spi_enable(master);
- 		if (ret) {
-+			clk_disable_unprepare(sspi->clk);
- 			dev_err(dev, "failed to enable spi (%d)\n", ret);
- 			return ret;
- 		}
--- 
-2.35.1
-
+Best regards,
+Krzysztof
