@@ -2,75 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C91E58C30D
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 07:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D8758C36F
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 08:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbiHHFxe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Aug 2022 01:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S232190AbiHHGqk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Aug 2022 02:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiHHFxe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 01:53:34 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7CD108A
-        for <linux-spi@vger.kernel.org>; Sun,  7 Aug 2022 22:53:31 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bx38so8689498ljb.10
-        for <linux-spi@vger.kernel.org>; Sun, 07 Aug 2022 22:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3vnVtVwupQ8WazaZ/AL9IwhCzJFASSPI0qjJVJcoGaM=;
-        b=yjIPdxk6jpZlmk7BoHMOCo62Yfn7cAnV3oiwVY3HUfDPv5VzvqYi8VIzM8o/nd2yTd
-         JGC4Rd9g+lOBYGQLkLwp+HPpTahAEcOI1n4S1S7/FX3n+YNGqiw5ZY63vKeDJFeQA2iw
-         0ipNhEaWG4MQYKCjoegvDEeN96f4Z9A11EFwLh1DOb7OQCxdN/7baNPv1L/jGpzyRILF
-         CgHTpW/RYHmgOo5av9P8c4m+YxAVSzWU7n8Uglf2RLPWdFTA1lOHDRSK69Xl8aCip7/h
-         u1t7RerPTHjToAaK9V2cYkzc1kRG9Br4c/u9dpjazwR5mIO/mVuIo/6XTmr++gOVp95w
-         3/Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3vnVtVwupQ8WazaZ/AL9IwhCzJFASSPI0qjJVJcoGaM=;
-        b=TSKjMWX1BIPbKQaMCm6Cmas6O4qTRycS+HeCvaHGMK1BGt5vd4uPHBpR5TTmwSJToQ
-         Jw/Aa0lC31MQM5PxC+cIeieg3/et8SrMz6iZbDGLnYSErHg2WnKDvWFjl4WmexHMjQlz
-         dRX30es7zmvioTdbRNmm0bZJk0UriyXWKdycaLWR171oD2eRm50ng3Lx38DB6DWwJ/2J
-         sO4UdpJ7lg0pLwrhsC7tKV1uciD+nx1WBZ/TeHlVS+0mEtOdejvWMpeQjRG0jGaj2kS7
-         VgOk2L3Ay1LvHuunNUAESV3yi/86VWJuUz8whX+1XXGLpynwWe91YsrLa1OqZKL06ULQ
-         dJDg==
-X-Gm-Message-State: ACgBeo3v0scY5CP/mWOHWH6ceF/v5AdHubL0k+7075oMSWpiHyaeygNe
-        VP1FvzEdM/gg/TxiEe6jgTm/Ew==
-X-Google-Smtp-Source: AA6agR6Ns2dWP270jXtxfSHr7jqQAWAB2geMsLB2/0u9dfxx6EWGcJLF7DNwM6LljpdVPznto5Rl0g==
-X-Received: by 2002:a05:651c:179f:b0:25d:ba24:2e16 with SMTP id bn31-20020a05651c179f00b0025dba242e16mr5080138ljb.422.1659938009749;
-        Sun, 07 Aug 2022 22:53:29 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id j16-20020ac25510000000b0048af3154456sm1306679lfk.146.2022.08.07.22.53.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Aug 2022 22:53:29 -0700 (PDT)
-Message-ID: <5e61f334-4712-a41c-e270-d4cef6397112@linaro.org>
-Date:   Mon, 8 Aug 2022 08:53:26 +0300
+        with ESMTP id S229688AbiHHGqi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 02:46:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D55101CA;
+        Sun,  7 Aug 2022 23:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659941197; x=1691477197;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FVcZt3g9dN4KqEcK66vr9WuH6JLgWK2Sx/SymlRoM10=;
+  b=S8wf+ZWhwXbdfeXFY7ii1Ndj488nhbIdjSIxmyjusVqvkWNXuvL2Z4y1
+   FAaJvk+R8p+Y/SdgGtvQzIJRSYh9JCr34XHHxhbBIxqu8F2/zms14D9Ry
+   byjDc4+6gM56YXWi5Ojbsnbq7FQX/kelUiuP1UG/D9UC1zqlhKUbKLtVe
+   6EfnDT/9EAxYzO62m7X5rlupgbO1Fq+Ypy1oYR5MHFxBThL8zRghf2QkU
+   jT2cDWuigOuC1HdijIlV2oQ768Sce38CZh8IJYWiSaGnt6cC/OYfYTImj
+   MbI6gRkDzh9wO434pokoGQcs1QVC4WnEIt+c74DmpgtkQt6PFauuruqen
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="107987859"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Aug 2022 23:46:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Sun, 7 Aug 2022 23:46:31 -0700
+Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.28 via Frontend Transport; Sun, 7 Aug 2022 23:46:28 -0700
+From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Valentina.FernandezAlanis@microchip.com>,
+        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+Subject: [PATCH v4 0/4] Add support for Microchip QSPI controller
+Date:   Mon, 8 Aug 2022 12:15:59 +0530
+Message-ID: <20220808064603.1174906-1-nagasuresh.relli@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] spi: s3c64xx: correct dma_chan pointer initialization
-Content-Language: en-US
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Adithya K V <adithya.kv@samsung.com>,
-        kernel test robot <lkp@intel.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <CGME20220808004253epcas2p3937171a6f89a765d67d5cc7b55afb89a@epcas2p3.samsung.com>
- <20220808004851.25122-1-chanho61.park@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808004851.25122-1-chanho61.park@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +62,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/08/2022 02:48, Chanho Park wrote:
-> Use NULL for dma channel pointer initialization instead of plain integer.
-> 
-> sparse warnings: (new ones prefixed by >>)
->>> drivers/spi/spi-s3c64xx.c:387:34: sparse: sparse: Using plain integer as NULL pointer
->    drivers/spi/spi-s3c64xx.c:388:34: sparse: sparse: Using plain integer as NULL pointer
-> 
+This patch enables the Microchip's FPGA QSPI and Polarfire SoC QSPI
+controller support.
 
+Tested spi-nand (W25N01GV) and spi-nor (MT25QL256A) on Microchip's
+ICICLE kit. tested using both FPGA QSPI and Polarfie SoC QSPI.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+changes in v4
+-------------
+1. Removed microchip,mpfs-qspi compatible from the driver
+2. Changed platform_get_irq() return value check from <=0 to <0
+3. Fixed dt_binding_check warning by installing latest yamllint
 
+changes in v3
+------------
+1. Added dev_err_probe() at places like probe failures
+2. Split the dt-bindings one for adding coreqspi compatible
+   and other one to add coreqspi as fallback to mpfs-qspi.
 
-Best regards,
-Krzysztof
+changes in v2
+------------
+1. Replaced spi_alloc_master() with devm_spi_alloc_master()
+2. Used dev_err_probe() when devm_spi_alloc_master() fails.
+3. Added shared IRQ flag in the interrupt registration.
+4. Updated the dt_bindings so that there is a differentiation
+   between FPGA QSPI IP core and hard QSPI IP core.
+
+Naga Sureshkumar Relli (4):
+  spi: dt-binding: document microchip coreQSPI
+  spi: dt-binding: add coreqspi as a fallback for mpfs-qspi
+  spi: microchip-core-qspi: Add support for microchip fpga qspi
+    controllers
+  MAINTAINERS: add qspi to Polarfire SoC entry
+
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  15 +-
+ MAINTAINERS                                   |   1 +
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-microchip-core-qspi.c         | 600 ++++++++++++++++++
+ 5 files changed, 622 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/spi/spi-microchip-core-qspi.c
+
+-- 
+2.25.1
+
