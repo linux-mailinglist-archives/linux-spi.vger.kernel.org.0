@@ -2,61 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B1458C379
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 08:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7727158C393
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 08:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbiHHGqx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Aug 2022 02:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S229698AbiHHG4e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Aug 2022 02:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236542AbiHHGqs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 02:46:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38112772;
-        Sun,  7 Aug 2022 23:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659941207; x=1691477207;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X47q7DThyrWu/kkT8n4MueOYo1D/I729fdsIdMKG9zk=;
-  b=p2iJVroYzdNxtGlyOgLFWbG3MpfJrHzHFm/IDtdfBhFEVvH+RwHeL+r/
-   DGVPL8ckkXB6II9kUdcn5fc/2q+sLRlMU/xi4+VcuEj6UX3aGbKnTw7xo
-   Gxbz8O6cakOUcZc7ecq023NL5/C3xsvPKopFfkQAp4UH+bwINEAAAlaHA
-   q5tnRW7yYaa4+IxdRSjFzoSiEpPEHXVAIFGjKUn135xurbxQbXTwJeNHd
-   YIs9NjY0rVpQlKlKMtlUUkFc6uhHx81n1KUcpvhmJzR/ZxGYpUoxgvyZp
-   lBpuXrNjConPIvA0fCgqV8mUQjX0LL8izsa7MCNyu8QKl5E5IhFo1rUfu
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="107987926"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Aug 2022 23:46:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sun, 7 Aug 2022 23:46:46 -0700
-Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Sun, 7 Aug 2022 23:46:42 -0700
-From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Valentina.FernandezAlanis@microchip.com>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Subject: [PATCH v4 4/4] MAINTAINERS: add qspi to Polarfire SoC entry
-Date:   Mon, 8 Aug 2022 12:16:03 +0530
-Message-ID: <20220808064603.1174906-5-nagasuresh.relli@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220808064603.1174906-1-nagasuresh.relli@microchip.com>
-References: <20220808064603.1174906-1-nagasuresh.relli@microchip.com>
+        with ESMTP id S229688AbiHHG4d (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 02:56:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578AEDF96
+        for <linux-spi@vger.kernel.org>; Sun,  7 Aug 2022 23:56:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED65860C21
+        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 06:56:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58876C433C1;
+        Mon,  8 Aug 2022 06:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659941788;
+        bh=UQ/azTN4SFNNv+o1dpRNkFMurvr/gxN7QecPeOikOeI=;
+        h=Subject:From:Date:To:From;
+        b=e+JyIbqiXP4WYz+KQvOdS6Hy8ioM82svLLkrKh551y1W4kUaC8GOeERV92yC3T7Kq
+         ZFAu9PeOZPSSVtaqeI7HXN/bAvHVC9Y9MB5uBSgzWSf7p4hGrj5WE9I5FHRSsWzTnc
+         rtrGxQjfe+IStKE7dO2anA9KfLf8Y0dszk4vk3AeZdkblZ/I8vPRJ7xMpGf6v+Hw0u
+         YhrMvvhbNOGHEEbuyyhvbu1RoyIXgkcftkf/O7Bd4jDUzBfclHVRsfCa0k4AQse7n9
+         oHPE0SlooNjE24uCCmlynkVyc9BSgzUU6Yqywl+l+1H34UJBLSlRzkSSHxLkDxj9Rd
+         tO51yKkhHt7WA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32AE1C43140;
+        Mon,  8 Aug 2022 06:56:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165994178811.6116.18085358940906962435.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 08 Aug 2022 06:56:28 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,26 +52,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the qspi driver to existing Polarfire SoC entry.
+Latest series: [v4] Add support for Microchip QSPI controller (2022-08-08T06:45:59)
+  Superseding: [v3] Add support for Microchip QSPI controller (2022-08-05T05:30:15):
+    [v3,1/4] spi: dt-binding: document microchip coreQSPI
+    [v3,2/4] spi: dt-binding: add coreqspi as a fallback for mpfs-qspi
+    [v3,3/4] spi: microchip-core-qspi: Add support for microchip fpga qspi controllers
+    [v3,4/4] MAINTAINERS: add qspi to Polarfire SoC entry
 
-Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 295ca16a415b..0329dca23fe2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17146,6 +17146,7 @@ S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
-+F:	drivers/spi/spi-microchip-core-qspi.c
- F:	drivers/spi/spi-microchip-core.c
- F:	include/soc/microchip/mpfs.h
- 
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
