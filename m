@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6765158BF8E
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2971258C03C
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242681AbiHHBmP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 7 Aug 2022 21:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S243215AbiHHBte (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 7 Aug 2022 21:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243022AbiHHBln (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:41:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EA65F6B;
-        Sun,  7 Aug 2022 18:35:17 -0700 (PDT)
+        with ESMTP id S243047AbiHHBsl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:48:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1295717074;
+        Sun,  7 Aug 2022 18:37:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87EE060DEE;
-        Mon,  8 Aug 2022 01:35:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C67C433D7;
-        Mon,  8 Aug 2022 01:35:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3256A60DF3;
+        Mon,  8 Aug 2022 01:37:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9395DC433D7;
+        Mon,  8 Aug 2022 01:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922516;
+        s=k20201202; t=1659922625;
         bh=Shks8rDUt6fwvZCiVNN+z/KX40yACmnhgAaxaywLQ9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xg+vKAacO5Qf9WCSHPn5gCH7j6dsXsyhhppfYpLnJKptUDq4SE1HcrjNHo3cWsPBD
-         ZusJ2JpRThV2bhjCzzWatZg+VkKDhYGQSOnWQ6nW1yg8BRkMOhRefgRCj8dvJVNNB4
-         6bs2txyTeaG+H1KmElYoVKoNpLZXcscP2qc2u9/oGJcevQN7t++h6v2pLB0iIQgkGq
-         D9nQ0yFnyo39mr2iYs+OD5Ps2GZnXaq8c2GBIT2kwIzIb77INGwc24y3tCIHITd9bP
-         VpLS0xwPS6TNhSwfblu7J4uuQz7cO6bh1l2lHOAEKf27SFBCebedNkHjYCC1OlfGgy
-         7fWa1fgGa8MkA==
+        b=HYr8P4BaCn3w3SOw0iUCY9M723S6hmHBHSgkCsU42nuM12zdmyPhji19kmdZTeqtA
+         mvVqyYH2jhqyCYm6MV6X9WmXq66QqWSzy8nsgy5ppJyHB+6Q2g1M77pvY4JkDlVVD7
+         sk9mjdBdFSIRMs2etStGXuJeWl+RjPndfZXLuPkZihUPEXzosl6ElihNKQP5Kp0qo1
+         6UmvCOPEj7G25k9RfzuWDPXaejdknPYGc18XNWLaQKEhv0zbx2CJMUwJmbmebvN5g0
+         tsscraTaoXaRKejoUEVST7P0AOfY7XKwSp3UshBZXXLJDrDJZkiqivbDj/m1DGA/Y8
+         LoGvUV9QXD+Ig==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Mengqi <guomengqi3@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, masahisa.kojima@linaro.org,
         jaswinder.singh@linaro.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 33/53] spi: synquacer: Add missing clk_disable_unprepare()
-Date:   Sun,  7 Aug 2022 21:33:28 -0400
-Message-Id: <20220808013350.314757-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 27/45] spi: synquacer: Add missing clk_disable_unprepare()
+Date:   Sun,  7 Aug 2022 21:35:31 -0400
+Message-Id: <20220808013551.315446-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013350.314757-1-sashal@kernel.org>
-References: <20220808013350.314757-1-sashal@kernel.org>
+In-Reply-To: <20220808013551.315446-1-sashal@kernel.org>
+References: <20220808013551.315446-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
