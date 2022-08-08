@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E5558C07D
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D4658C0DC
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 03:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243289AbiHHBw3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 7 Aug 2022 21:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S243483AbiHHBzX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 7 Aug 2022 21:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243546AbiHHBvP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:51:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCA5BE26;
-        Sun,  7 Aug 2022 18:38:13 -0700 (PDT)
+        with ESMTP id S243408AbiHHBxw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Aug 2022 21:53:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700551AF06;
+        Sun,  7 Aug 2022 18:38:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79B87B80E10;
-        Mon,  8 Aug 2022 01:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D63EC43470;
-        Mon,  8 Aug 2022 01:38:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B0760DF3;
+        Mon,  8 Aug 2022 01:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89E0C43140;
+        Mon,  8 Aug 2022 01:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922691;
-        bh=Shks8rDUt6fwvZCiVNN+z/KX40yACmnhgAaxaywLQ9Y=;
+        s=k20201202; t=1659922736;
+        bh=Dmx4oOnZlzw9wzNSiNks7f7+LAxIbZSjqe1MP8P4Bjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nLoHKtjlx4BBZO+ZM57CvP8F4Cc2u5QaWYWnR4Qn94fyuCQGPLp/4J0kKhjGBZ2E5
-         XLjFTmstEsROghUDnmHwg2MltNIOeHt/+lx/XeJj+BtNLvygBE9M6BmWGiRkA/re2f
-         l4jmc+ObKRX6cvBGgLvfxdMYzyTy/GjymeMHPe4KSQxBcy40Ri8WctYCWZO9YSLjE8
-         lMZJu+jFzk3uVMsMbcVcRf6PXaWbM5lF5NXqRpbKUMr9aBPCBxJHr7pcvIiEFAbsUR
-         zDnPJ35pPDa1ERlixZ8IGqcL29mrVcRDeJNUqLOBxAjyst3Nl4HdpuOiCtdm5m3K3b
-         M6ugJWV4ZtV3g==
+        b=nZEaoTyaOx02LB8FdNZggkh2oo/T1MiVMm8fzwgNktU7aez7uw6v1sydJr4wxUz3r
+         Yk80ZUdt0fxd5vz/+hf5UNkS/z+Cnd8Ias6VOQiBTyMjTacFUSyeGhu8OAEv5KoHOA
+         vlLsr8igsDl4xWJHrr1w3iyZ8z1llHKe1GP10rGOyJHqcLSChsaAn0ty6ksnNM2jyh
+         ob//EoX0DpyBXHKlhjyQr8+3m4MiMhvPBRz0qIRCSJ7RDVfPy6TqCi8s3zYfLzltr5
+         XbmJQzEjYmJd7D0ltY4QFOMhBPXjdZZbY6ImDgme7q5BO1o5uKnO+UbxwOmhjl/0ZI
+         vDjjEji5c+SVA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Mengqi <guomengqi3@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, masahisa.kojima@linaro.org,
         jaswinder.singh@linaro.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 17/29] spi: synquacer: Add missing clk_disable_unprepare()
-Date:   Sun,  7 Aug 2022 21:37:27 -0400
-Message-Id: <20220808013741.316026-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 13/23] spi: synquacer: Add missing clk_disable_unprepare()
+Date:   Sun,  7 Aug 2022 21:38:20 -0400
+Message-Id: <20220808013832.316381-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013741.316026-1-sashal@kernel.org>
-References: <20220808013741.316026-1-sashal@kernel.org>
+In-Reply-To: <20220808013832.316381-1-sashal@kernel.org>
+References: <20220808013832.316381-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
-index ea706d9629cb..47cbe73137c2 100644
+index 785e7c445123..1e10af6e10a9 100644
 --- a/drivers/spi/spi-synquacer.c
 +++ b/drivers/spi/spi-synquacer.c
-@@ -783,6 +783,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
+@@ -784,6 +784,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
  
  		ret = synquacer_spi_enable(master);
  		if (ret) {
