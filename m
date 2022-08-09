@@ -2,60 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6487C58D2B2
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Aug 2022 06:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDD958D328
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Aug 2022 07:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiHIESk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Aug 2022 00:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
+        id S232199AbiHIF3V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Aug 2022 01:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiHIESi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Aug 2022 00:18:38 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD496183BE
-        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 21:18:37 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id s9so11823240ljs.6
-        for <linux-spi@vger.kernel.org>; Mon, 08 Aug 2022 21:18:37 -0700 (PDT)
+        with ESMTP id S229769AbiHIF3U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Aug 2022 01:29:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E471EADC
+        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 22:29:19 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t1so15548546lft.8
+        for <linux-spi@vger.kernel.org>; Mon, 08 Aug 2022 22:29:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ktjbOwbUIz6JZWGLIYlF9Qv19zLsmQ14nlnBHaQqtKY=;
-        b=fQbtoJUe4jFNbbbhRZa3Tv3NjHw8InWX5xP/yg0r7db2IBJyPK2LkV+4jCyhbDQxTw
-         rS0bRSG/hcpK0Ii5M7QHqSc7nbfDNrH8nq39KCCP42jnpx40OMM+sayFO5PvyZL97k8k
-         dJPX3sQtCrl/8Qx3b30gxzLIBFrnvQmGjPPpXLRAzFUHKw+plgD8zpAbIcjExJ3qS74q
-         5pNKgzTmMakgmVu14v4B5GKshfCaFDntqrRboBU4fdj8b4KF09hpLWQ15iTdEnNKwlNN
-         HQB0Ff1f5ldnZOq1TZ4UtvFSTmp5mgvhGd8oCI99ROxC6dFDMXGfpQQszUFs0uSzBXNK
-         nDdw==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=u/hZlxsdOPGw/Z2ifZgq67lFc+EwFWOndp1d8qCJ2O8=;
+        b=NrPr10ZujPg8N0R6nOI/K7Quje7yvVAdJqW1wgapVrP2H2s6lwauQKiIXAxsKK2t0Z
+         yC2HhUydYskBXLH+QWkY3YaqPz98IdV0xfAwn4S9KIcOY4UBT1WWjX40m10j8T66ZkjE
+         munSYPDFjcQeRlPSCC8pWfem/9NzH1hufVR22KKTHL/eOEQn6H5FFRqiviGWMGHqGzio
+         yamuy90GMkH526Ut/tvyvfiUmgyX+irBDbWQxITknIkHKbh5x2fSISsf8rX3xKHZbBPh
+         CKtcZ2OhvZxxQxmYmD0W6lN4GHK+n6+aL/IY5i9458Nrpr8aBTKSoUcr/vAXEHHbQkNZ
+         dMmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=ktjbOwbUIz6JZWGLIYlF9Qv19zLsmQ14nlnBHaQqtKY=;
-        b=MDKroP663MypIfjnwz0W855qcYZiTXannVfDqx5mDA7bFZodY13XpstkabVFs56vtA
-         3bmejfRAaNa0u+1rfvPr9DaosuQOXDRjGIDRcfkRllV9n0yyRpNGxNX1Um7gXESf1GPq
-         7LLMB7i9hIPT347NcPwsysDEpy33sOeVOdSc5D6v0eFZv7LQ6OHq7A8SmL4COOzAaXIB
-         QZOrLRZHyY1qlXBZFO90CktroyrwelzWS0YreX3KLNPAJ/PGaBE9Vg0QUMVri+x4H7uc
-         y5ZuO+u4NgTy7pbxqj3/XAujFuSlpk9t4EeA4vSsKetV+DOIXI8w7CWOVFVtDJXRZMAX
-         /hgQ==
-X-Gm-Message-State: ACgBeo2s4Fy0PJA5bZNXGL1GbyJax29hQ/VdEgKFWCTGndXJSvI95Ujx
-        eN9t0Z7eSUcfPipdHZYAIxbYjQ==
-X-Google-Smtp-Source: AA6agR7anU7Jd1Qacvlqh82YFYxyDO1oFmXIYlQYQsIHymSU5X0Uh7ffWNrP57hUs0cBE78V8Gi8pQ==
-X-Received: by 2002:a2e:bea8:0:b0:25f:e9ab:5a1b with SMTP id a40-20020a2ebea8000000b0025fe9ab5a1bmr1592141ljr.448.1660018716032;
-        Mon, 08 Aug 2022 21:18:36 -0700 (PDT)
+        bh=u/hZlxsdOPGw/Z2ifZgq67lFc+EwFWOndp1d8qCJ2O8=;
+        b=zJGxpDSPF/W3/nhJQ/ieg7opCc35b7DyyQCHECNoXLAoBVl3z1g9NTro1mBYpKyt2k
+         1P2KpT6+2uNjv3CtSCB5bGHbyCzYnvMhFqYjSkrlF27WmVIhBms3eEEAf3WDQnNu6a3a
+         tIDqNgmXz9VatRft5QVaabUNsql53e/nEnx2F1ZFEZln9dw4ggD9EJUKc3llqmiLHidI
+         KZsLdt0QGCE643ZkH2opBy1IZVRHtJiHurBPlsi5SE6IFvdM36daLBaBZA/iAVxgLz14
+         8SaXFkNVQyPJa1feNRvCDjYqwtmU+6opRO2+T4+Urme8TVX7wZyFpaDZ9hdVbgWt3SrP
+         RFiA==
+X-Gm-Message-State: ACgBeo1+lb3lpy14pC+SWGthnO+XS7A/tFKWXOa6b/tGQBl6o4ByLKPt
+        fxIRxNkE7WQVYUiUln/y8ZRg/A==
+X-Google-Smtp-Source: AA6agR5kYLA7ov5xiceEa1hxn2Gue+4ehJgPDN3o+sVTwyH9ADjDLIH0KZGgfn2gz8GFF5FQS73zQA==
+X-Received: by 2002:a19:654e:0:b0:48b:965d:d182 with SMTP id c14-20020a19654e000000b0048b965dd182mr5558154lfj.610.1660022957344;
+        Mon, 08 Aug 2022 22:29:17 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id t15-20020a2e9d0f000000b0025e2e70b41fsm1529430lji.71.2022.08.08.21.18.34
+        by smtp.gmail.com with ESMTPSA id w27-20020a05651c119b00b0025e01ee7229sm1551622ljo.54.2022.08.08.22.29.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 21:18:35 -0700 (PDT)
-Message-ID: <38c3977a-0196-1832-ff94-317064cbc439@linaro.org>
-Date:   Tue, 9 Aug 2022 07:18:34 +0300
+        Mon, 08 Aug 2022 22:29:16 -0700 (PDT)
+Message-ID: <b15184d6-c9e7-d042-621b-ef4ccd3c87ba@linaro.org>
+Date:   Tue, 9 Aug 2022 08:29:15 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
 Subject: Re: [PATCH 1/3] dt-bindings: spi: stm32: Add st,dual-flash property
  in st,stm32-qspi.yaml
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
         Mark Brown <broonie@kernel.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
@@ -68,8 +69,8 @@ References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
  <20220808074051.44736-2-patrice.chotard@foss.st.com>
  <9ad4b4a8-988e-f185-f80c-6f15f341ce8c@linaro.org>
  <79fd7e19-ceef-14fb-5a83-603740735f8f@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <79fd7e19-ceef-14fb-5a83-603740735f8f@foss.st.com>
+ <38c3977a-0196-1832-ff94-317064cbc439@linaro.org>
+In-Reply-To: <38c3977a-0196-1832-ff94-317064cbc439@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,44 +83,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/08/2022 19:08, Patrice CHOTARD wrote:
-> Hi Krzystof
-> 
-> On 8/8/22 11:01, Krzysztof Kozlowski wrote:
->> On 08/08/2022 10:40, patrice.chotard@foss.st.com wrote:
->>> From: Patrice Chotard <patrice.chotard@foss.st.com>
->>>
->>> Add new property st,dual-flash which allows to use the QSPI interface as a
->>> communication channel using up to 8 qspi line.
->>> This mode can only be used if cs-gpios property is defined.
->>>
->>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->>> ---
->>>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 8 ++++++++
->>>  1 file changed, 8 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>> index 6ec6f556182f..5e4f9109799e 100644
->>> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>> @@ -46,6 +46,14 @@ properties:
->>>        - const: tx
->>>        - const: rx
->>>  
->>> +  st,dual-flash:
->>> +    type: boolean
->>> +    description:
->>> +      Allows to use 8 data lines in case cs-gpios property is defined.
+On 09/08/2022 07:18, Krzysztof Kozlowski wrote:
+> On 08/08/2022 19:08, Patrice CHOTARD wrote:
+>> Hi Krzystof
 >>
->> It's named dual-flash, but what if you want to use QSPI to connect for
->> example to FPGA?
+>> On 8/8/22 11:01, Krzysztof Kozlowski wrote:
+>>> On 08/08/2022 10:40, patrice.chotard@foss.st.com wrote:
+>>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>>>
+>>>> Add new property st,dual-flash which allows to use the QSPI interface as a
+>>>> communication channel using up to 8 qspi line.
+>>>> This mode can only be used if cs-gpios property is defined.
+>>>>
+>>>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 8 ++++++++
+>>>>  1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>>> index 6ec6f556182f..5e4f9109799e 100644
+>>>> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>>> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>>> @@ -46,6 +46,14 @@ properties:
+>>>>        - const: tx
+>>>>        - const: rx
+>>>>  
+>>>> +  st,dual-flash:
+>>>> +    type: boolean
+>>>> +    description:
+>>>> +      Allows to use 8 data lines in case cs-gpios property is defined.
+>>>
+>>> It's named dual-flash, but what if you want to use QSPI to connect for
+>>> example to FPGA?
+>>>
+>>> Also how is this related to parallel-memories property?
 >>
->> Also how is this related to parallel-memories property?
+>> I called it "dual-flash" simply because it enable the dual flash feature of the QSPI block (bit CR_DFM : Dual Flash Mode)
+>> which allows to use the 8 lines simultaneously of our dual QSPI block.
 > 
-> I called it "dual-flash" simply because it enable the dual flash feature of the QSPI block (bit CR_DFM : Dual Flash Mode)
-> which allows to use the 8 lines simultaneously of our dual QSPI block.
+> And how is it related to existing parallel-memories property?
 
-And how is it related to existing parallel-memories property?
+Maybe I was not specific enough, so let me rephrase - we have already
+parallel-memories property. How this one is different (to justify the
+new property)? Is just one memory connected in your case to QSPI over 8
+data lines?
 
 Best regards,
 Krzysztof
