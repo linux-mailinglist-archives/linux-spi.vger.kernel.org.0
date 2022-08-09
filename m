@@ -2,86 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3021258D974
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Aug 2022 15:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652B558DAF9
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Aug 2022 17:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243369AbiHINhW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Aug 2022 09:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S244836AbiHIPUx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Aug 2022 11:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243385AbiHINhQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Aug 2022 09:37:16 -0400
-X-Greylist: delayed 7559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 06:36:54 PDT
-Received: from blackstone.apzort.in (unknown [202.142.85.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ACD208
-        for <linux-spi@vger.kernel.org>; Tue,  9 Aug 2022 06:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=anurav.com;
-        s=default; h=Content-Type:MIME-Version:Message-ID:Reply-To:From:Date:Subject:
-        To:Sender:Cc:Content-Transfer-Encoding:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YVUHs7UWdP4x/mxKiJOQPqdBXveF2XkswSL24fudVuE=; b=UFkOdHZJMQb1ZWSMF2/+S0nmbX
-        5tXtmmOVMy+MwZXa8u8aXCmH76vBWaUVCCGgTO9a6xrWcarW3bRmVzrKh4Sj0WdnMCxg1DvnBOvBQ
-        vcWDV5KO8PwkLks4atzlFmFvCr4Ik49MCWD1aYKsPQGJxQTxzHzcHtJ7CQbIPC9xutuA82x6Qk1bV
-        Gc5efSZG1y0gSh94B4leQwM3LD/rjtBxaoUDxxMEPElSQt/LFDUHD9FvYXmhdZStPnKQprbHWXTlb
-        ZmrmScGTdTyDRwr+7F8Na2BJJ0Ao7Kp1OWWYksbGksMPLKHayQ6prd0rwu2a75vy+FKW76jY7t5C9
-        HY5lFa5w==;
-Received: from apzort by blackstone.apzort.in with local (Exim 4.94.2)
-        (envelope-from <apzort@blackstone.apzort.in>)
-        id 1oLNRV-00FFWY-8b
-        for linux-spi@vger.kernel.org; Tue, 09 Aug 2022 17:00:37 +0530
-To:     linux-spi@vger.kernel.org
-Subject: =?us-ascii?Q?Anurav_Dhwaj__"EINE_FINANZKRISE_KANN_SIE_SEHR_R?=  =?us-ascii?Q?EICH_MACHEN!"?=
-X-PHP-Script: www.anurav.com/index.php for 191.101.31.24
-X-PHP-Originating-Script: 1000:PHPMailer.php
-Date:   Tue, 9 Aug 2022 11:30:37 +0000
-From:   Anurav Dhwaj <mail@anurav.com>
-Reply-To: mail@anurav.com
-Message-ID: <Dwju0Cuu2DOk8uTPm1Jxo6U1n9Y6gwLkpoSVLLCFQaA@www.anurav.com>
-X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S244852AbiHIPUd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Aug 2022 11:20:33 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDD9DF8
+        for <linux-spi@vger.kernel.org>; Tue,  9 Aug 2022 08:20:25 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id n185so6478185wmn.4
+        for <linux-spi@vger.kernel.org>; Tue, 09 Aug 2022 08:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Ls4lqjgx1p+SGOqqpZ5RhMqVskyV8lsav7dO9gMbm3A=;
+        b=VcMuiqgtWqmMKuBM8iolKvB5doGcT7vzUu5x4rt+07/AZNvNc6PIct6rPvHixoU1Ne
+         fasNlYL4YxPA6oe+m/i89Sj1U9AeaHZJZYmMr3UelQwPWTwj/hwAC1oxa+81tHfeOVn7
+         xkxwREDO/HQvtD8VEpNZ5y95w3NXdb7cx4yhbW3/tOpfK2WW5ZrBW45umeF62YJca7Ar
+         Euu1YKmvFZ4tQttgaNoo29JNRELNjLIzEmwrJvC9KKVUpYzGqBg/nahPZ9LUgMTX3Zlo
+         rNovmpH9UDh3RjeBfuU04disdHvgvB5Qx5GJYN/Qn3y165PJduqUZtcyezvgGAy59uFm
+         DsYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Ls4lqjgx1p+SGOqqpZ5RhMqVskyV8lsav7dO9gMbm3A=;
+        b=aJbhOLXkFsaqxvla60GeHnlndXD9A3bq5LQ2JmrY6Kr9ZH21oz87Heh7ls3j1epaz+
+         oUuPU4SRyxpGQt0IOAYwn2YroBFpTNwncmBcZbYmRtWbLeb1SU42xUGINeGMEHXnLvr/
+         K8RSBOu5zEhlWE7SYONNsRqoQOc7diLN+npSvYawDxqZ4yBwkVzTXHWqkEhFyp9AQMyr
+         eXwABX0ccpLYAJERG22TX4XU0epmVgpQa+swtbphwnMPZbxDwM4vRnTOBwfqQIP6RGwB
+         TM0BiS/nXztNoveBkLtPEwgYJRUh4CxIB4oK3D4BaB+qrcwNRejzbNtgT3gbfij66ee/
+         cGjA==
+X-Gm-Message-State: ACgBeo3pVN56ZHxWEL0p0KFSlpljuUc3BOMn1pZgzgCq2PP107MAVywX
+        f/I0xM7DscC5xq0Q5t9o0syQ6w==
+X-Google-Smtp-Source: AA6agR6q1GkF0jJvDFraMZ4ng6K/jQqngRGNxCAShS8DUJA8TSuXEhbFRK+Z+O7p4fPUZJXHr4DBjg==
+X-Received: by 2002:a05:600c:3caa:b0:3a0:18e4:781b with SMTP id bg42-20020a05600c3caa00b003a018e4781bmr16424183wmb.199.1660058424094;
+        Tue, 09 Aug 2022 08:20:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:982:cbb0:a7b2:d90d:221:7fec])
+        by smtp.gmail.com with ESMTPSA id r3-20020a05600c424300b003a53de38c0dsm8279390wmm.14.2022.08.09.08.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 08:20:23 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     broonie@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Da Xue <da@libre.computer>
+Subject: [PATCH] spi: meson-spicc: save pow2 datarate between messages
+Date:   Tue,  9 Aug 2022 17:20:19 +0200
+Message-Id: <20220809152019.461741-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - blackstone.apzort.in
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [1000 989] / [47 12]
-X-AntiAbuse: Sender Address Domain - blackstone.apzort.in
-X-Get-Message-Sender-Via: blackstone.apzort.in: authenticated_id: apzort/from_h
-X-Authenticated-Sender: blackstone.apzort.in: mail@anurav.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,PHP_SCRIPT,
-        RCVD_IN_PBL,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [202.142.85.54 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  2.3 PHP_SCRIPT Sent by PHP script
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *******
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1960; h=from:subject; bh=aW4Zdb2GhTYOX+8LyYNg05IkphRj4KSUnH50R2AElMo=; b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBi8nsrlLBCQ+QvH7Kx2FKrKGQhp/Kr5WdZF01i7kEC vp4OO8WJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCYvJ7KwAKCRB33NvayMhJ0UwID/ 9qkNF3gbvLrcr2s0wBGyr39E3A/imA5qSI/K1sL6+DmYpLVqXRJVGfiB/sPnNq2hY1TyJ8mFLSlxJy sL2RIL8mdMSdMIigyhh4JBTPZjiuLlJl5Rz0YpMN69YPXEy0DerAAIPWw9ontBt1qfqX+DywN38l1d PSbDrME1W4SMyusp7acnrNmMAio6bLMlXKc0FYLt7l9O25aLbye62v+DfolVdwT9FjQGby/9YkHJyA Gey1L1b04LlE9Nf6njPdUppsUUV5sFQo+hk5tEWBN4EXI2Loe2qutrmFz3fpgcuv10L3ptS8vYKYT+ 2EK2ZFCrLMpQHuM3+wdbqVyRk/omnZBlXYPxDSC2lVnx8SQWGkUEU81zopR96O0iRbYkCt71cEbDPB QxjkAlkQVfxJWKrPTlfi0zC7TD6DvbjxgMLViBazFa0YPmPFCXapCaN4oC+2wlC9g6YS5Rd4g8CVSB xTjtZZQaw8XtgcOTj2cEoLLLFAE3NCB64VKDoynw8Uf9UJVkhaCdpix692MjXjWOLIi+0Ya3NRxVlz 4dR7V8puOxh7ADFMqVidX9V52euNsrig4eSwWcA4y5fO0KT48CR+s9an2D+GbTP/aEN5Zi2i1UQh2H jB6dVEE1/zBOMUfyQa9v8MeSIgUHl2NY30cXpb4LZLAOdqiLe5QQ3HkXUZeA==
+X-Developer-Key: i=narmstrong@baylibre.com; a=openpgp; fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Message Body:
-DIE WELTFINANZKRISE KANN SIE SEHR REICH MACHEN! https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-548617-Euro-pro-Woche-08-07
+At the end of a message, the HW gets a reset in meson_spicc_unprepare_transfer(),
+this resets the SPICC_CONREG register and notably the value set by the
+Common Clock Framework.
 
+This saves the datarate dividor value between message to keep the last
+set value by the Common Clock Framework.
+
+This didn't appear before commit 3e0cf4d3fc29 ("spi: meson-spicc: add a linear clock divider support")
+because we recalculated and wrote the rate for each xfer.
+
+Fixes: 3e0cf4d3fc29 ("spi: meson-spicc: add a linear clock divider support")
+Reported-by: Da Xue <da@libre.computer>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/spi/spi-meson-spicc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index 0bc7daa7afc8..e58686e28439 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -166,6 +166,7 @@ struct meson_spicc_device {
+ 	unsigned long			tx_remain;
+ 	unsigned long			rx_remain;
+ 	unsigned long			xfer_remain;
++	unsigned int			pow2_datarate;
+ };
+ 
+ static void meson_spicc_oen_enable(struct meson_spicc_device *spicc)
+@@ -458,7 +459,8 @@ static int meson_spicc_prepare_message(struct spi_master *master,
+ 	/* Select CS */
+ 	conf |= FIELD_PREP(SPICC_CS_MASK, spi->chip_select);
+ 
+-	/* Default Clock rate core/4 */
++	/* Saved pow2 Clock rate */
++	conf |= FIELD_PREP(SPICC_DATARATE_MASK, spicc->pow2_datarate);
+ 
+ 	/* Default 8bit word */
+ 	conf |= FIELD_PREP(SPICC_BITLENGTH_MASK, 8 - 1);
+@@ -480,6 +482,10 @@ static int meson_spicc_unprepare_transfer(struct spi_master *master)
+ 	/* Disable all IRQs */
+ 	writel(0, spicc->base + SPICC_INTREG);
+ 
++	/* Save last pow2 datarate before HW reset */
++	spicc->pow2_datarate = FIELD_GET(SPICC_DATARATE_MASK,
++					 readl_relaxed(spicc->base + SPICC_CONREG));
++
+ 	device_reset_optional(&spicc->pdev->dev);
+ 
+ 	return 0;
 -- 
-This e-mail was sent from a contact form on Anurav Dhwaj  (https://www.anurav.com)
+2.25.1
 
