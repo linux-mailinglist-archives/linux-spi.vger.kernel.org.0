@@ -2,56 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30FC58CFEC
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Aug 2022 23:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6487C58D2B2
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Aug 2022 06:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244377AbiHHVv7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Aug 2022 17:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S233793AbiHIESk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Aug 2022 00:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244419AbiHHVv4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Aug 2022 17:51:56 -0400
-X-Greylist: delayed 657 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 Aug 2022 14:51:53 PDT
-Received: from plesk1.hk-node.need.sh (unknown [202.95.9.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97EE51A83B
-        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 14:51:53 -0700 (PDT)
-Received: by plesk1.hk-node.need.sh (Postfix, from userid 10741)
-        id A5882803E8F15; Tue,  9 Aug 2022 05:39:13 +0800 (HKT)
-To:     linux-spi@vger.kernel.org
-Subject: =?us-ascii?Q?Teflonfabric_"Der_Preisverfall_von_Bitcoin_mach?=  =?us-ascii?Q?t_Sie_zum_Milliardar"?=
-Date:   Mon, 8 Aug 2022 21:39:13 +0000
-From:   Teflonfabric <sales@teflonfabric.cn>
-Reply-To: sales@teflonfabric.cn
-Message-ID: <G5SxNQP20ay702Ek6eYGBLqzYPbeXKis9IK6c0H5MY@www.teflonfabric.cn>
-X-Mailer: WPMailSMTP/Mailer/mail 2.5.1
+        with ESMTP id S229612AbiHIESi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Aug 2022 00:18:38 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD496183BE
+        for <linux-spi@vger.kernel.org>; Mon,  8 Aug 2022 21:18:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s9so11823240ljs.6
+        for <linux-spi@vger.kernel.org>; Mon, 08 Aug 2022 21:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ktjbOwbUIz6JZWGLIYlF9Qv19zLsmQ14nlnBHaQqtKY=;
+        b=fQbtoJUe4jFNbbbhRZa3Tv3NjHw8InWX5xP/yg0r7db2IBJyPK2LkV+4jCyhbDQxTw
+         rS0bRSG/hcpK0Ii5M7QHqSc7nbfDNrH8nq39KCCP42jnpx40OMM+sayFO5PvyZL97k8k
+         dJPX3sQtCrl/8Qx3b30gxzLIBFrnvQmGjPPpXLRAzFUHKw+plgD8zpAbIcjExJ3qS74q
+         5pNKgzTmMakgmVu14v4B5GKshfCaFDntqrRboBU4fdj8b4KF09hpLWQ15iTdEnNKwlNN
+         HQB0Ff1f5ldnZOq1TZ4UtvFSTmp5mgvhGd8oCI99ROxC6dFDMXGfpQQszUFs0uSzBXNK
+         nDdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ktjbOwbUIz6JZWGLIYlF9Qv19zLsmQ14nlnBHaQqtKY=;
+        b=MDKroP663MypIfjnwz0W855qcYZiTXannVfDqx5mDA7bFZodY13XpstkabVFs56vtA
+         3bmejfRAaNa0u+1rfvPr9DaosuQOXDRjGIDRcfkRllV9n0yyRpNGxNX1Um7gXESf1GPq
+         7LLMB7i9hIPT347NcPwsysDEpy33sOeVOdSc5D6v0eFZv7LQ6OHq7A8SmL4COOzAaXIB
+         QZOrLRZHyY1qlXBZFO90CktroyrwelzWS0YreX3KLNPAJ/PGaBE9Vg0QUMVri+x4H7uc
+         y5ZuO+u4NgTy7pbxqj3/XAujFuSlpk9t4EeA4vSsKetV+DOIXI8w7CWOVFVtDJXRZMAX
+         /hgQ==
+X-Gm-Message-State: ACgBeo2s4Fy0PJA5bZNXGL1GbyJax29hQ/VdEgKFWCTGndXJSvI95Ujx
+        eN9t0Z7eSUcfPipdHZYAIxbYjQ==
+X-Google-Smtp-Source: AA6agR7anU7Jd1Qacvlqh82YFYxyDO1oFmXIYlQYQsIHymSU5X0Uh7ffWNrP57hUs0cBE78V8Gi8pQ==
+X-Received: by 2002:a2e:bea8:0:b0:25f:e9ab:5a1b with SMTP id a40-20020a2ebea8000000b0025fe9ab5a1bmr1592141ljr.448.1660018716032;
+        Mon, 08 Aug 2022 21:18:36 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t15-20020a2e9d0f000000b0025e2e70b41fsm1529430lji.71.2022.08.08.21.18.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 21:18:35 -0700 (PDT)
+Message-ID: <38c3977a-0196-1832-ff94-317064cbc439@linaro.org>
+Date:   Tue, 9 Aug 2022 07:18:34 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: spi: stm32: Add st,dual-flash property
+ in st,stm32-qspi.yaml
+Content-Language: en-US
+To:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        christophe.kerello@foss.st.com, devicetree@vger.kernel.org
+References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
+ <20220808074051.44736-2-patrice.chotard@foss.st.com>
+ <9ad4b4a8-988e-f185-f80c-6f15f341ce8c@linaro.org>
+ <79fd7e19-ceef-14fb-5a83-603740735f8f@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <79fd7e19-ceef-14fb-5a83-603740735f8f@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,RCVD_IN_VALIDITY_RPBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Message Body:
-Der Preisverfall von Bitcoin macht Sie zum Milliardar https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-90578-Euro-pro-Woche-08-07
+On 08/08/2022 19:08, Patrice CHOTARD wrote:
+> Hi Krzystof
+> 
+> On 8/8/22 11:01, Krzysztof Kozlowski wrote:
+>> On 08/08/2022 10:40, patrice.chotard@foss.st.com wrote:
+>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>>
+>>> Add new property st,dual-flash which allows to use the QSPI interface as a
+>>> communication channel using up to 8 qspi line.
+>>> This mode can only be used if cs-gpios property is defined.
+>>>
+>>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 8 ++++++++
+>>>  1 file changed, 8 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>> index 6ec6f556182f..5e4f9109799e 100644
+>>> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+>>> @@ -46,6 +46,14 @@ properties:
+>>>        - const: tx
+>>>        - const: rx
+>>>  
+>>> +  st,dual-flash:
+>>> +    type: boolean
+>>> +    description:
+>>> +      Allows to use 8 data lines in case cs-gpios property is defined.
+>>
+>> It's named dual-flash, but what if you want to use QSPI to connect for
+>> example to FPGA?
+>>
+>> Also how is this related to parallel-memories property?
+> 
+> I called it "dual-flash" simply because it enable the dual flash feature of the QSPI block (bit CR_DFM : Dual Flash Mode)
+> which allows to use the 8 lines simultaneously of our dual QSPI block.
 
--- 
-Thanks for your inquiry! We will respond to you ASAP!
+And how is it related to existing parallel-memories property?
 
-With Best Regards,
-
-Export Department
-
-Jiangsu Esone New Material Co.,Ltd.
-Taixing Youngsun FL-Plastics Co.,Ltd. 
-
-Skype:    steven_4860
-email:    sales@chinayoungsun.com
-          sales@esone
-Tel:      +86 523 87590206   Mobile:  +86 13901437262 
-Web:      www.teflonfabric.cn
-
+Best regards,
+Krzysztof
