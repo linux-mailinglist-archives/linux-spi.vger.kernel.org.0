@@ -2,65 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D3958F07A
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 18:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C2F58F09E
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 18:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiHJQeD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Aug 2022 12:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S231707AbiHJQok (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Aug 2022 12:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHJQeC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 12:34:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD182773;
-        Wed, 10 Aug 2022 09:34:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3265B81D4B;
-        Wed, 10 Aug 2022 16:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F52C433C1;
-        Wed, 10 Aug 2022 16:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660149239;
-        bh=TRHMkHy9TA2+R7Xo/cWt/GmZaVkYtJda3sygZr6n63E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZSqQDDuiRdorik9Pb/NCrx0oD2vlusIm0ixMcVKD77THj9qllEU6gMdB/rlZFKxQQ
-         1Y84PCd6G6/7azkAfGdqfXgZzJND6/e58nAYqDyze40HJN1++ciHIcfRGJyQBAYuRW
-         6C1oabpSKxGzXSH5QSw6SARyENrzNOAaYPdknnBcv+QKEN++KIEGoP0RR770PAqTO5
-         9d8jAGGh68yTeeux7Cm/nL71Im6g4uuE5CmShu8fZ2SYjddUgdjId4DQte/DzZ1qnz
-         pnZtzkHZEmCzy0Z54lVQP6EydD/q1GdGE4oq9kx+/kr8okcbgl4QiLKtvM3Rfl9NEL
-         MFbx0aVJuS5Tg==
-Date:   Wed, 10 Aug 2022 17:33:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
- acpi_device
-Message-ID: <YvPd8ewNOKdwMmR4@sirena.org.uk>
-References: <12036348.O9o76ZdvQC@kreacher>
- <2196460.iZASKD2KPV@kreacher>
+        with ESMTP id S231557AbiHJQoj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 12:44:39 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD2A11A0C
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 09:44:38 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id u6so11324510ljk.8
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 09:44:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=VOLDuPix/0lVR9yaNuPldPK7FBAubvn5P7aOtNnMozY=;
+        b=PxOmy31FMgnLAPzakLjut5vLpoUvufDZnrYVP17Y48jyHAinJzMIaKywcuoaJwPKTg
+         eQCMfxVEJA2L/CK8eGRqltCaWjIRMUQglFpEZvF+ERgJxnOwpG/cbVif0yKnx9z7Snow
+         SIM9KFxcdIhwV7AXsMMc1Py8OH9T+iO7fMMrI0eSP2w2qB+CTnnXbjcQrYDo7TQY9vfA
+         D51wlzvZ+klATs1G6HpGHcegPyR7hZCN7A4kOVmw6nEHCxN0XNAZIkPJshHFg9Qi1hsM
+         T08q9GkKN8t7TvEF/iUm+ruwky/ZEt0E6lvjtiRTroHzQjvUXDeK9aj1XR2+5kgZORG3
+         Tosg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=VOLDuPix/0lVR9yaNuPldPK7FBAubvn5P7aOtNnMozY=;
+        b=sm6dK30k/KxxfL37P31b6DnwaLsL1eieu8sqgyIeIEjfIw12jVzP0uunOqXDU5Xzha
+         j5K9hM6QgdV+zRIDXx+XKqSClO+KokaIOcWZIuemCs2KFoVdG/Jvv57BhoVxcsOEyKMV
+         TIMf2qSMd8TuijQcsH7nCkbugcfPzJbLC6dXgSQBFoJBYeQbNcIkycuLUmoBXNrfXrkQ
+         9mnbVm/7WexTK0ECwvd/ojkEfkazOT9eJlG3oTYKJSRYbL3hk+VaTMsFWOB9keC1nAh+
+         W44PeEICP/DOrgdWC6GZvHtUlrlcsJxJ+3oXW+pJCE2/dQrdssN2sCHjnPDZ44XirhlJ
+         P1qQ==
+X-Gm-Message-State: ACgBeo35n7P3iRdyg9UMwtoZGWkrdhyz7VW6mQ7lH3ejLVVIRGSCYB6Q
+        DBI9rCAtDFZ3j2TwxqjN39OcTw==
+X-Google-Smtp-Source: AA6agR4eoACd1ljMRqSIXs9EqFqbtjFc5gnzr+PoO1i7OTkPo+HY2BZ5YR46FSliA7NymB0fqOuUTg==
+X-Received: by 2002:a2e:81d2:0:b0:25e:68c3:f434 with SMTP id s18-20020a2e81d2000000b0025e68c3f434mr9196641ljg.526.1660149876935;
+        Wed, 10 Aug 2022 09:44:36 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id 13-20020a05651c128d00b0025e0396786dsm466556ljc.93.2022.08.10.09.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 09:44:36 -0700 (PDT)
+Message-ID: <4e096cc4-a012-8ef0-d5a2-1a32d1f6c83e@linaro.org>
+Date:   Wed, 10 Aug 2022 19:44:34 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Da0Ami2fDuAHDI9p"
-Content-Disposition: inline
-In-Reply-To: <2196460.iZASKD2KPV@kreacher>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] spi/panel: dt-bindings: drop 3-wire from common
+ properties
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
+ <YvPaaOgCUABREOcX@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YvPaaOgCUABREOcX@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,34 +86,20 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 10/08/2022 19:18, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 04:13:11PM +0300, Krzysztof Kozlowski wrote:
+>> The spi-3wire property is device specific and should be accepted only if
+>> device really needs them.  Drop it from common spi-peripheral-props.yaml
+>> schema, mention in few panel drivers which use it and include instead in
+>> the SPI controller bindings.  The controller bindings will provide
+>> spi-3wire type validation and one place for description.  Each device
+>> schema must list the property if it is applicable.
+> 
+> What's the plan for getting this merged?  I can just apply it at -rc1 if
+> that works for people?
 
---Da0Ami2fDuAHDI9p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, I should mention it before, my bad. There are no dependencies, no
+stoppers. I hope this will go via your SPI tree.
 
-On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> The parent field in struct acpi_device is, in fact, redundant,
-> because the dev.parent field in it effectively points to the same
-> object and it is used by the driver core.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---Da0Ami2fDuAHDI9p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLz3fAACgkQJNaLcl1U
-h9B8rQf/XtDVCaLNgxkwWhsW926hQ9+EvneuFPFiVGjVW+lbegON2gRrPeUWs8sS
-sC4GBIsaf1GiG5D6xQGh5Iq36TE60sjclNLk2WTG6eHppigATRVgiTwiwOnVDn4h
-IBqOYP3xauYkNpiX1QK91vc5Lh90Lh+W/B81A1RqbDaJIlNrihrFgezUZQ9Klwlm
-9lsOupKTe9TeDOdtv8xgq8fuHk9K+K28SmkPEDEg49UVhCUbx05BuPDoyOtmn+RP
-/+hKik8ajLZUd2qUg0VmM0dRNX3GnQiGQC5dAmLnF63o9XIWcu4x3XYQPHEAwy5L
-Aj0k8+2YrOgVHxyNIrsVmg01YaZIWg==
-=2BJY
------END PGP SIGNATURE-----
-
---Da0Ami2fDuAHDI9p--
+Best regards,
+Krzysztof
