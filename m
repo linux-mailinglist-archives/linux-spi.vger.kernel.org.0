@@ -2,107 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533DC58EDB6
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 15:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0081258EDC5
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 16:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbiHJN5n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Aug 2022 09:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S232909AbiHJOBk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Aug 2022 10:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiHJN5m (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 09:57:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3346BD70;
-        Wed, 10 Aug 2022 06:57:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88561614CE;
-        Wed, 10 Aug 2022 13:57:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD2AC433C1;
-        Wed, 10 Aug 2022 13:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660139860;
-        bh=8U9yFOGIsXPYWmmnHIYLkHpeD5RKwBawgrNQqyoYFfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N2HOEhRqGwBfJPfdmKK0Bn6Nzt07oLlpSXiNyADoQ7PN0jhltBCRr6m1p6CtP/XE0
-         UO0ylwcggBYllVAIfR4Lihsq2rGG1HaPBug1pa50c8GpEvmmUPzMJ+xDyMhwUfiU+r
-         oiJ11orrOdDYtHDX3fjUqeaFvcziXD9V8JTufeieE0LDb/PYDxyk0Qgw9vy8VWve76
-         y1J+BBupGRONFNsNFXt4syOMPrkC8wcKGh/QNft8y8LbHjebDyYzcAlUo6KBpIkheV
-         pc6IHhdr2K24E4mBJ8sI+VDFDwn85QTCzuj5/meMCk2tevBN9B7vdcSSTCo2mRVKco
-         04I0CZHGv7CXw==
-Date:   Wed, 10 Aug 2022 14:57:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Message-ID: <YvO5UKACe2FMa5K4@sirena.org.uk>
-References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
- <20220810093215.794977-2-patrice.chotard@foss.st.com>
- <YvOtZtrRHd4AT+j+@sirena.org.uk>
- <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
- <YvOxOg0vXSGrZLfP@sirena.org.uk>
- <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
- <YvO1U7VB7WQv0oKR@sirena.org.uk>
- <cfc882a2-c8f3-0ec8-706e-a16dccc9fda7@foss.st.com>
+        with ESMTP id S232908AbiHJOBj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 10:01:39 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07F46CD35
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 07:01:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id ay12so5030061wmb.1
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 07:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc;
+        bh=dZA7yOywUXukdcu5pO+Io3zvJr55DJZjswrAfBadLys=;
+        b=Yn8uEP++9IJloQ1BDCmMiI3k7Ee8qgEzlCEAYmHEDqta1P+Vib47gUxe6vH3H4XdOV
+         OQkpMmnZbDPz5ZX+zt2N196uqkG5xcL5/Kx/Wb43oX4ErRJWdjMi0ew0lu/wjmc8Yjuy
+         sFyHWISDMv2E9DqiHP1/J0w2EuhM24mGHNrb4Ifk62k07OzhsHShfSKkxVKjBCkYkmOC
+         SfBZ5uckbvCi0a0mbgdNeZ2wy8YvQU/QtZtPC/PFahOvXfByRXvwnLyTDuPoMx64qAnG
+         4mFLpCptRa301NI9CDIrmS097PGpKW57ag53WZk2Gx6MJ05SzA6QUFllmNpPRl9jQWFN
+         gfRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=dZA7yOywUXukdcu5pO+Io3zvJr55DJZjswrAfBadLys=;
+        b=VoOWMGtbmSrOB/p68P2YLekDNb1v1jYZokErnWIiCfbeK23PFJiFyU2UNtyhu6MWsg
+         lM6pttG9yebxqSYHKVoSovb0e6TMJ7rPeOeQQx+sLYS7LrMmL9m+ms3883zZfGXBCADH
+         EehiQCdX1b2knPKpCqVXuiTpWi4vTn9jz9t/xG+TJsrmzC48WnNTphqf0BBjy9FUfNjA
+         RBTLFFyO87fLrLZYvr9ctIeDYsIOH66rdnli36nHVCjQXVJwRqEXxWZuIqqIuqkAEjTO
+         E0Rt68Z8CQLOH9FEhg9OLdeTthU4cmkffzXZOfNAjX1u7YKgBq+W4ffnODUUi+ilcTfY
+         Pq+Q==
+X-Gm-Message-State: ACgBeo3Gs2qwiB0fEw88X4X6OEX/lblzxRxlT0pNYRGlK09yfU84zvU9
+        c1tov+X/pVQeegNwu8DAD2O6Gg==
+X-Google-Smtp-Source: AA6agR7DzgEgT3CgQhryxKIY8bUl9vYO/MdJ9kGHKEoVxRh7PUHU+GxrH0F86bCtL7LF92AxXsWGgg==
+X-Received: by 2002:a05:600c:1d1e:b0:3a5:4f8d:743f with SMTP id l30-20020a05600c1d1e00b003a54f8d743fmr2558911wms.121.1660140096061;
+        Wed, 10 Aug 2022 07:01:36 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:bbf0:b69d:fecb:8006? ([2a01:e0a:982:cbb0:bbf0:b69d:fecb:8006])
+        by smtp.gmail.com with ESMTPSA id az21-20020a05600c601500b003a31ca9dfb6sm3347611wmb.32.2022.08.10.07.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:01:35 -0700 (PDT)
+Message-ID: <518f22f4-1582-924c-9eaa-28ebbe53a632@baylibre.com>
+Date:   Wed, 10 Aug 2022 16:01:33 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qp2XHivCik8DSJHB"
-Content-Disposition: inline
-In-Reply-To: <cfc882a2-c8f3-0ec8-706e-a16dccc9fda7@foss.st.com>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] spi: meson-spicc: save pow2 datarate between messages
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Da Xue <da@libre.computer>
+References: <20220809152019.461741-1-narmstrong@baylibre.com>
+ <YvJ84qkuXdvVgXRm@sirena.org.uk>
+ <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
+ <YvOmnDJA+ov49chC@sirena.org.uk>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <YvOmnDJA+ov49chC@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 10/08/2022 14:37, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 11:17:14AM +0200, Neil Armstrong wrote:
+>> On 09/08/2022 17:27, Mark Brown wrote:
+>>> On Tue, Aug 09, 2022 at 05:20:19PM +0200, Neil Armstrong wrote:
+> 
+>>> When you say the value set by the clock framework does that mean that
+>>> the clock driver is adjusting hardware inside the SPI controller IP
+>>> block which is then getting reset by the SPI driver without the SPI
+>>> driver knowing about it?  That seems like a bad idea as you're finding
+>>> here.
+> 
+>> The SPI driver is explicitely triggering a reset at the end of each message
+>> to get back to a clean HW state, but it does reset the content of the "legacy"
+>> registers containing the power of 2 divider value, the new registers configuring
+>> the new clock divider path (only on newer SoCs) doesn't get cleared.
+> 
+> Sure, but that doesn't really address the concern - is this something
+> that the clk driver programmed or is this the driver forgetting to
+> restore a register that it programmed itself?  The commit message sounds
+> like the former which is a much bigger problem.
 
---qp2XHivCik8DSJHB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It's what is programmed by the Clock Framework yes, it was designed as-is
+so the Clock Framework takes the most accurate clock path but the reset case
+wasn't taken in account.
 
-On Wed, Aug 10, 2022 at 03:52:39PM +0200, Patrice CHOTARD wrote:
-> On 8/10/22 15:40, Mark Brown wrote:
-
-> > Can't the controller figure this out by looking at the properties of the
-> > connected devices?  You'd need to just return an error if we ever
-> > triggered transfer_one_message() on a device that can't support the
-> > operation.
-
-> It should be a solution.
-
-> I just noticed another point, property parallel-memories is an array of uint64 which represent device's size.
-> In case a FPGA is connected to the qspi 8 line bus, parallel-memories property will be set with what ?
-> simply random value to make dtbs_check happy ?
-
-> IMHO, adding a new proprietary property would be cleaner.
-
-I tend to agree that this is all rather unclear for things that aren't
-actually storage.
-
---qp2XHivCik8DSJHB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzuU8ACgkQJNaLcl1U
-h9C8lgf/Ty/PVO0gORA+r8yXkatIJMlVbunpNkmNDYE+OPE1h59+rHpcNnt4pzcv
-JACDJhEStqwIsqNOfBxHD5J7D4+jbRvCXhiL70yqKhOTw64DkUa65AJY136SSqLS
-XGvpjz1QMv98fljk/zS1PBDAQ8ysQ7xtY2wxQh+aqelNiTgsDb8TFC/T22C/iDxF
-2tRbU6HlL6VKoUUKHOvB4lBuTOo2gyMuloxVASblBnOqOO8Sb9er8P1ka4R1+BxE
-76U+2YCwNiDOZaug7c39cUKHWwYXwArj7TUlSszHiROFyHe0pkW0m/G550FVa9uF
-r5LLiJ7asVOVuuRyf5ow2bvxvAl6Yw==
-=Ovrt
------END PGP SIGNATURE-----
-
---qp2XHivCik8DSJHB--
+Neil
