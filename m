@@ -2,58 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47A758ED0D
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF8458ED42
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 15:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiHJNXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Aug 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S232701AbiHJNaN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Aug 2022 09:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiHJNXM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 09:23:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B96E2B601;
-        Wed, 10 Aug 2022 06:23:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB04961373;
-        Wed, 10 Aug 2022 13:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975E7C433C1;
-        Wed, 10 Aug 2022 13:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660137791;
-        bh=kuNflv+LVlGRoYVP2WgVIcz5hqpvWrWoxTBC7R1vsXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tFphcB8NZQsJQb23XV66rnyNs0qbvkQFV4BueYle5FvmXdXB0CtbunK/tNHyKN1h4
-         UxVHVuEmg1RobuwXHWbXf1IOUqwKFsiLOqdKhCR/vHKquavbqQqqEOK3pl6dbcmx2j
-         mIoGsBn2JHgbMuCCHqCJ9DMXZlIIpAWuSilP/NLWIWyp0sm8uZoKQRQROc78v8SESx
-         xJSMiRcTumujAYSbcY0i2iq4evuk/1XDyWHpRX0x4A9cts7Qg4e7gExHBLbxxGcRQW
-         Nrwu0+c5PZMOUJBlvBcnxT/PlRzgMeHm2SDgKYAzoYHiJM9gKRK0qIiZgzUMtvAMPW
-         /hDuOGRBtJz4A==
-Date:   Wed, 10 Aug 2022 14:23:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Message-ID: <YvOxOg0vXSGrZLfP@sirena.org.uk>
-References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
- <20220810093215.794977-2-patrice.chotard@foss.st.com>
- <YvOtZtrRHd4AT+j+@sirena.org.uk>
- <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
+        with ESMTP id S232735AbiHJN3u (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 09:29:50 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1548531DE5
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 06:29:39 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id l21so4630510ljj.2
+        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 06:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=M2+lgkUGbiFpPnZJdDr1e6oVq21WQvDGuoGeryWgspw=;
+        b=v76915Wzkkb1kBO16clztnFIfDJ0uvr0SKRaKC9YqQTf4IG6gm5Esg0V2n7qpgVjKc
+         53nyQ/6SBOQYXM3S0uiFmZeMkhhjD6qU654x8jiVbC7Nt8ucqIjFzFVtA7w/z4nbWDSd
+         JE45An8wat3l9WvALCFihINHrujCNJ2Gupi30v++JCi+M0GNMhSuSUzliUhhyTEUFtjw
+         CXxs2tmiy6RbEfe/gpI/6HUrNlz157WV0BTEOTQcnt7A92mZJh2au/0Mgi1w61PS5QAu
+         T6Q51PpTF4bAyyS/dXsa0CkH3HhfdugGRaM1OelRmPstyyYWe/Gc9WoJ+KTJRXSuvIgK
+         S12Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=M2+lgkUGbiFpPnZJdDr1e6oVq21WQvDGuoGeryWgspw=;
+        b=KVF+X2vrjNOOPQPz6+AyuFXNPBM3ixcdeTnv8J5TwC+HkWfMViIKjERIbt4Y/LcVg9
+         2EbBySLlGdXvxjl7ymQMDZnQl4mi21iHqd4kTyWEZLjUzXccI8VklzaL4w+3h4QKherU
+         Ntu6xdfnHXfqWkJedhfHZZhL7OtZEdDDPzZb5TK1zhBGuJr6DDbElnigz4aQf44J5jIl
+         1kFeWtt9Tmh9EfKz5mhwjn+NJ8FlkXfC/TOuYGhaEv07qSSAOJVTtNL0uVr1alRpbMYs
+         9k/7RQy+jxTXqFignDP3thAOn0vTPFXzy5qwnt2kkORbC40FMlmVJ/ufZl5wBMuWrmq0
+         YtIQ==
+X-Gm-Message-State: ACgBeo2UMAPbbVjM++RtvDG5YUwfbgxWdrA3aWZSTq+e7Gmsrtnx7Wf1
+        88683ofqVxnZVOHOnZQBMf9piw==
+X-Google-Smtp-Source: AA6agR56rpbkPS2VaMru/xs//Y04YuIV0S7fJ48JvFSxZ8tdGKn2VGteZCIB89deq4DtpaBko9t+5g==
+X-Received: by 2002:a2e:a28e:0:b0:25e:734f:38fa with SMTP id k14-20020a2ea28e000000b0025e734f38famr8723830lja.446.1660138177491;
+        Wed, 10 Aug 2022 06:29:37 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id d8-20020a19f248000000b0048a934168c0sm349958lfk.35.2022.08.10.06.29.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 06:29:37 -0700 (PDT)
+Message-ID: <dd173944-80d3-e13f-c405-f076401bf6c7@linaro.org>
+Date:   Wed, 10 Aug 2022 16:29:36 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="au179GULwQfaFnA3"
-Content-Disposition: inline
-In-Reply-To: <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] riscv: dts: microchip: add qspi compatible fallback
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Cc:     nagasuresh.relli@microchip.com,
+        valentina.fernandezalanis@microchip.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220810085914.801170-1-conor.dooley@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220810085914.801170-1-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,36 +78,21 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 10/08/2022 11:59, Conor Dooley wrote:
+> The "hard" QSPI peripheral on PolarFire SoC is derived from version 2
+> of the FPGA IP core. The original binding had no fallback etc, so this
+> device tree is valid as is. There was also no functional driver for the
+> QSPI IP, so no device with a devicetree from a previous mainline
+> release will regress.
+> 
+> Link: https://lore.kernel.org/linux-spi/7c9f0d96-2882-964a-cd1f-916ddb3f0410@linaro.org/
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> See the link for binding discussion. I'll apply this at some point once
 
---au179GULwQfaFnA3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Aug 10, 2022 at 03:15:08PM +0200, Patrice CHOTARD wrote:
-> On 8/10/22 15:06, Mark Brown wrote:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > Do we need to add something to the DT bindings to indicate that
-> > parallel-memories is valid?
 
-> You mean in the st,stm32-qspi.yaml DT binding file ? Right i think it could be preferable to add it.
-
-Yes.  Though I'm not clear if the bindings actually want to enforce it
-there, it's a device level property not a controller level one so it
-might not be something where controller support gets validated.
-
---au179GULwQfaFnA3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzsTkACgkQJNaLcl1U
-h9Cdbwf9GfH8m3PsuOTa3pYMAN0Nk1rdYEzikCwnvXUkj8XIuLIexNhLOLUWOiBA
-tdpgbrT4RPr4RShT/C2aMRKrVU+q/WFimT82mnk7VWMcYGFRNIolC3sASsuSE+7P
-5lIJ94GPPAaUj6IDdDMt4f7SAD83occf53beBuBpbGvKPjHtOYeVjLmviiBlN1Fp
-80vlYY/RfwhqjhKOedUShF+0KtxZeEpoaRL4bV2gM6qk5bz/+XBYNSYExXuBf9F+
-KVAAejPEh45t8kaOyv+v5mlbpZXXOO66QKBB+bhafNrWtWLYS5xFYV80gt267WJu
-CGlMBWb9JOZDooK5F7t8QWWs8s80/Q==
-=TfEc
------END PGP SIGNATURE-----
-
---au179GULwQfaFnA3--
+Best regards,
+Krzysztof
