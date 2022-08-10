@@ -2,235 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C10158E972
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 11:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A6358E9AD
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 11:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiHJJTd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Aug 2022 05:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S232122AbiHJJcr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Aug 2022 05:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiHJJTc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 05:19:32 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7982BAE22C
-        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 02:19:30 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id i128-20020a1c3b86000000b003a536d58f73so683830wma.4
-        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 02:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc;
-        bh=JUyNoU818egRObOa/IMHniG7D9eOIpIdC03VDFYcljo=;
-        b=zPk2H2DcpAOIYrazdg5bocpCKj1TZ3T3x+hhVv9dnfP4Jx3oGOh9mHo9HsNC+03Nlq
-         q1ovvctKiPUJ2e7+qAkpQIS730msh6rm5ux9rGj/XAWEIzBnCC3AZvzLJRDkcj7AY8jb
-         jm96gfWZDelrWicO5yWtIn3mFno+QROX1N1iTUarMx18UQnYj/LHCrUGblCpHr0xxIY/
-         pVPdYgCwUhHy4Jo5mpM5gvqVxAp9J9iOwlzoj8Jj8bbh/30gW3KRCh6rXScOIisb6EHp
-         HG6/KKVxxLy07xtHVrsWwy66h2wpw0qkWBcfvb3QYaB3a5p+ayBeHcPzklZ6Shbu4csV
-         fhvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=JUyNoU818egRObOa/IMHniG7D9eOIpIdC03VDFYcljo=;
-        b=W6S9AF/pv0d8weQc1aByGBWK2SZ+f2vn6ax9y7AgfIZ7bazEyB1UXX0gARO7KUtuLC
-         raednui9M2i62ELkLui0uUc36UoJUMrtTigWUTmILAKi2a7dO9JM9cfRwoCxuVy/N+y7
-         dzGxZYdArE1kcV5lK8HVkr4T8dQgdY2TjsctVExAI/ylgJ3uEHS+1IzrYUk9BImzTP2X
-         isNbmmcRzGrvrD2jZz+mmVr8ZlDxRR6/Dk4W6JFpIOXmgZmeBDFMtd5XyGC4qrcWVtkk
-         +Xwgj8tmFf+ifcinSahypiKe2tdvDIB5XLDnMDleRysMon+TIhBEBecEnQ6z6eD42ZOu
-         JxGA==
-X-Gm-Message-State: ACgBeo0384zivm4uWC+chvPVtvBCHvn437Kh1D785h2wkD5mIxIJYAOG
-        fm3+vxxIbXWyfhy3vJSzJoVmJQ==
-X-Google-Smtp-Source: AA6agR7pdGtejWvZTPsUk04vSJYrK2KdnyxThzcDnl1Dr3dCImUqcIN6rBQFOift4AReX0i5XvuZww==
-X-Received: by 2002:a1c:218b:0:b0:3a5:b5d4:9741 with SMTP id h133-20020a1c218b000000b003a5b5d49741mr908113wmh.28.1660123168886;
-        Wed, 10 Aug 2022 02:19:28 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:cb4c:4cd5:c6b6:8b12? ([2a01:e0a:982:cbb0:cb4c:4cd5:c6b6:8b12])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05600c274200b003a54f1d007csm1781685wmw.10.2022.08.10.02.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:19:28 -0700 (PDT)
-Message-ID: <f5720289-6d12-24a5-82bf-f8538d348252@baylibre.com>
-Date:   Wed, 10 Aug 2022 11:19:27 +0200
+        with ESMTP id S232120AbiHJJcq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 05:32:46 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2C16DF89;
+        Wed, 10 Aug 2022 02:32:44 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A68jdC004798;
+        Wed, 10 Aug 2022 11:32:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=JGY5zWrfCCK8U/3zgAroqF0FgJuxZGbZAnLQqoBRrso=;
+ b=0j8S3SNqXOkek34mkUPW7uFbheMJ/q/UayZS01EQTvKX2ZCKctNple+tOvUt6NQ3XLgy
+ iflhYECKtF1WaeZkpZa7A2PzvLnKvBSfKcYcnyoPUHeMxaIH0o2ttriPdHBOZojroaeW
+ +R930MK1dlNNsgsbpbrJDhrc1c9ERT7wW1bTVTYSFBvAErdiYoWKTFnv13DItzFUo7ht
+ VOczuZv9+G37EtoMeFnkwukUOC1VQnpWfnrjx2iCkeFgDx/9gbflsMtE/l0ko4Q/eTN2
+ Uids09E37dl1rnUjsntBDXd0iw5cv5S/k0aSaZ9l+vVfDaUgshaxn/rocxeYTc9OPDud AQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwpmbmm8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 11:32:21 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E49A110002A;
+        Wed, 10 Aug 2022 11:32:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CF39421B52F;
+        Wed, 10 Aug 2022 11:32:20 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
+ 2022 11:32:20 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/2] spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+Date:   Wed, 10 Aug 2022 11:32:13 +0200
+Message-ID: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] spi: meson-spicc: Use pinctrl to drive CLK line when
- idle
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Da Xue <da@libre.computer>
-References: <20220809172017.215412-1-aouledameur@baylibre.com>
- <20220809172017.215412-3-aouledameur@baylibre.com>
- <1jsfm4xymu.fsf@starbuckisacylon.baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <1jsfm4xymu.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_03,2022-08-09_02,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 10/08/2022 10:52, Jerome Brunet wrote:
-> 
-> On Tue 09 Aug 2022 at 19:20, Amjad Ouled-Ameur <aouledameur@baylibre.com> wrote:
-> 
->> Between SPI transactions, all SPI pins are in HiZ state. When using the SS
->> signal from the SPICC controller it's not an issue because when the
->> transaction resumes all pins come back to the right state at the same time
->> as SS.
->>
->> The problem is when we use CS as a GPIO. In fact, between the GPIO CS
->> state change and SPI pins state change from idle, you can have a missing or
->> spurious clock transition.
->>
->> Set a bias on the clock depending on the clock polarity requested before CS
->> goes active, by passing a special "idle-low" and "idle-high" pinctrl state
->> and setting the right state at a start of a message
->>
->> Reported-by: Da Xue <da@libre.computer>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->>   arch/arm64/boot/dts/amlogic/meson-gxl.dtsi | 14 ++++++++
->>   drivers/spi/spi-meson-spicc.c              | 39 +++++++++++++++++++++-
-> 
-> These 2 changes should not be in the same patch.
-> 
->>   2 files changed, 52 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
->> index c3ac531c4f84..04e9d0f1bde0 100644
->> --- a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
->> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> 
-> Does the problem applies only the gxl ? not gxbb, g12, axg ?
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Only on GXL, starting from AXG the pins mode output state can be kept between bursts.
 
-> 
->> @@ -429,6 +429,20 @@ mux {
->>   			};
->>   		};
->>   
->> +		spi_idle_high_pins: spi-idle-high-pins {
->> +			mux {
->> +				groups = "spi_sclk";
->> +				bias-pull-up;
->> +			};
->> +		};
->> +
->> +		spi_idle_low_pins: spi-idle-low-pins {
->> +			mux {
->> +				groups = "spi_sclk";
->> +				bias-pull-down;
-> 
-> Would it be safer to properly drive the pin in push-pull mode ?
-> Like using gpio pinumux mode and output-high/output-low pinconf ?
+The goal of this series is to allow to use QSPI bus as a 8 lines communication 
+channel for specific purpose.
 
-The pins mux must be kept in the SPI function, thus only a bias can be applied.
+The QSPI block offers the possibility to communicate with 2 flashes in 
+parrallel using the dual flash mode, 8 data lines are then used.
+Usage of DT parallel-memories property is needed to enable dual flash mode.
 
-> 
->> +			};
->> +		};
->> +
->>   		spi_ss0_pins: spi-ss0 {
->>   			mux {
->>   				groups = "spi_ss0";
->> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
->> index 0bc7daa7afc8..d42171ee1d61 100644
->> --- a/drivers/spi/spi-meson-spicc.c
->> +++ b/drivers/spi/spi-meson-spicc.c
->> @@ -21,6 +21,7 @@
->>   #include <linux/types.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/reset.h>
->> +#include <linux/pinctrl/consumer.h>
->>   
->>   /*
->>    * The Meson SPICC controller could support DMA based transfers, but is not
->> @@ -166,14 +167,31 @@ struct meson_spicc_device {
->>   	unsigned long			tx_remain;
->>   	unsigned long			rx_remain;
->>   	unsigned long			xfer_remain;
->> +	struct pinctrl			*pinctrl;
->> +	struct pinctrl_state		*pins_idle_high;
->> +	struct pinctrl_state		*pins_idle_low;
->>   };
->>   
->>   static void meson_spicc_oen_enable(struct meson_spicc_device *spicc)
->>   {
->>   	u32 conf;
->>   
->> -	if (!spicc->data->has_oen)
->> +	if (!spicc->data->has_oen) {
->> +		/* Try to get pinctrl states for idle high/low */
->> +		spicc->pins_idle_high = pinctrl_lookup_state(spicc->pinctrl,
->> +							     "idle-high");
->> +		if (IS_ERR(spicc->pins_idle_high)) {
->> +			dev_warn(&spicc->pdev->dev, "can't get idle-high pinctrl\n");
->> +			spicc->pins_idle_high = NULL;
->> +		}
->> +		spicc->pins_idle_low = pinctrl_lookup_state(spicc->pinctrl,
->> +							     "idle-low");
->> +		if (IS_ERR(spicc->pins_idle_low)) {
->> +			dev_warn(&spicc->pdev->dev, "can't get idle-low pinctrl\n");
->> +			spicc->pins_idle_low = NULL;
->> +		}
->>   		return;
->> +	}
->>   
->>   	conf = readl_relaxed(spicc->base + SPICC_ENH_CTL0) |
->>   		SPICC_ENH_MOSI_OEN | SPICC_ENH_CLK_OEN | SPICC_ENH_CS_OEN;
->> @@ -438,6 +456,16 @@ static int meson_spicc_prepare_message(struct spi_master *master,
->>   	else
->>   		conf &= ~SPICC_POL;
->>   
->> +	if (!spicc->data->has_oen) {
->> +		if (spi->mode & SPI_CPOL) {
->> +			if (spicc->pins_idle_high)
->> +				pinctrl_select_state(spicc->pinctrl, spicc->pins_idle_high);
->> +		} else {
->> +			if (spicc->pins_idle_low)
->> +				pinctrl_select_state(spicc->pinctrl, spicc->pins_idle_low);
->> +		}
->> +	}
->> +
->>   	if (spi->mode & SPI_CPHA)
->>   		conf |= SPICC_PHA;
->>   	else
->> @@ -482,6 +510,9 @@ static int meson_spicc_unprepare_transfer(struct spi_master *master)
->>   
->>   	device_reset_optional(&spicc->pdev->dev);
->>   
->> +	if (!spicc->data->has_oen)
->> +		pinctrl_select_default_state(&spicc->pdev->dev);
->> +
->>   	return 0;
->>   }
->>   
->> @@ -733,6 +764,12 @@ static int meson_spicc_probe(struct platform_device *pdev)
->>   		goto out_core_clk;
->>   	}
->>   
->> +	spicc->pinctrl = devm_pinctrl_get(&pdev->dev);
->> +	if (IS_ERR(spicc->pinctrl)) {
->> +		ret = PTR_ERR(spicc->pinctrl);
->> +		goto out_clk;
->> +	}
->> +
->>   	device_reset_optional(&pdev->dev);
->>   
->>   	master->num_chipselect = 4;
-> 
+The addition of the legacy transfer_one_message() spi callback is also needed
+as currently the stm32-qspi driver only supports spi_controller_mem_ops API.
+
+
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi |  50 +++++++----
+ arch/arm/boot/dts/stm32mp157c-ev1.dts    |  12 ++-
+ drivers/spi/spi-stm32-qspi.c             | 103 +++++++++++++++++++++--
+ 3 files changed, 139 insertions(+), 26 deletions(-)
+
+-- 
+2.25.1
 
