@@ -2,46 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEC358EA21
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 11:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F099258EC1C
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Aug 2022 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiHJJ4j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Aug 2022 05:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S231804AbiHJMiF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Aug 2022 08:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiHJJ4j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 05:56:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E471D6EF0F
-        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 02:56:37 -0700 (PDT)
+        with ESMTP id S230433AbiHJMhz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Aug 2022 08:37:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5417756F;
+        Wed, 10 Aug 2022 05:37:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D2C1B81AEF
-        for <linux-spi@vger.kernel.org>; Wed, 10 Aug 2022 09:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 42CD7C433C1;
-        Wed, 10 Aug 2022 09:56:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A0F561347;
+        Wed, 10 Aug 2022 12:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7B5C433D6;
+        Wed, 10 Aug 2022 12:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660125395;
-        bh=ydfdsep1OiSvvF/fwbEw6+s+sVz6EsZ+hEt9irIYNUs=;
-        h=Subject:From:Date:To:From;
-        b=XbfdHMUKQC3bMVdwlTYL/Aqo/6UICC/tJowymFeM1b1TULF+l36wvoaQpVkWsDp+N
-         SjxAPK0HK7YoqxJ1F42ACVBCGfZXyI8C9PHrZ5tmTbHGWzXnlI8bNBTFrpaaNj0oIC
-         6MlLKyyEZkkAhogTtD32wAs7ghNaPlpEg5JppamLtf6nvJR7L7G/fdbt/KrJd4u+9F
-         sYxw//Ou/Uc13fhsfiWPvGUW1inAkqjcOfwxumd5KPaDRO9WMU2A7FzrML+j1gjFF5
-         BDDT5lSNxKY960g2Gbp/tuuvhvMMS9XJHR/vxf7w1xPgxHbh6gB+Dsf/g2odCOnQLM
-         hoTQm1KnbEx1A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F18BC43142;
-        Wed, 10 Aug 2022 09:56:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1660135073;
+        bh=ROHaIZk75ZgJisF7nTMLDJS9o0AxLi1V/y+T67/KwWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qg7V+bjI7lf3dzSN62yYr9g4pSgwDtQDJWcjI3dRgZRvMIoOD/bbKegaOJMO2MzWN
+         SE+A3aKfjpe80HoF1s2lo5xVS6gIkpmA1DpXIUnW2aHmkkpf3RJ/y8dJotPeQecNET
+         e5qc36Vnk3SFh2ixHl5EoVsn2FhJ3CmaaVXyK9sh5fVsJqfdHGFcit844ItnozYVb6
+         CGZ4Ma5LOKbVbJtmpUwe4+JSb49OOdw677rfq2XdN3V5GeorsO5RJZw/LAVbThEAK4
+         woyx4cJp5ybMTB/NJtCaI8FBAu4HmfiRtObEhNrpbt1GgSGGFejKux81LEpIDva+n8
+         xCEk6z1CseItQ==
+Date:   Wed, 10 Aug 2022 13:37:48 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Da Xue <da@libre.computer>
+Subject: Re: [PATCH] spi: meson-spicc: save pow2 datarate between messages
+Message-ID: <YvOmnDJA+ov49chC@sirena.org.uk>
+References: <20220809152019.461741-1-narmstrong@baylibre.com>
+ <YvJ84qkuXdvVgXRm@sirena.org.uk>
+ <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166012539504.12385.7492186905710772122.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 10 Aug 2022 09:56:35 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2hd26sDiWQtv5ujx"
+Content-Disposition: inline
+In-Reply-To: <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
+X-Cookie: First pull up, then pull down.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,14 +58,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: stm32_qspi: use QSPI bus as 8 lines communication channel (2022-08-10T09:32:13)
-  Superseding: [v1] spi: stm32_qspi: use QSPI bus as 8 lines communication channel (2022-08-08T07:40:49):
-    [1/3] dt-bindings: spi: stm32: Add st,dual-flash property in st,stm32-qspi.yaml
-    [2/3] spi: stm32_qspi: Add transfer_one_message() spi callback
-    [3/3] ARM: dts: stm32: Create separate pinmux for qspi cs pin in stm32mp15-pinctrl.dtsi
 
+--2hd26sDiWQtv5ujx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Wed, Aug 10, 2022 at 11:17:14AM +0200, Neil Armstrong wrote:
+> On 09/08/2022 17:27, Mark Brown wrote:
+> > On Tue, Aug 09, 2022 at 05:20:19PM +0200, Neil Armstrong wrote:
 
+> > When you say the value set by the clock framework does that mean that
+> > the clock driver is adjusting hardware inside the SPI controller IP
+> > block which is then getting reset by the SPI driver without the SPI
+> > driver knowing about it?  That seems like a bad idea as you're finding
+> > here.
+
+> The SPI driver is explicitely triggering a reset at the end of each message
+> to get back to a clean HW state, but it does reset the content of the "legacy"
+> registers containing the power of 2 divider value, the new registers configuring
+> the new clock divider path (only on newer SoCs) doesn't get cleared.
+
+Sure, but that doesn't really address the concern - is this something
+that the clk driver programmed or is this the driver forgetting to
+restore a register that it programmed itself?  The commit message sounds
+like the former which is a much bigger problem.
+
+--2hd26sDiWQtv5ujx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzppwACgkQJNaLcl1U
+h9CP8Qf/cMQYM72jnQkNExfj6dskX5IIOlwCnAVUEnsbYrFpv3QL6BNLxgKx4eqx
+cjDy+gszIhOd4rr7/ayE4siN6fjOo/hWNIuydrrCsRWKrjvKTUInWB16AnVv5NrK
+JAjl3RZ9vrkKp2UcN/dsaU11B5Xce59ko2nuniDhKYZhubO9F2uYxOPiBLvufQyU
+Q20TDeHIgYaClQvbbnVnIBpjkeOYaZxhkpAjZmw/Btip07mzspkcC4ASnTbTKs2j
+cCeDY+xkSNPqT+Pie+GxbV0bOeAjLdUOwP7QoXIsrP4BJRzuoHk/aXWC8GzXo13a
+3baxwuQr/bFzHeoJRT+a3zrpms9mLA==
+=yOBS
+-----END PGP SIGNATURE-----
+
+--2hd26sDiWQtv5ujx--
