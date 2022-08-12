@@ -2,91 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FCF591012
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 13:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFC95912D4
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 17:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiHLLdI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Aug 2022 07:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S238884AbiHLPPG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Aug 2022 11:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiHLLdH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 07:33:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454C7ADCCE;
-        Fri, 12 Aug 2022 04:33:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6C63616D9;
-        Fri, 12 Aug 2022 11:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D13C433D7;
-        Fri, 12 Aug 2022 11:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660303986;
-        bh=4pxvzoeARritwSA7t5/xds/KLSaUDZC3mc4bIbfFMMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TyZvwqDODPH1OA6HSRGl1wTO4a9tCG8z4Xggb5pWwT/Bs7VeDxbi4rr5+3TJCUXse
-         UPXrYqe2XPJ6BxBkDDh2c+8HL0e+qK/lgApfoZiRLxf7IcY73rcxX65Wxs/fln30Uh
-         hnew1iYPXfYHNmn+lgcPyXMI/h9M2FAFqDh9vmLNWW0ts/P4xtQjCie4mape+WZtBq
-         2ebL4jgo9z1jp8b/dtdxfJyUi2EtiME6Y9FhHzudEdnrhdo6jTbbghhUtnz2R47Eu1
-         dcgNJDVDbfERfScTrZ7E1sabAQ2mn01rfHSFuEy9ZnOha3LcCbVSDdO6qCjFRAF3Bj
-         kSWXZitpqnDLA==
-Date:   Fri, 12 Aug 2022 12:32:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/2] dt-bindings: lpspi: add dmas property
-Message-ID: <YvY6a9SiFzAx5M2n@sirena.org.uk>
-References: <20220812073452.45763-1-peng.fan@oss.nxp.com>
+        with ESMTP id S239189AbiHLPO6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 11:14:58 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D67A7A81;
+        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id l22so1522314wrz.7;
+        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EoiVDV1BpkQyac6N0M+0zVwSj3WK1AdJP/ntOJZkbiI=;
+        b=y+C6TXoGy+311Sk25HndUdD8oAFpkGvgecJybzjCxB2DZEJQOrZkmUmsuPiqCI7MYK
+         nSygq/qCXeJkAetWuNZmVuqOLpfhIkZiyi0PUksGqaPvRgPGMfD10an0EY1LnHsiXQo3
+         O3MX5M+fD8ovdchs7GRBFr/RjXfv9rE6CclRf8ZPdwZZaUuagAc1rHUclt2hzaABqtgV
+         0DxTl0Fku6UTlBwX4KzWQb/yr0gAf2i6NiI1nzzKmlpxYe/1XLlsSFgdZ9rMt22tu9qo
+         66s+eu6aVCvbHc7D2a0LxigsTFTjugt752viL8GosJrhBi95OmTwhQLQb8GaCWykYqH+
+         4V5w==
+X-Gm-Message-State: ACgBeo3nSzT4v8Au/HSgM27ms/en+vyPUdFXUwwqxZ0TRMQD9/M4YbuF
+        uRzVSSMdxMhAvLRLVTR7DZDdfh1pZ9g=
+X-Google-Smtp-Source: AA6agR67pF4bd0Gg+R7FFH9Fs1c0QAkU7YjmSu0wWkZPvc1aU+z3yNTU4l0akoiHi1cnVXOTwkrsNw==
+X-Received: by 2002:a05:6000:18a3:b0:21f:d6a4:1aec with SMTP id b3-20020a05600018a300b0021fd6a41aecmr2444780wri.468.1660317296338;
+        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h41-20020a05600c49a900b003a5260b8392sm3938969wmp.23.2022.08.12.08.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 15:14:54 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
+ acpi_device
+Message-ID: <20220812151454.fqt2gknsoqjco4mz@liuwe-devbox-debian-v2>
+References: <12036348.O9o76ZdvQC@kreacher>
+ <2196460.iZASKD2KPV@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tSFccgfutfxwui54"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812073452.45763-1-peng.fan@oss.nxp.com>
-X-Cookie: No foreign coins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2196460.iZASKD2KPV@kreacher>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The parent field in struct acpi_device is, in fact, redundant,
+> because the dev.parent field in it effectively points to the same
+> object and it is used by the driver core.
+> 
+> Accordingly, the parent field can be dropped from struct acpi_device
+> and for this purpose define acpi_dev_parent() to retrieve the parent
+> struct acpi_device pointer from the dev.parent field in struct
+> acpi_device.  Next, update all of the users of the parent field
+> in struct acpi_device to use acpi_dev_parent() instead of it and
+> drop it.
+> 
+> While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
+> in one place in a confusing way.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> I may have missed some places where adev->parent is used directly, so
+> if that's happened, please let me know (I'm assuming that 0-day will
+> pick up this patch and run it through all of the relevant configs
+> anyway).
+> 
+> ---
+[...]
+>  drivers/hv/vmbus_drv.c       |    3 ++-
 
---tSFccgfutfxwui54
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Aug 12, 2022 at 03:34:51PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> The LPSPI has dma capability, so add dma property.
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---tSFccgfutfxwui54
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL2OmsACgkQJNaLcl1U
-h9AZIQf+PG4laPB+WUPIuqs6cmZr4n5FkU6dT2b2omVeJG0RhPuj6j3/ZjEN7skW
-5LILVD2sQbxTFZiVmUqWmTdFw8gt8p/hTzoEEDS8pZqczdiDymAxsMg5BmI8aO6Y
-J277FvQcbDjdBv/G8LEhvw2MhEwcU2tpLM/w5VM5QGEEvtH43y+ZZg6LIj+yaqPT
-bluDMhENWSIynNA58Y9yIb5UYo8xtlUkntpNwDYlFX9PS2SLVrxpPW12i9dMod6J
-J1pcM/JO55exKvgmkHPypQAyZWVzilheZBgBoMidr9IvecAPah1snMYuvc+jFSuQ
-5mu2MZ+D3h/CP9mJc9UjVjOMyfKNNw==
-=AYh+
------END PGP SIGNATURE-----
-
---tSFccgfutfxwui54--
+Acked-by: Wei Liu <wei.liu@kernel.org>
