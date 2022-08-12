@@ -2,60 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981E2591499
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 19:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344B3591528
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 20:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239415AbiHLREe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Aug 2022 13:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S232029AbiHLSAO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Aug 2022 14:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239385AbiHLREd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 13:04:33 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F074FB14E1;
-        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id z145so1270481iof.9;
-        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9EVAY3341uRLDeQR3qbIaskvaBL1Vga+F7BkTtexRf0=;
-        b=1Cup51pWqdAnzuD9uoCmwq6WUJqayn4R+94p1q7XLw5uLYqWLYl53oQKfdzOgP6qUB
-         n/638Es5U/WiK1apxhysx7RDznyhKQn7MSmoDbachBFW1xv7XFuGjeOOlRx6YJ2kL5lK
-         0/f88H4l+gO32ffLISsXGRJGiNqrfuLyWwlKsoxuW1vYLKfdtVaxR+kQ8ix7YYlpf20z
-         Vt2OT6tuCt4vS/6LvPitOFXSJLPLaHUN/JRRaiXW6Kctau2g66pMSfsNgfjTJDeHJuFE
-         RZnrU2kXCCQIK6LkAf8i6JaO0Ne2X2jVdZGEgG93FTEz/Y+OIKunMYpvTwQ7ZqwpoGly
-         1naA==
-X-Gm-Message-State: ACgBeo2OocGITP5u3V4QduT7YQ/uLieeXenUxGNQ6ASl3UHuS7ERwHnX
-        0rdtjvxH/zcVjWJobt3rvqenp3y1Vg==
-X-Google-Smtp-Source: AA6agR5v+3t0CqUnOx6AXsLMKMAa3BpiCFpKQyZHTgEWg9cMTJhmIuX1LrV/APLXcVPbjp0A9Vsnxg==
-X-Received: by 2002:a02:a141:0:b0:343:58ce:4d7f with SMTP id m1-20020a02a141000000b0034358ce4d7fmr2341486jah.223.1660323871161;
-        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id e47-20020a026d6f000000b003434de98f1asm99893jaf.28.2022.08.12.10.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 10:04:30 -0700 (PDT)
-Received: (nullmailer pid 329197 invoked by uid 1000);
-        Fri, 12 Aug 2022 17:04:28 -0000
-Date:   Fri, 12 Aug 2022 11:04:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, Vaishnav Achath <vaishnav.a@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: Drop Pratyush Yadav
-Message-ID: <20220812170428.GA328905-robh@kernel.org>
-References: <20220811063826.7620-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S234019AbiHLSAO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 14:00:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5539C1E4;
+        Fri, 12 Aug 2022 11:00:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDD58B8233E;
+        Fri, 12 Aug 2022 18:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A00C433D6;
+        Fri, 12 Aug 2022 18:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660327209;
+        bh=qlpox5oTG4mGqf0Z5CixjCw+6OtL2a4Mfnk09AY4MdQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=DjM7h2Ej+Y3LMuAZVTKSAZfTFyxK5YcunEXcMSR1Aiqe9vM9v6zHd3RHQY16bqhiL
+         tgTIIujsgIWrd9Ml9S++a0ucfaOPkuq2JyuoHF949zbd0OFsegJUCz9gSPbV3DeXLe
+         ZrPYIPF2+pvvrmyWep/LrQgwJ1aD82WLyAx2ZRDBtXxNMXy73+tVur9Zu6ZyToeOxX
+         dyBZUbIjoI3Im8H30B7Pg7qbAAz3PSYnULV5xSe7keieyDs9dS26qQjQDpZ4gr3Gqj
+         rZUMcEImmxmiF4aXHV+k0AtNbk2JXuTa6QH10p1qNZUf4XaW8nnW04qy8pVleOSbfw
+         O6NIMnS+fzMcA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, Da Xue <da@libre.computer>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220811134445.678446-1-narmstrong@baylibre.com>
+References: <20220811134445.678446-1-narmstrong@baylibre.com>
+Subject: Re: [PATCH] spi: meson-spicc: add local pow2 clock ops to preserve rate between messages
+Message-Id: <166032720712.92213.8055426385524956373.b4-ty@kernel.org>
+Date:   Fri, 12 Aug 2022 19:00:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811063826.7620-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,21 +55,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 11 Aug 2022 09:38:26 +0300, Krzysztof Kozlowski wrote:
-> Emails to Pratyush Yadav bounce ("550 Invalid recipient").  Generic SPI
-> properties should be maintained by subsystem maintainer (Mark).  Add
-> recent contributor Vaishnav Achath to the Cadence SPI bindings.
+On Thu, 11 Aug 2022 15:44:45 +0200, Neil Armstrong wrote:
+> At the end of a message, the HW gets a reset in meson_spicc_unprepare_transfer(),
+> this resets the SPICC_CONREG register and notably the value set by the
+> Common Clock Framework.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This is problematic because:
+> - the register value CCF can be different from the corresponding CCF cached rate
+> - CCF is allowed to change the clock rate whenever the HW state
 > 
-> ---
-> 
-> Vaishnav Achath, are you ok with that?
-> ---
->  .../devicetree/bindings/spi/cdns,qspi-nor-peripheral-props.yaml | 2 +-
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml        | 2 +-
->  Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
+> [...]
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: meson-spicc: add local pow2 clock ops to preserve rate between messages
+      commit: 09992025dacd258c823f50e82db09d7ef06cdac4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
