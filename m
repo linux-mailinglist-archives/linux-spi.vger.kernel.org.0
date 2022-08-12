@@ -2,61 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53CA59146A
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 18:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F03591494
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Aug 2022 19:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiHLQ4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Aug 2022 12:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S232177AbiHLRDs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Aug 2022 13:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239327AbiHLQ41 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 12:56:27 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C19B915C8;
-        Fri, 12 Aug 2022 09:56:26 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id l24so1246080ion.13;
-        Fri, 12 Aug 2022 09:56:26 -0700 (PDT)
+        with ESMTP id S234501AbiHLRDs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Aug 2022 13:03:48 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F3EB14DC;
+        Fri, 12 Aug 2022 10:03:47 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id j20so773391ila.6;
+        Fri, 12 Aug 2022 10:03:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9Cp4QeCbCvOKGEvFZUU0aNCq6FMaAD/1Ak9E24Cc4I4=;
-        b=XiS9tNUdnbmNJyZ3ObWNXgKYYs4HgDRbwgaIQSfPF/9VrScvArHaCjGQBrf8a4lIv+
-         /gdd9SY9OmTJoJ5jTnyKw7hQf1U4wXpXtJ+/ZQc/JWumt2f0fqsYnYL/76IaBPEm/GeB
-         sRraFDj3zbduuVSfoFYInXATnP10VGPa4X//m57Dr+juXQKB4QP+lbKTmiTHifS90kOc
-         pu4oR0oPffDYj4Ae0OAyvKLkiHhKq7DadjtQ0EOCkNlBXvn0tvtFNC9UxEDUhUftH411
-         4rDsktb9nGUdeWukvHQro/udapZ0KUBtdIhZFEDDl+NqM9BPJugQlvPf3GCUXMYRPyjz
-         VmBA==
-X-Gm-Message-State: ACgBeo1tjh3B2Z9OfvTxOsUneZqWk2jf/kM1tOyjLswwwocCRFA5PtoR
-        Vw6dj7WC46mirvfa4uU0bg==
-X-Google-Smtp-Source: AA6agR6qTsIohfC4640GKl7RspnUlKo+Ok0JVFjlNMLyEJRpsWgvTftyGOKSWm0+rvNuYvFQwV40vw==
-X-Received: by 2002:a05:6638:1483:b0:33f:7944:a30d with SMTP id j3-20020a056638148300b0033f7944a30dmr2350179jak.155.1660323385456;
-        Fri, 12 Aug 2022 09:56:25 -0700 (PDT)
+        bh=CbsNiIytCv9TuWDoxy66NWQwnGNftXPPpewBJoHfDIA=;
+        b=0Xarzv5J/J0SRECwpiCsW/xHv1QyAniPN7V1u6zQRGg6aLO65oVuJB0P1B2bw2V4aS
+         TGTnSZ09aaUMLRwbB8+e4mTVlxiI66LbnbmanNUVmJJCTPzAh/JRTaUDgiyBw3fENahs
+         7wfRGjJEg5wcWdTTT8Oj6LCCsj/+3G88UQO0/2cz3X2rpwHUd56xeV20hmM6ZXxrZJrC
+         CRAynr2Ix/Z36f3qERUQckxQ+AI8kEeDgVD/xHrOmGHLWxQpxn5IZgFLP/4+fW8gO9jB
+         WGtzknlXihP42SMJiqYJK6nhB4hAJLNgX62b5LwtUwBuGeHqzgGhzCAPFUTcbHScGjVq
+         LnhQ==
+X-Gm-Message-State: ACgBeo2u0FRW4K/22SpojVWM0eqXXuomfvYziclkqd/M2Bv2bUqDtmgw
+        vfah4qtCTyQRNMp+ezq8nw==
+X-Google-Smtp-Source: AA6agR5GGZj+HKLM7Mbb9Xw/65Zf53mj7vmnn/eflsC5QhVZLQwAoBMdhIHCeDPP16ImS8/8n8bnbQ==
+X-Received: by 2002:a05:6e02:80a:b0:2e3:4975:bf8a with SMTP id u10-20020a056e02080a00b002e34975bf8amr2115319ilm.316.1660323826577;
+        Fri, 12 Aug 2022 10:03:46 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id az14-20020a056638418e00b00342e029aa2dsm90467jab.40.2022.08.12.09.56.24
+        by smtp.gmail.com with ESMTPSA id c17-20020a023311000000b003434ee85d38sm105274jae.4.2022.08.12.10.03.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 09:56:24 -0700 (PDT)
-Received: (nullmailer pid 317914 invoked by uid 1000);
-        Fri, 12 Aug 2022 16:56:23 -0000
-Date:   Fri, 12 Aug 2022 10:56:23 -0600
+        Fri, 12 Aug 2022 10:03:46 -0700 (PDT)
+Received: (nullmailer pid 327993 invoked by uid 1000);
+        Fri, 12 Aug 2022 17:03:43 -0000
+Date:   Fri, 12 Aug 2022 11:03:43 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Bakker <xc-racer2@live.ca>, linux-spi@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: nvidia,tegra210-quad-peripheral-props:
- correct additional properties
-Message-ID: <20220812165623.GA317861-robh@kernel.org>
-References: <20220810131236.428529-1-krzysztof.kozlowski@linaro.org>
+        Paul Cercueil <paul@crapouillou.net>,
+        Sam Ravnborg <sam@ravnborg.org>, devicetree@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH] spi/panel: dt-bindings: drop 3-wire from common
+ properties
+Message-ID: <20220812170343.GA327951-robh@kernel.org>
+References: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810131236.428529-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,15 +71,26 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 10 Aug 2022 16:12:36 +0300, Krzysztof Kozlowski wrote:
-> Re-usable schemas should use additionalProperties:true, so the schema
-> using it will check for evaluated properties.
+On Wed, 10 Aug 2022 16:13:11 +0300, Krzysztof Kozlowski wrote:
+> The spi-3wire property is device specific and should be accepted only if
+> device really needs them.  Drop it from common spi-peripheral-props.yaml
+> schema, mention in few panel drivers which use it and include instead in
+> the SPI controller bindings.  The controller bindings will provide
+> spi-3wire type validation and one place for description.  Each device
+> schema must list the property if it is applicable.
 > 
-> Fixes: e23917822d3c ("spi: dt-bindings: split peripheral prods")
+> The Samsung S6E63M0 panel uses also spi-cpha/cpol properties on at least
+> one board (ste-ux500-samsung-janice/dts), so add also these to the
+> panel's bindings.
+> 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../bindings/spi/nvidia,tegra210-quad-peripheral-props.yaml    | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  .../bindings/display/panel/kingdisplay,kd035g6-54nt.yaml     | 2 ++
+>  .../bindings/display/panel/leadtek,ltk035c5444t.yaml         | 2 ++
+>  .../devicetree/bindings/display/panel/samsung,s6e63m0.yaml   | 4 ++++
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml    | 5 +++++
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml        | 5 -----
+>  5 files changed, 13 insertions(+), 5 deletions(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
