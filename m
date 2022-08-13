@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8E1591887
-	for <lists+linux-spi@lfdr.de>; Sat, 13 Aug 2022 06:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248FA5918CF
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Aug 2022 06:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiHMEJr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 13 Aug 2022 00:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S231424AbiHME0Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 13 Aug 2022 00:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiHMEJq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 Aug 2022 00:09:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4628F97D50;
-        Fri, 12 Aug 2022 21:09:45 -0700 (PDT)
+        with ESMTP id S230051AbiHME0X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 Aug 2022 00:26:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D518B14;
+        Fri, 12 Aug 2022 21:26:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660363785; x=1691899785;
+  t=1660364782; x=1691900782;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=YtnxD0BBwfe5HOnm9g9khCNeUtirSIklccPuLDL3HPI=;
-  b=fEBKa8rsncW5kP/2qke+mOh59N1mX0q3XPOaSFvDPl2GoXTem3rIln9U
-   mftLMuw2Msyxfr1nXSLdjhhJkkOsohgM8avAX+kaaWVRcNcNc6Glf3LaR
-   qTT+eUJaEONEfFNEW83Z96PyFSzHGjxGFqUjkjRUv2gnRQ7iG+QwTYKQT
-   eYWTky8WN3oGqtD2lCtZ1EJjqOlLk2vcGP2buF9RjDM9OLR1trAVQJG4h
-   4n9cjKOGVwjsmM2O9gNi8WlJ+fHmKenG//IsogbfdEz4gIV+Xic7ZMLpS
-   8lJhQSXgrTo7IgJ0y70tC9Qrm7x3zRs481F+67t/MLdzmSZGxN3eabH2d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="378015768"
+  bh=nuSF/DPyH4hEc+MssLIdGaOyti4gnu6kxnq2sOYunFY=;
+  b=KwqBpIKSP/r3j+xxKaw61Sl4n4tcgMAbVL0HmJ9OOar8CTTtvjxLmeZW
+   6yJuh2VRiTw7a7Scp7nUsHfiN1V2FxWxWDs3YGOYIUgaO+j6AX48rESAn
+   Rv+4GpDwhIYWIlEk1jJTXHHLTj0QvK7mGxJHfjYe9ZbCrmob3jleNvA0Y
+   5pAUOrVXqY8UC+mz2BHbWeSV17ixrtaAAW25MoqGCmPzkyObqVj2CDg/D
+   ie5JPlx0v0Aa8Vmt7Vs1yD0iGZI34pJfDRFMr3ZAPhsKR/dQBZ7pL9mJm
+   MPstXm4bn2pXPFDzoXFIJY69/HC1c16JPFCOIms7X9MxarhiBVJ+GNgmI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355734730"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="378015768"
+   d="scan'208";a="355734730"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 21:09:44 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 21:26:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="782153066"
+   d="scan'208";a="782156433"
 Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 21:09:42 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 21:26:20 -0700
 From:   niravkumar.l.rabara@intel.com
 To:     Mark Brown <broonie@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         niravkumar.l.rabara@intel.com
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: cadence-quadspi: Disable irqs during indirect reads
-Date:   Sat, 13 Aug 2022 12:09:28 +0800
-Message-Id: <20220813040928.1353077-1-niravkumar.l.rabara@intel.com>
+Subject: [PATCH v2] spi: cadence-quadspi: Disable irqs during indirect reads
+Date:   Sat, 13 Aug 2022 12:26:16 +0800
+Message-Id: <20220813042616.1372110-1-niravkumar.l.rabara@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,11 +76,11 @@ And disable all the read interrupts while reading from SRAM.
 
 Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 32 ++++++++++++++++++++++++++++---
- 1 file changed, 29 insertions(+), 3 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 38 +++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 72b1a5a2298c..75a3cdb84fba 100644
+index 72b1a5a2298c..e12ab5b43f34 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
 @@ -39,6 +39,7 @@
@@ -158,6 +158,26 @@ index 72b1a5a2298c..75a3cdb84fba 100644
  	}
  
  	/* Check indirect done status */
+@@ -1667,6 +1693,8 @@ static int cqspi_probe(struct platform_device *pdev)
+ 			cqspi->use_dma_read = true;
+ 		if (ddata->quirks & CQSPI_NO_SUPPORT_WR_COMPLETION)
+ 			cqspi->wr_completion = false;
++		if (ddata->quirks & CQSPI_SLOW_SRAM)
++			cqspi->slow_sram = true;
+ 
+ 		if (of_device_is_compatible(pdev->dev.of_node,
+ 					    "xlnx,versal-ospi-1.0"))
+@@ -1779,7 +1807,9 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
+ };
+ 
+ static const struct cqspi_driver_platdata socfpga_qspi = {
+-	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
++	.quirks = CQSPI_DISABLE_DAC_MODE
++			| CQSPI_NO_SUPPORT_WR_COMPLETION
++			| CQSPI_SLOW_SRAM,
+ };
+ 
+ static const struct cqspi_driver_platdata versal_ospi = {
 -- 
 2.25.1
 
