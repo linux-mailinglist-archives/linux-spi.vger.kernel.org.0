@@ -2,74 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863E8596308
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Aug 2022 21:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046ED59635D
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Aug 2022 21:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237035AbiHPTVT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Aug 2022 15:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S231804AbiHPTzQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Aug 2022 15:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237037AbiHPTVS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Aug 2022 15:21:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCAD80F53;
-        Tue, 16 Aug 2022 12:21:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S237311AbiHPTzQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Aug 2022 15:55:16 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD1D79608
+        for <linux-spi@vger.kernel.org>; Tue, 16 Aug 2022 12:55:14 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89364B81AC8;
-        Tue, 16 Aug 2022 19:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3EAD6C433D7;
-        Tue, 16 Aug 2022 19:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660677674;
-        bh=rqQmPKuzb5daA5RCPob+5rcVn2W7ybe8QvI6YIJDO3E=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=l0dZfbIkhuB8AlPUuvD0geY5Laq02s/CHu285rGn7/DkgwatbikvlbzlBL7xdKuC4
-         xq6gu/nevxWpKHpo/HHljO5/qrg0lyo+4KkWQvLBS3xUGrK9+jY/+vrXbn/ty/eNSl
-         jx1UpmKNmGel0nTFp8+J9KdTfRIsr4Z1uT4cMCT2rsoHuZ24WeqhL0xWr+IG145gJI
-         IqzDafbpmj5sOGB29ZEz4vKj8LmQShvpiBT21FwP2tQLE1JsVCc8rCXBXr09kuTQjY
-         iebZ5TEQdSHlUJYgnw+aQkYyM84hpOMr2rrrAph2Xhzv3jNsSv9yfpQZnuEqB1SOLT
-         kumjIO3a1wQ2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2319EE2A04C;
-        Tue, 16 Aug 2022 19:21:14 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.0-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220816112317.47721C433C1@smtp.kernel.org>
-References: <20220816112317.47721C433C1@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220816112317.47721C433C1@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.0-rc1
-X-PR-Tracked-Commit-Id: 2fd92c7b8fe2cfc634613dc093d0f507c7389ea8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 339800d50b411d617fb3298d478921e6626032e7
-Message-Id: <166067767413.31662.688858607098166502.pr-tracker-bot@kernel.org>
-Date:   Tue, 16 Aug 2022 19:21:14 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id CE25130CA4A;
+        Tue, 16 Aug 2022 21:55:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1660679712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E399oj/FMl021QbNUJyi4jZOEXebW+M4RWUvtnt08fA=;
+        b=AtLcy0X/Bl5vOo1QH8enQlD64WzFLH2ZqdoEnHt36Il1r/8eARwjioNZ5y7GvxqQDcROcK
+        jTLf20K6DDac2G1bBJ+8BHTcVgCIb54shlveDbp700Yaw+/tdqgkvzjuySi2zL/kHLXior
+        y0b0QQXn9fW9EtcMxdCaGL7Fl0TFcDAU5CW+kCa8U54PoApfVH76YiMlsI7koKhvSA1w33
+        4MsZMBAOqDFUc5m46MN3tHXDjqGTFAzN5LBlseqUh4iPRv0cwYlUQCIOKCioc/HmwMT/0N
+        sa3ltcVRbADNT50YiQUlnaz5jF7y4pXBud+uQhJEOB1cWSUhxA73fB88zFMuTA==
+Message-ID: <d837b3ecdc8eaddee62737df9abb086c490692d8.camel@svanheule.net>
+Subject: Re: [PATCH v3 1/2] spi: realtek-rtl: Add compile testing support
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
+Date:   Tue, 16 Aug 2022 21:55:08 +0200
+In-Reply-To: <20220731202152.1358252-2-martin.blumenstingl@googlemail.com>
+References: <20220731202152.1358252-1-martin.blumenstingl@googlemail.com>
+         <20220731202152.1358252-2-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Tue, 16 Aug 2022 12:23:07 +0100:
+T24gU3VuLCAyMDIyLTA3LTMxIGF0IDIyOjIxICswMjAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
+b3RlOgo+IEFkZCBzdXBwb3J0IGZvciBjb21waWxlIHRlc3RpbmcgdGhlIHNwaS1yZWFsdGVrLXJ0
+bCBkcml2ZXIgdG8gaW5jcmVhc2UKPiBidWlsZCB0ZXN0aW5nIGNvdmVyYWdlLgo+IAo+IFNpZ25l
+ZC1vZmYtYnk6IE1hcnRpbiBCbHVtZW5zdGluZ2wgPG1hcnRpbi5ibHVtZW5zdGluZ2xAZ29vZ2xl
+bWFpbC5jb20+CgpTb3JyeSB0aGlzIHRvb2sgc29tZSB0aW1lLCBidXQKClJldmlld2VkLWJ5OiBT
+YW5kZXIgVmFuaGV1bGUgPHNhbmRlckBzdmFuaGV1bGUubmV0PgoKVGhhbmtzIQpTYW5kZXIKCj4g
+LS0tCj4gwqBkcml2ZXJzL3NwaS9LY29uZmlnwqAgfCAxMSArKysrKysrKysrKwo+IMKgZHJpdmVy
+cy9zcGkvTWFrZWZpbGUgfMKgIDIgKy0KPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0aW9u
+cygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9LY29uZmln
+IGIvZHJpdmVycy9zcGkvS2NvbmZpZwo+IGluZGV4IDhlNTUwMjY5ZDQ4OC4uNGI4NGYyN2ZhZTJi
+IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvc3BpL0tjb25maWcKPiArKysgYi9kcml2ZXJzL3NwaS9L
+Y29uZmlnCj4gQEAgLTk2OSw2ICs5NjksMTcgQEAgY29uZmlnIFNQSV9NWFMKPiDCoMKgwqDCoMKg
+wqDCoMKgaGVscAo+IMKgwqDCoMKgwqDCoMKgwqDCoCBTUEkgZHJpdmVyIGZvciBGcmVlc2NhbGUg
+TVhTIGRldmljZXMuCj4gwqAKPiArY29uZmlnIFNQSV9SRUFMVEVLX1JUTAo+ICvCoMKgwqDCoMKg
+wqDCoHRyaXN0YXRlICJSZWFsdGVrIFJUTCBTUEkgY29udHJvbGxlciIKPiArwqDCoMKgwqDCoMKg
+wqBkZXBlbmRzIG9uIE1BQ0hfUkVBTFRFS19SVEwgfHwgQ09NUElMRV9URVNUCj4gK8KgwqDCoMKg
+wqDCoMKgZGVmYXVsdCBNQUNIX1JFQUxURUtfUlRMCj4gK8KgwqDCoMKgwqDCoMKgaGVscAo+ICvC
+oMKgwqDCoMKgwqDCoMKgIFNQSSBkcml2ZXIgZm9yIHRoZSBoYXJkd2FyZSBmb3VuZCBvbiBSZWFs
+dGVrIFJMVEw4MzgwLCBSVEw4MzgyLAo+ICvCoMKgwqDCoMKgwqDCoMKgIFJUTDgzOTEsIFJUTDgz
+OTIgYW5kIFJUTDgzOTMgU29Dcy4KPiArCj4gK8KgwqDCoMKgwqDCoMKgwqAgVGhpcyBkcml2ZXIg
+Y2FuIGFsc28gYmUgYnVpbHQgYXMgYSBtb2R1bGUuIElmIHNvLCB0aGUgbW9kdWxlCj4gK8KgwqDC
+oMKgwqDCoMKgwqAgd2lsbCBiZSBjYWxsZWQgc3BpLXJlYWx0ZWstcnRsLgo+ICsKPiDCoGNvbmZp
+ZyBTUElfVEVHUkEyMTBfUVVBRAo+IMKgwqDCoMKgwqDCoMKgwqB0cmlzdGF0ZSAiTlZJRElBIFRl
+Z3JhIFFTUEkgQ29udHJvbGxlciIKPiDCoMKgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBBUkNIX1RF
+R1JBIHx8IENPTVBJTEVfVEVTVAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9NYWtlZmlsZSBi
+L2RyaXZlcnMvc3BpL01ha2VmaWxlCj4gaW5kZXggMThiZjNkOGM2ZGY3Li45ZmU0YTJhYTBmZDcg
+MTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9zcGkvTWFrZWZpbGUKPiArKysgYi9kcml2ZXJzL3NwaS9N
+YWtlZmlsZQo+IEBAIC0xMDUsNyArMTA1LDcgQEAgb2JqLSQoQ09ORklHX1NQSV9RVVApwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1xdXAubwo+IMKg
+b2JqLSQoQ09ORklHX1NQSV9ST0NLQ0hJUCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNw
+aS1yb2NrY2hpcC5vCj4gwqBvYmotJChDT05GSUdfU1BJX1JPQ0tDSElQX1NGQynCoMKgwqDCoMKg
+wqDCoMKgwqArPSBzcGktcm9ja2NoaXAtc2ZjLm8KPiDCoG9iai0kKENPTkZJR19TUElfUkI0WFgp
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgKz0gc3BpLXJi
+NHh4Lm8KPiAtb2JqLSQoQ09ORklHX01BQ0hfUkVBTFRFS19SVEwpwqDCoMKgwqDCoMKgwqDCoMKg
+Kz0gc3BpLXJlYWx0ZWstcnRsLm8KPiArb2JqLSQoQ09ORklHX1NQSV9SRUFMVEVLX1JUTCnCoMKg
+wqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1yZWFsdGVrLXJ0bC5vCj4gwqBvYmotJChDT05GSUdfU1BJ
+X1JQQ0lGKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9
+IHNwaS1ycGMtaWYubwo+IMKgb2JqLSQoQ09ORklHX1NQSV9SU1BJKcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqArPSBzcGktcnNwaS5vCj4gwqBvYmotJChDT05GSUdfU1BJX1MzQzI0
+WFgpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1zM2MyNHh4LWh3Lm8KCg==
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.0-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/339800d50b411d617fb3298d478921e6626032e7
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
