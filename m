@@ -2,99 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046ED59635D
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Aug 2022 21:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCE6596AC1
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Aug 2022 10:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiHPTzQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Aug 2022 15:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S229930AbiHQIDK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Aug 2022 04:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237311AbiHPTzQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Aug 2022 15:55:16 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD1D79608
-        for <linux-spi@vger.kernel.org>; Tue, 16 Aug 2022 12:55:14 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id CE25130CA4A;
-        Tue, 16 Aug 2022 21:55:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660679712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E399oj/FMl021QbNUJyi4jZOEXebW+M4RWUvtnt08fA=;
-        b=AtLcy0X/Bl5vOo1QH8enQlD64WzFLH2ZqdoEnHt36Il1r/8eARwjioNZ5y7GvxqQDcROcK
-        jTLf20K6DDac2G1bBJ+8BHTcVgCIb54shlveDbp700Yaw+/tdqgkvzjuySi2zL/kHLXior
-        y0b0QQXn9fW9EtcMxdCaGL7Fl0TFcDAU5CW+kCa8U54PoApfVH76YiMlsI7koKhvSA1w33
-        4MsZMBAOqDFUc5m46MN3tHXDjqGTFAzN5LBlseqUh4iPRv0cwYlUQCIOKCioc/HmwMT/0N
-        sa3ltcVRbADNT50YiQUlnaz5jF7y4pXBud+uQhJEOB1cWSUhxA73fB88zFMuTA==
-Message-ID: <d837b3ecdc8eaddee62737df9abb086c490692d8.camel@svanheule.net>
-Subject: Re: [PATCH v3 1/2] spi: realtek-rtl: Add compile testing support
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
-Date:   Tue, 16 Aug 2022 21:55:08 +0200
-In-Reply-To: <20220731202152.1358252-2-martin.blumenstingl@googlemail.com>
-References: <20220731202152.1358252-1-martin.blumenstingl@googlemail.com>
-         <20220731202152.1358252-2-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        with ESMTP id S229624AbiHQIDI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Aug 2022 04:03:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C96A2;
+        Wed, 17 Aug 2022 01:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660723385; x=1692259385;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NR972ITJen90HoEiRrQftltI+Alot7Bl1nWm8R7vdcY=;
+  b=MOmavYttQXBm6nzUqCKn+kjIs3u15PQXCMxTzaik4XY5D3dWOD/kjAVU
+   PEiSYUao7fXohZJ1tFJe+QWU5mFKyswizWU675ulGXXi3Ao+KNyyOax/T
+   RNzwKLpya70SQEIxdkHr83tn3zzvoHe2IreJ/xNZNZm/yI6/AXMo4q43s
+   9zjLLgC04GntVIVsKNqA7dFO4fGd82UUYDkGVFSen6lVylrID8uGN9gTq
+   dHvFmYGRjVFwWClMnqJfEzHDI/q105eQXS9M3/Sy5RBYtrSou+lTQPwec
+   lPysQ0TKK5E+rNaHztOy2uiF/c9pkbR8tDjporQp00dXsYFLL2nB39eQ+
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="109399450"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Aug 2022 01:03:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 17 Aug 2022 01:03:03 -0700
+Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 17 Aug 2022 01:02:58 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <admin@hifiphile.com>, <kavyasree.kotagiri@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>
+Subject: [PATCH 0/5] Make atmel serial driver aware of GCLK
+Date:   Wed, 17 Aug 2022 10:55:13 +0300
+Message-ID: <20220817075517.49575-1-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gU3VuLCAyMDIyLTA3LTMxIGF0IDIyOjIxICswMjAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
-b3RlOgo+IEFkZCBzdXBwb3J0IGZvciBjb21waWxlIHRlc3RpbmcgdGhlIHNwaS1yZWFsdGVrLXJ0
-bCBkcml2ZXIgdG8gaW5jcmVhc2UKPiBidWlsZCB0ZXN0aW5nIGNvdmVyYWdlLgo+IAo+IFNpZ25l
-ZC1vZmYtYnk6IE1hcnRpbiBCbHVtZW5zdGluZ2wgPG1hcnRpbi5ibHVtZW5zdGluZ2xAZ29vZ2xl
-bWFpbC5jb20+CgpTb3JyeSB0aGlzIHRvb2sgc29tZSB0aW1lLCBidXQKClJldmlld2VkLWJ5OiBT
-YW5kZXIgVmFuaGV1bGUgPHNhbmRlckBzdmFuaGV1bGUubmV0PgoKVGhhbmtzIQpTYW5kZXIKCj4g
-LS0tCj4gwqBkcml2ZXJzL3NwaS9LY29uZmlnwqAgfCAxMSArKysrKysrKysrKwo+IMKgZHJpdmVy
-cy9zcGkvTWFrZWZpbGUgfMKgIDIgKy0KPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0aW9u
-cygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9LY29uZmln
-IGIvZHJpdmVycy9zcGkvS2NvbmZpZwo+IGluZGV4IDhlNTUwMjY5ZDQ4OC4uNGI4NGYyN2ZhZTJi
-IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvc3BpL0tjb25maWcKPiArKysgYi9kcml2ZXJzL3NwaS9L
-Y29uZmlnCj4gQEAgLTk2OSw2ICs5NjksMTcgQEAgY29uZmlnIFNQSV9NWFMKPiDCoMKgwqDCoMKg
-wqDCoMKgaGVscAo+IMKgwqDCoMKgwqDCoMKgwqDCoCBTUEkgZHJpdmVyIGZvciBGcmVlc2NhbGUg
-TVhTIGRldmljZXMuCj4gwqAKPiArY29uZmlnIFNQSV9SRUFMVEVLX1JUTAo+ICvCoMKgwqDCoMKg
-wqDCoHRyaXN0YXRlICJSZWFsdGVrIFJUTCBTUEkgY29udHJvbGxlciIKPiArwqDCoMKgwqDCoMKg
-wqBkZXBlbmRzIG9uIE1BQ0hfUkVBTFRFS19SVEwgfHwgQ09NUElMRV9URVNUCj4gK8KgwqDCoMKg
-wqDCoMKgZGVmYXVsdCBNQUNIX1JFQUxURUtfUlRMCj4gK8KgwqDCoMKgwqDCoMKgaGVscAo+ICvC
-oMKgwqDCoMKgwqDCoMKgIFNQSSBkcml2ZXIgZm9yIHRoZSBoYXJkd2FyZSBmb3VuZCBvbiBSZWFs
-dGVrIFJMVEw4MzgwLCBSVEw4MzgyLAo+ICvCoMKgwqDCoMKgwqDCoMKgIFJUTDgzOTEsIFJUTDgz
-OTIgYW5kIFJUTDgzOTMgU29Dcy4KPiArCj4gK8KgwqDCoMKgwqDCoMKgwqAgVGhpcyBkcml2ZXIg
-Y2FuIGFsc28gYmUgYnVpbHQgYXMgYSBtb2R1bGUuIElmIHNvLCB0aGUgbW9kdWxlCj4gK8KgwqDC
-oMKgwqDCoMKgwqAgd2lsbCBiZSBjYWxsZWQgc3BpLXJlYWx0ZWstcnRsLgo+ICsKPiDCoGNvbmZp
-ZyBTUElfVEVHUkEyMTBfUVVBRAo+IMKgwqDCoMKgwqDCoMKgwqB0cmlzdGF0ZSAiTlZJRElBIFRl
-Z3JhIFFTUEkgQ29udHJvbGxlciIKPiDCoMKgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBBUkNIX1RF
-R1JBIHx8IENPTVBJTEVfVEVTVAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9NYWtlZmlsZSBi
-L2RyaXZlcnMvc3BpL01ha2VmaWxlCj4gaW5kZXggMThiZjNkOGM2ZGY3Li45ZmU0YTJhYTBmZDcg
-MTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9zcGkvTWFrZWZpbGUKPiArKysgYi9kcml2ZXJzL3NwaS9N
-YWtlZmlsZQo+IEBAIC0xMDUsNyArMTA1LDcgQEAgb2JqLSQoQ09ORklHX1NQSV9RVVApwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1xdXAubwo+IMKg
-b2JqLSQoQ09ORklHX1NQSV9ST0NLQ0hJUCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNw
-aS1yb2NrY2hpcC5vCj4gwqBvYmotJChDT05GSUdfU1BJX1JPQ0tDSElQX1NGQynCoMKgwqDCoMKg
-wqDCoMKgwqArPSBzcGktcm9ja2NoaXAtc2ZjLm8KPiDCoG9iai0kKENPTkZJR19TUElfUkI0WFgp
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgKz0gc3BpLXJi
-NHh4Lm8KPiAtb2JqLSQoQ09ORklHX01BQ0hfUkVBTFRFS19SVEwpwqDCoMKgwqDCoMKgwqDCoMKg
-Kz0gc3BpLXJlYWx0ZWstcnRsLm8KPiArb2JqLSQoQ09ORklHX1NQSV9SRUFMVEVLX1JUTCnCoMKg
-wqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1yZWFsdGVrLXJ0bC5vCj4gwqBvYmotJChDT05GSUdfU1BJ
-X1JQQ0lGKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9
-IHNwaS1ycGMtaWYubwo+IMKgb2JqLSQoQ09ORklHX1NQSV9SU1BJKcKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqArPSBzcGktcnNwaS5vCj4gwqBvYmotJChDT05GSUdfU1BJX1MzQzI0
-WFgpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1zM2MyNHh4LWh3Lm8KCg==
+This series of patches introduces the GCLK as a potential clock source for
+the baudrate generator of UART on sama5d2 SoCs. Unlike the serial mode of
+the USART offered by FLEXCOM, the UART does not provide a fractional part
+that can be added to the clock divisor to obtain a more accurate result,
+which greatly decreases the flexibility available for producing a higher
+variety of baudrates. Now, with the last patch of the series, the driver
+will check for a GCLK in the DT. If provided, whenever `atmel_set_termios`
+is called, unless there is a fractional part, the driver will compare the
+error rate between the desired baudrate and the actual baudrate obtained
+through each of the available clock sources and will choose the clock source
+with the lowest error rate. While at it, convert the DT binding
+for UART/USART to json-schema, update the FLEXCOM binding to reference the
+new UART/USART binding and differentiate between the SPI of USART and the
+SPI of FLEXCOM.
+
+The first three patches of this patch series depend on this patch series
+converting atmel-flexcom bindings to json-schema:
+https://lore.kernel.org/all/20220708115619.254073-1-kavyasree.kotagiri@microchip.com/
+
+Sergiu Moga (5):
+  dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref
+    binding
+  dt-bindings: mfd: atmel,at91-usart: convert to json-schema
+  dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref
+    binding
+  clk: at91: sama5d2: Add Generic Clocks for UART/USART
+  tty: serial: atmel: Make the driver aware of the existence of GCLK
+
+ .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |  18 +-
+ .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
+ drivers/clk/at91/sama5d2.c                    |  10 +
+ drivers/tty/serial/atmel_serial.c             |  52 ++++-
+ drivers/tty/serial/atmel_serial.h             |   1 +
+ 6 files changed, 264 insertions(+), 105 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
+
+-- 
+2.25.1
 
