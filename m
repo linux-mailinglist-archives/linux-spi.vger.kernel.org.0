@@ -2,110 +2,227 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A95D596E51
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Aug 2022 14:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F11596FB0
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Aug 2022 15:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbiHQMVQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Aug 2022 08:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S239629AbiHQNTu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Aug 2022 09:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiHQMVP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Aug 2022 08:21:15 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6756E883CF
-        for <linux-spi@vger.kernel.org>; Wed, 17 Aug 2022 05:21:14 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r16so6790866wrm.6
-        for <linux-spi@vger.kernel.org>; Wed, 17 Aug 2022 05:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=m1ESsIqQK33mkc2gES2cmv+jNqxpWrAFNggOv3RLRRM=;
-        b=pPcIdlQQUO1qWmqM0DAIg+k4LibZFLWCKC3A7EAiYQU9IkycD05kLglZo2lWWVcmB+
-         eZkPJ4QrUl2IGp49BFinu5/UIRRE6dVC+jZITg475fvXiK088tDtWt3TwNO8uc6m0zA6
-         +6FrYF/VT7FRZJgaCFvqwJ1ezcdXT95oZb9C6h+2KHemooT+4rt6NkvlZZrY4pnt+dRI
-         ncfbRneUqN2mWDFMK9iD3M0ARzQ+yz5UM5zaOhGdRm251xuoN44cfqJp421zpzHjOoKC
-         rjNDnmrxKXfWIFZgxroW6DieRro9FyqbvvbM+cXQFzM31wlvW1Iubd3BNItVA/s2G1Jg
-         mwZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=m1ESsIqQK33mkc2gES2cmv+jNqxpWrAFNggOv3RLRRM=;
-        b=L5pyn2tkRn2vWcKgBo0bySnUsF9hmi6i366D9LzXf23IL9XvEhljrMdPM+KiIt7gju
-         Pbwem7u8QUBQysTICxeOKxpYwHHJOl7n8Vf7BqDPOtFLB9EF9sd+m35TE0P8ksQh+eVp
-         cw0XfheL49xhsiQ3N08qli3M5CG68vuG9EgQWNTQ7jgYBkATtVpBBCeMExQsI8mOHImM
-         +vuzD+udZxCDMUCL6crtnBt2HohHDIsyy3572jhjbsCwYL3AQe3ghI15+bRl4Otc8m1u
-         nE+6gGkMr2fIakqhI/WgYYo2BAFRLJ8HJ4NJWvZWl1QFs/bHSc4bxkqcUsJFkLeNghhf
-         IWlg==
-X-Gm-Message-State: ACgBeo3tAj88L5HN0+wdSZ9JgDG9h49fxmrPttmePlEX0i7BpiVrSD+S
-        LclnrNsUim5iOLV2Zo75n+pElQ==
-X-Google-Smtp-Source: AA6agR7OTnrPt5oIdtzE4QzF/PJAdntMdqijnhGLRs56Qj2uoOh/3Y5DHlKEkqQTRTTSmgxemiqazQ==
-X-Received: by 2002:a5d:6f05:0:b0:223:8bfc:dd0f with SMTP id ay5-20020a5d6f05000000b002238bfcdd0fmr13949143wrb.547.1660738872993;
-        Wed, 17 Aug 2022 05:21:12 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id az36-20020a05600c602400b003a5fa79007fsm2180552wmb.7.2022.08.17.05.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 05:21:12 -0700 (PDT)
-Message-ID: <8ab34dd4-ca5a-2824-ccbf-867996ac6536@linaro.org>
-Date:   Wed, 17 Aug 2022 13:21:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] dt-bindings: nvmem: mediatek: efuse: Add support for
- MT8188
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, broonie@kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
+        with ESMTP id S239661AbiHQNT2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Aug 2022 09:19:28 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0530B4A2;
+        Wed, 17 Aug 2022 06:18:30 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF665660159D;
+        Wed, 17 Aug 2022 14:18:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660742308;
+        bh=VZRPs6QHD675i6cxN6IOEc0D9k7f4ipDpaFxpo6k/Tc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O3K3zzBXv1FjAMpJXQHBa0QkDotw5BEb47KiX78Wu5ubl6dEh0uODYGemInjUyvX8
+         w/4qhNxjofm66X4wDoeDKYi7tLim9jaOXBA6lA3Z74VQcYF3iS5sq8NF4FwO7x+c62
+         eADY9TugCvDguZy49eQfDOyLWdHi83ZBA2pfU9Bumy1O2FQ1fI3i17OyhOObGhFhR+
+         rN6cv2pg2OJ4c0369l+3XJbuwzdP4bTeaQLieDawLYIAURyaVuChlHLtv0Rld2nSpU
+         fBUK7ggjVQjRkzhBwrBt9Gr91LChxE4vaqwlBtQPNiqs+HfkMAxB5Kd+EvkPSldRMK
+         ILVPdpnElJGBw==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     sanju.mehta@amd.com, broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220715120114.4243-1-johnson.wang@mediatek.com>
- <20220715120114.4243-3-johnson.wang@mediatek.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220715120114.4243-3-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        kernel@collabora.com, krisman@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH] spi: amd: Configure device speed
+Date:   Wed, 17 Aug 2022 18:48:09 +0530
+Message-Id: <20220817131809.312533-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
+Number of clock frequencies are supported by AMD controller
+which are mentioned in the amd_spi_freq structure table.
 
-On 15/07/2022 13:01, Johnson Wang wrote:
-> Add compatible for MT8188 SoC.
-> 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
-> This patch is based on "linux-next"[1].
-> [1]https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> ---
+Create mechanism to configure device clock frequency such
+that it is the closest frequency supported by the
+AMD controller.
 
-Applied thanks,
+Give priority to the device transfer speed and in case
+it is not set then use the max clock frequency supported
+by the device.
 
---srini
->   Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> index b5a1109f2ee1..75e0a516e59a 100644
-> --- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-> @@ -30,6 +30,7 @@ properties:
->                 - mediatek,mt8173-efuse
->                 - mediatek,mt8183-efuse
->                 - mediatek,mt8186-efuse
-> +              - mediatek,mt8188-efuse
->                 - mediatek,mt8192-efuse
->                 - mediatek,mt8195-efuse
->                 - mediatek,mt8516-efuse
+Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+---
+ drivers/spi/spi-amd.c | 98 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 08df4f8d0531..0cc9fd908f4f 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -36,6 +36,18 @@
+ #define AMD_SPI_FIFO_SIZE	70
+ #define AMD_SPI_MEM_SIZE	200
+ 
++#define AMD_SPI_ENA_REG		0x20
++#define AMD_SPI_ALT_SPD_SHIFT	20
++#define AMD_SPI_ALT_SPD_MASK	GENMASK(23, AMD_SPI_ALT_SPD_SHIFT)
++#define AMD_SPI_SPI100_SHIFT	0
++#define AMD_SPI_SPI100_MASK	GENMASK(AMD_SPI_SPI100_SHIFT, AMD_SPI_SPI100_SHIFT)
++#define AMD_SPI_SPEED_REG	0x6C
++#define AMD_SPI_SPD7_SHIFT	8
++#define AMD_SPI_SPD7_MASK	GENMASK(13, AMD_SPI_SPD7_SHIFT)
++
++#define AMD_SPI_MAX_HZ		100000000
++#define AMD_SPI_MIN_HZ		800000
++
+ /* M_CMD OP codes for SPI */
+ #define AMD_SPI_XFER_TX		1
+ #define AMD_SPI_XFER_RX		2
+@@ -50,14 +62,41 @@ enum amd_spi_versions {
+ 	AMD_SPI_V2,
+ };
+ 
++enum amd_spi_speed {
++	F_66_66MHz,
++	F_33_33MHz,
++	F_22_22MHz,
++	F_16_66MHz,
++	F_100MHz,
++	F_800KHz,
++	SPI_SPD7,
++	F_50MHz = 0x4,
++	F_4MHz = 0x32,
++	F_3_17MHz = 0x3F
++};
++
++/**
++ * struct amd_spi_freq - Matches device speed with values to write in regs
++ * @speed_hz: Device frequency
++ * @enable_val: Value to be written to "enable register"
++ * @spd7_val: Some frequencies requires to have a value written at SPISPEED register
++ */
++struct amd_spi_freq {
++	u32 speed_hz;
++	u32 enable_val;
++	u32 spd7_val;
++};
++
+ /**
+  * struct amd_spi - SPI driver instance
+  * @io_remap_addr:	Start address of the SPI controller registers
+  * @version:		SPI controller hardware version
++ * @speed_hz:		Device frequency
+  */
+ struct amd_spi {
+ 	void __iomem *io_remap_addr;
+ 	enum amd_spi_versions version;
++	unsigned int speed_hz;
+ };
+ 
+ static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+@@ -189,10 +228,61 @@ static int amd_spi_master_setup(struct spi_device *spi)
+ 	return 0;
+ }
+ 
++static const struct amd_spi_freq amd_spi_freq[] = {
++	{ AMD_SPI_MAX_HZ,   F_100MHz,         0},
++	{       66660000, F_66_66MHz,         0},
++	{       50000000,   SPI_SPD7,   F_50MHz},
++	{       33330000, F_33_33MHz,         0},
++	{       22220000, F_22_22MHz,         0},
++	{       16660000, F_16_66MHz,         0},
++	{        4000000,   SPI_SPD7,    F_4MHz},
++	{        3170000,   SPI_SPD7, F_3_17MHz},
++	{ AMD_SPI_MIN_HZ,   F_800KHz,         0},
++};
++
++static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
++{
++	unsigned int i, spd7_val, alt_spd;
++
++	if (speed_hz == amd_spi->speed_hz)
++		return 0;
++
++	if (speed_hz < AMD_SPI_MIN_HZ)
++		return -EINVAL;
++
++	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++)
++		if (speed_hz >= amd_spi_freq[i].speed_hz)
++			break;
++
++	if (speed_hz == amd_spi_freq[i].speed_hz)
++		return 0;
++
++	amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
++
++	alt_spd = (amd_spi_freq[i].enable_val << AMD_SPI_ALT_SPD_SHIFT)
++		   & AMD_SPI_ALT_SPD_MASK;
++	amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, alt_spd,
++			       AMD_SPI_ALT_SPD_MASK);
++
++	if (amd_spi->speed_hz == AMD_SPI_MAX_HZ)
++		amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, 1,
++				       AMD_SPI_SPI100_MASK);
++
++	if (amd_spi_freq[i].spd7_val) {
++		spd7_val = (amd_spi_freq[i].spd7_val << AMD_SPI_SPD7_SHIFT)
++			    & AMD_SPI_SPD7_MASK;
++		amd_spi_setclear_reg32(amd_spi, AMD_SPI_SPEED_REG, spd7_val,
++				       AMD_SPI_SPD7_MASK);
++	}
++
++	return 0;
++}
++
+ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 				    struct spi_master *master,
+ 				    struct spi_message *message)
+ {
++	struct spi_device *spi = message->spi;
+ 	struct spi_transfer *xfer = NULL;
+ 	u8 cmd_opcode;
+ 	u8 *buf = NULL;
+@@ -202,6 +292,12 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 
+ 	list_for_each_entry(xfer, &message->transfers,
+ 			    transfer_list) {
++
++		if (xfer->speed_hz)
++			amd_set_spi_freq(amd_spi, xfer->speed_hz);
++		else
++			amd_set_spi_freq(amd_spi, spi->max_speed_hz);
++
+ 		if (xfer->rx_buf)
+ 			m_cmd = AMD_SPI_XFER_RX;
+ 		if (xfer->tx_buf)
+@@ -312,6 +408,8 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	master->num_chipselect = 4;
+ 	master->mode_bits = 0;
+ 	master->flags = SPI_MASTER_HALF_DUPLEX;
++	master->max_speed_hz = AMD_SPI_MAX_HZ;
++	master->min_speed_hz = AMD_SPI_MIN_HZ;
+ 	master->setup = amd_spi_master_setup;
+ 	master->transfer_one_message = amd_spi_master_transfer;
+ 	master->max_transfer_size = amd_spi_max_transfer_size;
+-- 
+2.30.2
+
