@@ -2,64 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1CD5981A7
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Aug 2022 12:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AE6598402
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Aug 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244145AbiHRKs0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Aug 2022 06:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S245024AbiHRNXz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Aug 2022 09:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244160AbiHRKsT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Aug 2022 06:48:19 -0400
-X-Greylist: delayed 1065 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 03:48:17 PDT
-Received: from server.fedoraforum.org (server.fedoraforum.org [207.210.201.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E0326D4
-        for <linux-spi@vger.kernel.org>; Thu, 18 Aug 2022 03:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fedoraforum.org; s=default; h=Subject:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-ID:From:To:Date:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OSjkuEGGdIrLTtS33d+AdFjzK3YefHGl5ar5YYaX+dE=; b=A/FZJtojTCpaXb1CJD8JbumtWL
-        A0OKbz7X2V7pVUsFzSN6EP+rwz7L6wnW1H+W94opMH8+TepayhYQNFRYRYY6EayBf4FYK5jF3QH+n
-        TJnqK6A24k4zRf+r3BcdF7XWT+1kJSWdiuzociQAmt0cP1wTuiRgo+x4CcgG5W/b7TbhBbyb+gFfd
-        RWh39veE57bpOTyTqeGRgWByA+tjm1BpfI6pFwpuL8rJ5tnelaVVmDMfYm33yzokSYYAKiWriZ1aT
-        XsTSWqOVf+aj9pMuCQXicJPuWq4yGyxVzwjf8/K52oXENkywQBgGHTzJc676tn5g90iud1SprHYux
-        9MnW4+mg==;
-Received: from [207.210.201.125] (port=55082 helo=mail.fedoraforum.org)
-        by server.fedoraforum.org with esmtpsa  (TLS1) tls TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
-        (Exim 4.95)
-        (envelope-from <support@fedoraforum.org>)
-        id 1oOcnG-0005jG-UU
-        for linux-spi@vger.kernel.org;
-        Thu, 18 Aug 2022 11:30:30 +0100
-Date:   Thu, 18 Aug 2022 10:30:30 +0000
-To:     linux-spi@vger.kernel.org
-From:   "FedoraForum.org" <support@fedoraforum.org>
-Auto-Submitted: auto-generated
-Message-ID: <20220514063149.cbc1a88a7095@forums.fedoraforum.org>
+        with ESMTP id S242702AbiHRNXu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Aug 2022 09:23:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B35E15FFE;
+        Thu, 18 Aug 2022 06:23:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE31D6153A;
+        Thu, 18 Aug 2022 13:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B2FC433D6;
+        Thu, 18 Aug 2022 13:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660829027;
+        bh=7Jvb9VTNTGyJevS3lgNMgSmphDuDuYli74EbuMld70M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJRAhCjxfceD0/NRdpH1rqi3S9qlJKifQfmcF0Qojaje3rJ+Zc4mlYEP17mKisiL3
+         rUnXKoskTQ4OPazWMfmsvCMTJ6W72qcQUf3DBqtGpJXZQBUFxUPmqoK9iiEvbySh7c
+         ikr7l5/4FuUrY7yv9iSSqsn17N57qEtJ3XXhYswTfM+VXPE7oN18CChPr7vm+7ohBZ
+         6RFZoFIJxSedXUlZJowCGCEpgMfKx06YXs1nKcanpUyr9JA/bsJntdaeqlcWFv/5fg
+         n7GvHEr3/lYueiSjBdobJ6zpLwXyvCaLt+f9H6WWR7oR8Mumxgb3IyxEjUBqTxjk7l
+         JodKLTToJxIXg==
+Date:   Thu, 18 Aug 2022 14:23:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     sanju.mehta@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        krisman@collabora.com, alvaro.soliverez@collabora.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH] spi: amd: Configure device speed
+Message-ID: <Yv49XpsaRzerUuMl@sirena.org.uk>
+References: <20220817131809.312533-1-shreeya.patel@collabora.com>
+ <Yvzw0GqUd9ZgxUTo@sirena.org.uk>
+ <3e2a0f50-c396-5af6-5cbe-303978378587@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8bit
-X-Priority: 3
-X-Mailer: vBulletin Mail via PHP
-Subject: linux-spi@vger.kernel.org
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.fedoraforum.org
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - fedoraforum.org
-X-Get-Message-Sender-Via: server.fedoraforum.org: authenticated_id: support@fedoraforum.org
-X-Authenticated-Sender: server.fedoraforum.org: support@fedoraforum.org
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SHORT_SHORTNER,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_DBL_ABUSE_REDIR
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wpON6ygzczDYYJtZ"
+Content-Disposition: inline
+In-Reply-To: <3e2a0f50-c396-5af6-5cbe-303978378587@collabora.com>
+X-Cookie: Logic is the chastity belt of the mind!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,12 +60,33 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-💚 Deborah just viewed your profile! Click here: http://bit.do/fUefL?iwaf 💚,
+--wpON6ygzczDYYJtZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is a message from Unregistered ( mailto: ) from the FedoraForum.org ( https://forums.fedoraforum.org/ ).
+On Wed, Aug 17, 2022 at 07:40:31PM +0530, Shreeya Patel wrote:
 
-The message is as follows:
+> yes, the code is actually configuring it to use the frequency which is
+> strictly less than the requested one.
+> I just didn't use the correct words. I will make the change in commit
+> message for v2 once you review the patch.
 
-linux-spi@vger.kernel.org
+Please just resend with a fixed commit message, I'll only have to review
+it again anyway when you resend.
 
-FedoraForum.org takes no responsibility for messages sent through its system.
+--wpON6ygzczDYYJtZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL+PV0ACgkQJNaLcl1U
+h9BEBwgAhIXtiH5DF+MI83yuJvAokOdJxz4J+febdaSBzNrTECfN7mr7moYpsmyT
+JzKCQubxRAPeFRStvx47bB2cbLiNCLZmXDq+bfxd87vPLGOmRhxsmkQAwTB40NeB
++m/ToXHS65FsMZo2Z1zDAE/3BtTW6VkQFoMXzw6xUlokN2yFHekhLMj2zSLsbpK4
+cGt+HX+AVu5LE/KvDqm73mBnDnVZ4MV1IWCqChFielHqbx+YRfmCPp/HNMkCFFar
+x3GNngih9khR+FRAv7heZH+Wuj2fFbO/IA5eIQ9nCr6Rd0Dh8XMLFSB8Io8Jmq6Z
+Z0lWGLNIMzNcdm/tNM5SfS3Gtbz7Uw==
+=nDTc
+-----END PGP SIGNATURE-----
+
+--wpON6ygzczDYYJtZ--
