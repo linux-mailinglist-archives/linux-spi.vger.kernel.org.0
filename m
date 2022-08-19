@@ -2,216 +2,229 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CBC599B9C
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Aug 2022 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75F9599C1E
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Aug 2022 14:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348887AbiHSMGb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Aug 2022 08:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S1348626AbiHSMhE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Aug 2022 08:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348710AbiHSMG3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Aug 2022 08:06:29 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EA710096B
-        for <linux-spi@vger.kernel.org>; Fri, 19 Aug 2022 05:06:26 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id o2so5875798lfb.1
-        for <linux-spi@vger.kernel.org>; Fri, 19 Aug 2022 05:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=/Sb3w6Y1BeOgZMrIBk6x8kpTOxRss537p36tvRmvnAg=;
-        b=dH9RyMR3lKC/qZOXxXjEafcK7XBKChilHFvq0LsT4iA780RiPQKoXew3aujRndsSfM
-         9WHc33SEm49OFB78kb/hStFA6mKaEQmQlBw0XJ04mfvWdymVok5fsh1xOFJEHLgvgLPm
-         Yp3uOpwElmcoTR2sh6KeSZ/zf/HMZ3YG2IFsWbexZPGa4OtUlAXXQ2uLt+pJ5vFNB9zm
-         bbB9S8SzHl9EIDkvMetWJVwb4LexM/85N+ZGrEXtUv1PipNEw7aTnQEAwi6PSREWjHh6
-         w99N2AtiTCixlxSc8KvbnhCDiUEtlgSqXHjRkqz0qbINVJgGwrblkZwfXu/5VAqYwKFy
-         JmNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/Sb3w6Y1BeOgZMrIBk6x8kpTOxRss537p36tvRmvnAg=;
-        b=5eXv5WVrOBlue3IcZZ9hAjH2NE3KMyMSZMuVB9/Fcxxxan3cCJp5dOTCiYNlBCeKMh
-         iOVBG28UrlXlIRm2sGkIrqt+YA7QGXOlThv430MokZDYDG4rzi/s0QxR8dwEw1cSRhrH
-         I3QtOplLt1pYz/FllNZNjamWZldG2CU88V4rMa3oyXmfgg/ZcKpoGhy3/TfPsltsZ/x3
-         QLslp50i4zSlnSyVjnPBX7FFWrF0c3n6bA1N7Xjnsd7riSMt9kHDd6ty+q0UTevpI8qJ
-         L4QY4yy9vBrjfhgqzvGXYOprTbXC2dYLb4AHy9xK9PG4V7atStSqPSHndaPT/JQ/Az89
-         RCwA==
-X-Gm-Message-State: ACgBeo2CHAx15o0aHKcxhf9Yye5J3GkgUgPBV4gBN35GyPgsSJa8AVDL
-        jdWSklGl1wkhmCt399alXf8oCA==
-X-Google-Smtp-Source: AA6agR4UDDM3tfvRJzYG1IzCN1p3rR1zz78x4mZxht+ZjrTuTapl3U/WvyNHyNKsLsCkmdOM4E5jTg==
-X-Received: by 2002:a05:6512:358d:b0:48b:37f:dce2 with SMTP id m13-20020a056512358d00b0048b037fdce2mr2131532lfr.267.1660910784888;
-        Fri, 19 Aug 2022 05:06:24 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id u24-20020ac258d8000000b00492cebbeefbsm115021lfo.59.2022.08.19.05.06.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:06:24 -0700 (PDT)
-Message-ID: <0871f3af-cb37-e490-f0b3-88703652b089@linaro.org>
-Date:   Fri, 19 Aug 2022 15:06:22 +0300
+        with ESMTP id S235596AbiHSMhD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Aug 2022 08:37:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F3A1015AE;
+        Fri, 19 Aug 2022 05:37:01 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 03D5D66015B2;
+        Fri, 19 Aug 2022 13:36:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660912620;
+        bh=pObIoX59I+FSuduhBxmScU7R5MECVMxXywkg0t+LhWI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XcANuo0YHb1cRL3zdQAOt+ISxZy5XoMleqtMNJwGCpTmlCkKGRyDqNS/SVkqYTusI
+         gvN7BoWm0u6C1yL77N4lW9ncUriHTJbb/fYVXprUyJebNMSiSrr9cwcKW0RLda5Ne5
+         o3Ejy1qu16f5Xy2/28NLynnyDsSznBpQOnF5lqYvzFYTSUXjNviPsmcG/FiLg9yNEZ
+         hFbwY/NMpm5GOI69x9NfM02TeH3QHSvqeGlXGD+/a6WTHsMJEaTqBFvvyRduAU7RSI
+         GKduVBNEg0t9I0uGsxa+3GPuU14nZgfpMvDLxu7oJJgMsQcBdvigW0NbUq1oLtW1G6
+         vYfBqgJvBiMNQ==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     sanju.mehta@amd.com, broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, krisman@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v2] spi: amd: Configure device speed
+Date:   Fri, 19 Aug 2022 18:06:30 +0530
+Message-Id: <20220819123630.368462-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Content-Language: en-US
-To:     Sergiu.Moga@microchip.com, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <c1a98a3e-609e-7783-b1b7-3bb39caa8c65@linaro.org>
- <ddd8ca9a-1fc1-7d37-07e8-f6f7f4617eef@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ddd8ca9a-1fc1-7d37-07e8-f6f7f4617eef@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/08/2022 12:25, Sergiu.Moga@microchip.com wrote:
-> On 18.08.2022 11:38, Krzysztof Kozlowski wrote:
->> On 17/08/2022 10:55, Sergiu Moga wrote:
->>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
->>> json-schema format.
->>>
->>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
->>> ---
->>>   .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
->>>   .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
->>>   2 files changed, 190 insertions(+), 98 deletions(-)
->>>   create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>   delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>> new file mode 100644
->>> index 000000000000..cf15d73fa1e8
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>> @@ -0,0 +1,190 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/mfd/atmel,at91-usart.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Atmel Universal Synchronous Asynchronous Receiver/Transmitter (USART)
->>> +
->>> +maintainers:
->>> +  - Richard Genoud <richard.genoud@gmail.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->> This looks quite different than bindings and you commit msg is saying it
->> is only a conversion. Mention any changes against original bindings.
->>
->>> +      - const: atmel,at91rm9200-usart
->>> +      - const: atmel,at91sam9260-usart
->>> +      - const: microchip,sam9x60-usart
->> That's an enum
->>
->>> +      - items:
->>> +          - const: atmel,at91rm9200-dbgu
->>> +          - const: atmel,at91rm9200-usart
->>> +      - items:
->>> +          - const: atmel,at91sam9260-dbgu
->>> +          - const: atmel,at91sam9260-usart
->>> +      - items:
->>> +          - const: microchip,sam9x60-dbgu
->>> +          - const: microchip,sam9x60-usart
->>> +      - items:
->>> +          - const: microchip,sam9x60-usart
->>> +          - const: atmel,at91sam9260-usart
->> This is not correct - contradicts earlier one.
->>
->>> +      - items:
->>> +          - const: microchip,sam9x60-dbgu
->>> +          - const: microchip,sam9x60-usart
->>> +          - const: atmel,at91sam9260-dbgu
->>> +          - const: atmel,at91sam9260-usart
->> What? You wrote above that microchip,sam9x60-dbgu is compatible only
->> with microchip,sam9x60-usart. Now you write it is also compatible with
->> other ones?
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clock-names:
->>> +    contains:
->>> +      const: usart
->> No, this has to be specific/fixed list.
->>
->>> +
->>> +  clocks:
->>> +    minItems: 1
->>> +    maxItems: 2
->> Not really - define the items. One item could be optional, though.
->>
->>> +
->>> +  dmas:
->>> +    items:
->>> +      - description: TX DMA Channel
->>> +      - description: RX DMA Channel
->>> +
->>> +  dma-names:
->>> +    items:
->>> +      - const: tx
->>> +      - const: rx
->>> +
->>> +  atmel,usart-mode:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    description: |
->> No need for |
->>
->>> +      Must be either 1 for SPI or 0 for USART.
->> Mention the header.
->>
->>> +    enum: [ 0, 1 ]
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clock-names
->>> +  - clocks
->>> +
->>> +if:
->> Put it under allOf.
-> 
-> 
-> I missed this in the first read, but what do you mean by under allOf? 
-> The only allOf's in this file are under the then:'s.
-> 
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-It means that "if:" is preferred to be under allOf, just like example
-schema is showing:
-https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml
+Number of clock frequencies are supported by AMD controller
+which are mentioned in the amd_spi_freq structure table.
 
-Not some other allOf, which could be many in your bindings. The one
-allOf in top-level, just like example schema.
+Create mechanism to configure device clock frequency such
+that it is strictly less than the requested frequency.
 
+Give priority to the device transfer speed and in case
+it is not set then use the max clock speed supported
+by the device.
 
-Best regards,
-Krzysztof
+Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+---
+
+Changes in v2
+  - Improve the commit message.
+
+ drivers/spi/spi-amd.c | 98 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 08df4f8d0531..0cc9fd908f4f 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -36,6 +36,18 @@
+ #define AMD_SPI_FIFO_SIZE	70
+ #define AMD_SPI_MEM_SIZE	200
+ 
++#define AMD_SPI_ENA_REG		0x20
++#define AMD_SPI_ALT_SPD_SHIFT	20
++#define AMD_SPI_ALT_SPD_MASK	GENMASK(23, AMD_SPI_ALT_SPD_SHIFT)
++#define AMD_SPI_SPI100_SHIFT	0
++#define AMD_SPI_SPI100_MASK	GENMASK(AMD_SPI_SPI100_SHIFT, AMD_SPI_SPI100_SHIFT)
++#define AMD_SPI_SPEED_REG	0x6C
++#define AMD_SPI_SPD7_SHIFT	8
++#define AMD_SPI_SPD7_MASK	GENMASK(13, AMD_SPI_SPD7_SHIFT)
++
++#define AMD_SPI_MAX_HZ		100000000
++#define AMD_SPI_MIN_HZ		800000
++
+ /* M_CMD OP codes for SPI */
+ #define AMD_SPI_XFER_TX		1
+ #define AMD_SPI_XFER_RX		2
+@@ -50,14 +62,41 @@ enum amd_spi_versions {
+ 	AMD_SPI_V2,
+ };
+ 
++enum amd_spi_speed {
++	F_66_66MHz,
++	F_33_33MHz,
++	F_22_22MHz,
++	F_16_66MHz,
++	F_100MHz,
++	F_800KHz,
++	SPI_SPD7,
++	F_50MHz = 0x4,
++	F_4MHz = 0x32,
++	F_3_17MHz = 0x3F
++};
++
++/**
++ * struct amd_spi_freq - Matches device speed with values to write in regs
++ * @speed_hz: Device frequency
++ * @enable_val: Value to be written to "enable register"
++ * @spd7_val: Some frequencies requires to have a value written at SPISPEED register
++ */
++struct amd_spi_freq {
++	u32 speed_hz;
++	u32 enable_val;
++	u32 spd7_val;
++};
++
+ /**
+  * struct amd_spi - SPI driver instance
+  * @io_remap_addr:	Start address of the SPI controller registers
+  * @version:		SPI controller hardware version
++ * @speed_hz:		Device frequency
+  */
+ struct amd_spi {
+ 	void __iomem *io_remap_addr;
+ 	enum amd_spi_versions version;
++	unsigned int speed_hz;
+ };
+ 
+ static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+@@ -189,10 +228,61 @@ static int amd_spi_master_setup(struct spi_device *spi)
+ 	return 0;
+ }
+ 
++static const struct amd_spi_freq amd_spi_freq[] = {
++	{ AMD_SPI_MAX_HZ,   F_100MHz,         0},
++	{       66660000, F_66_66MHz,         0},
++	{       50000000,   SPI_SPD7,   F_50MHz},
++	{       33330000, F_33_33MHz,         0},
++	{       22220000, F_22_22MHz,         0},
++	{       16660000, F_16_66MHz,         0},
++	{        4000000,   SPI_SPD7,    F_4MHz},
++	{        3170000,   SPI_SPD7, F_3_17MHz},
++	{ AMD_SPI_MIN_HZ,   F_800KHz,         0},
++};
++
++static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
++{
++	unsigned int i, spd7_val, alt_spd;
++
++	if (speed_hz == amd_spi->speed_hz)
++		return 0;
++
++	if (speed_hz < AMD_SPI_MIN_HZ)
++		return -EINVAL;
++
++	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++)
++		if (speed_hz >= amd_spi_freq[i].speed_hz)
++			break;
++
++	if (speed_hz == amd_spi_freq[i].speed_hz)
++		return 0;
++
++	amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
++
++	alt_spd = (amd_spi_freq[i].enable_val << AMD_SPI_ALT_SPD_SHIFT)
++		   & AMD_SPI_ALT_SPD_MASK;
++	amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, alt_spd,
++			       AMD_SPI_ALT_SPD_MASK);
++
++	if (amd_spi->speed_hz == AMD_SPI_MAX_HZ)
++		amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, 1,
++				       AMD_SPI_SPI100_MASK);
++
++	if (amd_spi_freq[i].spd7_val) {
++		spd7_val = (amd_spi_freq[i].spd7_val << AMD_SPI_SPD7_SHIFT)
++			    & AMD_SPI_SPD7_MASK;
++		amd_spi_setclear_reg32(amd_spi, AMD_SPI_SPEED_REG, spd7_val,
++				       AMD_SPI_SPD7_MASK);
++	}
++
++	return 0;
++}
++
+ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 				    struct spi_master *master,
+ 				    struct spi_message *message)
+ {
++	struct spi_device *spi = message->spi;
+ 	struct spi_transfer *xfer = NULL;
+ 	u8 cmd_opcode;
+ 	u8 *buf = NULL;
+@@ -202,6 +292,12 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 
+ 	list_for_each_entry(xfer, &message->transfers,
+ 			    transfer_list) {
++
++		if (xfer->speed_hz)
++			amd_set_spi_freq(amd_spi, xfer->speed_hz);
++		else
++			amd_set_spi_freq(amd_spi, spi->max_speed_hz);
++
+ 		if (xfer->rx_buf)
+ 			m_cmd = AMD_SPI_XFER_RX;
+ 		if (xfer->tx_buf)
+@@ -312,6 +408,8 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	master->num_chipselect = 4;
+ 	master->mode_bits = 0;
+ 	master->flags = SPI_MASTER_HALF_DUPLEX;
++	master->max_speed_hz = AMD_SPI_MAX_HZ;
++	master->min_speed_hz = AMD_SPI_MIN_HZ;
+ 	master->setup = amd_spi_master_setup;
+ 	master->transfer_one_message = amd_spi_master_transfer;
+ 	master->max_transfer_size = amd_spi_max_transfer_size;
+-- 
+2.30.2
+
