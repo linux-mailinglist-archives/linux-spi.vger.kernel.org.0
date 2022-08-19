@@ -2,48 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F260B599D90
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Aug 2022 16:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F3A599D97
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Aug 2022 16:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349157AbiHSO02 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Aug 2022 10:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S1349467AbiHSO2X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Aug 2022 10:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349361AbiHSO0V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Aug 2022 10:26:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C21EA311;
-        Fri, 19 Aug 2022 07:26:08 -0700 (PDT)
+        with ESMTP id S1349541AbiHSO2V (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Aug 2022 10:28:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2421E32;
+        Fri, 19 Aug 2022 07:28:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 021F5B827E5;
-        Fri, 19 Aug 2022 14:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F4BC433C1;
-        Fri, 19 Aug 2022 14:26:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2312A61199;
+        Fri, 19 Aug 2022 14:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABEFC433C1;
+        Fri, 19 Aug 2022 14:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660919165;
-        bh=+6oUBYP5Akr39UzKlRCjPl3FcOmUxW9kETDioIzedJA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Io75iAELdIefKSpR712qfpmWJtvGFvUwTSLO4oZ7vN0DolpA6M9MZoFOTq/19Wefv
-         JeE1LmYo5440fcRt6nnaLghwlzES1lld7coqUmNGrP8Igh0rc5nOu7QENMWon8gDA0
-         8gUMH3h8TEehCMLCcpDBuZ2ROVOYeORdnjLrYZ8PsAGpIYXBGJ33RvHRJxn9V2niAb
-         xIuliBfk+KGkbrV0rck4NT1fkDOrk9O46WzokqU0uhJMOdFdjhqMjnJTXuEkMC8BkT
-         WpgA9wrh12pd8FY28tFvFEarYbt4JjApAWN15CnUkLqhiAQfmpdDfXHbuC7yFSG7s3
-         ZDS6gOgRfh9gw==
+        s=k20201202; t=1660919294;
+        bh=W6ZfbKa2VF0MiVjMNZj4uo2J9tIHd+e1pEfszl8HrnY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F7aK1+c8laxCqDdunn8O7uTKalWW8Lz9Isned6yIgCNuZnPcEmhK/XcSKoAFXa+21
+         +TXBc82RaKwCQWvmvRfnyiXsIkECmEl8vXlJas0QQEXghJhrjPHX5BlZGGJOTk64EV
+         45TDsZGyNsvrADmdHtyqCAzkrIG6nh6L+srEjmNrNxI61GZ4xfT6+zSBu4sA62vV8j
+         HHLGWgnhw8Ma2PhmduPuzhiaw6yT9HolBaZ4OxVKO1vbj9Q6vumpLUAiMnzjWHtHj3
+         qpV4IK1GhR0O+IwEE98pzNw7P1jJk0zVzqg4mVOdReMX8oKhmHhapk0EGp8UDZSCKW
+         SMKhUs10DPbGg==
+Date:   Fri, 19 Aug 2022 15:28:09 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20220818210107.7373-1-wsa+renesas@sang-engineering.com>
-References: <20220818210107.7373-1-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH] spi: move from strlcpy with unused retval to strscpy
-Message-Id: <166091916465.94432.6649632671608591710.b4-ty@kernel.org>
-Date:   Fri, 19 Aug 2022 15:26:04 +0100
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     sanju.mehta@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        krisman@collabora.com, alvaro.soliverez@collabora.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH v2] spi: amd: Configure device speed
+Message-ID: <Yv+d+byNXO3z9JaF@sirena.org.uk>
+References: <20220819123630.368462-1-shreeya.patel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aqSctdl6o5lEG6db"
+Content-Disposition: inline
+In-Reply-To: <20220819123630.368462-1-shreeya.patel@collabora.com>
+X-Cookie: You may be recognized soon.  Hide.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,37 +57,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 18 Aug 2022 23:01:07 +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> 
 
-Applied to
+--aqSctdl6o5lEG6db
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Fri, Aug 19, 2022 at 06:06:30PM +0530, Shreeya Patel wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>=20
+> Number of clock frequencies are supported by AMD controller
+> which are mentioned in the amd_spi_freq structure table.
+>=20
+> Create mechanism to configure device clock frequency such
+> that it is strictly less than the requested frequency.
 
-Thanks!
+This doesn't apply against current code, please check and resend.
 
-[1/1] spi: move from strlcpy with unused retval to strscpy
-      commit: 51e99de583697cc073ef8888690675b07fe8ef3c
+--aqSctdl6o5lEG6db
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/nfgACgkQJNaLcl1U
+h9By1wf/dl7YskCYF6ui2/ddg+SJHt1UlD1E2IOf3wutpmHEecl04Fs4Q3HGBVGY
+UBlrVXlRIpJr1wvGQ43qK2Upnmj+36qEwnjyHShe5cK+d5vPVRM0bo4irahG0XUe
+cOvqWeNNVhInq7dKWt/DVM4KiutfJVlrOmMaH8s2voNQ7ec//AGZMiOk1/Hd4aXL
+u2rO22NRZuTInjJDZSUncg66eFgBUzRJ7ezAhp9AkXp0ikbjYDdFAtV/u1AoLX2q
+1aoY1W+ghLHZV25JoS6IBnnGpDnrnMqxIdFuRLEdgJGoDvJgqAv4vN0tLeNEK64M
+iz/jNzM62HxJuwsxRUBKCjv6IFR43g==
+=yBzS
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--aqSctdl6o5lEG6db--
