@@ -2,91 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F3A599D97
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Aug 2022 16:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307C559B654
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Aug 2022 22:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349467AbiHSO2X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Aug 2022 10:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S231403AbiHUUhZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 21 Aug 2022 16:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349541AbiHSO2V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Aug 2022 10:28:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2421E32;
-        Fri, 19 Aug 2022 07:28:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2312A61199;
-        Fri, 19 Aug 2022 14:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABEFC433C1;
-        Fri, 19 Aug 2022 14:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660919294;
-        bh=W6ZfbKa2VF0MiVjMNZj4uo2J9tIHd+e1pEfszl8HrnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F7aK1+c8laxCqDdunn8O7uTKalWW8Lz9Isned6yIgCNuZnPcEmhK/XcSKoAFXa+21
-         +TXBc82RaKwCQWvmvRfnyiXsIkECmEl8vXlJas0QQEXghJhrjPHX5BlZGGJOTk64EV
-         45TDsZGyNsvrADmdHtyqCAzkrIG6nh6L+srEjmNrNxI61GZ4xfT6+zSBu4sA62vV8j
-         HHLGWgnhw8Ma2PhmduPuzhiaw6yT9HolBaZ4OxVKO1vbj9Q6vumpLUAiMnzjWHtHj3
-         qpV4IK1GhR0O+IwEE98pzNw7P1jJk0zVzqg4mVOdReMX8oKhmHhapk0EGp8UDZSCKW
-         SMKhUs10DPbGg==
-Date:   Fri, 19 Aug 2022 15:28:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     sanju.mehta@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        krisman@collabora.com, alvaro.soliverez@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: Re: [PATCH v2] spi: amd: Configure device speed
-Message-ID: <Yv+d+byNXO3z9JaF@sirena.org.uk>
-References: <20220819123630.368462-1-shreeya.patel@collabora.com>
+        with ESMTP id S229541AbiHUUhY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 21 Aug 2022 16:37:24 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258F1F60D;
+        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id s1so9941174lfp.6;
+        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
+        b=Dh0wHSuPepRN05VF69M8apwh8NLGTSQ0rj+C/rKBVw0IFpwC/l6DdaykrHcU/GFVK3
+         j65op7R8+6uvo6xt6Hm+hLsbYWROiF69cK9jmg3p8MmDiL8Blk+0EdT8RbEyggVeOzBc
+         E2QsKkaKWDt1JPAsZ0gGBXgaqegBUQGrfiZMgTjVaVZOhhFaDQb3++pDcQlEvl7am52g
+         8E6BWjV+Gw0ldKKbOgvYlTmuD9T1/4Ci/JB85yxkUXh/xufOFYBgrBSHT/oyyeXslpji
+         F8UqfqqExfmA69cRW0nQRkii+2MeQCh28QX7vRrFow1xOw4ZvwWwfp9pNniBFtlAYFBl
+         s8zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
+        b=s2sjVdoDWpCIur57YRum23vVBmCg3fzHvGVuPrJ2fitS0nDcg82dCzj23mB6EsoslP
+         N0ftrc9SKaYm19uME2Hiq/Y1gvkqRUZ91vVmGv53WT/vOs6Gfwc6H+7U5hQ0/MTfB/qL
+         BPG4JtWo33LbmxG8mudboTXlAzGGx1p1tUT821VmCHqdJC0VinI0pFZyLIgcknjzn9US
+         lN0ck9bG9eTNauc5FjihPhYxbhGS63+8FUrPkCQKhwkU2PX4dloMNmTu08fhGJgMjY5N
+         eG/T/d0Eu1yx1jn/erV1KL7Foc30UW4wffgKBV+HKtijberAZR0XTHrVWJiwNAKegDfw
+         xPxA==
+X-Gm-Message-State: ACgBeo1zt3CAxZEooxEcPTQWANn5zu0uadfgXTZcF8qLJ51NI6DYx3Ue
+        ZeMsCvU76rZQqTKUx45Eai9qmffLdtLK1w==
+X-Google-Smtp-Source: AA6agR5VwSaYfHoh8jG3iAVAoEI5L/BpK4p7fvqv4IoaMtYGPgIHW0+SlQrUQ568FJAEHINaPrh7ZQ==
+X-Received: by 2002:ac2:50cf:0:b0:48a:f4ef:788b with SMTP id h15-20020ac250cf000000b0048af4ef788bmr5731853lfm.527.1661114241945;
+        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac25dc2000000b0047dace7c7e5sm1606422lfq.212.2022.08.21.13.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 23:37:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com
+Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20220821203719.gxjxo24stzcf3a2x@mobilestation>
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aqSctdl6o5lEG6db"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819123630.368462-1-shreeya.patel@collabora.com>
-X-Cookie: You may be recognized soon.  Hide.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Sudip
 
---aqSctdl6o5lEG6db
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
+> Some Synopsys SSI controllers support enhanced SPI which includes
+> Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+> feature in enhanced SPI modes which can be used to prevent FIFO underflow
+> and overflow conditions while transmitting or receiving the data respectively.
+> This is only tested on controller version 1.03a.
+> 
+> Ben Dooks (1):
+>   spi: dw-apb-ssi: add generic 1.03a version
+> 
+> Sudip Mukherjee (10):
+>   spi: dw: define capability for enhanced spi
+>   spi: dw: add check for support of dual/quad/octal
+>   spi: dw: define spi_frf for dual/quad/octal modes
+>   spi: dw: use TMOD_RO to read in enhanced spi modes
+>   spi: dw: define SPI_CTRLR0 register and its fields
+>   spi: dw: update SPI_CTRLR0 register
+>   spi: dw: update NDF while writing in enhanced spi mode
+>   spi: dw: update buffer for enhanced spi mode
+>   spi: dw: prepare the transfer routine for enhanced mode
+>   spi: dw: initialize dwc-ssi-1.03a controller
 
-On Fri, Aug 19, 2022 at 06:06:30PM +0530, Shreeya Patel wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
->=20
-> Number of clock frequencies are supported by AMD controller
-> which are mentioned in the amd_spi_freq structure table.
->=20
-> Create mechanism to configure device clock frequency such
-> that it is strictly less than the requested frequency.
+Thanks for the very useful series. I've started reviewing it and will
+share all my comments tomorrow.
 
-This doesn't apply against current code, please check and resend.
+-Sergey
 
---aqSctdl6o5lEG6db
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/nfgACgkQJNaLcl1U
-h9By1wf/dl7YskCYF6ui2/ddg+SJHt1UlD1E2IOf3wutpmHEecl04Fs4Q3HGBVGY
-UBlrVXlRIpJr1wvGQ43qK2Upnmj+36qEwnjyHShe5cK+d5vPVRM0bo4irahG0XUe
-cOvqWeNNVhInq7dKWt/DVM4KiutfJVlrOmMaH8s2voNQ7ec//AGZMiOk1/Hd4aXL
-u2rO22NRZuTInjJDZSUncg66eFgBUzRJ7ezAhp9AkXp0ikbjYDdFAtV/u1AoLX2q
-1aoY1W+ghLHZV25JoS6IBnnGpDnrnMqxIdFuRLEdgJGoDvJgqAv4vN0tLeNEK64M
-iz/jNzM62HxJuwsxRUBKCjv6IFR43g==
-=yBzS
------END PGP SIGNATURE-----
-
---aqSctdl6o5lEG6db--
+> 
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+>  drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
+>  drivers/spi/spi-dw-mmio.c                     |  10 +
+>  drivers/spi/spi-dw.h                          |  19 ++
+>  4 files changed, 291 insertions(+), 27 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
