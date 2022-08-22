@@ -2,71 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A656759B984
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Aug 2022 08:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABC859BC99
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Aug 2022 11:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiHVGcS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Aug 2022 02:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S233966AbiHVJR1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Aug 2022 05:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbiHVGcN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Aug 2022 02:32:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2FD286CF
-        for <linux-spi@vger.kernel.org>; Sun, 21 Aug 2022 23:32:09 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k9so11929727wri.0
-        for <linux-spi@vger.kernel.org>; Sun, 21 Aug 2022 23:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=o31t8HDG7QptfeLJ+04Jkz8j9NFHlDWTE2XxPfy4mY4=;
-        b=FrYubPa5iRhzf+WrRPsmiY5vXh9yxeGqcT0p84Sdu/VMPFizo2ximY48tx9ylUHZED
-         mPTBYvFdQSWyQvZFeiwO+ZxRcjtLQByT4adG/DoNeZBMtMz8P1WBGCNUfwXOknCVageC
-         gOsO411NxXs0bFn/r4hWP6vZOvFFR4JKHsjmj17OEFnj3UyoPLJL3/F0BAPtvb3VrkKu
-         kt20y5+o7H2J6gAggdKUcj8w21Ihg/D6nYx+sWVa7eEOorpRHZwPseeMvJY9pUuIFhbk
-         K7EW0i+70qlXOgawP99bZ1X3czl9u7y6nzREE0Ep8RS/WLsefyESE2bvTvChiDPA3pa9
-         MIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=o31t8HDG7QptfeLJ+04Jkz8j9NFHlDWTE2XxPfy4mY4=;
-        b=Hc2C7KBHY3fKn4IfdUH7R6W5AWMOfNJdAOvqskLeCirQn01ZjEJozwLcVGj5+73ll6
-         1T6uItyW6v9G+V1VUw7NCw2sCmlzjSul8WWCG2aZrrfWbrejFArxXPenupGRw8P2D0VA
-         rY1263vlgEeC23TieWkVfwe9iR5sLOvxJXuHIuf8wG3/UlYKGw9S1KBk+pZrmmA1wHb8
-         iX8RUgJEBhlkhUKhFiTfxwzjfWtdioVL77iqcEkNYExf5LZTnyxHL2gDmRI/2gf8kllx
-         0cyyMWFFfJiSFZCIvylgYwy822faNks/Ce5qLJAgCnLXtc7eFs6c0vXNeYsTa1AaTvZ4
-         0j+g==
-X-Gm-Message-State: ACgBeo3cAZ8sKvxaGxo2k4fQvJQX+5jCGMjvAq/Ha+2vQqx2BetujIxq
-        uMJ1NBbgl3W0Vz1fqJ7LxH+cPMuw1IDKRPimuZs=
-X-Google-Smtp-Source: AA6agR6NTSbaljBeT6nBHwpsZV+iFEjaf84R55z0GxoNRdmBRntcrfv1xOl7luJnB44WOhlEhx6CPLwQoMYUPfF5qd0=
-X-Received: by 2002:a5d:4ad2:0:b0:225:285e:3ec1 with SMTP id
- y18-20020a5d4ad2000000b00225285e3ec1mr9924326wrs.24.1661149927923; Sun, 21
- Aug 2022 23:32:07 -0700 (PDT)
+        with ESMTP id S234586AbiHVJPw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Aug 2022 05:15:52 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014F31A04D;
+        Mon, 22 Aug 2022 02:15:36 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27M9FXj6036832;
+        Mon, 22 Aug 2022 04:15:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661159733;
+        bh=roTfperRVByHKT6yxJjjvpXH17NlwkzLgVIKQfXQcDc=;
+        h=From:To:CC:Subject:Date;
+        b=xpesxG5BVQ0y821yOZBos08Xelt3RuvB2lcys1LLChf02ZZk07LI983hVB3CdR8vo
+         IUrKrYRFNihgsg9O2pYYvBtVwW1TvELFw8SOyyrGWEXdB7x7Azv2yJWg1h5S22JAmp
+         ooPnVMFjL1TzTsXC9iJHVNNRrFzmTqQpbKlzfoys=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27M9FXJl111233
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Aug 2022 04:15:33 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
+ Aug 2022 04:15:32 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 22 Aug 2022 04:15:32 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27M9FVXQ037023;
+        Mon, 22 Aug 2022 04:15:32 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
+        <broonie@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <vigneshr@ti.com>, <kishon@ti.com>, <vaishnav.a@ti.com>
+Subject: [PATCH 0/2] spi: spi-omap2-mcspi: Use EOW interrupt for transfer completion
+Date:   Mon, 22 Aug 2022 14:45:29 +0530
+Message-ID: <20220822091531.27827-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a5d:5444:0:0:0:0:0 with HTTP; Sun, 21 Aug 2022 23:32:07
- -0700 (PDT)
-Reply-To: maddahabdwabbo@gmail.com
-From:   Abd-jaafari Maddah <sheishenalyeshmanbetovichu@gmail.com>
-Date:   Sun, 21 Aug 2022 23:32:07 -0700
-Message-ID: <CALX-7+0_G-U-D9doENGdbc90dSeV5o=VML+dqaJkbMJ9UiPshQ@mail.gmail.com>
-Subject: Why No Response Yet?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+When using MCSPI with DMA enabled in Master/Slave mode, real-time 
+performance issues were observed which were root caused to the 
+uncertain delays in the  TX completion calculation mechanism in
+k3-udma driver.
+
+This series updates the omap2-mcspi driver to use End of Word(EOW)
+interrupt to identify transaction completion and remove the usage
+of DMA rx_completion and tx_completion for identifying transaction
+completion.
+
+Tested on J721E SK (for both Master and Slave Mode) for Full Duplex,
+TX Only and RX Only mode transactions.Also tested with ILI9225 based
+SPI TFT Display.
+
+Vaishnav Achath (2):
+  dmaengine: ti: k3-udma: Respond TX done if DMA_PREP_INTERRUPT is not
+    requested
+  spi: spi-omap2-mcspi: Use EOW interrupt for completion when DMA
+    enabled
+
+ drivers/dma/ti/k3-udma.c      |   5 +-
+ drivers/spi/spi-omap2-mcspi.c | 141 +++++++++-------------------------
+ 2 files changed, 40 insertions(+), 106 deletions(-)
+
 -- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am writing
-you again,it's important we discuss.
-Am waiting,
-Abd-Jafaari Maddah
+2.17.1
+
