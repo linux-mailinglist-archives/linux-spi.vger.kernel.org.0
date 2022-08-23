@@ -2,53 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D308759E548
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Aug 2022 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E689F59EAC5
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Aug 2022 20:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242991AbiHWOqx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Aug 2022 10:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S233678AbiHWSRY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Aug 2022 14:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242814AbiHWOpc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Aug 2022 10:45:32 -0400
+        with ESMTP id S233482AbiHWSQq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Aug 2022 14:16:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA062DF767;
-        Tue, 23 Aug 2022 05:06:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7447C334;
+        Tue, 23 Aug 2022 09:32:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46191615B4;
-        Tue, 23 Aug 2022 12:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEB8C433D6;
-        Tue, 23 Aug 2022 12:06:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3118E616A9;
+        Tue, 23 Aug 2022 16:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31110C433D6;
+        Tue, 23 Aug 2022 16:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661256377;
-        bh=nAP0qzks6gVn5Zi51T/jnpO8q7K05qtrEhchRMrXEho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ehLhM25C776yGvnlRfUpApU4JH17JXj9hEg2MlapBomf+ExB5N5JjWBvwLWnSCxiT
-         6hgQXrG95GCMnX/75gqAvsOomwqiTcdTXYAja8xp4oLilfBarjK0tK+gCIRWinmYVl
-         Ti8QAAL4e83+Od+/lQncwrrCFC+FMxBxIWdoTPkwZv5joJn2XC9NpMAq0QwI9rJLgP
-         w5c/XBuTysv+HtY/Zwt56WNQ3jmnq0cuVUNlQkVVCBkELPmhLOTdi5h9etuyGYYkmE
-         m3Fc9ouH1L1cKOKoX3krK2nSp2ViGw+CDMtnko4+QTPLw/u44zGH+WeMwvlqRIYmLS
-         TrfQ70iovX3EA==
-Date:   Tue, 23 Aug 2022 13:06:12 +0100
+        s=k20201202; t=1661272323;
+        bh=117FuunxK9nAZbdA1dcbtm4Lkr0VrP7QV1M9APPUUI0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RkBNgbhX6PxMVcKvDdVO+u0Z8gqJVkX/zRxbPjEXinSZugcF64k8KwSRiO+34K7F9
+         NP8LRYfLB4/DYxHgTzdo0oRzfek7u1ILw0CoooHislelP78tlszP6bGbqWnB0LRgaF
+         KjzZHzVX1MRRaXgedZoh59YyouAVYH0INA14OVI0Y9TTYq7OZ+A0AQrNZA/Zkn1iZF
+         0G+8xhoxdenKEMxucbKHsKwAx2fuyZ17CQlU0IS2ufJAJL2AXTuyMY4PpGPdkSWOQe
+         5f9zf+UFBiocXiP9nkTvoue3Hz86hYqWea4XoXgjwRQbGnVLzF4nssRfxOpsOIpxsW
+         by1as5RMK+Nrg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Add deferred controller registration support
-Message-ID: <YwTCtOp30H2JIkkV@sirena.org.uk>
-References: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
+To:     patrice.chotard@foss.st.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        christophe.kerello@foss.st.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220823075850.575043-1-patrice.chotard@foss.st.com>
+References: <20220823075850.575043-1-patrice.chotard@foss.st.com>
+Subject: Re: (subset) [PATCH v4 0/2] spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+Message-Id: <166127232192.398080.13725379647685257288.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 17:32:01 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Poi0BA6RrE2EcrsC"
-Content-Disposition: inline
-In-Reply-To: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
-X-Cookie: The revolution will not be televised.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,36 +57,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 23 Aug 2022 09:58:48 +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+> 
+> The goal of this series is to allow to use QSPI bus as a 8 lines communication
+> channel for specific purpose.
+> 
+> The QSPI block offers the possibility to communicate with 2 flashes in
+> parrallel using the dual flash mode, 8 data lines are then used.
+> Usage of cs-gpios populated and spi-tx-bus-width / spi-rx-bus-width both set to 8,
+> is needed to enable dual flash mode.
+> 
+> [...]
 
---Poi0BA6RrE2EcrsC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, Aug 22, 2022 at 09:18:53PM +0300, Serge Semin wrote:
-> It's pretty possible to have the spi_register_controller() method
-> returning -EPROBE_DEFER status in case, for instance, if the GPIOs used
-> for the CS implementation aren't ready to be requested due to the
-> corresponding platform devices still pending to be probed. Let's make sure
-> the DW SSI driver won't print error message in that case by calling the
-> dev_err_probe() function if the SPI-registration procedure exited with
-> a non-zero status.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This isn't adding any new support, it's making the logging less verbose
-- deferred probe worked perfectly fine without this patch.
+Thanks!
 
---Poi0BA6RrE2EcrsC
-Content-Type: application/pgp-signature; name="signature.asc"
+[2/2] spi: stm32_qspi: Add transfer_one_message() spi callback
+      commit: b051161f44d414e736fa2b011245441bae9babd7
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMEwrMACgkQJNaLcl1U
-h9Bl1gf+Msioy2Df8da5Fhj/2K2KV4WM2KH1K9TJoZfs8rWO0URZ8y1GV3PTDgbm
-ycx3fcmvP0uyzv3PoCrwrHftTyZ3lPRHpKTrzvbZhYj+FAVwZnBWI7/jrhjnRjtg
-GU116AwtYRglf+Wd4A/Bc2sepIA35oYOYxw4sC2BIr96ACS32YtTKimEamQIXCps
-FmFfl3C2ix9Auiv5aDGYf9byD8Xt7iYgKucCNMf5RDfRTpa0SnqpMbpQeyEoXB6R
-U9QW4D54XZWC+pgUq99e8WRGRpk6bnrGPzelrs2yBiCSyJ/MtTh/z6+5oP+UflAx
-Qn7PKVfROgnnw4hsmln4hvuSoG+SPw==
-=VYuY
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---Poi0BA6RrE2EcrsC--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
