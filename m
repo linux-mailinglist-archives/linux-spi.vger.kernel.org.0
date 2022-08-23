@@ -2,49 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7606459DE2C
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Aug 2022 14:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7056C59E426
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Aug 2022 15:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352777AbiHWKMj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Aug 2022 06:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S241554AbiHWNTO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Aug 2022 09:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353462AbiHWKLb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Aug 2022 06:11:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE0E7F0B5
-        for <linux-spi@vger.kernel.org>; Tue, 23 Aug 2022 01:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5D337CE1B4B
-        for <linux-spi@vger.kernel.org>; Tue, 23 Aug 2022 08:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9652C4347C;
-        Tue, 23 Aug 2022 08:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661245008;
-        bh=Ou2X4+FcwH3jMEPxorPlLVuoE1+c7Pr5YPiW7NHPvVA=;
-        h=Subject:From:Date:To:From;
-        b=BqxHIlG8vHCH+rRSV9Y8r83pLpJp3R8o6YnxQlRq2nfVhL3SSKQtLF8TO8sjVlZse
-         tlPDrafcPztLhnhQXh2RO63Y0Da/RUQu87nFCNLKNW+GDhUBycBHuNxIMwXkHQx9Zu
-         +pbRzxZEwR78UTUJppJXjTxyXWuGl6OHziEgHkmK/W2N+6xdGVRRMvQ3RYUBn9csMp
-         UGL5p6PqhHnNX/HEUKvSZ9K+Jt+8Uzw+IYRb8VQA2TFtmjvboRr/AoGwj+ZF4QEHs1
-         /PkR4X/dPb6f6Gro0/puBSvKUXhj2nnvuVuQl5dYqNWBQSfrwQSEh/1lIyq4lRjcUj
-         3PBzx69fAdLAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4DEBC004EF;
-        Tue, 23 Aug 2022 08:56:48 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S241561AbiHWNSy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Aug 2022 09:18:54 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07927F274
+        for <linux-spi@vger.kernel.org>; Tue, 23 Aug 2022 03:17:27 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sd33so5115984ejc.8
+        for <linux-spi@vger.kernel.org>; Tue, 23 Aug 2022 03:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ErvpQRBWkC02/y/WgiYae39JxDxYSGXzZJYCfCsFztw=;
+        b=NJzMF0wK36YJI4Y5/nPYhPDEgd/lSMiBsUKJA/yftcv8bqHtHAe1vQ5durqBZtwhOP
+         QGavVPDQPOl9xx4SvJd2tSM6TX6ZsoPjUba5PJfhzBQ5IaXO+IhDahlYCPt6CtOk7miI
+         TR7jro59NXQ4J5Cn24tsqH2op0dWRMHdGgePZsu/IbRIBzeCMXXqbNLmMw29XAXOnXvC
+         Dlmimhnhp8c4DthEkMiYWstqhm3oaJPiHja+RBJAML4cwwGfAhRezNnOewq5+vt/tONa
+         hSiIrrG5NctxKxbQmWT97e5Zc8vTeGc7734VD8iqsUTLe/S/b0kvN+TDiQ5A+JeJ3jYY
+         CHFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ErvpQRBWkC02/y/WgiYae39JxDxYSGXzZJYCfCsFztw=;
+        b=kDGCRm/bMmst6LvzyiAbglU4VsK5fFNc8NrEErwnSPf0TEh39ZLt6ttc6eA1xKEoMB
+         4Ze7c2XuSUixIcbaKMtXPMFV6/JlvBTDmloLyZSqCTKgZ4MNkO6p7OT5sK4Qb5aHKApS
+         j36m1EXV2CDfnjfqU4UiXRZlcnr+383TnH3zrvAuhByBJaGVsxmdfoMXHRJ18y3wdumg
+         syYKKNJ/7d1+umE7E+XfTOwLS0NI96+PPQdcpCnY5So948A5bZlP2OvwIaoBhcdPIxU3
+         092oh62E2kn6zgrgEV8/ZGu7KcZUtloBIX6uwKx3lKq041PbvGYzIRzzK24nToYQkVa1
+         GhIg==
+X-Gm-Message-State: ACgBeo3eKnzHsw4nyjSYM9LW31UNoilSLBFTxMamSjxgwlqGIiIcSEr4
+        oNIhH0qLp3KS2gPGcaXcp8WN/GI4h/xambzX
+X-Google-Smtp-Source: AA6agR50Az9/QXs8LIC8w+QkyNn58UqGMVOi0cVByjnt+xxhy/Eyr9XKoNj1PCwgTvUqPphA/x6d8Q==
+X-Received: by 2002:a2e:3817:0:b0:261:cfba:ee4c with SMTP id f23-20020a2e3817000000b00261cfbaee4cmr2019651lja.443.1661249381299;
+        Tue, 23 Aug 2022 03:09:41 -0700 (PDT)
+Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id v11-20020a2ea44b000000b0025e42174f0csm2282737ljn.70.2022.08.23.03.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 03:09:40 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] spi: dt-bindings: snps,dw-apb-ssi: drop ref from reg-io-width
+Date:   Tue, 23 Aug 2022 13:09:37 +0300
+Message-Id: <20220823100937.386880-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166124500873.9245.6329855350683362198.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 23 Aug 2022 08:56:48 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,13 +71,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v4] spi: stm32_qspi: use QSPI bus as 8 lines communication channel (2022-08-23T07:58:49)
-  Superseding: [v3] spi: stm32_qspi: use QSPI bus as 8 lines communication channel (2022-08-16T16:13:42):
-    [v3,1/2] ARM: dts: stm32: Create separate pinmux for qspi cs pin in stm32mp15-pinctrl.dtsi
-    [v3,2/2] spi: stm32_qspi: Add transfer_one_message() spi callback
+reg-io-width is a standard property, so no need for defining its type
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index 37c3c272407d..d33b72fabc5d 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -104,7 +104,6 @@ properties:
+     const: spi
+ 
+   reg-io-width:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     description: I/O register width (in bytes) implemented by this device
+     default: 4
+     enum: [ 2, 4 ]
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.34.1
 
