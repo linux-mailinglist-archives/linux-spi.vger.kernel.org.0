@@ -2,46 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4C059F50B
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Aug 2022 10:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122B759F69D
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Aug 2022 11:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235879AbiHXIVz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Aug 2022 04:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S236407AbiHXJnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Aug 2022 05:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbiHXIVl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Aug 2022 04:21:41 -0400
+        with ESMTP id S235872AbiHXJnl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Aug 2022 05:43:41 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2820C85AB8
-        for <linux-spi@vger.kernel.org>; Wed, 24 Aug 2022 01:21:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49623A4B1
+        for <linux-spi@vger.kernel.org>; Wed, 24 Aug 2022 02:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=RRGjWF8vo1xlwr
-        bsZKBJ3tvhXOYAQLg0h4JU7SAZUfs=; b=II44+XWHJEQlN51s9LtP1BH060tBWb
-        KMTtI1Xccvm6+hGkZbBRAqwlKnDJMxQRq3YlVXPFSkkU9KqQW0M/J8JHoCzlN+V4
-        BTFBVQGwXszwlQPdzlRdDskGTA0/WkpWdUa+fAWA+ndQHK0z69Bi6dEXDOC2GDUw
-        bu/VGA5+QhxO0=
-Received: (qmail 2131871 invoked from network); 24 Aug 2022 10:21:34 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 10:21:34 +0200
-X-UD-Smtp-Session: l3s3148p1@MmVgXvjm7OcgAwDPXxw3AFlguiwjsjwa
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=WeFPj5LWD2/pjewhCsyVVgOAVYM
+        c7hNBlVKJ1ZlsHo8=; b=RorYM6DEW/UxuEun7YjENZfqtvP9DHVXJ3DN3Za1wm/
+        iJ7xdax0ttTIP3BrTI7pSvkJeYkViKxaa6oz+FMnL9/mlvdCNOZmE/W89FahbAiF
+        BaBBnrWpdU4q6gyFy0Qa26R8P+Jqza2NxEGuKIbjMLprRBHqdKM8NeHtBRBUGQqg
+        =
+Received: (qmail 2162570 invoked from network); 24 Aug 2022 11:43:34 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 11:43:34 +0200
+X-UD-Smtp-Session: l3s3148p1@r5Gxg/nmSJsgAwDPXxw3AFlguiwjsjwa
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-spi@vger.kernel.org
+To:     linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Heiko Schocher <hs@denx.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Holger Brunck <holger.brunck@keymile.com>,
-        Kumar Gala <galak@kernel.crashing.org>,
-        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] powerpc/82xx: remove spidev node from mgcoge
-Date:   Wed, 24 Aug 2022 10:21:29 +0200
-Message-Id: <20220824082130.21934-3-wsa+renesas@sang-engineering.com>
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH 0/3] spi: add generic R-Car Gen4 and specific r8a779f0 support
+Date:   Wed, 24 Aug 2022 11:43:23 +0200
+Message-Id: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
-References: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,39 +47,18 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Commit 956b200a846e ("spi: spidev: Warn loudly if instantiated from DT
-as "spidev"") states that there should not be spidev nodes in DTs.
-Remove this non-HW description. There won't be a regression because it
-won't bind since 2015 anyhow.
+Here are the patches to enable MSIOF on R-Car S4-8. They also introduce
+generic Gen4 support and move V3U to Gen4 (which it really is).
 
-Fixes: 5d1d67e361ea ("powerpc/82xx: add SPI support for mgcoge")
-Cc: Heiko Schocher <hs@denx.de>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Wolfram Sang (3):
+  spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+  spi: sh-msiof: add generic Gen4 binding
+  spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
 
-Please take it via your platform tree.
+ .../devicetree/bindings/spi/renesas,sh-msiof.yaml          | 7 ++++++-
+ drivers/spi/spi-sh-msiof.c                                 | 1 +
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
- arch/powerpc/boot/dts/mgcoge.dts | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/arch/powerpc/boot/dts/mgcoge.dts b/arch/powerpc/boot/dts/mgcoge.dts
-index 7de068991bde..9cefed207234 100644
---- a/arch/powerpc/boot/dts/mgcoge.dts
-+++ b/arch/powerpc/boot/dts/mgcoge.dts
-@@ -225,13 +225,6 @@ spi@11aa0 {
- 				interrupts = <2 8>;
- 				interrupt-parent = <&PIC>;
- 				cs-gpios = < &cpm2_pio_d 19 0>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--				ds3106@1 {
--					compatible = "gen,spidev";
--					reg = <0>;
--					spi-max-frequency = <8000000>;
--				};
- 			};
- 
- 		};
 -- 
 2.35.1
 
