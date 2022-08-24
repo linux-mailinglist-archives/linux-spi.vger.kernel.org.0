@@ -2,102 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7694759EDAE
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Aug 2022 22:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EF759F509
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Aug 2022 10:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiHWUoL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Aug 2022 16:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S235874AbiHXIVz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Aug 2022 04:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiHWUnz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Aug 2022 16:43:55 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EFBE1A;
-        Tue, 23 Aug 2022 13:37:11 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq23so12211077lfb.7;
-        Tue, 23 Aug 2022 13:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=vQcH+/y/P9B/2raRe9zmku2I7NczMFWSxzuMB3mZnb4=;
-        b=T/mirrj8pjK6zMDCBKV8LRH/dVG3aygy1DACRYAJzIFcxOKX3eKTW6CGZMb/zsbzcb
-         qbTzq5QYOZ1XrmRsQ8F4Kam7tleixaMDSwFu5UrIHgWf1ZLIW48Mw3XDHKU1ThUS4TBG
-         RxkRUASZhAR//q0YwhMy1OmUMrVqHaAnvYMfFdhx8xFD0DvZt4sKGQmDT5M/8XTlX8Yy
-         +ZU/Zi3vA9dJvKocUfL/Wby5GcWGpgCLZvDQ22xa/Em2obQs39g+zazsmYmqMk7UQ/26
-         L1u8fCUcbUx52d+aNK1k/Pe72Exw69Y7+sqOulpaRp895lFQfLQ5rEJJmqVISHk87FBb
-         hSaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=vQcH+/y/P9B/2raRe9zmku2I7NczMFWSxzuMB3mZnb4=;
-        b=58DB/kFMX+kh/B/7gCikqI0k1zqcjGNOK6TWX7Imkvno8qOj/iiMyqdnQ+YRNQmnMH
-         wBL8j+f7WmL3sGlv3MLD6dZmiECX7EtUv9XAigrEPtDrgjqpc0b0Tf65q35trmljFk68
-         jmkpVMIRQMsaLgfR80TrAKi7txDPrUZxg3OP9HdWTCMHxepvHftPkQZR4A499F1iRqKJ
-         p4Hh1IaP9WL99v/UP9ZeUiXMNjEvvJIodVbH+sgPeQ/EQdPmU3t0+Ts9yzGvn6UbjpUT
-         l5JdZyZgYnffu5leRiRN4b0nNUepHeZ3LX3grM392BfkrlWn1bR03XPrKogXx5GlUAM+
-         Pd6Q==
-X-Gm-Message-State: ACgBeo25sPeWRhSRpN6DdWY1Ck1zWDaJ6gBQAuxihiHXcaCVzamxwgpq
-        k27wjxkfxIQu6io4rpOwHSWs8rTvbkVWBw==
-X-Google-Smtp-Source: AA6agR40SLee4SjM1i2uq9+pfjMNU9jwlzbyfW16sjS4b3hxN9Ef4RUrzOg25a5D5kdASCLRpFgCVQ==
-X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id w1-20020a0565120b0100b0048ba0652a8bmr8664045lfu.401.1661287030347;
-        Tue, 23 Aug 2022 13:37:10 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id j17-20020ac253b1000000b00491203d6cc9sm257441lfh.131.2022.08.23.13.37.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 13:37:09 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 23:37:07 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: snps,dw-apb-ssi: drop ref from
- reg-io-width
-Message-ID: <20220823203707.jd4orvadad2yri3q@mobilestation>
-References: <20220823100937.386880-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S233749AbiHXIVj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Aug 2022 04:21:39 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061190821
+        for <linux-spi@vger.kernel.org>; Wed, 24 Aug 2022 01:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=QZSYy9ZOyYNn4Sbj+9d4hyd/rRC
+        F0R9pMJ4odvD5koQ=; b=YjWlbqTLtYbUvEIgtlAow9FBUx0ubdew9ifp0+2omMx
+        FhVJfSolrADooA0wev9GAqSeQvf0h1vL9Qw0sk6rhYMzYf8MEkeFpg5xZJ8w17Oc
+        9zrhSfi3HRJ4MNe0KSQV6cuA7P9KPPtoejQ4CLkAHtfzSsk9WSW30CEEv2LvW2aQ
+        =
+Received: (qmail 2131763 invoked from network); 24 Aug 2022 10:21:31 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 10:21:31 +0200
+X-UD-Smtp-Session: l3s3148p1@jehDXvjm1OcgAwDPXxw3AFlguiwjsjwa
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH 0/2] spi: remove "spidev" nodes from DTs
+Date:   Wed, 24 Aug 2022 10:21:27 +0200
+Message-Id: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823100937.386880-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 01:09:37PM +0300, Krzysztof Kozlowski wrote:
-> reg-io-width is a standard property, so no need for defining its type
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+There were two DTs left specifying "spidev" directly. Remove them.
 
-The patch has already been merged in, anyway thanks for the fix.
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Wolfram Sang (2):
+  ARM: dts: stm32: argon: remove spidev node
+  powerpc/82xx: remove spidev node from mgcoge
 
--Sergey
+ arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi | 6 ------
+ arch/powerpc/boot/dts/mgcoge.dts                 | 7 -------
+ 2 files changed, 13 deletions(-)
 
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index 37c3c272407d..d33b72fabc5d 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -104,7 +104,6 @@ properties:
->      const: spi
->  
->    reg-io-width:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->      description: I/O register width (in bytes) implemented by this device
->      default: 4
->      enum: [ 2, 4 ]
-> -- 
-> 2.34.1
-> 
+-- 
+2.35.1
+
