@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1C25A323D
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 00:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305BB5A3251
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 01:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344854AbiHZWyx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Aug 2022 18:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S1345427AbiHZXFQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Aug 2022 19:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiHZWyw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 18:54:52 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32B4A451;
-        Fri, 26 Aug 2022 15:54:46 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id l8so3750918lfc.12;
-        Fri, 26 Aug 2022 15:54:46 -0700 (PDT)
+        with ESMTP id S231738AbiHZXFP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 19:05:15 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EAC501A6;
+        Fri, 26 Aug 2022 16:05:12 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q16so2879884ljp.8;
+        Fri, 26 Aug 2022 16:05:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=KlUKhmVSDGLCq+qNQ31AyWcV10ZGUtGSbO9GS22mMcA=;
-        b=lLS0FZcnxFXAi3kgiP927ytXkZfOvQ9ymvRh+YXeGeTre/DbZagcwR93jp9RvaId89
-         TixILG5Qb4Hf3WPjfTbXPVzYJvMKFKLS5yMtLcm5OtdQQ8Eq2o/oWcc40KiwHTOLLoid
-         bsnoK0oW1iHv3dDUQfWY2N9jJZVtp/x4IS5ngzcZwa9uMFdGtpDC0N5wlEqCreIjQYJY
-         K8rb3V4bKRGu49MmkjtJSNpGs4irVdrphystcDSLCwnuTW4wVb1X6Ayy46uWLyAlu35o
-         VCZ8mTfYBhOe4hrQjPWSPG8lDUwrKnj7Wlr4wLoVU8ozFBfLrE+y/p5GHHaPgBngLemL
-         P4zw==
+        bh=Pbp0J2KuJMWy/u1hdZ0Pq6byLOIKeqHx1m75MM9TMnY=;
+        b=agVDPtMpjVei8gZLNupdAnyj4NOMcKA3RGy01rRHq34z6Tta1vZCI9ij2uS5xDHJ4w
+         tFbjhZGUo6ailScXlj/gVE/giWWkmnr7ciA6reFopm0QxirGx5DWLCfdPKFVa7HcUoPA
+         ifZPiE70b3m+Xf6L9ZG6KrX7FaArbVNm/MdwZU7S/r3czkcM0oGr38i4Ly9wY21mC1zO
+         3dFjXOB4/eGCMGLuVz/P3Kf+HInkqxlt/84t4Jc2y57iUmVeTR64RSNr97uOUUaSU8Ux
+         VbP/assIubl4TL3gAcPNFuabmbORJcoqOZr6QFqGmh2JIdoMyjyp9Tu/qB7i5GKXdlDe
+         ZqgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=KlUKhmVSDGLCq+qNQ31AyWcV10ZGUtGSbO9GS22mMcA=;
-        b=pNtVs5krcctg5hqENyA0m2M/kwhPK7pIY+Ay3amh9zohS1gHNpHCG9Vrt2tc+ML58q
-         LmbCUYaOfRNLV89F6PY3vg+y3UIVsMHdfkak+eCOyHfdMsZTBb5XspIP+Jmy9rivapbg
-         /q286KEtLSO1B41xhJ52ux9tAATdaouBq8RzujflzRPqnig7WKZjRGN/6SIB/qfaMstf
-         qlryl7C/juqVF1uq5cdoRv/Lbq2RL9LEbNs7F/qDliSYDoqiaUEq8et5nuACCE88BSEF
-         u5Q1ZGusc0Qj00cZxaUa+qUsjjFpBvbujv7Hwh2NvLhlzTzNNbPjUvJ6WqkzUlnHqw6o
-         vODg==
-X-Gm-Message-State: ACgBeo0OL3XvhyZZeTGVreCN7X7Pi1xK5yl7ICHDJpE7le6ggF297AaU
-        Nr3K48spiRTOwiH3+cf8Iu8=
-X-Google-Smtp-Source: AA6agR4FMcVQU80dpr8mT6ZRiA/JM9VOd0+JpfKocz9y7nlDSQxFgjX5FpERSnvV3Kw9mzb7vnuJwg==
-X-Received: by 2002:a19:f246:0:b0:493:50d:6bb with SMTP id d6-20020a19f246000000b00493050d06bbmr2891864lfk.461.1661554485298;
-        Fri, 26 Aug 2022 15:54:45 -0700 (PDT)
+        bh=Pbp0J2KuJMWy/u1hdZ0Pq6byLOIKeqHx1m75MM9TMnY=;
+        b=y24zNLH8Fy1LrJV7UM4Tp2iIIHJ+w5p2LsjWE6101wR6KttD9tHyMORaAozn4y2FMq
+         qcZ+D9dVfAoQKyMYpL57YThRROu+bBBBUSVwBneG2R2O9N7rJV846+TykuIbz8eLgaUt
+         cHTJYW/VFP3FOWryEOTsidA6qHvBCJZrdXE51DWtRo+mjST0j2gwP0N+ZHsZOolQeCzZ
+         ZXJLten8YIeowxKECajzXWWDt1CxHcqKfcHo2uPhkiDkIAqM0o1IAsT1wv8N9kBCNrFb
+         0kal5Xu2cSOpOoRxt8L/Di0/NC4ZnXOKN/8HSnnl8l1sEUvgRP3ayGM/oq4ywWCH6Sln
+         YubA==
+X-Gm-Message-State: ACgBeo0LD3sLMOb/mHrigsMpns7z2MO5bNl4iBTl2jAB+QTYnegBJ0ON
+        Dz7kXxNrBSdmXPFnQwiL/HhZ4tzGDElopQ==
+X-Google-Smtp-Source: AA6agR6RFTDBSQKZOPqJ+Og5AgBQ6K6ZM4s8q5inPgur4mI/jp1CTpeNwgPFANbVvHmJ5G7g/tdfTA==
+X-Received: by 2002:a2e:978e:0:b0:261:e36c:b2ca with SMTP id y14-20020a2e978e000000b00261e36cb2camr3043356lji.489.1661555110815;
+        Fri, 26 Aug 2022 16:05:10 -0700 (PDT)
 Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id w6-20020ac25d46000000b0048a85334a11sm496254lfd.143.2022.08.26.15.54.44
+        by smtp.gmail.com with ESMTPSA id v4-20020ac25b04000000b00492c4852f22sm484639lfn.307.2022.08.26.16.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 15:54:44 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 01:54:42 +0300
+        Fri, 26 Aug 2022 16:05:09 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 02:05:07 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -59,15 +59,14 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         ben.dooks@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 07/11] spi: dw: update NDF while writing in enhanced spi
- mode
-Message-ID: <20220826225442.47r6mjzkxbj3io5u@mobilestation>
+Subject: Re: [PATCH 08/11] spi: dw: update buffer for enhanced spi mode
+Message-ID: <20220826230507.bf6xxcphicg4gck7@mobilestation>
 References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-8-sudip.mukherjee@sifive.com>
+ <20220802175755.6530-9-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-8-sudip.mukherjee@sifive.com>
+In-Reply-To: <20220802175755.6530-9-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,54 +77,115 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:51PM +0100, Sudip Mukherjee wrote:
-> If the transfer of Transmit only mode is using dual/quad/octal SPI then
-> NDF needs to be updated with the number of data frames.
-> If the Transmit FIFO goes empty in-between, DWC_ssi masks the serial
-> clock and wait for rest of the data until the programmed amount of
-> frames are transferred successfully.
+On Tue, Aug 02, 2022 at 06:57:52PM +0100, Sudip Mukherjee wrote:
+> In enhanced spi mode we will be writing the address to a single FIFO
+> location instead of writing to multiple FIFOs in the standard SPI mode.
+> Save the cmd and address bytes in the buffer accordingly.
 > 
 > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
 > ---
->  drivers/spi/spi-dw-core.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/spi/spi-dw-core.c | 55 ++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 48 insertions(+), 7 deletions(-)
 > 
 > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 9d499bdf2ce6..8cb30540ad5b 100644
+> index 8cb30540ad5b..2564a2276572 100644
 > --- a/drivers/spi/spi-dw-core.c
 > +++ b/drivers/spi/spi-dw-core.c
-> @@ -344,7 +344,9 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
->  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
->  
->  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
-> -	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO)
-> +	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO ||
+> @@ -520,7 +520,8 @@ static bool dw_spi_supports_mem_op(struct spi_mem *mem,
+>  	return spi_mem_default_supports_op(mem, op);
+>  }
+> 
+ 
+> -static int dw_spi_init_mem_buf(struct dw_spi *dws, const struct spi_mem_op *op)
+> +static int dw_spi_init_mem_buf(struct dw_spi *dws, const struct spi_mem_op *op,
+> +			       bool enhanced_spi)
 
-> +	    (cfg->tmode == DW_SPI_CTRLR0_TMOD_TO &&
-> +	     (dws->caps & DW_SPI_CAP_EXT_SPI) && cfg->spi_frf))
-
-just (cfg->spi_frf != DW_SPI_CTRLR0_SPI_FRF_STD_SPI &&
-      cfg->tmode == DW_SPI_CTRLR0_TMOD_TO)
-
->  		dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf ? cfg->ndf - 1 : 0);
->  
->  	/* Note DW APB SSI clock divider doesn't support odd numbers */
-> @@ -760,6 +762,8 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
->  		cfg.ndf = op->data.nbytes;
->  	} else {
->  		cfg.tmode = DW_SPI_CTRLR0_TMOD_TO;
-
-> +		if (enhanced_spi)
-> +			cfg.ndf = op->data.nbytes;
-
-This shall be moved to the Enhanced SPI-specific mem-op execution method:
-dw_spi_exec_enh_mem_op().
+There is no point in modifying this method. Since clock stretching is
+available you won't need to collect all the data in a single buffer.
+So just create a new method dw_spi_init_enh_mem_buf() which would set
+dws->tx/rx pointers and tx_len/rx_len fields with the
+spi_mem_op.data.buf.{in,out} and the corresponding lengths. The command
+and address data shall be written to the Tx FIFO to initiate the SPI MEM
+transfers, since in accordance with the HW manual the SPI-bus transfers
+won't start before it is done.
 
 -Sergey
 
->  	}
+>  {
+>  	unsigned int i, j, len;
+>  	u8 *out;
+> @@ -548,17 +549,57 @@ static int dw_spi_init_mem_buf(struct dw_spi *dws, const struct spi_mem_op *op)
+>  	 */
+>  	for (i = 0; i < op->cmd.nbytes; ++i)
+>  		out[i] = DW_SPI_GET_BYTE(op->cmd.opcode, op->cmd.nbytes - i - 1);
+> -	for (j = 0; j < op->addr.nbytes; ++i, ++j)
+> -		out[i] = DW_SPI_GET_BYTE(op->addr.val, op->addr.nbytes - j - 1);
+> -	for (j = 0; j < op->dummy.nbytes; ++i, ++j)
+> -		out[i] = 0x0;
+> +
+> +	if (enhanced_spi) {
+> +		/*
+> +		 * Fill the remaining spaces of dws->reg_io_width bytes
+> +		 * size register with zero for cmd.
+> +		 */
+> +		for (; i < dws->reg_io_width; ++i)
+> +			out[i] = 0;
+> +		/*
+> +		 * Copy the address bytes in dws->reg_io_width bytes size
+> +		 * register and fill remaining spaces with zero.
+> +		 */
+> +		for (j = op->addr.nbytes; j > 0; ++i, --j)
+> +			out[i] = DW_SPI_GET_BYTE(op->addr.val, op->addr.nbytes - j);
+> +		for (j = op->addr.nbytes; j < dws->reg_io_width; ++i, ++j)
+> +			out[i] = 0;
+> +	} else {
+> +		for (j = 0; j < op->addr.nbytes; ++i, ++j)
+> +			out[i] = DW_SPI_GET_BYTE(op->addr.val, op->addr.nbytes - j - 1);
+> +	}
+> +
+> +	if (!enhanced_spi) {
+> +		/*
+> +		 * dummy bytes are not needed in enhanced mode as
+> +		 * wait_cycles specified as number of SPI clock cycles
+> +		 * between control frames transmit and data reception
+> +		 * will be mentioned in enhanced spi mode.
+> +		 */
+> +		for (j = 0; j < op->dummy.nbytes; ++i, ++j)
+> +			out[i] = 0x0;
+> +	}
 >  
->  	dw_spi_enable_chip(dws, 0);
+>  	if (op->data.dir == SPI_MEM_DATA_OUT)
+>  		memcpy(&out[i], op->data.buf.out, op->data.nbytes);
+>  
+>  	dws->n_bytes = 1;
+>  	dws->tx = out;
+> -	dws->tx_len = len;
+> +
+> +	if (enhanced_spi) {
+> +		/*
+> +		 * In enhanced mode cmd will be one FIFO and address
+> +		 * will be one more FIFO.
+> +		 */
+> +		dws->tx_len = 1;
+> +		if (op->addr.nbytes)
+> +			dws->tx_len += 1;
+> +		if (op->data.dir == SPI_MEM_DATA_OUT)
+> +			dws->tx_len += op->data.nbytes;
+> +	} else {
+> +		dws->tx_len = len;
+> +	}
+>  	if (op->data.dir == SPI_MEM_DATA_IN) {
+>  		dws->rx = op->data.buf.in;
+>  		dws->rx_len = op->data.nbytes;
+> @@ -744,7 +785,7 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	 * Collect the outbound data into a single buffer to speed the
+>  	 * transmission up at least on the initial stage.
+>  	 */
+> -	ret = dw_spi_init_mem_buf(dws, op);
+> +	ret = dw_spi_init_mem_buf(dws, op, enhanced_spi);
+>  	if (ret)
+>  		return ret;
+>  
 > -- 
 > 2.30.2
 > 
