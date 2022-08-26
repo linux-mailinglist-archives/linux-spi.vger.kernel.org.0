@@ -2,281 +2,196 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142A75A2961
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Aug 2022 16:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5695A2DF0
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Aug 2022 20:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344227AbiHZO0F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Aug 2022 10:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S1344227AbiHZSDf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Aug 2022 14:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343978AbiHZOZ4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 10:25:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28E23340A;
-        Fri, 26 Aug 2022 07:25:53 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MDhqs5ykMzlWG1;
-        Fri, 26 Aug 2022 22:22:33 +0800 (CST)
-Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 26 Aug
- 2022 22:25:50 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: [PATCH -next 4/4] spi: mockup: Add documentation
-Date:   Fri, 26 Aug 2022 14:43:41 +0000
-Message-ID: <20220826144341.532265-5-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220826144341.532265-1-weiyongjun1@huawei.com>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
+        with ESMTP id S230453AbiHZSDe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 14:03:34 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8D99D13C;
+        Fri, 26 Aug 2022 11:03:32 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m3so2947044lfg.10;
+        Fri, 26 Aug 2022 11:03:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=nN6w6sWQ+M9O3+SbU/L9UQPJ6uhDVHY44yRSnhXBG2Q=;
+        b=Zjcw2tEC7LCiCHeV9kInMVYMRpmy9FO40aLz7vstZ8VBdbHoWrY8VbN+grSflt4dt0
+         vpt/oW/a57hcgZD6dD9zCxw7sMDThJkaTtBP9PR80z40B7LPGoLviZDDV0SW8OMzagTr
+         QxUkoSMgkWMsUZoO8eEEHGu8QROsLF4QqFO3xCldYhya2drghTmwshfm7cMkV49KfKP/
+         vltjWUEY/O48ijdLXiRgtH1t0CcP3HIrAK8dngL06VvAB7d/pR7N1wohyuRbTP1IB7/O
+         NoJBL5IV3PRWUP+lFc6zx8Km85H0uDBid07u3vIfjcC/GORkMbxC5oIllQ2Ptd6bW6vO
+         0weg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nN6w6sWQ+M9O3+SbU/L9UQPJ6uhDVHY44yRSnhXBG2Q=;
+        b=mKixcI91A4kNV2S5WjisdWVU6qrOrukw8bXro5p+kdVNiy+8pyz5B+slTXdCfZetg9
+         2kGD9WQl5Ys9r+taxGnwTqzgCm/7r9CfVBHIolA5b5YNAfVK1U3B5haW1FgL1/Eop1QI
+         jphCjKRR+6uh7qpSdrIjJsGY8wZ4w2kpoRt13dnm4527nPONcklu4pt5BKdgqE/mR1cM
+         nkjZLr7+R63Dh9De49UM7asvrWcNoTOLWcPPv7RM52J6zhPw+v+cNUZx/yzZmLDOg3rk
+         SZbtLLDT33sbXtHGiqkTWAZ0zBwTw84L9uSU1fkhfcsAvunJncRITwr10Kd21QIcW4T7
+         o6sA==
+X-Gm-Message-State: ACgBeo0o/oQF0o/GcvfwTCaHOn9kPTWpfJqa8VPtKUWnID0lgC/GDMJI
+        B+qnSJRHpxKdMTGTtfRc4IE=
+X-Google-Smtp-Source: AA6agR72FDX83CKrMH1ppMdJEGUa7hjVbvDIDtWig2tmOQcmWnVFTMlWLKO6CWjN64R3I+BNEm/x/w==
+X-Received: by 2002:a05:6512:131f:b0:494:5d2f:c34b with SMTP id x31-20020a056512131f00b004945d2fc34bmr34433lfu.324.1661537010406;
+        Fri, 26 Aug 2022 11:03:30 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id be18-20020a05651c171200b0025e41bbf225sm534412ljb.39.2022.08.26.11.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 11:03:29 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 21:03:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com
+Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20220826180327.yazfoydjiyygd7qf@mobilestation>
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add documentation for the SPI mockup controller driver.
-This include the tutorial for how to mockup a api device.
+Hello Sudip
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- Documentation/spi/index.rst      |   1 +
- Documentation/spi/spi-mockup.rst | 201 +++++++++++++++++++++++++++++++
- 2 files changed, 202 insertions(+)
+On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
+> Some Synopsys SSI controllers support enhanced SPI which includes
+> Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+> feature in enhanced SPI modes which can be used to prevent FIFO underflow
+> and overflow conditions while transmitting or receiving the data respectively.
+> This is only tested on controller version 1.03a.
 
-diff --git a/Documentation/spi/index.rst b/Documentation/spi/index.rst
-index 06c34ea11bcf..a8f4f5cd0f09 100644
---- a/Documentation/spi/index.rst
-+++ b/Documentation/spi/index.rst
-@@ -13,6 +13,7 @@ Serial Peripheral Interface (SPI)
-    pxa2xx
-    spi-lm70llp
-    spi-sc18is602
-+   spi-mockup
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/spi/spi-mockup.rst b/Documentation/spi/spi-mockup.rst
-new file mode 100644
-index 000000000000..b38f44dca785
---- /dev/null
-+++ b/Documentation/spi/spi-mockup.rst
-@@ -0,0 +1,201 @@
-+==========
-+spi-mockup
-+==========
-+
-+Description
-+===========
-+
-+This module is a very simple fake SPI controller driver. It implements
-+a BPF based interface to mockup SPI device.
-+
-+No hardware is needed nor associated with this module. It will respond
-+spi message by BPF program attached to spi_transfer_writeable tracepoint
-+by reading from or writing BPF maps.
-+
-+The typical use-case is like this:
-+        1. load this module
-+        2. use bpftool to load BPF program
-+        3. load the target chip driver module
-+
-+Example
-+=======
-+
-+This example show how to mock a MTD device by using spi-mockup driver.
-+
-+Compile your copy of the kernel source. Make sure to configure the spi-mockup
-+and the target chip driver as a module. Prepare a dts described the spi-mockup
-+device.
-+
-+::
-+
-+  /dts-v1/;
-+
-+  / {
-+      spi: spi {
-+          compatible = "spi-mockup";
-+
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+      };
-+  }
-+
-+Write a BPF program as device's backup.
-+
-+::
-+
-+  #define MCHP23K256_CMD_WRITE_STATUS	0x01
-+  #define MCHP23K256_CMD_WRITE		0x02
-+  #define MCHP23K256_CMD_READ		0x03
-+
-+  #define CHIP_REGS_SIZE			0x20000
-+
-+  #define MAX_CMD_SIZE			4
-+
-+  struct {
-+  	__uint(type, BPF_MAP_TYPE_ARRAY);
-+  	__uint(max_entries, CHIP_REGS_SIZE);
-+  	__type(key, __u32);
-+  	__type(value, __u8);
-+  } regs_mtd_mchp23k256 SEC(".maps");
-+
-+  static unsigned int chip_reg = 0;
-+
-+  static int spi_transfer_read(struct spi_msg_ctx *msg, unsigned int len)
-+  {
-+  	int i, key;
-+  	u8 *reg;
-+
-+  	for (i = 0; i < len && i < sizeof(msg->data); i++) {
-+  		key = i + chip_reg;
-+
-+  		reg = bpf_map_lookup_elem(&regs_mtd_mchp23k256, &key);
-+  		if (!reg) {
-+  			bpf_printk("key %d not exists", key);
-+  			return -EINVAL;
-+  		}
-+
-+  		msg->data[i] = *reg;
-+  	}
-+
-+  	return 0;
-+  }
-+
-+  static int spi_transfer_write(struct spi_msg_ctx *msg, unsigned int len)
-+  {
-+  	u8 opcode = msg->data[0], value;
-+  	int i, key;
-+
-+  	switch (opcode) {
-+  	case MCHP23K256_CMD_READ:
-+  	case MCHP23K256_CMD_WRITE:
-+  		if (len < 2)
-+  			return -EINVAL;
-+
-+  		chip_reg = 0;
-+  		for (i = 0; i < MAX_CMD_SIZE && i < len - 1; i++)
-+  			chip_reg = (chip_reg << 8) + msg->data[1 + i];
-+
-+  		return 0;
-+  	case MCHP23K256_CMD_WRITE_STATUS:
-+  		// ignore write status
-+  		return 0;
-+  	default:
-+  		break;
-+  	}
-+
-+  	for (i = 0; i < len && i < sizeof(msg->data); i++) {
-+  		value = msg->data[i];
-+  		key = chip_reg + i;
-+
-+  		if (bpf_map_update_elem(&regs_mtd_mchp23k256, &key, &value,
-+  					BPF_EXIST)) {
-+  			bpf_printk("key %d not exists", key);
-+  			return -EINVAL;
-+  		}
-+  	}
-+
-+  	return 0;
-+  }
-+
-+  SEC("raw_tp.w/spi_transfer_writeable")
-+  int BPF_PROG(mtd_mchp23k256, struct spi_msg_ctx *msg, u8 chip,
-+  	     unsigned int len, u8 tx_nbits, u8 rx_nbits)
-+  {
-+  	int ret = 0;
-+
-+  	if (tx_nbits)
-+  		ret = spi_transfer_write(msg, len);
-+  	else if (rx_nbits)
-+  		ret = spi_transfer_read(msg, len);
-+
-+  	return ret;
-+  }
-+
-+  char LICENSE[] SEC("license") = "GPL";
-+
-+
-+Then boot a qemu instance by the following command:
-+
-+::
-+
-+  sudo qemu-system-x86_64 -m 4096 -smp 4 -display none -serial stdio -no-reboot \
-+  -enable-kvm -cpu host,migratable=off -dtb mocktest.dtb -snapshot -hda linux.img \
-+  -kernel arch/x86/boot/bzImage \
-+  -append "earlyprintk=serial root=/dev/sda console=ttyS0"
-+
-+
-+Use bpftool to load the BPF program.
-+
-+::
-+
-+  bpftool prog load mtd-mchp23k256.o /sys/fs/bpf/test_prog
-+  bpftool perf attach name mtd_mchp23k256 spi_transfer_writeable /sys/fs/bpf/test_perf
-+
-+
-+Load the target chip driver module. This is accomplished by executing the
-+following command:
-+
-+::
-+
-+  $ echo mchp23k256 0 > /sys/class/spi_master/spi0/new_device
-+
-+
-+The name of the target driver and its chip select were used to instantiate
-+the device.
-+
-+Now, the mchp23k256 MTD device named /dev/mtd0 has been created successfully.
-+
-+::
-+
-+  $ ls /sys/bus/spi/devices/spi0.0/mtd/
-+  mtd0  mtd0ro
-+
-+  $ cat /sys/class/mtd/mtd0/name
-+  spi0.0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+  $echo aaaa > /dev/mtd0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 6161 6161 000a 0000 0000 0000 0000 0000
-+  0000010 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+  $ bpftool map update name mtd_mchp23k256_ key 0 0 0 0 value 0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 6100 6161 000a 0000 0000 0000 0000 0000
-+  0000010 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+Remove the mockup device by executing the following command:
-+
-+::
-+
-+  $echo 0 > /sys/class/spi_master/spi0/delete_device
--- 
-2.34.1
+Thank you very much the patchset. As I already said adding new
+controller features support is always welcome. Yet there are some
+things which need to be fixed before the series would be fully
+suitable to be merged in into the kernel. Here is a short summary
+of ones:
 
+1. The eSPI capability isn't specific for the DW AHB SSI controller
+only. It can be found on the DW APB SSI controllers of v4.x and newer
+(though the SPI_FRF field is placed at different offset in CTRL0 CSR).
+Thus your patches will need to be fixed so the in-driver infrastructure
+would imply that.
+
+2. The mem ops check procedure provided by you doesn't verify whether
+the passed cmd, address and dummy data lengths meet the controller
+constraints or at least the constraints set by your code. You always
+expect the address and command being 4 and 1 bytes long, which is way
+not always true. So the implementation provided by you just won't
+correctly work for the unsupported cases with no any error returned.
+
+3. From what I see WAIT_CYCLES is specific for the Read-operations
+only (see the controller HW manual, the paragraphs like "Write
+Operation in Enhanced SPI Modes" or the SPI_CTRL0.WAIT_CYCLES field
+description). So any dummy-bytes requested for the Tx operations just
+won't be sent. Even though AFAICS the dummy cycles are specific for
+the Read SPI NAND/NOR operations it still would be correct to
+explicitly refuse the non-Rx transactions with non-zero dummy data
+length.
+
+4. I don't really see a reason of adding the address, command and
+dummy data length constraints. You can as easily update the
+command/address/dummy lengths passed in the SPI mem-op structure
+thus providing wider SPI memory devices range support.
+
+5. The main problem I can see in your implementation is that you try
+to assimilate the eSPI feature for the current DW SSI EEPROM
+read/write infrastructure. Note the SPI MEM ops currently available in
+the driver have been specifically created for the platforms with the
+native CS'es used to access the EEPROM devices. For such cases I had to
+use some not that nice solutions like IRQ-less transfers, local IRQs
+disabling and the outbound data collection in a single buffer in order
+to bypass the nasty DW SSI controller peculiarities. All of that isn't
+required in your case. You can implement a very nice and robust
+algorithm.
+
+6. You said your controller supports the clock stretching on Tx and Rx
+transfers. This is a very useful feature which can be used to bypass
+the main DW SSI controller problem connected with the native CS
+auto-toggling when the Tx FIFO gets empty or data loose due to the Rx
+FIFO overruns. Thus you won't need to always keep up with the Tx/Rx
+FIFO levels and implement the IRQ-based SPI MEM transfers.
+
+7. You unconditionally enable the eSPI support for the generic device
+snps,dwc-ssi-1.03a while this is an optional feature which yet can be
+disabled for any new controllers (see the SSI_SPI_MODE IP-core
+synthesize parameter). What you really need is to simply auto-detect
+the eSPI feature availability by checking whether the SPI_FRF field is
+writable for the DW APB SSI v4.0a and newer and for any DWC AHB SSI.
+
+8. There is no need in the IP-core version added to the compatible
+string because it can be retrieved from the SSI_VERSION_ID CSR. I
+would suggest to add a new generic compatible string "snps,dw-ahb-ssi"
+for the DW AHB SSI controllers and forget about the compatible strings
+versioning.
+
+9. Always study the driver coding convention before updating. In this
+particular case should you need to add new methods, macros, etc please
+add the vendor-specific prefix as is done for the rest of the driver
+entities.
+
+I've deliberately collected all the generic comments here so you'd be
+aware of the required changes in total, because I very much doubt all
+of them could be fixed at once via a single patchset iteration. But as
+soon as all of them are fixed we'll get a very nice and neat solution
+for the eSPI feature.
+
+I'll give you some more detailed comments right in the corresponding
+patches, but they won't cover all the issues noted above on this
+patchset iteration. So feel free to update your series based on your
+understanding of the issues (you can ask me if you don't fully get
+what I said above). It may reduce the number of the further series
+re-submissions.
+
+-Sergey
+
+> 
+> Ben Dooks (1):
+>   spi: dw-apb-ssi: add generic 1.03a version
+> 
+> Sudip Mukherjee (10):
+>   spi: dw: define capability for enhanced spi
+>   spi: dw: add check for support of dual/quad/octal
+>   spi: dw: define spi_frf for dual/quad/octal modes
+>   spi: dw: use TMOD_RO to read in enhanced spi modes
+>   spi: dw: define SPI_CTRLR0 register and its fields
+>   spi: dw: update SPI_CTRLR0 register
+>   spi: dw: update NDF while writing in enhanced spi mode
+>   spi: dw: update buffer for enhanced spi mode
+>   spi: dw: prepare the transfer routine for enhanced mode
+>   spi: dw: initialize dwc-ssi-1.03a controller
+> 
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+>  drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
+>  drivers/spi/spi-dw-mmio.c                     |  10 +
+>  drivers/spi/spi-dw.h                          |  19 ++
+>  4 files changed, 291 insertions(+), 27 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
