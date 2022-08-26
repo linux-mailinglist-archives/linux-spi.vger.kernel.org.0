@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F275A31C2
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 00:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709855A31F8
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 00:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344819AbiHZWMk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Aug 2022 18:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S1345061AbiHZWWG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Aug 2022 18:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344648AbiHZWMi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 18:12:38 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D10EE1177;
-        Fri, 26 Aug 2022 15:12:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bx38so2786496ljb.10;
-        Fri, 26 Aug 2022 15:12:37 -0700 (PDT)
+        with ESMTP id S1345280AbiHZWVp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 18:21:45 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2377BE9AA8;
+        Fri, 26 Aug 2022 15:19:27 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bt10so3710320lfb.1;
+        Fri, 26 Aug 2022 15:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=Pt+/cZ875kZz0E2lsEB+5Rmg0ZBd7mawodHVFJnvQkI=;
-        b=XDdcCHG69p3U9NL9QXx43ltscDcROI/Uhg8WGXPqKhr4pF2KdLfETt6qa1yGfAnllC
-         xNYo3LafLmy2oL8ttPQoqHy6Nod33zSEUnMuFy+E2gqzKsgBs5jTPHRUpdQdwJ35SRan
-         qJXyKdkBFg7j/WCh4uaRkIFPyQilcm/EJ16YleM3QBwOf8SPURTcBSD3/dnPzMCEjHRN
-         JR30V/AmCsOKQ955U1NS6KRWsvFF80NeM95mDN6myWJ/QxsX6PNohxzkKh5APRBcpIQQ
-         TPypD41DZwNZMwvbSO6mQqviS8+UY/KbdTUUI+N1qGjC/y7YHqgvJYuaGhDX21W3aW/g
-         bTnw==
+        bh=5sZZrUpkARsk9qJWaH/yaSkJtiZE1rGXFiif4NSjNJo=;
+        b=IMOOL7HySqQpLMuR8vbJ7rP49Ajs6oFtQI9upAfEOPOxhOzH/oL69lv4brlkDhF8OY
+         et2ryUKQzW8sQjxL1am1LiA7GiysGxDgE5AqhDrcTwyuNAylqYjr85cIu3mEDXAusWk+
+         QQAyJLGtBgOtfwOlnncQFzz7EFWgmyXk/GUG9G3+F4dlF2+HEjWANGQvPZ4otvsb5jsP
+         +P2AOPJj9hahGlzbaWmtuBvbuP362IqPIWnI1mwpBZVFbvw1UXPatEmiinTCcSiuPiEw
+         rscsnKvzvTkb2LiE0NfrpwpK+agsDiQChYJnjIoLp9xItoVy/2Nob+WyX4b/QsFP/174
+         WJ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Pt+/cZ875kZz0E2lsEB+5Rmg0ZBd7mawodHVFJnvQkI=;
-        b=mThQAvFszL4++oPnxNO4y0k6l5eGp0Drktyit+J9mVXyJrvSeOdzJMp3XPKaJ0lIPG
-         EPD2TvikqEXGUdjGG28B99sLjlX1wDithLip6QsyadYEcwpj5/6RFLUc6SGL/MmEgBYH
-         XvisslfnsYdLKSgSgWd5XBkanH2vooUmmR/fyh/gMiHCAzC/lgDDi4LLE4JlTWLgY+8/
-         kU8yfCczEVgMs8lamTxkhRs3jbCyD1c8cfBjFuV/O30ChEwwUGVlUOYVAzyp7FzE3XPP
-         hvtLc2SRyM+HFv7aPPRzdOKvJu7RJ2pCwD9mgG1Xu4vCEBqohv1JcBNzNEuYhzcs9a+B
-         /BcA==
-X-Gm-Message-State: ACgBeo24NbM7rH5zFCGJHZ/vjBw8nbYrY11BbVQrEv6VcqnschnXM0Mo
-        a4EtpaJQeT0LuVGtWxoQBk0=
-X-Google-Smtp-Source: AA6agR44cnr91IYZlU5ikFp1HIJBz6SO4fMjKlBnUrxf168BjnNZF7bxSpdLLmhnJLF+42BaH2WMOg==
-X-Received: by 2002:a2e:5cc2:0:b0:261:e2b3:e628 with SMTP id q185-20020a2e5cc2000000b00261e2b3e628mr2685434ljb.181.1661551955829;
-        Fri, 26 Aug 2022 15:12:35 -0700 (PDT)
+        bh=5sZZrUpkARsk9qJWaH/yaSkJtiZE1rGXFiif4NSjNJo=;
+        b=dbLR9z0o0/g0jKYmI5WsCptZab/+0HhMQDeDx/606ZNB3bifB5XOfv+xNkP8hopo3V
+         iAB7jRXuroWEEm6OUSO9JrYMqUtUauE0cIfRrZuf5CHcq1nsDaT3buBWrkTzToiMKgN2
+         BM6Xwu41+ph6Y4siVCACD26ocel+Rj/OLrf5kEmS2sgUq1QRoSeUMj8jvx735MO9SOp0
+         jTHutzqG1elH/sJAIZ7BFhAN100OOdomdOnYoz7Mo+b4Yj00HVBx0wZsyE3PqXblQQoF
+         /vVUm7OlmN+IS1qXGKDnbFyYWcsHGWo68/X5Aytq6uSL8LA5PpgVFByOXc9FjHCvwWbU
+         oiqw==
+X-Gm-Message-State: ACgBeo1Y4vYHeVrvxH0DIPcQ9RKLsw0ub84DcV75sADsdO1DLTMe3ro2
+        YW8lBq4fBlc22CUMAqBIKFk=
+X-Google-Smtp-Source: AA6agR7RZqv8wt2ZCnP/B6H7eEnBp/a4/HrBZTEa0paTPSTDZLniXRKs8BOyaTetpbTR4Qm6Ioofow==
+X-Received: by 2002:a05:6512:3982:b0:492:db4e:fe75 with SMTP id j2-20020a056512398200b00492db4efe75mr3310907lfu.482.1661552365926;
+        Fri, 26 Aug 2022 15:19:25 -0700 (PDT)
 Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id x1-20020a056512078100b00492d8c53692sm479702lfr.222.2022.08.26.15.12.34
+        by smtp.gmail.com with ESMTPSA id t30-20020a05651c205e00b00261e50a2534sm586734ljo.33.2022.08.26.15.19.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 15:12:35 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 01:12:33 +0300
+        Fri, 26 Aug 2022 15:19:25 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 01:19:23 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -59,14 +59,14 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         ben.dooks@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 04/11] spi: dw: use TMOD_RO to read in enhanced spi modes
-Message-ID: <20220826221233.3czezp7rcvk4ya6u@mobilestation>
+Subject: Re: [PATCH 05/11] spi: dw: define SPI_CTRLR0 register and its fields
+Message-ID: <20220826221923.k4cwharkathma7zi@mobilestation>
 References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-5-sudip.mukherjee@sifive.com>
+ <20220802175755.6530-6-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-5-sudip.mukherjee@sifive.com>
+In-Reply-To: <20220802175755.6530-6-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,40 +77,70 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:48PM +0100, Sudip Mukherjee wrote:
-> When we are using the enhanced spi modes we can not use EEPROM Read.
-> The Synopsys datasheet mentions EEPROM Read is not applicable in
-> enhanced SPI modes. We will need to use Receive only mode.
+On Tue, Aug 02, 2022 at 06:57:49PM +0100, Sudip Mukherjee wrote:
+> Synopsys SSI controllers supporting enhanced SPI mode of operation has
+> SPI Control Register at offset 0xf4 which controls the following:
+> 
+> CLK_STRETCH_EN: Enables clock stretching capability in SPI transfers.
+> In case of write, if the FIFO becomes empty DWC_ssi will stretch the
+> clock until FIFO has enough data to continue the transfer. In case of
+> read, if the receive FIFO becomes full DWC_ssi will stop the clock until
+> data has been read from the FIFO.
+> 
+> WAIT_CYCLES: Wait cycles in Dual/Quad/Octal mode between control frames
+> transmit and data reception.
+> 
+> INST_L: Dual/Quad/Octal mode instruction length in bits.
+> 
+> ADDR_L: defines Length of Address to be transmitted.
+> 
+> For now, we are only using 32bit Address length and 8 bit Instruction
+> length.
 > 
 > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
 > ---
->  drivers/spi/spi-dw-core.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/spi/spi-dw.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 8c84a2e991b5..8e624620864f 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -727,7 +727,10 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
->  	cfg.dfs = 8;
->  	cfg.freq = clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
->  	if (op->data.dir == SPI_MEM_DATA_IN) {
-> -		cfg.tmode = DW_SPI_CTRLR0_TMOD_EPROMREAD;
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index b8cc20e0deaa..a7a4637d6d32 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -63,6 +63,17 @@
+>  #define DW_SPI_RX_SAMPLE_DLY		0xf0
+>  #define DW_SPI_CS_OVERRIDE		0xf4
+>  
 
-> +		if (enhanced_spi)
-> +			cfg.tmode = DW_SPI_CTRLR0_TMOD_RO;
-> +		else
-> +			cfg.tmode = DW_SPI_CTRLR0_TMOD_EPROMREAD;
+> +/* Register offsets (Defined in DWC SSI 1.03a) */
 
-Just drop this modification and initialize the dw_spi_cfg structure
-from scratch in the Enhanced SPI-specific method:
-dw_spi_exec_enh_mem_op().
+Drop this comment. The CSR can exist in the DW APB SSI too
+
+> +#define DW_HSSI_SPI_CTRLR0		0xf4
+
+#define DW_SSI_SPI_CTRLR0		0xf4
+
+> +
+> +/* Bit fields in SPI_CTRLR0 (Defined in DWC SSI 1.03a) */
+
+Drop the IP-core ID and version from the comment. As I said the eSPI
+feature can be enabled for DW APB SSI too.
+
+> +#define DW_HSSI_SPI_CTRLR0_CLK_STRETCH_EN	BIT(30)
+> +#define DW_HSSI_SPI_CTRLR0_WAIT_CYCLE_MASK	GENMASK(15, 11)
+> +#define DW_HSSI_SPI_CTRLR0_INST_L_MASK		GENMASK(9, 8)
+> +#define DW_HSSI_SPI_CTRLR0_INST_L8		0x2
+> +#define DW_HSSI_SPI_CTRLR0_ADDR_L_MASK		GENMASK(5, 2)
+> +#define DW_HSSI_SPI_CTRLR0_ADDR_L32		0x8
+
+Move this to the tail of the CSR fields macros definition (right after
+the DW_SPI_DMACR_TDMAE macros) and s/HSSI/SPI .
 
 -Sergey
 
->  		cfg.ndf = op->data.nbytes;
->  	} else {
->  		cfg.tmode = DW_SPI_CTRLR0_TMOD_TO;
+> +
+>  /* Bit fields in CTRLR0 (DWC APB SSI) */
+>  #define DW_PSSI_CTRLR0_DFS_MASK			GENMASK(3, 0)
+>  #define DW_PSSI_CTRLR0_DFS32_MASK		GENMASK(20, 16)
 > -- 
 > 2.30.2
 > 
