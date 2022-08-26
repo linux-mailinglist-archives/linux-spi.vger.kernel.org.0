@@ -2,72 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3395A3201
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 00:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCE15A3239
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 00:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245341AbiHZWW6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Aug 2022 18:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S1345005AbiHZWuQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Aug 2022 18:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbiHZWWo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 18:22:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9D317;
-        Fri, 26 Aug 2022 15:22:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id d8so3746443lfq.0;
-        Fri, 26 Aug 2022 15:22:43 -0700 (PDT)
+        with ESMTP id S234440AbiHZWuP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 18:50:15 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CFD2C666;
+        Fri, 26 Aug 2022 15:50:14 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s8so2866046ljj.5;
+        Fri, 26 Aug 2022 15:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=jQpMnlq+ODH/Ac0/7WUzphnJZbozYed6CyScoeVbdz4=;
-        b=ce5SkjfpNQOpTiuaMMlH+tSSjeyZzphKYKmUGev4jX7Waz0RgviseNrLYzbYYoxiWz
-         nZ2GaMclfCfsb19RZr/m4sReDazhcT+CsJPxuBNmU/lpYYUsdGTKGMTufU1WuRHkZjaJ
-         7CXG6xDhN+gMsBGXJN7SOthVitjF9KOPL7RhjiXUnr1YKGGXYdglzW0XQ3i8JWAJebpR
-         dIdoFfnyXBDg7saC5Mg0SoIgNoVoM2WlrCiDt/TYdYfZw4Ib78iPUgK73c5eyU+xrt2R
-         fsQjxRUoWLaoChEkIAPAHnnMmRXan2HVaeTRGRJvaEM5Jg7hdUiFgJThL+3eNidGqpgN
-         ox/Q==
+        bh=4pc2oAidrj6yhUG2VXLcLsOrtbTR1Oyi+VKlwu+INl8=;
+        b=R529Deg9qrsUPKylDTBFVydt0KHPodA86KNyWEzwMKDPI0qc7f8w4pm5lEpo2djUnp
+         Fmhv5RzkZ80cSkMNsf2aAgLGYoRxFPKOYW0VCqGEXtMQh7B0zzzg5kKJvHn11yLqp1er
+         HMZlhJhpY+Z8GBYcNZ1kQOHGFYPoc//n7QtnYPaa94PhR6mthEtO82rr3XSRgdC7NvQ1
+         xk64BAK3JYFyYuL28T4zOkL5YsbI9UtrYlzQYoJEgC6dWsUFlhnXnapfh7S2ZZXKgUid
+         j8BPCWa1TSwEWj384je/p1aK4Xag8JJwb3lDyJq++HkAKePjxme00RUvS/vXGGzAR3Cv
+         NITw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=jQpMnlq+ODH/Ac0/7WUzphnJZbozYed6CyScoeVbdz4=;
-        b=XmWyEYhkEKCzHeZg28ztCzRdR6A0BDKyDndE0N85ZVaBvUEd9zs6k+bE/Ip6donlq0
-         IXl046d2OxV2JN9R0rXodCzuf1E+rB63FYGR7SjrKPJuXndqgWHmhOihq7N58DKI+aQK
-         HdGHUFj42uxezBH9zpwgqCAhYBOz61k54lA1E5gJYQ2u2cCmF7S755GbNkD7DJrYqsKG
-         GLstieuG2wRi3cnQ4seIxnlBNCrObaVcEvgacCxZUXpPFoMrbn+VgNTXFp4xO3ScViMs
-         pCsAR5jLJt+eHxvI1xAJ5vxfp8847GKxgm7rJp2d84K+5XvNbd8nQfK8XWNraW5SVUvE
-         l3og==
-X-Gm-Message-State: ACgBeo2ztfQefzw8h7lbbCDbaPkJdjA75yuU6TAPDwgPvji5qRlTjcY3
-        9lfI3rs/jdNM5I+fY9hciLGKAW8kHaIScg==
-X-Google-Smtp-Source: AA6agR5oCEajOf3PTPX/ljFuF1s4b7jHGQm9T5EiqNdlql48fr560T+T3z5DRY52O2hdC4W4s/uH1A==
-X-Received: by 2002:a05:6512:694:b0:492:c764:9510 with SMTP id t20-20020a056512069400b00492c7649510mr3389615lfe.591.1661552562128;
-        Fri, 26 Aug 2022 15:22:42 -0700 (PDT)
+        bh=4pc2oAidrj6yhUG2VXLcLsOrtbTR1Oyi+VKlwu+INl8=;
+        b=U7yGL+3ilKMHcnt27aq4mjXIERupcLdm2OeRq/csFCWWeds33NPQKnP+ZT5e7JNt9H
+         dTon7cXR9AJ3EmQcLkyvp1DOTPOWjN/IkijLPrbZejyvOeu2rQrMSHQ7fdpAD7IPka7Y
+         7zpSi5WdNF6Ci7lXaWHSRansmdt4K+6x43zpOgiVwrz5j1WQjh8kkKtM2aLjPmPHh3qQ
+         gL4Jwu/FnCxbHnn+WkQo1XiWZSDbwRNby1rl7di0Y79i8HWy/tbgpctAJgZvtXASGpoU
+         fLGTBWhzU9DEY1/RE4woJwtk2jOUf2TjFaTaHj57vEmrFThg4ovy8N/55TpJ72ho+aDc
+         LoFA==
+X-Gm-Message-State: ACgBeo1TpKFAOcJElB84mhftvXOdLote+jaKZI0PplZXft9qbtqkN9rM
+        JsYX1gCDXW/nm1QVVb1jrRvLT0yK1S1DRw==
+X-Google-Smtp-Source: AA6agR74p1nHA8uH4eqONhVaJ6eot9xw+yA5nFlIlGeCu5x42hB1AkobVbtU+oDATjJ6jQoQZqdEqg==
+X-Received: by 2002:a05:651c:10b0:b0:261:ca24:def5 with SMTP id k16-20020a05651c10b000b00261ca24def5mr2778197ljn.169.1661554212465;
+        Fri, 26 Aug 2022 15:50:12 -0700 (PDT)
 Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id y9-20020a196409000000b0048af749c060sm486934lfb.157.2022.08.26.15.22.40
+        by smtp.gmail.com with ESMTPSA id t14-20020a2e8e6e000000b0025e1ec74e25sm589154ljk.43.2022.08.26.15.50.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 15:22:41 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 01:22:39 +0300
+        Fri, 26 Aug 2022 15:50:11 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 01:50:09 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
         william.salmon@sifive.com, adnan.chowdhury@sifive.com,
         ben.dooks@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 03/11] spi: dw: define spi_frf for dual/quad/octal modes
-Message-ID: <20220826222239.vaovd7n5tqaw2ucv@mobilestation>
+Subject: Re: [PATCH 06/11] spi: dw: update SPI_CTRLR0 register
+Message-ID: <20220826225009.hipxcffq2ddpiv4s@mobilestation>
 References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-4-sudip.mukherjee@sifive.com>
- <20220826220319.5flk4zkz4gzzj7vh@mobilestation>
+ <20220802175755.6530-7-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826220319.5flk4zkz4gzzj7vh@mobilestation>
+In-Reply-To: <20220802175755.6530-7-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,147 +75,79 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 01:03:22AM +0300, Serge Semin wrote:
-> On Tue, Aug 02, 2022 at 06:57:47PM +0100, Sudip Mukherjee wrote:
-> > The SPI mode needs to be mentioned in CTRLR0[23:22] register. Define a
-> > configuration variable to keep the mode based on the buswidth, which will
-> > then be used to update CR0. If the transfer is using dual/quad/octal
-> > mode then mark enhanced_spi as true.
-> > 
-> > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> > ---
-> >  drivers/spi/spi-dw-core.c | 29 +++++++++++++++++++++++++++++
-> >  drivers/spi/spi-dw.h      |  7 +++++++
-> >  2 files changed, 36 insertions(+)
-> > 
-> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > index 77529e359b6d..8c84a2e991b5 100644
-> > --- a/drivers/spi/spi-dw-core.c
-> > +++ b/drivers/spi/spi-dw-core.c
-> > @@ -333,6 +333,14 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
-> >  		/* CTRLR0[11:10] Transfer Mode */
-> >  		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_TMOD_MASK, cfg->tmode);
-> >  
+On Tue, Aug 02, 2022 at 06:57:50PM +0100, Sudip Mukherjee wrote:
+> If the controller supports enhanced SPI modes then update the register
+> or reset the register if the transfer is not using dual/quad/octal mode.
 > 
-> > +	if (dws->caps & DW_SPI_CAP_EXT_SPI) {
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
 > 
-> Drop this conditional statement. Just always set the spi_frf field.
-> 
-> 
-> > +		if (cfg->spi_frf)
-> 
-> Drop this conditional statement. Just always set the spi_frf. It shall
-> be zero if the Enhanced SPI modes are unsupported.
-> 
-> > +			cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_SPI_FRF_MASK,
-> 
-> Since the SPI_FRF field has different offset in the DW APB and DW AHB
-> SSI controllers, you'll need to initialize the mode based on the
-> IP-core ID using the dw_spi_ip_is() macro (see the as it's done for
-> tmode).
-> 
-> > +				cfg->spi_frf);
-> > +		else
-> 
-> > +			cr0 &= ~DW_HSSI_CTRLR0_SPI_FRF_MASK;
-> 
-> This is redundant. The initial value never has the SPI_FRF field set
-> (see the dw_spi_setup() and dw_spi_prepare_cr0() methods for details).
-> 
-> > +	}
-> > +
-> >  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
-> >  
-> >  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
-> > @@ -679,10 +687,31 @@ static void dw_spi_stop_mem_op(struct dw_spi *dws, struct spi_device *spi)
-> >  static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
-> >  {
-> >  	struct dw_spi *dws = spi_controller_get_devdata(mem->spi->controller);
-> > +	bool enhanced_spi = false;
-> >  	struct dw_spi_cfg cfg;
-> >  	unsigned long flags;
-> >  	int ret;
-> >  
-> 
-> > +	if (dws->caps & DW_SPI_CAP_EXT_SPI) {
-> > +		switch (op->data.buswidth) {
-> > +		case 2:
-> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_DUAL_SPI;
-> > +			enhanced_spi = true;
-> > +			break;
-> > +		case 4:
-> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_QUAD_SPI;
-> > +			enhanced_spi = true;
-> > +			break;
-> > +		case 8:
-> > +			cfg.spi_frf = DW_SSI_CTRLR0_SPI_FRF_OCT_SPI;
-> > +			enhanced_spi = true;
-> > +			break;
-> > +		default:
-> > +			cfg.spi_frf = 0;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> 
-> Please create a separate dw_spi_exec_enh_mem_op() method for the
-> Enhanced SPI communications and parse the data.buswidth field there.
-> Also it would be better to define a new macro
-> DW_SSI_CTRLR0_SPI_FRF_STD_SPI and use it instead of the explicit zero
-> SPI_FRF value.
-> 
-> >  	/*
-> >  	 * Collect the outbound data into a single buffer to speed the
-> >  	 * transmission up at least on the initial stage.
-> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> > index 71d18e9291a3..b8cc20e0deaa 100644
-> > --- a/drivers/spi/spi-dw.h
-> > +++ b/drivers/spi/spi-dw.h
-> > @@ -96,6 +96,12 @@
-> >  #define DW_HSSI_CTRLR0_SRL			BIT(13)
-> >  #define DW_HSSI_CTRLR0_MST			BIT(31)
-> >  
-> 
-> > +/* Bit fields in CTRLR0 for enhanced SPI */
-> 
-> No need in the comment. The macros name is descriptive enough.
-> 
-> > +#define DW_HSSI_CTRLR0_SPI_FRF_MASK		GENMASK(23, 22)
-> 
-> Please also add the next new macros
-> #define DW_PSSI_CTRLR0_SPI_FRF_MASK		GENMASK(22, 21)
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 8e624620864f..9d499bdf2ce6 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -676,6 +676,32 @@ static void dw_spi_stop_mem_op(struct dw_spi *dws, struct spi_device *spi)
+>  	dw_spi_enable_chip(dws, 1);
+>  }
+>  
+> +static void update_spi_ctrl0(struct dw_spi *dws, const struct spi_mem_op *op, bool enable)
+> +{
+> +	u32 spi_ctrlr0;
+> +
+> +	spi_ctrlr0 = dw_readl(dws, DW_HSSI_SPI_CTRLR0);
+> +	if (enable) {
+> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_WAIT_CYCLE_MASK,
 
-> #define DW_SSI_CTRLR0_SPI_FRF_STD_SPI		0x0
-> 
-> and group them together with the rest of the APB SSI CTRL0 macros.
-> 
-> > +#define DW_SSI_CTRLR0_SPI_FRF_DUAL_SPI		0x1
-> > +#define DW_SSI_CTRLR0_SPI_FRF_QUAD_SPI		0x2
-> > +#define DW_SSI_CTRLR0_SPI_FRF_OCT_SPI		0x3
+> +					 op->dummy.nbytes * BITS_PER_BYTE);
+> +		/* 8 bit instruction length */
+> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_INST_L_MASK,
+> +					 DW_HSSI_SPI_CTRLR0_INST_L8);
+> +		/* 32 bit address length */
+> +		spi_ctrlr0 |= FIELD_PREP(DW_HSSI_SPI_CTRLR0_ADDR_L_MASK,
+> +					 DW_HSSI_SPI_CTRLR0_ADDR_L32);
 
-One more thing s/DW_SSI/DW_SPI . All the common macros are defined
-with the DW_SPI prefix.
+Just add new fields dw_spi_cfg.{trans_t,inst_l,addr_l,wait_c},
+initialize them with the values taken from the spi_mem_op (trans_t -
+based on the bus widths, inst_l - cmd.nbytes, addr_l - addr.nbytes,
+wait_c - dummy.nbytes / dummy.buswidth) and use them to accordingly
+update the SPI_CTRLR0 CSR in the dw_spi_update_config() method. Update
+the CSR if spi_frf has value other than STD_SPI_FRF, otherwise
+according to the HW manual the SPI_CTRLR0 register isn't relevant so
+don't touch it.
+
+> +		/* Enable clock stretching */
+> +		spi_ctrlr0 |= DW_HSSI_SPI_CTRLR0_CLK_STRETCH_EN;
+> +	} else {
+> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_WAIT_CYCLE_MASK;
+> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_INST_L_MASK;
+> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_ADDR_L_MASK;
+> +		spi_ctrlr0 &= ~DW_HSSI_SPI_CTRLR0_CLK_STRETCH_EN;
+> +	}
+> +
+> +	dw_writel(dws, DW_HSSI_SPI_CTRLR0, spi_ctrlr0);
+> +}
+> +
+>  /*
+>   * The SPI memory operation implementation below is the best choice for the
+>   * devices, which are selected by the native chip-select lane. It's
+> @@ -738,6 +764,9 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  
+>  	dw_spi_enable_chip(dws, 0);
+>  
+
+> +	if (dws->caps & DW_SPI_CAP_EXT_SPI)
+> +		update_spi_ctrl0(dws, op, enhanced_spi);
+> +
+
+This won't be needed as long as you do as I suggested above.
 
 -Sergey
 
+>  	dw_spi_update_config(dws, mem->spi, &cfg);
+>  
+>  	dw_spi_mask_intr(dws, 0xff);
+> -- 
+> 2.30.2
 > 
-> Please move these to be defined together with the APB SSI
-> CTRL0.SPI_FRF-related macros.
-> 
-> -Sergey
-> 
-> > +
-> >  /* Bit fields in CTRLR1 */
-> >  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
-> >  
-> > @@ -136,6 +142,7 @@ struct dw_spi_cfg {
-> >  	u8 dfs;
-> >  	u32 ndf;
-> >  	u32 freq;
-> > +	u8 spi_frf;
-> >  };
-> >  
-> >  struct dw_spi;
-> > -- 
-> > 2.30.2
-> > 
