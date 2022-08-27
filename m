@@ -2,72 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312715A32A9
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 01:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5C25A3768
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 13:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiHZXdL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Aug 2022 19:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S233408AbiH0Llu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Aug 2022 07:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiHZXdK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Aug 2022 19:33:10 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BEEE3C04;
-        Fri, 26 Aug 2022 16:33:09 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id z20so2933411ljq.3;
-        Fri, 26 Aug 2022 16:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=5AXWR4TpQid/hNoRIKM4TMgy6TBS7PDYRLOMZ30iE3Y=;
-        b=m0EkXge2NHZHTBiEIBu720vdlfOdmGev+aLGNetjKVmeeJBtcHaztiHAzT9DEfdyte
-         9VlVtgsmcoYbICMRTdy5vrV/iLeV/vU8hNnqWhIksld/T8QeTuyuHYQELovZzxemM5SR
-         FRLUZCMctfYPL27qqlO0I9vk4njrk6+HVpGewz3HTDSIzN3kYlMshh6ZgxOVGoSFGBpG
-         GIw5uwi3vjX0D0J1qMdC1jtDHH2VB5EuyDZlK+xi/YtUEuwiFSQcwlNwW+dM/qA/Y17O
-         g97ESQZBBMssND0vGBi6b7RhkD+5ae6lxZjryywENqNjsjFP/fukxKSkIXqQoKnnCjDb
-         JmQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=5AXWR4TpQid/hNoRIKM4TMgy6TBS7PDYRLOMZ30iE3Y=;
-        b=qwk/jnfF29oR6lbQEbTJf684dtYABoyezZqyJIkwiqsEc6/dYLezQ9T/K6W+g1ksfL
-         Fv3ka2hh1t5DSDnWrghXbxpwylVDoLu88ILnhe04k1HdeDVylmJUenRw7jFVE/3ggkRn
-         VJQuVDUCuQP3WakDJ/M7SknirQVDlD0yf8WVEO0BFSVgw0uCHAw7LUkdkT5r5Vp1vmOr
-         m6YOvFdQXttZmy5qsO1/QnL/ycg54Qugm63k+OEStYBoFALyxr5xPC+PZ3LL3yWTKNJf
-         /5Nxq5YjWND2VVC8T05Zml44Bq1E8rqgqWWFcN9gutMrgdyMLGF3jOpCCiPbdIw3J9NV
-         dGOw==
-X-Gm-Message-State: ACgBeo2Fn/y0JH+x0FABsuwTyI2HhW0fixgdlVgQStabYU5gLfdofOQ2
-        hG2qdqOq4gEM5gpSbJrl4fU=
-X-Google-Smtp-Source: AA6agR524STUpvZz6zOJZvL1bdxwiCFo8pCI8dMmc2ZA+xl5+SfDq2IASND7t5+tqSjN2d9V5jk55g==
-X-Received: by 2002:a2e:93c8:0:b0:261:e5a7:56ed with SMTP id p8-20020a2e93c8000000b00261e5a756edmr2952397ljh.483.1661556788130;
-        Fri, 26 Aug 2022 16:33:08 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id k10-20020a2eb74a000000b0025e42b981f9sm603578ljo.44.2022.08.26.16.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 16:33:07 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 02:33:05 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 10/11] spi: dw-apb-ssi: add generic 1.03a version
-Message-ID: <20220826233305.5ugpukokzldum7y5@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
- <20220802175755.6530-11-sudip.mukherjee@sifive.com>
+        with ESMTP id S231391AbiH0Llt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 07:41:49 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC24326D5
+        for <linux-spi@vger.kernel.org>; Sat, 27 Aug 2022 04:41:47 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id RuC4oJLK7XFXxRuC4oYr06; Sat, 27 Aug 2022 13:41:45 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 27 Aug 2022 13:41:45 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     broonie@kernel.org, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, neil@brown.name, blogic@openwrt.org
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 0/4] spi: mt7621: Fix an erroneous message + clean-ups
+Date:   Sat, 27 Aug 2022 13:41:39 +0200
+Message-Id: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-11-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,35 +43,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:57:54PM +0100, Sudip Mukherjee wrote:
-> From: Ben Dooks <ben.dooks@sifive.com>
-> 
-> Add new snps,dw-ssi-1.03a version to the bindings.
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index 37c3c272407d..35aa04a85813 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -45,6 +45,7 @@ properties:
->          enum:
->            - snps,dw-apb-ssi
->            - snps,dwc-ssi-1.01a
+Patch 1 fixes an issue about an error code that is erroneously logged.
 
-> +          - snps,dwc-ssi-1.03a
+Patch 2-4 are just clean-ups spotted while fixing it.
 
-Just add the "snps,dw-ahb-ssi" compatible string instead.
+Additional comments are added below --- in patches 2 and 3.
 
--Sergey
+Christophe JAILLET (4):
+  spi: mt7621: Fix an error message in mt7621_spi_probe()
+  spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error
+    handling
+  spi: mt7621: Use devm_spi_register_controller()
+  spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
 
->        - description: Microsemi Ocelot/Jaguar2 SoC SPI Controller
->          items:
->            - enum:
-> -- 
-> 2.30.2
-> 
+ drivers/spi/spi-mt7621.c | 42 ++++++----------------------------------
+ 1 file changed, 6 insertions(+), 36 deletions(-)
+
+-- 
+2.34.1
+
