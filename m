@@ -2,79 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2645A3773
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 13:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153AE5A37E1
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 15:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345302AbiH0Lmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 27 Aug 2022 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S232901AbiH0NTj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Aug 2022 09:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245153AbiH0Lmp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 07:42:45 -0400
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D085D0F7
-        for <linux-spi@vger.kernel.org>; Sat, 27 Aug 2022 04:42:44 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id RuD2oYf3rUoLVRuD3oSO9F; Sat, 27 Aug 2022 13:42:42 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 27 Aug 2022 13:42:42 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     broonie@kernel.org, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, neil@brown.name, blogic@openwrt.org
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 4/4] spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
-Date:   Sat, 27 Aug 2022 13:42:40 +0200
-Message-Id: <76ed0ef91479498b9a2d5ef539f80851cffdb4ea.1661599671.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
+        with ESMTP id S229677AbiH0NTi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 09:19:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B587198A;
+        Sat, 27 Aug 2022 06:19:37 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MFHJc4yxCzkWV9;
+        Sat, 27 Aug 2022 21:16:00 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 21:19:35 +0800
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 21:19:34 +0800
+Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Andreas Noever" <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        <linux-hyperv@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, "Will Deacon" <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
+ <5857822.lOV4Wx5bFT@kreacher>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <a0cab176-3c3a-707a-02c3-74ffc1b4926e@huawei.com>
+Date:   Sat, 27 Aug 2022 21:19:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5857822.lOV4Wx5bFT@kreacher>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.247]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The 'clk' field in 'struct mt7621_spi' is useless, remove it.
+Hi Rafael,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/spi/spi-mt7621.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 2022/8/25 0:59, Rafael J. Wysocki wrote:
+> Index: linux-pm/include/acpi/acpi_bus.h
+> ===================================================================
+> --- linux-pm.orig/include/acpi/acpi_bus.h
+> +++ linux-pm/include/acpi/acpi_bus.h
+> @@ -365,7 +365,6 @@ struct acpi_device {
+>   	int device_type;
+>   	acpi_handle handle;		/* no handle for fixed hardware */
+>   	struct fwnode_handle fwnode;
+> -	struct acpi_device *parent;
+>   	struct list_head wakeup_list;
+>   	struct list_head del_list;
+>   	struct acpi_device_status status;
+> @@ -458,6 +457,14 @@ static inline void *acpi_driver_data(str
+>   #define to_acpi_device(d)	container_of(d, struct acpi_device, dev)
+>   #define to_acpi_driver(d)	container_of(d, struct acpi_driver, drv)
+>   
+> +static inline struct acpi_device *acpi_dev_parent(struct acpi_device *adev)
+> +{
+> +	if (adev->dev.parent)
+> +		return to_acpi_device(adev->dev.parent);
+> +
+> +	return NULL;
+> +}
+> +
+>   static inline void acpi_set_device_status(struct acpi_device *adev, u32 sta)
+>   {
+>   	*((u32 *)&adev->status) = sta;
+> @@ -478,6 +485,7 @@ void acpi_initialize_hp_context(struct a
+>   /* acpi_device.dev.bus == &acpi_bus_type */
+>   extern struct bus_type acpi_bus_type;
+>   
+> +struct acpi_device *acpi_dev_parent(struct acpi_device *adev);
 
-diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-index 114f98dcae5e..c4cc8e2f85e2 100644
---- a/drivers/spi/spi-mt7621.c
-+++ b/drivers/spi/spi-mt7621.c
-@@ -55,7 +55,6 @@ struct mt7621_spi {
- 	void __iomem		*base;
- 	unsigned int		sys_freq;
- 	unsigned int		speed;
--	struct clk		*clk;
- 	int			pending_write;
- };
- 
-@@ -361,9 +360,8 @@ static int mt7621_spi_probe(struct platform_device *pdev)
- 
- 	rs = spi_controller_get_devdata(master);
- 	rs->base = base;
--	rs->clk = clk;
- 	rs->master = master;
--	rs->sys_freq = clk_get_rate(rs->clk);
-+	rs->sys_freq = clk_get_rate(clk);
- 	rs->pending_write = 0;
- 	dev_info(&pdev->dev, "sys_freq: %u\n", rs->sys_freq);
- 
--- 
-2.34.1
+We have a static inline function above, is it duplicated here?
+Or did I miss some use cases?
 
+Thanks
+Hanjun
