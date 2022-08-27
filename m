@@ -2,24 +2,24 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5A35A376D
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 13:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA67D5A376F
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 13:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbiH0LmO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 27 Aug 2022 07:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S240800AbiH0Lm0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Aug 2022 07:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbiH0LmM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 07:42:12 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4F5D0F7
-        for <linux-spi@vger.kernel.org>; Sat, 27 Aug 2022 04:42:11 -0700 (PDT)
+        with ESMTP id S233171AbiH0LmY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 07:42:24 -0400
+Received: from smtp.smtpout.orange.fr (smtp-11.smtpout.orange.fr [80.12.242.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943CD5D0E8
+        for <linux-spi@vger.kernel.org>; Sat, 27 Aug 2022 04:42:23 -0700 (PDT)
 Received: from pop-os.home ([90.11.190.129])
         by smtp.orange.fr with ESMTPA
-        id RuCVouLLlvbzbRuCVotLzE; Sat, 27 Aug 2022 13:42:10 +0200
+        id RuCioaXfqLFqbRuCioufxe; Sat, 27 Aug 2022 13:42:21 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 27 Aug 2022 13:42:10 +0200
+X-ME-Date: Sat, 27 Aug 2022 13:42:21 +0200
 X-ME-IP: 90.11.190.129
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     broonie@kernel.org, matthias.bgg@gmail.com,
@@ -28,55 +28,108 @@ Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 1/4] spi: mt7621: Fix an error message in mt7621_spi_probe()
-Date:   Sat, 27 Aug 2022 13:42:07 +0200
-Message-Id: <928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 2/4] spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error handling
+Date:   Sat, 27 Aug 2022 13:42:19 +0200
+Message-Id: <05a7fd22719008c8a905d6328aa9548ce40f2a7a.1661599671.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-'status' is known to be 0 at this point. The expected error code is
-PTR_ERR(clk).
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-Switch to dev_err_probe() in order to display the expected error code (in a
-human readable way).
-This also filters -EPROBE_DEFER cases, should it happen.
+This helper is well suited for cases where the clock would be kept
+prepared or enabled for the whole lifetime of the driver.
 
-Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
+This simplifies the error handling a lot.
+
+The order between spi_unregister_controller() (in the remove function) and
+the clk_disable_unprepare() (now handle by a  managed resource) is kept
+the same.
+(see commit 46b5c4fb87ce ("spi: mt7621: Don't leak SPI master in probe
+error path") to see why it matters)
+
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/spi/spi-mt7621.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+The order with  devm_spi_release_controller() (which undoes
+devm_spi_alloc_master()) is reversed, but I don't think it is an issue.
+---
+ drivers/spi/spi-mt7621.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
 diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-index b4b9b7309b5e..351b0ef52bbc 100644
+index 351b0ef52bbc..2580b28042be 100644
 --- a/drivers/spi/spi-mt7621.c
 +++ b/drivers/spi/spi-mt7621.c
-@@ -340,11 +340,9 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+@@ -327,7 +327,6 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	struct spi_controller *master;
+ 	struct mt7621_spi *rs;
+ 	void __iomem *base;
+-	int status = 0;
+ 	struct clk *clk;
+ 	int ret;
+ 
+@@ -339,19 +338,14 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	if (IS_ERR(base))
  		return PTR_ERR(base);
  
- 	clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&pdev->dev, "unable to get SYS clock, err=%d\n",
--			status);
--		return PTR_ERR(clk);
--	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
-+				     "unable to get SYS clock\n");
+-	clk = devm_clk_get(&pdev->dev, NULL);
++	clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
+ 				     "unable to get SYS clock\n");
  
- 	status = clk_prepare_enable(clk);
- 	if (status)
+-	status = clk_prepare_enable(clk);
+-	if (status)
+-		return status;
+-
+ 	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
+ 	if (!master) {
+ 		dev_info(&pdev->dev, "master allocation failed\n");
+-		clk_disable_unprepare(clk);
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -376,13 +370,10 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	ret = device_reset(&pdev->dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "SPI reset failed!\n");
+-		clk_disable_unprepare(clk);
+ 		return ret;
+ 	}
+ 
+ 	ret = spi_register_controller(master);
+-	if (ret)
+-		clk_disable_unprepare(clk);
+ 
+ 	return ret;
+ }
+@@ -390,13 +381,10 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ static int mt7621_spi_remove(struct platform_device *pdev)
+ {
+ 	struct spi_controller *master;
+-	struct mt7621_spi *rs;
+ 
+ 	master = dev_get_drvdata(&pdev->dev);
+-	rs = spi_controller_get_devdata(master);
+ 
+ 	spi_unregister_controller(master);
+-	clk_disable_unprepare(rs->clk);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 
