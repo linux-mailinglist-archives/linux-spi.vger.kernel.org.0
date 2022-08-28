@@ -2,115 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153AE5A37E1
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Aug 2022 15:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CCE5A3FA5
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Aug 2022 22:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiH0NTj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 27 Aug 2022 09:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S229612AbiH1Uku (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 28 Aug 2022 16:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiH0NTi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Aug 2022 09:19:38 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B587198A;
-        Sat, 27 Aug 2022 06:19:37 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MFHJc4yxCzkWV9;
-        Sat, 27 Aug 2022 21:16:00 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 21:19:35 +0800
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 27 Aug 2022 21:19:34 +0800
-Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Andreas Noever" <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        <linux-hyperv@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, "Will Deacon" <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>
-References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
- <5857822.lOV4Wx5bFT@kreacher>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <a0cab176-3c3a-707a-02c3-74ffc1b4926e@huawei.com>
-Date:   Sat, 27 Aug 2022 21:19:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        with ESMTP id S229445AbiH1Ukt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Aug 2022 16:40:49 -0400
+Received: from srv.faradid-honar.com (mail.faradid-honar.com [130.185.73.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD8B255A9
+        for <linux-spi@vger.kernel.org>; Sun, 28 Aug 2022 13:40:45 -0700 (PDT)
+Received: by srv.faradid-honar.com (Postfix, from userid 10000)
+        id B9D76E212E; Mon, 29 Aug 2022 01:10:31 +0430 (+0430)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=idid-store.com;
+        s=default; t=1661719231;
+        bh=B8YADlVBHV1+dzk0FH3HIpC4S1Qw+DeL/WV+irxDT+s=; h=To:Subject:From;
+        b=bPZJ9gKSmzs0+o3F6G8IbDg2a3na91U0zPmuyM8p/MZX75yurvtaogI7fNNE4uYrI
+         QP0rx2fhTopk45wZ+PavB6FWM0BA99Xc33hyeLVtn/rXmiDNPMX2vamzslVmc/6qTf
+         49lKMAC0UxWjwRaMzycoA/oRJrU5ig7cUSRwpmmg=
+To:     linux-spi@vger.kernel.org
+Subject: Forbes: Investieren Sie einmal 250 $ und erhalten Sie ab 1000 $ pro Tag
+Date:   Mon, 29 Aug 2022 01:10:31 +0430
+From:   WordPress <info@idid-store.com>
+Message-ID: <b1bd933794f16022f484e55401959d26@idid-store.com>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-In-Reply-To: <5857822.lOV4Wx5bFT@kreacher>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,
+        SCC_BODY_URI_ONLY,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_PH_SURBL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rafael,
+Millionen von Dollar in Kryptowahrung in nur wenigen Monaten http://bitcoin-800-number.donerbank.com/dayli-news-2391
 
-On 2022/8/25 0:59, Rafael J. Wysocki wrote:
-> Index: linux-pm/include/acpi/acpi_bus.h
-> ===================================================================
-> --- linux-pm.orig/include/acpi/acpi_bus.h
-> +++ linux-pm/include/acpi/acpi_bus.h
-> @@ -365,7 +365,6 @@ struct acpi_device {
->   	int device_type;
->   	acpi_handle handle;		/* no handle for fixed hardware */
->   	struct fwnode_handle fwnode;
-> -	struct acpi_device *parent;
->   	struct list_head wakeup_list;
->   	struct list_head del_list;
->   	struct acpi_device_status status;
-> @@ -458,6 +457,14 @@ static inline void *acpi_driver_data(str
->   #define to_acpi_device(d)	container_of(d, struct acpi_device, dev)
->   #define to_acpi_driver(d)	container_of(d, struct acpi_driver, drv)
->   
-> +static inline struct acpi_device *acpi_dev_parent(struct acpi_device *adev)
-> +{
-> +	if (adev->dev.parent)
-> +		return to_acpi_device(adev->dev.parent);
-> +
-> +	return NULL;
-> +}
-> +
->   static inline void acpi_set_device_status(struct acpi_device *adev, u32 sta)
->   {
->   	*((u32 *)&adev->status) = sta;
-> @@ -478,6 +485,7 @@ void acpi_initialize_hp_context(struct a
->   /* acpi_device.dev.bus == &acpi_bus_type */
->   extern struct bus_type acpi_bus_type;
->   
-> +struct acpi_device *acpi_dev_parent(struct acpi_device *adev);
-
-We have a static inline function above, is it duplicated here?
-Or did I miss some use cases?
-
-Thanks
-Hanjun
