@@ -2,49 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCF15A3FCF
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Aug 2022 23:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67505A3FD7
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Aug 2022 23:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiH1VEL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 Aug 2022 17:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S229656AbiH1VKT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 28 Aug 2022 17:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiH1VEG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Aug 2022 17:04:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9803134C;
-        Sun, 28 Aug 2022 14:04:05 -0700 (PDT)
+        with ESMTP id S229445AbiH1VKT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Aug 2022 17:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6A9E027
+        for <linux-spi@vger.kernel.org>; Sun, 28 Aug 2022 14:10:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3947BB80B89;
-        Sun, 28 Aug 2022 21:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574FAC433D6;
-        Sun, 28 Aug 2022 21:04:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDAF60E98
+        for <linux-spi@vger.kernel.org>; Sun, 28 Aug 2022 21:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3AFBEC433D7;
+        Sun, 28 Aug 2022 21:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661720643;
-        bh=FnUF9rYTJcPc77tbf/1+ZcTqjLp8rtPouSJhLcvpwFc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GXlQZ5TPGNr54tov+iA1ZRxY0LRGw0mZhlRimWThCDrV4vjGaJGoqtFbHux65UALs
-         mISfyRR3HkmsvHlvUkjwWjwVNIGMEokNahHK8vofLJ64NSG18a77iLx7g0nRV+WnAQ
-         tAy/vfQm25A90bipbJnu6r7+0OfKHkabrx8czRdvuuOnSD/yjfQpSMAa2Bo+By4uN1
-         RYWaJK/AHf6wALAA6o/5oue4UTCXXRgrlUtY/AKfJJsg9iVZbEjcyJC+5wntfkyL5A
-         Y56USxiHMCYFIuLaZQSxISA+UlPaaTBPLtbmIFZe6jjzH60c4yyYjafudeiIOfZAgi
-         l6Q9LaTakgXDw==
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     dan.carpenter@oracle.com, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-In-Reply-To: <20220826092031.1393430-1-patrice.chotard@foss.st.com>
-References: <20220826092031.1393430-1-patrice.chotard@foss.st.com>
-Subject: Re: [PATCH] spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
-Message-Id: <166172064098.600371.16580591348148311786.b4-ty@kernel.org>
-Date:   Sun, 28 Aug 2022 22:04:00 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1661721017;
+        bh=acaR8AVo2HQYXyfXjvPhMisvpwRjekoqu3lHEvsGLYs=;
+        h=Subject:From:Date:To:From;
+        b=ilEimF/SKMWJvf7RfbjmTc5L97Is9kgrhonwPEWoDdG53wLa+vf1KG62YeQPntf+r
+         4pDC3xR5LtJW2FViG2qJomcyz2Z+XdkkNiaY4G8UCL+0V0ELeZ/GjyRvJWqRugnxjz
+         +oRARn8dPNetUfkk5VkmmEgAS+FXnvR89IYtUeTuk73326gXjxf6oR9WGJLhI5puPw
+         jbbS/w09jKhbrsY/zZyAJYp7g8U63GY/eqjEc8cpnh9Gn+wbJg82bnO1030gp6lpXV
+         M3xb5bGKOXtKXEhbjXefcgJVwXhm5GbZ/ZkiDKje+bF7zZBITLQasWaFg37US4qXxC
+         nddZMTgL7x+Ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 07C44C5A8AF;
+        Sun, 28 Aug 2022 21:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166172101694.11666.11403293411277014504.git-patchwork-summary@kernel.org>
+Date:   Sun, 28 Aug 2022 21:10:16 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,42 +52,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 26 Aug 2022 11:20:31 +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> The patch a557fca630cc: "spi: stm32_qspi: Add transfer_one_message()
-> spi callback" from Aug 23, 2022, leads to the following Smatch static
-> checker warning:
-> 
-> drivers/spi/spi-stm32-qspi.c:627 stm32_qspi_transfer_one_message()
-> error: uninitialized symbol 'ret'.Fix the following Smatch static checker warning:
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   broonie/spi.git for-next
+Patch: spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
+  Submitter: Patrice CHOTARD <patrice.chotard@foss.st.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=671402
+  Lore link: https://lore.kernel.org/r/20220826092031.1393430-1-patrice.chotard@foss.st.com
 
-Thanks!
 
-[1/1] spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
-      commit: 56ec456293239b3c5dfb0e4dcf22972b1b8c571d
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
