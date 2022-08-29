@@ -2,118 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568905A50BE
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 17:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B625A5227
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 18:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiH2PyM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 11:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S229733AbiH2QuY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Aug 2022 12:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiH2PyL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 11:54:11 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ECA96749;
-        Mon, 29 Aug 2022 08:54:09 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 936fe8cf992e9b5f; Mon, 29 Aug 2022 17:54:08 +0200
-Received: from kreacher.localnet (public-gprs523165.centertel.pl [31.61.162.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229783AbiH2QuV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 12:50:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5D1564EB;
+        Mon, 29 Aug 2022 09:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 957EF66D25B;
-        Mon, 29 Aug 2022 17:54:06 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
-Date:   Mon, 29 Aug 2022 17:54:06 +0200
-Message-ID: <5617470.DvuYhMxLoT@kreacher>
-In-Reply-To: <a0cab176-3c3a-707a-02c3-74ffc1b4926e@huawei.com>
-References: <12036348.O9o76ZdvQC@kreacher> <5857822.lOV4Wx5bFT@kreacher> <a0cab176-3c3a-707a-02c3-74ffc1b4926e@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9350161277;
+        Mon, 29 Aug 2022 16:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232C1C43140;
+        Mon, 29 Aug 2022 16:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661791819;
+        bh=t4wMul9vxfMvuUg8UI41DbmTAkYSK1yPK94NKJG8a+4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=AOkVqZMNHdQziyPJMVzg7Yp67/LOAN0l6Z4abhJmwpvjIcKMX8ClVYkDUW5c4KLbR
+         t3Kkv4AfYhJ7jOea8Ho8NL6Wgcveo5xmBjHYV2wgH58ZkTw+rCb1lol2rOxxv74kZr
+         dMf/bZi9PlEdFnCTU+K2ktiIzrghD+YJoYLptFB2g1YeGrnpJc7iZwfDcgllEByka4
+         YhlV4TkuZVxkEm+t678KidmkOoB4SpDXbS9rTAI7R+cCRt4JY9KMSLnTATharY486r
+         iRzY1qDSy8C6vVP67eY6KKYSwpyaEE06VpuKGq68dt7i3xMwFCxgKKlEWt9vbD+ro4
+         iHKU0zF8+FDIA==
+From:   Mark Brown <broonie@kernel.org>
+To:     patrice.chotard@foss.st.com
+Cc:     linux-kernel@vger.kernel.org, christophe.kerello@foss.st.com,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+In-Reply-To: <20220829123250.2170562-1-patrice.chotard@foss.st.com>
+References: <20220829123250.2170562-1-patrice.chotard@foss.st.com>
+Subject: Re: [PATCH] spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
+Message-Id: <166179181682.898839.326483296605925659.b4-ty@kernel.org>
+Date:   Mon, 29 Aug 2022 17:50:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 31.61.162.222
-X-CLIENT-HOSTNAME: public-gprs523165.centertel.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekuddgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeefuddriedurdduiedvrddvvddvnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepfedurdeiuddrudeivddrvddvvddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepvdehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhuohhhrghnjhhunheshhhurgifvghirdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtgho
- mhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkhihssehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohephhgrihihrghnghiisehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohepshhthhgvmhhmihhnsehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohepfigvihdrlhhiuheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvtghuihesmhhitghrohhsohhfthdrtghomhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvrghsrdhnohgvvhgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehmihgthhgrvghlrdhjrghmvghtsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegjvghhvgiikhgvlhfuhheusehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqhhihphgvrhhvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqmhhsmhesvhhgv
- ghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtoheprghgrhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsjhhorhhnrdgrnhguvghrshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehkohhnrhgrugdrugihsggtihhosehsohhmrghinhhlihhnvgdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=25 Fuz1=25 Fuz2=25
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Saturday, August 27, 2022 3:19:33 PM CEST Hanjun Guo wrote:
-> Hi Rafael,
+On Mon, 29 Aug 2022 14:32:50 +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> On 2022/8/25 0:59, Rafael J. Wysocki wrote:
-> > Index: linux-pm/include/acpi/acpi_bus.h
-> > ===================================================================
-> > --- linux-pm.orig/include/acpi/acpi_bus.h
-> > +++ linux-pm/include/acpi/acpi_bus.h
-> > @@ -365,7 +365,6 @@ struct acpi_device {
-> >   	int device_type;
-> >   	acpi_handle handle;		/* no handle for fixed hardware */
-> >   	struct fwnode_handle fwnode;
-> > -	struct acpi_device *parent;
-> >   	struct list_head wakeup_list;
-> >   	struct list_head del_list;
-> >   	struct acpi_device_status status;
-> > @@ -458,6 +457,14 @@ static inline void *acpi_driver_data(str
-> >   #define to_acpi_device(d)	container_of(d, struct acpi_device, dev)
-> >   #define to_acpi_driver(d)	container_of(d, struct acpi_driver, drv)
-> >   
-> > +static inline struct acpi_device *acpi_dev_parent(struct acpi_device *adev)
-> > +{
-> > +	if (adev->dev.parent)
-> > +		return to_acpi_device(adev->dev.parent);
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> >   static inline void acpi_set_device_status(struct acpi_device *adev, u32 sta)
-> >   {
-> >   	*((u32 *)&adev->status) = sta;
-> > @@ -478,6 +485,7 @@ void acpi_initialize_hp_context(struct a
-> >   /* acpi_device.dev.bus == &acpi_bus_type */
-> >   extern struct bus_type acpi_bus_type;
-> >   
-> > +struct acpi_device *acpi_dev_parent(struct acpi_device *adev);
+> ctrl->auto_runtime_pm was wrongly set to true when adding
+> transfer_one_message() callback.
+> As explained in commit 6e6ccb3d4cdc ("spi: stm32-qspi: Add pm_runtime support")
+> the expected behavior is to prevent runtime suspends between each transfer.
 > 
-> We have a static inline function above, is it duplicated here?
-> Or did I miss some use cases?
+> [...]
 
-No, you didn't, it is redundant.
+Applied to
 
-I've just sent a fix for this.
+   broonie/spi.git for-next
 
 Thanks!
 
+[1/1] spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
+      commit: 47c32b2b7fcfa97f7224df222f439fc0ccf94ffe
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
