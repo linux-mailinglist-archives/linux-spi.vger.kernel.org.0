@@ -2,93 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B625A5227
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 18:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED76D5A5309
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 19:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiH2QuY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 12:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S229950AbiH2RXN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Aug 2022 13:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiH2QuV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 12:50:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5D1564EB;
-        Mon, 29 Aug 2022 09:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9350161277;
-        Mon, 29 Aug 2022 16:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232C1C43140;
-        Mon, 29 Aug 2022 16:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661791819;
-        bh=t4wMul9vxfMvuUg8UI41DbmTAkYSK1yPK94NKJG8a+4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AOkVqZMNHdQziyPJMVzg7Yp67/LOAN0l6Z4abhJmwpvjIcKMX8ClVYkDUW5c4KLbR
-         t3Kkv4AfYhJ7jOea8Ho8NL6Wgcveo5xmBjHYV2wgH58ZkTw+rCb1lol2rOxxv74kZr
-         dMf/bZi9PlEdFnCTU+K2ktiIzrghD+YJoYLptFB2g1YeGrnpJc7iZwfDcgllEByka4
-         YhlV4TkuZVxkEm+t678KidmkOoB4SpDXbS9rTAI7R+cCRt4JY9KMSLnTATharY486r
-         iRzY1qDSy8C6vVP67eY6KKYSwpyaEE06VpuKGq68dt7i3xMwFCxgKKlEWt9vbD+ro4
-         iHKU0zF8+FDIA==
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     linux-kernel@vger.kernel.org, christophe.kerello@foss.st.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-In-Reply-To: <20220829123250.2170562-1-patrice.chotard@foss.st.com>
-References: <20220829123250.2170562-1-patrice.chotard@foss.st.com>
-Subject: Re: [PATCH] spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
-Message-Id: <166179181682.898839.326483296605925659.b4-ty@kernel.org>
-Date:   Mon, 29 Aug 2022 17:50:16 +0100
+        with ESMTP id S230019AbiH2RXM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 13:23:12 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29747F090
+        for <linux-spi@vger.kernel.org>; Mon, 29 Aug 2022 10:23:10 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id SiTaoh2z4tk1aSiTaoL9lM; Mon, 29 Aug 2022 19:23:08 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 Aug 2022 19:23:08 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <444669a0-6328-0bc4-8073-9ec4baaf893e@wanadoo.fr>
+Date:   Mon, 29 Aug 2022 19:23:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
+Content-Language: fr
+To:     Matthias Brugger <matthias.bgg@gmail.com>, broonie@kernel.org,
+        gregkh@linuxfoundation.org, neil@brown.name, blogic@openwrt.org
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
+ <76ed0ef91479498b9a2d5ef539f80851cffdb4ea.1661599671.git.christophe.jaillet@wanadoo.fr>
+ <a8c87417-f37e-7c7a-a4a4-c5a01118e7a8@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <a8c87417-f37e-7c7a-a4a4-c5a01118e7a8@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-65ba7
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 29 Aug 2022 14:32:50 +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+Le 29/08/2022 à 13:18, Matthias Brugger a écrit :
 > 
-> ctrl->auto_runtime_pm was wrongly set to true when adding
-> transfer_one_message() callback.
-> As explained in commit 6e6ccb3d4cdc ("spi: stm32-qspi: Add pm_runtime support")
-> the expected behavior is to prevent runtime suspends between each transfer.
 > 
-> [...]
+> On 27/08/2022 13:42, Christophe JAILLET wrote:
+>> The 'clk' field in 'struct mt7621_spi' is useless, remove it.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> IMHO should be part of patch 2/4.
 
-Applied to
+Ok, I'll send a v2 of the serie to merge patch 2 & 4.
 
-   broonie/spi.git for-next
+CJ
 
-Thanks!
+> 
+> Regards,
+> Matthias
+> 
+>> ---
+>>   drivers/spi/spi-mt7621.c | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+>> index 114f98dcae5e..c4cc8e2f85e2 100644
+>> --- a/drivers/spi/spi-mt7621.c
+>> +++ b/drivers/spi/spi-mt7621.c
+>> @@ -55,7 +55,6 @@ struct mt7621_spi {
+>>       void __iomem        *base;
+>>       unsigned int        sys_freq;
+>>       unsigned int        speed;
+>> -    struct clk        *clk;
+>>       int            pending_write;
+>>   };
+>> @@ -361,9 +360,8 @@ static int mt7621_spi_probe(struct platform_device 
+>> *pdev)
+>>       rs = spi_controller_get_devdata(master);
+>>       rs->base = base;
+>> -    rs->clk = clk;
+>>       rs->master = master;
+>> -    rs->sys_freq = clk_get_rate(rs->clk);
+>> +    rs->sys_freq = clk_get_rate(clk);
+>>       rs->pending_write = 0;
+>>       dev_info(&pdev->dev, "sys_freq: %u\n", rs->sys_freq);
 
-[1/1] spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
-      commit: 47c32b2b7fcfa97f7224df222f439fc0ccf94ffe
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
