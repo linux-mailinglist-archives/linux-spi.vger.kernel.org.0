@@ -2,59 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61F05A4C31
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 14:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DA65A4B6A
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 14:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiH2Mqr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 08:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
+        id S230079AbiH2MSY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Aug 2022 08:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiH2Mq3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 08:46:29 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7CDB2482;
-        Mon, 29 Aug 2022 05:31:12 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id cu2so15425687ejb.0;
-        Mon, 29 Aug 2022 05:31:12 -0700 (PDT)
+        with ESMTP id S231171AbiH2MR5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 08:17:57 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E114D25;
+        Mon, 29 Aug 2022 05:01:19 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id w19so4827952ljj.7;
+        Mon, 29 Aug 2022 05:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=bC2z2S0UwWbCBQWC61peReEpzfQqE30gd7vkm5v9A+Y=;
-        b=TT8TUuHWP/Ind+i6ru55YUCFWkRSLo4/NeccX8TZMsM0K6Pw5Fb7RTvCqfWvHQ3xZw
-         gz4rfqX6fE/rofQHoqIXEppjNGDW15/LDakiyY75YKaLMtMAuH+FFkyVodMb1EN1isee
-         p6gr5ne2qN3XOeWRyyvuZt3YCIsy6HVQ6FSnzZ8leiR+STMIHg/i5kLT+xF3x1yuQPxp
-         REOYMnWKyE2yQo8RhZ/9hDaRozzKjexoSMKsoxNm2KyVy0pTP62IptYVvSfJvWg7+4kn
-         YVm3sjcaH/amZ5yGwDEvZ+1JBL3rzDX/lU9D5HSXvxPKhB6wx4rNfTf+U9qnTBtCBMN2
-         /nwg==
+        bh=6Y6slmLiEStk3SAV5P2VBUiGfRCGd21AEadH/l3GXUg=;
+        b=KLBfc+M/JLXURCR3AOZ3shzI4eXZOAoneqUu0gAJca1EcbP7U3snYwCyrFyj8zZ9Vs
+         Z0q6ZvRwX76HwYowuMtf0QzxuAuxRE9d2nkGXLVO/x6jwhELI9bJTihTTvk+GM4CQ7pt
+         q5NEJrQluBi6i7tpAgjVtYaSuafdrA3UJUZ47ZUnKivtkpxs3q7orVa7IJLfA6k0BCdG
+         lGVsuX7uH1A1LWoiSMuMVfgbaWBX59//A4ryyxMnlCqZUdPXyhnadwx1dWhV8+yH3FKL
+         14Tc3a2ob2TlXSwXAEVulvBTN6b8pbwrJYYcZNSUUL/1uNqs3xxDE9X3keYdMOMmeb65
+         vytQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=bC2z2S0UwWbCBQWC61peReEpzfQqE30gd7vkm5v9A+Y=;
-        b=HDpjpdRlFrZjurEfyPOT8BElrlMvX9a6DZhpBUNxEvuvicoUWgezMOY0Iphl5/b8kG
-         2N3w7JinGVTJVk5SdjN5JJdALb5WciOT86DpQPqTWL1ffHCaWIcM17bjUPVKPuqDbu3P
-         Ng6J8uWON9GUKTS10fLpxQwtWM/dPivQRezXmcHC6SvHJgIPAhw1Oz33B6R4/qjBBPMZ
-         7gXdRoTGiUOpy6e/snCmlbH0fwFwgOUfvgGWTjfG1hUn9aZJiporr2U6rieXNlwtC6QH
-         wgHxI8xiQwzu3MMK+wXvb0WO6dazW7vl5J9Crlbe1cPR+JF1Uae7ggl87ZdbdGso2w/t
-         X4uw==
-X-Gm-Message-State: ACgBeo1Q9q/RvKGfiuQ0aqoFPS5SOj6VwFQGmOH2AO1qcVvjIWFLPpVw
-        5II1hSsuCemsBwwLwLynf16AYCFc9z8=
-X-Google-Smtp-Source: AA6agR7PSgMWNHrHKcWwOB6Urkzu6yVZIv/Yqowk8TuQVkdXc8snDh6sKeWbPumgi3r5vtLwp35CKg==
-X-Received: by 2002:a5d:4302:0:b0:225:5303:39e5 with SMTP id h2-20020a5d4302000000b00225530339e5mr6193061wrq.380.1661771786388;
-        Mon, 29 Aug 2022 04:16:26 -0700 (PDT)
+        bh=6Y6slmLiEStk3SAV5P2VBUiGfRCGd21AEadH/l3GXUg=;
+        b=QSlvFhykn9TBy6ZaZwhzSHgxq9/IN0euPsS4wCxHaWyYInfXs7Jut7NYFrbywgN2Q4
+         CEec6YHWqrkTyvLrzoMmK1MI3WOuA8blT3dr74IsdpXUY26k5VHsXhEth7gAymUoWJjT
+         qfZ5nPgo5Vh8llaPx8yg4djOCsjk42hqi3mabZ3HSmRuBfyXbA1WgY6NKcweSnF3DV1T
+         ygL+PusifJ8AuieL6iPZqyndReqlk69ndgiG4kxMdojCU+AJ4b5aWIj0hG0Wyuzt5bcO
+         2Ym7QyyuAFDpqP9CqpMEkYTpE53w7y7UdYPTb3SV/cX7e9IAwV799UjnvLqQnsgmgZ9a
+         MICg==
+X-Gm-Message-State: ACgBeo0LqDmPIv/E5INaiLO9MfQY3gjMrxH3NbOaG4GWsYUn6bOXD2Gs
+        7KwPmr3hC+DElDwaff/YOuFeqZrYmt0=
+X-Google-Smtp-Source: AA6agR7wUOBv831RR9vPXNVN1xlDyiMTFsmanmANwV+5egTSjVEgQmKduYuE3lZVG+8ZkGMeNnGbZQ==
+X-Received: by 2002:adf:ed50:0:b0:225:4c37:5346 with SMTP id u16-20020adfed50000000b002254c375346mr6030765wro.207.1661771919256;
+        Mon, 29 Aug 2022 04:18:39 -0700 (PDT)
 Received: from [192.168.0.30] ([47.62.125.55])
-        by smtp.gmail.com with ESMTPSA id h15-20020a5d548f000000b0020e6ce4dabdsm6660033wrv.103.2022.08.29.04.16.24
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003a5c1e916c8sm30268815wmq.1.2022.08.29.04.18.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 04:16:25 -0700 (PDT)
-Message-ID: <8761d5a8-8044-3568-6ec9-30ea2ba30829@gmail.com>
-Date:   Mon, 29 Aug 2022 13:16:24 +0200
+        Mon, 29 Aug 2022 04:18:38 -0700 (PDT)
+Message-ID: <a8c87417-f37e-7c7a-a4a4-c5a01118e7a8@gmail.com>
+Date:   Mon, 29 Aug 2022 13:18:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH 3/4] spi: mt7621: Use devm_spi_register_controller()
+Subject: Re: [PATCH 4/4] spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
 Content-Language: en-US
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         broonie@kernel.org, gregkh@linuxfoundation.org, neil@brown.name,
@@ -63,9 +63,9 @@ Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org
 References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
- <b7698e198acc998d99e7e7c895a2910f14f89443.1661599671.git.christophe.jaillet@wanadoo.fr>
+ <76ed0ef91479498b9a2d5ef539f80851cffdb4ea.1661599671.git.christophe.jaillet@wanadoo.fr>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <b7698e198acc998d99e7e7c895a2910f14f89443.1661599671.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <76ed0ef91479498b9a2d5ef539f80851cffdb4ea.1661599671.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,56 +81,39 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 On 27/08/2022 13:42, Christophe JAILLET wrote:
-> Now that clk_disable_unprepare(clk) is handled with a managed resource,
-> we can use devm_spi_register_controller() and axe the .remove function.
-> 
-> The order between spi_unregister_controller() and clk_disable_unprepare()
-> is still the same.
-> (see commit 46b5c4fb87ce ("spi: mt7621: Don't leak SPI master in probe
-> error path") to see why it matters)
+> The 'clk' field in 'struct mt7621_spi' is useless, remove it.
 > 
 > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+IMHO should be part of patch 2/4.
+
+Regards,
+Matthias
 
 > ---
-> I guess that the dev_set_drvdata() in the probe can be removed as-well.
-> But it is also harmless to leave it as-is.
-> ---
->   drivers/spi/spi-mt7621.c | 16 +---------------
->   1 file changed, 1 insertion(+), 15 deletions(-)
+>   drivers/spi/spi-mt7621.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 > 
 > diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-> index 2580b28042be..114f98dcae5e 100644
+> index 114f98dcae5e..c4cc8e2f85e2 100644
 > --- a/drivers/spi/spi-mt7621.c
 > +++ b/drivers/spi/spi-mt7621.c
-> @@ -373,20 +373,7 @@ static int mt7621_spi_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> -	ret = spi_register_controller(master);
-> -
-> -	return ret;
-> -}
-> -
-> -static int mt7621_spi_remove(struct platform_device *pdev)
-> -{
-> -	struct spi_controller *master;
-> -
-> -	master = dev_get_drvdata(&pdev->dev);
-> -
-> -	spi_unregister_controller(master);
-> -
-> -	return 0;
-> +	return devm_spi_register_controller(&pdev->dev, master);
->   }
->   
->   MODULE_ALIAS("platform:" DRIVER_NAME);
-> @@ -397,7 +384,6 @@ static struct platform_driver mt7621_spi_driver = {
->   		.of_match_table = mt7621_spi_match,
->   	},
->   	.probe = mt7621_spi_probe,
-> -	.remove = mt7621_spi_remove,
+> @@ -55,7 +55,6 @@ struct mt7621_spi {
+>   	void __iomem		*base;
+>   	unsigned int		sys_freq;
+>   	unsigned int		speed;
+> -	struct clk		*clk;
+>   	int			pending_write;
 >   };
 >   
->   module_platform_driver(mt7621_spi_driver);
+> @@ -361,9 +360,8 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   
+>   	rs = spi_controller_get_devdata(master);
+>   	rs->base = base;
+> -	rs->clk = clk;
+>   	rs->master = master;
+> -	rs->sys_freq = clk_get_rate(rs->clk);
+> +	rs->sys_freq = clk_get_rate(clk);
+>   	rs->pending_write = 0;
+>   	dev_info(&pdev->dev, "sys_freq: %u\n", rs->sys_freq);
+>   
