@@ -2,50 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C775A458E
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 10:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052A45A4A4B
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 13:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiH2I4X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 04:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S232633AbiH2LgZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Aug 2022 07:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiH2I4W (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 04:56:22 -0400
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F83658DE6
-        for <linux-spi@vger.kernel.org>; Mon, 29 Aug 2022 01:56:20 -0700 (PDT)
+        with ESMTP id S232635AbiH2Lek (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 07:34:40 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8107E023;
+        Mon, 29 Aug 2022 04:20:46 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id s23so4083195wmj.4;
+        Mon, 29 Aug 2022 04:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=esCMo8PBLkNSMnXopCXEMF1viNhLwayJRCXNod7O0ME=;
-        b=i7rMYnPk7gBHqGuFK2LuMwQUYppgOX1WZ/GXT1enuz+sORVyCrHY17FNIkm8xTd7294R3bknQYqFP
-         oUWe8VgbLM2G0O2rDxcFEPkl36pe5eO7+TEpe/WPhfth/J09tflMCQfGATepC+NQKlQtQk4o/P/ba9
-         LnOleG4oA6uH7Cp/MEbFPetfN9fNMqOYFNpJpCDW8yYv+gtfPcNwej4X9/5JKngXqloTLXyRT5trvP
-         rHTlD68OPijuahPDiBMXTf9gF3gDaRlaJzdddUWf44zmDQLiCyz9ZJMGVd8+Ou13ZR5r8Ew5oY60Uy
-         ynwGFosda4Pm3VODSynG96gQeiJ2cuA==
-X-MSG-ID: 6f79fc21-2778-11ed-9051-0050569d2c73
-Date:   Mon, 29 Aug 2022 10:56:13 +0200
-From:   David Jander <david@protonic.nl>
-To:     Casper Andersson <casper.casan@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-Subject: Re: [PROBLEM] spi driver internal error during boot on sparx5
-Message-ID: <20220829105613.476622d2@erd992>
-In-Reply-To: <20220826094143.iysrl3tsqxmhp4dq@wse-c0155>
-References: <20220826094143.iysrl3tsqxmhp4dq@wse-c0155>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=kxFHxw5tUjZxCZ2GBgc9GYMmh2Gtq2Cyp8o30geZz5o=;
+        b=MA697DqQnMRrj6wgc66/A7msIAa4J9t7qWMk4UU6vZlGylRqlyl1K39To1Un5SrE1t
+         gbzkXv25oTELyejHii9cCIhCpCpg5WI9Ml7I0E39Df4Uy4gOYwbNw7Gaqgbe+g1b6d10
+         6VmVqpthoJpxDAnk7ELjKF0d4i25zbI8ZMrJvgb0N7uyUT9dMPpQnfbveBY0CUNQWX1j
+         zbtfTeQvp7QlfZ3awSHBT4YWYklV0KSO2NYAu/YwJ5ZAg80nPdxUqZi+cMk2mUmeRiKk
+         e4DS3+qEaz1BoJB/i5R3Ma7aTJl4cn/qw5UZ4M8VV3+vgOYaBwlhpZsjm6VPVQQ9r1wH
+         doZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kxFHxw5tUjZxCZ2GBgc9GYMmh2Gtq2Cyp8o30geZz5o=;
+        b=EBZMhJYVa4JS2+pAVNRfcW5kQInn0vHbBBigKSQafoMAcgMb5cvqCMcWUWPppRzgfE
+         rPDLL/PJrPjMTAd3Opa0hw+cqSPjZ/NqtGjjP9bgnL8L3H2CWWIiCApXiPYyC/WivG22
+         XwLViaiPmfxNPAIHNrjHkpUnQN+UKxElpFeHnaKthIazF3NkL7eBO5SWkqU5lYWcfOCZ
+         /DSGr7Y5Ye+Msr2AazxJtOWrpyNNAx2uzV8TSC1Y2+zFfXFkc4txOVSpwotrn/LIVyi3
+         RdhgwZayZl7cR2NmOHq8dhMQsXb8HE3lsvxembRka3H6H0rQ47kkHXyiNWwbAneirip1
+         GO9g==
+X-Gm-Message-State: ACgBeo2vxKL/Bn+tRKtBEhbHaeppVnKh0GIwctejxVS56lxz/Y8pOdlD
+        2eE9evxQVz+ntNjZHHV5eiMGk+k5MVs=
+X-Google-Smtp-Source: AA6agR4b6FUzmJBDIZ/3/4jEr5QLoLgJC9eT6kBwOwTgAV4f0sHGu25uZEhVI+lmiHK5yZIKCNDmWA==
+X-Received: by 2002:a05:600c:4f92:b0:3a5:f545:a6ce with SMTP id n18-20020a05600c4f9200b003a5f545a6cemr6268545wmq.149.1661771225707;
+        Mon, 29 Aug 2022 04:07:05 -0700 (PDT)
+Received: from [192.168.0.30] ([47.62.125.55])
+        by smtp.gmail.com with ESMTPSA id w17-20020a5d6091000000b002237fd66585sm6710878wrt.92.2022.08.29.04.07.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 04:07:04 -0700 (PDT)
+Message-ID: <778646cb-1b25-52d7-abd5-274757f40e93@gmail.com>
+Date:   Mon, 29 Aug 2022 13:07:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 1/4] spi: mt7621: Fix an error message in
+ mt7621_spi_probe()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        broonie@kernel.org, gregkh@linuxfoundation.org, neil@brown.name,
+        blogic@openwrt.org
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
+ <928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,199 +80,40 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Hi Casper,
 
-On Fri, 26 Aug 2022 11:41:43 +0200
-Casper Andersson <casper.casan@gmail.com> wrote:
-
-> Hi,
+On 27/08/2022 13:42, Christophe JAILLET wrote:
+> 'status' is known to be 0 at this point. The expected error code is
+> PTR_ERR(clk).
 > 
-> I'm having some issues on my SparX5 switch (PCB135) from Microchip.
-> Since this patch series by David Jander the spi driver errors during boot.
-> https://lore.kernel.org/all/20220621061234.3626638-1-david@protonic.nl/
+> Switch to dev_err_probe() in order to display the expected error code (in a
+> human readable way).
+> This also filters -EPROBE_DEFER cases, should it happen.
 > 
-> ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
-> On this commit it starts failing to mount the partitions during boot.
-> This causes the output marked ERROR 1 below.
+> Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   drivers/spi/spi-mt7621.c | 8 +++-----
+>   1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> 69fa95905d40 ("spi: Ensure the io_mutex is held until spi_finalize_current_message()")
-> On this commit it no longer boots properly. I am able to enter login
-> info, but then I'm unable to do anything. Though, when running latest
-> versions of e.g. net and net-next trees it boots sometimes. I have
-> observed some different errors which seems to occur seemingly at random,
-> show in ERROR 2-4 below. ERROR 2 and 3 seems to be the most common ones.
-> 
-> ERROR 1:
-> [    1.333629] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [    1.333636] Modules linked in:
-> [    1.333644] CPU: 0 PID: 292 Comm: spi0 Not tainted 5.19.0-rc1 #18
-> [    1.333653] Hardware name: microchip,sparx5 (DT)
-> [    1.333657] pstate: a0000005 (NzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    1.333665] pc : ktime_get_real_ts64+0x4c/0x110
-> [    1.333681] lr : spi_transfer_one_message+0x13c/0x690
-> [    1.333693] sp : ffff80000aadbce0
-> [    1.333696] x29: ffff80000aadbce0 x28: 0000000000000000 x27: 00007bff79822ce0
-> [    1.333709] x26: ffff000004d1f400 x25: ffff000004d1f000 x24: ffff800009d03798
-> [    1.333720] x23: ffff8000093f3008 x22: 0000006809d03830 x21: 00000000000001c2
-> [    1.333732] x20: ffff800009a20e80 x19: 0000000000000000 x18: ffffffffffffffff
-> [    1.333743] x17: 0000000000000002 x16: 000001d25a50f10c x15: 00074f2fcdde90a0
-> [    1.333754] x14: ffff800008dfb8a0 x13: 000000000000ac08 x12: 00000000f5257d14
-> [    1.333766] x11: 00000000000002f7 x10: 0000000000000a00 x9 : ffff8000088690bc
-> [    1.333777] x8 : ffff000005242760 x7 : 0000000000000004 x6 : fffffbffeffcbd28
-> [    1.333788] x5 : 0000000000000000 x4 : 0000000009a51c00 x3 : 0000000000000000
-> [    1.333798] x2 : 0000000009a51c00 x1 : 0000000000000000 x0 : 0000000000000001
-> [    1.333810] Call trace:
-> [    1.333812]  ktime_get_real_ts64+0x4c/0x110
-> [    1.333821]  spi_transfer_one_message+0x13c/0x690
-> [    1.333831]  __spi_pump_transfer_message+0x174/0x550
-> [    1.333841]  __spi_pump_messages+0xb8/0x330
-> [    1.333850]  spi_pump_messages+0x24/0x30
-> [    1.333859]  kthread_worker_fn+0xb8/0x290
-> [    1.333870]  kthread+0x118/0x120
-> [    1.333879]  ret_from_fork+0x10/0x20
-> [    1.333892] Code: 120002b3 370004d5 d50339bf f9403e80 (f90002c0)
-> [    1.333898] ---[ end trace 0000000000000000 ]---
-> 
-> Error 2:
-> [    5.527818] Internal error: Oops: 8600000f [#1] PREEMPT SMP
-> [    5.534020] Modules linked in:
-> [    5.536959] CPU: 0 PID: 292 Comm: spi0 Not tainted 6.0.0-rc1 #7
-> [    5.542627] Hardware name: microchip,sparx5 (DT)
-> [    5.547043] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    5.553704] pc : 0xffff0000042062d8
-> [    5.557046] lr : spi_finalize_current_message+0x1ac/0x2e0
-> [    5.562216] sp : ffff80000aa2bc50
-> [    5.565384] x29: ffff80000aa2bc50 x28: 0000000000000000 x27: 00007bff79858be0
-> [    5.572217] x26: ffff000007258c20 x25: ffff000007258800 x24: ffff80000cb8b0e0
-> [    5.579049] x23: ffff80000cb8b1b0 x22: ffff80000cb8b158 x21: ffff000004d1c800
-> [    5.585881] x20: ffff80000cb8b1b0 x19: ffff80000cb8b1b0 x18: 0000000000000000
-> [    5.592713] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> [    5.599544] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> [    5.606375] x11: 00000000000001f5 x10: 0000000000000a10 x9 : ffff80000808e890
-> [    5.613206] x8 : ffff000004966170 x7 : 0000000000000004 x6 : 00000001497a5800
-> [    5.620037] x5 : 00000000410fd030 x4 : 0000000000c0000e x3 : ffff800076773000
-> [    5.626869] x2 : 0000000000000000 x1 : ffff0000042062d8 x0 : ffff0000037addb8
-> [    5.633701] Call trace:
-> [    5.636040]  0xffff0000042062d8
-> [    5.639046]  spi_mux_complete_cb+0x48/0x60
-> [    5.642969]  spi_finalize_current_message+0x1ac/0x2e0
-> [    5.647803]  spi_transfer_one_message+0x298/0x680
-> [    5.652304]  __spi_pump_transfer_message+0x188/0x5a0
-> [    5.657055]  __spi_pump_messages+0xdc/0x330
-> [    5.661058]  spi_pump_messages+0x24/0x30
-> [    5.664812]  kthread_worker_fn+0xb8/0x290
-> [    5.668653]  kthread+0x118/0x120
-> [    5.671742]  ret_from_fork+0x10/0x20
-> [    5.675170] Code: 00000000 00000000 08f4b570 ffff8000 (00000000)
-> [    5.680999] ---[ end trace 0000000000000000 ]---
-> [    5.678207] note: spi0[291] exited with preempt_count 1
-> 
-> ERROR 3:
-> [    4.443467] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000108
-> [    4.443479] Mem abort info:
-> [    4.443481]   ESR = 0x0000000086000004
-> [    4.443485]   EC = 0x21: IABT (current EL), IL = 32 bits
-> [    4.443490]   SET = 0, FnV = 0
-> [    4.443494]   EA = 0, S1PTW = 0
-> [    4.443497]   FSC = 0x04: level 0 translation fault
-> [    4.443502] user pgtable: 4k pages, 48-bit VAs, pgdp=00000007070f2000
-> [    4.443508] [0000000000000108] pgd=0000000000000000, p4d=0000000000000000
-> [    4.443520] Internal error: Oops: 86000004 [#1] PREEMPT SMP
-> [    4.443527] Modules linked in:
-> [    4.443534] CPU: 0 PID: 292 Comm: spi0 Not tainted 5.19.0-rc1 #25
-> [    4.443542] Hardware name: microchip,sparx5 (DT)
-> [    4.443546] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    4.443555] pc : 0x108
-> [    4.443564] lr : spi_finalize_current_message+0x1ac/0x2e0
-> [    4.443578] sp : ffff80000ab03c50
-> [    4.443581] x29: ffff80000ab03c50 x28: 0000000000000000 x27: 00007bff79822ce0
-> [    4.443594] x26: ffff0000049c3420 x25: ffff0000049c3000 x24: ffff80000b7733b0
-> [    4.443607] x23: ffff80000b773480 x22: ffff80000b773428 x21: ffff0000036ac800
-> [    4.443619] x20: ffff80000b773480 x19: ffff80000b773480 x18: 0000000040bd0097
-> [    4.443632] x17: 0000000000000004 x16: 0000000000000121 x15: 007c2a66ba4f78c6
-> [    4.443644] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000002
-> [    4.443655] x11: 000000000000026b x10: 0000000000000a00 x9 : ffff80000808c94c
-> [    4.443667] x8 : ffff00000735c460 x7 : 0000000000000001 x6 : 0000000108d9d000
-> [    4.443679] x5 : 00000000410fd030 x4 : 0000000000c0000e x3 : ffff8000767a9000
-> [    4.443691] x2 : 0000000000000000 x1 : 0000000000000108 x0 : ffff80000b773750
-> [    4.443703] Call trace:
-> [    4.443706]  0x108
-> [    4.443712]  spi_mux_complete_cb+0x48/0x60
-> [    4.443720]  spi_finalize_current_message+0x1ac/0x2e0
-> [    4.443730]  spi_transfer_one_message+0x2b0/0x690
-> [    4.443739]  __spi_pump_transfer_message+0x188/0x5a0
-> [    4.443749]  __spi_pump_messages+0xdc/0x330
-> [    4.443759]  spi_pump_messages+0x24/0x30
-> [    4.443768]  kthread_worker_fn+0xb8/0x290
-> [    4.443779]  kthread+0x118/0x120
-> [    4.443788]  ret_from_fork+0x10/0x20
-> [    4.443802] Code: bad PC value
-> [    4.443807] ---[ end trace 0000000000000000 ]---
-> 
-> Error 4:
-> [    4.012013] Unable to handle kernel execute from non-executable memory at virtual address ffff80000b79b498
-> [    4.012027] Mem abort info:
-> [    4.012029]   ESR = 0x000000008600000f
-> [    4.012033]   EC = 0x21: IABT (current EL), IL = 32 bits
-> [    4.012038]   SET = 0, FnV = 0
-> [    4.012042]   EA = 0, S1PTW = 0
-> [    4.012045]   FSC = 0x0f: level 3 permission fault
-> [    4.012049] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000007012ec000
-> [    4.012055] [ffff80000b79b498] pgd=100000077ffff003, p4d=100000077ffff003, pud=100000077fffe003, pmd=10000007036c7003, pte=0068000704f29703
-> [    4.012077] Internal error: Oops: 8600000f [#1] PREEMPT SMP
-> [    4.012084] Modules linked in:
-> [    4.012091] CPU: 0 PID: 292 Comm: spi0 Not tainted 5.19.0-rc1 #25
-> [    4.012099] Hardware name: microchip,sparx5 (DT)
-> [    4.012103] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    4.012112] pc : 0xffff80000b79b498
-> [    4.012121] lr : 0xffff80000b79b498
-> [    4.012127] sp : ffff80000ab5bc90
-> [    4.012130] x29: ffff0000042ea800 x28: 0000000000000000 x27: 00007bff79822ce0
-> [    4.012143] x26: ffff0000042eac20 x25: ffff0000042ea800 x24: ffff80000b79b420
-> [    4.012155] x23: ffff80000b79b4f0 x22: ffff80000b79b498 x21: ffff000004c35800
-> [    4.012168] x20: ffff80000b79b4f0 x19: ffff80000b79b4f0 x18: 0000000000000000
-> [    4.012180] x17: 0000000000000001 x16: 0000000000000001 x15: 0117d93fc9cfcb72
-> [    4.012192] x14: 0114def7e22c5168 x13: ffff800008dfb8a0 x12: 00000000fa83b2da
-> [    4.012204] x11: 0000000000000077 x10: 000000000000008a x9 : ffff8000080b2724
-> [    4.012216] x8 : 0000000000000000 x7 : 0000000000000001 x6 : 0000000000000096
-> [    4.012227] x5 : 0000000000000000 x4 : ffff00007fbacd80 x3 : ffff000004dec880
-> [    4.012239] x2 : 0000000000000000 x1 : ffff000004dec880 x0 : 0000000000000000
-> [    4.012251] Call trace:
-> [    4.012254]  0xffff80000b79b498
-> [    4.012265] Code: 04dfc880 ffff0000 0b79b4b0 ffff8000 (08dd5984)
-> [    4.012271] ---[ end trace 0000000000000000 ]---
-
-Thanks for reporting.
-Looking at Errors 2 and 3, I suspect there might be a race in the SPI mux
-driver. After a quick inspection, I see this:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/spi/spi-mux.c?h=v6.0-rc3#n123
-
-spi_mux_transfer_one_message() returns before the message is transferred (in
-spi_async()), which is not expected. AFAIK, an ctlr->transfer_one_message()
-implementation should not return until the transfer is completed.
-
-To check if that is causing the problem, could you try the following change:
-
---- a/drivers/spi/spi-mux.c
-+++ b/drivers/spi/spi-mux.c
-@@ -120,7 +120,7 @@ static int spi_mux_transfer_one_message(struct spi_controller *ctlr,
-        m->spi = priv->spi;
- 
-        /* do the transfer */
--       return spi_async(priv->spi, m);
-+       return spi_sync(priv->spi, m);
- }
- 
- static int spi_mux_probe(struct spi_device *spi)
-
-Not sure if this is a correct fix, but I'd like to know if your situation
-changes this way, if you could try it.
-I don't have access to any hardware with a mux unfortunately, so I can't test
-it myself.
-
-Best regards,
-
--- 
-David Jander
-Protonic Holland.
+> diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+> index b4b9b7309b5e..351b0ef52bbc 100644
+> --- a/drivers/spi/spi-mt7621.c
+> +++ b/drivers/spi/spi-mt7621.c
+> @@ -340,11 +340,9 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	clk = devm_clk_get(&pdev->dev, NULL);
+> -	if (IS_ERR(clk)) {
+> -		dev_err(&pdev->dev, "unable to get SYS clock, err=%d\n",
+> -			status);
+> -		return PTR_ERR(clk);
+> -	}
+> +	if (IS_ERR(clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
+> +				     "unable to get SYS clock\n");
+>   
+>   	status = clk_prepare_enable(clk);
+>   	if (status)
