@@ -2,107 +2,198 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FB05A55D3
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 22:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDCC5A5634
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Aug 2022 23:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiH2Uy2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 16:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S229796AbiH2Vbp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Aug 2022 17:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiH2UyZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 16:54:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D09C2D1;
-        Mon, 29 Aug 2022 13:54:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4835A611C1;
-        Mon, 29 Aug 2022 20:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170FAC433D6;
-        Mon, 29 Aug 2022 20:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661806463;
-        bh=kQN0K1JdQf+wETbVKAjAg7qcB5LeYW6ExuLEV5ZgUug=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=mLeNaRBVUBII8aBY8A2zCbDN/yXsfnpQolkq1xfmEPimrFjXrjbTbZ8Dr9J8lGdq2
-         ACREAuOoMj0wQyXSELbvaDCgN8WoFEji16ma9bJBWTqTVmkBbXkZgWNBLIsxsclSgm
-         9GPrlwhngaM9vBSZub395LOeJ5Jyfh67awglIyaAWbT8HseyO1AhzIbBWokfGXm8TL
-         gYQO2LheCAApV91RxXY2jpPNsYkGZF1yYzeh+4OpNLv7DMgIBVEJ25dcOzSo5X4vr0
-         u1Mi2dGgCjAGAtghvA0AuBX3+W/EpHx9OKtwzJb1fIeVvwCw4UsgR8WC3aXviHthoC
-         82yzwtgD9pBcQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        neil@brown.name, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, blogic@openwrt.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH 0/4] spi: mt7621: Fix an erroneous message + clean-ups
-Message-Id: <166180645965.972874.4626638273769561589.b4-ty@kernel.org>
-Date:   Mon, 29 Aug 2022 21:54:19 +0100
+        with ESMTP id S229725AbiH2Vb1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 17:31:27 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE7399B5E;
+        Mon, 29 Aug 2022 14:30:39 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q81so7713221iod.9;
+        Mon, 29 Aug 2022 14:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ZzLF3Zpb2/6xSumnVVpMWDck1aMiBeVtZex1RW6P1FI=;
+        b=mmkgecyQE1OTUA7TBoutytmXccFptEA8GgRHydXKbCjhJ9/4LEJHA2yYgXFLZ3vDvr
+         t6t7xGbEV5IUrxMsmBwWfqagADcjaWjmxpMH8fa1CujXCi/SJ/wv//bUGFC9nlLmoKAk
+         iTESS9NS/78WtZmxaGLpkgYtn78DYo9u4FLRfF3nQJpu9Y0WToxNRNEOplLNV736bnKU
+         QUOutt3PJ89MkCoK85UrCpSQln1c7UsZwVrD2pextscsD+s9rfClPpiu5qoXRw6vk5E/
+         OD5NvxMbTqgM4GbKaJd/CSNgoL1qOHVoO4Wt6yueZtCCQDGWicvYrtw6jDrkvx0jvbea
+         K0lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ZzLF3Zpb2/6xSumnVVpMWDck1aMiBeVtZex1RW6P1FI=;
+        b=lDtVammyDC8zOUVBYG/qMxSy8sknuYrxQhXRXioFLymo6khCZWeiWUbWBiX2mlfPuS
+         F4ICkJcsG/7csa8dQxivoBRHVSQnDYn0P/Mm0Xq/RNuCnK/IOamqd7lGhxDM2GBEIgHc
+         rKBovFOqP38DoYcCleP3zHtpi6hNOkIpyRscQ6cjWaN0ufaQ19F/bbridEFO3G1EZbpN
+         WyuQtwBvt7G/jCktQcchz85R9LYx6FJf9o4HfYDrKh4YkBXh+rRoWFqnhUSkQsBAei1j
+         wEyElqMeLfmYuhHRyJ02I96Wn5AOdvKSEL8dJ1BIBBHVpaW8UfyCf/CsABBHoxJh6KEk
+         ulIg==
+X-Gm-Message-State: ACgBeo0tq2Nc+jun0wDu9EhzUYeM1+nR8xgYgZnuF8OlVce8IAo9akbp
+        9MnrXlHyE3+aV5392U6rlXo=
+X-Google-Smtp-Source: AA6agR4A46YqPYgmjacBLOtKx0hpt07rHl9E8iNpwSKM7/zuZLvPzv1bo8ejDH+Cl7gKH6/N09cOXQ==
+X-Received: by 2002:a05:6638:1485:b0:348:b986:6e62 with SMTP id j5-20020a056638148500b00348b9866e62mr11001575jak.236.1661808591586;
+        Mon, 29 Aug 2022 14:29:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:1485:e42c:9c81:f760? ([2600:1700:2442:6db0:1485:e42c:9c81:f760])
+        by smtp.gmail.com with ESMTPSA id i189-20020a6bb8c6000000b0068acff8cfe7sm5582926iof.44.2022.08.29.14.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 14:29:51 -0700 (PDT)
+Message-ID: <8c436553-e35c-4e46-1407-24184fd113ba@gmail.com>
+Date:   Mon, 29 Aug 2022 16:29:50 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-65ba7
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
+ interface
+Content-Language: en-US
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220826144341.532265-1-weiyongjun1@huawei.com>
+ <20220826144341.532265-4-weiyongjun1@huawei.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220826144341.532265-4-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 27 Aug 2022 13:41:39 +0200, Christophe JAILLET wrote:
-> Patch 1 fixes an issue about an error code that is erroneously logged.
+comment inline below, plus adding to cc: and to: list
+
+On 8/26/22 09:43, Wei Yongjun wrote:
+> Add a runtime device tree overlay interface for device need dts file.
+> With it its possible to use device tree overlays without having to use
+> a per-platform overlay manager.
+
+Why is an overlay needed?  The documentation in patch 4 shows providing
+a dtb as an argument to the qemu-system-x86_64 command, which should be
+sufficient to supply the appropriate dtb.
+
+-Frank
+
 > 
-> Patch 2-4 are just clean-ups spotted while fixing it.
+> Add a new device by command:
+> $ cat test.dtbo > /sys/class/spi_master/spi0/overlay_fdto
 > 
-> Additional comments are added below --- in patches 2 and 3.
+> Remove the device by command:
+> $ echo remove > /sys/class/spi_master/spi0/overlay_fdto
 > 
-> Christophe JAILLET (4):
->   spi: mt7621: Fix an error message in mt7621_spi_probe()
->   spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error
->     handling
->   spi: mt7621: Use devm_spi_register_controller()
->   spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+>  drivers/spi/Kconfig      |  2 ++
+>  drivers/spi/spi-mockup.c | 48 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
 > 
-> [...]
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index e0f0fa2746ad..4b7c84ddb367 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -1161,6 +1161,8 @@ config SPI_TLE62X0
+>  config SPI_MOCKUP
+>  	tristate "SPI controller Testing Driver"
+>  	depends on OF
+> +	select OF_EARLY_FLATTREE
+> +	select OF_RESOLVE
+>  	select BPF_EVENTS
+>  	help
+>  	  This enables SPI controller testing driver, which provides a way to
+> diff --git a/drivers/spi/spi-mockup.c b/drivers/spi/spi-mockup.c
+> index 7a93b194ee53..404ad821bf6a 100644
+> --- a/drivers/spi/spi-mockup.c
+> +++ b/drivers/spi/spi-mockup.c
+> @@ -21,6 +21,9 @@
+>  struct mockup_spi {
+>  	struct mutex lock;
+>  	struct spi_device *devs[MOCKUP_CHIPSELECT_MAX];
+> +
+> +	void *fdto;
+> +	int ovcs_id;
+>  };
+>  
+>  static struct spi_master *to_spi_master(struct device *dev)
+> @@ -145,9 +148,53 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_WO(delete_device);
+>  
+> +static ssize_t
+> +overlay_fdto_store(struct device *dev, struct device_attribute *attr,
+> +		   const char *buf, size_t count)
+> +{
+> +	struct spi_master *master = to_spi_master(dev);
+> +	struct mockup_spi *mock = spi_master_get_devdata(master);
+> +	int ret;
+> +
+> +	mutex_lock(&mock->lock);
+> +
+> +	if (strncmp(buf, "remove\n", count) == 0) {
+> +		if (mock->ovcs_id < 0) {
+> +			ret = -ENOENT;
+> +			goto out_unlock;
+> +		}
+> +		of_overlay_remove(&mock->ovcs_id);
+> +		kfree(mock->fdto);
+> +		mock->ovcs_id = -1;
+> +		mock->fdto = NULL;
+> +	} else {
+> +		if (mock->ovcs_id >= 0) {
+> +			ret = -EINVAL;
+> +			goto out_unlock;
+> +		}
+> +		mock->fdto = kmemdup(buf, count, GFP_KERNEL);
+> +		if (!mock->fdto) {
+> +			ret = -ENOMEM;
+> +			goto out_unlock;
+> +		}
+> +		ret = of_overlay_fdt_apply(mock->fdto, count, &mock->ovcs_id);
+> +		if (ret < 0)
+> +			goto out_unlock;
+> +	}
+> +
+> +	mutex_unlock(&mock->lock);
+> +	return count;
+> +
+> +out_unlock:
+> +	mutex_unlock(&mock->lock);
+> +	return ret;
+> +}
+> +static DEVICE_ATTR_WO(overlay_fdto);
+> +
+>  static struct attribute *spi_mockup_attrs[] = {
+>  	&dev_attr_new_device.attr,
+>  	&dev_attr_delete_device.attr,
+> +	&dev_attr_overlay_fdto.attr,
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(spi_mockup);
+> @@ -227,6 +274,7 @@ static int spi_mockup_probe(struct platform_device *pdev)
+>  
+>  	mock = spi_master_get_devdata(master);
+>  	mutex_init(&mock->lock);
+> +	mock->ovcs_id = -1;
+>  
+>  	ret = spi_register_master(master);
+>  	if (ret) {
 
-Applied to
-
-   broonie/spi.git for-next
-
-Thanks!
-
-[1/4] spi: mt7621: Fix an error message in mt7621_spi_probe()
-      commit: 2b2bf6b7faa9010fae10dc7de76627a3fdb525b3
-[2/4] spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error handling
-      commit: 3d6af96814d753f34cf897466e7ddf041d0cdf3b
-[3/4] spi: mt7621: Use devm_spi_register_controller()
-      commit: 30b31b29a866d32fc381b406d4c4f5db2636e5ec
-[4/4] spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
-      commit: 4a5cc683543f5f6ed586944095c65cb4da4b9273
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
