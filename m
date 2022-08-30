@@ -2,76 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4655B5A5FB5
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 11:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DF65A607A
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 12:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiH3JqU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 05:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S230162AbiH3KPk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 06:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiH3JqS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 05:46:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A26A2DA1;
-        Tue, 30 Aug 2022 02:46:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S230019AbiH3KNX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 06:13:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE92DED;
+        Tue, 30 Aug 2022 03:09:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C5ACD6601BF7;
-        Tue, 30 Aug 2022 10:46:14 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661852775;
-        bh=yjC89saAgBju8ExXt9nwpmDQQR18E9xc86/sSTGhJEQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AddUnld3tR1MuhWklJh9cxZbTR0S+J3RifWNZeGGGLhVFmcYSHF1zPBERasbYg8uN
-         nxo1Mu92N1gD7OLNFVmCQ0aQV/o/+8bDqhHwHt4boW1gIEhHwQsd/AJmoW2HZZEP1T
-         LI4jeTLXV2F7hvbYf6eGChkbWyi0fTFpivZt42XKQR/K59b7xtQlAofjYQijtWtkvv
-         Jq1HEqkVE4IfUeUTE4TISKWbnoGYlGBJKrmhYkxuds42KygoG3eLOQkOcDGs61UJ41
-         0txWtrYR1/UujPChcQVQSk+xxth56j0rqCPnGGkQqBeqW4A1Mo7BnmVrMyN9umw8hs
-         fDhQkmniXhTTQ==
-Message-ID: <a0396687-f27e-a601-1bb6-daa6fa210ea5@collabora.com>
-Date:   Tue, 30 Aug 2022 11:46:11 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87577B811B3;
+        Tue, 30 Aug 2022 10:09:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD727C433D6;
+        Tue, 30 Aug 2022 10:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661854152;
+        bh=0GgQSfiovxbB6DlRH1/NdKZX2aHBw5Zag6bneKmYBJY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=B6J2RmE3b6y2cRIRMNi1f8wV0jciD7CxkwjjVWXNProlo5pvQEGBpq1/2Chl1N7yX
+         jni8dMRa5VpsyBwz/wvxM40nOveqTbavwKNdzpslr8FKI0nnY/j0PeWHPv1QZYHfK4
+         f6p3aKXQuThtqgJT1/tyhNigUiFbDEKkJ3CHHMmsgGf3HmAk8L5pFKXQyVdRbKjwyj
+         OfikAdOlOPAmw0/1iWjVH8S3F+TQXRXAsTxmmaPlD3AaZZ9HdTkTHMK7rJTY1Dmpx9
+         /vmDMV3x8BxRqsjPWFr+3RNHL5mlFJdnjkxDEWvalxa7QRDaAJHaTmc+yKGcqTnLkS
+         59zkbokSBOzCQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
+References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH 0/3] spi: add generic R-Car Gen4 and specific r8a779f0 support
+Message-Id: <166185415042.1099942.6942703458061199839.b4-ty@kernel.org>
+Date:   Tue, 30 Aug 2022 11:09:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] spi: mt7621: Fix an error message in
- mt7621_spi_probe()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        broonie@kernel.org, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, neil@brown.name, blogic@openwrt.org
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <cover.1661599671.git.christophe.jaillet@wanadoo.fr>
- <928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 27/08/22 13:42, Christophe JAILLET ha scritto:
-> 'status' is known to be 0 at this point. The expected error code is
-> PTR_ERR(clk).
+On Wed, 24 Aug 2022 11:43:23 +0200, Wolfram Sang wrote:
+> Here are the patches to enable MSIOF on R-Car S4-8. They also introduce
+> generic Gen4 support and move V3U to Gen4 (which it really is).
 > 
-> Switch to dev_err_probe() in order to display the expected error code (in a
-> human readable way).
-> This also filters -EPROBE_DEFER cases, should it happen.
+> Wolfram Sang (3):
+>   spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+>   spi: sh-msiof: add generic Gen4 binding
+>   spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
 > 
-> Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> [...]
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Applied to
+
+   broonie/spi.git for-next
+
+Thanks!
+
+[1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+      commit: e1e62f05d5d9d7726349e00562299d829e478ce9
+[2/3] spi: sh-msiof: add generic Gen4 binding
+      commit: ea9d001550abaf2f4c75cf4fcd936ea19f932b84
+[3/3] spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+      commit: b076fdd02133e6a31db167f8acc368edc2530cc0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
