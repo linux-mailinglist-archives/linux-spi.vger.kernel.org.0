@@ -2,224 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BD15A59B6
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 05:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B84D5A5CCD
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 09:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiH3DGT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Aug 2022 23:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S229765AbiH3HVM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 03:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiH3DGN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Aug 2022 23:06:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5956C719AF;
-        Mon, 29 Aug 2022 20:06:11 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGsXv5VCkzkWmW;
-        Tue, 30 Aug 2022 11:02:07 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 11:05:45 +0800
-Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
- interface
-To:     Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-4-weiyongjun1@huawei.com>
- <8c436553-e35c-4e46-1407-24184fd113ba@gmail.com>
-From:   "weiyongjun (A)" <weiyongjun1@huawei.com>
-Message-ID: <4eab3d1a-199f-fdfe-8d8f-3369eeefde47@huawei.com>
-Date:   Tue, 30 Aug 2022 11:05:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S230133AbiH3HVJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 03:21:09 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D856E2D5;
+        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id q8so8079611qvr.9;
+        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=QOMOADjxX3AxTQL00SsYd+7QYCr6eFHbzE6U4FiL748=;
+        b=JX17LTtjcGH9EgCC/Sn8YM4CeGOUrSCV5kVO7zWqccyJAY6lqXFRbL1gev2nE7Uu30
+         jBurRZVMktqo2MA7n9Noqurl4MsGLM5Y75yPpgB3hJ7Na26MDtKl+0yT1kJp2MNBvfyG
+         tLYOkLmvKezm5RHXJAcpepWXH2cESaDTxqpOjxn1DOP/Kj7ZDbBRmepO3ltQREQlam3E
+         Vz7NeZDMZDKBvVkJa/0aKdiZ7HvwClOCMbd6XM/XAMqZGD6dNH5/cFX+1aWw5Ec8fLvx
+         laronjlFTJ1hoar2y6Ju98TnRL/ap/lvS8II48UGjkw5epPH/N6Gwi7NIKps2D00MaFl
+         h65Q==
+X-Gm-Message-State: ACgBeo2IAMk2i2zMJTWsmnh/AgfMOOMarzwVETgUDpl4luUkCuvFq65R
+        huKg5CdmiTQjhRGHdrVrDIUXs93L76jrjQ==
+X-Google-Smtp-Source: AA6agR6OqWL/6cQbJlnEWRAcb6Aic2oWVvHdEpw3gHSLtxqHZYYxa3w6efU6y3Cb3P+9rasnXbsvxQ==
+X-Received: by 2002:a05:6214:4015:b0:496:be28:62f5 with SMTP id kd21-20020a056214401500b00496be2862f5mr13740056qvb.14.1661844067098;
+        Tue, 30 Aug 2022 00:21:07 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05622a17cc00b003422c7ccbc5sm6488715qtk.59.2022.08.30.00.21.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-33da3a391d8so252091137b3.2;
+        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
+X-Received: by 2002:a0d:d691:0:b0:340:f6e7:5654 with SMTP id
+ y139-20020a0dd691000000b00340f6e75654mr7738635ywd.502.1661844066437; Tue, 30
+ Aug 2022 00:21:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8c436553-e35c-4e46-1407-24184fd113ba@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Aug 2022 09:20:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
+Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix
+ 'unevaluatedProperties' warnings
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Aug 30, 2022 at 12:03 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
+>
+> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
+>         From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+>
+> The main problem is that SoC DTSI's include power-domains and resets
+> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
+> false'. So just add optional power-domains and resets properties.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Set maxItems to 1
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 2022/8/30 5:29, Frank Rowand wrote:
-> comment inline below, plus adding to cc: and to: list
-> 
-> On 8/26/22 09:43, Wei Yongjun wrote:
->> Add a runtime device tree overlay interface for device need dts file.
->> With it its possible to use device tree overlays without having to use
->> a per-platform overlay manager.
-> 
-> Why is an overlay needed?  The documentation in patch 4 shows providing
-> a dtb as an argument to the qemu-system-x86_64 command, which should be
-> sufficient to supply the appropriate dtb.
+Gr{oetje,eeting}s,
 
-Fist, we are aimed to build a device driver regression testsuit. Without
-overlay, lots of the dtb fragments must be combined to a very big one, it
-may different to maintainence. overlay makes easily to attach/detech as
-the device's requirement.
+                        Geert
 
-Seconds, overlay dts may be used to found or verification issues related
-to of_node_put or others, such as patches like:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?qt=grep&q=node_put
-
-many of them may found by static check tool, which may leak of tesing.
-
-The documentation I post does not use overlay dts, but when overlay
-dts[1] is used, we can found the of node leak:
-
-$ python3 -m kddv.cmds.mock -b spi -d mchp23k256
-create spi device mchp23k256 success!
-$ ls /sys/bus/spi/drivers/mchp23k256/spi0.0/mtd/
-mtd0  mtd0ro
-$ python3 -m kddv.cmds.mock -b spi -d mchp23k256 -r
-[  233.508565] Deleting MTD partitions on "spi0.0":
-[  233.516784] OF: ERROR: memory leak, expected refcount 1 instead of 2,
-  of_node_get()/of_node_put() unbalanced - destroy cset entry: attach
-  overlay node /spi/spi-sram@0
-remove spi device mchp23k256 success!
-
-Not sure it is worth to fix issues like this, but at least, we can
-tesing them now.
-
--[1]---------------------------------------------------------
-/dts-v1/;
-/plugin/;
-
-&{/spi} {
-	spi-sram@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "microchip,mchp23k256";
-		reg = <0>;
-		spi-max-frequency = <20000000>;
-	};
-};
-
--------------------------------------------------------
-
-Regards,
-Wei Yongjun
-
-> 
-> -Frank
-> 
->>
->> Add a new device by command:
->> $ cat test.dtbo > /sys/class/spi_master/spi0/overlay_fdto
->>
->> Remove the device by command:
->> $ echo remove > /sys/class/spi_master/spi0/overlay_fdto
->>
->> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->> ---
->>   drivers/spi/Kconfig      |  2 ++
->>   drivers/spi/spi-mockup.c | 48 ++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 50 insertions(+)
->>
->> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
->> index e0f0fa2746ad..4b7c84ddb367 100644
->> --- a/drivers/spi/Kconfig
->> +++ b/drivers/spi/Kconfig
->> @@ -1161,6 +1161,8 @@ config SPI_TLE62X0
->>   config SPI_MOCKUP
->>   	tristate "SPI controller Testing Driver"
->>   	depends on OF
->> +	select OF_EARLY_FLATTREE
->> +	select OF_RESOLVE
->>   	select BPF_EVENTS
->>   	help
->>   	  This enables SPI controller testing driver, which provides a way to
->> diff --git a/drivers/spi/spi-mockup.c b/drivers/spi/spi-mockup.c
->> index 7a93b194ee53..404ad821bf6a 100644
->> --- a/drivers/spi/spi-mockup.c
->> +++ b/drivers/spi/spi-mockup.c
->> @@ -21,6 +21,9 @@
->>   struct mockup_spi {
->>   	struct mutex lock;
->>   	struct spi_device *devs[MOCKUP_CHIPSELECT_MAX];
->> +
->> +	void *fdto;
->> +	int ovcs_id;
->>   };
->>   
->>   static struct spi_master *to_spi_master(struct device *dev)
->> @@ -145,9 +148,53 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
->>   }
->>   static DEVICE_ATTR_WO(delete_device);
->>   
->> +static ssize_t
->> +overlay_fdto_store(struct device *dev, struct device_attribute *attr,
->> +		   const char *buf, size_t count)
->> +{
->> +	struct spi_master *master = to_spi_master(dev);
->> +	struct mockup_spi *mock = spi_master_get_devdata(master);
->> +	int ret;
->> +
->> +	mutex_lock(&mock->lock);
->> +
->> +	if (strncmp(buf, "remove\n", count) == 0) {
->> +		if (mock->ovcs_id < 0) {
->> +			ret = -ENOENT;
->> +			goto out_unlock;
->> +		}
->> +		of_overlay_remove(&mock->ovcs_id);
->> +		kfree(mock->fdto);
->> +		mock->ovcs_id = -1;
->> +		mock->fdto = NULL;
->> +	} else {
->> +		if (mock->ovcs_id >= 0) {
->> +			ret = -EINVAL;
->> +			goto out_unlock;
->> +		}
->> +		mock->fdto = kmemdup(buf, count, GFP_KERNEL);
->> +		if (!mock->fdto) {
->> +			ret = -ENOMEM;
->> +			goto out_unlock;
->> +		}
->> +		ret = of_overlay_fdt_apply(mock->fdto, count, &mock->ovcs_id);
->> +		if (ret < 0)
->> +			goto out_unlock;
->> +	}
->> +
->> +	mutex_unlock(&mock->lock);
->> +	return count;
->> +
->> +out_unlock:
->> +	mutex_unlock(&mock->lock);
->> +	return ret;
->> +}
->> +static DEVICE_ATTR_WO(overlay_fdto);
->> +
->>   static struct attribute *spi_mockup_attrs[] = {
->>   	&dev_attr_new_device.attr,
->>   	&dev_attr_delete_device.attr,
->> +	&dev_attr_overlay_fdto.attr,
->>   	NULL
->>   };
->>   ATTRIBUTE_GROUPS(spi_mockup);
->> @@ -227,6 +274,7 @@ static int spi_mockup_probe(struct platform_device *pdev)
->>   
->>   	mock = spi_master_get_devdata(master);
->>   	mutex_init(&mock->lock);
->> +	mock->ovcs_id = -1;
->>   
->>   	ret = spi_register_master(master);
->>   	if (ret) {
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
