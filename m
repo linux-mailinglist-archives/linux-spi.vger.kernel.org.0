@@ -2,56 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C17A5A6BB4
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 20:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A2E5A6BDC
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 20:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiH3SEL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 14:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S230000AbiH3SOJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 14:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiH3SEI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 14:04:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3831839B;
-        Tue, 30 Aug 2022 11:04:07 -0700 (PDT)
+        with ESMTP id S229753AbiH3SOI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 14:14:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E97298D12;
+        Tue, 30 Aug 2022 11:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B3F61535;
-        Tue, 30 Aug 2022 18:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63639C433C1;
-        Tue, 30 Aug 2022 18:04:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6559B81D0C;
+        Tue, 30 Aug 2022 18:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DCEC433C1;
+        Tue, 30 Aug 2022 18:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661882646;
-        bh=SXz9foGOCKalc8a9oyokHuKsEKQfaVSfN6xJ/rlclUs=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=et7qx/6viOP9ZfFCNmKB1pya+dCeR8RdTtPfZf+hM0yDEUArV+P53n5/rhMFffFqm
-         WlupHOg/XxI503UryqCIBbUxtN77RP8ZvEPxqC7ZShsj10XZwSWznh0A+vfJBLHYuG
-         sWL1YvhAg3ZzPzJzrL1CELN4ZhOMcKIXXv1qYYbuOpL8Hq3LzIm3Kx8S/0IbvD1BeN
-         xRQi0w9u+OMyRzPbqEekqDcCo48AApb4XJnpyIVFeGnpGxG3IVg1bPa6xWcVvZcJrh
-         YNkWhOD8TeO18hiI/SH1yL1Ui9QlAp84v/CZyDhsIKjfU/vSbB8CiFHEaLKvRoGRIi
-         U5aPsTZlIkzPQ==
-Date:   Tue, 30 Aug 2022 19:04:05 +0100
+        s=k20201202; t=1661883245;
+        bh=VKzLFiP5mB24ZQikYwTCSQzw6IlGtjNBLJRJ3/f8DN4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VoQzTTQT6IaJUZCXQsb10J+JwgNfoHg0nCI4uVecJ+sh6iaQo7idU22k+xf0mHwYS
+         TFZKdr5oKf0jcULLavtJGByELsx0GZkjE9faQNyttS2enX7z82jrvOXNuAWuXgrIsr
+         FSTZ79v5BU1XcqhAu/4Z3n7fxoY4Z11RrpeND7WGSnLvGmmFs+8NFnIZ31u3mcuUsV
+         gV54BfP4OHnFpyW3BHvjKHpN7AkVx3obiekUh0Li925PI7GgIXwGbyEfDtB8Dmkgba
+         zVOe12BdnPNYGrusd8noWIFxQPqsx5pi++zxAj5Scux/M6AyzTH2FXwNJKMdi/D/SR
+         j9XYn+qb8aw1A==
+Date:   Tue, 30 Aug 2022 19:14:03 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0
- support
-Message-ID: <Yw5RFX3rFeM/xwLb@sirena.org.uk>
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
- <20220824094327.33685-2-wsa+renesas@sang-engineering.com>
- <Yw3WDjj7MzQjG8z6@sirena.org.uk>
- <Yw3Wm9D+9zGWlB67@shikoro>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH -next 2/4] spi: mockup: Add writeable tracepoint for spi
+ transfer
+Message-ID: <Yw5Ta8sO3fMsPLDY@sirena.org.uk>
+References: <20220826144341.532265-1-weiyongjun1@huawei.com>
+ <20220826144341.532265-3-weiyongjun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N23qGugilPz27T8e"
+        protocol="application/pgp-signature"; boundary="NrO7SSyXeKA+hN76"
 Content-Disposition: inline
-In-Reply-To: <Yw3Wm9D+9zGWlB67@shikoro>
+In-Reply-To: <20220826144341.532265-3-weiyongjun1@huawei.com>
 X-Cookie: Necessity is a mother.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,38 +59,42 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---N23qGugilPz27T8e
+--NrO7SSyXeKA+hN76
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 30, 2022 at 11:21:31AM +0200, Wolfram Sang wrote:
+On Fri, Aug 26, 2022 at 02:43:39PM +0000, Wei Yongjun wrote:
 
-> > Not sure why you didn't CC me on the cover letter for this?
+> +#define SPI_BUFSIZ_MAX		0x1000
+> +
+> +struct spi_msg_ctx {
+> +	int ret;
+> +	__u8 data[SPI_BUFSIZ_MAX];
+> +};
 
-> After I got cover-letters rejected because of too much CC (but the
-> paaches itself went through), I wrote a script to only include lists on
-> cover-letters.
+This has a hard limit on the size of messages of only 4k on the
+size of messages, that seems a bit on the low side especially
+considering that the example is for a flash device.  There's also
+things like firmware downloads which can easily exceed 4k.  The
+driver should at the very least report this limit via the SPI
+API, and probably also complain loudly if the limit is exceeded
+since it's unlikely that most drivers will actually be checking
+for such a low limit given how rare they are.=20
 
-That's very unhelpful, nobody is seeing your cover letters if you
-do that.  You should at least be copying the people you expect to
-apply your patch, and it seems only sensible to copy people who
-are getting every single patch in the series.  You can always
-copy patches@lists.linux.dev if all mailing lists are rejecting
-your CCs.
-
---N23qGugilPz27T8e
+--NrO7SSyXeKA+hN76
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOURQACgkQJNaLcl1U
-h9BlgAf+LXnQoJNgkH8wZwKzLVjtilu+sGddJk+Rmpd/CFS5kK//tWlPPmHliCBD
-dJWKWcmNcnJGgUMrc1vbI46fX/OwlA4Kg0Pn2QqpCNOTHlp4BABhHYNY74wUxSTc
-jytN+9MvhpmYOuVqB1hKnxyMcQQ9h1VM0SFTx6AMHVutEIA0Xy1HBgrN2nk2QZQ4
-pIDmiliMvJRGfJK2k0yjzBkHWH2SOhW2fkLBb0QTEBH1D8FPYQbP1RX+kgWZk0Bb
-VDxlArIG3tltXxq5wDZihf8Mlg+p9853QtRlbgC57pUSkLvCaWWk9s+nWCS2tZp2
-D6ymx/TZ4DuhO7fL4B3EKEGhdrZdGA==
-=x+hX
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOU2oACgkQJNaLcl1U
+h9Dh1Af9GdUHS58zJBE+b0BdW2/c+ovfh36z1nrwxcJmGcLx+PFKfGGpTnk+7BX0
+oBKAI50N9F0ah3pROKYTAwz7jKW92dHXakjR14zsPG2TnOX3mb3ZBcellJ+LveNQ
+HTGjT+XX7Ggc1ZvjzTyTQ/FlSGRCOviRpem61IzIxvbdB2XDPFETQS0sbfNkvWxC
+YRKyVg/yFMLQAQ49pEeoJnUOU4Cxe0PxagFAvjbeav8tiOrGxsBchmzb8opSVTGD
+p8wF1d0tZnMyzrCGyklWblniXO7oiUsf/3Dc5+QwHCTqEu+KOgTTLM3AbLWYcEXt
+zVUPTPuxfCQv4cPJk//ZJolyfz9Y7w==
+=RqoT
 -----END PGP SIGNATURE-----
 
---N23qGugilPz27T8e--
+--NrO7SSyXeKA+hN76--
