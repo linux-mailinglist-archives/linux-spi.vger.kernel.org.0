@@ -2,46 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DF65A607A
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 12:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35AC5A60A2
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 12:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiH3KPk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 06:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S230302AbiH3KW7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 06:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiH3KNX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 06:13:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE92DED;
-        Tue, 30 Aug 2022 03:09:14 -0700 (PDT)
+        with ESMTP id S230310AbiH3KWh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 06:22:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CB540BE7;
+        Tue, 30 Aug 2022 03:21:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87577B811B3;
-        Tue, 30 Aug 2022 10:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD727C433D6;
-        Tue, 30 Aug 2022 10:09:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B275A612B9;
+        Tue, 30 Aug 2022 10:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F313BC433C1;
+        Tue, 30 Aug 2022 10:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661854152;
-        bh=0GgQSfiovxbB6DlRH1/NdKZX2aHBw5Zag6bneKmYBJY=;
+        s=k20201202; t=1661854893;
+        bh=hN4IvqLBUwQ7LA2EASNAfcsy15aflmpkS+M3B+PyQbA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=B6J2RmE3b6y2cRIRMNi1f8wV0jciD7CxkwjjVWXNProlo5pvQEGBpq1/2Chl1N7yX
-         jni8dMRa5VpsyBwz/wvxM40nOveqTbavwKNdzpslr8FKI0nnY/j0PeWHPv1QZYHfK4
-         f6p3aKXQuThtqgJT1/tyhNigUiFbDEKkJ3CHHMmsgGf3HmAk8L5pFKXQyVdRbKjwyj
-         OfikAdOlOPAmw0/1iWjVH8S3F+TQXRXAsTxmmaPlD3AaZZ9HdTkTHMK7rJTY1Dmpx9
-         /vmDMV3x8BxRqsjPWFr+3RNHL5mlFJdnjkxDEWvalxa7QRDaAJHaTmc+yKGcqTnLkS
-         59zkbokSBOzCQ==
+        b=eJLXCcY+LXCaNpPgZPN24kpSvkPulyeIQZIVp9JV8OF7C7LjRMK66t9FRpGN/7obJ
+         iCO02vd1Td2RvzA0zKkkkUet3HNvczHQSJInTBG0MtwUGBqiQYbJTv5+czIHCVmc7w
+         mefwBz2tXDRi3YfGEBjZzdvEOlJSyaRhQNbkHhmYkfGULZDEGzLAuFDG78SnPqCzQ2
+         6RTPHo+lE2K+H5NaUoGGRk76F3iSiyyVjekbSfxhw37YZ9KtKqqDTBJ6BeeBpc0n3s
+         hIguvnC9X58mmbEyYTkwZwQBp82FXITyyDSqaNpCSgivsYejyt5r0Eisl3+TCXX5pr
+         pS9EM/5Kek4nQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 0/3] spi: add generic R-Car Gen4 and specific r8a779f0 support
-Message-Id: <166185415042.1099942.6942703458061199839.b4-ty@kernel.org>
-Date:   Tue, 30 Aug 2022 11:09:10 +0100
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+Message-Id: <166185489065.1123097.6582178011318784987.b4-ty@kernel.org>
+Date:   Tue, 30 Aug 2022 11:21:30 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,14 +58,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 24 Aug 2022 11:43:23 +0200, Wolfram Sang wrote:
-> Here are the patches to enable MSIOF on R-Car S4-8. They also introduce
-> generic Gen4 support and move V3U to Gen4 (which it really is).
+On Mon, 29 Aug 2022 23:03:34 +0100, Lad Prabhakar wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
 > 
-> Wolfram Sang (3):
->   spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
->   spi: sh-msiof: add generic Gen4 binding
->   spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
+> 	From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> 
+> The main problem is that SoC DTSI's include power-domains and resets
+> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
+> false'. So just add optional power-domains and resets properties.
 > 
 > [...]
 
@@ -73,12 +77,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
-      commit: e1e62f05d5d9d7726349e00562299d829e478ce9
-[2/3] spi: sh-msiof: add generic Gen4 binding
-      commit: ea9d001550abaf2f4c75cf4fcd936ea19f932b84
-[3/3] spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
-      commit: b076fdd02133e6a31db167f8acc368edc2530cc0
+[1/1] dt-bindings: spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+      commit: f4d381038700361f92d157288b0e18d87fab6c6d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
