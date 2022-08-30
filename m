@@ -2,95 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC045A5F41
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 11:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D335A5F9C
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 11:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbiH3JWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 05:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S230378AbiH3Jja (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 05:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiH3JW3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 05:22:29 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32304D99C0
-        for <linux-spi@vger.kernel.org>; Tue, 30 Aug 2022 02:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=raRrzqkFd5CCKbO1PqyENGyR/Paq
-        rg3GUAkUnfiaKVY=; b=o4pY/p89of4Z9kZjGKWzR1se1BrpRSwLTMalK3/1pMsi
-        /Uka8NagLQKjE+baPvpOPlR/zfEp0STX83+opezh808e6k0SLO3NR3oPd0R+GJo1
-        f8zdCJ8MdanOMEI25GZtdf6e0FYXZ9gHecWLlXQnHmUJTJPNEghqTZrvCGbxwVQ=
-Received: (qmail 206937 invoked from network); 30 Aug 2022 11:21:34 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Aug 2022 11:21:34 +0200
-X-UD-Smtp-Session: l3s3148p1@Hdru53HnSOEgAwDPXyz6AKlRFcsoQyrD
-Date:   Tue, 30 Aug 2022 11:21:31 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0
- support
-Message-ID: <Yw3Wm9D+9zGWlB67@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mark Brown <broonie@kernel.org>, linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
- <20220824094327.33685-2-wsa+renesas@sang-engineering.com>
- <Yw3WDjj7MzQjG8z6@sirena.org.uk>
+        with ESMTP id S230387AbiH3JjN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 05:39:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545FFF32F7;
+        Tue, 30 Aug 2022 02:37:15 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6B4B76601BF7;
+        Tue, 30 Aug 2022 10:37:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661852233;
+        bh=b5EMCAqklGR1n0mJHp5xybG1xU4cd1JVpNMDf92YVuw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EESiaD3LrZwZ9y2nz6qqZgxhvdx9xDoCCINMgc+1v7rnk/1HZ0zO3eUYeyCHBn+qm
+         deJpl3nOBWIsbDMIWl5ZCh1oUprkqb6Cjw3XkEYxFrCiy97EkBrWl7W/LWdbezQRkG
+         unqgNDO3H/lR2n/inW5PeitcMCcjYkBaX9+gEDuUAJpFRkLgu7zpcHZ9Z02ynRwlyN
+         1+LqpCKAiA+Q08E9ubHbt79+rFBMKCwsAhFLkqXPIx3qNGCD+r3A+mebq4IaR41JuI
+         +iIrDURS24PeOcDHp/5aZ4aCVxntZ2T1iBLK1b+LYkAjPBVg+qgVWUWlQBTwWo67uJ
+         FFSugDG1v1VwA==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     broonie@kernel.org, sanju.mehta@amd.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, krisman@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH] spi: amd: Fix speed selection
+Date:   Tue, 30 Aug 2022 15:06:07 +0530
+Message-Id: <20220830093607.45484-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aN4JroXIk+/N7WnL"
-Content-Disposition: inline
-In-Reply-To: <Yw3WDjj7MzQjG8z6@sirena.org.uk>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+If the current speed is equal to the requested speed by the device
+then return success.
+This patch fixes a bug introduced by the commit 3fe26121dc3a
+("spi: amd: Configure device speed") which checks speed_hz instead
+of amd_spi->speed_hz.
 
---aN4JroXIk+/N7WnL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: 3fe26121dc3a ("spi: amd: Configure device speed")
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
+ drivers/spi/spi-amd.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 264633c5ce0b..e23121456c70 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -240,9 +240,6 @@ static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
+ {
+ 	unsigned int i, spd7_val, alt_spd;
+ 
+-	if (speed_hz == amd_spi->speed_hz)
+-		return 0;
+-
+ 	if (speed_hz < AMD_SPI_MIN_HZ)
+ 		return -EINVAL;
+ 
+@@ -250,7 +247,7 @@ static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
+ 		if (speed_hz >= amd_spi_freq[i].speed_hz)
+ 			break;
+ 
+-	if (speed_hz == amd_spi_freq[i].speed_hz)
++	if (amd_spi->speed_hz == amd_spi_freq[i].speed_hz)
+ 		return 0;
+ 
+ 	amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
+-- 
+2.30.2
 
-> Not sure why you didn't CC me on the cover letter for this?
-
-After I got cover-letters rejected because of too much CC (but the
-paaches itself went through), I wrote a script to only include lists on
-cover-letters.
-
-
---aN4JroXIk+/N7WnL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMN1pgACgkQFA3kzBSg
-KbbgFA//fOHFmDXO68iU9/1UB0k32jeyyDrI/QMTjfFC+7epXC+1idRY/zgCbImk
-6KB6svozIc9YYxE4V0TULP48BapFUXZe07AGHzIxnDvS5iqk1flgX3FsBDBpxmXh
-dbcndvtoBQUR2Fl3IkLN0EXctpS7hgufjzU4yXV8ZPOL8JFfavlzgt8EEPGDWKjW
-+Jrkd42Xi3FJxa5KwrEhGwd3Z/hrscyN+piYml/2FPJy34WYRE0BdTuVddOpLrux
-IneoxKohhQzmdv/RWEvB5m80dtoDClyXXB4gLVi5qEunpsTIlmgVnY5nbhZSlPBG
-ro/n9LPmbsxfRpMWmMf13Io2Y9w4BPrmKviv1w/M+TqMTHGva4hlKMKWPM53lAEb
-199PA4+fyQV77IfWTwSaaRPq4nri6CS0E2Q9B56t87BNN9sEujP3BE5oxXOG9ZpG
-+D5chboxigCW0EvWSB8VdA4QjwXYNpvDCTsUz1f5COOfmqaENLF2sQZC8K7zzky0
-qbS0TdkxjElH9+QM7+ukolQHpF4eZ0BjNNBA8g/6sEr5WqgOWFlybLwqoyhx0SvD
-mPqHQ92hu0pdZruE9o1DyxoKZymZ8D6xVd8zHbGIv4mq1qMRzqIIpQ728Dfairw8
-dqId01OI0N4bS8lmufHOblfctjAIDIif1EAcRt6Ojvl2cM4W0TE=
-=QidM
------END PGP SIGNATURE-----
-
---aN4JroXIk+/N7WnL--
