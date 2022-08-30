@@ -2,52 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63815A60BB
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 12:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448715A611B
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 12:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiH3K1h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 06:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S229968AbiH3Ktd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 06:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiH3K1h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 06:27:37 -0400
+        with ESMTP id S229775AbiH3Kta (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 06:49:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A661A07C;
-        Tue, 30 Aug 2022 03:27:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F23E343F;
+        Tue, 30 Aug 2022 03:49:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C98614CC;
-        Tue, 30 Aug 2022 10:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F40FC433C1;
-        Tue, 30 Aug 2022 10:27:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA6A661508;
+        Tue, 30 Aug 2022 10:49:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7543C433D6;
+        Tue, 30 Aug 2022 10:49:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661855253;
-        bh=NzwhEaBJ4IOFNkpz7IFnyFmSrONqw0D+AKDzNV7uN/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VNm5r1x0PvLchegLQEwxCiIPruSdG/UMoKKhhCZi8yphv4z0yGEDjOYJaEzknqiOL
-         LK/XFJgEnb9waGQAsKmhTpsEE7VobsC2ynAdxk8/EvXPI06MKnyBriQotuh97CJyo/
-         NR6/ChInRbVRQbznnE4lzxHGV7NxUZmWWQG2hiO/CHEaL7Ak2mCY5BfFNAf2/IbQSG
-         zqcU0mdD0aBrAsXG6dk/jjGPwVbO3G10KhVANqqBZ6ujB8azOx0XDCMMKHPz72L3si
-         7TeecoVWs5P0wLPZwjvDSAtvkUojVkBDxFLn7PTUg6OPShZdIdufqgkuqd0yCXCZH1
-         iV1k0gcMyOUJg==
-Date:   Tue, 30 Aug 2022 11:27:31 +0100
+        s=k20201202; t=1661856565;
+        bh=hN4IvqLBUwQ7LA2EASNAfcsy15aflmpkS+M3B+PyQbA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=BGnjqLXZ93XxFzw3bOsPTLNxqBkFUkOfGzLocWniOUzIY9hEr6OgjETiJqhlQPFU5
+         msPaD2phFgaFY9f1KMA9iHokmReJcHod3g+08+in04V4cJ33N3AJ/J5OP16wbp0AdJ
+         CT9RFxgLuKLop7Zu/lgGVyKgWIX+K7tlqDvHNb3lzRO/Vo7cxKb/ewUuQG425+W2Ir
+         AH/fqszLfgCIpRduolgFeeExfIM5bYkAJKBN/9ND1fMcr/7+sxsmHhQAtsPNU6rctO
+         6SvgggVyWgz0NhE3HyZ89PXKHuQ/ILXOZOZNnK7ETVlWIz5FJAFnSDhjaD8l0n7uPs
+         jyKMB47LmX+Eg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
- interface
-Message-ID: <Yw3mE1UX1z/fGSBL@sirena.org.uk>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-4-weiyongjun1@huawei.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>, linux-spi@vger.kernel.org
+In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+Message-Id: <166185656353.1130408.6017479791067634652.b4-ty@kernel.org>
+Date:   Tue, 30 Aug 2022 11:49:23 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wxSWXB32qDsSatsV"
-Content-Disposition: inline
-In-Reply-To: <20220826144341.532265-4-weiyongjun1@huawei.com>
-X-Cookie: Necessity is a mother.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-65ba7
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,34 +59,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 29 Aug 2022 23:03:34 +0100, Lad Prabhakar wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
+> 
+> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
+> 	From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> 
+> The main problem is that SoC DTSI's include power-domains and resets
+> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
+> false'. So just add optional power-domains and resets properties.
+> 
+> [...]
 
---wxSWXB32qDsSatsV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Aug 26, 2022 at 02:43:40PM +0000, Wei Yongjun wrote:
+   broonie/spi.git for-next
 
-> Add a runtime device tree overlay interface for device need dts file.
-> With it its possible to use device tree overlays without having to use
-> a per-platform overlay manager.
+Thanks!
 
-Why would an entirely virtual device like this need to appear in
-DT?  DT is supposed to be a hardware description and this clearly
-isn't hardware, nor is it something we're providing to a VM.
+[1/1] dt-bindings: spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+      commit: f4d381038700361f92d157288b0e18d87fab6c6d
 
---wxSWXB32qDsSatsV
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMN5hMACgkQJNaLcl1U
-h9D/Bwf/aef79RHV/G5TkjWiI1kbn0b9uY3uoZKV9xk9eBNMXd13sjvf6WhmtUmz
-KCG7q3O7XpyseM6HiReyzkMHaYPxrv7KaO6i8FUJgkhF/TFoe6s+IQXNu5M1pRhp
-x+t85j49FlEwb6Z3/pjN0EBibcabsngLlCmDft6H73doof+BQqOVBJbIVyPjBrFd
-FNcadq56ZGwYLHAXl/lBL/y1G2Z6eJxkcoXPNaYF9NEraCEgd11rdFkF+vXUy/16
-mUR6go79EsBPw37/QeSi3WCkajG8YJG+6/sdM5icdW6yp9w6afsDB5gZpy+eGvCd
-JD8Xd1s5I17XCn2fktJDBzjwEs8HCQ==
-=aD7p
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---wxSWXB32qDsSatsV--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
