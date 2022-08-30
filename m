@@ -2,102 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8695A6BFF
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 20:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625945A6C1C
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Aug 2022 20:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiH3SVj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Aug 2022 14:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S229883AbiH3S2R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Aug 2022 14:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH3SVi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 14:21:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504F17050;
-        Tue, 30 Aug 2022 11:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E4F615F3;
-        Tue, 30 Aug 2022 18:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F0AC433C1;
-        Tue, 30 Aug 2022 18:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661883696;
-        bh=hEcJQgeqsw3y9ftigfqvc55T9IiJXbNXceyR/L9Nq0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=loFc3EhNodztGhZZnDSkOIIofEmmsyLTZ+gj6nyBikvbzRCuWpufEA1qJcpzlg0Mf
-         W0IO+ZQLmFvFUWTUURFsgj59PGoMOX5mKMbjR1t9FvxLoj1WnJ//jwsTD3Lxa2SM5I
-         AHiyGZSN8pAiUS0Zqfv8BVig7hMh2pMDsN44huYkvSpB9CDfN2kh9pawD9IsrYioTl
-         A6/u/S7Z+kylHW2/uS4TygaLKU2+fGMT6yeD36wofmDyWcnWmzixcMF9ddJMIZRBXl
-         m+tE8zc2tERLx8tpZrdsaO1k6PGA7mzTpXmAT6FYWrd9Sb/w1rm9U+IZObS6zk2Sfr
-         f5MLNiqCg3f4g==
-Date:   Tue, 30 Aug 2022 19:21:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next 4/4] spi: mockup: Add documentation
-Message-ID: <Yw5VL2MsJ4L6vLRF@sirena.org.uk>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-5-weiyongjun1@huawei.com>
+        with ESMTP id S231375AbiH3S2N (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Aug 2022 14:28:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C50F65559;
+        Tue, 30 Aug 2022 11:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661884092; x=1693420092;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2WYTg5lKPqDuQOYcZq0AKSkMHmFxEYby1nVsncAnnK0=;
+  b=JvqgLPFa4PPaayc7IHmnXyHGtyTvXiVPOam0Cjcvryg8WDA0orWwBbNY
+   p2oherQCxH7cxTAlA4Pv5Df0jJxOuBusMXYUN7k6IwBc9lgbVTIPxguUh
+   GSf6CNYwuy80GOe9v34mE2LovKeRfbnlrExzTBubSkrVZHKj5cEFqi/Lp
+   37HoPBjkXLEcVWkHXQk6BWGSnGTll9B9BbxFWZYkLuxew4eK2j5bQH4tF
+   NL4KV23Yn0GPsh/9fgGa16H3NiOfYtOmWWXbff+UMjTXus6WUWXlCRyM0
+   gztdyckf1eb6o1IaOyOsqub9d9/byKzoteGDeYoiQMAYyOAhDjgttv2sS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="381566597"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="381566597"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 11:28:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="715417220"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 11:28:09 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1CD7D174; Tue, 30 Aug 2022 21:28:23 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] spi: stm32-qspi: Replace of_gpio_named_count() by gpiod_count()
+Date:   Tue, 30 Aug 2022 21:28:20 +0300
+Message-Id: <20220830182821.47919-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TvtZemuiz5sCf+Us"
-Content-Disposition: inline
-In-Reply-To: <20220826144341.532265-5-weiyongjun1@huawei.com>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+As a preparation to unexport of_gpio_named_count(), convert the
+driver to use gpiod_count() instead.
 
---TvtZemuiz5sCf+Us
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-stm32-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, Aug 26, 2022 at 02:43:41PM +0000, Wei Yongjun wrote:
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 227f450aa5f0..5858f5f9c758 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -656,7 +656,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+ 	mode = spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL);
+ 	if ((mode == SPI_TX_OCTAL || mode == SPI_RX_OCTAL) ||
+ 	    ((mode == (SPI_TX_OCTAL | SPI_RX_OCTAL)) &&
+-	    of_gpio_named_count(qspi->dev->of_node, "cs-gpios") == -ENOENT)) {
++	    gpiod_count(qspi->dev, "cs") == -ENOENT)) {
+ 		dev_err(qspi->dev, "spi-rx-bus-width\\/spi-tx-bus-width\\/cs-gpios\n");
+ 		dev_err(qspi->dev, "configuration not supported\n");
+ 
+@@ -681,7 +681,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+ 	 * are both set in spi->mode and "cs-gpios" properties is found in DT
+ 	 */
+ 	if (((spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL)) == (SPI_TX_OCTAL | SPI_RX_OCTAL)) &&
+-	    of_gpio_named_count(qspi->dev->of_node, "cs-gpios")) {
++	    gpiod_count(qspi->dev, "cs")) {
+ 		qspi->cr_reg |= CR_DFM;
+ 		dev_dbg(qspi->dev, "Dual flash mode enable");
+ 	}
+-- 
+2.35.1
 
-> +The typical use-case is like this:
-> +        1. load this module
-> +        2. use bpftool to load BPF program
-> +        3. load the target chip driver module
-
-This needs to go into a bit more detail on how one is expected to
-obtain a copy of bpftool I think (or point to some good
-documentation, I can't seem to find any in tree right now),
-things may have changed since the last time I looked into this
-but in the past the userspace tooling for BPF had some extremely
-ambitious build dependencies which would be a fairly substantial
-barrier to entry.
-
-> +Compile your copy of the kernel source. Make sure to configure the spi-mockup
-> +and the target chip driver as a module. Prepare a dts described the spi-mockup
-> +device.
-
-As I said in another mail the DT part of this appears to be
-inappropriate, the driver should just allow the creation of
-virtual devices.
-
---TvtZemuiz5sCf+Us
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOVS4ACgkQJNaLcl1U
-h9Cq6wf9GYh8XeiXuu/caGDq8OMy5MOOjg5WDignKSUxW2jhdMl45BWR9uCfHO/C
-oGs5x4l1eLMq9NQ2Z7tOCf78/7XEMwjQ1dBySk89/MvkL2L6fsWOXc44jvkvygR3
-rFMJrxDLDW114l7IsLebsctZ2Na7nbjt1tz+ZyfpMF05grdcR1G/ygU/eiJQ4cP5
-Mn2vMw34d+UfEMC15ZMzTDfKusk/Z+VbBhBSyDJVROpgNoLAVHPGXnqUfqkuT+s8
-z1bGuvyop0hN/e0STh7Ssws0g8bVgBblXGd/Dwr2RYkBMepZVE5gmyIHOfN68g4N
-RQfBF/0jr82w58GLL56bT+cjhDzD2Q==
-=4dZD
------END PGP SIGNATURE-----
-
---TvtZemuiz5sCf+Us--
