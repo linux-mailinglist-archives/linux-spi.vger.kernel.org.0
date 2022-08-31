@@ -2,75 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868EE5A753E
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Aug 2022 06:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21705A776B
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Aug 2022 09:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiHaEoy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 Aug 2022 00:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S229437AbiHaHW6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 Aug 2022 03:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiHaEow (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Aug 2022 00:44:52 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD310A5;
-        Tue, 30 Aug 2022 21:44:50 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MHWks58NRzHnXJ;
-        Wed, 31 Aug 2022 12:43:01 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 31 Aug 2022 12:44:48 +0800
-Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
- interface
-To:     Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-4-weiyongjun1@huawei.com>
- <Yw3mE1UX1z/fGSBL@sirena.org.uk>
- <7111c94c-a85c-2f51-f94b-ed60080b1717@gmail.com>
-From:   "weiyongjun (A)" <weiyongjun1@huawei.com>
-Message-ID: <a4a24a54-c864-e5ed-7e17-84b7a55996af@huawei.com>
-Date:   Wed, 31 Aug 2022 12:44:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229633AbiHaHW4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Aug 2022 03:22:56 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AADA2615;
+        Wed, 31 Aug 2022 00:22:54 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27V4PeFi016216;
+        Wed, 31 Aug 2022 09:22:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=EQg/IIxHWRoP16UyxonRRbckr/7L8mRwqHs4veLZRPo=;
+ b=bnAlnt8+2Q8Z6J9KALAg8S+w27oDIzR8vLU1rFJSqJjGFCy79VH5/Dml/PxNj/2Fk2C7
+ Eqh59v2u4c0B2nohAJSBWX6v8HgseCIdIlAYUCydurfm9QbvYzzirSVDQH7DbapDwZde
+ M+MzVO0ccP3/0P78rmseA+t3eXbjVsszavsGMoloA078C+tctNcrvkbxKT8rN1ZD3bhS
+ Tjd7YEi/I81ba+5K1hbKZM5CM+CtAsS1bCppcZaySLfvirfwul2IPQn3bT7waTL3PSWB
+ ARrR5phtG1ludoTbPJDlJCs1HhOWCo1sF3/2eRySHYG+SJoTVlYGBxHUSrbbx1WYZGTJ 1g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j7a5j4f5e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 09:22:11 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FF7710002A;
+        Wed, 31 Aug 2022 09:22:10 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0694B2138E4;
+        Wed, 31 Aug 2022 09:22:10 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.47) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Wed, 31 Aug
+ 2022 09:22:09 +0200
+Message-ID: <33d2da82-1e8a-c5dd-7f75-2454714357e6@foss.st.com>
+Date:   Wed, 31 Aug 2022 09:22:08 +0200
 MIME-Version: 1.0
-In-Reply-To: <7111c94c-a85c-2f51-f94b-ed60080b1717@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/2] spi: stm32-qspi: Replace of_gpio_named_count() by
+ gpiod_count()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <20220830182821.47919-1-andriy.shevchenko@linux.intel.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20220830182821.47919-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-31_03,2022-08-31_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Andy
 
-
-On 2022/8/31 3:24, Frank Rowand wrote:
-> On 8/30/22 05:27, Mark Brown wrote:
->> On Fri, Aug 26, 2022 at 02:43:40PM +0000, Wei Yongjun wrote:
->>
->>> Add a runtime device tree overlay interface for device need dts file.
->>> With it its possible to use device tree overlays without having to use
->>> a per-platform overlay manager.
->>
->> Why would an entirely virtual device like this need to appear in
->> DT?  DT is supposed to be a hardware description and this clearly
->> isn't hardware, nor is it something we're providing to a VM.
+On 8/30/22 20:28, Andy Shevchenko wrote:
+> As a preparation to unexport of_gpio_named_count(), convert the
+> driver to use gpiod_count() instead.
 > 
-> Good point.  Patch 3 seems to not be needed.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/spi/spi-stm32-qspi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+> index 227f450aa5f0..5858f5f9c758 100644
+> --- a/drivers/spi/spi-stm32-qspi.c
+> +++ b/drivers/spi/spi-stm32-qspi.c
+> @@ -656,7 +656,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+>  	mode = spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL);
+>  	if ((mode == SPI_TX_OCTAL || mode == SPI_RX_OCTAL) ||
+>  	    ((mode == (SPI_TX_OCTAL | SPI_RX_OCTAL)) &&
+> -	    of_gpio_named_count(qspi->dev->of_node, "cs-gpios") == -ENOENT)) {
+> +	    gpiod_count(qspi->dev, "cs") == -ENOENT)) {
+>  		dev_err(qspi->dev, "spi-rx-bus-width\\/spi-tx-bus-width\\/cs-gpios\n");
+>  		dev_err(qspi->dev, "configuration not supported\n");
+>  
+> @@ -681,7 +681,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+>  	 * are both set in spi->mode and "cs-gpios" properties is found in DT
+>  	 */
+>  	if (((spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL)) == (SPI_TX_OCTAL | SPI_RX_OCTAL)) &&
+> -	    of_gpio_named_count(qspi->dev->of_node, "cs-gpios")) {
+> +	    gpiod_count(qspi->dev, "cs")) {
+>  		qspi->cr_reg |= CR_DFM;
+>  		dev_dbg(qspi->dev, "Dual flash mode enable");
+>  	}
 
-Yes, will drop it in next version.
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Thanks,
-Wei Yongjun
+Thanks
+Patrice
