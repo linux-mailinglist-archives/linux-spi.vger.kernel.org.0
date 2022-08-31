@@ -2,46 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372445A7DA4
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Aug 2022 14:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F495A7E37
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Aug 2022 15:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiHaMlT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 Aug 2022 08:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S230331AbiHaNEH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 Aug 2022 09:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiHaMlR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Aug 2022 08:41:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CDA9C8FE;
-        Wed, 31 Aug 2022 05:41:13 -0700 (PDT)
+        with ESMTP id S229565AbiHaNEF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Aug 2022 09:04:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F1C1657;
+        Wed, 31 Aug 2022 06:04:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E422B82062;
-        Wed, 31 Aug 2022 12:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0365C433C1;
-        Wed, 31 Aug 2022 12:41:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A214561A2F;
+        Wed, 31 Aug 2022 13:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D3EC433C1;
+        Wed, 31 Aug 2022 13:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661949670;
-        bh=GlqPyBG/2QZHbPqaaWonjRMxL4niWdBcQJxyKEdjQSk=;
+        s=k20201202; t=1661951044;
+        bh=RSI4EOwQ+8AxbiJ/TcfxFRbL8c6SneehjW86TBWE2t0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=gNwuWskc/jXU/OrebX3y24EoJciyi62c5H6tEuPGRlLQ+alc5tVqmdzZDmAVXi3Ud
-         MTw042H61ryMiZrFzQqF28RjgkCVuMWzValPBezeBZSbkfjqhmRAS4fasfq35SMot3
-         xQtL9Q6Q+DQga6bzAe3ws6RbvHwAaaLmzlOYB0y9RDIdcyUAlxm6j/Zz7XiBaZVTF9
-         kKoUWS5XduYHs8kbhkKS2YrFa+G2TQxJt813jLoNQJg5Ene0jKdVJAiALr4OtpVuvf
-         v1Twttg65eM9lvEKG9AKDgvVhfC0WW7xBilKgwSUXNKynQq5bvBJRpmdV7d+p0q70f
-         XI0HOQftONieg==
+        b=q2nRvBXZwapTVPpgTrknqzCUAIK9LuQlJp085kuXCzQp2GW/xX+EvBvXIS3o/fLVD
+         FTcaT4VEtdu4twrIr++RNpEQiryUwCtil+VtQGs1W/kL0fypw2M+HyIeZ2vk5EPe7q
+         bbqb5+vFpqoZxss1heRJoYysNEu5Up6B5n9GGAxSRJxDtlpYROVTvAFl/5QkelktFf
+         jj/+3hzvuxttQdU9Dp7tyG257flFYRjxuVJPmjYpJvkqOiEzyci+TTRR9WrgvrFZy9
+         fotJMvEVPTfXheB4VwXN4ZckJT5hfs0mbmBC0NLKCVoS9h8o0iHvfbbnX0XOLBG9x0
+         13yP17Fw4uaBg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 0/3] spi: add generic R-Car Gen4 and specific r8a779f0 support
-Message-Id: <166194966864.85432.14716335347687736430.b4-ty@kernel.org>
-Date:   Wed, 31 Aug 2022 13:41:08 +0100
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220830182821.47919-1-andriy.shevchenko@linux.intel.com>
+References: <20220830182821.47919-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] spi: stm32-qspi: Replace of_gpio_named_count() by gpiod_count()
+Message-Id: <166195104216.267626.16919953203529886429.b4-ty@kernel.org>
+Date:   Wed, 31 Aug 2022 14:04:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,16 +58,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 24 Aug 2022 11:43:23 +0200, Wolfram Sang wrote:
-> Here are the patches to enable MSIOF on R-Car S4-8. They also introduce
-> generic Gen4 support and move V3U to Gen4 (which it really is).
+On Tue, 30 Aug 2022 21:28:20 +0300, Andy Shevchenko wrote:
+> As a preparation to unexport of_gpio_named_count(), convert the
+> driver to use gpiod_count() instead.
 > 
-> Wolfram Sang (3):
->   spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
->   spi: sh-msiof: add generic Gen4 binding
->   spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
 > 
-> [...]
 
 Applied to
 
@@ -73,12 +70,10 @@ Applied to
 
 Thanks!
 
-[1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
-      commit: e1e62f05d5d9d7726349e00562299d829e478ce9
-[2/3] spi: sh-msiof: add generic Gen4 binding
-      commit: ea9d001550abaf2f4c75cf4fcd936ea19f932b84
-[3/3] spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
-      commit: b076fdd02133e6a31db167f8acc368edc2530cc0
+[1/2] spi: stm32-qspi: Replace of_gpio_named_count() by gpiod_count()
+      commit: eea0e7d20d6dab38522ac0a3af61fd92c53c34f6
+[2/2] spi: stm32-qspi: Refactor dual flash mode enable check in ->setup()
+      commit: c9448aa41ac7dd223a6bef79e71d6c168593ebb7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
