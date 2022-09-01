@@ -2,132 +2,153 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97EF5A9666
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Sep 2022 14:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6E95A965C
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Sep 2022 14:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiIAMLR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Sep 2022 08:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S232874AbiIAMIc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Sep 2022 08:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiIAMLP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Sep 2022 08:11:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BB610B945
-        for <linux-spi@vger.kernel.org>; Thu,  1 Sep 2022 05:11:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A70C161E36
-        for <linux-spi@vger.kernel.org>; Thu,  1 Sep 2022 12:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4878C433D7;
-        Thu,  1 Sep 2022 12:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662034267;
-        bh=3MDc6l/CTHBGpIhLzEAzcIRM2CRiMDVAT1jy33m15U8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=huJkOGuLMkhYMLAjxfYoo1gl9m6sJGMPxoCkrDqLIgu/ajmhALX6CKymuoMvffEzL
-         QyhZ0/+yZfhHdOpJvbky3Zsf2ylb/jz2YABUZQTufRm7b6MNGUKbUogFNe0KpiE9Ye
-         I4nQ9j1v3BOfG1XCAmwLAfEfc2zg+a+vU2+kC/cg3OiPB3AMvtlbi5lwFgn534Bpxu
-         oLSTPT1UYcYHLxHn0qsS6aEx3Xx3Z5oGmUAKrBIuA+Ut/EFmATU1GHStzTXs1dty81
-         5pP2w8Ud2F6/BAbnb+druHZuaocMUDj/mtv80glhCkonEQCTD16lzQWprIJ5/7Hb8w
-         cekfdE9Wn+uyw==
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>,
+        with ESMTP id S232838AbiIAMIb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Sep 2022 08:08:31 -0400
+Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E737EA338
+        for <linux-spi@vger.kernel.org>; Thu,  1 Sep 2022 05:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=Mh5ZAwE0H09V5EJX4QR04qeTJwqYdtAQjh8v9LOyyz8=;
+        b=bKfyQDSd738gv8xYKBZO2bbShaeJp8W5Rmo8iDR0+wyhKlv8OjEAVN1yezuFTsTbzv9/IVjonOayj
+         NqbTNzT02mS0RBkEO9g+gvD70uZaxstoLa3nLZTN5SMb8YKzV6A+ZowwMQF9e/q6PEjmk90PtHoVlQ
+         5/X6a0CpyGYbOCQyoihxyM+f9/kO8V+4ktqlE3pZ0H9Osd3U4qN5hz1nMfoalLUHGfCD9a980lEs9j
+         tqckcVQueuQVU5JBkD0XaWkm5sB7owVhdAQW/giYdA1RANcquNSPahIkrt5ZKBccZTvgPe7mAq+FYH
+         pXlsAmoQaWAkfiNvn0a433zcJtO4tvg==
+X-MSG-ID: c80cc119-29ee-11ed-8a45-0050569d11ae
+Date:   Thu, 1 Sep 2022 14:08:24 +0200
+From:   David Jander <david@protonic.nl>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Mark Brown <broonie@kernel.org>,
         Casper Andersson <casper.casan@gmail.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1] spi: mux: Fix mux interaction with fast path optimisations
-Date:   Thu,  1 Sep 2022 13:07:32 +0100
-Message-Id: <20220901120732.49245-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+Subject: Re: [PROBLEM] spi driver internal error during boot on sparx5
+Message-ID: <20220901140824.64977e82@erd992>
+In-Reply-To: <YxCam3BMVyTo+ZON@axis.com>
+References: <20220826094143.iysrl3tsqxmhp4dq@wse-c0155>
+        <20220829105613.476622d2@erd992>
+        <Yw+HTj98V1ToLWIL@sirena.org.uk>
+        <YxBX4bXG02E4lSUW@axis.com>
+        <20220901130222.587f4932@erd992>
+        <YxCam3BMVyTo+ZON@axis.com>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3371; i=broonie@kernel.org; h=from:subject; bh=3MDc6l/CTHBGpIhLzEAzcIRM2CRiMDVAT1jy33m15U8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjEKCDdA+qC2/tZCd1TCaAbRbuwhT+fCfqe4T4NPSg Zl7MzSSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYxCggwAKCRAk1otyXVSH0JRXB/ 9yAaaGqnHoxTcSKpArMJIW5abgzMaJR3OVnZF/pmEzDJtdU0QfnYF5VfcKEMu76xcR2xUtVU0YGaFu uyziLDo0VWr8iC7NulXiuthX8LK6jPGQ6hKYFYNRwMgWrwCbQ0VtUPOtESic5/YN9L5FSx9dvbYTmP p5f/Sp0oqZ4FwLdaLGMKXbAABmeMcatASA0v7Ry8jFl2M33aNddbOJvTgPL3/pX4nrYHxVU2pyLxkd TKc/imM0pnd6b/47Zn7FjtFOL+wG7UMhUrKdvS8htx9vthSx8ZFrvmzF7sR7RQJ3BQhKSuoR2zTPKE /cuL4JecAKQRwfjWefldWP2cVlDu7o
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The spi-mux driver is rather too clever and attempts to resubmit any
-message that is submitted to it to the parent controller with some
-adjusted callbacks.  This does not play at all nicely with the fast
-path which now sets flags on the message indicating that it's being
-handled through the fast path, we see async messages flagged as being on
-the fast path.  Ideally the spi-mux code would duplicate the message but
-that's rather invasive and a bit fragile in that it relies on the mux
-knowing which fields in the message to copy.  Instead teach the core
-that there are controllers which can't cope with the fast path and have
-the mux flag itself as being such a controller, ensuring that messages
-going via the mux don't get partially handled via the fast path.
+On Thu, 1 Sep 2022 13:42:19 +0200
+Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
 
-This will reduce the performance of any spi-mux connected device since
-we'll now always use the thread for both the actual controller and the
-mux controller instead of just the actual controller but given that we
-were always hitting the slow path anyway it's hopefully not too much of
-an additional cost and it allows us to keep the fast path.
+> On Thu, Sep 01, 2022 at 01:02:22PM +0200, David Jander wrote:
+> > On Thu, 1 Sep 2022 08:57:37 +0200
+> > Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:  
+> > > You can reproduce the problem with:
+> > > 
+> > >  git remote add vwax https://github.com/vwax/linux.git
+> > >  git fetch vwax
+> > >  git archive vwax/roadtest/devel tools/testing/roadtest | tar xf -
+> > >  make -C tools/testing/roadtest/ -j24 OPTS="-k adc --rt-timeout 10 -v"
+> > > 
+> > > The test passes on v5.19 but on current mainline it hangs and times out.  
+> > 
+> > This is very nice. Thanks.  
+> 
+> Great to hear that it was useful!
+> 
+> > I followed your instructions, and if I apply the following, all tests are
+> > passed.
+> > 
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index 83da8862b8f2..32c01e684af3 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -1727,8 +1727,7 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+> >         spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+> >  
+> >         ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+> > -       if (!ret)
+> > -               kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
+> > +       kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
+> >  
+> >         ctlr->cur_msg = NULL;
+> >         ctlr->fallback = false;
+> > 
+> > The problem is that if __spi_pump_transfer_message() fails, the ctlr->busy
+> > flag is left true, so __spi_async() is not going to queue new work. The busy
+> > transition is handled right above that piece of code, in
+> > __spi_pump_transfer_message(), and the mechanism is to queue more work to do
+> > it. Apparently work was only queued when the transfer was successful, and I am
+> > not sure why it was like that. Queuing work unconditionally solves the issue
+> > and should not be a problem.
+> > 
+> > Curious thing is, that this change alone is sufficient to make all the
+> > roadtest tests pass. But I still think that does not fix the bug reported by
+> > Casper. For that, Mark's patch is also necessary.  
+> 
+> Yes, I noticed that too.  If you comment out the two usages of
+> "@flaky_bus" in tools/testing/roadtest/roadtest/tests/iio/adc/test_adc084s021.py then
+> the bus error injection will be disabled and only the success paths will
+> be tested.  If you do that and test ae7d2346dc89ae89a6e0 ("spi: Don't
+> use the message queue if possible in spi_sync") with the crash fix and
+> iio sysfs fixes cherry-picked in, you'll see the following failure
+> without Mark's patch:
+> 
+>  FAILED roadtest/tests/iio/adc/test_adc084s021.py::test_illuminance - BlockingIOError: [Errno 115] Operation now in progress
+> 
+> But if you move forward to 69fa95905d40846756d22 ("spi: Ensure the
+> io_mutex is held until spi_finalize_current_message()"), then the tests
+> start passing again, if they're run without the error injection.
+> 
+> So 69fa95905d40846756d22 seems to be masking the original problem from
+> ae7d2346dc89ae89a6e0 (while at the same time introducing the other
+> problem in the error handling).
 
-Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
-Reported-by: Casper Andersson <casper.casan@gmail.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-mux.c   | 1 +
- drivers/spi/spi.c       | 2 +-
- include/linux/spi/spi.h | 2 ++
- 3 files changed, 4 insertions(+), 1 deletion(-)
+The following patch set should be viewed as one single change:
 
-diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
-index f5d32ec4634e..0709e987bd5a 100644
---- a/drivers/spi/spi-mux.c
-+++ b/drivers/spi/spi-mux.c
-@@ -161,6 +161,7 @@ static int spi_mux_probe(struct spi_device *spi)
- 	ctlr->num_chipselect = mux_control_states(priv->mux);
- 	ctlr->bus_num = -1;
- 	ctlr->dev.of_node = spi->dev.of_node;
-+	ctlr->must_async = true;
- 
- 	ret = devm_spi_register_controller(&spi->dev, ctlr);
- 	if (ret)
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 83da8862b8f2..c4ccd45ebc1a 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -4033,7 +4033,7 @@ static int __spi_sync(struct spi_device *spi, struct spi_message *message)
- 	 * guard against reentrancy from a different context. The io_mutex
- 	 * will catch those cases.
- 	 */
--	if (READ_ONCE(ctlr->queue_empty)) {
-+	if (READ_ONCE(ctlr->queue_empty) && !ctlr->must_async) {
- 		message->actual_length = 0;
- 		message->status = -EINPROGRESS;
- 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e6c73d5ff1a8..f089ee1ead58 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -469,6 +469,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  *	SPI_TRANS_FAIL_NO_START.
-  * @queue_empty: signal green light for opportunistically skipping the queue
-  *	for spi_sync transfers.
-+ * @must_async: disable all fast paths in the core
-  *
-  * Each SPI controller can communicate with one or more @spi_device
-  * children.  These make a small bus, sharing MOSI, MISO and SCK signals
-@@ -690,6 +691,7 @@ struct spi_controller {
- 
- 	/* Flag for enabling opportunistic skipping of the queue in spi_sync */
- 	bool			queue_empty;
-+	bool			must_async;
- };
- 
- static inline void *spi_controller_get_devdata(struct spi_controller *ctlr)
+dc3029056b02 spi: opportunistically skip ctlr->cur_msg_completion
+69fa95905d40 spi: Ensure the io_mutex is held until spi_finalize_current_message()
+72c5c59b659d spi: Set ctlr->cur_msg also in the sync transfer case
+1a9cafcb57b7 spi: Remove unneeded READ_ONCE for ctlr->busy flag
+66a221593cb2 spi: Remove the now unused ctlr->idling flag
+049d6ccc4da8 spi: Remove check for idling in __spi_pump_messages()
+d5256cce1f50 spi: Remove check for controller idling in spi sync path
+8711a2ab51dd spi: __spi_pump_messages: Consolidate spin_unlocks to goto target
+c1038165fbbf spi: Lock controller idling transition inside the io_mutex
+ae7d2346dc89 spi: Don't use the message queue if possible in spi_sync
+1714582a3a08 spi: Move ctlr->cur_msg_prepared to struct spi_message
 
-base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+I left the individual steps, in order to make it easier to view how the code
+mutated, but the individual steps have had very little testing in between, and
+some have known problems in corner-cases.
+Particularly patch 69fa95905d40 does fix support for controllers that do not
+call spi_finalize_current_message() in the same context as transfer_one(), for
+example from IRQ, or in the case of the mux from a completion. If you replace
+spi_async() with spi_sync() in spi-mux.c you will accomplish the same.
+
+Best regards,
+
 -- 
-2.30.2
-
+David Jander
