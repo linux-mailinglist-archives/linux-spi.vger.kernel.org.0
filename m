@@ -2,96 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9318A5AB521
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Sep 2022 17:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814005ABAFC
+	for <lists+linux-spi@lfdr.de>; Sat,  3 Sep 2022 01:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbiIBP2q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Sep 2022 11:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S229905AbiIBXED (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Sep 2022 19:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbiIBP2Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Sep 2022 11:28:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3618D2E69C;
-        Fri,  2 Sep 2022 08:02:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF9861EB2;
-        Fri,  2 Sep 2022 15:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6F3C433B5;
-        Fri,  2 Sep 2022 15:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662130972;
-        bh=juCmVv9yVRVu6vgAJSepeShnFkMGD40VL3ymb2cpIs8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=HKoQkgI7WYHu4jMuGdUDcInPVifE5wUHoBAbBuoGzIZ3f102JB2nF5lBgAl3+xBBZ
-         PYcEkQR7mGB/ftpCC9CPk46Z1I4EvjwFvbHVvMAKHtGlUx47D1hKSU2655Oa8zfTi7
-         r6Ei+/5/SY6kppspVMP/qGH2P4PALGSp4gvRISLy4NljZpLWlp9ismdp3oyVXNaMb+
-         92n4zgLjn8M30LyF/VZNQ/eJJj7mSkd183iRdpw4HRpNV0t8OfJQV4Rfr/E+1DPAzl
-         t6vx3pxediMjXTEHEKRNrbc5Qw9CzDCNZibsghE0Jk7cPbZmnChPOiLPdwvEmYjSQ/
-         3wWWB/qS80djA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Casper Andersson <casper.casan@gmail.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220901123630.1098433-1-david@protonic.nl>
-References: <20220901123630.1098433-1-david@protonic.nl>
-Subject: Re: [PATCH] spi: spi.c: Fix queue hang if previous transfer failed
-Message-Id: <166213097084.48295.10048279518019656460.b4-ty@kernel.org>
-Date:   Fri, 02 Sep 2022 16:02:50 +0100
+        with ESMTP id S229504AbiIBXED (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Sep 2022 19:04:03 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D60E8316;
+        Fri,  2 Sep 2022 16:03:59 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bq23so5272168lfb.7;
+        Fri, 02 Sep 2022 16:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JwcThZfvgGkXvH/oN7CgEbjQX6xMEv9IlnB4AnwDp1w=;
+        b=XEhCtacuL7sz7x1zd9T562MxiUsvaaPJftDtplKq/7UYHrsmUE1ydgFEdQ2h/ClfW6
+         6ccSu7C0ZTLcWvtQo/nBHx5c2YTxVdDWQOypehP/JKixamj5xUQl8ETbVLcSsg5Xa337
+         aiW/EN4V5J8MBXoMbBG/MJDdWDOJT3Q/wimWcbt0LbUHL8FE+ubtkGUNust0RCPVRVup
+         ZQoCRu+A3EzS/CdQdgTCwt7pJcSYUTAzzISsQUKCmiyPuDtf2fbTR9asU3kolCxp7yMi
+         lCx2ZnBC71Vlyj25Q1NzMdznlfj4dR4C14lsY1Qt0kH471GIzTbhUUEYXaTjjjNBgfmQ
+         lfRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JwcThZfvgGkXvH/oN7CgEbjQX6xMEv9IlnB4AnwDp1w=;
+        b=mtjzUjzUV+hZqCwx9n9v7hJtKs9NruSmezhg8fctErfS7wis6Vreg20VSI5xOheM1l
+         0iY3dAeo5irdGgDjreKg5bQy/LglCeEijK04tZeGfHFv+MceJqpLePYX1m6wVCIwNnJ7
+         Yrqq449lkRUCpu2xh95XSP0qx3Eyk4SYwcnZt6ZTVbzaA3bgyXGeRoVe0Wzw1eNZXzLE
+         IXuMh8QWEv28QMZ6nKit2Z/lzVUlJLYKsT42pet9lQlfr4cChQvlLGphcp5e5pLNwE8V
+         FTbHCL/FIEEjZvZVq425vQKMR5P9i/TYDh/Ava5RHTG1Xr/vUbA1cewQCVwz6uChNCb3
+         r4dw==
+X-Gm-Message-State: ACgBeo1fI5Os7BNyZbLJlWEzNeT6dVHT+lWja0Lem7LeGkdCm//9CL1N
+        qj3AxJV91nZo1JYl8EzUHiY=
+X-Google-Smtp-Source: AA6agR7Z2FehWmCHWUOj9dB/4A7HYfLxZaSgOsEhd90WFW8vXX1ICBOJkci0w7dn5wDyrL+c7mqpkA==
+X-Received: by 2002:a05:6512:32a9:b0:494:a994:6fac with SMTP id q9-20020a05651232a900b00494a9946facmr1444344lfe.5.1662159837478;
+        Fri, 02 Sep 2022 16:03:57 -0700 (PDT)
+Received: from mobilestation ([83.220.236.124])
+        by smtp.gmail.com with ESMTPSA id q22-20020a056512211600b004947303691dsm384418lfr.95.2022.09.02.16.03.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 16:03:56 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 02:03:53 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeegar Lakhani <jeegar.lakhani@sifive.com>
+Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20220902230353.mscyeklhamzpg5s7@mobilestation>
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+ <20220826180327.yazfoydjiyygd7qf@mobilestation>
+ <CAHyZL-cmyRprNmr_DtUQaZFXJtcV-6r-UOksFJeMz=XgDhnMNw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-7d1a0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHyZL-cmyRprNmr_DtUQaZFXJtcV-6r-UOksFJeMz=XgDhnMNw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 1 Sep 2022 14:36:30 +0200, David Jander wrote:
-> The queue worker always needs to be kicked one final time after a transfer
-> is done in order to transition to idle (ctlr->busy = false).
+On Tue, Aug 30, 2022 at 09:48:35AM +0100, Sudip Mukherjee wrote:
+> On Fri, Aug 26, 2022 at 7:03 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > Hello Sudip
+> >
+> > On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
+> > > Some Synopsys SSI controllers support enhanced SPI which includes
+> > > Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+> > > feature in enhanced SPI modes which can be used to prevent FIFO underflow
+> > > and overflow conditions while transmitting or receiving the data respectively.
+> > > This is only tested on controller version 1.03a.
+> >
 > 
-> Commit 69fa95905d40 ("spi: Ensure the io_mutex is held until
-> spi_finalize_current_message()") moved this code into
-> __spi_pump_messages(), but it was executed only if the transfer was
-> successful. This condition check causes ctlr-busy to stay true in case of
-> a failed transfer.
-> This in turn causes that no new work is ever scheduled to the work queue.
+> <snip>
 > 
-> [...]
+> >
+> > I've deliberately collected all the generic comments here so you'd be
+> > aware of the required changes in total, because I very much doubt all
+> > of them could be fixed at once via a single patchset iteration. But as
+> > soon as all of them are fixed we'll get a very nice and neat solution
+> > for the eSPI feature.
+> >
+> 
 
-Applied to
+> Thanks a lot for the summary here Sergey. I am sure I will have a few
+> questions for you after I start with the changes.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Ok. Don't hesitate to ask.
 
-Thanks!
+-Sergey
 
-[1/1] spi: spi.c: Fix queue hang if previous transfer failed
-      commit: 9c9c9da7aa108e6bf952c18289527a5234e4fc59
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> 
+> -- 
+> Regards
+> Sudip
