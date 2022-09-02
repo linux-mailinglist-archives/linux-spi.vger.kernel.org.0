@@ -2,170 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2306D5AB453
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Sep 2022 16:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A8D5AB524
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Sep 2022 17:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236242AbiIBOyO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Sep 2022 10:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S235432AbiIBP2p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Sep 2022 11:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236835AbiIBOxt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Sep 2022 10:53:49 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C985FB2CF5;
-        Fri,  2 Sep 2022 07:17:56 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id k18so2370227lji.13;
-        Fri, 02 Sep 2022 07:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/+qv/qtVZLxZWjZaDQDBBWUqwZqD8Ult8cYyZQOZh8o=;
-        b=Q5H04ZVMrIAhefDQpGO8RR97Okeo5Vw0US0RPNRsryFh6DUuQ3ZNk9G0A4SDnmeo21
-         lOWXybJM0Cl/m1cuwid8E7HJbepJJSWGD8+l6QuDHNu82/OOMuFvNGoai/OsR0kxVph6
-         Q9aiLPfmxjSuHgZbIo+53k9U0a3CeA+x+3pQksMbDgA+ooxLw3o5GQXsmXfhHnHm9Pw5
-         8Ve+NZANM/bZodRLGl2MmK0kvwF9AIEc6ZwSOcXFnagzXQVZramA/8vNPhgP9okcX77C
-         v+lHRmXuL2QNXrI5y785Fz/T9Kaxu9TajHSNnMIqy9bfkqySEg62KWdiq+ZZT1f1wOOF
-         bceQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/+qv/qtVZLxZWjZaDQDBBWUqwZqD8Ult8cYyZQOZh8o=;
-        b=A5mAUfF2J+Vm+23qL9Bb6EORCiol8+m/u2mJl6iEI/Tt4JcFzB4U+ydXg3KXTQnMXT
-         07sgWcqSl6S+UtP030rhibNx53g2WI2NKdYRc/2W5Kt1chnBfJWRRKt+O+Vu1yEY6yK/
-         qbFuxfw90FEXrHb9i3D+4t9gYPkDltmssSX9c7jtMNVJphwSfBeop4KIeq2aDeUVhbzk
-         wXHwHnejOzMMfA+Qzyk31Cq22bPzPoMcbxJoj29fMcEX+9BR3AThJ0kzp+mZJ254gkGm
-         WoEbNpLgVtI3MVng6pnTWGimLqTDGhJAPN51GOsqbmq2F1H+jqWCp8TPNADQ9dXCYE1n
-         fOFA==
-X-Gm-Message-State: ACgBeo3AL7VfHc0v117fIn9+MBKbcW8yU7FO+7qjpmScvHbRSiv9rVK5
-        G4/LL70eG6GczrOH7LmOthBjW7+G+22V+qWD
-X-Google-Smtp-Source: AA6agR7baXn4SVJuzrf/vnZ6uXiphZvMo0i8uBoNHsA3EEIy6l2gKS5svbt6UQDxfL+jEx+73xbt2w==
-X-Received: by 2002:a05:651c:1048:b0:268:f7bd:8043 with SMTP id x8-20020a05651c104800b00268f7bd8043mr599403ljm.52.1662128274974;
-        Fri, 02 Sep 2022 07:17:54 -0700 (PDT)
-Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05651232d100b00492f1b2ac0bsm261258lfg.101.2022.09.02.07.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 07:17:54 -0700 (PDT)
-Message-ID: <7dae9f3f-88eb-d996-3cb3-89402ea9e31f@gmail.com>
-Date:   Fri, 2 Sep 2022 17:20:30 +0300
+        with ESMTP id S236083AbiIBP2Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Sep 2022 11:28:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAC62C67D
+        for <linux-spi@vger.kernel.org>; Fri,  2 Sep 2022 08:02:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6DE2B829FB
+        for <linux-spi@vger.kernel.org>; Fri,  2 Sep 2022 15:02:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2EEC433C1;
+        Fri,  2 Sep 2022 15:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662130970;
+        bh=cqYQrDWbsA259s6mDxyiNrdfRWNS+VT5pLMF5AfVRe8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=nD0KjQXGacIWcblAj0sWtgtJkoxZ67TnNSoRGhTReDsolLLQvTlgd/SXgIiY7KEsi
+         XEbBCWaAQS/8R2II4CcYVtrcLh0+VwileUb3Hzsd+Sitjlu5BX/BD6ogp9BIru3rWs
+         g4wZahM9J9hUylaJ70kPbh48QyEHbdiyoTEzEYzl5Hu5d/ojyO8BydqZXdHGIXOIx+
+         FQNgHm6cJuAs/k+GGDC44KiK/rAAYY491GUhc1TShE8SAbQ412c+tHC2au8HbBN/kE
+         HFDfvYTHo6zY1ZOQ0CuhcMc8l3uww3HDDCXeDK1jt6QsN6mg7ag4gK4EC7p3utALCQ
+         1D6WQDzhWWjzg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Brown <broonie@kernel.org>,
+        David Jander <david@protonic.nl>,
+        Casper Andersson <casper.casan@gmail.com>
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20220901120732.49245-1-broonie@kernel.org>
+References: <20220901120732.49245-1-broonie@kernel.org>
+Subject: Re: [PATCH v1] spi: mux: Fix mux interaction with fast path optimisations
+Message-Id: <166213096929.48295.4853697815455694348.b4-ty@kernel.org>
+Date:   Fri, 02 Sep 2022 16:02:49 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/2] dmaengine: ti: k3-udma: Respond TX done if
- DMA_PREP_INTERRUPT is not requested
-To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
-        broonie@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     vigneshr@ti.com, kishon@ti.com
-References: <20220822091531.27827-1-vaishnav.a@ti.com>
- <20220822091531.27827-2-vaishnav.a@ti.com>
- <1d4eb194-aab7-42c7-f33f-4b89e607dc6c@gmail.com>
- <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-7d1a0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Achath,
-
-On 23/08/2022 09:57, Vaishnav Achath wrote:
-> Hi Peter,
+On Thu, 1 Sep 2022 13:07:32 +0100, Mark Brown wrote:
+> The spi-mux driver is rather too clever and attempts to resubmit any
+> message that is submitted to it to the parent controller with some
+> adjusted callbacks.  This does not play at all nicely with the fast
+> path which now sets flags on the message indicating that it's being
+> handled through the fast path, we see async messages flagged as being on
+> the fast path.  Ideally the spi-mux code would duplicate the message but
+> that's rather invasive and a bit fragile in that it relies on the mux
+> knowing which fields in the message to copy.  Instead teach the core
+> that there are controllers which can't cope with the fast path and have
+> the mux flag itself as being such a controller, ensuring that messages
+> going via the mux don't get partially handled via the fast path.
 > 
-> On 22/08/22 18:42, Péter Ujfalusi wrote:
->>
->>
->> On 22/08/2022 12:15, Vaishnav Achath wrote:
->>> When the DMA consumer driver does not expect the callback for TX done,
->>> There is no need to perform the channel RT byte counter calculations
->>> and estimate the completion but return complete on first attempt itself.
->>> This assumes that the consumer who did not request DMA_PREP_INTERRUPT
->>> has its own mechanism for understanding TX completion, example: MCSPI
->>> EOW interrupt can be used as TX completion signal for a SPI transaction.
->>
->> The check is in place to make sure that we don't leave stale data in the
->> DMA fabric.
->> If you drop the check then it is going to be possible that some TX data
->> is going to be lost.
->> Could be one out of 10K transfers or 100K, but if that happens it is not
->> going to be easy to figure out.
->> Let's say we go the packet back, but PDMA is still have data to send and
->> the IP stops transmitting (externally clocked bus, some delay, etc).
->> Is it going to be OK to disable the channel?
->>
-> Thanks for the feedback, yes the check is necessary for most of the cases
-> but there needs to be  a way to disable the check for consumers which can
-> identify the end of transaction using some other internal mechanism/interrupt.
-> 
-> For example the MCSPI controller has an End of Word(EOW) interrupt when the
-> said number of bytes has been clocked out, in this case the EOW interrupt
-> being raised guarantees that there is no stale data in DMA fabric.Using
-> the EOW interrupt to identify the completion of a transaction significantly
-> improves the transaction speed since we need not now wait for the slower DMA
-> TX completion calculation.
-> 
-> This commit tries to bypass the check only if the consumer did not request
-> it by not passing the DMA_PREP_INTERRUPT flag, in other cases the check
-> should not be bypassed.
+> [...]
 
-Let me think about over the weekend... Do you have performance numbers 
-for this change?
+Applied to
 
-If we make sure that this is only affecting non cyclic transfers with a 
-in code comment to explain the expectations from the user I think this 
-can be safe.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> 
->>>
->>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->>> ---
->>>   drivers/dma/ti/k3-udma.c | 5 ++++-
->>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->>> index 39b330ada200..03d579068453 100644
->>> --- a/drivers/dma/ti/k3-udma.c
->>> +++ b/drivers/dma/ti/k3-udma.c
->>> @@ -263,6 +263,7 @@ struct udma_chan_config {
->>>   	enum udma_tp_level channel_tpl; /* Channel Throughput Level */
->>>   
->>>   	u32 tr_trigger_type;
->>> +	unsigned long tx_flags;
->>>   
->>>   	/* PKDMA mapped channel */
->>>   	int mapped_channel_id;
->>> @@ -1057,7 +1058,7 @@ static bool udma_is_desc_really_done(struct udma_chan *uc, struct udma_desc *d)
->>>   
->>>   	/* Only TX towards PDMA is affected */
->>>   	if (uc->config.ep_type == PSIL_EP_NATIVE ||
->>> -	    uc->config.dir != DMA_MEM_TO_DEV)
->>> +	    uc->config.dir != DMA_MEM_TO_DEV || !(uc->config.tx_flags & DMA_PREP_INTERRUPT))
->>>   		return true;
->>>   
->>>   	peer_bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->>> @@ -3418,6 +3419,8 @@ udma_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
->>>   	if (!burst)
->>>   		burst = 1;
->>>   
->>> +	uc->config.tx_flags = tx_flags;
->>> +
->>>   	if (uc->config.pkt_mode)
->>>   		d = udma_prep_slave_sg_pkt(uc, sgl, sglen, dir, tx_flags,
->>>   					   context);
->>
-> 
+Thanks!
 
--- 
-Péter
+[1/1] spi: mux: Fix mux interaction with fast path optimisations
+      commit: b30f7c8eb0780e1479a9882526e838664271f4c9
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
