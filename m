@@ -2,46 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A8D5AB524
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Sep 2022 17:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9318A5AB521
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Sep 2022 17:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiIBP2p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Sep 2022 11:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S235565AbiIBP2q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Sep 2022 11:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbiIBP2Z (ORCPT
+        with ESMTP id S236446AbiIBP2Z (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Sep 2022 11:28:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAC62C67D
-        for <linux-spi@vger.kernel.org>; Fri,  2 Sep 2022 08:02:53 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3618D2E69C;
+        Fri,  2 Sep 2022 08:02:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6DE2B829FB
-        for <linux-spi@vger.kernel.org>; Fri,  2 Sep 2022 15:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2EEC433C1;
-        Fri,  2 Sep 2022 15:02:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF9861EB2;
+        Fri,  2 Sep 2022 15:02:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6F3C433B5;
+        Fri,  2 Sep 2022 15:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662130970;
-        bh=cqYQrDWbsA259s6mDxyiNrdfRWNS+VT5pLMF5AfVRe8=;
+        s=k20201202; t=1662130972;
+        bh=juCmVv9yVRVu6vgAJSepeShnFkMGD40VL3ymb2cpIs8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nD0KjQXGacIWcblAj0sWtgtJkoxZ67TnNSoRGhTReDsolLLQvTlgd/SXgIiY7KEsi
-         XEbBCWaAQS/8R2II4CcYVtrcLh0+VwileUb3Hzsd+Sitjlu5BX/BD6ogp9BIru3rWs
-         g4wZahM9J9hUylaJ70kPbh48QyEHbdiyoTEzEYzl5Hu5d/ojyO8BydqZXdHGIXOIx+
-         FQNgHm6cJuAs/k+GGDC44KiK/rAAYY491GUhc1TShE8SAbQ412c+tHC2au8HbBN/kE
-         HFDfvYTHo6zY1ZOQ0CuhcMc8l3uww3HDDCXeDK1jt6QsN6mg7ag4gK4EC7p3utALCQ
-         1D6WQDzhWWjzg==
+        b=HKoQkgI7WYHu4jMuGdUDcInPVifE5wUHoBAbBuoGzIZ3f102JB2nF5lBgAl3+xBBZ
+         PYcEkQR7mGB/ftpCC9CPk46Z1I4EvjwFvbHVvMAKHtGlUx47D1hKSU2655Oa8zfTi7
+         r6Ei+/5/SY6kppspVMP/qGH2P4PALGSp4gvRISLy4NljZpLWlp9ismdp3oyVXNaMb+
+         92n4zgLjn8M30LyF/VZNQ/eJJj7mSkd183iRdpw4HRpNV0t8OfJQV4Rfr/E+1DPAzl
+         t6vx3pxediMjXTEHEKRNrbc5Qw9CzDCNZibsghE0Jk7cPbZmnChPOiLPdwvEmYjSQ/
+         3wWWB/qS80djA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Mark Brown <broonie@kernel.org>,
-        David Jander <david@protonic.nl>,
-        Casper Andersson <casper.casan@gmail.com>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20220901120732.49245-1-broonie@kernel.org>
-References: <20220901120732.49245-1-broonie@kernel.org>
-Subject: Re: [PATCH v1] spi: mux: Fix mux interaction with fast path optimisations
-Message-Id: <166213096929.48295.4853697815455694348.b4-ty@kernel.org>
-Date:   Fri, 02 Sep 2022 16:02:49 +0100
+To:     linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Casper Andersson <casper.casan@gmail.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220901123630.1098433-1-david@protonic.nl>
+References: <20220901123630.1098433-1-david@protonic.nl>
+Subject: Re: [PATCH] spi: spi.c: Fix queue hang if previous transfer failed
+Message-Id: <166213097084.48295.10048279518019656460.b4-ty@kernel.org>
+Date:   Fri, 02 Sep 2022 16:02:50 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,18 +55,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 1 Sep 2022 13:07:32 +0100, Mark Brown wrote:
-> The spi-mux driver is rather too clever and attempts to resubmit any
-> message that is submitted to it to the parent controller with some
-> adjusted callbacks.  This does not play at all nicely with the fast
-> path which now sets flags on the message indicating that it's being
-> handled through the fast path, we see async messages flagged as being on
-> the fast path.  Ideally the spi-mux code would duplicate the message but
-> that's rather invasive and a bit fragile in that it relies on the mux
-> knowing which fields in the message to copy.  Instead teach the core
-> that there are controllers which can't cope with the fast path and have
-> the mux flag itself as being such a controller, ensuring that messages
-> going via the mux don't get partially handled via the fast path.
+On Thu, 1 Sep 2022 14:36:30 +0200, David Jander wrote:
+> The queue worker always needs to be kicked one final time after a transfer
+> is done in order to transition to idle (ctlr->busy = false).
+> 
+> Commit 69fa95905d40 ("spi: Ensure the io_mutex is held until
+> spi_finalize_current_message()") moved this code into
+> __spi_pump_messages(), but it was executed only if the transfer was
+> successful. This condition check causes ctlr-busy to stay true in case of
+> a failed transfer.
+> This in turn causes that no new work is ever scheduled to the work queue.
 > 
 > [...]
 
@@ -77,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: mux: Fix mux interaction with fast path optimisations
-      commit: b30f7c8eb0780e1479a9882526e838664271f4c9
+[1/1] spi: spi.c: Fix queue hang if previous transfer failed
+      commit: 9c9c9da7aa108e6bf952c18289527a5234e4fc59
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
