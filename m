@@ -2,171 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3F95AC8F1
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Sep 2022 05:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4B35ACFAD
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Sep 2022 12:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235590AbiIEDDG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 4 Sep 2022 23:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S237088AbiIEKKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Sep 2022 06:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbiIEDDC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 4 Sep 2022 23:03:02 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D107B25EBC;
-        Sun,  4 Sep 2022 20:03:00 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28532nB8099767;
-        Sun, 4 Sep 2022 22:02:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662346969;
-        bh=JhT2S9EfNW5iVlcN1uvv+SIM5JSkRZnuNcDBBSGekcs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cUFeyrPCIpLeYwQzJxQw7u7C170Us/gJbAltIuPBDEkvoDDFAMMyON/RmDY9p52a3
-         Jb/BmUNqdpaJVOfYuUqNl2szgl7WspbBfPM9V4jae0YPTzCyBPwAbOLsMPN4BRIwMb
-         1c2v7AVQz0TvGLDHmNOC9Vxji+Z+h3gGO9gokKEU=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28532nq6019441
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 4 Sep 2022 22:02:49 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Sun, 4 Sep
- 2022 22:02:49 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Sun, 4 Sep 2022 22:02:49 -0500
-Received: from [10.24.69.110] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28532kYC115634;
-        Sun, 4 Sep 2022 22:02:46 -0500
-Message-ID: <a30e917d-e031-3829-36fb-b897e971825f@ti.com>
-Date:   Mon, 5 Sep 2022 08:32:45 +0530
+        with ESMTP id S236990AbiIEKKY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Sep 2022 06:10:24 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3412F676
+        for <linux-spi@vger.kernel.org>; Mon,  5 Sep 2022 03:10:22 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id v26so12393034lfd.10
+        for <linux-spi@vger.kernel.org>; Mon, 05 Sep 2022 03:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=9iZUJ2C+XzNkKLqBt28HLIylkiN68ZpTZ2fgZQtMBpU=;
+        b=g075S5okKrDHmJNtm8Ec66J8SgI+LW/7dkJPUaLVxLUIdCMZ7mkZ0uP6vLvlWxfGY3
+         GSUj7p9ZQsjq1Liw8ZLR0G3LGJDB8hgK1ItCJL4z40Ai0Z3RlFfsi2nTw9XDVAPSFQBO
+         nx3xh9rJN0Vr1VyajPjDDIfxmKvg4tUSm36bdVQy1dMe9JG4yFh2T87fbnpVKflQ/ROp
+         N4auuALgoy4s2xWcRD4eVsqjGRHiYcUlFtKZUcH3XH1fVvFHbHbim2J9xrgn/nAAOCeR
+         maPHym/1hVHv/AS1eEu/ipimDkb/yAg/mc8e0vAXc4bRxyQLkbSPnqMlPSijxb0mMPjP
+         UfoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=9iZUJ2C+XzNkKLqBt28HLIylkiN68ZpTZ2fgZQtMBpU=;
+        b=6zMdFNeI9OtQyl0799I5n/QOOec8EIL2DMS/WvE2i6y8wYjyAcxnjLyM3WW30Z4fxz
+         dqTM0fKn50Y/Jf1+mquKKBC2XfwUt8O/I8M4hFvmE161gYALP8jYv9j5MYKkTDYWvKrI
+         9AvhZps2aWIdCzIkNtFqCkItSFoBAhxLLebsM05WJyBQ31ZOV16zwNwPWbr8o8QSMs9x
+         r+ye4HTyV+L5gg1UPdJHB3USxRIlhyuBuVEAIO3VgZxAkw31aFgwaVb361JedJZ2BUMw
+         8ZVkmVhq1zR3R/pAt9QyhFVz0EZvbYJfzz5i9cyzm+HDP7qbT0a/VJydqG2CkB4MEIZ9
+         5U5w==
+X-Gm-Message-State: ACgBeo2Dorn0bbqmyGHD8DeQAtViDsX1UcrN/l619I3z3bwix/d9GTaK
+        YWYyAh2DW9UwD8Wqqfu7gikYZw==
+X-Google-Smtp-Source: AA6agR54xygcg8U5xob0simsg/0TJd3c+/Trm5Wr5mH6lOfqkDvRVfkz6Tv/7SEAHfrH+2elmOMrXw==
+X-Received: by 2002:a05:6512:12c4:b0:494:8373:5678 with SMTP id p4-20020a05651212c400b0049483735678mr8899913lfg.577.1662372620382;
+        Mon, 05 Sep 2022 03:10:20 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b0048b365176d9sm1135613lfq.286.2022.09.05.03.10.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 03:10:19 -0700 (PDT)
+Message-ID: <baa9c80a-bc81-03a9-680f-883a54cb4e63@linaro.org>
+Date:   Mon, 5 Sep 2022 12:10:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dmaengine: ti: k3-udma: Respond TX done if
- DMA_PREP_INTERRUPT is not requested
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
+ json-schema
 Content-Language: en-US
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        <vkoul@kernel.org>, <broonie@kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-CC:     <vigneshr@ti.com>, <kishon@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>
-References: <20220822091531.27827-1-vaishnav.a@ti.com>
- <20220822091531.27827-2-vaishnav.a@ti.com>
- <1d4eb194-aab7-42c7-f33f-4b89e607dc6c@gmail.com>
- <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
- <7dae9f3f-88eb-d996-3cb3-89402ea9e31f@gmail.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <7dae9f3f-88eb-d996-3cb3-89402ea9e31f@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Eugen.Hristev@microchip.com, Sergiu.Moga@microchip.com,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20220817075517.49575-1-sergiu.moga@microchip.com>
+ <20220817075517.49575-3-sergiu.moga@microchip.com>
+ <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
+ <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
+ <ec86420c-a210-facd-ab3a-5baf84a736f3@linaro.org>
+ <0aba8906-ed30-786e-cff4-6cb70d6e73c5@linaro.org>
+ <f2fdaf34-ad66-9e6d-2f11-34171fb7aaa9@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f2fdaf34-ad66-9e6d-2f11-34171fb7aaa9@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Peter,
-
-On 02/09/22 19:50, Péter Ujfalusi wrote:
-> Hi Achath,
-> 
-> On 23/08/2022 09:57, Vaishnav Achath wrote:
->> Hi Peter,
->>
->> On 22/08/22 18:42, Péter Ujfalusi wrote:
->>>
->>>
->>> On 22/08/2022 12:15, Vaishnav Achath wrote:
->>>> When the DMA consumer driver does not expect the callback for TX done,
->>>> There is no need to perform the channel RT byte counter calculations
->>>> and estimate the completion but return complete on first attempt itself.
->>>> This assumes that the consumer who did not request DMA_PREP_INTERRUPT
->>>> has its own mechanism for understanding TX completion, example: MCSPI
->>>> EOW interrupt can be used as TX completion signal for a SPI transaction.
->>>
->>> The check is in place to make sure that we don't leave stale data in the
->>> DMA fabric.
->>> If you drop the check then it is going to be possible that some TX data
->>> is going to be lost.
->>> Could be one out of 10K transfers or 100K, but if that happens it is not
->>> going to be easy to figure out.
->>> Let's say we go the packet back, but PDMA is still have data to send and
->>> the IP stops transmitting (externally clocked bus, some delay, etc).
->>> Is it going to be OK to disable the channel?
->>>
->> Thanks for the feedback, yes the check is necessary for most of the cases
->> but there needs to be  a way to disable the check for consumers which can
->> identify the end of transaction using some other internal mechanism/interrupt.
->>
->> For example the MCSPI controller has an End of Word(EOW) interrupt when the
->> said number of bytes has been clocked out, in this case the EOW interrupt
->> being raised guarantees that there is no stale data in DMA fabric.Using
->> the EOW interrupt to identify the completion of a transaction significantly
->> improves the transaction speed since we need not now wait for the slower DMA
->> TX completion calculation.
->>
->> This commit tries to bypass the check only if the consumer did not request
->> it by not passing the DMA_PREP_INTERRUPT flag, in other cases the check
->> should not be bypassed.
-> 
-> Let me think about over the weekend... Do you have performance numbers for this
-> change?
-> 
-Thank you, yes we tested mainly for the SPI cases(Master and Slave mode), there
-we saw a peak delay of 400ms for transaction completion and this varied with CPU
-load, after adding the patch to not wait for DMA TX completion and use EOW
-interrupt the peak latency reduced to 2ms.
-> If we make sure that this is only affecting non cyclic transfers with a in code
-> comment to explain the expectations from the user I think this can be safe.
-> \
-Sure I will add this in the next revision.
->>
+On 01/09/2022 13:31, Eugen.Hristev@microchip.com wrote:
+>>>>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..cf15d73fa1e8
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+>>>>> One more thing - I think this should be in serial directory, not mfd,
+>>>>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
 >>>>
->>>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->>>> ---
->>>>   drivers/dma/ti/k3-udma.c | 5 ++++-
->>>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->>>> index 39b330ada200..03d579068453 100644
->>>> --- a/drivers/dma/ti/k3-udma.c
->>>> +++ b/drivers/dma/ti/k3-udma.c
->>>> @@ -263,6 +263,7 @@ struct udma_chan_config {
->>>>       enum udma_tp_level channel_tpl; /* Channel Throughput Level */
->>>>         u32 tr_trigger_type;
->>>> +    unsigned long tx_flags;
->>>>         /* PKDMA mapped channel */
->>>>       int mapped_channel_id;
->>>> @@ -1057,7 +1058,7 @@ static bool udma_is_desc_really_done(struct udma_chan
->>>> *uc, struct udma_desc *d)
->>>>         /* Only TX towards PDMA is affected */
->>>>       if (uc->config.ep_type == PSIL_EP_NATIVE ||
->>>> -        uc->config.dir != DMA_MEM_TO_DEV)
->>>> +        uc->config.dir != DMA_MEM_TO_DEV || !(uc->config.tx_flags &
->>>> DMA_PREP_INTERRUPT))
->>>>           return true;
->>>>         peer_bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->>>> @@ -3418,6 +3419,8 @@ udma_prep_slave_sg(struct dma_chan *chan, struct
->>>> scatterlist *sgl,
->>>>       if (!burst)
->>>>           burst = 1;
->>>>   +    uc->config.tx_flags = tx_flags;
->>>> +
->>>>       if (uc->config.pkt_mode)
->>>>           d = udma_prep_slave_sg_pkt(uc, sgl, sglen, dir, tx_flags,
->>>>                          context);
+>>>> I would rather keep it in this directory, since its corresponding driver
+>>>> is also in the mfd directory.
 >>>
+>>> Sorry, but that's poor argument. Driver subsystems match Linux
+>>> convention, not necessarily hardware type/naming. Bindings directories
+>>> match hardware. MFD bindings are only for MFD wrapper drivers and this
+>>> is a serial interface. Not a MFD. You even do not add MFD devices in the
+>>> driver but add *always one* device depending on serial feature you want.
+>>> This is not even MFD device but regular platform device with children.
+>>>
+>>> You put it in SoC, though, because all other SoCs store it there...
 >>
+>> The last one should be:
+>>
+>> You could put it in SoC, though, because all other SoCs store it there...
+> 
+> Hi,
+> 
+> If it this is only a conversion to yaml, why do you want it moved to 
+> another dir ?
+> Perhaps if you consider SoC or serial as a better place, it should be 
+> done through a different patch.
+> 
+> Also, disputing whether this is really a MFD or not, is not in the scope 
+> of this patch.
 > 
 
--- 
-Regards,
-Vaishnav
+Because you are converting - thus renaming - the bindings, so this is
+the place to put them in proper place. The conversion to DT Schema comes
+pretty often with small fixups, so proper location is one of them.
+That's quite common case.
+
+Best regards,
+Krzysztof
