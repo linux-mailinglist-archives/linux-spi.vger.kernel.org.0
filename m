@@ -2,84 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A4F5AD725
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Sep 2022 18:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C5A5AD869
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Sep 2022 19:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiIEQM2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Sep 2022 12:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S231630AbiIERdX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Sep 2022 13:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiIEQMW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Sep 2022 12:12:22 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5D454CBE
-        for <linux-spi@vger.kernel.org>; Mon,  5 Sep 2022 09:12:20 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id z29so13670242lfb.13
-        for <linux-spi@vger.kernel.org>; Mon, 05 Sep 2022 09:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rrWMFV+N+f8aARUW0ZNrAlxPcv8JN7PD06T7jx57Q7s=;
-        b=SS3wEpx17GrNgX9Fc+X/k3B/9tRMakRxRbH8xMVvVDq2ZdruXjZG7LTGx+p+6x1mMu
-         jepfNNJGN6O3or1m/v60nbMJcuavuaBqS1W9ZbCI7/Ya5z3pgt0zpvsfZ+Vf0Gm/heYu
-         eczsXHy88W6Mg1JHIpbb0P7YNYSyzRYzGs+l0DVwXxSOlLg2rcR5CeqOo6OzBjLvGMqL
-         DrJTFyVARk/EwFRMAPsXNAFdKReDopalSto5lm+nfMqaF87QF8hAYfYpMcjonMW2EaP1
-         wK9l1oULRf5bFySVuoLUYG40Bgn4zumjoEnRwUzL7guqlm2k3GdQGr1Y8UYGB929y+Qm
-         M9dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rrWMFV+N+f8aARUW0ZNrAlxPcv8JN7PD06T7jx57Q7s=;
-        b=sVOUfmfXwauGKwNuWfGY1yjhXhVxo3FVJeZwwrP07JpsEOHd9IrfXbZpjFNrL6ACpD
-         97w03diPEPb0Rk2QqqeeAV1hN0z8Q6h/l1NiWjF6Yat5VasyWmPxUwlZiVG+N0YBi06P
-         EhX4L7OM5Vilzr3LG0+LrjOHmcPW9N3YkqyZ0g/7DFZqWLslgBDwjOoIU/yxpp61hl/y
-         mfW22CkB6T7Aa8R6EQmZTtVlQfQ7l08tzMmsccoFfpzLjJ169JmsuhID6/I/l6JCtqHy
-         Tq1nEl9BUkM9vk3HoPqNWlzPvxJcIFmCeApyNH3d+CgzWGbML6cqr58a25FrLcsU5mI1
-         Qpmw==
-X-Gm-Message-State: ACgBeo1CsZm6mljaMv6e/6mqu58gwpyBTXD4FQ1f+v7/yFT2Wc5Dqck8
-        U4Mo4rBkyZg8olrpJHjpszbAsA==
-X-Google-Smtp-Source: AA6agR5YbCPHG0VF+WgTYH8U/Qyjr4JX1+miUiqvPBNw4ceg3bXl8ITHJX7z4VES5+HrNXJDFKZYSw==
-X-Received: by 2002:ac2:5ccd:0:b0:495:79c7:f2f7 with SMTP id f13-20020ac25ccd000000b0049579c7f2f7mr3651296lfq.647.1662394338923;
-        Mon, 05 Sep 2022 09:12:18 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f19-20020ac25333000000b0048a9a756763sm1235025lfh.19.2022.09.05.09.12.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 09:12:18 -0700 (PDT)
-Message-ID: <80abf192-0313-aade-7780-604f4c9c6810@linaro.org>
-Date:   Mon, 5 Sep 2022 18:12:15 +0200
+        with ESMTP id S231230AbiIERdW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Sep 2022 13:33:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3412C5A3FB;
+        Mon,  5 Sep 2022 10:33:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B96E461369;
+        Mon,  5 Sep 2022 17:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE7F6C433D6;
+        Mon,  5 Sep 2022 17:33:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662399201;
+        bh=fJl2loForj832KBRuUXO1rQdi1jQcxM/e8AQQzTuHYo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=I73vtqRP5D3OpZADsGj16+2lyQtKBWSU66U5KTMIuET9gCbn3GP39nR7LRUMupe0/
+         3riKs0mbTQKuJS0+hFS/TWYxX5yIR5QXDW9KFNKT8p+huHZgPCodGHuR9LvyfOVEkH
+         LExEQrSmUQtKarJux/AAe/6Qfpe8wtLX5QzQbIN3KaQi0iZ/Mt7O3QK03aZFvU31ZR
+         /KGf+qkXqnTHK6i0h4X8aUKiVP9s7TE+CywPweBUaSabPKVAFShoDp3oipchrRYuCv
+         KO/ALv4vpBzWNTZp+HpUWvJFlDlnUFgCYEza2EWUYvfgtrwMyMIbTuZqF5xR++NBcq
+         NgDEm+iDbNqjg==
+From:   Mark Brown <broonie@kernel.org>
+To:     pramod.gurav@linaro.org, Xu Qiang <xuqiang36@huawei.com>,
+        konrad.dybcio@somainline.org, iivanov@mm-sol.com,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     weiyongjun1@huawei.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        guohanjun@huawei.com
+In-Reply-To: <20220825065324.68446-1-xuqiang36@huawei.com>
+References: <20220825065324.68446-1-xuqiang36@huawei.com>
+Subject: Re: [PATCH -next 1/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
+Message-Id: <166239919867.807748.1227253290015300046.b4-ty@kernel.org>
+Date:   Mon, 05 Sep 2022 18:33:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Content-Language: en-US
-To:     Sergiu.Moga@microchip.com, lee@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu.Beznea@microchip.com, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, mturquette@baylibre.com,
-        sboyd@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
- <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
- <YxYI8/bprIV2wd1c@google.com>
- <d6a498e7-838b-addf-bc7f-81e6805806d3@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d6a498e7-838b-addf-bc7f-81e6805806d3@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,59 +57,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 05/09/2022 17:22, Sergiu.Moga@microchip.com wrote:
-> On 05.09.2022 17:37, Lee Jones wrote:
->>
->> On Fri, 19 Aug 2022, Sergiu.Moga@microchip.com wrote:
->>
->>> On 18.08.2022 11:39, Krzysztof Kozlowski wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>
->>>> On 17/08/2022 10:55, Sergiu Moga wrote:
->>>>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
->>>>> json-schema format.
->>>>>
->>>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
->>>>> ---
->>>>>    .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
->>>>>    .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
->>>>>    2 files changed, 190 insertions(+), 98 deletions(-)
->>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>>>    delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..cf15d73fa1e8
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>> One more thing - I think this should be in serial directory, not mfd,
->>>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>
->>> I would rather keep it in this directory, since its corresponding driver
->>> is also in the mfd directory.
->>
->> Looks like a UART driver to me.
->>
->> Which MFD driver does this pertain to?
->>
->> --
->> Lee Jones [李琼斯]
-> 
-> Hi,
-> 
-> It's this one: drivers/mfd/at91-usart.c[1]
+On Thu, 25 Aug 2022 06:53:23 +0000, Xu Qiang wrote:
+> Add the missing clk_disable_unprepare() before return
+> from spi_qup_resume() in the error handling case.
 > 
 > 
-> [1] 
-> https://elixir.bootlin.com/linux/v6.0-rc4/source/drivers/mfd/at91-usart.c
 
-Which is not a "real MFD driver" because it probes exactly one child
-(depending on the chosen serial protocol). Aren't MFD supposed to have
-more then one child?
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
-Krzysztof
+Thanks!
+
+[1/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
+      commit: 70034320fdc597b8f58b4a43bb547f17c4c5557a
+[2/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
+      commit: 494a22765ce479c9f8ad181c5d24cffda9f534bb
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
