@@ -2,66 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F1B5AF05A
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Sep 2022 18:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44675AF07D
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Sep 2022 18:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiIFQ07 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Sep 2022 12:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S238878AbiIFQfX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Sep 2022 12:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234053AbiIFQ0l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Sep 2022 12:26:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87E9A6C41
-        for <linux-spi@vger.kernel.org>; Tue,  6 Sep 2022 08:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B1AFB81923
-        for <linux-spi@vger.kernel.org>; Tue,  6 Sep 2022 15:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E31CC433C1;
-        Tue,  6 Sep 2022 15:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662479805;
-        bh=mysM9bFXZJPlkmGlKbllguvyLT1ui6lT0Xf2RMXoZGI=;
-        h=Subject:From:Date:To:From;
-        b=PKoNQ8TE/1Vc0WvYC3buB6dS4YOby4AtV1N89rbrloVKb0F7c+ZcF3B7adEArYInx
-         9ZqvgOqokk3h/4V0rpSlumwVysL1/oC+iJwv1L68uAnVcZL2UYJ2RfTaAWUlEL0TaX
-         kH2hfA/8pl3WyOvBt1/jY5DRux/xtdBn2WJpEgf88OwdycQG0T3hkWIUNZLWe5yYyy
-         zQzqofM/EqyaWksrfDrKQFn40s/c8TKToKGp3aL6HNZRiWeyBsdcXUuFYYJGkfS1hG
-         Yod3vW5siAgIM9DpJiKICd3Bhxd3SPR15hBytx71GIQkDEyslMOYLRoyvyEyi6BzHJ
-         /o/alzsbtiYKA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 319A0C4166E;
-        Tue,  6 Sep 2022 15:56:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238216AbiIFQez (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Sep 2022 12:34:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608BB81B00;
+        Tue,  6 Sep 2022 09:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662480636; x=1694016636;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gedYZwo4u48DyQIx4AvZM58SsPLraSGOxPfVfqmenhw=;
+  b=OzTCVFSs8olnZXWnjCsQ13tnHOF7usEDhxuvr3YKSI4ie18wtGvZqgkz
+   eyk+sByDBlf0Er1xUH/oh9cKlgQtJDkUQcyhWwUNz06YwH6mmAU5cbpiP
+   GmJnLf2jIGy3jc24F84p2PxSf/9je0h6D3jj8alC129YYzx206VDak64B
+   8YLMElcIc+spq3He4vrXWvc/sWLcbZaqcjlZusnF55VNG7guJ7Xrc7ncN
+   ZG87IVzec8exyZ3oz+iF7cTNeIpdU/++4v6impdoJkfIbTHFVQRzxPG/Q
+   KzLDhwhbdUoivzYdH756DxObbiImf6psXFuqvhUjJYMwr1+PYvgwTRZx5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276373799"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="276373799"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 09:10:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="942510315"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2022 09:10:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id AC18986; Tue,  6 Sep 2022 19:10:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Walle <michael@walle.cc>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] spi: nxp-fspi: Do not dereference fwnode in struct device
+Date:   Tue,  6 Sep 2022 19:10:48 +0300
+Message-Id: <20220906161048.39953-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166247980519.12242.5418920071906989066.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 06 Sep 2022 15:56:45 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Make atmel serial driver aware of GCLK (2022-09-06T13:55:02)
-  Superseding: [v1] Make atmel serial driver aware of GCLK (2022-08-17T07:55:13):
-    [1/5] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref binding
-    [2/5] dt-bindings: mfd: atmel,at91-usart: convert to json-schema
-    [3/5] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref binding
-    [4/5] clk: at91: sama5d2: Add Generic Clocks for UART/USART
-    [5/5] tty: serial: atmel: Make the driver aware of the existence of GCLK
+In order to make the underneath API easier to change in the future,
+prevent users from dereferencing fwnode from struct device. Instead,
+use the specific dev_fwnode() API for that.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-nxp-fspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index 2b0301fc971c..d6a65a989ef8 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -588,7 +588,7 @@ static int nxp_fspi_clk_prep_enable(struct nxp_fspi *f)
+ {
+ 	int ret;
+ 
+-	if (is_acpi_node(f->dev->fwnode))
++	if (is_acpi_node(dev_fwnode(f->dev)))
+ 		return 0;
+ 
+ 	ret = clk_prepare_enable(f->clk_en);
+@@ -606,7 +606,7 @@ static int nxp_fspi_clk_prep_enable(struct nxp_fspi *f)
+ 
+ static int nxp_fspi_clk_disable_unprep(struct nxp_fspi *f)
+ {
+-	if (is_acpi_node(f->dev->fwnode))
++	if (is_acpi_node(dev_fwnode(f->dev)))
+ 		return 0;
+ 
+ 	clk_disable_unprepare(f->clk);
+@@ -1100,7 +1100,7 @@ static int nxp_fspi_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, f);
+ 
+ 	/* find the resources - configuration register address space */
+-	if (is_acpi_node(f->dev->fwnode))
++	if (is_acpi_node(dev_fwnode(f->dev)))
+ 		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	else
+ 		res = platform_get_resource_byname(pdev,
+@@ -1113,7 +1113,7 @@ static int nxp_fspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* find the resources - controller memory mapped space */
+-	if (is_acpi_node(f->dev->fwnode))
++	if (is_acpi_node(dev_fwnode(f->dev)))
+ 		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+ 	else
+ 		res = platform_get_resource_byname(pdev,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.35.1
 
