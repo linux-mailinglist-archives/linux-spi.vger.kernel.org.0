@@ -2,59 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFCC5AEF7D
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Sep 2022 17:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B145AF040
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Sep 2022 18:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbiIFPzB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Sep 2022 11:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S237420AbiIFQUf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Sep 2022 12:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiIFPyd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Sep 2022 11:54:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C23E8B98E;
-        Tue,  6 Sep 2022 08:12:38 -0700 (PDT)
+        with ESMTP id S232906AbiIFQT6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Sep 2022 12:19:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F3D326DA;
+        Tue,  6 Sep 2022 08:49:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6FB8B81919;
-        Tue,  6 Sep 2022 15:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1405CC433C1;
-        Tue,  6 Sep 2022 15:12:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1F49B818C2;
+        Tue,  6 Sep 2022 15:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603B1C433D6;
+        Tue,  6 Sep 2022 15:49:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662477155;
-        bh=bD0yKhphSmBVVLUyMPYKB5NUPKImxamaOv37wNGzfVM=;
+        s=k20201202; t=1662479354;
+        bh=HyOzm5VMGmYJGCUZJSGax0V3uAmkTmNzZyIR1FAA+RQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/X1/ApvsqezV4eN1BIndC2/MAwkQm3YupuJBYQmD8izTSnTp/lrI35aWbBr4zeVc
-         RrxtZze9J3pTr5iwZMJWvEqU/rnzOxj7jVk2RnBIEPpBmvqamYQx7zcu17ut67cWKi
-         dRkfKWk30sRB8xj2AMRr3lzlVMbw9RHW09kJ9OnBYyEv7uLfy5xocv6HsKALoGXySt
-         ejOOkisZ96Ucfu1HHjJyLbB2sFPZm+NZfhiDksAp2OHDMd0cdYkr/6ne1hIpcUHcF0
-         Oge3E055C3Eev1I0kGxKPo51kJb7A/FLEOfwa+U13HiT1y0+KWMg6nK0jsTahy6JDx
-         rK3LGPYULPHmw==
-Date:   Tue, 6 Sep 2022 16:12:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, jirislaby@kernel.org, admin@hifiphile.com,
-        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com,
+        b=OB6QEsUCynTHvPxAqfPNLKgNfjrOnGNuCsjcCMghiOVfEjqklmu+JjF1pE6s740tR
+         o73CbEg5qg4GocYd4ffIXKqn2Vn374C0VE8irVivL//j0IM8oXHcQzfyzS4ff7zLTn
+         0SF6aY/qx6kzV0f8dBPG8p9iYJiu272Hw8LCBiPwZWHLjQ4tFH2Ysv6JOROT/tfRi9
+         LsFO2D59VxPZo7JsdEkoJMXCQ82H2gPyFjaiTftXzSBGdw0oL1DIUoIfeoZq7lRk91
+         7Teieml4YBhcnYEPOdflYkLXh+krGUQfR9276k2zwRoLAzAVEYpig0v2XAA/PtLHWV
+         EpC+kNT2h9nNw==
+Date:   Tue, 6 Sep 2022 16:49:03 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sergiu.Moga@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 01/13] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA
- related properties
-Message-ID: <YxdjW2HXcneKvP3c@sirena.org.uk>
-References: <20220906135511.144725-1-sergiu.moga@microchip.com>
- <20220906135511.144725-2-sergiu.moga@microchip.com>
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
+ json-schema
+Message-ID: <Yxdr76d2KVdUDfpW@google.com>
+References: <20220817075517.49575-1-sergiu.moga@microchip.com>
+ <20220817075517.49575-3-sergiu.moga@microchip.com>
+ <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
+ <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
+ <YxYI8/bprIV2wd1c@google.com>
+ <d6a498e7-838b-addf-bc7f-81e6805806d3@microchip.com>
+ <80abf192-0313-aade-7780-604f4c9c6810@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RiykofuyQSrEwF40"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220906135511.144725-2-sergiu.moga@microchip.com>
-X-Cookie: divorce, n:
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <80abf192-0313-aade-7780-604f4c9c6810@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,33 +69,64 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 05 Sep 2022, Krzysztof Kozlowski wrote:
 
---RiykofuyQSrEwF40
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On 05/09/2022 17:22, Sergiu.Moga@microchip.com wrote:
+> > On 05.09.2022 17:37, Lee Jones wrote:
+> >>
+> >> On Fri, 19 Aug 2022, Sergiu.Moga@microchip.com wrote:
+> >>
+> >>> On 18.08.2022 11:39, Krzysztof Kozlowski wrote:
+> >>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>>>
+> >>>> On 17/08/2022 10:55, Sergiu Moga wrote:
+> >>>>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
+> >>>>> json-schema format.
+> >>>>>
+> >>>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> >>>>> ---
+> >>>>>    .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
+> >>>>>    .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
+> >>>>>    2 files changed, 190 insertions(+), 98 deletions(-)
+> >>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+> >>>>>    delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..cf15d73fa1e8
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
+> >>>> One more thing - I think this should be in serial directory, not mfd,
+> >>>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
+> >>>>
+> >>>> Best regards,
+> >>>> Krzysztof
+> >>>
+> >>> I would rather keep it in this directory, since its corresponding driver
+> >>> is also in the mfd directory.
+> >>
+> >> Looks like a UART driver to me.
+> >>
+> >> Which MFD driver does this pertain to?
+> >>
+> > 
+> > Hi,
+> > 
+> > It's this one: drivers/mfd/at91-usart.c[1]
+> > 
+> > 
+> > [1] 
+> > https://elixir.bootlin.com/linux/v6.0-rc4/source/drivers/mfd/at91-usart.c
+> 
+> Which is not a "real MFD driver" because it probes exactly one child
+> (depending on the chosen serial protocol). Aren't MFD supposed to have
+> more then one child?
 
-On Tue, Sep 06, 2022 at 04:55:00PM +0300, Sergiu Moga wrote:
-> The DT nodes of the SPI IP's may contain DMA related properties so
-> make sure that the binding is able to properly validate those as
-> well by making it aware of these optional properties.
+It's a single piece of silicon which supports multiple functions.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+There is no stipulation detailing simultaneous usage.
 
-though it looks like perhaps this could just go separately?
+Still, happy to receive suggestions on implementing this differently.
 
---RiykofuyQSrEwF40
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMXY1oACgkQJNaLcl1U
-h9CFSwf/f2WJjlGGmV0h/sjORBcMhneYZgMVZLsU1og4qFz2YDAOtYmPZnu9DQ+0
-Kra8RSJuu24fqcKgfjibNu9WMF9rhWVJCCW4Y0loHGBWWUf5ZFOXTLB0zor5WZjg
-nUodeAOO6krDC1SL5lmly3FP9DCEuYQoJ2PxH3Rh/3Vrvb0PWNbdGV6gJ8+KitmB
-eFlcVGlxggLpFxM7AZrpTY7cNt8XBmP3jQfo76+14nGSX5UsRIvvBt3To3ml3yyd
-wHF17Rb401msATbqq2sIy0GtR2ouz4KB42jNKYz7IF45cu8V053xJNwFY4P/5Epj
-XqqBL2HP7BaE5e8g7rqEqHrVv+jdXQ==
-=GClE
------END PGP SIGNATURE-----
-
---RiykofuyQSrEwF40--
+-- 
+Lee Jones [李琼斯]
