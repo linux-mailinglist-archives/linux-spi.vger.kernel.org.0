@@ -2,142 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C1E5B063A
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Sep 2022 16:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993C75B06D6
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Sep 2022 16:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiIGOPu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Sep 2022 10:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S230325AbiIGOce (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Sep 2022 10:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiIGOPo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Sep 2022 10:15:44 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90054.outbound.protection.outlook.com [40.107.9.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101B91838B;
-        Wed,  7 Sep 2022 07:15:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XIDOs2XhJTzPUY7uRUmCVz3MNinP0IRKSNewEkMTBRWh+tFVFUQ6ZvYUflN7ufmZxzMdThDXGBI1GCBy0ZccVuqOPwOjlnQw+1bfQ4QMlrTy4yi4Nyn5LntBO8IwuvzqufOh3nlqQhftIHZLELTh83cFXyp8TnfkhCFQ3CV85ZL1dPGhmhwX4J4otDT9aEwAZwVz0ux9f/bUKuyikRKf8rHODRlFfj2GM5z/H0ICmK8mI2sr7dBe6whdAEnUdgoYyU0Y76Y/pQxmC9MvM5PbILgbqHApgvdZlu8YlKoCFn2Cvlz7SAdeguboyVGVVKWLw9WCLLEuKvtZlFFpK+kL4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2G84Xnw+wzMS9yXpTtC3KRk4Q+S/lipObz/6BxSxh4E=;
- b=FJJTsLnlBAucMbvkbYrGcPdz48IuCqq2ga7aa6I3vjQM/sjibo/t69BI4Doz9yQwTHFYWgdwVt7ik+zoOIkT2YGiirwpnNn6KVAGo/26EckwR/Q7eWO4h/dlw8iA4oLL+fpf/dsuq6dwfWv08J+XcA1PkTq6uKNpJeE2tWYtxSUnSNEMBOhzpFWpbRFmM8hzyORDoa5cS6LMqDSMzjUmYLXTB5QJv1f1StcizuPdzUnec4vQK5iOihHVBKMQtP2nbVkzGodAkIr6BxuIKaKptCeD4BJrAEsRi1bWHtCF4tdE3yiyeKBUYvK0wC/Q9U2GippWgiFW9U61/e7oXAOTtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2G84Xnw+wzMS9yXpTtC3KRk4Q+S/lipObz/6BxSxh4E=;
- b=fTEMdg+zth3OfyaoFGbsgYJ0X5iSRTQ+YjYTSMPux9bkCsevygbDuBRyFPfgGt49vNNmlnLrJQzy/BCDzi0WM9vTs064BmfIUCDtl3iNZmUAVYI9XGx0v7T+Kudd6raM/hp77OhalG/qcKrFbgzg9ZcV9ea3vDQ+tUjms160mdRlUFzXdfT8TNNz2FpRtlOkMf1LGxAxs1XxkH3s7gT9kdO9JZn2n7qQkku99xF+Z6TjNRq52M4EwiT9fJbRc/P0Q5/pM6bpp9eHoOJaLC/IXBV2r223DPvm3mZO+jMzd7htSORzx/t4njrCWhXrXcuTIjGJmU/Gcx/j3i5qcnjxqA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2282.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:b::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.12; Wed, 7 Sep 2022 14:15:40 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 14:15:40 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v3] spi: Add capability to perform some transfer with
- chipselect off
-Thread-Topic: [PATCH v3] spi: Add capability to perform some transfer with
- chipselect off
-Thread-Index: AQHYswqO8Kc9VdcRcE2LGLJ+oumCL63T+DsAgAAqSAA=
-Date:   Wed, 7 Sep 2022 14:15:40 +0000
-Message-ID: <b8f85b72-5313-affb-3402-70e2102d1383@csgroup.eu>
-References: <fabbc87627e5ddc2c913b368ae99386668d8dcfb.1660830866.git.christophe.leroy@csgroup.eu>
- <YxiEEP3krNUiUvlg@sirena.org.uk>
-In-Reply-To: <YxiEEP3krNUiUvlg@sirena.org.uk>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b33e8a48-ce1f-4c3e-f2e1-08da90db71aa
-x-ms-traffictypediagnostic: MRZP264MB2282:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eK4esa2duVfq9Op3D9s8ys9hHh4kcLg5DLDm5o8OlzDAj7+acMxiVzO3FVYazTPvPLxzBF1/iJE6ywO0rol8AbKs7mE/Br4ECwh9uTuhtds8ILcQ/vgWyePLq+rm2zeQr8Z5+Fa75T/M59et0tSeeHoYADK5RR9YrD9bRxISaJaXysbtQ9ScKHww5W1/vlnWUAFAcQ/OlB0Dtmdlmw17lOFH8ObFu2wkAnJJTgAYE7OkNrHW/fSQcVMb8FQYjyMjBaFM+7hWj+qFzez9tuOrxlrhjoaZEcmzhfTsoauPHmMlrq0UkWTW6y+5i7vAU2J8v20IgMOlAoutga5uDIut6Xiv9lYjlmxH52z0S0xtDUgG8brPd/Nlv6PHzSSFYFojOENNnITwXF0AqmSMi+D6XHiOV/FYhcoAWXlFCbpYQr2T1FlO+QdSSOtMES45FBQ1U9xS5yytdQOS62oJ8ihUEyUCNFEg6EcLF+6ppwoQFJ/mkNmeYDxS25JcoKQACzS17FMMSVWEbI302g68OTHMeqeVPlZ4RGHZwmxuHUIE2IGUxN/tFfXaFr5AjA4iuJxDNqWHPeJX81AfM5F7iljEFHElNlcDFLZccG3vBnTGm3Hk0u1bHHPrHQVJPedHfC7ST4Y0eA9c2xuBPcqjD1E1THzwJYaOy7q8V789vaB6/RVJCQ0Uo2O5ZjDdU/TPX6fh2QKwzWrltTi8WysNwL3bUXVbUfI78DDluaOZUwKqdQRHEFZhIQw5tQVWPsYi6qsDnowi6IcPw3eGlVt4ZDvpa811PtpXgX6tAYO0tG3jbdc2MItVDi4Zv9QDFSQ6unrx/+mTYHNmz0sFuwTtCLbZyA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(366004)(136003)(346002)(76116006)(86362001)(31696002)(316002)(54906003)(6916009)(6486002)(71200400001)(38070700005)(6512007)(41300700001)(6506007)(2616005)(478600001)(186003)(26005)(31686004)(4744005)(2906002)(122000001)(44832011)(8936002)(8676002)(66446008)(64756008)(36756003)(91956017)(66476007)(4326008)(66946007)(66556008)(5660300002)(38100700002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QjBOQkFhWE1kQ3FOeXd5NkQzUm5OajNWa2tYVHQzVHVCY1lua0Fib3pLa2U2?=
- =?utf-8?B?WXNYUTIvbXk4cmR0c0NBeGRUWEFmZmQyeHJtSXZyWU00eTdJYU5kSzJSN21W?=
- =?utf-8?B?Y0NqWVBIc0dVbGY1QUZFMTVYMXhtVnBCaThnRVRnRkczSTZLSnFnRXd4bUtk?=
- =?utf-8?B?eVU4c0RUSENuUVRtZmQ5VzJUUzZTYkg5d3l3ZHQ0WVFtRTEyNHpkSmhiaita?=
- =?utf-8?B?NlFidnRBdDFwRkFoYjVYeHNxaE9JZ1VRSXg5d1lVSkFVWUtZbzZCS213Q09r?=
- =?utf-8?B?RTkvQ1BuMmowUzY0bTBhaHdLM2JtT2dsMW5mSXM5VVN1VUZqS2VRd05BOW5N?=
- =?utf-8?B?bDEzbHhJc21wb05ITG1LbCtZTXk4K0Q3cEd0SVhnQkMzY2RzTThBNTVMNWhR?=
- =?utf-8?B?UlJKaGt2VWRGaC9hcnBLSTczRVN1Y2FFY09tTGZENFpNd2R6andjNmYzVkNC?=
- =?utf-8?B?cElYYjlnNkZQY1BrZUtDOTVhS1JGaFNmUWJBUzR1dHR3MURNUVptSTZyQlAz?=
- =?utf-8?B?ZFA4OW45eDIrL280dVZ4UXBPZHJaaDU2cUkvLzhGcExudkVDNGRMdUh1clR6?=
- =?utf-8?B?NjhNSXdNRmwzcFNMUVZVekxqQkE2d0h2OWRwSUNXOGc3OFl2S2ZvOFBJbmJX?=
- =?utf-8?B?bDZsVG8vV2VyTUpRT0UxeDNOL2xFbGdBUFU0UndrWTNUV3p4dlIrNGZnczAx?=
- =?utf-8?B?cTNtdWxIck5LUHp4NlpWSmNvMHdpN1dGbENsSVFwdE81b2RSckRlR0RCa1d3?=
- =?utf-8?B?a0NjZGZCa0pEaFcrcGdzYUVSYW5makIzS1RLMVVEMytoM3B2c1Z4Y3VzalhL?=
- =?utf-8?B?L0hlYXJhajBqelk4aGZMSm9sNVZITW9DWjRmcjBTYjJ0Q1ROVXR6MXRvNDcv?=
- =?utf-8?B?bHZtMVhIaFM2RnhoUzE0ZDVaZ1ZFZzZHQWh0UlRFb2dyTWJOYWZ0WVdvWFBs?=
- =?utf-8?B?TTYvOHIwRTcyYVM3Vk0wYnpPWmFDNGIvb2c0aGRwNFQ2ejFKd3RBTVErZDJr?=
- =?utf-8?B?VjdtOUp5aWlZK1pxSTRMRTlhRmxpMjdYaU9yWWRWV1dQalN2UjgrNTZGMElT?=
- =?utf-8?B?T0FFQm1aQ2VtUzlhTmQyS2pmVzlFbFo0YmJrZGFqZXMrRU92cXovQ3BCZzkx?=
- =?utf-8?B?L1JQOGcyVUFTSzdYeDVPaDR6MHdncmZYKzN1ZDFCSXhUMmxWSzdhWFQra3ZN?=
- =?utf-8?B?YldmbzV6cEVUNElsMFJhbmdCSSs0S0kreHh0NzB2RE40UlhQUDhsRlNqZjYy?=
- =?utf-8?B?ZWdsUmdENEtVRHVpc2NNT1dSODRWMzlIekpjOW1vY053OVJ0RXVjaVlIQ05E?=
- =?utf-8?B?eVg0QVk1Z2hLdVJsa2F5ZUl1ZzNiZWRtT2NWbFoybHBPcFNmcjFXTEZLbk9W?=
- =?utf-8?B?V2lON0tGZFdzNldkTUlGWVVvMzQ1YkJodnhhbm1oN3lHTm0vODFVR2hDQlUx?=
- =?utf-8?B?RU1TdGYvRXJpcDMyOGQvQVdWcENnNWRRMTgwZVljajJQNTBoRjlyQ3JpOXU1?=
- =?utf-8?B?ZE9rZnNmRFB6Q091dEVSZStRUEFwbm5HTlFqRnV6eENpeUdZV1BlRXJLbEpT?=
- =?utf-8?B?RmZJRzNWMGI1Wmo1TXZCWTRsUnFWV0Uwd1haeGxFaytsUDJtYjJqU1lQYjFN?=
- =?utf-8?B?VGVaN0Nwd3VUSkIyTFUvRHhZdUhtTEZyUVVHTFUvZmxWVWd5azJ0dGhpQmRP?=
- =?utf-8?B?dVFaajF0ZElQd3FNVFVlcFdqRlQxVVRRRkdRb29PVkppazhqQ3hkUEJ5dU91?=
- =?utf-8?B?MlZ2aDRRTTNBUlh0NXZWUlR4QzFVT2IyYzlUR1RUWkpndU15QTY5NTdac0Yr?=
- =?utf-8?B?dU0wb2Z1V2gycHFOYm9hUVQ3bW0zZFpnZ3hjZmtZN2h2N2gyRGsyWmNLbXVl?=
- =?utf-8?B?cCtNa3N0Yy9iZ0N6UzdPM3lNbmdIcm5TMDMvSVJEYmEvejFQWnFNK1JKWWl6?=
- =?utf-8?B?c0QzWW45MDFlMDhsM1F0Rnk0bzkwaFN1N2wvdjJ5Z3hMdWtjNzg5VlU2dTRk?=
- =?utf-8?B?TTJFVXdzN0NjRGc4ZXZwMDhPTlRudGlEZ21GRkdqblBNT2JZUUtoYUtwZmJK?=
- =?utf-8?B?c2tVS1dzaWc5ZFVHWjI1N1prNXZ2eGYvL08xRENXN2pUK2w5Qkk4bWthS3Vn?=
- =?utf-8?B?SzRtSFprSzd6STNvNU10aUVUNlFzeUNjc3dTZFhuT093SjZvc2M5R0tQTmF4?=
- =?utf-8?Q?hcreO1QHAN4+9ZJLgdr7/YI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9E85D6CBC1604D4AB8F82B5063C6EB40@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230240AbiIGOcA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Sep 2022 10:32:00 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13926EF23
+        for <linux-spi@vger.kernel.org>; Wed,  7 Sep 2022 07:31:53 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id lz22so9963391ejb.3
+        for <linux-spi@vger.kernel.org>; Wed, 07 Sep 2022 07:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=hlX5LG70Pfi5xUfXCm2C7WvkXcJVP5UakJZVNodPOy7vNkSXQuxkM6JMnL0NkwpmEx
+         GApIDchppryVktOBo5G41BqVss7NVeWmLRXcOx2bAZqQ+LAYFz8ePbLc684sFXT4Nmqj
+         OcoPmJYuvMlwncvSBL0BFnkvuWLyKibj/n8A5QS+qmy30Nhg7xyf0NkI/q67juR/h0tY
+         bD/nOML45bK21IZjrLP4cVfkyGYdsdvh6OJ7KPKPWGwDpi4WDdxiFiQ5bptV3cHn11YY
+         R2/ccByiK1oIAZVOw3mE9dymIO7CzllUwLBF2JbmBffIhO2NpTaaNqhGzBB+XMxejIE1
+         VDsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=iMDS5LSOirH98qiw0ViOpWTYw5kCW30ghYhTuFu5HXkk4ssAu9PWlG64oxy7ppgvoD
+         GVkfhMa2k32REsDvWA7aBhzaNPH0GuEgYgwmG75gNeBG5NmQhhn2gnx6rtKVINzL8JGq
+         DxsglIgY6YGDvy1kScb0049oTOAVhEzEfU2PCUuLl7C/8DON5RIS4s/trYrpArD7w8Jg
+         hWx4h47h0Qy1VitkLRQ34Ca+h6QSoeOLs8YjQkdv5X0YNWoz6YZ+Zcq0vLEHWdtogyAb
+         n+SoQZN/qDYtsUXoSqMHGYtu24kJRJX27huoIinfpHr/JqD8y1JC/LCxd2pCn2wnxaAC
+         Lyfg==
+X-Gm-Message-State: ACgBeo0oee90jEfb33AiubacI8if6aKoWDV+pzx/QSzqwhryPAgsf/bd
+        KDEvzk2fsBQXtyDu7kCtrl6g00UsEkJxchHXx7I=
+X-Google-Smtp-Source: AA6agR4pyZsB+xbbjgKGlrl2+RDjPAQ7wWCMdSGS3qWC1Sv629AIX++hkd3miN/bJlP1/yRRoX5bdHKo53e2l2Vr/Xc=
+X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id
+ b15-20020a170906038f00b007421f687058mr2510502eja.743.1662561112231; Wed, 07
+ Sep 2022 07:31:52 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b33e8a48-ce1f-4c3e-f2e1-08da90db71aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 14:15:40.5456
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Be1i3QXW91HtaHl8z/i26P+1Q7ph3N2uw4Lp3a8LoJOBFh9YuAWdunZekigCOJ+13lV7APOITUjEHPAwPalkQ61ClQNL6bShsK4mGjm4LUw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2282
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:51 -0700 (PDT)
+Reply-To: lumar.casey@outlook.com
+From:   LUMAR CASEY <miriankushrat@gmail.com>
+Date:   Wed, 7 Sep 2022 16:31:51 +0200
+Message-ID: <CAO4StN23CjT73+kAZo3jW6NA7B_rVMGFz9vZYzq4Gs86AZgN6A@mail.gmail.com>
+Subject: ATTENTION/PROPOSAL
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:642 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5014]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [miriankushrat[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-DQoNCkxlIDA3LzA5LzIwMjIgw6AgMTM6NDQsIE1hcmsgQnJvd24gYSDDqWNyaXTCoDoNCj4gT24g
-VGh1LCBBdWcgMTgsIDIwMjIgYXQgMDM6NTc6NDlQTSArMDIwMCwgQ2hyaXN0b3BoZSBMZXJveSB3
-cm90ZToNCj4+IFNvbWUgY29tcG9uZW50cyByZXF1aXJlIGEgZmV3IGNsb2NrIGN5Y2xlcyB3aXRo
-IGNoaXBzZWxlY3Qgb2ZmIGJlZm9yZQ0KPj4gb3IvYW5kIGFmdGVyIHRoZSBkYXRhIHRyYW5zZmVy
-IGRvbmUgd2l0aCBDUyBvbi4NCj4+DQo+PiBUeXBpY2FsbHkgSURUIDgwMTAzNCBRVUFEIFBDTSBD
-T0RFQyBkYXRhc2hlZXQgc3RhdGVzICJOb3RlICo6IENDTEsNCj4+IHNob3VsZCBoYXZlIG9uZSBj
-eWNsZSBiZWZvcmUgQ1MgZ29lcyBsb3csIGFuZCB0d28gY3ljbGVzIGFmdGVyDQo+PiBDUyBnb2Vz
-IGhpZ2giLg0KPiANCj4gVGhpcyBkb2Vzbid0IGFwcGx5IGFnYWluc3QgY3VycmVudCBjb2RlLCBw
-bGVhc2UgY2hlY2sgYW5kIHJlc2VuZC4NCg0KTG9va3MgbGlrZSBteSBwYXRjaCB3YXMgZnJvbSBi
-ZWZvcmUgdGhlIHBlcmNwdSBzdGF0aXN0aWNzLg0KDQpJIGp1c3Qgc2VudCBhIHJlYmFzZWQgcGF0
-Y2guDQoNCkNocmlzdG9waGU=
+ATTENTION
+
+BUSINESS PARTNER,
+
+I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
+MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
+PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
+DIPLOMATIC OUTLET.
+
+I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
+PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
+YOUR COUNTRY.
+
+I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
+
+REGARDS,
+
+LUMAR CASEY
