@@ -2,56 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD835B0632
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Sep 2022 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CE65B0634
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Sep 2022 16:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIGONx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Sep 2022 10:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S229643AbiIGOOO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Sep 2022 10:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiIGONv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Sep 2022 10:13:51 -0400
+        with ESMTP id S229977AbiIGOON (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Sep 2022 10:14:13 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B19D5AC68;
-        Wed,  7 Sep 2022 07:13:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAA365644;
+        Wed,  7 Sep 2022 07:14:11 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MN4495FRdz9sk7;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4MN44f2t8Pz9sk7;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NbQ0L84h4YdI; Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        with ESMTP id QizXyr0QWWIB; Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MN4494R6wz9sk5;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MN44f1kt3z9sk5;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 839B28B78B;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2CC5D8B78B;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id RvCiRwW5QFyp; Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        with ESMTP id pAVmOfMFge_0; Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 332CC8B763;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E0EC38B763;
+        Wed,  7 Sep 2022 16:14:09 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 287EDNDw3203669
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 287EDuVA3203820
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 7 Sep 2022 16:13:23 +0200
+        Wed, 7 Sep 2022 16:13:56 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 287EBZlP3203513;
-        Wed, 7 Sep 2022 16:11:35 +0200
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 287EDtKE3203817;
+        Wed, 7 Sep 2022 16:13:55 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Subject: [PATCH v3 REBASED] spi: Add capability to perform some transfer with chipselect off
-Date:   Wed,  7 Sep 2022 16:11:25 +0200
+Date:   Wed,  7 Sep 2022 16:13:44 +0200
 Message-Id: <434165c46f06d802690208a11e7ea2500e8da4c7.1662558898.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662559883; l=3320; s=20211009; h=from:subject:message-id; bh=nhEy38PTRF9ranS0NmdK0DMBPj0AbmzHk2k5M/5fx/Y=; b=7JH9vrLSGNogatlUQo3OoL53sgXR5y6jdrk3XO5Qzq3rqH/1opFMfHaCL3yQCBkIO1vlXFyxiHEZ 1YCOVkFGAuJpOiyq5GWAYVJeuIGBIAr1GDkHPgql7j5SIwQ8+kGD
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662560022; l=3320; s=20211009; h=from:subject:message-id; bh=nhEy38PTRF9ranS0NmdK0DMBPj0AbmzHk2k5M/5fx/Y=; b=c4eyahKivpthECdpPNVAd307Quru5kBXew3d5nU0poRbIqQeC3YMw6g4ziyJX2HuT47CGyosUPjm hZTtBw+4Bk2dRDguVQvk/sJHTI0TgyMr+HdL4bYvFdSuZzEyXbQ1
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
