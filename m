@@ -2,82 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306315B19A2
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 12:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877F65B1C9A
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 14:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiIHKHI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Sep 2022 06:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S231552AbiIHMSP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Sep 2022 08:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiIHKHG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 06:07:06 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE68C6FD7;
-        Thu,  8 Sep 2022 03:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662631625; x=1694167625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NCMYuaghCCLYiVfbRGO7/C8mw8n6/gmcgPBD0pal7aY=;
-  b=CqJiWelJBoB3UOW6tUdDXngLqmeMyX+frhWw1BQ5DINhGQWvox/ZyP2I
-   ns99I1qGS6+AznXxeyGrMgMY/W/ZzG6QpgAxGVnmJWroR9C0KStdaSbF8
-   L1fxu5pmEUo2b0tHiP8CzaZnTiF3qh8Mu0+vjJTy9IJmvDoLyeu4fEStS
-   2aF7PIcFshDgtoPbbI54f6zw1mXT0Iskx7ZfBEI+Rd5kRF2GPtEExLla/
-   TNSYcmMUKEv7zgC8PiHmSsXlftkZuKX/yx+kmcgBB1w/ylSD+514ufaCt
-   7VXFG4g5Egol0njhpchtQ6e+3vH1D2SuTEQBDeo74FVIiSQBqsUJ9WU3O
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="323321525"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="323321525"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:07:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="610639513"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:06:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWEQw-00A4Ra-1f;
-        Thu, 08 Sep 2022 13:06:54 +0300
-Date:   Thu, 8 Sep 2022 13:06:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v1 0/8] ACPI: unify _UID handling as integer
-Message-ID: <Yxm+vkO31ip16+q0@smile.fi.intel.com>
-References: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
- <fd1c459c-0c49-8fee-f71e-b2756aad84e9@redhat.com>
+        with ESMTP id S231536AbiIHMSN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 08:18:13 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368C7E55B8
+        for <linux-spi@vger.kernel.org>; Thu,  8 Sep 2022 05:18:12 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e20so25705831wri.13
+        for <linux-spi@vger.kernel.org>; Thu, 08 Sep 2022 05:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=36szBVL2Cn+cs2NB42v+LawQS2D430mbQOaqyu/Olfs=;
+        b=Pde3JYxD/Xd7HKAURItyoFTzSLlbMdkJZf1gK9a32JrxfqoSR6WT7zjXJ30ox8O3HB
+         zs49UqsyBuLz6xVMI0aQekGt+BTmG/KUBFlcAcB4ZlBhVS4aceqzdh64Ic+v0Q9TghVe
+         Aj/TPe9IXO7rMvvRs7GxgWDEzruAd5C+rvoMrKPgJBNEga4t2DPEKGfBsVAGA3D/wXvf
+         xd+pRbnIomRsdTKedKKrUE5WcNF5tavoZCeGkht64YQiI7mu9TrAQggoHu26KZqdzI1g
+         uUfXz4zxxI5PDVkuze5GMqJ+cv5HZyf+XodaHVXZFDWgij62kVXc3yFRzpgs0gCuv8ws
+         xr1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=36szBVL2Cn+cs2NB42v+LawQS2D430mbQOaqyu/Olfs=;
+        b=vCRz4hHzZn48B+3dtWVV6xU8ce61T+gHZyhePNHzUE7++zXB8Zppd1uy7stnCCDerX
+         0fQBrBslpzFFSqM2HcnhXL64tmhE0zURkMYIdxO+3vp1fkzgSqtdMb3bOYGH7mnT6w63
+         Zr0T3RDay/WTF0/zL2EUmtKmwCRkEVlsKPTzPi36VD6VZqWQO4ypWPBv4prrVGGYU2af
+         gqW/rwWliimfhblploMNwKv92Y6OdDtvChWx9viVhII/tcS9SyVZZzGR/RYoJv4ljuXe
+         8VXaV+nkdW/C6ex6VTfI2lHgYPmI0SBNbvB0Prn3Zw/9KrOxKH80c/rpbod3FMfhBCCj
+         NMAQ==
+X-Gm-Message-State: ACgBeo17Bmg8sAYDeslN2ynpmN+xsZBF6TjWU0PCHzvlmg0vJvsZ83NM
+        dJu1B0L5hiJNEtVX3ES33M2xGw==
+X-Google-Smtp-Source: AA6agR5EjA56judCPtRCeCyzyYiLIg54xxck9hVsX0853urdIxfPbSabM8hT3pDh8JwKOyA8tSzDaQ==
+X-Received: by 2002:a5d:6e8c:0:b0:225:5f3f:1d8f with SMTP id k12-20020a5d6e8c000000b002255f3f1d8fmr5262682wrz.610.1662639490672;
+        Thu, 08 Sep 2022 05:18:10 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:982:cbb0:666e:a053:1034:922f])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05600c4e0100b003ab1a870daasm3212208wmq.5.2022.09.08.05.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 05:18:10 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH] spi: meson-spicc: do not rely on busy flag in pow2 clk ops
+Date:   Thu,  8 Sep 2022 14:18:03 +0200
+Message-Id: <20220908121803.919943-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd1c459c-0c49-8fee-f71e-b2756aad84e9@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2239; h=from:subject; bh=yaCMBlN3USyF395Qdq99BsDpbkdWYyZKbFBk4XoweKc=; b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBjGd1q0Ohn/nMUpBJQiilkpVXCK3b8I2QACUHiwbG7 HNL0O1GJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCYxndagAKCRB33NvayMhJ0RtJD/ 4mdK7zWsfF1Ga9qsaLSDth+NlZNgABEsh3oscJvCZlBD9qZNExO3Glepq2g1FnFmbD7FIoK6kN+NP2 nRT3URxR0tX2COW7gxtfywqW3N8Pu7l4HDr2MXnjhL+3q8dw/+TtjRfHPgWb+uyXg1N1vScKU6dnRy lBUilgIhBTygZl2E1g6vtGN3tFZG1idUwIT+YIgxbb7EcWCXac6Z+L6omlKS2j8L4gpszEIM10YE0x nE5TE5gsbHciqfxc0X8pd7wI2oxugaw7fz7ecDy3pWZh6/+ofNiRrGjwjgbwGMlV45UTncwv4O8SF7 5Dd1I3IyZjWQ5I0v+oQNCOKb/gs3QG7zOwgkvBSR9UQjbVFBOXIoJZ3UafQQP/wmFXaeRr4oJKR+OD NymFVCG3+6NC/vqTZnmkGBSzpNbmOeaD4SWXHM8M2eDEDgY98wclVDLCkyi2fV9fOeIVWKnzeRJ3RB a74K42rUBbN+t37jcwZxObMWH8XHSAWqjcWxz80Dc4hjhaEvGjMO2QNz2LzsYEjJhzkxwcB0+HV5D2 lPKPpS1AXR1EF7U8pfxcpl5G/BtrabXa6bGz42Pb6163yqzFc4NjjNWb4POhBpZgWzgO+gzgT3HQBl xy00lqqUJqtsPMaQBtJUHSMUSD54ssFtW/sHjSpttcvgZMTjwEAi28AtZ43w==
+X-Developer-Key: i=narmstrong@baylibre.com; a=openpgp; fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,57 +70,56 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:28:48AM +0200, Hans de Goede wrote:
-> On 9/7/22 18:45, Andy Shevchenko wrote:
-> > This series is about unification on how we handle ACPI _UID when
-> > it's known to be an integer-in-the-string.
-> > 
-> > The idea of merging either all via ACPI tree, or (which I prefer)
-> > taking ACPI stuff for v6.1 while the rest may be picked up later
-> > on by respective maintainers separately.
-> > 
-> > Partially compile-tested (x86-64).
-> > 
-> > Andy Shevchenko (8):
-> >   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
-> >     integer
-> >   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   i2c: amd-mp2-plat: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> >   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   perf: qcom_l2_pmu: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> >   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
-> >   efi/dev-path-parser: Refactor _UID handling to use
-> >     acpi_dev_uid_to_integer()
-> > 
-> >  drivers/acpi/acpi_lpss.c               | 15 ++++++------
-> >  drivers/acpi/utils.c                   | 24 ++++++++++++++++++
-> >  drivers/acpi/x86/utils.c               | 14 ++++++++---
-> >  drivers/firmware/efi/dev-path-parser.c | 10 +++++---
-> >  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++-------------
-> >  drivers/i2c/busses/i2c-mlxbf.c         | 19 +++++---------
-> >  drivers/perf/qcom_l2_pmu.c             |  7 +++---
-> >  drivers/spi/spi-pxa2xx.c               | 34 +++++++-------------------
-> >  include/acpi/acpi_bus.h                |  1 +
-> >  include/linux/acpi.h                   |  5 ++++
-> >  10 files changed, 81 insertions(+), 75 deletions(-)
-> > 
-> 
-> Thanks, patches 1-7 look good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> for patches 1-7.
-> 
-> I have one small remark for patch 8, which I will send in
-> a reply to patch 8.
+Since [1], controller's busy flag isn't set anymore when the
+__spi_transfer_message_noqueue() is used instead of the
+__spi_pump_transfer_message() logic for spi_sync transfers.
 
-Thanks for review!
+Since the pow2 clock ops were limited to only be available when a
+transfer is ongoing (between prepare_transfer_hardware and
+unprepare_transfer_hardware callbacks), the only way to track this
+down is to check for the controller cur_msg.
 
+[1] ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
+
+Fixes: 09992025dacd ("spi: meson-spicc: add local pow2 clock ops to preserve rate between messages")
+Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
+Reported-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/spi/spi-meson-spicc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index e4cb52e1fe26..6974a1c947aa 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -537,7 +537,7 @@ static unsigned long meson_spicc_pow2_recalc_rate(struct clk_hw *hw,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
+ 
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return 0;
+ 
+ 	return clk_divider_ops.recalc_rate(hw, parent_rate);
+@@ -549,7 +549,7 @@ static int meson_spicc_pow2_determine_rate(struct clk_hw *hw,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
+ 
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return -EINVAL;
+ 
+ 	return clk_divider_ops.determine_rate(hw, req);
+@@ -561,7 +561,7 @@ static int meson_spicc_pow2_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
+ 
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return -EINVAL;
+ 
+ 	return clk_divider_ops.set_rate(hw, rate, parent_rate);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
