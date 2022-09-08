@@ -2,52 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF095B1E0A
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 15:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0C55B1F0B
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 15:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiIHNJI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Sep 2022 09:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S232243AbiIHN3h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Sep 2022 09:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiIHNJH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 09:09:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E39D41BC;
-        Thu,  8 Sep 2022 06:09:00 -0700 (PDT)
+        with ESMTP id S232545AbiIHN3H (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 09:29:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A59129526;
+        Thu,  8 Sep 2022 06:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662642542; x=1694178542;
+  t=1662643744; x=1694179744;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=3EY9SgS3SUG4WY37IeZwy97NQANvho/Y6Owh/3ya5QU=;
-  b=deAVT31NOWQGdArTBKikxfEWoMtQbP53b4mJrRkHxfoUxuLv4IMHyPA0
-   PpoYd21S39FoKv/C2mJmI7lkemNv/uv4pN32RD7dxmgSK4J1TXfhWJbI9
-   /13IMeHIa+/DieriiQ20T97teCrfNRkaRYrjyErN+Gar3oowdK2YpCLHd
-   pD8hMvbVE1a0gWY26xk72n5aPnCksEb2hilKUKZn7fyw1IQe7YAgYQDJb
-   wAcnqBXfFHcvlhANUVc2TJ6+/brebszbHkLtrT26psjTph/GG1WBUr5At
-   wihErgSTQgIiSrEm1Co/Uyp2wmui3Fb1vbh3SPyel2wWgzEjFaEAMbEz1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="358891613"
+  bh=cb/38D5XgcJUt79hNwgcMMzRjj8ed28v6JTWv2P9Fig=;
+  b=ffm5Ke5mTn4foac7NX99JA/F6oZ1MVEWVQQ2eztpYs5my0LPLbocS4R4
+   9sBHSVuvRTF1jVoZd3nf6TpVhjDEdJWbn+0KzNZRmMAQeT4utvRHLqKUI
+   taJT3I6+UbIOj5oSnL0Wu+Y94t4Fi3rN+7r/1+YIPQQcxxf1HQh6qHISK
+   5QOLm3K57SdApa7Jb45FFtc4XVsl2yl9AbpLenKhQejfSCuvGWzqivZn2
+   O5/SYLFv3tt5Vh4ukwVUqoItSf7EE56ojdKsxxOVzqnKl44Is7n5aTduW
+   yB2Lru7rKB9hTISFMBvRaUaiwCxzA+RVU6xzywuwFm+sNjBvJU+Kxz70u
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="361130140"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="358891613"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:05:05 -0700
+   d="scan'208";a="361130140"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:29:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="790427318"
+   d="scan'208";a="740671478"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 08 Sep 2022 06:05:04 -0700
+  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 06:28:56 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 63BC0235; Thu,  8 Sep 2022 16:05:20 +0300 (EEST)
+        id A4E43235; Thu,  8 Sep 2022 16:29:12 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] spi: Group cs_change and cs_off flags together in struct spi_transfer
-Date:   Thu,  8 Sep 2022 16:05:18 +0300
-Message-Id: <20220908130518.32186-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@acpica.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v2 0/8] ACPI: unify _UID handling as integer
+Date:   Thu,  8 Sep 2022 16:29:02 +0300
+Message-Id: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -59,45 +81,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The commit 5e0531f6b90a ("spi: Add capability to perform some transfer
-with chipselect off") added a new flag but squeezed it into a wrong
-group of struct spi_transfer members (note that SPI_NBITS_* are macros
-for easier interpretation of the tx_nbits and rx_nbits bitfields).
+This series is about unification on how we handle ACPI _UID when
+it's known to be an integer-in-the-string.
 
-Group cs_change and cs_off flags together and their doc strings.
+The idea of merging either all via ACPI tree, or taking ACPI stuff
+for the v6.1 while the rest may be picked up later on by respective
+maintainers separately (currently all depends on Wolfram, other
+patches have got the tags from the maintainers).
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed some grammar issues, grouped doc strings as well
- include/linux/spi/spi.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Partially compile-tested (x86-64).
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e111cf5e77de..6ea889df0813 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -848,8 +848,8 @@ struct spi_res {
-  * @bits_per_word: select a bits_per_word other than the device default
-  *      for this transfer. If 0 the default (from @spi_device) is used.
-  * @dummy_data: indicates transfer is dummy bytes transfer.
-- * @cs_change: affects chipselect after this transfer completes
-  * @cs_off: performs the transfer with chipselect off.
-+ * @cs_change: affects chipselect after this transfer completes
-  * @cs_change_delay: delay between cs deassert and assert when
-  *      @cs_change is set and @spi_transfer is not the last in @spi_message
-  * @delay: delay to be introduced after this transfer before
-@@ -959,10 +959,10 @@ struct spi_transfer {
- 	struct sg_table rx_sg;
- 
- 	unsigned	dummy_data:1;
-+	unsigned	cs_off:1;
- 	unsigned	cs_change:1;
- 	unsigned	tx_nbits:3;
- 	unsigned	rx_nbits:3;
--	unsigned	cs_off:1;
- #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
- #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
- #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
+Changelog v2:
+- rebased pxa2xx patch to be applied against current Linux kernel code
+- fixed uninitialized variable adev in use (mlxbf)
+- dropped unneeded temporary variable adev (qcom_l2_pmu)
+- changed type for ret in patch 8 (Hans)
+- swapped conditions to check ret == 0 first (Ard)
+- added tags (Mark, Ard, Hans)
+
+Andy Shevchenko (8):
+  ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
+    integer
+  ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  i2c: amd-mp2-plat: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+  i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  perf: qcom_l2_pmu: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+  spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
+  efi/dev-path-parser: Refactor _UID handling to use
+    acpi_dev_uid_to_integer()
+
+ drivers/acpi/acpi_lpss.c               | 15 ++++++-----
+ drivers/acpi/utils.c                   | 24 ++++++++++++++++++
+ drivers/acpi/x86/utils.c               | 14 ++++++++---
+ drivers/firmware/efi/dev-path-parser.c | 10 +++++---
+ drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++-------------
+ drivers/i2c/busses/i2c-mlxbf.c         | 20 +++++----------
+ drivers/perf/qcom_l2_pmu.c             |  8 +++---
+ drivers/spi/spi-pxa2xx.c               | 35 +++++++-------------------
+ include/acpi/acpi_bus.h                |  1 +
+ include/linux/acpi.h                   |  5 ++++
+ 10 files changed, 81 insertions(+), 78 deletions(-)
+
 -- 
 2.35.1
 
