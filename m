@@ -2,49 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE9C5B1CA8
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 14:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753935B1CAD
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Sep 2022 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiIHMVB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Sep 2022 08:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S231578AbiIHMVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Sep 2022 08:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiIHMVA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 08:21:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F17DFF62;
-        Thu,  8 Sep 2022 05:20:59 -0700 (PDT)
+        with ESMTP id S231635AbiIHMVg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Sep 2022 08:21:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879051316DA;
+        Thu,  8 Sep 2022 05:21:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01009B820C3;
-        Thu,  8 Sep 2022 12:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E5AC433C1;
-        Thu,  8 Sep 2022 12:20:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C67461CD4;
+        Thu,  8 Sep 2022 12:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0BDC433D6;
+        Thu,  8 Sep 2022 12:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662639656;
-        bh=0mxXnqiCBIz6MCrFRUCqtBLAvMSXOlLHP2NCWyHlgvU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Mxk5LTjMEjrKIxrO0ZArMAgMad5mpdU2em4hF5IPWbFKJ/X2x7uL7cPJ2+hm4xpPu
-         aANlobG2HF3FvODTJpHtNQbbyJiocEjJej8+edk/EvPcJSRKDxFj+DNV60HyXOjZdH
-         x1MFPeEHbdcQKgzfm+g9nYlOftvDMulbKwnaGnun4m5V83YqhX3qCnYb34sebU8AKT
-         CVvYP/4S5S50u81jSuVoHarr2a+duJzQp0t766EE7zPvHiK73aqvMdlDPUbYPNstWC
-         vHGtfugDqvfRgKdQbXPhCYcXgVqLD8Z0XK/7+7EETGFXqTce+zmHfu5vjRsvhsTSGD
-         eSNh6ipRbN3ew==
+        s=k20201202; t=1662639692;
+        bh=holoJC7k/mCyBOzapjBumEYJ6+C0KD4dODVUkOFKXcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Vza+rTw1sbAO7TAn9OxaiIfhWPzd+vmCVjZl2wHpNDlgX8PIxu0MyM46j+yRD++hd
+         q1Na9S8ow3494CKwI2YtEZ7ExNh6Q7DNPpju6NVOaCfBWjiv4B1R5FDlrurmLzG8gX
+         OI096/7hOGGmJVAQ+ivjCDDQiyIPR2hoD+EN8ogi7PGf1l9pkZMg2qT2SU9lvUAcZc
+         8B6Po/Nt8Xa65QM9zj4p3RG47ui4laEFRjL3sufVKmSKMJrBS05nHc7vcKJVvP1HBZ
+         06GHprADe7RRGtJjn12iVHIfImyNyShPfFdzAwfMf41NVKbFpKc18JCqAdmYvXKIzV
+         mQdfk22cyFGYA==
 From:   Mark Brown <broonie@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-In-Reply-To: <20220908010429.342875-1-ye.xingchen@zte.com.cn>
-References: <20220908010429.342875-1-ye.xingchen@zte.com.cn>
-Subject: Re: [PATCH linux-next] spi: lpspi: Remove the unneeded result variable
-Message-Id: <166263965532.78625.7360091717176089663.b4-ty@kernel.org>
-Date:   Thu, 08 Sep 2022 13:20:55 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.0-rc4
+Date:   Thu, 08 Sep 2022 13:21:23 +0100
+Message-Id: <20220908122132.2A0BDC433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,38 +48,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 8 Sep 2022 01:04:29 +0000, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Return the value pm_runtime_force_suspend() directly instead of storing
-> it in another redundant variable.
-> 
-> 
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Applied to
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+are available in the Git repository at:
 
-Thanks!
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.0-rc4
 
-[1/1] spi: lpspi: Remove the unneeded result variable
-      commit: 014eac3e93515ef37a794b1880340efd616d5768
+for you to fetch changes up to 9c9c9da7aa108e6bf952c18289527a5234e4fc59:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  spi: spi: Fix queue hang if previous transfer failed (2022-09-02 13:27:48 +0100)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+spi: Fixes for v6.0
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Several fixes that came in since the merge window, the major one being a
+fix for the spi-mux driver which was broken by the performance
+optimisations due to it peering inside the core's data structures more
+than it should.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+----------------------------------------------------------------
+David Jander (1):
+      spi: spi: Fix queue hang if previous transfer failed
 
-Thanks,
-Mark
+Mark Brown (1):
+      spi: mux: Fix mux interaction with fast path optimisations
+
+Niravkumar L Rabara (1):
+      spi: cadence-quadspi: Disable irqs during indirect reads
+
+Robin Murphy (1):
+      spi: bitbang: Fix lsb-first Rx
+
+ drivers/spi/spi-bitbang-txrx.h    |  6 ++++--
+ drivers/spi/spi-cadence-quadspi.c | 38 ++++++++++++++++++++++++++++++++++----
+ drivers/spi/spi-mux.c             |  1 +
+ drivers/spi/spi.c                 |  5 ++---
+ include/linux/spi/spi.h           |  2 ++
+ 5 files changed, 43 insertions(+), 9 deletions(-)
