@@ -2,103 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DF25B4781
-	for <lists+linux-spi@lfdr.de>; Sat, 10 Sep 2022 18:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889B55B47FC
+	for <lists+linux-spi@lfdr.de>; Sat, 10 Sep 2022 20:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiIJQcZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 10 Sep 2022 12:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S229544AbiIJS4d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 10 Sep 2022 14:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiIJQcX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 10 Sep 2022 12:32:23 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD624A83E;
-        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id f131so6899551ybf.7;
-        Sat, 10 Sep 2022 09:32:22 -0700 (PDT)
+        with ESMTP id S229446AbiIJS4c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 10 Sep 2022 14:56:32 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44E7481E2;
+        Sat, 10 Sep 2022 11:56:31 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u9so11411209ejy.5;
+        Sat, 10 Sep 2022 11:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=3PplGYcFwa58sgJyq0s6GKaVr3wUW1D0jH7TKWDQs/0=;
+        b=qWwmi4l9tkhs+K+eUHh6fIlNVbj02RW1SDpguvVyPuvThzzfNg9bg2OztEF1cYiRTc
+         s5H9IgSqdamsiXQz/SkWKrUKZqxF5WgDo+x7IWiMS6thkN0YtolScBTDH1lZLNQJYxsI
+         g/GWUO/FqZq9YixXfYdM6Si5IlRsN4IU1G8e5H4Fq42KGQZnEAaqKLWYnSWx6A1KdWFO
+         PyiTSUaX0lrZ0K8rlKFMaR1jpnQVutklE1v+xncU3wblKEgj8qiVEdatVCyWn9qnEa/l
+         A4AeCDK9ZlWhr1t4SD3CTNS3qXjz6cNlJC4VDYrGLbJYefMw5dF8j0xUZ42lVAO5KPR2
+         0QYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GkMFjVtDr0W10OJLyjB1PHKjRI7ZFioNTd0VYLRMl94=;
-        b=ThoRLvkIbjrCWL0q+TFVOHf3eGbii09QgZZ8+fnloYa65GmvZoYZxXRfi4dIf/o3/X
-         CHxXNCVetlaCzlNPH7RHeluIxXBW9UaWGxJbq44/RtWKjnWMdCJeIjeGpTxtZk7sC3XY
-         FC1+bATa/yirJyG/f0TfPtNbPuBdAW51Y4xNJXJOabOT0rud7KCnxWelfVT3WcqdnVvi
-         S/MvEcHpaC+v+YF47p1//uEddmEbtpH4EW44HoPAx6nua0qW6qe+AO4eBtEhW/IhMKDt
-         EtzYW5sIUxU/qV5nqC5OKkZTZ9vMESj0n6S0HZwEROc08lB3wnnH38cngZo5+KpEIQns
-         iUaQ==
-X-Gm-Message-State: ACgBeo09Bstel6aHIS4x5EoDtJZ7DCW8jizVZ0Jd0dyvtaTwHiRyqD8t
-        l7KDxBTL2gsd8LWoF2CLf5zUIJz+v4ZKxTCZ4bs=
-X-Google-Smtp-Source: AA6agR4n7pXTzaWGoZwbXMPbML7j3aWjxBABW4Ue2CuqwFbK1YnZzMiGo3Y8jNXuTBWAX9gMGWr6mCabLDZaslxS/Ik=
-X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
- v12-20020a252f0c000000b006a8f23012edmr15745127ybv.633.1662827541557; Sat, 10
- Sep 2022 09:32:21 -0700 (PDT)
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=3PplGYcFwa58sgJyq0s6GKaVr3wUW1D0jH7TKWDQs/0=;
+        b=y8m6rrrSroreOh8k3PCywa/ra/zFeOL8i+sgSZnXldhb4wtWEBOwx64cltLHzJ4PWD
+         ef0glHNndAY777R0iMtUPUtbyCmAnyNhobHTyfIG+O+lr9d8m/NYW1X3CCA9bv2G4Iv5
+         ctxCY9n5Ume5pIyEekbCWXgnqsAeljPTBH9vLjHZz8k29GCvqJpvqUsrZXB2v0bs+f0y
+         gBUEiWSq8s2K1b6DD1vSDiNS2f37QsFoBIEHeTT6hbbDvzhzp/hdzlDkWOI44pR1cbI6
+         ujla5ld4GdHziClsqLNpLWQVPKIRVlEHtVcYNlG84kCp/7QyXghBsMsFOPCRnF5MtFen
+         2r0A==
+X-Gm-Message-State: ACgBeo21fS7+hWR2LHEqotHN5qsyoEY83mCrb+WXl71x/W60t+9LJWKC
+        5bpuMyCCBckuf7cMdlYuV9Y=
+X-Google-Smtp-Source: AA6agR77n+mQgZTAm6u67SKl30loSrOlLzz5oqTb2H7JEQJz++WyB3Qxbiq6/Hgq/4xQMVJbsUKIrg==
+X-Received: by 2002:a17:907:96ab:b0:779:b7d8:41ba with SMTP id hd43-20020a17090796ab00b00779b7d841bamr6352676ejc.449.1662836190148;
+        Sat, 10 Sep 2022 11:56:30 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906539600b0072f4f4dc038sm2045125ejo.42.2022.09.10.11.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 11:56:29 -0700 (PDT)
+Message-ID: <64d03f6e-c578-3155-e3fb-53dbe53573eb@gmail.com>
+Date:   Sat, 10 Sep 2022 20:56:28 +0200
 MIME-Version: 1.0
-References: <20220908132910.62122-1-andriy.shevchenko@linux.intel.com> <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
-In-Reply-To: <YxnwMLvgQAPOkeeK@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 10 Sep 2022 18:32:10 +0200
-Message-ID: <CAJZ5v0j5FO+OcX6VdiR-tuDCrHFwErquxzZGUu3ZLQ1G57T-+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] ACPI: unify _UID handling as integer
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1] dt-bindings: spi: rockchip: add power-domains property
+To:     broonie@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 3:38 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Sep 08, 2022 at 04:29:02PM +0300, Andy Shevchenko wrote:
-> > This series is about unification on how we handle ACPI _UID when
-> > it's known to be an integer-in-the-string.
-> >
-> > The idea of merging either all via ACPI tree, or taking ACPI stuff
-> > for the v6.1 while the rest may be picked up later on by respective
-> > maintainers separately
->
-> >(currently all depends on Wolfram, other
-> > patches have got the tags from the maintainers).
->
-> I stand corrected, the perf patch is not tagged yet.
->
-> > Partially compile-tested (x86-64).
+The Rockchip rk3399 TRM mentions that pd_sdioaudio includes
+sdio, spi, i2s and spdif. Add a power-domains property to
+reduce notifications with spi-rockchip.yaml.
 
-Tentatively applied as 6.1 material.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-If there are updates, we'll make changes as they go.
+diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+index 52768894b..66e49947b 100644
+--- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+@@ -82,6 +82,9 @@ properties:
+       where the "sleep" configuration may describe the state
+       the pins should be in during system suspend.
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.20.1
 
-Thanks!
