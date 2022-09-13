@@ -2,209 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62405B6AC7
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Sep 2022 11:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB015B6B9E
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Sep 2022 12:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiIMJfh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Sep 2022 05:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S231406AbiIMK2d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Sep 2022 06:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiIMJfg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Sep 2022 05:35:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC15717ABF;
-        Tue, 13 Sep 2022 02:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663061733; x=1694597733;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
-  b=Hliegv7cy3qomQoJglFbtNr8W+odDsuAkJ/3QvL4HOJW50VtmUuQuK46
-   CDdPetGUUoWJo952Ou4mjoPSwZuPBFwIRk456dKnAbVwTwVjM7Chfkzah
-   oYws+2KdwdnVxeKs7dzBFw4GDl8OTyJNlxz/OX0+KfKCsukqrolNWBB+e
-   G/yit1H5jNUKy5FunRO+R1UZK5UwsjgrPf8PlK1RS5qt40/v8HoJxfWO9
-   qmqMc5z/BJZPkT8X9lJR80s3e5I2ASsdaZ/W2bISSVC8P6yIcRS7lz4sT
-   vVVyKTGC4mI7zR5UjjFX4e0hJSmKcp8finx5duYHyKdMgmdzrmUk59YX4
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="180264256"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 02:35:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 13 Sep 2022 02:35:32 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 13 Sep 2022 02:35:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LeOozOhZnhvOBER+ghRl1juh+0VbuE6Y0pB3l6HxABmi3XYMx2yyp+6tIzRhm9gcedUZ3JUvLBRwimUx+0qYqsjyBYnlHpcfrDcFO6aFOl3JzydPZ69vc2pzdyOGgY2bR7ofPtZjDv95bnonU9e/eoQiPOEX/Ej3V4PkCpoV9QKa/e2u3xjeZGh2lbsRJC0E4GycuLM7l8a11/Tnfvo7O59bmV8OPlectwDbq7iHbgPv29caF6ETlsCRs07J/qJN07V75pdSeGpoO6orI8RJLlCjzIS0W5U2kwKegvR+e6Fzdt74/ocKZ4IE6aHBzMonJTFtb1u1FCTW68oC6QF/EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
- b=oFkLI/ZPstwHgMcwBTADXmiPmBQi6LSt98guT8K3XUfGPL5js/tRfqOqh7G6kVOOuBc8hljXsVJoilqxGaiX9F5Z+g9BnOWBbtQ1myXu3X7rdL5NJrIRVNZlgs7gU8Z4CLoKSMD98SCSK8qMoqSlFP4e6LswJNm0hEyO5EetbCt6NSMR8wpCUtjjpOjMAK1i9G3pGSM1FpsfZ8GqTCcoazRSiaxH9+lEsK8HhQjBleULzEW26Q1BuITM7AOcAyk0r71de0+FUroR4x65i0WfULBPk5nbz15Fwj2sbb4MbJL346UfSi4NkfIskFXhJvA8dh7ZKTCKcvYAEL7pJT00LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        with ESMTP id S231557AbiIMK20 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Sep 2022 06:28:26 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBFE5A15C
+        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 03:28:25 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id i26so19310929lfp.11
+        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 03:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ubq+Nbr3qtwMAhkoqmZ0wYKd6J3dRuuusxNhyhXPNs=;
- b=co14MTtj6IthUW0QrGPnpAJ/XrDNovj4nKoOC8uUtudT47XjM1rDKrYQj90WgGXUTpdtiEhyOurSTZT/XztnoOZBnbG4zNnh6/NhhA+wSlZB0X+SxSNbS0O6bwT27kUL2C7/CqF65/AVLJn5V1GszSQDbqTvVUKsCCIHGDK3rrk=
-Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
- by MW4PR11MB5871.namprd11.prod.outlook.com (2603:10b6:303:188::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 13 Sep
- 2022 09:35:28 +0000
-Received: from BYAPR11MB2758.namprd11.prod.outlook.com
- ([fe80::e8ff:82ac:b76d:c61c]) by BYAPR11MB2758.namprd11.prod.outlook.com
- ([fe80::e8ff:82ac:b76d:c61c%4]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 09:35:28 +0000
-From:   <Sergiu.Moga@microchip.com>
-To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>
-CC:     <lee@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <Claudiu.Beznea@microchip.com>, <richard.genoud@gmail.com>,
-        <radu_nicolae.pirea@upb.ro>, <gregkh@linuxfoundation.org>,
-        <broonie@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jirislaby@kernel.org>, <admin@hifiphile.com>,
-        <Kavyasree.Kotagiri@microchip.com>, <Tudor.Ambarus@microchip.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
- SAM9260 compatibles to SAM9x60
-Thread-Topic: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
- SAM9260 compatibles to SAM9x60
-Thread-Index: AQHYwfjCQbG755VmlEGUqK2TrhMH7a3VeaSAgAAuKICAAK1+AIAFHfCAgAAyC4CAACijAIABTCEAgAAF4YCAAAMZAIAAAVuA
-Date:   Tue, 13 Sep 2022 09:35:27 +0000
-Message-ID: <bf1d7b3e-c542-fbe1-d904-e11f1d1d5ec2@microchip.com>
-References: <20220906135511.144725-1-sergiu.moga@microchip.com>
- <20220906135511.144725-7-sergiu.moga@microchip.com>
- <9aa29d74-b1fc-d00e-dee4-57f277a366ab@linaro.org>
- <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
- <20220909013644.GA3731620-robh@kernel.org>
- <b6b044f6-de87-e85b-0b51-e957b90622ab@microchip.com>
- <aa6d8c7d-1723-7674-2142-a5aafe30e570@linaro.org>
- <77d38e3f-6d8c-dbb1-2e66-c768d95b5e35@microchip.com>
- <5f8ca612-5a89-db3a-42f3-a0613c192a87@linaro.org>
- <888b8ab9-f8cb-2e1f-465c-3cb97187fce0@microchip.com>
- <f9e03913-b3dd-c82e-8c63-d912c0bbf443@linaro.org>
-In-Reply-To: <f9e03913-b3dd-c82e-8c63-d912c0bbf443@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB2758:EE_|MW4PR11MB5871:EE_
-x-ms-office365-filtering-correlation-id: 3d3e9886-25aa-4525-7421-08da956b4b10
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8iNt661UGAwEpBAqTSxAAHjUdwwgDKIkz95a4wYNcKSLXK5/X8KOXDDLi5mF9Ke0iFlnMs37CrQ9WZseKqPhuYqCTjOJgBut4urrVZCinwosJLXHDEsOsnjze2SaDxQ7oHml31T83/IONNRiqLt3ZAIuC6kJpOB/esS2AXKhG5dBnFXOHhvasghVASbpyRqg3uJLutN8nPNZ1yXlTuLTTiCOZAbHezRm4XSpipjGcII7SpfH5at7kMJbVvpUgNbtYdbIrExKFjel4QDTwDch4b4/As2OxFVh17KRVkgCW/LxkF+qJBEXfmurTLw+wAaWWV8BeOi901xaPlgDup41ZdE+pyLWGMUG6awBwSO3Nw8HjBdlcIlsYbR0Yn9BVDBAXipsnwJ8DSVD4tI+tm19dW2nc3v5dOSMIEgI9K2bpVpwbiPR8V8BkFzJr8aQNXzr3aNV3Ja73zBgFppAhXJoDnl/J4Noe0+OImLgq9L99aH2U4heEwKqDlosYwfhBq9+5NCX568WbuDRWJOWcu9AjrYkplDXWGMK8zVWWWfJIZWXq735ky2pMYrIu+qyDh8nWZBb+S+BSf8Npl7HaSBPFKrqugFAMcdRH4DamDr/nDG8gXKMOX+A3uRNbm7/pLxvh8Id0CalZUDjN1sf3bEBTijJjyhtQf44BmVt7rrsZ2E/tZswRx5zkugdJRgfETtfZwU2AznKPWazt9S9eeEi+WnJcveSpUrwHxgCTapbZnUtZlyvNTuiY0RtPtiXVpsyEFUiDIaoITa48YjPFA2qwCfmvBOHO5U+DR97BjX5i14=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(346002)(39860400002)(396003)(451199015)(4326008)(31686004)(71200400001)(122000001)(478600001)(6486002)(38100700002)(8936002)(5660300002)(6512007)(66476007)(186003)(66946007)(64756008)(26005)(66556008)(2616005)(110136005)(6506007)(7416002)(76116006)(38070700005)(53546011)(41300700001)(86362001)(31696002)(83380400001)(36756003)(8676002)(66446008)(91956017)(54906003)(2906002)(316002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnhZVnlZRk5UeUZDSm1JTmxXRFZsUEtkNnR1Z3pnSm16QnJocE9sVFF6VndU?=
- =?utf-8?B?QTlDWlE2Mlk4ZXR6bFlzMW96V2JKd1ByY2tFWld0K29iQ3pNSElSTlJpbG9r?=
- =?utf-8?B?U1JFblBhSFpKVXQ5cTc5S3l2bC8zelZldzhsaWpTSXRabDlOcGorWkVndU9H?=
- =?utf-8?B?Y3BxNk9TZ0NzMEVxZDlnejROaUNqczNiTXlEa29CRDR5NmpyN2x0aTUva3Ey?=
- =?utf-8?B?RFQxTk9QQlNEN0NuOWRUOE5QQlVVZG1pN2IycVBDRkZMcjhYNTFhVEJ2RjdJ?=
- =?utf-8?B?MWJ3WXR3L2l4ZHNPZE0zVWNEb1BTQlpVa3FCaXRFYmlST2NBM0xzVXd4Z0Ni?=
- =?utf-8?B?MHRGVEJWaG5rdU1NbVRvK0NEYnlhczgvMVltdFlIVTA5U0M1bnFEWDY3amRH?=
- =?utf-8?B?ZUFzRUl5b0NMS3Btams1Q29vazJnR0hadkVOQzZUZmxibWM5Mm5sdjhRaVdz?=
- =?utf-8?B?YzBMY3Q4eXl3cFpwNGpUd3lOcWVsWjl3Rlc3SHk5cUMwVzNGSXpDN3JXWlRy?=
- =?utf-8?B?OFozTUJWMVZSSkhXT3dLa2szR3kzcXpQTk9EY2c0TXhHaXE3VmE5aFkvSnJJ?=
- =?utf-8?B?bThUeFZ0VGh5Nm9rbDkzekx2cFQraDBvZ05lOUZYUjh2S1dhSUtVSGJoZ0xp?=
- =?utf-8?B?ZElkUVNDK3RXVnpWeXRSZEZzaGwrNStnVnBDRnd4OGU4c0RFS0NWQjV0K244?=
- =?utf-8?B?eTR1ZzNEUnN3Q2VzdlZUcGE0Zm1WZU5NRWdqaG1WSGttQldrdFpJRDFFWDd1?=
- =?utf-8?B?WXlJNHVtdjZqR29vQVF5cWJnOHlaVHR0Rmg4S2lHMG1vYjVTWmJZR2VwL1pT?=
- =?utf-8?B?cXlDd2ppTFNINEszeG1ZSWN6RzllVWwyYjFtQ0V3anhtK3dUZXFyTUFPQnR5?=
- =?utf-8?B?anZjcGZoNW1LY09pbFRBVVh2UXdOSnF1WFhwYm01MjBEVGpQcG1rK1B5OC8z?=
- =?utf-8?B?Njg3QU1iUUJMNlVyZEFSUmNITkpKQ0k0WTV6NnZEaGFac2U3d0pHeE94UHQv?=
- =?utf-8?B?MThFWmhJVkZsZ2ZXdXlPL2hNaHVzbVREWE9NTE1Fa3F0ZTVzS25ZaE5keFhW?=
- =?utf-8?B?ZmFRM0U4ZHRaQWhjUjZmejd6eWZ1Wm52eGpLb09KKy96SXdNRUgzZkFaNnJq?=
- =?utf-8?B?Q2F3RzZXWnVVODVJZjVkTmRWWE9oNGk2TkV5YkVBVTRDTVlkSXhDUHFPTldu?=
- =?utf-8?B?OXFsSjUyZjhJMm4ycWdZNkJjOENOc3VYZmsrdE9qUGJZVktvb3RoOTZYcWhT?=
- =?utf-8?B?SGRoY21POU1Va0lJNS9DTktDRDdoV3hzSzZBNW5CbG9iYzZ4UnhXaGVQWENF?=
- =?utf-8?B?blNVZnQzSHFJdkZEcHVNamRJSC82Q1FTUHVjQ21Ed2tmM0Y2dkhyMHB2dlpW?=
- =?utf-8?B?aFdBRFJucGhURTB6U2c1dUh3d3JFVE16TUYrOWlZUllUMVlhcFNoQThzTXdD?=
- =?utf-8?B?Mm91Nk1xdStzd1kxVjVWVTlNZEF0a05QWkNBU1k1Q1lnNkJCL3FaOWRXWDNm?=
- =?utf-8?B?VVdhdWw3Y1hxUTRXMTB1WFVSVTFRVFNrNVJxSURtQlpVdytmY05oVU5YbXdR?=
- =?utf-8?B?c0FBVGduU0dUcXVNbWlNZW9tbFZ3ZVhOUzFOK05TOTI1T2dxVHB3RmgvOEpo?=
- =?utf-8?B?SDY2clZKaEs3dFc1RHhtUm9kbnE5cEJnZFFtQldJSUJpcDdUYUc5TTZ0QVZD?=
- =?utf-8?B?cEhPV1htMFkvdzVjcFNoNlRDQ3lEN3JBbWRMdFdUUmhEc2NOT2VKTGhqYzJk?=
- =?utf-8?B?aFBYZmkxZ21XZnpWcHhJWERLOUlyMWVILzRiVmgxc3hTcXpDMG5QbmNPZmtH?=
- =?utf-8?B?Umt4RlVrdTlESThEbXIyVE9hMUVnQlBIY1poTDZKTlFiZVk0eXFid29ZSGpp?=
- =?utf-8?B?V1N6UHViNlpNMUI0MCtpTnZlMjlUckJxMDNhZWRkMHpmNnRlZ0ROdHdWRm5p?=
- =?utf-8?B?VDZWanVJdnY5S3l6eld3N3Azb01ocTRQNWNDbUtQbVpGeU5CcHVLN211b0tu?=
- =?utf-8?B?aHVhbUJyMjFnMi8wdi9PWEFxSjJ1MFl0OERlT3NrK0d5Y1d0SFJvV1BFWWhT?=
- =?utf-8?B?dVlZaDJISDI5VmpBR0tKVVJPU3BGK2JhNi9kbmJqWUJndUo4MHF6L1FlbHNi?=
- =?utf-8?Q?UZ2L8/hpEazmkjeXYyJkRupeA?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1E0DE51AB51E024085C466D33B77780C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date;
+        bh=oFPao6+FHTUKOYc11RmLF8YTaUlvFn2TAMXlqT2wmEQ=;
+        b=QaeRW/iRYZOZN+tU13/28qc0fJfz1vBIgH2B6DpUcCa3VjL/56r5M/xKb0QgwrcT4B
+         k1rFFa+poJgej8cN5x3NH676yE4p+jIf6itqXBNqIAiBZSTiSWE9x5czvixci++EsZs0
+         SUmfPd20DKsdJPOcaVxQfeensTr37GsEBFgVCQGlj2Fu/ieIp56FkoZHxOSjD1QKmo3u
+         JZrD/uTPQqyoPms0ZwWQILqzQS46TFe98h0w4kBOhuPUHtSDM6OsubdBEiFe9jzdRWSb
+         WdfJAAXqm3FsvFka2Tg7KpteJPFjbczwigj0VVcKZsyG+99tAOrL0hEZRG236MrftICz
+         ZLtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oFPao6+FHTUKOYc11RmLF8YTaUlvFn2TAMXlqT2wmEQ=;
+        b=YJHl4m5L5NL5I5crft/8QxEQlgF9ppCxRTV7lI9bL+Tbw+WmYrHvPAxilQxTc4SVMd
+         3Os/nmG0r+dLY95JjPL8j9PRGZLtYZk1uyE6uKwmErjZ0t4SYQJKeyTX9O8BbnM63/s4
+         se4R/sWO6BtbxliWveKP2639+VrtK0/iL3UPhBRGscMdO7GC3bzyOkSghBqtYIR3KRps
+         R80SHZEL9IFLwEDQmg5hhuKxg+vaeP7SrprEjAVDOA/J6jktMdk5C4/Ykpj/bxr1JKAQ
+         vbNIRYHhNIEW6GZmIyX+MDrfuVrCm+cs30HyT9iIjvK0VafX90jgJKBr1hxkrn1iaBsX
+         uRfw==
+X-Gm-Message-State: ACgBeo38mwu6nw8mORVz8O5FdI+Ov06UzHdRj60FpPLk5BBmb+knlzIQ
+        k+maPWQe9tiP76STkC5j40wjC0Ay8S77ESKFsRw=
+X-Google-Smtp-Source: AA6agR7bbkhgcCoDHLb8qx3rP1bHW0TKMhC7oECOGjOmdY7XFE46YM43lGg8megS6i1XXTOxwseJgunnFFTy7/1jDO0=
+X-Received: by 2002:a19:f805:0:b0:498:df1f:858e with SMTP id
+ a5-20020a19f805000000b00498df1f858emr9330279lff.610.1663064903146; Tue, 13
+ Sep 2022 03:28:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d3e9886-25aa-4525-7421-08da956b4b10
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 09:35:27.9286
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cxWwZPGVbyjZvGG2sh8UahuhUnv8xxQJah/j067zbTkcPngBs59lQEjCIa1XhzTSnTEp7sPK1qS5eqOGsQxQ8qnEQVSAOFNAiO39nMOLsDQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5871
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Sender: missaisha.gaddafi2014@gmail.com
+Received: by 2002:a05:6512:318a:0:0:0:0 with HTTP; Tue, 13 Sep 2022 03:28:22
+ -0700 (PDT)
+From:   Mr Ibrahim <ibrahimidewu4@gmail.com>
+Date:   Tue, 13 Sep 2022 11:28:22 +0100
+X-Google-Sender-Auth: NwP0BLnV4kw4qf9oHUwplZq_Ekg
+Message-ID: <CAHnzjr1N4Trgp8GMAZzH+0-3Q=s4NzWPPHpbvuJWhNEzn6bJgQ@mail.gmail.com>
+Subject: GREETINGS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
+        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:143 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9992]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 0.9992]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [missaisha.gaddafi2014[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ibrahimidewu4[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.0 HK_SCAM No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.5 MONEY_FORM Lots of money if you fill out a form
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  0.4 ADVANCE_FEE_5_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gMTMuMDkuMjAyMiAxMjozMCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMTMv
-MDkvMjAyMiAxMToxOSwgU2VyZ2l1Lk1vZ2FAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+Pg0KPj4+
-IExldCBtZSByZXBocmFzZSBpdDoNCj4+Pg0KPj4+IFdoYXQgeW91ciBjb21taXQgaXMgZG9pbmcg
-aXMgcmVxdWlyaW5nIGFkZGl0aW9uYWwgZmFsbGJhY2sgY29tcGF0aWJsZXMuDQo+Pj4gVGhlcmVm
-b3JlIHRoZSBjb21taXQgbXNnIHNob3VsZCBhbnN3ZXIgLSB3aHkgZG8geW91IHJlcXVpcmUgYWRk
-aXRpb25hbA0KPj4+IGZhbGxiYWNrIGNvbXBhdGlibGVzPw0KPj4+DQo+Pg0KPj4NCj4+IFRoZSBh
-ZGRpdGlvbmFsIGZhbGxiYWNrIGNvbXBhdGlibGVzIGFyZSByZXF1aXJlZCBiZWNhdXNlIHRoZSBk
-cml2ZXIgaW4NCj4+IHF1ZXN0aW9uIG9ubHkga25vd3MgYWJvdXQgdGhlIGF0bWVsLGF0OTFzYW05
-MjYwLXVzYXJ0IGNvbXBhdGlibGUuDQo+PiBGdXJ0aGVybW9yZSwgaXQgaXMgYWxzbyBhIGJldHRl
-ciByZXByZXNlbnRhdGlvbiBvZiB0aGUgZmFjdCB0aGF0IHRoZQ0KPj4gc2VyaWFsIElQIG9mIDl4
-NjAgaXMgYW4gaW1wcm92ZW1lbnQgb3ZlciB0aGUgc2VyaWFsIElQIG9mIDkyNjAgKGl0DQo+PiBj
-b250YWlucyBtb3JlIGhhcmR3YXJlIGZlYXR1cmVzIG5vdCB5ZXQgaW1wbGVtZW50ZWQgaW4gdGhl
-IGRyaXZlcikuDQo+Pg0KPj4NCj4+PiBJbmNyZW1lbnRhbCBjaGFyYWN0ZXJpc3RpY3Mgc291bmQg
-dG8gbWUgb3B0aW9uYWwuIEkgY2FuIGluY3JlbWVudA0KPj4+IHNhbTl4NjAgd2l0aCBzb21ldGhp
-bmcgb3IgSSBjYW4gc2tpcCBpdC4gQnV0IHlvdSBhcmUgbm90IGRvaW5nIGl0Li4uDQo+Pj4gc2Ft
-OXg2MCB3YXMgYWxyZWFkeSB0aGVyZSBhbmQgbm93IHlvdSByZXF1aXJlIGEgZmFsbGJhY2suDQo+
-Pj4NCj4+PiBCZXN0IHJlZ2FyZHMsDQo+Pj4gS3J6eXN6dG9mDQo+Pg0KPj4gU28sIHdoYXQgaXMg
-eW91ciBvcGluaW9uIG9uIHRoZSBmb2xsb3dpbmcgY29tbWl0IG1lc3NhZ2U6DQo+Pg0KPj4gIkZp
-eCBzYW05eDYwIGNvbXBhdGlibGUgbGlzdCBieSBhZGRpbmcgdGhlIHNhbTkyNjAgY29tcGF0aWJs
-ZXMgYXMNCj4+IGZhbGxiYWNrLCBzaW5jZSB0aGUgYXRtZWxfc2VyaWFsIGRyaXZlciBvbmx5IGtu
-b3dzIG9mIHRoZSBsYXR0ZXIncw0KPj4gY29tcGF0aWJsZS4gVGhlIGF0bWVsX3NlcmlhbCBkcml2
-ZXIgb25seSBoYXMga25vd2xlZGdlIG9mIHRoZSBzYW05MjYwDQo+PiBjb21wYXRpYmxlIGJlY2F1
-c2UgaXQgZG9lcyBub3QgaGF2ZSB0aGUgc2FtOXg2MCdzIHNlcmlhbCBJUCBzcGVjaWZpYw0KPj4g
-ZmVhdHVyZXMgaW1wbGVtZW50ZWQgeWV0IGFuZCBhZGRpbmcgYW4gZW1wdHkgY29tcGF0aWJsZSB3
-aXRob3V0IGFkZGluZw0KPj4gc3VwcG9ydCBzcGVjaWZpYyB0byB0aGF0IGNvbXBhdGlibGUgd291
-bGQgYmUgbWlzbGVhZGluZy4gVGh1cyBwcmVmZXIgdGhlDQo+PiBmYWxsYmFjayBtZWNoYW5pc20g
-aW4gdGhlIGRldHJpbWVudCBvZiBhZGRpbmcgYW4gZW1wdHkgY29tcGF0aWJsZSBpbiB0aGUNCj4+
-IGRyaXZlci4iDQo+IA0KPiBJdCdzIGZpbmUuIEFsc28gY291bGQgd29yazoNCj4gDQo+ICJSZXF1
-aXJlIHNhbTkyNjAgZmFsbGJhY2sgY29tcGF0aWJsZSBmb3Igc2FtOXg2MCwgYmVjYXVzZSBzYW05
-eDYwIGlzDQo+IGZ1bGx5IGNvbXBhdGlibGUgd2l0aCBzYW05MjYwIGFuZCBMaW51eCBkcml2ZXIg
-cmVxdWlyZXMgdGhlIGxhdHRlci4iDQo+IA0KDQoNClRoaXMgdmVyc2lvbiBsb29rcyBiZXR0ZXIg
-aW5kZWVkLiBTdW1zIGl0IGFsbCB1cCBhbmQgaXMgb25seSAyIGxpbmVzIDopLiANClRoYW5rIHlv
-dSB2ZXJ5IG11Y2ggZm9yIHRoZSBzdWdnZXN0aW9uIGl0IGlzIGdyZWF0bHkgYXBwZWNpYXRlZC4N
-Cg0KDQo+IElmIGl0IGZpeGVzIGFueSBvYnNlcnZhYmxlIGlzc3VlIGxpa2UgbGFjayBvZiBkcml2
-ZXIgYmluZGluZyB0byBEVFMsIHlvdQ0KPiBjYW4gYWxzbyBtZW50aW9uIHRoYXQuDQo+IA0KPiBC
-ZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KDQoNClRoYW5rcywNCglTZXJnaXUNCg==
+Dear,
+                       Can you trust a financial relationship that is
+mutually beneficial to us both? I have received your name and contact
+information from your country's banking data Information, hoping that
+you are interested in what I am going to tell you.
+
+I'm Mr. Ibrahim idewu from Ouagadougou, here in Burkina Faso. I work
+for coris bank international. I am writing to you about a business
+proposal that will be of great benefit to both of us. In my
+department, as a banker, I discovered $19,300,000 in the account of
+one of our deceased foreign clients.
+The choice to contact you depends on the sensitivity of the
+transaction and the confidentiality it contains. Now our bank has been
+waiting for one of the family members to file the application, but
+nobody has done so. Personally, I have not found family members for a
+long time. I ask for permission to present you as the next of kin /
+beneficiary of the deceased, so the proceeds of this account are worth
+$19,300,000 to you.
+
+This is paid or shared in these percentages, 60% for me and 40% for
+you. I have secured legal documents that can be used to substantiate
+this claim. The only thing I have to do is put your names in the
+documents and legalize them here in court to prove you as the rightful
+beneficiary. All I need now is your honest cooperation,
+confidentiality and your trust, so that we can complete this
+transaction. I guarantee that this transaction is 100% risk-free, as
+the transfer is subject to international banking law
+
+Please give me this as we have 5 days to work through this. This is very urgent.
+
+1. Full Name:
+2. Your direct mobile number:
+3. Your contact address:
+4. Your job:
+5. Your nationality:
+6. Your gender / age:
+
+Please confirm your message and interest to provide further
+information. Please do get back to me on time.
+
+Best regards
+Mr. Ibrahim idewu
