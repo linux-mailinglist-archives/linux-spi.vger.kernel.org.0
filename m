@@ -2,82 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF925B64DD
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Sep 2022 03:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF43B5B6A10
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Sep 2022 10:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiIMBA4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Sep 2022 21:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S230409AbiIMI6j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Sep 2022 04:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIMBAw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Sep 2022 21:00:52 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2542C51A20;
-        Mon, 12 Sep 2022 18:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663030849; x=1694566849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ezLCKwkUBdNCoq39097eIEjcGDCqTdmZcynP14rPVWY=;
-  b=dEAsdcvPNpQnWlRIacB/K+Ish63Hwzc3uOPqw54D5l+2Hpq2w8a6uRU3
-   mIt1DW7bC4Sgrn32G4BMTPRzJX8nDHxR+EszpK0cllfbGUkU4RNf1tMqO
-   oyoTas/j/9HT1Raj786tHjOG9b5IQG1GO8c6UR+2acY6G/Q7XG4SDFENH
-   MUm/WZT843ua1pMq2pjBaNgOTahL57FMZ0ERB5Dt7xionALlzeIHj77cQ
-   W06+Uk7tjtpOAT0d5DIXmMBJ04unf20N8k509cYn3kwTjA5U7YS1A21gi
-   LwXW1Lbi29X0fSuEgcBMgDQtrPiGWpwtj4DpRUhVJILhT+0/YH5xp2Jce
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="299345081"
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="299345081"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:00:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="684652243"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 18:00:38 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXuI1-00032x-2a;
-        Tue, 13 Sep 2022 01:00:37 +0000
-Date:   Tue, 13 Sep 2022 09:00:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org
-Cc:     kbuild-all@lists.01.org, Len Brown <lenb@kernel.org>,
-        Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>
-Subject: Re: [PATCH v2 7/8] spi: pxa2xx: Refactor _UID handling to use
- acpi_dev_uid_to_integer()
-Message-ID: <202209130810.dgrshDMB-lkp@intel.com>
-References: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S231542AbiIMI6d (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Sep 2022 04:58:33 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A331A4D837
+        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 01:58:31 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t14so19642086wrx.8
+        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 01:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=u4ofErT5hOMpQGT6cywWVhLXqVmQE7e7Op5vJ0iCaOQ=;
+        b=CUrH1MyfvoQBLVS+1bNqDxagpk8da2WmGc2X1jrklxStrvrUxn++Ywcgqx4VN4roZP
+         3JoWE/S1P5XiPpC1x88uK2gd5f0n8/2AErWwpORKgOYDSO2QX1BLfa/TV+WZ3ETxZqjZ
+         yA9oaHKWEQxh7RsoMinCS3UG31NCTBqZYQhGwrTXRnezldgzViR9B1WBGt3Yo+k45Sc7
+         V6+CA9AfLN/TYasyOOx2E5RtQHlLqaJtRmrJlVBn+rP5yC2Eerbum8v9QWZGx3QEogNa
+         UvTH9AogHf5pSxhoPDcUR45WAChcbzM+/LcF1ed7SQeaShR1U0Bf5VnBC/fNhhcCsQqX
+         T2jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=u4ofErT5hOMpQGT6cywWVhLXqVmQE7e7Op5vJ0iCaOQ=;
+        b=Ca4RKcSkanU/6O/pZjtZ0NGAUWx3aTiEQeofH/8JqAwQ85LeOZxqXx8635wjE8Ijr1
+         bdtVxhjTVOrMXzILGI1UG3CWHKGIL3poJDKhyRgrAxm51YCTeBhMlKdKOkwVPN51caW0
+         3fx7KXhZwCinCWlHFrAWqRNzSdzKyS6l5rDE4V0KE0iStGWT1xCJrmW3iyy9Mx51Wij5
+         ov0O5PF5XFioACf3kY7lYzPrdLspAden0QYUKt5yg2n0AExs3wO4C1F7UlxYZ98+DfQH
+         rvMcE0D/CLV7VCHVxDDCYeEsPwpN59ZAnGJnMK3Tbb/hbVnrmJ/aWmnwzDn+3osGKaIE
+         OW/A==
+X-Gm-Message-State: ACgBeo29U52OuNEfx4rUELYfumrVToOmQMLR5GERaRL/jQ4eq74zPb/G
+        rJZclnGzMw52qbI5sNfD/GI3vQ==
+X-Google-Smtp-Source: AA6agR7NJFeL1td8GL5y3jCMjrfmIttwAxs8dqRjcGTJeYaHGfS5MNlGiXG2PnvftRkB5RfgEcW7rQ==
+X-Received: by 2002:a5d:5c08:0:b0:228:e139:43f3 with SMTP id cc8-20020a5d5c08000000b00228e13943f3mr17794182wrb.396.1663059510234;
+        Tue, 13 Sep 2022 01:58:30 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.70])
+        by smtp.gmail.com with ESMTPSA id c18-20020adffb12000000b00226f0a00348sm9726306wrr.111.2022.09.13.01.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 01:58:29 -0700 (PDT)
+Message-ID: <5f8ca612-5a89-db3a-42f3-a0613c192a87@linaro.org>
+Date:   Tue, 13 Sep 2022 10:58:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908132910.62122-8-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
+ SAM9260 compatibles to SAM9x60
+Content-Language: en-US
+To:     Sergiu.Moga@microchip.com, robh@kernel.org
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, richard.genoud@gmail.com,
+        radu_nicolae.pirea@upb.ro, gregkh@linuxfoundation.org,
+        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        jirislaby@kernel.org, admin@hifiphile.com,
+        Kavyasree.Kotagiri@microchip.com, Tudor.Ambarus@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-7-sergiu.moga@microchip.com>
+ <9aa29d74-b1fc-d00e-dee4-57f277a366ab@linaro.org>
+ <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
+ <20220909013644.GA3731620-robh@kernel.org>
+ <b6b044f6-de87-e85b-0b51-e957b90622ab@microchip.com>
+ <aa6d8c7d-1723-7674-2142-a5aafe30e570@linaro.org>
+ <77d38e3f-6d8c-dbb1-2e66-c768d95b5e35@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <77d38e3f-6d8c-dbb1-2e66-c768d95b5e35@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,83 +90,91 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Andy,
+On 12/09/2022 15:09, Sergiu.Moga@microchip.com wrote:
+> On 12.09.2022 13:44, Krzysztof Kozlowski wrote:
+>> On 12/09/2022 09:45, Sergiu.Moga@microchip.com wrote:
+>>> On 09.09.2022 04:36, Rob Herring wrote:
+>>>> On Thu, Sep 08, 2022 at 03:15:44PM +0000, Sergiu.Moga@microchip.com wrote:
+>>>>> On 08.09.2022 15:30, Krzysztof Kozlowski wrote:
+>>>>>> On 06/09/2022 15:55, Sergiu Moga wrote:
+>>>>>>> Add the AT91SAM9260 serial compatibles to the list of SAM9X60 compatibles
+>>>>>>> in order to highlight the incremental characteristics of the SAM9X60
+>>>>>>> serial IP.
+>>>>>>>
+>>>>>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+>>>>>>> ---
+>>>>>>>
+>>>>>>>
+>>>>>>> v1 -> v2:
+>>>>>>> - Nothing, this patch was not here before
+>>>>>>>
+>>>>>>>
+>>>>>>>     Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml | 2 ++
+>>>>>>>     1 file changed, 2 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+>>>>>>> index b25535b7a4d2..4d80006963c7 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+>>>>>>> @@ -26,6 +26,8 @@ properties:
+>>>>>>>           - items:
+>>>>>>>               - const: microchip,sam9x60-dbgu
+>>>>>>>               - const: microchip,sam9x60-usart
+>>>>>>> +          - const: atmel,at91sam9260-dbgu
+>>>>>>> +          - const: atmel,at91sam9260-usart
+>>>>>>
+>>>>>> This is weird. You say in commit msg to "highlight the incremental
+>>>>>> characteristics" but you basically change here existing compatibles.
+>>>>>
+>>>>>
+>>>>> Does "show that they are incremental IP's" sound better then?
+>>>>>
+>>>>>
+>>>>>> This is not enum, but a list.
+>>>>>>
+>>>>>
+>>>>>
+>>>>> What do you mean by this? I know it is a list, I specified so in the
+>>>>> commit message.
+>>>>
+>>>> You are saying that compatible must be exactly the 4 strings above in
+>>>> the order listed. You need another entry with another 'items' list.
+>>>>
+>>>> Rob
+>>>
+>>>
+>>> That is what was intended though: a list of the 4 compatibles in that
+>>> exact order. The 4th patch of this series also ensures that all 9x60
+>>> nodes have that exact list of 4 compatibles.
+>>
+>> The commit msg suggest otherwise - two options, because it is
+>> incremental... But this one is not really incremental - you require this
+>> one, only one, configuration. It's in general fine, but commit msg
+>> should reflect what you are really intend to do here and why you are
+>> doing it.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> 
+> My apologies, I still do not understand what is wrong with the commit 
+> message. My intention was to ensure that every 9x60 usart compatible is 
+> followed by the 9260 compatibles because the 9x60 serial IP is an 
+> improvement over the 9260 one. Would you prefer it to be just the first 
+> part of the commit message: `Add the AT91SAM9260 serial compatibles to 
+> the list of SAM9X60 compatibles`? That way it would really only be what 
+> the commit does.
 
-I love your patch! Perhaps something to improve:
+Let me rephrase it:
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on wsa/i2c/for-next broonie-spi/for-next efi/next linus/master v6.0-rc5 next-20220912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+What your commit is doing is requiring additional fallback compatibles.
+Therefore the commit msg should answer - why do you require additional
+fallback compatibles?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-buildonly-randconfig-r006-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130810.dgrshDMB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ea7999676bc9f75bb4165358cda640b340fe34d0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/ACPI-unify-_UID-handling-as-integer/20220908-213543
-        git checkout ea7999676bc9f75bb4165358cda640b340fe34d0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
+Incremental characteristics sound to me optional. I can increment
+sam9x60 with something or I can skip it. But you are not doing it...
+sam9x60 was already there and now you require a fallback.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-pxa2xx.c: In function 'pxa2xx_spi_init_pdata':
->> drivers/spi/spi-pxa2xx.c:1457:24: warning: unused variable 'dev' [-Wunused-variable]
-    1457 |         struct device *dev = &pdev->dev;
-         |                        ^~~
-
-
-vim +/dev +1457 drivers/spi/spi-pxa2xx.c
-
-  1452	
-  1453	static struct pxa2xx_spi_controller *
-  1454	pxa2xx_spi_init_pdata(struct platform_device *pdev)
-  1455	{
-  1456		struct pxa2xx_spi_controller *pdata;
-> 1457		struct device *dev = &pdev->dev;
-  1458		struct ssp_device *ssp;
-  1459		struct resource *res;
-  1460		struct device *parent = pdev->dev.parent;
-  1461		struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
-  1462		const struct pci_device_id *pcidev_id = NULL;
-  1463		enum pxa_ssp_type type;
-  1464		const void *match;
-  1465		int status;
-  1466		u64 uid;
-  1467	
-  1468		if (pcidev)
-  1469			pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
-  1470	
-  1471		match = device_get_match_data(&pdev->dev);
-  1472		if (match)
-  1473			type = (enum pxa_ssp_type)match;
-  1474		else if (pcidev_id)
-  1475			type = (enum pxa_ssp_type)pcidev_id->driver_data;
-  1476		else
-  1477			return ERR_PTR(-EINVAL);
-  1478	
-  1479		pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-  1480		if (!pdata)
-  1481			return ERR_PTR(-ENOMEM);
-  1482	
-  1483		ssp = &pdata->ssp;
-  1484	
-  1485		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-  1486		ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
-  1487		if (IS_ERR(ssp->mmio_base))
-  1488			return ERR_CAST(ssp->mmio_base);
-  1489	
-  1490		ssp->phys_base = res->start;
-  1491	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
