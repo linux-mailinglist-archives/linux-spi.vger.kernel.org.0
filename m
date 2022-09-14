@@ -2,49 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DD45B79B6
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Sep 2022 20:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E9C5B834C
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Sep 2022 10:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiIMSgH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Sep 2022 14:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S229650AbiINIxI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Sep 2022 04:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiIMSfu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Sep 2022 14:35:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA79E402F1
-        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 10:56:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5706E6153C
-        for <linux-spi@vger.kernel.org>; Tue, 13 Sep 2022 17:56:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AF7B9C433D6;
-        Tue, 13 Sep 2022 17:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663091812;
-        bh=dqUVlDp2AWrvZrJwSPBsStw72LEKIKRSNw2iVBHQeWk=;
-        h=Subject:From:Date:To:From;
-        b=t4qbShHI/woIJS6TxH11cF/pzr4aYi+h/AJ1UrlhKkeL7fKLWcWBLRSp2rzwxSL1M
-         AZH2FzqPZI+nKf2Kj1/pr1XVa71HMFW+iedYRfq8vB43fqtVyXl4eGUFiT2rAXWemd
-         6BFjuiivTFmXDlmrx0RCCijgkFKXfo3Yl5+8HipPlbe8+AREqwAPsnWkxjElo3/pEJ
-         z/C2l16Ft2kKqcOSomlJNh8qDL77lXEmQXwSEiNHNBZlM9051rjR3OlPPM5U8jmLvM
-         fb7HQ7CYtIuWDqmSZRT/+YrirwCRTEmYjFELlxH9+KnWwnUEoM3PMoZ0w8caIimjyM
-         G7G5gDucbiJXw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92204C59A58;
-        Tue, 13 Sep 2022 17:56:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229503AbiINIxG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Sep 2022 04:53:06 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EB45F7F6;
+        Wed, 14 Sep 2022 01:53:04 -0700 (PDT)
+Received: from [89.101.193.68] (helo=phil.sntech)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oYO8L-0004ae-5u; Wed, 14 Sep 2022 10:52:37 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, vkoul@kernel.org,
+        vigneshr@ti.com, linux@roeck-us.net, ulf.hansson@linaro.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        u.kleine-koenig@pengutronix.de, linux-mtd@lists.infradead.org,
+        zhangqing@rock-chips.com, linux-pwm@vger.kernel.org,
+        jamie@jamieiles.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, kishon@ti.com, richard@nod.at,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        robh+dt@kernel.org, linux-mmc@vger.kernel.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux-serial@vger.kernel.org,
+        miquel.raynal@bootlin.com
+Subject: Re: (subset) [PATCH v1 01/11] dt-bindings: serial: rockchip: add rockchip,rk3128-uart
+Date:   Wed, 14 Sep 2022 10:52:33 +0200
+Message-Id: <166314554237.197444.11513118217413767473.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
+References: <20220909212543.17428-1-jbx6244@gmail.com> <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166309181258.31681.6352811951941141985.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 13 Sep 2022 17:56:52 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,35 +55,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Make atmel serial driver aware of GCLK (2022-09-13T14:22:04)
-  Superseding: [v2] Make atmel serial driver aware of GCLK (2022-09-06T13:55:02):
-    [v2,01/13] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties
-    [v2,02/13] ARM: dts: at91: sama7g5: Swap rx and tx for spi11
-    [v2,03/13] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref binding
-    [v2,04/13] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
-    [v2,05/13] dt-bindings: serial: atmel,at91-usart: convert to json-schema
-    [v2,06/13] dt-bindings: serial: atmel,at91-usart: Add SAM9260 compatibles to SAM9x60
-    [v2,07/13] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref binding
-    [v2,08/13] tty: serial: atmel: Define GCLK as USART baudrate source clock
-    [v2,09/13] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register
-    [v2,10/13] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
-    [v2,11/13] clk: at91: sama5d2: Add Generic Clocks for UART/USART
-    [v2,12/13] tty: serial: atmel: Make the driver aware of the existence of GCLK
-    [v2,13/13] dt-bindings: serial: atmel,at91-usart: Add gclk as a possible USART clock
+On Sat, 10 Sep 2022 00:01:28 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-uart compatible string.
 
-Latest series: [v3] ACPI: unify _UID handling as integer (2022-09-13T16:31:43)
-  Superseding: [v2] ACPI: unify _UID handling as integer (2022-09-08T13:29:06):
-    [v2,1/8] ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as integer
-    [v2,2/8] ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,3/8] ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,4/8] i2c: amd-mp2-plat: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,5/8] i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,6/8] perf: qcom_l2_pmu: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,7/8] spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
-    [v2,8/8] efi/dev-path-parser: Refactor _UID handling to use acpi_dev_uid_to_integer()
+Applied, thanks!
 
+[08/11] dt-bindings: arm: rockchip: pmu: add rockchip,rk3128-pmu
+        commit: 9c2f4521344f3b14fa0be050100ef726edc36cbc
+[10/11] dt-bindings: soc: rockchip: grf: add rockchip,rk3128-grf
+        commit: adc4f190260a6c004f950992d8c9ee3aec8da38b
 
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Heiko Stuebner <heiko@sntech.de>
