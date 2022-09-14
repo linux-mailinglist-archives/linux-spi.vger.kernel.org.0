@@ -2,46 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210835B8394
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Sep 2022 11:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3155B8486
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Sep 2022 11:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiINJBY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Sep 2022 05:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
+        id S230026AbiINJNU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Sep 2022 05:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiINJBN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Sep 2022 05:01:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D75124951;
-        Wed, 14 Sep 2022 02:01:12 -0700 (PDT)
+        with ESMTP id S231444AbiINJMp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Sep 2022 05:12:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09597B7B9;
+        Wed, 14 Sep 2022 02:05:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE31E61812;
-        Wed, 14 Sep 2022 09:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96E2C433D6;
-        Wed, 14 Sep 2022 09:01:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E71619F3;
+        Wed, 14 Sep 2022 09:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25A8C433D6;
+        Wed, 14 Sep 2022 09:05:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663146071;
-        bh=Gyqz6gWvSgQvR7dEPd2ETTNIQBE+ZsNVjs0eMRE5tmM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V30QXqfq1oZCdIw07KutG8EKpswuexFMIyt7aNBA6PgKBzO2fxHdlhf0Z68r7A0Mx
-         vTIgDprWXq2wh+GWJ2dr0GlRbxIRF1jOfaikGumJIsl3HWeGxtRFwALzJE+kcwggQi
-         2SP2rJPQRP9HKQlQEx6yLEjG3tqjcavGlytJt+WJPIP/q1grI1p1dJ5DG0aBWjlVxp
-         vG8l53lwoqsBqJhCypeqPuFQ6FGiyg7zfr4ytIE1hpvR7hDNJat/ETypq38Cd8ldP8
-         YuD4CWMXsxh91sW6/V9X6UzCmAdINZ6wjKFA4K0jO0MkKhXuAWDQTvbkWZvNcVItmV
-         49M+pvB6qhdmg==
+        s=k20201202; t=1663146346;
+        bh=OIO8DTjkczrrzBsuFKIYuLXJvggjWtYdU4iWvbQCJrU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fOn1juFLeTRq7EcklTT2DErMenVbmiKEdKVn2QY8LV2McmKrOQllIybbvoCzbpZ+2
+         +IM9zGrnTfaJVpHFdL1NcxOyZjyCCw033ih1p6VNVOKpU7ik8FI+Bi3B9C1hCwkeNO
+         DfkVhRRZro5CyZOBTAnBGZVSU1Sx/+3BKfSol53yWq7cBnPNak7KL4Gj1oEkFvEVja
+         nSvuA3LNovckgEL9ODJ1PnzHzJC9eLXkaAsd3q++o6kHHqjfRAPKjTe9GFwj4II0aP
+         p7HGh+7j+qlnlIqHNwzb9pdU/kaElsechn8w9To2E+C4X3wpOUEYTYt5Yu5X/Y6/+J
+         jXe3lc2Z9fP9w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Niravkumar L Rabara <niravkumar.l.rabara@intel.com>,
+Cc:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 02/22] spi: cadence-quadspi: Disable irqs during indirect reads
-Date:   Wed, 14 Sep 2022 05:00:43 -0400
-Message-Id: <20220914090103.470630-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 01/13] spi: spi-cadence: Fix SPI CS gets toggling sporadically
+Date:   Wed, 14 Sep 2022 05:05:28 -0400
+Message-Id: <20220914090540.471725-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220914090103.470630-1-sashal@kernel.org>
-References: <20220914090103.470630-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,131 +55,65 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
 
-[ Upstream commit 9ee5b6d53b8c99d13a47227e3b7052a1365556c9 ]
+[ Upstream commit 21b511ddee09a78909035ec47a6a594349fe3296 ]
 
-On architecture where reading the SRAM is slower than the pace at
-controller fills it, with interrupt enabled while reading from
-SRAM FIFO causes unwanted interrupt storm to CPU.
+As part of unprepare_transfer_hardware, SPI controller will be disabled
+which will indirectly deassert the CS line. This will create a problem
+in some of the devices where message will be transferred with
+cs_change flag set(CS should not be deasserted).
+As per SPI controller implementation, if SPI controller is disabled then
+all output enables are inactive and all pins are set to input mode which
+means CS will go to default state high(deassert). This leads to an issue
+when core explicitly ask not to deassert the CS (cs_change = 1). This
+patch fix the above issue by checking the Slave select status bits from
+configuration register before disabling the SPI.
 
-The inner "bytes to read" loop never exits and waits for the completion
-so it is enough to only enable the watermark interrupt when we
-are out of bytes to read, which only happens when we start the
-transfer (waiting for the FIFO to fill up initially) if the SRAM
-is slow.
-
-So only using read watermark interrupt, as the current implementation
-doesn't utilize the SRAM full and indirect complete read interrupt.
-And disable all the read interrupts while reading from SRAM.
-
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-Link: https://lore.kernel.org/r/20220813042616.1372110-1-niravkumar.l.rabara@intel.com
+Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Link: https://lore.kernel.org/r/20220606062525.18447-1-amit.kumar-mahapatra@xilinx.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-cadence-quadspi.c | 38 +++++++++++++++++++++++++++----
- 1 file changed, 34 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cadence.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 72b1a5a2298c5..e12ab5b43f341 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -39,6 +39,7 @@
- #define CQSPI_DISABLE_DAC_MODE		BIT(1)
- #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
- #define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
-+#define CQSPI_SLOW_SRAM		BIT(4)
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index e383c63689157..6d294a1fa5e58 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -72,6 +72,7 @@
+ #define CDNS_SPI_BAUD_DIV_SHIFT		3 /* Baud rate divisor shift in CR */
+ #define CDNS_SPI_SS_SHIFT		10 /* Slave Select field shift in CR */
+ #define CDNS_SPI_SS0			0x1 /* Slave Select zero */
++#define CDNS_SPI_NOSS			0x3C /* No Slave select */
  
- /* Capabilities */
- #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -87,6 +88,7 @@ struct cqspi_st {
- 	bool			use_dma_read;
- 	u32			pd_dev_id;
- 	bool			wr_completion;
-+	bool			slow_sram;
- };
+ /*
+  * SPI Interrupt Registers bit Masks
+@@ -444,15 +445,20 @@ static int cdns_prepare_transfer_hardware(struct spi_master *master)
+  * @master:	Pointer to the spi_master structure which provides
+  *		information about the controller.
+  *
+- * This function disables the SPI master controller.
++ * This function disables the SPI master controller when no slave selected.
+  *
+  * Return:	0 always
+  */
+ static int cdns_unprepare_transfer_hardware(struct spi_master *master)
+ {
+ 	struct cdns_spi *xspi = spi_master_get_devdata(master);
++	u32 ctrl_reg;
  
- struct cqspi_driver_platdata {
-@@ -333,7 +335,10 @@ static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
- 		}
- 	}
+-	cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
++	/* Disable the SPI if slave is deselected */
++	ctrl_reg = cdns_spi_read(xspi, CDNS_SPI_CR);
++	ctrl_reg = (ctrl_reg & CDNS_SPI_CR_SSCTRL) >>  CDNS_SPI_SS_SHIFT;
++	if (ctrl_reg == CDNS_SPI_NOSS)
++		cdns_spi_write(xspi, CDNS_SPI_ER, CDNS_SPI_ER_DISABLE);
  
--	irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
-+	else if (!cqspi->slow_sram)
-+		irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
-+	else
-+		irq_status &= CQSPI_REG_IRQ_WATERMARK | CQSPI_IRQ_MASK_WR;
- 
- 	if (irq_status)
- 		complete(&cqspi->transfer_complete);
-@@ -673,7 +678,18 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 	/* Clear all interrupts. */
- 	writel(CQSPI_IRQ_STATUS_MASK, reg_base + CQSPI_REG_IRQSTATUS);
- 
--	writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
-+	/*
-+	 * On SoCFPGA platform reading the SRAM is slow due to
-+	 * hardware limitation and causing read interrupt storm to CPU,
-+	 * so enabling only watermark interrupt to disable all read
-+	 * interrupts later as we want to run "bytes to read" loop with
-+	 * all the read interrupts disabled for max performance.
-+	 */
-+
-+	if (!cqspi->slow_sram)
-+		writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
-+	else
-+		writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
- 
- 	reinit_completion(&cqspi->transfer_complete);
- 	writel(CQSPI_REG_INDIRECTRD_START_MASK,
-@@ -684,6 +700,13 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 						 msecs_to_jiffies(CQSPI_READ_TIMEOUT_MS)))
- 			ret = -ETIMEDOUT;
- 
-+		/*
-+		 * Disable all read interrupts until
-+		 * we are out of "bytes to read"
-+		 */
-+		if (cqspi->slow_sram)
-+			writel(0x0, reg_base + CQSPI_REG_IRQMASK);
-+
- 		bytes_to_read = cqspi_get_rd_sram_level(cqspi);
- 
- 		if (ret && bytes_to_read == 0) {
-@@ -715,8 +738,11 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 			bytes_to_read = cqspi_get_rd_sram_level(cqspi);
- 		}
- 
--		if (remaining > 0)
-+		if (remaining > 0) {
- 			reinit_completion(&cqspi->transfer_complete);
-+			if (cqspi->slow_sram)
-+				writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
-+		}
- 	}
- 
- 	/* Check indirect done status */
-@@ -1667,6 +1693,8 @@ static int cqspi_probe(struct platform_device *pdev)
- 			cqspi->use_dma_read = true;
- 		if (ddata->quirks & CQSPI_NO_SUPPORT_WR_COMPLETION)
- 			cqspi->wr_completion = false;
-+		if (ddata->quirks & CQSPI_SLOW_SRAM)
-+			cqspi->slow_sram = true;
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
- 					    "xlnx,versal-ospi-1.0"))
-@@ -1779,7 +1807,9 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
- };
- 
- static const struct cqspi_driver_platdata socfpga_qspi = {
--	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
-+	.quirks = CQSPI_DISABLE_DAC_MODE
-+			| CQSPI_NO_SUPPORT_WR_COMPLETION
-+			| CQSPI_SLOW_SRAM,
- };
- 
- static const struct cqspi_driver_platdata versal_ospi = {
+ 	return 0;
+ }
 -- 
 2.35.1
 
