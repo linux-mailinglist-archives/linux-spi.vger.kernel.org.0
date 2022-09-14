@@ -2,113 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F955B8957
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Sep 2022 15:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1755B89C1
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Sep 2022 16:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiINNns (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Sep 2022 09:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S229933AbiINOCs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Sep 2022 10:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiINNnq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Sep 2022 09:43:46 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B30141D0C
-        for <linux-spi@vger.kernel.org>; Wed, 14 Sep 2022 06:43:45 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so2302330wmb.0
-        for <linux-spi@vger.kernel.org>; Wed, 14 Sep 2022 06:43:44 -0700 (PDT)
+        with ESMTP id S229614AbiINOCE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Sep 2022 10:02:04 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5758F792F9
+        for <linux-spi@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id r20so6174695ljj.0
+        for <linux-spi@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=W8Z5kpkd0SkrtJbwd2sn9XnWAgVawbNE74OWYqDPa98=;
-        b=zDxi5YU9rpc/P4/4ACTVR03sZ78dlhXoiEg34DwutUm6Y7Znn6dc16XF+EHNHNq9KX
-         SHExzteZmUcTl6QI5k6gjsCgZ40uZsg4XLKS5VwAv37R3e71UcrscZUPrlHw3mHwy3FV
-         iawvf2u0uXqAQ/eNNa5mA25uWha04CPctgcf0GjHgdR5GckSbrsmFgM6WU+UArRyRnMZ
-         dGEqY1uh35f0s9J9IvqYGKlUxdKYNVImopoNfYbK+bTzANY9djadDB5F764DsnSVBlPM
-         iTAvh4Dkh475zFWTNpsxO3rU0YUWMdRrD+rYrGIhW54xzzosDOAc+57RtNZlwTE/icJb
-         XkCA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
+        b=brLbhteVZvljyIvgq/BZuRLdaBrU3dauTxDoV0afpm3D8G8eC+PzDhihujize4u5bY
+         xgox21O6n2RkerLtHPJSxFlI9Ypd4EaaCMtXQ7yq5LZNyMV3rxWn43mV+DL93secxJ35
+         4Mo/5OnJiR6EUaDKMTG+vYej6lxDoTN17UAF7qfMYvtkuVe2JYPn54zshCzOug6c4hnm
+         0PMtdZptGI+KTwKQPmr17gsklS46PN+JxnAiFa0Kz1YXmHRDDEHnUiBiga5Vbxp6gH4i
+         w0hl0XbK0nFJOe2yMuLg3FVQgvh34lleAXvP2oQC+kW2m8mmi10ye76Qq7J6zmCtULXy
+         wI1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=W8Z5kpkd0SkrtJbwd2sn9XnWAgVawbNE74OWYqDPa98=;
-        b=ulMO1hDI4xH2ydKnU6zjCg6jLJyJQ2pJl2MfKbpvUp4f0k4SW1AvNd3aWFek1fEWxh
-         HOWVZ1kN5/tH5yf9AiOwsA1E/+ncFv6N/JL4CKx+0vfK1WSTQAzz0sZImorWAn1O/3KY
-         l/fKcU5duWCZx991T1hcVpBVD0f05Unq8hNLOI3eZ+3cteTI/LF6i3tXAbRyhKAiOF9g
-         FbRJJ+8BNXXFqhuQPwUQFMpbMv5f+rQPeN/+gzrCJNp7lFBBkJZ4oGvqRy/t1KstrJND
-         n4UxcOGXm50LblCq7pLtDpTN39whYak77Enc/hbkrpTKZOTbLbN/ttrqf9p5UHUari/Z
-         re0A==
-X-Gm-Message-State: ACgBeo313gVmCO+TmxQmi/4l3tiS4oCPsnq+GqrNGZCUFKlWS0+cqY+Q
-        K4sf8l+2cOmH19cGW1Q3V4lUYg==
-X-Google-Smtp-Source: AA6agR7a984bJVGvmq0/C97vtjeKUz6al+EhhC8nG4zQvtRSp6gdWlbRjqVgKOQbzZYDdWgdu7P1eQ==
-X-Received: by 2002:a05:600c:3483:b0:3b4:99f4:1191 with SMTP id a3-20020a05600c348300b003b499f41191mr3091710wmq.147.1663163023407;
-        Wed, 14 Sep 2022 06:43:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:375e:b940:b903:7792? ([2a01:e0a:982:cbb0:375e:b940:b903:7792])
-        by smtp.gmail.com with ESMTPSA id v6-20020a5d6786000000b00228cbac7a25sm13527031wru.64.2022.09.14.06.43.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 06:43:42 -0700 (PDT)
-Message-ID: <b2b9284d-0e18-0f4b-a41c-bb251f9de591@baylibre.com>
-Date:   Wed, 14 Sep 2022 15:43:39 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
+        b=NF8qT09B1i71CHYOxkmHByQKllB90xy4QC5+U0GTYr6khkhh6jM9B2U+SRpSWZerC/
+         E86is9CI19b58wq2mMTKzf6sYbIgM8uLeMOra8zruuURFcEiY3lrXlAgiRxFaCs3teD2
+         +a9PJmYKHfd4OR6JfCRfvJb5P3J1N7IFxYRoGUlXMX+HoTFiL35k6NLOo7MCokyMCK7y
+         VEiAGPYp/4TWB7TJIOltYzf0eDNpT6KyQJE3ykZccKKF4BDhfb9o5XJ49YbnMZBtEPDD
+         O9xs4XW4TdUJaqzlJDgvAqK76BCxC/5JKPBp9HqQadbSfWN6jCAFg3Riigy/IIPoKYjC
+         7z/g==
+X-Gm-Message-State: ACgBeo0lz+9E56+F1lmmREYBVjonU7/waAw6o77YN9rTjwFmmg4bq+hD
+        9ZWBOwDA2KtREdUDz8MJUxNh20XBg3Ft/MzSzGboqA==
+X-Google-Smtp-Source: AA6agR6JkJbCqyE2gTrtp6CclhDjtY75sWE4XsKvRX/lZhn/DSwVZZASJB/yTmhXGA6tUkOdrnfrqI0qNyYf9XVzF8k=
+X-Received: by 2002:a05:651c:214:b0:26a:b03b:9e0c with SMTP id
+ y20-20020a05651c021400b0026ab03b9e0cmr10198201ljn.463.1663164075540; Wed, 14
+ Sep 2022 07:01:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] spi: meson-spicc: add support for DMA
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220913140303.437994-1-narmstrong@baylibre.com>
- <667da463-1edc-4a99-9ac1-85303d9187c6@www.fastmail.com>
- <499f0940-3d7f-0ed5-e469-5c0979e6f761@baylibre.com>
- <28501fbf-3508-4afe-804d-fa5a3ccd4291@www.fastmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <28501fbf-3508-4afe-804d-fa5a3ccd4291@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909212543.17428-1-jbx6244@gmail.com> <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
+In-Reply-To: <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 14 Sep 2022 16:00:38 +0200
+Message-ID: <CAPDyKFrF5Tn9a_hqp7mrp14YCrcX4LV6Y5qNxOz2ZSRJJuMmCA@mail.gmail.com>
+Subject: Re: [PATCH v1 04/11] dt-bindings: mmc: rockchip: add rockchip,rk3128-dw-mshc
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        kishon@ti.com, vkoul@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 14/09/2022 15:17, Arnd Bergmann wrote:
-> On Wed, Sep 14, 2022, at 2:35 PM, Neil Armstrong wrote:
->> On 14/09/2022 13:19, Arnd Bergmann wrote:
->>> On Tue, Sep 13, 2022, at 4:03 PM, Neil Armstrong wrote:
->>>
->>>> + /* Sometimes, TC gets triggered while the RX fifo isn't fully flushed *
->>>> + if (spicc->using_dma) {
->>>> +          unsigned int rxfifo_count = FIELD_GET(SPICC_RXCNT_MASK,
->>>> +                       readl_relaxed(spicc->base + SPICC_TESTREG));
->>>
->>> Same here in the interrupt controller, I don't see anything enforcing
->>> the DMA to actually complete before the readl_relaxed().
->>
->> I don't see the relathionship between a register relaxed read and the
->> DMA not finishing
->> writing the data in uncached memory, for me it's 2 unrelated things.
-> 
-> The race is between the readl_relaxed() and a subsequent access
-> to the data that is being transferred. On Arm processors you
-> need a "dmb(oshld)" instruction to ensure that the CPU cannot
-> prefetch data from the DMA buffer while it is waiting for the
-> MMIO to complete.
-> 
-> The __io_ar() in readl() exists specifically there for this race, and
-> this is the reason that readl_relaxed() exists for drivers that
-> do not do any DMA.
+On Sat, 10 Sept 2022 at 00:02, Johan Jonker <jbx6244@gmail.com> wrote:
+>
+> Add rockchip,rk3128-dw-mshc compatible string.
+>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-Acked, thx for for expliciting, will do the fix.
+Applied for next, thanks!
 
-> 
-> Note that this prefetching can happen for uncached memory, but
-> spe-meson-spicc uses cached memory.
-> 
->       Arnd
+Kind regards
+Uffe
 
+
+> ---
+>  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> index bad28bc74..95f59a5e3 100644
+> --- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> @@ -32,6 +32,7 @@ properties:
+>                - rockchip,px30-dw-mshc
+>                - rockchip,rk1808-dw-mshc
+>                - rockchip,rk3036-dw-mshc
+> +              - rockchip,rk3128-dw-mshc
+>                - rockchip,rk3228-dw-mshc
+>                - rockchip,rk3308-dw-mshc
+>                - rockchip,rk3328-dw-mshc
+> --
+> 2.20.1
+>
