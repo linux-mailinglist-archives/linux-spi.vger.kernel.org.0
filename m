@@ -2,98 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1067A5BAC93
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Sep 2022 13:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7980A5BB0DE
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Sep 2022 18:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiIPLkB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Sep 2022 07:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S230024AbiIPQHM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Sep 2022 12:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiIPLkA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Sep 2022 07:40:00 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC972CC97;
-        Fri, 16 Sep 2022 04:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663328398;
-  x=1694864398;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=522Kxf6U1q7s2dtT3SsExSNapFPwyU8RLSswskWzai8=;
-  b=TfneD9eTL6XivhGCtWAcEhjTVLROmOQBXNFGkByRRWKCXS3gojsIEUJ+
-   +JstlQrYh/ONRk/RdkJ2sTBYkK2XxQkGADU6p/JBWRyZYKzTRcy/41EVV
-   PzT1Za44VbqDsB1hZ/9dw73sXN3QQXbGA1by870v6dFWy1slk+X8iwKd5
-   TzA5KHPkZaJ+oex1F9lv5NhcEUBej9sG6S8PIb6d+/y55RUAnpoqJ0UM6
-   zlibkTW1SJhHbuzBYexO3UY5Tw5ZQgCSVl3VYjZTLlzxbHAFEIi06pdcP
-   p+od6pD8W4RMrnmkRq+Hq0tszA+IWEe+NrKGuaU3RQc8PuRSI/iPL3YDn
+        with ESMTP id S229606AbiIPQHL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Sep 2022 12:07:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A79B5E76;
+        Fri, 16 Sep 2022 09:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663344430; x=1694880430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=txXFG6pxRQXR5LBhZBt+ObfjH9wJQexQ6BpqZeDAbo4=;
+  b=LWCQm/E754V4p8RGoHqwFpZ1gFwDcHiiMYykqnTmiqRqrraz1OpD6jZG
+   siEi8uVJFGlZjkTeTsUnEN8rYUOAYQthctkbF7ylzpgHAXBPV2LSEh+Hp
+   RtxBV7+kLaamxnc4Dl1rp4c7TtEvt5AGsFCS5kKZnazxCc3NX4I81rW1f
+   zclKXMtzztjY7vxymCONHPIEn/E74VT5NCTpGK6h3N9GzpZJp94LFdr/w
+   RMp9JGbNBkerRqlFkE0Kb9wo97sXeOqXFUK9usRYdHja5S1pS2418UAKH
+   avclpGqb6hp5OSGuaSnMfMiPiBRlRqCHKk9CwBWZR1UQoXXGugPBPSIXH
    A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <broonie@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <andi@etezian.org>
-CC:     <kernel@axis.com>,
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="299015230"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="299015230"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 09:07:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="743387423"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Sep 2022 09:07:07 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZDru-0001vt-2c;
+        Fri, 16 Sep 2022 16:07:06 +0000
+Date:   Sat, 17 Sep 2022 00:06:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        broonie@kernel.org, krzysztof.kozlowski@linaro.org,
+        andi@etezian.org
+Cc:     kbuild-all@lists.01.org, kernel@axis.com,
         Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <alim.akhtar@samsung.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 4/4] spi: s3c64xx: Fix large transfers with DMA
-Date:   Fri, 16 Sep 2022 13:39:51 +0200
-Message-ID: <20220916113951.228398-5-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220916113951.228398-1-vincent.whitchurch@axis.com>
-References: <20220916113951.228398-1-vincent.whitchurch@axis.com>
+        alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/4] spi: Fix cache corruption due to DMA/PIO overlap
+Message-ID: <202209162337.7NbxJFXD-lkp@intel.com>
+References: <20220916113951.228398-4-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220916113951.228398-4-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The COUNT_VALUE in the PACKET_CNT register is 16-bit so the maximum
-value is 65535.  Asking the driver to transfer a larger size currently
-leads to the DMA transfer timing out.  Fix this by splitting the
-transfer as needed.
+Hi Vincent,
 
-With this, the len>64 KiB tests in spi-loopback-test pass.
+Thank you for the patch! Perhaps something to improve:
 
-(Note that len==64 KiB tests work even without this patch for some reason.
- The driver programs 0 to the COUNT_VALUE field in that case, but it's
- unclear if it's by design, since the hardware documentation doesn't say
- anything about the behaviour when COUNT_VALUE == 0, so play it safe and
- split at 65535.)
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on krzk/for-next linus/master v6.0-rc5 next-20220916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 230d42d422e7b69 ("spi: Add s3c64xx SPI Controller driver")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/spi/spi-s3c64xx.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Whitchurch/spi-Fix-DMA-bugs-in-not-only-spi-s3c64xx/20220916-194234
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220916/202209162337.7NbxJFXD-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d9c81b85380dadb07e24d2f5dd6b27bacb72845a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vincent-Whitchurch/spi-Fix-DMA-bugs-in-not-only-spi-s3c64xx/20220916-194234
+        git checkout d9c81b85380dadb07e24d2f5dd6b27bacb72845a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/spi/
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 7f346866614a..85e1d1f90109 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -701,6 +701,16 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
- 	struct spi_device *spi = msg->spi;
- 	struct s3c64xx_spi_csinfo *cs = spi->controller_data;
- 
-+	if (master->can_dma) {
-+		int ret;
-+
-+		/* Limited by size of PACKET_CNT.COUNT_VALUE. */
-+		ret = spi_split_transfers_maxsize(master, msg, 65535,
-+						  GFP_KERNEL | GFP_DMA);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/* Configure feedback delay */
- 	if (!cs)
- 		/* No delay if not defined */
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi.c:1243:6: warning: no previous prototype for 'spi_dma_sync_for_device' [-Wmissing-prototypes]
+    1243 | void spi_dma_sync_for_device(struct spi_controller *ctrl, struct spi_transfer *xfer)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/spi/spi.c:1247:6: warning: no previous prototype for 'spi_dma_sync_for_cpu' [-Wmissing-prototypes]
+    1247 | void spi_dma_sync_for_cpu(struct spi_controller *ctrl, struct spi_transfer *xfer)
+         |      ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/spi_dma_sync_for_device +1243 drivers/spi/spi.c
+
+  1242	
+> 1243	void spi_dma_sync_for_device(struct spi_controller *ctrl, struct spi_transfer *xfer)
+  1244	{
+  1245	}
+  1246	
+> 1247	void spi_dma_sync_for_cpu(struct spi_controller *ctrl, struct spi_transfer *xfer)
+  1248	{
+  1249	}
+  1250	#endif /* !CONFIG_HAS_DMA */
+  1251	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
