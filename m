@@ -2,83 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802995BB316
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Sep 2022 21:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64B45BB825
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Sep 2022 14:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiIPT50 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Sep 2022 15:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S229452AbiIQMSI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 17 Sep 2022 08:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIPT5Y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Sep 2022 15:57:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D19B6D68;
-        Fri, 16 Sep 2022 12:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 182FEB82919;
-        Fri, 16 Sep 2022 19:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2545C433D7;
-        Fri, 16 Sep 2022 19:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663358240;
-        bh=vCLtuY1TpVMliumE5DbT2WWZvJ7/teLjaPmFO/zeNJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IOX0u1Ga5jI3fyqBR9wRY7ly+OLINlk+lX+/BsGejMs60jVRDL8sIKqdSt3XILF3S
-         3K8SPRau6FUTQjVtbE6TEJNBmBOBPcPVQXi8OX57u4C0HVoKJPkMEEJ00ksU2lEwGs
-         eneNMJ1+ZnjxnQkCh/cvuyCe2+sDYCEoDJMO2dCn8QTVKtHj5HclYZhNhoQ3rUjl8F
-         tLS/O8FsgwubYS4qOpznp7bdKsC95dfNfY+vQCoCjDHNxc5H6XhL91QFFlfKlKIRzu
-         6tQdmHN/uGcOz3u/YXt0EebKPWSOF1vo6zXrc1qJQEZh8QfmRKs6RTMPWgVqS4lGYT
-         5hmw0V5iFK+MA==
-Date:   Fri, 16 Sep 2022 20:57:18 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v1 02/11] dt-bindings: i2c: rockchip: add
- rockchip,rk3128-i2c
-Message-ID: <YyTVHph1bCF/gfjL@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
-        sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
+        with ESMTP id S229379AbiIQMSI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 17 Sep 2022 08:18:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41C530F7F
+        for <linux-spi@vger.kernel.org>; Sat, 17 Sep 2022 05:18:06 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MV8xf73hRzmV9p;
+        Sat, 17 Sep 2022 20:14:14 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 17 Sep 2022 20:18:04 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 17 Sep
+ 2022 20:17:57 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <broonie@kernel.org>
+Subject: [PATCH -next] spi: omap2-mcspi: Switch to use dev_err_probe() helper
+Date:   Sat, 17 Sep 2022 20:25:04 +0800
+Message-ID: <20220917122504.1896302-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vbp8ZsxZHEPG+tBR"
-Content-Disposition: inline
-In-Reply-To: <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,38 +47,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+In the probe path, dev_err() can be replace with dev_err_probe()
+which will check if error code is -EPROBE_DEFER and prints the
+error name.
 
---Vbp8ZsxZHEPG+tBR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-omap2-mcspi.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-On Sat, Sep 10, 2022 at 12:02:30AM +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-i2c compatible string.
->=20
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index c42e59df38fe..80e79f3aa0c4 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -1509,10 +1509,8 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	status = platform_get_irq(pdev, 0);
+-	if (status == -EPROBE_DEFER)
+-		goto free_master;
+-	if (status < 0) {
+-		dev_err(&pdev->dev, "no irq resource found\n");
++	if (status) {
++		dev_err_probe(&pdev->dev, status, "no irq resource found\n");
+ 		goto free_master;
+ 	}
+ 	init_completion(&mcspi->txdone);
+-- 
+2.25.1
 
-Applied to for-next, thanks!
-
-
---Vbp8ZsxZHEPG+tBR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk1R4ACgkQFA3kzBSg
-KbY8YxAAqkmITIjJchmw2BH4eehoxFiSAW8VYh6gojn2S2RgQjSwZsHnR8E8FMIu
-eUeROZH0Wd/Mihi8hLz9Fm3/aTSxUss5Zj2hzFr2RGOHqsicHtx622HwdTakfM08
-6NFWuuBya9tGX4iujN+oQsnI1NA8mDPNEIE8tMEh1wBzOY5m/ijAJLIALJ/cB/qj
-4MGIK9aKg9PfU3nSd0b+9Dn7iZDClo6CnBeKCAHhUeF+DoKzdLsl3FQzNtcIxS1+
-+NL48AB8Kst01hfZHKpuUriTDT2lXfBeQi5NEKNRyc+1fEWBshPat1tYRlEfs9BA
-WAHNZkh3q8qsSDPh2lufGmmOhuX3pUumWAwHfHgbZksNtPj5ldSTXhUciPPHeufb
-Rf+Ne4WaMMX4JOJJ70wMKn+ycaJYRulfiOacroqTqTH7rSX+NuioTEtITA2KMa3q
-4WfMmHrJe3qLPhEkLXabhrYwMcAWkHaPDJ6dJJbHfxRtR0F8y0DMpyJrCRsF9TcS
-+8Hqcq+y5bxc9n/eDxSrSQXXoEQLBFjGeJfCz4D+n6oOWv/6dxMe8dZyU7vq/Ea8
-0DApwW0esWTGZuuV5r2xmncP/4+spn2C2FCOI1ZqCPs2T3Kd7DPBEMPnp7UQRZFO
-cVkNoe0c0N9yQjMEVi9+aqqDWefE6imYt3d3PXqcHEYoHYqHON4=
-=t7C7
------END PGP SIGNATURE-----
-
---Vbp8ZsxZHEPG+tBR--
