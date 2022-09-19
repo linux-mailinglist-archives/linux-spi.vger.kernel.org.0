@@ -2,175 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA8F5BD087
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Sep 2022 17:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90545BD17E
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Sep 2022 17:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiISPTN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Sep 2022 11:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S229842AbiISP4v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Sep 2022 11:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiISPSm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Sep 2022 11:18:42 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8F9399CA;
-        Mon, 19 Sep 2022 08:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663600676; x=1695136676;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=lyWtjXhG3QhRvIlRitPwxiBIgXlP2Igv2zzIEO7c0wk=;
-  b=UK1iaNaFCOHeQiM15afCQioFkuV3SdRsQWpitnmayVjdJXZFfdlEvnUD
-   9DSlxRTI0w8LzfmdgZXSjek/Q5wUitCv277laBagdaSytSFZJW2DnilHo
-   XS49zYptWAINRYAtjWur55KEAiiyyuqWmplTZa698hHpw5N9BWJ3DxcEb
-   1Eux0upnkY0uVrU1OOm3+dy5fW2/0xZ8o3YMqF+sHuTsERerSgXdvIaDw
-   bqRunK45ygAqGiysnb4fRR0EDs0ofDS5/MX6mjiiecvW1v871sX9DOk8B
-   7FSJhjboM7sA8vCeiC7d1GXtqSJDOpP9+0Tg/IMDMpgVJdKazMLaVLqgR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279809041"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="279809041"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:17:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="744148447"
-Received: from iswiersz-mobl1.ger.corp.intel.com ([10.252.33.172])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:17:49 -0700
-Date:   Mon, 19 Sep 2022 18:17:46 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 8/9] tty: serial: atmel: Only divide Clock Divisor if
- the IP is USART
-In-Reply-To: <20220919150846.1148783-9-sergiu.moga@microchip.com>
-Message-ID: <7173f82-4f14-6f89-9651-fd3fdc4b9dcc@linux.intel.com>
-References: <20220919150846.1148783-1-sergiu.moga@microchip.com> <20220919150846.1148783-9-sergiu.moga@microchip.com>
+        with ESMTP id S229911AbiISP4u (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Sep 2022 11:56:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A671115E
+        for <linux-spi@vger.kernel.org>; Mon, 19 Sep 2022 08:56:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D0661839
+        for <linux-spi@vger.kernel.org>; Mon, 19 Sep 2022 15:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C0DEDC433C1;
+        Mon, 19 Sep 2022 15:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663603008;
+        bh=Rn4V4a7CWuuK9UyqIMNgR4mgNnD16QsvALPZc23epD4=;
+        h=Subject:From:Date:To:From;
+        b=KdbNkJefNTVFJhBGpCNBpSK0Wj1zo0sCmJK9pr7P1zAnSSU2MdXpVO+3GOFW0HvUq
+         Dhr/o83lQWcHx03Sz/m8KAlsgaratfQ9XpjXrkZA2fzI/bNKGmVJ8QMwNe1z5o3nlY
+         25Nh0hKcB2vJUx5Eq5Fb5zmboOIBqycGpTfYsbL859cpmyEoSB5wOSIDXzTq76vCrt
+         PqZt902cIcLjkJdz0f/N7u+B0VatZdo6Ru2cutQC+0phTQnorAYHHv/2gRV9k5CQGi
+         TRl1O5/hP1xAxgp+IRzP+CZIsodq1vxFlTU9Yvz+j2+I8IO/HYVR0LAi2I5m1V62Cb
+         Tn06ymoS9j4OA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2F6DE21ED0;
+        Mon, 19 Sep 2022 15:56:48 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-390606940-1663600673=:1603"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166360300866.6966.18283916500953113829.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 19 Sep 2022 15:56:48 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Latest series: [v4] Make atmel serial driver aware of GCLK (2022-09-19T15:08:38)
+  Superseding: [v3] Make atmel serial driver aware of GCLK (2022-09-13T14:22:04):
+    [v3,01/14] ARM: dts: at91: sama7g5: Swap rx and tx for spi11
+    [v3,02/14] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+    [v3,03/14] ARM: dts: at91: Add `atmel,usart-mode` required property to serial nodes
+    [v3,04/14] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties
+    [v3,05/14] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref binding
+    [v3,06/14] dt-bindings: serial: atmel,at91-usart: convert to json-schema
+    [v3,07/14] dt-bindings: serial: atmel,at91-usart: Add SAM9260 compatibles to SAM9X60
+    [v3,08/14] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref binding
+    [v3,09/14] dt-bindings: serial: atmel,at91-usart: Add gclk as a possible USART clock
+    [v3,10/14] tty: serial: atmel: Define GCLK as USART baudrate source clock
+    [v3,11/14] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register
+    [v3,12/14] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
+    [v3,13/14] clk: at91: sama5d2: Add Generic Clocks for UART/USART
+    [v3,14/14] tty: serial: atmel: Make the driver aware of the existence of GCLK
 
---8323329-390606940-1663600673=:1603
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 19 Sep 2022, Sergiu Moga wrote:
-
-> Make sure that the driver only divides the clock divisor if the
-> IP handled at that point is USART, since UART IP's do not support
-> implicit peripheral clock division. Instead, in the case of UART,
-> go with the highest possible clock divisor.
-> 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-
-Look good.
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
- i.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-
-> ---
-> 
-> 
-> v1 -> v2:
-> - Nothing, this patch was not here before and is mainly meant as both cleanup
-> and as a way to introduce a new field into struct atmel_uart_port that will be
-> used by the last patch to diferentiate between USART and UART regarding the
-> location of the Baudrate Clock Source bitmask.
-> 
-> 
-> 
-> v2 -> v3:
-> - Use ATMEL_US_CD instead of 65535
-> - Previously [PATCH 10]
-> 
-> 
-> 
-> v3 -> v4:
-> - Use min_t instead of &
-> - Previously [PATCH 12]
-> 
-> 
->  drivers/tty/serial/atmel_serial.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> index ab4a9dfae07d..c983798a4ab2 100644
-> --- a/drivers/tty/serial/atmel_serial.c
-> +++ b/drivers/tty/serial/atmel_serial.c
-> @@ -150,6 +150,7 @@ struct atmel_uart_port {
->  	u32			rts_low;
->  	bool			ms_irq_enabled;
->  	u32			rtor;	/* address of receiver timeout register if it exists */
-> +	bool			is_usart;
->  	bool			has_frac_baudrate;
->  	bool			has_hw_timer;
->  	struct timer_list	uart_timer;
-> @@ -1825,6 +1826,7 @@ static void atmel_get_ip_name(struct uart_port *port)
->  	 */
->  	atmel_port->has_frac_baudrate = false;
->  	atmel_port->has_hw_timer = false;
-> +	atmel_port->is_usart = false;
->  
->  	if (name == new_uart) {
->  		dev_dbg(port->dev, "Uart with hw timer");
-> @@ -1834,6 +1836,7 @@ static void atmel_get_ip_name(struct uart_port *port)
->  		dev_dbg(port->dev, "Usart\n");
->  		atmel_port->has_frac_baudrate = true;
->  		atmel_port->has_hw_timer = true;
-> +		atmel_port->is_usart = true;
->  		atmel_port->rtor = ATMEL_US_RTOR;
->  		version = atmel_uart_readl(port, ATMEL_US_VERSION);
->  		switch (version) {
-> @@ -1863,6 +1866,7 @@ static void atmel_get_ip_name(struct uart_port *port)
->  			dev_dbg(port->dev, "This version is usart\n");
->  			atmel_port->has_frac_baudrate = true;
->  			atmel_port->has_hw_timer = true;
-> +			atmel_port->is_usart = true;
->  			atmel_port->rtor = ATMEL_US_RTOR;
->  			break;
->  		case 0x203:
-> @@ -2283,10 +2287,21 @@ static void atmel_set_termios(struct uart_port *port,
->  		cd = uart_get_divisor(port, baud);
->  	}
->  
-> -	if (cd > 65535) {	/* BRGR is 16-bit, so switch to slower clock */
-> +	/*
-> +	 * If the current value of the Clock Divisor surpasses the 16 bit
-> +	 * ATMEL_US_CD mask and the IP is USART, switch to the Peripheral
-> +	 * Clock implicitly divided by 8.
-> +	 * If the IP is UART however, keep the highest possible value for
-> +	 * the CD and avoid needless division of CD, since UART IP's do not
-> +	 * support implicit division of the Peripheral Clock.
-> +	 */
-> +	if (atmel_port->is_usart && cd > ATMEL_US_CD) {
->  		cd /= 8;
->  		mode |= ATMEL_US_USCLKS_MCK_DIV8;
-> +	} else {
-> +		cd = min_t(unsigned int, cd, ATMEL_US_CD);
->  	}
-> +
->  	quot = cd | fp << ATMEL_US_FP_OFFSET;
->  
->  	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
-
-
---8323329-390606940-1663600673=:1603--
