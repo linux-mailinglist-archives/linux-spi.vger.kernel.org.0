@@ -2,138 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103FD5BE75C
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 15:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919CD5BE784
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 15:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiITNlo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Sep 2022 09:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S230003AbiITNsj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Sep 2022 09:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiITNll (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Sep 2022 09:41:41 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4966242AD1
-        for <linux-spi@vger.kernel.org>; Tue, 20 Sep 2022 06:41:34 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MX2fG54jJz14Qkk;
-        Tue, 20 Sep 2022 21:37:26 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 21:41:32 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
- 2022 21:41:31 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH -next 6/6] spi: altera: Switch to use devm_spi_alloc_master()
-Date:   Tue, 20 Sep 2022 21:48:19 +0800
-Message-ID: <20220920134819.2981033-7-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220920134819.2981033-1-yangyingliang@huawei.com>
-References: <20220920134819.2981033-1-yangyingliang@huawei.com>
+        with ESMTP id S229489AbiITNsi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Sep 2022 09:48:38 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE956B8C;
+        Tue, 20 Sep 2022 06:48:35 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 678AB1C0003; Tue, 20 Sep 2022 15:48:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1663681713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LMWgtZekcEigY07GE7Rgrxe8a63TCCCCmIA3rHO/7ts=;
+        b=hwATHZQAyROmF5XEgiIGhMzxryLKLMf3wRGld3G+8pxwqvmVyKk26dwh+3Vv0IV1VXU9LB
+        1Uxz+kQFxPz29R2t589s4gUqDb14bPrc5jR1hEJkTaN+F5rXGJssTZXj5GtaJw68cCiZgc
+        WHNFWcO3HV4j/WTSDG6D+42ti3geA0I=
+Date:   Tue, 20 Sep 2022 15:48:32 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>, Greg KH <greg@kroah.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.9 01/13] spi: spi-cadence: Fix SPI CS gets
+ toggling sporadically
+Message-ID: <20220920134832.GA19086@duo.ucw.cz>
+References: <20220914090540.471725-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Disposition: inline
+In-Reply-To: <20220914090540.471725-1-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Switch to use devm_spi_alloc_master() to simpify error path.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-altera-platform.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+--KsGdsel6WgEHnImy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-altera-platform.c b/drivers/spi/spi-altera-platform.c
-index 65147aae82a1..376df7b6f543 100644
---- a/drivers/spi/spi-altera-platform.c
-+++ b/drivers/spi/spi-altera-platform.c
-@@ -43,7 +43,7 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	int err = -ENODEV;
- 	u16 i;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
-+	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
- 	if (!master)
- 		return err;
- 
-@@ -55,8 +55,7 @@ static int altera_spi_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev,
- 				"Invalid number of chipselect: %u\n",
- 				pdata->num_chipselect);
--			err = -EINVAL;
--			goto exit;
-+			return -EINVAL;
- 		}
- 
- 		master->num_chipselect = pdata->num_chipselect;
-@@ -83,7 +82,7 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		hw->regmap = dev_get_regmap(pdev->dev.parent, NULL);
- 		if (!hw->regmap) {
- 			dev_err(&pdev->dev, "get regmap failed\n");
--			goto exit;
-+			return err;
- 		}
- 
- 		regoff = platform_get_resource(pdev, IORESOURCE_REG, 0);
-@@ -93,17 +92,14 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		void __iomem *res;
- 
- 		res = devm_platform_ioremap_resource(pdev, 0);
--		if (IS_ERR(res)) {
--			err = PTR_ERR(res);
--			goto exit;
--		}
-+		if (IS_ERR(res))
-+			return PTR_ERR(res);
- 
- 		hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
- 						   &spi_altera_config);
- 		if (IS_ERR(hw->regmap)) {
- 			dev_err(&pdev->dev, "regmap mmio init failed\n");
--			err = PTR_ERR(hw->regmap);
--			goto exit;
-+			return PTR_ERR(hw->regmap);
- 		}
- 	}
- 
-@@ -115,12 +111,12 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		err = devm_request_irq(&pdev->dev, hw->irq, altera_spi_irq, 0,
- 				       pdev->name, master);
- 		if (err)
--			goto exit;
-+			return err;
- 	}
- 
- 	err = devm_spi_register_master(&pdev->dev, master);
- 	if (err)
--		goto exit;
-+		return err;
- 
- 	if (pdata) {
- 		for (i = 0; i < pdata->num_devices; i++) {
-@@ -134,9 +130,6 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	dev_info(&pdev->dev, "regoff %u, irq %d\n", hw->regoff, hw->irq);
- 
- 	return 0;
--exit:
--	spi_master_put(master);
--	return err;
- }
- 
- #ifdef CONFIG_OF
--- 
-2.25.1
+Hi!
 
+> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+>=20
+> [ Upstream commit 21b511ddee09a78909035ec47a6a594349fe3296 ]
+>=20
+> As part of unprepare_transfer_hardware, SPI controller will be disabled
+> which will indirectly deassert the CS line. This will create a problem
+> in some of the devices where message will be transferred with
+> cs_change flag set(CS should not be deasserted).
+> As per SPI controller implementation, if SPI controller is disabled then
+> all output enables are inactive and all pins are set to input mode which
+> means CS will go to default state high(deassert). This leads to an issue
+> when core explicitly ask not to deassert the CS (cs_change =3D 1). This
+> patch fix the above issue by checking the Slave select status bits from
+> configuration register before disabling the SPI.
+
+My records say this was already submitted to AUTOSEL at "Jun
+27". There are more patches from that era that were reviewed in
+AUTOSEL but not merged anywhere. Can you investigate?
+
+Best regards,
+								Pavel
+
+a 4.9 01/13] spi: spi-cadence: Fix SPI CS gets toggling sporadic
+a 4.9 02/13] spi: cadence: Detect transmit FIFO depth
+n unused preparation 4.9 03/13] drm/vc4: crtc: Use an union to store the pa=
+ge f\
+l
+a 4.9 04/13] drivers/net/ethernet/neterion/vxge: Fix a use-af
+n just a comment fix 4.9 05/13] video: fbdev: skeletonfb: Fix syntax errors=
+ in \
+c
+a just a printk tweak 4.9 06/13] video: fbdev: intelfb: Use aperture size f=
+rom \
+pc
+a 4.9 07/13] video: fbdev: pxa3xx-gcu: Fix integer overflow i
+n just a cleanup 4.9 08/13] video: fbdev: simplefb: Check before clk_put() n
+a 4.9 09/13] mips: lantiq: falcon: Fix refcount leak bug in s
+a 4.9 10/13] mips: lantiq: xway: Fix refcount leak bug in sys
+n we still have reference to the name, it is not safe to put it 4.9 11/13] =
+mips\
+/pic32/pic32mzda: Fix refcount leak bugs
+a 4.9 12/13] mips: lantiq: Add missing of_node_put() in irq.c
+
+a 4.19 03/22] ALSA: usb-audio: US16x08: Move overflow check b
+n unused preparation 4.19 05/22] drm/vc4: crtc: Move the BO handling out of=
+ com\
+m
+! do we have everything? 4.19 06/22] ALSA: x86: intel_hdmi_audio: enable pm=
+_run\
+time
+! 4.19 07/22] hamradio: 6pack: fix array-index-out-of-bounds
+a 4.19 13/22] arch: mips: generic: Add missing of_node_put()
+a 4.19 14/22] mips: mti-malta: Fix refcount leak in malta-tim
+a 4.19 15/22] mips: ralink: Fix refcount leak in of.c
+a 4.19 20/22] drm/sun4i: Add DMA mask and segment size
+! 4.19 21/22] drm/amdgpu: Adjust logic around GTT size (v3)
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--KsGdsel6WgEHnImy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYynEsAAKCRAw5/Bqldv6
+8luBAJ9OZ67f7QmMHV8I0fI6mhl5V8eB4ACgiefn0m6xPtyoWiXiT/59AaF1ZJM=
+=7rpI
+-----END PGP SIGNATURE-----
+
+--KsGdsel6WgEHnImy--
