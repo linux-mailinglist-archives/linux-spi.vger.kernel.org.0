@@ -2,131 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919CD5BE784
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 15:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C9C5BE8B4
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 16:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiITNsj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Sep 2022 09:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S231776AbiITOWb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Sep 2022 10:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiITNsi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Sep 2022 09:48:38 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE956B8C;
-        Tue, 20 Sep 2022 06:48:35 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 678AB1C0003; Tue, 20 Sep 2022 15:48:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1663681713;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LMWgtZekcEigY07GE7Rgrxe8a63TCCCCmIA3rHO/7ts=;
-        b=hwATHZQAyROmF5XEgiIGhMzxryLKLMf3wRGld3G+8pxwqvmVyKk26dwh+3Vv0IV1VXU9LB
-        1Uxz+kQFxPz29R2t589s4gUqDb14bPrc5jR1hEJkTaN+F5rXGJssTZXj5GtaJw68cCiZgc
-        WHNFWcO3HV4j/WTSDG6D+42ti3geA0I=
-Date:   Tue, 20 Sep 2022 15:48:32 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sasha Levin <sashal@kernel.org>, Greg KH <greg@kroah.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 01/13] spi: spi-cadence: Fix SPI CS gets
- toggling sporadically
-Message-ID: <20220920134832.GA19086@duo.ucw.cz>
-References: <20220914090540.471725-1-sashal@kernel.org>
+        with ESMTP id S230174AbiITOWK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Sep 2022 10:22:10 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDC8647CE
+        for <linux-spi@vger.kernel.org>; Tue, 20 Sep 2022 07:20:28 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id a2so4053465lfb.6
+        for <linux-spi@vger.kernel.org>; Tue, 20 Sep 2022 07:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Eh2LQRT0Rx3iFyYK4xw6+ip+TFjiIifMEJCdTff73EU=;
+        b=hgGlbX3Q+iNiEU6QrKzAMyM4NUdWObFNdyrjzItgO0hfONFpG3kGZLMHNAyIcQQdYM
+         hkOb216nm8kXF3tEy4f4dYu5fz12yjJlUDGyHdbw0yV5I3oC/Oa/q6UtIMPm2ifgS3/j
+         /dHDZDraX1V2o2SgLVOSOL61wEQf64y5E6mxqZEwbL3p9rMPm6uMcNyvnjdq7oYkzpRf
+         MH4b3+qGlRWg5GSpo6aWlHnL1/Tx36wvxQAix8hZPpv2Fag1kFLqeMPsV3Fkdn7Xla96
+         zF2I232b1xuhGrwprr3RBeKaaW65TgmovkcPdpAiHPLiyZoYvjghndI1DQvQOzpH8sw7
+         Zy7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Eh2LQRT0Rx3iFyYK4xw6+ip+TFjiIifMEJCdTff73EU=;
+        b=PQn9xECOS8zi2URdRRSg6DDkRL6wu2tX9oaN29sTJQqPXQGs5ICBw/TSexo+jkoPpk
+         epL4GXU84wdUUaKKFFsDn/+6IClS8c7jPitIMtjfm/M1rTLPMQn7FFCoy18cTTkO4n9g
+         cbFuqDZOsT84+Yp2Egv5Sv3gxFe+9VzUUFobNI5Kbnn4fFqYyUb08VQ0LkLghu/+DI/A
+         vUORwmQBNafUtuAlS1j9almRgF9VSAQ3D7zRPkhGzJjS0AGHEHvDYEPXRgMWGpo53r9A
+         QVDzm/XyvDy+y64R94rgkDDcU5sIatydUtfPrjxqixlRjwUxgEYDCCLN6+lWdtX54arD
+         ifPw==
+X-Gm-Message-State: ACrzQf1aQ8oe59vK6ZxGSH3AyMEqocAlojoEYxinkduTNQG9bLja3v7v
+        Gxl8xqzTyGeN8R75auVd64dCIksbLGEDQQ==
+X-Google-Smtp-Source: AMsMyM5SNdAUxS11DFE5CHGNWUZu5b++WSSL/CI+Y2/Mq8HCuhwVuoEC3h+55HGtPLg5YKusYImE4w==
+X-Received: by 2002:a05:6512:1047:b0:49d:a875:8d90 with SMTP id c7-20020a056512104700b0049da8758d90mr8706407lfb.630.1663683623367;
+        Tue, 20 Sep 2022 07:20:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y17-20020a2e95d1000000b00261b9ccb18esm31448ljh.10.2022.09.20.07.20.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 07:20:22 -0700 (PDT)
+Message-ID: <15f8096b-da2f-5132-c8e4-16a2ca12f0b4@linaro.org>
+Date:   Tue, 20 Sep 2022 16:20:17 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
-Content-Disposition: inline
-In-Reply-To: <20220914090540.471725-1-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH -next v2] spi: s3c24xx: Switch to use
+ devm_spi_alloc_master()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     andi@etezian.org, alim.akhtar@samsung.com, broonie@kernel.org
+References: <20220920142216.3002291-1-yangyingliang@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920142216.3002291-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 20/09/2022 16:22, Yang Yingliang wrote:
+> Switch to use devm_spi_alloc_master() to simpify error path.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
->=20
-> [ Upstream commit 21b511ddee09a78909035ec47a6a594349fe3296 ]
->=20
-> As part of unprepare_transfer_hardware, SPI controller will be disabled
-> which will indirectly deassert the CS line. This will create a problem
-> in some of the devices where message will be transferred with
-> cs_change flag set(CS should not be deasserted).
-> As per SPI controller implementation, if SPI controller is disabled then
-> all output enables are inactive and all pins are set to input mode which
-> means CS will go to default state high(deassert). This leads to an issue
-> when core explicitly ask not to deassert the CS (cs_change =3D 1). This
-> patch fix the above issue by checking the Slave select status bits from
-> configuration register before disabling the SPI.
-
-My records say this was already submitted to AUTOSEL at "Jun
-27". There are more patches from that era that were reviewed in
-AUTOSEL but not merged anywhere. Can you investigate?
 
 Best regards,
-								Pavel
-
-a 4.9 01/13] spi: spi-cadence: Fix SPI CS gets toggling sporadic
-a 4.9 02/13] spi: cadence: Detect transmit FIFO depth
-n unused preparation 4.9 03/13] drm/vc4: crtc: Use an union to store the pa=
-ge f\
-l
-a 4.9 04/13] drivers/net/ethernet/neterion/vxge: Fix a use-af
-n just a comment fix 4.9 05/13] video: fbdev: skeletonfb: Fix syntax errors=
- in \
-c
-a just a printk tweak 4.9 06/13] video: fbdev: intelfb: Use aperture size f=
-rom \
-pc
-a 4.9 07/13] video: fbdev: pxa3xx-gcu: Fix integer overflow i
-n just a cleanup 4.9 08/13] video: fbdev: simplefb: Check before clk_put() n
-a 4.9 09/13] mips: lantiq: falcon: Fix refcount leak bug in s
-a 4.9 10/13] mips: lantiq: xway: Fix refcount leak bug in sys
-n we still have reference to the name, it is not safe to put it 4.9 11/13] =
-mips\
-/pic32/pic32mzda: Fix refcount leak bugs
-a 4.9 12/13] mips: lantiq: Add missing of_node_put() in irq.c
-
-a 4.19 03/22] ALSA: usb-audio: US16x08: Move overflow check b
-n unused preparation 4.19 05/22] drm/vc4: crtc: Move the BO handling out of=
- com\
-m
-! do we have everything? 4.19 06/22] ALSA: x86: intel_hdmi_audio: enable pm=
-_run\
-time
-! 4.19 07/22] hamradio: 6pack: fix array-index-out-of-bounds
-a 4.19 13/22] arch: mips: generic: Add missing of_node_put()
-a 4.19 14/22] mips: mti-malta: Fix refcount leak in malta-tim
-a 4.19 15/22] mips: ralink: Fix refcount leak in of.c
-a 4.19 20/22] drm/sun4i: Add DMA mask and segment size
-! 4.19 21/22] drm/amdgpu: Adjust logic around GTT size (v3)
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYynEsAAKCRAw5/Bqldv6
-8luBAJ9OZ67f7QmMHV8I0fI6mhl5V8eB4ACgiefn0m6xPtyoWiXiT/59AaF1ZJM=
-=7rpI
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
+Krzysztof
