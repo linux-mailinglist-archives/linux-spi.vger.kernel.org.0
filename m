@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E145BE75B
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 15:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103FD5BE75C
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Sep 2022 15:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiITNlo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S231382AbiITNlo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 20 Sep 2022 09:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiITNll (ORCPT
+        with ESMTP id S231398AbiITNll (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Sep 2022 09:41:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62294DB54
-        for <linux-spi@vger.kernel.org>; Tue, 20 Sep 2022 06:41:33 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX2db0GCWzMnD8;
-        Tue, 20 Sep 2022 21:36:51 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4966242AD1
+        for <linux-spi@vger.kernel.org>; Tue, 20 Sep 2022 06:41:34 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MX2fG54jJz14Qkk;
+        Tue, 20 Sep 2022 21:37:26 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 20 Sep 2022 21:41:32 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
@@ -28,9 +28,9 @@ Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH -next 5/6] spi: sh-sci: Switch to use devm_spi_alloc_master()
-Date:   Tue, 20 Sep 2022 21:48:18 +0800
-Message-ID: <20220920134819.2981033-6-yangyingliang@huawei.com>
+Subject: [PATCH -next 6/6] spi: altera: Switch to use devm_spi_alloc_master()
+Date:   Tue, 20 Sep 2022 21:48:19 +0800
+Message-ID: <20220920134819.2981033-7-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220920134819.2981033-1-yangyingliang@huawei.com>
 References: <20220920134819.2981033-1-yangyingliang@huawei.com>
@@ -53,76 +53,87 @@ Switch to use devm_spi_alloc_master() to simpify error path.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-sh-sci.c | 34 +++++++++++++---------------------
- 1 file changed, 13 insertions(+), 21 deletions(-)
+ drivers/spi/spi-altera-platform.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/spi/spi-sh-sci.c b/drivers/spi/spi-sh-sci.c
-index 8f30531e1418..2cd5cd23e37c 100644
---- a/drivers/spi/spi-sh-sci.c
-+++ b/drivers/spi/spi-sh-sci.c
-@@ -118,11 +118,10 @@ static int sh_sci_spi_probe(struct platform_device *dev)
- 	struct sh_sci_spi *sp;
- 	int ret;
+diff --git a/drivers/spi/spi-altera-platform.c b/drivers/spi/spi-altera-platform.c
+index 65147aae82a1..376df7b6f543 100644
+--- a/drivers/spi/spi-altera-platform.c
++++ b/drivers/spi/spi-altera-platform.c
+@@ -43,7 +43,7 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 	int err = -ENODEV;
+ 	u16 i;
  
--	master = spi_alloc_master(&dev->dev, sizeof(struct sh_sci_spi));
-+	master = devm_spi_alloc_master(&dev->dev, sizeof(struct sh_sci_spi));
- 	if (master == NULL) {
- 		dev_err(&dev->dev, "failed to allocate spi master\n");
--		ret = -ENOMEM;
--		goto err0;
-+		return -ENOMEM;
+-	master = spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
++	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
+ 	if (!master)
+ 		return err;
+ 
+@@ -55,8 +55,7 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"Invalid number of chipselect: %u\n",
+ 				pdata->num_chipselect);
+-			err = -EINVAL;
+-			goto exit;
++			return -EINVAL;
+ 		}
+ 
+ 		master->num_chipselect = pdata->num_chipselect;
+@@ -83,7 +82,7 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 		hw->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+ 		if (!hw->regmap) {
+ 			dev_err(&pdev->dev, "get regmap failed\n");
+-			goto exit;
++			return err;
+ 		}
+ 
+ 		regoff = platform_get_resource(pdev, IORESOURCE_REG, 0);
+@@ -93,17 +92,14 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 		void __iomem *res;
+ 
+ 		res = devm_platform_ioremap_resource(pdev, 0);
+-		if (IS_ERR(res)) {
+-			err = PTR_ERR(res);
+-			goto exit;
+-		}
++		if (IS_ERR(res))
++			return PTR_ERR(res);
+ 
+ 		hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
+ 						   &spi_altera_config);
+ 		if (IS_ERR(hw->regmap)) {
+ 			dev_err(&pdev->dev, "regmap mmio init failed\n");
+-			err = PTR_ERR(hw->regmap);
+-			goto exit;
++			return PTR_ERR(hw->regmap);
+ 		}
  	}
  
- 	sp = spi_master_get_devdata(master);
-@@ -131,8 +130,7 @@ static int sh_sci_spi_probe(struct platform_device *dev)
- 	sp->info = dev_get_platdata(&dev->dev);
- 	if (!sp->info) {
- 		dev_err(&dev->dev, "platform data is missing\n");
--		ret = -ENOENT;
--		goto err1;
-+		return -ENOENT;
+@@ -115,12 +111,12 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 		err = devm_request_irq(&pdev->dev, hw->irq, altera_spi_irq, 0,
+ 				       pdev->name, master);
+ 		if (err)
+-			goto exit;
++			return err;
  	}
  
- 	/* setup spi bitbang adaptor */
-@@ -147,28 +145,22 @@ static int sh_sci_spi_probe(struct platform_device *dev)
- 	sp->bitbang.txrx_word[SPI_MODE_3] = sh_sci_spi_txrx_mode3;
+ 	err = devm_spi_register_master(&pdev->dev, master);
+ 	if (err)
+-		goto exit;
++		return err;
  
- 	r = platform_get_resource(dev, IORESOURCE_MEM, 0);
--	if (r == NULL) {
--		ret = -ENOENT;
--		goto err1;
--	}
-+	if (r == NULL)
-+		return -ENOENT;
- 	sp->membase = ioremap(r->start, resource_size(r));
--	if (!sp->membase) {
--		ret = -ENXIO;
--		goto err1;
--	}
-+	if (!sp->membase)
-+		return -ENXIO;
- 	sp->val = ioread8(SCSPTR(sp));
- 	setbits(sp, PIN_INIT, 1);
+ 	if (pdata) {
+ 		for (i = 0; i < pdata->num_devices; i++) {
+@@ -134,9 +130,6 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 	dev_info(&pdev->dev, "regoff %u, irq %d\n", hw->regoff, hw->irq);
  
- 	ret = spi_bitbang_start(&sp->bitbang);
--	if (!ret)
--		return 0;
-+	if (ret) {
-+		setbits(sp, PIN_INIT, 0);
-+		iounmap(sp->membase);
-+		return ret;
-+	}
- 
--	setbits(sp, PIN_INIT, 0);
--	iounmap(sp->membase);
-- err1:
--	spi_master_put(sp->bitbang.master);
-- err0:
--	return ret;
-+	return 0;
+ 	return 0;
+-exit:
+-	spi_master_put(master);
+-	return err;
  }
  
- static int sh_sci_spi_remove(struct platform_device *dev)
+ #ifdef CONFIG_OF
 -- 
 2.25.1
 
