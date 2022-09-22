@@ -2,128 +2,220 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CC15E60C2
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 13:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B065E6169
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 13:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiIVLS4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Sep 2022 07:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S230498AbiIVLmU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Sep 2022 07:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiIVLSz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 07:18:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78889DED5D;
-        Thu, 22 Sep 2022 04:18:54 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYCMx3fZZz688vP;
-        Thu, 22 Sep 2022 19:14:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+        with ESMTP id S229936AbiIVLmQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 07:42:16 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81389B843;
+        Thu, 22 Sep 2022 04:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663846934; x=1695382934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h4RtjIzXLWK5epTWueE8Vm3jsayEzVLuddfdK7Akvws=;
+  b=cCkd1B3oquXRKrsj+/aDEibpkdiB0flY7dnHH/hc8piTiVU7/w/DmsGe
+   ExecArRAfbZwFOTGhs598LEGjUglqqW0YOBWqFYtOcOqbiwSFsx0iQT4y
+   d6VCYkdxGzO1hJ4VSe48G2gxQFqBogq6r62xrD/T5Bg3EuTy0/PJFv2vP
+   sbHmsLChVvyW0O2GgKaEEdxhuY1hu+bh3RCZWwCBYabUoPEQCZGmp17k3
+   kZxKu5qDWSFJIaxuNZI3vd6R3R0JbR9GvrcYq0zD197EXBTkWeBUzgZZv
+   poQNCy7hx8ix6Nk5B88BZq149bqKCVCU6Oi7sY1Ex1eUFLHghZeEXgO7w
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="114897412"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:42:14 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 13:18:52 +0200
-Received: from localhost (10.81.208.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 12:18:51 +0100
-Date:   Thu, 22 Sep 2022 12:18:50 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun@huaweicloud.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] spi: Introduce spi_get_device_match_data()
- helper
-Message-ID: <20220922121850.000006f3@huawei.com>
-In-Reply-To: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
-References: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+ 15.1.2507.12; Thu, 22 Sep 2022 04:42:13 -0700
+Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 04:42:07 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <kavyasree.kotagiri@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>
+Subject: [PATCH v5 0/9] Make atmel serial driver aware of GCLK
+Date:   Thu, 22 Sep 2022 14:33:38 +0300
+Message-ID: <20220922113347.144383-1-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.208.231]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 21 Sep 2022 23:45:20 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+This series of patches introduces the GCLK as a clock source for
+the baudrate generator of UART on sama5d2 SoCs. Unlike the serial mode of
+the USART offered by FLEXCOM, the UART does not provide a fractional part
+that can be added to the clock divisor to obtain a more accurate result,
+which greatly decreases the flexibility available for producing a higher
+variety of baudrates. Now, with the last patch of the series, the driver
+will check for a GCLK in the DT. If provided, whenever `atmel_set_termios`
+is called, unless there is a fractional part, the driver will compare the
+error rate between the desired baudrate and the actual baudrate obtained
+through each of the available clock sources and will choose the clock source
+with the lowest error rate. While at it, convert the DT binding
+for UART/USART to json-schema, update the FLEXCOM binding to reference the
+new UART/USART binding (while differentiating between the SPI of USART and the
+SPI of FLEXCOM), do some small DT related fixups and do some small driver
+cleanup.
 
-> The proposed spi_get_device_match_data() helper is for retrieving
-> a driver data associated with the ID in an ID table. First, it tries
-> to get driver data of the device enumerated by firmware interface
-> (usually Device Tree or ACPI). If none is found it falls back to
-> the SPI ID table matching.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The DT bindings related patches of this patch series depend on this patch
+series converting atmel-flexcom bindings to json-schema:
+https://lore.kernel.org/linux-arm-kernel/20220916075744.1879428-1-kavyasree.kotagiri@microchip.com/
+
+v1 -> v2:
+- [PATCH 3] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref
+    binding:
+	- use full schema paths
+
+- [PATCH 5] dt-bindings: serial: atmel,at91-usart: convert to json-schema
+	- only do what the commit says, split the addition of other compatibles
+	(PATCH 6) and properties (PATCH 13) in other patches
+	- remove unnecessary "|"'s
+	- mention header in `atmel,usart-mode`'s description
+	- place `if:` under `allOf:`
+	- respect order of spi0's DT properties: compatible, then reg then the
+	reset of properties
+
+- two new baudrate clock source related patches:
+  [PATCH 9] tty: serial: atmel: Add definition for GCLK as baudrate source clock
+			+
+  [PATCH 10] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode
+    Register:
+	- v1's bitfield definition of GCLK was wrong, so add two more patches:
+		- one for the definition of GCLK of USART IP's
+		- one for the definition of BRSRCCK bitmask and its bitfields
+		for UART IP's
+
+- a new cleanup related patch that introduces a new struct atmel_uart_port field:
+  [PATCH 11] tty: serial: atmel: Only divide Clock Divisor if the IP is USART:
+  	- this ensures a division by 8 which is unnecessary and unappliable to
+	UART IP's is only done for USART IP's
+
+- four new patches regarding DT fixes and a SPI binding update that I came
+upon:
+  [PATCH 1] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties
+  [PATCH 2] ARM: dts: at91: sama7g5: Swap rx and tx for spi11
+  [PATCH 4] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+  [PATCH 6] dt-bindings: serial: atmel,at91-usart: Highlight SAM9X60 incremental
+
+- [PATCH 12] tty: serial: atmel: Make the driver aware of the existence of GCLK
+	- take into account the different placement of the baudrate clock source
+	into the IP's Mode Register (USART vs UART)
+	- don't check for atmel_port->gclk != NULL
+	- use clk_round_rate instead of clk_set_rate + clk_get_rate
+	- remove clk_disable_unprepare from the end of the probe method
+
+v2 -> v3:
+- Re-order the patches as suggested by Krzysztof Kozlowski:
+1. DTS changes needed for aligning to schema.
+2. all bindings
+3. rest
+
+- New DT consistency related patch:
+  [PATCH 3] ARM: dts: at91: Add `atmel,usart-mode` required property to serial
+    nodes
+
+- [PATCH 6] dt-bindings: serial: atmel,at91-usart: convert to json-schema:
+  - Check value of `atmel,usart-mode` instead of the node regex
+  - Define all properties top level and disallow them explicitly for other type,
+  since additionalProperties:false conflicts with referencing other schemas
+  - Remove useless else if: after else:
+
+- [PATCH 7] dt-bindings: serial: atmel,at91-usart: add SAM9260 compatibles to
+  SAM9X60:
+  - Use the commit message suggested by Krzysztof Kozlowski
+
+- [PATCH 8] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref
+  binding
+  - Compare devices based on the compatible instead of the clock
+
+- [PATCH 12] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
+  - Use ATMEL_US_CD instead of 65535
+
+- [PATCH 14] tty: serial: atmel: Make the driver aware of the existence of GCLK
+  - add `gclk_fail` goto
+  - replace `goto err` with `goto err_clk_disable_unprepare;`
 
 
-I like this in general, but we need to keep a close eye on usecases
-that are introduced to make sure that there is alignment between the
-contents of the tables.
-
-Perhaps the text should also explain a bit about why we would allow
-both paths (in many case, the fallback will work fine)...
-Previously a strong reason for that was that there was nothing to ensure
-that all dt table entries were mirrored in the spi_device_id table.
-As a side effect of the check to ensure module autoloading works, there
-is now a check for that.
-
-My personal view is we should still use the more generic path, even if
-magic under the hood puts the data in spi_id->driver_data.
-
-Jonathan
+v3 -> v4:
+- Remove the first 4 patches as they have already been applied
+https://lore.kernel.org/linux-arm-kernel/b537bbcf-cb0f-551d-6dd0-cf50864bafa3@microchip.com/
+https://lore.kernel.org/linux-arm-kernel/53e72e5d-47fc-403d-c969-61b267a9ff15@microchip.com/
+https://lore.kernel.org/linux-arm-kernel/1ae89854-74fa-6194-304f-db31d56d3674@microchip.com/
+https://lore.kernel.org/linux-arm-kernel/3234cd79-65db-1210-50c1-e880ec6d87a0@microchip.com/
+- Remove the addition of gclk's to sama5d2 clock driver as it has already been applied
+https://lore.kernel.org/linux-arm-kernel/4b23db7d-d6b2-6c93-01f7-6a3b86f403d1@microchip.com/
+- [PATCH 2] -> [PATCH 5]
+  - add Acked-by/Reviewed-by tags to DT bindings
+- [PATCH 8]
+  - replace & with min_t
 
 
-> ---
->  drivers/spi/spi.c       | 12 ++++++++++++
->  include/linux/spi/spi.h |  3 +++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index ad254b94308e..a0947d63afbc 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -360,6 +360,18 @@ const struct spi_device_id *spi_get_device_id(const struct spi_device *sdev)
->  }
->  EXPORT_SYMBOL_GPL(spi_get_device_id);
->  
-> +const void *spi_get_device_match_data(const struct spi_device *sdev)
-> +{
-> +	const void *match;
-> +
-> +	match = device_get_match_data(&sdev->dev);
-> +	if (match)
-> +		return match;
-> +
-> +	return (const void *)spi_get_device_id(sdev)->driver_data;
-> +}
-> +EXPORT_SYMBOL_GPL(spi_get_device_match_data);
-> +
->  static int spi_match_device(struct device *dev, struct device_driver *drv)
->  {
->  	const struct spi_device	*spi = to_spi_device(dev);
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 6ea889df0813..f2565c24ef27 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1510,6 +1510,9 @@ extern void spi_unregister_device(struct spi_device *spi);
->  extern const struct spi_device_id *
->  spi_get_device_id(const struct spi_device *sdev);
->  
-> +extern const void *
-> +spi_get_device_match_data(const struct spi_device *sdev);
-> +
->  static inline bool
->  spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
->  {
+
+v4 -> v5:
+- squash previous
+`[PATCH v4 7/9] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register`
+into a newly added
+`[PATCH v5 6/9] tty: serial: atmel: Separate mode clearing between UART and USART`
+whose role is mainly of cleanup and to make a clear separation between the
+clearing of the mode for UART vs USART and make BRSRCCK into a bitfield
+instead of a bitmask as it is only a bit.
+- squash previous
+`[PATCH v4 6/9] tty: serial: atmel: Define GCLK as USART baudrate source clock`
+into the current
+`[PATCH v5 8/9] tty: serial: atmel: Make the driver aware of the existence of GCLK`
+- new bitfield conversions to FIELD_PREP/FIELD_GET PATCH
+`[PATCH v5 9/9] tty: serial: atmel: Use FIELD_PREP/FIELD_GET`
+
+
+Sergiu Moga (9):
+  dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref
+    binding
+  dt-bindings: serial: atmel,at91-usart: convert to json-schema
+  dt-bindings: serial: atmel,at91-usart: Add SAM9260 compatibles to
+    SAM9X60
+  dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref
+    binding
+  dt-bindings: serial: atmel,at91-usart: Add gclk as a possible USART
+    clock
+  tty: serial: atmel: Separate mode clearing between UART and USART
+  tty: serial: atmel: Only divide Clock Divisor if the IP is USART
+  tty: serial: atmel: Make the driver aware of the existence of GCLK
+  tty: serial: atmel: Use FIELD_PREP/FIELD_GET
+
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |  19 +-
+ .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
+ .../bindings/serial/atmel,at91-usart.yaml     | 190 ++++++++++++++++++
+ drivers/tty/serial/atmel_serial.c             |  82 +++++++-
+ drivers/tty/serial/atmel_serial.h             |  75 +++----
+ 5 files changed, 321 insertions(+), 143 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+
+-- 
+2.34.1
 
