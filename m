@@ -2,89 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF5D5E59BD
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 05:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F125E5AC3
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 07:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiIVDu7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Sep 2022 23:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        id S229525AbiIVFfI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Sep 2022 01:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiIVDu6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Sep 2022 23:50:58 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB6CAB40E;
-        Wed, 21 Sep 2022 20:50:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MY1VH4NKhzKPy1;
-        Thu, 22 Sep 2022 11:48:55 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.102.38])
-        by APP2 (Coremail) with SMTP id Syh0CgDHGXOd2ytjjvLTBA--.48717S4;
-        Thu, 22 Sep 2022 11:50:55 +0800 (CST)
-From:   Wei Yongjun <weiyongjun@huaweicloud.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH -next] spi: meson-spicc: make symbol 'meson_spicc_pow2_clk_ops' static
-Date:   Thu, 22 Sep 2022 04:08:07 +0000
-Message-Id: <20220922040807.1409540-1-weiyongjun@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229471AbiIVFfH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 01:35:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FF3AE859;
+        Wed, 21 Sep 2022 22:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663824905; x=1695360905;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WbsPdoDDj+mIs1fxH99tKp0beojLYTi0zXyU5RR6UfY=;
+  b=WhpWmG4zTXCAKqse5BdRGCXbjFzTHuOmAOW4AmR0mQamk97pWgUaYzU0
+   VSeWqEIbAYdd/EBfafIgfqm6tH9ZvbX8/wzGklI3EQe/PV/z4CPsn4YxP
+   JlxbeJl6quUNBM2SBFVRR8V5LWBinmb6d+NU7cV58CgIB0x3MtVx6rpVi
+   b3OGNEAxKuEFCsyuXD9hzwj0EIaYPk3ucPGeo2jEplz2raUqOxqn6Lnzx
+   azhFPOFIEPs/oCQuIVgbsS4GXxYgQ2r6Oc+/Yx7aOxaNVQVp6O6xouHX+
+   /L/tlEF6uoMqhCZdobR56Wn5u0KK1LPtedOXqVHJABdoxT/CPT7PBAOtr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="326520943"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="326520943"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:35:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762045591"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Sep 2022 22:35:02 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obErW-0004Ly-16;
+        Thu, 22 Sep 2022 05:35:02 +0000
+Date:   Thu, 22 Sep 2022 13:34:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Wei Yongjun <weiyongjun@huaweicloud.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: Introduce spi_get_device_match_data() helper
+Message-ID: <202209221302.UKxElkNH-lkp@intel.com>
+References: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-CM-TRANSID: Syh0CgDHGXOd2ytjjvLTBA--.48717S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4fuw48Gry5tr4DZr48Xrb_yoWkJrb_CF
-        WDGr45GF47J34xAFy3u3W7ArZFvF13uwn0vr4vgFW8Aay5Zrn8ZF1DuryxCr98u3Wj9rZ8
-        Xr97J34UCrW5CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
-        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+Hi Andy,
 
-The sparse tool complains as follows:
+I love your patch! Perhaps something to improve:
 
-drivers/spi/spi-meson-spicc.c:570:22: warning:
- symbol 'meson_spicc_pow2_clk_ops' was not declared. Should it be static?
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This symbol is not used outside of spi-meson-spicc.c, so marks it static.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-Introduce-spi_get_device_match_data-helper/20220922-044658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: s390-randconfig-s031-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221302.UKxElkNH-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/4d7a10e29738f98137b08b2dcc0297535dd92a11
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/spi-Introduce-spi_get_device_match_data-helper/20220922-044658
+        git checkout 4d7a10e29738f98137b08b2dcc0297535dd92a11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash drivers/spi/
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/spi/spi-meson-spicc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index e4cb52e1fe26..85b4b9b267b1 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -567,7 +567,7 @@ static int meson_spicc_pow2_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return clk_divider_ops.set_rate(hw, rate, parent_rate);
- }
- 
--const struct clk_ops meson_spicc_pow2_clk_ops = {
-+static const struct clk_ops meson_spicc_pow2_clk_ops = {
- 	.recalc_rate = meson_spicc_pow2_recalc_rate,
- 	.determine_rate = meson_spicc_pow2_determine_rate,
- 	.set_rate = meson_spicc_pow2_set_rate,
+sparse warnings: (new ones prefixed by >>)
+>> drivers/spi/spi.c:367:40: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct device *dev @@     got struct device const * @@
+   drivers/spi/spi.c:367:40: sparse:     expected struct device *dev
+   drivers/spi/spi.c:367:40: sparse:     got struct device const *
 
+vim +367 drivers/spi/spi.c
+
+   362	
+   363	const void *spi_get_device_match_data(const struct spi_device *sdev)
+   364	{
+   365		const void *match;
+   366	
+ > 367		match = device_get_match_data(&sdev->dev);
+   368		if (match)
+   369			return match;
+   370	
+   371		return (const void *)spi_get_device_id(sdev)->driver_data;
+   372	}
+   373	EXPORT_SYMBOL_GPL(spi_get_device_match_data);
+   374	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
