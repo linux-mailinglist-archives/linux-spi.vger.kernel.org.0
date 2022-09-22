@@ -2,69 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA47F5E61D1
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 13:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E884B5E6205
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 14:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiIVL45 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Sep 2022 07:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S229959AbiIVMMs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Sep 2022 08:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiIVL4y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 07:56:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C2A61DE
-        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 04:56:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E9FEB81F1E
-        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 11:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C659C433C1;
-        Thu, 22 Sep 2022 11:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663847810;
-        bh=WYcbu7zJQ23nByhECAMuijwfIuMrwPoL9L1cHe8HYPE=;
-        h=Subject:From:Date:To:From;
-        b=RDXxB468vgMkeRk3QuUHj2zSFThJl778mBndUOMwE6Ik3zDJy6N5W0vsIaZFHKYtt
-         bml8M7VrYYtFCSS2smOKQNl3MregTx6EtNbjQzwsvUWhLlyOPaWWIrg25PZfhFybEa
-         vqNw2R8ouyhuOxdoTDA8qZWaMXbMifhwKX4ZnK/VxqwGUdIois860UNBLvY6i2iSbG
-         +shZpXOiRH54m6+rV7NHZRgANbXW24/0aUrvBXORW2bTejEStgWD11BoGZHFg+kjf2
-         qWUtdcOw7fOWZ+j95BuF/if/TvoaGxCKAZid/6VMaB2Y3irgxJN7ODnbWLwU15LvUA
-         3zRydixyAabkA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35ABEE21ED1;
-        Thu, 22 Sep 2022 11:56:50 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229777AbiIVMMr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 08:12:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAE89FAB5;
+        Thu, 22 Sep 2022 05:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663848766; x=1695384766;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=dV896P9KsrY/FhIaPaqfWulS1JdnBEHjNbRfyVsbuCw=;
+  b=k8/O8OBywCMNj0z9q8uFOC91qFtZeIBZPwXmSfJSXmEcIMrlyYnKMcV8
+   8xgBSekzeZQ9bc40gk1JKNTr4h7DmEdP3WsxGg32UjwiWjJJePeOBoC5K
+   lJ3GE0IBbykdCdLH3XyR8lptVFefQPvkqhDK7iEOKeyBqzVPfPjW9Ibmv
+   Lvz3CSBhzKK8WGHDT+JmYY+j+9ZFg3hIsRLVIKqHQZgA8t1cDX2M+CH67
+   VzSuXj7VXehTLKUc6rq4dHVAaPsfhlEUKXDSLToQAdIHAIRyAeL1prcBy
+   aLGtAQ6uwiHfWdf7BcX5R7hYcv4h9h1rzhwalVYTwrGSiPIMoiX4j79lI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="287359950"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="287359950"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 05:12:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="650497637"
+Received: from lsundin-mobl.ger.corp.intel.com ([10.252.58.180])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 05:12:41 -0700
+Date:   Thu, 22 Sep 2022 15:12:35 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v5 9/9] tty: serial: atmel: Use FIELD_PREP/FIELD_GET
+In-Reply-To: <20220922113347.144383-10-sergiu.moga@microchip.com>
+Message-ID: <a894518-4112-b99a-c2b7-657c23ee4974@linux.intel.com>
+References: <20220922113347.144383-1-sergiu.moga@microchip.com> <20220922113347.144383-10-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166384781012.19062.2697004871804946683.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 22 Sep 2022 11:56:50 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-152948573-1663848765=:1702"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Make atmel serial driver aware of GCLK (2022-09-22T11:33:38)
-  Superseding: [v4] Make atmel serial driver aware of GCLK (2022-09-19T15:08:38):
-    [v4,1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref binding
-    [v4,2/9] dt-bindings: serial: atmel,at91-usart: convert to json-schema
-    [v4,3/9] dt-bindings: serial: atmel,at91-usart: Add SAM9260 compatibles to SAM9X60
-    [v4,4/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref binding
-    [v4,5/9] dt-bindings: serial: atmel,at91-usart: Add gclk as a possible USART clock
-    [v4,6/9] tty: serial: atmel: Define GCLK as USART baudrate source clock
-    [v4,7/9] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register
-    [v4,8/9] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
-    [v4,9/9] tty: serial: atmel: Make the driver aware of the existence of GCLK
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323329-152948573-1663848765=:1702
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Thu, 22 Sep 2022, Sergiu Moga wrote:
+
+> Convert all open-coded instances of bitfields retrieval/setting
+> to FIELD_PREP/FIELD_GET where possible.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+With one caveat below which I leave up to you to decide as it might be
+more a matter of taste thing.
+
+> @@ -82,7 +84,7 @@
+>  #define	ATMEL_US_INACK		BIT(20)	/* Inhibit Non Acknowledge */
+>  #define	ATMEL_US_DSNACK		BIT(21)	/* Disable Successive NACK */
+>  #define	ATMEL_US_MAX_ITER_MASK	GENMASK(26, 24)	/* Max Iterations */
+> -#define	ATMEL_US_MAX_ITER(n)	(((n) << 24) & ATMEL_US_MAX_ITER_MASK)
+> +#define	ATMEL_US_MAX_ITER(n)	FIELD_PREP(ATMEL_US_MAX_ITER_MASK, (n))
+>  #define	ATMEL_US_FILTER		BIT(28)	/* Infrared Receive Line Filter */
+>  
+>  #define ATMEL_US_IER		0x08	/* Interrupt Enable Register */
+> @@ -134,19 +136,19 @@
+>  
+>  #define ATMEL_US_CMPR		0x90	/* Comparaison Register */
+>  #define ATMEL_US_FMR		0xa0	/* FIFO Mode Register */
+> -#define	ATMEL_US_TXRDYM(data)	(((data) & 0x3) << 0)	/* TX Ready Mode */
+> -#define	ATMEL_US_RXRDYM(data)	(((data) & 0x3) << 4)	/* RX Ready Mode */
+> +#define	ATMEL_US_TXRDYM(data)	FIELD_PREP(GENMASK(1, 0), (data))	/* TX Ready Mode */
+> +#define	ATMEL_US_RXRDYM(data)	FIELD_PREP(GENMASK(5, 4), (data))	/* RX Ready Mode */
+>  #define		ATMEL_US_ONE_DATA	0x0
+>  #define		ATMEL_US_TWO_DATA	0x1
+>  #define		ATMEL_US_FOUR_DATA	0x2
+>  #define	ATMEL_US_FRTSC		BIT(7)	/* FIFO RTS pin Control */
+> -#define	ATMEL_US_TXFTHRES(thr)	(((thr) & 0x3f) << 8)	/* TX FIFO Threshold */
+> -#define	ATMEL_US_RXFTHRES(thr)	(((thr) & 0x3f) << 16)	/* RX FIFO Threshold */
+> -#define	ATMEL_US_RXFTHRES2(thr)	(((thr) & 0x3f) << 24)	/* RX FIFO Threshold2 */
+> +#define	ATMEL_US_TXFTHRES(thr)	FIELD_PREP(GENMASK(13, 8), (thr))	/* TX FIFO Threshold */
+> +#define	ATMEL_US_RXFTHRES(thr)	FIELD_PREP(GENMASK(21, 16), (thr))	/* RX FIFO Threshold */
+> +#define	ATMEL_US_RXFTHRES2(thr)	FIELD_PREP(GENMASK(29, 24), (thr))	/* RX FIFO Threshold2 */
+>  
+>  #define ATMEL_US_FLR		0xa4	/* FIFO Level Register */
+> -#define	ATMEL_US_TXFL(reg)	(((reg) >> 0) & 0x3f)	/* TX FIFO Level */
+> -#define	ATMEL_US_RXFL(reg)	(((reg) >> 16) & 0x3f)	/* RX FIFO Level */
+> +#define	ATMEL_US_TXFL(reg)	FIELD_GET(GENMASK(5, 0), (reg))		/* TX FIFO Level */
+> +#define	ATMEL_US_RXFL(reg)	FIELD_GET(GENMASK(21, 16), (reg))	/* RX FIFO Level */
+
+I don't particularly like this kind of constructs. IMHO, all these would 
+be nice after removing the macro argument and moving the FIELD_PREP() to 
+.c file. That is,
+
+.h:
+#define ATMEL_US_RXFL	GENMASK(21, 16)
+
+.c:
+	... FIELD_PREP(ATMEL_US_RXFL, arg) ...
+
+But I guess there might be differing opinions on it (and both are 
+correct from purely technical perspective).
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ i.
 
+--8323329-152948573-1663848765=:1702--
