@@ -2,47 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F111B5E69FC
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 19:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA665E69FE
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 19:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiIVRyV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Sep 2022 13:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S232154AbiIVRyX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Sep 2022 13:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiIVRyQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 13:54:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3544710650D;
-        Thu, 22 Sep 2022 10:54:16 -0700 (PDT)
+        with ESMTP id S232165AbiIVRyV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 13:54:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8744106504
+        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 10:54:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6BFE636C3;
-        Thu, 22 Sep 2022 17:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56B8C433C1;
-        Thu, 22 Sep 2022 17:54:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0D3B63701
+        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 17:54:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC336C433B5;
+        Thu, 22 Sep 2022 17:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663869255;
-        bh=sPEfNt549leOVSeFwAMTEwbkpSUroLM7+a3d5AF/yOQ=;
+        s=k20201202; t=1663869258;
+        bh=k017GrdbgsBhj9lK2zwnWl+jpRSespv4ciMXHMOCUEc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OvYT0old6lhYOJhem8X36tPfmhv22eGf3e+sJH/9fHFJYf3i5es8jXKB99PO6jxpV
-         fRd8EyvusTckJGk8t3WbrXTYwbF+xBC/rTU+ZEN6XJo8CAp0UzA3S7DKKwqc8XYOHI
-         tFALL65D+D2/xDpIAOVRXKJ2jIq4xUPJT4BRyTi9xc+bZ9EHGiDpSrx4tuB/eyXp4F
-         oRA4ueKSzej39t+5y32Is7pnueaZWTancF4aTNiUq5OTykHYYnUJUg5KFEJLzslUWH
-         xcP7J7vFTi2p7QZCGIBiASP0IkgYm1LbiTTPhwzg2ji88SmtIzRIrMhSz9kVRwEcMK
-         MLro8/Fvj071g==
+        b=l4CZq5KjRMM04tjWffdcTYlPugzIcsEuSwrAya7/Nbje7OQOiBfBP7BPc8+qzBJQq
+         nzzmJoCJxzLKXUAxwYlAi89r0rjq+q69QtduojzY8imULP0TwXNrsk3ss4+M4l+rsG
+         Q75toxFXl3q2VQu0sTTeDyW2tzxDCLaQF1lNUlxC9WdwOkEnwqjDTH4tzPCb6Z3WAr
+         g+jJlhO6Cya+iefrpWheOeXhz9XP1KWA7eDqLSsGvbByMXNY6768W5Z1pEPmBRUc2T
+         RBHv+54EYA0WIj39V8w2ZnBoodBJjNqqJqTCk4d3HWEiPVhSn/w0hqrdJQEitdW22M
+         CH5v73OtjABfQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun@huaweicloud.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     linux-amlogic@lists.infradead.org, kernel-janitors@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Wei Yongjun <weiyongjun1@huawei.com>
-In-Reply-To: <20220922040807.1409540-1-weiyongjun@huaweicloud.com>
-References: <20220922040807.1409540-1-weiyongjun@huaweicloud.com>
-Subject: Re: [PATCH -next] spi: meson-spicc: make symbol 'meson_spicc_pow2_clk_ops' static
-Message-Id: <166386925058.727991.8817892530350799405.b4-ty@kernel.org>
-Date:   Thu, 22 Sep 2022 18:54:10 +0100
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-xtensa@linux-xtensa.org, linux-spi@vger.kernel.org
+Cc:     jcmvbkbc@gmail.com
+In-Reply-To: <20220920114448.2681053-1-yangyingliang@huawei.com>
+References: <20220920114448.2681053-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()
+Message-Id: <166386925472.727991.10531908902956154500.b4-ty@kernel.org>
+Date:   Thu, 22 Sep 2022 18:54:14 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,15 +53,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 22 Sep 2022 04:08:07 +0000, Wei Yongjun wrote:
-> From: Wei Yongjun <weiyongjun1@huawei.com>
+On Tue, 20 Sep 2022 19:44:48 +0800, Yang Yingliang wrote:
+> Switch to use devm_spi_alloc_master() to simpify error path.
 > 
-> The sparse tool complains as follows:
 > 
-> drivers/spi/spi-meson-spicc.c:570:22: warning:
->  symbol 'meson_spicc_pow2_clk_ops' was not declared. Should it be static?
-> 
-> [...]
 
 Applied to
 
@@ -72,8 +64,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: meson-spicc: make symbol 'meson_spicc_pow2_clk_ops' static
-      commit: 077dac343b54babfd56b1a52cf1f091518118957
+[1/1] spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()
+      commit: 478cc2fc3dd782f7935bc0ab84c198691ea83fa3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
