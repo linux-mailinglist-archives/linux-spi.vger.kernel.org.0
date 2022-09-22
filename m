@@ -2,46 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4045E5D64
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 10:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2237D5E5E6D
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Sep 2022 11:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiIVIYo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Sep 2022 04:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S229790AbiIVJXv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Sep 2022 05:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiIVIYc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 04:24:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C746D1F9F0
-        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 01:24:17 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MY7VY5zl0zMpNS;
-        Thu, 22 Sep 2022 16:19:33 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:24:16 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 16:24:12 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH -next v2 6/6] spi: altera: Switch to use __devm_spi_alloc_controller()
-Date:   Thu, 22 Sep 2022 16:31:03 +0800
-Message-ID: <20220922083103.666157-7-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922083103.666157-1-yangyingliang@huawei.com>
-References: <20220922083103.666157-1-yangyingliang@huawei.com>
+        with ESMTP id S229459AbiIVJXt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Sep 2022 05:23:49 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A349710552
+        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 02:23:47 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id k3-20020a05600c1c8300b003b4fa1a85f8so915167wms.3
+        for <linux-spi@vger.kernel.org>; Thu, 22 Sep 2022 02:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=0oW+9yt7498h+lO2a1DaBWCIJgwtJERfgviB79Lo1Y4=;
+        b=HuDw6Ts7eqn9+FpWBXdFfI+MNIEPh+9HPz7+HdbnjkBZfpVoEQddP7F2EOtfZTGjE+
+         2LkLxtbLKi5jgOUmsGj0KaYMIgu70XgDZzuO2alqnNNcm1Hub/itYoO87sIpWrD1VXnq
+         qb76RFr9VeA6Wb64HlQu2dFTI8ZHJT08fXAmWwnolzgg7Pkp/tcixNdw/NA28sQicNF2
+         ICNtwHkZNjh0+CNNvVdagVtAh2DfhJD0s6BmXLxf7pPrvXT+95LCNAfgN92A+2RbqG47
+         IPIYuvwGQ5Jr+lORDt7OQeKvUT/7omdB+kAPR90SDmEcrJUpd05yVdK4UEWuXhTTQbb5
+         G4pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=0oW+9yt7498h+lO2a1DaBWCIJgwtJERfgviB79Lo1Y4=;
+        b=ZXHASftaToI7JLQ9WRyNPb2LRKhGUP4fFk7NMSibIFC7x038088tIL8sttm4xm5QJB
+         2PU39rQhRKPPcLP4xZZSnv06PMh6/+FF1wRX2K7uCO6HnaQ/f1x5S+K0NRVTll/UpxWu
+         TMc92IYYRB9tijppb4ZIFOdigCHN8qEmYrtUz0OikujXxe9uYg7BAgq5MEjklPICPoTe
+         Cnuy67BTNOYCZLBU4tuDckTs+tiI4dWLTYQ61xu/kBf/w7r7ptlzlBGM4lonGgp7TfX2
+         mznA5IruU8PdqeMIW0Ev7/U/AI5mGdPt/3pn6WIxlAS8KFRjhnVvDYWa8gKR9hMzGM3z
+         N23A==
+X-Gm-Message-State: ACrzQf0qQW0Wy2KneL5iDDbOPhF89OKuuLPBA1igVUsAx8kQv1WnaqJV
+        JYD+FqSqz02nNyT8c1UB5YLTog==
+X-Google-Smtp-Source: AMsMyM4hzQ6OpNA16zPCO4R6+e1l10Orii3c1e9BAA5rpjZ3q22Jf9I0uZigmmUKMzK54QW8tXXupg==
+X-Received: by 2002:a7b:c398:0:b0:3b4:9308:ffee with SMTP id s24-20020a7bc398000000b003b49308ffeemr8947146wmj.51.1663838626144;
+        Thu, 22 Sep 2022 02:23:46 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:6aa5:ee77:c3d6:a9d6? ([2a01:e0a:982:cbb0:6aa5:ee77:c3d6:a9d6])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003b491f99a25sm6896559wmq.22.2022.09.22.02.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 02:23:45 -0700 (PDT)
+Message-ID: <19f10c64-efec-e2c7-a39d-0f346d6936fa@linaro.org>
+Date:   Thu, 22 Sep 2022 11:23:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH -next] spi: meson-spicc: make symbol
+ 'meson_spicc_pow2_clk_ops' static
+Content-Language: en-US
+To:     Wei Yongjun <weiyongjun@huaweicloud.com>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, kernel-janitors@vger.kernel.org
+References: <20220922040807.1409540-1-weiyongjun@huaweicloud.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220922040807.1409540-1-weiyongjun@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,141 +80,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-With using __devm_spi_alloc_controller(), spi_controller_put() is called in
-devres_release_all() whenever the device is unbound, so the spi_master_put()
-in error path can be removed.
-Also replace spi_master_get_devdata() and devm_spi_register_master() with
-spi_controller_get_devdata() and devm_spi_register_controller().
+On 22/09/2022 06:08, Wei Yongjun wrote:
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+> 
+> The sparse tool complains as follows:
+> 
+> drivers/spi/spi-meson-spicc.c:570:22: warning:
+>   symbol 'meson_spicc_pow2_clk_ops' was not declared. Should it be static?
+> 
+> This symbol is not used outside of spi-meson-spicc.c, so marks it static.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+>   drivers/spi/spi-meson-spicc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+> index e4cb52e1fe26..85b4b9b267b1 100644
+> --- a/drivers/spi/spi-meson-spicc.c
+> +++ b/drivers/spi/spi-meson-spicc.c
+> @@ -567,7 +567,7 @@ static int meson_spicc_pow2_set_rate(struct clk_hw *hw, unsigned long rate,
+>   	return clk_divider_ops.set_rate(hw, rate, parent_rate);
+>   }
+>   
+> -const struct clk_ops meson_spicc_pow2_clk_ops = {
+> +static const struct clk_ops meson_spicc_pow2_clk_ops = {
+>   	.recalc_rate = meson_spicc_pow2_recalc_rate,
+>   	.determine_rate = meson_spicc_pow2_determine_rate,
+>   	.set_rate = meson_spicc_pow2_set_rate,
+> 
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-altera-platform.c | 55 ++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/spi/spi-altera-platform.c b/drivers/spi/spi-altera-platform.c
-index 65147aae82a1..7404e5eaaeb2 100644
---- a/drivers/spi/spi-altera-platform.c
-+++ b/drivers/spi/spi-altera-platform.c
-@@ -39,38 +39,37 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	struct altera_spi_platform_data *pdata = dev_get_platdata(&pdev->dev);
- 	enum altera_spi_type type = ALTERA_SPI_TYPE_UNKNOWN;
- 	struct altera_spi *hw;
--	struct spi_master *master;
-+	struct spi_controller *ctlr;
- 	int err = -ENODEV;
- 	u16 i;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
--	if (!master)
-+	ctlr = __devm_spi_alloc_controller(&pdev->dev, sizeof(*hw), false);
-+	if (!ctlr)
- 		return err;
- 
--	/* setup the master state. */
--	master->bus_num = -1;
-+	/* setup the controller state. */
-+	ctlr->bus_num = -1;
- 
- 	if (pdata) {
- 		if (pdata->num_chipselect > ALTERA_SPI_MAX_CS) {
- 			dev_err(&pdev->dev,
- 				"Invalid number of chipselect: %u\n",
- 				pdata->num_chipselect);
--			err = -EINVAL;
--			goto exit;
-+			return -EINVAL;
- 		}
- 
--		master->num_chipselect = pdata->num_chipselect;
--		master->mode_bits = pdata->mode_bits;
--		master->bits_per_word_mask = pdata->bits_per_word_mask;
-+		ctlr->num_chipselect = pdata->num_chipselect;
-+		ctlr->mode_bits = pdata->mode_bits;
-+		ctlr->bits_per_word_mask = pdata->bits_per_word_mask;
- 	} else {
--		master->num_chipselect = 16;
--		master->mode_bits = SPI_CS_HIGH;
--		master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 16);
-+		ctlr->num_chipselect = 16;
-+		ctlr->mode_bits = SPI_CS_HIGH;
-+		ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 16);
- 	}
- 
--	master->dev.of_node = pdev->dev.of_node;
-+	ctlr->dev.of_node = pdev->dev.of_node;
- 
--	hw = spi_master_get_devdata(master);
-+	hw = spi_controller_get_devdata(ctlr);
- 	hw->dev = &pdev->dev;
- 
- 	if (platid)
-@@ -83,7 +82,7 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		hw->regmap = dev_get_regmap(pdev->dev.parent, NULL);
- 		if (!hw->regmap) {
- 			dev_err(&pdev->dev, "get regmap failed\n");
--			goto exit;
-+			return err;
- 		}
- 
- 		regoff = platform_get_resource(pdev, IORESOURCE_REG, 0);
-@@ -93,38 +92,35 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		void __iomem *res;
- 
- 		res = devm_platform_ioremap_resource(pdev, 0);
--		if (IS_ERR(res)) {
--			err = PTR_ERR(res);
--			goto exit;
--		}
-+		if (IS_ERR(res))
-+			return PTR_ERR(res);
- 
- 		hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
- 						   &spi_altera_config);
- 		if (IS_ERR(hw->regmap)) {
- 			dev_err(&pdev->dev, "regmap mmio init failed\n");
--			err = PTR_ERR(hw->regmap);
--			goto exit;
-+			return PTR_ERR(hw->regmap);
- 		}
- 	}
- 
--	altera_spi_init_master(master);
-+	altera_spi_init_master(ctlr);
- 
- 	/* irq is optional */
- 	hw->irq = platform_get_irq(pdev, 0);
- 	if (hw->irq >= 0) {
- 		err = devm_request_irq(&pdev->dev, hw->irq, altera_spi_irq, 0,
--				       pdev->name, master);
-+				       pdev->name, ctlr);
- 		if (err)
--			goto exit;
-+			return err;
- 	}
- 
--	err = devm_spi_register_master(&pdev->dev, master);
-+	err = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (err)
--		goto exit;
-+		return err;
- 
- 	if (pdata) {
- 		for (i = 0; i < pdata->num_devices; i++) {
--			if (!spi_new_device(master, pdata->devices + i))
-+			if (!spi_new_device(ctlr, pdata->devices + i))
- 				dev_warn(&pdev->dev,
- 					 "unable to create SPI device: %s\n",
- 					 pdata->devices[i].modalias);
-@@ -134,9 +130,6 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	dev_info(&pdev->dev, "regoff %u, irq %d\n", hw->regoff, hw->irq);
- 
- 	return 0;
--exit:
--	spi_master_put(master);
--	return err;
- }
- 
- #ifdef CONFIG_OF
--- 
-2.25.1
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
