@@ -2,66 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD7E5EAF4B
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Sep 2022 20:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C64B5EB211
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Sep 2022 22:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiIZSLU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Sep 2022 14:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S230168AbiIZU2H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Sep 2022 16:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIZSK4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Sep 2022 14:10:56 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A215BC13
-        for <linux-spi@vger.kernel.org>; Mon, 26 Sep 2022 10:57:22 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z13so10044752edb.13
-        for <linux-spi@vger.kernel.org>; Mon, 26 Sep 2022 10:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=CRllL3Ms27ez6IvzpulcJLbYxFjEBlXHOPdBJd/sz8s=;
-        b=fPQKgx4TS11TfHGmZSQfrQZmQCjzIq6WYbnOn91p1FnXfYL2FssItOeiYcRAAJoMHt
-         NYJlewB6mtl8i0wgnlv8CImD/HfFd09rV5rqe/en2NtGRQvt2vUhl5k/rldwn9Li/OXx
-         GUlA8HWcdDVCM1kzMnUDADaTaNVOuuGMz5VQ8ufucx8oR4ajXEfk3fwN+MNl6Cb58gZQ
-         IIiM3rrlc7ujpuXEDlMhj8LXX/8TT6LifeNtrlfrAJd/ItOKueJw0YEJCpTVxAP93dhu
-         YskBD0FwG6tE+MOXeQ4XCQ696G2KUiv30Wphd3N8KC5nW+c3PsLfp5wTrq+iH2/R0J2Q
-         lFpg==
+        with ESMTP id S229805AbiIZU2E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Sep 2022 16:28:04 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648AC9FA96;
+        Mon, 26 Sep 2022 13:28:02 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1278624b7c4so10781666fac.5;
+        Mon, 26 Sep 2022 13:28:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=CRllL3Ms27ez6IvzpulcJLbYxFjEBlXHOPdBJd/sz8s=;
-        b=1XmKJnPVcoNagtHMJWNAx6qd7ldo3Ks+al+P0R5rJf0qVOsHeUbdEwSfBcf68Cx4or
-         q+dq5ILe6mkbT8GD7/roc562r/zt7l+cFaI2l4wODcIy+zPO4ueRTlTKrpih8/ewaO+6
-         h5pbFG45RbENVYpN8mjPdRj2jq6RQQhEH2CNyBrDRocCeAsTTQ3IhP2Aa8jGF+i+ed6K
-         e2CrcTptgxlwsW6qlIxn9df0V16clPtPvMjR7SThHzZaKB+l7c09RMQ35qfiR5499NUU
-         lSAIEW+VhJsmy+lzyx6n6AgBUGwGIqcnSNW4aCZUlo0795g0yRFkpo6dhrCdGBz4q7ht
-         QGXg==
-X-Gm-Message-State: ACrzQf35K8FSmZzp32ydypKz6Gta9L5BUaDTMnZr+ZAqSVxB4hIsU0Dy
-        2yU5Esw8G0SvN1GOiqiOY6Y=
-X-Google-Smtp-Source: AMsMyM6X8Z1KaqD7FetPssrNuJa1z/BZJHXsq85uYcL65aHyjy5MsukqxLmvrOiTgOYncGHcGlqkBQ==
-X-Received: by 2002:a05:6402:538f:b0:444:c17b:1665 with SMTP id ew15-20020a056402538f00b00444c17b1665mr23841687edb.98.1664215040916;
-        Mon, 26 Sep 2022 10:57:20 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id x14-20020a056402414e00b0043bea0a48d0sm11838458eda.22.2022.09.26.10.57.19
+        bh=auy+cxKcc8eI2Uhu+qm54E46IRglRqVFF347Yn8jFX4=;
+        b=OBS0eQhFwisRHJKzdvhAv92zRPWrZ6dPJmLdDGQ4MUcuyuLZZ+TVIIh25UlhHwcfyI
+         0elvTrMoq6KdhP+HGPVhr/wmwG7TRJRxogsSUrIL7WvkwbbxYOl+vHZTaMSqLlrpGNdm
+         GkI+98sXEmLI9F99TdLJbCBnGq6TUJ1RqysIb90BiaFUlfD4WqcMnXirdKZi2ahatDZV
+         kpIaIXJSen85YQiUFunrDxrM9agKMxFoWdUIE13Urgc01cjbN2wROfADCNByFFLn7kHD
+         WffvCGkLgOJnmhVlcykCw3khzafpDrWVHbdAmiD9Ifbuq7X1bnSD927SnVjf4Quu+wGY
+         IRfA==
+X-Gm-Message-State: ACrzQf3o1qOrtnMxRLJ2yoKfg00+blNQqDGU+Bf/s6v+iqS80bg9JyEl
+        nsC2vBRmZ+VF7wQZOjoXZIqTLGU6BQ==
+X-Google-Smtp-Source: AMsMyM7wwf6CJTGQ5p14C1PoCEnqcGr+H5KC4BxnIocKFuz4+Y+evjpdxQUruxGweyDm5Hku2ckjTA==
+X-Received: by 2002:a05:6870:899d:b0:12b:cdce:63d5 with SMTP id f29-20020a056870899d00b0012bcdce63d5mr282808oaq.51.1664224081573;
+        Mon, 26 Sep 2022 13:28:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056808014600b003509cc4ad4esm7569470oie.39.2022.09.26.13.28.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 10:57:19 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 20:57:17 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-spi@vger.kernel.org, han.xu@nxp.com, broonie@kernel.org
-Subject: Re: [PATCH -next 1/3] spi: spi-fsl-dspi: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <20220926175717.hrotmqwqe4vxfgif@skbuf>
-References: <20220924131854.964923-1-yangyingliang@huawei.com>
+        Mon, 26 Sep 2022 13:28:01 -0700 (PDT)
+Received: (nullmailer pid 2750278 invoked by uid 1000);
+        Mon, 26 Sep 2022 20:28:00 -0000
+Date:   Mon, 26 Sep 2022 15:28:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bert Vermeulen <bert@biot.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Benjamin Larsson <benjamin.larsson@iopsys.eu>
+Subject: Re: [PATCH 1/3] dt-bindings: arm: airoha: Add documentation for
+ Airoha SPI controller
+Message-ID: <20220926202800.GA2747274-robh@kernel.org>
+References: <20220922100410.1101874-1-bert@biot.com>
+ <20220922100410.1101874-2-bert@biot.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220924131854.964923-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220922100410.1101874-2-bert@biot.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,13 +64,85 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 09:18:52PM +0800, Yang Yingliang wrote:
-> Use the devm_platform_get_and_ioremap_resource() helper instead of calling
-> platform_get_resource() and devm_ioremap_resource() separately.
+On Thu, Sep 22, 2022 at 12:04:08PM +0200, Bert Vermeulen wrote:
+> Create documentation for accessing the Airoha EN7523 SPI controller.
 > 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Signed-off-by: Bert Vermeulen <bert@biot.com>
 > ---
+>  .../bindings/spi/airoha,en7523-spi.yaml       | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml b/Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml
+> new file mode 100644
+> index 000000000000..e5bc7814424e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/airoha,en7523-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Airoha EN7523 SPI controller
+> +
+> +maintainers:
+> +  - Bert Vermeulen <bert@biot.com>
+> +
+> +description: |
+> +  This binding describes the SPI controller on Airoha EN7523 SoCs.
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
 
-For the series:
+Drop quotes.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: airoha,en7523-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: SPI clock
+
+'maxItems: 1' is sufficient.
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: spi
+
+You don't really need clock-names when there is only 1.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/en7523-clk.h>
+> +    spi0: spi@1fa10000 {
+> +      compatible = "airoha,en7523-spi";
+> +      reg = <0x1fa10000 0x10000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      clocks = <&scu EN7523_CLK_SPI>;
+> +      clock-names = "spi";
+> +    };
+> -- 
+> 2.25.1
+> 
+> 
