@@ -2,133 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3655EBD41
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 10:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C675EBD4B
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 10:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiI0IaF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 04:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S230290AbiI0Ial (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Sep 2022 04:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiI0IaC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 04:30:02 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B38326DA
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 01:30:01 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso8932733wmq.4
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 01:30:01 -0700 (PDT)
+        with ESMTP id S230444AbiI0IaT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 04:30:19 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFF79CCD9
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 01:30:09 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso5007313wmq.2
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 01:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:reply-to:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date;
-        bh=BqKb1MOod0APhgvKJiJsziZsDmx0K0c2qqX6KClwNl8=;
-        b=gkskCLvsNhU6rPJILVg60kgxjOUQpR6Hq/kMdiieQiqU2RQewtzbgTYSi+OveKmK8Q
-         eM84vagUMNZ/sleHwlRfAdyuTdmeMuhgkvwyh3z5m5gz9ntzcEhWYr+MQ3Je4RdTcuf/
-         1vIfY61AWydZ1iGHmuNqsSgPbnyCtRXCzPfaPZTdxskoA4H97hlz2WRbWtd0BD8XB6Fs
-         TI2RFhAH7Z8dcG4Osv+jgN0vElu30KR/yVBm5+pgyxUrTtR0tGQZmVrWNF+rcXzyrxyH
-         q0n2hY1hhIIqYnOA5Ijitb0W/SrK/O1LxvkZKDyXNldW1H/Q7XCRdWTLFcVZvc4SI4/A
-         t+Iw==
+        bh=dbuQOe3pFZvmT6+HOPkDlXjOm8BeB2xsU1eHBI9Ld4g=;
+        b=xNpdmvdRiP0RtD/67ppEEA9lEnlpKlwNwlNmbN53x6nSe0K3L2VOQuO2LIqJiaEdIY
+         eWBZ+38MHIXV+6QJQXnqc1m23qxXlLss4pysqhxb7LhzKJLi9BjXeT1sZPyx7tTSLhr5
+         cZqjqAcSPlHeLcXfX3USZn3BqeNvzagI7B4dsAjc4aAYxuDxsUkGlFmJi+PyI7TdhuWn
+         ICRKmrAOHsj4i55jA6LQ1SeaGiaFMi28h1KqF+mqmquKFYW7m4TFA/jL/amzaNqp+NEp
+         F4H0DSrVPy8U2iDHEmq8+iIUEsTmS/Fl6H961VvLoD9zEWDo41s4sOg0u9RqKGqvKFBv
+         JM7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:reply-to:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=BqKb1MOod0APhgvKJiJsziZsDmx0K0c2qqX6KClwNl8=;
-        b=ErsrLaxjX8OW/uX9mnqgia8OsFoYD2a7nj+QAaRqzRXKs7pzakxOjQ38WcS3Fbj/ja
-         eqUgUjCdShaj/7XY1tiMR8x42fDu+ghVokTLsa14oRmYPPDQK9GgIQd8yyh16uI5cH4P
-         vqHKmJjVLqF/0BbeTBcAkEuQiL8ISgbtfZSgi/ka96IE0G6YiJSrsk+4ITSMKjOvVRMO
-         TTmjPyxgnb67MPd0ZBv7SSLWi70TOGn3ELJkyYnpQd2KWa97Ykq2QiVRDOn08Qnoxtsi
-         tAURNULh1meMu/J7R/Y7THiW3RwBXhW/1/SVjbUtROmsjm6Qbr81xQFvHtpK/26iLZwV
-         yXVQ==
-X-Gm-Message-State: ACrzQf2wgfH8dg3rn0QnmaylgBlpxgMm8NAcLfIv73hXdL3zPrH0eQuC
-        RjY2VvvVtR9snAcSZt7gPqU4Ag==
-X-Google-Smtp-Source: AMsMyM53efqUnk+cvJ0VgUzsAEsKx6Zwf42B1WU+5vDB7OJ8sHKF6wCrHgxbsKqn5+krOU2a/JQB1w==
-X-Received: by 2002:a7b:c01a:0:b0:3b4:a61c:52d1 with SMTP id c26-20020a7bc01a000000b003b4a61c52d1mr1733578wmb.146.1664267400042;
-        Tue, 27 Sep 2022 01:30:00 -0700 (PDT)
+        bh=dbuQOe3pFZvmT6+HOPkDlXjOm8BeB2xsU1eHBI9Ld4g=;
+        b=xYljurCymxpt7XxzlkjQeUnqzruQhQQL2xzO0a8fdZolJM/5w6XpVVM+6MYCfGXjiT
+         536W+IIUjB2qfPGc56K0TEfK88GCswoaCoyu31aZk6dQL421+0wJ6d0lY+axxOU3pjYg
+         tkrlbX+knHxKoJCTKSpRnxAxDuus4Nk3TIMgzuM2YpD6W7t2doRSlfU7Qdb+uC+XuU2l
+         06tXmEZr7nJFu7uNcTnV2EIJmXfOEbrV/gDPeAvZJBNTR2rcF//Vqz8qjZARdTf+wOiD
+         OClVuSpyjSAILFUj1HmtxpUCEQQFFYKE1Bf3jGd1Apep82NtUjtztQlO3+WqvuuLQYAA
+         H8jw==
+X-Gm-Message-State: ACrzQf3qRzEfgwG+DPFnpGkfuUIW9TybBou53KAssnsbpADFG4tDwXei
+        qv6fkwG15Fe0oP7MfkjAV/yJWw==
+X-Google-Smtp-Source: AMsMyM5RGTznKVMVuAGcUTRiYQAR8un7aByG5CUNLtCf41KydJUjFyeUP4h8pc+wje1HYy6CFe/GMQ==
+X-Received: by 2002:a05:600c:211a:b0:3b4:75ee:c63e with SMTP id u26-20020a05600c211a00b003b475eec63emr1786727wml.44.1664267407748;
+        Tue, 27 Sep 2022 01:30:07 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:b771:c77b:f889:9833? ([2a01:e0a:982:cbb0:b771:c77b:f889:9833])
-        by smtp.gmail.com with ESMTPSA id i1-20020adfa501000000b0022a2f4fa042sm1118461wrb.103.2022.09.27.01.29.59
+        by smtp.gmail.com with ESMTPSA id p14-20020adfce0e000000b0022af6c93340sm1199236wrn.17.2022.09.27.01.30.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 01:29:59 -0700 (PDT)
-Message-ID: <f9bf3f7e-e949-3e77-a74c-74c0eecd77c0@linaro.org>
-Date:   Tue, 27 Sep 2022 10:29:58 +0200
+        Tue, 27 Sep 2022 01:30:06 -0700 (PDT)
+Message-ID: <09081275-be9c-9d0c-856b-ed2df8fc0b13@linaro.org>
+Date:   Tue, 27 Sep 2022 10:30:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
+Subject: Re: [PATCH 0/2] spi: amlogic: meson-spicc: Use pinctrl to drive CLK
+ line when idle
 Content-Language: en-US
 To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, broonie@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        narmstrong@baylibre.com, Da Xue <da@libre.computer>
+        narmstrong@baylibre.com
 References: <20220809172017.215412-1-aouledameur@baylibre.com>
- <20220809172017.215412-2-aouledameur@baylibre.com>
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Organization: Linaro Developer Services
-In-Reply-To: <20220809172017.215412-2-aouledameur@baylibre.com>
+In-Reply-To: <20220809172017.215412-1-aouledameur@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Hi Amjad,
 
 On 09/08/2022 19:20, Amjad Ouled-Ameur wrote:
-> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
-> pin biais when idle. Therefore define three pinctrl names:
-> - default: SPI pins are controlled by spi function.
-> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
-> by spi function.
-> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
-> by spi function.
+> Between SPI transactions, all SPI pins are in HiZ state. When using the SS
+> signal from the SPICC controller it's not an issue because when the
+> transaction resumes all pins come back to the right state at the same time
+> as SS.
 > 
-> Reported-by: Da Xue <da@libre.computer>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-
-Don't forget to CC devicetree@vger.kernel.org otherwise it won't be reviewed.
-
-> ---
->   .../bindings/spi/amlogic,meson-gx-spicc.yaml      | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+> The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+> state change and SPI pins state change from idle, you can have a missing or
+> spurious clock transition.
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> index 50de0da42c13..10707a8216f5 100644
-> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> @@ -43,6 +43,14 @@ properties:
->       minItems: 1
->       maxItems: 2
->   
-> +  pinctrl-0:
-> +    minItems: 1
-> +
-> +  pinctrl-1:
-> +    maxItems: 1
-> +
-> +  pinctrl-names: true
-> +
->   if:
->     properties:
->       compatible:
-> @@ -69,6 +77,13 @@ else:
->         items:
->           - const: core
->   
-> +    pinctrl-names:
-> +      minItems: 1
-> +      items:
-> +        - const: default
-> +        - const: idle-high
-> +        - const: idle-low
-> +
->   required:
->     - compatible
->     - reg
+> Set a bias on the clock depending on the clock polarity requested before CS
+> goes active, by passing a special "idle-low" and "idle-high" pinctrl state
+> and setting the right state at a start of a message.
+> 
+> Amjad Ouled-Ameur (2):
+>    spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI
+>      signal states
+>    spi: meson-spicc: Use pinctrl to drive CLK line when idle
+> 
+>   .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 15 +++++++
+>   arch/arm64/boot/dts/amlogic/meson-gxl.dtsi    | 14 +++++++
+>   drivers/spi/spi-meson-spicc.c                 | 39 ++++++++++++++++++-
+>   3 files changed, 67 insertions(+), 1 deletion(-)
+> 
+
+Will you send a v2 with comments adresses ?
