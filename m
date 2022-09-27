@@ -2,43 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171245EBFD5
+	by mail.lfdr.de (Postfix) with ESMTP id 62C7F5EBFD6
 	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 12:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbiI0Kew (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 06:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S229962AbiI0Key (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Sep 2022 06:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiI0Keo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 06:34:44 -0400
+        with ESMTP id S230150AbiI0Ker (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 06:34:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B80311453
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 03:34:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5832215FF9
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 03:34:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED567B81AE8
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 10:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389F8C433C1;
-        Tue, 27 Sep 2022 10:34:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ACB0B81AE1
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 10:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36778C433D7;
+        Tue, 27 Sep 2022 10:34:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664274871;
-        bh=UMdr8CNUsHJdrIZbnLoxC+DdYUOyl1L+mmyLI65lhVM=;
+        s=k20201202; t=1664274873;
+        bh=ZVjN0xxHSAa6ZxI4uknUhVSZgHiVGfBmHB9JFh+T8oU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=I2YwGqDJWJnZ0pQ5RENpoM4blRvH2MB66ODZyQpy6/2qI233tf4c+u8iXBwTJDztS
-         oxXCvAal2BFM/TVuy2rI5sefNcXKRFWBbuqDVZJTjC2Eb4OMknNhc3SxRl/kR6Mu7T
-         U9i2BmNkVnIDQENbwiGvnt1JxPBAOUTJ4svpi2dK+PBguFCCGJH728Eg8PdUUyBIba
-         6l3Fdwcu8tf+RrwPWk7qbUfnbN01Jzd2Mn/orZ85cchZ7rWDYgkorAHChPIqxAxdhV
-         GQng+V3Tp8yYUBHpPFa3xnXyFhKCXQQkCuX1Uqmz3HTWKHDK5dSiZB3DPjeSPRitFC
-         c7oaA7w/LcDJw==
+        b=jP1k4xgfZ5oDyMi7Eg4MNY6sY5RpUfYyGg45HrenZjuDZf0i00gSsS5tZVFwc14+N
+         eeJD3uwHq87IaDUgCDufHHXPGYhK7GchBA5isPwdsbYKS09gOzmYfN+eAZFDqoZo64
+         Ya3+hNV6q3oLz5ONFJ0ECXRYA7UiiqiN3PyFw7pXcRJQUWuqKaHfL38PNol/Mzap5M
+         a7F+Bqm/+qiVGILkCZpc1+O5wOYsarK2BbNeDAKl845/mn+dPFHIiRFnLvzfCemEGY
+         c+sdlAg8Vo3jKQpHm9ceyCWuL7q8PiiGIDI+LxrE5/CzkjEDhmXaxWqUNCXENTqkmD
+         tbKVSTQaz6wvw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20220924121310.78331-1-zhangqilong3@huawei.com>
-References: <20220924121310.78331-1-zhangqilong3@huawei.com>
-Subject: Re: [PATCH -next 0/3] Fix PM disable depth imbalance in probe
-Message-Id: <166427487094.61277.8173045546114429378.b4-ty@kernel.org>
-Date:   Tue, 27 Sep 2022 11:34:30 +0100
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org
+Cc:     han.xu@nxp.com, olteanv@gmail.com
+In-Reply-To: <20220924131854.964923-1-yangyingliang@huawei.com>
+References: <20220924131854.964923-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next 1/3] spi: spi-fsl-dspi: Use devm_platform_get_and_ioremap_resource()
+Message-Id: <166427487193.61277.16583804674559801107.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 11:34:31 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,17 +53,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 24 Sep 2022 20:13:06 +0800, Zhang Qilong wrote:
-> The pm_runtime_enable will increase power disable depth. Thus
-> a pairing decrement is needed when error returns to keep it
-> balanced. This series of patches fixed it in spi probe.
+On Sat, 24 Sep 2022 21:18:52 +0800, Yang Yingliang wrote:
+> Use the devm_platform_get_and_ioremap_resource() helper instead of calling
+> platform_get_resource() and devm_ioremap_resource() separately.
 > 
-> Zhang Qilong (3):
->   spi: cadence-quadspi: Fix PM disable depth imbalance in cqspi_probe
->   spi: dw: Fix PM disable depth imbalance in dw_spi_bt1_probe
->   spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
 > 
-> [...]
 
 Applied to
 
@@ -70,12 +65,12 @@ Applied to
 
 Thanks!
 
-[1/3] spi: cadence-quadspi: Fix PM disable depth imbalance in cqspi_probe
-      commit: 4d0ef0a1c35189a6e8377d8ee8310ea5ef22c5f3
-[2/3] spi: dw: Fix PM disable depth imbalance in dw_spi_bt1_probe
-      commit: 618d815fc93477b1675878f3c04ff32657cc18b4
-[3/3] spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
-      commit: 29f65f2171c85a9633daa380df14009a365f42f2
+[1/3] spi: spi-fsl-dspi: Use devm_platform_get_and_ioremap_resource()
+      commit: f96087a38cca6f3bb4c7cf582b949016aeb59d0e
+[2/3] spi: spi-fsl-lpspi: Use devm_platform_get_and_ioremap_resource()
+      commit: c9e1bb724d884b12a4c0d1dc9f802946cf427a92
+[3/3] spi: spi-fsl-qspi: Use devm_platform_ioremap_resource_byname()
+      commit: fc13b5a25e18b0de5e04b6f5616c60d71d2610ee
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
