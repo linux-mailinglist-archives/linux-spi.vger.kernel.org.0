@@ -2,158 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C475EC730
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 17:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9885ECA5E
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 19:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiI0PFF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 11:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S231436AbiI0RBr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Sep 2022 13:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiI0PFE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 11:05:04 -0400
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B4857E1
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 08:04:59 -0700 (PDT)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1odC8n-00CKdx-2i
-        for linux-spi@vger.kernel.org; Tue, 27 Sep 2022 17:04:57 +0200
+        with ESMTP id S231513AbiI0RBp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 13:01:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65DE6B8CB
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 10:01:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FFF1612FF
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 17:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24C6C433D6;
+        Tue, 27 Sep 2022 17:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664298103;
+        bh=e1DaEBdNGacwimNKQbn5J4uq1I8n3bPfi5z5sz8/xzc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GPHwAhQl0zLL9l2k5Wp12KrVL5KUoTqiO+rzn3BvQ10hLNuBXB+OnRAqie0xkoZwE
+         6i9ZvBPqP8gqLJ587zeFQjnBmkD7r0yyOCBEa91+ZU0tD48ljdFNhvGibmJ/PfZydr
+         jElKbpAH7uBEkhou3yBiAQ13HBzROGlR63zrhk74WaDJj+EYfA6g7LG9WxL0ZBwvSK
+         ffSPQd2bQXtFeHf7yq2YBhkwa93rOMXDBNBMo1JeRFur6tNxRQ7td/I6fiwUrEeMfg
+         jfD8m6LIhOoISwGk8mdtfgoL2cSB5XW7I1OUId6fTlq+wR9RO3sDtFR9i6wNkfwoqA
+         TdItfUeTH8FKg==
+Date:   Tue, 27 Sep 2022 18:01:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH -next 1/2] spi: introduce devm_spi_alloc_controller()
+Message-ID: <YzMsc1IM/73CMEeg@sirena.org.uk>
+References: <20220926142933.2299460-1-yangyingliang@huawei.com>
+ <20220927034525.GA32253@wunner.de>
+ <YzLct0v1ZRJVW2Gm@sirena.org.uk>
+ <703c43ca-ab47-bfd9-da26-d435aaf236e5@huawei.com>
+ <20220927133129.GA29821@wunner.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ip0YQvZrw0f65TAP"
+Content-Disposition: inline
+In-Reply-To: <20220927133129.GA29821@wunner.de>
+X-Cookie: Vote anarchist.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from [2a01:4f8:10a:f402::1:2]
-        by yawp.biot.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1odC8c-00CKd0-AK; Tue, 27 Sep 2022 17:04:46 +0200
-Message-ID: <64b7e467-485a-91db-82fb-3204f8ccf877@biot.com>
-Date:   Tue, 27 Sep 2022 17:04:45 +0200
-MIME-Version: 1.0
-Subject: Re: [PATCH v2 2/3] spi: Add support for the Airoha EN7523 SoC SPI
- controller
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Benjamin Larsson <benjamin.larsson@iopsys.eu>
-References: <20220927113229.1214224-1-bert@biot.com>
- <20220927113229.1214224-3-bert@biot.com> <YzLrMHVU3mTJVVh6@sirena.org.uk>
-From:   Bert Vermeulen <bert@biot.com>
-In-Reply-To: <YzLrMHVU3mTJVVh6@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 9/27/22 14:23, Mark Brown wrote:
 
-Hi Mark,
+--Ip0YQvZrw0f65TAP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for reviewing.
+On Tue, Sep 27, 2022 at 03:31:29PM +0200, Lukas Wunner wrote:
+> On Tue, Sep 27, 2022 at 07:57:05PM +0800, Yang Yingliang wrote:
 
-> On Tue, Sep 27, 2022 at 01:32:28PM +0200, Bert Vermeulen wrote:
-> 
->>  
->> +config SPI_AIROHA_EN7523
->> +	bool "Airoha EN7523 SPI controller support"
-> 
-> Why not tristate?
-> 
->> +	depends on ARCH_AIROHA
-> 
-> I don't see a reason we couldn't have an || COMPILE_TEST here to improve
-> coverage?
-> 
->> +	default ARCH_AIROHA
+> > Do you mean to introduce two more proper wrappers to instead of
+> > devm_spi_alloc_master/slave() ?
 
-In both cases, because SPi boot flash is the only way to boot this SoC 
-that I know of. However as you say this may not be the case on different 
-SoCs, and indeed I believe this SPI core is in lots of stuff already.
+> Honestly I don't think there's room for (or a need for) improvement here.
 
-So I'll fix this, and also address your other comments.
+The issue here is that we're trying to get rid of the master/slave
+terminology.
 
-> It's unusual to default a SPI controller on, they tend not to be ultra
-> critical like a clock driver or similar can be?
-> 
->> +static void __iomem *iobase;
-> 
-> This should be driver data rather than a global, your current SoC might
-> only have one controller but some other model might build two and it's
-> fairly trivial to do.
-> 
->> +static void opfifo_write(u32 cmd, u32 len)
->> +{
->> +	u32 tmp = ((cmd & 0x1f) << 9) | (len & 0x1ff);
->> +
->> +	writel(tmp, REG(ENSPI_MANUAL_OPFIFO_WDATA));
->> +
->> +	/* Wait for room in OPFIFO */
->> +	while (readl(REG(ENSPI_MANUAL_OPFIFO_FULL)))
->> +		cpu_relax();
->> +
-> 
-> Some sort of timeout would be good with these loops, if things go wrong
-> we'll just lock up which isn't good.
-> 
->> +       ret = clk_prepare_enable(clk);
->> +       if (ret)
->> +               return ret;
-> 
-> Nothing ever reverses this unless clk_set_rate() fails.
-> 
->> +	ret = clk_set_rate(clk, 40000000);
->> +	if (ret) {
->> +		clk_disable_unprepare(clk);
->> +		return ret;
->> +	}
-> 
-> Could this be pushed into DT via the clock bindings?  The hard coded
-> number might need to vary by SoC.
-> 
->> +static int xfer_read(struct spi_transfer *xfer)
->> +{
->> +	int opcode;
->> +	uint8_t *buf = xfer->rx_buf;
->> +
->> +	switch (xfer->rx_nbits) {
->> +	case SPI_NBITS_SINGLE:
->> +		opcode = OP_INS;
->> +		break;
->> +	case SPI_NBITS_DUAL:
->> +		opcode = OP_IND;
->> +		break;
->> +	}
-> 
-> This should have a default case that returns an error.
-> 
->> +static int transfer_one_message(struct spi_controller *ctrl, struct spi_message *msg)
->> +{
->> +	struct spi_transfer *xfer;
->> +	int next_xfer_is_rx = 0;
->> +
->> +	manual_begin_cmd();
->> +	set_cs(0);
-> 
-> The driver should not be setting chip select itself, it should just
-> provide the set_cs() operation to the core and let the core worry about
-> when to call it.
-> 
->> +	ctrl->transfer_one_message = transfer_one_message;
->> +	err = devm_spi_register_controller(&pdev->dev, ctrl);
->> +	if (err) {
->> +		dev_err(&pdev->dev, "Could not register SPI controller\n");
->> +		return -ENODEV;
->> +	}
-> 
-> Don't discard the error code that registeration returned, include it in
-> the log message and pass it back to the caller.
+--Ip0YQvZrw0f65TAP
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Bert Vermeulen
-bert@biot.com
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMzLHIACgkQJNaLcl1U
+h9Bm/wf/c5lJQ7W3Merq3KZJhvfvM8cxKkujqfTwGTs9sE+DK4f3CLj+L4z693q6
+6QBSd8WqqRZBCLA3AS7Y01QV7nT4/58Y2tr3HnSh60/kEeuyfrSfoaWtbxQlqmOX
+GCqdyXJcGu9HWbWI7yOKXUoOFHe3KkaME/ZYP9/6JGd1iu8yGZMEeQ+F7b5OPsdQ
+IhMwaeImRu23p4WT+xAT0vXfbhCixfFmm0UFsK/4moxHOGXDrtgmXyKo0QMKGn8z
+92vHlIVb6cLreWsdKBKP4e7qScgehhrSrJWrNEvzMUK7IqJa7dPqTNQnZWX+CNzF
+fJn+rYmrOysNvYzwxYDjczB7U/ZR9w==
+=OscE
+-----END PGP SIGNATURE-----
+
+--Ip0YQvZrw0f65TAP--
