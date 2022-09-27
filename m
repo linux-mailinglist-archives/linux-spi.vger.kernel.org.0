@@ -2,70 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81005EC1EE
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 13:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D835EC1EF
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 13:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiI0L5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 07:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S230290AbiI0L5L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Sep 2022 07:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiI0L47 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 07:56:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A551155669
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 04:56:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 175E3B81B92
-        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 11:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9783C433D7;
-        Tue, 27 Sep 2022 11:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664279815;
-        bh=YBbJwQq0y3IHwOoKt0ADHVAWgqmMd/hnSp11Znhoxik=;
-        h=Subject:From:Date:To:From;
-        b=LXRq762dwleWYT05U4CYySZAqvLmk95XslyhFvIyxrc5WP4ffQ7TYRwW5rlpr2hSn
-         Fn54qnVJNoDSHTI46h152ZnA6x4jbKHWcomtpZyvwpOLJOJ0Jl5rE6RZkT3WLRzoaX
-         jSfKlJUxqKTCGbcfFT3Ey/z2ldYlkH/ozdmkHw+PqwdzqHuiLFSkdnjaC6IRAX8EKS
-         qRRU9cA8IjBYkn8iAY91TZ7bciLtRPvZP2padE4TLk4PduiWpIXFaqOUEC+DV9lT8B
-         yf65yCneM/I7H1kPzKwOL5gk7vot5zlerIUouGSj83eCnXmEArgj0mt+4EHwnMb6gB
-         C9PgOAT0TeZxQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4890C04E59;
-        Tue, 27 Sep 2022 11:56:55 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232048AbiI0L5L (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 07:57:11 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E585A1559CA
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 04:57:08 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4McJ2f5mqbzHqLV;
+        Tue, 27 Sep 2022 19:54:50 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 19:57:06 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 19:57:06 +0800
+Subject: Re: [PATCH -next 1/2] spi: introduce devm_spi_alloc_controller()
+To:     Mark Brown <broonie@kernel.org>, Lukas Wunner <lukas@wunner.de>
+CC:     <linux-spi@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        <yangyingliang@huawei.com>
+References: <20220926142933.2299460-1-yangyingliang@huawei.com>
+ <20220927034525.GA32253@wunner.de> <YzLct0v1ZRJVW2Gm@sirena.org.uk>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <703c43ca-ab47-bfd9-da26-d435aaf236e5@huawei.com>
+Date:   Tue, 27 Sep 2022 19:57:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166427981566.10601.8850075357849060607.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 27 Sep 2022 11:56:55 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzLct0v1ZRJVW2Gm@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: Fix DMA bugs in (not only) spi-s3c64xx (2022-09-27T11:21:13)
-  Superseding: [v1] spi: Fix DMA bugs in (not only) spi-s3c64xx (2022-09-16T11:39:49):
-    [1/4] spi: spi-loopback-test: Add test to trigger DMA/PIO mixing
-    [2/4] spi: Save current RX and TX DMA devices
-    [3/4] spi: Fix cache corruption due to DMA/PIO overlap
-    [4/4] spi: s3c64xx: Fix large transfers with DMA
+Hi Mark,
 
-Latest series: [v2] Add support for the Airoha EN7523 SPI controller (2022-09-27T11:32:26)
-  Superseding: [v1] Add support for the Airoha EN7523 SPI controller (2022-09-22T10:04:08):
-    [1/3] dt-bindings: arm: airoha: Add documentation for Airoha SPI controller
-    [2/3] spi: Add support for the Airoha EN7523 SoC SPI controller
-    [3/3] ARM: dts: en7523: Add SPI node
+On 2022/9/27 19:21, Mark Brown wrote:
+> On Tue, Sep 27, 2022 at 05:45:25AM +0200, Lukas Wunner wrote:
+>> On Mon, Sep 26, 2022 at 10:29:32PM +0800, Yang Yingliang wrote:
+>>>   extern int devm_spi_register_controller(struct device *dev,
+>>>   					struct spi_controller *ctlr);
+>> This doesn't really make sense I'm afraid.  The umbrella term
+>> "spi_controller" can refer to either a master or a slave.
+>> One has to specify on allocation which of the two is desired.
+>> An API which purports to allow allocation of the umbrella term
+>> but defaults to a master behind the scenes seems misleading to me.
+> Yes, we'd need to either have two wrappers using some more appropriate
+> terminology than master/slave or have a parameter which specifies the
+> role.
+Do you mean to introduce two more proper wrappers to instead of 
+devm_spi_alloc_master/slave() ?
 
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Yang
