@@ -2,54 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C9A5EC28A
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 14:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FFC5EC33F
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Sep 2022 14:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiI0MXu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 08:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S232097AbiI0Mst (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Sep 2022 08:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiI0MXV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 08:23:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D58072B72;
-        Tue, 27 Sep 2022 05:23:20 -0700 (PDT)
+        with ESMTP id S231848AbiI0Msg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 08:48:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622BC14AD4E;
+        Tue, 27 Sep 2022 05:48:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA6CB81BB6;
-        Tue, 27 Sep 2022 12:23:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41452C433C1;
-        Tue, 27 Sep 2022 12:23:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F037B6189A;
+        Tue, 27 Sep 2022 12:48:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CADC433D7;
+        Tue, 27 Sep 2022 12:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664281398;
-        bh=afj7llXxrifwZaowZIAJp2ar5s4Dwn8Iu7HXu53vABI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B0bF9QMSXM81hym4g2vWUW9Xyg8s/XLrXhqc/WOv1uknOgLuagCD6oZGwUk06MAQh
-         HdM9Wqza3fLyt7f3TAKAqwi8yko5Z5wWrBkoI+oTDzknXaF2glu9KDtHLbL8LiS0sM
-         Sz4pUhM/ZfGt+lXmGWgb5h4Nw+1laxe4PErCiPJmIXvJa5NN5SSuJyvJIAi54a7d6f
-         oxvh7VwjSJpvkBkFSRrLch1p9jroK839BGfiC5tlZwF0LHidROglLcoWgn7zSfgMfw
-         +wYarlHnD3q69oJSi3jDC6OWbdTkeL4f16H+Gm76Tk8/+w83mH8e1CB6Id2ciOVb4l
-         NMFb46gVblpKg==
-Date:   Tue, 27 Sep 2022 13:23:12 +0100
+        s=k20201202; t=1664282914;
+        bh=PG9v6mJH6eEZ8x3CFsDSJ83Cg3al2A78Zn1VJOPpuds=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Ab38CFuBdw3Dh8IU2r/p09kz43wJPEZxx9TF/pgj3eMgU/XhcnPCY9KyKpixDUkGC
+         zz5V6ej/SDxfmP0OyLLbQvpsP7R7G/iWAT+gC8VLOFdTnkgzBJEKOwwB8cSi7cf+AC
+         e2zJGwRF3JOqqjLoOA7ffShNkKmRYB9ioqvgG4hunUFa5GziXnAunjeULc6qj4kSXR
+         FJbEs9cTcrsRpxc8bSEnRn8ZOKzG35EbfRsj+rQ+hZdziup+z0S2z+ZGuHRY6M5ffv
+         ZZ5H4QERUV4oU6PYkXa8gvF0VrKgHwy6Pu1A36w6UEhWd9+mKdQ/V/DAJtcJBD/6gG
+         mbHgsN+Mtu7Uw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Benjamin Larsson <benjamin.larsson@iopsys.eu>
-Subject: Re: [PATCH v2 2/3] spi: Add support for the Airoha EN7523 SoC SPI
- controller
-Message-ID: <YzLrMHVU3mTJVVh6@sirena.org.uk>
-References: <20220927113229.1214224-1-bert@biot.com>
- <20220927113229.1214224-3-bert@biot.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-spi@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        arinc.unal@arinc9.com
+In-Reply-To: <20220927031929.807070-1-sergio.paracuellos@gmail.com>
+References: <20220927031929.807070-1-sergio.paracuellos@gmail.com>
+Subject: Re: [RESEND PATCH v3] dt-bindings: spi: migrate mt7621 text bindings to YAML
+Message-Id: <166428291253.354496.654801731263989122.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 13:48:32 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="inRlknFBlKRNn326"
-Content-Disposition: inline
-In-Reply-To: <20220927113229.1214224-3-bert@biot.com>
-X-Cookie: Vote anarchist.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,117 +56,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 27 Sep 2022 05:19:29 +0200, Sergio Paracuellos wrote:
+> SoC MT7621 SPI bindings used text format, so migrate them to YAML.
+> There are some additions to the binding that were not in the original
+> file. This binding is used in MT7621 and MT7628a Ralink SoCs. To
+> properly match both dts nodes in tree we need to add to the schema
+> 'clocks', 'clock-names' and 'reset-names'. Both 'clock-names' and
+> 'reset-names' use 'spi' as string so maintain that as const in
+> the schema.
+> 
+> [...]
 
---inRlknFBlKRNn326
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, Sep 27, 2022 at 01:32:28PM +0200, Bert Vermeulen wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> =20
-> +config SPI_AIROHA_EN7523
-> +	bool "Airoha EN7523 SPI controller support"
+Thanks!
 
-Why not tristate?
+[1/1] dt-bindings: spi: migrate mt7621 text bindings to YAML
+      commit: 048f71f7685706dcc859160cc74f73e361cfe6c0
 
-> +	depends on ARCH_AIROHA
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-I don't see a reason we couldn't have an || COMPILE_TEST here to improve
-coverage?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> +	default ARCH_AIROHA
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-It's unusual to default a SPI controller on, they tend not to be ultra
-critical like a clock driver or similar can be?
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> +static void __iomem *iobase;
-
-This should be driver data rather than a global, your current SoC might
-only have one controller but some other model might build two and it's
-fairly trivial to do.
-
-> +static void opfifo_write(u32 cmd, u32 len)
-> +{
-> +	u32 tmp =3D ((cmd & 0x1f) << 9) | (len & 0x1ff);
-> +
-> +	writel(tmp, REG(ENSPI_MANUAL_OPFIFO_WDATA));
-> +
-> +	/* Wait for room in OPFIFO */
-> +	while (readl(REG(ENSPI_MANUAL_OPFIFO_FULL)))
-> +		cpu_relax();
-> +
-
-Some sort of timeout would be good with these loops, if things go wrong
-we'll just lock up which isn't good.
-
-> +       ret =3D clk_prepare_enable(clk);
-> +       if (ret)
-> +               return ret;
-
-Nothing ever reverses this unless clk_set_rate() fails.
-
-> +	ret =3D clk_set_rate(clk, 40000000);
-> +	if (ret) {
-> +		clk_disable_unprepare(clk);
-> +		return ret;
-> +	}
-
-Could this be pushed into DT via the clock bindings?  The hard coded
-number might need to vary by SoC.
-
-> +static int xfer_read(struct spi_transfer *xfer)
-> +{
-> +	int opcode;
-> +	uint8_t *buf =3D xfer->rx_buf;
-> +
-> +	switch (xfer->rx_nbits) {
-> +	case SPI_NBITS_SINGLE:
-> +		opcode =3D OP_INS;
-> +		break;
-> +	case SPI_NBITS_DUAL:
-> +		opcode =3D OP_IND;
-> +		break;
-> +	}
-
-This should have a default case that returns an error.
-
-> +static int transfer_one_message(struct spi_controller *ctrl, struct spi_=
-message *msg)
-> +{
-> +	struct spi_transfer *xfer;
-> +	int next_xfer_is_rx =3D 0;
-> +
-> +	manual_begin_cmd();
-> +	set_cs(0);
-
-The driver should not be setting chip select itself, it should just
-provide the set_cs() operation to the core and let the core worry about
-when to call it.
-
-> +	ctrl->transfer_one_message =3D transfer_one_message;
-> +	err =3D devm_spi_register_controller(&pdev->dev, ctrl);
-> +	if (err) {
-> +		dev_err(&pdev->dev, "Could not register SPI controller\n");
-> +		return -ENODEV;
-> +	}
-
-Don't discard the error code that registeration returned, include it in
-the log message and pass it back to the caller. =20
-
---inRlknFBlKRNn326
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMy6zAACgkQJNaLcl1U
-h9C8oAf9F6JurerXV3JEhRYVqQeE+E+PGovqffTvtfViQp4w02wB26HgqFgpWgRV
-uf9b9bwC5ohdggXwODKMl8bHXmcO02DXxqk8k/1Npgy3ASmboASEdaVt6oeCH8tM
-NBA0ROjKdc0g6cs/EL1VqqaGqLejaN99yWsFAck2wcYYQN6hrOwSiyp1tVHEAFow
-Rqw5nZlKfbFa/3WtP//Vqma8PxBwmO5onY3JKqymDZV1Z9Jq7+viRgUaVaHqSMQu
-Z6KbRpxPBlRrxZH7ofDDORBGATkaTgFxKBHHgTngiG52iwogRtFWMjuoHc5sUcav
-AtQvF3QHTvuvri+/rI7xBeNjBM6jbA==
-=7wpB
------END PGP SIGNATURE-----
-
---inRlknFBlKRNn326--
+Thanks,
+Mark
