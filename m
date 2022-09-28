@@ -2,78 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673335EDF92
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Sep 2022 17:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A2F5EDF9A
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Sep 2022 17:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiI1PBY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 28 Sep 2022 11:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S233980AbiI1PEH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Sep 2022 11:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiI1PBH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Sep 2022 11:01:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158E136426
-        for <linux-spi@vger.kernel.org>; Wed, 28 Sep 2022 08:01:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Md02H42YGzWgnY;
-        Wed, 28 Sep 2022 22:56:55 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 23:01:01 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 23:01:01 +0800
-Subject: Re: [PATCH -next 1/2] spi: introduce devm_spi_alloc_controller()
-To:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Lukas Wunner <lukas@wunner.de>, <linux-spi@vger.kernel.org>,
-        <yangyingliang@huawei.com>
-References: <20220926142933.2299460-1-yangyingliang@huawei.com>
- <20220927034525.GA32253@wunner.de> <YzLct0v1ZRJVW2Gm@sirena.org.uk>
- <703c43ca-ab47-bfd9-da26-d435aaf236e5@huawei.com>
- <20220927133129.GA29821@wunner.de> <YzMsc1IM/73CMEeg@sirena.org.uk>
- <20220927201901.GB24652@wunner.de> <YzNbhPjn27cWHwyi@sirena.org.uk>
- <CAMuHMdWb8qeUGbr-zku4-zAM4Zj5MgCLJKR=Xg=Txe39kno8Og@mail.gmail.com>
- <YzQsw8hiMTxdqZuu@sirena.org.uk>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <bc97b9e1-fbd1-be29-beb4-e7a1e4037f3f@huawei.com>
-Date:   Wed, 28 Sep 2022 23:01:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S233247AbiI1PEG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Sep 2022 11:04:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BB088A1A;
+        Wed, 28 Sep 2022 08:04:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED1D4B81FA2;
+        Wed, 28 Sep 2022 15:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF0CC433C1;
+        Wed, 28 Sep 2022 15:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664377438;
+        bh=NRllYnWOmIZn9K9w86cX3L3Nj4a7CsqYqfE3TbG8jFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EzDIqzwOpCcuTEMA4WbMpGj+/uVLnmZvjsbMne/ABCC1CMSvRTBy/48jWaf0Hg4KY
+         bgw7smjokwizE2hSdWQHQ+cTqWj0rH+KQEeu+Uyzn+lM3xCLLFdgJM89J7TYUHAeRo
+         PX8jGzmMpXwVWpUb47Qi6TDvbxzsP+Ijx8hVO+5DJvVSy6lMnyeN1XcwNChk2gy54W
+         4ZEvIoGNRKBP5M43zUg4/UajXWDeWR+nMBA/jGnAjLu6IV7GlYvUvvk1tLJPPMke4o
+         92YBTWMlPGFYjhuo+qJ3bjl2JKgm01hr4RuLriDn5HfIn5oqsEdk2XrUOdQ0TCAu12
+         RJBE6qFFNqwlA==
+Date:   Wed, 28 Sep 2022 16:03:51 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, radu_nicolae.pirea@upb.ro,
+        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kavyasree.kotagiri@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI
+ child node ref binding
+Message-ID: <YzRiVwzJYXtat1O5@google.com>
+References: <20220922113347.144383-1-sergiu.moga@microchip.com>
+ <20220922113347.144383-2-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <YzQsw8hiMTxdqZuu@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922113347.144383-2-sergiu.moga@microchip.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 22 Sep 2022, Sergiu Moga wrote:
 
-On 2022/9/28 19:15, Mark Brown wrote:
-> On Tue, Sep 27, 2022 at 10:43:08PM +0200, Geert Uytterhoeven wrote:
->> On Tue, Sep 27, 2022 at 10:24 PM Mark Brown <broonie@kernel.org> wrote:
->>> Sure, but since the current wrappers use the legacy names this means
->>> that we need new wrappers with more modern names hence there is
->>> something to improve here.
->> So what are the more modern names?
-> It's unfortunately not 100% clear, and our use of controller for the
-> generic thing gets in the way a bit.  There was some stuff from one of
-> the open source hardware groups recently that tried to propose new names
-> but I'm not immediately finding it.  "host" and "target" would probably
-> do the trick?
-So shall we use host/target to do wrappers.
+> Another functionality of FLEXCOM is that of SPI. In order for
+> the proper validation of the SPI children nodes through the binding
+> to occur, the proper binding for SPI must be referenced.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> 
+> v1 -> v2:
+> - use full schema paths
+> 
+> 
+> v2 -> v3:
+> - Added Reviewed-by tag, previously this was [PATCH 3]
+> 
+> 
+> v3 -> v4:
+> - Nothing, previously this was [PATCH 5]
+> 
+> 
+> v4 -> v5:
+> - Nothing
+> 
+> 
+> 
+>  .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml       | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks,
-Yang
+Not sure how these can be handled.
+
+I guess I cannot take these until the other patches are applied.
+
+NB: The patch doesn't apply cleanly anyway, so will need to be rebased.
+
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> index 0c80f4e98c54..f283cfd84b2d 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> @@ -78,10 +78,9 @@ patternProperties:
+>        of USART bindings.
+>  
+>    "^spi@[0-9a-f]+$":
+> -    type: object
+> +    $ref: /schemas/spi/atmel,at91rm9200-spi.yaml
+>      description:
+> -      Child node describing SPI. See ../spi/spi_atmel.txt for details
+> -      of SPI bindings.
+> +      Child node describing SPI.
+>  
+>    "^i2c@[0-9a-f]+$":
+>      $ref: /schemas/i2c/atmel,at91sam-i2c.yaml
+
+-- 
+Lee Jones [李琼斯]
