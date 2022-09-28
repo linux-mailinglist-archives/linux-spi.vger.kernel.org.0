@@ -2,170 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E1E5ED395
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Sep 2022 05:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1215ED4EE
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Sep 2022 08:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiI1Dnv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Sep 2022 23:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S231143AbiI1GeY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Sep 2022 02:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiI1Dno (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Sep 2022 23:43:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727EEF5083;
-        Tue, 27 Sep 2022 20:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664336623; x=1695872623;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BFYWGW8K3bIDy5Ql/rcg4K4rlvjhOLOijgenCiffFdc=;
-  b=MxAlnBd7EI/qnnkIAMLS0BkYxRgR0d/gZVg5QJW3gv9l7xP6Lw9Q+3yk
-   3kdrICoa1mXXL6fy27YENk9GXAcH3HCfmjC1VEkETlzdXQ8EE7SF5sfZq
-   v+twIPW0N8TvMtP80ijCy/3vu5P7EwVOJ8Uk9buXXnfK1ui4M05wj1q+I
-   FErmOIXOnqcfVhBtrCFeOOZRF63FF4dEczyGcKVCym5reM1A6u33QVKXA
-   3WXkayJNoF5GAPybq6FGjNIBaAsXrsgpO3EU31JUXMQYvf1vzgvoh8s7R
-   bFCqsZmf+xdw69KBTDahwXxw/XzeHgze2tF3ziER7xpyki9Brrs33fJf7
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="115744159"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Sep 2022 20:43:42 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        with ESMTP id S229486AbiI1GeX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Sep 2022 02:34:23 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4351C00C5
+        for <linux-spi@vger.kernel.org>; Tue, 27 Sep 2022 23:34:20 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4McmnQ1PFRz1P6sY;
+        Wed, 28 Sep 2022 14:30:02 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 20:43:41 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 27 Sep 2022 20:43:39 -0700
-From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-To:     <broonie@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>
-Subject: [PATCH RFC SPI for-next 2/2] spi: microchip: pci1xxxx: Add suspend and resume support for PCI1XXXX SPI driver
-Date:   Wed, 28 Sep 2022 09:13:36 +0530
-Message-ID: <20220928034336.2939265-3-tharunkumar.pasumarthi@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928034336.2939265-1-tharunkumar.pasumarthi@microchip.com>
-References: <20220928034336.2939265-1-tharunkumar.pasumarthi@microchip.com>
+ 15.1.2375.31; Wed, 28 Sep 2022 14:34:18 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 14:34:17 +0800
+Subject: Re: [PATCH -next 1/2] spi: introduce devm_spi_alloc_controller()
+To:     Mark Brown <broonie@kernel.org>, Lukas Wunner <lukas@wunner.de>
+CC:     <linux-spi@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        <yangyingliang@huawei.com>
+References: <20220926142933.2299460-1-yangyingliang@huawei.com>
+ <20220927034525.GA32253@wunner.de> <YzLct0v1ZRJVW2Gm@sirena.org.uk>
+ <703c43ca-ab47-bfd9-da26-d435aaf236e5@huawei.com>
+ <20220927133129.GA29821@wunner.de> <YzMsc1IM/73CMEeg@sirena.org.uk>
+ <20220927201901.GB24652@wunner.de> <YzNbhPjn27cWHwyi@sirena.org.uk>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <f544de9f-2a57-fe59-79b1-f39857bb8d14@huawei.com>
+Date:   Wed, 28 Sep 2022 14:34:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <YzNbhPjn27cWHwyi@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Implement suspend, resume callbacks, store config at suspend and restore
-config at time of resume
 
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+On 2022/9/28 4:22, Mark Brown wrote:
+> On Tue, Sep 27, 2022 at 10:19:01PM +0200, Lukas Wunner wrote:
+>> On Tue, Sep 27, 2022 at 06:01:39PM +0100, Mark Brown wrote:
+>>> On Tue, Sep 27, 2022 at 03:31:29PM +0200, Lukas Wunner wrote:
+>>>> On Tue, Sep 27, 2022 at 07:57:05PM +0800, Yang Yingliang wrote:
+>>>>> Do you mean to introduce two more proper wrappers to instead of
+>>>>> devm_spi_alloc_master/slave() ?
+>>>> Honestly I don't think there's room for (or a need for) improvement here.
+>>> The issue here is that we're trying to get rid of the master/slave
+>>> terminology.
+>> Converting drivers to use spi_controller everywhere in lieu of
+>> spi_master is fine, but drivers need to specify whether the
+>> spi_controller is a master or a slave and Geert's design is
+>> to specify that on allocation.  Which makes sense because
+>> that's the moment the spi_controller comes to life, there's
+>> no earlier moment where one could specify the type.
+> Sure, but since the current wrappers use the legacy names this means
+> that we need new wrappers with more modern names hence there is
+> something to improve here.
 
----
- drivers/spi/spi-pci1xxxx.c | 75 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+How about using primary/secondary, introduce two wrappers like this:
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index 0b6ba8108d19..072549231e11 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -58,6 +58,9 @@
- #define SPI_CHIP_SEL_COUNT 7
- #define VENDOR_ID_MCHP 0x1055
- 
-+#define SPI_SUSPEND_CONFIG 0x101
-+#define SPI_RESUME_CONFIG 0x303
-+
- struct pci1xxxx_spi_internal {
- 	u8 hw_inst;
- 	int irq;
-@@ -364,10 +367,82 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 	return ret;
- }
- 
-+static void store_restore_config(struct pci1xxxx_spi *spi_ptr,
-+				 struct pci1xxxx_spi_internal *spi_sub_ptr,
-+				 u8 inst, bool store)
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+
+index 6ea889df0813..c41654fb069b 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -778,6 +778,21 @@ static inline struct spi_controller 
+*devm_spi_alloc_slave(struct device *dev,
+      return __devm_spi_alloc_controller(dev, size, true);
+  }
+
++static inline struct spi_controller *devm_spi_alloc_primary(struct 
+device *dev,
++                                unsigned int size)
 +{
-+	u32 regval;
-+
-+	if (store) {
-+		regval = readl(spi_ptr->reg_base +
-+			       SPI_MST_CTL_REG_OFFSET(spi_sub_ptr->hw_inst));
-+		regval &= SPI_MST_CTL_DEVSEL_MASK;
-+		spi_sub_ptr->prev_val.dev_sel = (regval >> 25) & 7;
-+		regval = readl(spi_ptr->reg_base +
-+			       SPI_PCI_CTRL_REG_OFFSET(spi_sub_ptr->hw_inst));
-+		regval &= SPI_MSI_VECTOR_SEL_MASK;
-+		spi_sub_ptr->prev_val.msi_vector_sel = (regval >> 4) & 1;
-+	} else {
-+		regval = readl(spi_ptr->reg_base + SPI_MST_CTL_REG_OFFSET(inst));
-+		regval &= ~SPI_MST_CTL_DEVSEL_MASK;
-+		regval |= (spi_sub_ptr->prev_val.dev_sel << 25);
-+		writel(regval,
-+		       spi_ptr->reg_base + SPI_MST_CTL_REG_OFFSET(inst));
-+		writel((spi_sub_ptr->prev_val.msi_vector_sel << 4),
-+			spi_ptr->reg_base + SPI_PCI_CTRL_REG_OFFSET(inst));
-+	}
++    return __devm_spi_alloc_controller(dev, size, false);
 +}
 +
-+static int pci1xxxx_spi_resume(struct device *dev)
++static inline struct spi_controller *devm_spi_alloc_secondary(struct 
+device *dev,
++                                  unsigned int size)
 +{
-+	struct pci1xxxx_spi *spi_ptr = dev_get_drvdata(dev);
-+	struct pci1xxxx_spi_internal *spi_sub_ptr;
-+	u32 regval = SPI_RESUME_CONFIG;
-+	u8 iter;
++    if (!IS_ENABLED(CONFIG_SPI_SLAVE))
++        return NULL;
 +
-+	for (iter = 0; iter < spi_ptr->total_hw_instances; iter++) {
-+		spi_sub_ptr = spi_ptr->spi_int[iter];
-+		spi_master_resume(spi_sub_ptr->spi_host);
-+		writel(regval, spi_ptr->reg_base +
-+		       SPI_MST_EVENT_MASK_REG_OFFSET(iter));
-+
-+		/* Restore config at resume */
-+		store_restore_config(spi_ptr, spi_sub_ptr, iter, 0);
-+	}
-+
-+	return 0;
++    return __devm_spi_alloc_controller(dev, size, true);
 +}
 +
-+static int pci1xxxx_spi_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_spi *spi_ptr = dev_get_drvdata(dev);
-+	struct pci1xxxx_spi_internal *spi_sub_ptr;
-+	u32 reg1 = SPI_SUSPEND_CONFIG;
-+	u8 iter;
-+
-+	for (iter = 0; iter < spi_ptr->total_hw_instances; iter++) {
-+		spi_sub_ptr = spi_ptr->spi_int[iter];
-+
-+		/* Store existing config before suspend */
-+		store_restore_config(spi_ptr, spi_sub_ptr, iter, 1);
-+		spi_master_suspend(spi_sub_ptr->spi_host);
-+		writel(reg1, spi_ptr->reg_base +
-+		       SPI_MST_EVENT_MASK_REG_OFFSET(iter));
-+	}
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(spi_pm_ops, pci1xxxx_spi_suspend,
-+				pci1xxxx_spi_resume);
-+
- static struct pci_driver pci1xxxx_spi_driver = {
- 	.name		= DRV_NAME,
- 	.id_table	= pci1xxxx_spi_pci_id_table,
- 	.probe		= pci1xxxx_spi_probe,
-+	.driver		=	{
-+		.pm = pm_sleep_ptr(&spi_pm_ops),
-+	},
- };
- 
- module_pci_driver(pci1xxxx_spi_driver);
--- 
-2.25.1
+  extern int spi_register_controller(struct spi_controller *ctlr);
+  extern int devm_spi_register_controller(struct device *dev,
+                      struct spi_controller *ctlr);
 
+Thanks,
+Yang
