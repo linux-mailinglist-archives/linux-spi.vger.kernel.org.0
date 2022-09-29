@@ -2,115 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F59C5EFBE2
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Sep 2022 19:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BD65F0004
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Sep 2022 00:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiI2RYJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Sep 2022 13:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S229602AbiI2WWE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Sep 2022 18:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbiI2RXm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Sep 2022 13:23:42 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F921F44D0;
-        Thu, 29 Sep 2022 10:22:48 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w13so2283889oiw.8;
-        Thu, 29 Sep 2022 10:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=oML0lesbLZNwdQ5fehk6s2daxEgvPhRDh/+lofYjbqM=;
-        b=UjVmnbnZArEarTWIBG2mGn6/xad7/V+PKS6pT79JAoXkINbenBF6yH3fUTa6/wPaSX
-         j4IJaEz+36gx09+ivAAlamVtU2qKYtUWmgfG7hygspic+6FBsKpt3vZ2HsxCyjVQ4uRq
-         GVGqrWsl/k8C5uAlH3cQ5Rsxvh+ABClgXAlod8NiQcG7fazSb8nR9cgqASgCjSAWnS9h
-         FOZqcqXrQPn5MeKDqgV0QLwFwWaOEDvQ1xm3ez8RriP4KVnyFAFOODJYle48MbVgD35w
-         0boXbzdkQj9OLP+Nl67RtVaDPCJnniEtfqBw60HjgvPCf2qZdaCAxTqHpsAsFsKVQ5LO
-         wAkg==
+        with ESMTP id S229515AbiI2WWD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Sep 2022 18:22:03 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E012BD90;
+        Thu, 29 Sep 2022 15:22:02 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id g130so2994086oia.13;
+        Thu, 29 Sep 2022 15:22:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=oML0lesbLZNwdQ5fehk6s2daxEgvPhRDh/+lofYjbqM=;
-        b=ZGsiM0Cn7oU/I1karI1g4IBC9lKAvc48GVb1+iEOlGGXceG3vHd2vftdNdnuWy0rpk
-         4QTCw1bQn3dFSyetlEfyHSdfUycHXSzFoub843bm0ulgDsJtW5RKviaK921Br5OYxk4g
-         lHXWblrvLv65aD3znxyPXfY2fgAB0ChiNp7w02xRdN8y5Ondmj34+ZVxtit9rhboD4pU
-         qUJwA4HZqME0yOCEzR95vjwq6tgTQrJKCxpDHrNUx+6HMnYWUVri63CmxS2aU1/Gn76z
-         MC5MIZThMGGrvqV5963A7UD5wgF8unFR+wmeNisMsPmk83YuEEjkmeOQsmTavRj6LqgL
-         MWYw==
-X-Gm-Message-State: ACrzQf2njLtz2WhiDiWSt0Wr7xn5vEjnyRdOw9rnYeevNmMpDGT9xlRm
-        b9Zjod0Uo37wAIvZaeO95QvGp2pgSG+DxyL72Tg=
-X-Google-Smtp-Source: AMsMyM57l04X4qryFVpDzl3vpgv4SiLKsym9dnt1kSc8IUgjDTpt5498fecpA0KDw80chdvsW6rnWiJbQ6Nzj8DZcv4=
-X-Received: by 2002:a05:6808:23ca:b0:350:92c4:3422 with SMTP id
- bq10-20020a05680823ca00b0035092c43422mr2124630oib.144.1664472166706; Thu, 29
- Sep 2022 10:22:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220927031929.807070-1-sergio.paracuellos@gmail.com>
- <YzLagn9/j0w4UymU@sirena.org.uk> <CAMhs-H8664babt9xwE-iCJNCdm+kues-c6V1iPwS63EtdWCV1w@mail.gmail.com>
- <YzLloE/AEdFiHsEj@sirena.org.uk> <CAMhs-H9+hp3yLoGyGTNLDZKX__KGwa5PwLrqiFzVP__8_nPrFw@mail.gmail.com>
- <20220929164836.GA2297514-robh@kernel.org>
-In-Reply-To: <20220929164836.GA2297514-robh@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 29 Sep 2022 19:22:34 +0200
-Message-ID: <CAMhs-H_abY9aPYWnRQ+cMwvL9zrhGrxHFZfHJ=aDKrxH7ATEog@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3] dt-bindings: spi: migrate mt7621 text bindings
- to YAML
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nwi21MnQaHdJlPOmY1nF+KNwtNvxXho+DAnFATZDOD4=;
+        b=Xehx9YGEDTMH4HrSnMXMf4xRTjKBl5qqraHg+dXQ5+oU9ZKlkob4B44hgZajOaE13+
+         FgDBTeOS4+QxpXcwLz1Wx+ksv8KdXCaycysgG5G1pTL3dvyRgM5x3soCJqihQ3nUd5k4
+         spnBO/USUHGEbpxhHkZEr9SNPvgw+ciW8d1BG/S/I8HNdWUVJI/zlOu7E5ZAQ/F+4uZx
+         Qz7O798wETbnDcph23j55Iv3P9x3B6DoCM6zXcFyxBJ592rYuUjonag48PmiRhuLVzcA
+         N9v4HN0xAqpuuoCHDo4+htuU/YLXmXE9sXq0KR9nfkAPO3Giible1IVXPt6YQWhcMHNj
+         xXAw==
+X-Gm-Message-State: ACrzQf28Z0amfJUR9MKOVKPSr/x5ZszEb5DZzQBMo1prhTKqXnRF342d
+        K19RId3zCpIOeD1xcLBhxw==
+X-Google-Smtp-Source: AMsMyM6ttsnbqtjCf/yyPwWQ3A2P5X4CWOUFq8T28o5HSGv5OQpUDuRKiY8sdc69vpKUuop47sDOlA==
+X-Received: by 2002:a05:6808:1b2a:b0:34f:f989:99c1 with SMTP id bx42-20020a0568081b2a00b0034ff98999c1mr7786648oib.173.1664490121352;
+        Thu, 29 Sep 2022 15:22:01 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m5-20020a9d7ac5000000b00655c6b2655esm203513otn.68.2022.09.29.15.22.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 15:22:00 -0700 (PDT)
+Received: (nullmailer pid 2870767 invoked by uid 1000);
+        Thu, 29 Sep 2022 22:21:59 -0000
+Date:   Thu, 29 Sep 2022 17:21:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bert Vermeulen <bert@biot.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, John Crispin <john@phrozen.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Benjamin Larsson <benjamin.larsson@iopsys.eu>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: arm: airoha: Add documentation for
+ Airoha SPI controller
+Message-ID: <166449011940.2870705.14660966610426590404.robh@kernel.org>
+References: <20220927113229.1214224-1-bert@biot.com>
+ <20220927113229.1214224-2-bert@biot.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927113229.1214224-2-bert@biot.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 6:48 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Sep 27, 2022 at 02:09:21PM +0200, Sergio Paracuellos wrote:
-> > On Tue, Sep 27, 2022 at 1:59 PM Mark Brown <broonie@kernel.org> wrote:
-> > >
-> > > On Tue, Sep 27, 2022 at 01:36:04PM +0200, Sergio Paracuellos wrote:
-> > > > On Tue, Sep 27, 2022 at 1:12 PM Mark Brown <broonie@kernel.org> wrote:
-> > > > > On Tue, Sep 27, 2022 at 05:19:29AM +0200, Sergio Paracuellos wrote:
-> > >
-> > > > > Please submit patches using subject lines reflecting the style for the
-> > > > > subsystem, this makes it easier for people to identify relevant patches.
-> > >
-> > > > Since this is a binding migration change I sent the patch expecting
-> > > > this going into the devicetree kernel tree. So I just use the common
-> > > > device tree change style 'dt-bindings: spi: migrate mt7621 text
-> > > > bindings to YAML' as the subject. So I don't really understand what
-> > > > you mean above, sorry. What is wrong with this subject? I submitted
-> > > > this v3 [0] and I was told by Rob to resend it to you and the
-> > > > linux-spi mail list also.
-> > >
-> > > Bindings mostly go through the subsystem rather than the DT tree.
-> >
-> > I thought when changes are only in the binding side DT tree was
-> > preferred. Sorry for the inconvenience, then. Will take into account
-> > your advice from now on.
->
-> Sometimes they do, but that's more the exception. The ones from you I've
-> picked up don't have a subsystem really or the subsystem maintainer
-> isn't too active or doesn't pay much attention to DT only patches. Mark
-> is responsive and pays some attention to binding patches, so he takes
-> them.
+On Tue, 27 Sep 2022 13:32:27 +0200, Bert Vermeulen wrote:
+> Create documentation for accessing the Airoha EN7523 SPI controller.
+> 
+> Signed-off-by: Bert Vermeulen <bert@biot.com>
+> ---
+>  .../bindings/spi/airoha,en7523-spi.yaml       | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml
+> 
 
-Thanks a lot for clarification, Rob. Much appreciated.
-
-Best regards,
-    Sergio Paracuellos
-
->
-> Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
