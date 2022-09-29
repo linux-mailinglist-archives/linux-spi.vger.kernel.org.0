@@ -2,45 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5075E5EF5FA
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Sep 2022 15:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E385EFB24
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Sep 2022 18:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbiI2NEm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Sep 2022 09:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S235638AbiI2Qoo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Sep 2022 12:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbiI2NEk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Sep 2022 09:04:40 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7DBC26
-        for <linux-spi@vger.kernel.org>; Thu, 29 Sep 2022 06:04:33 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MdYRT6VJbzHqTP;
-        Thu, 29 Sep 2022 21:02:13 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 21:04:31 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 21:04:31 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <lukas@wunner.de>, <geert@linux-m68k.org>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next] spi: introduce new helpers with using modern naming
-Date:   Thu, 29 Sep 2022 21:20:41 +0800
-Message-ID: <20220929132041.484110-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235877AbiI2Qon (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Sep 2022 12:44:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B51B15A3A
+        for <linux-spi@vger.kernel.org>; Thu, 29 Sep 2022 09:44:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87BA661F53
+        for <linux-spi@vger.kernel.org>; Thu, 29 Sep 2022 16:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17059C433D7;
+        Thu, 29 Sep 2022 16:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664469878;
+        bh=2Eek/eVqWp+8NxqMONKuh0X4QSeZvK/WqXOtgRt3O2E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=iZE+UmwSmO2jxmUlv9/Hxn1OS0f6YCp492be109fs6RRc4prbgSjgvlGk6F1A0fIb
+         IhLi0bah3v0qwzwyy8eVu/3JLjFUwb+Vu4Ri18cWKIe9JtQj4PGjiEziJySor3yMQ2
+         KP1gQs6IauqNunEpFWapUOjNaWKET/3+NKNod7KIxfzP34AzrKanjcPK4UjOQSsux6
+         BC0zWxu8neDD+6GYlcTWs2fjQ+m9lsHi9mq2Kwu0wFTrj7IcdsMnIjoGyfN1oTAJ/Y
+         mjE90e1gILLWCQUNU7ZQ3Ctzlk5AgRcA/hHhnLzqQlCQkZTXMkgDD8VeSWFk4tqhc+
+         ixmhOIhLftm5A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org
+Cc:     nick.hawkins@hpe.com, verdun@hpe.com
+In-Reply-To: <20220928145256.1879256-1-yangyingliang@huawei.com>
+References: <20220928145256.1879256-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] spi: spi-gxp: Use devm_platform_ioremap_resource()
+Message-Id: <166446987780.210386.3002557586962223080.b4-ty@kernel.org>
+Date:   Thu, 29 Sep 2022 17:44:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,144 +53,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-For using modern names host/target to instead of all the legacy names,
-I think it takes 3 steps:
-  - step1: introduce new helpers with modern naming.
-  - step2: switch to use these new helpers in all drivers.
-  - step3: remove all legacy helpers and update all legacy names.
+On Wed, 28 Sep 2022 22:52:56 +0800, Yang Yingliang wrote:
+> Use the devm_platform_ioremap_resource() helper instead of calling
+> platform_get_resource() and devm_ioremap_resource() separately.
+> 
+> 
 
-This patch is for step1, it introduces new helpers with host/target
-naming for drivers using.
+Applied to
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi.c       | 11 +++++++++++
- include/linux/spi/spi.h | 41 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ad254b94308e..52d64ac398fc 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2692,6 +2692,17 @@ int spi_slave_abort(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_slave_abort);
- 
-+int spi_target_abort(struct spi_device *spi)
-+{
-+	struct spi_controller *ctlr = spi->controller;
-+
-+	if (spi_controller_is_target(ctlr) && ctlr->target_abort)
-+		return ctlr->target_abort(ctlr);
-+
-+	return -ENOTSUPP;
-+}
-+EXPORT_SYMBOL_GPL(spi_target_abort);
-+
- static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 6ea889df0813..1824d7cef69b 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -356,6 +356,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @max_speed_hz: Highest supported transfer speed
-  * @flags: other constraints relevant to this driver
-  * @slave: indicates that this is an SPI slave controller
-+ * @target: indicates that this is an SPI target controller
-  * @devm_allocated: whether the allocation of this struct is devres-managed
-  * @max_transfer_size: function that returns the max transfer size for
-  *	a &spi_device; may be %NULL, so the default %SIZE_MAX will be used.
-@@ -438,6 +439,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @mem_caps: controller capabilities for the handling of memory operations.
-  * @unprepare_message: undo any work done by prepare_message().
-  * @slave_abort: abort the ongoing transfer request on an SPI slave controller
-+ * @target_abort: abort the ongoing transfer request on an SPI target controller
-  * @cs_gpiods: Array of GPIO descs to use as chip select lines; one per CS
-  *	number. Any individual value may be NULL for CS lines that
-  *	are not GPIOs (driven by the SPI controller itself).
-@@ -535,6 +537,8 @@ struct spi_controller {
- 
- 	/* Flag indicating this is an SPI slave controller */
- 	bool			slave;
-+	/* Flag indicating this is an SPI target controller */
-+	bool			target;
- 
- 	/*
- 	 * on some hardware transfer / message size may be constrained
-@@ -646,6 +650,7 @@ struct spi_controller {
- 	int (*unprepare_message)(struct spi_controller *ctlr,
- 				 struct spi_message *message);
- 	int (*slave_abort)(struct spi_controller *ctlr);
-+	int (*target_abort)(struct spi_controller *ctlr);
- 
- 	/*
- 	 * These hooks are for drivers that use a generic implementation
-@@ -723,6 +728,11 @@ static inline bool spi_controller_is_slave(struct spi_controller *ctlr)
- 	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->slave;
- }
- 
-+static inline bool spi_controller_is_target(struct spi_controller *ctlr)
-+{
-+	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->target;
-+}
-+
- /* PM calls that need to be issued by the driver */
- extern int spi_controller_suspend(struct spi_controller *ctlr);
- extern int spi_controller_resume(struct spi_controller *ctlr);
-@@ -759,6 +769,21 @@ static inline struct spi_controller *spi_alloc_slave(struct device *host,
- 	return __spi_alloc_controller(host, size, true);
- }
- 
-+static inline struct spi_controller *spi_alloc_host(struct device *dev,
-+						    unsigned int size)
-+{
-+	return __spi_alloc_controller(dev, size, false);
-+}
-+
-+static inline struct spi_controller *spi_alloc_target(struct device *dev,
-+						      unsigned int size)
-+{
-+	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
-+		return NULL;
-+
-+	return __spi_alloc_controller(dev, size, true);
-+}
-+
- struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
- 						   unsigned int size,
- 						   bool slave);
-@@ -778,6 +803,21 @@ static inline struct spi_controller *devm_spi_alloc_slave(struct device *dev,
- 	return __devm_spi_alloc_controller(dev, size, true);
- }
- 
-+static inline struct spi_controller *devm_spi_alloc_host(struct device *dev,
-+							 unsigned int size)
-+{
-+	return __devm_spi_alloc_controller(dev, size, false);
-+}
-+
-+static inline struct spi_controller *devm_spi_alloc_target(struct device *dev,
-+							   unsigned int size)
-+{
-+	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
-+		return NULL;
-+
-+	return __devm_spi_alloc_controller(dev, size, true);
-+}
-+
- extern int spi_register_controller(struct spi_controller *ctlr);
- extern int devm_spi_register_controller(struct device *dev,
- 					struct spi_controller *ctlr);
-@@ -1137,6 +1177,7 @@ static inline void spi_message_free(struct spi_message *m)
- extern int spi_setup(struct spi_device *spi);
- extern int spi_async(struct spi_device *spi, struct spi_message *message);
- extern int spi_slave_abort(struct spi_device *spi);
-+extern int spi_target_abort(struct spi_device *spi);
- 
- static inline size_t
- spi_max_message_size(struct spi_device *spi)
--- 
-2.25.1
+Thanks!
 
+[1/1] spi: spi-gxp: Use devm_platform_ioremap_resource()
+      commit: 28366dd2ecb2c47cfd706a0743dd78f287f1abd7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
