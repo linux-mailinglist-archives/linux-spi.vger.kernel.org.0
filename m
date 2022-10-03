@@ -2,83 +2,281 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6310E5F2FA2
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Oct 2022 13:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B0B5F306C
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Oct 2022 14:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJCL31 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Oct 2022 07:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S229463AbiJCMrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Oct 2022 08:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiJCL3Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Oct 2022 07:29:25 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232162CC8D;
-        Mon,  3 Oct 2022 04:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1664796560;
-  x=1696332560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZwcYVLOdHsCgTakuvlsIcAUfd5Jd8zD73dYPiE5yHpo=;
-  b=gqBxCs1H2ZvxteM1ijq5qjn3T8QZVK7b44Rgrv5iSr/ILVNjia0TdQAh
-   UnH6+jR3XfwSJsFaOgi1Up3P/nOifNVgFgGjBAnUqFqJCNUsYI1ZG8v0T
-   sNehcITFZd3CT+0jHjfzJXo+ddLdX75iItRxuENxuqSWxwSmcaQujRuZB
-   P2KEBI57XABuRySi9vF7l04lGfkAQbPJP5DeFvrNo4d9H1wPz8WZwVyNk
-   IMfjWv7KvdM/rW0b0Nw882Ujikn4thHRYzONJQyZaJbBKGK9FLVBCPRal
-   163HTa0eSq3EI3IWsrxKh/KEX7oKj54oCysZQRB2X97jIc/K3umgoBdSU
-   Q==;
-Date:   Mon, 3 Oct 2022 13:29:18 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "andi@etezian.org" <andi@etezian.org>,
-        Christoph Hellwig <hch@lst.de>, kernel <kernel@axis.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [PATCH v2 2/4] spi: Fix cache corruption due to DMA/PIO overlap
-Message-ID: <YzrHjl8x2bd1rqeE@axis.com>
-References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
- <CGME20220927112359eucas1p15bee651dfbe727701ad732f6ce9a7f13@eucas1p1.samsung.com>
- <20220927112117.77599-3-vincent.whitchurch@axis.com>
- <a4be6670-832a-ffac-4d68-e4a079eb2eed@samsung.com>
- <461a5187-fc7a-b7f6-84da-0e947f764a0a@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <461a5187-fc7a-b7f6-84da-0e947f764a0a@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229773AbiJCMrQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Oct 2022 08:47:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AA720358;
+        Mon,  3 Oct 2022 05:47:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 114646104A;
+        Mon,  3 Oct 2022 12:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A30C433D6;
+        Mon,  3 Oct 2022 12:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664801233;
+        bh=keNr9g0gFrAYQ0FEhkmBmaa6oUOtnAu9nTjfWKPwZO4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SACFOd+E/1RGmjghfgmofvjC0dKU54ADXSBylS4xk09a/hNP2qmARaQDv3PPNSFLT
+         crDGiC1eHFHetRhQMnLZ2xm5bkDaO1CB11oIJYHs7+C5KaPgcZOUVPcxFlcqmN8Yof
+         LBpMnuHEds1MO280whDas7QqPn92gM+txPQV8NJCT2h5s/2Mqz5V+0aACbCgCbwjoO
+         Pv5GNI18KSVxDpIRnHIZ4dzUcpkFMSfoDGpMTAK7edA0vCATmF8IPrLxOIfrLRj5o+
+         qidsdFyeSQxfvaHw10BLl0ldIhl9xBgpeCYwZvVtH4atXDn/RLYRXvz7c+8fep37IX
+         WJnjl+LaLJHfw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v6.1
+Date:   Mon, 03 Oct 2022 13:47:03 +0100
+Message-Id: <20221003124713.15A30C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 02:10:28PM +0200, Robin Murphy wrote:
-> That said, maybe this is something that's better to catch than to paper 
-> over? Arguably the real bug here is that spi_unmap_buf() and the new 
-> sync functions should use the same "{tx,rx}_buf != NULL" condition that 
-> spi_map_buf() used for the DMA mapping decision in the first place.
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-The "{tx,rx}_buf != NULL" condition would not sufficient on its own; the
-call to ->can_dma() is also part of the condition.  __spi_unmap_msg()
-already does the ->can_dma() call even though it checks for the
-orig_nents != 0 condition instead of the tx,rx_buf != NULL, but I
-omitted that call in the new sync functions, incorrectly believing it to
-be redundant.
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-It looks like __spi_unmap_msg() would have triggered a similar crash
-even before this patch, if a client had reused an xfer with both rx and
-tx the first time, and only one of them enabled the next time around
-(and with ->can_dma() returning true both times).  Testing the
-{tx,rx}_buf instead of sgt->orig_nents would have avoided that, as you
-say.
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.1
+
+for you to fetch changes up to 8e9204cddcc3fea9affcfa411715ba4f66e97587:
+
+  spi: Ensure that sg_table won't be used after being freed (2022-09-30 12:56:29 +0100)
+
+----------------------------------------------------------------
+spi: Updates for v6.1
+
+With the exception of some refactoring to fix long standing issues
+where we weren't handling cache syncs properly for messages which had
+PIO and DMA transfers going to the same page correctly there has been o
+work on the core this time around, and it's also been quite a quiet
+release for the drivers too:
+
+ - Fix cache syncs for cases where we have DMA and PIO transfers in the
+   same message going to the same page.
+ - Update the fsl_spi driver to use transfer_one() rather than a custom
+   transfer function.
+ - Support for configuring transfer speeds with the AMD SPI controller.
+ - Support for a second chip select and 64K erase on Intel SPI.
+ - Support for Microchip coreQSPI, Nuvoton NPCM845, NXP i.MX93, and
+   Rockchip RK3128 and RK3588.
+
+----------------------------------------------------------------
+Andy Shevchenko (5):
+      spi: stm32-qspi: Replace of_gpio_named_count() by gpiod_count()
+      spi: stm32-qspi: Refactor dual flash mode enable check in ->setup()
+      spi: nxp-fspi: Do not dereference fwnode in struct device
+      spi: Group cs_change and cs_off flags together in struct spi_transfer
+      spi: mpc52xx: Replace of_gpio_count() by gpiod_count()
+
+Chanho Park (1):
+      spi: s3c64xx: correct dma_chan pointer initialization
+
+Christophe JAILLET (6):
+      spi: microchip-core: Simplify some error message
+      spi: lpspi: Simplify some error message
+      spi: mt7621: Fix an error message in mt7621_spi_probe()
+      spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error handling
+      spi: mt7621: Use devm_spi_register_controller()
+      spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
+
+Christophe Leroy (2):
+      spi: Add capability to perform some transfer with chipselect off
+      spi: fsl_spi: Convert to transfer_one
+
+Cristian Ciocaltea (1):
+      spi: amd: Setup all xfers before opcode execution
+
+Dan Carpenter (1):
+      spi: omap2-mcspi: Fix probe so driver works again
+
+Dmitry Torokhov (1):
+      spi: spi-mpc52xx: switch to using gpiod API
+
+Geert Uytterhoeven (1):
+      spi: renesas,sh-msiof: Add r8a779g0 support
+
+Johan Jonker (2):
+      rockchip: add rockchip,rk3128-spi
+      spi: rockchip: add power-domains property
+
+Krzysztof Kozlowski (3):
+      spi: dt-bindings: nvidia,tegra210-quad-peripheral-props: correct additional properties
+      spi/panel: dt-bindings: drop 3-wire from common properties
+      spi: dt-bindings: snps,dw-apb-ssi: drop ref from reg-io-width
+
+Lad Prabhakar (1):
+      spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+
+Lucas Tanure (1):
+      spi: amd: Configure device speed
+
+Marek Szyprowski (1):
+      spi: Ensure that sg_table won't be used after being freed
+
+Mark Brown (8):
+      Merge remote-tracking branch 'spi/for-5.20' into spi-6.0
+      Add support for Microchip QSPI controller
+      spi: npcm-pspi: add Arbel NPCM8XX support
+      spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+      spi: add generic R-Car Gen4 and specific r8a779f0 support
+      spi: mt7621: Fix an erroneous message + clean-ups
+      spi: Merge tag 'v6.0-rc4' into spi-6.1
+      Fix PM disable depth imbalance in probe
+
+Mika Westerberg (2):
+      spi: intel: Add support for second flash chip
+      spi: intel: 64k erase is supported from Canon Lake and beyond
+
+Naga Sureshkumar Relli (4):
+      spi: dt-binding: document microchip coreQSPI
+      spi: dt-binding: add coreqspi as a fallback for mpfs-qspi
+      spi: microchip-core-qspi: Add support for microchip fpga qspi controllers
+      MAINTAINERS: add qspi to Polarfire SoC entry
+
+Neil Armstrong (1):
+      spi: meson-spicc: do not rely on busy flag in pow2 clk ops
+
+Patrice Chotard (3):
+      spi: stm32_qspi: Add transfer_one_message() spi callback
+      spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
+      spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
+
+Peng Fan (2):
+      spi: dt-bindings: lpspi: add i.MX93 compatible
+      spi: lpspi: add dmas property
+
+Sebastian Reichel (1):
+      spi: spi-rockchip: Add rk3588-spi compatible
+
+Serge Semin (1):
+      spi: dw: Quite logging on deferred controller registration
+
+Sergio Paracuellos (1):
+      spi: migrate mt7621 text bindings to YAML
+
+Shang XiaoJing (2):
+      spi: cadence: Remove redundant dev_err call
+      spi: aspeed: Remove redundant dev_err call
+
+Shreeya Patel (1):
+      spi: amd: Fix speed selection
+
+Tomer Maimon (2):
+      dt-binding: spi: npcm-pspi: Add npcm845 compatible
+      spi: npcm-pspi: Add NPCM845 peripheral SPI support
+
+Vincent Whitchurch (5):
+      spi: spi-loopback-test: Add test to trigger DMA/PIO mixing
+      spi: Save current RX and TX DMA devices
+      spi: Fix cache corruption due to DMA/PIO overlap
+      spi: Split transfers larger than max size
+      spi: s3c64xx: Fix large transfers with DMA
+
+Wei Yongjun (1):
+      spi: meson-spicc: make symbol 'meson_spicc_pow2_clk_ops' static
+
+Wolfram Sang (4):
+      spi: move from strlcpy with unused retval to strscpy
+      spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+      spi: sh-msiof: add generic Gen4 binding
+      spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+
+Xu Qiang (2):
+      spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
+      spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
+
+Yang Yingliang (8):
+      spi: omap2-mcspi: Switch to use dev_err_probe() helper
+      spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()
+      spi: xilinx: Switch to use devm_spi_alloc_master()
+      spi: s3c24xx: Switch to use devm_spi_alloc_master()
+      spi: spi-fsl-dspi: Use devm_platform_get_and_ioremap_resource()
+      spi: spi-fsl-lpspi: Use devm_platform_get_and_ioremap_resource()
+      spi: spi-fsl-qspi: Use devm_platform_ioremap_resource_byname()
+      spi: spi-gxp: Use devm_platform_ioremap_resource()
+
+Zhang Qilong (4):
+      spi: img-spfi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      spi: cadence-quadspi: Fix PM disable depth imbalance in cqspi_probe
+      spi: dw: Fix PM disable depth imbalance in dw_spi_bt1_probe
+      spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
+
+ye xingchen (2):
+      spi: pxa2xx: Remove the unneeded result variable
+      spi: lpspi: Remove the unneeded result variable
+
+zhichao.liu (1):
+      spi: mt65xx: Add dma max segment size declaration
+
+ .../display/panel/kingdisplay,kd035g6-54nt.yaml    |   2 +
+ .../display/panel/leadtek,ltk035c5444t.yaml        |   2 +
+ .../bindings/display/panel/samsung,s6e63m0.yaml    |   4 +
+ .../bindings/spi/microchip,mpfs-spi.yaml           |  15 +-
+ .../devicetree/bindings/spi/nuvoton,npcm-pspi.txt  |   3 +-
+ .../spi/nvidia,tegra210-quad-peripheral-props.yaml |   3 +-
+ .../devicetree/bindings/spi/ralink,mt7621-spi.yaml |  61 +++
+ .../devicetree/bindings/spi/renesas,sh-msiof.yaml  |  14 +-
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   1 -
+ .../devicetree/bindings/spi/spi-controller.yaml    |   5 +
+ .../devicetree/bindings/spi/spi-fsl-lpspi.yaml     |  14 +-
+ .../devicetree/bindings/spi/spi-mt7621.txt         |  26 -
+ .../bindings/spi/spi-peripheral-props.yaml         |   5 -
+ .../devicetree/bindings/spi/spi-rockchip.yaml      |   5 +
+ MAINTAINERS                                        |   1 +
+ drivers/spi/Kconfig                                |   9 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-amd.c                              | 183 +++++--
+ drivers/spi/spi-aspeed-smc.c                       |   4 +-
+ drivers/spi/spi-cadence-quadspi.c                  |   3 +-
+ drivers/spi/spi-cadence-xspi.c                     |   4 +-
+ drivers/spi/spi-dw-bt1.c                           |   4 +-
+ drivers/spi/spi-dw-core.c                          |   2 +-
+ drivers/spi/spi-fsl-dspi.c                         |   3 +-
+ drivers/spi/spi-fsl-lpspi.c                        |  10 +-
+ drivers/spi/spi-fsl-qspi.c                         |   3 +-
+ drivers/spi/spi-fsl-spi.c                          | 157 ++----
+ drivers/spi/spi-gxp.c                              |  10 +-
+ drivers/spi/spi-img-spfi.c                         |   6 +-
+ drivers/spi/spi-intel.c                            | 164 +++++-
+ drivers/spi/spi-loopback-test.c                    |  27 +
+ drivers/spi/spi-meson-spicc.c                      |   8 +-
+ drivers/spi/spi-microchip-core-qspi.c              | 600 +++++++++++++++++++++
+ drivers/spi/spi-microchip-core.c                   |   4 +-
+ drivers/spi/spi-mpc52xx.c                          |  35 +-
+ drivers/spi/spi-mt65xx.c                           |   5 +
+ drivers/spi/spi-mt7621.c                           |  42 +-
+ drivers/spi/spi-npcm-pspi.c                        |   1 +
+ drivers/spi/spi-nxp-fspi.c                         |   8 +-
+ drivers/spi/spi-omap-100k.c                        |   1 +
+ drivers/spi/spi-omap2-mcspi.c                      |   4 +-
+ drivers/spi/spi-pxa2xx.c                           |   4 +-
+ drivers/spi/spi-qup.c                              |  21 +-
+ drivers/spi/spi-s3c24xx.c                          |  24 +-
+ drivers/spi/spi-s3c64xx.c                          |  13 +-
+ drivers/spi/spi-sh-msiof.c                         |   1 +
+ drivers/spi/spi-stm32-qspi.c                       | 125 ++++-
+ drivers/spi/spi-xilinx.c                           |  20 +-
+ drivers/spi/spi-xtensa-xtfpga.c                    |  16 +-
+ drivers/spi/spi.c                                  | 157 ++++--
+ include/linux/spi/spi.h                            |   6 +
+ 51 files changed, 1430 insertions(+), 416 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/ralink,mt7621-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt7621.txt
+ create mode 100644 drivers/spi/spi-microchip-core-qspi.c
