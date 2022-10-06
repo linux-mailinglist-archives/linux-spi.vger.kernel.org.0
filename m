@@ -2,85 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25965F6AFE
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Oct 2022 17:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AAD5F6E66
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Oct 2022 21:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiJFPsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Oct 2022 11:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S232089AbiJFTsb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Oct 2022 15:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiJFPsy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Oct 2022 11:48:54 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D751742E40
-        for <linux-spi@vger.kernel.org>; Thu,  6 Oct 2022 08:48:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id b4so3369626wrs.1
-        for <linux-spi@vger.kernel.org>; Thu, 06 Oct 2022 08:48:52 -0700 (PDT)
+        with ESMTP id S232069AbiJFTs3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Oct 2022 15:48:29 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36A0125012
+        for <linux-spi@vger.kernel.org>; Thu,  6 Oct 2022 12:48:27 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id nb11so6919897ejc.5
+        for <linux-spi@vger.kernel.org>; Thu, 06 Oct 2022 12:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=+3zPXnpnurVqkyWfh7imcEmKL4InpVj2u33K45eRBbc=;
-        b=IoWihUEwnpnTLnpHQHHxLiTKyV5QPuNS6PCBEKsl6ZrLL3RofTtoyfmOlSYH9ok1TD
-         L+ADNRSC2g7EfFev6QLgV2hFhbPHPqfCLFjivFtejVfszLS5rCZiMCAfVa+SPtYYgimV
-         ezvCd+rBuhbwsoRzz5b9HahwwEfr7lMFepXdK+l+30H2E8Ervyh811Ls18ET+Jy4gu4n
-         mpAq+tDaJ91UL1xwXentpVhNtRnL5RriVsyLlXxdtwc8+Ls0Qr0f96+iQDo4hpSt5wgm
-         CC63L8xRZfBdsZQZbo5HtpirZG/1jdcu/qfQcx4Fq14mJNuQLaqblzmVQUgTJLD2oOiZ
-         Jvyg==
+        d=sartura.hr; s=sartura;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=SubjIuBws5LPaK2F6fl7djEE32KNShOpGo87GmZ3kbY=;
+        b=FHa/vDtdebdXMgW7KVsFf9ZcK5KpzB4y2fu+78ZJO/jInIegCXwPsLxu3ycGwwfrFx
+         cvrB5c4DYtfygHY9cu8xOJGrI+J9hEGm0smqMLT3nhOnAtldgM7whWdYBfF43NBvsDKY
+         OpaKP9PTtdqFTyIT4gkP1KTx/cVrOkNyEoS/Y40beWiJvipJFh0gwZgJVo1docdObzNe
+         EMlR9KdacoLqDzGcUOYmo/Sf2CLKcIOADj3YBQFVzkxY/Xk6cagRy+NzBImEBKlN0VOk
+         WtwhKkeDM5TYdKVvbzSvFXgFwti7sKUVJD/OZGHTq7hGO7vZHYplzoPDQCQGsGBhmTt/
+         DiOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=+3zPXnpnurVqkyWfh7imcEmKL4InpVj2u33K45eRBbc=;
-        b=PZ7XeL4JWMgxU+ALju1PWLh/AtlzkqtQM3N1V4Hk+0IEN4v3geRkFC2LZYV4fiWopE
-         iCbWeJ3SHJrmQIe1Ey+on969pNiTmiVGPDaB0otq87BCJ+ISKK/0Ex2pHdgTxzteoFFP
-         uMzg5LG1E926HR1aV2tmr04P144a6Y4UsIxIQfrkRNeg6guqa1a2SujAr+yfgxdPNLNj
-         4HyfZosgM3AmwiaE3bv4JFtVD9e4eXAdIumL4IRlctsEFKnD8dWh2ZMiI96B3vwgXv3/
-         ty8xrAB5Tnqj+TwM+bFCuUWeBYorq8BvAVcnWEv6iObBSVPVLSbYNUgViQecuREHOLwe
-         aI6g==
-X-Gm-Message-State: ACrzQf2trr60Of7sdhdpHjNslevXpGTLaT3DuCw57j8tv5kFkrLJswic
-        xUCgigIRwDvVHEkb4rP8IUGX4g==
-X-Google-Smtp-Source: AMsMyM5l/VXA+U+pVwucM15R2+ysEwIQb1CUvCAdfzFaI6nIzUDdNI8kxERgz563HumDXD6XBsebmw==
-X-Received: by 2002:a5d:6d07:0:b0:22a:3f21:3b56 with SMTP id e7-20020a5d6d07000000b0022a3f213b56mr383272wrq.679.1665071331331;
-        Thu, 06 Oct 2022 08:48:51 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:e032:72ae:542:774? ([2a01:e0a:982:cbb0:e032:72ae:542:774])
-        by smtp.gmail.com with ESMTPSA id bh9-20020a05600005c900b0022ccbc7efb5sm18696153wrb.73.2022.10.06.08.48.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 08:48:50 -0700 (PDT)
-Message-ID: <2c22e3b9-3da4-78c4-e068-78b84e24b2c3@linaro.org>
-Date:   Thu, 6 Oct 2022 17:48:49 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=SubjIuBws5LPaK2F6fl7djEE32KNShOpGo87GmZ3kbY=;
+        b=mmCklrB+hqUPP2kxIk/KhB8dDu79xydSexceNUSTqSZi5GXzoT7pG/3L/5apquXVha
+         H6nSyT94BevHTivEcPuSrlucQGU2dDgSayZcU6kEWAdjUKCWDYp9fuTzvVbG69MiD+OJ
+         G5muvmWI0QzIAqeQUmRsY//qnvaOMHMD7dVaC/PKQeOFq0WHJHC1lmom3e57utuM+TW0
+         zfLTuXDQpUdoymTB06R+GJAGTwSo8y1fnwcGr8DEfBb1173YzJDb3ISfFShGMDud7yS6
+         27XcA8csE+vUfl88araeTv5tFoTDPrrn5yXcFCsH8r3gNU1uvHRlbKe2jUPY5Pe2kCvz
+         Os5A==
+X-Gm-Message-State: ACrzQf24c2XBChpiELL3MJkXBh7p695DEiPWrca4HrL708k4fXwrBMY3
+        j2ceLpvVZVOY5sdVyGFgFKSPeA==
+X-Google-Smtp-Source: AMsMyM7lGUO5s/XfctQB/DIPjA1h+5Xa7NpwAFS4jTATaxNFrWml5ah0CQthp5237VTD/JeaAGN5EQ==
+X-Received: by 2002:a17:907:d90:b0:78d:48b1:496d with SMTP id go16-20020a1709070d9000b0078d48b1496dmr1207704ejc.665.1665085706326;
+        Thu, 06 Oct 2022 12:48:26 -0700 (PDT)
+Received: from fedora.. (dh207-96-33.xnet.hr. [88.207.96.33])
+        by smtp.googlemail.com with ESMTPSA id l26-20020a170906415a00b0078116c361d9sm174229ejk.10.2022.10.06.12.48.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:48:25 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, broonie@kernel.org,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robert.marko@sartura.hr>, luka.perkov@sartura.hr
+Subject: [PATCH] spi: qup: support using GPIO as chip select line
+Date:   Thu,  6 Oct 2022 21:48:19 +0200
+Message-Id: <20221006194819.1536932-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
- <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
- <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
- <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
- <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
-Content-Language: en-US
-Organization: Linaro Developer Services
-In-Reply-To: <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,71 +69,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/10/2022 16:11, Krzysztof Kozlowski wrote:
-> On 06/10/2022 12:57, Amjad Ouled-Ameur wrote:
->> Hi Krzysztof,
->>
->> Thank you for the review.
->>
->> On 10/5/22 10:14, Krzysztof Kozlowski wrote:
->>> On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
->>>> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
->>>> pin biais when idle. Therefore define three pinctrl names:
->>>> - default: SPI pins are controlled by spi function.
->>>> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
->>>> by spi function.
->>>> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
->>>> by spi function.
->>>>
->>>> Reported-by: Da Xue <da@libre.computer>
->>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->>>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->>>> ---
->>>>    .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
->>>>    1 file changed, 15 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>>> index 0c10f7678178..53013e27f507 100644
->>>> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>>> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>>> @@ -43,6 +43,14 @@ properties:
->>>>        minItems: 1
->>>>        maxItems: 2
->>>>    
->>>> +  pinctrl-0:
->>>> +    minItems: 1
->>> maxItems?
->>>
->> Will fill it in next version.
->>>> +
->>>> +  pinctrl-1:
->>>> +    maxItems: 1
->>>> +
->>>> +  pinctrl-names: true
->>> Why do you need all these in the bindings?
->>
->> SPI clock bias needs to change at runtime depending on SPI mode, here is an example of
->>
->> how this is supposed to be used ("spi_idle_low_pins" and "spi_idle_low_pins" are defined
->>
->> in the second patch of this series):
-> 
-> I know what it the point in general of pinctrl configuration... But the
-> question is why do you need to specify them in the bindings? Core
-> handles that. IOW, do you require them and missing/incomplete pinctrl
-> should be reported?
+Most of the device with QUP SPI adapter are actually using GPIO-s for
+chip select.
 
-Looking at other bindings, when specific pinctrl state names were requires, they were
-documented.
+However, this stopped working after ("spi: Retire legacy GPIO handling")
+as it introduced a check on ->use_gpio_descriptors flag and since spi-qup
+driver does not set the flag it meant that all of boards using GPIO-s and
+with QUP adapter SPI devices stopped working.
 
-There's some bindings with pinctrl-names for specific states like rockchip/rockchip,dw-hdmi.yaml,
-mediatek/mediatek,dpi.yaml, mmc/mtk-sd.yaml or mmc/fsl-imx-esdhc.yaml
+So, to enable using GPIO-s again set ->use_gpio_descriptors to true and
+populate ->max_native_cs.
 
-Neil
+Fixes: f48dc6b96649 ("spi: Retire legacy GPIO handling")
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Cc: luka.perkov@sartura.hr
+---
+ drivers/spi/spi-qup.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 00d6084306b4..81c2e00532cf 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1057,6 +1057,8 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	else
+ 		master->num_chipselect = num_cs;
+ 
++	master->use_gpio_descriptors = true;
++	master->max_native_cs = SPI_NUM_CHIPSELECTS;
+ 	master->bus_num = pdev->id;
+ 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
+ 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
+-- 
+2.37.3
 
