@@ -2,62 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C77D5F649D
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Oct 2022 12:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD1D5F696A
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Oct 2022 16:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiJFK56 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Oct 2022 06:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S231933AbiJFOPk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Oct 2022 10:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiJFK55 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Oct 2022 06:57:57 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC8B98CAD
-        for <linux-spi@vger.kernel.org>; Thu,  6 Oct 2022 03:57:55 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j7so2128421wrr.3
-        for <linux-spi@vger.kernel.org>; Thu, 06 Oct 2022 03:57:55 -0700 (PDT)
+        with ESMTP id S231968AbiJFOPM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Oct 2022 10:15:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AE7EE25
+        for <linux-spi@vger.kernel.org>; Thu,  6 Oct 2022 07:12:47 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d6so2871430lfs.10
+        for <linux-spi@vger.kernel.org>; Thu, 06 Oct 2022 07:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fbv2nHTUDzNiZ9nBgts2ji/CMIP6Gv2pRdL0he3cIgg=;
-        b=dQA1MwmY32f6mMOh4FebesRI3KpmxdKASSXF3XNuJ1f5B+AsXOFW7kU2xAamd3DN74
-         McmUWagQo3TwI39dvke4dYZr08Rr+nREfOYAyL10Sf3eYIhBxMUgqSEj0BxsvnuYIfPY
-         mDfvkk9+xKm8BOSPGU2qmuCf8mzNq32V4RZpsgHkkkWxlCekYHUHyVQ66PqZiC5M/U57
-         RhZUfbdX12Z6eHnMdyeGGssGzuY6pcRjXWSdQihGSDaQpSNCleZB0mEFi5mNVn5KjwHl
-         dgkkiGgBjNbbpH6gUZh1Y2My2qr8i2S5AsVXEmoGhkT6KLpgNm502H9GcUZd6bdx1VZb
-         7wRA==
+         :from:to:cc:subject:date;
+        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
+        b=LErqkYQ3SKuNYCFFC05liT3/69AynMf1KtPpKCZaBCGgTDRYRpQMD+PACtiHdUHNVI
+         CvL7H/8TXvtFKsOimAKz9j64XVLhx++47eDDb4XoEJHNRQ4A1yei0XH+pHhZ/nuCbToP
+         QnT6vhg+DQWa0u+MCmqLMJX7KlspTevR+QOJ/exQD7s+yqOU9jDMeonj0iIrBJ7dF6GK
+         +XDbYeLQ9pUwvE+s97XqKmB3SsHEs5se1x5e6mSZGwuKp5/UvT+ejwzFzCpZXHUi4IEM
+         rciTiYPNX+VBCe04KFWxwdPqiRhlwgi0aD3xSse+ZGkoUdleRcyiWu60qAEtHCBiWSAN
+         9ldQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbv2nHTUDzNiZ9nBgts2ji/CMIP6Gv2pRdL0he3cIgg=;
-        b=4x3WVh4LRh2y5O+lS1jEcc38ZUiJEWTKySJnd4YzHmxZnq8xX587Um2irwV6M18tAr
-         OK77jSv6zGsHhyDbB7iZHyD/Us4S1twDTyMEaa+HtnUNAoupSKlNjf/JtCXPD8tSMvwY
-         BniV8mxcAUbIitdof2NKhqkRqCyz3cC1/v+GZzMEr9u/Aei7yLHDRF/lz3T27EvqNK9O
-         2aodaCaYbWK/WMMWBEb8dUiVSSE250NYMqW+quWJ1z2O8mFQjlNnkDdWmnSTdNMVJGDx
-         dCTgR/+fWjFUQ00Ej+IQ/K+KNFveWjEuL09DKTn9li/c3h8MraSBEEyLmMejrm6RXPCD
-         iYNw==
-X-Gm-Message-State: ACrzQf3MsjF+GkpfkU393mM1QdMwdj/3Mmc623xYPpnDf52tyYFfT3lO
-        p98aNOVUWSrhPzDrapsSMorZCA==
-X-Google-Smtp-Source: AMsMyM6nhQ5i2ukKQyJBrZwm0pxC9L1Un6AVLfuF3eK/z8umqKVDErHz9KN/EfjKDk5f/Rjlorlh+Q==
-X-Received: by 2002:a5d:4c8e:0:b0:22e:3979:7dc9 with SMTP id z14-20020a5d4c8e000000b0022e39797dc9mr2632995wrs.41.1665053874257;
-        Thu, 06 Oct 2022 03:57:54 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id c66-20020a1c3545000000b003bdb2c7f3d1sm4819568wma.32.2022.10.06.03.57.52
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
+        b=nI+Ppi8QhAJESSjrZhFh8a4xR6QrJQ1BvdY6OUJ+PvyqLE4kSm1ZLHKE2wjGTmrInc
+         2wue0s2wAah6wriOBheslid4tVLvgyY5xw3807eDDKk6rh5oGTF+5P0qDKzCIyirAen1
+         0x5JuThiuk4Bm6TgxyRGbIpX397HRWFKAx7KrDc89eZrP7p0Je0YXX+itp9Av72syX4c
+         Ix0jRkjOBbTajrUuZZu2I3OeOrLXYje0O3jJ0VVe5auDRbFQ8BJlLQBu6ZGny5HsCJ+f
+         ASB3RQjEoKV9dvlQTFoAshZBqQMnbkOUSFdYCQtvKMKeYyNJe0s+JFCHRRVG9K+tUg8s
+         w4WA==
+X-Gm-Message-State: ACrzQf23v1IL0pygpLLIxVywCwcHSNDnYLbodJhxtIfjsQxuxzViWDZ0
+        LnMSvB2BuZdW0YWfrKzswNzobw==
+X-Google-Smtp-Source: AMsMyM4ylZPoyJycfqTxZLE/wBpDPIPW+NjZKnv18zVYR3Uj+em69HKE9roVPotUhNN1V5zutAzBpw==
+X-Received: by 2002:a05:6512:261c:b0:49f:af36:d47 with SMTP id bt28-20020a056512261c00b0049faf360d47mr65017lfb.284.1665065502063;
+        Thu, 06 Oct 2022 07:11:42 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id be25-20020a05651c171900b0026c1cbbf461sm1922973ljb.80.2022.10.06.07.11.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 03:57:53 -0700 (PDT)
-Message-ID: <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
-Date:   Thu, 6 Oct 2022 12:57:52 +0200
+        Thu, 06 Oct 2022 07:11:40 -0700 (PDT)
+Message-ID: <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
+Date:   Thu, 6 Oct 2022 16:11:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
 Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
  pinctrl names for SPI signal states
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,101 +71,74 @@ Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
 References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
  <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
  <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
-
-Thank you for the review.
-
-On 10/5/22 10:14, Krzysztof Kozlowski wrote:
-> On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
->> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
->> pin biais when idle. Therefore define three pinctrl names:
->> - default: SPI pins are controlled by spi function.
->> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
->> by spi function.
->> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
->> by spi function.
+On 06/10/2022 12:57, Amjad Ouled-Ameur wrote:
+> Hi Krzysztof,
+> 
+> Thank you for the review.
+> 
+> On 10/5/22 10:14, Krzysztof Kozlowski wrote:
+>> On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
+>>> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
+>>> pin biais when idle. Therefore define three pinctrl names:
+>>> - default: SPI pins are controlled by spi function.
+>>> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
+>>> by spi function.
+>>> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
+>>> by spi function.
+>>>
+>>> Reported-by: Da Xue <da@libre.computer>
+>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>>> ---
+>>>   .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
+>>>   1 file changed, 15 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> index 0c10f7678178..53013e27f507 100644
+>>> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> @@ -43,6 +43,14 @@ properties:
+>>>       minItems: 1
+>>>       maxItems: 2
+>>>   
+>>> +  pinctrl-0:
+>>> +    minItems: 1
+>> maxItems?
 >>
->> Reported-by: Da Xue <da@libre.computer>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->>   .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> index 0c10f7678178..53013e27f507 100644
->> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> @@ -43,6 +43,14 @@ properties:
->>       minItems: 1
->>       maxItems: 2
->>   
->> +  pinctrl-0:
->> +    minItems: 1
-> maxItems?
->
-Will fill it in next version.
->> +
->> +  pinctrl-1:
->> +    maxItems: 1
->> +
->> +  pinctrl-names: true
-> Why do you need all these in the bindings?
+> Will fill it in next version.
+>>> +
+>>> +  pinctrl-1:
+>>> +    maxItems: 1
+>>> +
+>>> +  pinctrl-names: true
+>> Why do you need all these in the bindings?
+> 
+> SPI clock bias needs to change at runtime depending on SPI mode, here is an example of
+> 
+> how this is supposed to be used ("spi_idle_low_pins" and "spi_idle_low_pins" are defined
+> 
+> in the second patch of this series):
 
-SPI clock bias needs to change at runtime depending on SPI mode, here is an example of
+I know what it the point in general of pinctrl configuration... But the
+question is why do you need to specify them in the bindings? Core
+handles that. IOW, do you require them and missing/incomplete pinctrl
+should be reported?
 
-how this is supposed to be used ("spi_idle_low_pins" and "spi_idle_low_pins" are defined
+Best regards,
+Krzysztof
 
-in the second patch of this series):
-
-&spicc {
-     pinctrl-0 = <&spi_pins>;
-     pinctrl-1 = <&spi_pins>, <&spi_idle_high_pins>;
-     pinctrl-2 = <&spi_pins>, <&spi_idle_low_pins>;
-     pinctrl-names = "default", "idle-high", "idle-low";
-
-     [...]
-
-};
-
->> +
->>   if:
->>     properties:
->>       compatible:
->> @@ -69,6 +77,13 @@ else:
->>         items:
->>           - const: core
->>   
->> +    pinctrl-names:
->> +      minItems: 1
->> +      items:
->> +        - const: default
->> +        - const: idle-high
->> +        - const: idle-low
-> This does not match what you wrote in the bindings - you mentioned only
-> two set of pin controls.
-
-Right, there are actually three set of pin controls, will correct the bindings above.
-
-
-Regards,
-
-Amjad
-
->
-> Best regards,
-> Krzysztof
->
