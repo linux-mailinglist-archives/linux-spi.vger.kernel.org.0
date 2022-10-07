@@ -2,119 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742CF5F754D
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Oct 2022 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16A45F7F3B
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Oct 2022 22:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiJGI3K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 Oct 2022 04:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S229563AbiJGUtB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 Oct 2022 16:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJGI3I (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Oct 2022 04:29:08 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498FEFDB41
-        for <linux-spi@vger.kernel.org>; Fri,  7 Oct 2022 01:29:07 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id b2so6249026lfp.6
-        for <linux-spi@vger.kernel.org>; Fri, 07 Oct 2022 01:29:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=BO9hdTt5nvKjhGy1cXaOnGxbQ6UWl/ky+S+9OZ0HfrA=;
-        b=o08Og5qlTtYfp/u6lS6HbQTZdMLg0W8CzhKvTcdHPn5TyiER0syLTIcaPh3G9XP/9f
-         PQvug7kd7xD5GEA/f1xmDBOxkFXEEOnR2a5yMS2yWISeNKTrvXzxW65YDoaWkl50SkP0
-         fJTkk87HC0fZ5L0QBdUB4/wU33rQcfbbeHDvsGfNk+WClV17a/ydFrD/ElMwC6bWIVB/
-         XAcHg8KZ6PyI2AYyRmzmWP5CVoz+GD91Yjckb4LIEvmmPotE3tbQBBk4vmHdW38n6OTE
-         Y8eKSU9PsXR9dVQBaJkDziGkeSFxwb+2MXoCwdYHpqc0guyVEcGhYM46/3DAVHTCKO/n
-         xhHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BO9hdTt5nvKjhGy1cXaOnGxbQ6UWl/ky+S+9OZ0HfrA=;
-        b=vVFJMuCp061rO2ccD8RGc+X29a21wsbT5j7SESI4VWPaRKCM29ck9fPjgqf+stirj6
-         gzx69DT/zLQsNLBW34DpGkQ/Fal2qhsxi9k1sOdwx0OCy68/S61xI3SI+fiiMy7J/fxa
-         28lm9YZYIcv6SvM/8bbk1YwpzFEjNxsIuQaqRgLp+Zqd5Qdj0PQsq51ZRrsP0fU1JEhL
-         0wdZFt09iVhB7sjOAp/1JiFHqBQC5cRLk53vaH0lHQ7ahk16WNPJq8BJh6axJOyd3ETQ
-         w3juB/DkmwXCvQQ53EICoHIFDs6L50nI1K++l+u6Q+v+5PQNkvxISsxSupikruQXEtTQ
-         HpZw==
-X-Gm-Message-State: ACrzQf32Baj/oKL1u9fi3jjFJVbIA3JrHgOQyNHdqsW9gxjzhBhHTOuF
-        UWJACoP6IqDUNXJHwzEGjMSRZw==
-X-Google-Smtp-Source: AMsMyM7vWzOxGsjOmR3cZCcTn9Qll28t8XMFFQdeN4ltEYMtUP3ZwKze6OCsBUnmY9nhQH2UMx3/Fw==
-X-Received: by 2002:a05:6512:1108:b0:4a2:504f:b3f with SMTP id l8-20020a056512110800b004a2504f0b3fmr1406995lfg.169.1665131345549;
-        Fri, 07 Oct 2022 01:29:05 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c19-20020ac25f73000000b00499fe9ce5f2sm204326lfc.175.2022.10.07.01.29.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 01:29:05 -0700 (PDT)
-Message-ID: <41bc017c-5ef5-b2ac-86bb-510651064f05@linaro.org>
-Date:   Fri, 7 Oct 2022 10:29:03 +0200
+        with ESMTP id S229459AbiJGUtA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Oct 2022 16:49:00 -0400
+X-Greylist: delayed 1130 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Oct 2022 13:48:58 PDT
+Received: from smtpout1.mo529.mail-out.ovh.net (smtpout1.mo529.mail-out.ovh.net [178.32.125.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C854DC14B2
+        for <linux-spi@vger.kernel.org>; Fri,  7 Oct 2022 13:48:58 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.1.125])
+        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 94A661303F460;
+        Fri,  7 Oct 2022 22:30:05 +0200 (CEST)
+Received: from kaod.org (37.59.142.106) by DAG4EX2.mxp5.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 7 Oct
+ 2022 22:30:04 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006ae27c1e1-0ba7-49ef-b5c0-50886aca72bf,
+                    72EF84A86A0CAB1F8CEB0FBBC9371DA6A893A50B) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.66.77.115
+Message-ID: <c1bfbadf-0989-329b-308e-1a3c79ca2caa@kaod.org>
+Date:   Fri, 7 Oct 2022 22:29:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
+Subject: Re: [v2] spi: aspeed: Fix typo in mode_bits field for AST2600
+ platform
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     neil.armstrong@linaro.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
- <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
- <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
- <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
- <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
- <2c22e3b9-3da4-78c4-e068-78b84e24b2c3@linaro.org>
- <83649505-d8eb-b0b5-da9d-4536f58a7daa@linaro.org>
- <96160129-e9a0-ec0f-20d9-c92d1487eac6@linaro.org>
- <dbc3bcbf-cc46-79a3-8ce6-2d981d9e7d05@linaro.org>
-In-Reply-To: <dbc3bcbf-cc46-79a3-8ce6-2d981d9e7d05@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, <broonie@kernel.org>,
+        <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <BMC-SW@aspeedtech.com>, <steven_lee@aspeedtech.com>
+References: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.106]
+X-ClientProxiedBy: DAG2EX1.mxp5.local (172.16.2.11) To DAG4EX2.mxp5.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: 61269dbd-0814-42ac-865a-8955e68af19d
+X-Ovh-Tracer-Id: 10109736741803953074
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgudehtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshhtvghvvghnpghlvggvsegrshhpvggvughtvggthhdrtghomhdpoffvtefjohhsthepmhhohedvle
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/10/2022 10:17, Krzysztof Kozlowski wrote:
->>>
->>>> There's some bindings with pinctrl-names for specific states like rockchip/rockchip,dw-hdmi.yaml,
->>>> mediatek/mediatek,dpi.yaml, mmc/mtk-sd.yaml or mmc/fsl-imx-esdhc.yaml
->>>
->>> And? Just because someone did something is not itself an argument. They
->>> might have their reasons. If their reasons are applicable here, please
->>> state them.
->>
->> OK, I thought the reason was explicit, we find it worth documenting
->> those optional pinctrl states for when the spi lines are in idle state.
->>
->> If it's not an enough good reason, we'll drop this patch.
+On 10/5/22 10:32, Chin-Ting Kuo wrote:
+> Both quad SPI TX and RX modes can be supported on AST2600.
+> Correct typo in mode_bits field in both ast2600_fmc_data
+> and ast2600_spi_data structs.
 > 
-> No one wrote here any reason... The post from Amjad was about DTS usage,
-> yours about other bindings. Neither of them are reasons.
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
+
+Thanks,
+
+C.
+
+
+> ---
+>   drivers/spi/spi-aspeed-smc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Core schema already documents pinctrl states. This can be documented if
-> it is different than what core checks for, e.g. required or some
-> specific names are being enforced.
-
-Looking at your driver, these seems required. I missed that part in
-commit msg, because it actually explains these are needed. Then it seems
-fine, but they should be made required in the bindings.
-
-Best regards,
-Krzysztof
+> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+> index a334e89add86..33cefcf18392 100644
+> --- a/drivers/spi/spi-aspeed-smc.c
+> +++ b/drivers/spi/spi-aspeed-smc.c
+> @@ -1163,7 +1163,7 @@ static const struct aspeed_spi_data ast2500_spi_data = {
+>   static const struct aspeed_spi_data ast2600_fmc_data = {
+>   	.max_cs	       = 3,
+>   	.hastype       = false,
+> -	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+> +	.mode_bits     = SPI_RX_QUAD | SPI_TX_QUAD,
+>   	.we0	       = 16,
+>   	.ctl0	       = CE0_CTRL_REG,
+>   	.timing	       = CE0_TIMING_COMPENSATION_REG,
+> @@ -1178,7 +1178,7 @@ static const struct aspeed_spi_data ast2600_fmc_data = {
+>   static const struct aspeed_spi_data ast2600_spi_data = {
+>   	.max_cs	       = 2,
+>   	.hastype       = false,
+> -	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+> +	.mode_bits     = SPI_RX_QUAD | SPI_TX_QUAD,
+>   	.we0	       = 16,
+>   	.ctl0	       = CE0_CTRL_REG,
+>   	.timing	       = CE0_TIMING_COMPENSATION_REG,
 
