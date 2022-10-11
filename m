@@ -2,290 +2,199 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE085FACA1
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Oct 2022 08:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D632E5FAF3E
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Oct 2022 11:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJKGVm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Oct 2022 02:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229546AbiJKJWd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Oct 2022 05:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiJKGV1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Oct 2022 02:21:27 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2072.outbound.protection.outlook.com [40.107.244.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC4F88DE3;
-        Mon, 10 Oct 2022 23:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IqAp2uoH//XXVdJ9siCUIEq0ig4/LG8CqqIJG9th6WGucBfF8t5zpbHgPNJJMkbTiSN/HnfgwoDZtUCTg35rlC4QcVUQFMkHKspPbGiOzQCykZeMs3EDBvau2x1b1AZFaX+xm1Vh9VBjTdGrqwixn2noPRyWm07vOpR6/PLgvD6+KunHgXGDxGmmTsh9k1Ic8Di+RPqtAgg2Tru7JeD3wzZWJAoy0D35lq7EnW/sItJeUWf1XYLro+th8Z1rlVVagSyjPwNXm/Uh6qxpqUqgXaLz0enc/nUinZq6K0m4ZpNyOcUMM4c9Oe1W6yBFl7hpk4o9xCtMp9hQ3MWdKKF1Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kcfZQjDxX4XdkBG74CPK2inNidp7/XDLVonjtd7Wed8=;
- b=CBIsNBDMFSCjRzumeE6J6xkdxR1vUmyBh2pmsgeXIF56cLv5aacm/MjCD08e1moXWk9W2kmnQNMdowDu6D1bnm96P1J1dUp0ReKObGcEMv+pOHKR6y/5U/496ISYFKAReLgXa53+++uLL4nvs7VGdzR0v0HnQBqHo8k973H+WxZASYLeTC/bn3KOAVJekTXeQ/JfPaDGGR7RnyzfWmq3XVYjWaZ1YyiNrpHDiRgtn90D+eUBqOMpocaN8feERSc+4VEFuOEkdK+A0Svwi2UD4LU2WyYfLSr94qZhIFM8PJ77H74mIgsBwOyub1BWSJ282Z+RiazpqSOifj9yK0ghtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kcfZQjDxX4XdkBG74CPK2inNidp7/XDLVonjtd7Wed8=;
- b=t6jTlhR8Ltbe8aLGcvtBQWBoq2FIyfE4BV3Qjo7epjzDNZfAPez8Yi0TnO3S3sSkmuUjbmwn+WOsvWfKTjHPp32RvOGcjaCpuarrNsrFlWHJ22SeBrfKndXIVl237sJbz8esv2qBZ87mHQ5XE95U3ZrhHZk1PiVKzrbKIgNp0Qg=
-Received: from BN0PR04CA0006.namprd04.prod.outlook.com (2603:10b6:408:ee::11)
- by CY8PR12MB7147.namprd12.prod.outlook.com (2603:10b6:930:5d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.19; Tue, 11 Oct
- 2022 06:21:08 +0000
-Received: from BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ee:cafe::d2) by BN0PR04CA0006.outlook.office365.com
- (2603:10b6:408:ee::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21 via Frontend
- Transport; Tue, 11 Oct 2022 06:21:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT012.mail.protection.outlook.com (10.13.177.55) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Tue, 11 Oct 2022 06:21:08 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 11 Oct
- 2022 01:21:08 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 10 Oct
- 2022 23:21:07 -0700
-Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 11 Oct 2022 01:21:04 -0500
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>
-Subject: [PATCH v4 7/7] spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on Versal platform
-Date:   Tue, 11 Oct 2022 11:50:40 +0530
-Message-ID: <20221011062040.12116-8-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
-References: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
+        with ESMTP id S229538AbiJKJWc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Oct 2022 05:22:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549465D0CB
+        for <linux-spi@vger.kernel.org>; Tue, 11 Oct 2022 02:22:30 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mmqv70BkDzmV7V;
+        Tue, 11 Oct 2022 17:17:55 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 17:22:26 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
+ 2022 17:22:25 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <broonie@kernel.org>, <lukas@wunner.de>, <geert@linux-m68k.org>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH -next v2] spi: introduce new helpers with using modern naming
+Date:   Tue, 11 Oct 2022 17:22:04 +0800
+Message-ID: <20221011092204.950288-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT012:EE_|CY8PR12MB7147:EE_
-X-MS-Office365-Filtering-Correlation-Id: faf42eb4-fb4e-40a3-f314-08daab50c902
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XNyFPn2AE7xsgrG8P2Ljlpyyc21rDOQ4afTWs6SgHXghntBBeHP0s9FFyHI2NUAr+D3sx3QzIFW/ZMqnT9wIRAIo9p+VX+yZC0z7HsRyxNi8/6K4BeU894Qr1ur4y7IMrYwUUQyoRveLjhC0JPZ/9+rTiE5DEDrVZmf83EzfUS6bzSMFhsTCjrmPXahcwFWbyrU9GGkCE014k/ke5Hf2vfyWg4zcSCWAbocQoOLuXItOIXNcM08fbxUd4qRzbSVutETZWWREHu3uD1+imXL7QOc4nqsFmotfpFnipEKnAPoblU0+valaQ2f8KwDDmFv2WPD9aNwoxQouBG9frUiwxfsgBCXvifqj09ZYQ5KWgxxZO8VO7RACCmlJg7UWCL3blG7ZIG/dRs+L3YEjm1gl6XA/IhBFaYlRRwwshV0VyZ/cBVXxP3Ml8X58tinXGQgr1W4jXUnCBnCd6EblV8BgDuwgx+7wyVwwNHGtktoWuf5t/4onReUwRc2X3xTaZS+4nIuDvhK9bIx+CqrttRyhc+/6eZPGu/ISg7c8KMdrlpuBPvxCRKj+5CR9aRq5ilQdtKI7V1vqC89iAUNU0yuuJMGKJvw1tolKk6JvvfK0PHB8JhOFU7anJFCWMUsPwwCDerS40hKYrrTUoqqrb0k+fKXkfQyUPb6wPZG6eZavlBmlsc9OH99t3waZEDUb5QHbbNRuht9IQS5wiGd/bJf25hyob3/l5NkJalDoYh/iYlqV6lAWp8rTuyO3CsAxMKe1YharCMe5V2cUVwk90jt1w3fLHcfq3kJRG1SB1lLOvYzTKTRVNzmuDBn770j0DsMY
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199015)(46966006)(40470700004)(36840700001)(82310400005)(47076005)(4326008)(336012)(426003)(8676002)(70206006)(70586007)(36860700001)(86362001)(110136005)(40460700003)(478600001)(356005)(316002)(107886003)(81166007)(6666004)(54906003)(40480700001)(36756003)(41300700001)(1076003)(186003)(26005)(2906002)(83380400001)(82740400003)(2616005)(5660300002)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 06:21:08.4024
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: faf42eb4-fb4e-40a3-f314-08daab50c902
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7147
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add tap delay support for GQSPI controller on Versal platform.
+For using modern names host/target to instead of all the legacy names,
+I think it takes 3 steps:
+  - step1: introduce new helpers with modern naming.
+  - step2: switch to use these new helpers in all drivers.
+  - step3: remove all legacy helpers and update all legacy names.
 
-Signed-off-by: Naga Sureshkumar Relli <nagasure@xilinx.com>
-Signed-off-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+This patch is for step1, it introduces new helpers with host/target
+naming for drivers using.
+
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-zynqmp-gqspi.c | 86 ++++++++++++++++++++++++++--------
- 1 file changed, 67 insertions(+), 19 deletions(-)
+v1 -> v2:
+  make 'target' member into union to initialize it.
+---
+ drivers/spi/spi.c       | 11 ++++++++++
+ include/linux/spi/spi.h | 47 +++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 56 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index c11736d96f33..95ff15665d44 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -16,6 +16,7 @@
- #include <linux/module.h>
- #include <linux/of_irq.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/spi/spi.h>
-@@ -34,6 +35,7 @@
- #define GQSPI_RXD_OFST			0x00000120
- #define GQSPI_TX_THRESHOLD_OFST		0x00000128
- #define GQSPI_RX_THRESHOLD_OFST		0x0000012C
-+#define IOU_TAPDLY_BYPASS_OFST		0x0000003C
- #define GQSPI_LPBK_DLY_ADJ_OFST		0x00000138
- #define GQSPI_GEN_FIFO_OFST		0x00000140
- #define GQSPI_SEL_OFST			0x00000144
-@@ -141,6 +143,13 @@
- #define GQSPI_USE_DATA_DLY_SHIFT	31
- #define GQSPI_DATA_DLY_ADJ_VALUE	0x2
- #define GQSPI_DATA_DLY_ADJ_SHIFT	28
-+#define GQSPI_LPBK_DLY_ADJ_DLY_1	0x1
-+#define GQSPI_LPBK_DLY_ADJ_DLY_1_SHIFT	0x3
-+#define TAP_DLY_BYPASS_LQSPI_RX_VALUE	0x1
-+#define TAP_DLY_BYPASS_LQSPI_RX_SHIFT	0x2
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5f9aedd1f0b6..04b5668a1866 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2759,6 +2759,17 @@ int spi_slave_abort(struct spi_device *spi)
+ }
+ EXPORT_SYMBOL_GPL(spi_slave_abort);
+ 
++int spi_target_abort(struct spi_device *spi)
++{
++	struct spi_controller *ctlr = spi->controller;
 +
-+/* set to differentiate versal from zynqmp, 1=versal, 0=zynqmp */
-+#define QSPI_QUIRK_HAS_TAPDELAY		BIT(0)
- 
- #define GQSPI_FREQ_37_5MHZ	37500000
- #define GQSPI_FREQ_40MHZ	40000000
-@@ -150,6 +159,14 @@
- #define SPI_AUTOSUSPEND_TIMEOUT		3000
- enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
- 
-+/**
-+ * struct qspi_platform_data - zynqmp qspi platform data structure
-+ * @quirks:    Flags is used to identify the platform
-+ */
-+struct qspi_platform_data {
-+	u32 quirks;
-+};
++	if (spi_controller_is_target(ctlr) && ctlr->target_abort)
++		return ctlr->target_abort(ctlr);
 +
- /**
-  * struct zynqmp_qspi - Defines qspi driver instance
-  * @ctlr:		Pointer to the spi controller information
-@@ -171,6 +188,7 @@ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
-  * @data_completion:	completion structure
-  * @op_lock:		Operational lock
-  * @speed_hz:          Current SPI bus clock speed in hz
-+ * @has_tapdelay:	Used for tapdelay register available in qspi
-  */
- struct zynqmp_qspi {
- 	struct spi_controller *ctlr;
-@@ -192,6 +210,7 @@ struct zynqmp_qspi {
- 	struct completion data_completion;
- 	struct mutex op_lock;
- 	u32 speed_hz;
-+	bool has_tapdelay;
- };
- 
- /**
-@@ -271,25 +290,44 @@ static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
-  */
- static void zynqmp_qspi_set_tapdelay(struct zynqmp_qspi *xqspi, u32 baudrateval)
++	return -ENOTSUPP;
++}
++EXPORT_SYMBOL_GPL(spi_target_abort);
++
+ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
  {
--	u32 lpbkdlyadj = 0, datadlyadj = 0, clk_rate;
-+	u32 tapdlybypass = 0, lpbkdlyadj = 0, datadlyadj = 0, clk_rate;
- 	u32 reqhz = 0;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index fbf8c0d95968..130d5b5e3147 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -356,6 +356,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @max_speed_hz: Highest supported transfer speed
+  * @flags: other constraints relevant to this driver
+  * @slave: indicates that this is an SPI slave controller
++ * @target: indicates that this is an SPI target controller
+  * @devm_allocated: whether the allocation of this struct is devres-managed
+  * @max_transfer_size: function that returns the max transfer size for
+  *	a &spi_device; may be %NULL, so the default %SIZE_MAX will be used.
+@@ -440,6 +441,7 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+  * @mem_caps: controller capabilities for the handling of memory operations.
+  * @unprepare_message: undo any work done by prepare_message().
+  * @slave_abort: abort the ongoing transfer request on an SPI slave controller
++ * @target_abort: abort the ongoing transfer request on an SPI target controller
+  * @cs_gpiods: Array of GPIO descs to use as chip select lines; one per CS
+  *	number. Any individual value may be NULL for CS lines that
+  *	are not GPIOs (driven by the SPI controller itself).
+@@ -535,8 +537,12 @@ struct spi_controller {
+ 	/* Flag indicating if the allocation of this struct is devres-managed */
+ 	bool			devm_allocated;
  
- 	clk_rate = clk_get_rate(xqspi->refclk);
- 	reqhz = (clk_rate / (GQSPI_BAUD_DIV_SHIFT << baudrateval));
+-	/* Flag indicating this is an SPI slave controller */
+-	bool			slave;
++	union {
++		/* Flag indicating this is an SPI slave controller */
++		bool			slave;
++		/* Flag indicating this is an SPI target controller */
++		bool			target;
++	};
  
--	if (reqhz <= GQSPI_FREQ_40MHZ) {
--		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
--					      PM_TAPDELAY_BYPASS_ENABLE);
--	} else if (reqhz <= GQSPI_FREQ_100MHZ) {
--		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
--					      PM_TAPDELAY_BYPASS_ENABLE);
--		lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
--		datadlyadj |= ((GQSPI_USE_DATA_DLY <<
--				GQSPI_USE_DATA_DLY_SHIFT) |
--			       (GQSPI_DATA_DLY_ADJ_VALUE <<
--				GQSPI_DATA_DLY_ADJ_SHIFT));
--	} else if (reqhz <= GQSPI_FREQ_150MHZ) {
--		lpbkdlyadj |= GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK;
-+	if (!xqspi->has_tapdelay) {
-+		if (reqhz <= GQSPI_FREQ_40MHZ) {
-+			zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
-+						      PM_TAPDELAY_BYPASS_ENABLE);
-+		} else if (reqhz <= GQSPI_FREQ_100MHZ) {
-+			zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
-+						      PM_TAPDELAY_BYPASS_ENABLE);
-+			lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
-+			datadlyadj |= ((GQSPI_USE_DATA_DLY <<
-+					GQSPI_USE_DATA_DLY_SHIFT)
-+					| (GQSPI_DATA_DLY_ADJ_VALUE <<
-+						GQSPI_DATA_DLY_ADJ_SHIFT));
-+		} else if (reqhz <= GQSPI_FREQ_150MHZ) {
-+			lpbkdlyadj |= GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK;
-+		}
-+	} else {
-+		if (reqhz <= GQSPI_FREQ_37_5MHZ) {
-+			tapdlybypass |= (TAP_DLY_BYPASS_LQSPI_RX_VALUE <<
-+					TAP_DLY_BYPASS_LQSPI_RX_SHIFT);
-+		} else if (reqhz <= GQSPI_FREQ_100MHZ) {
-+			tapdlybypass |= (TAP_DLY_BYPASS_LQSPI_RX_VALUE <<
-+					TAP_DLY_BYPASS_LQSPI_RX_SHIFT);
-+			lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
-+			datadlyadj |= (GQSPI_USE_DATA_DLY <<
-+					GQSPI_USE_DATA_DLY_SHIFT);
-+		} else if (reqhz <= GQSPI_FREQ_150MHZ) {
-+			lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK
-+				       | (GQSPI_LPBK_DLY_ADJ_DLY_1 <<
-+					       GQSPI_LPBK_DLY_ADJ_DLY_1_SHIFT));
-+		}
-+		zynqmp_gqspi_write(xqspi,
-+				   IOU_TAPDLY_BYPASS_OFST, tapdlybypass);
- 	}
- 	zynqmp_gqspi_write(xqspi, GQSPI_LPBK_DLY_ADJ_OFST, lpbkdlyadj);
- 	zynqmp_gqspi_write(xqspi, GQSPI_DATA_DLY_ADJ_OFST, datadlyadj);
-@@ -1156,6 +1194,16 @@ static const struct dev_pm_ops zynqmp_qspi_dev_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(zynqmp_qspi_suspend, zynqmp_qspi_resume)
- };
+ 	/*
+ 	 * on some hardware transfer / message size may be constrained
+@@ -650,6 +656,7 @@ struct spi_controller {
+ 	int (*unprepare_message)(struct spi_controller *ctlr,
+ 				 struct spi_message *message);
+ 	int (*slave_abort)(struct spi_controller *ctlr);
++	int (*target_abort)(struct spi_controller *ctlr);
  
-+static const struct qspi_platform_data versal_qspi_def = {
-+	.quirks = QSPI_QUIRK_HAS_TAPDELAY,
-+};
-+
-+static const struct of_device_id zynqmp_qspi_of_match[] = {
-+	{ .compatible = "xlnx,zynqmp-qspi-1.0"},
-+	{ .compatible = "xlnx,versal-qspi-1.0", .data = &versal_qspi_def },
-+	{ /* End of table */ }
-+};
-+
- static const struct spi_controller_mem_ops zynqmp_qspi_mem_ops = {
- 	.exec_op = zynqmp_qspi_exec_op,
- };
-@@ -1176,6 +1224,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
- 	u32 num_cs;
-+	const struct qspi_platform_data *p_data;
- 
- 	ctlr = spi_alloc_master(&pdev->dev, sizeof(*xqspi));
- 	if (!ctlr)
-@@ -1186,6 +1235,10 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	xqspi->ctlr = ctlr;
- 	platform_set_drvdata(pdev, xqspi);
- 
-+	p_data = of_device_get_match_data(&pdev->dev);
-+	if (p_data && (p_data->quirks & QSPI_QUIRK_HAS_TAPDELAY))
-+		xqspi->has_tapdelay = true;
-+
- 	xqspi->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(xqspi->regs)) {
- 		ret = PTR_ERR(xqspi->regs);
-@@ -1324,11 +1377,6 @@ static int zynqmp_qspi_remove(struct platform_device *pdev)
- 	return 0;
+ 	/*
+ 	 * These hooks are for drivers that use a generic implementation
+@@ -727,6 +734,11 @@ static inline bool spi_controller_is_slave(struct spi_controller *ctlr)
+ 	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->slave;
  }
  
--static const struct of_device_id zynqmp_qspi_of_match[] = {
--	{ .compatible = "xlnx,zynqmp-qspi-1.0", },
--	{ /* End of table */ }
--};
--
- MODULE_DEVICE_TABLE(of, zynqmp_qspi_of_match);
++static inline bool spi_controller_is_target(struct spi_controller *ctlr)
++{
++	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->target;
++}
++
+ /* PM calls that need to be issued by the driver */
+ extern int spi_controller_suspend(struct spi_controller *ctlr);
+ extern int spi_controller_resume(struct spi_controller *ctlr);
+@@ -763,6 +775,21 @@ static inline struct spi_controller *spi_alloc_slave(struct device *host,
+ 	return __spi_alloc_controller(host, size, true);
+ }
  
- static struct platform_driver zynqmp_qspi_driver = {
++static inline struct spi_controller *spi_alloc_host(struct device *dev,
++						    unsigned int size)
++{
++	return __spi_alloc_controller(dev, size, false);
++}
++
++static inline struct spi_controller *spi_alloc_target(struct device *dev,
++						      unsigned int size)
++{
++	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
++		return NULL;
++
++	return __spi_alloc_controller(dev, size, true);
++}
++
+ struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
+ 						   unsigned int size,
+ 						   bool slave);
+@@ -782,6 +809,21 @@ static inline struct spi_controller *devm_spi_alloc_slave(struct device *dev,
+ 	return __devm_spi_alloc_controller(dev, size, true);
+ }
+ 
++static inline struct spi_controller *devm_spi_alloc_host(struct device *dev,
++							 unsigned int size)
++{
++	return __devm_spi_alloc_controller(dev, size, false);
++}
++
++static inline struct spi_controller *devm_spi_alloc_target(struct device *dev,
++							   unsigned int size)
++{
++	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
++		return NULL;
++
++	return __devm_spi_alloc_controller(dev, size, true);
++}
++
+ extern int spi_register_controller(struct spi_controller *ctlr);
+ extern int devm_spi_register_controller(struct device *dev,
+ 					struct spi_controller *ctlr);
+@@ -1141,6 +1183,7 @@ static inline void spi_message_free(struct spi_message *m)
+ extern int spi_setup(struct spi_device *spi);
+ extern int spi_async(struct spi_device *spi, struct spi_message *message);
+ extern int spi_slave_abort(struct spi_device *spi);
++extern int spi_target_abort(struct spi_device *spi);
+ 
+ static inline size_t
+ spi_max_message_size(struct spi_device *spi)
 -- 
-2.17.1
+2.25.1
 
