@@ -2,85 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982915FB101
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Oct 2022 13:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128A85FC854
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Oct 2022 17:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJKLJM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Oct 2022 07:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S229902AbiJLPWD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Oct 2022 11:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJKLJK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Oct 2022 07:09:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7D68E98F
-        for <linux-spi@vger.kernel.org>; Tue, 11 Oct 2022 04:09:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 063E961172
-        for <linux-spi@vger.kernel.org>; Tue, 11 Oct 2022 11:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C84BC433C1;
-        Tue, 11 Oct 2022 11:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665486545;
-        bh=C0KIp2fsTEZim5o07aA8vzlMORz/af5cz3cnvRFWooA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+puQ1Bhe2S+R6R6Jdr609xPOg1KUENqJhqbjeS0uQHvadiYDFWzYAplBSc0ohotL
-         8WYRgP0zyZbqX3uce3cIReXHnoKU9+rE5/9Uu2JWC6HIa4CEAxv2/jstecIa4YXRjO
-         AXRbHqo47DrM6PyZREO4o0AM1YRFUaR5hrRhxXhXev+jUPjW0q2aZIFuSk9Js0wZEe
-         QxxWuZVVngps2lWjLtACwvCvkyrYYWAnLQDyim8pK4xcazVfqTsRdN4BCAGzy79Znv
-         UfPQMJXDw2iwaJ8MivMBzCHG0JzK4+QSx5xqkKTLLZmgHqARgzcN68GTf8iCCDHBZv
-         wVNRJfHVgojwQ==
-Date:   Tue, 11 Oct 2022 12:09:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zhichao Liu <zhichao.liu@mediatek.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: mediatek: Fix packet division error
-Message-ID: <Y0VOzQzRX24Jo1dC@sirena.org.uk>
-References: <20220930115828.14442-1-zhichao.liu@mediatek.com>
+        with ESMTP id S229939AbiJLPVy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Oct 2022 11:21:54 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AE3E310F
+        for <linux-spi@vger.kernel.org>; Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-12c8312131fso19824025fac.4
+        for <linux-spi@vger.kernel.org>; Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kwJqhNTRTFOg6KTTCmq+FiqxOKuhAXdi9Q4wCoPOfNA=;
+        b=LfBzqTPrASeASfAn0654FEvZUhQFsvG64bV9qcmnJd4LbEm+rkZNvoKFu0ffJ+FNtQ
+         4E6H/Gv2Q2RUfFZNewBefThDeYwq9SdFEk69iIOyc4abjB5Et0TliU2LrZpckIum6Pdz
+         ut9fbok3nZ9I9AtM6ckHbIFeZvb96geiPR6f/YrmSDPz9NkoH3imxf3Bm1Q/faP/lvqi
+         NjWfQnt7GfmQMkyXQB5IEfTaACIO89fSsdQT9uJKpNEORekRZz9GaeOmOB7YNA4V92f6
+         2klOhMMHe1zGx/15xksX3AII8yjZ8zm+/6ZTM5rG1LhkdfocruGU+1uaC7h4N90epx+K
+         lxEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kwJqhNTRTFOg6KTTCmq+FiqxOKuhAXdi9Q4wCoPOfNA=;
+        b=KEU9HWgvv9Rgx+tK0bMfRGWeilYBMCsJw0oHWUvCTsMH3ywdKg0EaVyUb2OASRkiUA
+         JCk8U4tFmPladIaWv1ZPWAm/5oLeVbPeasyQnQnuwvFDTqS/7VCa/yiBjAiU7kjXTiLG
+         TBZtnpBCByvzzN8RIvazenl+hSpO9U7x2mpZCKvV8osWfk65kP5jf7k/TtrBoQItAJ6s
+         l+J19JiPYd389dqElu6Mi5G6hucNTZVLRxjcrk2ljR7RqveXcg3L/jckHysrjg/IWiVX
+         xHkWnNSVWKA36HHKGnSah2BUvhuNMtRXwqO7Rh0p/VVeTYNI3LruGiR8v72TBBUsqUlQ
+         WX5g==
+X-Gm-Message-State: ACrzQf2e2QTHYfldAEVZ6LbdjWqaIn+jPwvGtDmKALxbmyoqJikiCWVe
+        qyUaQUXof5hzTFRD70ZOXJAe4A==
+X-Google-Smtp-Source: AMsMyM6kEsuXW3HmeI0aeXF32Wl0YnPoY7Nc/gpj1Mziw/JRUJ4FdkB+Pc2sCFKPhLu+UaFZgU1aPA==
+X-Received: by 2002:a05:6870:f5a9:b0:136:3e51:eff7 with SMTP id eh41-20020a056870f5a900b001363e51eff7mr2828401oab.241.1665588109024;
+        Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
+Received: from fedora.. ([186.122.181.28])
+        by smtp.gmail.com with ESMTPSA id h21-20020aca1815000000b00342ded07a75sm6808541oih.18.2022.10.12.08.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 08:21:48 -0700 (PDT)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     broonie@kernel.org
+Cc:     mika.westerberg@linux.intel.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH] spi: intel: Fix the offset to get the 64K erase opcode
+Date:   Wed, 12 Oct 2022 12:21:35 -0300
+Message-Id: <20221012152135.28353-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bGcAR1t2DLC7vqbh"
-Content-Disposition: inline
-In-Reply-To: <20220930115828.14442-1-zhichao.liu@mediatek.com>
-X-Cookie: I had pancake makeup for brunch!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+According to documentation, the 64K erase opcode is located in VSCC
+range [16:23] instead of [8:15].
+Use the proper value to shift the mask over the correct range.
 
---bGcAR1t2DLC7vqbh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
+---
+ drivers/spi/spi-intel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Sep 30, 2022 at 07:58:28PM +0800, Zhichao Liu wrote:
-> From: "zhichao.liu" <zhichao.liu@mediatek.com>
->=20
-> Commit: 7e963fb2a33c ("spi: mediatek: add ipm design support for MT7986")
-> take a mistake on packet dividing operation, this patch is to fix it.
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 55f4ee2db002..605acb1bf4b0 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -114,7 +114,7 @@
+ #define ERASE_OPCODE_SHIFT		8
+ #define ERASE_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
+ #define ERASE_64K_OPCODE_SHIFT		16
+-#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
++#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_64K_OPCODE_SHIFT)
+ 
+ /* Flash descriptor fields */
+ #define FLVALSIG_MAGIC			0x0ff0a55a
+-- 
+2.34.3
 
-Your commit description doesn't say what the problem is or how the
-change fixes it which makes it very hard to review.
-
---bGcAR1t2DLC7vqbh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNFTswACgkQJNaLcl1U
-h9DbVwf8DQYy0yNdMIWKi53RUWTL400KuXMbXXLsIBKx9EKfE7/9ZCsl3dCMd+uc
-/kJjpa9mXxxsy6baPWtrNMrlIurHr9v3LSRD8xZfQ+rtgYSPe5MQo/Re97e/YGvd
-EqIFRc/CcTCHevsxBjlQ27b14zP8rrvxHYsBBniwIEDTuT+vwEiB6aMXrMsHzjny
-QESyg7tAE2QqEKA+nEEvL7ujmVXXEoR6mIZz3IQPtV9wxfNIM5cvS2H2s5py45Zg
-r9A/DpW8Ld/I3XXAUbZVlO+Jbstfmg4/4OVd9fxbYMp3ZtltvzYP+2+l18JMqX3U
-46c79+pWesz8TiurVLhK9x1VlC0aPA==
-=d5Ee
------END PGP SIGNATURE-----
-
---bGcAR1t2DLC7vqbh--
