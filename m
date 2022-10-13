@@ -2,51 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006095FDAF5
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Oct 2022 15:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E08A5FDB36
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Oct 2022 15:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJMNfe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Oct 2022 09:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S229929AbiJMNmX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Oct 2022 09:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiJMNfd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Oct 2022 09:35:33 -0400
+        with ESMTP id S229940AbiJMNmV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Oct 2022 09:42:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B796E2E3;
-        Thu, 13 Oct 2022 06:35:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63011112A81;
+        Thu, 13 Oct 2022 06:41:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36982609D1;
-        Thu, 13 Oct 2022 13:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9184DC433D6;
-        Thu, 13 Oct 2022 13:35:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17F70617DB;
+        Thu, 13 Oct 2022 13:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960D8C433C1;
+        Thu, 13 Oct 2022 13:41:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665668131;
-        bh=A7gvKvrmvLJ4A2rarNPB79xMmqFf/0zYZuatB2aPs8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dFvyFwBPpBTdhUkdMBScuMCxFxTgy51heucJCrCWlt4tZ0WVGjTf9OQgkbwY9GOLQ
-         EqioPMbifzkn+Y4MuM0kqpvbxDAeCkr+JxCc5s3HAZH7vU+vedjPv4CmTYaWhLplGe
-         DzWU3OxW4j7O5+s4XPHhR4QgOIfkCmf1r52wefrjh65Xg8XDK/N7Z20rHhgR9ACcdP
-         gC45UQ5nEJlz9sFlMf8KJ2XwFQAXMQW5QdzNb+5WoLzbBlQphrlQ27fGPxz+u6kWUp
-         tCI37zDwlh9ImvpfSGS4gVbipJ55CREjIujlDC8N1790GpneMUOfv4eZdAE4Uo7KbI
-         HPHfNjt/Cwg+Q==
-Date:   Thu, 13 Oct 2022 14:35:27 +0100
+        s=k20201202; t=1665668515;
+        bh=R7GmJ1Pa4UeNhmrZDrYdeBri3438fwvsRLGHVYf4zkg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rloKGLhjtIM8CAF93xj0IG6+Yj4icf9Ag/FduJN5yeS7vhzHb7VMBJksuwfIm4p6X
+         rv6OdcC0QYYiyJIw8Z28dPjxx7+BvJxSDyRiP6gBMxQg7miotrjKTJYdTMQk1h+vN4
+         CqVZlYIZSWqzGWFy8W3F4DFubdKa4742RCJE7wmyhJAnr+NtXXPoxRC3labG5hwYIY
+         hP9mufFRM05roydXOaX3tNzb7i9WqhVGrn0E+inhM2Ik3o3jmBFYiSalmTcqfBz/qF
+         LlnF8goCWgqcEq1AeyqzyURC6FbrspsGg4MPpIgsPy60pqERB2soQIzScwnHD5QEs7
+         osXABvslLJ84w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v2 SPI for-next 2/2] spi: microchip: pci1xxxx: Add
- suspend and resume support for PCI1XXXX SPI driver
-Message-ID: <Y0gUH1fbB/LijKLw@sirena.org.uk>
-References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
- <20221006050514.115564-3-tharunkumar.pasumarthi@microchip.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, mika.westerberg@linux.intel.com,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20221012152135.28353-1-mauro.lima@eclypsium.com>
+References: <20221012152135.28353-1-mauro.lima@eclypsium.com>
+Subject: Re: [PATCH] spi: intel: Fix the offset to get the 64K erase opcode
+Message-Id: <166566851432.143409.7076565841669803802.b4-ty@kernel.org>
+Date:   Thu, 13 Oct 2022 14:41:54 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/peYUdyb9zf/jKcQ"
-Content-Disposition: inline
-In-Reply-To: <20221006050514.115564-3-tharunkumar.pasumarthi@microchip.com>
-X-Cookie: Do you like "TENDER VITTLES"?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,50 +53,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 12 Oct 2022 12:21:35 -0300, Mauro Lima wrote:
+> According to documentation, the 64K erase opcode is located in VSCC
+> range [16:23] instead of [8:15].
+> Use the proper value to shift the mask over the correct range.
+> 
+> 
 
---/peYUdyb9zf/jKcQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Oct 06, 2022 at 10:35:14AM +0530, Tharun Kumar P wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +static int pci1xxxx_spi_resume(struct device *dev)
-> +{
-> +	struct pci1xxxx_spi *spi_ptr = dev_get_drvdata(dev);
-> +	struct pci1xxxx_spi_internal *spi_sub_ptr;
-> +	u32 regval = SPI_RESUME_CONFIG;
-> +	u8 iter;
-> +
-> +	for (iter = 0; iter < spi_ptr->total_hw_instances; iter++) {
-> +		spi_sub_ptr = spi_ptr->spi_int[iter];
-> +		spi_master_resume(spi_sub_ptr->spi_host);
-> +		writel(regval, spi_ptr->reg_base +
-> +		       SPI_MST_EVENT_MASK_REG_OFFSET(iter));
-> +
-> +		/* Restore config at resume */
-> +		store_restore_config(spi_ptr, spi_sub_ptr, iter, 0);
-> +	}
-> +
-> +	return 0;
-> +}
+Thanks!
 
-There should be a call to spi_controller_suspend() in here (and
-similarly in resume) to tell the controller to stop the queue of
-operations.
+[1/1] spi: intel: Fix the offset to get the 64K erase opcode
+      commit: 6a43cd02ddbc597dc9a1f82c1e433f871a2f6f06
 
---/peYUdyb9zf/jKcQ
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNIFB4ACgkQJNaLcl1U
-h9C0mgf/cX24A/BrVWf33R8t8kuqByOzEhxH0WGgkAejAd9uxSogJxkrsX9hVnkG
-baNvviWqDg4o7jvYl6c2uM57pjbkmycVqHiM1EzHKD60JFaK+fkA74UXMTFuRA2Z
-pEdVS65rle7wM5YFttaQD8us9+7zwTr7rcy05si/RQd2UIsiUgx+5fMFaj037dPA
-kXafwNEAVrGNNqRdAPXDZ9KfCKubFhGN7Mk8WSJVhyno4vwok+SPkrDOZTWz2Jxi
-96p8HhZ9lMDdh06ROTvl+MwlZRTGqfcWASHYAgB6n16OmhZ0HCBXCK7rj4Ix1Ddq
-6SzSZ27eUE3DidcdrdlhgZn1mH7/BA==
-=5++5
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---/peYUdyb9zf/jKcQ--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
