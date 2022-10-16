@@ -2,88 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E08A5FDB36
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Oct 2022 15:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E016000FA
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Oct 2022 17:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiJMNmX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Oct 2022 09:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S229797AbiJPP5j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 16 Oct 2022 11:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiJMNmV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Oct 2022 09:42:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63011112A81;
-        Thu, 13 Oct 2022 06:41:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229562AbiJPP5i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Oct 2022 11:57:38 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762002E9C4;
+        Sun, 16 Oct 2022 08:57:37 -0700 (PDT)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4Mr4Ww3Gvfz4xGp;
+        Mon, 17 Oct 2022 02:57:32 +1100 (AEDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17F70617DB;
-        Thu, 13 Oct 2022 13:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960D8C433C1;
-        Thu, 13 Oct 2022 13:41:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665668515;
-        bh=R7GmJ1Pa4UeNhmrZDrYdeBri3438fwvsRLGHVYf4zkg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rloKGLhjtIM8CAF93xj0IG6+Yj4icf9Ag/FduJN5yeS7vhzHb7VMBJksuwfIm4p6X
-         rv6OdcC0QYYiyJIw8Z28dPjxx7+BvJxSDyRiP6gBMxQg7miotrjKTJYdTMQk1h+vN4
-         CqVZlYIZSWqzGWFy8W3F4DFubdKa4742RCJE7wmyhJAnr+NtXXPoxRC3labG5hwYIY
-         hP9mufFRM05roydXOaX3tNzb7i9WqhVGrn0E+inhM2Ik3o3jmBFYiSalmTcqfBz/qF
-         LlnF8goCWgqcEq1AeyqzyURC6FbrspsGg4MPpIgsPy60pqERB2soQIzScwnHD5QEs7
-         osXABvslLJ84w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Lima <mauro.lima@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, mika.westerberg@linux.intel.com,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20221012152135.28353-1-mauro.lima@eclypsium.com>
-References: <20221012152135.28353-1-mauro.lima@eclypsium.com>
-Subject: Re: [PATCH] spi: intel: Fix the offset to get the 64K erase opcode
-Message-Id: <166566851432.143409.7076565841669803802.b4-ty@kernel.org>
-Date:   Thu, 13 Oct 2022 14:41:54 +0100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mr4Wq65Brz4xGG;
+        Mon, 17 Oct 2022 02:57:27 +1100 (AEDT)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Subject: [PATCH] spi: aspeed: Fix window offset of CE1
+Date:   Sun, 16 Oct 2022 17:57:22 +0200
+Message-Id: <20221016155722.3520802-1-clg@kaod.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 12 Oct 2022 12:21:35 -0300, Mauro Lima wrote:
-> According to documentation, the 64K erase opcode is located in VSCC
-> range [16:23] instead of [8:15].
-> Use the proper value to shift the mask over the correct range.
-> 
-> 
+The offset value of the mapping window in the kernel structure is
+calculated using the value of the previous window offset. This doesn't
+reflect how the HW is configured and can lead to erroneous setting of
+the second flash device (CE1).
 
-Applied to
+Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com> 
+Fixes: e3228ed92893 ("spi: spi-mem: Convert Aspeed SMC driver to spi-mem")
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+---
+ drivers/spi/spi-aspeed-smc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index 33cefcf18392..b90571396a60 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -398,7 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi *aspi,
+ 		windows[cs].cs = cs;
+ 		windows[cs].size = data->segment_end(aspi, reg_val) -
+ 			data->segment_start(aspi, reg_val);
+-		windows[cs].offset = cs ? windows[cs - 1].offset + windows[cs - 1].size : 0;
++		windows[cs].offset = data->segment_start(aspi, reg_val) - aspi->ahb_base_phy;
+ 		dev_vdbg(aspi->dev, "CE%d offset=0x%.8x size=0x%x\n", cs,
+ 			 windows[cs].offset, windows[cs].size);
+ 	}
+-- 
+2.37.3
 
-Thanks!
-
-[1/1] spi: intel: Fix the offset to get the 64K erase opcode
-      commit: 6a43cd02ddbc597dc9a1f82c1e433f871a2f6f06
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
