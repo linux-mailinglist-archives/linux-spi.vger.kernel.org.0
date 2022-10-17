@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF25F60149F
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 19:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3336014A5
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 19:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiJQRSt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 13:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S230196AbiJQRUG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 13:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiJQRSq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 13:18:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5371BE5;
-        Mon, 17 Oct 2022 10:18:44 -0700 (PDT)
+        with ESMTP id S230012AbiJQRUF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 13:20:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB1D4B4BB;
+        Mon, 17 Oct 2022 10:20:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C824611D9;
-        Mon, 17 Oct 2022 17:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E48C433D7;
-        Mon, 17 Oct 2022 17:18:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA4FB819CD;
+        Mon, 17 Oct 2022 17:19:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8958FC433D6;
+        Mon, 17 Oct 2022 17:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666027123;
-        bh=krHlaJzPvLjQqfJuSv/OVHfYALtY3FAQJLdgKatZOm4=;
+        s=k20201202; t=1666027198;
+        bh=z54rkF4UOtVFeBgyLjiUmL7hvvBxUd3T++Un7SGW4F0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B7M2rYpWGeXCqLI4Opi4t6ajVMC2lKhzCAL0Vw3a3fdHhjhGlyLkcXVv0d3bFwi/F
-         W0PD3eF/AHvwFEjuzq7Qh9opmJHw5nQnjVTNCnxSe3UYiNZyZ6ibleqyoR7wUOmhbZ
-         jyOzIBf4Q5fb50wxyPsZEAnmvJj1LAaOJL4KDGKQjrSs/5lkpbDen2RcqAZrIZSxyi
-         ddZg5zWB6AmeBYl58MStmQFeiODN7MWKOvOihqHMf4+gUrMkuKLBeqyQuIPvcsBdo9
-         FmGyB7RPpPIruHQ1Jxrm5nhXcYCaBPsXwHrVnDYcUH89YQ4PbTF99gO+umGt1m6zQ5
-         kLOLhiLqQ1opg==
-Date:   Mon, 17 Oct 2022 18:18:38 +0100
+        b=ryeIxb+CMvxLWZU4HEJxRp0WPAJ59dkKkS5pm1RPyz6vSIgB2TMILLGl45XNaNKf8
+         z+pGoMOEln0rbeN2bBAujoVXx0+BeSCjIGAOaY3uPbhTUg7DQT8V3oa9C0oBJfP5Uq
+         I29JGOE4G6RgrgSSX7vMPHqVIIUFVNIr4vQh2dMvD9lLfcyHf07TOHFr+0OFzxFRz3
+         w9dFMeNpVwn+eoolfY0tnKKn6V8z2gP+lq8efpmJKoX/etRIJGc8sAFATqcCH7bsGR
+         VCXgCZSGXw7QB+4O3lx3piqdYaJHs80PQbTGh5ot0nhrjR0OeVgPnDgpzGL7mV+G4g
+         05uoJdu8j/D1Q==
+Date:   Mon, 17 Oct 2022 18:19:53 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y02ObkYoUQlY9oG/@sirena.org.uk>
+Subject: Re: [PATCH v1 6/6] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
+Message-ID: <Y02OuQVTxqm5mRtK@sirena.org.uk>
 References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iarKEsYMc7Q7b1jP"
+        protocol="application/pgp-signature"; boundary="V9S8SQ5cUoONv9dP"
 Content-Disposition: inline
-In-Reply-To: <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
 X-Cookie: Real Users hate Real Programmers.
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,31 +58,32 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---iarKEsYMc7Q7b1jP
+--V9S8SQ5cUoONv9dP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Oct 17, 2022 at 08:12:40PM +0300, Andy Shevchenko wrote:
+On Mon, Oct 17, 2022 at 08:12:43PM +0300, Andy Shevchenko wrote:
 
-> Since the PCI enumerated devices provide a property with SSP type,
-> there is no more necessity to bear the copy of the ID table here.
-> Remove it for good.
+> Cleaning up the driver to use pm_ptr() macro instead of ifdeffery
+> that makes it simpler and allows the compiler to remove those functions
+> if built without CONFIG_PM and CONFIG_PM_SLEEP support.
 
-They do?  How?  Are you sure that this is true for all existing devices?
+Are you sure this works cleanly and doesn't suffer from similar problems
+to of_match_ptr() when PM is disabled, leaving some unreferenced statics?
 
---iarKEsYMc7Q7b1jP
+--V9S8SQ5cUoONv9dP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNjm4ACgkQJNaLcl1U
-h9DbhAf5AcLRs0gT2Pw6dKgWb3AtBuOjEWr3JX9AmLoLe+FnXpaiWLLVf5gCwt8b
-kt87wygjh54g162FT99FD0khjx6suHEw/N3wCp6vw5H10AMG9qUALjNXubc0Ryfy
-IbXhPi+DiAeutRDzPTA0Le2lEZYzBIFR+1xXJkYwvax9kWbnTZ3+kQfLy/SwUM0t
-mnJyYrMjruDGWKJZ3ac9HA1qMswwsMfmnIDEzJxQNaRKm6JT+X5oHHa0c4SsGBpK
-bafBjJoQD89XC+XoZBWTlznzrQ+hYnLL8dYQkRuxbEUWH+IL2cwKznz8vma6qgN0
-E324AeijGqW54+nDFaVDT3Wn5qVnWA==
-=zGfN
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNjrgACgkQJNaLcl1U
+h9Dz4Qf/cKh3nwp5Mo7NR0eiTkI4J5KQ7WkEMgIyw75YiI7z1RL2yBwGdRqXo0y1
+LEgVrOjMQAxLmDo6mWG4DwBfwmO1EE787uut6T1mGAxqxlavCfkrXo0Jq2GonSv7
+c9u7DHNEkicF6exOfwEG6WYsqJZikxUb+vqCMzedAZMLYP2Wa574jtVYszI1c8Gb
++dLe0itdeP3RKQU+tBTXxcboYkpqYfEuCz23WP8egCbsDQiwMv5mpOfKbJ0Oe/Sb
+AVhfYh3lC5GLV00br+KLrdF1EOtdeBKVmMOTp75u7+ptb6M0KRCbG32GYiOSAq+4
+CsqKcbqK3vqKy7ulDB9xVTkSFjKeEA==
+=eiYH
 -----END PGP SIGNATURE-----
 
---iarKEsYMc7Q7b1jP--
+--V9S8SQ5cUoONv9dP--
