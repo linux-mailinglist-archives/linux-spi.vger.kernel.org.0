@@ -2,88 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3336014A5
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 19:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6EE60157B
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 19:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiJQRUG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 13:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S230272AbiJQRev (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 13:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiJQRUF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 13:20:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB1D4B4BB;
-        Mon, 17 Oct 2022 10:20:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA4FB819CD;
-        Mon, 17 Oct 2022 17:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8958FC433D6;
-        Mon, 17 Oct 2022 17:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666027198;
-        bh=z54rkF4UOtVFeBgyLjiUmL7hvvBxUd3T++Un7SGW4F0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ryeIxb+CMvxLWZU4HEJxRp0WPAJ59dkKkS5pm1RPyz6vSIgB2TMILLGl45XNaNKf8
-         z+pGoMOEln0rbeN2bBAujoVXx0+BeSCjIGAOaY3uPbhTUg7DQT8V3oa9C0oBJfP5Uq
-         I29JGOE4G6RgrgSSX7vMPHqVIIUFVNIr4vQh2dMvD9lLfcyHf07TOHFr+0OFzxFRz3
-         w9dFMeNpVwn+eoolfY0tnKKn6V8z2gP+lq8efpmJKoX/etRIJGc8sAFATqcCH7bsGR
-         VCXgCZSGXw7QB+4O3lx3piqdYaJHs80PQbTGh5ot0nhrjR0OeVgPnDgpzGL7mV+G4g
-         05uoJdu8j/D1Q==
-Date:   Mon, 17 Oct 2022 18:19:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229972AbiJQRer (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 13:34:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6111176;
+        Mon, 17 Oct 2022 10:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666028073; x=1697564073;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eAb8YxBfSFdDfJx0JCc9f+Nak1n7XNSg7jL/KIJ9xxY=;
+  b=DA/X24CZc8ZhrWvWYawqEqVDL+sCrniAct5NlGjXjzSoby9gpX0+Vhhh
+   Yc6VFK+ZerST25HlfbtAeORyTPwaWqPHCz6O9Jsw7SIa67zU1HGjKN9EK
+   kbrb/xP8Ti+UPTeSGNp2BwUwB+p+EpvvW2B6b/1W6ubWO9zJr+yVnwU9J
+   /KHttr9CrB06voaigERrqQPC9CWiGY+YPwz/lwHi9pDN9UdnmMH2m7i1m
+   Dpx+iqNmNxBfWq9AFaGxWWCacxvx47gET1rDlxPgTwrlqC/8I376KgNbN
+   GE6oLRTDpM2DRmZl3QkP1sb4+cthO8i5VvvnqHQ0+FWXs31WrM0JKOBay
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="370064270"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="370064270"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:34:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753713646"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="753713646"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 17 Oct 2022 10:34:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okU0S-008wZJ-1V;
+        Mon, 17 Oct 2022 20:34:28 +0300
+Date:   Mon, 17 Oct 2022 20:34:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 6/6] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
-Message-ID: <Y02OuQVTxqm5mRtK@sirena.org.uk>
+Subject: Re: [PATCH v1 2/6] spi: pxa2xx: Respect Intel SSP type given by a
+ property
+Message-ID: <Y02SJNTxrLMjpZfG@smile.fi.intel.com>
 References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-2-andriy.shevchenko@linux.intel.com>
+ <Y02OMNAFrKLWUtiO@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="V9S8SQ5cUoONv9dP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
-X-Cookie: Real Users hate Real Programmers.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y02OMNAFrKLWUtiO@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 06:17:36PM +0100, Mark Brown wrote:
+> On Mon, Oct 17, 2022 at 08:12:39PM +0300, Andy Shevchenko wrote:
+> 
+> > Allow to set the Intel SSP type by reading the property.
+> 
+> > +	/* Always try to read property */
+> > +	device_property_read_u32(&pdev->dev, "intel,spi-pxa2xx-type", &value);
+> 
+> What is the advantage of pushing this into firmware?
 
---V9S8SQ5cUoONv9dP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+To distinguish better what the controller generation is there.
 
-On Mon, Oct 17, 2022 at 08:12:43PM +0300, Andy Shevchenko wrote:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> Cleaning up the driver to use pm_ptr() macro instead of ifdeffery
-> that makes it simpler and allows the compiler to remove those functions
-> if built without CONFIG_PM and CONFIG_PM_SLEEP support.
 
-Are you sure this works cleanly and doesn't suffer from similar problems
-to of_match_ptr() when PM is disabled, leaving some unreferenced statics?
-
---V9S8SQ5cUoONv9dP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNjrgACgkQJNaLcl1U
-h9Dz4Qf/cKh3nwp5Mo7NR0eiTkI4J5KQ7WkEMgIyw75YiI7z1RL2yBwGdRqXo0y1
-LEgVrOjMQAxLmDo6mWG4DwBfwmO1EE787uut6T1mGAxqxlavCfkrXo0Jq2GonSv7
-c9u7DHNEkicF6exOfwEG6WYsqJZikxUb+vqCMzedAZMLYP2Wa574jtVYszI1c8Gb
-+dLe0itdeP3RKQU+tBTXxcboYkpqYfEuCz23WP8egCbsDQiwMv5mpOfKbJ0Oe/Sb
-AVhfYh3lC5GLV00br+KLrdF1EOtdeBKVmMOTp75u7+ptb6M0KRCbG32GYiOSAq+4
-CsqKcbqK3vqKy7ulDB9xVTkSFjKeEA==
-=eiYH
------END PGP SIGNATURE-----
-
---V9S8SQ5cUoONv9dP--
