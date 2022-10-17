@@ -2,111 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DC26003F8
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 00:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2451B600A5D
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 11:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiJPWnr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 16 Oct 2022 18:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S230323AbiJQJWB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 05:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJPWnq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Oct 2022 18:43:46 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022412AE16;
-        Sun, 16 Oct 2022 15:43:44 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id bk15so15805478wrb.13;
-        Sun, 16 Oct 2022 15:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wDsdEqeSyYndowz7YCRb9tbG1LI9jdAVJZcV10CPOKY=;
-        b=b4WAKvQpKxm/VVN+/HaV58gMgbxFzk34sPNg6kh+QcMqPSoaUAIJMybiayxNxS3Ns6
-         OhbeYOtq5BOXilCfMdAi0HykbmZSEw9ycZKw4PMEEPvjOXiY5SEh+nCPadeY7rg7qxKY
-         Js4KZnD4YsAG4GUDQH5xXN1CcUuuldr1gGRkg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wDsdEqeSyYndowz7YCRb9tbG1LI9jdAVJZcV10CPOKY=;
-        b=vqiJ7VNZxSnbH82jo9DXL4P0fFyFHEOErkiomXGBCFErxwG04TEmoacFUNHF0QJCC0
-         svCkTAYSQJGYfYft+VzDWOm5xpyK/KlXCzvVRrDped1i9ia+2zkf4I+hDIYYHwvVS4O9
-         DjBL3xl1Z0Y7nX7YKQOmUak8xFVX98PZYoHyVeFuaabn8W9tbtCyekKnbhZDFlrh3N7A
-         W2J9dPxO5Op9TWCfgyfy4EJ/KQBqa/LuRe/ooyN+96j4Gmx6B0Do6G2UIvruul0me9Cy
-         t2u9m9gB+fn7TrjmJyGE5AGWS/iJqxTXWCSQTTPkQnwkjYpA//RWVeUd1x/6afDOyjiW
-         1Qiw==
-X-Gm-Message-State: ACrzQf1ApLqNpRhPYvqFj3reZd3rwwq5NAWA1WlmvccCnJseQJ4Zvdvl
-        yBKfW2joiT1iQlWWu1erjEHqUS0rELULb8Oi4Xs=
-X-Google-Smtp-Source: AMsMyM6+vvLG/zT8BB8DixOZKoQOE4ds/2ACweWZ+P4b8z80ltXBboupc0jh5MD97+Bmf2y5bMFK/mr1zHT+QkeFydM=
-X-Received: by 2002:a5d:6c63:0:b0:230:8257:be9e with SMTP id
- r3-20020a5d6c63000000b002308257be9emr4251960wrz.606.1665960222405; Sun, 16
- Oct 2022 15:43:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221016155722.3520802-1-clg@kaod.org>
-In-Reply-To: <20221016155722.3520802-1-clg@kaod.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Sun, 16 Oct 2022 22:43:30 +0000
-Message-ID: <CACPK8XfrF2h0zYNPcFwHmGfyohCOYQziqoUAJ6j60bEonFHu0A@mail.gmail.com>
-Subject: Re: [PATCH] spi: aspeed: Fix window offset of CE1
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        with ESMTP id S231226AbiJQJVr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 05:21:47 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3933112AC8;
+        Mon, 17 Oct 2022 02:21:39 -0700 (PDT)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4MrWZr12rvz4xGl;
+        Mon, 17 Oct 2022 20:16:36 +1100 (AEDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MrWZh54s8z4wgv;
+        Mon, 17 Oct 2022 20:16:28 +1100 (AEDT)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH linux v2 0/3] spi: aspeed: Add a "ranges" property
+Date:   Mon, 17 Oct 2022 11:16:21 +0200
+Message-Id: <20221017091624.130227-1-clg@kaod.org>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 16 Oct 2022 at 15:57, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
->
-> The offset value of the mapping window in the kernel structure is
-> calculated using the value of the previous window offset. This doesn't
-> reflect how the HW is configured and can lead to erroneous setting of
-> the second flash device (CE1).
+Hello,
 
-So .offset is expected to be the absolute address of the window, and
-this was okay for the 2400/2500 but was broken on the 2600?
+Currently, the Linux Aspeed SMC driver computes the decoding ranges of
+each CS (AHB memory window on which the flash contents are mapped)
+from the size of the detected flash device. It seems that some chips
+have issues with the computed ranges and for these, it would be nice
+to be able to define custom decoding ranges in the DT.
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Here is a little series doing that. 
 
+Thanks,
 
->
-> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Fixes: e3228ed92893 ("spi: spi-mem: Convert Aspeed SMC driver to spi-mem"=
-)
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
-> ---
->  drivers/spi/spi-aspeed-smc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index 33cefcf18392..b90571396a60 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -398,7 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi =
-*aspi,
->                 windows[cs].cs =3D cs;
->                 windows[cs].size =3D data->segment_end(aspi, reg_val) -
->                         data->segment_start(aspi, reg_val);
-> -               windows[cs].offset =3D cs ? windows[cs - 1].offset + wind=
-ows[cs - 1].size : 0;
-> +               windows[cs].offset =3D data->segment_start(aspi, reg_val)=
- - aspi->ahb_base_phy;
->                 dev_vdbg(aspi->dev, "CE%d offset=3D0x%.8x size=3D0x%x\n",=
- cs,
->                          windows[cs].offset, windows[cs].size);
->         }
-> --
-> 2.37.3
->
+C. 
+
+Changes in v2 :
+
+ - Tested by Naresh Solanki
+ - sent preliminary fix independently
+   https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221016155722.3520802-1-clg@kaod.org/
+ - changed the sysfs file exposing the register values to debugfs.
+ - refresh on 6.1-rc1
+
+Cédric Le Goater (3):
+  spi: dt-bindings: aspeed: Add a ranges property
+  spi: aspeed: Handle custom decoding ranges
+  spi: aspeed: Introduce a "ranges" debugfs file
+
+ drivers/spi/spi-aspeed-smc.c                  | 131 +++++++++++++++++-
+ .../bindings/spi/aspeed,ast2600-fmc.yaml      |   9 ++
+ 2 files changed, 138 insertions(+), 2 deletions(-)
+
+-- 
+2.37.3
+
