@@ -2,109 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385C3600CF9
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 12:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F681600E20
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 13:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiJQKzu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 06:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S230153AbiJQLto (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 07:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiJQKzt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 06:55:49 -0400
-Received: from 6.mo552.mail-out.ovh.net (6.mo552.mail-out.ovh.net [188.165.49.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FF05C95D
-        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 03:55:46 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.20.48])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 8A3012723A;
-        Mon, 17 Oct 2022 09:39:31 +0000 (UTC)
-Received: from kaod.org (37.59.142.95) by DAG4EX2.mxp5.local (172.16.2.32)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Mon, 17 Oct
- 2022 11:39:30 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-95G001e4a9f766-4f6d-4d46-83cb-9024a96d311a,
-                    03067325AA2E056BEC2EB751A0783F460AB0E9BE) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <5141de99-33cc-7266-d56a-9f8112d1e588@kaod.org>
-Date:   Mon, 17 Oct 2022 11:39:29 +0200
+        with ESMTP id S230096AbiJQLtl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 07:49:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C572DC6
+        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 04:49:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F4926108F
+        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 11:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9882C433D6;
+        Mon, 17 Oct 2022 11:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666007372;
+        bh=4X4LcN25+lwO+RURYoBcclRumNpUbLtS15XOQm1NekI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ftAE4sZsXTkhWtV3nnykV5VDl8B03mhkzitol6v/bciMt7AmS7yg4Q55mSdLlBlXd
+         AiA9gPKvWjvbmzBwClq5ago7hUWFS7n4WEP++RjZr5ncNbPyfZ41CxXY4/SboifAhO
+         Ob4MZJ8LEYrhvoc774Vk16SosK+8fRgYhDzy5mYB5cJ0iEOg+74o4skG5w9xPllpKk
+         H5PRKqTvatiL4p/Y7F18BrNgCCJJTBhU2tYAeJzSru2Ht7+xjJ9HdV1SspQxQ30yFY
+         pFskIi8TznXnCF2iMXLQ9i7O15EIssi2cJmzBFqcwC4BhK5uYuvey5TzjJiHOmi/8h
+         4h9+bJsjfTmRg==
+Date:   Mon, 17 Oct 2022 12:49:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chris Lesiak <chris.lesiak@licor.com>
+Cc:     linux-spi@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH] spi: spi-imx: mx51 support for more than 4 gpio chip
+ selects
+Message-ID: <Y01BSOOv+KZ6ndMl@sirena.org.uk>
+References: <20221007152830.699869-1-chris.lesiak@licor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] spi: aspeed: Fix window offset of CE1
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-References: <20221016155722.3520802-1-clg@kaod.org>
- <CACPK8XfrF2h0zYNPcFwHmGfyohCOYQziqoUAJ6j60bEonFHu0A@mail.gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <CACPK8XfrF2h0zYNPcFwHmGfyohCOYQziqoUAJ6j60bEonFHu0A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.95]
-X-ClientProxiedBy: DAG9EX2.mxp5.local (172.16.2.82) To DAG4EX2.mxp5.local
- (172.16.2.32)
-X-Ovh-Tracer-GUID: ab2a3e5c-c840-4939-a121-c42b9414ee40
-X-Ovh-Tracer-Id: 2509067946161834799
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekledgudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekteejtdelkeejvdevffduhfetteelieefgeefffeugffhfeekheffueefledujeenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddrleehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeotghlgheskhgrohgurdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehjohgvlhesjhhmshdrihgurdgruhdplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdpsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdgrshhpvggvugeslhhishhtshdrohiilhgrsghsrdhorhhgpdhophgvnhgsmhgtsehlihhsthhsrdhoiihlrggsshdrohhrghdprghnughrvgifsegrjhdrihgurdgruhdplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvh
- hgvghrrdhkvghrnhgvlhdrohhrghdptghhihhnqdhtihhnghgpkhhuohesrghsphgvvgguthgvtghhrdgtohhmpdfovfetjfhoshhtpehmohehhedvpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JAI05UtFAHXTUaLm"
+Content-Disposition: inline
+In-Reply-To: <20221007152830.699869-1-chris.lesiak@licor.com>
+X-Cookie: Apply only to affected area.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 10/17/22 00:43, Joel Stanley wrote:
-> On Sun, 16 Oct 2022 at 15:57, Cédric Le Goater <clg@kaod.org> wrote:
->>
->> The offset value of the mapping window in the kernel structure is
->> calculated using the value of the previous window offset. This doesn't
->> reflect how the HW is configured and can lead to erroneous setting of
->> the second flash device (CE1).
-> 
-> So .offset is expected to be the absolute address of the window, and
-> this was okay for the 2400/2500 but was broken on the 2600?
 
-the aspeed_spi_get_windows() routine collects in an array the window/decoding
-range setting for each CS, and the offset for CS1 and above is computed from
-the offset/size of the previous CS. But this makes an assumption on the fact
-ranges are contiguous, which is not necessarily how the HW is configured.
+--JAI05UtFAHXTUaLm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-C.
+On Fri, Oct 07, 2022 at 10:28:30AM -0500, Chris Lesiak wrote:
+> The MX51_ECSPI_CTRL and MX51_ECSPI_CONFIG registers have bit fields
+> that only support the four slave select channels.  If we are using
+> a gpio to support chip_select > 3, we need to be careful not to
 
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-> 
-> 
->>
->> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
->> Fixes: e3228ed92893 ("spi: spi-mem: Convert Aspeed SMC driver to spi-mem")
->> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->> ---
->>   drivers/spi/spi-aspeed-smc.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
->> index 33cefcf18392..b90571396a60 100644
->> --- a/drivers/spi/spi-aspeed-smc.c
->> +++ b/drivers/spi/spi-aspeed-smc.c
->> @@ -398,7 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi *aspi,
->>                  windows[cs].cs = cs;
->>                  windows[cs].size = data->segment_end(aspi, reg_val) -
->>                          data->segment_start(aspi, reg_val);
->> -               windows[cs].offset = cs ? windows[cs - 1].offset + windows[cs - 1].size : 0;
->> +               windows[cs].offset = data->segment_start(aspi, reg_val) - aspi->ahb_base_phy;
->>                  dev_vdbg(aspi->dev, "CE%d offset=0x%.8x size=0x%x\n", cs,
->>                           windows[cs].offset, windows[cs].size);
->>          }
->> --
->> 2.37.3
->>
+This doesn't apply against current code, please check and resend.
+Please also try to avoid outdated terminology and refer to chip selects.
 
+--JAI05UtFAHXTUaLm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNQUcACgkQJNaLcl1U
+h9DpyAf9G46SBvAabphTKXQWPFIcxCYMxzmw1hFy2AXDpqwFlaEd2gcysvDYIiO/
+3Lo1KXsw4TXayk/D0kVSeXjfbjCVKU38sTlZbmuGHrdPHPcwLWyz8ocZKabs+3f1
+xQv3jQymgD0qEoBjruJ4U2MS9dDmv+7df6pDsQD5gndcFyyTpFGzSazxYCluY3b0
+6yJQSnEi98d5evQWP0YTCRwZAhtcwKiPHAd/G0bgVxXYmc/JaSWRG/d/VUvr2pK+
+O+ZrSFVoPtFQLd/DzZwcGp1YdhNgQ1DH2IFxYAjm5GIg3rWPLS5HycDZLekqgDZP
+9HCS9jCKW0/LpjNjWeoWxsI3+0GLow==
+=xTQl
+-----END PGP SIGNATURE-----
+
+--JAI05UtFAHXTUaLm--
