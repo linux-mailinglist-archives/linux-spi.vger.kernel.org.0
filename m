@@ -2,171 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C608A600A48
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 11:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF793600A4D
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 11:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJQJSY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 05:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S230313AbiJQJTI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 05:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJQJST (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 05:18:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13FC40561;
-        Mon, 17 Oct 2022 02:18:02 -0700 (PDT)
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4MrWb55sqhz4xG9;
-        Mon, 17 Oct 2022 20:16:49 +1100 (AEDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MrWb20658z4xGG;
-        Mon, 17 Oct 2022 20:16:45 +1100 (AEDT)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH linux v2 3/3] spi: aspeed: Introduce a "ranges" debugfs file
-Date:   Mon, 17 Oct 2022 11:16:24 +0200
-Message-Id: <20221017091624.130227-4-clg@kaod.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017091624.130227-1-clg@kaod.org>
-References: <20221017091624.130227-1-clg@kaod.org>
+        with ESMTP id S231454AbiJQJTE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 05:19:04 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B018501BD
+        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 02:18:48 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id a13so15169335edj.0
+        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 02:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+HqAIl6nBJaeTsKPrd3Fu1M8Q24TXGKoN11JeqqOoGQ=;
+        b=OUMxqBlyLog/Cl8agdjk25/WRV0xCBdMiotiEDcpVSGtmZ6+Ckbqnpc7DCdFbPYYJt
+         1yUUZYDeXQnl0gQh5KTe+ojvd1s4Coo8UtsuE5do0UZLghcjm7lyOd9HvwRIDqB3PTB8
+         P+JmU1m0niHDX5DQuej6CeIaEwP/4jIlqVBlqUEkBWBPWrwytfsOViSeEAewTT1VQ07G
+         wXyzKrnrbwx5qEcLxvd++JmAeIs32nYp9qbSnhptfvA//kkt5z7zkOmH/7KoJjFLI8qC
+         cEGBp4Nwyd9qPRYgwyAOUsRoDkrxv7z8j+PylWQ2EVYU8xs3lFFwWhOwoxfp0H80gTUd
+         Wr6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+HqAIl6nBJaeTsKPrd3Fu1M8Q24TXGKoN11JeqqOoGQ=;
+        b=wvSqVA3v08lGZ4JAx40K6cLByifeV0e4K6bkDEcSqnmPqz6pRy3AdgxCIu1zCGuBmU
+         natZeYvYiTQ/IZFLzzBwWGVA3Zm2BakzBewjZnL1ezTxLDoDWjDbLRW49tHPoEk2hCSI
+         +sAlZs1CkdY0QIVWtCtiN5PklRKHBaVpFUUtP75wh/HqPK3ZbXlBlvuIEJ/0E+hzoZ5p
+         kFqOX+xdHuqICZGflpTIGoQIFhiX6B8L/U3nrq3nTt70JjNLc0wo1Hw0/QStN7xzPDo/
+         kUvR6fz6TwHtwdDJLoq86/U9IXuenHGqh2+U2blLZolwWcGx438z074UgZgYEgahDpIT
+         zVCw==
+X-Gm-Message-State: ACrzQf1L08I1Z22P7K+egr/fbqNpYCBzTiT+yBdj4/M3OsvGy3iJthjF
+        s2Gy1x7sVgxP1Jt8C0t/+spHF8MqMsMZhgJZ1h9J0DYRltc=
+X-Google-Smtp-Source: AMsMyM6dy0W7/AbolGk9+7me5a49jX88i4urkUqsO8zQdLx+msJsCLBRnqfnOjgEd1Y5uv+zt8vkYxuXTpcSPP2JPH0=
+X-Received: by 2002:aa7:c98d:0:b0:45c:6451:320e with SMTP id
+ c13-20020aa7c98d000000b0045c6451320emr9368712edt.172.1665998279122; Mon, 17
+ Oct 2022 02:17:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221006194819.1536932-1-robert.marko@sartura.hr>
+In-Reply-To: <20221006194819.1536932-1-robert.marko@sartura.hr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 11:17:47 +0200
+Message-ID: <CACRpkda9vrPskHYbasqWpDcap=qwP3_QoEpuEBgbC1WQ4=aoYw@mail.gmail.com>
+Subject: Re: [PATCH] spi: qup: support using GPIO as chip select line
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This dumps the mapping windows, or decoding ranges, of all devices
-possibly attached of the controller. To be noted that a top level
-"spi" debugfs directory is created to hold the intermediate directory
-of the driver instance.
+On Thu, Oct 6, 2022 at 9:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
 
-Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- drivers/spi/spi-aspeed-smc.c | 66 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 65 insertions(+), 1 deletion(-)
+> Most of the device with QUP SPI adapter are actually using GPIO-s for
+> chip select.
+>
+> However, this stopped working after ("spi: Retire legacy GPIO handling")
+> as it introduced a check on ->use_gpio_descriptors flag and since spi-qup
+> driver does not set the flag it meant that all of boards using GPIO-s and
+> with QUP adapter SPI devices stopped working.
+>
+> So, to enable using GPIO-s again set ->use_gpio_descriptors to true and
+> populate ->max_native_cs.
+>
+> Fixes: f48dc6b96649 ("spi: Retire legacy GPIO handling")
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Cc: luka.perkov@sartura.hr
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 75e1d08bbd00..a79e5cc8ac5b 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/debugfs.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-@@ -102,6 +103,9 @@ struct aspeed_spi {
- 	u32			 clk_freq;
- 
- 	struct aspeed_spi_chip	 chips[ASPEED_SPI_MAX_NUM_CS];
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	struct dentry           *debugfs;
-+#endif
- };
- 
- static u32 aspeed_spi_get_io_mode(const struct spi_mem_op *op)
-@@ -716,6 +720,65 @@ static void aspeed_spi_enable(struct aspeed_spi *aspi, bool enable)
- 		aspeed_spi_chip_enable(aspi, cs, enable);
- }
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+static int aspeed_spi_ranges_debug_show(struct seq_file *m, void *private)
-+{
-+	struct aspeed_spi *aspi = m->private;
-+	struct aspeed_spi_window windows[ASPEED_SPI_MAX_NUM_CS] = { 0 };
-+	u32 cs;
-+
-+	if (aspi->data == &ast2400_spi_data)
-+		return 0;
-+
-+	aspeed_spi_get_windows(aspi, windows);
-+
-+	seq_puts(m, "     offset     size       register\n");
-+	for (cs = 0; cs < aspi->data->max_cs; cs++) {
-+		if (!windows[cs].reg)
-+			seq_printf(m, "CE%d: disabled\n", cs);
-+		else
-+			seq_printf(m, "CE%d: 0x%.8x 0x%.8x 0x%x\n", cs,
-+				   windows[cs].offset, windows[cs].size,
-+				   windows[cs].reg);
-+	}
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(aspeed_spi_ranges_debug);
-+
-+static int aspeed_spi_debugfs_init(struct spi_controller *ctlr)
-+{
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(ctlr);
-+	struct dentry *rootdir = NULL;
-+
-+	rootdir = debugfs_lookup("spi", NULL);
-+	if (!rootdir)
-+		rootdir = debugfs_create_dir("spi", NULL);
-+
-+	aspi->debugfs = debugfs_create_dir(dev_name(&ctlr->dev), rootdir);
-+	if (!aspi->debugfs)
-+		return -ENOMEM;
-+
-+	debugfs_create_file("ranges", 0444, aspi->debugfs, (void *)aspi,
-+			    &aspeed_spi_ranges_debug_fops);
-+	return 0;
-+}
-+
-+static void aspeed_spi_debugfs_remove(struct aspeed_spi *aspi)
-+{
-+	debugfs_remove_recursive(aspi->debugfs);
-+}
-+
-+#else
-+static inline int aspeed_spi_debugfs_init(struct spi_controller *ctlr)
-+{
-+	return 0;
-+}
-+
-+static inline void aspeed_spi_debugfs_remove(struct aspeed_spi *aspi)
-+{
-+}
-+#endif /* IS_ENABLED(CONFIG_DEBUG_FS) */
-+
- static int aspeed_spi_chip_read_ranges(struct device_node *node, struct aspeed_spi *aspi)
- {
- 	const char *range_prop = "ranges";
-@@ -845,7 +908,7 @@ static int aspeed_spi_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "spi_register_controller failed\n");
- 		goto disable_clk;
- 	}
--	return 0;
-+	return aspeed_spi_debugfs_init(ctlr);
- 
- disable_clk:
- 	clk_disable_unprepare(aspi->clk);
-@@ -856,6 +919,7 @@ static int aspeed_spi_remove(struct platform_device *pdev)
- {
- 	struct aspeed_spi *aspi = platform_get_drvdata(pdev);
- 
-+	aspeed_spi_debugfs_remove(aspi);
- 	aspeed_spi_enable(aspi, false);
- 	clk_disable_unprepare(aspi->clk);
- 	return 0;
--- 
-2.37.3
+Ooops sorry about that!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
