@@ -2,91 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF793600A4D
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 11:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87796600A70
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 11:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiJQJTI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 05:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S231160AbiJQJWm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 05:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiJQJTE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 05:19:04 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B018501BD
-        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 02:18:48 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id a13so15169335edj.0
-        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 02:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HqAIl6nBJaeTsKPrd3Fu1M8Q24TXGKoN11JeqqOoGQ=;
-        b=OUMxqBlyLog/Cl8agdjk25/WRV0xCBdMiotiEDcpVSGtmZ6+Ckbqnpc7DCdFbPYYJt
-         1yUUZYDeXQnl0gQh5KTe+ojvd1s4Coo8UtsuE5do0UZLghcjm7lyOd9HvwRIDqB3PTB8
-         P+JmU1m0niHDX5DQuej6CeIaEwP/4jIlqVBlqUEkBWBPWrwytfsOViSeEAewTT1VQ07G
-         wXyzKrnrbwx5qEcLxvd++JmAeIs32nYp9qbSnhptfvA//kkt5z7zkOmH/7KoJjFLI8qC
-         cEGBp4Nwyd9qPRYgwyAOUsRoDkrxv7z8j+PylWQ2EVYU8xs3lFFwWhOwoxfp0H80gTUd
-         Wr6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+HqAIl6nBJaeTsKPrd3Fu1M8Q24TXGKoN11JeqqOoGQ=;
-        b=wvSqVA3v08lGZ4JAx40K6cLByifeV0e4K6bkDEcSqnmPqz6pRy3AdgxCIu1zCGuBmU
-         natZeYvYiTQ/IZFLzzBwWGVA3Zm2BakzBewjZnL1ezTxLDoDWjDbLRW49tHPoEk2hCSI
-         +sAlZs1CkdY0QIVWtCtiN5PklRKHBaVpFUUtP75wh/HqPK3ZbXlBlvuIEJ/0E+hzoZ5p
-         kFqOX+xdHuqICZGflpTIGoQIFhiX6B8L/U3nrq3nTt70JjNLc0wo1Hw0/QStN7xzPDo/
-         kUvR6fz6TwHtwdDJLoq86/U9IXuenHGqh2+U2blLZolwWcGx438z074UgZgYEgahDpIT
-         zVCw==
-X-Gm-Message-State: ACrzQf1L08I1Z22P7K+egr/fbqNpYCBzTiT+yBdj4/M3OsvGy3iJthjF
-        s2Gy1x7sVgxP1Jt8C0t/+spHF8MqMsMZhgJZ1h9J0DYRltc=
-X-Google-Smtp-Source: AMsMyM6dy0W7/AbolGk9+7me5a49jX88i4urkUqsO8zQdLx+msJsCLBRnqfnOjgEd1Y5uv+zt8vkYxuXTpcSPP2JPH0=
-X-Received: by 2002:aa7:c98d:0:b0:45c:6451:320e with SMTP id
- c13-20020aa7c98d000000b0045c6451320emr9368712edt.172.1665998279122; Mon, 17
- Oct 2022 02:17:59 -0700 (PDT)
+        with ESMTP id S231248AbiJQJWS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 05:22:18 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC96F20BFD;
+        Mon, 17 Oct 2022 02:22:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSLPPPc_1665998521;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VSLPPPc_1665998521)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Oct 2022 17:22:09 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     conor.dooley@microchip.com
+Cc:     daire.mcnamara@microchip.com, broonie@kernel.org,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] spi: microchip-core: Remove the unused function mchp_corespi_enable()
+Date:   Mon, 17 Oct 2022 17:21:41 +0800
+Message-Id: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20221006194819.1536932-1-robert.marko@sartura.hr>
-In-Reply-To: <20221006194819.1536932-1-robert.marko@sartura.hr>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Oct 2022 11:17:47 +0200
-Message-ID: <CACRpkda9vrPskHYbasqWpDcap=qwP3_QoEpuEBgbC1WQ4=aoYw@mail.gmail.com>
-Subject: Re: [PATCH] spi: qup: support using GPIO as chip select line
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 9:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
+The function mchp_corespi_enable() is defined in the spi-microchip-core.c
+file, but not called elsewhere, so delete this unused function.
 
-> Most of the device with QUP SPI adapter are actually using GPIO-s for
-> chip select.
->
-> However, this stopped working after ("spi: Retire legacy GPIO handling")
-> as it introduced a check on ->use_gpio_descriptors flag and since spi-qup
-> driver does not set the flag it meant that all of boards using GPIO-s and
-> with QUP adapter SPI devices stopped working.
->
-> So, to enable using GPIO-s again set ->use_gpio_descriptors to true and
-> populate ->max_native_cs.
->
-> Fixes: f48dc6b96649 ("spi: Retire legacy GPIO handling")
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: luka.perkov@sartura.hr
+drivers/spi/spi-microchip-core.c:122:20: warning: unused function 'mchp_corespi_enable'.
 
-Ooops sorry about that!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2418
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/spi/spi-microchip-core.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index d352844c798c..aeaa1da88f39 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -119,15 +119,6 @@ static inline void mchp_corespi_write(struct mchp_corespi *spi, unsigned int reg
+ 	writel(val, spi->regs + reg);
+ }
+ 
+-static inline void mchp_corespi_enable(struct mchp_corespi *spi)
+-{
+-	u32 control = mchp_corespi_read(spi, REG_CONTROL);
+-
+-	control |= CONTROL_ENABLE;
+-
+-	mchp_corespi_write(spi, REG_CONTROL, control);
+-}
+-
+ static inline void mchp_corespi_disable(struct mchp_corespi *spi)
+ {
+ 	u32 control = mchp_corespi_read(spi, REG_CONTROL);
+-- 
+2.20.1.7.g153144c
+
