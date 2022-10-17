@@ -2,159 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFFD6016BC
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 20:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F9E601875
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Oct 2022 22:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiJQS5i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Oct 2022 14:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S230520AbiJQUCF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Oct 2022 16:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiJQS5c (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 14:57:32 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA2E754AE;
-        Mon, 17 Oct 2022 11:57:31 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-134072c15c1so14349921fac.2;
-        Mon, 17 Oct 2022 11:57:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yhi01nIKMu8oS63Us1m9T4vtO8yAbuN6/vPxNd3xC04=;
-        b=Zh5B6ZViLeAtu7JJ7aZYHQqghCUrS29QLD9jB6hc286jDTc5gNqGK/CRu0jtOkFgKs
-         hlFXTRck4FrXaRcVKt7tW6+U26COll4eN3Gu+d26tJIB4ijYcPQvmJTguzYeCFlIINpZ
-         9RBPHEL+XY4EU/At81Fhl4JLlZLhgq4xL0jQTgvqxQBaN6UhfZ0e/bz6Z2arn/ETzXpo
-         8diArGkLuZ1VlR6km4VVc+MXeq68rdIyicUOeZeP1moyRTnQ7NUuIhTCElbKG3E0Tw8d
-         H4frCInSwPa5BRk6HrEYylAUT2gDSXP4fln+uE2FuWzQa3OUF33bcB9g9+iM7rHpHquO
-         L4IQ==
-X-Gm-Message-State: ACrzQf37Yc/exKDQ8BSWGKdV17nqTVPayWe6fzETCTRW2grFgPu9Z9wT
-        CdVLjkaHTDhG6k2SydTJjw==
-X-Google-Smtp-Source: AMsMyM6hd4KpSHEGg5rpmw44Oeh0ybM1WiVTBmJIC/qj0uwN3RJKLDIGEfvrnaZYCvC5RjxH/lV8IQ==
-X-Received: by 2002:a05:6870:c8a2:b0:136:5491:8f08 with SMTP id er34-20020a056870c8a200b0013654918f08mr15781649oab.225.1666033050385;
-        Mon, 17 Oct 2022 11:57:30 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t4-20020a4a8244000000b004805c328971sm4500369oog.42.2022.10.17.11.57.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:57:30 -0700 (PDT)
-Received: (nullmailer pid 2279555 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:57:30 -0000
-Date:   Mon, 17 Oct 2022 13:57:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Subject: Re: [PATCH linux v2 2/3] spi: aspeed: Handle custom decoding ranges
-Message-ID: <20221017185730.GB2264550-robh@kernel.org>
-References: <20221017091624.130227-1-clg@kaod.org>
- <20221017091624.130227-3-clg@kaod.org>
+        with ESMTP id S231132AbiJQUB4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Oct 2022 16:01:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D78275EE
+        for <linux-spi@vger.kernel.org>; Mon, 17 Oct 2022 13:01:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okWJ1-0007p7-J3; Mon, 17 Oct 2022 22:01:47 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okWJ0-0028XE-6d; Mon, 17 Oct 2022 22:01:46 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okWIz-008db7-37; Mon, 17 Oct 2022 22:01:45 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de
+Subject: [PATCH] spi: bcm-qspi: Make bcm_qspi_remove() return void
+Date:   Mon, 17 Oct 2022 22:01:43 +0200
+Message-Id: <20221017200143.1426528-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2956; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=qdLvd2FgQb/E+Oq0ESxa5ffvopjSJfr6ID2Op/GvaRw=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjTbSjq+Wzs7tAZHqf62uASxmZMHg/WQ2Fg0yHhiNq TOyDrp2JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY020owAKCRDB/BR4rcrsCVn5B/ 95EeWuhGokejrWgOTQB/uUSAGC40syD9muxugJdiIZ9rYVXqm+RSzlnQlgnjruCRA0aJ8rLpVvF3z3 qnQPChdGUV1n9UHLjCkI0/G9HVIKRrlobE6qy3x9XkXJm7LIz0lgG74SBcVQYX9EulZ8J9qwOozN+5 ofgJsZGEnzMjl1NsW2LtpPleNDmaUH1k6Jo9jPVftzRj/aZH1ygMcvbJnF0dUPzfd7MbBr4uycyzSp 8ksfGsdqd7yMuKpwSDDzehw3XYCr/hNNwI1xpspqpqimozl7XbgB1A3Fg5cLxNGVtrxuhaysWN6pFy Qh1/Cob2TlkIfL9uKK+3h6FDh895oV
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221017091624.130227-3-clg@kaod.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:16:23AM +0200, Cédric Le Goater wrote:
-> The "ranges" property predefines settings for the decoding ranges of
-> each CS. If found in the DT, the driver applies the settings at probe
-> time. The default behavior is to set the decoding range of each CS
-> using the flash device size when the spi slave is setup.
-> 
-> Cc: Naresh Solanki <naresh.solanki@9elements.com>
-> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Signed-off-by: Cédric Le Goater <clg@kaod.org>
-> ---
->  drivers/spi/spi-aspeed-smc.c | 65 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 64 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index b90571396a60..75e1d08bbd00 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -96,6 +96,7 @@ struct aspeed_spi {
->  	u32			 ahb_base_phy;
->  	u32			 ahb_window_size;
->  	struct device		*dev;
-> +	bool                     fixed_windows;
->  
->  	struct clk		*clk;
->  	u32			 clk_freq;
-> @@ -382,6 +383,7 @@ static const char *aspeed_spi_get_name(struct spi_mem *mem)
->  
->  struct aspeed_spi_window {
->  	u32 cs;
-> +	u32 reg;
->  	u32 offset;
->  	u32 size;
->  };
-> @@ -396,6 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi *aspi,
->  	for (cs = 0; cs < aspi->data->max_cs; cs++) {
->  		reg_val = readl(aspi->regs + CE0_SEGMENT_ADDR_REG + cs * 4);
->  		windows[cs].cs = cs;
-> +		windows[cs].reg = reg_val;
->  		windows[cs].size = data->segment_end(aspi, reg_val) -
->  			data->segment_start(aspi, reg_val);
->  		windows[cs].offset = data->segment_start(aspi, reg_val) - aspi->ahb_base_phy;
-> @@ -572,7 +575,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
->  	if (op->data.dir != SPI_MEM_DATA_IN)
->  		return -EOPNOTSUPP;
->  
-> -	aspeed_spi_chip_adjust_window(chip, desc->info.offset, desc->info.length);
-> +	if (!aspi->fixed_windows)
-> +		aspeed_spi_chip_adjust_window(chip, desc->info.offset, desc->info.length);
->  
->  	if (desc->info.length > chip->ahb_window_size)
->  		dev_warn(aspi->dev, "CE%d window (%dMB) too small for mapping",
-> @@ -712,6 +716,61 @@ static void aspeed_spi_enable(struct aspeed_spi *aspi, bool enable)
->  		aspeed_spi_chip_enable(aspi, cs, enable);
->  }
->  
-> +static int aspeed_spi_chip_read_ranges(struct device_node *node, struct aspeed_spi *aspi)
-> +{
-> +	const char *range_prop = "ranges";
-> +	struct property *prop;
-> +	struct aspeed_spi_window ranges[ASPEED_SPI_MAX_NUM_CS];
-> +	int prop_size;
-> +	int count;
-> +	int ret;
-> +	int i;
-> +
-> +	prop = of_find_property(node, range_prop, &prop_size);
-> +	if (!prop)
-> +		return 0;
+The function bcm_qspi_remove() returns zero unconditionally. Make it
+return void.
 
-Parsing common properties yourself is generally a bad sign.
+This is a preparation for making platform remove callbacks return void.
 
-> +
-> +	count = prop_size / sizeof(*ranges);
-> +	if (count > aspi->data->max_cs) {
-> +		dev_err(aspi->dev, "invalid '%s' property %d\n", range_prop, count);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (count < aspi->data->max_cs)
-> +		dev_dbg(aspi->dev, "'%s' property does not cover all CE\n",
-> +			range_prop);
-> +
-> +	ret = of_property_read_u32_array(node, range_prop, (u32 *)ranges, count * 4);
+Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+---
+ drivers/spi/spi-bcm-qspi.c     | 5 ++---
+ drivers/spi/spi-bcm-qspi.h     | 2 +-
+ drivers/spi/spi-brcmstb-qspi.c | 4 +++-
+ drivers/spi/spi-iproc-qspi.c   | 4 +++-
+ 4 files changed, 9 insertions(+), 6 deletions(-)
 
-You've just gotten it horribly wrong because you ignored #size-cells and 
-#address-cells.
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index cad2d55dcd3d..0eee574d3e1f 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -1682,7 +1682,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ /* probe function to be called by SoC specific platform driver probe */
+ EXPORT_SYMBOL_GPL(bcm_qspi_probe);
+ 
+-int bcm_qspi_remove(struct platform_device *pdev)
++void bcm_qspi_remove(struct platform_device *pdev)
+ {
+ 	struct bcm_qspi *qspi = platform_get_drvdata(pdev);
+ 
+@@ -1690,9 +1690,8 @@ int bcm_qspi_remove(struct platform_device *pdev)
+ 	bcm_qspi_hw_uninit(qspi);
+ 	clk_disable_unprepare(qspi->clk);
+ 	kfree(qspi->dev_ids);
+-
+-	return 0;
+ }
++
+ /* function to be called by SoC specific platform driver remove() */
+ EXPORT_SYMBOL_GPL(bcm_qspi_remove);
+ 
+diff --git a/drivers/spi/spi-bcm-qspi.h b/drivers/spi/spi-bcm-qspi.h
+index 01aec6460108..3d7c359c0239 100644
+--- a/drivers/spi/spi-bcm-qspi.h
++++ b/drivers/spi/spi-bcm-qspi.h
+@@ -96,7 +96,7 @@ static inline u32 get_qspi_mask(int type)
+ /* The common driver functions to be called by the SoC platform driver */
+ int bcm_qspi_probe(struct platform_device *pdev,
+ 		   struct bcm_qspi_soc_intc *soc_intc);
+-int bcm_qspi_remove(struct platform_device *pdev);
++void bcm_qspi_remove(struct platform_device *pdev);
+ 
+ /* pm_ops used by the SoC platform driver called on PM suspend/resume */
+ extern const struct dev_pm_ops bcm_qspi_pm_ops;
+diff --git a/drivers/spi/spi-brcmstb-qspi.c b/drivers/spi/spi-brcmstb-qspi.c
+index 75e9b76dab1e..de362b35718f 100644
+--- a/drivers/spi/spi-brcmstb-qspi.c
++++ b/drivers/spi/spi-brcmstb-qspi.c
+@@ -23,7 +23,9 @@ static int brcmstb_qspi_probe(struct platform_device *pdev)
+ 
+ static int brcmstb_qspi_remove(struct platform_device *pdev)
+ {
+-	return bcm_qspi_remove(pdev);
++	bcm_qspi_remove(pdev);
++
++	return 0;
+ }
+ 
+ static struct platform_driver brcmstb_qspi_driver = {
+diff --git a/drivers/spi/spi-iproc-qspi.c b/drivers/spi/spi-iproc-qspi.c
+index de297dacfd57..91cf8eb7213c 100644
+--- a/drivers/spi/spi-iproc-qspi.c
++++ b/drivers/spi/spi-iproc-qspi.c
+@@ -129,7 +129,9 @@ static int bcm_iproc_probe(struct platform_device *pdev)
+ 
+ static int bcm_iproc_remove(struct platform_device *pdev)
+ {
+-	return bcm_qspi_remove(pdev);
++	bcm_qspi_remove(pdev);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id bcm_iproc_of_match[] = {
 
-Rob
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.37.2
+
