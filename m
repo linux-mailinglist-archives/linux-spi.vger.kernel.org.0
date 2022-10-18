@@ -2,44 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A933602C06
+	by mail.lfdr.de (Postfix) with ESMTP id B7237602C07
 	for <lists+linux-spi@lfdr.de>; Tue, 18 Oct 2022 14:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiJRMpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Oct 2022 08:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S229604AbiJRMpn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Oct 2022 08:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiJRMpk (ORCPT
+        with ESMTP id S229816AbiJRMpk (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Oct 2022 08:45:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779C976468
-        for <linux-spi@vger.kernel.org>; Tue, 18 Oct 2022 05:45:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6F7284C;
+        Tue, 18 Oct 2022 05:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E226B81E05
-        for <linux-spi@vger.kernel.org>; Tue, 18 Oct 2022 12:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451F8C433C1;
-        Tue, 18 Oct 2022 12:45:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 252A0B81BFB;
+        Tue, 18 Oct 2022 12:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70209C433D6;
+        Tue, 18 Oct 2022 12:45:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666097128;
-        bh=M7HWP2I8N0CJ/enYJccZNvtny3B6zJKXPSbiBGl3PCs=;
+        s=k20201202; t=1666097129;
+        bh=jRFoqeAs6PqQmn5JQefnF9EBH8A3Cf2rw0GlfDexcGw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=DW/JhGUoGC93rp2bhm7MNtADk7l56RJK5zIMYQ2lnBJ6/SGmqhHedcuQpRaB8p2nt
-         IWme/KoUDZ5oHOH6Iqly161ewVbBztCCKQNJ25Bta0TkNhBQSc7Q+w83NiSt8fkruu
-         +VAxf2lB3OVt8KKs7ZU8VfW5T+9PIvs5RtGg42J3Bl7POlaXxWqTNqeOPkVH4C9Frr
-         GLofyg+FjW1Oi0SVk4Co7O52dg7h/YywyvgCdGc7DMRVbgYJtvlruLwwHB5Q2qZU1Z
-         RDQvRifqwETkAD4wLO/JCvcW17kV1TliKRGOxEKjmHzkAhBgWFEZIeNv+QQ6Yi2B16
-         isYK70/YwCF8g==
+        b=kj+uLC+hQU4DVsfHXBbIlMfuFkLYVPTE5S5ePWMyvZReNHoicUZnVcBDjjN35Jjmw
+         UVN5/he5xgCYX75CRcRSY7QwxqcYsE46sFtg2RUQUekAebPA9OMSaLPW1Hb1TgzDxh
+         DpJoVPGB6gm3rI40AW8knO/iHC/Qb80zoKkyPcbg9ZJfbOErDbFci6aOfFEDM7hDeJ
+         F/6Uc2ZaFo/oKPFPk2+0brvtSEcEjZ+2gGQ+PaSMiE4MMmaERaOmKLdK/b/gp7+rDW
+         7OcNgD4mwVgq/HqiIYeLlUuTQiX5sxFLEw01HhgIUhneX3X1AOkh3HS5gPCwSeGJqK
+         JLcOlMSDjtF0Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-spi@vger.kernel.org
-Cc:     p.zabel@pengutronix.de
-In-Reply-To: <20220928145852.1882221-1-yangyingliang@huawei.com>
-References: <20220928145852.1882221-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next 1/2] spi: bcm63xx: Use devm_platform_get_and_ioremap_resource()
-Message-Id: <166609712700.385867.3047625085191857256.b4-ty@kernel.org>
-Date:   Tue, 18 Oct 2022 13:45:27 +0100
+To:     conor.dooley@microchip.com,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-riscv@lists.infradead.org, daire.mcnamara@microchip.com
+In-Reply-To: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
+References: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
+Subject: Re: [PATCH] spi: microchip-core: Remove the unused function mchp_corespi_enable()
+Message-Id: <166609712817.385867.3776854548759783028.b4-ty@kernel.org>
+Date:   Tue, 18 Oct 2022 13:45:28 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,9 +55,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 28 Sep 2022 22:58:51 +0800, Yang Yingliang wrote:
-> Use the devm_platform_get_and_ioremap_resource() helper instead of calling
-> platform_get_resource() and devm_ioremap_resource() separately.
+On Mon, 17 Oct 2022 17:21:41 +0800, Jiapeng Chong wrote:
+> The function mchp_corespi_enable() is defined in the spi-microchip-core.c
+> file, but not called elsewhere, so delete this unused function.
+> 
+> drivers/spi/spi-microchip-core.c:122:20: warning: unused function 'mchp_corespi_enable'.
 > 
 > 
 
@@ -65,10 +69,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: bcm63xx: Use devm_platform_get_and_ioremap_resource()
-      commit: a008ae9f8336d79df589eb343a38080a4b98340d
-[2/2] spi: cadence-quadspi: Use devm_platform_{get_and_}ioremap_resource()
-      commit: 4e12ef2b2e3f65c4fba895262363c499476848a1
+[1/1] spi: microchip-core: Remove the unused function mchp_corespi_enable()
+      commit: 8f4b3d2f653937956fdc68b665c621dfa3cf2fa7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
