@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C212B602C05
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Oct 2022 14:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A933602C06
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Oct 2022 14:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJRMpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S230043AbiJRMpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 18 Oct 2022 08:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJRMpk (ORCPT
+        with ESMTP id S229882AbiJRMpk (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Oct 2022 08:45:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C655F72945;
-        Tue, 18 Oct 2022 05:45:27 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779C976468
+        for <linux-spi@vger.kernel.org>; Tue, 18 Oct 2022 05:45:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B3961539;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E226B81E05
+        for <linux-spi@vger.kernel.org>; Tue, 18 Oct 2022 12:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451F8C433C1;
         Tue, 18 Oct 2022 12:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F5BC433D6;
-        Tue, 18 Oct 2022 12:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666097126;
-        bh=PSPwRfSOvvr8DnOP03iTih3cMwWsqZecmSWzS6DwR3w=;
+        s=k20201202; t=1666097128;
+        bh=M7HWP2I8N0CJ/enYJccZNvtny3B6zJKXPSbiBGl3PCs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pAiTI4eO+pubK4zW5itvpEfp2cpyuH+M0ZM5wa+e+n6J32opE7In7J8scptOOT0k9
-         gxG2bH3ItXobCkAF7yPAajJKCE/Yudz786xm/OeNENF61AAhllLcUVf0vy9Nxk6vrP
-         CdIh6SIgANMUnAl4z5LmLGS0spdYifnYfabe9ynJQky5oZqPCQ+Jj7pwEp4tSdjKXQ
-         xto0adW94EY/g3wpJ5RyYessP6P3C2R50obIEiBPwcaR2EnQSkJ5SonBCG2tvo1n6J
-         pWGAo2UsNzSLDni9YWqIy1ZnJMGa90O99mpNv8yEZIR1ixhYlLtt7nHY0gEx9U8Wdy
-         2ZR0rqsfmUQHg==
+        b=DW/JhGUoGC93rp2bhm7MNtADk7l56RJK5zIMYQ2lnBJ6/SGmqhHedcuQpRaB8p2nt
+         IWme/KoUDZ5oHOH6Iqly161ewVbBztCCKQNJ25Bta0TkNhBQSc7Q+w83NiSt8fkruu
+         +VAxf2lB3OVt8KKs7ZU8VfW5T+9PIvs5RtGg42J3Bl7POlaXxWqTNqeOPkVH4C9Frr
+         GLofyg+FjW1Oi0SVk4Co7O52dg7h/YywyvgCdGc7DMRVbgYJtvlruLwwHB5Q2qZU1Z
+         RDQvRifqwETkAD4wLO/JCvcW17kV1TliKRGOxEKjmHzkAhBgWFEZIeNv+QQ6Yi2B16
+         isYK70/YwCF8g==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-Subject: Re: (subset) [PATCH v2 SPI for-next 0/2] spi: microchip: pci1xxxx: Load SPI driver for SPI endpoint of PCI1XXXX switch
-Message-Id: <166609712567.385867.7300778836137490468.b4-ty@kernel.org>
-Date:   Tue, 18 Oct 2022 13:45:25 +0100
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org
+Cc:     p.zabel@pengutronix.de
+In-Reply-To: <20220928145852.1882221-1-yangyingliang@huawei.com>
+References: <20220928145852.1882221-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next 1/2] spi: bcm63xx: Use devm_platform_get_and_ioremap_resource()
+Message-Id: <166609712700.385867.3047625085191857256.b4-ty@kernel.org>
+Date:   Tue, 18 Oct 2022 13:45:27 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,15 +53,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 6 Oct 2022 10:35:12 +0530, Tharun Kumar P wrote:
-> Microchip PCI1XXXX is an unmanaged PCIe3.1a switch for consumer,
-> industrial, and automotive applications. This switch has multiple
-> downstream ports. One of the switch's downstream ports is a multifunction
-> endpoint; one of those functions supports SPI functionality. This series
-> of patches provides the SPI controller driver for the SPI function of the
-> multifunction PCIe endpoint of the switch.
+On Wed, 28 Sep 2022 22:58:51 +0800, Yang Yingliang wrote:
+> Use the devm_platform_get_and_ioremap_resource() helper instead of calling
+> platform_get_resource() and devm_ioremap_resource() separately.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -69,8 +65,10 @@ Applied to
 
 Thanks!
 
-[1/2] spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch
-      commit: 1cc0cbea7167af524a7f7b2d0d2f19f7a324e807
+[1/2] spi: bcm63xx: Use devm_platform_get_and_ioremap_resource()
+      commit: a008ae9f8336d79df589eb343a38080a4b98340d
+[2/2] spi: cadence-quadspi: Use devm_platform_{get_and_}ioremap_resource()
+      commit: 4e12ef2b2e3f65c4fba895262363c499476848a1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
