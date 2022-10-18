@@ -2,132 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CB3602812
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Oct 2022 11:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4722E6029C4
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Oct 2022 13:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiJRJQG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Oct 2022 05:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S229930AbiJRLBs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Oct 2022 07:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiJRJQF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Oct 2022 05:16:05 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326787FA7;
-        Tue, 18 Oct 2022 02:16:04 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms7Tm2ZwXz687Jl;
-        Tue, 18 Oct 2022 17:14:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 11:16:03 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 10:16:02 +0100
-Date:   Tue, 18 Oct 2022 10:16:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 5/6] spi: pxa2xx: Move OF and ACPI ID tables closer
- to their user
-Message-ID: <20221018101601.00007888@huawei.com>
-In-Reply-To: <20221017171243.57078-5-andriy.shevchenko@linux.intel.com>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
-        <20221017171243.57078-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        with ESMTP id S229990AbiJRLBr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Oct 2022 07:01:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6517FB5FDA;
+        Tue, 18 Oct 2022 04:01:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2C05B81E88;
+        Tue, 18 Oct 2022 11:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6487C433D6;
+        Tue, 18 Oct 2022 11:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666090903;
+        bh=b6Iw/I2YAN+EIBfO8nYIfadbuQNj8Oni/NifDZiVS4M=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FcRJ85KV6/e4XRC/5H2J8/lx9Yx5fUr1FfdXGTtr3uMx/AZlEG4yVkAfC/Mh/iMzB
+         T3Nff07yPYJQyHKLA2am+Kn4+dfN2OuNXuQICSUG3WZmRPwRv1nYCoGYob9LHX7Isb
+         tPQnlJhURNxmc5e9Wxh0nNoU42ExMIrsSIOEbUbHncBassLZZgGqwQsMlOS3In5yQp
+         KyFT9EMTkbeex1XMS6bQQOlhtFTIJc1HvLZQT7CHLnKgN7qqQ2cFoBrjDezDE4rmSS
+         /yjFA3pIO+Sx6lyjzeq5o0CLxD1IYng69V1qkFAvflGwiUYOe+T71Qob08CEoN7oMI
+         eT31xTygI6BDw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Robert Marko <robert.marko@sartura.hr>, linux-spi@vger.kernel.org,
+        agross@kernel.org, linus.walleij@linaro.org,
+        konrad.dybcio@somainline.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+Cc:     luka.perkov@sartura.hr
+In-Reply-To: <20221006194819.1536932-1-robert.marko@sartura.hr>
+References: <20221006194819.1536932-1-robert.marko@sartura.hr>
+Subject: Re: [PATCH] spi: qup: support using GPIO as chip select line
+Message-Id: <166609090152.70786.17854878547413325335.b4-ty@kernel.org>
+Date:   Tue, 18 Oct 2022 12:01:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 17 Oct 2022 20:12:42 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> There is no code that uses ID tables directly, except the
-> struct device_driver at the end of the file. Hence, move
-> tables closer to its user. It's always possible to access
-> them via pointer to a platform device.
+On Thu, 6 Oct 2022 21:48:19 +0200, Robert Marko wrote:
+> Most of the device with QUP SPI adapter are actually using GPIO-s for
+> chip select.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Seems sensible.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/spi/spi-pxa2xx.c | 38 +++++++++++++++++++-------------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
+> However, this stopped working after ("spi: Retire legacy GPIO handling")
+> as it introduced a check on ->use_gpio_descriptors flag and since spi-qup
+> driver does not set the flag it meant that all of boards using GPIO-s and
+> with QUP adapter SPI devices stopped working.
 > 
-> diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-> index 31927493eeb0..76046612466d 100644
-> --- a/drivers/spi/spi-pxa2xx.c
-> +++ b/drivers/spi/spi-pxa2xx.c
-> @@ -1321,25 +1321,6 @@ static void cleanup(struct spi_device *spi)
->  	kfree(chip);
->  }
->  
-> -#ifdef CONFIG_ACPI
-> -static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
-> -	{ "INT33C0" },
-> -	{ "INT33C1" },
-> -	{ "INT3430" },
-> -	{ "INT3431" },
-> -	{ "80860F0E" },
-> -	{ "8086228E" },
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
-> -#endif
-> -
-> -static const struct of_device_id pxa2xx_spi_of_match[] = {
-> -	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
-> -	{},
-> -};
-> -MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
-> -
->  static bool pxa2xx_spi_idma_filter(struct dma_chan *chan, void *param)
->  {
->  	return param == chan->device->dev;
-> @@ -1759,6 +1740,25 @@ static const struct dev_pm_ops pxa2xx_spi_pm_ops = {
->  			   pxa2xx_spi_runtime_resume, NULL)
->  };
->  
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
-> +	{ "80860F0E" },
-> +	{ "8086228E" },
-> +	{ "INT33C0" },
-> +	{ "INT33C1" },
-> +	{ "INT3430" },
-> +	{ "INT3431" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
-> +#endif
-> +
-> +static const struct of_device_id pxa2xx_spi_of_match[] = {
-> +	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
-> +
->  static struct platform_driver driver = {
->  	.driver = {
->  		.name	= "pxa2xx-spi",
+> [...]
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: qup: support using GPIO as chip select line
+      commit: b40af6183b685b0cf7870987b858de0d48db9ea0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
