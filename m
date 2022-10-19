@@ -2,85 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DDC604991
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 16:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834AB60493A
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 16:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiJSOoj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S232314AbiJSO2y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 10:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiJSOnw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 10:43:52 -0400
-X-Greylist: delayed 3557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 07:30:04 PDT
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EF62FE924
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:30:00 -0700 (PDT)
-Received: from [192.168.50.220] ([146.241.87.206])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id l8yLom6VCSmRKl8yLoC5TK; Wed, 19 Oct 2022 15:19:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1666185545; bh=WDOGMpV390CNEKOYi9e07ywYx+WEmXUEkJzv9gxWxDQ=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=VesLSrQjcCVgIuoR09xn8ccWOncxgNJcFM6I7wVwjsfV2pUdgYZ8hpjBNGvD2SOOt
-         QZl+pQzHBrIw3NwIm2x6BYUm2MQhMb1dmqChCu3e7NqoHzI9dvaYYet6vnVAv5rI9o
-         SdOyhMh3w2+81l3DjVSwJQap/i1CpzVudzmaK2wUd3yDKd96kZQk1P9LSiWNC2v4yX
-         u+5TrkE30+LIE3aanSyzL+2Px9i1UtgsA8F6DI6ZrjwJaKqLOwpAo5QSUSMC0v0ubX
-         TrNBJrNH3/l3GixjjJK78GYOS3iMGd4VnCk5Ur8SjrAGLk0J5B1/uodHhTEN7e4kSf
-         0sV/SxXC5mXGA==
-Message-ID: <e08af145-59eb-1a36-01d1-3ddb9eef5e7c@benettiengineering.com>
-Date:   Wed, 19 Oct 2022 15:19:01 +0200
+        with ESMTP id S232628AbiJSO2d (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 10:28:33 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB755160EE9
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:13:12 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id l32so13013128wms.2
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVj2DAdfLIU/pX3XZE26BCq9oqHkdH2P1yACg55ATYc=;
+        b=QlA9FYPVLD1k0zfaUSwjLI8Q83sBFeoAzC7eQuA8Vn4Dp8rjm78gQg6ZSYljWFaYI7
+         +EDL8mVklujMsDG8GH9sEfGXq2u99dWf+2LcmapexNQMysE0Gk9TzJ7RJR9XciOpt60T
+         v2f7F0XsTAOUDv9oH+0tpL/amAfarJmdENSkKa5Fmhky74UWZjAH3KB+l6inFESY5V1f
+         aNjyQ0JZwMql16HhSJGSg149q426+rWzciTmWU7Ja794brJrFd4gv8Mq63R3zu2Skj0B
+         bJKMfYLkoBFcz8AsXb9NzPVITJMOIhiV15K+OlEVdt/gbPnIOGmsPEGVwyHC61oOIOBn
+         bN5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PVj2DAdfLIU/pX3XZE26BCq9oqHkdH2P1yACg55ATYc=;
+        b=klgAL/GBUHk7gVu4Ib49jcPebjeHQEDlbrb1HVcVvM/PeNGpkfq2ORNMewZ8UDfGM0
+         51C6XMtthC/EndphTHF4vmsbNapFBj3l9Sm/oHGzJLEfCWMyPVYgr2SHzyntkZ5TQZRX
+         xymMpY2KofmlqxH0MJctpPFPD3f7ZhnXHvfL4XQMgB6zjwoNjPWzDMpf277NeHEdS5An
+         yO+3Uzndeywl/fIILsqA8yYEyaTpXPAVXLtSBABaMpz7qe8OaLMenf9ERQlAyXXlqRWo
+         h2oV4rekcUoUD5B8VHBozHXCIPktbfvSNNErqJW/rng0DPvqCqF77HpBa71IiUJ89xNM
+         tyHw==
+X-Gm-Message-State: ACrzQf3/+a6ypXujgZXYbWk6iaJgtCtR9Y+gmcMNJ59INmQsMjdGQRbX
+        IHsUyAcEnuvPBPZlM/m/dTTUGIzBumZ9rw==
+X-Google-Smtp-Source: AMsMyM5VncASy5bf6AEIZVI0iOwpTrGuyy+Dcp8M8CChiqgXYaA84TGEqw0ITPNidhlKL1DMQ9mdMg==
+X-Received: by 2002:a05:600c:468f:b0:3c6:f85c:25a1 with SMTP id p15-20020a05600c468f00b003c6f85c25a1mr5696138wmo.60.1666188197604;
+        Wed, 19 Oct 2022 07:03:17 -0700 (PDT)
+Received: from [127.0.1.1] (rtr.23.90.200.126.unyc.it. [23.90.200.126])
+        by smtp.googlemail.com with ESMTPSA id o5-20020a5d62c5000000b00228cbac7a25sm13998628wrv.64.2022.10.19.07.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 07:03:17 -0700 (PDT)
+Subject: [PATCH v3 0/2] spi: amlogic: meson-spicc: Use pinctrl to drive CLK line when idle
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 3/3] raid: substitute empty_zero_page with helper
- ZERO_PAGE(0)
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-raid@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Song Liu <song@kernel.org>
-References: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
- <20221018215755.33566-3-giulio.benetti@benettiengineering.com>
- <Y0/Yt4uJWg4knNoc@infradead.org>
-Content-Language: en-US
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfB+NDAsiJxnR3l50nzexIf2Nm5qf9kozjDLXjBsMXnWsJq1kS6Prga/nWQyUoWheKfTCL6zoU+IRJI1sdAmagXZVMkd/FUYgd79e2NLN0969HIPurf4s
- 7FMqqGZHdB7dUwJp3GTb41IUsxfziJIyLnvZ2LjBS9yn5u/m8d4V+f0W95lHOCCGo8cqAJjRnoimvLFwFjpDbOaqnPBQADhxPA1Bpsw7xVtBnLVPAsqmdeAA
- hfVULjRA0+GBTwTI1NvhAMDIC2d/0nQl/Xb/svdU7BuHgAPVDgZ/rwbC4Xc+zmXCjZs9ATUNqmLhxECSEYGZmCCatC2GMc1CbjslIrBo+kmqc8HZKABoxeuz
- RaeT95Md9rzbiu3lgAtg3o/IqI0jmCKESRC5IiByX7ymiZH7J9EI94Tu767HTqsyTJCcYC18KkUPqUFcM9knS1Ut77Tiwd5WGx/a+hlWM+/Og0ZqY74KtyxQ
- LYFfX/FiHIR++SiEBaZlD2erzaOmk7J8BBA7GQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAB4DUGMC/3WNzQrCMBCEX6Xs2ZV0q/bn5HuIh01c7UKalsQWS+m7G7x7Gr6Bb2aDJFElQVdsEG
+ XRpGPIUB0KcD2Hl6A+MgMZotKYE84T8uDxqR9Mk6Ija2upG7mYCrJkOQnayMH1WQuz97nsNb3HuP5O
+ Fspx+7u3EBqspGFpSy5bOl8tr15tlKMbB7jv+/4FlmtKQLQAAAA=
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Date:   Wed, 19 Oct 2022 16:01:02 +0200
+Message-Id: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1666188196; l=1508;
+ i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
+ bh=/olsUtwOJnRswdLM6doMxbVMNoGB8qZCnkiNegDbh1w=;
+ b=aFPV+HsjpwaTDlj7ngssvgjXRK+U0pQ5Yu0g/7m9QFR2MBhDYQYr2iRBsvSx6x+PD6M/5IKDkRss
+ MTCh+avjCw3BKpkSwtHHwbLoGKJbXu2qDxoOXZfjOz5/8jYPCtQC
+X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
+ pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Cristoph,
+Between SPI transactions, all SPI pins are in HiZ state. When using the SS
+signal from the SPICC controller it's not an issue because when the
+transaction resumes all pins come back to the right state at the same time
+as SS.
 
-On 19/10/22 13:00, Christoph Hellwig wrote:
-> On Tue, Oct 18, 2022 at 11:57:55PM +0200, Giulio Benetti wrote:
->>   #if RAID6_USE_EMPTY_ZERO_PAGE
->> -# define raid6_empty_zero_page empty_zero_page
->> +# define raid6_empty_zero_page ZERO_PAGE(0)
->>   #else
->>   extern const char raid6_empty_zero_page[PAGE_SIZE];
-> 
-> RAID6_USE_EMPTY_ZERO_PAGE is never set to a non-zero value.  So this
-> is dead code and we can just remove all code related to the
-> RAID6_USE_EMPTY_ZERO_PAGE case.
+The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+state change and SPI pins state change from idle, you can have a missing or
+spurious clock transition.
 
-thank you for taking a look.
-Should I send a patch for removing the code in this v2 patchset?
+Set a bias on the clock depending on the clock polarity requested before CS
+goes active, by passing a special "idle-low" and "idle-high" pinctrl state
+and setting the right state at a start of a message.
 
-Best regards
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+---
+Changes in v3:
+- Fixed documentation by removing pinctrl states as they are not mandatory.
+- Link to v2: https://lore.kernel.org/r/20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com
+
+---
+Amjad Ouled-Ameur (2):
+      spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI signal states
+      spi: meson-spicc: Use pinctrl to drive CLK line when idle
+
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml       | 67 ++++++++++++++--------
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         | 14 +++++
+ drivers/spi/spi-meson-spicc.c                      | 39 ++++++++++++-
+ 3 files changed, 94 insertions(+), 26 deletions(-)
+---
+base-commit: aae703b02f92bde9264366c545e87cec451de471
+change-id: 20221004-up-aml-fix-spi-c2bb7e78e603
+
+Best regards,
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
+Amjad Ouled-Ameur <aouledameur@baylibre.com>
