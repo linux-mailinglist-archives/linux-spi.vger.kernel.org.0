@@ -2,84 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8032604DCD
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 18:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3595E604E48
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 19:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJSQxX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 12:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
+        id S230090AbiJSRN6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 13:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJSQxW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 12:53:22 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A801CCCD2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 09:53:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id bp11so30120300wrb.9
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 09:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=LTAsnU5E92eB+qM6c/ybV2oQFafDvcuad98jbA6ENts=;
-        b=WpIqH6sWxI6Hu6UReuyNYrXyJhDU+rDEgOP2RlGzl1zKwZERTXOvQh6h1JCi3h+LXe
-         LZUA9R/IiGCU0NllpowXPn+Uv9KCmsSx5ADU6HXkhZHumIZ+l0Maaw1M+hDV+XYp3gmy
-         mHoD7i4M2m4WiiHH6zMqPxqwk/vjAzNXHXHg1zKmOlR6q2+enQZVK4ODS1rTzYEi4c/8
-         5NdGRXYH4AfV0uXEiNK5ndX2gGR1VW7a197z2UMKYuwWVSkAvTrAaiIwfBjnGuog9zyB
-         C7VUpP0yfgRhA/v8u5PZlcXnxUeHasXCm4yCB6jVt/KliKDsruTiMkmulyRaxTTIu+mt
-         S1Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LTAsnU5E92eB+qM6c/ybV2oQFafDvcuad98jbA6ENts=;
-        b=d9EG4Gt6cVdBhumHn28PqIJWAoPZPCkB468BTVQfkuxWlXs+f7QrtiyBMxVwIcZtgS
-         NOCLly4oANnYC2Yi33vxwumqt+WZ8DyhnT426psAU7kaOXenTSIM2+BQ1hqDA6eZfbk1
-         hxN+mnsiBYbSguVa4G415pFZsHdiwBjZreHVs01+QiSx3J1pW/dX47YgZKVJwvIhvcY+
-         etj8n6p8lHbM8LNkNiAK4T50SMNUNGChIlh9L1k+97VxdgK3i8D4lx+irHVfxUEEznBL
-         321jTePb+OAHXqiEIYkjtvAoPi5tnVC/PtqZL0HU+qb4eUPQODZvTrMJKSbT05HQmOFl
-         rxAw==
-X-Gm-Message-State: ACrzQf1MueIv2ZdrhBJW/iOmlfAFw2t+tWnD5lB4jB/qty+0TcvBF+86
-        CFGQW/vWb3vU9WV9oIk41vwvEg==
-X-Google-Smtp-Source: AMsMyM6TUejGXleI8wbR+NzTKQK8JKTIGhCs1+rC2ZIma8ucCBvl4QA0tduEqQwFPKHHpZup6eUUxg==
-X-Received: by 2002:a5d:64c2:0:b0:22e:41b0:42ca with SMTP id f2-20020a5d64c2000000b0022e41b042camr5930528wri.411.1666198399330;
-        Wed, 19 Oct 2022 09:53:19 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b15b:4b56:592a:c397? ([2a01:e0a:982:cbb0:b15b:4b56:592a:c397])
-        by smtp.gmail.com with ESMTPSA id j30-20020adfa55e000000b0021e51c039c5sm14905294wrb.80.2022.10.19.09.53.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 09:53:18 -0700 (PDT)
-Message-ID: <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
-Date:   Wed, 19 Oct 2022 18:53:17 +0200
+        with ESMTP id S230139AbiJSRN5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 13:13:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F381D0650;
+        Wed, 19 Oct 2022 10:13:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD79B8256F;
+        Wed, 19 Oct 2022 17:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00C5C433D6;
+        Wed, 19 Oct 2022 17:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666199631;
+        bh=CL8cFgCw4ynN/G27qFiFYik2sE93rrVtsedtuYFWlfE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=cAR7LEv8bcDRMmWE4fl8ZIoXaiVuUExHveg5/wrWUUIM/jR5j5Xq3Vn6qbGZzByNM
+         cHs8mqwBb0Lljtyz718ImUaOAvTUJg5hV+oCJt3UBYLsdIwQrPWfuuGf5DObnyIgLt
+         l8ZWPhJ4cjQNB6OEThInIyCTdQshfe2xdLmmmbFQfALNy25HQdkRrTqx8wTFpmPnoR
+         gSaQlhgry0XUOYaOgmiqU/85Mj7xtSY3+ycaUxw7hm3QOf318/8WOZF5uuqKG/eSwv
+         8n+tLbInCRiHN4DFP6v34MKszzfR5yYgssVHmv7ATiiJubcCIQP8qqbfTm5cYHvxjz
+         My6tJydShahdQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, michal.simek@amd.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        git@amd.com, linux-spi@vger.kernel.org
+In-Reply-To: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
+References: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: [PATCH v4 0/7] spi: spi-zyqnmp-gqspi: Add tap delay and Versal platform support
+Message-Id: <166619962963.1416921.6108066747778177545.b4-ty@kernel.org>
+Date:   Wed, 19 Oct 2022 18:13:49 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
- <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
- <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,46 +55,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/10/2022 16:29, Krzysztof Kozlowski wrote:
-> On 19/10/2022 10:01, Amjad Ouled-Ameur wrote:
->> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
->> pin biais when idle. Therefore define three pinctrl names:
->> - default: SPI pins are controlled by spi function.
->> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
->> by spi function.
->> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
->> by spi function.
->>
+On Tue, 11 Oct 2022 11:50:33 +0530, Amit Kumar Mahapatra wrote:
+> - Fix kernel-doc warnings in GQSPI driver.
+> - Avoid setting CPOL, CPHA & baud rate multiple times.
+> - Add Versal platform support in GQSPI driver.
+> - Add tap delay support in GQSPI driver.
 > 
-> 
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - amlogic,meson-gx-spicc
->> +
->> +    then:
->> +      properties:
->> +        pinctrl-names:
->> +          minItems: 1
->> +          items:
->> +            - const: default
->> +            - const: idle-high
->> +            - const: idle-low
-> 
-> You should also define in such case pinctrl-0 and others.
 
-Ok I thought it would be covered by the pinctrl-consumer.yaml
-but yeah we should allow pinctrl-1 and pinctrl-2 here aswell by adding:
+Applied to
 
-             pinctrl-1: true
-             pinctrl-2: true
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> 
-> Best regards,
-> Krzysztof
-> 
-Neil
+Thanks!
 
+[1/7] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
+      commit: b3b953084b1bd0e74785bc5017444dd56952fb39
+[2/7] spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
+      commit: 22742b8bbdd9fee1ae30be49c7e7e3becba96fc1
+[3/7] spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same SPI frequency
+      commit: 21764a49d32e041e9d118a7b38c14e3e02fae129
+[4/7] firmware: xilinx: Add qspi firmware interface
+      commit: 1e400cb9cff2157f89ca95aba4589f95253425ba
+[5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
+      commit: fae7b3c3ecd76a911a1f0e45d2258a420559cbf6
+[6/7] spi: dt-bindings: zynqmp-qspi: Add support for Xilinx Versal QSPI
+      commit: 824590249b3cdf57d090d4c912f1497b8e61458f
+[7/7] spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on Versal platform
+      commit: 29f4d95b97bcabc0cd83c34495224b24490f0fe0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
