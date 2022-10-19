@@ -2,80 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC602604B90
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 17:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DDC604991
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 16:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiJSPdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 11:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S229447AbiJSOoj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 10:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiJSPdY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 11:33:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66701DCCD2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 08:26:45 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MsldC2Fq9zmVDC;
-        Wed, 19 Oct 2022 17:22:55 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 17:27:19 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
- 2022 17:27:18 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <chin-ting_kuo@aspeedtech.com>, <clg@kaod.org>,
-        <broonie@kernel.org>, <yangyingliang@huawei.com>
-Subject: [PATCH -next] spi: aspeed: Use devm_platform_{get_and_}ioremap_resource()
-Date:   Wed, 19 Oct 2022 17:26:35 +0800
-Message-ID: <20221019092635.1176622-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230200AbiJSOnw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 10:43:52 -0400
+X-Greylist: delayed 3557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 07:30:04 PDT
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EF62FE924
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:30:00 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id l8yLom6VCSmRKl8yLoC5TK; Wed, 19 Oct 2022 15:19:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666185545; bh=WDOGMpV390CNEKOYi9e07ywYx+WEmXUEkJzv9gxWxDQ=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=VesLSrQjcCVgIuoR09xn8ccWOncxgNJcFM6I7wVwjsfV2pUdgYZ8hpjBNGvD2SOOt
+         QZl+pQzHBrIw3NwIm2x6BYUm2MQhMb1dmqChCu3e7NqoHzI9dvaYYet6vnVAv5rI9o
+         SdOyhMh3w2+81l3DjVSwJQap/i1CpzVudzmaK2wUd3yDKd96kZQk1P9LSiWNC2v4yX
+         u+5TrkE30+LIE3aanSyzL+2Px9i1UtgsA8F6DI6ZrjwJaKqLOwpAo5QSUSMC0v0ubX
+         TrNBJrNH3/l3GixjjJK78GYOS3iMGd4VnCk5Ur8SjrAGLk0J5B1/uodHhTEN7e4kSf
+         0sV/SxXC5mXGA==
+Message-ID: <e08af145-59eb-1a36-01d1-3ddb9eef5e7c@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 15:19:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 3/3] raid: substitute empty_zero_page with helper
+ ZERO_PAGE(0)
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-raid@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Song Liu <song@kernel.org>
+References: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
+ <20221018215755.33566-3-giulio.benetti@benettiengineering.com>
+ <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Language: en-US
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfB+NDAsiJxnR3l50nzexIf2Nm5qf9kozjDLXjBsMXnWsJq1kS6Prga/nWQyUoWheKfTCL6zoU+IRJI1sdAmagXZVMkd/FUYgd79e2NLN0969HIPurf4s
+ 7FMqqGZHdB7dUwJp3GTb41IUsxfziJIyLnvZ2LjBS9yn5u/m8d4V+f0W95lHOCCGo8cqAJjRnoimvLFwFjpDbOaqnPBQADhxPA1Bpsw7xVtBnLVPAsqmdeAA
+ hfVULjRA0+GBTwTI1NvhAMDIC2d/0nQl/Xb/svdU7BuHgAPVDgZ/rwbC4Xc+zmXCjZs9ATUNqmLhxECSEYGZmCCatC2GMc1CbjslIrBo+kmqc8HZKABoxeuz
+ RaeT95Md9rzbiu3lgAtg3o/IqI0jmCKESRC5IiByX7ymiZH7J9EI94Tu767HTqsyTJCcYC18KkUPqUFcM9knS1Ut77Tiwd5WGx/a+hlWM+/Og0ZqY74KtyxQ
+ LYFfX/FiHIR++SiEBaZlD2erzaOmk7J8BBA7GQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use the devm_platform_{get_and_}ioremap_resource() helper instead of
-calling platform_get_resource() and devm_ioremap_resource() separately.
+Hi Cristoph,
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-aspeed-smc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On 19/10/22 13:00, Christoph Hellwig wrote:
+> On Tue, Oct 18, 2022 at 11:57:55PM +0200, Giulio Benetti wrote:
+>>   #if RAID6_USE_EMPTY_ZERO_PAGE
+>> -# define raid6_empty_zero_page empty_zero_page
+>> +# define raid6_empty_zero_page ZERO_PAGE(0)
+>>   #else
+>>   extern const char raid6_empty_zero_page[PAGE_SIZE];
+> 
+> RAID6_USE_EMPTY_ZERO_PAGE is never set to a non-zero value.  So this
+> is dead code and we can just remove all code related to the
+> RAID6_USE_EMPTY_ZERO_PAGE case.
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 33cefcf18392..710ff8cf121f 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -734,13 +734,11 @@ static int aspeed_spi_probe(struct platform_device *pdev)
- 	aspi->data = data;
- 	aspi->dev = dev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	aspi->regs = devm_ioremap_resource(dev, res);
-+	aspi->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(aspi->regs))
- 		return PTR_ERR(aspi->regs);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	aspi->ahb_base = devm_ioremap_resource(dev, res);
-+	aspi->ahb_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
- 	if (IS_ERR(aspi->ahb_base)) {
- 		dev_err(dev, "missing AHB mapping window\n");
- 		return PTR_ERR(aspi->ahb_base);
+thank you for taking a look.
+Should I send a patch for removing the code in this v2 patchset?
+
+Best regards
 -- 
-2.25.1
-
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
