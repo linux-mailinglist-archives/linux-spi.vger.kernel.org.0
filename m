@@ -2,71 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA2D605194
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 22:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4DF6053F3
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 01:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiJSUuo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 16:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S231731AbiJSXcD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 19:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiJSUun (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 16:50:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D1763E5;
-        Wed, 19 Oct 2022 13:50:42 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t16so7781163edd.2;
-        Wed, 19 Oct 2022 13:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k9Jb/D65Nwg00CddvhyNz1Pxcixmx0unsPQe8+d9sp4=;
-        b=fa63IEr9jQKvbBnkDN5zidLJtLtuwez4NKCLptx6HoEnO1qmslQdNwePVxo+j8j6gJ
-         CSOAWaJkDuvnh1wfFKZ99frANkEA4eD1QIC/zwJxwGUssFUqpMJR2HPKaBwqI5i35EO0
-         33JTLh0XzNYoxV8mHYhujKZezsqZDSbXNYWhQyo2Z1fz//3JYSzQqcRHukFoVylsufnt
-         qwNI57GTs468vVKMRDx42UutK9QiLwmfypca+jdxntZCzOHCua633n7YZsx6lil/LCbQ
-         B5XOP0ltuncOShhY9+AjxVbSq7c00WUHlTPhpIukN92c1R6mTfW/2P/fzarRKmQgPvO6
-         60nQ==
+        with ESMTP id S229463AbiJSXb6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 19:31:58 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032F6170DD6;
+        Wed, 19 Oct 2022 16:31:58 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so10427744otu.1;
+        Wed, 19 Oct 2022 16:31:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k9Jb/D65Nwg00CddvhyNz1Pxcixmx0unsPQe8+d9sp4=;
-        b=Re/XOZDSU4mjKt/vtYY/u7PY/O2XTA4ykiXkzR4NiICfz3Ygf9YDnx5jz9glE7+Y+d
-         895wHI3jX2FES0GBQhv2gEeklJzCabqlEVHmx6oyxsyavCv1VV2saf2mF9y1ZXomQdsD
-         kGvGtOAtBRSXH2MT3JwGU+u8prnFv7kR9LqhYhWdd0qmmJe4SExe5gtGLkXHR5whwFvf
-         pkbL2neFlIfUKEWDG3q1T0uA8IqnfX9qdQ1oYOz7uQE5fhOkhHWY655j2CPJz6Zu2gR5
-         aht6690oJ6r09VfIPBagcQXIrpbCjAU55mg+5Z+5hGYnnWt/e2+T0OLblvuvuJEYBG+l
-         benw==
-X-Gm-Message-State: ACrzQf2JWIBZcgGoUpwp/jEvHypgIdIhLn0WLw8TfbJGmyhxOb8t4PsY
-        C4R/HOenRp+sy5jFrjJHxkX3Z576pkJBG3g8Dk4=
-X-Google-Smtp-Source: AMsMyM5WSDH4F3/5sQv3/kCfh6o4ZgGBFVx1bvDggwII+Ekb/WVPf3ARd86uFycXR7ZHWTK4GNRjOWYhMn+7yLUmzC4=
-X-Received: by 2002:a05:6402:190e:b0:45c:d10a:4c1a with SMTP id
- e14-20020a056402190e00b0045cd10a4c1amr9266859edz.345.1666212640531; Wed, 19
- Oct 2022 13:50:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com> <20221004-up-aml-fix-spi-v3-2-89de126fd163@baylibre.com>
-In-Reply-To: <20221004-up-aml-fix-spi-v3-2-89de126fd163@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 19 Oct 2022 22:50:29 +0200
-Message-ID: <CAFBinCAsCg6QQRH3VPY1OKuyfkxY0oCXLhAuMwO6=00gXKqQrQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] spi: meson-spicc: Use pinctrl to drive CLK line
- when idle
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MS0VPgDd6DBW5Ti7Tsf3pJIozjZqn06guICmD2Kp4sM=;
+        b=0a+ruPl68EQ83VfXh8jxAR9EtN/DVoIU/4OkR3ukE65mQbGLgbA5bUtDCHdRjKJ0t3
+         nMzmTip0nMX5nk6z8jUKOVSZ0z9nKc++7uPyLcMD+24YKag2DxwdbTGcPE8KpB+5a9Xq
+         VDUllp6TtSNBqUAH11xOaWQf3NW0PpUnF9O6PJ1GKWlkp9TAQAtvr4uHN1F5ZvY8LOrE
+         ejYRoULNFbOPB4dPyXCodVnqiSzK6743S12ONDyQWTAScXLGzV/E85VHd+Ktmj1y6/Kr
+         Umi24ic1QIUqbZR5Uz4NIP/4NBsDg2LIckbItx+bXvFuXDvau+Joga7EBnALBVZsOVnJ
+         suIw==
+X-Gm-Message-State: ACrzQf12+vZ0/GdUf2dPEVWUZElHnWpXf65IyjYurJcxQ5RX9Re09m4l
+        D6FrGx/gNTwI6ld9W6BxQA==
+X-Google-Smtp-Source: AMsMyM6licy+56vLBx+iqqslzytNI3UKFyi0/zd2kw7rkpCogv5TjVOaifRFEOt+ifDYFE23dsBvIA==
+X-Received: by 2002:a9d:6f02:0:b0:661:d432:fb52 with SMTP id n2-20020a9d6f02000000b00661d432fb52mr5498021otq.153.1666222317217;
+        Wed, 19 Oct 2022 16:31:57 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s17-20020a4ac811000000b00480dccc0c2asm2117891ooq.14.2022.10.19.16.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 16:31:56 -0700 (PDT)
+Received: (nullmailer pid 19942 invoked by uid 1000);
+        Wed, 19 Oct 2022 23:31:53 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Da Xue <da@libre.computer>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Da Xue <da@libre.computer>
+In-Reply-To: <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com> <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+Message-Id: <166622204954.13100.10317615531856688163.robh@kernel.org>
+Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI signal states
+Date:   Wed, 19 Oct 2022 18:31:53 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +66,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Amjad,
+On Wed, 19 Oct 2022 16:01:03 +0200, Amjad Ouled-Ameur wrote:
+> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
+> pin biais when idle. Therefore define three pinctrl names:
+> - default: SPI pins are controlled by spi function.
+> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
+> by spi function.
+> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
+> by spi function.
+> 
+> Reported-by: Da Xue <da@libre.computer>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> ---
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml       | 67 ++++++++++++++--------
+>  1 file changed, 42 insertions(+), 25 deletions(-)
+> 
 
-On Wed, Oct 19, 2022 at 4:03 PM Amjad Ouled-Ameur
-<aouledameur@baylibre.com> wrote:
-[...]
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> index c3ac531c4f84..04e9d0f1bde0 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> @@ -429,6 +429,20 @@ mux {
->                         };
->                 };
->
-> +               spi_idle_high_pins: spi-idle-high-pins {
-> +                       mux {
-> +                               groups = "spi_sclk";
-> +                               bias-pull-up;
-> +                       };
-> +               };
-> +
-> +               spi_idle_low_pins: spi-idle-low-pins {
-> +                       mux {
-> +                               groups = "spi_sclk";
-> +                               bias-pull-down;
-> +                       };
-> +               };
-> +
-We typically have the .dts{,i} changes in a separate patch. I suggest
-doing the same here.
-I also have two questions about this part:
-- why are these not referenced by the SPICC controller node?
-- is there a particular reason why meson-gxl.dtsi is updated but
-meson-gxbb.dtsi is not? (my understanding is that GXBB is also lacking
-hardware OEN support)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml:46:1: [error] duplication of key "allOf" in mapping (key-duplicates)
 
-Best regards,
-Martin
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml:46:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml: ignoring, error parsing file
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.example.dts'
+Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml:46:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
