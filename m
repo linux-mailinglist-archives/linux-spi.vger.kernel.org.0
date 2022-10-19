@@ -2,50 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3595E604E48
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 19:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DD9604E7D
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 19:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJSRN6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 13:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S230086AbiJSRU2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 13:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiJSRN5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 13:13:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F381D0650;
-        Wed, 19 Oct 2022 10:13:54 -0700 (PDT)
+        with ESMTP id S230445AbiJSRU0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 13:20:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EFC157F5F
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 10:20:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD79B8256F;
-        Wed, 19 Oct 2022 17:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00C5C433D6;
-        Wed, 19 Oct 2022 17:13:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2669261973
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 17:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DFE5C433D6;
+        Wed, 19 Oct 2022 17:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666199631;
-        bh=CL8cFgCw4ynN/G27qFiFYik2sE93rrVtsedtuYFWlfE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=cAR7LEv8bcDRMmWE4fl8ZIoXaiVuUExHveg5/wrWUUIM/jR5j5Xq3Vn6qbGZzByNM
-         cHs8mqwBb0Lljtyz718ImUaOAvTUJg5hV+oCJt3UBYLsdIwQrPWfuuGf5DObnyIgLt
-         l8ZWPhJ4cjQNB6OEThInIyCTdQshfe2xdLmmmbFQfALNy25HQdkRrTqx8wTFpmPnoR
-         gSaQlhgry0XUOYaOgmiqU/85Mj7xtSY3+ycaUxw7hm3QOf318/8WOZF5uuqKG/eSwv
-         8n+tLbInCRiHN4DFP6v34MKszzfR5yYgssVHmv7ATiiJubcCIQP8qqbfTm5cYHvxjz
-         My6tJydShahdQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, michal.simek@amd.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        git@amd.com, linux-spi@vger.kernel.org
-In-Reply-To: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
-References: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
-Subject: Re: [PATCH v4 0/7] spi: spi-zyqnmp-gqspi: Add tap delay and Versal platform support
-Message-Id: <166619962963.1416921.6108066747778177545.b4-ty@kernel.org>
-Date:   Wed, 19 Oct 2022 18:13:49 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1666200024;
+        bh=gcCqjvtKuSWmsXVts5KLj+v9Mwlu0rVZoKYCw6NDD7c=;
+        h=Subject:From:Date:To:From;
+        b=U22sUyOzzA3/QiU77Ar4PiU949Az+ggjoR+mPN/5VYjOWsN8w6071HbnD9yLbMqGb
+         zXNF+fUPJbCEn00D3XJ8wu+Yz9wuoiyNPlT2ryg6yKsZTv2nPvdSdJ/UKDMfBtItk6
+         0v2vGWRkg4QmAFTzYlv7oa75pTM8y3Bxbx9t1lL6GerYKU1OOkMhnjUYL82DI2eMnS
+         uomrqPVvkeg+WsxwRguFn9lSiLNQl/7TcMR8NV6q3GUbJ1MEDIf/hQvwGKjsjtTSqj
+         lVNj0S1ZLvE38F4lvX/yjmpyGLlycMjEQ6KiDr1SgkOlEjAvdj/SmZxlmWr+CCOdGp
+         53RZeFXZ8pb1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52A23E29F37;
+        Wed, 19 Oct 2022 17:20:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166620002425.19409.1807231181311266230.git-patchwork-summary@kernel.org>
+Date:   Wed, 19 Oct 2022 17:20:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,49 +51,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 11 Oct 2022 11:50:33 +0530, Amit Kumar Mahapatra wrote:
-> - Fix kernel-doc warnings in GQSPI driver.
-> - Avoid setting CPOL, CPHA & baud rate multiple times.
-> - Add Versal platform support in GQSPI driver.
-> - Add tap delay support in GQSPI driver.
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: spi-zyqnmp-gqspi: Add tap delay and Versal platform support
+  Submitter: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=680345
+  Lore link: https://lore.kernel.org/r/20220926063327.20753-1-amit.kumar-mahapatra@xilinx.com
+    Patches: [RESEND,v3,1/7] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
+             [RESEND,v3,2/7] spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
+             [RESEND,v3,3/7] spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same SPI frequency
+             [RESEND,v3,4/7] firmware: xilinx: Add qspi firmware interface
+             [RESEND,v3,5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
+             [RESEND,v3,6/7] dt-bindings: spi: spi-zynqmp-qspi: Add support for Xilinx Versal QSPI
+             [RESEND,v3,7/7] spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on Versal platform
 
-Thanks!
+Series: spi: spi-zyqnmp-gqspi: Add tap delay and Versal platform support
+  Submitter: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=684406
+  Lore link: https://lore.kernel.org/r/20221011062040.12116-1-amit.kumar-mahapatra@amd.com
+    Patches: [v4,1/7] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
+             [v4,2/7] spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
+             [v4,3/7] spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same SPI frequency
+             [v4,4/7] firmware: xilinx: Add qspi firmware interface
+             [v4,5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
+             [v4,6/7] spi: dt-bindings: zynqmp-qspi: Add support for Xilinx Versal QSPI
+             [v4,7/7] spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on Versal platform
 
-[1/7] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
-      commit: b3b953084b1bd0e74785bc5017444dd56952fb39
-[2/7] spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
-      commit: 22742b8bbdd9fee1ae30be49c7e7e3becba96fc1
-[3/7] spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same SPI frequency
-      commit: 21764a49d32e041e9d118a7b38c14e3e02fae129
-[4/7] firmware: xilinx: Add qspi firmware interface
-      commit: 1e400cb9cff2157f89ca95aba4589f95253425ba
-[5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
-      commit: fae7b3c3ecd76a911a1f0e45d2258a420559cbf6
-[6/7] spi: dt-bindings: zynqmp-qspi: Add support for Xilinx Versal QSPI
-      commit: 824590249b3cdf57d090d4c912f1497b8e61458f
-[7/7] spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on Versal platform
-      commit: 29f4d95b97bcabc0cd83c34495224b24490f0fe0
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 14
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
