@@ -2,63 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEECA604917
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 16:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E94604993
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Oct 2022 16:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJSOVa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Oct 2022 10:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
+        id S229738AbiJSOol (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Oct 2022 10:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiJSOVM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 10:21:12 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597AA61B24
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:04:42 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so68089wmq.4
-        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:04:41 -0700 (PDT)
+        with ESMTP id S231420AbiJSOoG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Oct 2022 10:44:06 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8880E1B866D
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:30:37 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id o22so10775443qkl.8
+        for <linux-spi@vger.kernel.org>; Wed, 19 Oct 2022 07:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rZgwfLubP2W/1t0/FaJA376eh/Hnps387U4J2IjbH+Q=;
-        b=u/rHqaVSXAtf44+agVTaE7rGMxdiAM9mO+71rH0zJ13C+ops+wfxsALrLi/qTcHLo2
-         Ev9tB/jp7LpRZrpDHe+l83Ad3mBJ2dKF4iB6mppCyruY6ljkZZUK6lCRy7Ing4rcvvER
-         Zj/PzLkyiUQv6AgvOqL2zNCF9C8AoGVdGkNgWTSsWTe00yYumXkM2MceEQazBiKqE3jl
-         KjZzDc8RXzZ4mZcyAV2kNLiHjgklBvH5uBSWHKUc3IosI9qDvLSiwftNVI92bOBCdG/0
-         8Urw1OrJdT28AjBHu9avIBYu4AkAcdhPIF4Udczs8XDQNxnna8i6A9pc6rQnj5gVoJ7J
-         5JTQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rEmIhwLP6JWJlQRt/3w8mhy6Yg1o3TLKHqQiOhMxy0U=;
+        b=ilprgxZy/nxFTTz37DvZ1mP/ydqyP3gwcaRJpuxF1UGyotKOl1P0TiyF+qbRDXAVP+
+         akYeivho+XgXIdhxz/1VcgkOGZfNaJDsQECdfdTkS6TTo2LVgrhTqAm6ZgwAdYEwfXlO
+         zxfaDJfLj27/AjML/XccPnZwVbKFy9U6IkozVVN5YTtOkJUYLEgBeUy/uDP62/+Tw7lL
+         tMpbux0+ueArUxiap5maUr7qhn1u6sU12qPulUMS8yLmn70JLDoPH+st0+0ZPCAaAHZ7
+         Dcq0zZ6TK48SG9SefGqm3jvUjdISTD6ETlJmCPAzI73W3Io2vVKh/okOJTkgLCpE94Kt
+         S4jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rZgwfLubP2W/1t0/FaJA376eh/Hnps387U4J2IjbH+Q=;
-        b=KYfF3cyUa+8B+iMf+BMpk2N1SrQwyjjpaeQH3PlnjYMkfXu4HZVG/gxsYCmwOn8KfG
-         3ukzoIY6nO2u7Ndyq5vTPo0BvW9YN2PN0FOdRCyhen3VmZ8Z94ejzTwgOGro4FRZZdcE
-         Z61Gvi/H8jNWiAjgncJOa1zcJI7ufDxeqx8NNhnHmGPOdE/pxDOBD64XlBYbQ8vYMzGb
-         ZAglOFwtFa8wfQMUORY584zywErNKuFAVRDG4k02ssiufXbr4SvhLZcgmoJoG9AsUpId
-         Z7rBiZXm078vhhEGXn4yYn+WYLYHHduXQ+rstG+K7VTSFYip9/NVvpRnRoQPFoxuZGN0
-         slng==
-X-Gm-Message-State: ACrzQf16Ko1K5/xWkpsF9ILEeUfwSKd1O9yv7Vw/S8GPVOk9SzkzN8RF
-        5HB+iM7CXxQlv2zIvvlXqRiv5w==
-X-Google-Smtp-Source: AMsMyM4k2lIu5FtcD+oSZfD3YSgbmUclwlgXE3MZJDzEiIqjqYmYHAetaHQWtEDUAoC/OeKJuPuMjQ==
-X-Received: by 2002:a05:600c:4e47:b0:3c6:fc59:5eff with SMTP id e7-20020a05600c4e4700b003c6fc595effmr6918684wmq.18.1666188199567;
-        Wed, 19 Oct 2022 07:03:19 -0700 (PDT)
-Received: from [127.0.1.1] (rtr.23.90.200.126.unyc.it. [23.90.200.126])
-        by smtp.googlemail.com with ESMTPSA id o5-20020a5d62c5000000b00228cbac7a25sm13998628wrv.64.2022.10.19.07.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 07:03:19 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Wed, 19 Oct 2022 16:01:04 +0200
-Subject: [PATCH v3 2/2] spi: meson-spicc: Use pinctrl to drive CLK line when idle
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rEmIhwLP6JWJlQRt/3w8mhy6Yg1o3TLKHqQiOhMxy0U=;
+        b=qHDugaRlh7F8LE73bFxlsTuYnyYdWUlz+kXkhT9EH9qKuweHNAQanUO/WZ6q6mSGD3
+         giygmICWGA6PRu+wAX+hjdPgx3UiteGSpz6gr6K7yrwoh3eTjYefy+qx1u91+3W3uoHo
+         RbeeNBc6W83SxOnFtmewwn4rc6WbpVN4nvPBIhPheuR7GXP2yY1o4qo10erELgOYa/rA
+         E13EPQ6le/woMsAALIGV1T+8Ccqc8/CRmyljIm8wIsB6/47XvVsvle+icCZRnOkXQdN1
+         J0lrDWQSlJCmYCzyRawMIknEfowdtbhrAqWOkznisE32006SHAK/2oCSzSigQADtdxVQ
+         5miQ==
+X-Gm-Message-State: ACrzQf2Pm1iraqR/Z1biL48hV01bYRPBeEkIYMplZLyKRN3YGD1gkqeU
+        KBXj/BV4La2w+dK5SrY9JobPjQ==
+X-Google-Smtp-Source: AMsMyM49VXrZGh0Y6/lHBCG4YpU/HQkprtBYeSAxBKwVJI5YDUWZ81RHBa5iViI4NMMV2LjRZt4rPA==
+X-Received: by 2002:a37:9ac4:0:b0:6ee:caa8:fe2f with SMTP id c187-20020a379ac4000000b006eecaa8fe2fmr5788394qke.638.1666189768362;
+        Wed, 19 Oct 2022 07:29:28 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id u24-20020a37ab18000000b006bb83c2be40sm4993247qke.59.2022.10.19.07.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 07:29:27 -0700 (PDT)
+Message-ID: <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
+Date:   Wed, 19 Oct 2022 10:29:26 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221004-up-aml-fix-spi-v3-2-89de126fd163@baylibre.com>
-References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
-In-Reply-To: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
-To:     Mark Brown <broonie@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
+ pinctrl names for SPI signal states
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -67,158 +67,53 @@ To:     Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1666188196; l=4316;
- i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=dN6XmPpYO7Ty0vQSXH4eMp49Nq2iRF2CEqKZcOspWpI=;
- b=vviwObwJxuPYh/ZZNDCsfx7v9An1mgI8ZqaQQkOEPhpUcxtNrkB4V7dyqhh3eHnJUsX9mrUCOAxn
- oyRtrThBCRUCQgrksHjC40en6/dPJsjPNI8IfERp46vdxVdELtM6
-X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
- pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
+ <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Between SPI transactions, all SPI pins are in HiZ state. When using the SS
-signal from the SPICC controller it's not an issue because when the
-transaction resumes all pins come back to the right state at the same time
-as SS.
+On 19/10/2022 10:01, Amjad Ouled-Ameur wrote:
+> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
+> pin biais when idle. Therefore define three pinctrl names:
+> - default: SPI pins are controlled by spi function.
+> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
+> by spi function.
+> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
+> by spi function.
+>
 
-The problem is when we use CS as a GPIO. In fact, between the GPIO CS
-state change and SPI pins state change from idle, you can have a missing or
-spurious clock transition.
 
-Set a bias on the clock depending on the clock polarity requested before CS
-goes active, by passing a special "idle-low" and "idle-high" pinctrl state
-and setting the right state at a start of a message
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - amlogic,meson-gx-spicc
+> +
+> +    then:
+> +      properties:
+> +        pinctrl-names:
+> +          minItems: 1
+> +          items:
+> +            - const: default
+> +            - const: idle-high
+> +            - const: idle-low
 
-Reported-by: Da Xue <da@libre.computer>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
----
- arch/arm64/boot/dts/amlogic/meson-gxl.dtsi | 14 +++++++++++
- drivers/spi/spi-meson-spicc.c              | 39 +++++++++++++++++++++++++++++-
- 2 files changed, 52 insertions(+), 1 deletion(-)
+You should also define in such case pinctrl-0 and others.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-index c3ac531c4f84..04e9d0f1bde0 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-@@ -429,6 +429,20 @@ mux {
- 			};
- 		};
- 
-+		spi_idle_high_pins: spi-idle-high-pins {
-+			mux {
-+				groups = "spi_sclk";
-+				bias-pull-up;
-+			};
-+		};
-+
-+		spi_idle_low_pins: spi-idle-low-pins {
-+			mux {
-+				groups = "spi_sclk";
-+				bias-pull-down;
-+			};
-+		};
-+
- 		spi_ss0_pins: spi-ss0 {
- 			mux {
- 				groups = "spi_ss0";
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index bad201510a99..ffea38e2339c 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -21,6 +21,7 @@
- #include <linux/types.h>
- #include <linux/interrupt.h>
- #include <linux/reset.h>
-+#include <linux/pinctrl/consumer.h>
- 
- /*
-  * The Meson SPICC controller could support DMA based transfers, but is not
-@@ -167,6 +168,9 @@ struct meson_spicc_device {
- 	unsigned long			tx_remain;
- 	unsigned long			rx_remain;
- 	unsigned long			xfer_remain;
-+	struct pinctrl			*pinctrl;
-+	struct pinctrl_state		*pins_idle_high;
-+	struct pinctrl_state		*pins_idle_low;
- };
- 
- #define pow2_clk_to_spicc(_div) container_of(_div, struct meson_spicc_device, pow2_div)
-@@ -175,8 +179,22 @@ static void meson_spicc_oen_enable(struct meson_spicc_device *spicc)
- {
- 	u32 conf;
- 
--	if (!spicc->data->has_oen)
-+	if (!spicc->data->has_oen) {
-+		/* Try to get pinctrl states for idle high/low */
-+		spicc->pins_idle_high = pinctrl_lookup_state(spicc->pinctrl,
-+							     "idle-high");
-+		if (IS_ERR(spicc->pins_idle_high)) {
-+			dev_warn(&spicc->pdev->dev, "can't get idle-high pinctrl\n");
-+			spicc->pins_idle_high = NULL;
-+		}
-+		spicc->pins_idle_low = pinctrl_lookup_state(spicc->pinctrl,
-+							     "idle-low");
-+		if (IS_ERR(spicc->pins_idle_low)) {
-+			dev_warn(&spicc->pdev->dev, "can't get idle-low pinctrl\n");
-+			spicc->pins_idle_low = NULL;
-+		}
- 		return;
-+	}
- 
- 	conf = readl_relaxed(spicc->base + SPICC_ENH_CTL0) |
- 		SPICC_ENH_MOSI_OEN | SPICC_ENH_CLK_OEN | SPICC_ENH_CS_OEN;
-@@ -441,6 +459,16 @@ static int meson_spicc_prepare_message(struct spi_master *master,
- 	else
- 		conf &= ~SPICC_POL;
- 
-+	if (!spicc->data->has_oen) {
-+		if (spi->mode & SPI_CPOL) {
-+			if (spicc->pins_idle_high)
-+				pinctrl_select_state(spicc->pinctrl, spicc->pins_idle_high);
-+		} else {
-+			if (spicc->pins_idle_low)
-+				pinctrl_select_state(spicc->pinctrl, spicc->pins_idle_low);
-+		}
-+	}
-+
- 	if (spi->mode & SPI_CPHA)
- 		conf |= SPICC_PHA;
- 	else
-@@ -487,6 +515,9 @@ static int meson_spicc_unprepare_transfer(struct spi_master *master)
- 	/* Set default configuration, keeping datarate field */
- 	writel_relaxed(conf, spicc->base + SPICC_CONREG);
- 
-+	if (!spicc->data->has_oen)
-+		pinctrl_select_default_state(&spicc->pdev->dev);
-+
- 	return 0;
- }
- 
-@@ -798,6 +829,12 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 		goto out_core_clk;
- 	}
- 
-+	spicc->pinctrl = devm_pinctrl_get(&pdev->dev);
-+	if (IS_ERR(spicc->pinctrl)) {
-+		ret = PTR_ERR(spicc->pinctrl);
-+		goto out_clk;
-+	}
-+
- 	device_reset_optional(&pdev->dev);
- 
- 	master->num_chipselect = 4;
+Best regards,
+Krzysztof
 
--- 
-b4 0.10.1
