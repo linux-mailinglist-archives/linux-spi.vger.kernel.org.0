@@ -2,205 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA6D606616
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089A960665B
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJTQqC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Oct 2022 12:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S229731AbiJTQ4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Oct 2022 12:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJTQpj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:45:39 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB2108263
-        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 09:45:37 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id j188so253449oih.4
-        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 09:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vDumrWNAjxV0BcAyCgGrt674q5FMm5zVCvNU89iAQTg=;
-        b=UZMHuGCifh3qmno7GQJPsOV2RwukwD3s4fLy7qas8iFuErv6L72H1IaEpeX2zkSD6Y
-         5L7r7Qr34Rhn0hm3TbkM2FtLG9K9geMhesmiW3boTSlUWCZy/TNXGuQSX5XXpmuTt2Yz
-         cNGN25iCn6Rwrs6Sxzn8nFiquqD+4hi7aCL+iDN1l6EshzxxXx6LLK3wDDxx30GQF1l+
-         XcwW1qCSMdeo/VtURvC9vXYriRmCCEyQABzmLgahulWC3jpgffg1Jqleg7wcOqZ+FncY
-         OXwQxiKn1LiNvr03OMxr7b53t3B6OViJPrw9ClQLqMBhlmP0456mp0Ihc0drQNhu+Cf+
-         J6cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vDumrWNAjxV0BcAyCgGrt674q5FMm5zVCvNU89iAQTg=;
-        b=3uatgTQ451X16ZfSEohNdDD5P5YbfY8AaUI3P4/Rbs7gbFRH85ioUFzNEQ+PscG0lv
-         3hagGVPaHtbsBeMFp1VaU2cSHphPjYJFKgaewGr9PtNlhUaRR1b7Wpuz2mpuBAgfaJp8
-         YSlgeu9t9skVzk3ENda4GdOjkvv/M4hw5yeRdNFoqeozVdYdsuL0JOE+CgiJ+M2FazYv
-         UY7XPQeu/u/OemYQteIpFvb3oyK7zzBsBeilnYiaUidMjrzkcha+hdn4g1G5JNFPvsZs
-         p+U2KFiaxomnDjoWq6t7XBejcIZa5K7e89WZFMxPx51TFcG8ScNTiX5EfZ/wP9GysemQ
-         dtoA==
-X-Gm-Message-State: ACrzQf1x8HW2U1/JNR1M8QVKcjmfiOszWHwZ9fgFvyP60MYFu04rZaHE
-        /p5IiyClKLUm0epfB8CTwpVv8Q==
-X-Google-Smtp-Source: AMsMyM5f5alURJ/2bjgBdB5+7KDQFJLaHft3kuHLgebxdp2AkvVIgWt+byF7H5AbPeR+5HTHjHaZ/Q==
-X-Received: by 2002:a05:6808:144d:b0:355:3bef:799b with SMTP id x13-20020a056808144d00b003553bef799bmr11100528oiv.283.1666284336311;
-        Thu, 20 Oct 2022 09:45:36 -0700 (PDT)
-Received: from fedora.. ([186.122.181.28])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056870d58300b0011f00b027bdsm9154325oao.45.2022.10.20.09.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 09:45:35 -0700 (PDT)
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-To:     broonie@kernel.org
-Cc:     mika.westerberg@linux.intel.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
-Subject: [PATCH 2/2] spi: intel-spi: build the driver with hardware sequencing by default
-Date:   Thu, 20 Oct 2022 13:45:08 -0300
-Message-Id: <20221020164508.29182-3-mauro.lima@eclypsium.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20221020164508.29182-1-mauro.lima@eclypsium.com>
-References: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+        with ESMTP id S229795AbiJTQ4u (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:56:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C6019A23A
+        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 09:56:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D832461CA0
+        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 487B4C433C1;
+        Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666285008;
+        bh=OPMPKI/m6ks9ZqvFbG3+116U8C/MAT78RIZ+pmMJJ5w=;
+        h=Subject:From:Date:To:From;
+        b=A1vIhtiIhwAc635mRNGwNsbalQ+dOzKckXIwXssNsWhTMupSztpuziMwporUH+Kl4
+         LhSmovA4ZNI79OxFeUEl6nGI65tg/xcSqnyZgokxQGLgdhZmRhXsky9kkwWgjYAC5Y
+         6aXXSn0WrazxKX9u0Rn8narJKND+Jv82GsTUEEDCBokMwVHnj7ESgF+pgWUEvLa5oS
+         +LvMnKVBCtvc599FHPokp1dLXS3LcXljs0qdwugihuCmwX0AOwnJeEwh07XeuJaPZ4
+         Bn5wPQyBYODnQR+Had+bQO/FrUv5AuMbjK/QwLVvYcEFT6eOLElrgKx6kKJFVTGc6g
+         nMjKJcgE4odBQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D8E6E270E2;
+        Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166628500817.23167.17863306682796335064.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 20 Oct 2022 16:56:48 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add menuconfig option to build the driver with hardware sequencing by
-default and another to specify software sequencing support if needed.
-For the software sequencing functionality preserve the *DANGEROUS* tag.
+Latest series: [v3] spi: pxa2xx: Pass the SSP type via device property (2022-10-20T16:26:27)
+  Superseding: [v2] spi: pxa2xx: Pass the SSP type via device property (2022-10-19T15:04:25):
+    [v2,1/5] spi: pxa2xx: Respect Intel SSP type given by a property
+    [v2,2/5] spi: pxa2xx: Remove no more needed PCI ID table
+    [v2,3/5] spi: pxa2xx: Remove no more needed driver data
+    [v2,4/5] spi: pxa2xx: Move OF and ACPI ID tables closer to their user
+    [v2,5/5] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
 
-Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- drivers/spi/Kconfig           | 15 +++++++++--
- drivers/spi/spi-intel-swseq.c | 50 +++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index d1bb62f7368b..aec095988ab7 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -448,7 +448,7 @@ config SPI_INTEL
- 	tristate
- 
- config SPI_INTEL_PCI
--	tristate "Intel PCH/PCU SPI flash PCI driver (DANGEROUS)"
-+	tristate "Intel PCH/PCU SPI flash PCI driver"
- 	depends on PCI
- 	depends on X86 || COMPILE_TEST
- 	depends on SPI_MEM
-@@ -458,6 +458,8 @@ config SPI_INTEL_PCI
- 	  master mode. This controller is present in modern Intel hardware
- 	  and is used to hold BIOS and other persistent settings. Using
- 	  this driver it is possible to upgrade BIOS directly from Linux.
-+	  The driver will use hardware sequencing capabilities from the chip
-+	  by default.
- 
- 	  Say N here unless you know what you are doing. Overwriting the
- 	  SPI flash may render the system unbootable.
-@@ -466,7 +468,7 @@ config SPI_INTEL_PCI
- 	  will be called spi-intel-pci.
- 
- config SPI_INTEL_PLATFORM
--	tristate "Intel PCH/PCU SPI flash platform driver (DANGEROUS)"
-+	tristate "Intel PCH/PCU SPI flash platform driver"
- 	depends on X86 || COMPILE_TEST
- 	depends on SPI_MEM
- 	select SPI_INTEL
-@@ -476,6 +478,8 @@ config SPI_INTEL_PLATFORM
- 	  Intel hardware and is used to hold BIOS and other persistent
- 	  settings. Using this driver it is possible to upgrade BIOS
- 	  directly from Linux.
-+	  The driver will use hardware sequencing capabilities from the chip
-+	  by default.
- 
- 	  Say N here unless you know what you are doing. Overwriting the
- 	  SPI flash may render the system unbootable.
-@@ -483,6 +487,13 @@ config SPI_INTEL_PLATFORM
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called spi-intel-platform.
- 
-+config SPI_INTEL_SWSEQ
-+	tristate "Intel SPI controller software sequencing support (DANGEROUS)"
-+	depends on X86 || COMPILE_TEST
-+	depends on SPI_MEM
-+	help
-+	  This enables software sequencing functionality to the SPI controller
-+
- config SPI_JCORE
- 	tristate "J-Core SPI Master"
- 	depends on OF && (SUPERH || COMPILE_TEST)
-diff --git a/drivers/spi/spi-intel-swseq.c b/drivers/spi/spi-intel-swseq.c
-index 2597aa06a160..d7e4834be6db 100644
---- a/drivers/spi/spi-intel-swseq.c
-+++ b/drivers/spi/spi-intel-swseq.c
-@@ -12,6 +12,7 @@
- #include "spi-intel-common.h"
- #include "spi-intel-swseq.h"
- 
-+#if defined(CONFIG_SPI_INTEL_SWSEQ)
- bool mem_op_supported_on_spi_locked(const struct intel_spi *ispi,
- 				    const struct spi_mem_op *op)
- {
-@@ -178,4 +179,53 @@ void populate_opmenus(struct intel_spi *ispi, u32 *opmenu0, u32 *opmenu1)
- }
- EXPORT_SYMBOL(populate_opmenus);
- 
-+#else
-+static inline void log_error_swseq_not_supported(const struct intel_spi *ispi)
-+{
-+	dev_err(ispi->dev, "SW sequencing is not enabled");
-+}
-+
-+int handle_swseq_wren(struct intel_spi *ispi)
-+{
-+	log_error_swseq_not_supported(ispi);
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL(handle_swseq_wren);
-+
-+bool mem_op_supported_on_spi_locked(const struct intel_spi *ispi,
-+				    const struct spi_mem_op *op)
-+{
-+	log_error_swseq_not_supported(ispi);
-+	return false;
-+}
-+EXPORT_SYMBOL(mem_op_supported_on_spi_locked);
-+
-+int intel_spi_sw_cycle(struct intel_spi *ispi, u8 opcode, size_t len,
-+		       int optype)
-+{
-+	log_error_swseq_not_supported(ispi);
-+	return -ENOTSUPP;
-+}
-+EXPORT_SYMBOL(intel_spi_sw_cycle);
-+
-+inline bool is_swseq_enabled(void)
-+{
-+	return false;
-+}
-+EXPORT_SYMBOL(is_swseq_enabled);
-+
-+void disable_smi_generation(const struct intel_spi *ispi)
-+{
-+	log_error_swseq_not_supported(ispi);
-+}
-+EXPORT_SYMBOL(disable_smi_generation);
-+
-+void populate_opmenus(struct intel_spi *ispi, u32 *opmenu0, u32 *opmenu1)
-+{
-+	log_error_swseq_not_supported(ispi);
-+}
-+EXPORT_SYMBOL(populate_opmenus);
-+
-+#endif
-+
- MODULE_LICENSE("GPL v2");
 -- 
-2.34.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
