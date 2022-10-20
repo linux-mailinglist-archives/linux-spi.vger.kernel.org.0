@@ -2,46 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089A960665B
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E6606663
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJTQ4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Oct 2022 12:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S229608AbiJTQ6q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Oct 2022 12:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJTQ4u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:56:50 -0400
+        with ESMTP id S229710AbiJTQ6p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:58:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C6019A23A
-        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 09:56:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D48F19ABD0;
+        Thu, 20 Oct 2022 09:58:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D832461CA0
-        for <linux-spi@vger.kernel.org>; Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 487B4C433C1;
-        Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF65061C9C;
+        Thu, 20 Oct 2022 16:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9214EC433D6;
+        Thu, 20 Oct 2022 16:58:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666285008;
-        bh=OPMPKI/m6ks9ZqvFbG3+116U8C/MAT78RIZ+pmMJJ5w=;
-        h=Subject:From:Date:To:From;
-        b=A1vIhtiIhwAc635mRNGwNsbalQ+dOzKckXIwXssNsWhTMupSztpuziMwporUH+Kl4
-         LhSmovA4ZNI79OxFeUEl6nGI65tg/xcSqnyZgokxQGLgdhZmRhXsky9kkwWgjYAC5Y
-         6aXXSn0WrazxKX9u0Rn8narJKND+Jv82GsTUEEDCBokMwVHnj7ESgF+pgWUEvLa5oS
-         +LvMnKVBCtvc599FHPokp1dLXS3LcXljs0qdwugihuCmwX0AOwnJeEwh07XeuJaPZ4
-         Bn5wPQyBYODnQR+Had+bQO/FrUv5AuMbjK/QwLVvYcEFT6eOLElrgKx6kKJFVTGc6g
-         nMjKJcgE4odBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D8E6E270E2;
-        Thu, 20 Oct 2022 16:56:48 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1666285124;
+        bh=+OES5EZmhZxEwIIx+Cvwo2LLTdxU66Lge2u2Lr27KyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ABYCw7v9z008luI93/k6ojwUsiJVDhhwK0Rr0PWe5lOLGSx/h9XHHzu/KF5IJDvn7
+         wUOdqSbmRoLZ2h4pNO99kpGAOmc4ZbGeWSjyCmStJLme15Rw/2RCYcI0H0Lj5XpJBs
+         7hfpAC9JQ6Eq3fY8XPb/CujLwjFlGfUWiPKVcgQ9F+b+yTQc1t4Ob0lcIDxKhVAAq8
+         mzOesEITBmWyDH1MdIsHWCsmH26o1tLymb7gvTvhbXPqxGU2m5k0zThm5SMMeE2xmL
+         iMeZ1S/iNhNAGBvbilhJLSEW/r5uKmWt79qcof+T7JnB6rJ1VWVytzXXlfloCI3a2j
+         xUsO8vzMoC8lA==
+Date:   Thu, 20 Oct 2022 17:58:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y1F+Pw52nN195qDO@sirena.org.uk>
+References: <Y02ObkYoUQlY9oG/@sirena.org.uk>
+ <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
+ <Y02TR0UBseEKUjq8@sirena.org.uk>
+ <Y02TxHp53XQo34ql@smile.fi.intel.com>
+ <Y06RCxzwrPZwIETp@sirena.org.uk>
+ <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
+ <Y1AczgwCEQO2gvQ2@sirena.org.uk>
+ <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+ <Y1F2a6CR+9sY66Zz@sirena.org.uk>
+ <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166628500817.23167.17863306682796335064.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 20 Oct 2022 16:56:48 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aJUxk5TzEVqHFiLi"
+Content-Disposition: inline
+In-Reply-To: <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
+X-Cookie: Today is what happened to yesterday.
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,16 +65,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: pxa2xx: Pass the SSP type via device property (2022-10-20T16:26:27)
-  Superseding: [v2] spi: pxa2xx: Pass the SSP type via device property (2022-10-19T15:04:25):
-    [v2,1/5] spi: pxa2xx: Respect Intel SSP type given by a property
-    [v2,2/5] spi: pxa2xx: Remove no more needed PCI ID table
-    [v2,3/5] spi: pxa2xx: Remove no more needed driver data
-    [v2,4/5] spi: pxa2xx: Move OF and ACPI ID tables closer to their user
-    [v2,5/5] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
 
+--aJUxk5TzEVqHFiLi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Thu, Oct 20, 2022 at 07:42:09PM +0300, Andy Shevchenko wrote:
+> On Thu, Oct 20, 2022 at 05:25:15PM +0100, Mark Brown wrote:
 
+> > That's true currently since you're matching based on ACPI ID and then
+> > have the lookup done with the ID information in the acpi_device_id table
+> > but IIRC the patch was replacing that with some device property stuff.
+
+> But that one also based on the IDs, it's not assigned without real IDs of
+> the devices on the certain platforms. I don't see how it's different in
+> this sense.
+
+The driver won't even match and therefore load if it doesn't have a
+lookup for the device with the current code, the type code comes from
+the match.  If it has to go querying a device property then the driver
+can load but end up with a device property it hasn't ever heard of and
+end up misbehaving as a result.
+
+--aJUxk5TzEVqHFiLi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRfj4ACgkQJNaLcl1U
+h9CYlQf/ZGasWtKFi/8Brya2HvpljMvaunGOitRyKwPyy32bw6LW76GE4b3wHW6s
+BEOdvkvxeQK2M5KnnNWDd+0oWT7VRAoBMPmKJwWoCvq3bvSUyaF7goab7RzWs23F
+ArKFyKsVgIE8tAraucAejv38diL4U/JR5KiNASMz3F3lp/jFTm0qsn3s7+jzp2Yh
+pH79k7uLXXX3IrWCXn+GALUeXfvPJaYcqwHvVHaEl2D0sS5aquGY0tby/cmbri+P
+exFeCloVN90w9HQqlJXdOQGfIbXE0DDoOJkbRCxDJcGcteKMrgPc+tG7jNOG+V09
+rDQsY6g39dVlMI1F22Q00bLjJ8pj0Q==
+=sOEF
+-----END PGP SIGNATURE-----
+
+--aJUxk5TzEVqHFiLi--
