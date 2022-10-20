@@ -2,61 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E28F6065BA
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CB360660B
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJTQ01 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Oct 2022 12:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S229918AbiJTQmT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Oct 2022 12:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJTQ0W (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:26:22 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBA01372BF;
-        Thu, 20 Oct 2022 09:26:21 -0700 (PDT)
+        with ESMTP id S230182AbiJTQmP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:42:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CDB1ABA34;
+        Thu, 20 Oct 2022 09:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666283181; x=1697819181;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0AkAdKQ3EDQm469XbLB15BS+d5aKGhLhD/NPpezR/co=;
-  b=JgD/1XJ9qcDuj7U3kWpOQ7I6cCKpwXssVqmYJ50/WeXrSNOALpXzp+b3
-   ZNhFCz43Ss0EgVe2MlanWI6hsyL0Mya6vu7UkE2CTKY21Tx7kl9Zn7yYS
-   +11Tms/GUkj/sTAoeSB1s3KyZgo2AY1MmdCPTUW0lDoEiatQv2kkeaDFc
-   06EGE6kxhO+jZfTurrGYYl9kqMRWZ5IOuMqKVP6L03gAEuCoYZ4itq5BJ
-   cRShA8nDQHBB2JCAkn310yK30y8ukPwXSFoClKr0R4LHx27c730IQAbIt
-   MnW9O08zK0Kfsrd1nvAIf2QVjL2coP9t2ZLgf7MvKMKmk6h2keP6cKlvM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="287164950"
+  t=1666284133; x=1697820133;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mtmyWnBU7EHxFbOleRTpDFq4fp2GV0yFyVdIlqKcAY0=;
+  b=Iak8azakFUvgKuY4lExTcq0mpv6+YIjBM4uVr9cwotfnzHgsFeRkKQIP
+   LlTLIUhW3T1ez/N8/m5XP7ggsEaCZS7ha/vB3UzhcZsgq3R+mHMZaefL3
+   cNloJIulG/BjNBzXihxhX2kfKPSPEWA7ntIKUwuC87E7DaGUMqASTp6Wa
+   2Fv874BdbIPZe5MRrcnx7EA5ebcpKcexKWyFKaSBw7Disu1vTmW2N4z75
+   9UHrAvtRcOnWzuPV5r1fE7z9ieiTS8J3yFviPu9DLS1IiWWzuA2Ku+5I7
+   uXhjPh4Dle9NjkJGARHJMc9V/rd7fF/tPmEuyODXV08uiel4MZ+b5CrH+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="368815237"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="287164950"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:26:18 -0700
+   d="scan'208";a="368815237"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:42:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="581004389"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="661029041"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="581004389"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 20 Oct 2022 09:26:14 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D31EF6DA; Thu, 20 Oct 2022 19:26:32 +0300 (EEST)
+   d="scan'208";a="661029041"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 20 Oct 2022 09:42:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olYcT-00AeGF-2w;
+        Thu, 20 Oct 2022 19:42:09 +0300
+Date:   Thu, 20 Oct 2022 19:42:09 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 5/5] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
-Date:   Thu, 20 Oct 2022 19:26:31 +0300
-Message-Id: <20221020162631.68914-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221020162631.68914-1-andriy.shevchenko@linux.intel.com>
-References: <20221020162631.68914-1-andriy.shevchenko@linux.intel.com>
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
+References: <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+ <Y02ObkYoUQlY9oG/@sirena.org.uk>
+ <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
+ <Y02TR0UBseEKUjq8@sirena.org.uk>
+ <Y02TxHp53XQo34ql@smile.fi.intel.com>
+ <Y06RCxzwrPZwIETp@sirena.org.uk>
+ <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
+ <Y1AczgwCEQO2gvQ2@sirena.org.uk>
+ <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+ <Y1F2a6CR+9sY66Zz@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1F2a6CR+9sY66Zz@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -66,62 +75,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Cleaning up the driver to use pm_ptr() macro instead of ifdeffery
-that makes it simpler and allows the compiler to remove those functions
-if built without CONFIG_PM and CONFIG_PM_SLEEP support.
+On Thu, Oct 20, 2022 at 05:25:15PM +0100, Mark Brown wrote:
+> On Thu, Oct 20, 2022 at 07:18:23PM +0300, Andy Shevchenko wrote:
+> > On Wed, Oct 19, 2022 at 04:50:38PM +0100, Mark Brown wrote:
+> 
+> > > For example a check that the ID is one we know about.  IIRC that bit of
+> > > context looked like a tree of if statements with no particular
+> > > validation.
+> 
+> > But isn't it guaranteed to be handled by device core, i.e. we won't get driver
+> > even enumerated if ID is unknown to us.
+> 
+> That's true currently since you're matching based on ACPI ID and then
+> have the lookup done with the ID information in the acpi_device_id table
+> but IIRC the patch was replacing that with some device property stuff.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/spi/spi-pxa2xx.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+But that one also based on the IDs, it's not assigned without real IDs of
+the devices on the certain platforms. I don't see how it's different in
+this sense.
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 76046612466d..60cab241200b 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1680,7 +1680,6 @@ static int pxa2xx_spi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int pxa2xx_spi_suspend(struct device *dev)
- {
- 	struct driver_data *drv_data = dev_get_drvdata(dev);
-@@ -1715,9 +1714,7 @@ static int pxa2xx_spi_resume(struct device *dev)
- 	/* Start the queue running */
- 	return spi_controller_resume(drv_data->controller);
- }
--#endif
- 
--#ifdef CONFIG_PM
- static int pxa2xx_spi_runtime_suspend(struct device *dev)
- {
- 	struct driver_data *drv_data = dev_get_drvdata(dev);
-@@ -1732,12 +1729,10 @@ static int pxa2xx_spi_runtime_resume(struct device *dev)
- 
- 	return clk_prepare_enable(drv_data->ssp->clk);
- }
--#endif
- 
- static const struct dev_pm_ops pxa2xx_spi_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(pxa2xx_spi_suspend, pxa2xx_spi_resume)
--	SET_RUNTIME_PM_OPS(pxa2xx_spi_runtime_suspend,
--			   pxa2xx_spi_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(pxa2xx_spi_suspend, pxa2xx_spi_resume)
-+	RUNTIME_PM_OPS(pxa2xx_spi_runtime_suspend, pxa2xx_spi_runtime_resume, NULL)
- };
- 
- #ifdef CONFIG_ACPI
-@@ -1762,7 +1757,7 @@ MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
- static struct platform_driver driver = {
- 	.driver = {
- 		.name	= "pxa2xx-spi",
--		.pm	= &pxa2xx_spi_pm_ops,
-+		.pm	= pm_ptr(&pxa2xx_spi_pm_ops),
- 		.acpi_match_table = ACPI_PTR(pxa2xx_spi_acpi_match),
- 		.of_match_table = of_match_ptr(pxa2xx_spi_of_match),
- 	},
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
