@@ -2,55 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A61860658F
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BFC6065B1
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 18:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiJTQSy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Oct 2022 12:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S229556AbiJTQZY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Oct 2022 12:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJTQSx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:18:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0A210573;
-        Thu, 20 Oct 2022 09:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666282732; x=1697818732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=um53HRrJ8LVVo6L7ZwNauAEB6I/IHREg0YMMB7JEA+I=;
-  b=QvKIbbS7gfP3bna+LX7vJVPRFVq/zJ8U3vJiS+nBCCHWzFI6ViESwztb
-   E58+QNUSSX0iO+3MdxjEBpXLmnMq4/c3jCiAC/8+f9rh5YHeciVbFFqYW
-   oDIV/aJzDyWf0694TlHu3KFOyIUwaxQmhMQT4yWlXBn3uXKatoA+DL51V
-   cA3CPS3KQ5mK8OBOpHZgaM1Yl8GiZiWROPHv0aqyyAkeNP+bu1rvEOYF4
-   6bL3IUhZFpUcwnxa5e+ENHVjmET9MlBhJjpzNp0W7w7JFMnt1RpFTXOfE
-   qVzyBFtqGK9FqPhCp4fcLTE8Vx8VSox5eTR8RnNjPHwxaVDmBm9fSOAgu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304374540"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="304374540"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:18:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="772457862"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="772457862"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2022 09:18:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olYFT-00AdOh-2X;
-        Thu, 20 Oct 2022 19:18:23 +0300
-Date:   Thu, 20 Oct 2022 19:18:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S229587AbiJTQZX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 12:25:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C69A0267;
+        Thu, 20 Oct 2022 09:25:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 410A361C14;
+        Thu, 20 Oct 2022 16:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E161C433C1;
+        Thu, 20 Oct 2022 16:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666283120;
+        bh=WA6ArbC///fPpUFKat2w0OyZjBrmeEDkfhpgrx6B+ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qiePNk7+gyM4hfxx+v7U32xQIsBTDyQE3l+9jPy0Ggm0lOOn5jlBVEU89rreYttkW
+         qREx7PQTpjn7Mj1b8bts7AHTbkLMDiQC+9opmSo9eQir8zRWc4h40gem2ZXl1ol+UI
+         uiy2GnwvhhKxiQyQZ2NZr5cHcD4DbyrQuSbYqqYgZ+eUA/9wk09GVqaxXq9L4PyOzh
+         LOYhXVeGwcJ2cbGo5pF5VsshWFLRdzG3TSLzxOIBXr5c6n66qJ8tZh0FwGTduDl+R6
+         6Z6Nk29xFpLZIIiDTUeXdZ9nRP8eijqGcb+0fGKHvq40IAUEJAoY0WsKAJwI0j6Tw+
+         tx59TfQONm9dw==
+Date:   Thu, 20 Oct 2022 17:25:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
 Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+Message-ID: <Y1F2a6CR+9sY66Zz@sirena.org.uk>
 References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
  <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
  <Y02ObkYoUQlY9oG/@sirena.org.uk>
@@ -60,40 +49,54 @@ References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
  <Y06RCxzwrPZwIETp@sirena.org.uk>
  <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
  <Y1AczgwCEQO2gvQ2@sirena.org.uk>
+ <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8ZsyvR6DT6KBTzFY"
 Content-Disposition: inline
-In-Reply-To: <Y1AczgwCEQO2gvQ2@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+X-Cookie: Today is what happened to yesterday.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 04:50:38PM +0100, Mark Brown wrote:
-> On Wed, Oct 19, 2022 at 06:06:04PM +0300, Andy Shevchenko wrote:
-> > On Tue, Oct 18, 2022 at 12:42:03PM +0100, Mark Brown wrote:
-> 
-> > > You should probably also restructure the code interpreting the device
-> > > IDs so that it's very clear that unknown values are handled well, this
-> > > would split things between multiple subsystems and right now the code is
-> > > a bit fragile.
-> 
-> > I'm not sure how better to do this. Any example?
-> 
-> For example a check that the ID is one we know about.  IIRC that bit of
-> context looked like a tree of if statements with no particular
-> validation.
 
-But isn't it guaranteed to be handled by device core, i.e. we won't get driver
-even enumerated if ID is unknown to us.
+--8ZsyvR6DT6KBTzFY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Thu, Oct 20, 2022 at 07:18:23PM +0300, Andy Shevchenko wrote:
+> On Wed, Oct 19, 2022 at 04:50:38PM +0100, Mark Brown wrote:
 
+> > For example a check that the ID is one we know about.  IIRC that bit of
+> > context looked like a tree of if statements with no particular
+> > validation.
 
+> But isn't it guaranteed to be handled by device core, i.e. we won't get driver
+> even enumerated if ID is unknown to us.
+
+That's true currently since you're matching based on ACPI ID and then
+have the lookup done with the ID information in the acpi_device_id table
+but IIRC the patch was replacing that with some device property stuff.
+
+--8ZsyvR6DT6KBTzFY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRdmsACgkQJNaLcl1U
+h9AQWgf/cxAZpP10nopJ1x0dx9Fldq1w4K3nzW1g84Hdt6vHzb1+F+Yb/lg9hg4+
+HqkyucjudaILCwckOsRs3WH1jXDOyDraBZ1QzdXWJfWiFa0BBBBg4PGxGhDHwF2/
+Zr2LbwBp78nVEo6NF9VIB8QW5+NHPdlUN6q9m/NkOSkJRuDEntegov/FWzsCggjh
+DkxBLHI6hf7aYdUkXO1vOt641cJVz90pf3H2fI+LlZ29iemdokC0lUuidWqk86cX
++yysqW/ENllNBWNiQM1eX8yZ4BVKKICdjD0o5n5NO5DWSglk1UpR6vfo9FJZHowH
+4OjMAzESRqXaOi3vuc4NoT3Ov52bnA==
+=cf23
+-----END PGP SIGNATURE-----
+
+--8ZsyvR6DT6KBTzFY--
