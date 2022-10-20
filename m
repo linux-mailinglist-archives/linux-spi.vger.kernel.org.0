@@ -2,70 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDC1606811
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 20:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69C0606911
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Oct 2022 21:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiJTSTM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Oct 2022 14:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S230037AbiJTTot (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Oct 2022 15:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJTSTL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 14:19:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6921E5767;
-        Thu, 20 Oct 2022 11:19:10 -0700 (PDT)
+        with ESMTP id S230020AbiJTToq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Oct 2022 15:44:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340083C8FF;
+        Thu, 20 Oct 2022 12:44:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666289950; x=1697825950;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MtFi0IdneB9mqNUg/wvuCL4g5v4DiS3LPtKl7NyWaS8=;
-  b=lm+vGm+M4mM2AQNvoTUkF/V4/HbFnAKl/q+QH2VPtDU5oyWVdvXsr1Lx
-   /54AB6Zf7Sv7iZv8bo3iHaW74gGb2kTjWElozBXwUWbhbTFr8SYEEAr0v
-   5u4jmAMxL9M1HQNWZOl1MQAyUiQi9v+Tf6I/TcjgZljMZI9JReO2nI5rl
-   b7nWZvl0nDIVHvnHyzoGrc8SSbYSfcxonVKZzXTsbjBqlRe25oO4WH3P0
-   PNy6sC7p659mQR81YTsrBPe4lsxsBOBRUQv0A8gKy1srF1uHGLtbcfC5k
-   9+janaedmdmzt9JWbvsj6TxKKflfwqQVDGuAl8uhm+1m2KNqJqlw8u20G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="308480431"
+  t=1666295085; x=1697831085;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cDRbvPGMB4daHpf4H0/xcqTeuiVnp6lHkMnNi54s/1I=;
+  b=buXWpudEq7k8plZFKn/EZuw/i588rwx0xQi5IXWqkLQhLmuQW5ENLTbs
+   BZOAAqANxExccZo0VK2xK+w3WVb48LfB8o9YUvbVgBWSoy2Q6LzHr5nrl
+   r1JH5D+Unt9I8prI9HZuheURQ1Go1RQW9slliUQiXdFSD/l8exb4WBHqf
+   +iLpXvdR6tAZRSDF0UHNwd7yhTblTpyi17fQUxY4Qh/0FMU/VZqNptoAg
+   dLAZH2pHr5Cm2iWlYIP5ZU3rikA52T8EIZ52XdrIW4czoBeiExtNFMBB1
+   wMZEUVJjQbuz6Vh69ldQdReLfa7WwViiz/lGswM2tXSsPilvvv6rTZJ62
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="305559079"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="308480431"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 11:19:10 -0700
+   d="scan'208";a="305559079"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 12:44:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="772529591"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="630031800"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="772529591"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2022 11:19:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ola8I-00Agpt-2X;
-        Thu, 20 Oct 2022 21:19:06 +0300
-Date:   Thu, 20 Oct 2022 21:19:06 +0300
+   d="scan'208";a="630031800"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 20 Oct 2022 12:44:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id DA0E3107; Thu, 20 Oct 2022 22:45:03 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1GRGrt8EvhoeV0z@smile.fi.intel.com>
-References: <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
- <Y1F2a6CR+9sY66Zz@sirena.org.uk>
- <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
- <Y1F+Pw52nN195qDO@sirena.org.uk>
- <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
- <Y1GEqa07/b25utui@sirena.org.uk>
- <Y1GIVy8l4vKsUYLr@smile.fi.intel.com>
- <Y1GJL8/YfeoUy8wB@sirena.org.uk>
- <Y1GLdp9GCqD7CdfW@smile.fi.intel.com>
- <Y1GOTtYIeOFmrmm7@sirena.org.uk>
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v4 0/5] spi: pxa2xx: Pass the SSP type via device property
+Date:   Thu, 20 Oct 2022 22:44:55 +0300
+Message-Id: <20221020194500.10225-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1GOTtYIeOFmrmm7@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -75,45 +63,57 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:07:10PM +0100, Mark Brown wrote:
-> On Thu, Oct 20, 2022 at 08:55:02PM +0300, Andy Shevchenko wrote:
-> > On Thu, Oct 20, 2022 at 06:45:19PM +0100, Mark Brown wrote:
-> 
-> > > Not sure I quite get what you're proposing here but I *think* so,
-> > > assuming you mean checking the values if the property is present (and
-> > > error out if the property isn't there at all and you're instantiating
-> > > via a MFD rather than direct PCI/DT binding I guess)?
-> 
-> > When we instantiate via MFD, we (semi-)manually create resources for each of
-> > the children. These resources may or may not have a dedicated names. Those
-> > names can be given _only_ inside the source code in the kernel, so it means
-> > it is _explicit_ telling, that we are know where the device in question comes
-> > from.
-> 
-> > 	if (resource_with_name_present()) {
-> > 		ret = device_property_...
-> 
-> > Like you said, checking property only when we have resource present _by name_
-> > and bail out if there is none.
-> 
-> Remember that device_property backs onto fwnode so properties can come
-> from _DSD properties too since fwnode will query any source of
-> properties (and further remember that things will be going through
-> multiple trees so even with stuff purely in the kernel things could get
-> out of sync).
+Currently the SPI PXA2xx devices on Intel platforms can be instantiated
+via the following paths:
+ 1) as ACPI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 2) as ACPI LPSS device on the Sky Lake and newer;
+ 3) as PCI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 4) as PCI LPSS device on the Sky Lake and newer;
+ 5) as PCI device via ID table.
 
-> I think the code would have to also check that it was a
-> MFD child at least,
+Each of these cases provides some platform related data differently,
+i.e.:
+ 1) via drivers/acpi/acpi_lpss.c and drivers/spi/spi-pxa2xx.c
+ 2) via drivers/mfd/intel-lpss-acpi.c
+ 3) via drivers/spi/spi-pxa2xx-pci.c
+ 4) via drivers/mfd/intel-lpss-pci.c and drivers/spi/spi-pxa2xx.c
+ 5) via drivers/spi/spi-pxa2xx-pci.c
 
-That's exactly what I'm talking about when said "named resource check".
+This approach has two downsides:
 
-> you couldn't get _DSD on a child node so that should
-> be fine.
+a) there is no data propagated in the case #2 because we can't have
+   two or more drivers to match the same ACPI ID and hence some cases
+   are still not supported (Sky Lake and newer ACPI enabled LPSS);
 
-So, I guess we settled down this. I'll prepare v4 with the discussed changes.
+b) the data is duplicated over two drivers in the cases #1 & #4 and,
+   besides to be a bloatware, it is error prone (e.g. Lakefield has
+   a wrong data right now due to missed PCI entry in the spi-pxa2xx.c).
+
+This series fixes the downsides, and enables previously unsupported
+cases. On top of that it has a couple of cleanups (patches 4 and 5).
+
+Changelog v4:
+- apply the property only for known MFD enumerated devices (Mark)
+
+Changelog v3:
+- added tags to patches 4 & 5 (Jonathan)
+- massaged cover letter
+
+Changelog v2:
+- added cover letter (Mark)
+- dropped applied patch
+
+Andy Shevchenko (5):
+  spi: pxa2xx: Respect Intel SSP type given by a property
+  spi: pxa2xx: Remove no more needed PCI ID table
+  spi: pxa2xx: Move OF and ACPI ID tables closer to their user
+  spi: pxa2xx: Consistently use dev variable in pxa2xx_spi_init_pdata()
+  spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
+
+ drivers/spi/spi-pxa2xx.c   | 186 ++++++++-----------------------------
+ include/linux/pxa2xx_ssp.h |   1 +
+ 2 files changed, 41 insertions(+), 146 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
