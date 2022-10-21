@@ -2,104 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF089607BE8
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 18:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56225607E82
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 21:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiJUQPT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Oct 2022 12:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S230169AbiJUTAV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Oct 2022 15:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJUQPS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 12:15:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D439E0FE;
-        Fri, 21 Oct 2022 09:15:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF3D761F15;
-        Fri, 21 Oct 2022 16:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816BFC433C1;
-        Fri, 21 Oct 2022 16:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666368915;
-        bh=iCewE/mUxFUwxBVTnDRE81TzLYGC1UfmkQxqs8i3xdI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UgOkjA0vCyTWZOEVc0oZ4JGwhq2kdluMgDqvKxBto23HIa/+qVg2HuTj8IPoirRh3
-         kwSGgDINHoE4fvG4RsW1tyq6DKMjNxwLoFuxE5TEs+CkhZp592InEZ1VXE9MlCcd7f
-         xXHc10Ha5fwttkEuWsvAKBs4se4DMNTdEo9Jrhw4Qo5zOlAjuKj+sQnfF3BbtWQs0Y
-         35bFprox0Lar/dETz922Q3AwU1CJR+R2NHNAI2r8v3rsaD84Aa9z9MuMll1moy9O73
-         0XYEhGoJG/nBTTXQQNNo4C88G7tEdm42dZKyJ5F6NR2atupQfzH6ESO7qyk3gueFhb
-         fwVEKgbbEn5lQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     linux-amlogic@lists.infradead.org, Da Xue <da@libre.computer>,
+        with ESMTP id S229895AbiJUTAM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 15:00:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6366016C22A;
+        Fri, 21 Oct 2022 12:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666378807; x=1697914807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/h+VrN160fOhMYJNJRAgTKgEfr4ireiMY5yjWF5ws8Q=;
+  b=Sp3RTOS2UGdzJGs1I5IWzW6WYOMLd8eaPhrOzYlAwh80RHFdFnteQAKN
+   hL9Jw18nMHbxsgNYONNzFYntvfqh0gL8MxnVipdu72Sk36DYpZ9BNvW4N
+   AWsTsrF5rI5GuUA9Sfb23+UI/tvN6RSqexFGThDrUFCM4sGydrgLFNuuQ
+   R0x2PGrCrXSE7h3PCTzKTTPHSLv2WU9nK5vNNlDYYjQz4TuENmRk0uApN
+   +1W1/TsvRcaMwim7JwmKzVCo4d2z3U8+x5pH9rR8n6td2DM8BB/daniHW
+   /+iT65bMDUuO9bW7gvmrzzF5DU72FRBewdTjPxyO5RIycHtohLVaOynvm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="333658296"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="333658296"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 12:00:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="773171046"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="773171046"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Oct 2022 12:00:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BE58F107; Fri, 21 Oct 2022 22:00:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com>
-References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com>
-Subject: Re: (subset) [PATCH v4 0/4] spi: amlogic: meson-spicc: Use pinctrl to drive CLK line when idle
-Message-Id: <166636891222.378315.9501642129883885314.b4-ty@kernel.org>
-Date:   Fri, 21 Oct 2022 17:15:12 +0100
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: [PATCH v5 0/4] spi: pxa2xx: Pass the SSP type via device property
+Date:   Fri, 21 Oct 2022 22:00:14 +0300
+Message-Id: <20221021190018.63646-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 Oct 2022 15:31:24 +0200, Amjad Ouled-Ameur wrote:
-> Between SPI transactions, all SPI pins are in HiZ state. When using the SS
-> signal from the SPICC controller it's not an issue because when the
-> transaction resumes all pins come back to the right state at the same time
-> as SS.
-> 
-> The problem is when we use CS as a GPIO. In fact, between the GPIO CS
-> state change and SPI pins state change from idle, you can have a missing or
-> spurious clock transition.
-> 
-> [...]
+Currently the SPI PXA2xx devices on Intel platforms can be instantiated
+via the following paths:
+ 1) as ACPI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 2) as ACPI LPSS device on the Sky Lake and newer;
+ 3) as PCI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 4) as PCI LPSS device on the Sky Lake and newer;
+ 5) as PCI device via ID table.
 
-Applied to
+Each of these cases provides some platform related data differently,
+i.e.:
+ 1) via drivers/acpi/acpi_lpss.c and drivers/spi/spi-pxa2xx.c
+ 2) via drivers/mfd/intel-lpss-acpi.c
+ 3) via drivers/spi/spi-pxa2xx-pci.c
+ 4) via drivers/mfd/intel-lpss-pci.c and drivers/spi/spi-pxa2xx.c
+ 5) via drivers/spi/spi-pxa2xx-pci.c
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This approach has two downsides:
 
-Thanks!
+a) there is no data propagated in the case #2 because we can't have
+   two or more drivers to match the same ACPI ID and hence some cases
+   are still not supported (Sky Lake and newer ACPI enabled LPSS);
 
-[1/4] spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI signal states
-      commit: 031837826886e254fefff7d8b849dc63b6a7e2b9
-[2/4] spi: meson-spicc: Use pinctrl to drive CLK line when idle
-      commit: f4567b28fdd4bede7cab0810200d567a1f03ec5e
+b) the data is duplicated over two drivers in the cases #1 & #4 and,
+   besides to be a bloatware, it is error prone (e.g. Lakefield has
+   a wrong data right now due to missed PCI entry in the spi-pxa2xx.c).
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+This series fixes the downsides, and enables previously unsupported
+cases. On top of that it has a couple of cleanups (patches 4 and 5).
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Changelog v5:
+- added a patch to validate the SSP type
+- reworked LPSS detection code to narrow its scope (Mark)
+- dropped applied patches
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Changelog v4:
+- apply the property only for known MFD enumerated devices (Mark)
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Changelog v3:
+- added tags to patches 4 & 5 (Jonathan)
+- massaged cover letter
 
-Thanks,
-Mark
+Changelog v2:
+- added cover letter (Mark)
+- dropped applied patch
+
+Andy Shevchenko (4):
+  spi: pxa2xx: Validate the correctness of the SSP type
+  spi: pxa2xx: Respect Intel SSP type given by a property
+  spi: pxa2xx: Remove no more needed PCI ID table
+  spi: pxa2xx: Move OF and ACPI ID tables closer to their user
+
+ drivers/spi/spi-pxa2xx.c   | 171 ++++++++-----------------------------
+ include/linux/pxa2xx_ssp.h |   1 +
+ 2 files changed, 37 insertions(+), 135 deletions(-)
+
+-- 
+2.35.1
+
