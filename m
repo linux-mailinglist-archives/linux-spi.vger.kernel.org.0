@@ -2,111 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D92607170
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 09:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3C76073FF
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 11:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiJUHvs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Oct 2022 03:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S230124AbiJUJ0X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Oct 2022 05:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJUHvr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 03:51:47 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3923B6BE;
-        Fri, 21 Oct 2022 00:51:45 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 503915C00A5;
-        Fri, 21 Oct 2022 03:51:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 21 Oct 2022 03:51:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666338703; x=1666425103; bh=Bb2mHnT1JP
-        70JzG2D69kGVHJtQMGKIn402mRECKC4F4=; b=YJndt3bVrfFKDrdAek/qsaZKfC
-        GIY2+JfgU75WsfND4cO4kRG3x+O+L72Sx4MhBQ1Mrt3o7WTkd2pY6UjdmMLwfF+9
-        6FmMOPyH5dNToYT0vWd/jvRIe21+raA7qoHdxaYFHtyMiE4yzGfCAHpbE9Mhwmw2
-        XDX4OWes+gg95jH50EkrKu5BcIGHEna27w6XkRO3+A7xOU3kTEGzrzZn6M/Qstdq
-        AQMHP8oRaJRAHtDmzKR+txQuwt2kccfz20uYH3pyCih6kdhdcP7EnZPfd9VSF2LX
-        21PVkV4JX2DuEZaA2ucVt01O08H1WGOn2e30kjQMozGtQTARP12lAnQkC/Bg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666338703; x=1666425103; bh=Bb2mHnT1JP70JzG2D69kGVHJtQMG
-        KIn402mRECKC4F4=; b=P8j9ROzxMhxfBLefQQ/EED3Qm8fMars4PuUmKq6vKSiw
-        hBKNIvZx//r/DeiaVUPTqpRU0AxT0vdIpk3SooqlFDv2HxYrbtIO5z7b6cjp8c91
-        BKG4jFAHl7cLSRjKtJTAhSmQA9II+sVD7FafJYfZrWEi8CTl6NcJc2J+l756NSlp
-        oRzHJY1ullMZJlB807oCWUDci32NCfjGeuGq/lGU67u4r7+IVYb65gSr9ofl+peo
-        8Hpd0gbmuYClvPA5HCdruWC0hTk2//MzSlQkfdO7YqeE7/ia5ndAfiNCLbO1IiBJ
-        hCCP8LZFHlHjLZlR5EEJckEmkCNqHcjnUKB8Zl0gQw==
-X-ME-Sender: <xms:jk9SY2r6Ig5ji619KxJgCjJET4nnh55Y6oEwwGrI6QBBsuE3Zm3m0A>
-    <xme:jk9SY0r3jX90q8rFlAOcq1IX21hQp7gikJAG4I4MmNBJe4YKbs2uwHdAi_k3hoPK7
-    IGa7tK9K9yRzkjiaOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeljedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jk9SY7MeN_fxobJB-fqC_YlU-Ev85a3NcnYPyvb8hSin8RUKeNxIjA>
-    <xmx:jk9SY15Q9JM-W1-0jZaaUQug-1DZcRbyiYgA8wnVRbMMz01Tn3lfwA>
-    <xmx:jk9SY15wJlZo0WGK_pfL_XK54dYpRLPtNFkYon57j9T99kVGHhkx1g>
-    <xmx:j09SY5qo-mVAQ0XblG-tDD1wHSfn7K4EOn_k433Fz7n4rOmjGuUzzQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 35876B60086; Fri, 21 Oct 2022 03:51:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <09cbb91f-bea8-4c22-9c1c-26d933ca1a94@app.fastmail.com>
-In-Reply-To: <20221019173437.GB41568@darkstar.musicnaut.iki.fi>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-14-arnd@kernel.org>
- <20221019173437.GB41568@darkstar.musicnaut.iki.fi>
-Date:   Fri, 21 Oct 2022 09:51:20 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Aaro Koskinen" <aaro.koskinen@iki.fi>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "Paul Walmsley" <paul@pwsan.com>,
-        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
-        "Tony Lindgren" <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        "Kevin Hilman" <khilman@kernel.org>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>, "Bin Liu" <b-liu@ti.com>,
-        "Helge Deller" <deller@gmx.de>, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
+        with ESMTP id S230020AbiJUJ0Q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 05:26:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340081119E7;
+        Fri, 21 Oct 2022 02:26:11 -0700 (PDT)
+X-UUID: 0018b82e76504adeb0a5f38c6ad7ce51-20221021
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TDfh+x5FytpWi0W8sYJ9u2fBze82/hHd4fVkyhEFTUQ=;
+        b=NTG13TMMFoUnQYSCCW/LMGVc27cDGpcJLh9ICuV9waD/NVwDn2krFD3tM7M+TJl1J/OEpIcD8iJCZSuZM8Xr9ljuVBMbCJV2JoQkwAXJoMu5ICxAaE7COk8LAHOsKH9x/XTd7MMYUpeXKnWISJBYTHhq5r82i1+UILLY4ijFFUM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:a9e61a8e-06a9-4544-867f-9bd59ba28860,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:62cd327,CLOUDID:f3bfae6c-89d3-4bfa-baad-dc632a24bca3,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0018b82e76504adeb0a5f38c6ad7ce51-20221021
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <zhichao.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1252444914; Fri, 21 Oct 2022 17:26:07 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 21 Oct 2022 17:26:05 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 21 Oct 2022 17:26:05 +0800
+From:   Zhichao Liu <zhichao.liu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <zhichao.liu@mediatek.com>
+Subject: [PATCH] spi: mediatek: Fix package division error
+Date:   Fri, 21 Oct 2022 17:16:53 +0800
+Message-ID: <20221021091653.18297-1-zhichao.liu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 19, 2022, at 19:34, Aaro Koskinen wrote:
-> Hi,
->
-> On Wed, Oct 19, 2022 at 05:03:36PM +0200, Arnd Bergmann wrote:
->>  drivers/usb/phy/phy-isp1301-omap.c | 91 +-----------------------------
->
-> This driver and config option ISP1301_OMAP can be deleted altogether as
-> there are no users after H2/H3 boards are gone.
+From: "zhichao.liu" <zhichao.liu@mediatek.com>
 
-Good catch! I'll split the driver removal out as a separate patch
-then and remove this bit here.
+Commit 7e963fb2a33ce ("spi: mediatek: add ipm design support
+for MT7986") makes a mistake on package dividing operation
+(one change is missing), need to fix it.
 
-     Arnd
+Background:
+Ipm design is expanding the HW capability of dma (adjust package
+length from 1KB to 64KB), and using "dev_comp->ipm_support" flag
+to indicate it.
+
+Issue description:
+Ipm support patch (said above) is missing to handle remainder at
+package dividing operation.
+One case, a transmission length is 65KB, is will divide to 1K
+(package length) * 65(package loop) in non-ipm desgin case, and
+will divide to 64K(package length) * 1(package loop) + 1K(remainder)
+in ipm design case. And the 1K remainder will be lost with the
+current SW flow, and the transmission will be failure.
+So, it should be fixed.
+
+Solution:
+Add "ipm_design" flag in function "mtk_spi_get_mult_delta()" to
+indicate HW capability, and modify the parameters corespondingly.
+
+fixes: 7e963fb2a33ce ("spi: mediatek: add ipm design support for MT7986")
+Signed-off-by: zhichao.liu <zhichao.liu@mediatek.com>
+---
+ drivers/spi/spi-mt65xx.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 11aeae7fe7fc..a33c9a3de395 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -551,14 +551,17 @@ static void mtk_spi_enable_transfer(struct spi_master *master)
+ 	writel(cmd, mdata->base + SPI_CMD_REG);
+ }
+ 
+-static int mtk_spi_get_mult_delta(u32 xfer_len)
++static int mtk_spi_get_mult_delta(struct mtk_spi *mdata, u32 xfer_len)
+ {
+-	u32 mult_delta;
++	u32 mult_delta = 0;
+ 
+-	if (xfer_len > MTK_SPI_PACKET_SIZE)
+-		mult_delta = xfer_len % MTK_SPI_PACKET_SIZE;
+-	else
+-		mult_delta = 0;
++	if (mdata->dev_comp->ipm_design) {
++		if (xfer_len > MTK_SPI_IPM_PACKET_SIZE)
++			mult_delta = xfer_len % MTK_SPI_IPM_PACKET_SIZE;
++	} else {
++		if (xfer_len > MTK_SPI_PACKET_SIZE)
++			mult_delta = xfer_len % MTK_SPI_PACKET_SIZE;
++	}
+ 
+ 	return mult_delta;
+ }
+@@ -570,22 +573,22 @@ static void mtk_spi_update_mdata_len(struct spi_master *master)
+ 
+ 	if (mdata->tx_sgl_len && mdata->rx_sgl_len) {
+ 		if (mdata->tx_sgl_len > mdata->rx_sgl_len) {
+-			mult_delta = mtk_spi_get_mult_delta(mdata->rx_sgl_len);
++			mult_delta = mtk_spi_get_mult_delta(mdata, mdata->rx_sgl_len);
+ 			mdata->xfer_len = mdata->rx_sgl_len - mult_delta;
+ 			mdata->rx_sgl_len = mult_delta;
+ 			mdata->tx_sgl_len -= mdata->xfer_len;
+ 		} else {
+-			mult_delta = mtk_spi_get_mult_delta(mdata->tx_sgl_len);
++			mult_delta = mtk_spi_get_mult_delta(mdata, mdata->tx_sgl_len);
+ 			mdata->xfer_len = mdata->tx_sgl_len - mult_delta;
+ 			mdata->tx_sgl_len = mult_delta;
+ 			mdata->rx_sgl_len -= mdata->xfer_len;
+ 		}
+ 	} else if (mdata->tx_sgl_len) {
+-		mult_delta = mtk_spi_get_mult_delta(mdata->tx_sgl_len);
++		mult_delta = mtk_spi_get_mult_delta(mdata, mdata->tx_sgl_len);
+ 		mdata->xfer_len = mdata->tx_sgl_len - mult_delta;
+ 		mdata->tx_sgl_len = mult_delta;
+ 	} else if (mdata->rx_sgl_len) {
+-		mult_delta = mtk_spi_get_mult_delta(mdata->rx_sgl_len);
++		mult_delta = mtk_spi_get_mult_delta(mdata, mdata->rx_sgl_len);
+ 		mdata->xfer_len = mdata->rx_sgl_len - mult_delta;
+ 		mdata->rx_sgl_len = mult_delta;
+ 	}
+-- 
+2.18.0
+
