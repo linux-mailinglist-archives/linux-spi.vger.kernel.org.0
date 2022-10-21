@@ -2,150 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A54607046
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 08:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D92607170
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 09:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJUGov (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Oct 2022 02:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S229606AbiJUHvs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Oct 2022 03:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiJUGou (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 02:44:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AC357ED;
-        Thu, 20 Oct 2022 23:44:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C6E861B39;
-        Fri, 21 Oct 2022 06:44:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC4FC433D7;
-        Fri, 21 Oct 2022 06:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666334687;
-        bh=dg+igT/kH5vNLile/55ugMghQ6bHOl5tdBoCQSBXYac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AGeMyJeg87UlxSe5k2XIw2g27XDq3ZEoGhJylOgn/Pc+deCE0ymZDPF3pyhTXbf62
-         BkfHG3/Jo3vHInZD0+8lFJ/J32KahCu6OAm/wJgPFxd9F/HemwazCjH13UA8hJ60mM
-         b7/YE//cHLp3hSWuNDGNIrsZr73GEPOrbsw5jMJf/PXtSzJrG6IggCpuVSgIjAuv7T
-         mkRnUX2cWBckGEDpW/KQuEh4jbsZI+7HVNHZJlkU6jCmsTyk4td814k6t0S+O3WWSh
-         8xaaW5CBclarLFx8oWJMBlgIHD63a03DVy9s1ojqs8YIrBNztmRJ02YHmW3QFs0F8Q
-         AkwK4fKzudFJw==
-Date:   Fri, 21 Oct 2022 08:44:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     linux-kernel@lists.debian.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>
-Subject: Re: [PATCH 0/6] a pile of randconfig fixes
-Message-ID: <Y1I/3KPxSI1voRHh@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Adam Borowski <kilobyte@angband.pl>, linux-kernel@lists.debian.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>, Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Brent Lu <brent.lu@intel.com>
-References: <20221020221749.33746-1-kilobyte@angband.pl>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ASNnxeSggHlth0r3"
-Content-Disposition: inline
-In-Reply-To: <20221020221749.33746-1-kilobyte@angband.pl>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229817AbiJUHvr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 03:51:47 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3923B6BE;
+        Fri, 21 Oct 2022 00:51:45 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 503915C00A5;
+        Fri, 21 Oct 2022 03:51:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 21 Oct 2022 03:51:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666338703; x=1666425103; bh=Bb2mHnT1JP
+        70JzG2D69kGVHJtQMGKIn402mRECKC4F4=; b=YJndt3bVrfFKDrdAek/qsaZKfC
+        GIY2+JfgU75WsfND4cO4kRG3x+O+L72Sx4MhBQ1Mrt3o7WTkd2pY6UjdmMLwfF+9
+        6FmMOPyH5dNToYT0vWd/jvRIe21+raA7qoHdxaYFHtyMiE4yzGfCAHpbE9Mhwmw2
+        XDX4OWes+gg95jH50EkrKu5BcIGHEna27w6XkRO3+A7xOU3kTEGzrzZn6M/Qstdq
+        AQMHP8oRaJRAHtDmzKR+txQuwt2kccfz20uYH3pyCih6kdhdcP7EnZPfd9VSF2LX
+        21PVkV4JX2DuEZaA2ucVt01O08H1WGOn2e30kjQMozGtQTARP12lAnQkC/Bg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666338703; x=1666425103; bh=Bb2mHnT1JP70JzG2D69kGVHJtQMG
+        KIn402mRECKC4F4=; b=P8j9ROzxMhxfBLefQQ/EED3Qm8fMars4PuUmKq6vKSiw
+        hBKNIvZx//r/DeiaVUPTqpRU0AxT0vdIpk3SooqlFDv2HxYrbtIO5z7b6cjp8c91
+        BKG4jFAHl7cLSRjKtJTAhSmQA9II+sVD7FafJYfZrWEi8CTl6NcJc2J+l756NSlp
+        oRzHJY1ullMZJlB807oCWUDci32NCfjGeuGq/lGU67u4r7+IVYb65gSr9ofl+peo
+        8Hpd0gbmuYClvPA5HCdruWC0hTk2//MzSlQkfdO7YqeE7/ia5ndAfiNCLbO1IiBJ
+        hCCP8LZFHlHjLZlR5EEJckEmkCNqHcjnUKB8Zl0gQw==
+X-ME-Sender: <xms:jk9SY2r6Ig5ji619KxJgCjJET4nnh55Y6oEwwGrI6QBBsuE3Zm3m0A>
+    <xme:jk9SY0r3jX90q8rFlAOcq1IX21hQp7gikJAG4I4MmNBJe4YKbs2uwHdAi_k3hoPK7
+    IGa7tK9K9yRzkjiaOw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeljedguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:jk9SY7MeN_fxobJB-fqC_YlU-Ev85a3NcnYPyvb8hSin8RUKeNxIjA>
+    <xmx:jk9SY15Q9JM-W1-0jZaaUQug-1DZcRbyiYgA8wnVRbMMz01Tn3lfwA>
+    <xmx:jk9SY15wJlZo0WGK_pfL_XK54dYpRLPtNFkYon57j9T99kVGHhkx1g>
+    <xmx:j09SY5qo-mVAQ0XblG-tDD1wHSfn7K4EOn_k433Fz7n4rOmjGuUzzQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 35876B60086; Fri, 21 Oct 2022 03:51:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <09cbb91f-bea8-4c22-9c1c-26d933ca1a94@app.fastmail.com>
+In-Reply-To: <20221019173437.GB41568@darkstar.musicnaut.iki.fi>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-14-arnd@kernel.org>
+ <20221019173437.GB41568@darkstar.musicnaut.iki.fi>
+Date:   Fri, 21 Oct 2022 09:51:20 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        "Paul Walmsley" <paul@pwsan.com>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        "Kevin Hilman" <khilman@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>, "Bin Liu" <b-liu@ti.com>,
+        "Helge Deller" <deller@gmx.de>, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Oct 19, 2022, at 19:34, Aaro Koskinen wrote:
+> Hi,
+>
+> On Wed, Oct 19, 2022 at 05:03:36PM +0200, Arnd Bergmann wrote:
+>>  drivers/usb/phy/phy-isp1301-omap.c | 91 +-----------------------------
+>
+> This driver and config option ISP1301_OMAP can be deleted altogether as
+> there are no users after H2/H3 boards are gone.
 
---ASNnxeSggHlth0r3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Good catch! I'll split the driver removal out as a separate patch
+then and remove this bit here.
 
-
-> I've been doing randconfig build tests for quite a while, here's a pile of
-> fixes.  I'm not sure what's the best way to submit these: do you folks
-> prefer a series like this, or a number of individual submissions?
-
-You sent the one for i2c-mlxbf seperately, which I applied now.
-
-
---ASNnxeSggHlth0r3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP9wACgkQFA3kzBSg
-KbbjSg//Qpjk7lLoKdOzvsdmL0Mq2o5hT22qP9eF8TiQ3pE1B3B9C9AsdWQ7FjOB
-ClXU5SlQmHPj//fgEfmr9Vj2bKBssiA4QkjiF/fcjthcBqG2j3tLeQPRmFr6qcd7
-a873ogKipCuWcb7wHngTM9a7820xTtzm6AUCGCfWQHKiXjdCWsSdBoSEyHDocLiz
-CVpTOsOeH+pC5Sa1WwXdONrrOMoA1Cttpxu8Y/ZCLzyqQ4M+WL5j17g/jMihywZ3
-hg4uduAbJ9Oq2gWXAi8JvnNLPYE5RdYjk3d0j4jFxyxSD8DeIOjp1tw/UT6VSoWK
-n+ygnkytK+33BTuEoIKKEfl3O5XTYtERfroHf3trO+xaIMKqa06p3+qPM5+2Rnqx
-cZ9cfqYqw+vCs/zkbtzWArA81N4O/QBDhNe4ktHyFkChCAN8dJSf0Yx5QM1oY50f
-Vkj0kWe6nA34LURe2MazhrLSQP7ht/8WkC1l1efH+2gHOdNBmxsr3fqOvYznCziB
-BWT40k8BRRdByRFICeSeS001FW+AUlbpE8q637iYCR8sGyqxJmCCb541W35o2gdT
-5ciiIlzkqA3NudtWem09SR8UuBv9wXaiLx8qQXd72b/Na86U8dT3Bc8DKthJFWn6
-59ubRiZuumctWs6sE7kZ9aPXpPpci4isfJAhNOCtgJ7+pC+g65E=
-=s3Uy
------END PGP SIGNATURE-----
-
---ASNnxeSggHlth0r3--
+     Arnd
