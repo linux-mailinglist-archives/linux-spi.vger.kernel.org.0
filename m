@@ -2,46 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB1C60758E
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 12:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B2F6075E6
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 13:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJUK7b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Oct 2022 06:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S230294AbiJULQg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Oct 2022 07:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJUK7a (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 06:59:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337FD9589;
-        Fri, 21 Oct 2022 03:59:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98ECF61E56;
-        Fri, 21 Oct 2022 10:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE6BC433D6;
-        Fri, 21 Oct 2022 10:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666349965;
-        bh=MX7AqOonF7ye3Ep2fovK6pVwLEUIuFjhJnUH+hlXQx8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WUetN10ob/FIbEPagcZvM2nW1HGj0igr495aAzUmGd0UtPsnbTqeniiK6vioUWvLE
-         p6jWtOEByYJUx8bEq9t7AdZct5vopfSIt0lGbc0A3XYFyIkw39m/NCCzmsaATWLbTy
-         WT3OXqP7IEIqICbeICW69e2exY+5fduZjr5+WXI0xdaXH7yT1WDTh4miVZbn40aCNj
-         fAezUBi7Rtg86IwlYwx6slXIGvJtJc3jlC2qjwSebW4/RgV7DWaS5Zev8PO5mzw5Oe
-         vbeMqXUxKx4Jtf9uJXqmb9fQWC83AL6WkrtjtFdbCp7QagJJc46iijNvRbgXhAOmWh
-         uB0FMzVFyozpA==
-Date:   Fri, 21 Oct 2022 11:59:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230312AbiJULQJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 07:16:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AA523923A;
+        Fri, 21 Oct 2022 04:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666350965; x=1697886965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LAn3ijLl8vdyojji+zoDVIBj6GTriBASs9iZAxj3n/E=;
+  b=GceQTu+C5wmuPI/9NM4xIGX2+5P+RSLLTd8DXBqdfZN3mrghpRW6KbKE
+   wQe2O6Ph82cCV5w3W86Yz+bMgIO3WeymeFgNmSdsWpU0XmK74oMW+GYX9
+   kFpqwbZJ6Y/d2ss9XHhEQJz4OXRPSqaoDBpWZ1u1HRbbJ4MbuyQ+UoEv2
+   nQZwCPNiXpALA/b6qQfED+k33/JOAKk406e5JBYNbMuyW3CcrIW99A2NF
+   +Yls5pltMhXeVGLX4PhhbZwIYPOCMvtSBeTAVkseYTwk4ItWCHk6uKfRU
+   OPepVIJOaj7x+rYkIWkttk8W/ZEBj5zGguDT12N3g+CRPafbxx9/oKUG2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="371189588"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="371189588"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 04:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="632875295"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="632875295"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Oct 2022 04:16:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olq0O-00B7Xg-0E;
+        Fri, 21 Oct 2022 14:16:00 +0300
+Date:   Fri, 21 Oct 2022 14:15:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
 Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1J7iJ967d0I83oZ@sirena.org.uk>
-References: <Y1F+Pw52nN195qDO@sirena.org.uk>
- <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
+Message-ID: <Y1J/by2TGbaYgoDq@smile.fi.intel.com>
+References: <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
  <Y1GEqa07/b25utui@sirena.org.uk>
  <Y1GIVy8l4vKsUYLr@smile.fi.intel.com>
  <Y1GJL8/YfeoUy8wB@sirena.org.uk>
@@ -50,53 +60,58 @@ References: <Y1F+Pw52nN195qDO@sirena.org.uk>
  <Y1GRGrt8EvhoeV0z@smile.fi.intel.com>
  <Y1J3lyrygPvVGUJw@sirena.org.uk>
  <Y1J5wx63bzq4tnik@smile.fi.intel.com>
+ <Y1J7iJ967d0I83oZ@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1syzuSsqkSt8kCc8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1J5wx63bzq4tnik@smile.fi.intel.com>
-X-Cookie: On the eighth day, God created FORTRAN.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1J7iJ967d0I83oZ@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Oct 21, 2022 at 11:59:20AM +0100, Mark Brown wrote:
+> On Fri, Oct 21, 2022 at 01:51:47PM +0300, Andy Shevchenko wrote:
+> > On Fri, Oct 21, 2022 at 11:42:31AM +0100, Mark Brown wrote:
+> 
+> > > > That's exactly what I'm talking about when said "named resource check".
+> 
+> > > Like I say a property can come from any firmware interface.
+> 
+> > But I'm talking about resource (not a property) as IO memory. It doesn't come
+> > via firmware at all. Have you had a chance to look into the v4?
+> 
+> On DT based systems resources can be named by the firmware, I don't know
+> if that's possible with ACPI but as the name suggests the driver gets
+> used on PXA systems too.
 
---1syzuSsqkSt8kCc8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+And how is it related to DT if the enumeration happens via platform driver
+code? As for PXA this is all comes via board files:
 
-On Fri, Oct 21, 2022 at 01:51:47PM +0300, Andy Shevchenko wrote:
-> On Fri, Oct 21, 2022 at 11:42:31AM +0100, Mark Brown wrote:
+$ git grep -n -w '"pxa2xx-spi"'
+Documentation/spi/pxa2xx.rst:66:        .name = "pxa2xx-spi", /* MUST BE THIS VALUE, so device match driver */
+arch/arm/mach-pxa/devices.c:1082:       pd = platform_device_alloc("pxa2xx-spi", id);
+arch/arm/mach-pxa/icontrol.c:127:       .name          = "pxa2xx-spi",
+arch/arm/mach-pxa/icontrol.c:135:       .name          = "pxa2xx-spi",
+drivers/mfd/intel-lpss.c:123:   .name = "pxa2xx-spi",
+drivers/spi/spi-pxa2xx-pci.c:298:       pi.name = "pxa2xx-spi";
+drivers/spi/spi-pxa2xx.c:1765:          .name   = "pxa2xx-spi",
 
-> > > That's exactly what I'm talking about when said "named resource check".
+In the current code and after my patch series the priority is that
+the driver data from the spi-pxa2xx.c is the first. So, if compatible
+(which is by fact the only "marvell,mmp2-ssp") has named resources
+that exactly the same as LPSS for MFD, nothing will change the driver
+behaviour.
 
-> > Like I say a property can come from any firmware interface.
+For the ACPI there is no names for the resources so far.
 
-> But I'm talking about resource (not a property) as IO memory. It doesn't come
-> via firmware at all. Have you had a chance to look into the v4?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-On DT based systems resources can be named by the firmware, I don't know
-if that's possible with ACPI but as the name suggests the driver gets
-used on PXA systems too.
 
---1syzuSsqkSt8kCc8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNSe4cACgkQJNaLcl1U
-h9DGaAf/TtbS0H0VEp77qLTvAQrMYbEZujP2T1T0FjMijMAO1g7KBAdddAFjwtwu
-TVvzGLojbch3aFCHSPdYlhib4xTYewUVdcmqK/p5CHtjMz2YOa+lVxyZTnk5ahok
-Rx7OY+5/YpI5XYhJpoyK5cT02lvRuZC8lwQm3pWKz0D1mrcZCAXXhkVBSE4FclYZ
-DYKnFEQVojSTpb6VX91oXZoOe7nNhrHjirF4in2rURyjNrySU/1BvZ6vxDp5gVcW
-/Hpp6rJHmB42xxtrbYNNzvUYYW78qyWxqmkLW7ABB4bcbl7jAHzCve4AA7mzjMky
-TtiDAaeMGUCVPlZfMT7QPcGz4Yd/gQ==
-=FFfo
------END PGP SIGNATURE-----
-
---1syzuSsqkSt8kCc8--
