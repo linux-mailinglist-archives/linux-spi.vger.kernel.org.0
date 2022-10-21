@@ -2,117 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C0A6077EA
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 15:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F78607870
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Oct 2022 15:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiJUNLY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Oct 2022 09:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S230492AbiJUNbn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Oct 2022 09:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiJUNLW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 09:11:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6684624E42C
-        for <linux-spi@vger.kernel.org>; Fri, 21 Oct 2022 06:10:57 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1olrna-0002Ri-VR
-        for linux-spi@vger.kernel.org; Fri, 21 Oct 2022 15:10:55 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 6E7041060D7
-        for <linux-spi@vger.kernel.org>; Fri, 21 Oct 2022 13:10:54 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A411E1060CF;
-        Fri, 21 Oct 2022 13:10:52 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a4d18a8a;
-        Fri, 21 Oct 2022 13:10:51 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-spi@vger.kernel.org
-Cc:     kernel@pengutronix.de, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Robin Gong <yibin.gong@nxp.com>
-Subject: [PATCH] spi: spi-imx: remove unused struct spi_imx_devtype_data::disable_dma callback
-Date:   Fri, 21 Oct 2022 15:10:51 +0200
-Message-Id: <20221021131051.1777984-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S230026AbiJUNbm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Oct 2022 09:31:42 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C93E2639DD
+        for <linux-spi@vger.kernel.org>; Fri, 21 Oct 2022 06:31:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id a3so5004644wrt.0
+        for <linux-spi@vger.kernel.org>; Fri, 21 Oct 2022 06:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1C8rgUAGHf+jLqpE/CuMvEaAQwxa6V5+hxBqPwgUl4=;
+        b=VT5D5asWne9UXufhJlAhGa0EmSt5P0Hw6devsJJzR8+iofV3cA2BWJNKGMuFsN4Fqm
+         IcxrUgNFDdlniCIrLtHcj2X/aWeccarjVBhWGNRF3+ZiX7UCWzjuHQyC02aq8LPYOsjf
+         ZGE5hxa5G71mBHwZUBvVV25OqgTXv3Yl7zKW1SvuSkCQkS8PDUL2OHPIPe0rSDBHGiPW
+         O1dVAsqXIH9brG0AsAHQtaPtvqepSVJIynaIH37rTakT/6U2fYRn8zm/EVqYCqt5dvsy
+         siz+j4NbG8YUcKTzJjdaKZy4VDS/2VZdm7wyi+JVA7TSqXvRln6ioq+sJKYjgN+DqxRi
+         h3bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1C8rgUAGHf+jLqpE/CuMvEaAQwxa6V5+hxBqPwgUl4=;
+        b=kgwiWEOpId0cuBOofG4YsxFn+FWvDPij5vt776H2Q09vvfMWvTC7Ciey1hooctT0kb
+         0MM97g+ufXyP/lI7EKBe8gWgNW9DdQKoZR1nisa7uj5b7/1eGPvLMlwbO7eCtSjUt/0Y
+         +KDI4IsjiXTJAsdp2B87lDRiY23DC1F2hOBSsbBZ4sDrSOMnLIZhW2sk0ytx5lL/QnVl
+         TzLufZYmcKpQLrpjbOTOqWaHCstRP7tyPWBEFZYuF/JHUU2OP3PC8TsK1MmuQXLasd6y
+         XUilZxyWdhLlt88RT60RXU/0dwi3UwxaLqAkPh0XY9kStCUiXyJ2nik2AhFSV/SyNFoh
+         p3mA==
+X-Gm-Message-State: ACrzQf3ulmNUedywBDb7HHRQKS8CrlWLGD/UZDHtLFvglBeEyPLtq60C
+        0DkO51ndoYD87tyFo+umS0b4sg==
+X-Google-Smtp-Source: AMsMyM5qyI1cW3ggb8lP2/pXLZo9ZzZ8Tvd5w+92XYdbvWvWBG5C05J0jgsWEpZL+/L7Tqi/pOTWvA==
+X-Received: by 2002:a5d:5983:0:b0:22e:bb12:7041 with SMTP id n3-20020a5d5983000000b0022ebb127041mr12385502wri.645.1666359096510;
+        Fri, 21 Oct 2022 06:31:36 -0700 (PDT)
+Received: from [127.0.1.1] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id j8-20020a05600c1c0800b003c6b7f5567csm10325280wms.0.2022.10.21.06.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 06:31:35 -0700 (PDT)
+Subject: [PATCH v4 0/4] spi: amlogic: meson-spicc: Use pinctrl to drive CLK line when idle
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIACyfUmMC/33NTQrCMBAF4KuUrB1JJrU/rryHuEjSqR2IbUlssJTe3eBS0NXwHrxvNhEpMEVxLj
+ YRKHHkacyhPBTCDWa8E3CXs0CJqKQsYZnBPDz0/II4Mzi0tqa6oUpqkUfWRAIbzOiGPBsX73M5cHxO
+ Yf08SZjP9aeXECRoagy1yqgWTxdrVs820NFND3HLWtL/BZ2Fpu1IYdV3qtJfwr7vb0sgc/P2AAAA
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Date:   Fri, 21 Oct 2022 15:31:24 +0200
+Message-Id: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Da Xue <da@libre.computer>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1666359095; l=1850;
+ i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
+ bh=uh9b1V5lppXzVxalMWZveFXtfZNKXVHWr9osZJQJmd8=;
+ b=0swTXrE+WS10AzArr7fM6CGstAbhVRX7nQSIOVPrQrbIfFk9podLHQ5iJt+C/00Nj7XVBVPwvjaG
+ BSHMkaSkDAQUMKq8yDVgWMXnURoaBsPi/EI1jLcB/9/tmwrPLfas
+X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
+ pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In commit 7a908832ace7 ("spi: imx: add fallback feature") the last
-user of the struct spi_imx_devtype_data::disable_dma callback was
-removed. However the disable_dma member of struct spi_imx_devtype_data
-and the callback itself was not removed.
+Between SPI transactions, all SPI pins are in HiZ state. When using the SS
+signal from the SPICC controller it's not an issue because when the
+transaction resumes all pins come back to the right state at the same time
+as SS.
 
-Remove struct spi_imx_devtype_data::disable_dma and mx51_disable_dma()
-as they are unused.
+The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+state change and SPI pins state change from idle, you can have a missing or
+spurious clock transition.
 
-Cc: Robin Gong <yibin.gong@nxp.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Set a bias on the clock depending on the clock polarity requested before CS
+goes active, by passing a special "idle-low" and "idle-high" pinctrl state
+and setting the right state at a start of a message.
+
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 ---
- drivers/spi/spi-imx.c | 8 --------
- 1 file changed, 8 deletions(-)
+Changes in v4:
+- Fixed documentation by defining pinctrl-x.
+- Link to v3: https://lore.kernel.org/r/20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 30d82cc7300b..a4bda03d3a8e 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -77,7 +77,6 @@ struct spi_imx_devtype_data {
- 	void (*reset)(struct spi_imx_data *spi_imx);
- 	void (*setup_wml)(struct spi_imx_data *spi_imx);
- 	void (*disable)(struct spi_imx_data *spi_imx);
--	void (*disable_dma)(struct spi_imx_data *spi_imx);
- 	bool has_dmamode;
- 	bool has_slavemode;
- 	unsigned int fifo_size;
-@@ -497,11 +496,6 @@ static void mx51_ecspi_trigger(struct spi_imx_data *spi_imx)
- 	writel(reg, spi_imx->base + MX51_ECSPI_CTRL);
- }
- 
--static void mx51_disable_dma(struct spi_imx_data *spi_imx)
--{
--	writel(0, spi_imx->base + MX51_ECSPI_DMA);
--}
--
- static void mx51_ecspi_disable(struct spi_imx_data *spi_imx)
- {
- 	u32 ctrl;
-@@ -1043,7 +1037,6 @@ static struct spi_imx_devtype_data imx51_ecspi_devtype_data = {
- 	.rx_available = mx51_ecspi_rx_available,
- 	.reset = mx51_ecspi_reset,
- 	.setup_wml = mx51_setup_wml,
--	.disable_dma = mx51_disable_dma,
- 	.fifo_size = 64,
- 	.has_dmamode = true,
- 	.dynamic_burst = true,
-@@ -1058,7 +1051,6 @@ static struct spi_imx_devtype_data imx53_ecspi_devtype_data = {
- 	.prepare_transfer = mx51_ecspi_prepare_transfer,
- 	.trigger = mx51_ecspi_trigger,
- 	.rx_available = mx51_ecspi_rx_available,
--	.disable_dma = mx51_disable_dma,
- 	.reset = mx51_ecspi_reset,
- 	.fifo_size = 64,
- 	.has_dmamode = true,
+Changes in v3:
+- Fixed documentation by removing pinctrl states as they are not mandatory.
+- Link to v2: https://lore.kernel.org/r/20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com
+
+---
+Amjad Ouled-Ameur (4):
+      spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI signal states
+      spi: meson-spicc: Use pinctrl to drive CLK line when idle
+      arm64: dts: meson-gxl: add SPI pinctrl nodes for CLK
+      arm64: dts: meson-gxbb: add SPI pinctrl nodes for CLK
+
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml       | 75 ++++++++++++++--------
+ arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi        | 14 ++++
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         | 14 ++++
+ drivers/spi/spi-meson-spicc.c                      | 39 ++++++++++-
+ 4 files changed, 113 insertions(+), 29 deletions(-)
+---
+base-commit: e35184f321518acadb681928a016da21a9a20c13
+change-id: 20221004-up-aml-fix-spi-c2bb7e78e603
+
+Best regards,
 -- 
-2.35.1
-
-
+Amjad Ouled-Ameur <aouledameur@baylibre.com>
