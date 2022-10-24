@@ -2,53 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09111609A0E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Oct 2022 07:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF7160A94D
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Oct 2022 15:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJXFu7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Oct 2022 01:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S235912AbiJXNRi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Oct 2022 09:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJXFuy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Oct 2022 01:50:54 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4717542E54;
-        Sun, 23 Oct 2022 22:50:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id E8F748945;
-        Mon, 24 Oct 2022 05:41:34 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 08:50:47 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        linux-omap@vger.kernel.org,
-        Cory Maccarrone <darkstar6262@gmail.com>,
-        Fabrice Crohas <fcrohas@gmail.com>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 16/17] spi: remove omap 100K driver
-Message-ID: <Y1Ynt42XqQ4iFjpm@atomide.com>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-16-arnd@kernel.org>
+        with ESMTP id S233701AbiJXNRE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Oct 2022 09:17:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FA29AF9E;
+        Mon, 24 Oct 2022 05:26:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A375E612D2;
+        Mon, 24 Oct 2022 12:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF6CC433D7;
+        Mon, 24 Oct 2022 12:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666614362;
+        bh=2XWGMD1dyJoof5ESj2tNrEfH8u5LG6bFReadSHUzboE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=keyyr4OZE3GtaW9cTc0eOlIcSQLxEgKVkHoKcO1+qn3YT7qDohzIikn4xVrY3uteN
+         IxaxxTbHSva8XMZStVMADlD/Jy3e/38tNhwXegG7zeiW5IzZEiu0RA1PB4Uh7+RcEI
+         dvcSk+hRxPA79LfLwH21FfvNZnsqud3zbSSYpHjYKgQbCvl4Te3C0DvNBYjQP3s6va
+         HhY0qZo0LBSeTBRz76K6dOJ+EupvvNPRbVV9X3Chv7khS5TFoRBfS7QqAf2mcMCxRc
+         OlbvlC6F2FVjUEpnT793zg2Oq1oMC6HJkKHBnppUyC/kzsDaeV5nGhQwo8jpUAvZxi
+         htN5/K4iXEADQ==
+Date:   Mon, 24 Oct 2022 13:25:55 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Sergiu.Moga@microchip.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, radu_nicolae.pirea@upb.ro,
+        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, Kavyasree.Kotagiri@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v5 1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI
+ child node ref binding
+Message-ID: <Y1aEU+k1lMOdSSR5@google.com>
+References: <20220922113347.144383-1-sergiu.moga@microchip.com>
+ <20220922113347.144383-2-sergiu.moga@microchip.com>
+ <YzRiVwzJYXtat1O5@google.com>
+ <7a0c45e2-85fc-b5b0-d1de-a9e06a20bb42@microchip.com>
+ <YzRnAy0DrfBilz8d@google.com>
+ <1d61596b-876b-2eca-f72d-ed38cc36f1a8@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221019150410.3851944-16-arnd@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1d61596b-876b-2eca-f72d-ed38cc36f1a8@microchip.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-* Arnd Bergmann <arnd@kernel.org> [221019 15:12]:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The OMAP7xx/OMAP8xx support was removed since all of its boards
-> have no remaining users. Remove its spi driver as well.
+On Wed, 28 Sep 2022, Sergiu.Moga@microchip.com wrote:
 
-Acked-by: Tony Lindgren <tony@atomide.com>
+> On 28.09.2022 18:23, Lee Jones wrote:
+> > On Wed, 28 Sep 2022, Sergiu.Moga@microchip.com wrote:
+> > 
+> >> On 28.09.2022 18:03, Lee Jones wrote:
+> >>> On Thu, 22 Sep 2022, Sergiu Moga wrote:
+> >>>
+> >>>> Another functionality of FLEXCOM is that of SPI. In order for
+> >>>> the proper validation of the SPI children nodes through the binding
+> >>>> to occur, the proper binding for SPI must be referenced.
+> >>>>
+> >>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> >>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>> ---
+> >>>>
+> >>>>
+> >>>> v1 -> v2:
+> >>>> - use full schema paths
+> >>>>
+> >>>>
+> >>>> v2 -> v3:
+> >>>> - Added Reviewed-by tag, previously this was [PATCH 3]
+> >>>>
+> >>>>
+> >>>> v3 -> v4:
+> >>>> - Nothing, previously this was [PATCH 5]
+> >>>>
+> >>>>
+> >>>> v4 -> v5:
+> >>>> - Nothing
+> >>>>
+> >>>>
+> >>>>
+> >>>>    .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml       | 5 ++---
+> >>>>    1 file changed, 2 insertions(+), 3 deletions(-)
+> >>>
+> >>> Not sure how these can be handled.
+> >>>
+> >>> I guess I cannot take these until the other patches are applied.
+> >>>
+> >>> NB: The patch doesn't apply cleanly anyway, so will need to be rebased.
+> >>>
+> >>
+> >>
+> >> Hello,
+> >>
+> >> The sama5d2-flexcom binding related patches are dependent on:
+> >> https://lore.kernel.org/linux-arm-kernel/20220916075744.1879428-1-kavyasree.kotagiri@microchip.com/
+> > 
+> > I would be very cautious about relying on comments made in the
+> > cover-letter.  Better to make this a hard requirement and place them
+> > in the same patch-set.
+> > 
+> 
+> 
+> 
+> Understood, my apologies, I will keep this in mind the next time this 
+> happens :).
+> 
+> Otherwise, by applying the patch series linked above, my sama5d2-flexcom 
+> patches should apply cleanly afterwards.
+
+Please re-send this once the other set has been applied.
+
+-- 
+Lee Jones [李琼斯]
