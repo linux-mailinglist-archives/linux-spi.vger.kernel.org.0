@@ -2,47 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C1860B145
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Oct 2022 18:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF7A60B7C5
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Oct 2022 21:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiJXQR4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Oct 2022 12:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S233281AbiJXTdJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Oct 2022 15:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiJXQPy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Oct 2022 12:15:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0371852FCB;
-        Mon, 24 Oct 2022 08:03:48 -0700 (PDT)
+        with ESMTP id S233287AbiJXTcr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Oct 2022 15:32:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E92D4A1A
+        for <linux-spi@vger.kernel.org>; Mon, 24 Oct 2022 11:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1A7DB81BA2;
-        Mon, 24 Oct 2022 14:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271F7C433C1;
-        Mon, 24 Oct 2022 14:13:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7866B81895
+        for <linux-spi@vger.kernel.org>; Mon, 24 Oct 2022 13:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E96C433C1;
+        Mon, 24 Oct 2022 13:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666620813;
-        bh=enWWnfXFctYRIjwy/dBACRIWMkD2S/LPIlskceBorm0=;
+        s=k20201202; t=1666616876;
+        bh=vkZnW0gjSxeSOiEzu/ZRPD5x7ksD6U0yEsC+P2WMStU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nUjRLriR6nX1Izc+MMw0nSDvNcVQVIWKxR4xtulDsb9lQfHCuKinMFv/7w+7zdMMx
-         xKUgLE9pamP0IUglNLqsRLb7pxFC6/Kx+MHzfvUfsstZRR4+ozPOBr2c8g3VRXIoxC
-         33E1X20nkm3Hjt/1N0E35XumiLLdMTqyv3+win8mxt6lmwcVMy9ihovNqJr2N/OFHl
-         LBqK3TQsQ2iqtU03SW/LZLNRK05GGO5odP17X8YBNXNvSdQLbmxHq4wm9fEWRMLzpf
-         P5pijsXP+ke7J9bMdSA5f2osgZINqLceTko5gzJl+Ay7DxO8Bett5x81RgVdqo55Gt
-         sExRFKuSR3t+A==
+        b=hT6ZBVzbR/R3X8agHdaNiqwoEa596+RKXDALu68o0wBkhQKCdrA+3kebCRpGEbgUn
+         BEv9MayIq9CcTZEi0zEM3dDKvLTsHbq8+/J6tUFRh2VgEoHOF20HJdvMn3RA3GZ3EH
+         NwKqDzxEiJY+XbSg1FN5r3LJgrKRq1v5OUChXuOoJZq1N4gFOcjtFi1oOG8TqHKTWC
+         ULp4bIA17lRd1Dr0zpS6PidelG5J5y031eecq0s1xhQ7vgzLksdM0FUWkH+aKqdYRe
+         hTOH03ODOhsvNqZTvo0VjbN5yd4dZ1zNg2/P6jvTshmH3YJyvLL89pcXirr5hVKgSk
+         ykeJVNIV0wWzg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     Yang Yingliang <yangyingliang@huawei.com>,
         linux-spi@vger.kernel.org
-Cc:     Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>
-In-Reply-To: <20221021190018.63646-1-andriy.shevchenko@linux.intel.com>
-References: <20221021190018.63646-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 0/4] spi: pxa2xx: Pass the SSP type via device property
-Message-Id: <166662081186.262681.14528029830842691867.b4-ty@kernel.org>
-Date:   Mon, 24 Oct 2022 15:13:31 +0100
+Cc:     clg@kaod.org, chin-ting_kuo@aspeedtech.com
+In-Reply-To: <20221019092635.1176622-1-yangyingliang@huawei.com>
+References: <20221019092635.1176622-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] spi: aspeed: Use devm_platform_{get_and_}ioremap_resource()
+Message-Id: <166661687537.215328.15512815155107512987.b4-ty@kernel.org>
+Date:   Mon, 24 Oct 2022 14:07:55 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,16 +53,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 Oct 2022 22:00:14 +0300, Andy Shevchenko wrote:
-> Currently the SPI PXA2xx devices on Intel platforms can be instantiated
-> via the following paths:
->  1) as ACPI LPSS device on Haswell, Bay Trail and Cherry Trail;
->  2) as ACPI LPSS device on the Sky Lake and newer;
->  3) as PCI LPSS device on Haswell, Bay Trail and Cherry Trail;
->  4) as PCI LPSS device on the Sky Lake and newer;
->  5) as PCI device via ID table.
+On Wed, 19 Oct 2022 17:26:35 +0800, Yang Yingliang wrote:
+> Use the devm_platform_{get_and_}ioremap_resource() helper instead of
+> calling platform_get_resource() and devm_ioremap_resource() separately.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -73,14 +65,8 @@ Applied to
 
 Thanks!
 
-[1/4] spi: pxa2xx: Validate the correctness of the SSP type
-      commit: 88a947215c29aa49307c8cd0638ba54e4cf07391
-[2/4] spi: pxa2xx: Respect Intel SSP type given by a property
-      commit: 1a1864cd879a1497fd46f6ea2f31ddcde8385585
-[3/4] spi: pxa2xx: Remove no more needed PCI ID table
-      commit: 07c337927e0618faf22ea98475c7162e6b7d2b35
-[4/4] spi: pxa2xx: Move OF and ACPI ID tables closer to their user
-      commit: 0e1f0b1ca79fdcc03c3e6b4277a994ca894c9fcc
+[1/1] spi: aspeed: Use devm_platform_{get_and_}ioremap_resource()
+      commit: 6d0cebbdf29922eaba4648a7a06d0d4ffd00439f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
