@@ -2,56 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D9C60C39F
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Oct 2022 08:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F62560C3CC
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Oct 2022 08:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJYGJT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Oct 2022 02:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S229841AbiJYG1n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Oct 2022 02:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJYGJS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Oct 2022 02:09:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F7F53D7;
-        Mon, 24 Oct 2022 23:09:17 -0700 (PDT)
+        with ESMTP id S230206AbiJYG1m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Oct 2022 02:27:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC19109D6F
+        for <linux-spi@vger.kernel.org>; Mon, 24 Oct 2022 23:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666678157; x=1698214157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4M4RG7e6KbnVlnMZy0nJZCHUEfnJaV+ADRTY0rAYgCc=;
-  b=Yp5CeQUupmfzwAf2koxjzZAAdaWvhQs9Q99bG+iMofAWUuFcvgoRQrqA
-   ag55nxFALiBqurw34LBE4R2gW+Ad2dnfY8T0FrsEHp4wbupu1dS4FTRqX
-   wY8DDZU9zqo5xXP+zjNc1VYqCZOOmfMEo7BpqocVcakXPRNTFZdpclqDV
-   qGPKfG/enGbGIOqMYREocv/E0zd8Slp4Nq090+phCiy15N78+aqVk3h5s
-   T6skQ09Im+dA9AUkHQ7nI+0PTu8dWuqd4zJ3JqDyE1iIt+sraxWsF9IK5
-   F1nxuuN49yxP4EIY1fuwAb5xdWiAj4EWIpY6sd68vPixBI+HlQO2O2Y8O
+  t=1666679261; x=1698215261;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gP7BkeNBDN8b+WUOHQ/WDZLeGpVMxeBq8D/W43ikivU=;
+  b=KZnzfMse4disIxp/r514hOyNd854Gwj1sgY5VF9L1XM1vQMlL4TQDWzE
+   XmXs5rETsDB1REpuCtd9JhEWqb3xacU7M/j3RnKZrVvC5Dx2v9jWM7T5m
+   Vsc8zsvwDhBGGB78k4b6XBNL+LsJDxCwHz2xD2397EAF/uyCOTc122XBx
+   7DClY67t8dvtXDfSUIl7hS8FD9xUvF88rO7hnWUmDlgY0RYNc8KPRNIsT
+   6FA2th3+/QqhyHZACBrRUUz1gwBkdUDJBWnymEbW0Od1Bb/ULP0KULduQ
+   rgHHOE8PLglMYkk0MQF1ACjEWZdIgJH2YbQ9BmnxwZVl5YHXxAqgkOwNU
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287993687"
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="309286829"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="287993687"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 23:08:46 -0700
+   d="scan'208";a="309286829"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 23:27:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="806552299"
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="774082888"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="806552299"
+   d="scan'208";a="774082888"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2022 23:08:44 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Oct 2022 23:27:38 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id B4D20107; Tue, 25 Oct 2022 09:09:06 +0300 (EEST)
-Date:   Tue, 25 Oct 2022 09:09:06 +0300
+        id 4CACD107; Tue, 25 Oct 2022 09:28:00 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mauro Lima <mauro.lima@eclypsium.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] intel-spi: Split hardware and software sequencing
-Message-ID: <Y1d9glOgHsQlZe2L@black.fi.intel.com>
-References: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: intel: Use correct mask for flash and protected regions
+Date:   Tue, 25 Oct 2022 09:28:00 +0300
+Message-Id: <20221025062800.22357-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -61,47 +59,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+The flash and protected region mask is actually 0x7fff (30:16 and 14:0)
+and not 0x3fff so fix this accordingly. While there use GENMASK() instead.
 
-On Thu, Oct 20, 2022 at 01:45:06PM -0300, Mauro Lima wrote:
-> Right now the only driver for Intel's spi has a DANGEROUS tag for
-> a bug in the past on certain Lenovo platforms. It was cleared out
-> that the bug was caused for the spi software sequencing mechanism
-> and if we only use the driver with the hardware sequencing
-> capabilities will be much safer[1].
-> 
-> This changes will remove all the software sequencing bits from
-> the driver and left only the hardware sequencing functionality.
-> If the software sequencing capabilities are needed, the old driver
-> can be build using the DANGEROUS option from the menu.
-> 
-> [1] https://lkml.org/lkml/2021/11/11/468
-> 
-> Mauro Lima (2):
->   spi: intel-spi: Move software sequencing logic outside the core
->   spi: intel-spi: build the driver with hardware sequencing by default
+Cc: stable@vger.kernel.org
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/spi/spi-intel.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I'be been thinking about this and I believe we can do something simpler
-instead.
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 55f4ee2db002..acd8ec4f86a7 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -52,17 +52,17 @@
+ #define FRACC				0x50
+ 
+ #define FREG(n)				(0x54 + ((n) * 4))
+-#define FREG_BASE_MASK			0x3fff
++#define FREG_BASE_MASK			GENMASK(14, 0)
+ #define FREG_LIMIT_SHIFT		16
+-#define FREG_LIMIT_MASK			(0x03fff << FREG_LIMIT_SHIFT)
++#define FREG_LIMIT_MASK			GENMASK(30, 16)
+ 
+ /* Offset is from @ispi->pregs */
+ #define PR(n)				((n) * 4)
+ #define PR_WPE				BIT(31)
+ #define PR_LIMIT_SHIFT			16
+-#define PR_LIMIT_MASK			(0x3fff << PR_LIMIT_SHIFT)
++#define PR_LIMIT_MASK			GENMASK(30, 16)
+ #define PR_RPE				BIT(15)
+-#define PR_BASE_MASK			0x3fff
++#define PR_BASE_MASK			GENMASK(14, 0)
+ 
+ /* Offsets are from @ispi->sregs */
+ #define SSFSTS_CTL			0x00
+-- 
+2.35.1
 
-All the modern "Core" CPUs expose this as PCI device and that only
-supports hardware sequencer which should be safe so I think we can do
-something like this:
-
-1. Make spi-intel-pci.c to set the type to INTEL_SPI_CNL for all the
-   controllers it supports (and double check that this is the case for
-   all these controllers).
-
-As a side effect the ispi->sregs will be set to NULL so the core driver
-does not even try to use the software seguencer.
-
-2. Update Kconfig of SPI_INTEL_PCI to remove "DANGEROUS" and mention in
-   the help text that this only supports the hardware sequencer and only
-   the modern core hardware.
-
-3. Update Kconfig of SPI_INTEL_PLATFORM help text to mention that most
-   of these are using software sequencer, leave "DANGEROUS" there.
-
-Does this make sense? Let me know what you think. I can do this myself
-as well (might take some while though since busy with other things
-usual).
