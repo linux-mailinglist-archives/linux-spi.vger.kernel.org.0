@@ -2,87 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEA560B8C7
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Oct 2022 21:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D9C60C39F
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Oct 2022 08:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiJXTyq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Oct 2022 15:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S230071AbiJYGJT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Oct 2022 02:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiJXTxv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Oct 2022 15:53:51 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D231440A6
-        for <linux-spi@vger.kernel.org>; Mon, 24 Oct 2022 11:18:09 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-13be3ef361dso346218fac.12
-        for <linux-spi@vger.kernel.org>; Mon, 24 Oct 2022 11:18:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPf6G/73Hd0s0zh7PYg5rvhdRmvS3jQjXsc+lqFusyc=;
-        b=HGcVBFDteMZls7ZMsIqjOq7T8/WfuF1etJ7ROqUxvS4ggGiZNESri7+18Ux08kMjOh
-         47J5+qd9Nv5snWwet2PfoPSRBSh9MTWfTA8MF4x5a3cst+gCEUk3MVqVrIVwbRdklIgx
-         DsztJnobAckKidL6xUzLrYwdGsz1nEP3lcLEAYCzGs3OWk2zVdu1lEyYEwTRNt7VO+Zv
-         DZxHXejkaVio0WcOTpKxY5QCLl2oSQZWdmi1HazGx4m1e/B+trzljjwlXuc3FFGZDJBn
-         yb5RWbbU0IhN0sHRcr5fTwU/8sE2dvxO00p7tdTQEWcWEXMNFJpn911HBLYjy0wsoOtw
-         +1bw==
-X-Gm-Message-State: ACrzQf0CmmEz2osGOZkLrDWlTyPAy371jgLqN9qLS8qK9DPQp25WxUEC
-        WoStonhj3yf05/WvsrCKiDMFe93+94FsEKSKhR5fIA==
-X-Google-Smtp-Source: AMsMyM4Gm7Aig8YT5fRJeyMGddzfvxxYUrUEmpPq2PCQ/RGA1i1Qlql9jRoJlFidSVPdqq8RCQds4g==
-X-Received: by 2002:a17:90a:fe6:b0:212:bfc3:31f5 with SMTP id 93-20020a17090a0fe600b00212bfc331f5mr25482041pjz.215.1666634594766;
-        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
-Received: from localhost ([75.172.140.17])
-        by smtp.gmail.com with ESMTPSA id mj19-20020a17090b369300b002131a9f8dcbsm1291814pjb.46.2022.10.24.11.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul@pwsan.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-omap@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>,
-        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
-In-Reply-To: <20221019150410.3851944-14-arnd@kernel.org>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-14-arnd@kernel.org>
-Date:   Mon, 24 Oct 2022 11:03:13 -0700
-Message-ID: <7hbkq1hzfi.fsf@baylibre.com>
+        with ESMTP id S229910AbiJYGJS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Oct 2022 02:09:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F7F53D7;
+        Mon, 24 Oct 2022 23:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666678157; x=1698214157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4M4RG7e6KbnVlnMZy0nJZCHUEfnJaV+ADRTY0rAYgCc=;
+  b=Yp5CeQUupmfzwAf2koxjzZAAdaWvhQs9Q99bG+iMofAWUuFcvgoRQrqA
+   ag55nxFALiBqurw34LBE4R2gW+Ad2dnfY8T0FrsEHp4wbupu1dS4FTRqX
+   wY8DDZU9zqo5xXP+zjNc1VYqCZOOmfMEo7BpqocVcakXPRNTFZdpclqDV
+   qGPKfG/enGbGIOqMYREocv/E0zd8Slp4Nq090+phCiy15N78+aqVk3h5s
+   T6skQ09Im+dA9AUkHQ7nI+0PTu8dWuqd4zJ3JqDyE1iIt+sraxWsF9IK5
+   F1nxuuN49yxP4EIY1fuwAb5xdWiAj4EWIpY6sd68vPixBI+HlQO2O2Y8O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287993687"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="287993687"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 23:08:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="806552299"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="806552299"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2022 23:08:44 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id B4D20107; Tue, 25 Oct 2022 09:09:06 +0300 (EEST)
+Date:   Tue, 25 Oct 2022 09:09:06 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] intel-spi: Split hardware and software sequencing
+Message-ID: <Y1d9glOgHsQlZe2L@black.fi.intel.com>
+References: <20221020164508.29182-1-mauro.lima@eclypsium.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+Hi,
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> After the removal of the unused board files, I went through the
-> omap1 code to look for code that no longer has any callers
-> and remove that.
->
-> In particular, support for the omap7xx/omap8xx family is now
-> completely unused, so I'm only leaving omap15xx/omap16xx/omap59xx.
+On Thu, Oct 20, 2022 at 01:45:06PM -0300, Mauro Lima wrote:
+> Right now the only driver for Intel's spi has a DANGEROUS tag for
+> a bug in the past on certain Lenovo platforms. It was cleared out
+> that the bug was caused for the spi software sequencing mechanism
+> and if we only use the driver with the hardware sequencing
+> capabilities will be much safer[1].
+> 
+> This changes will remove all the software sequencing bits from
+> the driver and left only the hardware sequencing functionality.
+> If the software sequencing capabilities are needed, the old driver
+> can be build using the DANGEROUS option from the menu.
+> 
+> [1] https://lkml.org/lkml/2021/11/11/468
+> 
+> Mauro Lima (2):
+>   spi: intel-spi: Move software sequencing logic outside the core
+>   spi: intel-spi: build the driver with hardware sequencing by default
 
-Acked-by: Kevin Hilman <khilman@baylibre.com>
+I'be been thinking about this and I believe we can do something simpler
+instead.
 
-with a few tears shed since omap7xx/omap8xx was the first family I
-contributed to upstream. :(
+All the modern "Core" CPUs expose this as PCI device and that only
+supports hardware sequencer which should be safe so I think we can do
+something like this:
 
-Kevin
+1. Make spi-intel-pci.c to set the type to INTEL_SPI_CNL for all the
+   controllers it supports (and double check that this is the case for
+   all these controllers).
+
+As a side effect the ispi->sregs will be set to NULL so the core driver
+does not even try to use the software seguencer.
+
+2. Update Kconfig of SPI_INTEL_PCI to remove "DANGEROUS" and mention in
+   the help text that this only supports the hardware sequencer and only
+   the modern core hardware.
+
+3. Update Kconfig of SPI_INTEL_PLATFORM help text to mention that most
+   of these are using software sequencer, leave "DANGEROUS" there.
+
+Does this make sense? Let me know what you think. I can do this myself
+as well (might take some while though since busy with other things
+usual).
