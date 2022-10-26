@@ -2,90 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BB860E0A1
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 14:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B02860E106
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 14:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiJZMaJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Oct 2022 08:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S233893AbiJZMkw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Oct 2022 08:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbiJZMaF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 08:30:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD88399E2
-        for <linux-spi@vger.kernel.org>; Wed, 26 Oct 2022 05:30:02 -0700 (PDT)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666787400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ov97DnXbeyGTG04tM11Ln/jh5+1InwlVZS0bgIBezJg=;
-        b=H5K1W4Cm9JehfQEWdD3JP6WVgPrM9kFr5EEYsU1GHWjvp5S3EJJsX+UelFTgHiTTwR+4Qb
-        Rc9mex2KbCjHIujfUj8syikXQ0QXFf0NTk4/tJuJ4raH/us0mVvQeAFshpYBD79cBnRUQK
-        GluAMsPMwAV47rDz5dUyzCQWRyqLK2NM1wAFzsyArUHxMnacdRoapXk2BNhwzjbjXuJ2nD
-        g1HFZrIVWqzVGjWxFEGAxXW09R41rhU5khLVMSUdohfxS6F/HIZCAloCsiB3gknmLAdG0N
-        RD/SoM2wVSMTriIsBc2fOkEdyTVTi25lPZkMYp3aOsaOpDQ6SQ2HgMIgXeZUWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666787400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ov97DnXbeyGTG04tM11Ln/jh5+1InwlVZS0bgIBezJg=;
-        b=G4yN5cz8jnwKBRs5tFswA0D7E0P7d4Yh+iR9N4+jwQw1fc1YkY+LzxQHMELyF9XUha1MyR
-        d8+eQkIP8Vsb0BBg==
-To:     linux-spi@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH] spi: Remove the obsolte u64_stats_fetch_*_irq() users.
-Date:   Wed, 26 Oct 2022 14:29:51 +0200
-Message-Id: <20221026122951.331638-1-bigeasy@linutronix.de>
+        with ESMTP id S233831AbiJZMkW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 08:40:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A27A33E34;
+        Wed, 26 Oct 2022 05:39:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 792BCB8223A;
+        Wed, 26 Oct 2022 12:39:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2527CC433C1;
+        Wed, 26 Oct 2022 12:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666787997;
+        bh=nZyuqLx+6uxbjW68/34pb1i0VYW3PxBvAZFlwinx2VA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KA7mHixe8OKOC6B+Xwxv6zB3L9nBWHSuxKyQbnYQnGc068pBk2NLmExadnS8jvpFo
+         kAFP2G9+a0TFrLfZT4awiDBxsRa5XzHbsz4d7kXDhBENVbDdxHAqjTfSWIipjXRUxx
+         DgKTOpfiDhsVUtq9NVrbg+0NjZlDTkXeZJyy+DQ2wHBhpMQ9F3megj3JNuMUSpAfIF
+         89fpc8dBHpJWOzp94kfBIJMtQPCUkeU1X/yGhHBOvhrngrjq43f+bYZFIBecox87PJ
+         2+EzaYcjhisEArVTBYaHCQENAgRwCkRk82amO+m32cmiP/2H96NYBxi+W7uoomdXo/
+         z71VbjGFhVNVw==
+Date:   Wed, 26 Oct 2022 13:39:51 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, Da Xue <da@libre.computer>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: meson-spicc: move wait completion in driver to take
+ bursts delay in account
+Message-ID: <Y1kql/WwAX+ZV8us@sirena.org.uk>
+References: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OiPSywjFVb7KoiNF"
+Content-Disposition: inline
+In-Reply-To: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
+X-Cookie: Prunes give you a run for your money.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
 
-Now that the 32bit UP oddity is gone and 32bit uses always a sequence
-count, there is no need for the fetch_irq() variants anymore.
+--OiPSywjFVb7KoiNF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Convert to the regular interface.
+On Wed, Oct 26, 2022 at 09:58:28AM +0200, Neil Armstrong wrote:
 
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- drivers/spi/spi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> -		spi_finalize_current_transfer(spicc->master);
+> +		complete(&spicc->done);
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 5f9aedd1f0b65..dabe89666efdb 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -127,10 +127,10 @@ do {									\
- 		unsigned int start;					\
- 		pcpu_stats =3D per_cpu_ptr(in, i);			\
- 		do {							\
--			start =3D u64_stats_fetch_begin_irq(		\
-+			start =3D u64_stats_fetch_begin(		\
- 					&pcpu_stats->syncp);		\
- 			inc =3D u64_stats_read(&pcpu_stats->field);	\
--		} while (u64_stats_fetch_retry_irq(			\
-+		} while (u64_stats_fetch_retry(			\
- 					&pcpu_stats->syncp, start));	\
- 		ret +=3D inc;						\
- 	}								\
---=20
-2.37.2
+No, you need to call spi_finalize_current_transfer() - you need to block
+inside the transfer function if you want to open code this stuff.
 
+--OiPSywjFVb7KoiNF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNZKpYACgkQJNaLcl1U
+h9C2AAf+On8ZkqQcFewrYfuP8Ug1PJmIq/gmECvUtesQ18Y+vaANvc6kZTqPGAYL
+H/WQkFsjFVQv+tEZLvFbisejDOcA9OL6Z4dnFsE+LFJdz/1typ5OySErgvOVco0N
++PqpGoRjI8gy6cy3vdSi2iNHBx70Xp5Nz7yLJayQyALu4+h6WWywuk1NL/dTJ9GJ
+KSfIEbFcazcMZsPlzeyK6NCSoMZOf3ebU0VLqicsH9ONKjDoaBg9Zs1TZm4hcwlY
+vWxnN/zejXyOcEfYYYb7JE6oxhv1LcifxtxDG08Vf0JcdR/DzbmUgjDppXZRZF9D
+o6RTZ26fjdxtWwKIL3IaXI/1cXJWgQ==
+=9Zpz
+-----END PGP SIGNATURE-----
+
+--OiPSywjFVb7KoiNF--
