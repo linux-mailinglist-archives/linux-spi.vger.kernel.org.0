@@ -2,92 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1652A60E6FA
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 20:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B8260E9C1
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 22:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiJZSHk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Oct 2022 14:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S234905AbiJZUEQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Oct 2022 16:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbiJZSHj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 14:07:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28A8F275
-        for <linux-spi@vger.kernel.org>; Wed, 26 Oct 2022 11:07:39 -0700 (PDT)
+        with ESMTP id S234815AbiJZUEN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 16:04:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F5B110B10;
+        Wed, 26 Oct 2022 13:04:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFAF962020
-        for <linux-spi@vger.kernel.org>; Wed, 26 Oct 2022 18:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635CEC433D6;
-        Wed, 26 Oct 2022 18:07:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 413B462097;
+        Wed, 26 Oct 2022 20:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5BFC433B5;
+        Wed, 26 Oct 2022 20:04:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666807658;
-        bh=polzen8u7BtRGEDgsOoWDDarlMQ8J9m3QWOMOLwe69o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=snYOBtKxz78gMpdu3Ec76oAOGpzXLXtObQIq8TZ3yoYVq2blfUvlKUFSLCPjvTDP9
-         PJZiXFPp/TY3HFEkb+LodkuO9mDaGjERZ/DxGKPMnea0IKHJGYV/1CCrqnocMxyswl
-         3FeyToaJ5oFoToqyl3ZliUSJZS/FbmVLA0j7V9BPUDFz9g0WL3SFO0JQJrh4AoCdyQ
-         tSwrYQcr4syBy9b0i6sTFd3G2cZ6JYiOaJHZrpyDlSnFaEHoE0O0rgXyjwLuUKUSVd
-         xy78oXBerCsUxWvGjIPzaedkK3rH21h6AhYQSfc+gtIzBMlf1PN18SX4X5k9qMbxda
-         2NQr67ggO9Hyg==
+        s=k20201202; t=1666814649;
+        bh=nFv9CTw8y/qv9YpySBRdZ5qQVFKLubk9H3LBqzmqt5Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IpmPRPMp5oxUuWF5J7r7OZXKBerz45hbXkRAS5CvWNX2efVw+EufnFN37vD3MjxW7
+         8l69Sg2DlBzRD5huSy9UmEx4L6WEpfJ/4RGeSETjkg/LbKNKRxba6qlU81NLAdIlJE
+         Ylk8GENyjSEqz9XcLLuQnVqeTR4ydcQzZhgcnLW1YHrSEVfnd9ilu5OdyZvLGCKADb
+         +Ig/g1Z0ujJ2CV3GtXDrySrXy/bPNB7gmsPl7t/PDTgSSV0NTstGeZakb7jdiE64sn
+         EE/X+h+cLz95EnriYRH47brTGFfJiy/PjnOcuZF6EooRB76G2/EIFC26AGHtHfkNmN
+         wXKyXoDx4U3nA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-spi@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-In-Reply-To: <20221026122951.331638-1-bigeasy@linutronix.de>
-References: <20221026122951.331638-1-bigeasy@linutronix.de>
-Subject: Re: [PATCH] spi: Remove the obsolte u64_stats_fetch_*_irq() users.
-Message-Id: <166680765713.867963.5145895651436078636.b4-ty@kernel.org>
-Date:   Wed, 26 Oct 2022 19:07:37 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.1-rc2
+Date:   Wed, 26 Oct 2022 21:04:02 +0100
+Message-Id: <20221026200409.4B5BFC433B5@smtp.kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 26 Oct 2022 14:29:51 +0200, Sebastian Andrzej Siewior wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Now that the 32bit UP oddity is gone and 32bit uses always a sequence
-> count, there is no need for the fetch_irq() variants anymore.
-> 
-> Convert to the regular interface.
-> 
-> [...]
+The following changes since commit 8e9204cddcc3fea9affcfa411715ba4f66e97587:
 
-Applied to
+  spi: Ensure that sg_table won't be used after being freed (2022-09-30 12:56:29 +0100)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+are available in the Git repository at:
 
-Thanks!
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc2
 
-[1/1] spi: Remove the obsolte u64_stats_fetch_*_irq() users.
-      commit: 93cc2559d3fdcd28b1a7972ab519a6cd8ba20f9d
+for you to fetch changes up to f8aa6c895d482847c9b799dcdac8bbdb56cb8e04:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  spi: aspeed: Fix window offset of CE1 (2022-10-19 14:36:43 +0100)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+spi: Fixes for v6.1
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+A collection of mostly unremarkable fixes for SPI that have built up
+since the merge window, all driver specific.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The change to the qup adding support for GPIO chip selects is fixing a
+regression due to the removal of legacy GPIO handling, the driver had
+previously been silently relying on the legacy GPIO support in a
+slightly broken way which worked well enough on some systems.  Fixing
+it is simply a case of setting a couple of bits of information in the
+driver description.
 
-Thanks,
-Mark
+----------------------------------------------------------------
+Bird, Tim (1):
+      spi: spi-gxp: fix typo in SPDX identifier line
+
+Chin-Ting Kuo (1):
+      spi: aspeed: Fix typo in mode_bits field for AST2600 platform
+
+Christophe Leroy (1):
+      spi: mpc52xx: Replace NO_IRQ by 0
+
+Cédric Le Goater (1):
+      spi: aspeed: Fix window offset of CE1
+
+Jonathan Neuschäfer (1):
+      spi: spi-mem: Fix typo (of -> or)
+
+Krishna Yarlagadda (1):
+      spi: tegra210-quad: Fix combined sequence
+
+Mauro Lima (1):
+      spi: intel: Fix the offset to get the 64K erase opcode
+
+Robert Marko (1):
+      spi: qup: support using GPIO as chip select line
+
+ drivers/spi/spi-aspeed-smc.c    | 6 +++---
+ drivers/spi/spi-gxp.c           | 2 +-
+ drivers/spi/spi-intel.c         | 2 +-
+ drivers/spi/spi-mpc52xx.c       | 2 +-
+ drivers/spi/spi-qup.c           | 2 ++
+ drivers/spi/spi-tegra210-quad.c | 5 +++++
+ include/linux/spi/spi-mem.h     | 2 +-
+ 7 files changed, 14 insertions(+), 7 deletions(-)
