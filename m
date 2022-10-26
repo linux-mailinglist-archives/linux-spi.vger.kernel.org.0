@@ -2,48 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B6660E6D9
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 19:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1652A60E6FA
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Oct 2022 20:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiJZRy4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Oct 2022 13:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S233153AbiJZSHk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Oct 2022 14:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiJZRyy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 13:54:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E444720365;
-        Wed, 26 Oct 2022 10:54:52 -0700 (PDT)
+        with ESMTP id S233802AbiJZSHj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Oct 2022 14:07:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28A8F275
+        for <linux-spi@vger.kernel.org>; Wed, 26 Oct 2022 11:07:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAB262018;
-        Wed, 26 Oct 2022 17:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A17C4314E;
-        Wed, 26 Oct 2022 17:54:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFAF962020
+        for <linux-spi@vger.kernel.org>; Wed, 26 Oct 2022 18:07:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635CEC433D6;
+        Wed, 26 Oct 2022 18:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666806891;
-        bh=1zMYOW4OGqV7CIj0igClXnh2UOdKvHi5CykJj1DT2RE=;
+        s=k20201202; t=1666807658;
+        bh=polzen8u7BtRGEDgsOoWDDarlMQ8J9m3QWOMOLwe69o=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XLqyn7YMuswnyGGt7j1DK4BhUt6nikzGyFyef7OeUi58Z3AN9F5DbDCp742WZVfBd
-         i7QPJC01uRsTKKPUjKl2NTUFWPV8Fu9iIxQfexwvM4nkL9xxOyDntWwWitUnoDYdmN
-         AFad8QNHSDUeY4+XEXJ4fe6vhBI+YPwt8PQO6K1lT1uXwX/GF/zZ62UV2S5c2L8dAI
-         fOK0o636grFSLxbw7IfslXrO2usd1JU9ZE6RFp8rx1SPsxEE9vxipkb4t9NuEpUPhz
-         pB8LijwQd7oWQn8Or2MBSsQ9/pMU2viz+xzkwUJ04jsg34XKonpx15lNI2fbbV+zRt
-         ZXwMI5XFOhlTg==
+        b=snYOBtKxz78gMpdu3Ec76oAOGpzXLXtObQIq8TZ3yoYVq2blfUvlKUFSLCPjvTDP9
+         PJZiXFPp/TY3HFEkb+LodkuO9mDaGjERZ/DxGKPMnea0IKHJGYV/1CCrqnocMxyswl
+         3FeyToaJ5oFoToqyl3ZliUSJZS/FbmVLA0j7V9BPUDFz9g0WL3SFO0JQJrh4AoCdyQ
+         tSwrYQcr4syBy9b0i6sTFd3G2cZ6JYiOaJHZrpyDlSnFaEHoE0O0rgXyjwLuUKUSVd
+         xy78oXBerCsUxWvGjIPzaedkK3rH21h6AhYQSfc+gtIzBMlf1PN18SX4X5k9qMbxda
+         2NQr67ggO9Hyg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Da Xue <da@libre.computer>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
-References: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
-Subject: Re: [PATCH] spi: meson-spicc: move wait completion in driver to take bursts delay in account
-Message-Id: <166680688974.833294.9389296907324181570.b4-ty@kernel.org>
-Date:   Wed, 26 Oct 2022 18:54:49 +0100
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-spi@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+In-Reply-To: <20221026122951.331638-1-bigeasy@linutronix.de>
+References: <20221026122951.331638-1-bigeasy@linutronix.de>
+Subject: Re: [PATCH] spi: Remove the obsolte u64_stats_fetch_*_irq() users.
+Message-Id: <166680765713.867963.5145895651436078636.b4-ty@kernel.org>
+Date:   Wed, 26 Oct 2022 19:07:37 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,13 +54,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 26 Oct 2022 09:58:28 +0200, Neil Armstrong wrote:
-> Some delay occurs between each bursts, thus the default delay is wrong
-> and a timeout will occur with big enough transfers.
+On Wed, 26 Oct 2022 14:29:51 +0200, Sebastian Andrzej Siewior wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> The solution is to handle the timeout management in the driver and
-> add some delay for each bursts in the timeout calculation.
+> Now that the 32bit UP oddity is gone and 32bit uses always a sequence
+> count, there is no need for the fetch_irq() variants anymore.
 > 
+> Convert to the regular interface.
 > 
 > [...]
 
@@ -73,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: meson-spicc: move wait completion in driver to take bursts delay in account
-      commit: 04694e50020b62b10bd0d46ff9e9708a6e1c7eb3
+[1/1] spi: Remove the obsolte u64_stats_fetch_*_irq() users.
+      commit: 93cc2559d3fdcd28b1a7972ab519a6cd8ba20f9d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
