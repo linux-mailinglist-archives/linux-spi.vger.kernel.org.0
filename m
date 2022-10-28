@@ -2,98 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCA2610A4C
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Oct 2022 08:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994D6610A55
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Oct 2022 08:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiJ1GZe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Oct 2022 02:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S229788AbiJ1Gai (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Oct 2022 02:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ1GZd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Oct 2022 02:25:33 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D026524A
-        for <linux-spi@vger.kernel.org>; Thu, 27 Oct 2022 23:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666938333; x=1698474333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=MqoXu2wQyv3G3L76HC6ilwoqzRzxIgv2l2DtGnnavvc=;
-  b=kudYq/cYTONy6Q+a+xioEvkJDc98bD4wX260DpErZu5a4kvjxP1EJ01l
-   lE2IcghvvLz+A2ixnqdtKYQuTT+EPrsysWJSvKSkQokNCiYtwdEMXdvRM
-   h/lhKQkVZJBHEW5YKpd/zfooJq6GGVJylcynjaXEGO4oaIInzqIWVdI1n
-   nC9PRQn4/npvi7trSuUA9QvFAqsJ4sE7+iaQWD5IBlxzwgmWm17pVJivO
-   hQuau/mcOd7EnznddVqrd2gSPYeTaTy5ewzWhODsV+7aGvFzgwDfWnuBg
-   jnN/jlBWt/hgQW89aFG/i1X64O4CwjqOF1VtjoE/Mhr/ByNNd0+goGR06
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="372635875"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="372635875"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 23:25:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="663913088"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="663913088"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 27 Oct 2022 23:25:12 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 03B29107; Fri, 28 Oct 2022 09:25:34 +0300 (EEST)
-Date:   Fri, 28 Oct 2022 09:25:34 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Gole, Dhruva" <d-gole@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/4] spi: intel: Implement adjust_op_size()
-Message-ID: <Y1t13q53WbQxDzST@black.fi.intel.com>
-References: <20221025064623.22808-1-mika.westerberg@linux.intel.com>
- <20221025064623.22808-3-mika.westerberg@linux.intel.com>
- <99f962a4-0101-b040-17dc-cec3d877dba8@ti.com>
+        with ESMTP id S229719AbiJ1Gah (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Oct 2022 02:30:37 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25E7495CF;
+        Thu, 27 Oct 2022 23:30:34 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29S6UQaq058643;
+        Fri, 28 Oct 2022 01:30:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666938626;
+        bh=tTe8duNXpQL7SpPJcLpKbMe2aHabAC/tsbx1oi2DWUE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=KCQZToxAbfLb2gbxpQyFzZa9n5Z0E/yynEhZ1xlo4HyA7pwiqwajiB1iQGBLfONtM
+         aselVjdh3tIAVktZpz41/IVKanhuro76Jz8GII9FmxLeNRw5Rlf9tAE6u3WxK9blp3
+         +3uEY28rh/iRp7cyefUm2q9zt+BYD7d0R1t2nmMU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29S6UQfj071371
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Oct 2022 01:30:26 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
+ Oct 2022 01:30:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 28 Oct 2022 01:30:26 -0500
+Received: from [10.250.234.138] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29S6UOqV065181;
+        Fri, 28 Oct 2022 01:30:25 -0500
+Message-ID: <0f5235b8-9f35-6f7c-37b4-8094e476fbd4@ti.com>
+Date:   Fri, 28 Oct 2022 12:00:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] spi: spi-mem: Fix typo (of -> or)
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        <linux-spi@vger.kernel.org>
+CC:     Mark Brown <broonie@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221008151459.1421406-1-j.neuschaefer@gmx.net>
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <20221008151459.1421406-1-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <99f962a4-0101-b040-17dc-cec3d877dba8@ti.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Hi Jonathan,
 
-On Fri, Oct 28, 2022 at 11:42:09AM +0530, Gole, Dhruva wrote:
-> Hi Mika,
-> 
-> On 10/25/2022 12:16 PM, Mika Westerberg wrote:
-> > This allows us to get rid of the checks in the intel_spi_[sh]w_cycle()
-> > and makes it possible for the SPI-NOR core to split the transaction into
-> > smaller chunks as needed.
-> 
-> If I understand correctly, the controller ops are called from spi-mem.c, and
-> 
-> spi_mem_adjust_op does exist and on it's own does "split a data transfer
-> �operation into multiple ones"
-> 
-> So is this really something that you require the controller to do and
-> 
-> can we not rely on spi-mem.c to do it's thing instead?
+On 10/8/2022 8:44 PM, Jonathan Neuschäfer wrote:
+> In this instance, "or" makes more sense than "of", so I guess that "or"
+> was intended and "of" was a typo.
 
-How does it know the size supported by the hardware? I think this is the
-reason spi_mem_adjust_op was introduced but I may be mistaken.
+Using "I guess" is generally discouraged in commit messages. Please read 
+up the documentation
 
-> I would like to point you to another controller spi-cadence-quadspi.c
-> 
-> that also doesn't have it's own adjust_op_size but I haven't seen any issues
-> as such
-> 
-> inspite. This is because everything first goes through spi-mem.c then onto
-> the controllers drivers.
+on submitting patches:
 
-Well Intel SPI driver did not not have any issues previously either
-because it handled the read/write split internally but SFDP read is done
-through "register read side" which only supported max 64-byte read until
-now :-)
+ > Describe your changes in imperative mood, e.g. “make xyzzy do frotz” 
+instead of “[This patch] makes xyzzy do frotz” or “[I] changed xyzzy to 
+do frotz”, as if you are giving orders to the codebase to change its 
+behaviour.
+
+link: 
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
+
+>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>   include/linux/spi/spi-mem.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+> index 2ba044d0d5e5b..8e984d75f5b6c 100644
+> --- a/include/linux/spi/spi-mem.h
+> +++ b/include/linux/spi/spi-mem.h
+> @@ -225,7 +225,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
+>   /**
+>    * struct spi_controller_mem_ops - SPI memory operations
+>    * @adjust_op_size: shrink the data xfer of an operation to match controller's
+> - *		    limitations (can be alignment of max RX/TX size
+> + *		    limitations (can be alignment or max RX/TX size
+>    *		    limitations)
+>    * @supports_op: check if an operation is supported by the controller
+>    * @exec_op: execute a SPI memory operation
+> --
+> 2.35.1
+>
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
+
