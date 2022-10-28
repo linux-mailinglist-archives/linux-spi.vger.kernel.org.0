@@ -2,68 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9218A610DEE
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Oct 2022 11:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34EA610F91
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Oct 2022 13:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiJ1J4r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Oct 2022 05:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S229755AbiJ1LW1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Oct 2022 07:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiJ1J4W (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Oct 2022 05:56:22 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AF189AE8;
-        Fri, 28 Oct 2022 02:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1666950924; bh=4c2U5abA0ObwFBqTupA+Ypcyzv/fJnoG1A+yS2C369s=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=XP6xYbaEVNP7zR3NEUrkkmklBKQyu/j5bLRYKHJzCLajIhFpvDXbPNlfHV4f14hvl
-         1ZTOcuyhKTKZCBa0sf9QytGv4J3rdxuF7/uwrEQDkQXnqxIJKi3qLnOwDcUIBo0ec0
-         cq97gapP5b7HhNb4jG0CGcCOex/sXcQkiv5QJ0dzviFC8WDjDdul1mF8Ia18Rudhz/
-         Q+em8BUrD+gzD/xGg/lfvxN2fbHzCMY/lgyOZ3ew4RfpWYS1XPPTRAAzuYX+Fno7ey
-         PofOfIDHSHQ3AYpdo+9M9K1W7Z216eH3q1A5+lo62M3gYtgeeZPyTeEAXU4VlQsmQd
-         XEJWlYHhQ/4Qg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MkHQX-1pTiJp2nGL-00kcTi; Fri, 28
- Oct 2022 11:55:24 +0200
-Date:   Fri, 28 Oct 2022 11:55:23 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     "Gole, Dhruva" <d-gole@ti.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-mem: Fix typo (of -> or)
-Message-ID: <Y1unCzyjQ1ZzgU/S@probook>
-References: <20221008151459.1421406-1-j.neuschaefer@gmx.net>
- <0f5235b8-9f35-6f7c-37b4-8094e476fbd4@ti.com>
+        with ESMTP id S229549AbiJ1LWZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Oct 2022 07:22:25 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63526754AE;
+        Fri, 28 Oct 2022 04:22:24 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n12so12131354eja.11;
+        Fri, 28 Oct 2022 04:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HIxrQ8E1bPnZiGDXaml/48HhptzuynLApLQoeNm+bQM=;
+        b=H2GyWOXWu3amGHhnRB2vDHYVTLeiiIFTuhWlxGA7WXZk8cfDmSMuCwUqNkjr5eJU26
+         vwTb6szkVh9cGKikWUWtM01l2C/qV0Kg9Ko4aBb8uesfuRE+mpCGbBgy1ySZH+J6Y+UT
+         rao3qgQHSOgEACEScRgbyMOauNXSI2Im6zFbiJrdmJo3ifDae0RCNwt//urKBRm2OTdC
+         E4Pk03aUXcYGUQm4LVc80lidNUz1rP+PVSZptAcVEYqrpij0NVix7/pFheg8MnGypn5/
+         kGND89NyDH58PsrtY875vRkFpdExIjPhhUrBiUnaLMHLr5svy/KsexVn/vHh6O9nWEbQ
+         uNIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HIxrQ8E1bPnZiGDXaml/48HhptzuynLApLQoeNm+bQM=;
+        b=g0VneyVQJRTAmtoVV/CFkpX/xfV3jj5Gs0oeplmOPm5rAv8dS+cShwVkPkm6XuGO3x
+         iZDPepDhGgM3Lkw7nWy9LBXOuVKdFzvhF8XTVZX8/uE/mTet3QyGsVMyN+P7vapn1v+j
+         MG6v1Smuu9JMg7Fj/mf3/u/HoDaE4SmiacYjH9GLwCZN+xQ9Akekk/rabetTyPYVGepE
+         WvOiy0khF+AI6HP+V+lZhOH2jHGt8tKWmTsDbcULRoGbBf89BeX8QbOKh8oI0T09LrAu
+         cNOe4exGh9GHvvaeCCNZeJJ0XgxQJdz8OQIqWS15zRlBVl0lPAAt7WKyX+7bHAEKYWBh
+         IFxw==
+X-Gm-Message-State: ACrzQf1yjnv3QuSw7Qe4AZESLRsB4Q4y9KJls22lz2ldTpiWwAp0ROpp
+        NhRApSdgQhMLDNoTiRzB6sQ=
+X-Google-Smtp-Source: AMsMyM4ZSWkTrwIdU1Rz7nrRxtfOuDRhhgvAjqtYYT/dpNd0vOqIQldvd0mpDDgDgPXMqvM0xho6VA==
+X-Received: by 2002:a17:906:730d:b0:78e:9ca5:3269 with SMTP id di13-20020a170906730d00b0078e9ca53269mr46199016ejc.366.1666956142946;
+        Fri, 28 Oct 2022 04:22:22 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id kw21-20020a170907771500b00730b3bdd8d7sm2090215ejc.179.2022.10.28.04.22.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 04:22:21 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 13:22:20 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [PATCH] spi: tegra210-quad: Don't initialise DMA if not supported
+Message-ID: <Y1u7bDYd78vb5FyT@orome>
+References: <20221026155633.141792-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1NtTPhkobE9FrTi9"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QJ8+L68pP1weG6Mc"
 Content-Disposition: inline
-In-Reply-To: <0f5235b8-9f35-6f7c-37b4-8094e476fbd4@ti.com>
-X-Provags-ID: V03:K1:+u0k713dk+xt7z9LwjDSM3AWpg/Gk69GC3CTAAZ+Uh8sB+rEmJa
- 0iIv3wtN05Jl7lk0Z1Kt4PiT/jLbM/9b7HTAGkz902eVrcedAIaPP0QsrPg/1fRqMQk0LBN
- BdmzImuWnKg4vTM78RvXF713G4QTi9b8q6Datt+15NF0Qhx3Kh2XWLhCN3xrGD11ahA3fqQ
- Y/PpIivRMzH9ZR8rnb1Lg==
-UI-OutboundReport: notjunk:1;M01:P0:N1lsjRnlqaQ=;fNkAC7kWKBjkcVw5mRwQPYFHwjb
- CdCuv11tVODhHBj6yyFZVt8R+OAd2aWQpWXFsp2OzbAe/DJeWAcXx1KIEiJlGyN50OrgFZLS9
- AZzSlpzYjBBIq7IcqIWAz63cOvl0VXtsVuLGyPiZs52Ny9+1Q/2KxGX5ialqEkOAMRWSp0oIk
- umu1TULRksbk63j8YTfZabJ88ijZSGh82AN86yeYNDqptmZGPfFrB2tHTerF1t9gcbXgYGsdn
- wwsLqyeYk5ELVFboqNJrMt1DYUV91+9adUmD+hatPsb4H2P817G3ygyiXx+XiBjmSCJqmgkw0
- 3CntwNxc+XmSB9WfnAJCfLLZf6BvMRehbK8y5XpI9UALd9r/NDCULIr3x01N6zaBF7U/RjD8z
- tcZtVc4nEwUKD4zCyIzAHtWFMpbBdyScvSQxpZPfNM+2sCbuJtso4DO76rIK9L8edACVWGHuW
- j3F4jVD4Mv/DbHv79Svi+q6nxY+9EzXGnNUoU0frGgP+O17d/yfEoEKO+yOGeg3SHfUd73FwX
- CfTzClYgiVciFLWIdeH7f23VxjaoIgkcylMOUuMZKEG35tL8rYi5JhCRmO9gPZGJ3ltWnyfV5
- smTAJXzEG1bBhp009TGy23bBbglPlWweLcaxKDAAUKkcAFaP3AHAjzHPd1NzLy8futlDePRW+
- Erak7/62WVTn46LEkWctGoLVQt+JUJee272BLn6RUXg8r9Y02iklvUTTb7cUAPs9UxjCT+fhe
- 7oqpBbIOCA2QH4un8KcnLtONSe106JK9DrgPv3cWarTVfqovNDn8B52iMYmo2tPAr5qg26hej
- 5GlIBuIL7ZMRHUoBOkbI71xsyqE46JS5mHJsrAU6/DVYJCENUdE8NcuJk8qkaRkh5hiAmfeAB
- kuCf2QlRnAU43GgVDL8eo2WlJQJr7+u4uHL4mf+5FE0NglID7RkVvq0mtvJ8OKKItDwOb3l9N
- Pk23LCt1HkZswC9Qj6INvW7cs+k=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221026155633.141792-1-jonathanh@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +76,47 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---1NtTPhkobE9FrTi9
-Content-Type: text/plain; charset=utf-8
+--QJ8+L68pP1weG6Mc
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 28, 2022 at 12:00:23PM +0530, Gole, Dhruva wrote:
-> Hi Jonathan,
+On Wed, Oct 26, 2022 at 04:56:33PM +0100, Jon Hunter wrote:
+> The following error messages are observed on boot for Tegra234 ...
 >=20
-> On 10/8/2022 8:44 PM, Jonathan Neusch=C3=A4fer wrote:
-> > In this instance, "or" makes more sense than "of", so I guess that "or"
-> > was intended and "of" was a typo.
+>  ERR KERN tegra-qspi 3270000.spi: cannot use DMA: -19
+>  ERR KERN tegra-qspi 3270000.spi: falling back to PIO
 >=20
-> Using "I guess" is generally discouraged in commit messages. Please read =
-up
-> the documentation
-
-It is truthful though: I did not write the original comment, and my
-change is based on my interpretation of the comment.
-
-> on submitting patches:
+> Tegra234 does not support DMA for the QSPI and so initialising the DMA
+> is expected to fail. The above error messages are misleading for devices
+> that don't support DMA and so fix this by skipping the DMA
+> initialisation for devices that don't support DMA.
 >=20
-> > Describe your changes in imperative mood, e.g. =E2=80=9Cmake xyzzy do f=
-rotz=E2=80=9D
-> instead of =E2=80=9C[This patch] makes xyzzy do frotz=E2=80=9D or =E2=80=
-=9C[I] changed xyzzy to do
-> frotz=E2=80=9D, as if you are giving orders to the codebase to change its=
- behaviour.
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  drivers/spi/spi-tegra210-quad.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-The imperative-mood description is already in the commit title
-(or subject line). I am not making a functional change to the code, so
-"fix a typo" is really all that is to be said in imperative mood, the
-rest is an explanation of why I think this makes sense.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
->=20
-> link: https://www.kernel.org/doc/html/latest/process/submitting-patches.h=
-tml#describe-your-changes
-
-
-Best regards,
-Jonathan
-
---1NtTPhkobE9FrTi9
+--QJ8+L68pP1weG6Mc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNbpuAACgkQCDBEmo7z
-X9sr4g//VvsB4DL6cxOkmmeWBDqoGQantquJSx2os82Mrwqh1d3WAuc/fXeODrTU
-4pMFCbrbv/eC1sKy0LiYMcBFCy5n6dUcxHMVFl+QNlc0HZxOLVYVsD3aUWGkEdVq
-5RnfTmXvK/CIiK+OahaFpg7x2g7guNWT/7Tc4mwDPuEh78QO8QAB9Jc1HD9u1HbT
-71mqGBRSAux7/0WD/D0qIE7VDxKGRt7nempUAcC/ys+6iSkR/csJfBhSilpJFBI+
-GBumW2Lt4UHYk48E0mZeQCycGYarQ3E71/Slm2bdWfLaaUEgcQ6OX1mtpWxqamzI
-SIGju+H+sxLagjkDM7nr7WMNoAUc1GqXKqryfTLOUZSj1BkVCrjLUBFxRwDolZ7A
-kD+0VCuTtqACFhn7CpwB1lK7RWG1Eu4zX+eEb4uSMIq6ZKruIf+yRbjwP3B2E3As
-SPXAxQb1wuV81Itg4jAfxrUw2KLayeIJdYG/aH5vO8muXAJX0ap+ti6obKqYkeZu
-cASE8C1stw5spziwKwYeHnJO4HhmVTfUsGBYpRAdC7zu3OtZNeIGuZOSzYHb74Iy
-4dmwgwQCZGyBNbX2HBkbKg3nUxxw9yAAgB+zvYvjs+P4B1xg7HI9Qu87p8PeCgLF
-N0TicmHo6KdHj8l/L5+HzTa0BIJRMNTXX9U+R31fjOdhsSiYqAo=
-=q8+s
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbu2sACgkQ3SOs138+
+s6HAEQ/+OpJdVLzcg9lWWFnEhhL89eZhR4X/A7XMdtaNLWiLUV+i7lJYE6GjYHGL
+H8Y4o7eH29brDZhWfbmlnMgUHPZJyA5/UdFNdFxZyKEtFpRCRn48vBDpr+otIyYm
+Ta2v2un5s+kocInYQ8Kd95Kjl06GtKdzGRhQ+HL9juN6KenoI3NAJqBAFusq5Jy7
+QR89K5sO2z1kF2Hx0uYNHPvU4OXNyOhuF4Z7VZtHeFgd6cwAKBd/+EmbuDwWSfik
+KLZaUaaNzybAWU4Yn7DkDfZHSN996TLOUITxcgEqyfZN13AUi6vuJLWgcQRvXykW
+088aJS6VvHSAAfH7HFRoXoD+4xzsjUeQF4ZSwIZGeYkHi+t498OErObnodpQ4hDN
+N6AFWVZaWVrmyL2jLPdcdcXxgeXRNT8H3fqaygvZ6m1QIrdw6WFiSpSNhRTM6JnK
+Y42QltbSYanRY+6i/NmHu4BbeaFnIDVmposFJfdTyxairHEVQWsEL2paz3SpPQo2
+9M38xG8DET51xSDO9s1qZr2PzkgQzoUG18FKq+owVoBDn2pa4RntZgwFEKPfq3pe
+ZDrl8PR9z3Q+RMIlPBNDSGgzn89U4dtL/UypEfT2/1X8XZbS1nfDhPiM0W022DGh
+a69DfU+7IIVlc1adoXp56d7tZJajjpD5KneCh6vbmmOwWFFIOjM=
+=WDMR
 -----END PGP SIGNATURE-----
 
---1NtTPhkobE9FrTi9--
+--QJ8+L68pP1weG6Mc--
