@@ -2,39 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF92C61414B
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Nov 2022 00:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF656141D3
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Nov 2022 00:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiJaXDm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Oct 2022 19:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S229741AbiJaXbJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Oct 2022 19:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJaXDl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Oct 2022 19:03:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1422E13D0E;
-        Mon, 31 Oct 2022 16:03:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFDE614E0;
-        Mon, 31 Oct 2022 23:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FD8C433C1;
-        Mon, 31 Oct 2022 23:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667257420;
-        bh=vhAIFwd6AVcg9TvJkSBVEzUDWyNe6/dFjwB4YX0P1HA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ufLAtrQ8r2IQjgzoMHeW4VigYVfb/D/Y3zkKD0Q26Z7d4muDn7ykBk0TyJtp4Bfk8
-         GZDLmb0a21FUSQi7ixzNiFSyTotz4ldFPutgBGXBsistLp7PedPbXyhpRWBiBO53f4
-         PXyti+EJ3nEGT7vBLc1lU58u/+P1mmMQVOy9XifrvK2PgIctUaeYzdy0ewu8jo8A5h
-         wS/0V8vNUv9uwnJS3rEX6dlGPC11xyInNLbVSCV1vf0WTgNv3hqL+MkRFOVKA2bItx
-         3Gj83ZA3V3ayhR2x+Im4SzJIrcIZkpMMEJhhGsLZgQYhYjNpGHONaUcLOdBVr1R3hV
-         LEZ0WlevymIPA==
-Date:   Mon, 31 Oct 2022 23:03:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        with ESMTP id S229589AbiJaXbI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Oct 2022 19:31:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7B61CC;
+        Mon, 31 Oct 2022 16:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667259053; bh=Ydt30ZiOwoAlHwQQhVHso8KMBpJhTV2zmKzAWz49L3k=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=N6jqJdwt6r4UlyHJQ5Nn9gf2K4rMAeSo0GJU2XVV5AXdc2fEgh8lynBJApgPusUHR
+         wCO56RusmAVBcUfheAapG3hHFC00SpeM3YHztaYPoZllAfB2AGtrdPMNUkKx+TAgeF
+         ZmEIaCgqVgKmJiFS7pTlS4pebGwVXKupBVy+bCe77vNtybUtsfGnf18tDWtFl/xaiN
+         KnLPvYv2LIK0Tj0dz2XHdPoxAcn1rchdHPO8Ra8gB2cRJBofvpBAhDFH/SvnkXLVw4
+         m/eFObmS2ohMOdE1QO0j9OoNCg+YCQobYwzMjeOIFdMr//25N2PtYqZtIGXby8koRY
+         XmwIUrCmHcExg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.35.189.154]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MpDNl-1pOifb34md-00qkAn; Tue, 01
+ Nov 2022 00:30:52 +0100
+Date:   Tue, 1 Nov 2022 00:30:51 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         Avi Fishman <avifishman70@gmail.com>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -46,17 +43,37 @@ Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: spi: nuvoton,npcm-fiu: Change spi-nor@0
  name to flash@0
-Message-ID: <Y2BURsf5xKyfMn4+@sirena.org.uk>
+Message-ID: <Y2Baq2gtpGVoIBJs@probook>
 References: <20221031222559.199509-1-j.neuschaefer@gmx.net>
+ <Y2BURsf5xKyfMn4+@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZcKXsyfc17hrmMdl"
+        protocol="application/pgp-signature"; boundary="yYhPxXbmJxZLcJpQ"
 Content-Disposition: inline
-In-Reply-To: <20221031222559.199509-1-j.neuschaefer@gmx.net>
-X-Cookie: Are you still an ALCOHOLIC?
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2BURsf5xKyfMn4+@sirena.org.uk>
+X-Provags-ID: V03:K1:WWR7Zc4ssSK8aKgo/jAZe4YzExcnZi0wjzmJdCstujb1AiDoe2G
+ zQkc4A4mWO0ihGrS95QQEQs+wl1OWvtrfK8A0YiBUoY1jLYvYxSvKsPuO56soJQIchQZDSk
+ iA4l3UuycOWFZsLnKwzN6q64ZbqgDQhkJ2u6Ecsthnyzh4nLGt5AFUS1k3rI6299bzQWsQ8
+ xdlNp21AtQ/+7rbkv78og==
+UI-OutboundReport: notjunk:1;M01:P0:6695kWv5LRI=;FJ9O1qSTJw53FfkUYY9HmLoLg1O
+ +Fz2ysyLqXhd2rmXJAafBcWaWpM5vl6YduohLD6+mXiEgk6M/1lMIX/tPVCj8JEBCR8Cj+EIU
+ bNCLm4NiFhZkRzW3/vrHYJ28B1cb7FeCKLg8ca1zS6vfqyJIlGR6nulWqryoVv3UzlH+zAcO+
+ /LraYSMPOwnZ+ZRZlViHAI3LQyWM+m777otmHUCTuzunlhTZTSG1jNaS32w8gTs775/yn6+CN
+ 0LVeXgLqMX6SIB5YPOjtHjCDzR7nsp5W6MLl5ldzFyp44HdJazmbAM4Q1E2zieJPMyQRtm7ws
+ B2wvHmsx0mp3+bwGHeIIKylUpd/ryuhJ/Z+x0zuJtFe3bhMvCQg76mtCcKvQSo/u8R3mAu46R
+ q6fZ+A7GchCVR9k/KqzSJfwXOwjD7Qq5aZ5ORoAK3gzmliEIwAvfShgzgjeUKeVKsx1yRar4v
+ 8kpbbtxpBUZu0etYQFTELptbHTVJ+49rfJhgHbd4gnbYukHH5+HihqHJZ2ljKT1DdvjdG2FF4
+ YugG0tqdaP/yDZPVPpncch6Rk6sgGaK3N7BltD00jmsdc3bfDHa+hKDWN+5JnVggHR4j/cGzT
+ iunMwZNMzliCL6WaNH5b1Ax5ZxRy5O5QnQjLaKdBOF4jJteVDqZurI7/V2rJjheRgm8kEGCzn
+ Pj0mCRUGmVdy9tvA2QG8lBrGfbm2LYD9w04M0t4fhrk+gxMuxHQeL5NE4MclutGjUOUKyY3gD
+ VXBnkR0Wnifu02f9BEPjD9vcynQqJWTk0MAa1K3RBdMU/qlyciSp/Zz57BzSvwljdrtPlSf43
+ /l9EoY+X81ATguOFS9+ahLwnFK+F5SlbsUyuPxdlY+SnzYD2OiEdpk5teZG8r1GB77X3I9pqX
+ n23AdRfsikAwO5Tn0FkA9yHR+t+t+/HaWHfocT/UwUOUlE6C3bC/m5CWUK975k6lczY/TRl8j
+ jbu+ccHbTbeh3KcuAYbgvbc4mOo=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,34 +81,53 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---ZcKXsyfc17hrmMdl
-Content-Type: text/plain; charset=iso-8859-1
+--yYhPxXbmJxZLcJpQ
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 31, 2022 at 11:25:59PM +0100, Jonathan Neusch=E4fer wrote:
-> The node name for flash memories has been standardized to "flash@...".
-> Fix the example in nuvoton,npcm-fiu.txt accordingly.
+On Mon, Oct 31, 2022 at 11:03:34PM +0000, Mark Brown wrote:
+> On Mon, Oct 31, 2022 at 11:25:59PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> > The node name for flash memories has been standardized to "flash@...".
+> > Fix the example in nuvoton,npcm-fiu.txt accordingly.
+>=20
+> Please submit patches using subject lines reflecting the style for the
+> subsystem, this makes it easier for people to identify relevant patches.
+> Look at what existing commits in the area you're changing are doing and
+> make sure your subject lines visually resemble what they're doing.
+> There's no need to resubmit to fix this alone.
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Documentation/devicetree/bindings/spi/ has a wild mix of
 
---ZcKXsyfc17hrmMdl
+ - spi: <some vendor>:
+ - spi: dt-bindings:
+ - dt-bindings: spi:
+
+
+"spi: dt-bindings:" seems to win out slightly. I'll switch it to that for v=
+2.
+
+
+Jonathan
+
+--yYhPxXbmJxZLcJpQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNgVEUACgkQJNaLcl1U
-h9Csegf7BWykpbvVVPf8R0bt4VAWNjgzLV3ymlMsBbbtxT6WQCa+AcQN0HCosnYZ
-+rZPW1v4IHCCcWm+waqSW9Tcwbis0pxKBVgAjl7wk3oKsWVR5n294pdLO0X0Bl7O
-CSxpakEZwLgrgNeNhPKZ5Y2xHs3gTMmWkyAOY+iS7jANW7z7Agiw0ybRUpVrEv0f
-C9CMWE3Hzds5kObCvFSvXpPKk5C5IIYxoNGb3S0RZ5413UApL91f2N5bT1sUoOEc
-a+fpK0pr5Kvsy7IgcWo0ZCOHn4uCjLujCff86WvO7AUGUPT4XpKjkcmOwh0g63iC
-r7eToayU+xomSUMTZQOj6TqBsHygWQ==
-=F6c0
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNgWogACgkQCDBEmo7z
+X9vfshAAiK26wbBQbFCBucnUGZTFpx0brpsEL/LKl/3IH2xTjgIlMC/mjHwCXWS+
+42hZfk/brTkVYFHR3w/OFbdAPTb5YcpRXkgsaTP3acYDFHBs6YSn/KKYb7AWRaz4
+mp0HKDLU8138sZbmQnAXRf2S74prur6KvEKYynQRLn5gQJnY7pVCRrHMIdzsKXIK
+pU/hjFLIobZGQtFRzvd34ObiaWzf0j2PBtJ8zPWIP3r3fmyrX3LGBt76ENX9QDjt
+xeuvxfEkoQE2q0IXyb3M4uhzSHENE7C1ExXwr5WNxvKAKrLQwGj34BBIBfi3jCeo
+QqBZETCja3NFEqYTWdKZY0tH9q9onZcQG6T8QQZ8pJ1ZSqV/3okQM1CNw1XS2TWi
+9+cT7wg+IJG/f8789gqdYFJlemXx4uQ0E+wjEuWinptX+AqTjRJMhhXFYAy9uFA2
+AnERTsD03R2vET5abhHFV9u3Oi+nlyLMhc3UF4wyEhVtIMIAplOHnPKfrkdicTgi
+9my93+U2QIdCooZNzT4raEHxASBdLF7B/cc+GmiYRhouPFSY728bjBcQIrM7Mkua
+ibVX8inuw+k/DsLpnqIvIhojEGi3dRn2EEXpDb04nQNPRFXfXq6FgwdyYRMYklVR
+rCcMNE9wdw3G3Q99ecvy1DGDz3cYvZpiLk3hkCfcdsN9gSpoiUo=
+=2Gef
 -----END PGP SIGNATURE-----
 
---ZcKXsyfc17hrmMdl--
+--yYhPxXbmJxZLcJpQ--
