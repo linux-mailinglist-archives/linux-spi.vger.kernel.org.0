@@ -2,61 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004B6615E7B
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Nov 2022 09:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF5361629C
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Nov 2022 13:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiKBI5J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Nov 2022 04:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S229518AbiKBMV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Nov 2022 08:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiKBI5A (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Nov 2022 04:57:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5301D66F
-        for <linux-spi@vger.kernel.org>; Wed,  2 Nov 2022 01:56:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230045AbiKBMV4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Nov 2022 08:21:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077C129CB3;
+        Wed,  2 Nov 2022 05:21:55 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE0DB6183D
-        for <linux-spi@vger.kernel.org>; Wed,  2 Nov 2022 08:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39AC3C433D6;
-        Wed,  2 Nov 2022 08:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667379416;
-        bh=JuqeC9qtbaqeuFplPdotJjCKCjGh1i010CJhWhocG4U=;
-        h=Subject:From:Date:To:From;
-        b=SAUFZxj/dHTvDcdCeM8p5AIYS/NfqaItVajL1HmKEMJMHwO287GQa53GLM1OMRv7M
-         IZOt+tVwUpLWrmQC9fRFlXzmwxH77RUNuvuogwvbssvFdViqgs1C+9ejXvnFB74cue
-         Rqnt/3hveVzLk9UqukjRr6lFYWu7aqIt+qV1bNey9isypoWFW7ReDETuaX5ry3JKVP
-         gf2ucTtTgwBi6qrV7wBYOg1zrMgiaK4cVNS4uyu4S9VQzx/EPm1TOfEU3ooaCook02
-         CZNsi+ixjx7i++/Quy2wG2bdtJADsJqYpvspxGiXsCUGFqVaQKR+eDGAvByoQQavva
-         1SiQiwPnlXp+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F90AC395FF;
-        Wed,  2 Nov 2022 08:56:56 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9CD616602946;
+        Wed,  2 Nov 2022 12:21:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667391714;
+        bh=GWrRwN7bo6fjXnGPMvnQdgStYumrjcHBQAPPOaH9oHo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TFEcV7yYRYT7iW5wv1LhRrmo+Xj1fG3UlLNU1htU2Ve/t57kVotd9+jk1QcLJGJYv
+         21LoV00Gq5lKqyIfGkihnXbvJeetV2KzpagoJZy+0j2xVYVswmw4ZP11SVNSezlslk
+         LO0tMXIilWpkTiDtfVRLaKghaC2ISJubVKOrE1v2CyEOd1ZrfsdNyZ8qgOvGRy2o6Y
+         kOlRvh4rQk2CBpaudqPMhevdpq3GS5JOmr5+hF+mJlQqDQzSycp3sDqjOBhO8ta4ZU
+         zNJOU0bRGMS1SpTirb6ZqP24Zvj7HNkvUhLwGtC9Tq5qTYoQ8E38m3lGhX/ONOlL8U
+         kyZNE0W558Dnw==
+Message-ID: <4841b48c-c35c-a375-8e78-154bc5217930@collabora.com>
+Date:   Wed, 2 Nov 2022 13:21:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <166737941611.23852.4704726880256962724.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 02 Nov 2022 08:56:56 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] mtd: spi-nor: Fix the number of bytes for the dummy
+ cycles
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mtd@lists.infradead.org
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Bayi Cheng <bayi.cheng@mediatek.com>
+References: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: meson-spicc: fix do_div build error on non-arm64 (2022-11-02T08:46:01)
-  Superseding: [v1] spi: meson-spicc: fix do_div build error on non-arm64 (2022-10-27T12:11:43):
-    spi: meson-spicc: fix do_div build error on non-arm64
+Il 31/10/22 13:46, Allen-KH Cheng ha scritto:
+> The number of bytes used by spi_nor_spimem_check_readop() may be
+> incorrect for the dummy cycles. Since nor->read_dummy is not initialized
+> before spi_nor_spimem_adjust_hwcaps().
+> 
+> We use both mode and wait state clock cycles instead of nor->read_dummy.
+> 
+> Fixes: 0e30f47232ab ("mtd: spi-nor: add support for DTR protocol")
+> Co-developed-by: Bayi Cheng <bayi.cheng@mediatek.com>
+> Signed-off-by: Bayi Cheng <bayi.cheng@mediatek.com>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Tested-by: Dhruva Gole <d-gole@ti.com>
 
+On MT8195 Tomato Chromebook:
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
