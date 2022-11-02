@@ -2,85 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF5361629C
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Nov 2022 13:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DEB6162B5
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Nov 2022 13:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiKBMV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Nov 2022 08:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S229459AbiKBM3a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Nov 2022 08:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiKBMV4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Nov 2022 08:21:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077C129CB3;
-        Wed,  2 Nov 2022 05:21:55 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229939AbiKBM3a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Nov 2022 08:29:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AEE252BD
+        for <linux-spi@vger.kernel.org>; Wed,  2 Nov 2022 05:29:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9CD616602946;
-        Wed,  2 Nov 2022 12:21:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667391714;
-        bh=GWrRwN7bo6fjXnGPMvnQdgStYumrjcHBQAPPOaH9oHo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TFEcV7yYRYT7iW5wv1LhRrmo+Xj1fG3UlLNU1htU2Ve/t57kVotd9+jk1QcLJGJYv
-         21LoV00Gq5lKqyIfGkihnXbvJeetV2KzpagoJZy+0j2xVYVswmw4ZP11SVNSezlslk
-         LO0tMXIilWpkTiDtfVRLaKghaC2ISJubVKOrE1v2CyEOd1ZrfsdNyZ8qgOvGRy2o6Y
-         kOlRvh4rQk2CBpaudqPMhevdpq3GS5JOmr5+hF+mJlQqDQzSycp3sDqjOBhO8ta4ZU
-         zNJOU0bRGMS1SpTirb6ZqP24Zvj7HNkvUhLwGtC9Tq5qTYoQ8E38m3lGhX/ONOlL8U
-         kyZNE0W558Dnw==
-Message-ID: <4841b48c-c35c-a375-8e78-154bc5217930@collabora.com>
-Date:   Wed, 2 Nov 2022 13:21:51 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2EBAB8221B
+        for <linux-spi@vger.kernel.org>; Wed,  2 Nov 2022 12:29:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E214C433C1;
+        Wed,  2 Nov 2022 12:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667392166;
+        bh=AjjaS9jReinlRaLXiuodirsvxlPqo+smHakSiy4NA+M=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=sCJBj2vGP4ORHx7IMD1oggJpBfUW26/qQQJGy6BOFCacpREhmZN66aUJWFW8B00jG
+         59MQj08KSE/GctBPM+f8T4rgYiyyH9Hykt4Ct++Vl/bnpJlpk6PpoICmOjHbNajUZL
+         tADmIJYrnnnow9M6pMm+zu1Im23ikmjRWPgd/TelGiw9T2nXBzJ0kySFZiSWPauK4M
+         txcJPr67wrhQY3kMdwEXZHsQNI81ht5gv1KGg7834QrgVDpwmqXU6QpAuYm+E/Hilo
+         NmnJbUT8MAIEkaLZelW6GKq1UyJlpvxfKAvT/nPQhxIaU+qeT3L+fjqitJyc2Ogu+y
+         sj/WmEk58Lc7Q==
+From:   Mark Brown <broonie@kernel.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20221025062800.22357-1-mika.westerberg@linux.intel.com>
+References: <20221025062800.22357-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] spi: intel: Use correct mask for flash and protected regions
+Message-Id: <166739216584.30778.6377407184105382498.b4-ty@kernel.org>
+Date:   Wed, 02 Nov 2022 12:29:25 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] mtd: spi-nor: Fix the number of bytes for the dummy
- cycles
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mtd@lists.infradead.org
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Bayi Cheng <bayi.cheng@mediatek.com>
-References: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 31/10/22 13:46, Allen-KH Cheng ha scritto:
-> The number of bytes used by spi_nor_spimem_check_readop() may be
-> incorrect for the dummy cycles. Since nor->read_dummy is not initialized
-> before spi_nor_spimem_adjust_hwcaps().
+On Tue, 25 Oct 2022 09:28:00 +0300, Mika Westerberg wrote:
+> The flash and protected region mask is actually 0x7fff (30:16 and 14:0)
+> and not 0x3fff so fix this accordingly. While there use GENMASK() instead.
 > 
-> We use both mode and wait state clock cycles instead of nor->read_dummy.
 > 
-> Fixes: 0e30f47232ab ("mtd: spi-nor: add support for DTR protocol")
-> Co-developed-by: Bayi Cheng <bayi.cheng@mediatek.com>
-> Signed-off-by: Bayi Cheng <bayi.cheng@mediatek.com>
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Tested-by: Dhruva Gole <d-gole@ti.com>
 
-On MT8195 Tomato Chromebook:
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: intel: Use correct mask for flash and protected regions
+      commit: 92a66cbf6b30eda5719fbdfb24cd15fb341bba32
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
