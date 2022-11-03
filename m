@@ -2,87 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95F26187F8
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 19:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC34361881B
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 20:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiKCSx2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Nov 2022 14:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S229877AbiKCTBQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Nov 2022 15:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKCSx1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 14:53:27 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2149FEF;
-        Thu,  3 Nov 2022 11:53:24 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id hh9so1798029qtb.13;
-        Thu, 03 Nov 2022 11:53:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e3P3zdhy8GKexWx3vyrC2poycFZmbZATTV4uCKdeI44=;
-        b=BkmpreiOCbLX+dtUWJ+2YdF9+bdOs8FJkLKV/MOd138mAPNSrWqt2OisXMxL0B49gA
-         Xkj9B+giyvQh4Vp/LghlyHW3gU8ruEist71r5kXjp0kXPDlFe4l+bhO0TfCYLv5Zslr/
-         fPAwLT3SJ0lAJJvMPMOjMmE25nKsBIT1Ai6d95zcfZ0Vhn6Eu2MuTW59aDuUR5sok7KP
-         PDrvjus151I2wZ8rFkbM5Md0piP2VR1tgQD/3wztWYW3UazR0kMaiSF7pK8oChyBbidc
-         jYruMe3giJsXWjhDSWniiz5vl2nf/38WUtelp8IR2eemPPDaco0nlQXgI9z6wdMX9AeM
-         SrYQ==
-X-Gm-Message-State: ACrzQf0ihpYA6saMeAKUgr2ERNhOWhUmRqaySke5GELgHX+Ax34aUHZz
-        cM14/O7ivZcvSlQlHaXOk3tz+UqzdaKabkOAt+A=
-X-Google-Smtp-Source: AMsMyM4QSySjm+ZEB/jau7CJMJJfWL1+5ZQtQRrNl6i66knX97g4Qv73Gu/6SVigeCoz4CyrTFJzPtEC8KPqj3i61Aw=
-X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
- f37-20020a05622a1a2500b0039cb8627318mr26133393qtb.147.1667501603818; Thu, 03
- Nov 2022 11:53:23 -0700 (PDT)
+        with ESMTP id S229611AbiKCTBP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 15:01:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189A8101FA;
+        Thu,  3 Nov 2022 12:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667502057; bh=y6ODappL0YkTif+pCw4EY7reX6hNd03JrdnmL87+lL4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Jc0nWk4jEg6sqa6GeXS7N+oXnoifryG5QFEcrGKqSZgttSYU1oY0Wug+Fri79ir+Y
+         v509NPDu33TWPvh8cu5N4gWagqRs7+mOPKAL/msWnIB/7BF2YN0IFs6lUuHKkWKS0f
+         5LV4XtwPnHkNXTjMOypnQd5v5z3qNt7vPWbtJUkHGYuBvff0LZNYXedtZ/rtm5I1Jm
+         hBnnngKDWDsS1mI6NvcSEeru6sSU07Tz2fq3aQcQomljSF+tX81cAZT0jDWfNQEhbi
+         WCADjLODdudG3SUW+YbsnKHtJ/KXiafK5HNkGfgw/adYqml1x7AqnN58f8s1HM2PUW
+         Ls5Wa61OijmvQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZTqg-1oUEUI3Zna-00WSce; Thu, 03
+ Nov 2022 20:00:56 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-spi@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        John Garry <john.garry@huawei.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: hisi-sfc-v3xx: Fix a typo ("duall")
+Date:   Thu,  3 Nov 2022 20:00:52 +0100
+Message-Id: <20221103190052.915755-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 19:53:12 +0100
-Message-ID: <CAJZ5v0hRBd8OEg1CJUQGhb6_59j-+-zZTid8kmMV9nUk2CF3EA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ACPI: scan: substitute empty_zero_page with helper ZERO_PAGE(0)
-To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-raid@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jU2HSdldWdlFUnjmhwhye85P+6qlqbtaDZxZ8VGpSe/Zyjj74H/
+ mOPTOjpB5UBGoBPYa1Rilbv2SLBLPo7+HvQrApx1OfLwf0w48Ima6UxXfKAcaA5VpP445uO
+ t268UrgZvFTMtGyXjx9yhw93i329TXkyrmW/xNXVh5scrouWYv1+zkZbjNy+eGSKSnVogFm
+ qLQLVjFzUy0Lwk1j2knpg==
+UI-OutboundReport: notjunk:1;M01:P0:cRPZfCxS86Q=;GutQ29mYsva/S7bZSWxjH8G/3Ej
+ fvhULHZ/RkMdMSEaFKvTkgCkYeNfL5dVLzVMyt6KKRVVVs9YJvZM+nGTPCJw7xA4LkNWfRMwt
+ rBRlGNVSHpKqAsvTYFioE2E0uuPPP5Xx9Fn8n5IftXXY62T1tSWOGBJG5w+WNQXx7YrifmxYK
+ dIUgnBhsfaKVLVG0IWkX+2iR2qdLGv9sR4b247OgTQejAZdYdRvCLmjwZeg15Zi+IEJXdFLo6
+ 839IZyv95XlmOKFtrqz4mX7jepOquW6iXN29PjtBMiiiZv88zUlcDDGKyYrRRS0VPjwV7JHp1
+ oj9H0GzqVvNq0MPQqqYe8XYnZEZkOgxL0G94XiksZ/AnuDLDcRj1yh8cvuzv6n5R3TfEVHbGn
+ qprYeUzHabEq5wBjQpZKvv3irv4Uz/kmBeVPfMqxUj9iU+V4jOOOgs5V1f309KMfwgZrs8xbX
+ zCB42twW6hOKBM04dr/2AVs0AHWB0vXvpJ1B+IIs+2POk2C7LphFPobCyBpR+HVy73UFAE/sO
+ DK7PTJR6lnrPhPyZMBjaEYmdhSHsgHhrQNiOAl5pR1qBWht5I9OKjL/Ibu3HjIox8DrZPcp5M
+ kfM63ANd877m+Mm7flrROTtFAjMLq42pfWHBdVD/cs42A1GXdo/KqLFzGOK4FIqwsMgqlUAad
+ 2FF994+WQ+sWBC3Dcerq4lnkaJbvUqsHaO+tzjALUw/4RxhQRhCJRPNLx/z/2yp7c6rlaz8VZ
+ P1JAA06ngOaGFODdTexrJaxlxKq4Fs0QTg4P+5v+e+5PKnznmgN8hOfDl6LOyjk/ligIgVbaz
+ mckIb9obOZpuPZ1/IiM4wEYwEZhtyk603WhEOKIponQV5f5tY2uVnHgzG4Uymz2Q3wlEV+DXk
+ sqHRsp5HOglqpgrHWAj0x8NqYZa8ORy0mlX95NvCYocaFX4yF2KYhjN4qdV45yhcrHt8DzDQu
+ QUHLU40PRznViyyn88p48R7XjUI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 11:59 PM Giulio Benetti
-<giulio.benetti@benettiengineering.com> wrote:
->
-> Not all zero page implementations use empty_zero_page global pointer so
-> let's substitute empty_zero_page occurence with helper ZERO_PAGE(0).
->
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  drivers/acpi/scan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 558664d169fc..4d2d274cc8ad 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -30,7 +30,7 @@ extern struct acpi_device *acpi_root;
->  #define ACPI_BUS_HID                   "LNXSYBUS"
->  #define ACPI_BUS_DEVICE_NAME           "System Bus"
->
-> -#define INVALID_ACPI_HANDLE    ((acpi_handle)empty_zero_page)
-> +#define INVALID_ACPI_HANDLE    ((acpi_handle)ZERO_PAGE(0))
->
->  static const char *dummy_hid = "device";
->
-> --
+Simple typo, simple fix.
 
-Applied as 6.2 material, thanks!
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/spi/spi-hisi-sfc-v3xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3=
+xx.c
+index d3a23b1c2a4c5..f07d1045a30a2 100644
+=2D-- a/drivers/spi/spi-hisi-sfc-v3xx.c
++++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+@@ -165,7 +165,7 @@ static int hisi_sfc_v3xx_adjust_op_size(struct spi_mem=
+ *mem,
+ }
+
+ /*
+- * The controller only supports Standard SPI mode, Duall mode and
++ * The controller only supports Standard SPI mode, Dual mode and
+  * Quad mode. Double sanitize the ops here to avoid OOB access.
+  */
+ static bool hisi_sfc_v3xx_supports_op(struct spi_mem *mem,
+=2D-
+2.35.1
+
