@@ -2,89 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D53617881
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 09:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2398617A23
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 10:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKCIQZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Nov 2022 04:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S229551AbiKCJns (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Nov 2022 05:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKCIQX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 04:16:23 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:16:22 PDT
-Received: from first.geanix.com (first.geanix.com [116.203.34.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8985FAD;
-        Thu,  3 Nov 2022 01:16:22 -0700 (PDT)
-Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 104815827E;
-        Thu,  3 Nov 2022 08:01:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1667462464; bh=AxBdGD11GmXU93SjZlmfOt6f3j2/0l1361xkEdsg1iY=;
-        h=From:To:Cc:Subject:Date;
-        b=MItX3BnDqsJI383c0+PBt/GME0eDbQLDxRiavRuKSNAy/yQpifuYqntqZYZY4xU8w
-         +L4mJtyxMKjUDBl9CfhtrsoG5TM2ZqQ145mOVW46Y4uKXA6Y2/lZ85ZmRfBNSdQr7y
-         wYHJDxLX70KD/05Vf1D9SjdxSOr6tn7hBIt7bVhCGLb11TNl0rtN4G5FDP0rk9PtgD
-         OKhZVlTaf8/VzC6Va67o7OV7G/dZEZ9zcz25LJa70BNLagI6dtXlfkv20iOWNTKCYH
-         GokLqv+abyfNy7MBBLu508XAjUPreBF54rQHx/7KwQxobCPWq+W/gDv22xxCCZk/hs
-         lXWo8gAr6H5rQ==
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Alain Volmat <alain.volmat@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Sean Nyekjaer <sean@geanix.com>, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
-Date:   Thu,  3 Nov 2022 09:00:42 +0100
-Message-Id: <20221103080043.3033414-1-sean@geanix.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S229567AbiKCJnr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 05:43:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65FE01D;
+        Thu,  3 Nov 2022 02:43:46 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 502116602910;
+        Thu,  3 Nov 2022 09:43:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667468624;
+        bh=WzJl4BXFZRLkOk01bt0LBwgsiwnE8Tpr5KVb5Ed86K4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NaPeZEpZbFjEIt3jYG2wvn6z3NUPQRFSdWgpzTyAHzNlRJhaAFdJkikbizVhs7Byl
+         3tyIfSkeK3MhkRWZehuPSamIlQuBEXeAYSQWYYSXKUYox/3MFAR7S71Bwt3WB19lpc
+         4GJ8F3R6ZlyG+SA6FKmJ6C0DVY8fveeQ8SnZ340JNYNxczpi2RzhzzP3JSCCkV4fSq
+         +kjhNPeGOwrqONsuzP6yyIDXbtoWY6QoEuYtBuzMC7aNSlVkReVVGQ7W4U/Lavlanp
+         6tkuZDYZ4C+XOOmLDr+faXNsOG3xAgnkBPwtz9hYuaM3F8qqu3ll2g5gfucgLO57p3
+         L3anbGiWaI6jg==
+Message-ID: <10529948-a9b8-2121-7adb-0e94cf3cbf6a@collabora.com>
+Date:   Thu, 3 Nov 2022 10:43:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v1] spi: spi-mtk-nor: Optimize timeout for dma read
+Content-Language: en-US
+To:     Bayi Cheng <bayi.cheng@mediatek.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Chuanhong Guo <gch981213@gmail.com>,
+        linux-kernel@vger.kernel.org, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20221103052843.2025-1-bayi.cheng@mediatek.com>
+ <20221103052843.2025-2-bayi.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221103052843.2025-2-bayi.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When this driver is used with a driver that uses preallocated spi_transfer
-structs. The speed_hz is halved by every run. This results in:
+Il 03/11/22 06:28, Bayi Cheng ha scritto:
+> From: bayi cheng <bayi.cheng@mediatek.com>
+> 
+> The timeout value of the current dma read is unreasonable. For example,
+> If the spi flash clock is 26Mhz, It will takes about 1.3ms to read a
+> 4KB data in spi mode. But the actual measurement exceeds 50s when a
+> dma read timeout is encountered.
+> 
+> In order to be more accurately, It is necessary to use msecs_to_jiffies,
+> After modification, the measured timeout value is about 130ms.
+> 
+> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
+> ---
+>   drivers/spi/spi-mtk-nor.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> index d167699a1a96..3d989db80ee9 100644
+> --- a/drivers/spi/spi-mtk-nor.c
+> +++ b/drivers/spi/spi-mtk-nor.c
+> @@ -354,7 +354,7 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
+>   			    dma_addr_t dma_addr)
+>   {
+>   	int ret = 0;
+> -	ulong delay;
+> +	ulong delay, timeout;
+>   	u32 reg;
+>   
+>   	writel(from, sp->base + MTK_NOR_REG_DMA_FADR);
+> @@ -376,15 +376,16 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
+>   	mtk_nor_rmw(sp, MTK_NOR_REG_DMA_CTL, MTK_NOR_DMA_START, 0);
+>   
+>   	delay = CLK_TO_US(sp, (length + 5) * BITS_PER_BYTE);
+> +	timeout = (delay + 1) * 100;
+>   
+>   	if (sp->has_irq) {
+>   		if (!wait_for_completion_timeout(&sp->op_done,
+> -						 (delay + 1) * 100))
+> +		    msecs_to_jiffies(max_t(size_t, timeout / 1000, 10))))
 
-spi_stm32 44004000.spi: SPI transfer setup failed
-ads7846 spi0.0: SPI transfer failed: -22
+You're giving a `size_t` variable to msecs_to_jiffies(), but checking `jiffies.h`,
+this function takes a `const unsigned int` param.
+Please change the type to match that.
 
-Example when running with DIV_ROUND_UP():
-- First run; speed_hz = 1000000, spi->clk_rate 125000000
-  div 125 -> mbrdiv = 7, cur_speed = 976562
-- Second run; speed_hz = 976562
-  div 128,00007 (roundup to 129) -> mbrdiv = 8, cur_speed = 488281
-- Third run; speed_hz = 488281
-  div 256,000131072067109 (roundup to 257) and then -EINVAL is returned.
+Aside from that, your `timeout` variable contains a timeout in microseconds and
+this means that actually using msecs_to_jiffies() is suboptimal here.
 
-Use DIV_ROUND_CLOSEST to allow to round down and allow us to keep the
-set speed.
+Please use usecs_to_jiffies() instead.
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
----
- drivers/spi/spi-stm32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 6fe617b445a5..d6833361409d 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -434,7 +434,7 @@ static int stm32_spi_prepare_mbr(struct stm32_spi *spi, u32 speed_hz,
- 	u32 div, mbrdiv;
- 
- 	/* Ensure spi->clk_rate is even */
--	div = DIV_ROUND_UP(spi->clk_rate & ~0x1, speed_hz);
-+	div = DIV_ROUND_CLOSEST(spi->clk_rate & ~0x1, speed_hz);
- 
- 	/*
- 	 * SPI framework set xfer->speed_hz to master->max_speed_hz if
--- 
-2.38.1
+Regards,
+Angelo
 
