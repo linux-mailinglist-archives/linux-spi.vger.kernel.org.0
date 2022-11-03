@@ -2,116 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2398617A23
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 10:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2DD6180A7
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Nov 2022 16:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKCJns (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Nov 2022 05:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S232082AbiKCPJt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Nov 2022 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiKCJnr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 05:43:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65FE01D;
-        Thu,  3 Nov 2022 02:43:46 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S232094AbiKCPJ1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Nov 2022 11:09:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F45FBA;
+        Thu,  3 Nov 2022 08:08:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 502116602910;
-        Thu,  3 Nov 2022 09:43:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667468624;
-        bh=WzJl4BXFZRLkOk01bt0LBwgsiwnE8Tpr5KVb5Ed86K4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NaPeZEpZbFjEIt3jYG2wvn6z3NUPQRFSdWgpzTyAHzNlRJhaAFdJkikbizVhs7Byl
-         3tyIfSkeK3MhkRWZehuPSamIlQuBEXeAYSQWYYSXKUYox/3MFAR7S71Bwt3WB19lpc
-         4GJ8F3R6ZlyG+SA6FKmJ6C0DVY8fveeQ8SnZ340JNYNxczpi2RzhzzP3JSCCkV4fSq
-         +kjhNPeGOwrqONsuzP6yyIDXbtoWY6QoEuYtBuzMC7aNSlVkReVVGQ7W4U/Lavlanp
-         6tkuZDYZ4C+XOOmLDr+faXNsOG3xAgnkBPwtz9hYuaM3F8qqu3ll2g5gfucgLO57p3
-         L3anbGiWaI6jg==
-Message-ID: <10529948-a9b8-2121-7adb-0e94cf3cbf6a@collabora.com>
-Date:   Thu, 3 Nov 2022 10:43:41 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31F8BB828DB;
+        Thu,  3 Nov 2022 15:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25534C433D6;
+        Thu,  3 Nov 2022 15:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667488102;
+        bh=KhRW53DoqMIL02J6y2okdVdA8j0iIM0VREqjEufLwkM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=BggIhs21AGl3tcUI1M35R8FkXZUaa16Ldc6OBqymKfDnolM+r30o6tE6zI+/qzHdU
+         m4xkeaLBPUANkFqc3ZUGCc8SKB5iuCZ9SUF5Hbyp2SMPYTXoNwrGg/X3ls5A3SV8Og
+         0XaWZJLVcnUu73kof2GiMUkOwj950T2ocNPnRxgYBQENcYWmiEn7nWjKmalul1JY9r
+         mZhk8jGuEYR8/9N5QkSdYgyHtkxmtBRIc5BdLIVec1gpJvul7kpifhP+gdBEFcws98
+         ZiI0osnH+g0aOzEOBVZ9AicdMxchQnL80eMSc18YVKDjX678KCCbT4WBOnP2h5F2K0
+         OIGDqup0y4QHw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221103080043.3033414-1-sean@geanix.com>
+References: <20221103080043.3033414-1-sean@geanix.com>
+Subject: Re: [PATCH] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+Message-Id: <166748810082.250043.8488161005893728423.b4-ty@kernel.org>
+Date:   Thu, 03 Nov 2022 15:08:20 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v1] spi: spi-mtk-nor: Optimize timeout for dma read
-Content-Language: en-US
-To:     Bayi Cheng <bayi.cheng@mediatek.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Chuanhong Guo <gch981213@gmail.com>,
-        linux-kernel@vger.kernel.org, srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20221103052843.2025-1-bayi.cheng@mediatek.com>
- <20221103052843.2025-2-bayi.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221103052843.2025-2-bayi.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 03/11/22 06:28, Bayi Cheng ha scritto:
-> From: bayi cheng <bayi.cheng@mediatek.com>
+On Thu, 3 Nov 2022 09:00:42 +0100, Sean Nyekjaer wrote:
+> When this driver is used with a driver that uses preallocated spi_transfer
+> structs. The speed_hz is halved by every run. This results in:
 > 
-> The timeout value of the current dma read is unreasonable. For example,
-> If the spi flash clock is 26Mhz, It will takes about 1.3ms to read a
-> 4KB data in spi mode. But the actual measurement exceeds 50s when a
-> dma read timeout is encountered.
+> spi_stm32 44004000.spi: SPI transfer setup failed
+> ads7846 spi0.0: SPI transfer failed: -22
 > 
-> In order to be more accurately, It is necessary to use msecs_to_jiffies,
-> After modification, the measured timeout value is about 130ms.
+> Example when running with DIV_ROUND_UP():
+> - First run; speed_hz = 1000000, spi->clk_rate 125000000
+>   div 125 -> mbrdiv = 7, cur_speed = 976562
+> - Second run; speed_hz = 976562
+>   div 128,00007 (roundup to 129) -> mbrdiv = 8, cur_speed = 488281
+> - Third run; speed_hz = 488281
+>   div 256,000131072067109 (roundup to 257) and then -EINVAL is returned.
 > 
-> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
-> ---
->   drivers/spi/spi-mtk-nor.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-> index d167699a1a96..3d989db80ee9 100644
-> --- a/drivers/spi/spi-mtk-nor.c
-> +++ b/drivers/spi/spi-mtk-nor.c
-> @@ -354,7 +354,7 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
->   			    dma_addr_t dma_addr)
->   {
->   	int ret = 0;
-> -	ulong delay;
-> +	ulong delay, timeout;
->   	u32 reg;
->   
->   	writel(from, sp->base + MTK_NOR_REG_DMA_FADR);
-> @@ -376,15 +376,16 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
->   	mtk_nor_rmw(sp, MTK_NOR_REG_DMA_CTL, MTK_NOR_DMA_START, 0);
->   
->   	delay = CLK_TO_US(sp, (length + 5) * BITS_PER_BYTE);
-> +	timeout = (delay + 1) * 100;
->   
->   	if (sp->has_irq) {
->   		if (!wait_for_completion_timeout(&sp->op_done,
-> -						 (delay + 1) * 100))
-> +		    msecs_to_jiffies(max_t(size_t, timeout / 1000, 10))))
+> [...]
 
-You're giving a `size_t` variable to msecs_to_jiffies(), but checking `jiffies.h`,
-this function takes a `const unsigned int` param.
-Please change the type to match that.
+Applied to
 
-Aside from that, your `timeout` variable contains a timeout in microseconds and
-this means that actually using msecs_to_jiffies() is suboptimal here.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Please use usecs_to_jiffies() instead.
+Thanks!
 
-Regards,
-Angelo
+[1/1] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+      commit: 62aa1a344b0904549f6de7af958e8a1136fd5228
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
