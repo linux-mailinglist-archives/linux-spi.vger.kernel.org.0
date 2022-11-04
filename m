@@ -2,83 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6749619417
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Nov 2022 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F250461971E
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Nov 2022 14:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiKDKEA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Nov 2022 06:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S230473AbiKDNKT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Nov 2022 09:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiKDKD7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Nov 2022 06:03:59 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A72E1013
-        for <linux-spi@vger.kernel.org>; Fri,  4 Nov 2022 03:03:57 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:c5ee:bf27:9df:5172])
-        by laurent.telenet-ops.be with bizsmtp
-        id gA3t2800G2kjr6L01A3t1H; Fri, 04 Nov 2022 11:03:54 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oqtYG-002m7b-Cx; Fri, 04 Nov 2022 11:03:52 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oqtVy-00HVU8-Vt; Fri, 04 Nov 2022 11:01:31 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mark Brown <broonie@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] spi: Merge spi_controller.{slave,target}_abort()
-Date:   Fri,  4 Nov 2022 11:01:27 +0100
-Message-Id: <809c82d54b85dd87ef7ee69fc93016085be85cec.1667555967.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231549AbiKDNKT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Nov 2022 09:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A8920F6C
+        for <linux-spi@vger.kernel.org>; Fri,  4 Nov 2022 06:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F19856219A
+        for <linux-spi@vger.kernel.org>; Fri,  4 Nov 2022 13:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C025C433C1;
+        Fri,  4 Nov 2022 13:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667567417;
+        bh=9Q+kxnN9YwfWX2+Q60f1I87hx51hYv4/iK1r314CVYc=;
+        h=Subject:From:Date:To:From;
+        b=YQqT7qw8EKsiY1IXOjPdOsvGQUz2fW69RIvx/3jr44llfHC5WCIi95P/WlUmVRqlU
+         QMgH7YNSX5WmpmDp67cgeG5c6Ds8x6yAxb4pwodC+hp0Ypiv/2vLsy5cma0BGIV3dK
+         j4e/y/V8eSo+QyeeeHCwsX+6VNfsSVER+KlYUzGDyNsYSdV5RrO3Ji4ISS2zrZR0dg
+         GjesTk0Fv39WPXv85pENjVQvZwVt/4yLtuG1t2Yrw8vHQIq8tFJ0v+G0UzkTcn30o8
+         IQsoi44XLrIV1Z0ddAO0SaTI1LczJzR1iMIgk/74bEPnbMvlfAvJx/Cvc+CTFh3aan
+         k5r1Ym5RZCCIg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30864E270FB;
+        Fri,  4 Nov 2022 13:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166756741713.15917.2395337141287567759.git-patchwork-summary@kernel.org>
+Date:   Fri, 04 Nov 2022 13:10:17 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mixing SPI slave/target handlers and SPI slave/target controllers using
-legacy and modern naming does not work well: there are now two different
-callbacks for aborting a slave/target operation, of which only one is
-populated, while spi_{slave,target}_abort() check and use only one,
-which may be the unpopulated one.
+Hello:
 
-Fix this by merging the slave/target abort callbacks into a single
-callback using a union, like is already done for the slave/target flags.
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-Fixes: b8d3b056a78dcc94 ("spi: introduce new helpers with using modern naming")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Compile-tested only.
----
- include/linux/spi/spi.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Patch: spi: hisi-sfc-v3xx: Fix a typo ("duall")
+  Submitter: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=691795
+  Lore link: https://lore.kernel.org/r/20221103190052.915755-1-j.neuschaefer@gmx.net
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 27680bf02c6a221c..78c35ac1ef2f2b7e 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -655,8 +655,10 @@ struct spi_controller {
- 			       struct spi_message *message);
- 	int (*unprepare_message)(struct spi_controller *ctlr,
- 				 struct spi_message *message);
--	int (*slave_abort)(struct spi_controller *ctlr);
--	int (*target_abort)(struct spi_controller *ctlr);
-+	union {
-+		int (*slave_abort)(struct spi_controller *ctlr);
-+		int (*target_abort)(struct spi_controller *ctlr);
-+	};
- 
- 	/*
- 	 * These hooks are for drivers that use a generic implementation
+
+Total patches: 1
+
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
