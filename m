@@ -2,93 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD36D619B9B
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Nov 2022 16:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A39961D85B
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Nov 2022 08:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKDP2s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Nov 2022 11:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S229486AbiKEHUt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 5 Nov 2022 03:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiKDP20 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Nov 2022 11:28:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E9DE9A;
-        Fri,  4 Nov 2022 08:28:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81B57B82EC3;
-        Fri,  4 Nov 2022 15:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A76C433C1;
-        Fri,  4 Nov 2022 15:28:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667575702;
-        bh=LDGCDoHyAerC70HgbuOPtlNQHbiwGebSazZd8iM7vNQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=i+ymtIiUa5jIQJkm1gvDG2OjNx/ZxTtJ9bqLheAP02uUTJ2OJxuMlEbg3jtL0yU2K
-         jtosVxUw8pnbyQRw3pmqbxTahMKyzFCLxkXE+l9vL1yS9wP2kIa3EmQw6wbq8RwkYe
-         BcF8sr0O+rl3A8ImWHUywFmNnOhel1AvC0emiV/wgvhFk8CWALREfK6C+d3eReaH1v
-         4JQp7yOyg8wvLbdHqlFhMkENWxXCqPYQKfW50UVQ8Szc6CYxALcnvKyv3nk+lmte1w
-         xmfKVLat8V93XEQ02OLkAdyn3AFcuTgmSwqjl89hGqnNCwoV3ohRCv6kT5H8NRnwWt
-         YoiukuamcnhCw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <809c82d54b85dd87ef7ee69fc93016085be85cec.1667555967.git.geert+renesas@glider.be>
-References: <809c82d54b85dd87ef7ee69fc93016085be85cec.1667555967.git.geert+renesas@glider.be>
-Subject: Re: [PATCH] spi: Merge spi_controller.{slave,target}_abort()
-Message-Id: <166757570101.379896.16321881884283599927.b4-ty@kernel.org>
-Date:   Fri, 04 Nov 2022 15:28:21 +0000
+        with ESMTP id S229477AbiKEHUs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Nov 2022 03:20:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53342BF43;
+        Sat,  5 Nov 2022 00:20:46 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N486D4hrrz15MCj;
+        Sat,  5 Nov 2022 15:20:36 +0800 (CST)
+Received: from [10.40.188.234] (10.40.188.234) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 5 Nov 2022 15:20:43 +0800
+Subject: Re: [PATCH] spi: hisi-sfc-v3xx: Fix a typo ("duall")
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        <linux-spi@vger.kernel.org>
+CC:     John Garry <john.garry@huawei.com>,
+        Mark Brown <broonie@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221103190052.915755-1-j.neuschaefer@gmx.net>
+From:   Jay Fang <f.fangjian@huawei.com>
+Message-ID: <d585e334-6b27-4fc5-d0b4-d433780c548c@huawei.com>
+Date:   Sat, 5 Nov 2022 15:20:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
+In-Reply-To: <20221103190052.915755-1-j.neuschaefer@gmx.net>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.40.188.234]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 4 Nov 2022 11:01:27 +0100, Geert Uytterhoeven wrote:
-> Mixing SPI slave/target handlers and SPI slave/target controllers using
-> legacy and modern naming does not work well: there are now two different
-> callbacks for aborting a slave/target operation, of which only one is
-> populated, while spi_{slave,target}_abort() check and use only one,
-> which may be the unpopulated one.
+On 2022/11/4 3:00, Jonathan Neuschäfer wrote:
+> Simple typo, simple fix.
 > 
-> Fix this by merging the slave/target abort callbacks into a single
-> callback using a union, like is already done for the slave/target flags.
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  drivers/spi/spi-hisi-sfc-v3xx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+> index d3a23b1c2a4c5..f07d1045a30a2 100644
+> --- a/drivers/spi/spi-hisi-sfc-v3xx.c
+> +++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+> @@ -165,7 +165,7 @@ static int hisi_sfc_v3xx_adjust_op_size(struct spi_mem *mem,
+>  }
+> 
+>  /*
+> - * The controller only supports Standard SPI mode, Duall mode and
+> + * The controller only supports Standard SPI mode, Dual mode and
+>   * Quad mode. Double sanitize the ops here to avoid OOB access.
+>   */
+>  static bool hisi_sfc_v3xx_supports_op(struct spi_mem *mem,
+> --
+> 2.35.1
+> 
+> .
+> 
+Thanks
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: Merge spi_controller.{slave,target}_abort()
-      commit: 6c6871cdaef96361f6b79a3e45d451a6475df4d6
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Acked-by: Jay Fang <f.fangjian@huawei.com>
