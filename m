@@ -2,45 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5561E3A0
-	for <lists+linux-spi@lfdr.de>; Sun,  6 Nov 2022 18:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A81E61E3B3
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Nov 2022 18:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKFRDz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 6 Nov 2022 12:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S230298AbiKFREa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 6 Nov 2022 12:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiKFRDx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Nov 2022 12:03:53 -0500
+        with ESMTP id S230199AbiKFRER (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Nov 2022 12:04:17 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0192FDF51;
-        Sun,  6 Nov 2022 09:03:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1ACFCC4;
+        Sun,  6 Nov 2022 09:04:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC899B80BED;
-        Sun,  6 Nov 2022 17:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B04BC4347C;
-        Sun,  6 Nov 2022 17:03:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05CC2B80C6E;
+        Sun,  6 Nov 2022 17:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2991C433D6;
+        Sun,  6 Nov 2022 17:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667754230;
-        bh=L/nM+BqdI8CQ0JsCB003896I7ZgPq+TeFIFtwjcT/VQ=;
+        s=k20201202; t=1667754249;
+        bh=13qe3Y0HyQvbSIuVO3bjN0QorssUv2kzlba6d67mOq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jxd6a0K7YzGm9GRLzSW4LUtnMKJMZejYRde6rTL2Chwk1pUwRwFUUuq/gryiOLO0q
-         kkHwebqywOitkqh5Apd82LaKdwkBCj/yzD078grDrThCaU29fGwNDvWWjnhFUivUhQ
-         GzVB8yvi3VJbc7g1pFck3/TPzjvCKRqlJ85lXUhNdOEF65PF6nAYHZhnaGW9cvT+WD
-         BsWRwXO+EITsoecfGqEwFs5+7ECUgDY0t4LkVTCTgDdENog6QsGkem4jC3CqjSP2ts
-         wvWUF3K9ykkIe9hPQkvQgtH16Zx1k217nGz+JYdvIkFsu1JlRw8oo5YAKyELiu43Un
-         ZFHvTT8CoLfBA==
+        b=N+QyDPAPRbnysA9baigue++EhbaoVelbvxBUtZdtgRgz+qQ3c53mZlQETjKreGgUN
+         7YCnUyGyQuq9viWwxrCA4issBdHGP+z+Bw3hrJ4lSIhI8NZslP5Zaw4Ez8y1PaxVs2
+         VaE5ySOdb+EXXTe8/YyygMhTYoJvPNvavKlD1HuSPkQX70liLJ5NpEFucgRTwQASGp
+         37ENzBJ736rmj5libwhpjh9TDmV5u4fWvXon9hxUlMhuE0Wnwax5GB3zXH4VVicv2V
+         McSW3ztUJWU9CXvLRjxHhDOv/Vgf4hDiJIPFv30PlZdo4MXbmENpUzKMaN9G5BHLIO
+         QIAv93Hh6ANvQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+Cc:     Mauro Lima <mauro.lima@eclypsium.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 02/30] spi: tegra210-quad: Fix combined sequence
-Date:   Sun,  6 Nov 2022 12:03:14 -0500
-Message-Id: <20221106170345.1579893-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 10/30] spi: intel: Fix the offset to get the 64K erase opcode
+Date:   Sun,  6 Nov 2022 12:03:22 -0500
+Message-Id: <20221106170345.1579893-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221106170345.1579893-1-sashal@kernel.org>
 References: <20221106170345.1579893-1-sashal@kernel.org>
@@ -57,38 +56,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+From: Mauro Lima <mauro.lima@eclypsium.com>
 
-[ Upstream commit 8777dd9dff4020bba66654ec92e4b0ab6367ad30 ]
+[ Upstream commit 6a43cd02ddbc597dc9a1f82c1e433f871a2f6f06 ]
 
-Return value should be updated to zero in combined sequence routine
-if transfer is completed successfully. Currently it holds timeout value
-resulting in errors.
+According to documentation, the 64K erase opcode is located in VSCC
+range [16:23] instead of [8:15].
+Use the proper value to shift the mask over the correct range.
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Link: https://lore.kernel.org/r/20221001122148.9158-1-kyarlagadda@nvidia.com
+Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Link: https://lore.kernel.org/r/20221012152135.28353-1-mauro.lima@eclypsium.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra210-quad.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/spi/spi-intel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index c89592b21ffc..904972606bd4 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -1157,6 +1157,11 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 		msg->actual_length += xfer->len;
- 		transfer_phase++;
- 	}
-+	if (!xfer->cs_change) {
-+		tegra_qspi_transfer_end(spi);
-+		spi_transfer_delay_exec(xfer);
-+	}
-+	ret = 0;
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 66063687ae27..f59d2ce8629a 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -114,7 +114,7 @@
+ #define ERASE_OPCODE_SHIFT		8
+ #define ERASE_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
+ #define ERASE_64K_OPCODE_SHIFT		16
+-#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
++#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_64K_OPCODE_SHIFT)
  
- exit:
- 	msg->status = ret;
+ #define INTEL_SPI_TIMEOUT		5000 /* ms */
+ #define INTEL_SPI_FIFO_SZ		64
 -- 
 2.35.1
 
