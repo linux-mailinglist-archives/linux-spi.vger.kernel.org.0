@@ -2,114 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF6F6264BC
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Nov 2022 23:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AE0626749
+	for <lists+linux-spi@lfdr.de>; Sat, 12 Nov 2022 07:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiKKWrN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Nov 2022 17:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S234518AbiKLGHM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 12 Nov 2022 01:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbiKKWrK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Nov 2022 17:47:10 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150043.outbound.protection.outlook.com [40.107.15.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36155532F3;
-        Fri, 11 Nov 2022 14:47:09 -0800 (PST)
+        with ESMTP id S233446AbiKLGHL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 12 Nov 2022 01:07:11 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BA01A22F;
+        Fri, 11 Nov 2022 22:07:06 -0800 (PST)
+X-UUID: 34aa71b5fa834d9db1efe214db78a6ec-20221112
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=lRsDx+MAZtvD52eXlVq9x+AOjSOFxX7WpEdCiqQOJ78=;
+        b=Zo/ZUvZQPz3hS3HX/BQAZ8nxo4c9AaKcOM4hNPLcX18dozAwvxNCcwqXh33lj9k6GunLmh9SB2Dg6IbA7iXWgXW1oEKiLuO7wVHKDag64Mv7wkd6LU1bzo5mgH2KnKj+MmyVK8FKrqXKrD42XWd6I6ekKxJXxvRHyFf0dJR9Mao=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:6630a688-7147-41f9-99f9-be11b36750a8,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:41441551-b7af-492d-8b40-b1032f90ce11,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 34aa71b5fa834d9db1efe214db78a6ec-20221112
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <bayi.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 295234407; Sat, 12 Nov 2022 14:06:56 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 12 Nov 2022 14:06:54 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Sat, 12 Nov 2022 14:06:54 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kM8Q9uCN5Uikvq40SG2ABXMXmfjrrSLCe30Qaiyu8C69/LdD3PUh/H91jpEvYg0481t0Z4GhLlGhKA1a6ZiCRKnEkyFnSEyYbIsR0+jn8jw/4PwXVOGBXE1zE3DFV8RijIW2cHr7AnypyvtRtMY3OBS79ohB3/eoms1lrjkhHBcIbiXYMy9va/FvA/WfYphjtFtQJUIqU8ji/fXv3JZw6DyuWlNZvgJWH4fm3uEqh3HoO8H+rDeJUgrlcEy7ZMbBM3Qy2Hp/PU9/vlaG6wgmlYZhY2vtQAa3sRZLpA0+cflcvGo0yPHKLqwVNxDGQgU3GYqQfY2nCn1ywqLNXsr5Rw==
+ b=XHJfVchsseyRrkNle4ybZ9UoekNrHTlQSaxicDPXeLnBUCx2FlCKepBogotoTnlMWWVCLPftwTXUtfIv6pWObwAIbRC+JeHY/KKlOXQHXl4ZZ6SIyIAK1ss4Vec8D9o7ADYBnbUoVXkeF8+TzCcQHhPyeCIjh0Oe3h29ddcXGt9p81Ex4iahK/bfzaR9jz671VkLWuoosUCJ1e/3kb6USCPnld15sGbFNLB7WLBxbNMFRSBmjUrcJ9GP2dk8zNtYNnrcehrtBNvNbplqkKQlXmUgIE0sK8ayt/s9dChrB2q5MLWDZQcUV+if0orbQ7gLZj5U2iWnwnEPo3k3VBe0RA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tkl8PT8zzkfqDAcFnXYeGlgXksdGpJLiKubggmkkcxI=;
- b=h2Zklljymvn//etwOX11EQS+/VgDUwj3W6WPOy/c7AlVJn/McDWVH1UY+5tfyrRVZhUbfkL1cwXUXFyuXdqgt7y+xRbVqn4aFcG3RHVXAGm0Vgz/ndKlHSZZ2zyob4oldzf8Dan+TcUcQArCYx2vlU/qxlGsmyshc4/XCu1zg/gNEDt9SVKz64Jc21mNRnqwJSQ16Y4HLDXUkQMNXt0RgrZrb8nWW1F0UZxx+2/VoEtiPQBN4p1GqNfvAFJDv471GTNGCz05nITeawp3/NlRYKBU5LTJjyQRzLCGNpXw9mh4uGG2chwrPch8hvJom7xs4Jd0r7uSB3rtIUJvTo8RNw==
+ bh=lRsDx+MAZtvD52eXlVq9x+AOjSOFxX7WpEdCiqQOJ78=;
+ b=MOocwcCYJYiN5GXeDHuWZHqsPkC2RJ5KIOBx2lQ5YG6lW2BhMq7PZAOMyld/qZFqGahgjFxB56Z3ZNM8sJ0SYY1U7TKFyARt2ifTHkFDpsB1ECPhGqG/wzW7KNIgYKbSuJ3oK5ur6Gob/my874qS4WgQAW0HgH3Boz1iRof2+00ixb5kPo+RAEEKC3ed03NbLPhyfdDTMPfFDeXjr+xXUnjgstz8964j38miCzGRmP/K4lgHt/YnnG1jtLF6G38966UI0jJqFbIUFfC/PlSaMbIMPVjhhj8WUiPD1PLP1AlKi6F2mz9RlEIeEofeFJNsfoH/z84anxsXCd5QWEMrZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tkl8PT8zzkfqDAcFnXYeGlgXksdGpJLiKubggmkkcxI=;
- b=HrhuLXbHxuL6ooAINyCxLyy6kccbdQ+wwloj0ME/Wd3i8KHhT0nwIBBXIcr9Qt2EOFZbKnLjQz4mrpeWR+Jw2ZSpHvghf8lEiXzaPAmDpXnCVCURDYipqzuT2qKChQxJh3CnLOhuN70G/x5Ck8Vb1781uZ/635ms1Y9Epdh/yuM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR04MB6884.eurprd04.prod.outlook.com (2603:10a6:208:183::14) with
+ bh=lRsDx+MAZtvD52eXlVq9x+AOjSOFxX7WpEdCiqQOJ78=;
+ b=R5HnUmCK9uVdC3KtkGdJHdRGY6JVJUK7pztLCMmpTRnTNzXwvfJIpyBehb4YskRAYvBmF+4jGv5z/q6F2MSMaamSZCcLO4Dun0HvXaoyGjJ43w/en8VsSC5RFRgdCjYXe8JNE6wvo1QCc/W/fG/ULKoS43JdvibW6Q682G5xE5Y=
+Received: from PS1PR03MB4747.apcprd03.prod.outlook.com (2603:1096:300:86::18)
+ by TYZPR03MB5440.apcprd03.prod.outlook.com (2603:1096:400:3b::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 11 Nov
- 2022 22:47:06 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 22:47:05 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>
-Subject: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
-Date:   Sat, 12 Nov 2022 00:46:51 +0200
-Message-Id: <20221111224651.577729-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM4P190CA0009.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:200:56::19) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.15; Sat, 12 Nov
+ 2022 06:06:49 +0000
+Received: from PS1PR03MB4747.apcprd03.prod.outlook.com
+ ([fe80::55cc:c325:bcf6:ce1f]) by PS1PR03MB4747.apcprd03.prod.outlook.com
+ ([fe80::55cc:c325:bcf6:ce1f%7]) with mapi id 15.20.5813.013; Sat, 12 Nov 2022
+ 06:06:49 +0000
+From:   =?utf-8?B?QmF5aSBDaGVuZyAo56iL5YWr5oSPKQ==?= 
+        <bayi.cheng@mediatek.com>
+To:     "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "David.Laight@ACULAB.COM" <David.Laight@ACULAB.COM>,
+        "broonie@kernel.org" <broonie@kernel.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gch981213@gmail.com" <gch981213@gmail.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: Re: [PATCH v1] spi: spi-mtk-nor: Optimize timeout for dma read
+Thread-Topic: [PATCH v1] spi: spi-mtk-nor: Optimize timeout for dma read
+Thread-Index: AQHY70U3L+QgZhq720C1cLpB3c3zja4s8viAgADXjICAAJv0AIAKtUCAgABiWYCAAV1JgA==
+Date:   Sat, 12 Nov 2022 06:06:49 +0000
+Message-ID: <e546de4ea3b1e29da6f9cdf56c8bf1582b70944e.camel@mediatek.com>
+References: <20221103052843.2025-1-bayi.cheng@mediatek.com>
+         <20221103052843.2025-2-bayi.cheng@mediatek.com>
+         <10529948-a9b8-2121-7adb-0e94cf3cbf6a@collabora.com>
+         <c612cc0eb4fc463a9bfd9094ff652ac9@AcuMS.aculab.com>
+         <617c0b563a2602668fde7d96e1bc98648870d30c.camel@mediatek.com>
+         <794a0249500bf90a79f30a3522108e721fe06e17.camel@mediatek.com>
+         <34de22c0-1773-10b4-c3fd-387fd311ac11@collabora.com>
+In-Reply-To: <34de22c0-1773-10b4-c3fd-387fd311ac11@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PS1PR03MB4747:EE_|TYZPR03MB5440:EE_
+x-ms-office365-filtering-correlation-id: ea986373-3a29-40c7-df4e-08dac474166d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZRhNnv6e0S0eNr5hn/gOrNsLrkjUtw0wcvRRwtszuL5lRxmEMebYGQBrg/DYaVqLCEr0AMt4lOFhe7t73+Cd21pz9W2RXiKsFfm5ktz25c6DALdh/QdqheGVkhtb/XZr+W/E6GE0CJ/nkxhtkSesxq4ziByf+FsdVSSgasCzVRQyWJAGr9JOSys6z5o6mTllSCA9kL1ghrgLh3N79+vyhwi0lt620HtJNq18TlKz5t0NIfi9QJzuT3BcGXyTIPn7YJSBYrwyiY8ri0pYVljVA/WD0vGdYY6GxFQ8WwsxUto8sdjJxBh+MxrAfAZfWTNPCy4UCUl5ZnHEvW4UGJ+XVfdCa0FIZFglbogg1xwNart89nZ17gvT3+2YI7hkqyNxwS0NrN7OM57b3D8hUz+HQis9kXduVynNAsPI8ClMPvllEsFbUhsW1SsCpdvgscP/j0zoWCzCFpvsdF2vjq2qDPF3m1hnPoayWEI7J8pywf8cIls07JLfUy8U4fxXneM34SSbIBdbsQOex9W2Yq7zOWqy9CIvVF5H0RYhhSV9GTpqSxtePXFmBwfT/K2RfQ3RNkBrXljXdbtonWlvLXx7EWG3u/k/iDd0Pe65za0CU9YdTAUDqo0dNnCiwkUmzQcuNHgDqXaio6TIQYslG3atQ9dk1syIjF17KWdKxNWogE9dCovypkQVb1aZhfu5RqJ+ApkP/2/EUp9fsPPn8YfT3RwJtXvGiZHfuIjkpBPySGIMDXeHnff5IuEcSTfkDPdaWo49p1iTP/u8QixzIUtZahyjtfwsMh3Rv6ieKImnUc/o+YEEpPo0k5piCfmYRaCl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR03MB4747.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199015)(4001150100001)(2906002)(41300700001)(26005)(5660300002)(6512007)(66556008)(91956017)(85182001)(66946007)(66476007)(66446008)(76116006)(64756008)(8676002)(4326008)(36756003)(186003)(8936002)(54906003)(110136005)(38100700002)(6506007)(122000001)(38070700005)(2616005)(316002)(478600001)(6486002)(86362001)(83380400001)(107886003)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UkxVN2Q3b2cyTUQ4ZjI3K0JGeXM5Mm5GMGxWK01sUzdya2dXU1ZQTlVmTmhM?=
+ =?utf-8?B?MURVdUdKMlY3c2RQRFcrS0txN0VreXBzWG1GcHY2YmR1R3NwaEI5YmhJalFP?=
+ =?utf-8?B?eWRqbmpCRS9uczN0T3cxWUliblVDYzc5YVo4d2lsMmM4M3NhRGJMUVp1WDBm?=
+ =?utf-8?B?bU1yWTlUcUhuWUd4b1NWWDNEVWNrR3puSndxNVF2b0tMWXBRQnIzeGtGd0t0?=
+ =?utf-8?B?SHVjNXp0VEpWdUdFV3d6cmdJamtjT2lpM3pxTzROZVc0dWt3OTVFazJHZi9O?=
+ =?utf-8?B?YUlBUXJpeXZnSDlPcFF4cU8zK1hLbEdIZDF4SEsvUm5iNFhVU3IxUDV4SUlM?=
+ =?utf-8?B?NjdaVURxQjF5eVRWSGZ0aE1iUjFRSWREZ3FNWTVqbExKSEtYQWRFYVNXblFW?=
+ =?utf-8?B?VzNRRGRVY29Dc0tCTXpFSGhIbTFERTBSRFZ5WFo0NGMwZE4rb2RwcTQxaC9i?=
+ =?utf-8?B?NVVJU3VudmNDUWJ0VW9pelcrVW1BNnBhb2JWODYva3pGcXB3dHZLTjBwemoz?=
+ =?utf-8?B?Y3A4eVRoYUxGaFRZV0psM2VndWt2UzlpSXlNWlRqVE5ObTRoamFVbkRRSy9Z?=
+ =?utf-8?B?bjg2RFg3UHdSRXdhZDVTRFZjd0Y5Y2ErM1ZIVDhTR01tOVBGTjNBVmxXU2Fl?=
+ =?utf-8?B?bE1aQThNelRVYjgxNUI4WnRURHpUaXZibVprL1grbUVSSXJLeFpsZkZGVzNQ?=
+ =?utf-8?B?N05OZEZoT24ybEtmRXVKMm0rSFVTRmxjVHh3ZWEvV21kUmFYWmJWeXJjMW9K?=
+ =?utf-8?B?N3RYT1VhOE5oNnNlZVMySTlsbzlhTnpPQW5zcjVvWjNhaUd6R0VjblZ6MnZM?=
+ =?utf-8?B?RWVSalFBQzF4dU16N1ROMktoenVCRTQwcVN3Q2dMYlRwQlBRUjVyWjdFYkZD?=
+ =?utf-8?B?Z09oZEowUmpMQ2FQVzdPdUo4YkVRZHdxNWFiVlpubEZ3dUVJbkNualQrbTVB?=
+ =?utf-8?B?TFlLQTBWTGNzOUFKNDFMYXhSTk0xNW80Q2RGWXF4Mm10TVUraUdPeUhMVzJO?=
+ =?utf-8?B?eHJ5bWJhTXpvandLdVQ0NTczYjlzZWlzZGh1ZFBBbEgwQldvbXU4MkVLQ0ox?=
+ =?utf-8?B?cjZneEprUXlTdHZ2WlpNdVBXWmJSOHQzMXNueE5OdUdYZm9TdzB5cWg3THVS?=
+ =?utf-8?B?K3JGWW0ycU5DZEhLU1VWNEIwa3JDb0ltc0thU0prTHFubUg4aHFXUHZUcWFx?=
+ =?utf-8?B?U0l1cFFaZk1KWDQ3Yk1sWVV5VnBrVzlPdmFLVHJFS3FHSGV3ZWg4QXFYdGEr?=
+ =?utf-8?B?djlxWm5qbVhvOXh2UDF2Qk16K3VST0Y0Z0t4ZmN5eE9mejFiNUprTCtlaTND?=
+ =?utf-8?B?WEM2cmliRStPaCtHZW9wTVkwZ2t2TzZuNFFrQi9PTHdlaHNVMll0bGMvdHdt?=
+ =?utf-8?B?cThpRUxHUkFIN1h5Q29hWlhpRXlyazdoMk1aZzF6TERMOWVJbnhLN1dLTTRD?=
+ =?utf-8?B?NFJKbHFsL09tQ1gxT2N5MmFlU2xTOHJ6ZSs3Rk9qS0c0bi9sa3NxUjVRTEdB?=
+ =?utf-8?B?SUpDcHJyM215eDZEbENwbEdWRkxEeEl6cHJEeUtrWnplRUpoRkltbno3ZFVH?=
+ =?utf-8?B?Q0pxUnlpRTRrS2UxcDdUU1BLYUxwbUNTcG93TEw4K294dkdSSi9CdHd5Q1RD?=
+ =?utf-8?B?bXYrSnRVVFBTUWg5dGtxSHExb1I0K1JnaVdCSG5vZ3pHK0hnVTd2N2MvK0N3?=
+ =?utf-8?B?K0lWQ3NKa0JLRmY1c041Q0FhL0pYb1B5MDdZSXNQQWhURGY0b0l1T3k4NEVQ?=
+ =?utf-8?B?SVVPRjVwa1VBeExKNnVGVldDNUM2UFk4MFR2MzZjdS81VjQ2OGZ4YkY0Q0pH?=
+ =?utf-8?B?Q3ozZStjWS9rcUMrQUZZRGZwUEdMU2trQS9pbjNJdUxwL0k1Lzc0b1hBOWJU?=
+ =?utf-8?B?c3ZFTkVFVmtWOU1qTjZ2bkcxUmlYUWNJeVJZbGZlZklmL0dMK0VvMk9FMGVq?=
+ =?utf-8?B?YzJKZnFQeUhQUGVsb25QaFd0QzFTUXFvTlprSzFEVERUZmlXSW1KMEZuaUdQ?=
+ =?utf-8?B?REJRTFIvQWNtTjhPbmxLWU95N2xSYys5bXBhblhaWVhsL2dHVVFQbWdDNEtT?=
+ =?utf-8?B?MG9DZHp1cS9menB4Zm1qdDVxTWtnSTdQS2pFSENHUi9WWWIrWDVrNExlak9F?=
+ =?utf-8?B?YzhCTTVTWmhNWkNkVDJXY3NGMGdtNVo2N0Y1WlBaWktHa1FaanJTV3ZReG5J?=
+ =?utf-8?B?UFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <806EEFEF602419428B63F6F17578BF7C@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AM0PR04MB6884:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f2ca4f1-19e9-4137-d5e5-08dac436a844
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8ujVHyVyW3mJU3S8L/VUIdmYbm9PQTltAv8TpU97zOBoM3RIxN+LA7YZBTeTY+9NOxx4MfEZ/3ErXBX/vjdP/gJNnt+ahFx2b5IIQs67vcIBLvfiP5sMfpx9flvogpMo/zi6nnQ6uXvtwO6PYPWgDcQta9/7EViGBrg4wY6Kr3+CnoddbmTTHeUdJh2NW4a7lhIhjvh5mj3dCstf5F3Dn8bPNkPEGGI1Uj+lepMEFVMzRYuMMg1FxLgjJlZ3jp8P9yDZceaNL9r7GrSpVaBqwDUIB6Qk6z9O0Sy9v5pKf7YFnRACX389p8FNPKBtlRPHt5aae71mqoqC6f88+SsnV1UdmzC0H7OQk4Ug8cCCowTtbfmLLYx0UfcvbA3PlAKMHrbaSoQKMR+yYw2oibg/DgfOTarq1zMPeXCnxzjBMNGf5O3WWMbcMYIFFxnACvlmXjZTL2AGJE7o5yQsnCtsjwNl9I5YNUdD9CS+LOzLk7VmS+z4bwb5c4iEEEKMbxeohoMf6xCZkGcY8q0Noq1F40Kx7xtcGDC2yFhqr7peciI3UduS1OzE7+KEriwOxeeVTr4BpNYvoZt+LuxoW4xvKzOOiUSb2mcyxhM8IQOVAz/+wx2CUnED3xCzghBA3/3uiDXEivOQD0tXPkHsnxbyx5NnrbJdpn8gnu2fU7O4wYaL1B49kNwfzzyV6pRzKU4kDCiG+iU116W9YzpDQsp8gtrdPiNZr3aO9iNsolS9AkOt0nO1yYi5GP/Jv6JvgJjPMTncrNbWXbixEG34gxSeg7+chQTWyf5lkhcBBuvXIG/7321GJP5Rn85OUlj2Mk99fzd9xnZo6OpsGH2v4h+ntQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(451199015)(4326008)(2906002)(8676002)(316002)(83380400001)(6666004)(86362001)(38350700002)(38100700002)(52116002)(6506007)(36756003)(66476007)(66556008)(66946007)(966005)(54906003)(2616005)(6486002)(6512007)(8936002)(41300700001)(186003)(478600001)(1076003)(44832011)(26005)(6916009)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JuA5cslhn5WpXmNCG7s2p+HfjlZAiT+VqR3rPYkOsthh1IwI7Z/orJOIEoUw?=
- =?us-ascii?Q?jOfZsl0IGg2n1GIdxiJARAE0371LcVw0mF5O3iBvI2ub48b2zfM1YUhUquCR?=
- =?us-ascii?Q?+PN6kHE/7VcTfb345PLHXDnhO5T/sdKaFdOqDVl0g9wdE6wvu7R0nqjz8bI2?=
- =?us-ascii?Q?FZ/ypfD6JemGgYgvkBfckw/SZerp07kuCKbJZdlnI44WFHv7JbXUOergDY0T?=
- =?us-ascii?Q?xB+9kEPj0wqXifpxJ984iPHUJ0Ld+oV6ODqeZ+1k5cRF3L2B62fCHynTzgP6?=
- =?us-ascii?Q?uF38LoEcNLTY6yi/9ZI2zrE/LGNHHEBqzyqXW7Cq/4yQ0tky2CdveZvuCC/T?=
- =?us-ascii?Q?H6zdJ6E/upZuLHZeNcmwwxwp5X5gOelo7RL1O8CU8Y4LrSNr8dfQuduha4OB?=
- =?us-ascii?Q?zoB/KP67iu06DBdadpLxT5QmiTHDKuAahtRjfUuilJSrPzl/fuRkJlinENqR?=
- =?us-ascii?Q?ZK3IY5vRD26JKuhWbtg+8r8FqQCK4RHroadT7oiopZfG3+fpXCaLLuiKYwOf?=
- =?us-ascii?Q?8+O6cg5wPg7iNQy4WIuRgBxgfMn70b89rOf9WtZNCTsDpDugL0WZ0cccGDkU?=
- =?us-ascii?Q?ifp2gUeas6hWEOHZr/8uoUrWDs0q5zQktYnsuS7BK6IgqrpIbgE9+J4mBcdv?=
- =?us-ascii?Q?RjyiC3KlqAbMvPeUwIAOCy994kGFspcaO8/cbRTgC7FN67YETIPAcjBpS0ZO?=
- =?us-ascii?Q?YI2JhuM6l5nM6/eU05AOs9ngKmQkH1o1KqH8FQCarUcP8y8dCtsZjhBYELjW?=
- =?us-ascii?Q?Ki0TFrsDUCktuAAQV6emBQNRAvg9B1q5OkamFgchxMmbgOzY8kuQprniijtK?=
- =?us-ascii?Q?E80x/3bPC+psjAgOKqt13J6T7sv8+ZMBJhjoYH0BZ7yC8XNv1+M+v1HyLDFp?=
- =?us-ascii?Q?I1tdPkLxx5pbwC4pJq0ErAblBt0agfHeZYddqY3dZDMDKi0ci7huVDm71qG1?=
- =?us-ascii?Q?KIRDNovsbbryGC3lUT5ZtxZON8sc7y5oq4xIRDXT5niCHBM/gMuRao7BGQmr?=
- =?us-ascii?Q?tWgYtqjBPQN5V/Qe/eWnV4CyzXFqZRXwfM38M7mrhwWXXDFxesWyCZ3n6OxG?=
- =?us-ascii?Q?IfYV/bdqCCpkgCISbz/oNtFc4hclrhmKUqFvQOQCVzZAeBa5B8WBayFrrTU2?=
- =?us-ascii?Q?HEIJPvdVTJtQ4XUJk11W8I6duRDfSfbJ+mhofePisgsQPir9sk1mLeCXSBC3?=
- =?us-ascii?Q?bckZGMRWqonJRQZs9YcW3qPxzS2yVdR1TMA467aCFT/Bi7efFCMvlAVdPoSG?=
- =?us-ascii?Q?WWquX17dZFeFmOct7TEGUmTwZuDD73MJwzPePgabcMqluKUdfgliJaqYv5is?=
- =?us-ascii?Q?zQVlIHBG52J5WsdkAA3+oOPq7aOEzLp5OQewch3lxeO1OzZ3ohAMJQl1onUv?=
- =?us-ascii?Q?vRvEmPrqH6datN7elvI94rOQWa/LjtArfs8hiszkiBlNd/WGd3hpkzinH9mv?=
- =?us-ascii?Q?hGBVE3aYyEGYCb2NhOAhmCYmNk0RMKPno8/FvHI+KI3El3V5SOjS3a+v1tfO?=
- =?us-ascii?Q?JKrBN/NMKaiJAer6owMeC9nEbvWsPo/3j9/S8A9uGtfTkNrqmEfggjUVMjGJ?=
- =?us-ascii?Q?ZYQc3gbOvkyPyrNZ0ypWQqNgfITTSNRMlrLJWJTZ9cKnzwizDjva4MxN6jvI?=
- =?us-ascii?Q?dw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f2ca4f1-19e9-4137-d5e5-08dac436a844
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 22:47:05.9676
+X-MS-Exchange-CrossTenant-AuthSource: PS1PR03MB4747.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea986373-3a29-40c7-df4e-08dac474166d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2022 06:06:49.7583
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JLzQSEtehDPEY84e0jhRiSuT7wkX4Rgkjm/yRxPdJtuH4NbyMiQYFZOKBGu/HrD8VssxNsEfvEWaU7Q0V8tngQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6884
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4jX+DxsDMXvVz7q27h1Dz1RzJb+PQwdyXop6wEAiaHXKU3beHcv5LvBopYDZmxtzFntEyerMepCUm0x9GuqrsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5440
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,281 +166,94 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Kuldeep Singh <kuldeep.singh@nxp.com>
-
-Convert the Freescale DSPI binding to DT schema format.
-
-Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-v1 (from more than 1 year ago) at:
-https://patchwork.kernel.org/project/spi-devel-general/patch/20210315121518.3710171-1-kuldeep.singh@nxp.com/
-
- .../fsl,spi-fsl-dspi-peripheral-props.yaml    |  28 +++++
- .../bindings/spi/fsl,spi-fsl-dspi.yaml        | 118 ++++++++++++++++++
- .../devicetree/bindings/spi/spi-fsl-dspi.txt  |  65 ----------
- .../bindings/spi/spi-peripheral-props.yaml    |   1 +
- MAINTAINERS                                   |   3 +-
- 5 files changed, 149 insertions(+), 66 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi-peripheral-props.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-
-diff --git a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi-peripheral-props.yaml
-new file mode 100644
-index 000000000000..d15f77c040d1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi-peripheral-props.yaml
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/fsl,spi-fsl-dspi-peripheral-props.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Peripheral-specific properties for Freescale DSPI controller
-+
-+maintainers:
-+  - Vladimir Oltean <olteanv@gmail.com>
-+
-+description:
-+  See spi-peripheral-props.yaml for more info.
-+
-+properties:
-+  fsl,spi-cs-sck-delay:
-+    description:
-+      Delay in nanoseconds between activating chip select and the start of
-+      clock signal, at the start of a transfer.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  fsl,spi-sck-cs-delay:
-+    description:
-+      Delay in nanoseconds between stopping the clock signal and
-+      deactivating chip select, at the end of a transfer.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml
-new file mode 100644
-index 000000000000..8a790c0ed95f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml
-@@ -0,0 +1,118 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/fsl,spi-fsl-dspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale DSPI Controller
-+
-+maintainers:
-+  - Vladimir Oltean <olteanv@gmail.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    description:
-+      Some integrations can have a single compatible string containing their
-+      SoC name (LS1012A, LS1021A, ...). Others require their SoC compatible
-+      string, plus a fallback compatible string (either on LS1021A or on
-+      LS2085A).
-+    oneOf:
-+      - enum:
-+          - fsl,ls1012a-dspi
-+          - fsl,ls1021a-v1.0-dspi
-+          - fsl,ls1028a-dspi
-+          - fsl,ls2085a-dspi
-+          - fsl,lx2160a-dspi
-+          - fsl,vf610-dspi
-+      - items:
-+          - enum:
-+              - fsl,ls1012a-dspi
-+              - fsl,ls1028a-dspi
-+              - fsl,ls1043a-dspi
-+              - fsl,ls1046a-dspi
-+              - fsl,ls1088a-dspi
-+          - const: fsl,ls1021a-v1.0-dspi
-+      - items:
-+          - enum:
-+              - fsl,ls2080a-dspi
-+              - fsl,lx2160a-dspi
-+          - const: fsl,ls2085a-dspi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: dspi
-+
-+  dmas:
-+    maxItems: 2
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+  spi-num-chipselects:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of available native Chip Select signals
-+
-+  bus-num:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: SoC-specific identifier for the SPI controller
-+
-+  little-endian: true
-+  big-endian: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - spi-num-chipselects
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        spi@2100000 {
-+            compatible = "fsl,ls1028a-dspi", "fsl,ls1021a-v1.0-dspi";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            reg = <0x0 0x2100000 0x0 0x10000>;
-+            interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+            clock-names = "dspi";
-+            clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL QORIQ_CLK_PLL_DIV(2)>;
-+            dmas = <&edma0 0 62>, <&edma0 0 60>;
-+            dma-names = "tx", "rx";
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pinctrl_dspi0_1>;
-+            spi-num-chipselects = <4>;
-+            little-endian;
-+
-+            flash@0 {
-+                compatible = "jedec,spi-nor";
-+                spi-max-frequency = <10000000>;
-+                fsl,spi-cs-sck-delay = <100>;
-+                fsl,spi-sck-cs-delay = <100>;
-+                reg = <0>;
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-deleted file mode 100644
-index 30a79da9c039..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--ARM Freescale DSPI controller
--
--Required properties:
--- compatible : must be one of:
--	"fsl,vf610-dspi",
--	"fsl,ls1021a-v1.0-dspi",
--	"fsl,ls1012a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1028a-dspi",
--	"fsl,ls1043a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1046a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1088a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls2080a-dspi" (optionally followed by "fsl,ls2085a-dspi"),
--	"fsl,ls2085a-dspi",
--	"fsl,lx2160a-dspi",
--- reg : Offset and length of the register set for the device
--- interrupts : Should contain SPI controller interrupt
--- clocks: from common clock binding: handle to dspi clock.
--- clock-names: from common clock binding: Shall be "dspi".
--- pinctrl-0: pin control group to be used for this controller.
--- pinctrl-names: must contain a "default" entry.
--- spi-num-chipselects : the number of the chipselect signals.
--
--Optional property:
--- big-endian: If present the dspi device's registers are implemented
--  in big endian mode.
--- bus-num : the slave chip chipselect signal number.
--
--Optional SPI slave node properties:
--- fsl,spi-cs-sck-delay: a delay in nanoseconds between activating chip
--  select and the start of clock signal, at the start of a transfer.
--- fsl,spi-sck-cs-delay: a delay in nanoseconds between stopping the clock
--  signal and deactivating chip select, at the end of a transfer.
--
--Example:
--
--dspi0@4002c000 {
--	#address-cells = <1>;
--	#size-cells = <0>;
--	compatible = "fsl,vf610-dspi";
--	reg = <0x4002c000 0x1000>;
--	interrupts = <0 67 0x04>;
--	clocks = <&clks VF610_CLK_DSPI0>;
--	clock-names = "dspi";
--	spi-num-chipselects = <5>;
--	bus-num = <0>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_dspi0_1>;
--	big-endian;
--
--	sflash: at26df081a@0 {
--		#address-cells = <1>;
--		#size-cells = <1>;
--		compatible = "atmel,at26df081a";
--		spi-max-frequency = <16000000>;
--		spi-cpol;
--		spi-cpha;
--		reg = <0>;
--		linux,modalias = "m25p80";
--		modal = "at26df081a";
--		fsl,spi-cs-sck-delay = <100>;
--		fsl,spi-sck-cs-delay = <50>;
--	};
--};
--
--
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index dca677f9e1b9..a475e757f8da 100644
---- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-@@ -101,6 +101,7 @@ properties:
- # The controller specific properties go here.
- allOf:
-   - $ref: cdns,qspi-nor-peripheral-props.yaml#
-+  - $ref: fsl,spi-fsl-dspi-peripheral-props.yaml#
-   - $ref: samsung,spi-peripheral-props.yaml#
-   - $ref: nvidia,tegra210-quad-peripheral-props.yaml#
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c242098a34f9..c75ae49c85b5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8160,7 +8160,8 @@ FREESCALE DSPI DRIVER
- M:	Vladimir Oltean <olteanv@gmail.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-+F:	Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml
-+F:	Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi-peripheral-props.yaml
- F:	drivers/spi/spi-fsl-dspi.c
- F:	include/linux/spi/spi-fsl-dspi.h
- 
--- 
-2.34.1
-
+T24gRnJpLCAyMDIyLTExLTExIGF0IDEwOjE2ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
+ZWdubyB3cm90ZToNCj4gSWwgMTEvMTEvMjIgMDU6MTYsIEJheWkgQ2hlbmcgKOeoi+WFq+aEjykg
+aGEgc2NyaXR0bzoNCj4gPiBPbiBGcmksIDIwMjItMTEtMDQgYXQgMDc6NTMgKzAwMDAsIEJheWkg
+Q2hlbmcgKOeoi+WFq+aEjykgd3JvdGU6DQo+ID4gPiBPbiBUaHUsIDIwMjItMTEtMDMgYXQgMjI6
+MzUgKzAwMDAsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiA+ID4gRnJvbTogQW5nZWxvR2lvYWNj
+aGlubyBEZWwgUmVnbm8NCj4gPiA+ID4gPiBTZW50OiAwMyBOb3ZlbWJlciAyMDIyIDA5OjQ0DQo+
+ID4gPiA+ID4gDQo+ID4gPiA+ID4gSWwgMDMvMTEvMjIgMDY6MjgsIEJheWkgQ2hlbmcgaGEgc2Ny
+aXR0bzoNCj4gPiA+ID4gPiA+IEZyb206IGJheWkgY2hlbmcgPGJheWkuY2hlbmdAbWVkaWF0ZWsu
+Y29tPg0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBUaGUgdGltZW91dCB2YWx1ZSBvZiB0aGUg
+Y3VycmVudCBkbWEgcmVhZCBpcyB1bnJlYXNvbmFibGUuDQo+ID4gPiA+ID4gPiBGb3INCj4gPiA+
+ID4gPiA+IGV4YW1wbGUsDQo+ID4gPiA+ID4gPiBJZiB0aGUgc3BpIGZsYXNoIGNsb2NrIGlzIDI2
+TWh6LCBJdCB3aWxsIHRha2VzIGFib3V0IDEuM21zDQo+ID4gPiA+ID4gPiB0bw0KPiA+ID4gPiA+
+ID4gcmVhZCBhDQo+ID4gPiA+ID4gPiA0S0IgZGF0YSBpbiBzcGkgbW9kZS4gQnV0IHRoZSBhY3R1
+YWwgbWVhc3VyZW1lbnQgZXhjZWVkcw0KPiA+ID4gPiA+ID4gNTBzDQo+ID4gPiA+ID4gPiB3aGVu
+DQo+ID4gPiA+ID4gPiBhDQo+ID4gPiA+ID4gPiBkbWEgcmVhZCB0aW1lb3V0IGlzIGVuY291bnRl
+cmVkLg0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBJbiBvcmRlciB0byBiZSBtb3JlIGFjY3Vy
+YXRlbHksIEl0IGlzIG5lY2Vzc2FyeSB0byB1c2UNCj4gPiA+ID4gPiA+IG1zZWNzX3RvX2ppZmZp
+ZXMsDQo+ID4gPiA+ID4gPiBBZnRlciBtb2RpZmljYXRpb24sIHRoZSBtZWFzdXJlZCB0aW1lb3V0
+IHZhbHVlIGlzIGFib3V0DQo+ID4gPiA+ID4gPiAxMzBtcy4NCj4gPiA+ID4gPiA+IA0KPiA+ID4g
+PiA+ID4gU2lnbmVkLW9mZi1ieTogYmF5aSBjaGVuZyA8YmF5aS5jaGVuZ0BtZWRpYXRlay5jb20+
+DQo+ID4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiA+ICAgIGRyaXZlcnMvc3BpL3NwaS1tdGstbm9y
+LmMgfCA3ICsrKystLS0NCj4gPiA+ID4gPiA+ICAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlv
+bnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3NwaS9zcGktbXRrLW5vci5jIGIvZHJpdmVycy9zcGkvc3BpLQ0KPiA+ID4g
+PiA+ID4gbXRrLQ0KPiA+ID4gPiA+ID4gbm9yLmMNCj4gPiA+ID4gPiA+IGluZGV4IGQxNjc2OTlh
+MWE5Ni4uM2Q5ODlkYjgwZWU5IDEwMDY0NA0KPiA+ID4gPiA+ID4gLS0tIGEvZHJpdmVycy9zcGkv
+c3BpLW10ay1ub3IuYw0KPiA+ID4gPiA+ID4gKysrIGIvZHJpdmVycy9zcGkvc3BpLW10ay1ub3Iu
+Yw0KPiA+ID4gPiA+ID4gQEAgLTM1NCw3ICszNTQsNyBAQCBzdGF0aWMgaW50IG10a19ub3JfZG1h
+X2V4ZWMoc3RydWN0DQo+ID4gPiA+ID4gPiBtdGtfbm9yDQo+ID4gPiA+ID4gPiAqc3AsIHUzMiBm
+cm9tLCB1bnNpZ25lZCBpbnQgbGVuZ3RoLA0KPiA+ID4gPiA+ID4gICAgCQkJICAgIGRtYV9hZGRy
+X3QgZG1hX2FkZHIpDQo+ID4gPiA+ID4gPiAgICB7DQo+ID4gPiA+ID4gPiAgICAJaW50IHJldCA9
+IDA7DQo+ID4gPiA+ID4gPiAtCXVsb25nIGRlbGF5Ow0KPiA+ID4gPiA+ID4gKwl1bG9uZyBkZWxh
+eSwgdGltZW91dDsNCj4gPiA+ID4gPiA+ICAgIAl1MzIgcmVnOw0KPiA+ID4gPiA+ID4gDQo+ID4g
+PiA+ID4gPiAgICAJd3JpdGVsKGZyb20sIHNwLT5iYXNlICsgTVRLX05PUl9SRUdfRE1BX0ZBRFIp
+Ow0KPiA+ID4gPiA+ID4gQEAgLTM3NiwxNSArMzc2LDE2IEBAIHN0YXRpYyBpbnQgbXRrX25vcl9k
+bWFfZXhlYyhzdHJ1Y3QNCj4gPiA+ID4gPiA+IG10a19ub3INCj4gPiA+ID4gPiA+ICpzcCwgdTMy
+IGZyb20sIHVuc2lnbmVkIGludCBsZW5ndGgsDQo+ID4gPiA+ID4gPiAgICAJbXRrX25vcl9ybXco
+c3AsIE1US19OT1JfUkVHX0RNQV9DVEwsIE1US19OT1JfRE1BX1NUQVJULA0KPiA+ID4gPiA+ID4g
+MCk7DQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+ICAgIAlkZWxheSA9IENMS19UT19VUyhzcCwg
+KGxlbmd0aCArIDUpICogQklUU19QRVJfQllURSk7DQo+ID4gPiA+ID4gPiArCXRpbWVvdXQgPSAo
+ZGVsYXkgKyAxKSAqIDEwMDsNCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gICAgCWlmIChzcC0+
+aGFzX2lycSkgew0KPiA+ID4gPiA+ID4gICAgCQlpZiAoIXdhaXRfZm9yX2NvbXBsZXRpb25fdGlt
+ZW91dCgmc3AtPm9wX2RvbmUsDQo+ID4gPiA+ID4gPiAtCQkJCQkJIChkZWxheSArIDEpICoNCj4g
+PiA+ID4gPiA+IDEwMCkpDQo+ID4gPiA+ID4gPiArCQkgICAgbXNlY3NfdG9famlmZmllcyhtYXhf
+dChzaXplX3QsIHRpbWVvdXQgLw0KPiA+ID4gPiA+ID4gMTAwMCwNCj4gPiA+ID4gPiA+IDEwKSkp
+KQ0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IFlvdSdyZSBnaXZpbmcgYSBgc2l6ZV90YCB2YXJpYWJs
+ZSB0byBtc2Vjc190b19qaWZmaWVzKCksIGJ1dA0KPiA+ID4gPiA+IGNoZWNraW5nIGBqaWZmaWVz
+LmhgLA0KPiA+ID4gPiA+IHRoaXMgZnVuY3Rpb24gdGFrZXMgYSBgY29uc3QgdW5zaWduZWQgaW50
+YCBwYXJhbS4NCj4gPiA+ID4gPiBQbGVhc2UgY2hhbmdlIHRoZSB0eXBlIHRvIG1hdGNoIHRoYXQu
+DQo+ID4gPiA+IA0KPiA+ID4gPiBUaGUgdHlwZSBzaG91bGRuJ3QgbWF0dGVyIGF0IGFsbC4NCj4g
+PiA+ID4gV2hhdCBtYXR0ZXJzIGlzIHRoZSBkb21haW4gb2YgdGhlIHZhbHVlLg0KPiA+ID4gPiAN
+Cj4gPiA+ID4gUXVpdGUgd2h5IHlvdSBuZWVkIHRvIHVzZSBtYXhfdChzaXplX3QsIC4uLikgaXMg
+YW5vdGhlciBtYXR0ZXIuDQo+ID4gPiA+IHRpbWVvdXQgaXMgdWxvbmcgc28gbWF4KHRpbWVvdXQv
+MTAwMCwgMTB1bCkgc2hvdWxkIGJlIGZpbmUuDQo+ID4gPiA+IA0KPiA+ID4gPiBCdXQgaXMgdWxv
+bmcgZXZlbiByaWdodD8NCj4gPiA+ID4gVGhlIGRvbWFpbiBvZiB0aGUgdmFsdWUgaXMgYWxtb3N0
+IGNlcnRhaW5seSB0aGUgc2FtZSBvbiAzMmJpdA0KPiA+ID4gPiBhbmQNCj4gPiA+ID4gNjRiaXQu
+DQo+ID4gPiA+IFNvIHlvdSBhbG1vc3QgY2VydGFpbmx5IG5lZWQgdTMyIG9yIHU2NC4NCj4gPiA+
+ID4gDQo+ID4gPiA+IAlEYXZpZA0KPiA+ID4gPiANCj4gPiA+IA0KPiA+ID4gSGkgRGF2aWQgJiBB
+bmdlbG8NCj4gPiA+IA0KPiA+ID4gVGhhbmsgeW91IGZvciB5b3VyIGNvbW1lbnRzIQ0KPiA+ID4g
+VG8gc3VtIHVwLCBJIHRoaW5rIHRoZSBuZXh0IHZlcnNpb24gd2lsbCBtYWtlIHRoZSBmb2xsb3dp
+bmcgdHdvDQo+ID4gPiBjaGFuZ2VzOg0KPiA+ID4gMSwgVGhlIHRpbWVvdXQgdmFsdWUgd2lsbCBu
+b3QgZXhjZWVkIHUzMiwgc28gdGhlIHR5cGUgb2YgdGltZW91dA0KPiA+ID4gd2lsbA0KPiA+ID4g
+YmUgY2hhbmdlZCBmcm9tIHVsb25nIHRvIHUzMi4NCj4gPiA+IDIsIENoYW5nZSBtc2Vjc190b19q
+aWZmaWVzKG1heF90KHNpemVfdCwgdGltZW91dCAvIDEwMDAsIDEwKSkgdG8NCj4gPiA+IGJlDQo+
+ID4gPiBtc2Vjc190b19qaWZmaWVzKG1heCh0aW1lb3V0IC8gMTAwMCwgMTBVKSkuDQo+ID4gPiAN
+Cj4gPiA+IElmIHlvdSB0aGluayB0aGVzZSBjaGFuZ2VzIGFyZSBub3QgZW5vdWdoLCBwbGVhc2Ug
+bGV0IG1lIGtub3csDQo+ID4gPiBUaGFua3PvvIENCj4gPiA+IA0KPiA+ID4gQmVzdCBSZWdhcmRz
+LA0KPiA+ID4gQmF5aQ0KPiA+ID4gDQo+ID4gDQo+ID4gSGkgQW5nZWxvLCBIaSBEYXZpZCwNCj4g
+PiANCj4gPiBKdXN0IGEgZ2VudGxlIHBpbmcgb24gdGhpcy4NCj4gPiBDb3VsZCB5b3UgcGxlYXNl
+IHJldmlldyB0aGlzIHBhdGNoIGFuZCBnaXZlIHVzIHNvbWUgc3VnZ2VzdGlvbj8NCj4gPiANCj4g
+PiBQUzogV2l0aCB5b3VyIHBlcm1pc3Npb24sIEkgd2lsbCBtYWtlIHRoZSBmb2xsb3dpbmcgY2hh
+bmdlcyBpbiB0aGUNCj4gPiBuZXh0DQo+ID4gdmVyc2lvbjoNCj4gPiANCj4gPiBDaGFuZ2UgaW4g
+djI6DQo+ID4gICAgLUNoYW5nZSB0aGUgdHlwZSBvZiAidGltZW91dCIgZnJvbSB1bG9uZyB0byB1
+MzIuDQo+ID4gICAgLVJlcGxhY2UgbWF4X3Qgd2l0aCBtYXguDQo+ID4gDQo+IA0KPiBJIHN0aWxs
+IHJlY29tbWVuZCB0byB1c2UgdXNlY3NfdG9famlmZmllcygpIHdoZW4gYXBwcm9wcmlhdGUsIGlu
+c3RlYWQNCj4gb2YNCj4gY29udmVydGluZyB1c2VjcyB0byBtc2VjcyBhbmQgdXNpbmcgbXNlY3Nf
+dG9famlmZmllcygpLg0KPiANCj4gQXMgZm9yIHRoZSByZXN0IGluIHlvdXIgbGlzdDogeWVzLCBw
+bGVhc2UuDQo+IA0KPiBSZWdhcmRzLA0KPiBBbmdlbG8NCj4gDQoNCkhpIEFuZ2VsbywNCg0KVGhh
+bmtzIGZvciB5b3VyIGNvbW1lbnRzISANCkkgd2lsbCBjaGFuZ2UgaXQgdG8gYmUgdXNlY3NfdG9f
+amlmZmllcyhtYXgodGltZW91dCwgMTAwMDBVKSkgaW4gdGhlDQpuZXh0IHBhdGNoLg0KDQpCUnMs
+DQpCYXlpIENoZW5nDQoNCg0KPiA+IA0KPiA+IFRoYW5rcy4NCj4gPiANCj4gPiBCUnMsDQo+ID4g
+QmF5aSBDaGVuZw0KPiA+IA0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IEFzaWRlIGZyb20gdGhhdCwg
+eW91ciBgdGltZW91dGAgdmFyaWFibGUgY29udGFpbnMgYSB0aW1lb3V0DQo+ID4gPiA+ID4gaW4N
+Cj4gPiA+ID4gPiBtaWNyb3NlY29uZHMgYW5kDQo+ID4gPiA+ID4gdGhpcyBtZWFucyB0aGF0IGFj
+dHVhbGx5IHVzaW5nIG1zZWNzX3RvX2ppZmZpZXMoKSBpcw0KPiA+ID4gPiA+IHN1Ym9wdGltYWwN
+Cj4gPiA+ID4gPiBoZXJlLg0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IFBsZWFzZSB1c2UgdXNlY3Nf
+dG9famlmZmllcygpIGluc3RlYWQuDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gUmVnYXJkcywNCj4g
+PiA+ID4gPiBBbmdlbG8NCj4gPiA+ID4gDQo+ID4gPiA+IC0NCj4gPiA+ID4gUmVnaXN0ZXJlZCBB
+ZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbg0KPiA+ID4g
+PiBLZXluZXMsDQo+ID4gPiA+IE1LMSAxUFQsIFVLDQo+ID4gPiA+IFJlZ2lzdHJhdGlvbiBObzog
+MTM5NzM4NiAoV2FsZXMpDQo+IA0KPiANCg==
