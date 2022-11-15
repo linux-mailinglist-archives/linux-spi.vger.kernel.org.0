@@ -2,118 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F66C62A11E
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 19:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7192D62A196
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 19:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiKOSK1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Nov 2022 13:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S230238AbiKOS43 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Nov 2022 13:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbiKOSKV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 13:10:21 -0500
-X-Greylist: delayed 6968 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Nov 2022 10:10:16 PST
-Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E014D23E89;
-        Tue, 15 Nov 2022 10:10:16 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48EBBBFAAB;
-        Tue, 15 Nov 2022 19:10:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1668535814; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=H45maZABLXregYfqLWfeajAgJSlwlOq3Okec5GHiVqQ=;
-        b=tQX//QtZ+IrdGz7dRr777MgmC/yKvVgO1bgw+PhI6TvciqiL06D05PgqRuSVYEAQ9nY89p
-        nV4jT3M4ZoDCcxk9wMiOftdlWn/yDqooGK21N8JE8jQz5G3NSfhsRUf05v7RNN56hK6cfW
-        ZkjrkgnvXNl8vNvsayySjmtuI0tECvLiR4RYInUf7b2FZvnK6rlaxAKcwQ1YZE6IIdVqma
-        lJqkcnKxhx6cmlKT1PJ79OnjAASZtEsViftUEos5kMYezQ+XyEHwG1Gs2fQPPGaLgqX9UF
-        xve9YsRTePL4qOdf5CoUXJTn2Doz4QLtcMTcHp+FeWkrBQGSWd82sOi2iG/eQA==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marek Vasut <marex@denx.de>, Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v3] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
-Date:   Tue, 15 Nov 2022 19:10:00 +0100
-Message-Id: <20221115181002.2068270-1-frieder@fris.de>
+        with ESMTP id S230082AbiKOS42 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 13:56:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88F27B3C
+        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 10:56:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4D18B81A8F
+        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 18:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AC13C433C1;
+        Tue, 15 Nov 2022 18:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668538585;
+        bh=6xiM5f79pnuy9WKXKDl3LnutjxXjJc9FgCz/zK2nqPo=;
+        h=Subject:From:Date:To:From;
+        b=DgWG9oj8VY2n+D3GlAQsJqGBe9yMmJhzBBEkZpGhrjpR298mtsKB4tcjjE3Dx/pjQ
+         8XQACnYVWMtjh1jpq5q73nxzhbM1enMypOzVVFciVuDrs8f842lXKGRZiRyD5Ew/B9
+         RpOK1gjkG0J5b1lSn1p3mt0Ao7qKedI2uKUw2gU1IJ+v9vjUP03ykM6LTnojj33C5j
+         rUznj4cuxPGInSaOArjq/J3VvU8B48Wpmw5T2ymmnuD80Iwz33yoh/rRembIYcGXpc
+         ZOv7xmuVZENcvDksVYtcKengwJS7LIEL7dCaB/WL8KblMipjFVs0cJ1PMYnhGgXACZ
+         8D/EIknb30/MA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6498BC395FE;
+        Tue, 15 Nov 2022 18:56:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166853858540.25837.11800624519625818606.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 15 Nov 2022 18:56:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+Latest series: [v3] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock (2022-11-15T18:10:00)
+  Superseding: [v2] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock (2022-11-15T16:26:53):
+    [v2] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
 
-In case the requested bus clock is higher than the input clock, the correct
-dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
-*fres is left uninitialized and therefore contains an arbitrary value.
 
-This causes trouble for the recently introduced PIO polling feature as the
-value in spi_imx->spi_bus_clk is used there to calculate for which
-transfers to enable PIO polling.
-
-Fix this by setting *fres even if no clock dividers are in use.
-
-This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
-to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
-flash.
-
-With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
-following:
-
-spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-post: 0, pre: 0
-
-Fixes: 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds")
-Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: David Jander <david@protonic.nl>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-Tested-by: Fabio Estevam <festevam@gmail.com>
----
-
-Changes for v3:
-
-* Add back the Fixes tag for commit 6fd8b8503a0d
-* Add Fabio's Tested-by (Thanks!)
-
-Changes for v2:
-
-* Remove the reference and the Fixes tag for commit 6fd8b8503a0d as it is
-  incorrect.
----
- drivers/spi/spi-imx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 30d82cc7300b..468ce0a2b282 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct spi_imx_data *spi_imx,
- 	unsigned int pre, post;
- 	unsigned int fin = spi_imx->spi_clk;
- 
--	if (unlikely(fspi > fin))
--		return 0;
-+	fspi = min(fspi, fin);
- 
- 	post = fls(fin) - fls(fspi);
- 	if (fin > fspi << post)
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
