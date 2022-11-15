@@ -2,167 +2,170 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C4A629926
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 13:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7754629966
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 13:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiKOMrL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Nov 2022 07:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S231178AbiKOM4J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Nov 2022 07:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiKOMrK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 07:47:10 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55ED27DC4;
-        Tue, 15 Nov 2022 04:47:05 -0800 (PST)
-X-UUID: 769bc245b5924426bf4b1b63377e16b4-20221115
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=M5TRJ92JPSujVV77tXKFEvHsZ6iHftmWR79uxeFROKU=;
-        b=tS4Ny40JlbmEW8uvBh/y4Y9Om/qp2ScQBGESjgKaKFephpBbuuOjeaSbHJdj+IOqfNY7O2xoIly5xzuZamcIyE9n1hF1SZDUKIxXXenF8VyXgi+Y4zGfRnx3c/ihN5CTE+mSH9Wro5bJVYtztvbB8yVBP+xoL1myXuHickckbeU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:96f47c15-5c34-418d-93ff-7e6a7a9a096a,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:d12e911,CLOUDID:8e7fbfac-70f0-4e5b-83e6-c0b7915231c3,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 769bc245b5924426bf4b1b63377e16b4-20221115
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <bayi.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1703265728; Tue, 15 Nov 2022 20:46:59 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 15 Nov 2022 20:46:58 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 15 Nov 2022 20:46:57 +0800
-From:   Bayi Cheng <bayi.cheng@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        bayi cheng <bayi.cheng@mediatek.com>
-Subject: [PATCH v1] spi: spi-mtk-nor: Unify write buffer on/off
-Date:   Tue, 15 Nov 2022 20:46:55 +0800
-Message-ID: <20221115124655.10124-1-bayi.cheng@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S237917AbiKOM4H (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 07:56:07 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6798B34
+        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 04:56:06 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ouvTq-0005hp-LD; Tue, 15 Nov 2022 13:55:58 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6ac2:39cd:4970:9b29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9622711F37C;
+        Tue, 15 Nov 2022 12:55:57 +0000 (UTC)
+Date:   Tue, 15 Nov 2022 13:55:49 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Mark Brown <broonie@kernel.org>, David Jander <david@protonic.nl>,
+        Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCH] spi: spi-imx: Revert "spi: spi-imx: add PIO polling
+ support"
+Message-ID: <20221115125549.iih75abpy7cppiss@pengutronix.de>
+References: <20221111003032.82371-1-festevam@gmail.com>
+ <20221111105028.7d605632@erd992>
+ <CAOMZO5CH9S_RYpLNZbRxChzSVkkZTAd+qpxz1Ycj2UUPROTXpw@mail.gmail.com>
+ <20221111135919.63daed2d@erd992>
+ <1c70bfd1-38f6-3a30-9e36-a0f780f82571@kontron.de>
+ <Y3ImhoSzY1PYMp+9@sirena.org.uk>
+ <46dc7280-545d-6b8c-ff7f-4bad13486292@kontron.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eta6aaptgmkvwvcm"
+Content-Disposition: inline
+In-Reply-To: <46dc7280-545d-6b8c-ff7f-4bad13486292@kontron.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: bayi cheng <bayi.cheng@mediatek.com>
 
-The logical structures of mtk_nor_write_buffer_enable and
-mtk_nor_write_buffer_disable are very similar, So it is necessary to
-combine them into one.
+--eta6aaptgmkvwvcm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
----
-Change in v1:
-  -Delete mtk_nor_write_buffer_enable.
-  -Delete mtk_nor_write_buffer_disable.
-  -Add mtk_nor_setup_write_buffer.
----
----
- drivers/spi/spi-mtk-nor.c | 40 ++++++++++++++++-----------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+On 15.11.2022 11:51:53, Frieder Schrempf wrote:
+> On 14.11.22 12:29, Mark Brown wrote:
+> > On Mon, Nov 14, 2022 at 09:30:26AM +0100, Frieder Schrempf wrote:
+> >=20
+> >> As far as I know Fabio also discovered that disabling SDMA also fixes
+> >> the problem.
+> >=20
+> >> I guess I will try to repeat some tests on latest master and see if
+> >> there is anything that makes things work again without reducing the
+> >> clock. If anyone has some more ideas of how to fix this properly, plea=
+se
+> >> let me know. If nothing else helps we could also reduce the SPI clock.
+> >=20
+> > It sounds like the commit can stay and that everyone is happy
+> > that the issue is that the the commit made things run faster and
+> > exposed some other misconfiguration for these systems?
+>=20
+> Honestly I'm not really sure how to proceed.
+>=20
+> My first impression was to keep the PIO polling support with its
+> benefits if there's just this single issue with the SPI NOR on our board
+> and assuming that the performance improvements uncovered a bug somewhere
+> else. But at the moment I'm not quite sure this is really the case.
+>=20
+> I did another test on v6.1-rc5 and disabling either PIO polling
+> (spi-imx.polling_limit_us=3D0) or DMA (spi-imx.use_dma=3D0), or both of t=
+hem
+> makes reading the SPI NOR work again.
 
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index d167699a1a96..e8b355f5be56 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -443,36 +443,28 @@ static int mtk_nor_read_pio(struct mtk_nor *sp, const struct spi_mem_op *op)
- 	return ret;
- }
- 
--static int mtk_nor_write_buffer_enable(struct mtk_nor *sp)
-+static int mtk_nor_setup_write_buffer(struct mtk_nor *sp, bool on)
- {
- 	int ret;
- 	u32 val;
- 
--	if (sp->wbuf_en)
-+	if (!(sp->wbuf_en ^ on))
- 		return 0;
- 
- 	val = readl(sp->base + MTK_NOR_REG_CFG2);
--	writel(val | MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
--	ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
--				 val & MTK_NOR_WR_BUF_EN, 0, 10000);
--	if (!ret)
--		sp->wbuf_en = true;
--	return ret;
--}
--
--static int mtk_nor_write_buffer_disable(struct mtk_nor *sp)
--{
--	int ret;
--	u32 val;
-+	if (on) {
-+		writel(val | MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
-+		ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
-+					 val & MTK_NOR_WR_BUF_EN, 0, 10000);
-+	} else {
-+		writel(val & ~MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
-+		ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
-+					 !(val & MTK_NOR_WR_BUF_EN), 0, 10000);
-+	}
- 
--	if (!sp->wbuf_en)
--		return 0;
--	val = readl(sp->base + MTK_NOR_REG_CFG2);
--	writel(val & ~MTK_NOR_WR_BUF_EN, sp->base + MTK_NOR_REG_CFG2);
--	ret = readl_poll_timeout(sp->base + MTK_NOR_REG_CFG2, val,
--				 !(val & MTK_NOR_WR_BUF_EN), 0, 10000);
- 	if (!ret)
--		sp->wbuf_en = false;
-+		sp->wbuf_en = on;
+That was a good hint, I think I've found something.
+
+Can you check if this fixes your problem? Just a quick hack to, a proper
+solution needs some more love.
+
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 30d82cc7300b..76021b9bb445 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1270,9 +1270,22 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+                spi_imx->dynamic_burst =3D 0;
+        }
+=20
+-       if (spi_imx_can_dma(spi_imx->controller, spi, t))
+-               spi_imx->usedma =3D true;
+-       else
++       if (spi_imx_can_dma(spi_imx->controller, spi, t)) {
++               unsigned long hz_per_byte, byte_limit;
 +
- 	return ret;
- }
- 
-@@ -482,7 +474,7 @@ static int mtk_nor_pp_buffered(struct mtk_nor *sp, const struct spi_mem_op *op)
- 	u32 val;
- 	int ret, i;
- 
--	ret = mtk_nor_write_buffer_enable(sp);
-+	ret = mtk_nor_setup_write_buffer(sp, true);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -501,7 +493,7 @@ static int mtk_nor_pp_unbuffered(struct mtk_nor *sp,
- 	const u8 *buf = op->data.buf.out;
- 	int ret;
- 
--	ret = mtk_nor_write_buffer_disable(sp);
-+	ret = mtk_nor_setup_write_buffer(sp, false);
- 	if (ret < 0)
- 		return ret;
- 	writeb(buf[0], sp->base + MTK_NOR_REG_WDATA);
-@@ -608,7 +600,7 @@ static int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	}
- 
- 	if ((op->data.dir == SPI_MEM_DATA_IN) && mtk_nor_match_read(op)) {
--		ret = mtk_nor_write_buffer_disable(sp);
-+		ret = mtk_nor_setup_write_buffer(sp, false);
- 		if (ret < 0)
- 			return ret;
- 		mtk_nor_setup_bus(sp, op);
--- 
-2.25.1
++               /*
++                * Calculate the estimated time in us the transfer runs. Fi=
+nd
++                * the number of Hz per byte per polling limit.
++                */
++               hz_per_byte =3D polling_limit_us ? ((8 + 4) * USEC_PER_SEC)=
+ / polling_limit_us : 0;
++               byte_limit =3D hz_per_byte ? t->effective_speed_hz / hz_per=
+_byte : 1;
++
++               /* run in polling mode for short transfers */
++               if (t->len < byte_limit)
++                       spi_imx->usedma =3D false;
++               else
++                       spi_imx->usedma =3D true;
++       } else
+                spi_imx->usedma =3D false;
+=20
+        spi_imx->rx_only =3D ((t->tx_buf =3D=3D NULL)
+@@ -1597,8 +1610,8 @@ static int spi_imx_transfer_one(struct spi_controller=
+ *controller,
+        struct spi_imx_data *spi_imx =3D spi_controller_get_devdata(spi->co=
+ntroller);
+        unsigned long hz_per_byte, byte_limit;
+=20
+-       spi_imx_setupxfer(spi, transfer);
+        transfer->effective_speed_hz =3D spi_imx->spi_bus_clk;
++       spi_imx_setupxfer(spi, transfer);
+=20
+        /* flush rxfifo before transfer */
+        while (spi_imx->devtype_data->rx_available(spi_imx))
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--eta6aaptgmkvwvcm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNzjFIACgkQrX5LkNig
+0133xgf/YzhLoK1IP2MxbvNSd94OIoFOI9AUWcGSV4ZNEZqgLNWs4SiP1TD30uCV
+b6clj3i9Z2MKphxwj+e6GP/ozgiUVjiCGV99bAhY67pUXNy3ccjdOIuNTngy+0Nl
+qcBl03eZNrQ/uHoMZvgIiv2N1Q0jpkS+xUhWgro22Z79kZaMbhO2fuJCgwerxdb9
+aorRF2ZHTM50FLrN1bmX6G0RfpIO7jck6UbuOEW7nl1hkej2gSoWpEIVNFCysmGt
+tpjTYFPgdnvc+OHyvrajH4l9W/AuxM4O0JPL3KAQGU6bvtDQ+k+bBr0EDgPlXBT2
+EpK2Pu2LCSw5w6d/Ia0+A8/znKbAOQ==
+=nSqw
+-----END PGP SIGNATURE-----
+
+--eta6aaptgmkvwvcm--
