@@ -2,62 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A342629C10
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 15:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD2E629C25
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 15:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiKOO0S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Nov 2022 09:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S232040AbiKOOcJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Nov 2022 09:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiKOO0R (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 09:26:17 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FAD2C642
-        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 06:26:15 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id d6so24640690lfs.10
-        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 06:26:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRh5aMVcKhERES1ONTqHwjcTV3lsnsm7B9arRoDIzwg=;
-        b=DjbAMkTvi7XSmsMtHXkX+GA+YmTTsy0zB9gSrA+0UZqcwdniK+dARLL5vbJnMqz65N
-         MXnbWwvaGFevhUCJAJvG/ItgyqUqz9FOd/qIuJuVSA/gw1QrrKW2wno4bB/4A5PKf8yC
-         o3PJhxSKSlHZYc2eN9gvnSPXNKICm9MeLKVoJkQJOx/kSGnGlV+mGPxaHAtQotNtxeDm
-         NZArgDB3LLgkZkyj2YUK5j+MjUEaouSJfw4MBCd8ZIAlgLaqZmdzlvU49jI3HREJNXmK
-         Y0ex2Hwrr84xHYiIpE5oRs3lcaq8jKwCTe3VBi8KvvYdXsPq/jlA8JU6yRFcDkTLm12i
-         /hxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRh5aMVcKhERES1ONTqHwjcTV3lsnsm7B9arRoDIzwg=;
-        b=S/Jsohq5PV1UPf17MzEEIQGIVNoWqGrRcscCFSvbXL9FpYUNcMthMLXJ/KWuAoblf2
-         T6/jIEmRxAjFfPZwqg3vaJg1fTvqHr70sAHVUfPsShwHCdCgQGXf5GoJ1wVD2E6aQi8+
-         c+1RwIimv2a3J2E1NFn73P+3dTmv/Es9IG+NdR3NnIX6MIEalFmungG67tatvsdCBRZ2
-         Uvo9KXEZ8MbA5+YQsx+YNtz58mbMg2rEMaV9h8rePNVBxaGMW8eCPCaHqGWizGlEdep5
-         a217lXORhXkqhlyvBUBONaBb2PwaS1I3eC2ZAIWseRKuS+Cvqbf+iKKNbTp//zw0xjip
-         WoIw==
-X-Gm-Message-State: ANoB5pmncgnOXFUIzeTReYEetTdKA8wmpt6t2JQwJxW+wv1LU+KswQ5B
-        wV/HGqXSWXsbvbra3AThlWqXpQ==
-X-Google-Smtp-Source: AA0mqf6xyTSdvIGlDY8pOSsCVEj97KZz0oQHmB+lhcNQ27kEuxY3WCJuO8UtXG9mqsufvthMcLH3sw==
-X-Received: by 2002:a19:5515:0:b0:4b1:82c6:295b with SMTP id n21-20020a195515000000b004b182c6295bmr5328743lfe.67.1668522373845;
-        Tue, 15 Nov 2022 06:26:13 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a21-20020ac25e75000000b00494603953b6sm2228200lfr.6.2022.11.15.06.26.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 06:26:13 -0800 (PST)
-Message-ID: <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
-Date:   Tue, 15 Nov 2022 15:26:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        with ESMTP id S232301AbiKOOb5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 09:31:57 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150059.outbound.protection.outlook.com [40.107.15.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE383BF;
+        Tue, 15 Nov 2022 06:31:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WssYNMIQOH9Ksykuz+QDcZ8vFIu33RDGg+FHrGlNbgscAW9UDarkOIegr8OW+iz2v5xjbtyaxWiCoqDVHXLrmoIUOH9zmy75uwELWDxWgzlUGcB8y1DfKex7Ck0Pk+6cHi2ErUaYje36BOqHrCXYT2mT3PgxnYcj5S4IRSTWT0Djxu0zFj6KSWtWsPja1Daeq5n0H2fO5S2jaqYrvMmPu4u4cqSSTCAfqx6IuhJ7elbUFS2pAabDmWVFdd+4qdIt9gTA0StCQ+vEn+PeRc8vhHkYMik3nSlH3TZysLOF28nxykXV+UEy1Bh7Dr+UeAMPsIJCaW5Ym+joUYeCeJpPIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EOTOPxblDjyBpy+N9Sn27yZWzEjj+h43fOS19mW8X6I=;
+ b=MyXZ8C3qJ92X/JT41v3wC0I+RGomAx+nwGTQSBOEheW8Gg9HXLrLFUNFRNYPfUfTPx6tiP2G3XKOxRule9zoSi4a5EbxV24Hjsiofewb0TYHr9dYbcokisxpocTYrwxUrbeE6p6L6TkrymJBuQE7T4hok6bEGOAf2JTldvWEX8uo/rAMamHxg09C/RNuP6b8FZb3d0pPExkO1LJ7YaWCcbU4138pY7FeJQGeU7X+cWwUZ6RmeynYEFlRmMyOzTzQPSDrcmp4fpMxsnekXv6dITszioxPQi/LL4nStmJIQX/7QIiQ9gqLBLKn2wjXedQWceIHUJ4rsPWmV1mrGydhmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EOTOPxblDjyBpy+N9Sn27yZWzEjj+h43fOS19mW8X6I=;
+ b=qgfJcxukoBj4ip2XdyQv4Uira9xHFqL0XhlAuGlGE3SWggno8vhCL90iRXRO8DKUl6VTVk7TYwmu2x0Uj2NNqUPyUmLsSQf0BJU+WP4BOkk/mAA7iuyTVtulQJfyPoiKJsTDsiIIwmmURbqPABiz1oF3kaWm5Ki2Xb5GqBjtwVc=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AS8PR04MB8166.eurprd04.prod.outlook.com (2603:10a6:20b:3fa::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Tue, 15 Nov
+ 2022 14:31:53 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 14:31:53 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -67,102 +49,98 @@ Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         Michael Walle <michael@walle.cc>,
         Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
+Thread-Topic: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
+Thread-Index: AQHY9h+FTOIdILG+UESwpW9mF9x8Sq5ABQqAgAADlwCAAAKigIAAAusAgAAB/YCAAAGXAA==
+Date:   Tue, 15 Nov 2022 14:31:53 +0000
+Message-ID: <20221115143152.xjfr7v333rhjhd3m@skbuf>
 References: <20221111224651.577729-1-vladimir.oltean@nxp.com>
  <417bfdea-ed41-6468-ec16-f54480cfe2f6@linaro.org>
  <20221115135912.ksjk7zxqsyazqhtf@skbuf>
  <c9b82051-a9f5-883f-5455-1cb06aa6521b@linaro.org>
  <20221115141904.26lyetiforkgoqaf@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115141904.26lyetiforkgoqaf@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
+In-Reply-To: <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AS8PR04MB8166:EE_
+x-ms-office365-filtering-correlation-id: a001c2bd-9ac2-485a-7e7b-08dac7162411
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a/TvNu1DoPqhmtlr2UCPuLDSdyhHYn+fwDCgB5gcjwaereeB34ZmZ+euaYVCz2LfycsrrfoaPppCKYHG5va8TEEBrH7KGSrDzMX/MMkt97QUcPWOvrqoFUNTZFmqf3DLgfLU7vMzlBNBRZKSxBBHqh3zIYQKIkOPYPRqBXJbLD1AiLa6DyxzN0nDjWCSDYhzy7n1uJEGWgF+FgmPiRqqoETaWtGVGdAr7gkadOuQS8T8eiq6guZGZ4sAEf92nLZCEbJTY3FIkTa393Nrvl73gQvjgila2FrdwGFEFFDOlF/HzQEWlNNhZ4VRy1Uo745QUydDr9qY9DF56TW0mveBGgBYH7syflCeU7VeCdmOUQWf9X2yad9+pFZR/axoCsaL2W2aivNTzeSHVTEoIx92mb44uWZXXGFf7tZXUeMKQJG8w6TfHl+AGHJJmsYxlZN14j7yewOEyre+7/WDrogybuaAehhquKIwnfR4w9imD+RV5YJcG/qiAGXiWsAdfkazHWXfiFVfVKzeSxNZh7w4fc1MnedDtP8q42CwLkqKSoYxpQpIFpBnE+319RGvspuHp4dJliZN0EZOzke4/ruYdxayvUWf3utM8ORyfkVAHvVedfK9OPAGoquE+XIwC5rJ0owEDoMR0JXzzFhFrZo/jXQQBSCJdncLOahDNXoNgxZmfBWwug5Bw1APJvsrCt+PtKplTTJ9j7YKY/z4m5YTGx0yZpXQeT1bTBhVAtYjRa1mio495hZWkIdit0E868nO1otURzxlUgM8Ir9l32r2hQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(451199015)(478600001)(71200400001)(38070700005)(83380400001)(7416002)(5660300002)(8936002)(122000001)(6486002)(86362001)(38100700002)(9686003)(186003)(6512007)(26005)(1076003)(6506007)(6916009)(54906003)(316002)(41300700001)(44832011)(4744005)(66446008)(4326008)(2906002)(76116006)(66946007)(8676002)(66556008)(64756008)(66476007)(33716001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u5tgP/VFh0owSgiYo/8WHbTNKL0YOqUVD7feNJO3ZImJYFCmRkPo34NN17mJ?=
+ =?us-ascii?Q?+Pw1bCjpHgzqZsp3wXk/TC/uWpj3zQrn9UMt4KuJiPJ4liiZhPIPRw4fFy2X?=
+ =?us-ascii?Q?vDVWCQKGGGXgs48RH0yCVFLUUhLnOWzj98yQMZLeEE7YxFWnzpH3aAl1/99G?=
+ =?us-ascii?Q?iKH3h5YRXGfMZIcgfT6DBLzGEARcatLKFZEoiwNbA5lwgZitFPC3F0RsTn6a?=
+ =?us-ascii?Q?QDEFOsB/W92WBomhUjEDpogA5v3cdPYmYOUrn4xW6svK6a1n4aCYlo0DL3ix?=
+ =?us-ascii?Q?cx7juiVYhSRp7XQZ9L2XrAp+Bx0q+VXigrpwHaOJLXn+Ig2ApY+EV4R0CCkR?=
+ =?us-ascii?Q?WAZZBSb6pKQe/0Un62SpnweCuGgk6ZMJYmpFqAjTeb55ub+l13Cp2UT/sgDQ?=
+ =?us-ascii?Q?hoI3nxfMXT4Mj2m27O79WVcmogwT7Fff2dO2ySi0t4BgkhEtJQYf8nZfCmiD?=
+ =?us-ascii?Q?TzwCfVOLI6GPRLcJort8gB5FRMHCcpFX93hbNiiIlM5h3s0eEnaRPQ2nmKz7?=
+ =?us-ascii?Q?fIWAmc0zB2Cdb0//KhETk9mXgnrRg/BMqev5CUMQTAXnmcP51BK1WXOLq6kc?=
+ =?us-ascii?Q?8dktiNMlp9QEdST7KRGbblvGaUt5WeDD0ZVdQ44GQunc/HHQsU97Ahwd2RcI?=
+ =?us-ascii?Q?h9noKUgQgafX6eix7oEHlTpqtLKlLGMqlBlGehI0hPgP3iKeIS/2H6tGDeTh?=
+ =?us-ascii?Q?Hq3S3+YhRUb0hn5cKDuG4Li0zCakbE2WosDDbAkCJ2nH8JhJw56C2JFiY8Yc?=
+ =?us-ascii?Q?mFSpUZ2oEbSSYSEs/70CyhS87QzCwCa/L1NhtmPs1fG4+auZGEyxch6+w6YP?=
+ =?us-ascii?Q?Lrea4aDHd0woDUPYgXtj/j3eEl1zBTPuadp697OHqGPeKIU37bdrVsP3ApiA?=
+ =?us-ascii?Q?zH/+aJu2qZh4ojj+YNraCP5ir08wjTfzJAA2k8POCFZ0cnbS/NKFjfmNZuyx?=
+ =?us-ascii?Q?n9UE/Kn9ofV0gUytUq18abliUQ+wYclBEoIA/GbDPmIplHwCAzbaZRbmJ4Fh?=
+ =?us-ascii?Q?9TN0WS3u0Po05mYEdQFDIXz27USvFfmC63WxpbLpWPGz2P6uj9LhvMKtgCMh?=
+ =?us-ascii?Q?HLVcGj5uCOjTcBek7CcdFTpfagCpCrrkun48W1fHeby/2RyEUgjSY+GUrkrz?=
+ =?us-ascii?Q?8Z7fKH+/FXK4KKkwrafzessHaA2Lx4TlJPPzVauFV91QaAmZLYBFJPaFQF0f?=
+ =?us-ascii?Q?t8kr6M3GBmD0u9lKY2GA/sQ1wf1rEgmrc5eVw+aH9m93PKijuR1TvBEjgNGe?=
+ =?us-ascii?Q?40L6Ch4rmIMfQlOOUQTIqPN0qRC08oz4idedonDCntpLZprEmPCFDJwJGtnF?=
+ =?us-ascii?Q?YcDC7cRrzGWwh8NzIXa19PfYtn3oQBbGKQYp4oNDgJasmPEmIta8l4E7Jyro?=
+ =?us-ascii?Q?42rjK9MepcyvGyUCEIXgfYd5w6+/UrmY9fLXVDARBaNUvghpLGxrSFSjjgo2?=
+ =?us-ascii?Q?FBQoCJBQQcZrk/O0dYZrZ7UAGxhSy0YrZ/3vZHGQ9m4TYpSv6SQv0hg8RGUj?=
+ =?us-ascii?Q?mQ7cZq3dwIn75QBVdau/8kAA5EKZKQDj8VYx2tqMDqzmUIoL/VHqoLvqNuGI?=
+ =?us-ascii?Q?nR0UecYE1UkvrDS+IvmN3omrAR10cFy1isaWUzN+DFBDuq4UN/YNZSudm9xM?=
+ =?us-ascii?Q?JQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9B71382C151025428C892EF356CE1069@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a001c2bd-9ac2-485a-7e7b-08dac7162411
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 14:31:53.4055
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CwveGqQWQ7qFrUKvVPDGVr0vpgTyRRpppp6ClVd+2kBjPwgKfmckMjfXriCvvg71tSFiz2/2sbvY92A35c3wlQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8166
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/11/2022 15:19, Vladimir Oltean wrote:
-> On Tue, Nov 15, 2022 at 03:08:37PM +0100, Krzysztof Kozlowski wrote:
->> On 15/11/2022 14:59, Vladimir Oltean wrote:
->>> On Tue, Nov 15, 2022 at 02:46:21PM +0100, Krzysztof Kozlowski wrote:
->>>>> +$id: http://devicetree.org/schemas/spi/fsl,spi-fsl-dspi.yaml
->>>>
->>>> Why second "fsl" in file name? It does not patch compatibles and
->>>> duplicates the vendor. We do not have compatibles "nxp,imx6-nxp".
->>>
->>> Ok, which file name would be good then? There are 9 different (all SoC
->>> specific) compatible strings, surely the convention of naming the file
->>> after a compatible string has some limitations...
->>
->> If all DSPI blocks fit here, then maybe: fsl,dspi.yaml
->>
->> fsl,spi-dspi.yaml is also a bit redundant.
-> 
-> Ok, fsl,dspi.yaml and fsl,dspi-peripheral-props.yaml, and MAINTAINERS
-> entry for fsl,dspi*.yaml?
+On Tue, Nov 15, 2022 at 03:26:11PM +0100, Krzysztof Kozlowski wrote:
+> To be clear: ls1012a, ls1028a and lx2160a should be either followed by
+> compatible or not. Cannot be both.
 
-Yes.
+LS1012A should be followed by fallback compatible for practical reasons
+(Linux kernel worked that way up to 5.7, time during which LS1012A was
+supported).
 
-> 
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    description:
->>>>> +      Some integrations can have a single compatible string containing their
->>>>> +      SoC name (LS1012A, LS1021A, ...). Others require their SoC compatible
->>>>> +      string, plus a fallback compatible string (either on LS1021A or on
->>>>> +      LS2085A).
->>>>
->>>> Why? The fsl,ls1012a-dspi device is either compatible with
->>>> fsl,ls1021a-v1.0-dspi or not. It cannot be both - compatible and not
->>>> compatible.
->>>
->>> LS1012A is compatible with LS1021A to the extent that it works when
->>> treated like a LS1021A. LS1012A has a FIFO size of 8 SPI words, LS1021A
->>> of just 4. Treating it like LS1021A means roughly half the performance,
->>> but it still works.
->>>
->>> I didn't invent any of this. When I took over the driver, there were
->>> device trees like this all over the place:
->>>
->>> 		dspi: spi@2100000 {
->>> 			compatible = "fsl,ls1012a-dspi", "fsl,ls1021a-v1.0-dspi";
->>
->> Which looks ok...
->>
->>> 			#address-cells = <1>;
->>> 			#size-cells = <0>;
->>> 			reg = <0x0 0x2100000 0x0 0x10000>;
->>> 			interrupts = <0 64 IRQ_TYPE_LEVEL_HIGH>;
->>> 			clock-names = "dspi";
->>> 			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
->>> 					    QORIQ_CLK_PLL_DIV(1)>;
->>> 			spi-num-chipselects = <5>;
->>> 			big-endian;
->>> 			status = "disabled";
->>> 		};
->>>
->>> but the Linux driver pre-~5.7 always relied on the fallback compatible
->>> string (LS1021A in this case). I'm working with what's out in the field,
->>> haven't changed a thing there.
->>
->> The driver matters less (except ABI), but anyway it confirms the case -
->> fallback is expected always.  Why the fallback should be removed if the
->> devices are compatible (including halved performance)?
-> 
-> I don't think I said the fallback should be removed? I think you're
-> talking about a typo/braino I made, which puts the LS1012A both in the
-> bucket of SoCs with a single compatible strings required, as well as in
-> that with fallback required. Obviously both can't be true... I didn't
-> mean LS1012A but VF610.
-
-To be clear: ls1012a, ls1028a and lx2160a should be either followed by
-compatible or not. Cannot be both.
-
-Best regards,
-Krzysztof
-
+LS1028A and LX2160A device trees were both introduced after the Linux
+kernel started looking at specific device trees, so I believe that Linux
+never relied on the fallback compatible string and it could be removed.
+The fallback is present in device trees in circulation, even if the .txt
+schema says it isn't required. I don't know what the BSDs do about this,
+so I'd be tempted to leave them in the camp with required fallbacks,
+just because it's not worth risking a regression.=
