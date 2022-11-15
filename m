@@ -2,111 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC38629F00
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 17:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC2C629F9C
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 17:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbiKOQ1O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Nov 2022 11:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S231964AbiKOQwf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Nov 2022 11:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbiKOQ1G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 11:27:06 -0500
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A292496D;
-        Tue, 15 Nov 2022 08:27:05 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BF9FBBFB36;
-        Tue, 15 Nov 2022 17:26:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1668529622; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=5tgKf+p7vookHNtY0coTIkhFiTMT/dbT9kfNLD5BJEk=;
-        b=PuDasNOCxilEj2ZLt3Ng3PC9aw+m7AzQ5cN0UluxpTopBj4tpJTrnYEtTnC18ZtKpG3dpz
-        LCKfShB4UHon957EwvINZUg4loKUD4fakqlFhGLIldq0yqwfkjXIUQqG96H4SQGz9VEbxJ
-        Yi+TObf5Pr937nCfotNQXd3wjiIr1+PZ0f38G/9rDspqwhTbKaCb/5zlnZ/dFA8TPmFilH
-        ZyI/17zlxT2M2xE2ADHgQfYobclQt9qbF0CQDEeyowEo4I8VHp4rSzM3YEHUUyuJCFhAkA
-        Abg649ddL6Y3JRkoGlbYxqRl6tW7cu/QRl6VEWOb6V8Xbzz642tPBpofZqxTwQ==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Marek Vasut <marex@denx.de>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v2] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
-Date:   Tue, 15 Nov 2022 17:26:53 +0100
-Message-Id: <20221115162654.2016820-1-frieder@fris.de>
+        with ESMTP id S229663AbiKOQwe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 11:52:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5537360C1
+        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 08:52:33 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ouzAe-0007fe-7S; Tue, 15 Nov 2022 17:52:24 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6ac2:39cd:4970:9b29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5A64811F6D1;
+        Tue, 15 Nov 2022 16:52:23 +0000 (UTC)
+Date:   Tue, 15 Nov 2022 17:52:14 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Mark Brown <broonie@kernel.org>, David Jander <david@protonic.nl>,
+        Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCH] spi: spi-imx: Revert "spi: spi-imx: add PIO polling
+ support"
+Message-ID: <20221115165214.p35rfdczz7pmjepe@pengutronix.de>
+References: <20221111003032.82371-1-festevam@gmail.com>
+ <20221111105028.7d605632@erd992>
+ <CAOMZO5CH9S_RYpLNZbRxChzSVkkZTAd+qpxz1Ycj2UUPROTXpw@mail.gmail.com>
+ <20221111135919.63daed2d@erd992>
+ <1c70bfd1-38f6-3a30-9e36-a0f780f82571@kontron.de>
+ <Y3ImhoSzY1PYMp+9@sirena.org.uk>
+ <46dc7280-545d-6b8c-ff7f-4bad13486292@kontron.de>
+ <20221115125549.iih75abpy7cppiss@pengutronix.de>
+ <ff8c3ba5-fef6-cb9f-cccb-95e300892eba@kontron.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tsdcbadvdwhtg7vl"
+Content-Disposition: inline
+In-Reply-To: <ff8c3ba5-fef6-cb9f-cccb-95e300892eba@kontron.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-In case the requested bus clock is higher than the input clock, the correct
-dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
-*fres is left uninitialized and therefore contains an arbitrary value.
+--tsdcbadvdwhtg7vl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This causes trouble for the recently introduced PIO polling feature as the
-value in spi_imx->spi_bus_clk is used there to calculate for which
-transfers to enable PIO polling.
+On 15.11.2022 15:46:28, Frieder Schrempf wrote:
+> > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> > index 30d82cc7300b..76021b9bb445 100644
+> > --- a/drivers/spi/spi-imx.c
+> > +++ b/drivers/spi/spi-imx.c
+> > @@ -1270,9 +1270,22 @@ static int spi_imx_setupxfer(struct spi_device *=
+spi,
+> >                 spi_imx->dynamic_burst =3D 0;
+> >         }
+> > =20
+> > -       if (spi_imx_can_dma(spi_imx->controller, spi, t))
+> > -               spi_imx->usedma =3D true;
+> > -       else
+> > +       if (spi_imx_can_dma(spi_imx->controller, spi, t)) {
+> > +               unsigned long hz_per_byte, byte_limit;
+> > +
+> > +               /*
+> > +                * Calculate the estimated time in us the transfer runs=
+=2E Find
+> > +                * the number of Hz per byte per polling limit.
+> > +                */
+> > +               hz_per_byte =3D polling_limit_us ? ((8 + 4) * USEC_PER_=
+SEC) / polling_limit_us : 0;
+> > +               byte_limit =3D hz_per_byte ? t->effective_speed_hz / hz=
+_per_byte : 1;
+> > +
+> > +               /* run in polling mode for short transfers */
+> > +               if (t->len < byte_limit)
+> > +                       spi_imx->usedma =3D false;
+> > +               else
+> > +                       spi_imx->usedma =3D true;
+> > +       } else
+> >                 spi_imx->usedma =3D false;
+> > =20
+> >         spi_imx->rx_only =3D ((t->tx_buf =3D=3D NULL)
+> > @@ -1597,8 +1610,8 @@ static int spi_imx_transfer_one(struct spi_contro=
+ller *controller,
+> >         struct spi_imx_data *spi_imx =3D spi_controller_get_devdata(spi=
+->controller);
+> >         unsigned long hz_per_byte, byte_limit;
+> > =20
+> > -       spi_imx_setupxfer(spi, transfer);
+> >         transfer->effective_speed_hz =3D spi_imx->spi_bus_clk;
+> > +       spi_imx_setupxfer(spi, transfer);
+> > =20
+> >         /* flush rxfifo before transfer */
+> >         while (spi_imx->devtype_data->rx_available(spi_imx))
+> >=20
+>=20
+> Thanks for the patch, but unfortunately this doesn't help. I did some
+> more debugging and it looks like there are two problems.
 
-Fix this by setting *fres even if no clock dividers are in use.
-
-This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
-to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
-flash.
-
-With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
-following:
-
-spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-post: 0, pre: 0
-
-Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: David Jander <david@protonic.nl>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
-
-Changes for v2:
-
-* Remove the reference and the Fixes tag for commit 6fd8b8503a0d as it is
-  incorrect.
----
- drivers/spi/spi-imx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Can you try this one?
 
 diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 30d82cc7300b..468ce0a2b282 100644
+index 30d82cc7300b..d45da1d0ac1d 100644
 --- a/drivers/spi/spi-imx.c
 +++ b/drivers/spi/spi-imx.c
-@@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct spi_imx_data *spi_imx,
- 	unsigned int pre, post;
- 	unsigned int fin = spi_imx->spi_clk;
- 
--	if (unlikely(fspi > fin))
--		return 0;
-+	fspi = min(fspi, fin);
- 
- 	post = fls(fin) - fls(fspi);
- 	if (fin > fspi << post)
--- 
-2.38.1
+@@ -1607,6 +1607,13 @@ static int spi_imx_transfer_one(struct spi_controlle=
+r *controller,
+        if (spi_imx->slave_mode)
+                return spi_imx_pio_transfer_slave(spi, transfer);
+=20
++       /*
++        * If we decided in spi_imx_can_dma() that we want to do a DMA
++        * transfer, the message has already been mapped, so we have
++        * to do the DMA transfer now.
++        */
++       if (spi_imx->usedma)
++               return spi_imx_dma_transfer(spi_imx, transfer);
+        /*
+         * Calculate the estimated time in us the transfer runs. Find
+         * the number of Hz per byte per polling limit.
+@@ -1618,9 +1625,6 @@ static int spi_imx_transfer_one(struct spi_controller=
+ *controller,
+        if (transfer->len < byte_limit)
+                return spi_imx_poll_transfer(spi, transfer);
+=20
+-       if (spi_imx->usedma)
+-               return spi_imx_dma_transfer(spi_imx, transfer);
+-
+        return spi_imx_pio_transfer(spi, transfer);
+ }
 
+The problem is: we decide on DMA in spi_imx_can_dma() the SPI frameworks
+maps the message, and then calls spi_imx_transfer_one(). We cannot
+operate with the CPU in the memory mapped to the DMA engine.
+
+This should fix the problem without any additional patches.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--tsdcbadvdwhtg7vl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNzw7sACgkQrX5LkNig
+0137SQgAnlQ4dKceeD4SFI2qbZ9nMY8VP6RTdhm9vd/KmIwf1NSOs6zu0Erg6PFA
+0xqDwylPBA8ZDvHvW/RVDcm/R4kR4u5M+ioVRvh8uaAju27M0yycfo9eqD5NZIwD
+11P1SoOKtWGUjjtlSAP7Yasoz2h0B55EPiQDJkQQKFjQvYQMQieULUeABs2u4s6y
++u9unOLEq7pIgsfp8ffTaJVh9skmxuIbV1HTNkklBDWXBo3Tp3cNlQmenzUi8/Jn
+QZkoJKzBEWtyT+SNrJt8SEOXhC3ReaIzo22KDKvVoxkfTdDR24XJKUIpyv+RpnZX
+EyRLt1gQdUtVBMh47fvKSJgpYjYrHQ==
+=nQBj
+-----END PGP SIGNATURE-----
+
+--tsdcbadvdwhtg7vl--
