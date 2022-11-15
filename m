@@ -2,145 +2,272 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD2E629C25
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 15:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CABF629C83
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Nov 2022 15:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiKOOcJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Nov 2022 09:32:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S230182AbiKOOqg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Nov 2022 09:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiKOOb5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 09:31:57 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150059.outbound.protection.outlook.com [40.107.15.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE383BF;
-        Tue, 15 Nov 2022 06:31:55 -0800 (PST)
+        with ESMTP id S230190AbiKOOqf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Nov 2022 09:46:35 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2102.outbound.protection.outlook.com [40.107.105.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28152D2DA
+        for <linux-spi@vger.kernel.org>; Tue, 15 Nov 2022 06:46:33 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WssYNMIQOH9Ksykuz+QDcZ8vFIu33RDGg+FHrGlNbgscAW9UDarkOIegr8OW+iz2v5xjbtyaxWiCoqDVHXLrmoIUOH9zmy75uwELWDxWgzlUGcB8y1DfKex7Ck0Pk+6cHi2ErUaYje36BOqHrCXYT2mT3PgxnYcj5S4IRSTWT0Djxu0zFj6KSWtWsPja1Daeq5n0H2fO5S2jaqYrvMmPu4u4cqSSTCAfqx6IuhJ7elbUFS2pAabDmWVFdd+4qdIt9gTA0StCQ+vEn+PeRc8vhHkYMik3nSlH3TZysLOF28nxykXV+UEy1Bh7Dr+UeAMPsIJCaW5Ym+joUYeCeJpPIA==
+ b=M7Y1KI6DY9tLKuOltu7rZrIY47tvNs9x7kJeL7Kq1LT6yDvTSrxpfXDWLq3mLQIJVxRjR6AJkl3RIUqtuxKgcot05W3zZhTjUWiPa4gMm0w44nvBC5F/O/SU8i9PB77yZDyM/QIETB4SHo3zWbvxhRxgWlYTU7gM8XOMwEhmj2SwcFDdZ0FtiiB6NkatQwqO1og3OnxI/5wMW/bEMtcNm4vgWlxGB4+1o3g/ZVLQ55fnojGlWekc7EqpbADk1Z8PmhlVc3tV77ygkSexqy4UWbK9eKxaFG4JQCAoM4JuPQ794S9wUcHAShBuq/QwN4dTTtLdUrhQJbKtj7fu7VzEHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EOTOPxblDjyBpy+N9Sn27yZWzEjj+h43fOS19mW8X6I=;
- b=MyXZ8C3qJ92X/JT41v3wC0I+RGomAx+nwGTQSBOEheW8Gg9HXLrLFUNFRNYPfUfTPx6tiP2G3XKOxRule9zoSi4a5EbxV24Hjsiofewb0TYHr9dYbcokisxpocTYrwxUrbeE6p6L6TkrymJBuQE7T4hok6bEGOAf2JTldvWEX8uo/rAMamHxg09C/RNuP6b8FZb3d0pPExkO1LJ7YaWCcbU4138pY7FeJQGeU7X+cWwUZ6RmeynYEFlRmMyOzTzQPSDrcmp4fpMxsnekXv6dITszioxPQi/LL4nStmJIQX/7QIiQ9gqLBLKn2wjXedQWceIHUJ4rsPWmV1mrGydhmg==
+ bh=vE+vuZ/1ddyDLQM8Bw+BAyveYuqxzbos5xx5ZqOlNMM=;
+ b=RaSjEFKE2ucIBk9o5Yw1RBw/fNBqL+3yeU1eId6zDH7Kwo3J35xSezyHRGnxIKJ83xUX/iUK9auoqIT0//ERUAW3JqIGS49nUjkeSOuICXCCCWvuPdqOZRRX0x0fQWuZVsuKiUjLE6uzFsETfsMuNSkogY+NZkWEqL+ZbL16ZupNFJw0MM8iQD8Qsjd+vDxUTOILXcAX18PhgJkvio6foIyK7LF9OlQb+qkT0Ce7gULgq0wpH1e7Y3kxqPSb+fvVlfEhY+Ua03cYz3e/4D/vJAagjsG6GyQ6YW8Z2DZ542ZiDl8FCzIGn+OBO5mXjSUSdOZYpHL3+w47gvlPxp4j/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EOTOPxblDjyBpy+N9Sn27yZWzEjj+h43fOS19mW8X6I=;
- b=qgfJcxukoBj4ip2XdyQv4Uira9xHFqL0XhlAuGlGE3SWggno8vhCL90iRXRO8DKUl6VTVk7TYwmu2x0Uj2NNqUPyUmLsSQf0BJU+WP4BOkk/mAA7iuyTVtulQJfyPoiKJsTDsiIIwmmURbqPABiz1oF3kaWm5Ki2Xb5GqBjtwVc=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AS8PR04MB8166.eurprd04.prod.outlook.com (2603:10a6:20b:3fa::20) with
+ bh=vE+vuZ/1ddyDLQM8Bw+BAyveYuqxzbos5xx5ZqOlNMM=;
+ b=MS6w8hxeP4dxBRMoEl1erk9gbqM8YdHeIl6T/g09XDnYFtW6yv9J/3jIKul7E4tLxLgkol1pXzKw8wE4Dawro/If3uYz1n8YT4VsxLEEtv0u/BtiyN11mw96ERyUKNUMpPvxB2afkzRVZzjreduKWkRGK9dVr5+NgOXG+zxunlU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by DB8PR10MB3322.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:11e::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Tue, 15 Nov
- 2022 14:31:53 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 14:31:53 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>
-Subject: Re: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
-Thread-Topic: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
-Thread-Index: AQHY9h+FTOIdILG+UESwpW9mF9x8Sq5ABQqAgAADlwCAAAKigIAAAusAgAAB/YCAAAGXAA==
-Date:   Tue, 15 Nov 2022 14:31:53 +0000
-Message-ID: <20221115143152.xjfr7v333rhjhd3m@skbuf>
-References: <20221111224651.577729-1-vladimir.oltean@nxp.com>
- <417bfdea-ed41-6468-ec16-f54480cfe2f6@linaro.org>
- <20221115135912.ksjk7zxqsyazqhtf@skbuf>
- <c9b82051-a9f5-883f-5455-1cb06aa6521b@linaro.org>
- <20221115141904.26lyetiforkgoqaf@skbuf>
- <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
-In-Reply-To: <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
+ 2022 14:46:30 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::f209:bc86:3574:2ae6]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::f209:bc86:3574:2ae6%5]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
+ 14:46:30 +0000
+Message-ID: <ff8c3ba5-fef6-cb9f-cccb-95e300892eba@kontron.de>
+Date:   Tue, 15 Nov 2022 15:46:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] spi: spi-imx: Revert "spi: spi-imx: add PIO polling
+ support"
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AS8PR04MB8166:EE_
-x-ms-office365-filtering-correlation-id: a001c2bd-9ac2-485a-7e7b-08dac7162411
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a/TvNu1DoPqhmtlr2UCPuLDSdyhHYn+fwDCgB5gcjwaereeB34ZmZ+euaYVCz2LfycsrrfoaPppCKYHG5va8TEEBrH7KGSrDzMX/MMkt97QUcPWOvrqoFUNTZFmqf3DLgfLU7vMzlBNBRZKSxBBHqh3zIYQKIkOPYPRqBXJbLD1AiLa6DyxzN0nDjWCSDYhzy7n1uJEGWgF+FgmPiRqqoETaWtGVGdAr7gkadOuQS8T8eiq6guZGZ4sAEf92nLZCEbJTY3FIkTa393Nrvl73gQvjgila2FrdwGFEFFDOlF/HzQEWlNNhZ4VRy1Uo745QUydDr9qY9DF56TW0mveBGgBYH7syflCeU7VeCdmOUQWf9X2yad9+pFZR/axoCsaL2W2aivNTzeSHVTEoIx92mb44uWZXXGFf7tZXUeMKQJG8w6TfHl+AGHJJmsYxlZN14j7yewOEyre+7/WDrogybuaAehhquKIwnfR4w9imD+RV5YJcG/qiAGXiWsAdfkazHWXfiFVfVKzeSxNZh7w4fc1MnedDtP8q42CwLkqKSoYxpQpIFpBnE+319RGvspuHp4dJliZN0EZOzke4/ruYdxayvUWf3utM8ORyfkVAHvVedfK9OPAGoquE+XIwC5rJ0owEDoMR0JXzzFhFrZo/jXQQBSCJdncLOahDNXoNgxZmfBWwug5Bw1APJvsrCt+PtKplTTJ9j7YKY/z4m5YTGx0yZpXQeT1bTBhVAtYjRa1mio495hZWkIdit0E868nO1otURzxlUgM8Ir9l32r2hQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(451199015)(478600001)(71200400001)(38070700005)(83380400001)(7416002)(5660300002)(8936002)(122000001)(6486002)(86362001)(38100700002)(9686003)(186003)(6512007)(26005)(1076003)(6506007)(6916009)(54906003)(316002)(41300700001)(44832011)(4744005)(66446008)(4326008)(2906002)(76116006)(66946007)(8676002)(66556008)(64756008)(66476007)(33716001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u5tgP/VFh0owSgiYo/8WHbTNKL0YOqUVD7feNJO3ZImJYFCmRkPo34NN17mJ?=
- =?us-ascii?Q?+Pw1bCjpHgzqZsp3wXk/TC/uWpj3zQrn9UMt4KuJiPJ4liiZhPIPRw4fFy2X?=
- =?us-ascii?Q?vDVWCQKGGGXgs48RH0yCVFLUUhLnOWzj98yQMZLeEE7YxFWnzpH3aAl1/99G?=
- =?us-ascii?Q?iKH3h5YRXGfMZIcgfT6DBLzGEARcatLKFZEoiwNbA5lwgZitFPC3F0RsTn6a?=
- =?us-ascii?Q?QDEFOsB/W92WBomhUjEDpogA5v3cdPYmYOUrn4xW6svK6a1n4aCYlo0DL3ix?=
- =?us-ascii?Q?cx7juiVYhSRp7XQZ9L2XrAp+Bx0q+VXigrpwHaOJLXn+Ig2ApY+EV4R0CCkR?=
- =?us-ascii?Q?WAZZBSb6pKQe/0Un62SpnweCuGgk6ZMJYmpFqAjTeb55ub+l13Cp2UT/sgDQ?=
- =?us-ascii?Q?hoI3nxfMXT4Mj2m27O79WVcmogwT7Fff2dO2ySi0t4BgkhEtJQYf8nZfCmiD?=
- =?us-ascii?Q?TzwCfVOLI6GPRLcJort8gB5FRMHCcpFX93hbNiiIlM5h3s0eEnaRPQ2nmKz7?=
- =?us-ascii?Q?fIWAmc0zB2Cdb0//KhETk9mXgnrRg/BMqev5CUMQTAXnmcP51BK1WXOLq6kc?=
- =?us-ascii?Q?8dktiNMlp9QEdST7KRGbblvGaUt5WeDD0ZVdQ44GQunc/HHQsU97Ahwd2RcI?=
- =?us-ascii?Q?h9noKUgQgafX6eix7oEHlTpqtLKlLGMqlBlGehI0hPgP3iKeIS/2H6tGDeTh?=
- =?us-ascii?Q?Hq3S3+YhRUb0hn5cKDuG4Li0zCakbE2WosDDbAkCJ2nH8JhJw56C2JFiY8Yc?=
- =?us-ascii?Q?mFSpUZ2oEbSSYSEs/70CyhS87QzCwCa/L1NhtmPs1fG4+auZGEyxch6+w6YP?=
- =?us-ascii?Q?Lrea4aDHd0woDUPYgXtj/j3eEl1zBTPuadp697OHqGPeKIU37bdrVsP3ApiA?=
- =?us-ascii?Q?zH/+aJu2qZh4ojj+YNraCP5ir08wjTfzJAA2k8POCFZ0cnbS/NKFjfmNZuyx?=
- =?us-ascii?Q?n9UE/Kn9ofV0gUytUq18abliUQ+wYclBEoIA/GbDPmIplHwCAzbaZRbmJ4Fh?=
- =?us-ascii?Q?9TN0WS3u0Po05mYEdQFDIXz27USvFfmC63WxpbLpWPGz2P6uj9LhvMKtgCMh?=
- =?us-ascii?Q?HLVcGj5uCOjTcBek7CcdFTpfagCpCrrkun48W1fHeby/2RyEUgjSY+GUrkrz?=
- =?us-ascii?Q?8Z7fKH+/FXK4KKkwrafzessHaA2Lx4TlJPPzVauFV91QaAmZLYBFJPaFQF0f?=
- =?us-ascii?Q?t8kr6M3GBmD0u9lKY2GA/sQ1wf1rEgmrc5eVw+aH9m93PKijuR1TvBEjgNGe?=
- =?us-ascii?Q?40L6Ch4rmIMfQlOOUQTIqPN0qRC08oz4idedonDCntpLZprEmPCFDJwJGtnF?=
- =?us-ascii?Q?YcDC7cRrzGWwh8NzIXa19PfYtn3oQBbGKQYp4oNDgJasmPEmIta8l4E7Jyro?=
- =?us-ascii?Q?42rjK9MepcyvGyUCEIXgfYd5w6+/UrmY9fLXVDARBaNUvghpLGxrSFSjjgo2?=
- =?us-ascii?Q?FBQoCJBQQcZrk/O0dYZrZ7UAGxhSy0YrZ/3vZHGQ9m4TYpSv6SQv0hg8RGUj?=
- =?us-ascii?Q?mQ7cZq3dwIn75QBVdau/8kAA5EKZKQDj8VYx2tqMDqzmUIoL/VHqoLvqNuGI?=
- =?us-ascii?Q?nR0UecYE1UkvrDS+IvmN3omrAR10cFy1isaWUzN+DFBDuq4UN/YNZSudm9xM?=
- =?us-ascii?Q?JQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9B71382C151025428C892EF356CE1069@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, David Jander <david@protonic.nl>,
+        Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
+        stable@kernel.org
+References: <20221111003032.82371-1-festevam@gmail.com>
+ <20221111105028.7d605632@erd992>
+ <CAOMZO5CH9S_RYpLNZbRxChzSVkkZTAd+qpxz1Ycj2UUPROTXpw@mail.gmail.com>
+ <20221111135919.63daed2d@erd992>
+ <1c70bfd1-38f6-3a30-9e36-a0f780f82571@kontron.de>
+ <Y3ImhoSzY1PYMp+9@sirena.org.uk>
+ <46dc7280-545d-6b8c-ff7f-4bad13486292@kontron.de>
+ <20221115125549.iih75abpy7cppiss@pengutronix.de>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20221115125549.iih75abpy7cppiss@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0017.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:15::8) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|DB8PR10MB3322:EE_
+X-MS-Office365-Filtering-Correlation-Id: a393a240-e96c-4f11-a369-08dac7182ee1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oGSymHTVniq/NMzDe6iPH5wfxpHCAB7GbmSi6ZuppMv1CV0p6spw7dUZmWAjGvUoiE8ZAqwp/lSylEwAsnKzBnFuXpOavt0z7jiNhExCxHvFZQ74/K8zFGL2uE856wHRv7ryjH0M7Y/FKCOmm7r3xlrvXjvx6RAgEZbkFlaneS+K9hOLTVjjw97W5hQ9YCXEcCLfcrq17DRURAXkU6rU9G73wRpgK0W1nFFsjND5tscuDa5j6CtlU2Puwc2e/RbCD1MNaJ6F3ZMvXT+dM9lsYVXHu/tY0DLzSqE53AIU4qtnDsUv5nkKEJC/puSiYa1SOzD0HaxOLCUEHTcYi/1NINJC9ipVye82M7Q7Q1It3akUZGimUfu+FZckxmbuAjHpX2hpoS6MV64BhG5jWRPVWygVGbvdX6yYEX/ceEfqdj28x2X9j+rzzuErYQt1Q3bt50OQodrMVuyhQ9O8bILKH9B/PfybB94O8iMHapaWBylKZXO4m7twON9IlPoeqJ3oSORV9pnBCM4l1Q1cJndSXle9B233iKfBepK/1obclRo3uhNDL5kZgZ9M/4hWmFUKqaMbKz2dorZU6I03DcbTkXJnR5UoNuMVflc/qj9zkzFnYMudIpxiWkBj8qyKjlrJWOfCnWtBCeYdAt62G7K9CLVG2Nh4hkzdhZZD1oq6b03bt8U4AoCg7OcgAHS4Z54FlQ0MA+GQ7wVw8Q8LY6rEGtb+k9AD4vSc0UceClwCjR5Uy604KI7pfOK5caNJ22JCPlhx9HUaVpioj7dU5akvB6rIqVJbFGNJEeMZxcWhpBY0MzmpOQXjGvO7APS2gTUX5NLw+hOQ4rGvcXTHPlhbGw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199015)(2906002)(31686004)(8676002)(41300700001)(83380400001)(4326008)(54906003)(6916009)(36756003)(66946007)(5660300002)(66556008)(66476007)(8936002)(86362001)(44832011)(966005)(478600001)(31696002)(6512007)(53546011)(6506007)(316002)(186003)(6486002)(2616005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2d3WjBWTm5pc2FvZFRyWitOZXlWcFRJMEtCSFRhZElMdXJhWllLODJXcWxG?=
+ =?utf-8?B?NHIwQWRNcUFXWTliYk5JNHRUby9tVWJLY0tNams2RlZwZ21RRGVtZmNIeVQ3?=
+ =?utf-8?B?bXAweGZPcEFCSmdpRWFUZVI4YXNxT3hGNUdHcFZTMUJVbGNQcGsweUVHWE1E?=
+ =?utf-8?B?WGNNRWk4d0tSL3ZMSy9OZmlsTy8vc2ZLVzVhSklGOXpIUjJ0eHlVYkRUWStK?=
+ =?utf-8?B?Nnl4SVVWYTJKVVNRYURuVVZXdXdGeHVtQ1FudTlWM0ZGeklCam5mM2dDWGF2?=
+ =?utf-8?B?dDJ4WU4rOHZrNDhlY3FrcWw2L1p0UTNWVEs4WS9IVXB3QTMvV3lRMENvQVdK?=
+ =?utf-8?B?U2gvQ1V2NHYxRElocFRMOVRXc29xQlhDNkY0RnI4VEhwVDh2WkZXZXY5dFN1?=
+ =?utf-8?B?UG9HVUFxTjBPdjltUjVhdTRpdVBlM0UzV1lORUNqK3dSYTdLM1loTHhsTFpK?=
+ =?utf-8?B?NFdkd1VWUTRCcE51TXNJZkRiY2piUFBxREcyVjdHTWh1OU51TjlkUlhtbm9U?=
+ =?utf-8?B?eGV5Zm5xamxSS3RpV090anQ5dnA2dURucnZTeWJYLzdHc1hReWRWSDRob2g3?=
+ =?utf-8?B?djRHa1FGZ1hUSFk2dmgwK2REUm5YS3hBeDFrRnRpeEwwclRqNlVRZnVudDBP?=
+ =?utf-8?B?OVlxM3dTSi9TdlJVWnBrT0NOZnlXWlVETlJlYmhKQnIrT0hXay9PY3MrcXA5?=
+ =?utf-8?B?R1AvSXNER1RrRW1PRjBVVjAxQVNDaHEyVlRsRytncHRCM0g5S2FWUkxUalpv?=
+ =?utf-8?B?YTVaVmNXSUlobitZQ3F6ei9tVjM0cEIwWnJUampiMnIzMUFUa3lZd28vNHls?=
+ =?utf-8?B?U0hSNitGNmF5SUJtbnhUVHlXcEF0MU9qNDBwWThoQlVaMm40dXh5V2J0N2E0?=
+ =?utf-8?B?akZSbmJHc1R2c2Q1amdGSFN1UWwvTUdLbGZBTmlaRHVObDVEK3o3QnZSUm8y?=
+ =?utf-8?B?bmJQYjFsTWp5RVFGWkhOV1pDMm93ajRvM0hlMk5mTnN4SCtCTzMyUTFETHdX?=
+ =?utf-8?B?NmV1R3FiWnczQk8wdTBUNGhhV29LNTJBeDYxazFKNTZFVzIzWExJSHUxc2Zq?=
+ =?utf-8?B?KzgweVNmZW1FemZzNjFUOE52UW53eHh6UHVsUTZnMlRlTTJGYkk0OHp5ZXN1?=
+ =?utf-8?B?aGNWbHI4cUt5MElEWDU1cHp1MCtXeFlTRElncDVFOTBkODlNTWNIaElydE9J?=
+ =?utf-8?B?aGNYS2VaN0gwU3JrV09ZUUtlRFJqNXlFQldSRW9tVHV6a2FKRHEyakhxbmxN?=
+ =?utf-8?B?ZlFDWnVDNFU4NXQyN0gyMGxHK2lMQUFGc25VWDF6WDgrTEpoZm5SSGR5MWc3?=
+ =?utf-8?B?YXdlVG9GdEN4dW5BR1JLZlhXU0ppQ2Q4cnR2TDZsUmJ5NGo5bmhRVStKZDFt?=
+ =?utf-8?B?UDY5MWJNTkxXRWRQWXkwNm9vSzJmWjBPQnYzTmU4Zll2VDN6d0w3UkpaRnM0?=
+ =?utf-8?B?S0Y2QlBnanpRMFhzaUQrRHhUUlo1K2RMNTl0Tm9rV3RDclhGVCtWQ3oyMCtB?=
+ =?utf-8?B?YmFVNGpGeVNXYW5pWUwvQ05qSkJ1ekpHaDQ3d1AvZDdKVnFvbFdhRmpLNmVj?=
+ =?utf-8?B?QUduUTM5cHRTQTlKQnFUbGFWYnQ0ZkltaEUvSHVqcGpYUkhVTDlDSmNKd1dK?=
+ =?utf-8?B?ak1LS0tlL1FRZm0xZEg0Q1lsV0JDUjJMQWpLWVQybC8xcGdudzVQZ3VjbzFX?=
+ =?utf-8?B?Q2NMMm5NVmRkcUd5dm5EYnJ4Smg0UWJVdW5ZVkRCZFhwNnFWMVBrVDZBSzVm?=
+ =?utf-8?B?SDROeEtrcm1oTWRqeTcrSHgwSVRWWjBYa2JCbi92L2MwUnA3V1VnRDBlb0Z4?=
+ =?utf-8?B?Z0toY2xkRmxJdWlMMjhOYUdyTDZHNzVYQS85bk1tbnU5U2xpTmw5UTdRK1dG?=
+ =?utf-8?B?TXVQR3cyL095eTRhYnJnS2ZqOXRtM0pkL0tCTkt5VU5IWEdlcEQrQmhyNVZz?=
+ =?utf-8?B?SnBFdG9NVzF6ZE5FSGpzeklBWFkzaTZtODRBL1A1bk1yRzQyWU1vK3Zab0ly?=
+ =?utf-8?B?b3E4UjYyL3JDSEJsNDErMEhxbG9RN3o2RjZEWHNHbW9HSkVuTUZoazcyd0Z5?=
+ =?utf-8?B?bkhibkQxOTRMRGlSY0t2TEpHaDNmM1paQ3NTaEdiQXVtYnZYMnFUcjFkeVhS?=
+ =?utf-8?B?RzA3dFRtelhTdE9iemEzYmtCeGM0YWhCdUoweHRxMjNtTDJsQ3ZKUm5Zakww?=
+ =?utf-8?Q?BPXCfL7XNYU9386rWWjyqYJYOIziL5iqiw/uuk+W9HZZ?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: a393a240-e96c-4f11-a369-08dac7182ee1
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a001c2bd-9ac2-485a-7e7b-08dac7162411
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 14:31:53.4055
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 14:46:30.7121
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CwveGqQWQ7qFrUKvVPDGVr0vpgTyRRpppp6ClVd+2kBjPwgKfmckMjfXriCvvg71tSFiz2/2sbvY92A35c3wlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8166
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ptX2Mei1znJYA0KnCatqRtcoQTI5brtxdGONpuGLuOhh/40K+tkC+SoFwGVUlZCWOUvDj9AV+6e63WrjbnIkH5u+AaF/XF/yzhk3jQotXfc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3322
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 03:26:11PM +0100, Krzysztof Kozlowski wrote:
-> To be clear: ls1012a, ls1028a and lx2160a should be either followed by
-> compatible or not. Cannot be both.
+Hi Marc,
 
-LS1012A should be followed by fallback compatible for practical reasons
-(Linux kernel worked that way up to 5.7, time during which LS1012A was
-supported).
+On 15.11.22 13:55, Marc Kleine-Budde wrote:
+> On 15.11.2022 11:51:53, Frieder Schrempf wrote:
+>> On 14.11.22 12:29, Mark Brown wrote:
+>>> On Mon, Nov 14, 2022 at 09:30:26AM +0100, Frieder Schrempf wrote:
+>>>
+>>>> As far as I know Fabio also discovered that disabling SDMA also fixes
+>>>> the problem.
+>>>
+>>>> I guess I will try to repeat some tests on latest master and see if
+>>>> there is anything that makes things work again without reducing the
+>>>> clock. If anyone has some more ideas of how to fix this properly, please
+>>>> let me know. If nothing else helps we could also reduce the SPI clock.
+>>>
+>>> It sounds like the commit can stay and that everyone is happy
+>>> that the issue is that the the commit made things run faster and
+>>> exposed some other misconfiguration for these systems?
+>>
+>> Honestly I'm not really sure how to proceed.
+>>
+>> My first impression was to keep the PIO polling support with its
+>> benefits if there's just this single issue with the SPI NOR on our board
+>> and assuming that the performance improvements uncovered a bug somewhere
+>> else. But at the moment I'm not quite sure this is really the case.
+>>
+>> I did another test on v6.1-rc5 and disabling either PIO polling
+>> (spi-imx.polling_limit_us=0) or DMA (spi-imx.use_dma=0), or both of them
+>> makes reading the SPI NOR work again.
+> 
+> That was a good hint, I think I've found something.
+> 
+> Can you check if this fixes your problem? Just a quick hack to, a proper
+> solution needs some more love.
+> 
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 30d82cc7300b..76021b9bb445 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -1270,9 +1270,22 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+>                 spi_imx->dynamic_burst = 0;
+>         }
+>  
+> -       if (spi_imx_can_dma(spi_imx->controller, spi, t))
+> -               spi_imx->usedma = true;
+> -       else
+> +       if (spi_imx_can_dma(spi_imx->controller, spi, t)) {
+> +               unsigned long hz_per_byte, byte_limit;
+> +
+> +               /*
+> +                * Calculate the estimated time in us the transfer runs. Find
+> +                * the number of Hz per byte per polling limit.
+> +                */
+> +               hz_per_byte = polling_limit_us ? ((8 + 4) * USEC_PER_SEC) / polling_limit_us : 0;
+> +               byte_limit = hz_per_byte ? t->effective_speed_hz / hz_per_byte : 1;
+> +
+> +               /* run in polling mode for short transfers */
+> +               if (t->len < byte_limit)
+> +                       spi_imx->usedma = false;
+> +               else
+> +                       spi_imx->usedma = true;
+> +       } else
+>                 spi_imx->usedma = false;
+>  
+>         spi_imx->rx_only = ((t->tx_buf == NULL)
+> @@ -1597,8 +1610,8 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+>         struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+>         unsigned long hz_per_byte, byte_limit;
+>  
+> -       spi_imx_setupxfer(spi, transfer);
+>         transfer->effective_speed_hz = spi_imx->spi_bus_clk;
+> +       spi_imx_setupxfer(spi, transfer);
+>  
+>         /* flush rxfifo before transfer */
+>         while (spi_imx->devtype_data->rx_available(spi_imx))
+> 
 
-LS1028A and LX2160A device trees were both introduced after the Linux
-kernel started looking at specific device trees, so I believe that Linux
-never relied on the fallback compatible string and it could be removed.
-The fallback is present in device trees in circulation, even if the .txt
-schema says it isn't required. I don't know what the BSDs do about this,
-so I'd be tempted to leave them in the camp with required fallbacks,
-just because it's not worth risking a regression.=
+Thanks for the patch, but unfortunately this doesn't help. I did some
+more debugging and it looks like there are two problems.
+
+In my case on i.MX8MM the SPI is fed by a 50 MHz peripheral clock.
+Requesting 80 MHz for the SPI NOR triggers the fspi > fin condition in
+mx51_ecspi_clkdiv() [1] which in turn leaves *fres uninitialized causing
+spi_imx->spi_bus_clk to be set to an arbitrary/random value in
+mx51_ecspi_prepare_transfer() [2].
+
+This in turn messes up the calculation for the PIO polling byte limit.
+In my case the limit was usually somewhere around 8000 bytes, so the
+4096 byte SPI NOR messages get transferred via PIO polling.
+
+Having large and inefficient polling transfers shouldn't be a problem
+and lead to corrupted data, but I suspect that it doesn't work because
+the transfer size exceeds the FIFO size in this case.
+
+If my conclusions are correct there are two fixes required (though for
+my use case each one of the alone is enough to make things work):
+
+1. Make sure spi_bus_clk is correct even if the requested bus clock
+exceeds the input clock.
+
+2. Limit byte_limit for PIO polling calculation to a maximum of
+fifo_size, so we don't try to poll for transfers that don't fit into the
+FIFO.
+
+Both fixes are quite simple (see diff below) and if you agree I will
+send them as formal patches.
+
+Thanks
+Frieder
+
+[1]
+https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi-imx.c#L447
+[2]
+https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi-imx.c#L650
+
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -445,7 +445,7 @@ static unsigned int mx51_ecspi_clkdiv(struct
+spi_imx_data *spi_imx,
+        unsigned int fin = spi_imx->spi_clk;
+
+        if (unlikely(fspi > fin))
+-               return 0;
++               fspi = fin;
+
+        post = fls(fin) - fls(fspi);
+        if (fin > fspi << post)
+@@ -1613,6 +1613,7 @@ static int spi_imx_transfer_one(struct
+spi_controller *controller,
+         */
+        hz_per_byte = polling_limit_us ? ((8 + 4) * USEC_PER_SEC) /
+polling_limit_us : 0;
+        byte_limit = hz_per_byte ? transfer->effective_speed_hz /
+hz_per_byte : 1;
++       byte_limit = min(byte_limit, spi_imx->devtype_data->fifo_size);
+
+        /* run in polling mode for short transfers */
+        if (transfer->len < byte_limit)
