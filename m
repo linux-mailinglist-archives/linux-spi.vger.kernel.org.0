@@ -2,50 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF8662C141
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Nov 2022 15:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6125962C560
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Nov 2022 17:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiKPOqK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Nov 2022 09:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S239203AbiKPQvK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Nov 2022 11:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiKPOqJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Nov 2022 09:46:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7AE3F05A
-        for <linux-spi@vger.kernel.org>; Wed, 16 Nov 2022 06:46:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39F6FB81D9C
-        for <linux-spi@vger.kernel.org>; Wed, 16 Nov 2022 14:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8813CC433C1;
-        Wed, 16 Nov 2022 14:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668609966;
-        bh=v3HpvHpJVomdvbJxt/gV40DgO5WOFh9zEdu74EvhTpQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=G0FwN+HTklYG+6ssLiUA7IekuVIWbrsY0kuWpY3Z5C8LyhhTVrTAXuRVKoZFtSwZx
-         auy5cWg7IUjyqnaXEhEEeVDQH5AZeIo0tMXi6b375Stom70DQ1ef6ORoQczUXPEyta
-         qZiLfBAgkKe9aivV+/TtaGgVLejxdLktgw+8bf8KSQL3P8ZiGW43TnhwQBlv/fcolf
-         XfnK5nFBRXBR5YD7ECDaBRam23lPWosW+4g1MrpxonGUUi/zqeooPtB4NqbND4HZtl
-         QqRRKLvHTPW/0HKtjYi4f2+mQ8KDr2ecEOuRb7OFp7bSod6MwyUYuGE8jM+yyzeRqy
-         TtPRkUiF7hb9Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     feng.tang@intel.com, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        linus.walleij@stericsson.com, fancer.lancer@gmail.com
-Cc:     linux-spi@vger.kernel.org, yangyingliang@huawei.com
-In-Reply-To: <20221116093204.46700-1-wangxiongfeng2@huawei.com>
-References: <20221116093204.46700-1-wangxiongfeng2@huawei.com>
-Subject: Re: [PATCH] spi: dw-dma: decrease reference count in dw_spi_dma_init_mfld()
-Message-Id: <166860996429.526539.15589221652649718177.b4-ty@kernel.org>
-Date:   Wed, 16 Nov 2022 14:46:04 +0000
+        with ESMTP id S232392AbiKPQut (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Nov 2022 11:50:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75650111A
+        for <linux-spi@vger.kernel.org>; Wed, 16 Nov 2022 08:49:36 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ovLbS-0003pA-UO
+        for linux-spi@vger.kernel.org; Wed, 16 Nov 2022 17:49:34 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 5ADED12043D
+        for <linux-spi@vger.kernel.org>; Wed, 16 Nov 2022 16:49:34 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id E7FA2120433;
+        Wed, 16 Nov 2022 16:49:31 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 756466ff;
+        Wed, 16 Nov 2022 16:49:31 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        David Jander <david@protonic.nl>, stable@vger.kernel.org
+Subject: [PATCH] spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
+Date:   Wed, 16 Nov 2022 17:49:30 +0100
+Message-Id: <20221116164930.855362-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,38 +59,67 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 16 Nov 2022 17:32:04 +0800, Xiongfeng Wang wrote:
-> pci_get_device() will increase the reference count for the returned
-> pci_dev. Since 'dma_dev' is only used to filter the channel in
-> dw_spi_dma_chan_filer(). After using it, we need to use pci_dev_put() to
-> decrease the reference count. Also add pci_dev_put() for the error case.
-> 
-> 
+The SPI framework checks for each transfer (with the struct
+spi_controller::can_dma callback) whether the driver wants to use DMA
+for the transfer. If the driver returns true, the SPI framework will
+map the transfer's data to the device, start the actual transfer and
+map the data back.
 
-Applied to
+In commit 07e759387788 ("spi: spi-imx: add PIO polling support") the
+spi-imx driver's spi_imx_transfer_one() function was extended. If the
+estimated duration of a transfer does not exceed a configurable
+duration, a polling transfer function is used. This check happens
+before checking if the driver decided earlier for a DMA transfer.
 
-   broonie/spi.git for-next
+If spi_imx_can_dma() decided to use a DMA transfer, and the user
+configured a big maximum polling duration, a polling transfer will be
+used. The DMA unmap after the transfer destroys the transferred data.
 
-Thanks!
+To fix this problem check in spi_imx_transfer_one() if the driver
+decided for DMA transfer first, then check the limits for a polling
+transfer.
 
-[1/1] spi: dw-dma: decrease reference count in dw_spi_dma_init_mfld()
-      commit: 804313b64e412a81b0b3389a10e7622452004aa6
+Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
+Link: https://lore.kernel.org/all/20221111003032.82371-1-festevam@gmail.com
+Reported-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reported-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Fabio Estevam <festevam@gmail.com>
+Cc: David Jander <david@protonic.nl>
+Cc: stable@vger.kernel.org
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/spi/spi-imx.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 30d82cc7300b..3240c139f8f3 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1607,6 +1607,13 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+ 	if (spi_imx->slave_mode)
+ 		return spi_imx_pio_transfer_slave(spi, transfer);
+ 
++	/*
++	 * If we decided in spi_imx_can_dma() that we want to do a DMA
++	 * transfer, the SPI transfer has already been mapped, so we
++	 * have to do the DMA transfer here.
++	 */
++	if (spi_imx->usedma)
++		return spi_imx_dma_transfer(spi_imx, transfer);
+ 	/*
+ 	 * Calculate the estimated time in us the transfer runs. Find
+ 	 * the number of Hz per byte per polling limit.
+@@ -1618,9 +1625,6 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+ 	if (transfer->len < byte_limit)
+ 		return spi_imx_poll_transfer(spi, transfer);
+ 
+-	if (spi_imx->usedma)
+-		return spi_imx_dma_transfer(spi_imx, transfer);
+-
+ 	return spi_imx_pio_transfer(spi, transfer);
+ }
+ 
+-- 
+2.35.1
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
