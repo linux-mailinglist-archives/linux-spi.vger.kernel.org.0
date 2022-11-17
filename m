@@ -2,103 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3EB62D891
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 11:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD9162D8BD
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 12:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbiKQKyU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Nov 2022 05:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S239368AbiKQLBh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Nov 2022 06:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239379AbiKQKx3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 05:53:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D6F5595;
-        Thu, 17 Nov 2022 02:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668682407; x=1700218407;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uWkuOl/J8eDUGqINokgFVHKc4s1F8Y1WbCaW1XUAocc=;
-  b=h8YW220uZYycXNF+d+P+4j5sjN3rNwggUMtEg+0BNnb1KCeEnibR5OX5
-   jb6XZFxwVcW5hFTiM+/6Ced6CZ2XJgRano4rrXmg2Bv9UwiwnhWCDR57Q
-   F2FZVn1YwqI55+UI9hrF+pE8LOutURSAYSTq6IHVQPWSFllaQBw8R5kU+
-   0Yf4sk2f2FXDNbFxNn+5ZmKtrQGvI0wzn6p5t87ZicpO7lNhcQoxGpgqa
-   5obCbOUg4vZrbgbdFfLygbwRcDWGF3Ca6oMdZ/Ph+pgOZhUb1MXxMNIxE
-   XBPGrt2FszY1Cn+Hu7iImpRCth9SvKzbeaqsHpf/TrRQYPd6hts1oYmZz
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="183965664"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2022 03:53:19 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 17 Nov 2022 03:53:17 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 17 Nov 2022 03:53:15 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mtd@lists.infradead.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH 8/8] ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its maximum frequency
-Date:   Thu, 17 Nov 2022 12:52:49 +0200
-Message-ID: <20221117105249.115649-9-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117105249.115649-1-tudor.ambarus@microchip.com>
-References: <20221117105249.115649-1-tudor.ambarus@microchip.com>
+        with ESMTP id S239647AbiKQLAk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 06:00:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004BB1C7;
+        Thu, 17 Nov 2022 02:59:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F8BCB81FF4;
+        Thu, 17 Nov 2022 10:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C113CC433D6;
+        Thu, 17 Nov 2022 10:59:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668682794;
+        bh=FTcXBVf4xKuIE7vas46JjAXZsr5dkNSkrqRgK59BR3E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j3aCJYHiEH9yeDG4sHk7/Z9AsxDyOnRrOuUaaPmyFhDe4xZ7640/EoC+qQ21H+kXH
+         08J0YkV0AvOWwkIZgeORvNcR7+Thk9/gFhQ+j/07CgdiSiqgHT9sIkpbJnlNSmSYy7
+         F0s+Lkp/tCo9flUPLLLEOsKv77nTk0+dt8r9HQwPWNuFFrKmTl0g1PmuMnTR1dHuFK
+         +EIKV6Bz/yqgXNyld4b+aneK1HPLhq8HFjHJiNQnrXiCMqPg/W7GwFnmcAzJ9Q24D4
+         g/OdUB4RLlrAVnEBDmQqm2/TGfn+5SaqpKMM4hfxrlG03xxcvz/cnqRwwzEEYNWBF6
+         8Rz0l/MIOY8Kg==
+Date:   Thu, 17 Nov 2022 10:59:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Carlo Caione <ccaione@baylibre.com>
+Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
+Message-ID: <Y3YUJjSTI9U9qz59@sirena.org.uk>
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sVW5maJnbV5GYFNa"
+Content-Disposition: inline
+In-Reply-To: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-sam9x60ek populates an sst26vf064b SPI NOR flash. Its maximum operating
-frequency for 2.7-3.6V is 104 MHz. As the flash is operated at 3.3V,
-increase its maximum supported frequency to 104MHz. The increasing of the
-spi-max-frequency value requires the setting of the
-"CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value of 7.
 
-The sst26vf064b datasheet specifies just a minimum value for the
-"CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
-maximum time specified. I determined experimentally that 5 ns for the
-spi-cs-setup-ns is not enough when the flash is operated close to its
-maximum frequency and tests showed that 7 ns is just fine, so set the
-spi-cs-setup-ns dt property to 7.
+--sVW5maJnbV5GYFNa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-With the increase of frequency the reads are now faster with ~33%.
+On Thu, Nov 17, 2022 at 09:47:41AM +0100, Carlo Caione wrote:
+> On some hardware (reproduced on S905X) when a large payload is
+> transmitted over SPI in bursts at the end of each burst, the clock line
+> briefly fluctuates creating spurious clock transitions that are being
+> recognised by the connected device as a genuine pulses, creating an
+> offset in the data being transmitted.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- arch/arm/boot/dts/at91-sam9x60ek.dts | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Lower the GPIO CS between bursts to avoid the clock being interpreted as
+> valid.
 
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index 4ba52ba11dc6..6cbb4e0d9938 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -612,7 +612,8 @@ flash@0 {
- 		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
- 		reg = <0>;
--		spi-max-frequency = <80000000>;
-+		spi-max-frequency = <104000000>;
-+		spi-cs-setup-ns = /bits/ 16 <7>;
- 		spi-tx-bus-width = <4>;
- 		spi-rx-bus-width = <4>;
- 		m25p,fast-read;
--- 
-2.25.1
+This is just plain broken, *many* SPI devices attach meaning to
+chip select edges - for example register writes will typically
+have the register address followed by one or more register values
+for sequential registers.  Bouncing chip select in the middle of
+transfer will corrupt data.  If the device can't handle larger
+transfers it needs to advertise this limit and refuse to handle
+them.
 
+--sVW5maJnbV5GYFNa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2FCYACgkQJNaLcl1U
+h9BA1Af9GvKfza2vtRbu0JnM9pTzjygGkt+vf4n801Z7oafMH+9AsCMpa4yyr7Dq
+zhMWNsKInloF+p+FGqJUx6iky4xR83YXfpR1dzXn9xh27MNjYMSvH9MgbDLKKPyZ
+TG+uVFrFsaus8eR7mzZw80l7KCiw6ypiGWh5o+qtO7UWGCVnbcwl1NeD0RDolNE+
+tmRoPMEoZohX3XIGL5NGihK0buq/ZFq4EkrpUK7mfJ5kHSCwtX7O4ZR4SUI2VB8g
+WiLut2anQJ/MgXPdHnhKdrY47fwGRDi3TCI88Le+mb2gc3iUAf4r1rdqviUnMps7
+6nf/3APDiJ0vw09mztpBv8KT1ASrrg==
+=atc7
+-----END PGP SIGNATURE-----
+
+--sVW5maJnbV5GYFNa--
