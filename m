@@ -2,65 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E4B62D568
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 09:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4B362D58E
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 09:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239400AbiKQIr7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Nov 2022 03:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S234725AbiKQIyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Nov 2022 03:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239551AbiKQIr4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 03:47:56 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B939810FF0
-        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:47:55 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s12so1536687edd.5
-        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:47:55 -0800 (PST)
+        with ESMTP id S229939AbiKQIys (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 03:54:48 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF165E4B
+        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1301137wmg.2
+        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=idox2DWf9CfxY6np+xVajajSNgisazAtYo+m3/oXIzQ=;
-        b=YJtoDwNevsDYE56TfvpY13pJKKdr1ptUtkThXpzJvzyqFNfQ0lQAYsHeD/G6ijoQb9
-         FzNX3VDp0JST+f3q3q97kt/nU09VpZOu7LMruQ2aOWiPdjy515rP0ho3XAzk1xer9fUN
-         oo8Xij8p06FD8ZWJk/LZaY9rS8uvkmH0Z1QGAUQbauZoRhXRKl8mkUxO/VfQ94d/bxDO
-         0PA707ZmvAL0b7U1IDRpV2graHjHktcAA/oqFa82GZMPJbLgLQQ8+eIAE7kVfLldaMqZ
-         ih7RbpltfyVp99rBOpxzOCYnMi64Up3c/VX8yVq0MmjyQIqG90pWGWBylHcJm+0gLN/P
-         +P2Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
+        b=GejQpumCcaJEwAMF9vs5N6MTa4HzjPwDmJEUeAvSGwmdPfgcFftqfp718ZY//Kwd/6
+         NiRLKvzHWmOEB2glIPDCQqS20M5AbpWcheJWEe0v9HSameNpXDzd3tnXIkr21M/fO/+B
+         pMxqk3YwUh68R3+JoME0RkA8m5KvnhhhS5BEJpn7PLYav1RuSPombssgPei++tn1Lbhg
+         FKRcEUteXeQMMH39vFxOtoAEEqhtSHQu3b9aIGoVVR1/ibfYRas58aI9oEtbYLOM1yiM
+         SRgaK8m7sSzvY+2xBJIHjAcY9v4AZ62NV5llYbm9KOpaVbb/wgsOyny44CZrK2w4rHgZ
+         96pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=idox2DWf9CfxY6np+xVajajSNgisazAtYo+m3/oXIzQ=;
-        b=mrubyBskcYCUmpjj9GWsDwA6pcSdP2ybgjfMRTgqWzvZHK7pMTfUjctxmbOrdKiVje
-         ktoKCq6PsipMZEjCqRxAzV9xZgCYA6joKWe5RApkL1JyhS1k8ZseYepPSPFmvO1X7z9i
-         N6AVnEBMK8VdKZ1iJusucGYJG8DXSQ4fdafEUPaHVu9YKIteadAHKHyXToqoJRBiKfuO
-         A9KCceIHTsbxTdW5GpYoPxGj7rKJP9hd0A79iWdW8E57Gmwbt6WVLVe2gvcja/FkZ4w1
-         GNbfzQWMccvxnYHf+Ma0M7xkg1ny9tSG/awjBXSwKHt+3V3GPqREmVYBqOuSrkW0toPS
-         H+NA==
-X-Gm-Message-State: ANoB5pnfl6hmFqMB6kNnNhKrBokg0uGtCP1TYEuDBqAm738iFxBXqBxY
-        dxJ25hNESU5BY8mai6GWP38ABg==
-X-Google-Smtp-Source: AA0mqf4yWjrqIlKEjUvVEQZBYNp9Cyg1fui9YTk3qSoXBiIO38liYCs7aLKXOQNddd4uvH2WBxvUEA==
-X-Received: by 2002:a05:6402:3707:b0:467:6847:83d3 with SMTP id ek7-20020a056402370700b00467684783d3mr1257987edb.247.1668674874355;
-        Thu, 17 Nov 2022 00:47:54 -0800 (PST)
-Received: from [127.0.1.1] ([2a0e:41a:894f:0:7a60:27eb:954c:5ab1])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1709067b9600b0077205dd15basm77332ejo.66.2022.11.17.00.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 00:47:54 -0800 (PST)
-From:   Carlo Caione <ccaione@baylibre.com>
-Date:   Thu, 17 Nov 2022 09:47:41 +0100
-Subject: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
+        b=vwseTJq4/Ig2eMNi4IEE6rSMlcgB12S5UFmzTj90pdV/dKHfKQC5cW6F+5L+wdjpBG
+         Foy+u8tNbXJodlYykmViUUhmpfnpKHzv5sQ26iQsaWS3Sj3Y8Oen9RDSrh2V88vfq9Xe
+         ZGo1VYYyqPjMs9WlzQ2deoYzUP7P7p0MhdYQwQmIA9MbJMkdqsYEru+jOi1Ojc2P0agL
+         VOa20Nu92IqbWTVb6oS7p5a1ObjG19C4ohEJlfjsk5nG0woYk2Lm5vPo9Jdx61iTeR94
+         kHhloxn6PedNdcsn9ieOlRtEODNi+Xa1vMphQWLE+vknk2SMW3TsTHBfPHlIP61WdWcw
+         uVAg==
+X-Gm-Message-State: ANoB5pkDTti1ALptUVsDLOiG1CBvXeiiB41c9Bl+gBXHfVqeTweSyJWr
+        Unk5/PxMVl6zc3SWGlchxbieqQ==
+X-Google-Smtp-Source: AA0mqf7R5pytyH9/lNfPVQJWtwPbmJ8SiI7lVBKrIVlZzrwL5/u2Uq88NSqEZmONRgEmdbXer9wwaw==
+X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr940137wmj.203.1668675281746;
+        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d6dd0000000b0022584c82c80sm386384wrz.19.2022.11.17.00.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
+Message-ID: <098b923b-ff46-5ef5-9c21-19c974c9274f@linaro.org>
+Date:   Thu, 17 Nov 2022 09:54:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
-In-Reply-To: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
-To:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
+Content-Language: en-US
+To:     Carlo Caione <ccaione@baylibre.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         David Airlie <airlied@gmail.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
@@ -68,56 +69,71 @@ To:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Carlo Caione <ccaione@baylibre.com>
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On some hardware (reproduced on S905X) when a large payload is
-transmitted over SPI in bursts at the end of each burst, the clock line
-briefly fluctuates creating spurious clock transitions that are being
-recognised by the connected device as a genuine pulses, creating an
-offset in the data being transmitted.
+Hi,
 
-Lower the GPIO CS between bursts to avoid the clock being interpreted as
-valid.
+On 17/11/2022 09:47, Carlo Caione wrote:
+> On some hardware (reproduced on S905X) when a large payload is
+> transmitted over SPI in bursts at the end of each burst, the clock line
+> briefly fluctuates creating spurious clock transitions that are being
+> recognised by the connected device as a genuine pulses, creating an
+> offset in the data being transmitted.
+> 
+> Lower the GPIO CS between bursts to avoid the clock being interpreted as
+> valid.
 
-Signed-off-by: Carlo Caione <ccaione@baylibre.com>
----
- drivers/spi/spi-meson-spicc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+I'm afraid this will actually break SPI NORs for example where CS actually splits
+transactions.
 
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index d47f2623a60f..af8d74b53519 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
- static irqreturn_t meson_spicc_irq(int irq, void *data)
- {
- 	struct meson_spicc_device *spicc = (void *) data;
-+	struct spi_device *spi_dev;
-+
-+	spi_dev = spicc->message->spi;
-+	gpiod_set_value(spi_dev->cs_gpiod, 0);
- 
- 	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
- 
-@@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
- 	/* Setup burst */
- 	meson_spicc_setup_burst(spicc);
- 
-+	gpiod_set_value(spi_dev->cs_gpiod, 1);
-+
- 	/* Start burst */
- 	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
- 
+Isn't Amjad change enough ? The CLK pull-up should avoid this.
 
--- 
-b4 0.10.1
+If it's not the case, then it's an HW issue and the CLK line pull-up is too weak and an
+external pull should then be added.
+
+> 
+> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
+> ---
+>   drivers/spi/spi-meson-spicc.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+> index d47f2623a60f..af8d74b53519 100644
+> --- a/drivers/spi/spi-meson-spicc.c
+> +++ b/drivers/spi/spi-meson-spicc.c
+> @@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
+>   static irqreturn_t meson_spicc_irq(int irq, void *data)
+>   {
+>   	struct meson_spicc_device *spicc = (void *) data;
+> +	struct spi_device *spi_dev;
+> +
+> +	spi_dev = spicc->message->spi;
+> +	gpiod_set_value(spi_dev->cs_gpiod, 0);
+>   
+>   	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
+>   
+> @@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
+>   	/* Setup burst */
+>   	meson_spicc_setup_burst(spicc);
+>   
+> +	gpiod_set_value(spi_dev->cs_gpiod, 1);
+> +
+>   	/* Start burst */
+>   	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
+>   
+> 
+
