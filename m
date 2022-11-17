@@ -2,138 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4B362D58E
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 09:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E130D62D87B
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 11:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiKQIyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Nov 2022 03:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S239615AbiKQKxm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Nov 2022 05:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiKQIys (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 03:54:48 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF165E4B
-        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1301137wmg.2
-        for <linux-spi@vger.kernel.org>; Thu, 17 Nov 2022 00:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
-        b=GejQpumCcaJEwAMF9vs5N6MTa4HzjPwDmJEUeAvSGwmdPfgcFftqfp718ZY//Kwd/6
-         NiRLKvzHWmOEB2glIPDCQqS20M5AbpWcheJWEe0v9HSameNpXDzd3tnXIkr21M/fO/+B
-         pMxqk3YwUh68R3+JoME0RkA8m5KvnhhhS5BEJpn7PLYav1RuSPombssgPei++tn1Lbhg
-         FKRcEUteXeQMMH39vFxOtoAEEqhtSHQu3b9aIGoVVR1/ibfYRas58aI9oEtbYLOM1yiM
-         SRgaK8m7sSzvY+2xBJIHjAcY9v4AZ62NV5llYbm9KOpaVbb/wgsOyny44CZrK2w4rHgZ
-         96pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9hYrAT2BNVskU/iDANhKEsz2VyGmJLN/rJvwow2j2xk=;
-        b=vwseTJq4/Ig2eMNi4IEE6rSMlcgB12S5UFmzTj90pdV/dKHfKQC5cW6F+5L+wdjpBG
-         Foy+u8tNbXJodlYykmViUUhmpfnpKHzv5sQ26iQsaWS3Sj3Y8Oen9RDSrh2V88vfq9Xe
-         ZGo1VYYyqPjMs9WlzQ2deoYzUP7P7p0MhdYQwQmIA9MbJMkdqsYEru+jOi1Ojc2P0agL
-         VOa20Nu92IqbWTVb6oS7p5a1ObjG19C4ohEJlfjsk5nG0woYk2Lm5vPo9Jdx61iTeR94
-         kHhloxn6PedNdcsn9ieOlRtEODNi+Xa1vMphQWLE+vknk2SMW3TsTHBfPHlIP61WdWcw
-         uVAg==
-X-Gm-Message-State: ANoB5pkDTti1ALptUVsDLOiG1CBvXeiiB41c9Bl+gBXHfVqeTweSyJWr
-        Unk5/PxMVl6zc3SWGlchxbieqQ==
-X-Google-Smtp-Source: AA0mqf7R5pytyH9/lNfPVQJWtwPbmJ8SiI7lVBKrIVlZzrwL5/u2Uq88NSqEZmONRgEmdbXer9wwaw==
-X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr940137wmj.203.1668675281746;
-        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
-        by smtp.gmail.com with ESMTPSA id d16-20020a5d6dd0000000b0022584c82c80sm386384wrz.19.2022.11.17.00.54.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:54:41 -0800 (PST)
-Message-ID: <098b923b-ff46-5ef5-9c21-19c974c9274f@linaro.org>
-Date:   Thu, 17 Nov 2022 09:54:40 +0100
+        with ESMTP id S232825AbiKQKxG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 05:53:06 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A8C5ADF7;
+        Thu, 17 Nov 2022 02:52:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668682379; x=1700218379;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PgRUd/gJcLJbdlYAmpEJ7HzosgEa1Fgc6gekCvI/uMM=;
+  b=wc+3Uc0gmuAMn5+RMaPo8J904atdsKv6pGcG5W7gHfmXXVBla4cLO7ww
+   knd6AyHAk+1dUTfR5ZAjU9bv7EowKygpJCpAEld9w85l/OioasazE3N73
+   tG3OoO15DZoh2qYfp+JzdBRRYLhDBu1p5avSDHEfKgV/mjyDlm3ecfOck
+   7eerUdGWZ1VGtuqd4qXO5aTwhMpRy253nGkPy1MomAXdnLbcXBFcy2t7U
+   hty7LtrohVgh2fv6+U4cCsXJMoMnzpqUxqT0cotV2u8SYDL7KOLXTKKmj
+   PZcIVBNSPHEeHOjnmmpdigwc/QjLkVJZSUhJTWIRd7RF7CtTZt080ih+n
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="183965587"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2022 03:52:58 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 17 Nov 2022 03:52:53 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 17 Nov 2022 03:52:50 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mtd@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH 0/8] spi: Introduce spi-cs-setup-ns dt property
+Date:   Thu, 17 Nov 2022 12:52:41 +0200
+Message-ID: <20221117105249.115649-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/3] spi: meson-spicc: Lower CS between bursts
-Content-Language: en-US
-To:     Carlo Caione <ccaione@baylibre.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
- <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221116-s905x_spi_ili9486-v1-3-630401cb62d5@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+SPI NOR flashes have specific cs-setup time requirements without which
+they can't work at frequencies close to their maximum supported frequency,
+as they miss the first bits of the instruction command. Unrecognized
+commands are ignored, thus the flash will be unresponsive. Introduce the
+spi-cs-setup-ns property to allow spi devices to specify their cs setup
+time.
 
-On 17/11/2022 09:47, Carlo Caione wrote:
-> On some hardware (reproduced on S905X) when a large payload is
-> transmitted over SPI in bursts at the end of each burst, the clock line
-> briefly fluctuates creating spurious clock transitions that are being
-> recognised by the connected device as a genuine pulses, creating an
-> offset in the data being transmitted.
-> 
-> Lower the GPIO CS between bursts to avoid the clock being interpreted as
-> valid.
+Tudor Ambarus (8):
+  spi: dt-bindings: Introduce spi-cs-setup-ns property
+  spi: Introduce spi-cs-setup-ns property
+  spi: Reintroduce spi_set_cs_timing()
+  spi: atmel-quadspi: Add support for configuring CS timing
+  ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91-sama5d27_som1: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91: sama5d2_icp: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
+  ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its
+    maximum frequency
 
-I'm afraid this will actually break SPI NORs for example where CS actually splits
-transactions.
+ .../bindings/spi/spi-peripheral-props.yaml    |  5 +++
+ arch/arm/boot/dts/at91-sam9x60ek.dts          |  3 +-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi     |  3 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi   |  3 +-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts        |  3 +-
+ drivers/spi/atmel-quadspi.c                   | 34 +++++++++++++++
+ drivers/spi/spi.c                             | 43 +++++++++++++++++++
+ 7 files changed, 90 insertions(+), 4 deletions(-)
 
-Isn't Amjad change enough ? The CLK pull-up should avoid this.
-
-If it's not the case, then it's an HW issue and the CLK line pull-up is too weak and an
-external pull should then be added.
-
-> 
-> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
-> ---
->   drivers/spi/spi-meson-spicc.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-> index d47f2623a60f..af8d74b53519 100644
-> --- a/drivers/spi/spi-meson-spicc.c
-> +++ b/drivers/spi/spi-meson-spicc.c
-> @@ -291,6 +291,10 @@ static inline void meson_spicc_setup_burst(struct meson_spicc_device *spicc)
->   static irqreturn_t meson_spicc_irq(int irq, void *data)
->   {
->   	struct meson_spicc_device *spicc = (void *) data;
-> +	struct spi_device *spi_dev;
-> +
-> +	spi_dev = spicc->message->spi;
-> +	gpiod_set_value(spi_dev->cs_gpiod, 0);
->   
->   	writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_STATREG);
->   
-> @@ -309,6 +313,8 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
->   	/* Setup burst */
->   	meson_spicc_setup_burst(spicc);
->   
-> +	gpiod_set_value(spi_dev->cs_gpiod, 1);
-> +
->   	/* Start burst */
->   	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
->   
-> 
+-- 
+2.25.1
 
