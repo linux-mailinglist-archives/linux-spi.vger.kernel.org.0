@@ -2,142 +2,398 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7616862DEE5
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 15:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0503D62DF9F
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Nov 2022 16:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbiKQO7x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Nov 2022 09:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
+        id S240725AbiKQPVi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Nov 2022 10:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239980AbiKQO7d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 09:59:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274446327;
-        Thu, 17 Nov 2022 06:59:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 996F161E12;
-        Thu, 17 Nov 2022 14:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD1FC433C1;
-        Thu, 17 Nov 2022 14:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668697171;
-        bh=O+U992v26U9/jVBVgthCJ9el4v7NKpgKZhUu+7FqnGE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cEAkBgVTSjigXjhLE8Z3WCze+jK69DkTc+6W6TlQnjaTee11N1klVaeutLzNQw2BG
-         9vAsQv2qawUh6q/34t050wVxU0MBZmzhginKGpmDeC6e/LqZ3iQXuZDvob/kEFYdM2
-         Tg4GoTGlYoOj9/A6BoYVPvcgKBNB8WlTOTZI6lj7qcAoUCbHNFg6IT9/6p2OGfypN7
-         0nEBjRZiTUonuIal7bJdOpsemQ5O3dC9LMFhhHE3Ue1kJL3LmBARVcVblZAjoH/WDT
-         DWy3beAQBDNo8QkNFqWB9X+vAtEYrEx3YaQ50x/3jSB+1ouDq/YiJcC+0mKX+gFVO7
-         C/KTEZKS3cBIQ==
-Date:   Thu, 17 Nov 2022 14:59:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Carlo Caione <carlo@caione.org>
-Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
- controllers
-Message-ID: <Y3ZMT4F3+3bjNXKo@sirena.org.uk>
-References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
- <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
- <Y3YWdeTLfmDh7UyB@sirena.org.uk>
- <cd2d4d1e-f42a-da5b-e498-fbb32f792094@baylibre.com>
+        with ESMTP id S240316AbiKQPUw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Nov 2022 10:20:52 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C787990D;
+        Thu, 17 Nov 2022 07:17:08 -0800 (PST)
+Received: from frapeml500004.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCk3g38XBz688Z4;
+        Thu, 17 Nov 2022 23:14:39 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500004.china.huawei.com (7.182.85.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 16:17:05 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 15:17:04 +0000
+Date:   Thu, 17 Nov 2022 15:17:03 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <20221117151703.00006bf8@Huawei.com>
+In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+        <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9UsFcg/cAJcYd/H+"
-Content-Disposition: inline
-In-Reply-To: <cd2d4d1e-f42a-da5b-e498-fbb32f792094@baylibre.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 17 Nov 2022 13:38:42 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
---9UsFcg/cAJcYd/H+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> #for IIO.
 
-On Thu, Nov 17, 2022 at 02:40:05PM +0100, Carlo Caione wrote:
-> On 17/11/2022 12:09, Mark Brown wrote:
+Looked briefly at the rest and only found the issue Andrew Lunn pointed out.
+Otherwise all seem fine to me.
 
-> > I don't understand what the commit log is saying here.  The meson-spicc
-> > driver advertises support for 8 bit words, if the driver is sending data
-> > formatted as a byte stream everything should be fine.
-> > It may be that there is some optimisation available from taking
-> > advantage of the hardware's ability to handle larger word sizes but
-> > there should be no data corruption issue.
+Jonathan
 
-> There is no data corruption but the 16-bit pixel data have per-pixel
-> bytes swapped: for example 0x55AD is sent instead of 0xAD55 and this is
-> causing the wrong color to be displayed on the panel.
 
-If the data is being unexpectedly byte swapped then clearly it is
-being corrupted.  How is this byte swapping happening?  SPI
-devices should default to doing 8 bit transfers, if things
-randomly get put into anything other than 8 bit mode without the
-client device explicitly asking for it then that seems really
-bad.
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
+>  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
+>  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
+>  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
+>  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
+>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
+>  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
+>  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
+>  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
+>  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
+>  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
+>  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
+>  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
+>  21 files changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> index 1ab416c83c8d..d2de3d128b73 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Qualcomm Global Clock & Reset Controller Common Bindings
+> +title: Qualcomm Global Clock & Reset Controller common parts
+>  
+>  maintainers:
+>    - Stephen Boyd <sboyd@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/dma/dma-common.yaml b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> index ad06d36af208..9b7b94fdbb0b 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-common.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/dma/dma-common.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Engine Generic Binding
+> +title: DMA Engine common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/dma/dma-controller.yaml b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> index 6d3727267fa8..225a141c7b5c 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> @@ -4,13 +4,13 @@
+>  $id: http://devicetree.org/schemas/dma/dma-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Controller Generic Binding
+> +title: DMA Controller common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+>  
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
+>  
+>  # Everything else is described in the common file
+>  properties:
+> diff --git a/Documentation/devicetree/bindings/dma/dma-router.yaml b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> index 4b817f5dc30e..0ebd7bc6232b 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-router.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> @@ -4,13 +4,13 @@
+>  $id: http://devicetree.org/schemas/dma/dma-router.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Router Generic Binding
+> +title: DMA Router common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+>  
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
+>  
+>  description:
+>    DMA routers are transparent IP blocks used to route DMA request
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adc.yaml b/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> index db348fcbb52c..bd0f5fae256e 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/iio/adc/adc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic IIO bindings for ADC channels
+> +title: IIO common properties for ADC channels
+>  
+>  maintainers:
+>    - Jonathan Cameron <jic23@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/media/video-interface-devices.yaml b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> index 4527f56a5a6e..bd719cb1813e 100644
+> --- a/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> +++ b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/media/video-interface-devices.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Common bindings for video receiver and transmitter devices
+> +title: Common properties for video receiver and transmitter devices
+>  
+>  maintainers:
+>    - Jacopo Mondi <jacopo@jmondi.org>
+> diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> index 68c3b9871cf3..e8cf73794772 100644
+> --- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> +++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/media/video-interfaces.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Common bindings for video receiver and transmitter interface endpoints
+> +title: Common properties for video receiver and transmitter interface endpoints
+>  
+>  maintainers:
+>    - Sakari Ailus <sakari.ailus@linux.intel.com>
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index 802e3ca8be4d..a17f49738abd 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mmc/mmc-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: MMC Controller Generic Binding
+> +title: MMC Controller common properties
+>  
+>  maintainers:
+>    - Ulf Hansson <ulf.hansson@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> index 97ac3a3fbb52..20b195ef9b70 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NAND Chip and NAND Controller Generic Binding
+> +title: NAND Chip and NAND Controller common properties
+>  
+>  maintainers:
+>    - Miquel Raynal <miquel.raynal@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 359a015d4e5a..a004efc42842 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NAND Chip and NAND Controller Generic Binding
+> +title: NAND Chip and NAND Controller common properties
+>  
+>  maintainers:
+>    - Miquel Raynal <miquel.raynal@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml b/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> index 9309dc40f54f..8715adff5eaf 100644
+> --- a/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/bluetooth/bluetooth-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Bluetooth Controller Generic Binding
+> +title: Bluetooth Controller common properties
+>  
+>  maintainers:
+>    - Marcel Holtmann <marcel@holtmann.org>
+> diff --git a/Documentation/devicetree/bindings/net/can/can-controller.yaml b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> index 1f0e98051074..3747b46cf9b6 100644
+> --- a/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/can/can-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: CAN Controller Generic Binding
+> +title: CAN Controller common properties
+>  
+>  maintainers:
+>    - Marc Kleine-Budde <mkl@pengutronix.de>
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 3aef506fa158..26502c0f2aff 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/ethernet-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Ethernet Controller Generic Binding
+> +title: Ethernet Controller common properties
+>  
+>  maintainers:
+>    - David S. Miller <davem@davemloft.net>
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index ad808e9ce5b9..0aa1b60e78cc 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/ethernet-phy.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Ethernet PHY Generic Binding
+> +title: Ethernet PHY common properties
+>  
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+> diff --git a/Documentation/devicetree/bindings/net/mdio.yaml b/Documentation/devicetree/bindings/net/mdio.yaml
+> index b5706d4e7e38..b184689dd6b2 100644
+> --- a/Documentation/devicetree/bindings/net/mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/mdio.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/mdio.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: MDIO Bus Generic Binding
+> +title: MDIO Bus common properties
+>  
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index cf9c2f7bddc2..20ac432dc683 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic OPP (Operating Performance Points) Common Binding
+> +title: Generic OPP (Operating Performance Points) common parts
+>  
+>  maintainers:
+>    - Viresh Kumar <viresh.kumar@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> index 1f9a2aac53c0..8b52fd156d4c 100644
+> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Restart and shutdown handler generic binding
+> +title: Restart and shutdown handler common properties
+>  
+>  maintainers:
+>    - Sebastian Reichel <sre@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> index 0ec3551f12dd..00848a5a409e 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/rtc/rtc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: RTC Generic Binding
+> +title: Real Time Clock common properties
+>  
+>  maintainers:
+>    - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> index 4aad121eff3f..2176033850dc 100644
+> --- a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/soundwire/soundwire-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: SoundWire Controller Generic Binding
+> +title: SoundWire Controller common properties
+>  
+>  maintainers:
+>    - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> index 01042a7f382e..6bbe073f894b 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/spi/spi-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: SPI Controller Generic Binding
+> +title: SPI Controller common properties
+>  
+>  maintainers:
+>    - Mark Brown <broonie@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> index e3dfb02f0ca5..6875cf1c3159 100644
+> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/watchdog/watchdog.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Watchdog Generic Bindings
+> +title: Watchdog common properties
+>  
+>  maintainers:
+>    - Guenter Roeck <linux@roeck-us.net>
 
-> The problem is that the current code is sending data with an hardcoded
-> bpw == 8 whether the data is swapped or not before the sending.
-
-> For 8-bit only controllers the data is swapped by the MIPI DBI code but
-> this is not true for controllers supporting 16-bit as well, but in both
-> cases we are sending the data out the same way with an 8 bpw.
-
-> So the same image is basically displayed differently whether the SPI
-> controller supports 16 bpw or not. I'm trying to fix this by sending
-> data with 16-bit bpw when the controller is supporting that.
-
-So this is an issue in the MIPI DBI code where the interpretation
-of the buffer passed in depends on both the a caller parameter
-and the capabilities of the underlying SPI controller, meaning
-that a driver can suddenly become buggy when used with a new
-controller?  I can't really tell what the bits per word being
-passed in along with the buffer is supposed to mean, I'd have
-expected it to correspond to the format of the buffer but it
-seems like perhaps the buffer is always formatted for 16 bits and
-the callers are needing to pass in the capabilities of the
-controller which is then also checked by the underlying code?
-This all seems extremely confusing, I'm not surprised there's
-bugs.
-
-At the very least your changelog needs to express clearly what is
-going on, the description doesn't appear to correspond to what
-you're changing.
-
-> Please note that this is what it is done also by mipi_dbi_typec3_command().
-
-The core code does appear to have some checks for controller
-capabilities...
-
---9UsFcg/cAJcYd/H+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN2TEsACgkQJNaLcl1U
-h9DpKgf9FzxQ7ChMJiClsOLDz6yyHyS/FPaa1Kptfbl/K1nGsgEialuKtIsbFLTk
-Jns3jfo9+KpsN60wB9hYy0rstq8QUhoFd8M7HXHH0p8zC++zRgV64I0NUl1c7EKQ
-v4nMTmWTAwqeJ7g7rModR/lsJl7VeGJ4fxdY6b5TLBwVfasa/geoEAU8L7tlZYrb
-ECgj8WLnAmRkBTdXDuONdftUIbhBHJndjKJF9pmB4q9yXQ1/RlQk+DWQ7ERH9HHN
-oQEhftvv9z3hgY8dzfSCgFPWpx8MSQLgn3JigCHypmbMGwd6v5TJaR+MrbCCinWs
-55DZt6sIYRCfTC4nMyDGg0ogAZ2Hbg==
-=qeiD
------END PGP SIGNATURE-----
-
---9UsFcg/cAJcYd/H+--
