@@ -2,127 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278BB62FA7A
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 17:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D0E62FDC3
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 20:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbiKRQlZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 11:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S243084AbiKRTEQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 14:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiKRQlY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 11:41:24 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAC3A6204A;
-        Fri, 18 Nov 2022 08:41:22 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 19 Nov 2022 01:41:21 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 6D25E2058B4F;
-        Sat, 19 Nov 2022 01:41:21 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Sat, 19 Nov 2022 01:41:21 +0900
-Received: from [10.212.159.221] (unknown [10.212.159.221])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id AA8DFB62A4;
-        Sat, 19 Nov 2022 01:41:20 +0900 (JST)
-Message-ID: <935b3413-7a6f-79c8-aa74-2dae2fec62a0@socionext.com>
-Date:   Sat, 19 Nov 2022 01:41:20 +0900
+        with ESMTP id S243008AbiKRTCs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 14:02:48 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCB554B10;
+        Fri, 18 Nov 2022 11:02:36 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id g12so10650823wrs.10;
+        Fri, 18 Nov 2022 11:02:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=E5Ey+SWUGHe54inhYQO4Q9IAek2nNg4LJ02tyTCqBBc=;
+        b=muB+SifbTgI90sosGYp1Rdn9323oxvY/zKHPXxKDBsUaWLb+RDwNiQr346MUdyu7lC
+         Gucft/tc7JBy/sxc44JyFyG2pL7UhNO5tik1/CaLmaBOOQFGFjDrt0rB71jm5h/WW4VN
+         QNg3RKWX0yEJPqu7dLKG9Oz+By3cLCmQAhF8eLI7rFfy2yycAgWBMaPK9DwHZxe3OMnd
+         Ij6RcFnNjlBq625Wwun3KE3WP0OiqrZKmC86roZKUid0EjoAuLba4qAFT4oNMBoenwt7
+         RAsO4KMWBw0qoEuZZ66LqXSWOJp+pEvUrWX9/krmnj7hktPOkvvrhpqfLLg8YTYrYNQX
+         vy1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E5Ey+SWUGHe54inhYQO4Q9IAek2nNg4LJ02tyTCqBBc=;
+        b=sDSkueVDN3ph5p4ZSCGqrDF7+P/VU6s5HeQV/gjVCACLtOQjrhh8ZgkzNVynSOjzpR
+         wv4+iRKrbSWuY2R4RprFk5sKxpI//rPCFfq7B1nSn1vsG894vACQQWqkbHVZBtwXARTZ
+         mDMKuL1I9cuyhfwHHkjPXdgcdysc+eRl7LBZr26llyKf5vZEUSFou2ETQKOzgb+nKLTL
+         pBSfG++KwtratfWv40a5qojaaghAbbp7okkgSCJFWoNKKc+j4l0aXzrkFlujFMEuN6Ho
+         MXIEBvuFjczONl3FXVuznOmSgomYaXvIhlVBB8hOxcja2Wnr17MeIpqcSe+abz3Abw//
+         093w==
+X-Gm-Message-State: ANoB5plyHq9hUPPSW6mirs+cLb+tf2kKwx1+JHKYkqCkThIH0rRhlrdI
+        FfPc28/fYblO2A+ULiYQrYhlBXp7fQtgsDKl
+X-Google-Smtp-Source: AA0mqf6w/1xAUqgYy2FX3lJHlg67dGBf2UYoc+mhcExG80QMtV/cbLJw50V7xfWynisTt8PVUp27yg==
+X-Received: by 2002:a05:6000:114f:b0:241:c80c:5f54 with SMTP id d15-20020a056000114f00b00241c80c5f54mr476592wrx.15.1668798154591;
+        Fri, 18 Nov 2022 11:02:34 -0800 (PST)
+Received: from ?IPV6:2a0e:41a:894f:0:6f8e:6bf6:725c:d7d5? ([2a0e:41a:894f:0:6f8e:6bf6:725c:d7d5])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b003cf37c5ddc0sm5775361wmq.22.2022.11.18.11.02.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 11:02:33 -0800 (PST)
+Sender: Carlo Caione <carlo.caione@gmail.com>
+From:   Carlo Caione <carlo@caione.org>
+X-Google-Original-From: Carlo Caione <ccaione@baylibre.com>
+Message-ID: <8a3bdd84-2789-1b42-976f-2843320750b6@baylibre.com>
+Date:   Fri, 18 Nov 2022 20:02:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Socionext F_OSPI controller
- bindings
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221118005904.23557-1-hayashi.kunihiko@socionext.com>
- <20221118005904.23557-2-hayashi.kunihiko@socionext.com>
- <Y3du24GWN/enGORf@sirena.org.uk>
- <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
- <Y3emmHGM6uS0m5kd@sirena.org.uk>
+Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
+ controllers
 Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <Y3emmHGM6uS0m5kd@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
+ <Y3YWdeTLfmDh7UyB@sirena.org.uk>
+ <cd2d4d1e-f42a-da5b-e498-fbb32f792094@baylibre.com>
+ <Y3ZMT4F3+3bjNXKo@sirena.org.uk>
+ <e36142ec-6b7f-e667-7d6b-48234318c8cd@baylibre.com>
+ <Y3eoYTZRyRJnze1z@sirena.org.uk>
+In-Reply-To: <Y3eoYTZRyRJnze1z@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2022/11/19 0:36, Mark Brown wrote:
-> On Fri, Nov 18, 2022 at 11:16:22PM +0900, Kunihiko Hayashi wrote:
->> On 2022/11/18 20:39, Mark Brown wrote:
->>> On Fri, Nov 18, 2022 at 09:59:03AM +0900, Kunihiko Hayashi wrote:
-> 
->>>> +  socionext,cs-start-cycle:
->>>> +  socionext,cs-end-cycle:
->>>> +  socionext,cs-deassert-clk-cycle:
-> 
->>> These are all generic SPI properties so we should add them
->>> generically, on the device rather than the controller since this
->>> is something that might vary per client device.  There was also a
->>> core function spi_set_cs_timing() which was in earlier versions
->>> and is about to get reintroduced.
-> 
->> So I understand you mean that these properties should be defined like
->> spi-peripheral-props.yaml for the devices.
-> 
->> If yes, I'll drop these properties once and define our vendor-specific
->> "peripheral-props" in the next series.
-> 
-> Yes, sounds good.
+On 18/11/2022 16:44, Mark Brown wrote:
 
-Okay, I'll send simple one in v2.
-
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>>> +    items:
->>>> +      - description: the number of bytes to transfer
->>>> +        maximum: 4
->>>> +      - description: value to transfer
->>>> +        default: 0
->>>> +      - description: bit-width to transfer
->>>> +        enum: [0, 1, 2, 4, 8]
+>> The problem arrives when your controller does support 16-bits, so 
+>> your data is not swapped, but you still put the data on the bus 
+>> with 8-bit transfers.
 > 
->>> This is also something SPI device should set up, as far as I can
->>> tell this should be set vis spi_mem_op.dummy.nbytes.
-> 
->> Yes, but the controller also supports dummy cycles, and can send
->> extra bytes before the dummy cycles.
-> 
-> Ah, so this is some additional thing on top of dummy cycles?  I'd
-> not realised that.  It probably wants to be added into spi-mem I
-> guess.
+> Why would you need to use 8 bit transfers if the controller supports
+>  16 bits?
 
-Yes, however, it's tough to handle with spi-mem and I don't have
-any use case, so drop it.
+No idea why this driver is forcing 8-bit transfers when the controller
+supports 16-bits (this is what this patch is fixing).
 
->>>> +  socionext,data-swap-2byte:
->>>> +    description:
->>>> +      Indicates swap byte order per 2-bytes.
->>>> +    type: boolean
->>>
->>>> +  socionext,data-swap-4byte:
->>>> +    description:
->>>> +      Indicates swap byte order per 4-bytes.
->>>> +    type: boolean
-> 
->>> Again these should be set by the device.  I think these should be
->>> set based on a combination of bits per word and if the host is in
->>> big endian or little endian mode.
-> 
->> I see. This feature is complicated to use, so I'll not add it here.
-> 
-> That also works, someone can always add additional support later
-> when they have a concrete use case.
+My theory is that this driver was written with the Raspberry Pi HATs in
+mind and (AFAICT) the RPi has an 8-bit only SPI controller so the driver
+author didn't bother with anything different.
 
-I understand.
+--
+Carlo Caione
 
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
