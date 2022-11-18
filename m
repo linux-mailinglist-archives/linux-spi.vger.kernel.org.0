@@ -2,48 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA3762F706
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 15:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C89262F709
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 15:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242358AbiKRORa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 09:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S242297AbiKRORn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 09:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242394AbiKRORF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 09:17:05 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CE8369DE5;
-        Fri, 18 Nov 2022 06:16:24 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 18 Nov 2022 23:16:23 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id DBCB520584CE;
-        Fri, 18 Nov 2022 23:16:23 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 18 Nov 2022 23:16:23 +0900
-Received: from [10.212.158.119] (unknown [10.212.158.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 36093B62BA;
-        Fri, 18 Nov 2022 23:16:23 +0900 (JST)
-Message-ID: <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
-Date:   Fri, 18 Nov 2022 23:16:22 +0900
+        with ESMTP id S242298AbiKRORK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 09:17:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2A66D48F;
+        Fri, 18 Nov 2022 06:16:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72D1A6257A;
+        Fri, 18 Nov 2022 14:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E66C433D7;
+        Fri, 18 Nov 2022 14:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668780989;
+        bh=+VWgwc6Cv21GOSko5yeeeSuThRGjhJB4uSk3EPnNBlw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=K59dSKmhhZEgSVeAs3nsLfliSjVR+4wIiJHvN9VtXYfsilyc5DFHozkPNfDbrKqTH
+         zbQfIXNxXBxxI6/13Jb3k+ELsscXPApwwWIZhS4RJDSuTIiLTikA6CHUxtR7tLeAEe
+         3Rl92YK0Pmtd6HEj5PfHUKcrYvhfrCl9gwDHCvok0U5wJJUx2rsngCeXAcX0CiT3cs
+         b3u3OcqX++INq+gm5iIv/PC6Mp/HHgDQWXoDu94ACTbxg5QI/z+e7jGwcD5HiFPc9q
+         BTmP5+Oiz9DnSVQHStI1g+JmQXPZSzuj3W3dz23Z4KGxljxX6lIKe6CCRZaqcKrPGo
+         bUND9sJkd09wA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     stable@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        David Jander <david@protonic.nl>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        kernel@pengutronix.de
+In-Reply-To: <20221116164930.855362-1-mkl@pengutronix.de>
+References: <20221116164930.855362-1-mkl@pengutronix.de>
+Subject: Re: [PATCH] spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
+Message-Id: <166878098696.885585.12678167389874876535.b4-ty@kernel.org>
+Date:   Fri, 18 Nov 2022 14:16:26 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Socionext F_OSPI controller
- bindings
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221118005904.23557-1-hayashi.kunihiko@socionext.com>
- <20221118005904.23557-2-hayashi.kunihiko@socionext.com>
- <Y3du24GWN/enGORf@sirena.org.uk>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <Y3du24GWN/enGORf@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-8af31
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,73 +58,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
-
-Thank you for your comment.
-
-On 2022/11/18 20:39, Mark Brown wrote:
-> On Fri, Nov 18, 2022 at 09:59:03AM +0900, Kunihiko Hayashi wrote:
+On Wed, 16 Nov 2022 17:49:30 +0100, Marc Kleine-Budde wrote:
+> The SPI framework checks for each transfer (with the struct
+> spi_controller::can_dma callback) whether the driver wants to use DMA
+> for the transfer. If the driver returns true, the SPI framework will
+> map the transfer's data to the device, start the actual transfer and
+> map the data back.
 > 
->> +  socionext,cs-start-cycle:
->> +  socionext,cs-end-cycle:
->> +  socionext,cs-deassert-clk-cycle:
+> In commit 07e759387788 ("spi: spi-imx: add PIO polling support") the
+> spi-imx driver's spi_imx_transfer_one() function was extended. If the
+> estimated duration of a transfer does not exceed a configurable
+> duration, a polling transfer function is used. This check happens
+> before checking if the driver decided earlier for a DMA transfer.
 > 
-> These are all generic SPI properties so we should add them
-> generically, on the device rather than the controller since this
-> is something that might vary per client device.  There was also a
-> core function spi_set_cs_timing() which was in earlier versions
-> and is about to get reintroduced.
+> [...]
 
-So I understand you mean that these properties should be defined like
-spi-peripheral-props.yaml for the devices.
+Applied to
 
-If yes, I'll drop these properties once and define our vendor-specific
-"peripheral-props" in the next series.
+   broonie/spi.git for-next
 
->> +  socionext,alternative-byte:
->> +    description:
->> +      Specify the extra bytes to transfer after address transfer.
-> 
-> This just doesn't seem like something the controller should be
-> worrying about, the device should just send whatever the device
-> needs sending.
+Thanks!
 
-This seems to be a feature added for the special devices,
-so this should be device matter.
+[1/1] spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
+      commit: e85e9e0d8cb759013d6474011c227f92e442d746
 
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    items:
->> +      - description: the number of bytes to transfer
->> +        maximum: 4
->> +      - description: value to transfer
->> +        default: 0
->> +      - description: bit-width to transfer
->> +        enum: [0, 1, 2, 4, 8]
-> 
-> This is also something SPI device should set up, as far as I can
-> tell this should be set vis spi_mem_op.dummy.nbytes.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Yes, but the controller also supports dummy cycles, and can send
-extra bytes before the dummy cycles.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
->> +  socionext,data-swap-2byte:
->> +    description:
->> +      Indicates swap byte order per 2-bytes.
->> +    type: boolean
-> 
->> +  socionext,data-swap-4byte:
->> +    description:
->> +      Indicates swap byte order per 4-bytes.
->> +    type: boolean
-> 
-> Again these should be set by the device.  I think these should be
-> set based on a combination of bits per word and if the host is in
-> big endian or little endian mode.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-I see. This feature is complicated to use, so I'll not add it here.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+Thanks,
+Mark
