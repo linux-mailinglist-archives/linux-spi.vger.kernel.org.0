@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28E662F94C
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 16:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198C162F96C
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 16:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiKRPat (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 10:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S242372AbiKRPhM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 10:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbiKRPas (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 10:30:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B81659C;
-        Fri, 18 Nov 2022 07:30:47 -0800 (PST)
+        with ESMTP id S242505AbiKRPhB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 10:37:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB51B781B3;
+        Fri, 18 Nov 2022 07:37:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C399B8244C;
-        Fri, 18 Nov 2022 15:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF1EC433D6;
-        Fri, 18 Nov 2022 15:30:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A790625A4;
+        Fri, 18 Nov 2022 15:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CE0C433C1;
+        Fri, 18 Nov 2022 15:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668785445;
-        bh=LfiiqbQVgBizYCizUCNHg2IaL0Mi+yMeJ7xdaR4buUo=;
+        s=k20201202; t=1668785819;
+        bh=57l+idEGxs6Fkigjt1SVVkSFa0sb7GM3WUToVsS/X0s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ElI+i2r3kma/IUDyxlSnThJkl8QTnLeIACfF3w8dM+Px8545hceggGH/r/6fvER2O
-         PqopVu3Q96iNH1klO2wNODhFGrNZsZ9YyZyOAJlg9fokdPVB0Jd8QzZsojTOflQs8F
-         HKURLqFqS/sK3foKVBQTj5IoslV3U1yvZKoXVB03w87lqeA5m4Ch5qiQhrxCsAnfGa
-         5zo06a2+QMoERl2xcfa3cN5XW1YANTTTyfVbbsLccT3+xh4t/BzNURCThgzj3t9BbI
-         kVKaKEfE5sU3Lr2gDyLfoFqfAxrsokTjKQqJ7qETTrTjFT340BSgmuEg4jrHLyqk6D
-         G3t2KN3upPGhA==
-Date:   Fri, 18 Nov 2022 15:30:41 +0000
+        b=CNQJv7YCmb/p2EUHOadQ6N0/2Iz71suMvoYHthTIdQkYbn8qD4Ep5pcQPiCcAx7Pc
+         l6E3ETQbn8DiLockjrEG75xSFmYzev0LIXloqNOP5OeCCHizU6It0QPIuwku9sB5tQ
+         4wwdj1nR7IW78mpHQ6EavBYe+TZ/0hQNAZi8V5J8+LXecfu4B8cTGDbz+w3lthevuc
+         ZxCv7Osc5NshwS57RGNbdHLWlsqzqgQjP0roOD3J5h/d7FnVXyqoBoAHStnMTceIN8
+         OIFcaFnVMR0tYD2u5LBDandx2D8/QDY6LeFxdZWoYCtW8eVD3YDalEtP8MAoJMBbIX
+         WUII+FTZ1ut8Q==
+Date:   Fri, 18 Nov 2022 15:36:56 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     tudor.ambarus@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        nicolas.ferre@microchip.com, robh+dt@kernel.org
-Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
-Message-ID: <Y3elIdM3Xz1H4kKk@sirena.org.uk>
-References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
- <20221118141458.954646-1-michael@walle.cc>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Socionext F_OSPI controller
+ bindings
+Message-ID: <Y3emmHGM6uS0m5kd@sirena.org.uk>
+References: <20221118005904.23557-1-hayashi.kunihiko@socionext.com>
+ <20221118005904.23557-2-hayashi.kunihiko@socionext.com>
+ <Y3du24GWN/enGORf@sirena.org.uk>
+ <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kDV9Vhdp/jBbKORP"
+        protocol="application/pgp-signature"; boundary="MRUeBLnPLiUD0O8l"
 Content-Disposition: inline
-In-Reply-To: <20221118141458.954646-1-michael@walle.cc>
+In-Reply-To: <5483711f-504c-bcf3-0fbf-65d04530d188@socionext.com>
 X-Cookie: Ego sum ens omnipotens.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,43 +61,84 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---kDV9Vhdp/jBbKORP
+--MRUeBLnPLiUD0O8l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
-> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+On Fri, Nov 18, 2022 at 11:16:22PM +0900, Kunihiko Hayashi wrote:
+> On 2022/11/18 20:39, Mark Brown wrote:
+> > On Fri, Nov 18, 2022 at 09:59:03AM +0900, Kunihiko Hayashi wrote:
 
-> > +  spi-cs-setup-ns:
-> > +    description:
-> > +      Delay in nanosecods to be introduced by the controller after CS is
-> > +      asserted.
+> > > +  socionext,cs-start-cycle:
+> > > +  socionext,cs-end-cycle:
+> > > +  socionext,cs-deassert-clk-cycle:
 
-> Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
-> least the driver uses it that way.
+> > These are all generic SPI properties so we should add them
+> > generically, on the device rather than the controller since this
+> > is something that might vary per client device.  There was also a
+> > core function spi_set_cs_timing() which was in earlier versions
+> > and is about to get reintroduced.
 
-> But IMHO this should just be a normal uint32 value to be consistent with
-> all the other properties. Also the max value with 16bit will be 'just'
-> 65us.
+> So I understand you mean that these properties should be defined like
+> spi-peripheral-props.yaml for the devices.
 
-Making it 32 bit does seem safer.  I've applied the series
-already, mainly for the reintroduction of spi_set_cs_timing()
-since there was another driver that needed it, but we can still
-fix things up until the merge window.
+> If yes, I'll drop these properties once and define our vendor-specific
+> "peripheral-props" in the next series.
 
---kDV9Vhdp/jBbKORP
+Yes, sounds good.
+
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +    items:
+> > > +      - description: the number of bytes to transfer
+> > > +        maximum: 4
+> > > +      - description: value to transfer
+> > > +        default: 0
+> > > +      - description: bit-width to transfer
+> > > +        enum: [0, 1, 2, 4, 8]
+
+> > This is also something SPI device should set up, as far as I can
+> > tell this should be set vis spi_mem_op.dummy.nbytes.
+
+> Yes, but the controller also supports dummy cycles, and can send
+> extra bytes before the dummy cycles.
+
+Ah, so this is some additional thing on top of dummy cycles?  I'd
+not realised that.  It probably wants to be added into spi-mem I
+guess.
+
+> > > +  socionext,data-swap-2byte:
+> > > +    description:
+> > > +      Indicates swap byte order per 2-bytes.
+> > > +    type: boolean
+> >=20
+> > > +  socionext,data-swap-4byte:
+> > > +    description:
+> > > +      Indicates swap byte order per 4-bytes.
+> > > +    type: boolean
+
+> > Again these should be set by the device.  I think these should be
+> > set based on a combination of bits per word and if the host is in
+> > big endian or little endian mode.
+
+> I see. This feature is complicated to use, so I'll not add it here.
+
+That also works, someone can always add additional support later
+when they have a concrete use case.
+
+--MRUeBLnPLiUD0O8l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3pSEACgkQJNaLcl1U
-h9AP/wf+OU7ftgSU8x32UiIvVxfKAhXCTN6YUUpN5wJ5rcR6Y/u5C9U4Hz5OvhXt
-iFa2V0T2jjqbu23NzY1vE+1JHj9RDdajNIL6EmY+L/mWhg2zJ9ps6NzDFLKWTP8O
-jq8nKUKOtaaQEqjkf1JEohloqNWFiCeS+ClNGIKEE7mXIijbl40YWZ5+b6pu6Dyh
-RgAFSFvIvZWg4PcHaEipU9uHlkakTTnCFLdyx9IZYsVb/QxmaVtWHdvutod55qyK
-I8ma7ORrkz7xrlS77LyXeNira/4qBuln0QeOf1VRh2pNxOq7MFaiW8TMnSB2pbvp
-iPKEIzUny8D0A1zg1QWzhxfru8Jvcg==
-=PlCP
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3ppcACgkQJNaLcl1U
+h9C7MAf/ZniKmhRdAWeZsowY/qy6zpAwJiATBzqTv3G24VqhieLk+azOeSJKHJPR
+FEkFj1RiVTh3UOtX9dx9arInJfIj2fcPNHHBJTU+YDX5OCSKX81Md+6Cp2CwAYsA
+JiDZs3d8OXFoLxo39D5sFFHRonMx01/bbzSZ9ipdjo81dkThNFKD6KLA8Sg23sr6
+mAPx1ZNF3i5fnLftPM5DSM8gMLIFFIo4UIJhtaY5i+X6nfcusmpQayTyIwUXmUoG
+vcVwUtbI9y6r2HTjYQAsxRi3vKS0h+g8R5xMXiElVwL/TH85J/eHOXJ6Gr7iD+5L
+dZ2eYQHbIjVKkvkHe+Ye0jq6NSkvqA==
+=9Unj
 -----END PGP SIGNATURE-----
 
---kDV9Vhdp/jBbKORP--
+--MRUeBLnPLiUD0O8l--
