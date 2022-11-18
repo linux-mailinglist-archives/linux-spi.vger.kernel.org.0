@@ -2,176 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CE162EF60
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 09:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D459762F2B0
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 11:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240943AbiKRI3K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 03:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S229476AbiKRKgc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 05:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241401AbiKRI2h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 03:28:37 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6626331FAB
-        for <linux-spi@vger.kernel.org>; Fri, 18 Nov 2022 00:28:33 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id k19so5920577lji.2
-        for <linux-spi@vger.kernel.org>; Fri, 18 Nov 2022 00:28:33 -0800 (PST)
+        with ESMTP id S234724AbiKRKgb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 05:36:31 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EF992B6F;
+        Fri, 18 Nov 2022 02:36:30 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id r126-20020a1c4484000000b003cffd336e24so2518236wma.4;
+        Fri, 18 Nov 2022 02:36:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=c0DwlSGGZnpMt70g7cvHCqqLtClo+HqnYC/KDMQT/2C4Kgme2ED6Ajko4OIXpmbeXS
-         m5SIke4QdtVszOu65Cv1AnF200xxc1a/iy1cj+W/4WPUi1idnzCq3jL3rOCyXQ/Sy7Xo
-         FhxYYZmL7CP0ofdSTlNio6J4qvL4Gb4QE7SbMbyvGwdcz0q2lnaiEphLSDGuz3cWY979
-         gQT9VdBtzdRs59dL/dUgCq5BV84WRT+Q7ok8jIBAq5G8XWvjz6kIifP/efd7/+/UMkZu
-         +qzJPaRvsSeqy/GGhmsAycmFzituYnYzJUATh2BkazIz98eeuD3Eq9fkv2cSDtBNQpLB
-         eqpQ==
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=o2gq3WkhxO5jelfwCv/WS0BWOBOHKufpRkH4v9U9Wao=;
+        b=d4PKh8zw6k/K/IW7TceQGwknGbrYWtGWKCioj737b7AqjDamyVEgbP8oStwlBRCsgr
+         2r+/vH1UGVJOQi3gaRMn2/XRtbLw90ezM4z5Ya2pPGHfUfTa3oyxFx9a+7DOoqP0b2IL
+         Kf5PO5zgnl/Rxe8HXYNlDFTV1qDvsgryqooTi2Xg1eCd+lL7Vm+m3IFbeDrbmrvPFrR4
+         1z2QirjNW8QjJ5uhQD1nVJ6F8m4i1ujFlklWkQRMdwxsyqoTzhnrwxCIgN9RanPK0Zy3
+         eYOPIE73fiy1sLxHGUNDjbLWFPhV55RCsjfoJGT3y+8U0p71f425cbNfu5I1QBh41G/X
+         sc6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=q9gxb7o8e2vlwtcuPNMG8q0J3jMFTpfy3uKLhlibWmpVd0qV2ip/LIyQoP3y4YhrqT
-         O/uTMkAa9+rm/t28dNt3/pr+KbLImsXExdIeVtuwQNGVfT7vE1iECps3UiNYjEZhKBXz
-         rxFiKxEh4oDIP5AlPz5rXmWmKB8nm0PGVMN1kyKVK4h98qfQJIHbtN+RT7FjJPQY30rh
-         I4Os+NO5Y2vZ8QYH7Pyb8m+dhZsSjKfzOR2MvvSVLtaRm+zBgoP0EMyTgT2jmV7Vvbpn
-         4l8L8jAOdXvvbMbnpcsU/YE05a3bbsQbai31ZYnpxGf1uxALQLoetHaZuhou2kFO+IJe
-         UMSg==
-X-Gm-Message-State: ANoB5pm3wO4UrplhwXAfy3HRU0hyZYOkOY3c2JRCjWI+B3fw5qijBQLw
-        rQaFVOdRhuh4ko6FXu8otyu+IA==
-X-Google-Smtp-Source: AA0mqf5FUU/an0yPckwGnu0iJ8FLtTfHewcyaiyp5w+c6ymGf8LMkNj5Lkw1yXdUuHVX3l3x9IvIFA==
-X-Received: by 2002:a2e:a5c7:0:b0:277:8d48:27dd with SMTP id n7-20020a2ea5c7000000b002778d4827ddmr2207144ljp.192.1668760111721;
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056512369800b0049b8c0571e5sm564273lfs.113.2022.11.18.00.28.30
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o2gq3WkhxO5jelfwCv/WS0BWOBOHKufpRkH4v9U9Wao=;
+        b=2igmWQCfVmn8yxtSfBPis2WC1VULT4PkrYT5wBo1m9TdQhpGMzOE5glia4TJNu1qb+
+         5GY1vJ+upSnY1AXP/ADk5QKu72K9NU7xHhHS4Sbo0J90gYD99C+QnRTgd4eD2F+MBxoq
+         x3Txbnb9xm9kgosR8pI6/t1xKFX+l0Y7ecKSeDF4E6/JTqTQzETFBzA/9Wf0hzKS/2n2
+         QrJi3Zed7VJaf6rdd5rMYwRJYexdKxRk6F3YUjLnJLST3r0sLkdGJTKITLY63YIQ3tCa
+         kJygGrMMcaVF7QvglmK0U7zMaWvTnSGZe8jD8pdxvP+A0Yn6AhFXRSll7Jn9LzcKkqFk
+         Rr+g==
+X-Gm-Message-State: ANoB5pmDbVfKq4OD74xLFbdhIT8gK1igSjhhoyF+iN7sRSuCOCnlkVYq
+        bZJOBhGS6NQaDPPnh4uhTHs=
+X-Google-Smtp-Source: AA0mqf7o5IRd2H8nnmtyx5JfUpkr4cMqOd/06z+Ilwq8xBCC6RfYEnOjn0eWatL/t/qAOLXQQG9O4Q==
+X-Received: by 2002:a05:600c:4d0a:b0:3c6:a7a1:eebd with SMTP id u10-20020a05600c4d0a00b003c6a7a1eebdmr4357430wmp.176.1668767788532;
+        Fri, 18 Nov 2022 02:36:28 -0800 (PST)
+Received: from ?IPV6:2a0e:41a:894f:0:c794:607e:a911:a21e? ([2a0e:41a:894f:0:c794:607e:a911:a21e])
+        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b0022e36c1113fsm3230241wrd.13.2022.11.18.02.36.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Message-ID: <578b686e-8461-a959-86c5-83a8be1dc981@linaro.org>
-Date:   Fri, 18 Nov 2022 09:28:29 +0100
+        Fri, 18 Nov 2022 02:36:28 -0800 (PST)
+Sender: Carlo Caione <carlo.caione@gmail.com>
+From:   Carlo Caione <carlo@caione.org>
+X-Google-Original-From: Carlo Caione <ccaione@baylibre.com>
+Message-ID: <e36142ec-6b7f-e667-7d6b-48234318c8cd@baylibre.com>
+Date:   Fri, 18 Nov 2022 11:36:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
+Subject: Re: [PATCH 2/3] drm/tiny: ili9486: Do not assume 8-bit only SPI
+ controllers
 Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
- <20221117220756.7a1bf734@xps-13>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117220756.7a1bf734@xps-13>
-Content-Type: text/plain; charset=UTF-8
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221116-s905x_spi_ili9486-v1-0-630401cb62d5@baylibre.com>
+ <20221116-s905x_spi_ili9486-v1-2-630401cb62d5@baylibre.com>
+ <Y3YWdeTLfmDh7UyB@sirena.org.uk>
+ <cd2d4d1e-f42a-da5b-e498-fbb32f792094@baylibre.com>
+ <Y3ZMT4F3+3bjNXKo@sirena.org.uk>
+In-Reply-To: <Y3ZMT4F3+3bjNXKo@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 17/11/2022 22:07, Miquel Raynal wrote:
-> Hi Krzysztof,
-> 
-> krzysztof.kozlowski@linaro.org wrote on Thu, 17 Nov 2022 13:38:42 +0100:
-> 
->> The Devicetree bindings document does not have to say in the title that
->> it is a "binding", but instead just describe the hardware.  For shared
->> (re-usable) schemas, name them all as "common properties".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
->>  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
->>  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
->>  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
->>  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
->>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
->>  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
->>  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
->>  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
->>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
->>  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
->>  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->>  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
->>  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
->>  21 files changed, 23 insertions(+), 23 deletions(-)
->>
-> 
-> [...]
-> 
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> index 97ac3a3fbb52..20b195ef9b70 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> I only see this now but the title should be
-> 
-> 	"NAND chip common properties"
-> 
->>  
->>  maintainers:
->>    - Miquel Raynal <miquel.raynal@bootlin.com>
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> index 359a015d4e5a..a004efc42842 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> And here just "NAND controller..."
-> 
-> Of course the original purpose of your series is more to clean those
-> titles rather than fixing them and if you disagree I am fine doing it
-> myself aside, but if you could at the same time make the title more
-> accurate that would be perfect.
-> 
-> Either ways:
-> 
-> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On 17/11/2022 15:59, Mark Brown wrote:
 
-Thanks, I update these manually, so I can correct the names to ones you
-mentioned. Thanks.
+> So this is an issue in the MIPI DBI code where the interpretation of 
+> the buffer passed in depends on both the a caller parameter and the 
+> capabilities of the underlying SPI controller, meaning that a driver 
+> can suddenly become buggy when used with a new controller?
 
-Best regards,
-Krzysztof
+The MIPI DBI code is fine, in fact it is doing the correct thing in the
+mipi_dbi_typec3_command() function. The problem is that the ILI9486
+driver is hijacking that function installing its own hook that is wrong.
 
+> I can't really tell what the bits per word being passed in along
+> with the buffer is supposed to mean, I'd have expected it to
+> correspond to the format of the buffer but it seems like perhaps the
+> buffer is always formatted for 16 bits and the callers are needing to
+> pass in the capabilities of the controller which is then also checked
+> by the underlying code? This all seems extremely confusing, I'm not 
+> surprised there's bugs.
+
+Correct, the buffer (pixel data) is always formatted for 16 bits and the
+bpw is to indicate how this data should be put on the bus (according to
+the controller capability).
+
+If the controller is only capable of 8-bit transfers, the 16-bit data
+needs to be swapped to account for the big endian bus, while this is not
+needed if the controller already supports 16-bit transfers.
+
+The decision to swap the data or not is taken in the MIPI DBI code by
+probing the controller capabilities, so if the controller only supports
+8-bit the data is swapped, otherwise it is not.
+
+The problem arrives when your controller does support 16-bits, so your
+data is not swapped, but you still put the data on the bus with 8-bit
+transfers.
+
+> At the very least your changelog needs to express clearly what is 
+> going on, the description doesn't appear to correspond to what
+> you're changing.
+
+Gotcha, I'll try to clarify that in the next revision.
+
+Thanks,
+
+--
+Carlo Caione
