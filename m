@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C89262F709
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 15:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28E662F94C
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Nov 2022 16:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242297AbiKRORn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 09:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S235287AbiKRPat (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 10:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242298AbiKRORK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 09:17:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2A66D48F;
-        Fri, 18 Nov 2022 06:16:30 -0800 (PST)
+        with ESMTP id S234124AbiKRPas (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 10:30:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B81659C;
+        Fri, 18 Nov 2022 07:30:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72D1A6257A;
-        Fri, 18 Nov 2022 14:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E66C433D7;
-        Fri, 18 Nov 2022 14:16:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C399B8244C;
+        Fri, 18 Nov 2022 15:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF1EC433D6;
+        Fri, 18 Nov 2022 15:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668780989;
-        bh=+VWgwc6Cv21GOSko5yeeeSuThRGjhJB4uSk3EPnNBlw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=K59dSKmhhZEgSVeAs3nsLfliSjVR+4wIiJHvN9VtXYfsilyc5DFHozkPNfDbrKqTH
-         zbQfIXNxXBxxI6/13Jb3k+ELsscXPApwwWIZhS4RJDSuTIiLTikA6CHUxtR7tLeAEe
-         3Rl92YK0Pmtd6HEj5PfHUKcrYvhfrCl9gwDHCvok0U5wJJUx2rsngCeXAcX0CiT3cs
-         b3u3OcqX++INq+gm5iIv/PC6Mp/HHgDQWXoDu94ACTbxg5QI/z+e7jGwcD5HiFPc9q
-         BTmP5+Oiz9DnSVQHStI1g+JmQXPZSzuj3W3dz23Z4KGxljxX6lIKe6CCRZaqcKrPGo
-         bUND9sJkd09wA==
+        s=k20201202; t=1668785445;
+        bh=LfiiqbQVgBizYCizUCNHg2IaL0Mi+yMeJ7xdaR4buUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ElI+i2r3kma/IUDyxlSnThJkl8QTnLeIACfF3w8dM+Px8545hceggGH/r/6fvER2O
+         PqopVu3Q96iNH1klO2wNODhFGrNZsZ9YyZyOAJlg9fokdPVB0Jd8QzZsojTOflQs8F
+         HKURLqFqS/sK3foKVBQTj5IoslV3U1yvZKoXVB03w87lqeA5m4Ch5qiQhrxCsAnfGa
+         5zo06a2+QMoERl2xcfa3cN5XW1YANTTTyfVbbsLccT3+xh4t/BzNURCThgzj3t9BbI
+         kVKaKEfE5sU3Lr2gDyLfoFqfAxrsokTjKQqJ7qETTrTjFT340BSgmuEg4jrHLyqk6D
+         G3t2KN3upPGhA==
+Date:   Fri, 18 Nov 2022 15:30:41 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     stable@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        David Jander <david@protonic.nl>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        kernel@pengutronix.de
-In-Reply-To: <20221116164930.855362-1-mkl@pengutronix.de>
-References: <20221116164930.855362-1-mkl@pengutronix.de>
-Subject: Re: [PATCH] spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
-Message-Id: <166878098696.885585.12678167389874876535.b4-ty@kernel.org>
-Date:   Fri, 18 Nov 2022 14:16:26 +0000
+To:     Michael Walle <michael@walle.cc>
+Cc:     tudor.ambarus@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org
+Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
+Message-ID: <Y3elIdM3Xz1H4kKk@sirena.org.uk>
+References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
+ <20221118141458.954646-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kDV9Vhdp/jBbKORP"
+Content-Disposition: inline
+In-Reply-To: <20221118141458.954646-1-michael@walle.cc>
+X-Cookie: Ego sum ens omnipotens.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,45 +59,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 16 Nov 2022 17:49:30 +0100, Marc Kleine-Budde wrote:
-> The SPI framework checks for each transfer (with the struct
-> spi_controller::can_dma callback) whether the driver wants to use DMA
-> for the transfer. If the driver returns true, the SPI framework will
-> map the transfer's data to the device, start the actual transfer and
-> map the data back.
-> 
-> In commit 07e759387788 ("spi: spi-imx: add PIO polling support") the
-> spi-imx driver's spi_imx_transfer_one() function was extended. If the
-> estimated duration of a transfer does not exceed a configurable
-> duration, a polling transfer function is used. This check happens
-> before checking if the driver decided earlier for a DMA transfer.
-> 
-> [...]
 
-Applied to
+--kDV9Vhdp/jBbKORP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   broonie/spi.git for-next
+On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
+> From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-Thanks!
+> > +  spi-cs-setup-ns:
+> > +    description:
+> > +      Delay in nanosecods to be introduced by the controller after CS is
+> > +      asserted.
 
-[1/1] spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
-      commit: e85e9e0d8cb759013d6474011c227f92e442d746
+> Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
+> least the driver uses it that way.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> But IMHO this should just be a normal uint32 value to be consistent with
+> all the other properties. Also the max value with 16bit will be 'just'
+> 65us.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Making it 32 bit does seem safer.  I've applied the series
+already, mainly for the reintroduction of spi_set_cs_timing()
+since there was another driver that needed it, but we can still
+fix things up until the merge window.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--kDV9Vhdp/jBbKORP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3pSEACgkQJNaLcl1U
+h9AP/wf+OU7ftgSU8x32UiIvVxfKAhXCTN6YUUpN5wJ5rcR6Y/u5C9U4Hz5OvhXt
+iFa2V0T2jjqbu23NzY1vE+1JHj9RDdajNIL6EmY+L/mWhg2zJ9ps6NzDFLKWTP8O
+jq8nKUKOtaaQEqjkf1JEohloqNWFiCeS+ClNGIKEE7mXIijbl40YWZ5+b6pu6Dyh
+RgAFSFvIvZWg4PcHaEipU9uHlkakTTnCFLdyx9IZYsVb/QxmaVtWHdvutod55qyK
+I8ma7ORrkz7xrlS77LyXeNira/4qBuln0QeOf1VRh2pNxOq7MFaiW8TMnSB2pbvp
+iPKEIzUny8D0A1zg1QWzhxfru8Jvcg==
+=PlCP
+-----END PGP SIGNATURE-----
+
+--kDV9Vhdp/jBbKORP--
