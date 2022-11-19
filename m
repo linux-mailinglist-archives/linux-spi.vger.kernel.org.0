@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E13863094E
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Nov 2022 03:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2B06309FA
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Nov 2022 03:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbiKSCMy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Nov 2022 21:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S235606AbiKSCV3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Nov 2022 21:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbiKSCML (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 21:12:11 -0500
+        with ESMTP id S233386AbiKSCUi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Nov 2022 21:20:38 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F7629C95;
-        Fri, 18 Nov 2022 18:11:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3225969DC2;
+        Fri, 18 Nov 2022 18:14:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0532662833;
-        Sat, 19 Nov 2022 02:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44879C433B5;
-        Sat, 19 Nov 2022 02:11:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D456B62838;
+        Sat, 19 Nov 2022 02:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F45C433D6;
+        Sat, 19 Nov 2022 02:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668823911;
-        bh=7GUIACQPlrfO2mPigimkMl69Jy1LfyJQ0W5zFtdpGJk=;
+        s=k20201202; t=1668824051;
+        bh=Oc8lykV3DTzDRC9+/ELORB6diRPfi8W4+jW6Dnfyoog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SBZPt/e8Vn9X0UGyzDEeu7FUdMpuJ01RkV2/NojdMGBhUjIyvBtu2iV2SeLEE7bFa
-         /HXeHsZ6xvOua010yHKINWQocK36oKMrnqQE+u1GQ963Thi1I5+fcS75k3TDXGJ1Dg
-         lYyD8ComhvFtUMBKjIVY0B2urHjblJFnLGatyMrPaZ77SK3QSpzyQUiUo/yAUYK+Pa
-         0UIHEYTgzzX3SKYEPchigrDWEkCAK0swiAqgU56UOUuSXHURD05PBNIuvps6CQWOnX
-         9JPJUpO0SHjGr+QWc9AoDzRtOEMVvDbdnUKiLjFwb/ugv49zseWvdtlnc8s1RXpTPV
-         vGncBmJ+6jT6A==
+        b=bTjr65dVFNnUR8IELa6TinVKgaOxF7d/hja7dujMnpDdZaSzPAuST7YA8ERyMAqtd
+         u4m9HYg8lU2PbTES9FLCHgdX4dOtkiyN2WALwGxIkdqgw85piCMHhMRMkEiBtvph2q
+         KVKEXzL69A3W9PyFhswYmxRh8j1ctsorp2g2T6F8iFSpeYi54Kl6m8se7J2CVaUPee
+         TVisXbC/5tjcKXEZLnJqcrQn7+nvdNkBXxh0bpQt7WkCiRghSHTFJH79eiR6jTEylU
+         qZn7yiUCjU2hZXr7KtanW/l4BOASEVPjW4kqOSCqeIbkQmnLDoAiDzSpDblk+7OUyn
+         hHezNJQHzT1OQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sean Nyekjaer <sean@geanix.com>, Mark Brown <broonie@kernel.org>,
@@ -39,12 +39,12 @@ Cc:     Sean Nyekjaer <sean@geanix.com>, Mark Brown <broonie@kernel.org>,
         linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.0 12/44] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
-Date:   Fri, 18 Nov 2022 21:10:52 -0500
-Message-Id: <20221119021124.1773699-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 08/27] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+Date:   Fri, 18 Nov 2022 21:13:33 -0500
+Message-Id: <20221119021352.1774592-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221119021124.1773699-1-sashal@kernel.org>
-References: <20221119021124.1773699-1-sashal@kernel.org>
+In-Reply-To: <20221119021352.1774592-1-sashal@kernel.org>
+References: <20221119021352.1774592-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 6fe617b445a5..d6833361409d 100644
+index 9bd3fd1652f7..fdb5f36d77ef 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
 @@ -434,7 +434,7 @@ static int stm32_spi_prepare_mbr(struct stm32_spi *spi, u32 speed_hz,
