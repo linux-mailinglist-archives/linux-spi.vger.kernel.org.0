@@ -2,204 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C754631D76
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Nov 2022 10:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA217631E07
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Nov 2022 11:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiKUJyM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Nov 2022 04:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S231286AbiKUKQn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Nov 2022 05:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiKUJxj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Nov 2022 04:53:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E226FA1B4;
-        Mon, 21 Nov 2022 01:53:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44AFD60F9B;
-        Mon, 21 Nov 2022 09:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F83C433C1;
-        Mon, 21 Nov 2022 09:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669024397;
-        bh=m9yZHwnTEqGasYZNomMe1mRJHVzf8B7M3LDSNHYcXeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Opj/itLbJtFE0syJxd+qkemdvm+GfbfZ1pccF1SGR++3DJnkeyD3YQtGhN+blIjub
-         US8fX8iushvScwunkPr7LKirCchaNKKAU/twl0oVnqHEwdHsHxi0M0d/wgtlpEZqG7
-         k4ovt/Znm0DICj47Y+N6I+Yw47E1MyyiN0e/92S2h9qHrb149jszKe3FalK/2rVJQ+
-         ZppAyMp4v8rjq+XBX9JSBl1ysXWpcIvX0EVYeK13kfbg9IEzo070nVbf9UiCPP9DpS
-         bXABnzNPLB0lPKqHS3KQR0EQyUsQW7BynY23b8Z2+QTbLFxJQgHRN0fjhkCpVJB9+z
-         k93zjyweI0uEQ==
-Date:   Mon, 21 Nov 2022 09:53:05 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <Y3tKgXPJP7S48i3j@google.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        with ESMTP id S230143AbiKUKQk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Nov 2022 05:16:40 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4868EB54;
+        Mon, 21 Nov 2022 02:16:39 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g7so18117936lfv.5;
+        Mon, 21 Nov 2022 02:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=phJFVLoc9/POc6nbD0liFwrgYsKAiaNUs+VrsQZny0U=;
+        b=HMQtLNQC6JHUcpQnXKaMPeLJYNEXESjWqW9Jm9fxHdDsyxq3fD2y+gUbum8cazGLlS
+         0Nzot0o7wlI3aHmX0JtEp59ASN04zoUP5cBLwhJUS8UWXS1vrDPK5s0nm6MtNyPRkAXr
+         i9HRjhzMXJwfcX+oinAm/OP6xU5bC2NyVL00djub62igijCsqVS/+Gs3g8Ob67GV62e5
+         lbpACEGBVz+P7gegvEedJPLtYc/UAuXuZCP3D6YMe70yXUQfK1oo2OuCbl17wDJsWOWJ
+         juioZPmih2Q2tDZ+3ZlWsJUEwqpG6mEfuUGwVkFA5iKPxQNEPbzHK7gtA/8R8W2wDMdd
+         a+Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=phJFVLoc9/POc6nbD0liFwrgYsKAiaNUs+VrsQZny0U=;
+        b=lBnKJ9Fbk84EXn+jTk5HHJfL13AGx3liKDAcE65PTFsCC4hj/XAp3XZ4ZKBow/JdVm
+         i+x0Rl/QabSEeU3VVdVsP2pKzP0mmGIk3LuAaihS+X5I64pKlimYo5RnALpb96jSf1zT
+         gRFm8ALGZ7I4l92gLZgfS5MeJ63QJLGwi57eBvGq2N7MDKqFxWlhW8Po2Lq6n0uxcIV6
+         D/NkxSzLu0edKpySKtePKK/6o7s5i65TrVHL/yGKG0Do8o+5rc5YGIGGpK+HcWuuDdQG
+         czPR5mGzseZnR9sZQu1WQ9uN6fNOBkbKboGNFJ+ao6GWVrhWflw3p5nrlz2hdceEOOTQ
+         NyNQ==
+X-Gm-Message-State: ANoB5pmkH5jlmtpM9VQVH3tX/1Cuw9zIU7rBqKiRQokEFu/QAq15kZNN
+        gOaFE3DTi1tP6HmrHlv5M2E=
+X-Google-Smtp-Source: AA0mqf4ot1dRfz4XcQJOzbIEVDNmvoy9FxZf/F3Gx+j1WTmSwhOpMtvOjIltFzq0/t2LrM51x6qHTA==
+X-Received: by 2002:a05:6512:2521:b0:4a4:5e83:e07d with SMTP id be33-20020a056512252100b004a45e83e07dmr1937785lfb.409.1669025797870;
+        Mon, 21 Nov 2022 02:16:37 -0800 (PST)
+Received: from [172.16.196.95] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id e8-20020a05651236c800b004a03d5c2140sm1957388lfs.136.2022.11.21.02.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:16:36 -0800 (PST)
+Message-ID: <20825b50-c2ef-7efb-efbf-ac00cc4ab9f4@gmail.com>
+Date:   Mon, 21 Nov 2022 12:16:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing start and/or end of line regex
+ anchors
+To:     Rob Herring <robh@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Mack <zonque@gmail.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20221118223728.1721589-1-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 18 Nov 2022, Uwe Kleine-König wrote:
-
-> Hello,
+On 11/19/22 00:37, Rob Herring wrote:
+> json-schema patterns by default will match anywhere in a string, so
+> typically we want at least the start or end anchored. Fix the obvious
+> cases where the anchors were forgotten.
 > 
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Oh yeah, this!  Thanks for picking this up Uwe, I guess I've been
-distracted for the past 6 years or so. :)
+>   .../devicetree/bindings/regulator/rohm,bd9576-regulator.yaml  | 2 +-
 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_device_id_helper-immutable
-> 
-> I don't think it's feasable to apply this series in one go, so I ask the
-> maintainers of the changed files to apply via their tree. I guess it
-> will take a few kernel release iterations until all patch are in, but I
-> think a single tree creates too much conflicts.
-> 
-> The last patch changes i2c_driver::probe, all non-converted drivers will
-> fail to compile then. So I hope the build bots will tell me about any
-> driver I missed to convert. This patch is obviously not for application
-> now.
-> 
-> I dropped most individuals from the recipents of this mail to not
-> challenge the mail servers and mailing list filters too much. Sorry if
-> you had extra efforts to find this mail.
+Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-[...]
-
->  drivers/mfd/88pm800.c                            |  5 ++---
->  drivers/mfd/88pm805.c                            |  5 ++---
->  drivers/mfd/aat2870-core.c                       |  5 ++---
->  drivers/mfd/act8945a.c                           |  5 ++---
->  drivers/mfd/adp5520.c                            |  6 +++---
->  drivers/mfd/arizona-i2c.c                        |  6 +++---
->  drivers/mfd/as3711.c                             |  5 ++---
->  drivers/mfd/as3722.c                             |  5 ++---
->  drivers/mfd/atc260x-i2c.c                        |  5 ++---
->  drivers/mfd/axp20x-i2c.c                         |  5 ++---
->  drivers/mfd/bcm590xx.c                           |  5 ++---
->  drivers/mfd/bd9571mwv.c                          |  5 ++---
->  drivers/mfd/da903x.c                             |  6 +++---
->  drivers/mfd/da9052-i2c.c                         |  6 +++---
->  drivers/mfd/da9055-i2c.c                         |  5 ++---
->  drivers/mfd/da9062-core.c                        |  6 +++---
->  drivers/mfd/da9063-i2c.c                         |  6 +++---
->  drivers/mfd/da9150-core.c                        |  5 ++---
->  drivers/mfd/khadas-mcu.c                         |  5 ++---
->  drivers/mfd/lm3533-core.c                        |  5 ++---
->  drivers/mfd/lp3943.c                             |  4 ++--
->  drivers/mfd/lp873x.c                             |  5 ++---
->  drivers/mfd/lp87565.c                            |  5 ++---
->  drivers/mfd/lp8788.c                             |  4 ++--
->  drivers/mfd/madera-i2c.c                         |  6 +++---
->  drivers/mfd/max14577.c                           |  6 +++---
->  drivers/mfd/max77620.c                           |  6 +++---
->  drivers/mfd/max77693.c                           |  6 +++---
->  drivers/mfd/max77843.c                           |  6 +++---
->  drivers/mfd/max8907.c                            |  5 ++---
->  drivers/mfd/max8925-i2c.c                        |  5 ++---
->  drivers/mfd/max8997.c                            |  6 +++---
->  drivers/mfd/max8998.c                            |  6 +++---
->  drivers/mfd/mc13xxx-i2c.c                        |  6 +++---
->  drivers/mfd/menelaus.c                           |  5 ++---
->  drivers/mfd/menf21bmc.c                          |  4 ++--
->  drivers/mfd/palmas.c                             |  5 ++---
->  drivers/mfd/pcf50633-core.c                      |  5 ++---
->  drivers/mfd/rc5t583.c                            |  5 ++---
->  drivers/mfd/retu-mfd.c                           |  4 ++--
->  drivers/mfd/rk808.c                              |  5 ++---
->  drivers/mfd/rohm-bd718x7.c                       |  5 ++---
->  drivers/mfd/rsmu_i2c.c                           |  6 +++---
->  drivers/mfd/rt5033.c                             |  5 ++---
->  drivers/mfd/sec-core.c                           |  5 ++---
->  drivers/mfd/si476x-i2c.c                         |  6 +++---
->  drivers/mfd/sky81452.c                           |  5 ++---
->  drivers/mfd/stmfx.c                              |  5 ++---
->  drivers/mfd/stmpe-i2c.c                          |  5 +++--
->  drivers/mfd/stpmic1.c                            |  5 ++---
->  drivers/mfd/stw481x.c                            |  5 ++---
->  drivers/mfd/tc3589x.c                            |  6 +++---
->  drivers/mfd/ti-lmu.c                             |  5 +++--
->  drivers/mfd/tps6105x.c                           |  5 ++---
->  drivers/mfd/tps65010.c                           |  6 +++---
->  drivers/mfd/tps6507x.c                           |  5 ++---
->  drivers/mfd/tps65086.c                           |  5 ++---
->  drivers/mfd/tps65090.c                           |  5 ++---
->  drivers/mfd/tps65218.c                           |  5 ++---
->  drivers/mfd/tps6586x.c                           |  5 ++---
->  drivers/mfd/tps65910.c                           |  6 +++---
->  drivers/mfd/tps65912-i2c.c                       |  5 ++---
->  drivers/mfd/twl-core.c                           |  5 +++--
->  drivers/mfd/twl6040.c                            |  5 ++---
->  drivers/mfd/wl1273-core.c                        |  5 ++---
->  drivers/mfd/wm831x-i2c.c                         |  6 +++---
->  drivers/mfd/wm8350-i2c.c                         |  5 ++---
->  drivers/mfd/wm8400-core.c                        |  5 ++---
->  drivers/mfd/wm8994-core.c                        |  6 +++---
-
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-
->  drivers/video/backlight/adp8860_bl.c             |  6 +++---
->  drivers/video/backlight/adp8870_bl.c             |  6 +++---
->  drivers/video/backlight/arcxcnn_bl.c             |  4 ++--
->  drivers/video/backlight/bd6107.c                 |  5 ++---
->  drivers/video/backlight/lm3630a_bl.c             |  5 ++---
->  drivers/video/backlight/lm3639_bl.c              |  5 ++---
->  drivers/video/backlight/lp855x_bl.c              |  5 +++--
->  drivers/video/backlight/lv5207lp.c               |  5 ++---
->  drivers/video/backlight/tosa_bl.c                |  5 ++---
->  drivers/video/fbdev/matrox/matroxfb_maven.c      |  5 ++---
-
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-Backlight-by: Lee Jones <lee@kernel.org>
 
 -- 
-Lee Jones [李琼斯]
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+
