@@ -2,93 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3490633C62
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 13:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA929633C7C
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 13:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiKVMYp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Nov 2022 07:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S231773AbiKVMaf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Nov 2022 07:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiKVMYo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 07:24:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65599326CE;
-        Tue, 22 Nov 2022 04:24:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15FA5B81A4A;
-        Tue, 22 Nov 2022 12:24:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BF7C433C1;
-        Tue, 22 Nov 2022 12:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669119881;
-        bh=QcV/aHr1DpTzfVs0uQ2lgdfZ7zL1+NRJnZMTFZV6jEY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JXvItkZFSOWkRF4Tm0GkTxAAL7XfJ6Y18zpdMTYlxDU/3XXL7LUfOoyCJmIVNiH1w
-         v2jIdOCxji/L2HKG+Qn31D6SQW/1U9kHb6+XJxJHFDwa08LoyN0ATijH1DH85YM2sR
-         zd6wQ6HSk/gbh5QEcYahWeNhBxKpQYfyGIunD+Ku0wIc6BunS0zSJmIN/XX29kAv0Z
-         ihrEbBiTbIyB3xBow6bsVSsW4DTQUhNpJHA6ZyeqCLkEQv+1Cbq786yZJhu8uvULJA
-         HSuvhDmd0r3iglR8seWXXX87JofFPIszXNQ9hKBIbHTlyI9vwgHEbAJx4aUEUFwMko
-         6/0sif4ZVLrFg==
-Date:   Tue, 22 Nov 2022 12:24:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "ye.xingchen@zte.com.cn" <ye.xingchen@zte.com.cn>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn
-Subject: Re: [PATCH] spi: use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y3y/hPKHnvO/efpJ@sirena.org.uk>
-References: <202211220944121776425@zte.com.cn>
+        with ESMTP id S233772AbiKVMac (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 07:30:32 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2D5B5B4
+        for <linux-spi@vger.kernel.org>; Tue, 22 Nov 2022 04:30:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669120230; x=1700656230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pLqUyfQ32hwsa++iM/ixkMotyZAVzaFTjMFvtcUYzmg=;
+  b=lUnXUGK7Pj5AtuAjcbwIJihr+uXRZBTE+L7e5amv9UAtPjpiRqYpPShV
+   XTxMi5Rac1b6WckQwwgnOwAql8RcAKzlVF+S54TOD8QrRcp0qgi3rL8AC
+   nVVZQoJSVk7oYcuaw8UJKL36bHP546Evk1jx8LAuq40zeaJhU7dsAzIH4
+   dQjXe9f9pGp2fX0smeeORxA0Y0rO9Y2jSrxEUOePKh1o34mMVelmAnvSg
+   GSyKNk8/uTyg6R0/ZIBUx64V+8hGIiw/h263mjW9tBkAGDPC4y7Mlyply
+   kgD3mDf6xhdWaS9xK0c+8s1hc7W7QXyTPDYPID65PTXsLwDiUx2nq7COT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="294193547"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="294193547"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:30:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="672468614"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="672468614"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 22 Nov 2022 04:30:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id E48CC128; Tue, 22 Nov 2022 14:30:53 +0200 (EET)
+Date:   Tue, 22 Nov 2022 14:30:53 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, "Gole, Dhruva" <d-gole@ti.com>
+Subject: Re: [PATCH 0/4] spi: intel: Add support for SFDP opcode
+Message-ID: <Y3zA/THfo2jBglKS@black.fi.intel.com>
+References: <20221025064623.22808-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dZI8t1pVJ3nkhVeK"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202211220944121776425@zte.com.cn>
-X-Cookie: Are you still an ALCOHOLIC?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221025064623.22808-1-mika.westerberg@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Mark,
 
---dZI8t1pVJ3nkhVeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 25, 2022 at 09:46:19AM +0300, Mika Westerberg wrote:
+> Hi,
+> 
+> This series adds support for SFDP (Serial Flash Discoverable Parameter)
+> opcode to the Intel SPI driver. This allows the SPI-NOR core to query
+> the flash chip what it supports.
+> 
+> Mika Westerberg (4):
+>   spi: intel: Use ->replacement_op in intel_spi_hw_cycle()
+>   spi: intel: Implement adjust_op_size()
+>   spi: intel: Take possible chip address into account in intel_spi_read/write_reg()
+>   spi: intel: Add support for SFDP opcode
+> 
+>  drivers/spi/spi-intel.c | 78 +++++++++++++++++++++--------------------
+>  1 file changed, 40 insertions(+), 38 deletions(-)
 
-On Tue, Nov 22, 2022 at 09:44:12AM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-
-This doesn't apply against current code, please check and resend:
-
-Applying: spi: use devm_platform_get_and_ioremap_resource()
-error: corrupt patch at line 19
-error: could not build fake ancestor
-Patch failed at 0001 spi: use devm_platform_get_and_ioremap_resource()
-
---dZI8t1pVJ3nkhVeK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN8v4MACgkQJNaLcl1U
-h9AOSAf+OE2aD1DWtb9CReX10ia225E/ulS1ibHYMCHiNDhvNqN2QUjnhFEy6PFs
-3ZZZFSO0s49O9JB9TUXDQDZVMSEJu5Q4g2+7jE5oi+vyIIN7ETbIHuzLTChjWxns
-dDNZEfBj/+UNcL0d4LrBkdiLbOGs/DEv4fbddztSNVkQmWEJ+Sye1wB+oOB7ZCDG
-JCr0qk7Ws9LRcHDWxAZqKyAogL24ajSUDqRQ53h03bYyYTKwMG+FlPTQlNfEcu5B
-ZGmnHYDbyu/zRgO4q6FCJv+Qn012DrgdkmIVGLf++7OyK4EDVfGMstOSEjAFYOlO
-ArEvPh4MELz1cEhw1Q2JVfPlEN1vBg==
-=L/DU
------END PGP SIGNATURE-----
-
---dZI8t1pVJ3nkhVeK--
+Any chance getting this queued for v6.2? Thanks!
