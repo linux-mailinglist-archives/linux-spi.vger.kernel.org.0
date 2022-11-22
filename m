@@ -2,290 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E0B633D48
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 14:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58799633D54
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 14:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbiKVNO1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Nov 2022 08:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S233510AbiKVNQN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Nov 2022 08:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbiKVNOG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 08:14:06 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF9063145;
-        Tue, 22 Nov 2022 05:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669122834; x=1700658834;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=inJva2GCFCG4wUV3qNo2FJXvTuxNSseUErHaBYwOxLI=;
-  b=lUpoT3hE5vWdsQm39MS9/Cwgur/lWugaVonr0nFV3ptNy/p0zx2ivchq
-   QP0E1dsBf6+XTq47tqbYOPbYjI5+nZDIz5MmwcCateKbW7YVOXyy77vFk
-   RqjSnwXRl1jwvZJnSmhxMGU8AZji8Q2+NVBO8NlzEKuB0N7f/A9HU4qQi
-   NDxoaejUajJJ3hllJXkkMJBDMW6ad37zwjJkUItvJy2MlQZ+ue/De/9Ll
-   it1Mai1xlVd1fX+3zVEjq5Si+XY32Uri3jowgCZywH2yUhpC1DHnUinZE
-   Z3eZ83cp/fEQJXk/F1CR0pctwsjV3uNiSj7iMIbbicT73D4BVuTfYKINR
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="190092974"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 06:13:53 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 06:13:50 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 06:13:45 -0700
-Message-ID: <af0390fd-e238-dbe4-f67e-feb47e5ad31f@microchip.com>
-Date:   Tue, 22 Nov 2022 14:13:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: Update email of Tudor Ambarus
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <robh+dt@kernel.org>,
-        <akpm@linux-foundation.org>
-CC:     <herbert@gondor.apana.org.au>, <krzysztof.kozlowski+dt@linaro.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <broonie@kernel.org>, <qyousef@layalina.io>, <arnd@arndb.de>,
-        <atishp@atishpatra.org>, <anup@brainfault.org>, <tkhai@ya.ru>,
-        <quic_abhinavk@quicinc.com>, <vasily.averin@linux.dev>,
-        <baolin.wang@linux.alibaba.com>, <colin.i.king@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <pratyush@kernel.org>, <michael@walle.cc>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>
-References: <20221122125244.175295-1-tudor.ambarus@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
+        with ESMTP id S233495AbiKVNQM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 08:16:12 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450402793F;
+        Tue, 22 Nov 2022 05:16:10 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8BF7D58045D;
+        Tue, 22 Nov 2022 08:16:07 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 22 Nov 2022 08:16:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669122967; x=1669130167; bh=Fsuy/mZZ5T
+        5z+jQhn8xTVdY1LMGSEK1rG+fURdRPHdE=; b=WHL0dDUY9huUqeJ3XElkRvY99G
+        5KKp34kqvZzwAXdz3qWSTP8dkduKL4X6BZrHOUjjKhHFrbnOafMSX40l9hgSvGYd
+        llKjD8KuxUZ5LhSSdvGWRtY2Gnl4Egjxhnw7US/YqRHdhR/w9SCtA3p4WqeD6aH5
+        qd37+5xOqS25Lbv7SM5hRwV1HCbUtrXMUJR55HsgtZWEkXEZg8Ph4IbmSnyFoYZ/
+        OJQN2VQJETBIKGVKNzY2YutaJoXd6ze/IfpET6/cIPNPO3S4n2OKfphnRGHb0UL+
+        X+d73WODat2vuPj8if2mWEGkOdbZM0JeHRjf9SSlw5mTA2Gd9BPmzw4OMTmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669122967; x=1669130167; bh=Fsuy/mZZ5T5z+jQhn8xTVdY1LMGS
+        EK1rG+fURdRPHdE=; b=qHd2V94U8jhBOKm1F7zG+lP/0ILwVHOalPWyK84pceBd
+        UChe3Mf4j27Hui5G+5GS29eMaylydiIUnLzfbXHH0I21p1BH+8dAuVHfI8suGZY0
+        PgrRJKZb4aogD3REueoucsglMtfXJ/jT5OfK+2wwZo6U+ADoTNYirlm6Y8/NFUe0
+        R0qt/VLUqmbvopkmPdgQJR5SMcFBbGGX3gdtbGg5IHZjYKyhxUXZDxOHnB/fE5+Z
+        Lp+PYcph9ac+hcCx38TM75RZtbPrR9mWdv7ICcEfyuCTwBW6IqsiddfjmdTnm3E/
+        w3iCi1e7ozKZUqqDPCl/jJi9iTtnR28ICXUrEyFjcg==
+X-ME-Sender: <xms:lct8Y2KIz5BbdA7Y0eEPA5En7mn2GEt8jhrByQ2yONAtxwh01FB3Fw>
+    <xme:lct8Y-I5MxsZRT8j4kyxa66PaWA8bZo1UDUarFGnwFhGlIRqB3GbWf0W-b6a65IfS
+    2jI0XJkXWLQySxPhaM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheelgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:lct8Y2sJieowFyuaIn7MFFzTsfhKZmpFGTW0srEMHdPs_irOCAEXzw>
+    <xmx:lct8Y7aQVrgFCgyf3CmQdlDJJ2Iry5NEwXwRZZmmPhiafTvZFVsMdw>
+    <xmx:lct8Y9bl6rpaXksVoY01AWgzzkjax4Tu3vysj6w-KHPP3DDLO44xbQ>
+    <xmx:l8t8YxL9v1HssDbcgzDPEdxXDokY03uaja4qBZkPqf9YxCXxT44WGQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C95B5B60098; Tue, 22 Nov 2022 08:16:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <024e0a68-bb79-4e2e-84f8-f44afb759cdd@app.fastmail.com>
 In-Reply-To: <20221122125244.175295-1-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122125244.175295-1-tudor.ambarus@microchip.com>
+Date:   Tue, 22 Nov 2022 14:15:45 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tudor Ambarus" <tudor.ambarus@microchip.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "Mark Brown" <broonie@kernel.org>, qyousef@layalina.io,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Anup Patel" <anup@brainfault.org>, tkhai@ya.ru,
+        quic_abhinavk@quicinc.com, vasily.averin@linux.dev,
+        baolin.wang@linux.alibaba.com, colin.i.king@gmail.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        pratyush@kernel.org, "Michael Walle" <michael@walle.cc>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>
+Subject: Re: [PATCH] MAINTAINERS: Update email of Tudor Ambarus
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22/11/2022 at 13:52, Tudor Ambarus wrote:
+On Tue, Nov 22, 2022, at 13:52, Tudor Ambarus wrote:
 > My professional email will change and the microchip one will bounce after
 > mid-november of 2022.
-> 
+>
 > Update the MAINTAINERS file, the YAML bindings, MODULE_AUTHOR entries and
 > author mentions, and add an entry in the .mailmap file.
-> 
+>
 > Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+I can take this through the fixes branch of the SoC tree if that
+works for everyone. Alternatively, I can take only the MAINTAINERS
+and .mailmap bits and expect the other changes to get merged
+by the devicetree and crypto maintainers for 6.2.
 
-Thanks Tudor for the work during all these years!
-
-Best regards,
-   Nicolas
+      Arnd
 
 > ---
->   .mailmap                                               |  1 +
->   .../bindings/crypto/atmel,at91sam9g46-aes.yaml         |  2 +-
->   .../bindings/crypto/atmel,at91sam9g46-sha.yaml         |  2 +-
->   .../bindings/crypto/atmel,at91sam9g46-tdes.yaml        |  2 +-
->   .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml  |  2 +-
->   .../devicetree/bindings/spi/atmel,quadspi.yaml         |  2 +-
->   MAINTAINERS                                            | 10 +++++-----
->   drivers/crypto/atmel-ecc.c                             |  4 ++--
->   drivers/crypto/atmel-i2c.c                             |  4 ++--
->   drivers/crypto/atmel-i2c.h                             |  2 +-
->   10 files changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/.mailmap b/.mailmap
-> index fdd7989492fc..f723a29af021 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -415,6 +415,7 @@ Tony Luck <tony.luck@intel.com>
->   TripleX Chung <xxx.phy@gmail.com> <triplex@zh-kernel.org>
->   TripleX Chung <xxx.phy@gmail.com> <zhongyu@18mail.cn>
->   Tsuneo Yoshioka <Tsuneo.Yoshioka@f-secure.com>
-> +Tudor Ambarus <tudor.ambarus@linaro.org> <tudor.ambarus@microchip.com>
->   Tycho Andersen <tycho@tycho.pizza> <tycho@tycho.ws>
->   Uwe Kleine-König <ukleinek@informatik.uni-freiburg.de>
->   Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
-> index 0ccaab16dc61..0b7383b3106b 100644
-> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Atmel Advanced Encryption Standard (AES) HW cryptographic accelerator
->   
->   maintainers:
-> -  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
->   
->   properties:
->     compatible:
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-> index 5163c51b4547..ee2ffb034325 100644
-> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Atmel Secure Hash Algorithm (SHA) HW cryptographic accelerator
->   
->   maintainers:
-> -  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
->   
->   properties:
->     compatible:
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> index fcc5adf03cad..3d6ed24b1b00 100644
-> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Atmel Triple Data Encryption Standard (TDES) HW cryptographic accelerator
->   
->   maintainers:
-> -  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
->   
->   properties:
->     compatible:
-> diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> index 4dd973e341e6..6c57dd6c3a36 100644
-> --- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Atmel SPI device
->   
->   maintainers:
-> -  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
->   
->   allOf:
->     - $ref: spi-controller.yaml#
-> diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> index 1d493add4053..b0d99bc10535 100644
-> --- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Atmel Quad Serial Peripheral Interface (QSPI)
->   
->   maintainers:
-> -  - Tudor Ambarus <tudor.ambarus@microchip.com>
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
->   
->   allOf:
->     - $ref: spi-controller.yaml#
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e04d944005ba..b13e67bed48e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13418,7 +13418,7 @@ F:	arch/microblaze/
->   
->   MICROCHIP AT91 DMA DRIVERS
->   M:	Ludovic Desroches <ludovic.desroches@microchip.com>
-> -M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> +M:	Tudor Ambarus <tudor.ambarus@linaro.org>
->   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   L:	dmaengine@vger.kernel.org
->   S:	Supported
-> @@ -13464,7 +13464,7 @@ F:	Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
->   F:	drivers/media/platform/atmel/microchip-csi2dc.c
->   
->   MICROCHIP ECC DRIVER
-> -M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> +M:	Tudor Ambarus <tudor.ambarus@linaro.org>
->   L:	linux-crypto@vger.kernel.org
->   S:	Maintained
->   F:	drivers/crypto/atmel-ecc.*
-> @@ -13559,7 +13559,7 @@ S:	Maintained
->   F:	drivers/mmc/host/atmel-mci.c
->   
->   MICROCHIP NAND DRIVER
-> -M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> +M:	Tudor Ambarus <tudor.ambarus@linaro.org>
->   L:	linux-mtd@lists.infradead.org
->   S:	Supported
->   F:	Documentation/devicetree/bindings/mtd/atmel-nand.txt
-> @@ -13611,7 +13611,7 @@ S:	Supported
->   F:	drivers/power/reset/at91-sama5d2_shdwc.c
->   
->   MICROCHIP SPI DRIVER
-> -M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> +M:	Tudor Ambarus <tudor.ambarus@linaro.org>
->   S:	Supported
->   F:	drivers/spi/spi-atmel.*
->   
-> @@ -19402,7 +19402,7 @@ F:	drivers/clk/spear/
->   F:	drivers/pinctrl/spear/
->   
->   SPI NOR SUBSYSTEM
-> -M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> +M:	Tudor Ambarus <tudor.ambarus@linaro.org>
->   M:	Pratyush Yadav <pratyush@kernel.org>
->   R:	Michael Walle <michael@walle.cc>
->   L:	linux-mtd@lists.infradead.org
-> diff --git a/drivers/crypto/atmel-ecc.c b/drivers/crypto/atmel-ecc.c
-> index 82bf15d49561..dd7b561c4256 100644
-> --- a/drivers/crypto/atmel-ecc.c
-> +++ b/drivers/crypto/atmel-ecc.c
-> @@ -3,7 +3,7 @@
->    * Microchip / Atmel ECC (I2C) driver.
->    *
->    * Copyright (c) 2017, Microchip Technology Inc.
-> - * Author: Tudor Ambarus <tudor.ambarus@microchip.com>
-> + * Author: Tudor Ambarus
->    */
->   
->   #include <linux/delay.h>
-> @@ -411,6 +411,6 @@ static void __exit atmel_ecc_exit(void)
->   module_init(atmel_ecc_init);
->   module_exit(atmel_ecc_exit);
->   
-> -MODULE_AUTHOR("Tudor Ambarus <tudor.ambarus@microchip.com>");
-> +MODULE_AUTHOR("Tudor Ambarus");
->   MODULE_DESCRIPTION("Microchip / Atmel ECC (I2C) driver");
->   MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/crypto/atmel-i2c.c b/drivers/crypto/atmel-i2c.c
-> index 81ce09bedda8..55bff1e13142 100644
-> --- a/drivers/crypto/atmel-i2c.c
-> +++ b/drivers/crypto/atmel-i2c.c
-> @@ -3,7 +3,7 @@
->    * Microchip / Atmel ECC (I2C) driver.
->    *
->    * Copyright (c) 2017, Microchip Technology Inc.
-> - * Author: Tudor Ambarus <tudor.ambarus@microchip.com>
-> + * Author: Tudor Ambarus
->    */
->   
->   #include <linux/bitrev.h>
-> @@ -390,6 +390,6 @@ static void __exit atmel_i2c_exit(void)
->   module_init(atmel_i2c_init);
->   module_exit(atmel_i2c_exit);
->   
-> -MODULE_AUTHOR("Tudor Ambarus <tudor.ambarus@microchip.com>");
-> +MODULE_AUTHOR("Tudor Ambarus");
->   MODULE_DESCRIPTION("Microchip / Atmel ECC (I2C) driver");
->   MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/crypto/atmel-i2c.h b/drivers/crypto/atmel-i2c.h
-> index 48929efe2a5b..35f7857a7f7c 100644
-> --- a/drivers/crypto/atmel-i2c.h
-> +++ b/drivers/crypto/atmel-i2c.h
-> @@ -1,7 +1,7 @@
->   /* SPDX-License-Identifier: GPL-2.0 */
->   /*
->    * Copyright (c) 2017, Microchip Technology Inc.
-> - * Author: Tudor Ambarus <tudor.ambarus@microchip.com>
-> + * Author: Tudor Ambarus
->    */
->   
->   #ifndef __ATMEL_I2C_H__
-
--- 
-Nicolas Ferre
-
+>  .mailmap                                               |  1 +
+>  .../bindings/crypto/atmel,at91sam9g46-aes.yaml         |  2 +-
+>  .../bindings/crypto/atmel,at91sam9g46-sha.yaml         |  2 +-
+>  .../bindings/crypto/atmel,at91sam9g46-tdes.yaml        |  2 +-
+>  .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml  |  2 +-
+>  .../devicetree/bindings/spi/atmel,quadspi.yaml         |  2 +-
+>  MAINTAINERS                                            | 10 +++++-----
+>  drivers/crypto/atmel-ecc.c                             |  4 ++--
+>  drivers/crypto/atmel-i2c.c                             |  4 ++--
+>  drivers/crypto/atmel-i2c.h                             |  2 +-
+>  10 files changed, 16 insertions(+), 15 deletions(-)
+>
