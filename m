@@ -2,84 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEB663324D
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 02:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36FA6338C3
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 10:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiKVBoY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Nov 2022 20:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S233280AbiKVJlM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Nov 2022 04:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKVBoX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Nov 2022 20:44:23 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D091BC688F;
-        Mon, 21 Nov 2022 17:44:22 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NGRrP45RCz4xVnj;
-        Tue, 22 Nov 2022 09:44:21 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AM1iBT0036503;
-        Tue, 22 Nov 2022 09:44:11 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 22 Nov 2022 09:44:12 +0800 (CST)
-Date:   Tue, 22 Nov 2022 09:44:12 +0800 (CST)
-X-Zmail-TransId: 2afa637c296c6f907602
-X-Mailer: Zmail v1.0
-Message-ID: <202211220944121776425@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <agross@kernel.org>
-Cc:     <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chi.minghao@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBzcGk6IHVzZSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AM1iBT0036503
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 637C2975.001 by FangMail milter!
-X-FangMail-Envelope: 1669081461/4NGRrP45RCz4xVnj/637C2975.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637C2975.001/4NGRrP45RCz4xVnj
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232779AbiKVJlK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 04:41:10 -0500
+X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 01:41:06 PST
+Received: from mail.axisfairfi.com (mail.axisfairfi.com [94.177.230.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B303F51313
+        for <linux-spi@vger.kernel.org>; Tue, 22 Nov 2022 01:41:05 -0800 (PST)
+Received: by mail.axisfairfi.com (Postfix, from userid 1001)
+        id 5FCDD8263A; Tue, 22 Nov 2022 09:15:34 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=axisfairfi.com;
+        s=mail; t=1669108546;
+        bh=0BgaW9t8GFER5QecxVkFsHrVi3gO/4V5KAZgJaiRYBs=;
+        h=Date:From:To:Subject:From;
+        b=W/+8OC6+z5/UgR3RnwjbwI63NOp56OVOkveYlzlCKet84HAaeso31H/2FPt7AXaha
+         7GZ7ccIMepAydeD+CfTRCuXgaJxwP2vM7bg0AgwNdufVSloynKwSj7cFI74gWkHQ4C
+         ZPyDi1T9mmwo2Bhzl7e40lIZzqTCcBOub/0yKYKxx45znyULEhM59ejhgE6tLwKNMB
+         5gQi8PswHFhnQMFDcEhA8ClnDSz1mEPT8Yx0hVdj4YbJrJQmnYmJb+vXky/XfR92F6
+         68HUeF09OP59OZ34wstMYU+y07C79Amt8m1i1sYcIDU0PkLikBKgsyoyMNL0q5DGMf
+         qb5Fq+vmXH7og==
+Received: by mail.axisfairfi.com for <linux-spi@vger.kernel.org>; Tue, 22 Nov 2022 09:15:27 GMT
+Message-ID: <20221122074500-0.1.d.ofd.0.0emilebtjr@axisfairfi.com>
+Date:   Tue, 22 Nov 2022 09:15:27 GMT
+From:   "Zbynek Spacek" <zbynek.spacek@axisfairfi.com>
+To:     <linux-spi@vger.kernel.org>
+Subject: Silikonmischungen
+X-Mailer: mail.axisfairfi.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM14,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Good morning,
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+do you need intermediates for processing, plastics (e.g. rubber) or silic=
+one mixtures?
 
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/spi/spi-qup.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+We provide a wide range of silicone rubbers with various properties, sili=
+cone mixtures from renowned manufacturers such as Wacker, Elastosil LR an=
+d dyes, stabilizers, primers and anti-adhesive additives.
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 678dc51ef017..71fc65e094e7 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1003,8 +1003,7 @@ static int spi_qup_probe(struct platform_device *pdev)
- 	int ret, irq, size;
+We also produce technical silicone compounds with increased resistance to=
+ oils, resistant to high temperatures and water vapor, conductive and man=
+y more.
 
- 	dev = &pdev->dev;
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(dev, res);
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+We provide fast order fulfillment, timely deliveries and cost optimizatio=
+n.
 
--- 
-2.25.1
+Can I introduce what we can offer you?
+
+
+Zbynek Spacek
