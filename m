@@ -2,158 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8863620D
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 15:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3278D636222
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 15:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiKWOlm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Nov 2022 09:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S236223AbiKWOoC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Nov 2022 09:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbiKWOlh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 09:41:37 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54114554E0
-        for <linux-spi@vger.kernel.org>; Wed, 23 Nov 2022 06:41:33 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:881b:815b:474d:c3fd])
-        by michel.telenet-ops.be with bizsmtp
-        id nqhS2800P49U0Rd06qhSXE; Wed, 23 Nov 2022 15:41:30 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oxqwH-001Rql-Rb; Wed, 23 Nov 2022 15:41:25 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oxqwH-0012Ho-7B; Wed, 23 Nov 2022 15:41:25 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S236316AbiKWOoA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 09:44:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BCAE2;
+        Wed, 23 Nov 2022 06:43:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30BA661D2F;
+        Wed, 23 Nov 2022 14:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4054C433D6;
+        Wed, 23 Nov 2022 14:43:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669214636;
+        bh=Y//1b3rNjcukiNpZ5Pvh7pYLjJ73zqnquLe7wn350Y8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZG0A8BqvT2ORUrlb7I1sLgQbAJlUfWRx4X3QT05SHfMJHOiZi+oRORqmZj+4Ve1sr
+         yrWervl3veC7SaL/o17MVgz3Dhfcy0sfIdmXTsu4djT54VPEw3RJkWavMyc6YUx1SN
+         g9poRnTZVXeouBC0UZFuX6m9uQ4XqT9Rm2SZUstZY6NdbdpCNIZXXUg8rJ/rXGDFnm
+         xocVZ/NP1GyqV/SPtlOUK0KMz9pz+BK8ggFE9KJ+P7VJYkoo1Jc9GcfSQ0yDAa9SVX
+         zznkZz4xqfL53zsXyhV3+8pHvNOb+T4KROZfGYgEnEdEcDbd2YXbZBbjcYD5dpvcKV
+         yktlDGX0NXmHQ==
+Date:   Wed, 23 Nov 2022 14:43:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sergey Shtylyov <s.shtylyov@omp.ru>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 6/6] memory: renesas-rpc-if: Remove Runtime PM wrappers
-Date:   Wed, 23 Nov 2022 15:41:22 +0100
-Message-Id: <d87aa5d7e4a39b18f7e2e0649fee0a45b45d371f.1669213027.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1669213027.git.geert+renesas@glider.be>
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] memory: renesas-rpc-if: Pass device instead of
+ rpcif to rpcif_*()
+Message-ID: <Y34xpkf4c55D4VRc@sirena.org.uk>
 References: <cover.1669213027.git.geert+renesas@glider.be>
+ <0460fe82ba348cedec7a9a75a8eff762c50e817b.1669213027.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BKAJETaVx6g41XLW"
+Content-Disposition: inline
+In-Reply-To: <0460fe82ba348cedec7a9a75a8eff762c50e817b.1669213027.git.geert+renesas@glider.be>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Now the rpcif_{en,dis}able_rpm() wrappers just take a pointer to a
-device structure, there is no point in keeping them.  Remove them, and
-update the callers to call Runtime PM directly.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-This could be split in three patches for three different subsystems,
-with the changes to <memory/renesas-rpc-if.h> postponed, to relax
-dependencies, but the previous patch already touches all three
-subsystems anyway.
+--BKAJETaVx6g41XLW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-v2:
-  - New.
----
- drivers/mtd/hyperbus/rpc-if.c   |  6 +++---
- drivers/spi/spi-rpc-if.c        |  6 +++---
- include/memory/renesas-rpc-if.h | 10 ----------
- 3 files changed, 6 insertions(+), 16 deletions(-)
+On Wed, Nov 23, 2022 at 03:41:21PM +0100, Geert Uytterhoeven wrote:
+> Most rpcif_*() API functions do not need access to any other fields in
+> the rpcif structure than the device pointer.  Simplify dependencies by
+> passing the device pointer instead.
 
-diff --git a/drivers/mtd/hyperbus/rpc-if.c b/drivers/mtd/hyperbus/rpc-if.c
-index 41734e337ac00e40..ef32fca5f785e376 100644
---- a/drivers/mtd/hyperbus/rpc-if.c
-+++ b/drivers/mtd/hyperbus/rpc-if.c
-@@ -130,7 +130,7 @@ static int rpcif_hb_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, hyperbus);
- 
--	rpcif_enable_rpm(hyperbus->rpc.dev);
-+	pm_runtime_enable(hyperbus->rpc.dev);
- 
- 	error = rpcif_hw_init(hyperbus->rpc.dev, true);
- 	if (error)
-@@ -150,7 +150,7 @@ static int rpcif_hb_probe(struct platform_device *pdev)
- 	return 0;
- 
- out_disable_rpm:
--	rpcif_disable_rpm(hyperbus->rpc.dev);
-+	pm_runtime_disable(hyperbus->rpc.dev);
- 	return error;
- }
- 
-@@ -160,7 +160,7 @@ static int rpcif_hb_remove(struct platform_device *pdev)
- 
- 	hyperbus_unregister_device(&hyperbus->hbdev);
- 
--	rpcif_disable_rpm(hyperbus->rpc.dev);
-+	pm_runtime_disable(hyperbus->rpc.dev);
- 
- 	return 0;
- }
-diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
-index 5063587d2c724c7c..ec0904faf3a10bd0 100644
---- a/drivers/spi/spi-rpc-if.c
-+++ b/drivers/spi/spi-rpc-if.c
-@@ -147,7 +147,7 @@ static int rpcif_spi_probe(struct platform_device *pdev)
- 
- 	ctlr->dev.of_node = parent->of_node;
- 
--	rpcif_enable_rpm(rpc->dev);
-+	pm_runtime_enable(rpc->dev);
- 
- 	ctlr->num_chipselect = 1;
- 	ctlr->mem_ops = &rpcif_spi_mem_ops;
-@@ -169,7 +169,7 @@ static int rpcif_spi_probe(struct platform_device *pdev)
- 	return 0;
- 
- out_disable_rpm:
--	rpcif_disable_rpm(rpc->dev);
-+	pm_runtime_disable(rpc->dev);
- 	return error;
- }
- 
-@@ -179,7 +179,7 @@ static int rpcif_spi_remove(struct platform_device *pdev)
- 	struct rpcif *rpc = spi_controller_get_devdata(ctlr);
- 
- 	spi_unregister_controller(ctlr);
--	rpcif_disable_rpm(rpc->dev);
-+	pm_runtime_disable(rpc->dev);
- 
- 	return 0;
- }
-diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
-index 86a26ea78221a204..b8fa30fd6b500c73 100644
---- a/include/memory/renesas-rpc-if.h
-+++ b/include/memory/renesas-rpc-if.h
-@@ -76,14 +76,4 @@ void rpcif_prepare(struct device *dev, const struct rpcif_op *op, u64 *offs,
- int rpcif_manual_xfer(struct device *dev);
- ssize_t rpcif_dirmap_read(struct device *dev, u64 offs, size_t len, void *buf);
- 
--static inline void rpcif_enable_rpm(struct device *dev)
--{
--	pm_runtime_enable(dev);
--}
--
--static inline void rpcif_disable_rpm(struct device *dev)
--{
--	pm_runtime_disable(dev);
--}
--
- #endif // __RENESAS_RPC_IF_H
--- 
-2.25.1
+Acked-by: Mark Brown <broonie@kernel.org>
 
+--BKAJETaVx6g41XLW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+MaUACgkQJNaLcl1U
+h9Bcugf9Fq5kxq2SwxU/HdgpmKvb/nRaHNMV7D4mCFZNMxmkwUY4eMNTKzbpvly3
+D4lSGL4xRZWS1hQVR4EK5Xs5BCj2PqvvYhNTAM4BLDgLP/qK/+8B9Ezs8PuSYDRg
+CRyR3HF7GGKhP0NM8Vj9+M+OoldvWwfAFp5wx4kp5henzsB1zSuwIs90Z4FxsQTN
+IiCpmwcBJrmDQcBwYeZL+rGYiVWfs5xm/7WPt/E5ssbMGXms/cOnhjMZHgexSFEv
+ZPT3WyWEY7Ka01Ri1OxtooAIgdQ3BHnxEswLJbAhJj5Reb9kPfvl8UN+6h1iV1f6
+jLNoNQ5Gr5aHbQCbbs72ASpRcUqCqA==
+=evAV
+-----END PGP SIGNATURE-----
+
+--BKAJETaVx6g41XLW--
