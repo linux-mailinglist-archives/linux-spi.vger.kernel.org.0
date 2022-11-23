@@ -2,49 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E11763656F
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 17:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B37D6369D5
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 20:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238941AbiKWQKR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Nov 2022 11:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S238466AbiKWTY1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Nov 2022 14:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238956AbiKWQKF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 11:10:05 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5343668C76;
-        Wed, 23 Nov 2022 08:10:00 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 24 Nov 2022 01:10:00 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id F34592059054;
-        Thu, 24 Nov 2022 01:09:59 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 24 Nov 2022 01:09:59 +0900
-Received: from [10.212.158.163] (unknown [10.212.158.163])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 6D262A8557;
-        Thu, 24 Nov 2022 01:09:59 +0900 (JST)
-Message-ID: <53680a59-ff01-bc50-ee28-ba0aaff41f3c@socionext.com>
-Date:   Thu, 24 Nov 2022 01:09:59 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: spi: Add Socionext F_OSPI controller
- bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221121014800.13989-1-hayashi.kunihiko@socionext.com>
- <20221121014800.13989-2-hayashi.kunihiko@socionext.com>
- <579f9320-f114-2977-bb70-d5a26a3d2279@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <579f9320-f114-2977-bb70-d5a26a3d2279@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        with ESMTP id S238859AbiKWTYY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 14:24:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD1AC604D;
+        Wed, 23 Nov 2022 11:24:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F300B82465;
+        Wed, 23 Nov 2022 19:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFA54C433D6;
+        Wed, 23 Nov 2022 19:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669231460;
+        bh=0Xv6hRd935ZkfNko0MKVnltSbedyCiqw414iUAfzvzE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=TyjCnpF1jEctFcv9uvRqngj6SXPUwa5aSjdPivFrTkzgZQs28HfnSrbsoIgoSQBa1
+         JGp/MC1UCMTIZ0/zEs5cM7Mcg19DZac9wQmRt1HdjuS12scHNFuCp0mE4tpK+wSHea
+         8TJbf2FX6CfhLAZp/n2Yq0Iccjjm3NNO2UScjKBa0j96Z+MAKbm5c1wueNTYqG0vMC
+         F9eLJWiMHH/qYTHcgCPNcO3SU/RZ7IBfKuWJHgdiQWIzlSK1mSLL/D4JRxUpdscxYs
+         S4aefM17MmiGRestep+Ntmipbt62FH1csg950qx+juBTH28XRNN8rdEgF4use3WYj+
+         pZRj4jWP8Ipjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8BF5C395ED;
+        Wed, 23 Nov 2022 19:24:19 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.1-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221123160524.A4687C433C1@smtp.kernel.org>
+References: <20221123160524.A4687C433C1@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221123160524.A4687C433C1@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc6
+X-PR-Tracked-Commit-Id: e85e9e0d8cb759013d6474011c227f92e442d746
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4312098baf37ee17a8350725e6e0d0e8590252d4
+Message-Id: <166923145988.2332.3821760036184874925.pr-tracker-bot@kernel.org>
+Date:   Wed, 23 Nov 2022 19:24:19 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,68 +60,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
+The pull request you sent on Wed, 23 Nov 2022 16:04:59 +0000:
 
-Thank you for reviewing.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc6
 
-On 2022/11/23 18:33, Krzysztof Kozlowski wrote:
-> On 21/11/2022 02:47, Kunihiko Hayashi wrote:
->> Add devicetree binding documentation for Socionext F_OSPI SPI flash
->> controller.
-> 
-> Subject: drop second, redundant "bindings".
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4312098baf37ee17a8350725e6e0d0e8590252d4
 
-Ah, ok. I didn't notice it. I'll remove it in next.
+Thank you!
 
->> >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> ---
->>   .../bindings/spi/socionext,f-ospi.yaml        | 57 +++++++++++++++++++
->>   1 file changed, 57 insertions(+)
->>   create mode 100644
->> Documentation/devicetree/bindings/spi/socionext,f-ospi.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/spi/socionext,f-ospi.yaml
->> b/Documentation/devicetree/bindings/spi/socionext,f-ospi.yaml
->> new file mode 100644
->> index 000000000000..e04492c4fc84
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/socionext,f-ospi.yaml
->> @@ -0,0 +1,57 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/spi/socionext,f-ospi.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> 
-> Drop quotes from both lines.
-
-I see. I'll keep it in mind.
-
->> +
->> +title: Socionext F_OSPI controller
->> +
->> +description: |
->> +  The Socionext F_OSPI is a controller used to interface with flash
->> +  memories using the SPI communication interface.
->> +
->> +maintainers:
->> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> +
->> +allOf:
->> +  - $ref: "spi-controller.yaml#"
-> 
-> Drop quotes.
-
-Ditto.
-
-> With above:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-I'll fix the above in v3.
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
