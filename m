@@ -2,145 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343BA6347F9
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Nov 2022 21:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCB8634C15
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 02:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbiKVUSV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Nov 2022 15:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S235447AbiKWBIV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Nov 2022 20:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiKVUSL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 15:18:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABC7BC2B
-        for <linux-spi@vger.kernel.org>; Tue, 22 Nov 2022 12:18:09 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhX-0006Qx-Bo; Tue, 22 Nov 2022 21:17:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhR-005v1B-UM; Tue, 22 Nov 2022 21:16:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhS-000s7U-3N; Tue, 22 Nov 2022 21:16:58 +0100
-Date:   Tue, 22 Nov 2022 21:16:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221122201654.5rdaisqho33buibj@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
+        with ESMTP id S235443AbiKWBII (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Nov 2022 20:08:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C238525F3;
+        Tue, 22 Nov 2022 17:08:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BBF9B81DDD;
+        Wed, 23 Nov 2022 01:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D46C433B5;
+        Wed, 23 Nov 2022 01:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669165685;
+        bh=qTQ21cFsHNaq36zv0IktHLxNFPVLWU4zT0U5TeMVodI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=t1GF3SzcQqEax6YraA5cSidEEBrY+t9CKMvXX1RB2OIOQGszcdQKKFeS2makpGNNh
+         e4I4P34f0tkGChp7gb47xQ/AGIz3FYUjxTW2+uMyfIWKA/DqFQbQRgua2C8UYfCQ8H
+         LUD9FfLW3L0tpgSJxKD6isoQQEkiA79vLzeZkQWRdmvpXdYAjqtPxd49k0qPQ+Wp30
+         DhjwqykE7JWbCdDok81NTKOLoNJQevNoBRbcazCXpjtjCDJPo+kV+m2Jkl2prEKmAW
+         W2RbDr28IQOUcmdrWeOyl/WRLLZSR9ClBHGr6O6aJQnPsTDE9+nb7rS/f6xsjvKfLe
+         Zz4cyioi1Jocg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3mjk627u66tfbb3"
-Content-Disposition: inline
-In-Reply-To: <20221122185818.3740200d@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221121110615.97962-4-krzysztof.kozlowski@linaro.org>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org> <20221121110615.97962-4-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 3/9] dt-bindings: clock: st,stm32mp1-rcc: add proper title
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Date:   Tue, 22 Nov 2022 17:08:03 -0800
+User-Agent: alot/0.10
+Message-Id: <20221123010805.33D46C433B5@smtp.kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---t3mjk627u66tfbb3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
+Quoting Krzysztof Kozlowski (2022-11-21 03:06:09)
+> Add device name in the title, because "Reset Clock Controller" sounds
+> too generic.
 >=20
-> Queued all of the below:
-> with one tweaked as per your suggestion and the highlighted one dropped o=
-n basis
-> I was already carrying the equivalent - as you pointed out.
->=20
-> I was already carrying the required dependency.
->=20
-> Includes the IIO ones in staging.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> p.s. I perhaps foolishly did this in a highly manual way so as to
-> also pick up Andy's RB.  So might have dropped one...
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
 
-You could have done:
-
-	H=3D$(git rev-parse @)
-	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-	git am ...
-	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo=
- 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo '=
-Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
-
-(untested, but you get the idea).
-
-> Definitely would have been better as one patch per subsystem with
-> a cover letter suitable for replies like Andy's to be picked up
-> by b4.
-
-Next time I will go for one series per subsystem which I like better
-than one patch per subsystem.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---t3mjk627u66tfbb3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9LjMACgkQwfwUeK3K
-7An96wf/RMtsCSXVJy8BDrXiXMhey9OEm8p08ulRn0lKYlG54KR8nU/s77uuMjGS
-99aUfUU56Abxk02DuBv6N5Bax8nlFyIlUgkfaYPP9iN1TkF5XiucQ0Se4/haYL4A
-q11UqWIcKBS+5BL3K6Bl1Cqv4dPYpRvs99X3jlU6JmhFqJPPhPgAu0p74arSvLie
-kN6wgOGVdCjZTRD+Z7FxfIQPZqvVo7anPAynyk7XfgTXMSAK80JPR2UeMfvQ7yr2
-W28htsacTaJSnPOb1VIrhN8OytpxASYa120EJ8augNmBXC0IzvjosWI0LZnNljAU
-izPd/d6lzDCP0Mz/LU9QCBYUR1jxuQ==
-=KmMu
------END PGP SIGNATURE-----
-
---t3mjk627u66tfbb3--
+Acked-by: Stephen Boyd <sboyd@kernel.org>
