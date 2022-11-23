@@ -2,75 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833106364D9
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 16:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DB6636544
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Nov 2022 17:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiKWPxu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Nov 2022 10:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S237748AbiKWQF1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Nov 2022 11:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiKWPxB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 10:53:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121AC5A6EA;
-        Wed, 23 Nov 2022 07:52:57 -0800 (PST)
+        with ESMTP id S237815AbiKWQF0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Nov 2022 11:05:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078AD1FCDA;
+        Wed, 23 Nov 2022 08:05:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E2E61DD9;
-        Wed, 23 Nov 2022 15:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5EEC43144;
-        Wed, 23 Nov 2022 15:52:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9966C61DD6;
+        Wed, 23 Nov 2022 16:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4687C433C1;
+        Wed, 23 Nov 2022 16:05:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669218776;
-        bh=ZtsEDAGH6M1Hm2mKwIp+nkyl3EOfULlsa+PR5Jh+/yY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCYae1otHmgUnvQhYydPYexYhzz0miYjM4zpf8c2mnxAms5CtVYUfAM7tWuXKgBlL
-         NCzjlOivqXZ6UqIGFo6Q3BntqxLP3hoWG6T432NPpsWDwgRF2tNVlSSreyLi6w5epT
-         5yRu6zDAJOHqLx2PKvtXWr2dbpMJrrYdASELSXDQ7oXGnQVROdJjqD20wCxJmK/TbF
-         LxosEZjoFf2ROozxpxjVeaVFcuzQLwzX93rS2p4/AwotUvzWq5hYJvRgCJVOQBQ8wc
-         Y+r3iBPxcrfDRitsbVrK4soZK4ULKoO7A7tHxHwHfbIwT8fluQgTwO6NOBHUOHbov+
-         PWGuJ73a1veDQ==
-Date:   Wed, 23 Nov 2022 15:52:45 +0000
+        s=k20201202; t=1669219525;
+        bh=wumT2s5vcbQLnC2Ie1QxkdtZxlwX79xhxHYlH5r//Qs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iwA3yUXdDRK22J7A76qBE8VD+CsXQ7ytMFW8cGuF/F0lqabGHieU2qeDccVuKXdhk
+         sS35HnA7gHiLSRGgWPSl4kSKm9xGIgrtxE9b/oYIfB19CwRpjDHH76XM24JsEC/vMv
+         +s4i6gZr8larNS8WQ+HnKsM90OXLBSgWg5KnUKNPtqN5O32PhJs0qTXB1sdxkc6TUT
+         f9URkC26B4FH5z0hhe83piA8r8mcexBL8q+XSvbjrGtgjuVakuOiJ+3rRLOUqqFcWl
+         oRcsuI4lWIdBW6WelVIc7Y+5uk9q0yTS0qPdUi1eZnaYwAVcIDajzfiHZti1n8gOmp
+         v66zQVKJnL58A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: drop redundant part of title (manual)
-Message-ID: <Y35BzU80hf36eRyo@sirena.org.uk>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
- <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QAOhPtWQs4kr9fZE"
-Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-X-Cookie: I'm rated PG-34!!
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.1-rc6
+Date:   Wed, 23 Nov 2022 16:04:59 +0000
+Message-Id: <20221123160524.A4687C433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -80,31 +47,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following changes since commit bff6bef701db784bb159a659e99c785b4594fc96:
 
---QAOhPtWQs4kr9fZE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  spi: amd: Fix SPI_SPD7 value (2022-11-04 12:25:03 +0000)
 
-On Mon, Nov 21, 2022 at 12:06:15PM +0100, Krzysztof Kozlowski wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding" or a "schema", but instead just describe
-> the hardware.
+are available in the Git repository at:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc6
 
---QAOhPtWQs4kr9fZE
-Content-Type: application/pgp-signature; name="signature.asc"
+for you to fetch changes up to e85e9e0d8cb759013d6474011c227f92e442d746:
 
------BEGIN PGP SIGNATURE-----
+  spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first (2022-11-18 11:39:50 +0000)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+QcwACgkQJNaLcl1U
-h9AXjAf8DK+4g+6i+PYcdDNKGnFY/1uo0vNGE7MKgsNgIAMn42Y9Tw++ts0ZwHYw
-EDuQqMblUcsp9NKWMs1LVsvQ2YGAbZUXjgUzWpiImszGWwmUf6DZkjwNojGA5ngh
-GAGhKyUYUGXRb0MKJ1X4O3pobituSQSnz8UWlDrpBOO2OiWnWvdbURWlhNYNqMSm
-70ahwExSo8nv/Dxkvf+GV0FHLToE5K4JZxqRh/Gn0l0206IYzY4jvEbCq0DEuZPH
-Jt7Az6phpVvce86sAHnvukNdIa0EQ/8pR+v9idvZiGVY5NJvdJA54BR+1AoXlMna
-RQueknzjRrsbdQSr0xa/wr8lQW5rpw==
-=Wum3
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+spi: Fixes for v6.1
 
---QAOhPtWQs4kr9fZE--
+A few fixes, all device specific.  The most important ones are for the
+i.MX driver which had a couple of nasty data corruption inducing errors
+appear after the change to support PIO mode in the last merge window
+(one introduced by the change and one latent one which the PIO changes
+exposed), thanks to Frieder, Fabio, Marc and Marek for jumping on that
+and resolving the issues quickly once they were found.
+
+----------------------------------------------------------------
+Frieder Schrempf (1):
+      spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
+
+Krishna Yarlagadda (1):
+      spi: tegra210-quad: Fix duplicate resource error
+
+Marc Kleine-Budde (1):
+      spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
+
+Xiongfeng Wang (1):
+      spi: dw-dma: decrease reference count in dw_spi_dma_init_mfld()
+
+Zhichao Liu (1):
+      spi: mediatek: Fix DEVAPC Violation at KO Remove
+
+ drivers/spi/spi-dw-dma.c        |  3 +++
+ drivers/spi/spi-imx.c           | 13 ++++++++-----
+ drivers/spi/spi-mt65xx.c        |  8 +++++++-
+ drivers/spi/spi-tegra210-quad.c |  3 ++-
+ 4 files changed, 20 insertions(+), 7 deletions(-)
