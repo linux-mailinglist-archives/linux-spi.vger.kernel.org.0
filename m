@@ -2,55 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608DF63791E
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Nov 2022 13:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3506379E8
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Nov 2022 14:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiKXMmY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Nov 2022 07:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S229931AbiKXN1H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Nov 2022 08:27:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiKXMmJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Nov 2022 07:42:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EF0D92F2;
-        Thu, 24 Nov 2022 04:41:59 -0800 (PST)
+        with ESMTP id S229819AbiKXN1G (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Nov 2022 08:27:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34A28FF84;
+        Thu, 24 Nov 2022 05:27:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56ABA62117;
-        Thu, 24 Nov 2022 12:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8EEC433C1;
-        Thu, 24 Nov 2022 12:41:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F32462127;
+        Thu, 24 Nov 2022 13:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB4BC433C1;
+        Thu, 24 Nov 2022 13:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669293718;
-        bh=1iJR7svHch/4T42w9H9emz8bEDSlGXspdjOx/hxrm0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ohhfNIJXuUoO96qIbvqJlGPesY8HIlSJOzb2cUIWs7/NdrX6dhZqzdkKAE1TjgpVI
-         a5pigHiHTlg8wK+6+UdKBHqGuYXizkS093Y/DGiffBgCZK97ChCZbpzRJxuYkJD4ZQ
-         mPn9BUyz0PPjP6OssoOg//mRfoJCceH7lewJ0GmdgdM6J+LLICEO/dVMiQk70A6Ror
-         fZpIitc6pV/SzM911YLTqOj0mimRzwbm5yqkFYaYIfxcnD0JQaqjCJxqkFKL4X8EM0
-         T8GCVCGpeQLwC8THzWXr+eTYEB/Eja+NJNK8Wn4OHl1BW3r2GPUrJQi0mSOlLqtfgc
-         RGQZaJFyobbaA==
-Date:   Thu, 24 Nov 2022 12:41:54 +0000
+        s=k20201202; t=1669296424;
+        bh=Rrx/a0YRfqPx5rgHb8nvvNQ00yQDgG12Xp3NFnJUGqc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=WLhqunNSreRML8Sso8HZSIcf8VbEomG0gYJ3bX0iAeP9c63E66thfjjA6JPa2R+hc
+         D243qy/moxMqxmwzx29YFXNOUvZVh+T+cgxB13Yyei1RppFxPKa1taZ+TrFJOBfqCx
+         ku1/4X5NQ8QGRL1yisaq7NK9QQ5QWfKygFyUoVfKlNTvI2wb5//RmO99vP6kQb+r8m
+         9o0Zr+apHYBxe8JfhVtNTXVWdJSRPaH7dGyJm9+wipNxYgkngjv05QYmW8DQA5uOs8
+         1GQ+Oil8x8P/rtfXImXD8dekSPagjniEUYmxhGIaXCey1M07hGOuQ8Car4rVzo9XNR
+         NcDMiZk4eeqTw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>,
-        greg.malysa@timesys.com,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: cadence-quadspi: Add upper limit safety check to
- baudrate divisor
-Message-ID: <Y39mkl+9W8S6ZzOk@sirena.org.uk>
-References: <20221123211705.126900-1-nathan.morrison@timesys.com>
- <9e5264fa-db1a-ed96-5fd8-cbfa4694b8bd@ti.com>
- <Y39XFzYJL3EmxSFF@sirena.org.uk>
- <88b6dab2-87b1-34ef-b267-43933d79ab8e@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20221124003351.7792-1-hayashi.kunihiko@socionext.com>
+References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH v3 0/2] Introduce Socionext F_OSPI SPI flash controller
+Message-Id: <166929642318.251519.15577322648856458506.b4-ty@kernel.org>
+Date:   Thu, 24 Nov 2022 13:27:03 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BSJOWebIfHRbS2Ss"
-Content-Disposition: inline
-In-Reply-To: <88b6dab2-87b1-34ef-b267-43933d79ab8e@ti.com>
-X-Cookie: Apply only to affected area.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,51 +55,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 24 Nov 2022 09:33:49 +0900, Kunihiko Hayashi wrote:
+> This series adds dt-bindings and a driver for Socionext F_OSPI controller
+> for connecting an SPI Flash memory over up to 8-bit wide bus.
+> The controller supports up to 4 chip selects.
+> 
+> Changes since v2:
+> - Drop a redundant word in the subject line
+> - Drop quotes of referenceing URL in dt-bindings
+> - Add Reviewed-by line to dt-bindings patch
+> 
+> [...]
 
---BSJOWebIfHRbS2Ss
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Nov 24, 2022 at 05:57:10PM +0530, Dhruva Gole wrote:
-> On 24/11/22 17:05, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > As far as I can tell the issue here is that the device is asking for a
-> > rate which requires a larger divisor than the controller can support but
-> > the driver doesn't do any bounds checking so it just writes the
-> > calculated divisor out to the hardware, corrupting any adjacent fields.
+Thanks!
 
-> but, I am not sure it would anyway corrupt any adjacent bits,
+[1/2] dt-bindings: spi: Add Socionext F_OSPI controller
+      commit: bcd58c8ca0f89fe6a890f909916bc97561341a06
+[2/2] spi: Add Socionext F_OSPI SPI flash controller driver
+      commit: 1b74dd64c8612619e399e5a31da79a3636914495
 
-> The code
-> reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> does mask the div value to ensure bits ONLY in CQSPI_REG_CONFIG_BAUD_MASK
-> region are set and nothing else right?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Yes, that'd avoid corrupting adjacent bits (though it'd still be making
-things worse in that it makes the divider smaller).
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> I believe a simple warning is enough, and better not touch the div variable
-> because it seems unnecessary. We already have a mask to take care of masking
-> the appropriate bits.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-That'd still leave the clock driven too fast which could break things,
-going for the maximum divider would mitigate this (though an error would
-be even safer).
-
---BSJOWebIfHRbS2Ss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN/ZpEACgkQJNaLcl1U
-h9AvPAf9G6Ky3lmquOrNVgL0eNAxmRCd4YVvOTlKeIHNJrNv6TT320J/DzrVN4w+
-9ktTV3ZW4wsBcN1P3zz6nz8lwIofuAK+exw90LI2BduuLQ99UWguHRTZ5Boe9LDf
-xnFPHZmYF3HwIDC+S854MAKeEv99++By+wMtrhTBzv/OMF1OPynedrcmhNLYDZF6
-V8Hca5elzIKlOI0jF8GZ1tYllW50vvdNbgsCVpD5cUxtlsZDOuqLuH40xmS6DZ6A
-87YYdtrvk4LbTpVumgtypvnzECMDx+Jya1OSjqcRrEY9UDFklb2EX0RUJspLMpA7
-A2qJeq9A2Gf0/ULY7DAUK3T2I34JeA==
-=ZHIr
------END PGP SIGNATURE-----
-
---BSJOWebIfHRbS2Ss--
+Thanks,
+Mark
