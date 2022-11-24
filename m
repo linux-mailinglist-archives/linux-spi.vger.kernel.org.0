@@ -2,124 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5587563727F
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Nov 2022 07:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995D86372BA
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Nov 2022 08:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiKXGq0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Nov 2022 01:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S229544AbiKXHM0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Nov 2022 02:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKXGq0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Nov 2022 01:46:26 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C19EE2A;
-        Wed, 23 Nov 2022 22:46:23 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AO6kEAC006669;
-        Thu, 24 Nov 2022 00:46:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669272374;
-        bh=k8oQc928q/IqwtNyVn+bggppZAISVnv0DtJUajNDPD0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cCv0OazLFQW/Qh11HgvlAggM1vs1wrtQE+sF7RWxZMMJ9DM9UNmBeKn0lFNWt01oo
-         k5qeIygjvuRfR+7QV6IUqpMU5aBr/y0lp3bPiNWfgDemFBf9ukfBN7vBOGXp83rvA+
-         YSogSwJI1owyXPqu5z22PVsfvv1wJbpUwrSegww4=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AO6kEqh079461
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Nov 2022 00:46:14 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 24
- Nov 2022 00:46:13 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 24 Nov 2022 00:46:13 -0600
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AO6kB47119711;
-        Thu, 24 Nov 2022 00:46:12 -0600
-Message-ID: <9e5264fa-db1a-ed96-5fd8-cbfa4694b8bd@ti.com>
-Date:   Thu, 24 Nov 2022 12:16:10 +0530
+        with ESMTP id S229647AbiKXHMO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Nov 2022 02:12:14 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C11CFA5E
+        for <linux-spi@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n17so864915pgh.9
+        for <linux-spi@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=jN9Iu2JG6Jbf9f/Vtx6/x8W99mbfvmkmA5JpUTuuOhHuX9hE65G+zwT360z98Yxh2l
+         i6PqDF91yJmzwCKNYEVFuLVfqGCqoHx9I7wNV8pa819eMDoiMR27SZF1GHdGnGDHcMWz
+         pqI4i03rsZDpQ60ONyvQHuYR+N3femATVqrSC4hLc3ih0MmJpf23tjAqEmigk+Q4lN5p
+         TjriD73VK+kqD8Wil5LA1NXQ4waHtGM3IZBFIczk95hCWTGki63dLVXFv0wvyqKSahPp
+         nd3iHhwTtHF7fG/CtXcp1E5PNjqsgHvp71L23Lt4pdmYQDMtQS6xnA3gM9hUIGynee9E
+         kaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=tJw+I6D/LeDQkbw/IAri2fT6c/WzJr8HmlxvcM62ayJaI3yWFWp3qOzzrA29YG9G4K
+         7b0pzku94+JYZ1w6ZkZBiH/Kt73hJYNb2Masv5roK/70F7gzFI2hS07SvB2YvSlyO63G
+         o4XetiQtatuMQWbsTIf1lkeCBqCiYNtk0K3L1KcbQG8dblFHqxCUs2soXuJuDAWcebdi
+         lUuOtvNUaQ9qvHWbyGey2sEbxKQ9XbbeT4gnFHVUEs10EQGO6m18vdj/4cOpoecP26T9
+         LC3BulgnLXSV+7Z5k15CSg1N1H6zFnbExcZ+fIxVLdisn+YuF6VaeV70EnGms3xxkDzk
+         X3KA==
+X-Gm-Message-State: ANoB5pm9EtLLHoJYexGbwYIpcBLU7fVVpC9qHL3tic/jcTO3nUIh37gA
+        xCZdwmw9xk+dPZ1wvspmsjDFcA==
+X-Google-Smtp-Source: AA0mqf539xW7yp+XmSaeh7QyKEx/uI4+Px0TRaTKiiPa7cXAYmK2DoSN46/6FwkQRO+vECyNwcPwTg==
+X-Received: by 2002:aa7:8c19:0:b0:573:620a:3b1c with SMTP id c25-20020aa78c19000000b00573620a3b1cmr13160104pfd.50.1669274195379;
+        Wed, 23 Nov 2022 23:16:35 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b001867fdec154sm414181plk.224.2022.11.23.23.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 23:16:34 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:46:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 0/9] dt-bindings: cleanup titles
+Message-ID: <20221124071632.5cadtc6pbdvdv3xb@vireshk-i7>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] spi: cadence-quadspi: Add upper limit safety check to
- baudrate divisor
-Content-Language: en-US
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-CC:     <greg.malysa@timesys.com>, Mark Brown <broonie@kernel.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221123211705.126900-1-nathan.morrison@timesys.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20221123211705.126900-1-nathan.morrison@timesys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Nathan,
-Thanks for your contribution.
-However, there are a few issues that I would like you to address.
+On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
+>  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 +-
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml         | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v1.yaml               | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml          | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml      | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2.yaml               | 2 +-
 
-On 24/11/22 02:47, Nathan Barrett-Morrison wrote:
-> While bringing up the cadence-quadspi driver on a customer board,
-> I discovered that the baud divisor calculation can exceed the
-> peripheral's maximum in some circumstances.  This will prevent it.
-What is the peripheral's maximum? Is the peripheral a flash?
-Please define what you mean by "some circumstances".
-
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->   drivers/spi/spi-cadence-quadspi.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 447230547945..250575fb7b0e 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -1119,6 +1119,10 @@ static void cqspi_config_baudrate_div(struct cqspi_st *cqspi)
->   	/* Recalculate the baudrate divisor based on QSPI specification. */
->   	div = DIV_ROUND_UP(ref_clk_hz, 2 * cqspi->sclk) - 1;
->   
-> +	/* Maximum baud divisor */
-> +	if (div > CQSPI_REG_CONFIG_BAUD_MASK)
-
-I don't think comparing "greater than" with a MASK is atall a good idea.
-
-> +		div = CQSPI_REG_CONFIG_BAUD_MASK;
-I would not encourage this either.
-
-
-> +
->   	reg = readl(reg_base + CQSPI_REG_CONFIG);
->   	reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
->   	reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
-
-Either come up with a better MACRO, or if what I understand
-is correct, the peripheral's max value will depend, well
-on the _peripheral_ in which case it is that "peripheral" driver's
-responsibility to properly tell the controller what to do.
-
-
-Again, I don't fully understand your situation is as in
-what is the peripheral you are using. So please elaborate on that.
-
-Importantly, I would suggest that you _NEVER_ compare ANY value to a
-MASK Macro. MASK Macros are meant to MASK bits.
-
-
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-Thanks and Regards,
-Dhruva Gole
+viresh
