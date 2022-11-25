@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53595638C5E
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Nov 2022 15:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A05D638D16
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Nov 2022 16:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKYOic (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Nov 2022 09:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S229570AbiKYPKS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Nov 2022 10:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiKYOia (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Nov 2022 09:38:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4273209B2;
-        Fri, 25 Nov 2022 06:38:29 -0800 (PST)
+        with ESMTP id S229548AbiKYPKS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Nov 2022 10:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DE710FCB
+        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 07:10:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C8456245B;
-        Fri, 25 Nov 2022 14:38:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44A44C433D6;
-        Fri, 25 Nov 2022 14:38:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBD7624E5
+        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 15:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6F41C433D6;
+        Fri, 25 Nov 2022 15:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669387108;
-        bh=FcTggnf+rfccYnN6dKDPhz0HK+goPR+/Hv67+RvzE/8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OBu0GW4iCLq5pp7j2b4YwbAm3cb+b54WPBwBCAaDf7q2PaTspg/ML975iHxl4zP1F
-         k1b/tut8Yb3gpVfBTG0YD0fUTmfg2imJ07TtI+tTT9MWfQoYl7cIe0HCFPeh26Et5t
-         7a2l032FZiRuzkJx/oWVNWWocnLi0Gwi/+AAfW5qqjPLF5mekm3tTaiLiWEqL1MZee
-         HnAw72YQymjDrTcoMtdYEM+/MhYwzyEmAVRPEHWIZ0FUIJA/fnlqc2dxcZUYOOQMjo
-         O3DXyaJos4Uvdq+vyiiS1EvxZc/HlLJPRe3TXx+S1WbTo5BApFNZpwfqBRm64BLvf7
-         2iTdoCBhWGIVw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>, linux-spi@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <20221125083114.67e7f83c@endymion.delvare>
-References: <20221125083114.67e7f83c@endymion.delvare>
-Subject: Re: [PATCH] spi: cadence: Drop obsolete dependency on COMPILE_TEST
-Message-Id: <166938710801.543681.1594390263495409207.b4-ty@kernel.org>
-Date:   Fri, 25 Nov 2022 14:38:28 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1669389016;
+        bh=NnD3U46PzyBzm9pEX9/doa4f3l9BCIGIEm9he0rIOsk=;
+        h=Subject:From:Date:To:From;
+        b=MCxJ4t192AOWmfZEIw9iT4H0p9V16yiA6vcBAUcamKU81twtxUFtMGiji33ZxyWJ2
+         aanmI4DVZqNYZPHZRSPDkrfS6roX4O7Sr+j4H9JABtHzBqeJxOichBD3E19svGNf7X
+         /O5wl6A8Z9HK3el4a8jBvfpKJb3+5oeVntJSSNbApcGErPNkTqcSlU9r6xAMpqYsfn
+         40U5+TAg1ZjHkEh9S0FloE10DJaD3kjhawC6vFsKnZ87hsyUJNtkfZeVFQ21k6+Nxz
+         RIey/5gAy7zM6s1gJmmgq4mTkirwS+F8+H76C1Ksr4wctNnKSJe0sTj+NHEyVWAlV7
+         20VHdNOPquGFg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9585AC395EC;
+        Fri, 25 Nov 2022 15:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <166938901656.26926.5516029398956521193.git-patchwork-summary@kernel.org>
+Date:   Fri, 25 Nov 2022 15:10:16 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,46 +51,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 25 Nov 2022 08:31:14 +0100, Jean Delvare wrote:
-> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-> is possible to test-build any driver which depends on OF on any
-> architecture by explicitly selecting OF. Therefore depending on
-> COMPILE_TEST as an alternative is no longer needed.
-> 
-> It is actually better to always build such drivers with OF enabled,
-> so that the test builds are closer to how each driver will actually be
-> built on its intended target. Building them without OF may not test
-> much as the compiler will optimize out potentially large parts of the
-> code. In the worst case, this could even pop false positive warnings.
-> Dropping COMPILE_TEST here improves the quality of our testing and
-> avoids wasting time on non-existent issues.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Nuvoton WPCM450 FIU SPI flash controller
+  Submitter: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=698952
+  Lore link: https://lore.kernel.org/r/20221124191400.287918-1-j.neuschaefer@gmx.net
+    Patches: [v2,1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU)
+             [v2,2/3] spi: wpcm-fiu: Add driver for Nuvoton WPCM450 Flash Interface Unit (FIU)
+             [v2,3/3] spi: wpcm-fiu: Add direct map support
 
-Thanks!
 
-[1/1] spi: cadence: Drop obsolete dependency on COMPILE_TEST
-      commit: 9c512e476b0bf8b4f22982eac82db7ff7cc08f73
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
