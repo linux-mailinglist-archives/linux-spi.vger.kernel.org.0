@@ -2,73 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC68B638543
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Nov 2022 09:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FD263880B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Nov 2022 11:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiKYIdz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Nov 2022 03:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S230316AbiKYK7b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Nov 2022 05:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKYIdy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Nov 2022 03:33:54 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CC32EF07
-        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 00:33:53 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d6so5788858lfs.10
-        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 00:33:53 -0800 (PST)
+        with ESMTP id S230240AbiKYK7a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Nov 2022 05:59:30 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07DF4A071
+        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 02:59:28 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id d1so6181701wrs.12
+        for <linux-spi@vger.kernel.org>; Fri, 25 Nov 2022 02:59:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AEtS/Sqsho/UBDb0sfFOo6Xpo0qY16Hbh7nDItyhTCk=;
-        b=Sa8WmGKPniqzw3pm0pIIqkM73/LIU5QZcBbwuIWpIVvRPQqzx2p7mw2KXyz34bjAlo
-         CnWb3CjQXA2JF/co8/erj9LXv5i0bpAo0AsroJ0br2iyteN1rHuWNlTkUZ8CmFrG9EO7
-         XgxMkrNRjYSUGkoO4WY9ELeHQBwd89v10cj4+zv3mElg5YPGxqWMFDj1Q+E8eHf0DvEz
-         6nXgeJ8N6TeEETxgfQhH37sjKXXeKEKGNcFvxRozklmU3vv+fBDbgXw514193Q3+Rkdy
-         ti0kdsff1PeItPPMWGNR+3PgEQekKihAOqA3IUCG4loEi0CRzJs4zjrjgoB78ANnPato
-         9ebA==
+        bh=qxVUzuEfs/JtujPMqVzJNV5+NhQvPn6jD1wFfmF5YfM=;
+        b=hpWKj9WbiPBqcBWPgY84/bsJo2X8VHHOXSltnPkhVQpzOMblhiXUBP/YApAP4mxw/l
+         +iBMNvupOl05n/13RoHoB8ekVUWQ65WEpuirycbVxcERe+lcdgdfpXAqzBSpu0lrwPBf
+         ZbfyjyJ1KUGbb46s60vYiBs2tM7LF8/CoEvhTEcSaPMevCew4dF1QFKMhtl5mVfY+AbJ
+         rzZgRk1JgmHDlUkSh4UjwF3yP5erCL0w67iZ/NIzZUwOfr7lk3Y0uDlVrTU8FcNa4EbA
+         Vx3wiJs0B5m7pOWMFmQlFhR3R2RH5df2WNAkXG14kz21K0PTUbBy53QcCGYCSoeSBCBG
+         883A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AEtS/Sqsho/UBDb0sfFOo6Xpo0qY16Hbh7nDItyhTCk=;
-        b=qvUGcPAIdAwZdCkm+7y0nyR3tkpB07CMK70+vPBQ02m5KsxGQH3LKni8crYTeHVICi
-         oEhZgO2R8h515+bpCU2UI7Z8qDYxCpRqDLtJ3pwnhdwZNGW5Nclxu8vsbFpkoLoGQKdq
-         K/DF43335sFtIbqwW4KUp4x9sZvLAT1636nUwK8VUZ4ANMMgSxeUKY2IwC2DRHt+bcK2
-         PdmoOopY5RgeUyDOTV5apHl2JXqn/rlg2gvVLif7klX6fwb+rOJsCIvV5yEy8X/vOJTo
-         c7E6EH9OsoFNq1hy+Cx9JeWNriR3ynlrAYi49gkyioudMJfVydaVUVTnmAp8EZfIKoEX
-         32Ww==
-X-Gm-Message-State: ANoB5pkD9N1B7vYWe5OI5+XmvF/3SmVXhNkppUr6mh+O4vODsasDB0IS
-        xasKmRi23EwJPAqC+6T6P3AwxrV4vKhxspbv
-X-Google-Smtp-Source: AA0mqf6ShoBjJxNOXbS2X8k/JgWHpzM/h7gYJX7L/Po6kgXUCUVXOx9d24EHCwF7+iIpQm5bdX2yug==
-X-Received: by 2002:ac2:47fc:0:b0:4a2:2f31:12bf with SMTP id b28-20020ac247fc000000b004a22f3112bfmr12980909lfp.550.1669365231593;
-        Fri, 25 Nov 2022 00:33:51 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f5-20020a2eb5a5000000b0026dfbdfc1ddsm288598ljn.11.2022.11.25.00.33.50
+        bh=qxVUzuEfs/JtujPMqVzJNV5+NhQvPn6jD1wFfmF5YfM=;
+        b=n7Hs/En0tkVPJj1xGtJJ/c6gSH3Mv8CCbSXEaToUWof8h9o389K5IzW6Jc15blHUgI
+         WZQwfq94m9cxAs3OXACciIGXjjzCLvNbXLDeciooI+FcNRMH2lant87+CcWDXVxCOcKn
+         QlLu1xwsvFt0MXNCnXBEi2KrtvZbandM0z5A2A6QLY7PSWSN/R+2womTK/OYRv97WFo0
+         QE2LPgdmkrhxUGa2CKgxik5iEZFDeLL1K7OqyyMD+Zlh+QcRq8PBPtsvUMcut6qOsqvb
+         cCl2K8F32RFRppIQkhFkvf6XOKhfZLgRyWJM8mIlZyBWQtrv6H1aKztcQJeMYmzpLVwH
+         eddg==
+X-Gm-Message-State: ANoB5pnOKazfR6lDYutP8mKc4ppiqNog7SfWqEBt8DfrtKC9jF0X4T/D
+        bqBfXeceTAs4DCjVdsn/nKgea/PKIXw3og==
+X-Google-Smtp-Source: AA0mqf7br94cM7b4HGSNhekL2RXQdU8X1ZTptG1/XapkSAPoz5vUxC6qAPeIGDWl9OmGApyxNeoTCQ==
+X-Received: by 2002:adf:e7c3:0:b0:241:dfce:9bfc with SMTP id e3-20020adfe7c3000000b00241dfce9bfcmr11553565wrn.697.1669373967118;
+        Fri, 25 Nov 2022 02:59:27 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id z14-20020a7bc7ce000000b003cf78aafdd7sm4650935wmk.39.2022.11.25.02.59.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 00:33:51 -0800 (PST)
-Message-ID: <1d27dcff-cbad-c9ff-3143-e74531968af4@linaro.org>
-Date:   Fri, 25 Nov 2022 09:33:50 +0100
+        Fri, 25 Nov 2022 02:59:26 -0800 (PST)
+Message-ID: <eba53dc3-cfc8-1df5-970b-2c87d350dd09@linaro.org>
+Date:   Fri, 25 Nov 2022 10:59:25 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
- Interface Unit (FIU)
+ Thunderbird/102.4.2
+Subject: Re: [V2] spi: spi-geni-qcom: Add support for SE DMA mode
 Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
- <20221124191400.287918-2-j.neuschaefer@gmx.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124191400.287918-2-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com, vkoul@kernel.org
+References: <1669040373-23605-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1669040373-23605-1-git-send-email-quic_vnivarth@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -79,21 +77,309 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24/11/2022 20:13, Jonathan Neuschäfer wrote:
-> The Flash Interface Unit (FIU) is the SPI flash controller in the
-> Nuvoton WPCM450 BMC SoC. It supports four chip selects, and direct
-> (memory-mapped) access to 16 MiB per chip. Larger flash chips can be
-> accessed by software-defined SPI transfers.
+Thanks for your patch Vijaya,
+
+On 21/11/2022 14:19, Vijaya Krishna Nivarthi wrote:
+> SE DMA mode can be used for larger transfers and FIFO mode
+> for smaller transfers.
+
+Over all the patch looks good, but with few minor nits around coding 
+conventions.
 > 
-> The FIU in newer NPCM7xx SoCs is not compatible with the WPCM450 FIU.
-> 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 > ---
+>   drivers/spi/spi-geni-qcom.c | 211 ++++++++++++++++++++++++++++++++++----------
+>   1 file changed, 165 insertions(+), 46 deletions(-)
 > 
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index 4e83cc5..102529a 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -87,6 +87,8 @@ struct spi_geni_master {
+>   	struct completion cs_done;
+>   	struct completion cancel_done;
+>   	struct completion abort_done;
+> +	struct completion tx_reset_done;
+> +	struct completion rx_reset_done;
+>   	unsigned int oversampling;
+>   	spinlock_t lock;
+>   	int irq;
+> @@ -95,6 +97,7 @@ struct spi_geni_master {
+>   	struct dma_chan *tx;
+>   	struct dma_chan *rx;
+>   	int cur_xfer_mode;
+> +	u32 cur_m_cmd;
+>   };
+>   
+>   static int get_spi_clk_cfg(unsigned int speed_hz,
+> @@ -129,23 +132,26 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+>   	return ret;
+>   }
+>   
+> -static void handle_fifo_timeout(struct spi_master *spi,
+> +static void handle_se_timeout(struct spi_master *spi,
+>   				struct spi_message *msg)
+indentation looks off.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>   {
+>   	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+>   	unsigned long time_left;
+>   	struct geni_se *se = &mas->se;
+> +	const struct spi_transfer *xfer;
+>   
+>   	spin_lock_irq(&mas->lock);
+>   	reinit_completion(&mas->cancel_done);
+> -	writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
+> +	if (mas->cur_xfer_mode == GENI_SE_FIFO)
+> +		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
 
-Best regards,
-Krzysztof
+empty line here would make the code more readable.
 
+> +	xfer = mas->cur_xfer;
+>   	mas->cur_xfer = NULL;
+>   	geni_se_cancel_m_cmd(se);
+>   	spin_unlock_irq(&mas->lock);
+>   
+>   	time_left = wait_for_completion_timeout(&mas->cancel_done, HZ);
+>   	if (time_left)
+> -		return;
+> +		goto unmap_if_dma;
+>   
+>   	spin_lock_irq(&mas->lock);
+>   	reinit_completion(&mas->abort_done);
+> @@ -162,6 +168,45 @@ static void handle_fifo_timeout(struct spi_master *spi,
+>   		 */
+>   		mas->abort_failed = true;
+>   	}
+> +
+> +unmap_if_dma:
+> +	if (mas->cur_xfer_mode == GENI_SE_DMA) {
+> +		if (mas->cur_m_cmd & SPI_TX_ONLY) {
+> +			spin_lock_irq(&mas->lock);
+> +			reinit_completion(&mas->tx_reset_done);
+> +			writel(1, se->base + SE_DMA_TX_FSM_RST);
+> +			spin_unlock_irq(&mas->lock);
+> +			time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
+> +			if (!time_left)
+> +				dev_err(mas->dev, "DMA TX RESET failed\n");
+> +		}
+> +		if (mas->cur_m_cmd & SPI_RX_ONLY) {
+> +			spin_lock_irq(&mas->lock);
+> +			reinit_completion(&mas->rx_reset_done);
+> +			writel(1, se->base + SE_DMA_RX_FSM_RST);
+> +			spin_unlock_irq(&mas->lock);
+> +			time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
+> +			if (!time_left)
+> +				dev_err(mas->dev, "DMA RX RESET failed\n");
+> +		}
+> +
+> +		if (xfer) {
+> +			if (xfer->tx_buf && xfer->tx_dma)
+> +				geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
+> +			if (xfer->rx_buf && xfer->rx_dma)
+> +				geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
+> +		} else {
+> +			/*
+> +			 * This can happen if a timeout happened and we had to wait
+> +			 * for lock in this function because isr was holding the lock
+> +			 * and handling transfer completion at that time.
+> +			 * isr will set cur_xfer to NULL when done.
+> +			 * Unnecessary error but cannot be helped.
+> +			 * Only do reset, dma_unprep is already done by isr.
+> +			 */
+> +			dev_err(mas->dev, "Cancel/Abort on completed SPI transfer\n");
+> +		}
+> +	}
+>   }
+>   
+>   static void handle_gpi_timeout(struct spi_master *spi, struct spi_message *msg)
+> @@ -178,7 +223,8 @@ static void spi_geni_handle_err(struct spi_master *spi, struct spi_message *msg)
+>   
+>   	switch (mas->cur_xfer_mode) {
+>   	case GENI_SE_FIFO:
+> -		handle_fifo_timeout(spi, msg);
+> +	case GENI_SE_DMA:
+> +		handle_se_timeout(spi, msg);
+>   		break;
+>   	case GENI_GPI_DMA:
+>   		handle_gpi_timeout(spi, msg);
+> @@ -260,7 +306,7 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
+>   	time_left = wait_for_completion_timeout(&mas->cs_done, HZ);
+>   	if (!time_left) {
+>   		dev_warn(mas->dev, "Timeout setting chip select\n");
+> -		handle_fifo_timeout(spi, NULL);
+> +		handle_se_timeout(spi, NULL);
+>   	}
+>   
+>   exit:
+> @@ -482,8 +528,12 @@ static bool geni_can_dma(struct spi_controller *ctlr,
+>   {
+>   	struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
+>   
+> -	/* check if dma is supported */
+> -	return mas->cur_xfer_mode != GENI_SE_FIFO;
+> +	/*
+> +	 * Return true if transfer needs to be mapped prior to
+> +	 * calling transfer_one which is the case only for GPI_DMA.
+> +	 * For SE_DMA mode, map/unmap is done in geni_se_*x_dma_prep.
+> +	 */
+> +	return mas->cur_xfer_mode == GENI_GPI_DMA;
+>   }
+>   
+>   static int spi_geni_prepare_message(struct spi_master *spi,
+> @@ -494,6 +544,7 @@ static int spi_geni_prepare_message(struct spi_master *spi,
+>   
+>   	switch (mas->cur_xfer_mode) {
+>   	case GENI_SE_FIFO:
+> +	case GENI_SE_DMA:
+>   		if (spi_geni_is_abort_still_pending(mas))
+>   			return -EBUSY;
+>   		ret = setup_fifo_params(spi_msg->spi, spi);
+> @@ -597,7 +648,7 @@ static int spi_geni_init(struct spi_geni_master *mas)
+>   			break;
+>   		}
+>   		/*
+> -		 * in case of failure to get dma channel, we can still do the
+> +		 * in case of failure to get gpi dma channel, we can still do the
+>   		 * FIFO mode, so fallthrough
+>   		 */
+>   		dev_warn(mas->dev, "FIFO mode disabled, but couldn't get DMA, fall back to FIFO mode\n");
+> @@ -716,12 +767,12 @@ static void geni_spi_handle_rx(struct spi_geni_master *mas)
+>   	mas->rx_rem_bytes -= rx_bytes;
+>   }
+>   
+> -static void setup_fifo_xfer(struct spi_transfer *xfer,
+> +static int setup_se_xfer(struct spi_transfer *xfer,
+>   				struct spi_geni_master *mas,
+>   				u16 mode, struct spi_master *spi)
+
+consider adjusting the tabs once you change the function name.
+>   {
+>   	u32 m_cmd = 0;
+> -	u32 len;
+> +	u32 len, fifo_size;
+>   	struct geni_se *se = &mas->se;
+>   	int ret;
+>   
+> @@ -748,7 +799,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   	/* Speed and bits per word can be overridden per transfer */
+>   	ret = geni_spi_set_clock_and_bw(mas, xfer->speed_hz);
+>   	if (ret)
+> -		return;
+> +		return ret;
+>   
+>   	mas->tx_rem_bytes = 0;
+>   	mas->rx_rem_bytes = 0;xxxxxxx
+> @@ -771,6 +822,13 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   		writel(len, se->base + SE_SPI_RX_TRANS_LEN);
+>   		mas->rx_rem_bytes = xfer->len;
+>   	}
+> +	mas->cur_m_cmd = m_cmd;
+> +
+> +	/* Select transfer mode based on transfer length */
+> +	fifo_size =
+> +		mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
+
+line can go up to 100 chars
+
+
+> +	mas->cur_xfer_mode = (len <= fifo_size) ? GENI_SE_FIFO : GENI_SE_DMA;
+
+I do not see any protection for cur_xfer_mode? Isn't it true that it 
+could be modified here while an interrupt handler is using this?
+
+
+> +	geni_se_select_mode(se, mas->cur_xfer_mode);
+>   
+>   	/*
+>   	 * Lock around right before we start the transfer since our
+> @@ -778,11 +836,39 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   	 */
+>   	spin_lock_irq(&mas->lock);
+>   	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
+> -	if (m_cmd & SPI_TX_ONLY) {
+> +
+> +	if (mas->cur_xfer_mode == GENI_SE_DMA) {
+> +		if (m_cmd & SPI_RX_ONLY) {
+> +			ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
+> +				xfer->len, &xfer->rx_dma);
+> +			if (ret) {
+> +				dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
+> +				xfer->rx_dma = 0;
+> +				goto unlock_and_return;
+> +			}
+> +		}
+> +		if (m_cmd & SPI_TX_ONLY) {
+> +			ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
+> +				xfer->len, &xfer->tx_dma);
+> +			if (ret) {
+> +				dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
+> +				xfer->tx_dma = 0;
+> +				if (m_cmd & SPI_RX_ONLY && xfer->rx_dma) {
+> +					/* Unmap rx buffer if duplex transfer */
+> +					geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
+> +					xfer->rx_dma = 0;
+> +				}
+> +				goto unlock_and_return;
+> +			}
+> +		}
+> +	} else if (m_cmd & SPI_TX_ONLY) {
+>   		if (geni_spi_handle_tx(mas))
+>   			writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
+>   	}
+> +
+> +unlock_and_return:
+>   	spin_unlock_irq(&mas->lock);
+> +	return ret;
+>   }
+>   
+>   static int spi_geni_transfer_one(struct spi_master *spi,
+> @@ -790,6 +876,7 @@ static int spi_geni_transfer_one(struct spi_master *spi,
+>   				struct spi_transfer *xfer)
+>   {
+>   	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+> +	int ret;
+>   
+>   	if (spi_geni_is_abort_still_pending(mas))
+>   		return -EBUSY;
+> @@ -798,9 +885,12 @@ static int spi_geni_transfer_one(struct spi_master *spi,
+>   	if (!xfer->len)
+>   		return 0;
+>   
+> -	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
+> -		setup_fifo_xfer(xfer, mas, slv->mode, spi);
+> -		return 1;
+> +	if (mas->cur_xfer_mode == GENI_SE_FIFO || mas->cur_xfer_mode == GENI_SE_DMA) {
+> +		ret = setup_se_xfer(xfer, mas, slv->mode, spi);
+> +		/* SPI framework expects +ve ret code to wait for transfer complete */
+> +		if (!ret)
+> +			ret = 1;
+> +		return ret;
+>   	}
+>   	return setup_gsi_xfer(xfer, mas, slv, spi);
+>   }
+> @@ -823,39 +913,66 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
+>   
+>   	spin_lock(&mas->lock);
+>   
+> -	if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
+> -		geni_spi_handle_rx(mas);
+> -
+> -	if (m_irq & M_TX_FIFO_WATERMARK_EN)
+> -		geni_spi_handle_tx(mas);
+> -
+> -	if (m_irq & M_CMD_DONE_EN) {
+> -		if (mas->cur_xfer) {
+> +	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
+
+Switch case?
+
+...
+
+> +		}
+> +	} else if (mas->cur_xfer_mode == GENI_SE_DMA) {
+> +		const struct spi_transfer *xfer = mas->cur_xfer;
+
+
+--srini
