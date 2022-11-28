@@ -2,110 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FB363A208
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 08:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B9663A3E0
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 10:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiK1Hhn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Nov 2022 02:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S229659AbiK1JAT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Nov 2022 04:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiK1Hhm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 02:37:42 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139125584;
-        Sun, 27 Nov 2022 23:37:41 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id u10so1237724qvp.4;
-        Sun, 27 Nov 2022 23:37:41 -0800 (PST)
+        with ESMTP id S229769AbiK1JAS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 04:00:18 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CE517AB9
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 01:00:16 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id j4so16330924lfk.0
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 01:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uxQ4Op4wJkfy+E4USfATcQwka4uMnYgoKUlk7fhdGSE=;
+        b=vYdb5XXPSaGwuCoLSVoXRdQxnPaAziy9sgNBD8ranp2ceRSNgedYCPqR4S0vLEMnU5
+         P7HmMByv0VoBFVxh3uq65mFCK6MQA3c0f560kARTzEWaiHCOOyVKCJTkHV4l3S0g0eq6
+         vyrw/O9/ZX1QkVXD18yE6C+NWMpaloiZ48EArn/TOG2veHbj9d1Vcemour9Z1xigBKa3
+         RpQk3CTgz6qadxdn6IuvgcjwozjTQ3KcPOCBhwr3enogTDQR0PzTks2bn9+1k7OhHpBq
+         tbyLx/EFDgvPrd35WmKItzN43WvkclKutLtUhhSEvey4QSfvY342K6flzqPRcf5xJC5F
+         updg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mf6PpFgRdbUWXFIJ6gzSU4wMby+2q9WODUFq2erIU/Y=;
-        b=4YlAaINwMftkTS1LfYAoFRGLvCkf+QblDorkY/p3HwZewuoEQGbh6XlbB+cLlSIZOC
-         WoP0Oq4eJI+g3GDZJxYKlra1uQbd5oj1VWReroqbFnkQ+A2/mwu7OvexZfBWhTC19Kp+
-         L0ArrW54gbJ2zOH/3vGGJYzHDJLEn9+Mq4phZwJ+v1LHrKT5N0iB1ztjv+pZVayJjnkq
-         KLEWrltR1o32b6Y/l6kLpVL842/nxxinD9/cBQGWPLgZKlElnABh6ALGVJQxRs7GSSjK
-         DYMeFXyWervgfFnNexJuUZSVoxqFsxGfuQh4ncq2I+UqIkiacS+EzIvB/HmAE3+M+zv8
-         TUng==
-X-Gm-Message-State: ANoB5pl/qQQ1WbynZanvAhFygC6sGl8AIvtwldh2Pj8IqYfkHuc4ilYV
-        yOgFZtL8M0qx3/0po82N7/Wl5/xYbhaOXw==
-X-Google-Smtp-Source: AA0mqf5DO96y1c7ru3SNBuRiMKqbVVkVrnXzbHUZS6GXc0YbWY68NuwNK6ywaMbUtiEY3OZXjy/zAA==
-X-Received: by 2002:a0c:cb0c:0:b0:4c6:afdd:f1a2 with SMTP id o12-20020a0ccb0c000000b004c6afddf1a2mr27338201qvk.21.1669621059923;
-        Sun, 27 Nov 2022 23:37:39 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id bj15-20020a05620a190f00b006cbe3be300esm7924674qkb.12.2022.11.27.23.37.38
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uxQ4Op4wJkfy+E4USfATcQwka4uMnYgoKUlk7fhdGSE=;
+        b=sArP+vk8IqFdr41GlHFs7UIqqsKynDkt4TkpzIqb6zzkcLje35KOPahkwr81bA3Ja2
+         AcQj65nidXcLt7LumFkDcz8uzZX80aJNjxygmHNlf07Saei1nKAm1rew9CrQUZS3P4IY
+         x9+ODWCLi04+UV5FyPrZ1AZ6wliAQ9YpH/6RMnEP+mxRCQs06LGIv6TJrGlB6axua1Mg
+         9WpzY9bTsjl/EM0QqV5QzbcZEgLz2xzDUhQnTs2CJCD0F4Dr3vYZlwqBF0F/GI8dMzAC
+         gvHxoyJrMOIoCIXI5ZXksbTiUyfIxz6x94/6arArTakqm7Rvdyc5n7/5lhpiSTqPOiRK
+         CoAQ==
+X-Gm-Message-State: ANoB5pmP9OHnvLqfAx4hIju+UxPTvSTiccUaGPP5xOqQ0t85IldOlEI0
+        vsRtiaxJ2AcxG+BNu/Nvpsjc9g==
+X-Google-Smtp-Source: AA0mqf4yCrmsZoHkLNUdgjrfnhNmrW+jAyoF8Yth5MPBnrKTzOxQXVV9S2/fv4YTu9XRNKVY+0RP+Q==
+X-Received: by 2002:ac2:52aa:0:b0:4b1:fc9:429f with SMTP id r10-20020ac252aa000000b004b10fc9429fmr17759584lfm.84.1669626015128;
+        Mon, 28 Nov 2022 01:00:15 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v28-20020a05651203bc00b0048a757d1303sm1655307lfp.217.2022.11.28.01.00.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 23:37:38 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id 205so12236309ybf.6;
-        Sun, 27 Nov 2022 23:37:38 -0800 (PST)
-X-Received: by 2002:a5b:24b:0:b0:6ca:3b11:8d76 with SMTP id
- g11-20020a5b024b000000b006ca3b118d76mr28827047ybp.202.1669621058200; Sun, 27
- Nov 2022 23:37:38 -0800 (PST)
+        Mon, 28 Nov 2022 01:00:14 -0800 (PST)
+Message-ID: <8b8e4b23-a3bc-7e3d-199a-e8f591d05d71@linaro.org>
+Date:   Mon, 28 Nov 2022 10:00:13 +0100
 MIME-Version: 1.0
-References: <cover.1669213027.git.geert+renesas@glider.be> <b500e42c-f782-79c6-70ce-650e4ea32c54@linaro.org>
- <a75b604c-a671-d2c5-7160-74dcb8a4fa2e@linaro.org>
-In-Reply-To: <a75b604c-a671-d2c5-7160-74dcb8a4fa2e@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Nov 2022 08:37:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVgmxVxKbTxXO90XaaL5-qf6WnEwbTwU+ZmSEcuzOFEgA@mail.gmail.com>
-Message-ID: <CAMuHMdVgmxVxKbTxXO90XaaL5-qf6WnEwbTwU+ZmSEcuzOFEgA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc cleanups
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 5/9] dt-bindings: spi: mtk-snfi: add mt7986 IC snfi
+ bindings
+Content-Language: en-US
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
+ <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
+On 28/11/2022 03:06, Xiangsheng Hou wrote:
+> 1. add mt7986 IC bindings
 
-On Sun, Nov 27, 2022 at 10:34 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 27/11/2022 22:31, Krzysztof Kozlowski wrote:
-> > On 23/11/2022 15:41, Geert Uytterhoeven wrote:
-> >> The Renesas RPC-IF provides either HyperFlash or SPI host access.
-> >> To handle this, three drivers are used:
-> >>   1. The RPC-IF core diver,
-> >>   2. An HyperFlash child driver,
-> >>   3. An SPI child driver.
-> >
-> > Thank you for the patch.
-> > It is too late in the cycle for me to pick it up. I will take it after
-> > the merge window.
->
-> Optionally, if you want to push it via Renesas SoC tree and there are no
-> conflicts with existing two patches, then these look good:
+Subject: drop second, redundant "bindings".
 
-It's too late for the Renesas tree, too.
+> 2. add optional nfi_hclk property which needed for mt7986
+> 
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> ---
+>  .../devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml      | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> index 6e6e02c91780..ee20075cd0e7 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> @@ -26,6 +26,7 @@ properties:
+>      enum:
+>        - mediatek,mt7622-snand
+>        - mediatek,mt7629-snand
+> +      - mediatek,mt7986-snand
+>  
+>    reg:
+>      items:
+> @@ -36,14 +37,19 @@ properties:
+>        - description: NFI interrupt
+>  
+>    clocks:
+> +    minItems: 2
+>      items:
+>        - description: clock used for the controller
+>        - description: clock used for the SPI bus
+> +      - description: clock used for the AHB bus dma bus, this depends on
+> +                     hardware design, so this is optional.
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Otherwise, I'll pick them up after the merge window.
+Optional for which variants? For all of them?
 
-Thanks!
+>  
+>    clock-names:
+> +    minItems: 2
+>      items:
+>        - const: nfi_clk
+>        - const: pad_clk
+> +      - const: nfi_hclk
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards,
+Krzysztof
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
