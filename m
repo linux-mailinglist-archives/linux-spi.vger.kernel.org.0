@@ -2,54 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A45E63AFB8
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 18:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB1A63B0DD
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 19:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiK1Rou (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Nov 2022 12:44:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S232694AbiK1SP0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Nov 2022 13:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiK1Ro0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 12:44:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B7E2B25A;
-        Mon, 28 Nov 2022 09:40:57 -0800 (PST)
+        with ESMTP id S232244AbiK1SPC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 13:15:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AE8766A;
+        Mon, 28 Nov 2022 09:57:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBCD9612FB;
-        Mon, 28 Nov 2022 17:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E24C433C1;
-        Mon, 28 Nov 2022 17:40:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1AB061337;
+        Mon, 28 Nov 2022 17:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB5CC433C1;
+        Mon, 28 Nov 2022 17:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657256;
-        bh=XYArURAkXAvAkbmm+Cm1Z/1xfusRTaI91j3+d8JHuUM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RRPEq0NnShENUTt/gp+19LWwVT3rkY1PX+GqFzGDG1XVWi+QJZ3s+VhDPHXEoWA6H
-         fjDb8r/FScSsxN0XtkuMTgsWEVQk2qWbzdG6SnPincLYj20s6cPj/iocTR7D9PQYjT
-         h/CcIwPnVElsI/Nt6ftstOBt0rOeWD4OxmaU9y6w/TmVx+2ewFwS63QPuyF5CAvdlE
-         2DyKQ5E7ieB2jOAinxLJtZ8YguIO401qtWkaK8otnhYuD8oRFivuay3IKpAgv+t0J+
-         Uu5Ysy8GDgQKRXzhg3V1SK8fSBo45yGSnsZbM7Hbda1uoCbu0p5okhr+9quoycomRA
-         JqCfML/Kti1Kg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhichao Liu <zhichao.liu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 11/24] spi: mediatek: Fix DEVAPC Violation at KO Remove
-Date:   Mon, 28 Nov 2022 12:40:11 -0500
-Message-Id: <20221128174027.1441921-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128174027.1441921-1-sashal@kernel.org>
-References: <20221128174027.1441921-1-sashal@kernel.org>
+        s=k20201202; t=1669658263;
+        bh=HOm5tlWIniy5T1amAXM6Y8prJ7Kjyr4oEW5FOmYDoic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lkZTBD09uxBmtzSZiuor8HjGnbbP1RV/lyx2WAeOihIR7vO4VrljoBY1MtGSNUK3E
+         98JP5V9jtxBTF8PDeS1XarMMo5dPw+/rlowPp8unwkO1PMiK6Ru1I65LBMcTSN9y1F
+         9GH0y3P0Dz2GPAMi0QFsGEEODDYzzO5cvYMhjnOMpDT/P6DG306vNIg/sGCjE87b9Y
+         pGcerHb/jNWALLUDd5Ibi7KJl7j/OtUgs77xojC1MVkaBYnhiZinT7MRSVPqm7rBZv
+         UE3nRqjJFcSb7VCYe7VKxKUBmw8jRLpE5LW2EE96f73kUoLNevfSJHiATVXCL4/B96
+         OCl7V7suyc6hg==
+Date:   Mon, 28 Nov 2022 17:57:38 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
+ Interface Unit (FIU)
+Message-ID: <Y4T2kowzjQMqxckF@sirena.org.uk>
+References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+ <20221124191400.287918-2-j.neuschaefer@gmx.net>
+ <166950112932.8087.6546134123286782729.robh@kernel.org>
+ <Y4SV+5/3Y0dw5QeU@wendy>
+ <Y4S+oWz8fNsQj5Gj@probook>
+ <Y4TBIah6vJAG3kj2@wendy>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8hu38K+e8vZwubEp"
+Content-Disposition: inline
+In-Reply-To: <Y4TBIah6vJAG3kj2@wendy>
+X-Cookie: In the next world, you're on your own.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,54 +63,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Zhichao Liu <zhichao.liu@mediatek.com>
 
-[ Upstream commit 0d10e90cee9eb57882b0f7e19fd699033722e226 ]
+--8hu38K+e8vZwubEp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A DEVAPC violation occurs when removing the module
-due to accessing HW registers without base clock.
-To fix this bug, the correct method is:
-1. Call the runtime resume function to enable the
-   clock;
-2. Operate the registers to reset the HW;
-3. Turn off the clocks and disable the device
-   RPM mechanism.
+On Mon, Nov 28, 2022 at 02:09:37PM +0000, Conor Dooley wrote:
 
-Signed-off-by: Zhichao Liu <zhichao.liu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20221110072839.30961-1-zhichao.liu@mediatek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-mt65xx.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> Without being a Responsible Adult^TM for either SPI or DT, my preference
+> would be for simplifying the binding so that if your clk stuff doesn't
+> land for 6.2 the binding checks still work.
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 2ca19b01948a..49acba1dea1e 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -912,14 +912,20 @@ static int mtk_spi_remove(struct platform_device *pdev)
- {
- 	struct spi_master *master = platform_get_drvdata(pdev);
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
-+	int ret;
- 
--	pm_runtime_disable(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0)
-+		return ret;
- 
- 	mtk_spi_reset(mdata);
- 
- 	if (mdata->dev_comp->no_need_unprepare)
- 		clk_unprepare(mdata->spi_clk);
- 
-+	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
+Yes, please simplify the example.
 
+--8hu38K+e8vZwubEp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOE9pEACgkQJNaLcl1U
+h9Bs1wf+OUxEzRc8Sldcia8LNWHm678IKCqgxrejUeJvY8R7o/7LTsHa5JVhnTt3
+Ovq4CmMPJ+0bEF5DIDBxGFWNfEA5C1E9eNJOm9HWTpSYfxZTpBRcP+YC0p1bS9pS
+IQhoCxI4K+iYfERMqy6QDCiBCXr9y0+7QHQvwJGvjHNwOXrfEeGdP8GACFTYzCno
+3fMMk+tuTUHeRiLKCjdDSbEZwYzMwapBi5mXKS7Ocj+S8SIZFe4zQWY2ViO21GtA
+SYedntOzggayxP4PyoIdxyoju5UqteP59QHtE28ygxkzZZt9G1dKhbjhzQ8QAviL
+5rv8aCuy9lWvUL45v2NzDVf5/IzSwQ==
+=bB+P
+-----END PGP SIGNATURE-----
+
+--8hu38K+e8vZwubEp--
