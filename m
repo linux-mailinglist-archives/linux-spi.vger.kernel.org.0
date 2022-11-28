@@ -2,94 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCA263AD7F
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 17:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF4C63AE10
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 17:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiK1QTX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Nov 2022 11:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S230035AbiK1QoT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Nov 2022 11:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiK1QTW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 11:19:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B5219B;
-        Mon, 28 Nov 2022 08:19:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6F72B80D89;
-        Mon, 28 Nov 2022 16:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F3AC433D6;
-        Mon, 28 Nov 2022 16:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669652358;
-        bh=i0y/liEwV8DEyD+39Xmd9FgUWdMvwnQEigBzYVpa2kY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XvLTx3qDg/MyqlXFMWlq2auUM1z2S6pKc3Qh/ueg84vGINx+dNHNuUbFz5UTaUEez
-         zJV70ubR7QPbHEh/r3J7DZK4kJAmO80Apb3gqZKEJNb6tSd7Z55NM9VBvFA8ctQDYE
-         7bNASHtYwCU/VnheYuLMqRCOu84KAjr3wok632uiAtviH/ImJ2892ja/wGgUpeO3PQ
-         v9iDm+zyG+72E88Hfq053vOraEi5rBR4sB8XxwiwMrUklyUuq4zCA7XvYN2pOp+9Ou
-         G5jJntS6Cq2pVOYPqnGFwzcVZYFWRMPJcmmVOKGAjZJmDmBzGcz4G6J3lcG3ppU2gL
-         YW9jYA4svMkrQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221115124655.10124-1-bayi.cheng@mediatek.com>
-References: <20221115124655.10124-1-bayi.cheng@mediatek.com>
-Subject: Re: [PATCH v1] spi: spi-mtk-nor: Unify write buffer on/off
-Message-Id: <166965235645.555844.12992456289264361457.b4-ty@kernel.org>
-Date:   Mon, 28 Nov 2022 16:19:16 +0000
+        with ESMTP id S230208AbiK1QoR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 11:44:17 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A067C1AD94
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 08:44:14 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id l2so7045379qtq.11
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 08:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XXSSzXQqwpqTp8kvMCywn3wDULboBrcJlaRyokBQ21k=;
+        b=fejHIyNfaphEgkYKnCMhaL2S9tzT4NlOpJKoyQ/v4qpJLWqHeLSj8Q/Bt8hkvQgiNW
+         kf190UpnS4b3+SMrlzWDpyElTt4EXZp6IxFfn6XkfhiwmSmG3dzw0+kBSjHu6elG+sBH
+         76tF+npGB5JvlV3CaGWJ+G39ZWHYT+hbM37sQOLlOzLG5Uxtt87VXn+BS9DH3YYNPH0P
+         yCzDWDNfhT6rLYKJVvz8pc1exJUAbkb0fmDJO8CDCXipAI+F8UtVaA//tWLZw+FAY62w
+         wsVbyuA4jzpTNb2zMM6z0KtyvzP/DPYa0lmYAzF3y+okU7yq3liWGN9ajF3L8AUB8EqB
+         WoIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XXSSzXQqwpqTp8kvMCywn3wDULboBrcJlaRyokBQ21k=;
+        b=T+UWZGkpRk+koTfhyI2B1YLizcROprd9vxdgjszfiiFvibdq0Xc2LpqRKhFVwYbg5O
+         siLbJ/SJAKx2/WqI+TADccQVaTx1V/KxocTyhCYmu57Gmtq/Dd0KhNITYA4axXcqJJ4p
+         kHKbPff+Fw5UpogDN3xe3FtIl3K7DvmMn9ZgSclAJIdbc4C5HA8BNvVxEjKcY8uJo3oA
+         pz9AzbC6JDdFrus/O7jCKGeytcROM1H5MeUfjy+yQ6Ml8eo7wxbBz86X9HkDvQsmveqp
+         ID5P0+yz305EaHzkn+LnV7kvWyFLSRM1iOKiCvUL57+f6hfZdc/DRoskVhiHAD5ZV9cz
+         ++oA==
+X-Gm-Message-State: ANoB5pkDMLm8G63STRHSkbpT51KHdNvvFf4L0kDTBTTRsZOnz7KrmLa7
+        xbbTEn+CIJw1HaFg7owL1DaMpw==
+X-Google-Smtp-Source: AA0mqf7AtxhiM423WOE+xFxDY3JxLwBVPHLaeViLYBR9XRHLigeZ8k+EOCSYlJRNcx4+zIoCpf6HbA==
+X-Received: by 2002:ac8:604e:0:b0:3a2:9fcd:59c8 with SMTP id k14-20020ac8604e000000b003a29fcd59c8mr34598175qtm.273.1669653853577;
+        Mon, 28 Nov 2022 08:44:13 -0800 (PST)
+Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id bn31-20020a05620a2adf00b006b95b0a714esm8724614qkb.17.2022.11.28.08.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 08:44:13 -0800 (PST)
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
+Date:   Mon, 28 Nov 2022 11:41:47 -0500
+Message-Id: <20221128164147.158441-1-nathan.morrison@timesys.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 15 Nov 2022 20:46:55 +0800, Bayi Cheng wrote:
-> From: bayi cheng <bayi.cheng@mediatek.com>
-> 
-> The logical structures of mtk_nor_write_buffer_enable and
-> mtk_nor_write_buffer_disable are very similar, So it is necessary to
-> combine them into one.
-> 
-> 
-> [...]
+This Cadence QSPI IP has a 4-bit clock divisor field
+for baud rate division.  For example:
 
-Applied to
+0b0000 = /2
+0b0001 = /4
+0b0010 = /6
+...
+0b1111 = /32
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+The maximum divisor is 32
+(when div = CQSPI_REG_CONFIG_BAUD_MASK).
 
-Thanks!
+If we assume a reference clock of 500MHz and we set
+our spi-max-frequency to something low, such as 10 MHz.
+The calculated bit field for the divisor ends up being:
 
-[1/1] spi: spi-mtk-nor: Unify write buffer on/off
-      commit: 63d9a4d88499569210c445a862209515207c2732
+DIV_ROUND_UP(500000000/(2*10000000))-1 = 25
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+25 is 0b11001... which truncates to a divisor field of 0b1001 (or /20).
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+This is higher than our anticipated max-frequency of 10MHz
+(500MHz/20 = 25 MHz).  Instead, let's make sure we're always using
+the maximum divisor (/32) in this case and give the user a warning about
+the rate adjustment.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 447230547945..21b60b354404 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1119,6 +1119,14 @@ static void cqspi_config_baudrate_div(struct cqspi_st *cqspi)
+ 	/* Recalculate the baudrate divisor based on QSPI specification. */
+ 	div = DIV_ROUND_UP(ref_clk_hz, 2 * cqspi->sclk) - 1;
+ 
++	/* Maximum baud divisor */
++	if (div > CQSPI_REG_CONFIG_BAUD_MASK) {
++		div = CQSPI_REG_CONFIG_BAUD_MASK;
++		dev_warn(&cqspi->pdev->dev,
++			"Unable to adjust clock <= %d hz. Reduced to %d hz\n",
++			cqspi->sclk, ref_clk_hz/((div+1)*2));
++	}
++
+ 	reg = readl(reg_base + CQSPI_REG_CONFIG);
+ 	reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
+ 	reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
+-- 
+2.30.2
 
-Thanks,
-Mark
