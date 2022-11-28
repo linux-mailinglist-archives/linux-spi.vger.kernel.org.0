@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B41A63AF31
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 18:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A45E63AFB8
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 18:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbiK1Rjq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Nov 2022 12:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S233468AbiK1Rou (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Nov 2022 12:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiK1RjQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 12:39:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F2412D0D;
-        Mon, 28 Nov 2022 09:38:39 -0800 (PST)
+        with ESMTP id S233414AbiK1Ro0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 12:44:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B7E2B25A;
+        Mon, 28 Nov 2022 09:40:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B855B80E9F;
-        Mon, 28 Nov 2022 17:38:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FA7C433D6;
-        Mon, 28 Nov 2022 17:38:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBCD9612FB;
+        Mon, 28 Nov 2022 17:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E24C433C1;
+        Mon, 28 Nov 2022 17:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657114;
-        bh=SVNlqFMeW1EbUZbel3/ygwlBs6fe3l3AOdsXJS7vuUg=;
+        s=k20201202; t=1669657256;
+        bh=XYArURAkXAvAkbmm+Cm1Z/1xfusRTaI91j3+d8JHuUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FpPyqvubExdv+joUlANHLtO8pg2kdGC7nrqhJIQNWQot9MSY7ux6YyHXYbP+oUkBc
-         BhlXW4lf35ws4tDp4kRBg0vfx9r12LqS2Ua3x4mUxaHmN9U5dYCPZ0w/F7ULQzmeld
-         SsP7a3/SlaoCAyaFUWeyULL1UfO26U7iFtNYMebqP0+Xt9cvAN9uwZ08vuJKeuc0U2
-         fqFEgHga2EraE+RO/4ateXZMcONBQRoFPK2nnPhhA/a5NmdHplgQ8PObGq6x7DhfH7
-         6v2mOkW+UiV7tPwp2WSXrFGxYZX7omzVveJbOEz0ODKrq1MEPyRY3BgoFBqD0uKGzK
-         +hC163cbtZw3A==
+        b=RRPEq0NnShENUTt/gp+19LWwVT3rkY1PX+GqFzGDG1XVWi+QJZ3s+VhDPHXEoWA6H
+         fjDb8r/FScSsxN0XtkuMTgsWEVQk2qWbzdG6SnPincLYj20s6cPj/iocTR7D9PQYjT
+         h/CcIwPnVElsI/Nt6ftstOBt0rOeWD4OxmaU9y6w/TmVx+2ewFwS63QPuyF5CAvdlE
+         2DyKQ5E7ieB2jOAinxLJtZ8YguIO401qtWkaK8otnhYuD8oRFivuay3IKpAgv+t0J+
+         Uu5Ysy8GDgQKRXzhg3V1SK8fSBo45yGSnsZbM7Hbda1uoCbu0p5okhr+9quoycomRA
+         JqCfML/Kti1Kg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhichao Liu <zhichao.liu@mediatek.com>,
@@ -40,12 +40,12 @@ Cc:     Zhichao Liu <zhichao.liu@mediatek.com>,
         Sasha Levin <sashal@kernel.org>, matthias.bgg@gmail.com,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.0 17/39] spi: mediatek: Fix DEVAPC Violation at KO Remove
-Date:   Mon, 28 Nov 2022 12:35:57 -0500
-Message-Id: <20221128173642.1441232-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 11/24] spi: mediatek: Fix DEVAPC Violation at KO Remove
+Date:   Mon, 28 Nov 2022 12:40:11 -0500
+Message-Id: <20221128174027.1441921-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128173642.1441232-1-sashal@kernel.org>
-References: <20221128173642.1441232-1-sashal@kernel.org>
+In-Reply-To: <20221128174027.1441921-1-sashal@kernel.org>
+References: <20221128174027.1441921-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index cd9dc358d396..a7cc96aeb590 100644
+index 2ca19b01948a..49acba1dea1e 100644
 --- a/drivers/spi/spi-mt65xx.c
 +++ b/drivers/spi/spi-mt65xx.c
-@@ -1268,8 +1268,11 @@ static int mtk_spi_remove(struct platform_device *pdev)
+@@ -912,14 +912,20 @@ static int mtk_spi_remove(struct platform_device *pdev)
  {
  	struct spi_master *master = platform_get_drvdata(pdev);
  	struct mtk_spi *mdata = spi_master_get_devdata(master);
@@ -98,9 +98,8 @@ index cd9dc358d396..a7cc96aeb590 100644
  
  	mtk_spi_reset(mdata);
  
-@@ -1278,6 +1281,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
- 		clk_unprepare(mdata->spi_hclk);
- 	}
+ 	if (mdata->dev_comp->no_need_unprepare)
+ 		clk_unprepare(mdata->spi_clk);
  
 +	pm_runtime_put_noidle(&pdev->dev);
 +	pm_runtime_disable(&pdev->dev);
