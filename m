@@ -2,96 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CAB63AA89
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 15:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCA263AD7F
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Nov 2022 17:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiK1OKF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Nov 2022 09:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S231246AbiK1QTX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Nov 2022 11:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiK1OKA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 09:10:00 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D5310C8;
-        Mon, 28 Nov 2022 06:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669644599; x=1701180599;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Hi8mtuMtBxkZtTKEz9kvonjsKm5H9vDF/St1rZpRREA=;
-  b=FU0obIdLLE1uDOSB2LZ07jJxkgAEncGluY+GSjdapww6paPV/A434/Jc
-   vJ4CYjRwKrINhdfoqA7Ot8Lb24Julzih+T+TYsk2mj+M9FCBh+m8TZbrZ
-   J0N7AW83qKvNni0w65GtNNYI4ySflGOqY88gkcXxlMsZR3B4I+VlUlhgO
-   1CN77mDJniOE25QyffhdeC9ySIL6U0mYYwnxFIr4bdpvaysKzClYjN12d
-   r3Y/DucRVMm3pR+dOTSPg4jMEBm8h4weoCYnGIAoqKN7u8JfW+7CGYg4W
-   dxYfzEHXzi6YTf/1UVku/JZoxA8rll9VFVlObFQmJHyCWQsA0GMKQHP9U
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="185487674"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Nov 2022 07:09:58 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 28 Nov 2022 07:09:58 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 28 Nov 2022 07:09:56 -0700
-Date:   Mon, 28 Nov 2022 14:09:37 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-CC:     Rob Herring <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
- Interface Unit (FIU)
-Message-ID: <Y4TBIah6vJAG3kj2@wendy>
-References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
- <20221124191400.287918-2-j.neuschaefer@gmx.net>
- <166950112932.8087.6546134123286782729.robh@kernel.org>
- <Y4SV+5/3Y0dw5QeU@wendy>
- <Y4S+oWz8fNsQj5Gj@probook>
+        with ESMTP id S230136AbiK1QTW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Nov 2022 11:19:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B5219B;
+        Mon, 28 Nov 2022 08:19:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6F72B80D89;
+        Mon, 28 Nov 2022 16:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F3AC433D6;
+        Mon, 28 Nov 2022 16:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669652358;
+        bh=i0y/liEwV8DEyD+39Xmd9FgUWdMvwnQEigBzYVpa2kY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XvLTx3qDg/MyqlXFMWlq2auUM1z2S6pKc3Qh/ueg84vGINx+dNHNuUbFz5UTaUEez
+         zJV70ubR7QPbHEh/r3J7DZK4kJAmO80Apb3gqZKEJNb6tSd7Z55NM9VBvFA8ctQDYE
+         7bNASHtYwCU/VnheYuLMqRCOu84KAjr3wok632uiAtviH/ImJ2892ja/wGgUpeO3PQ
+         v9iDm+zyG+72E88Hfq053vOraEi5rBR4sB8XxwiwMrUklyUuq4zCA7XvYN2pOp+9Ou
+         G5jJntS6Cq2pVOYPqnGFwzcVZYFWRMPJcmmVOKGAjZJmDmBzGcz4G6J3lcG3ppU2gL
+         YW9jYA4svMkrQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Ikjoon Jang <ikjn@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221115124655.10124-1-bayi.cheng@mediatek.com>
+References: <20221115124655.10124-1-bayi.cheng@mediatek.com>
+Subject: Re: [PATCH v1] spi: spi-mtk-nor: Unify write buffer on/off
+Message-Id: <166965235645.555844.12992456289264361457.b4-ty@kernel.org>
+Date:   Mon, 28 Nov 2022 16:19:16 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4S+oWz8fNsQj5Gj@probook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:58:57PM +0100, Jonathan Neuschäfer wrote:
-> On Mon, Nov 28, 2022 at 11:05:31AM +0000, Conor Dooley wrote:
-> > On Sat, Nov 26, 2022 at 04:25:36PM -0600, Rob Herring wrote:
+On Tue, 15 Nov 2022 20:46:55 +0800, Bayi Cheng wrote:
+> From: bayi cheng <bayi.cheng@mediatek.com>
+> 
+> The logical structures of mtk_nor_write_buffer_enable and
+> mtk_nor_write_buffer_disable are very similar, So it is necessary to
+> combine them into one.
+> 
+> 
 > [...]
-> > > dtschema/dtc warnings/errors:
-> > > Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.example.dts:18:18: fatal error: dt-bindings/clock/nuvoton,wpcm450-clk.h: No such file or directory
-> > >    18 |         #include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-> > >       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > compilation terminated.
-> > > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.example.dtb] Error 1
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > make: *** [Makefile:1492: dt_binding_check] Error 2
-> > 
-> > FWIW this seems to now be in linux-next as dd71cd4dd6c9 ("spi: Add Nuvoton
-> > WPCM450 Flash Interface Unit (FIU) bindings") & is breaking
-> > dt_binding_check.
-> 
-> Ah, sorry about that. It should resolve itself once nuvoton,wpcm450-clk
-> binding gets merged, but I don't see a definite timeframe for that, yet.
-> 
-> Alternatively, I can send a patch to simplify the example in the FIU
-> binding.
 
-Without being a Responsible Adult^TM for either SPI or DT, my preference
-would be for simplifying the binding so that if your clk stuff doesn't
-land for 6.2 the binding checks still work.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: spi-mtk-nor: Unify write buffer on/off
+      commit: 63d9a4d88499569210c445a862209515207c2732
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
