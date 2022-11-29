@@ -2,44 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B02263C6FC
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 19:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9D563C8C8
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 20:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiK2SC1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Nov 2022 13:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S236208AbiK2TvV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Nov 2022 14:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiK2SCY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 13:02:24 -0500
+        with ESMTP id S236191AbiK2TvU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 14:51:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F346B39F;
-        Tue, 29 Nov 2022 10:02:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DF1C48;
+        Tue, 29 Nov 2022 11:51:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E8761889;
-        Tue, 29 Nov 2022 18:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727F2C433C1;
-        Tue, 29 Nov 2022 18:02:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2FA8618C5;
+        Tue, 29 Nov 2022 19:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4961FC433D6;
+        Tue, 29 Nov 2022 19:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669744942;
-        bh=qKd9ymqAdWLp6B0pPm4UgjxLqG9aPy3nEPRIKquv6Gs=;
+        s=k20201202; t=1669751479;
+        bh=Zh5WynhP+o4Gea28pjoNeKDMumUYpiocGMUapD80TLA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nRj829xdRrmMfjKBaa0SYOXHIVMI+fnAVfSA5NhPp4KXn9mqzM02mgqXRD3qwU0KY
-         YwGRQN2jtNdWGPUIOlKTeNAaOr+qW/dGtH82XLFYO/u9GplHJy//dI0UndiCHueVrP
-         N+D0EAL4YjXg5L4TVA7rWD3OeXpgoOmP0eFdvkF2WXXNOWOZ+y9pg+HFPDuDXGDQ7O
-         sqkPCT5SRvA6q4K4Oh3i/k8AoRlOOjG+ya0f6COsyizgQb6vZZSfKDtUXhVic2+uLv
-         vQr4ke8wRRq93Um7lGA/o9p9Fxo936PhNmSoUUJwIrZPhtyXq0t2zibeN64pW1Z8XD
-         CQHu9QlNzZskQ==
+        b=M6BMX69MohUyLJH7EKV6t1XgGJnmdjJFZ9e8eWCe84FLtqYFQ2db8tZRD4atpkyCq
+         FgX5OYIEjQeGmdW3ACW4hzN3U86knKobYnP6VcWVkjyKTgSZGnkmdT6fhsp47ephvp
+         Gi8pzDM/yWDZGpb2hy8Ro5ZwOgwWdQUZxUm2xHeRk6cL+tpdmkMPfv40cFxXqeQswv
+         ys7FMmK/YchvQLNbhvRm480jL+FfyeuJGhOZ+1h7HcG0PEYeAlHeeqkPm/0wxwVTS6
+         dPj9eRpxlnXFJiWQzQUg+pRoPxCm8dX98qR6rwAOh/J0ScZXedNJ5ggiWVEMbd0tCf
+         VKiAlXSKf5yng==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-In-Reply-To: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v2 SPI for-next 0/2] spi: microchip: pci1xxxx: Load SPI driver for SPI endpoint of PCI1XXXX switch
-Message-Id: <166974494118.343760.736502969260374198.b4-ty@kernel.org>
-Date:   Tue, 29 Nov 2022 18:02:21 +0000
+To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     greg.malysa@timesys.com,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20221128164147.158441-1-nathan.morrison@timesys.com>
+References: <20221128164147.158441-1-nathan.morrison@timesys.com>
+Subject: Re: [PATCH] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
+Message-Id: <166975147801.395913.7712035443734225881.b4-ty@kernel.org>
+Date:   Tue, 29 Nov 2022 19:51:18 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,13 +54,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 6 Oct 2022 10:35:12 +0530, Tharun Kumar P wrote:
-> Microchip PCI1XXXX is an unmanaged PCIe3.1a switch for consumer,
-> industrial, and automotive applications. This switch has multiple
-> downstream ports. One of the switch's downstream ports is a multifunction
-> endpoint; one of those functions supports SPI functionality. This series
-> of patches provides the SPI controller driver for the SPI function of the
-> multifunction PCIe endpoint of the switch.
+On Mon, 28 Nov 2022 11:41:47 -0500, Nathan Barrett-Morrison wrote:
+> This Cadence QSPI IP has a 4-bit clock divisor field
+> for baud rate division.  For example:
+> 
+> 0b0000 = /2
+> 0b0001 = /4
+> 0b0010 = /6
+> ...
+> 0b1111 = /32
 > 
 > [...]
 
@@ -69,10 +72,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch
-      (no commit info)
-[2/2] spi: microchip: pci1xxxx: Add suspend and resume support for PCI1XXXX SPI driver
-      commit: 7ba63521a1e9d8ca6fb55ead19e6e2b850b8fd80
+[1/1] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
+      commit: f8fc65e50ad71c139a12a96e64eeba5005e491d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
