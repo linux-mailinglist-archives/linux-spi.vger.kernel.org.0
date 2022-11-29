@@ -2,117 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E803D63C5C2
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 17:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B02263C6FC
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 19:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbiK2Q4C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Nov 2022 11:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S235673AbiK2SC1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Nov 2022 13:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbiK2Qzo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 11:55:44 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D996B74CD1;
-        Tue, 29 Nov 2022 08:50:23 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id p18so10215475qkg.2;
-        Tue, 29 Nov 2022 08:50:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Reczz2TeQI8YuLHOogtUntCHfa5rl0jqbOQAUswYaAw=;
-        b=gwNSAY492mdgn/QcdSWVFhbR/sIWqH5No4zYXCumnscMUayR6wPiKUDXPi/eGeUvV1
-         zqe2m6N4YCycoJNLv8uoaiZx1dZcVySZsIXsuQ3XNOcheeLitiHgU40xFZYpej3wJzHu
-         0BAHRh+TsFSTdDOxkxqr54/0thmkaVwqTmUxEITP7XRIE/qKWPOHW2sRqzN4uFs6YKjV
-         eIOKQpjEn2kbjvbPDMWGnw5hNAEVcjRfrGXkWtvxaZj2Pwq9ZG1/tvCsX6GpljYyhjCE
-         s43p/eXNGDvwANYGEU1p8Qr/AJLsGHnJBLWqLMwOoTmPxneLhUrsve19dHrc1gwr/hIe
-         QCQw==
-X-Gm-Message-State: ANoB5pm3JQLW9DbaT2citVrjPNd9k9+xHKm9eTT7hrTJ6DW2ZtJ1Ouin
-        kZ19NNbattrunNWv8gDUgXugdTmhKRD32Q==
-X-Google-Smtp-Source: AA0mqf7tqY/EJW8ZBHGvh7C+dpJayMVwS5DUANPOMGlBtuA/MtDKehgJJChIlcOpYx90qk6AYl5b6Q==
-X-Received: by 2002:a37:af07:0:b0:6ee:ee7c:aad8 with SMTP id y7-20020a37af07000000b006eeee7caad8mr33567345qke.470.1669740578423;
-        Tue, 29 Nov 2022 08:49:38 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b006fc2b672950sm11052234qkp.37.2022.11.29.08.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:49:38 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id o127so2733160yba.5;
-        Tue, 29 Nov 2022 08:49:37 -0800 (PST)
-X-Received: by 2002:a25:9e84:0:b0:6de:6183:c5c3 with SMTP id
- p4-20020a259e84000000b006de6183c5c3mr37056563ybq.89.1669740577632; Tue, 29
- Nov 2022 08:49:37 -0800 (PST)
+        with ESMTP id S235173AbiK2SCY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 13:02:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F346B39F;
+        Tue, 29 Nov 2022 10:02:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E8761889;
+        Tue, 29 Nov 2022 18:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727F2C433C1;
+        Tue, 29 Nov 2022 18:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669744942;
+        bh=qKd9ymqAdWLp6B0pPm4UgjxLqG9aPy3nEPRIKquv6Gs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=nRj829xdRrmMfjKBaa0SYOXHIVMI+fnAVfSA5NhPp4KXn9mqzM02mgqXRD3qwU0KY
+         YwGRQN2jtNdWGPUIOlKTeNAaOr+qW/dGtH82XLFYO/u9GplHJy//dI0UndiCHueVrP
+         N+D0EAL4YjXg5L4TVA7rWD3OeXpgoOmP0eFdvkF2WXXNOWOZ+y9pg+HFPDuDXGDQ7O
+         sqkPCT5SRvA6q4K4Oh3i/k8AoRlOOjG+ya0f6COsyizgQb6vZZSfKDtUXhVic2+uLv
+         vQr4ke8wRRq93Um7lGA/o9p9Fxo936PhNmSoUUJwIrZPhtyXq0t2zibeN64pW1Z8XD
+         CQHu9QlNzZskQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com
+In-Reply-To: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
+References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH v2 SPI for-next 0/2] spi: microchip: pci1xxxx: Load SPI driver for SPI endpoint of PCI1XXXX switch
+Message-Id: <166974494118.343760.736502969260374198.b4-ty@kernel.org>
+Date:   Tue, 29 Nov 2022 18:02:21 +0000
 MIME-Version: 1.0
-References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com> <20221124003351.7792-3-hayashi.kunihiko@socionext.com>
-In-Reply-To: <20221124003351.7792-3-hayashi.kunihiko@socionext.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Nov 2022 17:49:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
-Message-ID: <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] spi: Add Socionext F_OSPI SPI flash controller driver
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Hayashi-san,
+On Thu, 6 Oct 2022 10:35:12 +0530, Tharun Kumar P wrote:
+> Microchip PCI1XXXX is an unmanaged PCIe3.1a switch for consumer,
+> industrial, and automotive applications. This switch has multiple
+> downstream ports. One of the switch's downstream ports is a multifunction
+> endpoint; one of those functions supports SPI functionality. This series
+> of patches provides the SPI controller driver for the SPI function of the
+> multifunction PCIe endpoint of the switch.
+> 
+> [...]
 
-On Thu, Nov 24, 2022 at 1:36 AM Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
-> Introduce Socionext F_OSPI controller driver. This controller is used to
-> communicate with slave devices such as SPI Flash memories. It supports
-> 4 slave devices and up to 8-bit wide bus, but supports master mode only.
->
-> This driver uses spi-mem framework for SPI flash memory access, and
-> can only operate indirect access mode and single data rate mode.
->
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Applied to
 
-Thanks for your patch, which is now commit 1b74dd64c8612619
-("spi: Add Socionext F_OSPI SPI flash controller driver") in
-spi/for-next.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -906,6 +906,15 @@ config SPI_SLAVE_MT27XX
->           say Y or M here.If you are not sure, say N.
->           SPI slave drivers for Mediatek MT27XX series ARM SoCs.
->
-> +config SPI_SN_F_OSPI
-> +       tristate "Socionext F_OSPI SPI flash controller"
-> +       depends on OF && HAS_IOMEM
-> +       depends on SPI_MEM
+Thanks!
 
-On which systems is this hardware block found?
-Perhaps this should depend on ARCH_UNIPHIER || COMPILE_TEST?
+[1/2] spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch
+      (no commit info)
+[2/2] spi: microchip: pci1xxxx: Add suspend and resume support for PCI1XXXX SPI driver
+      commit: 7ba63521a1e9d8ca6fb55ead19e6e2b850b8fd80
 
-> +       help
-> +         This enables support for the Socionext F_OSPI controller
-> +         for connecting an SPI Flash memory over up to 8-bit wide bus.
-> +         It supports indirect access mode only.
-> +
->  config SPI_SPRD
->         tristate "Spreadtrum SPI controller"
->         depends on ARCH_SPRD || COMPILE_TEST
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Gr{oetje,eeting}s,
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-                        Geert
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Mark
