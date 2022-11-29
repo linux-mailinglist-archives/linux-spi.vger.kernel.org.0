@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ED063BAE9
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 08:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2E363BAEB
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 08:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiK2HrK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Nov 2022 02:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
+        id S229514AbiK2HsE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Nov 2022 02:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK2HrK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 02:47:10 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B6251C0B
-        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 23:47:08 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b3so21216927lfv.2
-        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 23:47:08 -0800 (PST)
+        with ESMTP id S229999AbiK2Hr6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 02:47:58 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAAB51C2F
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 23:47:56 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id j4so21231510lfk.0
+        for <linux-spi@vger.kernel.org>; Mon, 28 Nov 2022 23:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=loSpF9AgG01RMo3LBV/v8v6fFtboHwkwvrGYRwDPayw=;
-        b=BCIwFn6W/n3Cf25bMWz/YeiC1vDxWars4v8YMEFnaxBFn1+klIarsq0thr5IvFXBd9
-         y0iEYk/HW1kb38E9fGJQE23xoYKh1JSMPNptDyAci8eDnjw187PoZRcMaTSsGScprKF0
-         3JnzlEVO7XLzbb726ClGkCFzGKUg130Zltw6RkyFgarJr3EFrx3Ku1npNJ8ga77eTfkO
-         69uWTfnN2vC1onzoddkNRL9JzocY4lCxV2vQJqwWxkWEMQCWlm07jXhcvDk8tqH+MEI6
-         NmW+Z+mOT5piPL3GJr0IjEujQDbz1T01BGCV4QvqAHhK5GOztAAeZlu9lhf35ypj5sSe
-         RrOA==
+        bh=etxMVrTTVJSTddGDgARHAHEO1RrGD5Hs7SuIw9ap/3I=;
+        b=rJ2CHbAyVDgULRTpj4MDVg2dwBK1HADystIZFbvhbTYoLIME+/tt+UNXjiftguq7ib
+         w244K+6QPoVERfMg79BoElJO38d82eLScZZat5sFVE49snZOfOK2/+f0fnJIKBPDeYwr
+         FMbKUIjfcevvcaBgXAKIO3MbRsFR3P6ZtMV7rNa9PIY4woHjOWMCcZuqv4pX0tOMHtUg
+         i6K9FHqMYrX/NmhNXcCLLkLhSjNQEx5ifmowHQHPkWFrl7Bjgf4qKioahqfbJwtbyu+O
+         kUj+dvJ58qD1SX7rLqgkoUAxuWicMcWgz3BzKtCsL8WBGDD+0gJi4HnxuReDXO62n9lO
+         ykmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loSpF9AgG01RMo3LBV/v8v6fFtboHwkwvrGYRwDPayw=;
-        b=abL/ANyRP3w2QkqEI0/b4Xiw0f79mqC0cdwwoop6GjZPt9sB9VKos00JO2ma985c/t
-         W9aMCptHqVZykEcFjfbVq3xwF/Po7Hev2CAUqfm9nUvqBj1WL6JuP+6ikTNTR5RF3yea
-         0AbKJQOmlZBwe5WoVnWt8b+/YpHEYhFKE0WqRcdrpLC1RbzG8jsBlx+1l6CqdfFyp2x2
-         DaRwFyai8GvdFTUO+XWxtUCSXbSmj43szKk596xDinAJxN1F/ezcyuk+c9/0qXhIqY2M
-         69c9RwKgERR0CI6tW76/EdVXo8s8dmKjl29vcZ3YNICsaVr6zwsHU5Lf1NjgIndeRJJQ
-         UpRg==
-X-Gm-Message-State: ANoB5pkVNlMhkxSfJQsevFj6h8wj71uYgnl+Bpl7fPg4K1QoeciLJJL7
-        ZPPvnzdwbyfqYRU8x0sCaXcL8g==
-X-Google-Smtp-Source: AA0mqf6+wcgPAn5cslfEauv8J6Mh6lwM69/leKqgZb2AnXuqe0SSsSZ6WHFsED5uSwSOj/bep+llhw==
-X-Received: by 2002:a05:6512:2212:b0:4b5:acf:8789 with SMTP id h18-20020a056512221200b004b50acf8789mr4757200lfu.549.1669708026761;
-        Mon, 28 Nov 2022 23:47:06 -0800 (PST)
+        bh=etxMVrTTVJSTddGDgARHAHEO1RrGD5Hs7SuIw9ap/3I=;
+        b=sN/LrrTYHQtICBM/qrRNA0N18Ul28NHN4652EGj87WvBQHF4ny00Y3528xjmTZQe1e
+         A3LyRHKPeMUO9WLX2J8A7F2UUFK20q1ZzfR+sS3rWc6k+yyZTIioAb2kW4jcRoJYn0rH
+         V0zDi3OaDGCo3glRAB94JuMZDkuv/bJtkYDE9yE6YpVkxLO/tqzW3yfIblaITt2LQr+V
+         xi5V1W68nN0YVz3xaghWkAzbfX6lVSuS8a+h/xilasAOQE/bMS8y/ap/D21FUy/Bv0QX
+         kwAzDa9EN4Ps0EyWAu+i8h8s+lWmuvwJdstIP2bFT7soygqOC0sjYRVMF1kxuEd7ztBt
+         bcYQ==
+X-Gm-Message-State: ANoB5pkfmhVLa7hT627jSJlPLDpasZhqu6JqIM+qDezUo05a+2Ndh0Ck
+        2umVhwEKtqP9C4M3KGfbXzTMww==
+X-Google-Smtp-Source: AA0mqf67TcbUg0koPs/HiroxNXgbbcwrSRcrk/nihBw0w3MO/AQgLVDwdMtZH+S68ivSZKmzzQx01Q==
+X-Received: by 2002:a19:ae18:0:b0:4aa:c879:5bc with SMTP id f24-20020a19ae18000000b004aac87905bcmr12172113lfc.498.1669708074608;
+        Mon, 28 Nov 2022 23:47:54 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac252ad000000b004b49025f96dsm2096814lfm.187.2022.11.28.23.47.05
+        by smtp.gmail.com with ESMTPSA id k16-20020a0565123d9000b0049e9122bd1bsm2080686lfv.164.2022.11.28.23.47.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 23:47:06 -0800 (PST)
-Message-ID: <08ebc76a-0220-f984-b546-23dba8677be9@linaro.org>
-Date:   Tue, 29 Nov 2022 08:47:05 +0100
+        Mon, 28 Nov 2022 23:47:54 -0800 (PST)
+Message-ID: <e512b7fd-3404-3c2d-dbf6-dc66ee662a06@linaro.org>
+Date:   Tue, 29 Nov 2022 08:47:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 7/9] dt-bindings: spi: mtk-snfi: add two timing delay
- property
+Subject: Re: [PATCH 5/9] dt-bindings: spi: mtk-snfi: add mt7986 IC snfi
+ bindings
 Content-Language: en-US
 To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
         <Xiangsheng.Hou@mediatek.com>,
@@ -80,11 +80,11 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
 References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
- <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
- <9985d44e-977e-d7ea-0932-4879a3ccd14d@linaro.org>
- <f83184ae803dbe0afd37a31a8a83a369a9772880.camel@mediatek.com>
+ <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
+ <8b8e4b23-a3bc-7e3d-199a-e8f591d05d71@linaro.org>
+ <5f76482d33933c19e191ea618f8622cd0660597f.camel@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f83184ae803dbe0afd37a31a8a83a369a9772880.camel@mediatek.com>
+In-Reply-To: <5f76482d33933c19e191ea618f8622cd0660597f.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -98,68 +98,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 29/11/2022 03:50, Xiangsheng Hou (侯祥胜) wrote:
-
->>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> @@ -55,6 +55,22 @@ properties:
->>>      description: device-tree node of the accompanying ECC engine.
->>>      $ref: /schemas/types.yaml#/definitions/phandle
->>>  
->>> +  rx-sample-delay:
->>
->> No, use existing property, don't invent your own stuff - missing unit
->> suffix. See spi-peripheral-props.yaml.
-> Will change to other private property. The read sample delay with
-> MediaTek SPI NAND controller can be set with values from 0 to 47.
-> However, it`s difficult to say the unit of each vaule, because the unit
-> value will be difference with different chip process or different
-> corner IC.
-
-Why you cannot use same formula as other SPI drivers for sample-delay?
-And divide/multiple by some factor specific to SoC, which is taken from
-driver_data?
-
+> Hi Krzysztof,
 > 
->>> +    description: Rx delay to sample data with this value, the
->>> valid
->>> +                 values are from 0 to 47. The delay is smaller
->>> than
->>> +                 the rx-latch-latency.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> On Mon, 2022-11-28 at 10:00 +0100, Krzysztof Kozlowski wrote:
+>> On 28/11/2022 03:06, Xiangsheng Hou wrote:
+>>> 1. add mt7986 IC bindings
 >>
->> Drop $ref.
-> Will do.
+>> Subject: drop second, redundant "bindings".
+> Will be fixed in next series.
 > 
+>>>    clocks:
+>>> +    minItems: 2
+>>>      items:
+>>>        - description: clock used for the controller
+>>>        - description: clock used for the SPI bus
+>>> +      - description: clock used for the AHB bus dma bus, this
+>>> depends on
+>>> +                     hardware design, so this is optional.
 >>
->>> +    minItems: 0
->>> +    maxItems: 47
->>> +    default: 0
->>> +
->>> +  rx-latch-latency:
->>
->> Same problems. Did you check spi-peripheral-props.yaml or other SPI
->> controller schemas for such property?
->>
->>> +    description: Rx delay to sample data with this value, the
->>> value
->>> +                 unit is clock cycle.
->>
->> I think the unit should be rather time (e.g. us).
->>
-> Yes, I checked the spi-peripheral-props.yaml and the delay values are
-> described exactly unit with ns or us. However the unit of MediaTek read
-> latch latency is clock cycle and it`s difference with different clock
-> frequency.
+>> Optional for which variants? For all of them?
+> It`s only needed for the item 3 nfi_hclk. Is it proper with this
+> description or any other suggestion.
 
-This is fine in such case.
-
-> 
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [0, 1, 2, 3]
->>> +    default: 0
->>> +
+I understand third clock is optional. For which variants/compatibles it
+is optional? Add allOf:if:then restricting it.
 
 Best regards,
 Krzysztof
