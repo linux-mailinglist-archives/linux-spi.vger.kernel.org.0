@@ -2,51 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9D563C8C8
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Nov 2022 20:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85ECD63CC9B
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Nov 2022 01:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236208AbiK2TvV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Nov 2022 14:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S230425AbiK3Arg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Nov 2022 19:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbiK2TvU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 14:51:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DF1C48;
-        Tue, 29 Nov 2022 11:51:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2FA8618C5;
-        Tue, 29 Nov 2022 19:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4961FC433D6;
-        Tue, 29 Nov 2022 19:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669751479;
-        bh=Zh5WynhP+o4Gea28pjoNeKDMumUYpiocGMUapD80TLA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=M6BMX69MohUyLJH7EKV6t1XgGJnmdjJFZ9e8eWCe84FLtqYFQ2db8tZRD4atpkyCq
-         FgX5OYIEjQeGmdW3ACW4hzN3U86knKobYnP6VcWVkjyKTgSZGnkmdT6fhsp47ephvp
-         Gi8pzDM/yWDZGpb2hy8Ro5ZwOgwWdQUZxUm2xHeRk6cL+tpdmkMPfv40cFxXqeQswv
-         ys7FMmK/YchvQLNbhvRm480jL+FfyeuJGhOZ+1h7HcG0PEYeAlHeeqkPm/0wxwVTS6
-         dPj9eRpxlnXFJiWQzQUg+pRoPxCm8dX98qR6rwAOh/J0ScZXedNJ5ggiWVEMbd0tCf
-         VKiAlXSKf5yng==
-From:   Mark Brown <broonie@kernel.org>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-In-Reply-To: <20221128164147.158441-1-nathan.morrison@timesys.com>
-References: <20221128164147.158441-1-nathan.morrison@timesys.com>
-Subject: Re: [PATCH] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
-Message-Id: <166975147801.395913.7712035443734225881.b4-ty@kernel.org>
-Date:   Tue, 29 Nov 2022 19:51:18 +0000
+        with ESMTP id S229595AbiK3Arg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Nov 2022 19:47:36 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A1E0CCA;
+        Tue, 29 Nov 2022 16:47:33 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 30 Nov 2022 09:47:32 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 9D8162058B4F;
+        Wed, 30 Nov 2022 09:47:32 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Nov 2022 09:47:32 +0900
+Received: from [10.212.156.209] (unknown [10.212.156.209])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id D118AA8559;
+        Wed, 30 Nov 2022 09:47:31 +0900 (JST)
+Message-ID: <6c423f87-1187-b2d6-8b70-c8cd709f3ea0@socionext.com>
+Date:   Wed, 30 Nov 2022 09:47:31 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/2] spi: Add Socionext F_OSPI SPI flash controller
+ driver
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com>
+ <20221124003351.7792-3-hayashi.kunihiko@socionext.com>
+ <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
+Content-Language: en-US
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,42 +51,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 28 Nov 2022 11:41:47 -0500, Nathan Barrett-Morrison wrote:
-> This Cadence QSPI IP has a 4-bit clock divisor field
-> for baud rate division.  For example:
+Hi Geert,
+
+On 2022/11/30 1:49, Geert Uytterhoeven wrote:
+> Hi Hayashi-san,
 > 
-> 0b0000 = /2
-> 0b0001 = /4
-> 0b0010 = /6
-> ...
-> 0b1111 = /32
+> On Thu, Nov 24, 2022 at 1:36 AM Kunihiko Hayashi
+> <hayashi.kunihiko@socionext.com> wrote:
+>> Introduce Socionext F_OSPI controller driver. This controller is used to
+>> communicate with slave devices such as SPI Flash memories. It supports
+>> 4 slave devices and up to 8-bit wide bus, but supports master mode only.
+>>
+>> This driver uses spi-mem framework for SPI flash memory access, and
+>> can only operate indirect access mode and single data rate mode.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > 
-> [...]
+> Thanks for your patch, which is now commit 1b74dd64c8612619
+> ("spi: Add Socionext F_OSPI SPI flash controller driver") in
+> spi/for-next.
 
-Applied to
+Thank you for your work.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+>> --- a/drivers/spi/Kconfig
+>> +++ b/drivers/spi/Kconfig
+>> @@ -906,6 +906,15 @@ config SPI_SLAVE_MT27XX
+>>            say Y or M here.If you are not sure, say N.
+>>            SPI slave drivers for Mediatek MT27XX series ARM SoCs.
+>>
+>> +config SPI_SN_F_OSPI
+>> +       tristate "Socionext F_OSPI SPI flash controller"
+>> +       depends on OF && HAS_IOMEM
+>> +       depends on SPI_MEM
+> 
+> On which systems is this hardware block found?
+> Perhaps this should depend on ARCH_UNIPHIER || COMPILE_TEST?
 
-Thanks!
+This IP doesn't depend on ARCH_UNIPHIER, so I expect that it can be widely
+applied not only to ARCH_UNIPHIER.
 
-[1/1] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
-      commit: f8fc65e50ad71c139a12a96e64eeba5005e491d5
+If COMPILE_TEST is required, the dependency is like SPI_CADENCE_XSPI:
+         depends on (OF || COMPILE_TEST) && HAS_IOMEM
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Thank you,
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+---
+Best Regards
+Kunihiko Hayashi
