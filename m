@@ -2,121 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A463D103
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Nov 2022 09:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8A163D169
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Nov 2022 10:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbiK3IrG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Nov 2022 03:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S230400AbiK3JJL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Nov 2022 04:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbiK3IrB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Nov 2022 03:47:01 -0500
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5312AC64;
-        Wed, 30 Nov 2022 00:47:00 -0800 (PST)
-Received: by mail-qv1-f48.google.com with SMTP id u10so5903963qvp.4;
-        Wed, 30 Nov 2022 00:47:00 -0800 (PST)
+        with ESMTP id S230505AbiK3JJK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Nov 2022 04:09:10 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DA93F061;
+        Wed, 30 Nov 2022 01:09:09 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so10798177oti.5;
+        Wed, 30 Nov 2022 01:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B04fj9P00rqNhYYFd7+/64238rHa0D4FG/P5nQ2+7wA=;
+        b=mDQvEm1QplQg6YYyArNrM+4YH1l2ZwXmiBdYl+pswyW6I5sLmbPz+bUOW4saQgm5SV
+         RMRttnO718bCX4d3B+3FwynDrnMldjqGzetgTSaNlnVtSvj+4xku8XUOP8A/dgHajeJk
+         G2H67Y/u8tSQwfwqME8/zkA+9/kIHQEsf0QU+bEcJuekgJ2jbgemUkdGgjZjfmdz99/+
+         zJq9gQyWw8I31QzZ+DqfYr1UCpDwHfMaX5ZqsEfjJ6OPhnHVg1pOT211oX8D9BuMpbtz
+         ro+HKT4vqeAsQP94N3hhmkGgz/mkzFcctqftEofv/88pdAlXzy04dWkeQpvv7tBO/1+S
+         TjsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yJL7tkk/7tNU8e/+vm4nPHM5D33dVrunJX89jUIX5MU=;
-        b=VQ4lsS5BSC2dUU143JFqN7qKJgeNeL5Nc6Z+pa5IQmntUViFxyNXZiFfXG4z4Fr2bE
-         8EA9B+rt1Ox7Nz/ouGYsy7lnvHHZk0TVsc5oS5fT9KURmN7Y0IeF/BP5IkyphqM4Q5uL
-         MdMM0xFGCYnC2tgF+7TrMBKf53wZaLgcGetDyDdzmcOgBVvdpB8A5yqtPnjzdvhVbY8L
-         EqHI5mtrrByYf4lYmFT0ZMrwUnzMiQiKIvtxKxsLUJpn+lTocQkDGySWze9IRB2aCS/9
-         Rdkb+QKS6sHB2JhmLdGKULHs6JLlbJbFuKPkkbDjeJU4dIj8L2BdO6oE0WUWBy4Znlxz
-         AOPA==
-X-Gm-Message-State: ANoB5pkw8lY+y4lEIk/9k4+jH1avLuf1tV1gRppkxAnYrwies4Ee4Ywp
-        rPln5KQTYiUE12/X+sqhTgpfZcZ6YeeY9Q==
-X-Google-Smtp-Source: AA0mqf7f1Ji4Wyx3yDLonjjC0Vt/qm8wICINlLWUYYcnMTbfLe8/rtJkLKE/c+9LSqBZ3fnmWWQk6g==
-X-Received: by 2002:a0c:814d:0:b0:4c6:e530:2c6b with SMTP id 71-20020a0c814d000000b004c6e5302c6bmr24469687qvc.15.1669798019303;
-        Wed, 30 Nov 2022 00:46:59 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id de3-20020a05620a370300b006e99290e83fsm648467qkb.107.2022.11.30.00.46.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 00:46:59 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id c140so20649734ybf.11;
-        Wed, 30 Nov 2022 00:46:58 -0800 (PST)
-X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
- n4-20020a257204000000b006f09ff51151mr31642088ybc.543.1669798018596; Wed, 30
- Nov 2022 00:46:58 -0800 (PST)
+        bh=B04fj9P00rqNhYYFd7+/64238rHa0D4FG/P5nQ2+7wA=;
+        b=NTaaLz0jp0j1SSURrBE89/NuSRuHElb1nfWJHn/0eP7IGqkDD5aULdyjLrYkVgwn4H
+         dVyRuYtnhJ96W/v4w2nM9D1yfIVjYp+BEqN6SK2cl/9bc2FhUGRmAsal0Kzdj2eO+Rjw
+         ADmGWDx4Ut6CWBELee41jupYrxnqAYGA06obWP25XhAIVs23mXVLPyuhtpl8o62/Z9j1
+         14cnVMGEEObgs4rptXKB99JMMXtV5pLcmrq+DGKcnPKqLfbwTzMhzP1DmuQVJmhkYUXH
+         ni7kZpnzrITqpSHiltWV393aUOa2K5y8YsQITFvoNbVapJutbf0XPR4THuARRgN9cfF6
+         J6Qg==
+X-Gm-Message-State: ANoB5pnDwEQwIWXdxIWkhiWkC8rm4p0441mr8V5NaPYLXltoRJL8y9fk
+        QrKj85EAMUMG6Hlhu/+hsyuDDvkViASeVeQ9F2Q=
+X-Google-Smtp-Source: AA0mqf4iveLTZYV/xPRmj2emARsFD/Nu70y1nVjqfEd3HoFurktQjGnoPWWEZdf5U2qztxEjQN3owWB4HNcmz+Z3LBs=
+X-Received: by 2002:a9d:161:0:b0:66e:65dc:18e1 with SMTP id
+ 88-20020a9d0161000000b0066e65dc18e1mr2106886otu.83.1669799349116; Wed, 30 Nov
+ 2022 01:09:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com>
- <20221124003351.7792-3-hayashi.kunihiko@socionext.com> <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
- <6c423f87-1187-b2d6-8b70-c8cd709f3ea0@socionext.com>
-In-Reply-To: <6c423f87-1187-b2d6-8b70-c8cd709f3ea0@socionext.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Nov 2022 09:46:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWa06ND-Tud1_bYTYAVbmo1qMnU3i0bETZo6FVehvLZhg@mail.gmail.com>
-Message-ID: <CAMuHMdWa06ND-Tud1_bYTYAVbmo1qMnU3i0bETZo6FVehvLZhg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] spi: Add Socionext F_OSPI SPI flash controller driver
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
+ <20221128020613.14821-8-xiangsheng.hou@mediatek.com> <9985d44e-977e-d7ea-0932-4879a3ccd14d@linaro.org>
+ <f83184ae803dbe0afd37a31a8a83a369a9772880.camel@mediatek.com>
+ <08ebc76a-0220-f984-b546-23dba8677be9@linaro.org> <741d7ce16df25450b08c92e508190bc7c91fc8d9.camel@mediatek.com>
+ <bc356f96-600a-64df-c0fe-00c807fa605c@linaro.org>
+In-Reply-To: <bc356f96-600a-64df-c0fe-00c807fa605c@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 30 Nov 2022 17:08:57 +0800
+Message-ID: <CAJsYDVKdV7Pzt4fhc+OFWto6hK9U=WBe7LkPZU5sJHX1nyXTDw@mail.gmail.com>
+Subject: Re: [PATCH 7/9] dt-bindings: spi: mtk-snfi: add two timing delay property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
+        <Xiangsheng.Hou@mediatek.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
+        <Benliang.Zhao@mediatek.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Hayashi-san,
+Hi!
 
-On Wed, Nov 30, 2022 at 1:47 AM Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
-> On 2022/11/30 1:49, Geert Uytterhoeven wrote:
-> > On Thu, Nov 24, 2022 at 1:36 AM Kunihiko Hayashi
-> > <hayashi.kunihiko@socionext.com> wrote:
-> >> Introduce Socionext F_OSPI controller driver. This controller is used to
-> >> communicate with slave devices such as SPI Flash memories. It supports
-> >> 4 slave devices and up to 8-bit wide bus, but supports master mode only.
+On Wed, Nov 30, 2022 at 4:35 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> >>> Will change to other private property. The read sample delay with
+> >>> MediaTek SPI NAND controller can be set with values from 0 to 47.
+> >>> However, it`s difficult to say the unit of each vaule, because the
+> >>> unit
+> >>> value will be difference with different chip process or different
+> >>> corner IC.
 > >>
-> >> This driver uses spi-mem framework for SPI flash memory access, and
-> >> can only operate indirect access mode and single data rate mode.
-> >>
-> >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-
-> >> --- a/drivers/spi/Kconfig
-> >> +++ b/drivers/spi/Kconfig
-> >> @@ -906,6 +906,15 @@ config SPI_SLAVE_MT27XX
-> >>            say Y or M here.If you are not sure, say N.
-> >>            SPI slave drivers for Mediatek MT27XX series ARM SoCs.
-> >>
-> >> +config SPI_SN_F_OSPI
-> >> +       tristate "Socionext F_OSPI SPI flash controller"
-> >> +       depends on OF && HAS_IOMEM
-> >> +       depends on SPI_MEM
+> >> Why you cannot use same formula as other SPI drivers for sample-
+> >> delay?
+> >> And divide/multiple by some factor specific to SoC, which is taken
+> >> from
+> >> driver_data?
 > >
-> > On which systems is this hardware block found?
-> > Perhaps this should depend on ARCH_UNIPHIER || COMPILE_TEST?
+> > Even for specific SoC, the unit of sample delay may be various with
+> > different corner IC.
 >
-> This IP doesn't depend on ARCH_UNIPHIER, so I expect that it can be widely
-> applied not only to ARCH_UNIPHIER.
+> Which is easy to achieve with driver_data as I said.
 
-OK.
+I think Xiangsheng means this:
+This sample delay isn't achieved using a fixed clock signal. It's
+probably some kind of delay circuit whose delay value varies
+due to its manufacturing process. Every single chip made got
+different delay units, so it's impossible to specify a single unit
+for one chip model.
 
-> If COMPILE_TEST is required, the dependency is like SPI_CADENCE_XSPI:
->          depends on (OF || COMPILE_TEST) && HAS_IOMEM
+If that's true, shouldn't this be a value calibrated on-the-fly
+on probe instead? A single device-tree is supposed to be
+applied to all devices of the same model, so a value that
+varies on a device-by-device basis probably shouldn't
+be a device-tree property.
 
-While this is not a hard requirement, it would be nice to have.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Regards,
+Chuanhong Guo
