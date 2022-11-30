@@ -2,44 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2268463D85F
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Nov 2022 15:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A8E63D89D
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Nov 2022 15:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiK3OlG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Nov 2022 09:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S229499AbiK3O6L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Nov 2022 09:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiK3OlF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Nov 2022 09:41:05 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 06:41:01 PST
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0BA2FFEE
-        for <linux-spi@vger.kernel.org>; Wed, 30 Nov 2022 06:41:00 -0800 (PST)
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20221130143956988dbcb4638a47785a
-        for <linux-spi@vger.kernel.org>;
-        Wed, 30 Nov 2022 15:39:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=dpt5mrvPw7RM7k6Ey4ll2TJ6SXaTSEx8JWL9PuzsCpk=;
- b=DRLweHjIruPYZjaXyBdguWxe1SX2EiS6ywDH+hMPwfiN520wk1EfkE4Ofov8tv1Fd3S5GR
- yTA1gcDL+3KkeFQoqEGxcilvhre+wva8mp+DMiqONebpm+daMZ80GQHD7qDpI66Bn+Rf9D27
- Dh8eJdwhEXwI8NsVpCw7p97BRRjLs=;
-From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        with ESMTP id S229445AbiK3O6J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Nov 2022 09:58:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D514303F7;
+        Wed, 30 Nov 2022 06:58:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6AB561C32;
+        Wed, 30 Nov 2022 14:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2419C433C1;
+        Wed, 30 Nov 2022 14:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669820284;
+        bh=8qCtikAAK5ewVDLbkyFaVd5mw/YPRA/xoHRbnUNco6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CAcY2kH/2zAdyjKKueldIyXfICaXuvzKuZRPy8r/7GZORaNctWvPrXkMgUd6A4mnS
+         BGSgQzoPAEGQ2oCF+2hfDMoTdt8qzacuM2hbyIpTMMtyT5KwuS2w0980IDO623J1Sk
+         49NslQa6HisN1wtnMZTUCjgCxf0FWj8IbcjyPwn3ZryNvdRSq2Odt4HKwMHUsgJz4L
+         TIVlw/gGceQjkGI5UOrCfIA/bFYeU0fusdJwhY8Ll9YShXiWs6T53wv9jnAVfbwm6L
+         MECg8lqtDQMpFdP2I97DWGusxQguZAMa1RAuqhZdAX/Y0vFu4jVqD7q1cjjLQs2Xd6
+         uq7MugyilxkkA==
+Date:   Wed, 30 Nov 2022 14:57:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH] spi: spidev: mask SPI_CS_HIGH in SPI_IOC_RD_MODE
-Date:   Wed, 30 Nov 2022 15:39:48 +0100
-Message-Id: <20221130143948.426640-1-alexander.sverdlin@siemens.com>
+Subject: Re: [PATCH] spi: spidev: mask SPI_CS_HIGH in SPI_IOC_RD_MODE
+Message-ID: <Y4dvdzVQZDEt09+p@sirena.org.uk>
+References: <20221130143948.426640-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-456497:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dzZ2XdGmVBkCOrh6"
+Content-Disposition: inline
+In-Reply-To: <20221130143948.426640-1-alexander.sverdlin@siemens.com>
+X-Cookie: Jesus is my POSTMASTER GENERAL ...
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,67 +55,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-has changed the user-space interface so that bogus SPI_CS_HIGH started
-to appear in the mask returned by SPI_IOC_RD_MODE even for active-low CS
-pins. Commit 138c9c32f090
-("spi: spidev: Fix CS polarity if GPIO descriptors are used") fixed only
-SPI_IOC_WR_MODE part of the problem. Let's fix SPI_IOC_RD_MODE
-symmetrically.
+--dzZ2XdGmVBkCOrh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Test case:
+On Wed, Nov 30, 2022 at 03:39:48PM +0100, A. Sverdlin wrote:
 
-	#include <sys/ioctl.h>
-	#include <fcntl.h>
-	#include <linux/spi/spidev.h>
+>  	/* read requests */
+>  	case SPI_IOC_RD_MODE:
+> -		retval = put_user(spi->mode & SPI_MODE_MASK,
+> -					(__u8 __user *)arg);
+> +		tmp = spi->mode;
+> +
+> +		{
+> +			struct spi_controller *ctlr = spi->controller;
+> +
+> +			if (ctlr->use_gpio_descriptors && ctlr->cs_gpiods &&
+> +			    ctlr->cs_gpiods[spi->chip_select])
+> +				tmp &= ~SPI_CS_HIGH;
+> +		}
+> +
+> +		retval = put_user(tmp & SPI_MODE_MASK, (__u8 __user *)arg);
+>  		break;
+>  	case SPI_IOC_RD_MODE32:
+>  		retval = put_user(spi->mode & SPI_MODE_MASK,
 
-	int main(int argc, char **argv)
-	{
-		char modew = SPI_CPHA;
-		char moder;
-		int f = open("/dev/spidev0.0", O_RDWR);
+What about SPI_IOC_RD_MODE_32?  On the write path the code is shared...
 
-		if (f < 0)
-			return 1;
+--dzZ2XdGmVBkCOrh6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-		ioctl(f, SPI_IOC_WR_MODE, &modew);
-		ioctl(f, SPI_IOC_RD_MODE, &moder);
+-----BEGIN PGP SIGNATURE-----
 
-		return moder == modew ? 0 : 2;
-	}
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOHb3YACgkQJNaLcl1U
+h9CQJgf/daoxEQABFU5PoGFf/jNfQvZzeIJqAAztUAaw61V0mVzndC36v23iuL3V
+Fj1dBlPh1oZ/e+rDgTS6kJVdYhsnQK0z8hCDSHvBcFclBWfmT1SnMehlN0913sQ7
+GU1m/2xnDv8OVis3SY6SYpK4lcRgM6Dn97JO1JtMu9PXCg56bTfSSE/WGnZSahtN
+BOGXweozbj3VWmq/IIUWa1stWGMPsfU+3Rtg5dIXOUU52knv2Q7rTnX1u50x0RgA
+7ND0EqaR8EL7MlPl85SRRQ1BKbbOF1RZWAwLtGqwYnfzldZLoDjZPdZ6BG5I/yVQ
+h5JIsT4eVW0JMEsu8jhk9R6w84KwMg==
+=XgeV
+-----END PGP SIGNATURE-----
 
-Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
----
- drivers/spi/spidev.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index b2775d82d2d7b..23177a7c916c3 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -377,8 +377,17 @@ spidev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	switch (cmd) {
- 	/* read requests */
- 	case SPI_IOC_RD_MODE:
--		retval = put_user(spi->mode & SPI_MODE_MASK,
--					(__u8 __user *)arg);
-+		tmp = spi->mode;
-+
-+		{
-+			struct spi_controller *ctlr = spi->controller;
-+
-+			if (ctlr->use_gpio_descriptors && ctlr->cs_gpiods &&
-+			    ctlr->cs_gpiods[spi->chip_select])
-+				tmp &= ~SPI_CS_HIGH;
-+		}
-+
-+		retval = put_user(tmp & SPI_MODE_MASK, (__u8 __user *)arg);
- 		break;
- 	case SPI_IOC_RD_MODE32:
- 		retval = put_user(spi->mode & SPI_MODE_MASK,
--- 
-2.34.1
-
+--dzZ2XdGmVBkCOrh6--
