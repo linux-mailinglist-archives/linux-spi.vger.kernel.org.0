@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2A36403D9
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Dec 2022 10:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CCB6403D7
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Dec 2022 10:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiLBJ5M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Dec 2022 04:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S233161AbiLBJ46 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Dec 2022 04:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiLBJ5L (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Dec 2022 04:57:11 -0500
+        with ESMTP id S233188AbiLBJ46 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Dec 2022 04:56:58 -0500
+X-Greylist: delayed 454 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 01:56:56 PST
 Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C64CB20C
-        for <linux-spi@vger.kernel.org>; Fri,  2 Dec 2022 01:57:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B70CA7A9
+        for <linux-spi@vger.kernel.org>; Fri,  2 Dec 2022 01:56:56 -0800 (PST)
 Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id C25FD5FCDC;
-        Fri,  2 Dec 2022 10:49:20 +0100 (CET)
+        by mx1.emlix.com (Postfix) with ESMTPS id 0E82C5FEEB;
+        Fri,  2 Dec 2022 10:49:28 +0100 (CET)
 From:   Edmund Berenson <edmund.berenson@emlix.com>
 Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
         Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
-Date:   Fri,  2 Dec 2022 10:48:59 +0100
-Message-Id: <20221202094859.7869-1-edmund.berenson@emlix.com>
+Subject: [PATCH 2/3] spi: execute set_cs function before gpio cs is activated
+Date:   Fri,  2 Dec 2022 10:49:26 +0100
+Message-Id: <20221202094926.9113-1-edmund.berenson@emlix.com>
 X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -40,42 +40,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
-If gpio cs are used the cs number may be >= 4. To ensure we do not write
-outside of the valid area, we choose SS0 in case of gpio cs to start
-spi transfer.
+In some cases it is necessary to adjust the spi controller configuration
+before gpio cs is set.
+For example if spi devices requiring different cpol are used from the same
+controller the adjustment to cpol has to be made before gpio is activated.
+To achieve this set_cs should be executed before gpio cs and necessary
+adjustments can be made inside of controller driver.
 
-Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
 Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
 ---
- drivers/spi/spi-dw-core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/spi.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 99edddf9958b..57c9e384d6d4 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
- 	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
-+	u8 enable_cs = 0;
-+
-+	if (!spi->cs_gpiod)
-+		enable_cs = spi->chip_select;
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5f9aedd1f0b6..bf2a67184969 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -976,6 +976,11 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
+ 		enable = !enable;
  
- 	/*
- 	 * DW SPI controller demands any native CS being set in order to
-@@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
- 	 * support active-high or active-low CS level.
- 	 */
- 	if (cs_high == enable)
--		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
-+		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
- 	else
- 		dw_writel(dws, DW_SPI_SER, 0);
- }
+ 	if (spi->cs_gpiod) {
++		/* Some SPI masters need both GPIO CS & slave_select */
++		if ((spi->controller->flags & SPI_MASTER_GPIO_SS) &&
++		    spi->controller->set_cs)
++			spi->controller->set_cs(spi, !enable);
++
+ 		if (!(spi->mode & SPI_NO_CS)) {
+ 			/*
+ 			 * Historically ACPI has no means of the GPIO polarity and
+@@ -993,10 +998,6 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
+ 				/* Polarity handled by GPIO library */
+ 				gpiod_set_value_cansleep(spi->cs_gpiod, activate);
+ 		}
+-		/* Some SPI masters need both GPIO CS & slave_select */
+-		if ((spi->controller->flags & SPI_MASTER_GPIO_SS) &&
+-		    spi->controller->set_cs)
+-			spi->controller->set_cs(spi, !enable);
+ 	} else if (spi->controller->set_cs) {
+ 		spi->controller->set_cs(spi, !enable);
+ 	}
 -- 
 2.37.4
 
