@@ -2,100 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DEA6425B3
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Dec 2022 10:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29F9642A10
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Dec 2022 15:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiLEJXA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Dec 2022 04:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        id S231579AbiLEOBq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Dec 2022 09:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiLEJWx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Dec 2022 04:22:53 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD363AD
-        for <linux-spi@vger.kernel.org>; Mon,  5 Dec 2022 01:22:52 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id x11so12808565ljh.7
-        for <linux-spi@vger.kernel.org>; Mon, 05 Dec 2022 01:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ifApAlZTQFbWg5ohlrPWCvJNXEFvsjQ5YMa0cqLSe/Q=;
-        b=SMRaKuNVOMEMtKb9Ghp1P5LbxZ2NAL0PdCBOihZKAP3eyoOLXSa4aR9S/qbj0z3r8T
-         T7cFDebZRT0b0vN/E23WFhNOKpi64lihKYO1rHt/APkYNJNso3Kv+0uO7VQv2WnYHLMW
-         Z5Y6PuivtqO8N3JMa7TwdqZ9/H9rF41rYI+a8pkXjIIAqFUvA5wuLFpg85oxro8jtEws
-         F9HU6sZnpuzQhmH3r5cRvhb7H43hB4aW1q3oeeElxjSDF+HvJ+5yhTJxms9NbPLGa7hm
-         9lh89zB/V6Zy1S9+pqOFmgOe9hSVr566UMQTgYe4xuB7GgAaFYcaqhGTdZxUvKQFx6tu
-         jemw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ifApAlZTQFbWg5ohlrPWCvJNXEFvsjQ5YMa0cqLSe/Q=;
-        b=uJVBS7Fd9/sbfAz/vCiwRjWzC35CV5O8nmkl1SnXdlmUq3qa53MF+WzF4Bd176Fdkf
-         FRsDXAvX/m/8/W1acGicK+uBzSWLq6biwVbf3+LbmCof8HCHqP8kkPMTQ9Zo+e0G1GC1
-         MvspMSZL1f7HeAEwXLTTsReGisXM/V/Fjf+c7b9Nrw0F1npjQFpO89yVGEUwThXgpop8
-         3ZZU2FBJE3HdiRl5KJUdijXoiRiLWlsrM45D383F8FGzGQpYpVkg4BiMp+r2H0MXjEjJ
-         TnFErqINWcPmdg39viNGBC8RNkVXRD0nax66DGTp2tQ27hm/50addfWCCTzIU45fQ99+
-         rhSQ==
-X-Gm-Message-State: ANoB5pnctTY4xZfGQoJCBIMwuS0HWX6SBZMZqwEEazbQ76CG3QoB64C1
-        7GXk9qbm6n5MALtm9Bv+nDFy1Q==
-X-Google-Smtp-Source: AA0mqf5ubdilEPhhSGVBVAmanSy+eKOOTQiyr5re3MOtJ+WUJkcNhxnD/whPCuSsjcoLuGGPaa2jmA==
-X-Received: by 2002:a05:651c:2211:b0:26c:66c1:87f9 with SMTP id y17-20020a05651c221100b0026c66c187f9mr20482455ljq.47.1670232170396;
-        Mon, 05 Dec 2022 01:22:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k1-20020ac257c1000000b004b55075f813sm1304683lfo.227.2022.12.05.01.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 01:22:50 -0800 (PST)
-Message-ID: <6ba5f4c6-d725-0bee-9fb2-eddfae5760ca@linaro.org>
-Date:   Mon, 5 Dec 2022 10:22:48 +0100
+        with ESMTP id S231899AbiLEOBl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Dec 2022 09:01:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A9912776;
+        Mon,  5 Dec 2022 06:01:33 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7EAA96601E6A;
+        Mon,  5 Dec 2022 14:01:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670248891;
+        bh=rC8AWaMkj6jL9tBLy544uoByGzNsAgwTTbsHvW13wjY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DoKLkzE55yiXld463vrqnTy6JekyIpCZK77Vei8mWx0Yjqzf2Coi+F6FzRculJICZ
+         peLeplcOYdUHEpbSUDS9SAg/PZJ5kjI9PB1hkZeKJEwhnskwzhF9A2p+Ho+0MK1S3Z
+         BlMyui0tZe8vx8lXPeF+SuauD7rPsuCqIQXOGQc97bAoSdnX7ntJXqoF/6RO7rGwCA
+         znYLcSGAyok4Bgh/1fWBZOWTk2MKRjv4+2dIZsNTM33+GrjYJGiKZ3HjR9phXnmD7X
+         SVFkrQKYNF2mw5RehbBt7BciLhiouLV3SCSVQo7Tu3u1gG57gDcP3s6tiZX8yz1Pey
+         EdxJkM1c9JS4g==
+Message-ID: <d5bcc6aa-bdb5-9705-a7dd-79a276f4ea01@collabora.com>
+Date:   Mon, 5 Dec 2022 15:01:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 9/9] dt-bindings: mtd: ecc-mtk: Add compatible for
- MT7986
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1] spi: spi-mtk-nor: Add recovery mechanism for dma read
+ timeout
 Content-Language: en-US
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+To:     Bayi Cheng <bayi.cheng@mediatek.com>,
         Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-10-xiangsheng.hou@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221205065756.26875-10-xiangsheng.hou@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+        Chuanhong Guo <gch981213@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221205082419.29170-1-bayi.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221205082419.29170-1-bayi.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 05/12/2022 07:57, Xiangsheng Hou wrote:
-> Add dt-bindings documentation of ECC for MediaTek MT7986 SoC
-> platform.
+Il 05/12/22 09:24, Bayi Cheng ha scritto:
+> From: bayi cheng <bayi.cheng@mediatek.com>
 > 
+> The state machine of MTK spi nor controller may be disturbed by some
+> glitch signals from the relevant BUS during dma read, Although the
+> possibility of causing the dma read to fail is next to nothing,
+> However, if error-handling is not implemented, which makes the feature
+> somewhat risky.
+> 
+> Add an error-handling mechanism here, reset the state machine and
+> re-read the data when an error occurs.
+> 
+> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
+> ---
+> Change in v1:
+>    -Reset the state machine when dma read fails and read again.
+> ---
+> ---
+>   drivers/spi/spi-mtk-nor.c | 16 +++++++++++++++-
+>   1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> index d167699a1a96..c77d79da9a4c 100644
+> --- a/drivers/spi/spi-mtk-nor.c
+> +++ b/drivers/spi/spi-mtk-nor.c
+> @@ -80,6 +80,9 @@
+>   #define MTK_NOR_REG_DMA_FADR		0x71c
+>   #define MTK_NOR_REG_DMA_DADR		0x720
+>   #define MTK_NOR_REG_DMA_END_DADR	0x724
+> +#define MTK_NOR_REG_CG_DIS		0x728
+> +#define MTK_NOR_SFC_SW_RST		BIT(2)
+> +
+>   #define MTK_NOR_REG_DMA_DADR_HB		0x738
+>   #define MTK_NOR_REG_DMA_END_DADR_HB	0x73c
+>   
+> @@ -616,7 +619,18 @@ static int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>   			mtk_nor_set_addr(sp, op);
+>   			return mtk_nor_read_pio(sp, op);
+>   		} else {
+> -			return mtk_nor_read_dma(sp, op);
+> +			ret = mtk_nor_read_dma(sp, op);
+> +			if (ret) {
+> +				dev_err(sp->dev, "try to read again\n");
+> +				mtk_nor_rmw(sp, MTK_NOR_REG_CG_DIS, 0, MTK_NOR_SFC_SW_RST);
+> +				mb(); /* flush previous writes */
+> +				mtk_nor_rmw(sp, MTK_NOR_REG_CG_DIS, MTK_NOR_SFC_SW_RST, 0);
+> +				mb(); /* flush previous writes */
+> +				writel(MTK_NOR_ENABLE_SF_CMD, sp->base + MTK_NOR_REG_WP);
 
-Now your subject prefix does not match file. Filename is
-"mediatek,nand-ecc-engine." so use it instead of "ecc-mtk".
+ From what I understand, you're introducing a way to perform a flush+reset on
+the controller.
 
+At this point, I'd put that in a separate function like `mtk_nor_reset()`, as
+to both increase readability and to possibly reuse it somewhere else in the
+future, if needed.
 
-Best regards,
-Krzysztof
+So this would become...
+
+		} else {
+			ret = mtk_nor_read_dma(sp, op);
+			if (unlikely(ret)) {
+				/* Handle rare bus glitch */
+				mtk_nor_reset(sp);
+				mtk_nor_setup_bus(sp, op);
+				return mtk_nor_read_dma(sp, op);
+			}
+			return ret;
+		}
+
+...or something alike :-)
+
+Regards,
+Angelo
 
