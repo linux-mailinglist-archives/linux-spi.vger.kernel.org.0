@@ -2,77 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E95642A44
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Dec 2022 15:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A6642DCD
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Dec 2022 17:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiLEOV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Dec 2022 09:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S233297AbiLEQu5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiLEOVt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Dec 2022 09:21:49 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA1F1A83E;
-        Mon,  5 Dec 2022 06:21:44 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E305A66015ED;
-        Mon,  5 Dec 2022 14:21:41 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670250102;
-        bh=CwHD0VEBE8fR5lRlAcCaCZCWDstk5+5AzD84VuvkyY0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YmlutJOBO9n6hN5JadWlPiPB6phZpkLtc4C5xle2IbfSQFZ8ukE3EKGfI3zmk8f/m
-         YYbXfLlnHe6L85P433USLdluCdw8aouJaYNprmvA3lDaIAwa57Uj4Nkj4d5ixcB0x4
-         +rVTqa5YWBo6M/86Egl9AZw6+wsHbwuy0o0zBPUZaPugpXkMdfeAkS6t4mqCnh/9CT
-         l/DdldDQDo66XTLZGqVZOh1jJyY+OIqZDSNjfpEidyRVshJvHdnUFuh9ta7myh09Ot
-         uAg3vyd+wqElJSL/PcCFTvcgzKCvfvpCfJJCyAdVZWWz8NuKg0cgRCCI6ngIemAyq8
-         Gc2hnTidkB2LA==
-Message-ID: <8544ba11-7a87-665b-e0d1-5ed52559f083@collabora.com>
-Date:   Mon, 5 Dec 2022 15:21:39 +0100
+        with ESMTP id S232576AbiLEQuQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Dec 2022 11:50:16 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3721826
+        for <linux-spi@vger.kernel.org>; Mon,  5 Dec 2022 08:49:15 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so9523529wmc.0
+        for <linux-spi@vger.kernel.org>; Mon, 05 Dec 2022 08:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=lnBrKHPfFi+0aYH7GqZXYy/TLB/ugNm620+PZ+lzzV6sy6p/BuAqVtH/TYtyAUVvr5
+         6PSrQ2EBMpEXU1/SPA4R3dMr0p1Vi5mVG5xN4a0bdrIaGmmoF1BS7/vt3UKJqZzfT7af
+         3PD4Wqypwy12/Q45OLRkKN+1vZOFdUoVtjULLYELH6x4BfIdxdYu5gYNUH3OLkZc/P0N
+         gwkjg2qVi3pzAzYMxsqACGxJzx5zBm0ABYDFBoTnjEZOijZ7XKo15YQ07eLjdUZ21LYc
+         n8Oioy3ClAdrHB9skdW2IzzMi+FSGlGnl9JH/T9t22qZaZz73+hM1wgHA9NspyS0SQfR
+         2azw==
+X-Gm-Message-State: ANoB5pkg98Si/MdFNkzq7qykOqQQZ0cpQMdPTJe34xIo4fcwAN6c22pC
+        M2w6fnfp1FRZngDT54T712M7RBMZKjfMSNcsR4oNzXj6sq4=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/9] spi: mtk-snfi: Add snfi support for MT7986 IC
-Content-Language: en-US
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-2-xiangsheng.hou@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221205065756.26875-2-xiangsheng.hou@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 05/12/22 07:57, Xiangsheng Hou ha scritto:
-> Add snfi support for MT7986 IC.
-> 
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
