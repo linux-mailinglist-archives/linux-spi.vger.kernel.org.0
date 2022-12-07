@@ -2,51 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DDB645B2F
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 14:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00520645E95
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 17:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiLGNoY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 08:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S229662AbiLGQVL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 11:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLGNoW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 08:44:22 -0500
+        with ESMTP id S229640AbiLGQVK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 11:21:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D242F56;
-        Wed,  7 Dec 2022 05:44:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD4663BA8;
+        Wed,  7 Dec 2022 08:21:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAAB0616F6;
-        Wed,  7 Dec 2022 13:44:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3391C433D6;
-        Wed,  7 Dec 2022 13:44:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C898661A8E;
+        Wed,  7 Dec 2022 16:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78524C433C1;
+        Wed,  7 Dec 2022 16:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670420661;
-        bh=VFZvFoWtRtHDwGt2tI+fGMM46K2cotQeVJ2L5ZZaBPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t2L79QUvq4uN2qx3Q4uSBjGr0Q/nhjo51yIDbF6HjGaYfGszqaYo7YRJ0kQVFl5cS
-         xEZv6MDSl+Vic7G51DqR6GOXwVHkkBntKrorhQXEKDgcU6cRygXHwFUF+4Nh5Oplrx
-         xb2VW5NVWqx6fIF17PXh3f/DFqNWRTe+x4jmO/vPGjs1s4JPCPaIfMNW2g8+Aotsmf
-         ZfcKxJBsN5euprGFl3h8uGOeuo1gpPy89NsPsAjY9rCTwX+okEtq6tkiSCeUIdzjhA
-         cOApRlgFifTdi43DUWiETpqMLr/VmJYhnuttWyl9xCyQx4ZzC98gwptD15HP19hnvw
-         F9OotwLpf17zg==
-Date:   Wed, 7 Dec 2022 13:44:16 +0000
+        s=k20201202; t=1670430069;
+        bh=gD687UUnJea8Yfc6ECxObJUR701yC6QpmwJ0PK2TfFY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=VyU3Y5hy+bQNIm+Jx5Cahbr6ZDz21sn3CCp/2OS2bIKG5n3Z0KzSl00Ggk0s+6Iiy
+         D5dxPqE6NWbwAhjLdJHo87NatU+ry2i+sLDiweaxEBdPgN7e9MzLKJiLVehssk66cc
+         zE840mb2mK834BN2MSPQVO/0ikGbGRfUePV7YVKN0EDIW6odVPWjmlX4vSqnfXvg+x
+         R2Do/Gkw1gvfmZ3OamSkfac9msiCweI9eYquKfELDyuFfhOzGCQ+biWu1Pg5MvFxkG
+         WrzqsqDXc/Cvc6tBqw37SBJ3t75ShuHauf7EkFGYOA1n6jSr+Efj74fnxRPCtvzB9Y
+         x/8MMCG9gsZQQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Han Xu <han.xu@nxp.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 1/2] spi: spi-fsl-lpspi: support multiple cs for lpspi
-Message-ID: <Y5CYsDFdAEduswvm@sirena.org.uk>
-References: <20221206225410.604482-1-han.xu@nxp.com>
- <4ed39c8f-3736-30d6-8d8c-92a4882b72e7@ti.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Bayi Cheng <bayi.cheng@mediatek.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+In-Reply-To: <20221207055435.30557-1-bayi.cheng@mediatek.com>
+References: <20221207055435.30557-1-bayi.cheng@mediatek.com>
+Subject: Re: [PATCH v2] spi: spi-mtk-nor: Add recovery mechanism for dma read timeout
+Message-Id: <167043006609.286366.2467608192853584896.b4-ty@kernel.org>
+Date:   Wed, 07 Dec 2022 16:21:06 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FHJ0wrEYDAahKs6C"
-Content-Disposition: inline
-In-Reply-To: <4ed39c8f-3736-30d6-8d8c-92a4882b72e7@ti.com>
-X-Cookie: What!?  Me worry?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-b77ec
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,38 +57,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 07 Dec 2022 13:54:35 +0800, Bayi Cheng wrote:
+> The state machine of MTK spi nor controller may be disturbed by some
+> glitch signals from the relevant BUS during dma read, Although the
+> possibility of causing the dma read to fail is next to nothing,
+> However, if error-handling is not implemented, which makes the feature
+> somewhat risky.
+> 
+> Add an error-handling mechanism here, reset the state machine and
+> re-read the data when an error occurs.
+> 
+> [...]
 
---FHJ0wrEYDAahKs6C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Dec 07, 2022 at 12:08:43PM +0530, Dhruva Gole wrote:
-> On 07/12/22 04:24, Han Xu wrote:
-> > support to get chip select number from DT file.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > +		fsl_lpspi->num_cs = 1;
-> I am not sure I understand why you are setting this to 1 here?
-> I am assuming it is because you want num_cs to default to 1 if
-> it is not specified in DT.
+Thanks!
 
-> Please can you also add a dev_err and be sure to warn about this?
+[1/1] spi: spi-mtk-nor: Add recovery mechanism for dma read timeout
+      commit: 8330e9e8269bb76dd502e84efb5f351016512cf8
 
-The binding says that this property is optional with a default of 1 so
-it should be totally fine for a system to not specify anything.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---FHJ0wrEYDAahKs6C
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOQmK8ACgkQJNaLcl1U
-h9DQmQf/dQmK1zhfWMV21+4MZi7jWAQPkVACX1YRD9SdP5J7ibe5UCdIXWgVK7Bd
-lwYspDicnRBZIDaXfvADRgPQLSup2v+exb+xKbRGjuCC/O7ksuy4o+5l8XDfGpU3
-S1AdnIyj30a5glmYiFHqLSxE1bLAlcA4dT6sZ00aWv7lsiPH8HyRhtPWH4W2TgMv
-Ud76wPUbLFwz9tAF9tUUgRqlOPIRK+O51e4g1g6ErgruBvm0HrFgyUpYEqXS/Lwj
-McNBNljYHdAejLfh9BPnC0xvfg1WRYR+2+PfP9IRso8PMud4eAwMn/1ir0KVtcyJ
-czYfh9SX61D2s1KQ7alWZYQPfSxa4A==
-=pwb/
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---FHJ0wrEYDAahKs6C--
+Thanks,
+Mark
