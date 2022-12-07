@@ -2,74 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CBA645727
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 11:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6B8645ABA
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 14:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiLGKIp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 05:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S229713AbiLGNWG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 08:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiLGKIo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 05:08:44 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22AF6478;
-        Wed,  7 Dec 2022 02:08:43 -0800 (PST)
+        with ESMTP id S229998AbiLGNWF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 08:22:05 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7C313E92;
+        Wed,  7 Dec 2022 05:22:02 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D0296602BCA;
-        Wed,  7 Dec 2022 10:08:41 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 842456602BB7;
+        Wed,  7 Dec 2022 13:22:00 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670407721;
-        bh=AyR0RJnVKrrqQBm9hFiiBr7ZIDDoQirRHSbrqdL6UgM=;
+        s=mail; t=1670419321;
+        bh=5IvuM0VxRR2WGFZC4WAyEDPJdPLpL4jxxdvYzPTnkAw=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Lt1ouqtzvN/cuiyAwGqv8hAf7z0yOZ7kKLfaiI2zvDgg+xHD+3X9XYLh4CPC+tpeE
-         VhrqNI5+jpml1H8zckoIDyzdcqhFTgeSKuQxKVbtMMZOJ1poRgLRvY0Pgp1PtKd44e
-         URFvFOQWTsc99dYvNbtT5MFbJcqH3/HYxxZaseaihah8pgMfxy5QD8Bo6fpBLClyM9
-         F298s/We7GqPdmqjnLOpHPmWcjMMy3tCTGUjKdw/rF8yMeP8OcNFi525DTelWSPp0C
-         qDH4/2Vqi0afKEOssANEbUKPrr/V+WKYSOpb7f9n5RUlKJMsORCAfAKfwhMejfodD5
-         0Me9nh+W+yTYg==
-Message-ID: <ff2931b5-948f-f013-056d-b0a78d7272d6@collabora.com>
-Date:   Wed, 7 Dec 2022 11:08:38 +0100
+        b=NVdEgp8g1QR/7fKNyrRd+8VM11louL3qmrQWF4rrKPMSGk7HKAOuP2MkyZARtLztG
+         f5gaXhnkZu5m1vvoUzl3bHH2Ld0qa1TXPxzmAkyKJtfsYaRoPLZL6/c5wxKazv7hMC
+         YlFuTgp3dUhZns+ssFjO3xgwnQWct076Cvo+1iUSJgpI6GRs9JfjJrLMeaOX2QZV+S
+         qa3at/oDoCqiOLoeuIOB17hDkJnAA1v/43PBHidZzq/hYY48+6CKgs9iKDy/0bUxMU
+         Gd/3RafdctTZrVARA/SJEvGLglKmlCoaSIh6BHv8L3p+6gsBgQDlYRJoSN6zbmqlhU
+         l62MoP3834h7Q==
+Message-ID: <8bec1bdb-2e22-d2bd-18bf-505f6dc75024@collabora.com>
+Date:   Wed, 7 Dec 2022 14:21:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 3/9] spi: mtk-snfi: Add optional nfi_hclk which needed
- for MT7986
+Subject: Re: [PATCH v2] spi: spi-mtk-nor: Add recovery mechanism for dma read
+ timeout
 Content-Language: en-US
-To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
-        <Xiangsheng.Hou@mediatek.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "gch981213@gmail.com" <gch981213@gmail.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "richard@nod.at" <richard@nod.at>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
-        <Benliang.Zhao@mediatek.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-4-xiangsheng.hou@mediatek.com>
- <ef2e6859-56e1-bbf0-dbde-44ea3d7d2f3f@collabora.com>
- <4db35ac3914e444b754f9075141fd69e07e7c858.camel@mediatek.com>
+To:     Bayi Cheng <bayi.cheng@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221207055435.30557-1-bayi.cheng@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4db35ac3914e444b754f9075141fd69e07e7c858.camel@mediatek.com>
+In-Reply-To: <20221207055435.30557-1-bayi.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,45 +62,21 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 07/12/22 02:42, Xiangsheng Hou (侯祥胜) ha scritto:
-> Hi Angelo,
+Il 07/12/22 06:54, Bayi Cheng ha scritto:
+> From: bayi cheng <bayi.cheng@mediatek.com>
 > 
-> On Mon, 2022-12-05 at 15:21 +0100, AngeloGioacchino Del Regno wrote:
->> Il 05/12/22 07:57, Xiangsheng Hou ha scritto:
->>> Add optional nfi_hclk which needed for MT7986.
->>>
->>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
->>
->> Is there any operation for which you need NFI_HCLK enabled, but at
->> the same time
->> PAD_CLK and/or NFI_CLK can be disabled?
+> The state machine of MTK spi nor controller may be disturbed by some
+> glitch signals from the relevant BUS during dma read, Although the
+> possibility of causing the dma read to fail is next to nothing,
+> However, if error-handling is not implemented, which makes the feature
+> somewhat risky.
 > 
-> No, for the new IP design on MT7986, will need the
-> PAD_CLK/NFI_CLK/NFI_HCLK enabled at the same time.
+> Add an error-handling mechanism here, reset the state machine and
+> re-read the data when an error occurs.
 > 
->> If NFI_HCLK and NFI_CLK must always be ON at the same time, adding
->> this clock to
->> spi-mtk-snfi.c is *not* an optimal way of doing things: you can, at
->> this point,
->> set NFI_HCLK as parent of NFI_CLK in the MT7986 clock driver instead,
->> without
->> making any addition to this driver at all.
-> 
-> For some IC, there may have only NFI_CLK/PAD_CLK, and have no NFI_HCLK,
-> this rely on IC design.
-> 
-
-I've just checked clk-mt7986-infracfg and we can't reparent NFI1_CK, nor SPINFI1_CK
-as they have xxxx_sel parents already, which are not common with the HCK.
-
-You're right, the addition of the nfi_hclk clock is needed, which means that for
-this commit, you get my
-
+> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-P.S.: Thanks for clarifying!
 
-Regards,
-Angelo
