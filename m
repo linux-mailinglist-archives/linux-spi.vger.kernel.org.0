@@ -2,88 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559AA645E97
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 17:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017676464DD
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Dec 2022 00:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiLGQVQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 11:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S230036AbiLGXPE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 18:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiLGQVO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 11:21:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C607663B94;
-        Wed,  7 Dec 2022 08:21:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 769FEB81EC3;
-        Wed,  7 Dec 2022 16:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE31C433D6;
-        Wed,  7 Dec 2022 16:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670430071;
-        bh=A652jjUzRU9IUq0/Tbi1nZ8daE3vz6KyEgWd61MjQeQ=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Bm0EtuV0rh1ztc6gO/xr4XkWN8I5E1KEGQoqSq2wfjeFPdv5bdJbxg3y6bfHo2Aca
-         raJMjqx8MCyss6uze5ol3HHDYsoIuSMRX1pY49p5pB7I7HSaaR5XE9zzp4L91gi7KN
-         Vh309j654o1ygWs7xoZT95P9XPZMCl/SsPvVdVgm4cEquoFcoRUo4qdQ9Jlwu+Dj5A
-         Nd89Suld7z4YGFhOM8fPrx3hsKEkTy7wvU9lhbhlsDYWzEMpV3gnWnA3QgMMgDZ9gm
-         +uA+vAqODlQp52CKSh224xMV3zvt3C6dxavTBL8LBy5RErEleYXZupFWmbuwnfKELD
-         cHufOE5WtixjA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Han Xu <han.xu@nxp.com>
-In-Reply-To: <20221206225410.604482-1-han.xu@nxp.com>
-References: <20221206225410.604482-1-han.xu@nxp.com>
-Subject: Re: [PATCH 1/2] spi: spi-fsl-lpspi: support multiple cs for lpspi
-Message-Id: <167043006949.286366.8466486306454456470.b4-ty@kernel.org>
-Date:   Wed, 07 Dec 2022 16:21:09 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-b77ec
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229470AbiLGXPD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 18:15:03 -0500
+X-Greylist: delayed 320 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 15:15:02 PST
+Received: from smtp-out3.electric.net (ipam.electric.net [208.70.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787CC84DE8;
+        Wed,  7 Dec 2022 15:15:02 -0800 (PST)
+Received: from 1p33Xn-0000xz-TP by out3b.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1p33Xo-000123-U1; Wed, 07 Dec 2022 15:09:40 -0800
+Received: by emcmailer; Wed, 07 Dec 2022 15:09:40 -0800
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1p33Xn-0000xz-TP; Wed, 07 Dec 2022 15:09:39 -0800
+Received: from tsdebian.ts-local.net (unknown [75.164.86.214])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 716BF6236;
+        Wed,  7 Dec 2022 16:09:59 -0700 (MST)
+From:   Kris Bahnsen <kris@embeddedTS.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, mark@embeddedTS.com,
+        Kris Bahnsen <kris@embeddedTS.com>
+Subject: [PATCH] spi: spi-gpio: Don't set MOSI as an input if not 3WIRE mode
+Date:   Wed,  7 Dec 2022 15:08:53 -0800
+Message-Id: <20221207230853.6174-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.11.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:DHE-RSA-SEED-SHA:128
+X-Authenticated_ID: 
+X-VIPRE-Scanners: virus_bd;virus_clamav;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=OImUirt3A4zEHL9+Yq4pc3tOb7R+KFknOF6v5ZWL6lU=;b=LpZvaY61SIyPJqu2rRwKWORDqecrRUcVZ2qdeS7oB2kQa6hodFFBmZyYtomdSk7mez8dhDom0FQH74oeViuQoE4P1B3OaN3lvuO8L5wKOeWVMHqBseXWzA3uG7pp8e8mZpQPOi6YFbV8wRlyMw0GWYNS8Rs3hvBjJJCZf56VPCDvIC7V/FWHw60gHChbe+/LjuWqEymEobnJpCtVM0Dh1pAL0BWONycZvrIFIk00FHMJRhW3lkQnnL+79nktkxDjjBz3/NoAa7hqJFGILLjMofcFDHTEpz/YDmN/twboOEaQKlMMhm0LxfkFttrisaRIjUPaeLD9u0zllRadeK0nYA==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 06 Dec 2022 16:54:09 -0600, Han Xu wrote:
-> support to get chip select number from DT file.
-> 
-> 
+The addition of 3WIRE support would affect MOSI direction even
+when still in standard (4 wire) mode. This can lead to MOSI being
+at an invalid logic level when a device driver sets an SPI
+message with a NULL tx_buf.
 
-Applied to
+spi.h states that if tx_buf is NULL then "zeros will be shifted
+out ... " If MOSI is tristated then the data shifted out is subject
+to pull resistors, keepers, or in the absence of those, noise.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This issue came to light when using spi-gpio connected to an
+ADS7843 touchscreen controller. MOSI pulled high when clocking
+MISO data in caused the SPI device to interpret this as a command
+which would put the device in an unexpected and non-functional
+state.
 
-Thanks!
+Fixes: 4b859db2c606 ("spi: spi-gpio: add SPI_3WIRE support")
+Fixes: 5132b3d28371 ("spi: gpio: Support 3WIRE high-impedance turn-around")
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+---
 
-[1/2] spi: spi-fsl-lpspi: support multiple cs for lpspi
-      commit: 5f947746f0089529c85654704643f158b420ff92
-[2/2] dt-bindings: spi: spi-fsl-lpspi: add num-cs for lpspi
-      commit: bc9ab1b7a6c687370b5d4edf34064bf04af8d369
+As an aside, I wasn't sure how to best put down the Fixes: tags.
+4b859db2c606 ("spi: spi-gpio: add SPI_3WIRE support") introduced the
+actual bug, but 5132b3d28371 ("spi: gpio: Support 3WIRE high-impedance turn-around")
+modified that commit slightly and is what this patch actually applies
+to. Let me know if marking both as fixes is incorrect and I can
+create another patch.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ drivers/spi/spi-gpio.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+index 4b12c4964a66..9c8c7948044e 100644
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -268,9 +268,19 @@ static int spi_gpio_set_direction(struct spi_device *spi, bool output)
+ 	if (output)
+ 		return gpiod_direction_output(spi_gpio->mosi, 1);
+ 
+-	ret = gpiod_direction_input(spi_gpio->mosi);
+-	if (ret)
+-		return ret;
++	/*
++	 * Only change MOSI to an input if using 3WIRE mode.
++	 * Otherwise, MOSI could be left floating if there is
++	 * no pull resistor connected to the I/O pin, or could
++	 * be left logic high if there is a pull-up. Transmitting
++	 * logic high when only clocking MISO data in can put some
++	 * SPI devices in to a bad state.
++	 */
++	if (spi->mode & SPI_3WIRE) {
++		ret = gpiod_direction_input(spi_gpio->mosi);
++		if (ret)
++			return ret;
++	}
+ 	/*
+ 	 * Send a turnaround high impedance cycle when switching
+ 	 * from output to input. Theoretically there should be
+-- 
+2.11.0
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
