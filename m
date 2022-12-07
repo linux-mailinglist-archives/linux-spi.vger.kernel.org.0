@@ -2,103 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA238645575
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 09:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6996456CC
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiLGIeE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 03:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S229895AbiLGJs5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 04:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLGIeC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 03:34:02 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF85B234
-        for <linux-spi@vger.kernel.org>; Wed,  7 Dec 2022 00:34:01 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id p8so27545258lfu.11
-        for <linux-spi@vger.kernel.org>; Wed, 07 Dec 2022 00:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jsMHoSaJZ/RmJWdf5f3TFvZf4OfNz9sV6+JBNDP4JV8=;
-        b=RS1tYNNTr4s5/nVaZsPTphJUqpmI0PC7gXP5BV7VNKTgvo0H59b/NZr8r4YH46ySv1
-         VGfv9BCb6EOmvgp1Eq7H+qXfi+HLOuRctW+5HjzirRY9zHHYEiPXKPAAFlfP/Da7+kJm
-         l2ISIXpW0vdyex6GvfAmtaIM3QV5I6YnRsQEZD6RP3uSfOCaC/7c2tLH6EX0Y47tuWH2
-         GNXVXRaIWT+YGBcxKNmhBS/3uhB/NQo2YdiI9oPQKA0tasCQEG8W2fnRZyNPWTlgp1Tt
-         vXg64YT7CKGsa45zYt0PJRFpGgUekQB1CUSM9bbYSiX8g9mZzeiC0PHk9MXPP3xHxhfm
-         VY9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jsMHoSaJZ/RmJWdf5f3TFvZf4OfNz9sV6+JBNDP4JV8=;
-        b=R0kfgj9+32ZSrFQ2AIZ0DNWAQyYjRD4S713gbZrZgp0iGbS8FnWFIvI2AJmVIzM7RR
-         Ft83PmWOBPrdfk4CFZkt6kMwNlOt9jwtphVIcL0o6MISzE9YMn7fKzEiqFaEvVAGuNHg
-         Z7UHVFipHwrojRdlj4yZisRF1OV0Wh3UmmvE2U2bxoqFjeJ6YXFCosN1G5Ig1RUPasT/
-         +sC6dv674C/xykxHoCU5JBYsqIQtMTxjB7Kwf3c9gIWwdtr7Z9xbu2n/oxBG/yVy7Qex
-         gM39ho5miZg3icGNvqKpsWgoTn0m3FQGLJgddwS/B1eGpvq2aAw4rYCnU41xUEWkdJAQ
-         WSyA==
-X-Gm-Message-State: ANoB5plcmIsB8qjXEE755QBdT+vn096SptOvn4VV36GGCENFzbPieM/v
-        u7ZTtpPnA1hVD4J86HhMAGk38g==
-X-Google-Smtp-Source: AA0mqf7h5ps7QVnOjtRWOYiJ9KoucFsWpDpiwRb0Iry1x7BcWGRKX0PTDzE2sRvZRoqLdphHr0xT4w==
-X-Received: by 2002:a19:c217:0:b0:4b5:88da:17e0 with SMTP id l23-20020a19c217000000b004b588da17e0mr1851841lfc.71.1670402040027;
-        Wed, 07 Dec 2022 00:34:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o21-20020a05651205d500b004a62ff61b3dsm2777517lfo.252.2022.12.07.00.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 00:33:59 -0800 (PST)
-Message-ID: <8b0ea3e8-1ae9-bb12-a468-f74f69983b8d@linaro.org>
-Date:   Wed, 7 Dec 2022 09:33:58 +0100
+        with ESMTP id S229718AbiLGJs4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 04:48:56 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F63137D;
+        Wed,  7 Dec 2022 01:48:50 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F4686602BC8;
+        Wed,  7 Dec 2022 09:48:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670406528;
+        bh=qNEpnM8ClbrtXrZA6HU6eUiqyAOy4w4SGFwvj+Zg7ZU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gYO5sj0NeKHGQdOIykdzKDXaUMR4eTpN/Gf5vQW9433/FCKI5EhWReF8ANjQZz+9T
+         W0yfMuhK2NpiNeriKtbQdjar477D0D4bftjuQv1UBwHpISOf+a2P8QSaLSV2CTAPpX
+         PVWvv2MgZF2bo4rBeATogcd6pXZX+O9TJeFqHAVOHIsz7DLGPcq0peRCGaCNeCCozj
+         ycUDIRukQFQmbdZRm495QMNSBFSreFa60eyKqlABw8OS+8W6i2+OZX1ZwEZ5cO+mGD
+         SyagMVmgnx4+tBSYfZkiyNLcqotoE5Qfh3RJxuktLwks9Chjnni+BLLfg4ECF7LEHz
+         U779io82HGe+w==
+Message-ID: <b877af37-462e-c923-41c0-09c370062700@collabora.com>
+Date:   Wed, 7 Dec 2022 10:48:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/2] dt-bindings: spi: spi-fsl-lpspi: add num-cs for lpspi
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
+ property
+To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
+        <Xiangsheng.Hou@mediatek.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "gch981213@gmail.com" <gch981213@gmail.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "richard@nod.at" <richard@nod.at>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
+        <Benliang.Zhao@mediatek.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
+References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
+ <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
+ <ce449a0c-efcc-0ac1-fb8e-c2b4148a5bc1@collabora.com>
+ <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
+ <9992c9a5-059a-9396-32ce-7ed63cd12a96@collabora.com>
+ <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
 Content-Language: en-US
-To:     Han Xu <han.xu@nxp.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20221206225410.604482-1-han.xu@nxp.com>
- <20221206225410.604482-2-han.xu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221206225410.604482-2-han.xu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/12/2022 23:54, Han Xu wrote:
-> Add num-cs property to support multiple cs for lpspi. This property is
-> optional.
+Il 07/12/22 03:00, Xiangsheng Hou (侯祥胜) ha scritto:
+> Hi Angelo,
 > 
-> Signed-off-by: Han Xu <han.xu@nxp.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> On Tue, 2022-12-06 at 13:19 +0100, AngeloGioacchino Del Regno wrote:
+>>>>> diff --git
+>>>>> a/Documentation/devicetree/bindings/spi/mediatek,spi-
+>>>>> mtk-snfi.yaml
+>>>>> b/Documentation/devicetree/bindings/spi/mediatek,spi-
+>>>>> mtk-snfi.yaml
+>>>>> index bab23f1b11fd..6e6ff8d73fcd 100644
+>>>>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
+>>>>> snfi.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
+>>>>> snfi.yaml
+>>>>> @@ -45,6 +45,13 @@ properties:
+>>>>>         description: device-tree node of the accompanying ECC
+>>>>> engine.
+>>>>>         $ref: /schemas/types.yaml#/definitions/phandle
+>>>>>     
+>>>>> +  mediatek,rx-latch-latency:
+>>>>> +    description: Rx delay to sample data with this value, the
+>>>>> value
+>>>>> +                 unit is clock cycle.
+>>>>
+>>>> Can't we use nanoseconds or microseconds as a unit here, instead
+>>>> of
+>>>> clock cycles?
+>>>
+>>> The clock cycle will be various with MediaTek SPI NAND controller
+>>> which
+>>> clock frequency can support 26/52/68/81/104MHz...
+>>> It`s may be easy to configure and understand with clock cycle in
+>>> unit.
+>>>
+>>
+>> Yes, but whatever clock frequency we use, the target is to always
+>> wait for
+>> X nanoseconds, right?
+>>
+>> Waiting for 5 clock cycles at 104MHz is obviously not the same as
+>> waiting
+>> for the same 5 clock cycles at 26MHz: in that case, expressing the
+>> value
+>> in nanoseconds or microseconds would make that independent from the
+>> controller's clock frequency as the calculation from `time` to
+>> `cycles`
+>> would be performed inside of the driver.
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> index 8b44284d30c6..94caa2b7e241 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> @@ -56,6 +56,13 @@ properties:
->        this property to re-config the chipselect value in the LPSPI driver.
->      type: boolean
->  
-> +  num-cs:
-> +    description:
-> +      number of chip selects.
+> There have two rx related timing properties in spi-peripheral-props.
+> The rx-sample-delay-ns have been used in Mediatek snfi driver to adjust
+> controller sample delay.
+> However another spi-rx-delay-us is in microseconds. Take 52MHz for
+> example, the clock cycle will be 19.23ns which lower than 1us. This may
+> not easy to by one clock cycle.
+> 
 
-You do not need description, it's already in spi-controller.yaml.
+I agree, but nothing prevents you from adding your own property for that.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I propose "mediatek,rx-latch-latency-ns" or "mediatek,rx-latency-ns", so that
+we can specify the delay in nanoseconds: in that case, when we specify 19ns,
+the driver will safely round that resulting in 52MHz == 19.23ns => 19ns valid.
 
-Best regards,
-Krzysztof
+Regards,
+Angelo
 
