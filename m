@@ -2,140 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40A36453C4
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 06:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDFC645418
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 07:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiLGF4G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 00:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S229760AbiLGGjE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 01:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiLGFzh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 00:55:37 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F6A58BD7;
-        Tue,  6 Dec 2022 21:54:46 -0800 (PST)
-X-UUID: 77947c900e254c3cabf6f9d2e91f9499-20221207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Ftv+zxGMO96uvHy3jqmtrqARC5DnXXOr5/mLoPd06k4=;
-        b=PeSup/zty3kKR6OXmfasnxVKzAJc03Frnntb2Nzq+gwrij3o41Kvu7PD+DopirmZVoarRFKYMhfLTHnFfuzyhZqhG2UPXe5DLjuTekhQ2jO/Lhy5++d2ltQY8ifhHzY6ZT2dcQcBhxaC9bzSM2sMHbjm4DHYtbGnnLtbo4gC7fk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:19506cac-e56c-4c82-8a67-f160b814a8e3,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:dcaaed0,CLOUDID:6518e0d1-652d-43fd-a13a-a5dd3c69a43d,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 77947c900e254c3cabf6f9d2e91f9499-20221207
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <bayi.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 909069027; Wed, 07 Dec 2022 13:54:39 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 7 Dec 2022 13:54:37 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 7 Dec 2022 13:54:37 +0800
-From:   Bayi Cheng <bayi.cheng@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        bayi cheng <bayi.cheng@mediatek.com>
-Subject: [PATCH v2] spi: spi-mtk-nor: Add recovery mechanism for dma read timeout
-Date:   Wed, 7 Dec 2022 13:54:35 +0800
-Message-ID: <20221207055435.30557-1-bayi.cheng@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229834AbiLGGi7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 01:38:59 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C52B245;
+        Tue,  6 Dec 2022 22:38:59 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2B76ckkG071199;
+        Wed, 7 Dec 2022 00:38:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1670395126;
+        bh=/V+T88l8oC9cpiyVXjUF8saOMdaTLVrK6AsbdMLgbko=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=y74KxFnKI+/Z1gmb660fiMOYyZH3VqsnjPuvTTctyrdKVj3fafdMDFPraLe3NDRtC
+         cEfjvYSzv0scEQ6MQCB47tR9dEWC9d1QppLJclWHXpCMdStLYW3UrKYu6bwzoh9+A5
+         5gJLcHlXagZ9wUutqN8Q3DZYM3PXHGcNloYPI0IA=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2B76ckZl009827
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Dec 2022 00:38:46 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 7
+ Dec 2022 00:38:45 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 7 Dec 2022 00:38:45 -0600
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2B76chuv115915;
+        Wed, 7 Dec 2022 00:38:44 -0600
+Message-ID: <4ed39c8f-3736-30d6-8d8c-92a4882b72e7@ti.com>
+Date:   Wed, 7 Dec 2022 12:08:43 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] spi: spi-fsl-lpspi: support multiple cs for lpspi
+Content-Language: en-US
+To:     Han Xu <han.xu@nxp.com>, <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+References: <20221206225410.604482-1-han.xu@nxp.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20221206225410.604482-1-han.xu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: bayi cheng <bayi.cheng@mediatek.com>
+Hi,
 
-The state machine of MTK spi nor controller may be disturbed by some
-glitch signals from the relevant BUS during dma read, Although the
-possibility of causing the dma read to fail is next to nothing,
-However, if error-handling is not implemented, which makes the feature
-somewhat risky.
+On 07/12/22 04:24, Han Xu wrote:
+> support to get chip select number from DT file.
 
-Add an error-handling mechanism here, reset the state machine and
-re-read the data when an error occurs.
+In my humble opinion, a  more elaborate commit message would help.
+You can add perhaps which DT node is to be set, like you might want
+to say,
 
-Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
----
-Change in v2:
-  -Add a new function mtk_nor_reset() to reset host state machine.
+support to get chip select number by Setting the value of num-cs in DT
 
-Change in v1:
-  -Reset the state machine when dma read fails and read again.
----
----
- drivers/spi/spi-mtk-nor.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+or something on those lines.
+> 
+> Signed-off-by: Han Xu <han.xu@nxp.com>
+> ---
+>   drivers/spi/spi-fsl-lpspi.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+> index 6454b88c31fe..7f0562ed4d09 100644
+> --- a/drivers/spi/spi-fsl-lpspi.c
+> +++ b/drivers/spi/spi-fsl-lpspi.c
+> @@ -98,6 +98,7 @@ struct fsl_lpspi_data {
+>   	struct clk *clk_ipg;
+>   	struct clk *clk_per;
+>   	bool is_slave;
+> +	u32 num_cs;
+>   	bool is_only_cs1;
+>   	bool is_first_byte;
+>   
+> @@ -850,6 +851,9 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+>   	fsl_lpspi->is_slave = is_slave;
+>   	fsl_lpspi->is_only_cs1 = of_property_read_bool((&pdev->dev)->of_node,
+>   						"fsl,spi-only-use-cs1-sel");
+> +	if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
+Running a checkpatch on this patch gave me the following,
 
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index d167699a1a96..d07f50337f43 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -80,6 +80,9 @@
- #define MTK_NOR_REG_DMA_FADR		0x71c
- #define MTK_NOR_REG_DMA_DADR		0x720
- #define MTK_NOR_REG_DMA_END_DADR	0x724
-+#define MTK_NOR_REG_CG_DIS		0x728
-+#define MTK_NOR_SFC_SW_RST		BIT(2)
-+
- #define MTK_NOR_REG_DMA_DADR_HB		0x738
- #define MTK_NOR_REG_DMA_END_DADR_HB	0x73c
- 
-@@ -147,6 +150,15 @@ static inline int mtk_nor_cmd_exec(struct mtk_nor *sp, u32 cmd, ulong clk)
- 	return ret;
- }
- 
-+static void mtk_nor_reset(struct mtk_nor *sp)
-+{
-+	mtk_nor_rmw(sp, MTK_NOR_REG_CG_DIS, 0, MTK_NOR_SFC_SW_RST);
-+	mb(); /* flush previous writes */
-+	mtk_nor_rmw(sp, MTK_NOR_REG_CG_DIS, MTK_NOR_SFC_SW_RST, 0);
-+	mb(); /* flush previous writes */
-+	writel(MTK_NOR_ENABLE_SF_CMD, sp->base + MTK_NOR_REG_WP);
-+}
-+
- static void mtk_nor_set_addr(struct mtk_nor *sp, const struct spi_mem_op *op)
- {
- 	u32 addr = op->addr.val;
-@@ -616,7 +628,15 @@ static int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 			mtk_nor_set_addr(sp, op);
- 			return mtk_nor_read_pio(sp, op);
- 		} else {
--			return mtk_nor_read_dma(sp, op);
-+			ret = mtk_nor_read_dma(sp, op);
-+			if (unlikely(ret)) {
-+				/* Handle rare bus glitch */
-+				mtk_nor_reset(sp);
-+				mtk_nor_setup_bus(sp, op);
-+				return mtk_nor_read_dma(sp, op);
-+			}
-+
-+			return ret;
- 		}
- 	}
- 
+CHECK: Unnecessary parentheses around '&pdev->dev'
+#36: FILE: drivers/spi/spi-fsl-lpspi.c:854:
++       if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
++                                &fsl_lpspi->num_cs))
+
+You might want to just do &pdev->dev->of_node instead
+
+> +				 &fsl_lpspi->num_cs))
+> +		fsl_lpspi->num_cs = 1;
+I am not sure I understand why you are setting this to 1 here?
+I am assuming it is because you want num_cs to default to 1 if
+it is not specified in DT.
+
+Please can you also add a dev_err and be sure to warn about this?
+
+Also adding a comment or even a message inside dev err that you are
+setting this to 1 if it fails to get from DT would be helpful.
+
+>   
+>   	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 32);
+>   	controller->transfer_one = fsl_lpspi_transfer_one;
+> @@ -859,6 +863,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+>   	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
+>   	controller->dev.of_node = pdev->dev.of_node;
+>   	controller->bus_num = pdev->id;
+> +	controller->num_chipselect = fsl_lpspi->num_cs;
+>   	controller->slave_abort = fsl_lpspi_slave_abort;
+>   	if (!fsl_lpspi->is_slave)
+>   		controller->use_gpio_descriptors = true;
+
 -- 
-2.18.0
-
+Thanks and Regards,
+Dhruva Gole
