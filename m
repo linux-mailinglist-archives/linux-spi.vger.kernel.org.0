@@ -2,42 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6996456CC
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 10:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CBA645727
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Dec 2022 11:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiLGJs5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Dec 2022 04:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S230064AbiLGKIp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Dec 2022 05:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiLGJs4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 04:48:56 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F63137D;
-        Wed,  7 Dec 2022 01:48:50 -0800 (PST)
+        with ESMTP id S230078AbiLGKIo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Dec 2022 05:08:44 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22AF6478;
+        Wed,  7 Dec 2022 02:08:43 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F4686602BC8;
-        Wed,  7 Dec 2022 09:48:47 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D0296602BCA;
+        Wed,  7 Dec 2022 10:08:41 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670406528;
-        bh=qNEpnM8ClbrtXrZA6HU6eUiqyAOy4w4SGFwvj+Zg7ZU=;
+        s=mail; t=1670407721;
+        bh=AyR0RJnVKrrqQBm9hFiiBr7ZIDDoQirRHSbrqdL6UgM=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gYO5sj0NeKHGQdOIykdzKDXaUMR4eTpN/Gf5vQW9433/FCKI5EhWReF8ANjQZz+9T
-         W0yfMuhK2NpiNeriKtbQdjar477D0D4bftjuQv1UBwHpISOf+a2P8QSaLSV2CTAPpX
-         PVWvv2MgZF2bo4rBeATogcd6pXZX+O9TJeFqHAVOHIsz7DLGPcq0peRCGaCNeCCozj
-         ycUDIRukQFQmbdZRm495QMNSBFSreFa60eyKqlABw8OS+8W6i2+OZX1ZwEZ5cO+mGD
-         SyagMVmgnx4+tBSYfZkiyNLcqotoE5Qfh3RJxuktLwks9Chjnni+BLLfg4ECF7LEHz
-         U779io82HGe+w==
-Message-ID: <b877af37-462e-c923-41c0-09c370062700@collabora.com>
-Date:   Wed, 7 Dec 2022 10:48:44 +0100
+        b=Lt1ouqtzvN/cuiyAwGqv8hAf7z0yOZ7kKLfaiI2zvDgg+xHD+3X9XYLh4CPC+tpeE
+         VhrqNI5+jpml1H8zckoIDyzdcqhFTgeSKuQxKVbtMMZOJ1poRgLRvY0Pgp1PtKd44e
+         URFvFOQWTsc99dYvNbtT5MFbJcqH3/HYxxZaseaihah8pgMfxy5QD8Bo6fpBLClyM9
+         F298s/We7GqPdmqjnLOpHPmWcjMMy3tCTGUjKdw/rF8yMeP8OcNFi525DTelWSPp0C
+         qDH4/2Vqi0afKEOssANEbUKPrr/V+WKYSOpb7f9n5RUlKJMsORCAfAKfwhMejfodD5
+         0Me9nh+W+yTYg==
+Message-ID: <ff2931b5-948f-f013-056d-b0a78d7272d6@collabora.com>
+Date:   Wed, 7 Dec 2022 11:08:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
+Subject: Re: [PATCH v2 3/9] spi: mtk-snfi: Add optional nfi_hclk which needed
+ for MT7986
+Content-Language: en-US
 To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
         <Xiangsheng.Hou@mediatek.com>,
         "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
@@ -61,15 +62,12 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
 References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
- <ce449a0c-efcc-0ac1-fb8e-c2b4148a5bc1@collabora.com>
- <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
- <9992c9a5-059a-9396-32ce-7ed63cd12a96@collabora.com>
- <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
-Content-Language: en-US
+ <20221205065756.26875-4-xiangsheng.hou@mediatek.com>
+ <ef2e6859-56e1-bbf0-dbde-44ea3d7d2f3f@collabora.com>
+ <4db35ac3914e444b754f9075141fd69e07e7c858.camel@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
+In-Reply-To: <4db35ac3914e444b754f9075141fd69e07e7c858.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,68 +79,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 07/12/22 03:00, Xiangsheng Hou (侯祥胜) ha scritto:
+Il 07/12/22 02:42, Xiangsheng Hou (侯祥胜) ha scritto:
 > Hi Angelo,
 > 
-> On Tue, 2022-12-06 at 13:19 +0100, AngeloGioacchino Del Regno wrote:
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/spi/mediatek,spi-
->>>>> mtk-snfi.yaml
->>>>> b/Documentation/devicetree/bindings/spi/mediatek,spi-
->>>>> mtk-snfi.yaml
->>>>> index bab23f1b11fd..6e6ff8d73fcd 100644
->>>>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>>>> snfi.yaml
->>>>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>>>> snfi.yaml
->>>>> @@ -45,6 +45,13 @@ properties:
->>>>>         description: device-tree node of the accompanying ECC
->>>>> engine.
->>>>>         $ref: /schemas/types.yaml#/definitions/phandle
->>>>>     
->>>>> +  mediatek,rx-latch-latency:
->>>>> +    description: Rx delay to sample data with this value, the
->>>>> value
->>>>> +                 unit is clock cycle.
->>>>
->>>> Can't we use nanoseconds or microseconds as a unit here, instead
->>>> of
->>>> clock cycles?
+> On Mon, 2022-12-05 at 15:21 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 05/12/22 07:57, Xiangsheng Hou ha scritto:
+>>> Add optional nfi_hclk which needed for MT7986.
 >>>
->>> The clock cycle will be various with MediaTek SPI NAND controller
->>> which
->>> clock frequency can support 26/52/68/81/104MHz...
->>> It`s may be easy to configure and understand with clock cycle in
->>> unit.
->>>
+>>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 >>
->> Yes, but whatever clock frequency we use, the target is to always
->> wait for
->> X nanoseconds, right?
->>
->> Waiting for 5 clock cycles at 104MHz is obviously not the same as
->> waiting
->> for the same 5 clock cycles at 26MHz: in that case, expressing the
->> value
->> in nanoseconds or microseconds would make that independent from the
->> controller's clock frequency as the calculation from `time` to
->> `cycles`
->> would be performed inside of the driver.
+>> Is there any operation for which you need NFI_HCLK enabled, but at
+>> the same time
+>> PAD_CLK and/or NFI_CLK can be disabled?
 > 
-> There have two rx related timing properties in spi-peripheral-props.
-> The rx-sample-delay-ns have been used in Mediatek snfi driver to adjust
-> controller sample delay.
-> However another spi-rx-delay-us is in microseconds. Take 52MHz for
-> example, the clock cycle will be 19.23ns which lower than 1us. This may
-> not easy to by one clock cycle.
+> No, for the new IP design on MT7986, will need the
+> PAD_CLK/NFI_CLK/NFI_HCLK enabled at the same time.
+> 
+>> If NFI_HCLK and NFI_CLK must always be ON at the same time, adding
+>> this clock to
+>> spi-mtk-snfi.c is *not* an optimal way of doing things: you can, at
+>> this point,
+>> set NFI_HCLK as parent of NFI_CLK in the MT7986 clock driver instead,
+>> without
+>> making any addition to this driver at all.
+> 
+> For some IC, there may have only NFI_CLK/PAD_CLK, and have no NFI_HCLK,
+> this rely on IC design.
 > 
 
-I agree, but nothing prevents you from adding your own property for that.
+I've just checked clk-mt7986-infracfg and we can't reparent NFI1_CK, nor SPINFI1_CK
+as they have xxxx_sel parents already, which are not common with the HCK.
 
-I propose "mediatek,rx-latch-latency-ns" or "mediatek,rx-latency-ns", so that
-we can specify the delay in nanoseconds: in that case, when we specify 19ns,
-the driver will safely round that resulting in 52MHz == 19.23ns => 19ns valid.
+You're right, the addition of the nfi_hclk clock is needed, which means that for
+this commit, you get my
+
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
+P.S.: Thanks for clarifying!
 
 Regards,
 Angelo
-
