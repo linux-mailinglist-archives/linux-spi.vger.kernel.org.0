@@ -2,135 +2,181 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53693646AF7
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Dec 2022 09:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E06E646C15
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Dec 2022 10:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiLHIr6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Dec 2022 03:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S230199AbiLHJoW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Dec 2022 04:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiLHIrd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Dec 2022 03:47:33 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D1261BA5
-        for <linux-spi@vger.kernel.org>; Thu,  8 Dec 2022 00:46:30 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id a7so802739ljq.12
-        for <linux-spi@vger.kernel.org>; Thu, 08 Dec 2022 00:46:30 -0800 (PST)
+        with ESMTP id S229776AbiLHJoW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Dec 2022 04:44:22 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FD06E542
+        for <linux-spi@vger.kernel.org>; Thu,  8 Dec 2022 01:44:21 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id g7so1204287lfv.5
+        for <linux-spi@vger.kernel.org>; Thu, 08 Dec 2022 01:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeN4tbC8QYcjeXtnRCV0L0VBx1w71ZeUSLmAb6QYLH4=;
-        b=qH4NqlWKo3zt47ik7YIU7kmdLYYcvVcO6GSKeDJl6/FJDRKqjaKiZ20t70P3vsf5en
-         um9WTdmrMn0KhBo63A72CPiffEesD3chqRklTOKElHTQ4s2trN/3Zm/GF/By4MdxhqXm
-         vTax0XL5x02hgxffuacSJPfnFtYy1DvGMzk6aVd3SLy/vM3Z4lW1GnG1m1FEag5ta2Bt
-         tN2HRl85CSq/83+XNMmD1hS0qu5Fx0fsLwFanA2YLaQTzAro8a+h4HLCDwuHXsVqFNcQ
-         sVBatq/pAHSSUMeH0R140l91GO9ceAMmsmEfvL/YNTrKlK3EX3zbBaPSvJRI4gFdX93x
-         Gtww==
+        bh=tR+f/+3nybjrz985QuJTlkfFuvKyHlsK8G2EHEYD21M=;
+        b=NvP+hneTcrJLq5aKAbWBlzRJJD/2srJe9IAT/Pq2hUX9OAuJ1vz01KfcttkSjfGWq6
+         MkVQq1uw8kaTQSnVB8uX4rSsEPLC1n/PxH/go/ginVJgW0kAhDGkoNoRs1nCQHSk4/ck
+         94ktgccj6TDjOHMk+TlN+wvvuCtzqnhdW7+fA1IExI/sPZyyW9qQ4IwDE45IaqKWgC1L
+         fz0+PgDy6EuN18RY7i+dTcRX5m1e/rFaC7S5djIFlmkXMFDMfb3lBRwtf1W/F9Vre7Gh
+         5Y9A7wMqnRq2lIyDogonPN6I6vu4NSaPH0jxR54Lwuur/QSXC6XPAOQghUC7UTeLNFms
+         ZW0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeN4tbC8QYcjeXtnRCV0L0VBx1w71ZeUSLmAb6QYLH4=;
-        b=EE19GqToQ8gB4IseSroykQJBaFRWha7okNiDfGMS/C5QnTdAmnad5Sw+p7KMRwsMlJ
-         N5S8Akp0DejBzVy9GFJpCvyRUAwp77j/EKKZix/OYhV+TnOamPtR5vbL4Z0newRcAGTc
-         2HNwl0SaRHo9EyG0BnQCul8RTegJ9R3KEd0U9wxZpBWO9Oz9TAytmAkmiUvu0zvj6Iaf
-         nX6RYd9SpS5gK89kUyTEAyxaQr+RkK/XJEY4vJfQ3Thak+lr1zdafhWb7oDvaXu0rgfw
-         9DD1aHGGtj8Km8CY/aBT07Uf53fNQczRoUUsSOSO8417hOu3BqfIwMxyBNZROoIwjGaq
-         NQlQ==
-X-Gm-Message-State: ANoB5pmC1KtFn5Yzz2/Kq6/x7Ac7MOZ/38LWhXjKDwzrf58ZCadjqZ3U
-        HQm03HsfO7yPahO7kx3luUVYhA==
-X-Google-Smtp-Source: AA0mqf4oyc9MWULxVZ5mmTZx6NmoFsEfusvnFxRcT6pk965wUtiV7p7TVZN0HGcgHbu3gYT4dV3T2A==
-X-Received: by 2002:a05:651c:50f:b0:279:dbb8:4549 with SMTP id o15-20020a05651c050f00b00279dbb84549mr8910987ljp.79.1670489188855;
-        Thu, 08 Dec 2022 00:46:28 -0800 (PST)
+        bh=tR+f/+3nybjrz985QuJTlkfFuvKyHlsK8G2EHEYD21M=;
+        b=LMkHgT9jtsdU5VwpZ1fG0QKckdXx9mXlK/8n1LpKEPuwlXNiuC0LId53V4MjqrOlNe
+         0nyi7w+Qj/v41KIfZO+iiEnWR+XYIETq2PuC27a6UeXXc35Q6AJ05QEwyduok9trnKyJ
+         vRTV/JkyCfdDZIQpEzF3R2K5dgVNXBSyYkr2VDSNtFb4RW25i5U1K2Vcm/POqUeZFGCh
+         NSUrFXHdN7wy2j13P3pUmMalCwzCcG53ugpGS/qecLBNYYiwYUIG4YmIHgdQxHuIgxkF
+         4oJPhTVP2gUJ9ftNCk8k0+b1bzTvQsoeZW7Xy1XMN8n1IhcfFxy8VY/GfhyQpzOeNsLn
+         lECw==
+X-Gm-Message-State: ANoB5plWGeMH85V9v6nduA23EerqAyGoheUVsqCxMS5KaZ6wu7ONxXHu
+        e2V0LTSpm0Q3GXHR1Yc/tfEDxA==
+X-Google-Smtp-Source: AA0mqf77vkoDAk7e+na4oDIjnlgURFAAvORsW7EKDtnaXGZNkHzBFx7iahF6vIP8MxlwXav31qtCag==
+X-Received: by 2002:a05:6512:31c5:b0:4a2:3ca7:3a44 with SMTP id j5-20020a05651231c500b004a23ca73a44mr26614010lfe.23.1670492659337;
+        Thu, 08 Dec 2022 01:44:19 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m18-20020a194352000000b004b55ca53543sm2169721lfj.233.2022.12.08.00.46.27
+        by smtp.gmail.com with ESMTPSA id d23-20020a194f17000000b0049482adb3basm3257906lfb.63.2022.12.08.01.44.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 00:46:28 -0800 (PST)
-Message-ID: <d5f58e82-2644-3e16-f27a-de72ed8ab74d@linaro.org>
-Date:   Thu, 8 Dec 2022 09:46:26 +0100
+        Thu, 08 Dec 2022 01:44:18 -0800 (PST)
+Message-ID: <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
+Date:   Thu, 8 Dec 2022 10:44:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
+Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
 Content-Language: en-US
-To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
-        <Xiangsheng.Hou@mediatek.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "gch981213@gmail.com" <gch981213@gmail.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "richard@nod.at" <richard@nod.at>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
-        <Benliang.Zhao@mediatek.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
- <ce449a0c-efcc-0ac1-fb8e-c2b4148a5bc1@collabora.com>
- <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
- <9992c9a5-059a-9396-32ce-7ed63cd12a96@collabora.com>
- <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
- <b877af37-462e-c923-41c0-09c370062700@collabora.com>
- <97408c484927b6520ec79b23220496d628156e5f.camel@mediatek.com>
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+ <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <97408c484927b6520ec79b23220496d628156e5f.camel@mediatek.com>
+In-Reply-To: <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/12/2022 02:15, Xiangsheng Hou (侯祥胜) wrote:
->>>
->>> There have two rx related timing properties in spi-peripheral-
->>> props.
->>> The rx-sample-delay-ns have been used in Mediatek snfi driver to
->>> adjust
->>> controller sample delay.
->>> However another spi-rx-delay-us is in microseconds. Take 52MHz for
->>> example, the clock cycle will be 19.23ns which lower than 1us. This
->>> may
->>> not easy to by one clock cycle.
->>>
->>
->> I agree, but nothing prevents you from adding your own property for
->> that.
->>
->> I propose "mediatek,rx-latch-latency-ns" or "mediatek,rx-latency-ns", 
->> so that
->> we can specify the delay in nanoseconds: in that case, when we
->> specify 19ns,
->> the driver will safely round that resulting in 52MHz == 19.23ns =>
->> 19ns valid.
+On 08/12/2022 07:29, Xiangsheng Hou wrote:
+> Split MediaTek ECC engine with rawnand controller and convert to
+> YAML schema.
 > 
-> Will be fixed in next series.
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> ---
+>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
+>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+>  3 files changed, 216 insertions(+), 176 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> new file mode 100644
+> index 000000000000..eb1a44c7ae4e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> @@ -0,0 +1,154 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+> +
+> +maintainers:
+> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt2701-nfc
+> +      - mediatek,mt2712-nfc
+> +      - mediatek,mt7622-nfc
+> +
+> +  reg:
+> +    items:
+> +      - description: Base physical address and size of NFI.
+> +
+> +  interrupts:
+> +    items:
+> +      - description: NFI interrupt
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the controller
+> +      - description: clock used for the pad
+> +
+> +  clock-names:
+> +    items:
+> +      - const: nfi_clk
+> +      - const: pad_clk
+> +
+> +  ecc-engine:
+> +    description: device-tree node of the required ECC engine.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +patternProperties:
+> +  "^nand@[a-f0-9]$":
+> +    type: object
 
-I am fine with this approach, but after explanations I was also fine
-with clock cycles as unit. It's still quite specific unit and I think
-several timings on buses are clock-cycle dependent, not time dependent.
+This should be instead:
+    $ref: nand-chip.yaml#
+    unevaluatedProperties: false
+
+and then properties below (due to current dtschema limitations) should
+list properties from nand-controller.yaml:
+
+      nand-on-flash-bbt: true
+
+Optionally, we could create additional schema - nand-controller-chip,
+which would be referenced directly by nand-controller and itself would
+ref nand-chip.
+
+> +    properties:
+> +      reg:
+> +        minimum: 0
+
+no need, 0 is the minimum.
+
+> +        maximum: 1
+> +      nand-ecc-mode:
+> +        const: hw
+> +
+> +allOf:
+> +  - $ref: nand-controller.yaml#
+> +
+> +  - if:
 
 Best regards,
 Krzysztof
