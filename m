@@ -2,36 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516FA646C52
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Dec 2022 11:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D76646CB0
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Dec 2022 11:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiLHKAq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Dec 2022 05:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S229572AbiLHK1g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Dec 2022 05:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLHKAp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Dec 2022 05:00:45 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B881164AB;
-        Thu,  8 Dec 2022 02:00:42 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0607420003;
-        Thu,  8 Dec 2022 10:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670493641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pQBvnBipF0jBYBuu1EcKJlR/pd4YO5GJfr3JHPYqAq8=;
-        b=nHcSa8RDjNx8DzhiTHdnU62FP/U3JJFVD/kHc9FRwYndvpGihZr8KVG5P3UdSF/xTo4u2v
-        +5JyQUxoQvDH5LFHTBxynsI7WZm+tjoremxnDBAN29LIip92uhp2yPPoYAFk6naOyHqako
-        vrCPsn27kC0s95MhEALjy8UeHjE9LZzUO19D+K6X3KM7TMIaZAdVR+fQAO2npW0ycNH54L
-        U2VADhsqdaMr3hdyuVrwoqMT3t6MdCwV6Ok2YX0960rhpZXhuViLxqyX2uUnMAHZlRB7IA
-        UjJOAQ+XxF0KOCp1d6WHagxXOghUylxmnaity+qqz1a+81FqR2bNqC825po7DQ==
-Date:   Thu, 8 Dec 2022 11:00:35 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229530AbiLHK1f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Dec 2022 05:27:35 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C725916D
+        for <linux-spi@vger.kernel.org>; Thu,  8 Dec 2022 02:27:31 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id y25so1342551lfa.9
+        for <linux-spi@vger.kernel.org>; Thu, 08 Dec 2022 02:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=08K5Vlx4IB2Dsl4MLI7dMUqa7FCe1uwxxccMSj5m7Jc=;
+        b=IixV+1uuN0bY/bbX/+N1Lj3Yzho/GsLoaPm65A55jNVZnGBKdqqPJHjimnAVhl56jG
+         KkHyze5xgI+sqQzAHIwAnyBQlnetfyzeAarswqTTSMXXcJNiQTtHWLlyr2HKy6RJHB3z
+         ftbwsIEMBQHSadpP1Bt5ZwTO7fLPQ6u61hiDiuROWH4cjz5jlPIxKlw8V2u6uH5Ao8X6
+         ghDfPPV54N7yzq3bpv7U8lCMbuW1HOhxWsVQ661f4FCHJfSLxQzRaiJTq2EIx/m89PDH
+         15wEdAs1fzHM+kIxmA0U77aUjmrFCD3ZXlg68lUD2GXnrrxUfb7cp6sY2zmfuaNILclm
+         Db6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=08K5Vlx4IB2Dsl4MLI7dMUqa7FCe1uwxxccMSj5m7Jc=;
+        b=ymGbHRIjye3GuqA8x50goDb0+T1yaajYUWCp62ow/ZOxV90xOkin65kVxNvdTBgh61
+         GMq061JcCpPPRGcjUrRuq2KJ5ib5PLbq00ojN5Q+XFXAWmHRy/zIVQxZ/7oq31t/d8IT
+         FjEXZnxuJBqHfBP3tVFsr0IZs6BdZBC45tYD+3N3XnlXFIi8Uubih8Qyhvt/TNh5r+Ih
+         sXY0gsz5u/f/Zs7TDKTQjtT1MGpt+WXvT9QpCSzeeVrfn2Mm8++WUy9jRMhExeGG2usm
+         3NROvypXP8kHSEdy7LFcVWSNl0cIrKu9dG0dcD/2jtuCSSrRXlfByDkatHWeRI5yYV3Z
+         GldQ==
+X-Gm-Message-State: ANoB5pl3KHaUUZUVN4eFBinaS+yTYJlEh699iVUDJQyV9LBo9fRfIFJP
+        JMMk8Cb6DgEfMudaJX5hrREglw==
+X-Google-Smtp-Source: AA0mqf7/AP5zYXuEc0m0ov+YEb0CvMKWc7CDgcN+N/jX1BqZ0D2ehR+bjn3ZqxsyUTZwP+wrkY7e3w==
+X-Received: by 2002:a05:6512:c29:b0:4b1:b061:4815 with SMTP id z41-20020a0565120c2900b004b1b0614815mr30077826lfu.18.1670495249722;
+        Thu, 08 Dec 2022 02:27:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v7-20020ac25927000000b0048a982ad0a8sm3304728lfi.23.2022.12.08.02.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 02:27:29 -0800 (PST)
+Message-ID: <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
+Date:   Thu, 8 Dec 2022 11:27:27 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -45,114 +71,122 @@ Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
         bin.zhang@mediatek.com
-Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
- controller
-Message-ID: <20221208110035.5649a051@xps-13>
-In-Reply-To: <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
 References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
-        <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
-        <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+ <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
+ <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
+ <20221208110035.5649a051@xps-13>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208110035.5649a051@xps-13>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
+On 08/12/2022 11:00, Miquel Raynal wrote:
+> Hi Krzysztof,
+> 
+> krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
+> 
+>> On 08/12/2022 07:29, Xiangsheng Hou wrote:
+>>> Split MediaTek ECC engine with rawnand controller and convert to
+>>> YAML schema.
+>>>
+>>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+>>> ---
+>>>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
+>>>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+>>>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+>>>  3 files changed, 216 insertions(+), 176 deletions(-)
+>>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+>>>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>> new file mode 100644
+>>> index 000000000000..eb1a44c7ae4e
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>> @@ -0,0 +1,154 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+>>> +
+>>> +maintainers:
+>>> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - mediatek,mt2701-nfc
+>>> +      - mediatek,mt2712-nfc
+>>> +      - mediatek,mt7622-nfc
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: Base physical address and size of NFI.
+>>> +
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: NFI interrupt
+>>> +
+>>> +  clocks:
+>>> +    items:
+>>> +      - description: clock used for the controller
+>>> +      - description: clock used for the pad
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: nfi_clk
+>>> +      - const: pad_clk
+>>> +
+>>> +  ecc-engine:
+>>> +    description: device-tree node of the required ECC engine.
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +
+>>> +patternProperties:
+>>> +  "^nand@[a-f0-9]$":
+>>> +    type: object  
+>>
+>> This should be instead:
+>>     $ref: nand-chip.yaml#
+>>     unevaluatedProperties: false
+>>
+>> and then properties below (due to current dtschema limitations) should
+>> list properties from nand-controller.yaml:
+>>
+>>       nand-on-flash-bbt: true
+>>
+>> Optionally, we could create additional schema - nand-controller-chip,
+>> which would be referenced directly by nand-controller and itself would
+>> ref nand-chip.
+> 
+> Isn't this enough? (in linux-next)
+> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Documentation/devicetree/bindings/mtd/nand-controller.yaml?h=mtd/next#n54
 
-krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
+No, I tested it and it does not work as intended. In this particular
+case. I think this is a limitation of dtschema, because binding itself
+looks fine. The problem is that you have:
+1. mtk-nfc having nand@ children. mtk-nfc references nand-controller
+which brings these children.
+2. However nand-controller while bringing these children does two things:
+a. ref: nand-chip
+b. add more propeties
 
-> On 08/12/2022 07:29, Xiangsheng Hou wrote:
-> > Split MediaTek ECC engine with rawnand controller and convert to
-> > YAML schema.
-> >=20
-> > Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> > ---
-> >  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
-> >  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
-> >  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
-> >  3 files changed, 216 insertions(+), 176 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-=
-nfc.yaml
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand=
--ecc-engine.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yam=
-l b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> > new file mode 100644
-> > index 000000000000..eb1a44c7ae4e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> > @@ -0,0 +1,154 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
-> > +
-> > +maintainers:
-> > +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt2701-nfc
-> > +      - mediatek,mt2712-nfc
-> > +      - mediatek,mt7622-nfc
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Base physical address and size of NFI.
-> > +
-> > +  interrupts:
-> > +    items:
-> > +      - description: NFI interrupt
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: clock used for the controller
-> > +      - description: clock used for the pad
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: nfi_clk
-> > +      - const: pad_clk
-> > +
-> > +  ecc-engine:
-> > +    description: device-tree node of the required ECC engine.
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +
-> > +patternProperties:
-> > +  "^nand@[a-f0-9]$":
-> > +    type: object =20
->=20
-> This should be instead:
->     $ref: nand-chip.yaml#
->     unevaluatedProperties: false
->=20
-> and then properties below (due to current dtschema limitations) should
-> list properties from nand-controller.yaml:
->=20
->       nand-on-flash-bbt: true
->=20
-> Optionally, we could create additional schema - nand-controller-chip,
-> which would be referenced directly by nand-controller and itself would
-> ref nand-chip.
+3. The mtk-nfc must further extend the nand@ child.
+4. If you add "unevaluatedProperties: false" you notice warnings of
+unevaluated propertie from nand-controller children.
 
-Isn't this enough? (in linux-next)
-https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Document=
-ation/devicetree/bindings/mtd/nand-controller.yaml?h=3Dmtd/next#n54
+Best regards,
+Krzysztof
 
-Thanks,
-Miqu=C3=A8l
