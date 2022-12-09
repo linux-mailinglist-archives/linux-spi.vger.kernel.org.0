@@ -2,181 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2168E647FF9
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 10:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176956481ED
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 12:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiLIJOw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Dec 2022 04:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S229530AbiLILqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Dec 2022 06:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLIJOv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 04:14:51 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FB71B9C2;
-        Fri,  9 Dec 2022 01:14:49 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A05ECC000A;
-        Fri,  9 Dec 2022 09:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670577288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V8RnLDoy8tp25SHwTkiovb8GWGbv3/sxicauJU19K4U=;
-        b=cYgNkYDoYt41DwhflXDt+gjhOooE64yqVPoCzTiMgMvWATWeW5f8DqUfY9O+zg65GnJTg0
-        kiRvk5BIsHBLHDoVaH9iZm1nGSbiyGiCQapvdwb7kQUJpB46yNb6CiOI/6c3eR64OBfGgX
-        HdXZZ5dOg2htbmcdAg5Tsh3oeA8wSdiXe1fk5rb1nWSEi46x8amCxtEUTObXHJn2Sv7yDl
-        sgZRfzeg8/69B4/zGUo31ma2KUaftT0//Ncm9AENpQ8CsMApR8fUOW68Xxa2bJ+b575oM7
-        iP+cLlJh4g+1kMoFuXGhUH4yXngrD+1Vinb5WGM4Y6Xhbtah1gpnmsQxSSROSQ==
-Date:   Fri, 9 Dec 2022 10:14:43 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
- controller
-Message-ID: <20221209101443.77fbbe49@xps-13>
-In-Reply-To: <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
-References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
-        <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
-        <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
-        <20221208110035.5649a051@xps-13>
-        <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229470AbiLILqb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 06:46:31 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC466B98F;
+        Fri,  9 Dec 2022 03:46:30 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id p36so6592561lfa.12;
+        Fri, 09 Dec 2022 03:46:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
+        b=CI+w2qobo9rbG0YF7JCVw1JfKqMQ15T3oW5PuUEOIbq+rK3GUyMjphlkbXAjulb60X
+         dYy8IvDvs4Bk2qqfVBxRC16+K6xlko3+8jLPX16PJ5iTUGHzbNy2SohP+7cfigiaa+m5
+         efJrAv6MtWbZFWAhSEvv1iqOc18PSUqXDRIvDE+QaY0CUDVGBKylea9AdfYCFvJQ+dSG
+         bmpcnaxm0xN6iSEX9x7xPF5Osh69Btvn16ihgPp3eWfU7/MvAURbd/o3FLerVrzJLJ6O
+         8zBJ4nfDI5/fmO98s9uD8i8lRY7jFxmBHgfa25H2cN1cHYvyJlQjgxpzMHcTOp2dPb+C
+         Fb/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
+        b=qgRHCTq98xCe+w4Vm4h+UpKustyAsKE8SXlRu4ipz0g9/XhU2pD5/Rnwzh3H9UXKMb
+         oLXvYocDGpfrjUUJ7kfu0u0PZDOQqNErn2yQJNXwHzsHeK6hK5K7ezntv6VaXQ/iow42
+         /EQ6tC7cyGteYjKTxaGbOyirU5ZCTnfhL2MNVyDl2++zJkkL80iQruQnThGgW3V58XtP
+         k+2BnPB8aMSuSOtu1PiDm944kSp+ETdn9BLx9LVJx/J/MKQEs9SZpmUTsVrhnSsIG+sW
+         g7j6iaLD1+4PriV+Ye7BM/q8HONr4CgVts6lPrCL0IM+ij3F5A6tVioOhjwi6UA9J7az
+         vCCg==
+X-Gm-Message-State: ANoB5pnXcr7hz/O+m1Sjq0HhisG8WsANjYO1qYhRIBUQfSVedi4ufDlg
+        al1CbEUQFz3l7xSFQFEoHK7KNMpNB/E=
+X-Google-Smtp-Source: AA0mqf5N3XtmU7KG34z5ptj3fbp4YOmyPSIEOK9kZQ1fnyd2n0eAlSa64Ogt/Ie4u48GYWAzQ53IAQ==
+X-Received: by 2002:a05:6512:3092:b0:4b4:e4a3:4a23 with SMTP id z18-20020a056512309200b004b4e4a34a23mr2278630lfd.20.1670586388212;
+        Fri, 09 Dec 2022 03:46:28 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b0049ad2619becsm226905lfq.131.2022.12.09.03.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 03:46:27 -0800 (PST)
+Date:   Fri, 9 Dec 2022 14:46:25 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
+Message-ID: <20221209114625.32ww2laxfr72uqnb@mobilestation>
+References: <20221202094859.7869-1-edmund.berenson@emlix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202094859.7869-1-edmund.berenson@emlix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
+Hello Edmund
 
-krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 11:27:27 +0100:
+On Fri, Dec 02, 2022 at 10:48:59AM +0100, Edmund Berenson wrote:
+> SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
+> If gpio cs are used the cs number may be >= 4. To ensure we do not write
+> outside of the valid area, we choose SS0 in case of gpio cs to start
+> spi transfer.
 
-> On 08/12/2022 11:00, Miquel Raynal wrote:
-> > Hi Krzysztof,
-> >=20
-> > krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
-> >  =20
-> >> On 08/12/2022 07:29, Xiangsheng Hou wrote: =20
-> >>> Split MediaTek ECC engine with rawnand controller and convert to
-> >>> YAML schema.
-> >>>
-> >>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> >>> ---
-> >>>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
-> >>>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
-> >>>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ----------------=
---
-> >>>  3 files changed, 216 insertions(+), 176 deletions(-)
-> >>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mt=
-k-nfc.yaml
-> >>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,na=
-nd-ecc-engine.yaml
-> >>>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.y=
-aml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..eb1a44c7ae4e
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> >>> @@ -0,0 +1,154 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
-> >>> +
-> >>> +maintainers:
-> >>> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - mediatek,mt2701-nfc
-> >>> +      - mediatek,mt2712-nfc
-> >>> +      - mediatek,mt7622-nfc
-> >>> +
-> >>> +  reg:
-> >>> +    items:
-> >>> +      - description: Base physical address and size of NFI.
-> >>> +
-> >>> +  interrupts:
-> >>> +    items:
-> >>> +      - description: NFI interrupt
-> >>> +
-> >>> +  clocks:
-> >>> +    items:
-> >>> +      - description: clock used for the controller
-> >>> +      - description: clock used for the pad
-> >>> +
-> >>> +  clock-names:
-> >>> +    items:
-> >>> +      - const: nfi_clk
-> >>> +      - const: pad_clk
-> >>> +
-> >>> +  ecc-engine:
-> >>> +    description: device-tree node of the required ECC engine.
-> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >>> +
-> >>> +patternProperties:
-> >>> +  "^nand@[a-f0-9]$":
-> >>> +    type: object   =20
-> >>
-> >> This should be instead:
-> >>     $ref: nand-chip.yaml#
-> >>     unevaluatedProperties: false
-> >>
-> >> and then properties below (due to current dtschema limitations) should
-> >> list properties from nand-controller.yaml:
-> >>
-> >>       nand-on-flash-bbt: true
-> >>
-> >> Optionally, we could create additional schema - nand-controller-chip,
-> >> which would be referenced directly by nand-controller and itself would
-> >> ref nand-chip. =20
-> >=20
-> > Isn't this enough? (in linux-next)
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Docu=
-mentation/devicetree/bindings/mtd/nand-controller.yaml?h=3Dmtd/next#n54 =20
->=20
-> No, I tested it and it does not work as intended. In this particular
-> case. I think this is a limitation of dtschema, because binding itself
-> looks fine. The problem is that you have:
-> 1. mtk-nfc having nand@ children. mtk-nfc references nand-controller
-> which brings these children.
-> 2. However nand-controller while bringing these children does two things:
-> a. ref: nand-chip
-> b. add more propeties
->=20
-> 3. The mtk-nfc must further extend the nand@ child.
-> 4. If you add "unevaluatedProperties: false" you notice warnings of
-> unevaluated propertie from nand-controller children.
+Next time please don't forget to add me to the whole series Cc-list. I
+am missing the patch #2 in my inbox.
 
-Thanks for the details. Any chances this can eventually be fixed at
-dt-schema level?
+> 
+> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b..57c9e384d6d4 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  {
+>  	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
+>  	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
+> +	u8 enable_cs = 0;
+> +
+> +	if (!spi->cs_gpiod)
+> +		enable_cs = spi->chip_select;
+>  
+>  	/*
+>  	 * DW SPI controller demands any native CS being set in order to
+> @@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  	 * support active-high or active-low CS level.
+>  	 */
+>  	if (cs_high == enable)
 
-Thanks,
-Miqu=C3=A8l
+> -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+> +		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
+
+No, it's not that easy. By applying this patch we'll get a regression
+for the platforms which make use of both the GPIO-based and native
+chip-selects. Consider the next platform setup:
+ +--------------+
+ | SoC X        |
+ |              |    +-------------+
+ |   DW SSI CS0-+----+ SPI-slave 0 |
+ |              |    +-------------+
+ |              |    +-------------+
+ |        GPIOn-+----+ SPI-slave 1 |
+ |              |    +-------------+
+ +--------------+
+
+If we apply this patch then the communications targeted to the
+SPI-slave 1 will also reach the SPI-slave 0 device, which isn't what
+we'd want.
+
+That's why currently the DW SSI driver activates the native CS line
+with the corresponding ID irrespective whether it is a GPIO-based
+CS or a native one.
+
+-Serge(y)
+
+>  	else
+>  		dw_writel(dws, DW_SPI_SER, 0);
+>  }
+> -- 
+> 2.37.4
+> 
