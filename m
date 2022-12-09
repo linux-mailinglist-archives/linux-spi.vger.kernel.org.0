@@ -2,204 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587464878A
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 18:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBDD648835
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 19:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiLIRRH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Dec 2022 12:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S229675AbiLISLc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Dec 2022 13:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiLIRQ6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 12:16:58 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3163A48406;
-        Fri,  9 Dec 2022 09:16:57 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id m204so5105164oib.6;
-        Fri, 09 Dec 2022 09:16:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=373jG6KIJ+2uE1UbtRsBbApBUbmU4Os8skRmsDekqe4=;
-        b=CVG/jdrOPROgvhqED2j5kqTHPnuTjJD9yXC96ULhGKBgUzYpy/b2PMoT8RrWD+kt20
-         oTm4iugMNP/5nQpJdjTywJ0rZLNGmYt0WqvkHviHbL9u5nnqp2U0Zm6Xb38Wp/hteRer
-         nZ0X6aHbWgFIj9e2EoWFuXus0SDdFbTJ2e/07VFoqsHDDzrg9LJ+MNwr1wHxvhOxFfrw
-         QmfpEOH0NVElbj5KVXZgg+zSe2xgLN7Dws82+cN03Tb9km1cpRr+mt4aHrg/GGNYe7Wx
-         Qi52JUi7o5OWIXHB8UcrYnUcMXHh9vT5qkklCMZIPe1311VkypJHc4m+NU9rIHwuOMAt
-         w5OQ==
-X-Gm-Message-State: ANoB5pnVrMDSkScFhsmrEjD9ejh1lEpdMtIazDcOthubJ04fw3gHCxD2
-        Gh2+80VakEBYOv1M6w0dFh/LYhFPCg==
-X-Google-Smtp-Source: AA0mqf72lUTpgl+w8YkV49W/DN78RxNkuEhI1Jry3u/tzoFI+CjfOYJtHgLIu2k+ZhV0fVSWzZoOpw==
-X-Received: by 2002:a05:6808:1707:b0:35a:a868:df60 with SMTP id bc7-20020a056808170700b0035aa868df60mr2933773oib.56.1670606216405;
-        Fri, 09 Dec 2022 09:16:56 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a14-20020a9d3e0e000000b0066e868dbc2esm800991otd.46.2022.12.09.09.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 09:16:55 -0800 (PST)
-Received: (nullmailer pid 3352066 invoked by uid 1000);
-        Fri, 09 Dec 2022 17:16:55 -0000
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S229591AbiLISLb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 13:11:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECAB9B7B2;
+        Fri,  9 Dec 2022 10:11:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7634A622F8;
+        Fri,  9 Dec 2022 18:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D4BC433D2;
+        Fri,  9 Dec 2022 18:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670609489;
+        bh=epx/3n6EwqEj5rJc+f7YxdkKGXlAtgNwhwzCjKBq+B8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=q0fqputXafLstYl7s0bbqBLoARECT4s7udCu2lxwMr8acbXZx0lwkn41Ah5tYa6/m
+         Dw5GPNYVmG7/KMGJyL9dNgkzPdj1b9gzLW7x7XdFXZq6T/53w9aRpTBAHy1NV4gZQQ
+         cUjf/jbzo3V3qQnEUDrSWeS+lfxhDlf9ifvGJ0C1/ONiRUMWlXGPJgVVHqZLjn1A5U
+         heKpQRMS58dIB1xlUlW4/ckFhzwzj5aBBqJmhJVr/hxG6nswwtuTHWbgkAWl0ytECl
+         bYCXaHPvTTGJkVUZzzIWgsh7qSZRM8a9dU/h9H6GYx3y+mnu4YH3FvcXMKIfLhbI9O
+         jg05ybqRsE7EA==
+From:   Mark Brown <broonie@kernel.org>
 To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
         Jassi Brar <jaswinder.singh@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: Convert Synquacer SPI to DT schema
-Date:   Fri,  9 Dec 2022 11:16:43 -0600
-Message-Id: <20221209171644.3351787-1-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221209171644.3351787-1-robh@kernel.org>
+References: <20221209171644.3351787-1-robh@kernel.org>
+Subject: Re: [PATCH] spi: dt-bindings: Convert Synquacer SPI to DT schema
+Message-Id: <167060948678.166802.5232484726492968107.b4-ty@kernel.org>
+Date:   Fri, 09 Dec 2022 18:11:26 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-64ef0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert the Socionext Synquacer SPI binding to DT format.
+On Fri, 09 Dec 2022 11:16:43 -0600, Rob Herring wrote:
+> Convert the Socionext Synquacer SPI binding to DT format.
+> 
+> 
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/spi/socionext,synquacer-spi.yaml | 73 +++++++++++++++++++
- .../devicetree/bindings/spi/spi-synquacer.txt | 27 -------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 74 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-synquacer.txt
+Applied to
 
-diff --git a/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml b/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
-new file mode 100644
-index 000000000000..45cbe744c7ff
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/socionext,synquacer-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Socionext SynQuacer HS-SPI Controller
-+
-+maintainers:
-+  - Masahisa Kojima <masahisa.kojima@linaro.org>
-+  - Jassi Brar <jaswinder.singh@linaro.org>
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: socionext,synquacer-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: core clock
-+      - description: rate clock
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: iHCLK
-+      - const: iPCLK
-+
-+  interrupts:
-+    items:
-+      - description: Receive Interrupt
-+      - description: Transmit Interrupt
-+      - description: Fault Interrupt
-+
-+  socionext,use-rtm:
-+    type: boolean
-+    description: Enable using "retimed clock" for RX
-+
-+  socionext,set-aces:
-+    type: boolean
-+    description: Enable same active clock edges field to be set
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spi@ff110000 {
-+        compatible = "socionext,synquacer-spi";
-+        reg = <0xff110000 0x1000>;
-+        interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
-+               <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>,
-+               <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clk_hsspi>;
-+        clock-names = "iHCLK";
-+        socionext,use-rtm;
-+        socionext,set-aces;
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/spi/spi-synquacer.txt b/Documentation/devicetree/bindings/spi/spi-synquacer.txt
-deleted file mode 100644
-index 291dfa692d0a..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-synquacer.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--* Socionext Synquacer HS-SPI bindings
--
--Required Properties:
--- compatible: should be "socionext,synquacer-spi"
--- reg: physical base address of the controller and length of memory mapped
--       region.
--- interrupts: should contain the "spi_rx", "spi_tx" and "spi_fault" interrupts.
--- clocks: core clock iHCLK. Optional rate clock iPCLK (default is iHCLK)
--- clock-names: Shall be "iHCLK" and "iPCLK" respectively
--
--Optional Properties:
--- socionext,use-rtm: boolean, if required to use "retimed clock" for RX
--- socionext,set-aces: boolean, if same active clock edges field to be set.
--
--Example:
--
--	spi0: spi@ff110000 {
--		compatible = "socionext,synquacer-spi";
--		reg = <0xff110000 0x1000>;
--		interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&clk_hsspi>;
--		clock-names = "iHCLK";
--		socionext,use-rtm;
--		socionext,set-aces;
--	};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cf5a58bac7f8..1f81f0399efa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19037,7 +19037,7 @@ M:	Masahisa Kojima <masahisa.kojima@linaro.org>
- M:	Jassi Brar <jaswinder.singh@linaro.org>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/spi/spi-synquacer.txt
-+F:	Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
- F:	drivers/spi/spi-synquacer.c
- 
- SOCIONEXT SYNQUACER I2C DRIVER
--- 
-2.35.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: dt-bindings: Convert Synquacer SPI to DT schema
+      commit: 3cf241c3d56ff19f5192cb42a025bc6582b6e8fa
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
