@@ -2,125 +2,204 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD0964823A
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 13:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A587464878A
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 18:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiLIMOA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Dec 2022 07:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S229482AbiLIRRH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Dec 2022 12:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLIMOA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 07:14:00 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BCF43848;
-        Fri,  9 Dec 2022 04:13:57 -0800 (PST)
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 279FB63F3C;
-        Fri,  9 Dec 2022 13:13:55 +0100 (CET)
-Date:   Fri, 9 Dec 2022 13:13:54 +0100
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        with ESMTP id S230177AbiLIRQ6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 12:16:58 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3163A48406;
+        Fri,  9 Dec 2022 09:16:57 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id m204so5105164oib.6;
+        Fri, 09 Dec 2022 09:16:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=373jG6KIJ+2uE1UbtRsBbApBUbmU4Os8skRmsDekqe4=;
+        b=CVG/jdrOPROgvhqED2j5kqTHPnuTjJD9yXC96ULhGKBgUzYpy/b2PMoT8RrWD+kt20
+         oTm4iugMNP/5nQpJdjTywJ0rZLNGmYt0WqvkHviHbL9u5nnqp2U0Zm6Xb38Wp/hteRer
+         nZ0X6aHbWgFIj9e2EoWFuXus0SDdFbTJ2e/07VFoqsHDDzrg9LJ+MNwr1wHxvhOxFfrw
+         QmfpEOH0NVElbj5KVXZgg+zSe2xgLN7Dws82+cN03Tb9km1cpRr+mt4aHrg/GGNYe7Wx
+         Qi52JUi7o5OWIXHB8UcrYnUcMXHh9vT5qkklCMZIPe1311VkypJHc4m+NU9rIHwuOMAt
+         w5OQ==
+X-Gm-Message-State: ANoB5pnVrMDSkScFhsmrEjD9ejh1lEpdMtIazDcOthubJ04fw3gHCxD2
+        Gh2+80VakEBYOv1M6w0dFh/LYhFPCg==
+X-Google-Smtp-Source: AA0mqf72lUTpgl+w8YkV49W/DN78RxNkuEhI1Jry3u/tzoFI+CjfOYJtHgLIu2k+ZhV0fVSWzZoOpw==
+X-Received: by 2002:a05:6808:1707:b0:35a:a868:df60 with SMTP id bc7-20020a056808170700b0035aa868df60mr2933773oib.56.1670606216405;
+        Fri, 09 Dec 2022 09:16:56 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a14-20020a9d3e0e000000b0066e868dbc2esm800991otd.46.2022.12.09.09.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 09:16:55 -0800 (PST)
+Received: (nullmailer pid 3352066 invoked by uid 1000);
+        Fri, 09 Dec 2022 17:16:55 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
-Message-ID: <20221209121354.fcpwh54khx4y5g7q@emlix.com>
-References: <20221202094859.7869-1-edmund.berenson@emlix.com>
- <20221209114625.32ww2laxfr72uqnb@mobilestation>
+Subject: [PATCH] spi: dt-bindings: Convert Synquacer SPI to DT schema
+Date:   Fri,  9 Dec 2022 11:16:43 -0600
+Message-Id: <20221209171644.3351787-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209114625.32ww2laxfr72uqnb@mobilestation>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Serge,
+Convert the Socionext Synquacer SPI binding to DT format.
 
-On Fri, Dec 09, 2022 at 02:46:25PM +0300, Serge Semin wrote:
-> Hello Edmund
-> 
-> On Fri, Dec 02, 2022 at 10:48:59AM +0100, Edmund Berenson wrote:
-> > SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
-> > If gpio cs are used the cs number may be >= 4. To ensure we do not write
-> > outside of the valid area, we choose SS0 in case of gpio cs to start
-> > spi transfer.
-> 
-> Next time please don't forget to add me to the whole series Cc-list. I
-> am missing the patch #2 in my inbox.
-> 
-I am sorry, I probably made some mistake when sending the mail.
-I forwarded you patch 2 as well.
-> > 
-> > Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> > Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> > Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> > ---
-> >  drivers/spi/spi-dw-core.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > index 99edddf9958b..57c9e384d6d4 100644
-> > --- a/drivers/spi/spi-dw-core.c
-> > +++ b/drivers/spi/spi-dw-core.c
-> > @@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
-> >  {
-> >  	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
-> >  	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
-> > +	u8 enable_cs = 0;
-> > +
-> > +	if (!spi->cs_gpiod)
-> > +		enable_cs = spi->chip_select;
-> >  
-> >  	/*
-> >  	 * DW SPI controller demands any native CS being set in order to
-> > @@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
-> >  	 * support active-high or active-low CS level.
-> >  	 */
-> >  	if (cs_high == enable)
-> 
-> > -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
-> > +		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
-> 
-> No, it's not that easy. By applying this patch we'll get a regression
-> for the platforms which make use of both the GPIO-based and native
-> chip-selects. Consider the next platform setup:
->  +--------------+
->  | SoC X        |
->  |              |    +-------------+
->  |   DW SSI CS0-+----+ SPI-slave 0 |
->  |              |    +-------------+
->  |              |    +-------------+
->  |        GPIOn-+----+ SPI-slave 1 |
->  |              |    +-------------+
->  +--------------+
-> 
-> If we apply this patch then the communications targeted to the
-> SPI-slave 1 will also reach the SPI-slave 0 device, which isn't what
-> we'd want.
-> 
-> That's why currently the DW SSI driver activates the native CS line
-> with the corresponding ID irrespective whether it is a GPIO-based
-> CS or a native one.
-Okay that is actually true... but we will have to guard against CS>4 as only two
-bits are reserved for cs in the register.
-If both gpio and native cs are used at least one native cs
-has to be empty otherwise we will have at least one double activation.
-I am not sure if there is a "clean" way to determine which native cs is unused
-inside the driver. Do you think it would be an acceptable workaround to
-add an entry to the device tree like native-gpio cs?
-> 
-> -Serge(y)
-> 
-> >  	else
-> >  		dw_writel(dws, DW_SPI_SER, 0);
-> >  }
-> > -- 
-> > 2.37.4
-> > 
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/spi/socionext,synquacer-spi.yaml | 73 +++++++++++++++++++
+ .../devicetree/bindings/spi/spi-synquacer.txt | 27 -------
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 74 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-synquacer.txt
+
+diff --git a/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml b/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
+new file mode 100644
+index 000000000000..45cbe744c7ff
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/socionext,synquacer-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Socionext SynQuacer HS-SPI Controller
++
++maintainers:
++  - Masahisa Kojima <masahisa.kojima@linaro.org>
++  - Jassi Brar <jaswinder.singh@linaro.org>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: socionext,synquacer-spi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    items:
++      - description: core clock
++      - description: rate clock
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: iHCLK
++      - const: iPCLK
++
++  interrupts:
++    items:
++      - description: Receive Interrupt
++      - description: Transmit Interrupt
++      - description: Fault Interrupt
++
++  socionext,use-rtm:
++    type: boolean
++    description: Enable using "retimed clock" for RX
++
++  socionext,set-aces:
++    type: boolean
++    description: Enable same active clock edges field to be set
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spi@ff110000 {
++        compatible = "socionext,synquacer-spi";
++        reg = <0xff110000 0x1000>;
++        interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
++               <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>,
++               <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clk_hsspi>;
++        clock-names = "iHCLK";
++        socionext,use-rtm;
++        socionext,set-aces;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/spi/spi-synquacer.txt b/Documentation/devicetree/bindings/spi/spi-synquacer.txt
+deleted file mode 100644
+index 291dfa692d0a..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-synquacer.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-* Socionext Synquacer HS-SPI bindings
+-
+-Required Properties:
+-- compatible: should be "socionext,synquacer-spi"
+-- reg: physical base address of the controller and length of memory mapped
+-       region.
+-- interrupts: should contain the "spi_rx", "spi_tx" and "spi_fault" interrupts.
+-- clocks: core clock iHCLK. Optional rate clock iPCLK (default is iHCLK)
+-- clock-names: Shall be "iHCLK" and "iPCLK" respectively
+-
+-Optional Properties:
+-- socionext,use-rtm: boolean, if required to use "retimed clock" for RX
+-- socionext,set-aces: boolean, if same active clock edges field to be set.
+-
+-Example:
+-
+-	spi0: spi@ff110000 {
+-		compatible = "socionext,synquacer-spi";
+-		reg = <0xff110000 0x1000>;
+-		interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
+-			     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>,
+-			     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&clk_hsspi>;
+-		clock-names = "iHCLK";
+-		socionext,use-rtm;
+-		socionext,set-aces;
+-	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf5a58bac7f8..1f81f0399efa 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19037,7 +19037,7 @@ M:	Masahisa Kojima <masahisa.kojima@linaro.org>
+ M:	Jassi Brar <jaswinder.singh@linaro.org>
+ L:	linux-spi@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/spi/spi-synquacer.txt
++F:	Documentation/devicetree/bindings/spi/socionext,synquacer-spi.yaml
+ F:	drivers/spi/spi-synquacer.c
+ 
+ SOCIONEXT SYNQUACER I2C DRIVER
+-- 
+2.35.1
+
