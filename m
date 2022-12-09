@@ -2,143 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176956481ED
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 12:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83110648207
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 13:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiLILqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Dec 2022 06:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S229955AbiLIMAs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Dec 2022 07:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLILqb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 06:46:31 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC466B98F;
-        Fri,  9 Dec 2022 03:46:30 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id p36so6592561lfa.12;
-        Fri, 09 Dec 2022 03:46:29 -0800 (PST)
+        with ESMTP id S229703AbiLIMAn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 07:00:43 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43263303E7
+        for <linux-spi@vger.kernel.org>; Fri,  9 Dec 2022 04:00:38 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id b2so10950840eja.7
+        for <linux-spi@vger.kernel.org>; Fri, 09 Dec 2022 04:00:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
-        b=CI+w2qobo9rbG0YF7JCVw1JfKqMQ15T3oW5PuUEOIbq+rK3GUyMjphlkbXAjulb60X
-         dYy8IvDvs4Bk2qqfVBxRC16+K6xlko3+8jLPX16PJ5iTUGHzbNy2SohP+7cfigiaa+m5
-         efJrAv6MtWbZFWAhSEvv1iqOc18PSUqXDRIvDE+QaY0CUDVGBKylea9AdfYCFvJQ+dSG
-         bmpcnaxm0xN6iSEX9x7xPF5Osh69Btvn16ihgPp3eWfU7/MvAURbd/o3FLerVrzJLJ6O
-         8zBJ4nfDI5/fmO98s9uD8i8lRY7jFxmBHgfa25H2cN1cHYvyJlQjgxpzMHcTOp2dPb+C
-         Fb/A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
+        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
+         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
+         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
+         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
+         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
+         GpZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
-        b=qgRHCTq98xCe+w4Vm4h+UpKustyAsKE8SXlRu4ipz0g9/XhU2pD5/Rnwzh3H9UXKMb
-         oLXvYocDGpfrjUUJ7kfu0u0PZDOQqNErn2yQJNXwHzsHeK6hK5K7ezntv6VaXQ/iow42
-         /EQ6tC7cyGteYjKTxaGbOyirU5ZCTnfhL2MNVyDl2++zJkkL80iQruQnThGgW3V58XtP
-         k+2BnPB8aMSuSOtu1PiDm944kSp+ETdn9BLx9LVJx/J/MKQEs9SZpmUTsVrhnSsIG+sW
-         g7j6iaLD1+4PriV+Ye7BM/q8HONr4CgVts6lPrCL0IM+ij3F5A6tVioOhjwi6UA9J7az
-         vCCg==
-X-Gm-Message-State: ANoB5pnXcr7hz/O+m1Sjq0HhisG8WsANjYO1qYhRIBUQfSVedi4ufDlg
-        al1CbEUQFz3l7xSFQFEoHK7KNMpNB/E=
-X-Google-Smtp-Source: AA0mqf5N3XtmU7KG34z5ptj3fbp4YOmyPSIEOK9kZQ1fnyd2n0eAlSa64Ogt/Ie4u48GYWAzQ53IAQ==
-X-Received: by 2002:a05:6512:3092:b0:4b4:e4a3:4a23 with SMTP id z18-20020a056512309200b004b4e4a34a23mr2278630lfd.20.1670586388212;
-        Fri, 09 Dec 2022 03:46:28 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b0049ad2619becsm226905lfq.131.2022.12.09.03.46.27
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
+        b=5IyXCXgT4ibrdNVoRnEXw318LUE7jUqhQHO2RlDY1LjJNJMsHf2oLOH07qJlwqejhd
+         tclcDwpVLzr9d+jIZRgZpp+7uQrG/sU2JxIft5qMX7L654obn6SfiGM+TDcRqAED02vo
+         UQxHTPoZ9ntiKs2S6Z/3MxnI9Cn7HAkPRi9uY12xmuJFUoRFrdhuDlUJsjnR0Gvx06Iu
+         ws0dyN2CpXR3eC3ltTQ4X8pSejpDPPpKW8/lGQyReA9sQXUxOny/lnHv1zbdpChqoSI+
+         hWqlKYI8Pu9zjqP9t51jMYPD1TPk6cQJjuDrpJSAG9QvMLwJrf9NoJutW+44VkxxE8Qk
+         jfrw==
+X-Gm-Message-State: ANoB5pl74dpYynfY2NS2rslOJK2Od6GKlP+fl/4F4YzJYqRIVJd9BacS
+        G7c/3ZLcCMAXqGOL2KIWsjMCKw==
+X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
+X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
+        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
+Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
+        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 03:46:27 -0800 (PST)
-Date:   Fri, 9 Dec 2022 14:46:25 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
-Message-ID: <20221209114625.32ww2laxfr72uqnb@mobilestation>
-References: <20221202094859.7869-1-edmund.berenson@emlix.com>
+        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        Purism Kernel Team <kernel@puri.sm>,
+        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
+        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
+        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Date:   Fri,  9 Dec 2022 13:00:14 +0100
+Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202094859.7869-1-edmund.berenson@emlix.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Edmund
-
-On Fri, Dec 02, 2022 at 10:48:59AM +0100, Edmund Berenson wrote:
-> SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
-> If gpio cs are used the cs number may be >= 4. To ensure we do not write
-> outside of the valid area, we choose SS0 in case of gpio cs to start
-> spi transfer.
-
-Next time please don't forget to add me to the whole series Cc-list. I
-am missing the patch #2 in my inbox.
-
+On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
 > 
-> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> ---
->  drivers/spi/spi-dw-core.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
 > 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 99edddf9958b..57c9e384d6d4 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
->  {
->  	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
->  	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
-> +	u8 enable_cs = 0;
-> +
-> +	if (!spi->cs_gpiod)
-> +		enable_cs = spi->chip_select;
->  
->  	/*
->  	 * DW SPI controller demands any native CS being set in order to
-> @@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
->  	 * support active-high or active-low CS level.
->  	 */
->  	if (cs_high == enable)
+> [...]
 
-> -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
-> +		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
+Applied all patches that build.
 
-No, it's not that easy. By applying this patch we'll get a regression
-for the platforms which make use of both the GPIO-based and native
-chip-selects. Consider the next platform setup:
- +--------------+
- | SoC X        |
- |              |    +-------------+
- |   DW SSI CS0-+----+ SPI-slave 0 |
- |              |    +-------------+
- |              |    +-------------+
- |        GPIOn-+----+ SPI-slave 1 |
- |              |    +-------------+
- +--------------+
+Patches excluded:
+ - ps8622
+ - ti-sn65dsi83
+ - adv7511
 
-If we apply this patch then the communications targeted to the
-SPI-slave 1 will also reach the SPI-slave 0 device, which isn't what
-we'd want.
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
 
-That's why currently the DW SSI driver activates the native CS line
-with the corresponding ID irrespective whether it is a GPIO-based
-CS or a native one.
 
--Serge(y)
+[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
+          (no commit info)
+[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
+          (no commit info)
+[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
+          (no commit info)
+[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
+          (no commit info)
+[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
+          (no commit info)
+[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
+          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
+[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
+          (no commit info)
+[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
+          (no commit info)
+[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
+          (no commit info)
+[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
+          (no commit info)
+[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
+          (no commit info)
+[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
+          (no commit info)
+[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
+          (no commit info)
+[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
+          (no commit info)
+[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
+          (no commit info)
+[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
+          (no commit info)
+[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
+          (no commit info)
+[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
+          (no commit info)
+[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
+          (no commit info)
+[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
+          (no commit info)
+[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
+          (no commit info)
+[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
+          (no commit info)
+[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
+          (no commit info)
 
->  	else
->  		dw_writel(dws, DW_SPI_SER, 0);
->  }
-> -- 
-> 2.37.4
-> 
+
+
+rob
+
