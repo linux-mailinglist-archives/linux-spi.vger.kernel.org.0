@@ -2,91 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBDD648835
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Dec 2022 19:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA98648E92
+	for <lists+linux-spi@lfdr.de>; Sat, 10 Dec 2022 13:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiLISLc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Dec 2022 13:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S229524AbiLJMAb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 10 Dec 2022 07:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLISLb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Dec 2022 13:11:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECAB9B7B2;
-        Fri,  9 Dec 2022 10:11:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7634A622F8;
-        Fri,  9 Dec 2022 18:11:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D4BC433D2;
-        Fri,  9 Dec 2022 18:11:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670609489;
-        bh=epx/3n6EwqEj5rJc+f7YxdkKGXlAtgNwhwzCjKBq+B8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=q0fqputXafLstYl7s0bbqBLoARECT4s7udCu2lxwMr8acbXZx0lwkn41Ah5tYa6/m
-         Dw5GPNYVmG7/KMGJyL9dNgkzPdj1b9gzLW7x7XdFXZq6T/53w9aRpTBAHy1NV4gZQQ
-         cUjf/jbzo3V3qQnEUDrSWeS+lfxhDlf9ifvGJ0C1/ONiRUMWlXGPJgVVHqZLjn1A5U
-         heKpQRMS58dIB1xlUlW4/ckFhzwzj5aBBqJmhJVr/hxG6nswwtuTHWbgkAWl0ytECl
-         bYCXaHPvTTGJkVUZzzIWgsh7qSZRM8a9dU/h9H6GYx3y+mnu4YH3FvcXMKIfLhbI9O
-         jg05ybqRsE7EA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221209171644.3351787-1-robh@kernel.org>
-References: <20221209171644.3351787-1-robh@kernel.org>
-Subject: Re: [PATCH] spi: dt-bindings: Convert Synquacer SPI to DT schema
-Message-Id: <167060948678.166802.5232484726492968107.b4-ty@kernel.org>
-Date:   Fri, 09 Dec 2022 18:11:26 +0000
+        with ESMTP id S229475AbiLJMAa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 10 Dec 2022 07:00:30 -0500
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 10 Dec 2022 04:00:29 PST
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 895433A4
+        for <linux-spi@vger.kernel.org>; Sat, 10 Dec 2022 04:00:29 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 3yPYpAeHxFUJ33yPYptfah; Sat, 10 Dec 2022 12:52:58 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 10 Dec 2022 12:52:58 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Max Filippov <jcmvbkbc@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-xtensa@linux-xtensa.org, linux-spi@vger.kernel.org
+Subject: [PATCH v1] spi: xtensa-xtfpga: Fix a double put() in xtfpga_spi_remove()
+Date:   Sat, 10 Dec 2022 12:52:53 +0100
+Message-Id: <7946a26c6e53a4158f0f5bad5276d8654fd59415.1670673147.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-64ef0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 09 Dec 2022 11:16:43 -0600, Rob Herring wrote:
-> Convert the Socionext Synquacer SPI binding to DT format.
-> 
-> 
+'master' is allocated with devm_spi_alloc_master(), there is no need to
+put it explicitly in the remove function.
 
-Applied to
+Fixes: 478cc2fc3dd7 ("spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/spi/spi-xtensa-xtfpga.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/spi/spi-xtensa-xtfpga.c b/drivers/spi/spi-xtensa-xtfpga.c
+index 2fa7608f94cd..271ae98f441c 100644
+--- a/drivers/spi/spi-xtensa-xtfpga.c
++++ b/drivers/spi/spi-xtensa-xtfpga.c
+@@ -123,7 +123,6 @@ static int xtfpga_spi_remove(struct platform_device *pdev)
+ 	struct xtfpga_spi *xspi = spi_master_get_devdata(master);
+ 
+ 	spi_bitbang_stop(&xspi->bitbang);
+-	spi_master_put(master);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
-Thanks!
-
-[1/1] spi: dt-bindings: Convert Synquacer SPI to DT schema
-      commit: 3cf241c3d56ff19f5192cb42a025bc6582b6e8fa
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
