@@ -2,55 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7E264A43F
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Dec 2022 16:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B64764A508
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Dec 2022 17:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiLLPhF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Dec 2022 10:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S232827AbiLLQjF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Dec 2022 11:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiLLPg7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Dec 2022 10:36:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1836F959B;
-        Mon, 12 Dec 2022 07:36:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0BB2B80D53;
-        Mon, 12 Dec 2022 15:36:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28F1C433EF;
-        Mon, 12 Dec 2022 15:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670859416;
-        bh=3xjGxpTU+uAlErxm+6V13eo7pAhpayNah3d0WO3wiak=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ankc2UWgSEwXXsJNdufE3nbPUAcqxg6QNkfU64wkwb5y1YetnuV1L037jyLlkva4X
-         ohtZQhosg4nDJ7p5su7G34J7AWRTA7bJHWUC8Au61QKpSZ/sK0bLqxhQ49Tmjvtdrj
-         0TunmuHfbcuJrGLA66Z5an+mH9CUoj53HQsj10/2vDoXmbhJFE/H6GT9pTzSHYFHOy
-         M2SMlVDPkdqiejzdinA/gI0OXHWo1kTKa/NDOt+ry9726IdKNQTlMckg/s0jzlBvpK
-         j4BAooH92FmNo49cYOY7qSwPsJa58mJikw5h4Mh49MlUtEnmq6YSo7myQNRJXd8zaU
-         6CtYQXfXvMq9A==
-Date:   Mon, 12 Dec 2022 15:36:51 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v1] spi: xtensa-xtfpga: Fix a double put() in
- xtfpga_spi_remove()
-Message-ID: <Y5dKk+uw3UcW2Pu1@sirena.org.uk>
-References: <7946a26c6e53a4158f0f5bad5276d8654fd59415.1670673147.git.christophe.jaillet@wanadoo.fr>
- <CAMo8BfKCv9j-ftKWU+B27g1oHBB_=EZhGBH7qymyVAeF10JcnQ@mail.gmail.com>
+        with ESMTP id S232823AbiLLQia (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Dec 2022 11:38:30 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AC213F9A
+        for <linux-spi@vger.kernel.org>; Mon, 12 Dec 2022 08:37:02 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i9so803988edj.4
+        for <linux-spi@vger.kernel.org>; Mon, 12 Dec 2022 08:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=lIFXcScE+1mmzH1SBNLfPzmU2yyZ22FDa7zo6/O0Bw9aIOxDeXxYkEVfus52JWuhda
+         4ouELocZnEhmnwFppolEYq4c3c7RHYAqD4pax4M3unQDLONiM/9+ejXSM9E2FE+Z0v02
+         plxbNMhSLCExfq6g58BwEJLatQLzpt/xLWOhKWfMwSgaHbhPuPfGnoShEU2Q/8V0GhBe
+         I8mO/6POKEHTvHhiQrSmT3i/DlcfyH1o4pAMtSuNXvNoHj+mOy3GKKCsRTSQGVPFd3Z7
+         AQYI0FN6wamo3RnZf0VXDCwVvMRjPWjYDkKYXDeP5o/vQIFIn9FanCQzU/XNFNQHrfWF
+         2geA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=4THtOW7tOOcztYHN2QeT6PItHPXZSvjRsjz54nAGhzDAUC5TvtqeApbPb+BEOmzUW3
+         ETVbcTh3Lzbxl11gQ2phbuv5/bco85PoNSJXCYUYlKnZ2MJlMaGunOHWgL4uvGDWQQtb
+         RT0ULXa4VWbMUV77HMpn04iwMVqryG/8flwQbF2H90mqw4tk7FR3EZBrqoDcwCZFRmkK
+         ofnzQFryjkHeMCxiYIii+Vk5oBimrNrUGpFv79Lsa8oyz0yglRbKPBJ9ZVLj9KSfapSc
+         FkM1Mgc1d/WtE7LkmHL8nw8GBeHaQPbbaPje9K57ofgcZ+ydHRn7fY7voL2fI5o/sy2H
+         W+9w==
+X-Gm-Message-State: ANoB5plXZJs/QiFlZdhyxoS7XXJZPdf6ThbCR2hcdFf1K/Z60pkPC7QY
+        TKdfa4mJ4AQK6NHH9ehSGcmWYA==
+X-Google-Smtp-Source: AA0mqf5ppTTyM6N0bPOAfBX//eKXVRPakyRimeYdkY/8NocUbAvjnOSiYLmQOcD2W7tmhBu2XO410g==
+X-Received: by 2002:a05:6402:702:b0:46f:68d0:76 with SMTP id w2-20020a056402070200b0046f68d00076mr10093614edx.34.1670863020790;
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+Received: from prec5560.. ([2001:bf7:830:a7a8:ff97:7d8d:1f2e:ffaa])
+        by smtp.gmail.com with ESMTPSA id m15-20020a50930f000000b00463597d2c25sm4051979eda.74.2022.12.12.08.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Grant Likely <grant.likely@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-actions@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-input@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-serial@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-staging@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-mtd@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-fbdev@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Date:   Mon, 12 Dec 2022 17:36:51 +0100
+Message-Id: <167086288411.3041259.17824406556561546642.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EHvVr8XnbtwPXPXJ"
-Content-Disposition: inline
-In-Reply-To: <CAMo8BfKCv9j-ftKWU+B27g1oHBB_=EZhGBH7qymyVAeF10JcnQ@mail.gmail.com>
-X-Cookie: It was Penguin lust... at its ugliest.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +97,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+> 
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
+> 
+> [...]
 
---EHvVr8XnbtwPXPXJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Sat, Dec 10, 2022 at 06:48:02AM -0800, Max Filippov wrote:
-> Hi Christophe,
->=20
-> On Sat, Dec 10, 2022 at 3:52 AM Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr> wrote:
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
 
-> > 'master' is allocated with devm_spi_alloc_master(), there is no need to
-> > put it explicitly in the remove function.
 
-> >         spi_bitbang_stop(&xspi->bitbang);
-> > -       spi_master_put(master);
+[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
+          commit: 1c546894ff82f8b7c070998c03f9b15a3499f326
+[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
+          commit: d6b522e9bbb0cca1aeae4ef6188800534794836f
+[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
+          commit: 0f6548807fa77e87bbc37964c6b1ed9ba6e1155d
 
-> This put is matching the get in the spi_bitbang_start.
-> It was discussed here:
-> https://lore.kernel.org/linux-spi/CAMo8BfJaD7pG_iutY8jordysjChyzhTpVSqpxX=
-h3QoZsj2QmaQ@mail.gmail.com/
 
-Probably worth a comment though since it is a bit of a gotcha.  Ideally
-we'd improve this in the bitbang code but that's harder.
 
---EHvVr8XnbtwPXPXJ
-Content-Type: application/pgp-signature; name="signature.asc"
+rob
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOXSpIACgkQJNaLcl1U
-h9BT0Qf+NdrWJWMDdjoqnd5CyDhVDKdBCD/mS40Y9yT/7kC/kmCpKV3k5xsYhfxl
-TLdaRq5V3JYZX9L/jCwANwlCm9+hFNp+X2BMeum0UnPQ3tqmf1HXUw1JudlRpb/7
-k4h6vxqi5b4vd4bAeLztmRpN999BHuZPnR5lfbnCMLCJHGe2WIR63+fUJDVs20z4
-sMLRCVN9hQbLN3qSp6CKdCdwPXrJf9O0H/2oLtwjEB2qG9F9Z3M9pHGBZceRR3tV
-hdhpXl1deQauicERPLIG5O1lXhTF5oqgU2Wx3qFfY1hlWykwBiumjFSNfDRkhYjO
-sff6XWL/4MqS9TkWh2YuDoxHeFscbQ==
-=sjZz
------END PGP SIGNATURE-----
-
---EHvVr8XnbtwPXPXJ--
