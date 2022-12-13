@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8C764B284
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 10:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F67E64B28C
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 10:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbiLMJi6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Dec 2022 04:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S229884AbiLMJnD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Dec 2022 04:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiLMJi5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 04:38:57 -0500
+        with ESMTP id S229689AbiLMJnD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 04:43:03 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184D315836;
-        Tue, 13 Dec 2022 01:38:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B00F01D;
+        Tue, 13 Dec 2022 01:43:01 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B1E96602C2F;
-        Tue, 13 Dec 2022 09:38:54 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8FFB86602C2F;
+        Tue, 13 Dec 2022 09:42:59 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670924336;
-        bh=3uzuGrt4ZRlBHhLo37SMRYN1aSa87pzUD4T5GH1gEeg=;
+        s=mail; t=1670924580;
+        bh=VMAoG4F0h5+2Tw6EEa082N1EiJ7bqvGUQOspWsbMvtQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A4nvPBhVtQa3qTAmMlFdtQDm4YgpFyUwJTLjvAVgtowg90/zpPevyLE6/ys2uMYbj
-         LjMjyHtuTrh6I3a01HaFF/ofTEt0XsVb3iVPPeKEyDv+Vv1zdueihQd1lhdyQZobZ9
-         lvydKYdnnpll6YUHti4YDvjHTJJflnCBKKgQT1XQf8WWoEJmL8mVrB92oE6c+unlNL
-         68sXp/w1L/Ex07mLvNr3V4DVkFUppT3NyEZwonQR+AWABiOLvF3aGB36E3i+SveqjU
-         Gw21zQqtMpyI15/pL51Y85SminbIfCc+ZHXx4d4tveJAFx6UA+JwUS1QXNF5Kgh4zm
-         pgkGImauB/JOQ==
-Message-ID: <fc668f1e-3d04-29db-a761-73b9d7830381@collabora.com>
-Date:   Tue, 13 Dec 2022 10:38:52 +0100
+        b=nO4q0ZGLrpF68McW2i5tJS/hRxHNV+JxWpcNEhyfiA323dsriZkn42C8iP3aO69Ox
+         r2f+QiWQSlr8v6Xh1FPeIr5/9z5q8viZj+JTmXGzgwIUJGbYMr8dB//IOKgXuCRfQY
+         QJwdo6J0VUvr8YlqNfo4vTy7rJhz5NRGW/XMoKAz6dUKn20sFtpk97udrFlaTeEBri
+         /g2nCMeyqRdjq6AZp/tlM9TFqQ+iPi3ImBIgyKJAvWMg3IOhAbO1UMwApvnnZCPbok
+         E0c6JiYYGUX50g3Yp7Vr9DAZdi3zCgfVEdkkJIgZeGB8H6Pj2pRcbnlBu7KOujeTX1
+         VPEQXTHev9JLg==
+Message-ID: <3729df62-8d39-db47-0b57-2bef37cc5830@collabora.com>
+Date:   Tue, 13 Dec 2022 10:42:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v4 6/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
+Subject: Re: [PATCH v4 8/9] arm/arm64: dts: mediatek: Fix existing NAND
+ controller node name
 Content-Language: en-US
 To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -52,13 +52,12 @@ Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        bin.zhang@mediatek.com
 References: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
- <20221209064317.2828-7-xiangsheng.hou@mediatek.com>
+ <20221209064317.2828-9-xiangsheng.hou@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221209064317.2828-7-xiangsheng.hou@mediatek.com>
+In-Reply-To: <20221209064317.2828-9-xiangsheng.hou@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,11 +70,20 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Il 09/12/22 07:43, Xiangsheng Hou ha scritto:
-> Add mediatek,rx-latch-latency-ns property which adjust data read
-> latch latency in the unit of nanoseconds.
+> Change the existing node name in order to match NAND controller DT
+> bindings.
 > 
 > Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm/boot/dts/mt2701.dtsi             | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt7622.dtsi  | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+
+Splitting this in two commits, one for ARM and one for ARM64 would probably
+be better, but since I don't have strong opinions on that...
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
