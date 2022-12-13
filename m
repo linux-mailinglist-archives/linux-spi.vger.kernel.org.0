@@ -2,99 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1A964A6AE
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Dec 2022 19:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2761F64AD05
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 02:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiLLSJt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Dec 2022 13:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S234069AbiLMBaj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Dec 2022 20:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiLLSIa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Dec 2022 13:08:30 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2B865D7
-        for <linux-spi@vger.kernel.org>; Mon, 12 Dec 2022 10:07:56 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o15so6208409wmr.4
-        for <linux-spi@vger.kernel.org>; Mon, 12 Dec 2022 10:07:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vxcMgepI8oVEM9TqV5Jw/8Ls56KCQWpTpg2XQ851Vyo=;
-        b=ihIo87o/eW0m0yNdwDPZYK+DwBvApOUgbohqKB5uvxZomOsA7v/sIVscW3U7MU40Vn
-         oZvjCKLwi7XnZlTbhTAM1iefFfkNbcmzhaR1hWInKHbCO53Z6NJ71yKW4uCjdXX1pLmU
-         gbSbXVkBRmwf9k4nutNA9DDRLRSrKqyzVdDdGCmiepNlB69wP5ysyD+gWqC8MZHrLY1n
-         4FvDcYZA79H8FOQDnSK0i1wZCxfE9qBsG5n/6f8lwx4DQOqWyt2kbjuHOZr+KNYh8Uxa
-         4NSYJlsDKN0EKzCbH5oc29wuirYwZMkFKgoHGTbpd83LA+sXtN/jMMb0K6Aj43CL6ZXq
-         ygsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vxcMgepI8oVEM9TqV5Jw/8Ls56KCQWpTpg2XQ851Vyo=;
-        b=KqoaiPj0xEjv/kBpDlpQ61nFfxyUGZQcaVotRoHN4nodjtPK11EKOLaVB7pqtqbNRT
-         yt+5Pg6tjU+T5wxQI2z/cWcncu9yH+iAKvsL0qOkSLVZn76emqrGyoSbZnf77/zz9IB8
-         NcOB10TW3hO6LvdeEcp4bftGFE6lenxvd/3bo+c9djKvWHdp1Jkxvzj/QWBknSviuDmv
-         Mq+9bGSpmteSqpMs8vPp3/2J3HdXNWhvFRByzDExtMtHNuwdUa1SHo8kcCjtf+TSUhh7
-         i/AirP+A4MjUq5cqyRV5yPBF6hUUTxxufpGOnF+NTSTibmxPRtpHv+gsolmZymG8Bffc
-         jx8Q==
-X-Gm-Message-State: ANoB5pmRpTcrVql1iIE5gm2+5L/uW3ZPs161PmlZEPm5lSfFYtcEV4VN
-        1SXo9AMqcVQ6SFYbC5TWJh4R5w==
-X-Google-Smtp-Source: AA0mqf5WAwhv7CN65oqrRHJ56WnHd0r1iLiZBzcHbxlqTDYQ/i3lCLb42boTqKHrJxh0Z2TfH+O25Q==
-X-Received: by 2002:a1c:4c06:0:b0:3cf:88c3:d008 with SMTP id z6-20020a1c4c06000000b003cf88c3d008mr13028681wmf.28.1670868475158;
-        Mon, 12 Dec 2022 10:07:55 -0800 (PST)
-Received: from localhost.localdomain (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id t123-20020a1c4681000000b003a3170a7af9sm10156808wma.4.2022.12.12.10.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 10:07:54 -0800 (PST)
-From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
-        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Subject: [PATCH v2 15/15] spi: dw: initialize dwc-ssi controller
-Date:   Mon, 12 Dec 2022 18:07:32 +0000
-Message-Id: <20221212180732.79167-16-sudip.mukherjee@sifive.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
-References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+        with ESMTP id S233867AbiLMBai (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Dec 2022 20:30:38 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4411CFC5;
+        Mon, 12 Dec 2022 17:30:37 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NWLRs5rtGzqT5J;
+        Tue, 13 Dec 2022 09:26:17 +0800 (CST)
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 13 Dec 2022 09:30:33 +0800
+Subject: Re: [PATCH v1] spi: xtensa-xtfpga: Fix a double put() in
+ xtfpga_spi_remove()
+To:     Mark Brown <broonie@kernel.org>, Max Filippov <jcmvbkbc@gmail.com>
+CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-xtensa@linux-xtensa.org>, <linux-spi@vger.kernel.org>,
+        <yangyingliang@huawei.com>
+References: <7946a26c6e53a4158f0f5bad5276d8654fd59415.1670673147.git.christophe.jaillet@wanadoo.fr>
+ <CAMo8BfKCv9j-ftKWU+B27g1oHBB_=EZhGBH7qymyVAeF10JcnQ@mail.gmail.com>
+ <Y5dKk+uw3UcW2Pu1@sirena.org.uk>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <bdb26ba3-7276-359a-7784-6ec3e35c64de@huawei.com>
+Date:   Tue, 13 Dec 2022 09:30:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y5dKk+uw3UcW2Pu1@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use the generic snps,dw-ahb-ssi version to initialize the controller.
 
-Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
----
- drivers/spi/spi-dw-mmio.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2022/12/12 23:36, Mark Brown wrote:
+> On Sat, Dec 10, 2022 at 06:48:02AM -0800, Max Filippov wrote:
+>> Hi Christophe,
+>>
+>> On Sat, Dec 10, 2022 at 3:52 AM Christophe JAILLET
+>> <christophe.jaillet@wanadoo.fr> wrote:
+>>> 'master' is allocated with devm_spi_alloc_master(), there is no need to
+>>> put it explicitly in the remove function.
+>>>          spi_bitbang_stop(&xspi->bitbang);
+>>> -       spi_master_put(master);
+>> This put is matching the get in the spi_bitbang_start.
+>> It was discussed here:
+>> https://lore.kernel.org/linux-spi/CAMo8BfJaD7pG_iutY8jordysjChyzhTpVSqpxXh3QoZsj2QmaQ@mail.gmail.com/
+> Probably worth a comment though since it is a bit of a gotcha.  Ideally
+> we'd improve this in the bitbang code but that's harder.
+Ideally, spi_bitbang_stop() should undo spi_bitbang_start(). shall we 
+move spi_master_put() in spi_bitbang_stop() instead of
+calling it separately in drivers?
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 26c40ea6dd129..431ba768ea861 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -352,6 +352,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
- 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
-+	{ .compatible = "snps,dw-ahb-ssi", .data = dw_spi_hssi_init},
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
--- 
-2.30.2
-
+Thanks,
+Yang
