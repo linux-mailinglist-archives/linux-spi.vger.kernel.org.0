@@ -2,77 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2761F64AD05
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 02:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ADB64B27D
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 10:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiLMBaj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Dec 2022 20:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S234894AbiLMJhC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Dec 2022 04:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiLMBai (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Dec 2022 20:30:38 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4411CFC5;
-        Mon, 12 Dec 2022 17:30:37 -0800 (PST)
-Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NWLRs5rtGzqT5J;
-        Tue, 13 Dec 2022 09:26:17 +0800 (CST)
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 13 Dec 2022 09:30:33 +0800
-Subject: Re: [PATCH v1] spi: xtensa-xtfpga: Fix a double put() in
- xtfpga_spi_remove()
-To:     Mark Brown <broonie@kernel.org>, Max Filippov <jcmvbkbc@gmail.com>
-CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-xtensa@linux-xtensa.org>, <linux-spi@vger.kernel.org>,
-        <yangyingliang@huawei.com>
-References: <7946a26c6e53a4158f0f5bad5276d8654fd59415.1670673147.git.christophe.jaillet@wanadoo.fr>
- <CAMo8BfKCv9j-ftKWU+B27g1oHBB_=EZhGBH7qymyVAeF10JcnQ@mail.gmail.com>
- <Y5dKk+uw3UcW2Pu1@sirena.org.uk>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <bdb26ba3-7276-359a-7784-6ec3e35c64de@huawei.com>
-Date:   Tue, 13 Dec 2022 09:30:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S234764AbiLMJg5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 04:36:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093BEE090;
+        Tue, 13 Dec 2022 01:36:57 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C54546602C2F;
+        Tue, 13 Dec 2022 09:36:54 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670924215;
+        bh=fLn2UAeQvWXC9MeuL7iKd8dOQ4ZLh8KobKr8uewjk20=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eAZmkFqe31udewZc9gRFBkak1tXZAfCHVQtSZtQXetMuV/wIXuzpNEYdeexYqv38b
+         6ydmVOTgIJvRpZSb/DEmaa4p788XkpMxEj/HXMRI33qAbT7SHSH2VSmXMeIm1NvtmC
+         HbYtiFQ34VKe9piLr3XUv8538tB3CSD9DPxthgGJ1maEmVB+PX5LoG5mqoyeIupXZ7
+         WjauhF7zgY8VSFr9nF3FRnZj9hd+tqxUPnNnxvPBjrYjW9WKEOaFBYaphK9/yMjUah
+         NHr9Km0MSJEZycZHGRVZExwmqx2gl3rqdj0uXwfbLnpV/XkmNPhWqYP6Daxx59SBUw
+         XGB9IVcB7SNkQ==
+Message-ID: <e518539d-6573-85ae-e69c-6c5318e367fa@collabora.com>
+Date:   Tue, 13 Dec 2022 10:36:52 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y5dKk+uw3UcW2Pu1@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 3/9] mtd: nand: ecc-mtk: Add ECC support fot MT7986 IC
 Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
+ <20221209064317.2828-4-xiangsheng.hou@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221209064317.2828-4-xiangsheng.hou@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Il 09/12/22 07:43, Xiangsheng Hou ha scritto:
+> Add ECC support fot MT7986 IC, and change err_mask value with
+> GENMASK macro.
+> 
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 
-On 2022/12/12 23:36, Mark Brown wrote:
-> On Sat, Dec 10, 2022 at 06:48:02AM -0800, Max Filippov wrote:
->> Hi Christophe,
->>
->> On Sat, Dec 10, 2022 at 3:52 AM Christophe JAILLET
->> <christophe.jaillet@wanadoo.fr> wrote:
->>> 'master' is allocated with devm_spi_alloc_master(), there is no need to
->>> put it explicitly in the remove function.
->>>          spi_bitbang_stop(&xspi->bitbang);
->>> -       spi_master_put(master);
->> This put is matching the get in the spi_bitbang_start.
->> It was discussed here:
->> https://lore.kernel.org/linux-spi/CAMo8BfJaD7pG_iutY8jordysjChyzhTpVSqpxXh3QoZsj2QmaQ@mail.gmail.com/
-> Probably worth a comment though since it is a bit of a gotcha.  Ideally
-> we'd improve this in the bitbang code but that's harder.
-Ideally, spi_bitbang_stop() should undo spi_bitbang_start(). shall we 
-move spi_master_put() in spi_bitbang_stop() instead of
-calling it separately in drivers?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Thanks,
-Yang
