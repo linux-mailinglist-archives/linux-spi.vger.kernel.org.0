@@ -2,74 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF69164B56B
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 13:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085D164B593
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 14:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiLMMrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Dec 2022 07:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S235379AbiLMNCR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Dec 2022 08:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbiLMMro (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 07:47:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CB21008;
-        Tue, 13 Dec 2022 04:47:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6BA8B811B9;
-        Tue, 13 Dec 2022 12:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8A4C433EF;
-        Tue, 13 Dec 2022 12:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670935660;
-        bh=C0kWfzBMeUnkMCqjJc8AA1etPAtrgwywD/A/JsLxtAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nUa9dHjgNMtaO5Rte1RyIlkjg7PjS9qLM5wvmaPtlIm1i+M9BtZ2oLTLpADlhDu3o
-         x1m2S4yg9KCU9g/fw7NRbXQjMa0ezQBmBpZfj9x9GIjN2oGNqXIYNFRS7/VW/K9gJR
-         r7+ipzGE9olQsN3hF39wOKbfLDJI6d3MFKIfCMh9AZjM5RPWhXW9mm2JpICki85o2f
-         iQ52HZAkGfoQnBgWsoKGf5uX809LMyrMCQWivN2P21DRritJ6ctRyYTKZ5wTtsDxPR
-         Yf+LYN33DOt5nLomrpDTGVVFV3tfp4KdO1fxgFVyI0ikrgItl2w+JXPTU+2KPpk9MA
-         J/osE4R5HaU8Q==
-Date:   Tue, 13 Dec 2022 12:47:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com, linux-spi@vger.kernel.org,
-        Javier Martinez Canillas <fmartine@redhat.com>
+        with ESMTP id S235152AbiLMNCQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 08:02:16 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40613E09
+        for <linux-spi@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id q6so4743298lfm.10
+        for <linux-spi@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
+        b=v3fQlf2kgSS+AJzKkGbQbQVxCdOzB79tHBy13LmzAC6tYjbvJD2/3NLM3k3N7C1s1C
+         fbi8XkxaQfqTRPtEEAWsCNSkbLZT0Lr16P/d85zsDuUCOfJo8NWwY2Sogcds8MRuDAVW
+         ikR8fOeVjci1sJjgcql5bKdLLhRUl2NRUmCYDkdjqWimEH2I7MVLAwHV9yHC6YaIid6T
+         lEA3KVr9Z8TL6FK2o0Qv+FpL+I1zqlcVC2VqdC6fRV6+K4eBfWCnij2ecsMIW+4o8jwH
+         S8Z7PVUeKsSMsSAsFM0FAgDdBajAbRjANH4oNaaf6uC0uiHpQxnWF7I2dEFPR3yLwa41
+         Pssw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
+        b=L+B5cIF91g7cWOqRi2FSrQNqr0BqHXioL/elqQa/LNYrzVk0aPCoQDyQnEeMVA0bHu
+         MgeUJKe/wGqrZLTgSi9VQKttIkaqUB1waHLS58W9KHy0U388UajxeTv4ONMiCHQIvG/3
+         0a4RsVGcMSNDVbkwrQiqTBN/0VL55Vcu7sIHiy/qPZN6qjVIGCBOX34dxzu6auSgIRWW
+         hI1vMJjo8OBopTmpVwXm52KgazHuQOYhzoCNuxZCTlcZQJhIBq4/NzCk5+29f3oy6a6O
+         tUwg9T6PZ3r9Aq9tN4iI17XW2YL0Uq9p58YARe4UIGjXUopNk2RKoX4EvVuwZnZyW4we
+         BUUQ==
+X-Gm-Message-State: ANoB5pmKbJbz68AxgvAGQzpWFsPOqMy8i/DV6RSHtn0HAQ7/xSz3+CmO
+        UAwDqURuSGNw+aSBjYgVvCnGKQ==
+X-Google-Smtp-Source: AA0mqf6NbjEsBWAPSxu32rWUqrPPN0YATuL85yOo7kXNM8FUMipRROZsB4b08JOvaexQsUYWdpUQSQ==
+X-Received: by 2002:a05:6512:b8c:b0:4b5:7d49:4a05 with SMTP id b12-20020a0565120b8c00b004b57d494a05mr7830468lfv.0.1670936532229;
+        Tue, 13 Dec 2022 05:02:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y12-20020a19914c000000b004b55a1c4649sm363680lfj.38.2022.12.13.05.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 05:02:11 -0800 (PST)
+Message-ID: <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
+Date:   Tue, 13 Dec 2022 14:02:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
 Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Message-ID: <Y5h0ZiGaPg2tx0qs@sirena.org.uk>
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com,
+        linux-spi@vger.kernel.org,
+        Javier Martinez Canillas <fmartine@redhat.com>
 References: <20221212182314.1902632-1-bmasney@redhat.com>
  <20221212182314.1902632-5-bmasney@redhat.com>
- <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com>
- <Y5hvlX35nr8xQKEd@x1>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wyNsimEDc1OgCcyo"
-Content-Disposition: inline
+ <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com> <Y5hvlX35nr8xQKEd@x1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <Y5hvlX35nr8xQKEd@x1>
-X-Cookie: Edwin Meese made me wear CORDOVANS!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---wyNsimEDc1OgCcyo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Dec 13, 2022 at 07:27:01AM -0500, Brian Masney wrote:
-
+On 13/12/2022 13:27, Brian Masney wrote:
+> + Mark Brown and linux-spi list
+> 
+> On Tue, Dec 13, 2022 at 12:46:18PM +0530, Shazad Hussain wrote:
+>> On 12/12/2022 11:53 PM, Brian Masney wrote:
+>>> Add the missing nodes for the spi buses that's present on this SoC.
+>>>
+>>> This work was derived from various patches that Qualcomm delivered
+>>> to Red Hat in a downstream kernel.
+>>>
+>>> Signed-off-by: Brian Masney <bmasney@redhat.com>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 384 +++++++++++++++++++++++++
+>>>   1 file changed, 384 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> index 392a1509f0be..b50db09feae2 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> @@ -829,6 +829,22 @@ qup2_i2c16: i2c@880000 {
+>>>   				status = "disabled";
+>>>   			};
+>>> +			qup2_spi16: spi@880000 {
+>>> +				compatible = "qcom,geni-spi";
+>>> +				reg = <0 0x00880000 0 0x4000>;
+>>> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
+>>> +				clock-names = "se";
+>>> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+>>> +				#address-cells = <1>;
+>>> +				#size-cells = <0>;
+>>> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>>> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
+>>> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
+>>> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>>> +				spi-max-frequency = <50000000>;
+>>
+>> This is device property not host and same applicable for all below spi
+>> nodes.
+>> Also FYI let's enable below SPI for Qdrive usecases once spidev compatible
+>> name is confirmed.
+>> SE9  0x00A84000
+>> SE22 0x00898000
+> 
+> I talked to Javier Martinez Canillas yesterday about the spidev driver
+> and I think I now have a better understanding of what we need to do.
+> Quick background for Mark. For this automotive program, Qualcomm will be
+> delivering to Red Hat and our customers parts of the media stack in
+> userspace. This will be closed source, proprietary code that parts of it
+> will need to interface with SPI.
+> 
 > We can't add a generic qcom,spidev compatible to the spidev driver since
 > this is just a software abstraction. Instead, each type of device will
 > need to have it's own compatible that uniquely describes the type of
@@ -77,28 +140,17 @@ On Tue, Dec 13, 2022 at 07:27:01AM -0500, Brian Masney wrote:
 > will need to be a DT binding added that describes the hardware. I suspect
 > that a SPI device can simply be added to trivial-devices.yaml. Once the
 > DT binding is accepted, the compatible can be added to the spidev.c
-> driver. If an in-kernel driver is written in the future, then the=20
+> driver. If an in-kernel driver is written in the future, then the 
 > compatible can be moved from spidev to the new driver.
-
+> 
 > Mark: Is my understanding above correct? If so, will it be a problem to
 > get a compatible added to spidev.c if the corresponding userspace code is
 > closed source and proprietary?
 
-No restriction on what the userspace is.
+qcom,spi-video-codec is still not specific enough. You need to describe
+real device behind spidev. To be clear - you do not describe userspace,
+but the device.
 
---wyNsimEDc1OgCcyo
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Krzysztof
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOYdGUACgkQJNaLcl1U
-h9CzHwf+JP5CRJsjmYyyOlQmaCl1IOkTdl4br1Sd0Op4ooGVbIFEieXnBYfuUNon
-mPjbGv0f9Pn24dLxRMprh//Yh+Fv40ri4NEAVxq9OyShVcpg69lqzBdVlU8aGgds
-ljdMeZk7F3SqvHDKMzmL/cWho+aEh8ANg103ipEEq9nEYZZMXcyCLzPExqWcGw/3
-9djKGOGHrBl0b7LiCrQhQkbBh2I20mPKxGInjDdpyM0ck9AtFvhEsnii9DS7/Xsv
-DRPUvphwzRjpZBNLMXAaDJNcPQcJFh98VCm32/nBVHyT18bNHWo1aQzNAqoIqNqV
-FtASMiphe8tykKruLxRsrCwQOT9yJQ==
-=TKvN
------END PGP SIGNATURE-----
-
---wyNsimEDc1OgCcyo--
