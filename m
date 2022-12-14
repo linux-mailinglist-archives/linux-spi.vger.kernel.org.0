@@ -2,73 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E703B64BEE4
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Dec 2022 22:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09E64CB77
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Dec 2022 14:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbiLMV4N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Dec 2022 16:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S237453AbiLNNmL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Dec 2022 08:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237017AbiLMVze (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Dec 2022 16:55:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E425E25C6E;
-        Tue, 13 Dec 2022 13:54:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81AB161744;
-        Tue, 13 Dec 2022 21:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E77AEC433F0;
-        Tue, 13 Dec 2022 21:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670968439;
-        bh=P1k/51A7KQ9Rnp1vDNzZmRTK4PMeOsDP3jt5PUORj0I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WL4EBS4A6/0Yv+QD6u6sfMeMhVeSUt6Luh5ZD9ZL1OEcEhcsraRqSR22buqIUDRZ5
-         qUa2weqpckaMCDfmtNOvXQ9s/+2OvHlcJILFz+In/IcoevvbFfKVlBN6YMhkvyZ1sn
-         JUUSpc1JXzR62D/IOs2vF2YOe9w+EUDOj6WNKlieopk2rSO8Fv1ahEJV89+U6a7ZmF
-         TbSRRdM0gyNFREWXSHT+1y78B+VzD0SmsWocaYvaYIHM7xc3+osudUilgApBxif7uK
-         xZV5GzYqsTuMAbaLBZxJk7yLEaYk5BtxfZzIozUVFTP7omMbIkdLtEnFKlnM0dnLeU
-         TkNfQZAnRGupA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C92B2C41612;
-        Tue, 13 Dec 2022 21:53:59 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221212131621.6AAC2C433F0@smtp.kernel.org>
-References: <20221212131621.6AAC2C433F0@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221212131621.6AAC2C433F0@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.2
-X-PR-Tracked-Commit-Id: 3cf241c3d56ff19f5192cb42a025bc6582b6e8fa
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d0f3ad23cf4f4046e88eef92c608d43cad9e4f7e
-Message-Id: <167096843982.13204.7190568082693527148.pr-tracker-bot@kernel.org>
-Date:   Tue, 13 Dec 2022 21:53:59 +0000
+        with ESMTP id S229712AbiLNNmK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Dec 2022 08:42:10 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D6426AC3;
+        Wed, 14 Dec 2022 05:42:06 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4NXGkN0yH9z9snF;
+        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hfhTWXB50so6; Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4NXGkN05yxz9sn7;
+        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E7C018B773;
+        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yYyqfqsYJ_Hn; Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.109])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A4C018B766;
+        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BEDfs3H890976
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 14:41:54 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BEDfqfY890971;
+        Wed, 14 Dec 2022 14:41:52 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-spi@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] spi: fsl_spi: Don't change speed while chipselect is active
+Date:   Wed, 14 Dec 2022 14:41:33 +0100
+Message-Id: <8aab84c51aa330cf91f4b43782a1c483e150a4e3.1671025244.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671025291; l=2546; s=20211009; h=from:subject:message-id; bh=8/jPqVq6+i4ZTuwdyPTYisS3aYHreLAZCFf6R55Qckc=; b=qC4a0ccjJlEsJPlSdNoPiAK0OdPp36lryj0XAXdRWkYMSkTpCRSKsHcmDwFHDrSe4T7embn0AI06 R/d0B4vFB3QmoUTj3Dpc7VRNc76rQnest+fh3CBywicoYi5Lwg4K
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 12 Dec 2022 13:16:10 +0000:
+Commit c9bfcb315104 ("spi_mpc83xx: much improved driver") made
+modifications to the driver to not perform speed changes while
+chipselect is active. But those changes where lost with the
+convertion to tranfer_one.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.2
+Previous implementation was allowing speed changes during
+message transfer when cs_change flag was set.
+At the time being, core SPI does not provide any feature to change
+speed while chipselect is off, so do not allow any speed change during
+message transfer, and perform the transfer setup in prepare_message
+in order to set correct speed while chipselect is still off.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d0f3ad23cf4f4046e88eef92c608d43cad9e4f7e
+Reported-by: Herve Codina <herve.codina@bootlin.com>
+Fixes: 64ca1a034f00 ("spi: fsl_spi: Convert to transfer_one")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Tested-by: Herve Codina <herve.codina@bootlin.com>
+---
+ drivers/spi/spi-fsl-spi.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-Thank you!
-
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 731624f157fc..93152144fd2e 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -333,13 +333,26 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
+ {
+ 	struct mpc8xxx_spi *mpc8xxx_spi = spi_controller_get_devdata(ctlr);
+ 	struct spi_transfer *t;
++	struct spi_transfer *first;
++
++	first = list_first_entry(&m->transfers, struct spi_transfer,
++				 transfer_list);
+ 
+ 	/*
+ 	 * In CPU mode, optimize large byte transfers to use larger
+ 	 * bits_per_word values to reduce number of interrupts taken.
++	 *
++	 * Some glitches can appear on the SPI clock when the mode changes.
++	 * Check that there is no speed change during the transfer and set it up
++	 * now to change the mode without having a chip-select asserted.
+ 	 */
+-	if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
+-		list_for_each_entry(t, &m->transfers, transfer_list) {
++	list_for_each_entry(t, &m->transfers, transfer_list) {
++		if (t->speed_hz != first->speed_hz) {
++			dev_err(&m->spi->dev,
++				"speed_hz cannot change during message.\n");
++			return -EINVAL;
++		}
++		if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
+ 			if (t->len < 256 || t->bits_per_word != 8)
+ 				continue;
+ 			if ((t->len & 3) == 0)
+@@ -348,7 +361,7 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
+ 				t->bits_per_word = 16;
+ 		}
+ 	}
+-	return 0;
++	return fsl_spi_setup_transfer(m->spi, first);
+ }
+ 
+ static int fsl_spi_transfer_one(struct spi_controller *controller,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.38.1
+
