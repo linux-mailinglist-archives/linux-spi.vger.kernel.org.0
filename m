@@ -2,51 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F28D64CF8D
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Dec 2022 19:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869BB64DF07
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Dec 2022 17:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238869AbiLNSku (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Dec 2022 13:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S230368AbiLOQxg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Dec 2022 11:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238888AbiLNSkn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Dec 2022 13:40:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30D3D45;
-        Wed, 14 Dec 2022 10:40:40 -0800 (PST)
+        with ESMTP id S230304AbiLOQwy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Dec 2022 11:52:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE9396D2;
+        Thu, 15 Dec 2022 08:52:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 220D4B818A6;
-        Wed, 14 Dec 2022 18:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C064C433D2;
-        Wed, 14 Dec 2022 18:40:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDD0861E5D;
+        Thu, 15 Dec 2022 16:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD03FC433EF;
+        Thu, 15 Dec 2022 16:52:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671043237;
-        bh=BfPmRbxFCqUCV8U+jqF/ZUYDmw0wAT7lnJ27V9BdeZI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KZ3P2Jv9oF0WMB2ZBUF8BZEtYZa176QxZ/CgppeP2V/ZRZb1Q+XA4uKrx14uaydIa
-         JLi5AO3VrEeT67vretVugZV2ptRwxX7gMv0bBKz+0U81WAz+cXR9C3iKiVQRHi+sTM
-         QfV05JduPaGsWxj/SkXIX7doH/ycy9MUp/RrRYsZKolGh+3OPu7WTNvbls6YQkAxiP
-         1ICtOk0GbuVzjPWHNDwORhPIFdcCieVZeVbOcPqQDt8ZHmB9jnIKGeDy8rLqbqyGqs
-         ie4+AZQ1jcKhNHX0npRoypQTT9b49vGVqgwRwQeMGW82mr3cNwrPQ9KGZhESwjuRz3
-         yh1TF3SdKsU5w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-spi@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        stable@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C8aab84c51aa330cf91f4b43782a1c483e150a4e3=2E1671025?=
- =?utf-8?q?244=2Egit=2Echristophe=2Eleroy=40csgroup=2Eeu=3E?=
-References: =?utf-8?q?=3C8aab84c51aa330cf91f4b43782a1c483e150a4e3=2E16710252?=
- =?utf-8?q?44=2Egit=2Echristophe=2Eleroy=40csgroup=2Eeu=3E?=
-Subject: Re: [PATCH] spi: fsl_spi: Don't change speed while chipselect is active
-Message-Id: <167104323615.416042.13205866259522482706.b4-ty@kernel.org>
-Date:   Wed, 14 Dec 2022 18:40:36 +0000
+        s=k20201202; t=1671123173;
+        bh=2bmhdr/nvgkMf7YcywGkuuzXTYoO4RT28VcvVaqvCyU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=B/+V5Zt/7aZXi/25niJEihaQl697KMqmlxDtuRuL7on8YtR7umPBPLp5ZYsX1jtl5
+         Krc8ipKD2F4SyIdc29Cy1soN+OfO7gj1RySeBWttJFxiTce+DSVh7lQu++Ofe1ZUMt
+         94upTImB5ujP/M8x1Icu/ZeANadgp9v07a7g4xzIkEdsayWTF2dC6pVXnZ17cF534u
+         SYYWahicyAy5reTzMSBh5dT9ZyCNzidGHsE+IQQerc1JC9CO+Uuun0/nIMqJhc53AS
+         +ICvlmvPDaD0RnR0X55ffX+oB++R01NKXbCKVFFW+AjKTj168/0BHjYxMgBvHYeDc8
+         fWs/b6S7jP8PA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: dw_bt1: fix MUX_MMIO dependencies
+Date:   Thu, 15 Dec 2022 17:52:34 +0100
+Message-Id: <20221215165247.1723462-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-7e003
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,45 +52,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 14 Dec 2022 14:41:33 +0100, Christophe Leroy wrote:
-> Commit c9bfcb315104 ("spi_mpc83xx: much improved driver") made
-> modifications to the driver to not perform speed changes while
-> chipselect is active. But those changes where lost with the
-> convertion to tranfer_one.
-> 
-> Previous implementation was allowing speed changes during
-> message transfer when cs_change flag was set.
-> At the time being, core SPI does not provide any feature to change
-> speed while chipselect is off, so do not allow any speed change during
-> message transfer, and perform the transfer setup in prepare_message
-> in order to set correct speed while chipselect is still off.
-> 
-> [...]
+From: Arnd Bergmann <arnd@arndb.de>
 
-Applied to
+Selecting a symbol with additional dependencies requires
+adding the same dependency here:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+WARNING: unmet direct dependencies detected for MUX_MMIO
+  Depends on [n]: MULTIPLEXER [=y] && OF [=n]
+  Selected by [y]:
+  - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
 
-Thanks!
+Alternatively, we could drop this 'select' and require users to manually
+put it into their .config as we do for other drivers.
 
-[1/1] spi: fsl_spi: Don't change speed while chipselect is active
-      commit: 3b553e0041a65e499fa4e25ee146f01f4ec4e617
+Fixes: 7218838109fe ("spi: dw-bt1: Fix undefined devm_mux_control_get symbol")
+Fixes: abf00907538e ("spi: dw: Add Baikal-T1 SPI Controller glue driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/spi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 3b1c0878bb85..1884e4083088 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -294,6 +294,7 @@ config SPI_DW_MMIO
+ config SPI_DW_BT1
+ 	tristate "Baikal-T1 SPI driver for DW SPI core"
+ 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
++	depends on OF
+ 	select MULTIPLEXER
+ 	select MUX_MMIO
+ 	help
+-- 
+2.35.1
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
