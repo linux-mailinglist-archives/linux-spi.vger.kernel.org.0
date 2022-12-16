@@ -2,88 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869BB64DF07
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Dec 2022 17:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CD964EA4D
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Dec 2022 12:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiLOQxg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Dec 2022 11:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S231162AbiLPLYn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Dec 2022 06:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiLOQwy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Dec 2022 11:52:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE9396D2;
-        Thu, 15 Dec 2022 08:52:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDD0861E5D;
-        Thu, 15 Dec 2022 16:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD03FC433EF;
-        Thu, 15 Dec 2022 16:52:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671123173;
-        bh=2bmhdr/nvgkMf7YcywGkuuzXTYoO4RT28VcvVaqvCyU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=B/+V5Zt/7aZXi/25niJEihaQl697KMqmlxDtuRuL7on8YtR7umPBPLp5ZYsX1jtl5
-         Krc8ipKD2F4SyIdc29Cy1soN+OfO7gj1RySeBWttJFxiTce+DSVh7lQu++Ofe1ZUMt
-         94upTImB5ujP/M8x1Icu/ZeANadgp9v07a7g4xzIkEdsayWTF2dC6pVXnZ17cF534u
-         SYYWahicyAy5reTzMSBh5dT9ZyCNzidGHsE+IQQerc1JC9CO+Uuun0/nIMqJhc53AS
-         +ICvlmvPDaD0RnR0X55ffX+oB++R01NKXbCKVFFW+AjKTj168/0BHjYxMgBvHYeDc8
-         fWs/b6S7jP8PA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: dw_bt1: fix MUX_MMIO dependencies
-Date:   Thu, 15 Dec 2022 17:52:34 +0100
-Message-Id: <20221215165247.1723462-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S231147AbiLPLYl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Dec 2022 06:24:41 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076B116F;
+        Fri, 16 Dec 2022 03:24:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id f18so2175397wrj.5;
+        Fri, 16 Dec 2022 03:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W4VXbJEHeIKsxV2etXdXC9p74o9+DjjUHAD3709lTso=;
+        b=K7M2M+rnek8TsNzxL6ToBmEA11M3fhHINdOlnI8lFu9ZTErErwxUfXbk6k5Ru80qU/
+         D1Bjj+o9ySUzVezoLXlPciNiRhHChqvHdsy3ebTncTSyHLabX3D7Z6umY+rUgKpQOOxD
+         Ei8ppSoC9lUsLBZzMcNRnEDN5mZiljHqzIf0Ca4KMmSJ6nEzVI4OTZPmqo34JY+OtJvb
+         jE3irjg6TltoO32Eh0HzMQ8lJgSlsZuHHkNG5+Ihumc1vXAxBjti52GmDjMktNR5H4AX
+         exPGX0JFUGeEkbzhgehWpqzQMVo59nt7TzCx5ycRclXgeHlJyOoyEU5rxiVSu/2TrKZJ
+         icNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4VXbJEHeIKsxV2etXdXC9p74o9+DjjUHAD3709lTso=;
+        b=XBFvy8Zg7nCeoBDUopaTtaGYFkg4iVWKql66DMt2NfutYpd23JxZKZ3QW69vVQSQUl
+         1T+15ejL2/lKMeDOe3cRUeevMtpFff9dekrajSZGpACoURPj7Ttp238zAAx1jWiGKZId
+         vFTXxZiiKj1fwvOsNgAgBuHC/XLINC76V6ksoqJWbaLrs9Bbg7GUIT5PeCup78sSI8x3
+         CjnaL/AombsttIRBhWz2VUbzaXTx2E3Vj9ezSuzpofdM1vtPFA6/UgrRTTmqM82+3q8/
+         6cxbGfqKkTKP+gphL/EUWXHuNlh/VE2Gh0XAQFxsETl1ht2KcYaPFO0qreE8uFmbEk3c
+         sIbA==
+X-Gm-Message-State: ANoB5pnIjSXTtNPQk4X2YnM4elqIjFnDAE7tEdvajq96IXw42z3S8chX
+        i7SHUNgdlWCsaEZKiIvBZqn0AK1MR54=
+X-Google-Smtp-Source: AA0mqf4SMH1j0IY24v9NVD4Fb4t/t5rk7U6fmdMg4y7MdplN62WS3Wir4dKDp2SDEt0uAZBmKOwwpA==
+X-Received: by 2002:adf:f145:0:b0:242:486:5037 with SMTP id y5-20020adff145000000b0024204865037mr20176287wro.32.1671189879020;
+        Fri, 16 Dec 2022 03:24:39 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l17-20020a5d5611000000b002424b695f7esm1998289wrv.46.2022.12.16.03.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 03:24:38 -0800 (PST)
+Message-ID: <fb69f5da-1ea8-a0f3-1c3f-8269ad693f4e@gmail.com>
+Date:   Fri, 16 Dec 2022 12:24:36 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 8/9] arm/arm64: dts: mediatek: Fix existing NAND
+ controller node name
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
+ <20221209064317.2828-9-xiangsheng.hou@mediatek.com>
+ <3729df62-8d39-db47-0b57-2bef37cc5830@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <3729df62-8d39-db47-0b57-2bef37cc5830@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-Selecting a symbol with additional dependencies requires
-adding the same dependency here:
 
-WARNING: unmet direct dependencies detected for MUX_MMIO
-  Depends on [n]: MULTIPLEXER [=y] && OF [=n]
-  Selected by [y]:
-  - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
+On 13/12/2022 10:42, AngeloGioacchino Del Regno wrote:
+> Il 09/12/22 07:43, Xiangsheng Hou ha scritto:
+>> Change the existing node name in order to match NAND controller DT
+>> bindings.
+>>
+>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+>> ---
+>>   arch/arm/boot/dts/mt2701.dtsi             | 2 +-
+>>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 2 +-
+>>   arch/arm64/boot/dts/mediatek/mt7622.dtsi  | 2 +-
+>>   3 files changed, 3 insertions(+), 3 deletions(-)
+>>
+> 
+> Splitting this in two commits, one for ARM and one for ARM64 would probably
+> be better, but since I don't have strong opinions on that...
 
-Alternatively, we could drop this 'select' and require users to manually
-put it into their .config as we do for other drivers.
+Yes please split this up.
 
-Fixes: 7218838109fe ("spi: dw-bt1: Fix undefined devm_mux_control_get symbol")
-Fixes: abf00907538e ("spi: dw: Add Baikal-T1 SPI Controller glue driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/spi/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3b1c0878bb85..1884e4083088 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -294,6 +294,7 @@ config SPI_DW_MMIO
- config SPI_DW_BT1
- 	tristate "Baikal-T1 SPI driver for DW SPI core"
- 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-+	depends on OF
- 	select MULTIPLEXER
- 	select MUX_MMIO
- 	help
--- 
-2.35.1
-
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> 
