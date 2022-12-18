@@ -2,67 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4277F64FF17
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Dec 2022 15:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FFE650448
+	for <lists+linux-spi@lfdr.de>; Sun, 18 Dec 2022 19:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiLROWo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 18 Dec 2022 09:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S231127AbiLRS3J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 18 Dec 2022 13:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiLROWn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Dec 2022 09:22:43 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD928B4BD;
-        Sun, 18 Dec 2022 06:22:40 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id f20so6744808lja.4;
-        Sun, 18 Dec 2022 06:22:40 -0800 (PST)
+        with ESMTP id S231137AbiLRS2q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Dec 2022 13:28:46 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AC4C23;
+        Sun, 18 Dec 2022 09:45:28 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id s25so7063036lji.2;
+        Sun, 18 Dec 2022 09:45:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddM49am3SRjYdaMOdig5YnBjDLqlY8c4aLnn9nULA3Y=;
-        b=gy/Qs4C2K7q98DPzcI+2XrUtChI7tO1q3RoaGyg4YErTY556/IFpyEsnCFKYiD+UAW
-         XNLLSptbgfDe/GfP0csObzc3plsEkJ1thb0ETeghXKaQdj+b+kPTs13S043vOJvcs/gl
-         XlLfVn11WQ9AR96ydWnSwlgvXb84aGb1x7sfDwg0VQ8zCBqcXhyeWptCnp+agf2FusKb
-         WhKahUs7ISRB0WSwAMKuSSV6zexYYNsx2NA0Ui1lcBTfw22dnO4a/AhW0iAZ49Sr5jYQ
-         PNr5PeJ7IXPv23C6rYspIcMu60TLi3Nfq4pJjdFxV3bcbJHlk6/uzFhPBZCjyxyVplt3
-         foxw==
+        bh=fUzlIolrkO35IM847g1aZdLGAKepQ/5ib1TfeOvGlxY=;
+        b=XfvTZuXpYRutEu7yMimcOYjfNe0gU00ElbWqGZrMExxP2DRKnUs9ZS6sxrDsY7nYSP
+         SJf0Na4FXDbLptu1dUnlrTzFxCgdjPZcWpTc45t4TpOftktbK/jP/clov95razDkgbqw
+         7AcUgdn797L9DKQNnYpRNzW6ZSEESzLshuFAmT5E9k65Voz1YqJVpTuPcyQKuz7k7HGN
+         jQNIU3PM6WzsdciRu/HJTGkmT1SGnZMlc9BNGK/ZH/NmlpoXa0AIMl5xFWlO9ml2YRoX
+         aCW6R5/cB3kORG5LDdVTzv3lSCszaAipIKZyBz42HhZVto6xfm7iXANFGmtle+H7WNIx
+         HAZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ddM49am3SRjYdaMOdig5YnBjDLqlY8c4aLnn9nULA3Y=;
-        b=wtDkuNJDsGG3rA1Piv/YfI8Tlkth5O9c83O2VYB7NtS87+0n5r2d57HOYc7bu93yOx
-         fLg6WS+yGXyBWuQMAnBWkOC5Tx1HnwngrdPAdls2wG176HHH2qeKWwNU2E+2UZUPH8ZN
-         f/qAo5e80AUgpg4TZZDBGHLQ4OJNE3Deq4pt99pC9HfjHocLP1qDGI6W2dINF6AWjjDU
-         JNkXSCGdeRUHnwjbWntxJBaolKMUw3rWubOMUEVGGU+b/vb0i7W67wkeQn6WkWXhdGN/
-         00W968bgRL8Fk2MOC4pSGiK+K/NkMPjaDM4A1QBTpxplvz6LCkOBqlYBFcs414VYka89
-         hsOQ==
-X-Gm-Message-State: ANoB5pn/Rzc3IsCTCYBLaqFMW2e3K1hjmcQOvDEtGozpM8K87ddb0ZRy
-        g6kyhy5sEo9AriNTbCABl8A=
-X-Google-Smtp-Source: AA0mqf5W3CsG/9L9n1A+HudXfB1S+WWJ0ZLGz9NH/rjCWpl/1EpnoXHKDeTbDOdEQN9fIkgArNBT6Q==
-X-Received: by 2002:a2e:b530:0:b0:27a:cd8:dcf with SMTP id z16-20020a2eb530000000b0027a0cd80dcfmr9448315ljm.39.1671373358931;
-        Sun, 18 Dec 2022 06:22:38 -0800 (PST)
+        bh=fUzlIolrkO35IM847g1aZdLGAKepQ/5ib1TfeOvGlxY=;
+        b=R/TjUJCo8oUXHx+AQFKS4PFnu5abSNY4ynKfe5sy7QH7y7X6UFPuHVzycrNHELn6gk
+         0zw8e+bouoLkgUYo5nvakNzivhjg06K/6Nb1uNGo4tGiw17godctzPnCYu4iH9UrZmj1
+         JvHaJiWYUpZoKulL0DwDRRffR0It+vrn/GkClX1ExhtyXhmVVa8dsrSNaWW/ytn+ExWs
+         VJx2upxFulWn4bdFhTFMdzeprkeH6NQg+ZV2oHz7IW5RJHuRfX89p6w1KNJAFr+q3wSC
+         9dbtdJFPCaH8rzQFUztTt9aoVSwjxBmZhs0ADxNMusuIBzbip50MAS1ADVYmoYMgxBag
+         EZUg==
+X-Gm-Message-State: ANoB5pk+9pV9FcEs3TBOqIsgltCLAM3TT4xnWReZ/mXUulE0f1SkB9Kw
+        7dV1MPSbI+BiznOIyR0ZNLuqu3RCjxk=
+X-Google-Smtp-Source: AA0mqf7OQXKC1W2FrEkt0GD+KiUFbsAj3RJrLzmiYFqowcOQFAVHjhNCXR+lUVMaNe/GkQW/2LxRzA==
+X-Received: by 2002:a2e:bc09:0:b0:27a:40a3:d9a with SMTP id b9-20020a2ebc09000000b0027a40a30d9amr11527713ljf.9.1671385526080;
+        Sun, 18 Dec 2022 09:45:26 -0800 (PST)
 Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id t24-20020a2e8e78000000b0027a13ad14afsm548352ljk.125.2022.12.18.06.22.37
+        by smtp.gmail.com with ESMTPSA id m18-20020a056512359200b004b523766c23sm870247lfr.202.2022.12.18.09.45.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Dec 2022 06:22:38 -0800 (PST)
-Date:   Sun, 18 Dec 2022 17:22:31 +0300
+        Sun, 18 Dec 2022 09:45:25 -0800 (PST)
+Date:   Sun, 18 Dec 2022 20:45:23 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw_bt1: fix MUX_MMIO dependencies
-Message-ID: <20221218142231.qhczawk2zhpgh6dl@mobilestation>
-References: <20221215165247.1723462-1-arnd@kernel.org>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/15] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20221218174523.cke7ubh6nycd247c@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215165247.1723462-1-arnd@kernel.org>
+In-Reply-To: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,50 +74,51 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Arnd
+Hi Sudip
 
-On Thu, Dec 15, 2022 at 05:52:34PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Dec 12, 2022 at 06:07:17PM +0000, Sudip Mukherjee wrote:
+> The is v2 of the patch series adding enhanced SPI support. Some Synopsys SSI
+> controllers support enhanced SPI which includes Dual mode, Quad mode and
+> Octal mode. DWC_ssi includes clock stretching feature in enhanced SPI modes
+> which can be used to prevent FIFO underflow and overflow conditions while
+> transmitting or receiving the data respectively.
 > 
-> Selecting a symbol with additional dependencies requires
-> adding the same dependency here:
-> 
-> WARNING: unmet direct dependencies detected for MUX_MMIO
->   Depends on [n]: MULTIPLEXER [=y] && OF [=n]
->   Selected by [y]:
->   - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
-> 
-> Alternatively, we could drop this 'select' and require users to manually
-> put it into their .config as we do for other drivers.
+> This is almost a complete rework based on the review from Serge.
 
-Thanks for the patch. Seeing the driver is only implicitly dependent
-from the mux-mmio driver (via the device described in the device tree
-blob) I'd suggest to either drop the MUX_MMIO config reverse
-dependency or convert it to the weak one - 'imply' (if it will solve
-the problem).
+Thank you very much for the series. I'll have a look at it on the next
+week.
 
 -Serge(y)
 
 > 
-> Fixes: 7218838109fe ("spi: dw-bt1: Fix undefined devm_mux_control_get symbol")
-> Fixes: abf00907538e ("spi: dw: Add Baikal-T1 SPI Controller glue driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/spi/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 3b1c0878bb85..1884e4083088 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -294,6 +294,7 @@ config SPI_DW_MMIO
->  config SPI_DW_BT1
->  	tristate "Baikal-T1 SPI driver for DW SPI core"
->  	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-> +	depends on OF
->  	select MULTIPLEXER
->  	select MUX_MMIO
->  	help
 > -- 
-> 2.35.1
+> Regards
+> Sudip
+> 
+> Sudip Mukherjee (15):
+>   spi: dw: Introduce spi_frf and STD_SPI
+>   spi: dw: update NDF while using enhanced spi mode
+>   spi: dw: update SPI_CTRLR0 register
+>   spi: dw: add check for support of enhanced spi
+>   spi: dw: Introduce enhanced mem_op
+>   spi: dw: Introduce dual/quad/octal spi
+>   spi: dw: send cmd and addr to start the spi transfer
+>   spi: dw: update irq setup to use multiple handler
+>   spi: dw: use irq handler for enhanced spi
+>   spi: dw: Calculate Receive FIFO Threshold Level
+>   spi: dw: adjust size of mem_op
+>   spi: dw: Add retry for enhanced spi mode
+>   spi: dw: detect enhanced spi mode
+>   spi: dt-bindings: snps,dw-ahb-ssi: Add generic dw-ahb-ssi version
+>   spi: dw: initialize dwc-ssi controller
+> 
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+>  drivers/spi/spi-dw-core.c                     | 347 +++++++++++++++++-
+>  drivers/spi/spi-dw-mmio.c                     |   1 +
+>  drivers/spi/spi-dw.h                          |  27 ++
+>  4 files changed, 364 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.30.2
 > 
