@@ -2,52 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083C0651193
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Dec 2022 19:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2926511A1
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Dec 2022 19:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbiLSSPE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Dec 2022 13:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S229866AbiLSSQS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Dec 2022 13:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiLSSPD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Dec 2022 13:15:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E513D64;
-        Mon, 19 Dec 2022 10:15:02 -0800 (PST)
+        with ESMTP id S230226AbiLSSQR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Dec 2022 13:16:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561EC2605;
+        Mon, 19 Dec 2022 10:16:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2783CB80E28;
-        Mon, 19 Dec 2022 18:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA13FC433D2;
-        Mon, 19 Dec 2022 18:14:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E86DB6108D;
+        Mon, 19 Dec 2022 18:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66441C433D2;
+        Mon, 19 Dec 2022 18:16:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671473699;
-        bh=TsG+T1Egkcx7gNOFhm9GYhlDIE0AcHBvOcUGK0fBm+A=;
+        s=k20201202; t=1671473776;
+        bh=xf8iFCzl9zuXuIZoZeKbqKyIeX7Ltc9DNWcGsUf9asw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rg18VMXtGyTQ0Kvf30VHD+od6GvZL7Bn4JJn3M68W1Rp3O2nfP+0LtCrzxKS6s3jW
-         cfUVNdcqXHau5UY2LucKUKbPmHv8MZD9mm0Fk4jt51tp3v70xMsdgGmzu8703z1UMC
-         kXbShpGH2IkGvCbwGDsze2VKh+EUSeiaxJBpRM7DoviZpcsmdGqnd4SwIxmCJ+tKme
-         Xjme5ZDsApHGzmGKS+5XKrBigXjduES7CHJ2z5TJrR98rDu8v271614fnSXwFyENHF
-         PNPZyR1t8xt24mCJWkObdboJFqqyPGx40X+3pSD9psjiOF8JSuRVE97Kfo4PnRTUb7
-         XTYSxozpdaqiw==
-Date:   Mon, 19 Dec 2022 18:14:54 +0000
+        b=G0xO+GTMM6RneQprCz7daszheO8/h/FCWFvLmanljzzDwzmHLyArI8bqC8kK21RSX
+         W0iHknaZ1nn2s5z9j7r7942rbYfSViWb5HeZcSVr70lnGpL9qQg/uHX2gcqXT3HBGd
+         uypxF8yMN2KyH+ra4LwyIBkEoTQBWuKyYj1nwA9YucsaXqeI+wciVhAf6BvX7OfFIZ
+         FgjS1yw6hxLqxWicC3zaGQYORtEs53LlRZe7KYJ4jMFuGVqyRJ6jHwteZR7HOKrjXh
+         qwbRV2XwihEpuqPRSmO1KYW6dsYXsx+EIdj6YB/Oilk1oLyvl3Sjj1Hhfz2bbMQcIT
+         1wOqe3l8OQBvA==
+Date:   Mon, 19 Dec 2022 18:16:10 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Witold Sadowski <wsadowski@marvell.com>
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, jpawar@cadence.com,
         pthombar@cadence.com, konrad@cadence.com, wbartczak@marvell.com,
         wzmuda@marvell.com
-Subject: Re: [PATCH 4/7] spi: cadence: Change dt-bindings documentation for
- Cadence XSPI controller
-Message-ID: <Y6CqHoUEsNyFGLqA@sirena.org.uk>
+Subject: Re: [PATCH 5/7] spi: cadence: Add read access size switch
+Message-ID: <Y6Cqavt/wT2sQfRU@sirena.org.uk>
 References: <20221219144254.20883-1-wsadowski@marvell.com>
- <20221219144254.20883-5-wsadowski@marvell.com>
+ <20221219144254.20883-6-wsadowski@marvell.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WXT6nA19UxLAo44p"
+        protocol="application/pgp-signature"; boundary="fUY/ItggUwzxJAnk"
 Content-Disposition: inline
-In-Reply-To: <20221219144254.20883-5-wsadowski@marvell.com>
+In-Reply-To: <20221219144254.20883-6-wsadowski@marvell.com>
 X-Cookie: Pay toll ahead.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,30 +58,32 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---WXT6nA19UxLAo44p
+--fUY/ItggUwzxJAnk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Dec 19, 2022 at 06:42:51AM -0800, Witold Sadowski wrote:
+On Mon, Dec 19, 2022 at 06:42:52AM -0800, Witold Sadowski wrote:
+> Allow to use different SDMA read size.
+> In Marvell implementation of that IP each SDMA
+> access will read 8 bytes at once, and is not
+> configurable.
 
-> Add parameter cdns,read-size.
-> Parameter is controlling SDMA read size length.
+If this isn't configurable then shouldn't we just key off the compatible
+rather than having a separate property?
 
-Why is this something we would want to configure statically in DT?
-
---WXT6nA19UxLAo44p
+--fUY/ItggUwzxJAnk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOgqh0ACgkQJNaLcl1U
-h9Bgpgf+Nd66EDcVHEBigqaNJZs7RtRB/Eq6sHkD5PqoUlR8zktQfYnBjk+xInI8
-yfGwSgsKK+9V/McOobp13uXu3h0rYfUGFvZn2bAkitp/FjfYqTIRjTnLamVmjHf6
-2w5OWPpalALS6HbLak4Gef8HoT2vjAW6dLaBMN7GYDlKpYBdIza2HCKTSL8NIziQ
-STX1E5Sil5fAr8uSzRckC4IIEcoj2G2WBtGV6+I8445dy3/vdtmCaTkT9S+GxnCV
-jsSak/JCt+G1Gcota6fr7KBOBR7uoNfTiXXYIGnhg63nRnFxYZrLA8u19F7z6Ao1
-lEnIxXBfe8foqrSl+Ba+qsgCquMIiw==
-=awMf
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOgqmoACgkQJNaLcl1U
+h9DQwwgAgdo84Nf5Ics4LK4oxae6TizIsBnruqnm3WPEvcjnNlSWq1bejox99uH5
+3hPpyBH8pxhAJIwkUHukxVTsZmjdd7x7ZeNUWqi0nV+EFbEWZkpPsR2wb4vEuZY0
+KtB9mufJFdBmPmseqLGuSObzLtJoh9ERjrY/GtQil77IO5Zd/8NsFFId4PibehAQ
+2oK0xezwLv7N9Jd82b/Ai6RmE35sg50Rf0UlP7v7NnNTnbOyvpyTkD7SYzEFeWQu
+jO2B3dorzTljzIkAmnvuq5yMkPVBeO85mK60+gNaJvAg4WeuC4R5IgrwqJGLxSmJ
+Bwx1geciQym3FAbIb7kJjLQIRKv9nw==
+=Sai/
 -----END PGP SIGNATURE-----
 
---WXT6nA19UxLAo44p--
+--fUY/ItggUwzxJAnk--
