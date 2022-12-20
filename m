@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CCB652208
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Dec 2022 15:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DD365220C
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Dec 2022 15:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiLTOI2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Dec 2022 09:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S233717AbiLTOJc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Dec 2022 09:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiLTOI1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Dec 2022 09:08:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CC5DF95;
-        Tue, 20 Dec 2022 06:08:26 -0800 (PST)
+        with ESMTP id S233706AbiLTOJc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Dec 2022 09:09:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918B31B1ED;
+        Tue, 20 Dec 2022 06:09:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51E7AB81339;
-        Tue, 20 Dec 2022 14:08:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9869C433D2;
-        Tue, 20 Dec 2022 14:08:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4166146C;
+        Tue, 20 Dec 2022 14:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43410C433D2;
+        Tue, 20 Dec 2022 14:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671545304;
-        bh=TKstLQD0PQuncfO+Ytp0bIaVnXlc1sa3aOMQKwadUvg=;
+        s=k20201202; t=1671545370;
+        bh=SeeYWBzBbY123VZWb9HmtZx5tOjlGt/S60MNsnL+Q8g=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rs3h9OonrRmvMOtp2JFH/C1q0H+h8vLjFDKlhOTkiyDFI1V2H4+y3Ndf82gsHttWp
-         VYn0jIEfiB4e2RhZFbxh2PmimEiWzTlvRUAFk8uiRfpjsFbqyYzL41iIgwEjOFX9cm
-         GugCKn5do4Ol1fQI/yd64aL932SBeGEJfWMzSmsfsDTiBrMOLYQlZtoK/zsg4diWZe
-         MhThsrDm9GtGbGFn2hx3j5yjwDS1XLHTnHy140rYH1yDs4CoDc4FzoyQ1B82Htaxyf
-         1dqNSCjafy5/fkp4RWefa2y8wp/0nZQM0hv5t2WBGCvBZVYoduWEJ4GwOzX8URAXyN
-         95QDrBopS4fyA==
-Message-ID: <2828ed41-895d-a4ee-5511-b1246ff76ec0@kernel.org>
-Date:   Tue, 20 Dec 2022 15:08:18 +0100
+        b=oIKW9MmBYHUG7LwOTBsX5g89Phf/DXeePeyc4mtjBMU57bScuUJCDde3IZ+EO3EiS
+         e+wKckc3ktArnlktsTtvIZdpSZN2l9qK+R2iEJMrAgyHwljWSRLicSLrUV6Tr6Rylt
+         JND/2PioEX8acLKsklJo00V80v7Zaa2gwGqyVomtdr9Qv/wrnuiLhahmpSrmhLfJ/G
+         iB2oMlGdCc/ufeixag6S+eZivAHAwG3qvR0dcLGvdTlBN26H0AmU10NQz964U16xOy
+         NpxSNU9R32uvS5vYHcq+VeZ2DX6s7DtH5m+F+NeiNGSViXhmbGYdO1LaCGPmsgQayI
+         EKHLiMSfdkUGQ==
+Message-ID: <65e1f6da-d0eb-2fa1-1457-8a3afe714a9b@kernel.org>
+Date:   Tue, 20 Dec 2022 15:09:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 2/7] spi: cadence: Change dt-bindings documentation for
+Subject: Re: [PATCH 4/7] spi: cadence: Change dt-bindings documentation for
  Cadence XSPI controller
 Content-Language: en-US
 To:     Witold Sadowski <wsadowski@marvell.com>, broonie@kernel.org
@@ -45,9 +45,9 @@ Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         pthombar@cadence.com, konrad@cadence.com, wbartczak@marvell.com,
         wzmuda@marvell.com
 References: <20221219144254.20883-1-wsadowski@marvell.com>
- <20221219144254.20883-3-wsadowski@marvell.com>
+ <20221219144254.20883-5-wsadowski@marvell.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20221219144254.20883-3-wsadowski@marvell.com>
+In-Reply-To: <20221219144254.20883-5-wsadowski@marvell.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,18 +61,51 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 19/12/2022 15:42, Witold Sadowski wrote:
-> Interrupt property is not mandatory.
-> Driver will switch into pooling mode if property
-> will not be avalible.
+> Add parameter cdns,read-size.
+> Parameter is controlling SDMA read size length.
 
-1. Use subject prefixes matching the subsystem (git log --oneline -- ...).
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-2. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.  It might happen, that command when run on an
-older kernel, gives you outdated entries.  Therefore please be sure you
-base your patches on recent Linux kernel.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-3. Run also spellcheck.
+> 
+> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
+> ---
+>  Documentation/devicetree/bindings/spi/cdns,xspi.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> index f71a9c74e2ca..1274e3bf68e6 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> @@ -37,6 +37,10 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  cdns,read-size:
+> +    items:
+> +      - description: size of single SDMA read operation
+
+Why is this a property of DT?
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -60,6 +64,7 @@ examples:
+>              reg-names = "io", "sdma", "aux";
+>              interrupts = <0 90 IRQ_TYPE_LEVEL_HIGH>;
+>              interrupt-parent = <&gic>;
+> +            cdns,read-size=<0>;
+
+That's not DT coding style.
+
+>  
+>              flash@0 {
+>                  compatible = "jedec,spi-nor";
 
 Best regards,
 Krzysztof
