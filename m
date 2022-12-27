@@ -2,108 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876026568BD
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Dec 2022 10:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E03656A2C
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Dec 2022 12:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiL0JJw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Dec 2022 04:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S231743AbiL0L6C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Dec 2022 06:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiL0JJu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Dec 2022 04:09:50 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8496549;
-        Tue, 27 Dec 2022 01:09:49 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id bp44so7400037qtb.0;
-        Tue, 27 Dec 2022 01:09:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hyk7cPGA30ht9CIHOHoD2wEIGOPlfpDmF3Sx7wsll0k=;
-        b=jCYgmONV/YT8MpfL3Ek8gYg1aEr9iYLlijOC/GrU0BJnm2nNdOlG1kqDW0X7NrsPNW
-         ZhAisiKsQF/wbWLAVVGNVbjaLCIVt4FbH8aWvq1SRcL3HiBhiRnz61EpM0T+FH55Mk9g
-         4Mak3P5Y5PKi9AOWgzkw0Rn/n6wOJutFacEnEfRLy6yRzJzUusauRfkyxJGIu6iWnnGR
-         9mFvR8bGZRFYnZ3LNgrkWRS7YiF+YC8cE6FOf0V7llHBbDvcANo34P6mOpWBJwDXkc8o
-         4F9Rc/peCSW5rLfe0W20yu1DdpXZ+xgXL4zw254eY7VVFb4vg/nCpRp7+L4Cbi7zh/ow
-         02hA==
-X-Gm-Message-State: AFqh2kpfgDenk+UdDbmd1eyS5QH1UJ0ZCauOfT5V3lAYhlbF/zSvaMHd
-        jJ+nJKskj/PZKs2grnUw6DC1RcbuXboeMA==
-X-Google-Smtp-Source: AMrXdXsTUJgV9HRD45Nh8OkJCpo7w6mD1vYRoC6VzQ978bKYONPGJEgxyIq0wQ78Ty9wi2rQVrJlKg==
-X-Received: by 2002:a05:622a:2286:b0:3a5:f9eb:22e with SMTP id ay6-20020a05622a228600b003a5f9eb022emr24919267qtb.27.1672132188252;
-        Tue, 27 Dec 2022 01:09:48 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id bs7-20020a05620a470700b006b61b2cb1d2sm9295004qkb.46.2022.12.27.01.09.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 01:09:47 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id 192so13768071ybt.6;
-        Tue, 27 Dec 2022 01:09:47 -0800 (PST)
-X-Received: by 2002:a25:3143:0:b0:77a:b5f3:d0ac with SMTP id
- x64-20020a253143000000b0077ab5f3d0acmr584880ybx.202.1672132187403; Tue, 27
- Dec 2022 01:09:47 -0800 (PST)
+        with ESMTP id S232032AbiL0L5w (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Dec 2022 06:57:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B161A198;
+        Tue, 27 Dec 2022 03:57:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD53BB80F93;
+        Tue, 27 Dec 2022 11:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A93C433F0;
+        Tue, 27 Dec 2022 11:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672142269;
+        bh=MlbYDyHB2xL8RHMNdHwdmuRIR6U4juvja/JqAIqJOG8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Y47OOsgvF+sPnz4oT6xAxGZUQ9UQSvJnD8oEYBZq2LUAuINDtu6bZTEOhv7JyNiEu
+         LvXG0I8YRz7RBNzUlBBwAXhgPMr+10UP1MgP1VfU67By5WW/R+8vxX6JmGy+gCY0rW
+         Yc27nYK35ki/WuF0Ar5Zh55M+i9Lyk0QCauEXTDUCx/jy06RRYMMxO+eJsE4h5atEV
+         +LR+C0UHKyjXyVgHUAQz1E1HEC/y26vOAx+mUKRPS17g9fvF2OmhTYHEyE2MwuXhZV
+         wbMTDdWLSigE8ls6+EtqLiV8P4G5K9/JV1YWGeVlP/5RolcMhNAOFff9CdOfWrl8Vc
+         HChFeGWZdLEwQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com, vkoul@kernel.org,
+        quic_arandive@quicinc.com, quic_ramkri@quicinc.com
+In-Reply-To: <1670509544-15977-1-git-send-email-quic_vnivarth@quicinc.com>
+References: <1670509544-15977-1-git-send-email-quic_vnivarth@quicinc.com>
+Subject: Re: [V4] spi: spi-geni-qcom: Add support for SE DMA mode
+Message-Id: <167214226629.88639.764160014719387166.b4-ty@kernel.org>
+Date:   Tue, 27 Dec 2022 11:57:46 +0000
 MIME-Version: 1.0
-References: <cover.1669213027.git.geert+renesas@glider.be> <167213158107.15520.15699943919910529014.b4-ty@linaro.org>
- <2d62f33e-69d4-064c-f226-2d38396f0e9e@linaro.org>
-In-Reply-To: <2d62f33e-69d4-064c-f226-2d38396f0e9e@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Dec 2022 10:09:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUT4eW0KPV8DD40kPD0Cr+QudBfOxfhKy9iWnrcGBSM0Q@mail.gmail.com>
-Message-ID: <CAMuHMdUT4eW0KPV8DD40kPD0Cr+QudBfOxfhKy9iWnrcGBSM0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc cleanups
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-7ab1d
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:06 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 27/12/2022 09:59, Krzysztof Kozlowski wrote:
-> > On Wed, 23 Nov 2022 15:41:16 +0100, Geert Uytterhoeven wrote:
-> >> The Renesas RPC-IF provides either HyperFlash or SPI host access.
-> >> To handle this, three drivers are used:
-> >>   1. The RPC-IF core diver,
-> >>   2. An HyperFlash child driver,
-> >>   3. An SPI child driver.
-> >>
-> >> [...]
-> >
-> > Applied, thanks!
-> >
-> > [1/6] memory: renesas-rpc-if: Split-off private data from struct rpcif
-> >       https://git.kernel.org/krzk/linux-mem-ctrl/c/f8fa9cb3fb16e06514fec0bac58996015dedc453
->
-> Missing checkpatch. I corrected now:
-> WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1>
-> ("<title line>")' - ie: 'Fixes: ca7d8b980b67 ("memory: add Renesas
-> RPC-IF driver")'
+On Thu, 08 Dec 2022 19:55:44 +0530, Vijaya Krishna Nivarthi wrote:
+> SE DMA mode can be used for larger transfers and FIFO mode
+> for smaller transfers.
+> 
+> 
 
-Oh well... Merry Xmas ;-)
+Applied to
 
-Gr{oetje,eeting}s,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-                        Geert
+Thanks!
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1/1] spi: spi-geni-qcom: Add support for SE DMA mode
+      commit: e5f0dfa78ac77374a3f0817bf427a22f61494246
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
