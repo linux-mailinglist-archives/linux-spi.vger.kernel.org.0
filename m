@@ -2,110 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A8B6568B3
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Dec 2022 10:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 876026568BD
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Dec 2022 10:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiL0JG4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Dec 2022 04:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S229561AbiL0JJw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Dec 2022 04:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiL0JGx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Dec 2022 04:06:53 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AC56588
-        for <linux-spi@vger.kernel.org>; Tue, 27 Dec 2022 01:06:51 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id f34so18787554lfv.10
-        for <linux-spi@vger.kernel.org>; Tue, 27 Dec 2022 01:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wgi2g1n+nHbhC11kGT7UTTZnfTwUqhX8cOYNVdVe7V4=;
-        b=ClgKJTw7Bl1MJuZRI2HiZuLxT12iHsCqWSjsVVeX3rxiZs1D/Gn9scVdPi+/1yPL1R
-         1WrifslyTd0mTUXpqEgdVpAlvre9OhKExBdsih4pp36ofbQplLhQ/+sC09j+WY/dsLo8
-         ziglLCPyVN+HzBm0v+CyXJJcH6WIN8eQLO+W+3hJtz6oWkWvyLsuq/CQtBZSnMfApMJg
-         l3zofTkWFudPF7ee8VCQHnlzFjVRVWkWN7OvQx/kw0fTCTMieS1jCgboKO7gtWWSaXLs
-         LXQ1wAOxVdrVAg9p64mlvxixNn5dPOf+9b4b+Okmb9jTjy8pdc/pbVpq03bun23rFKmy
-         ZgCQ==
+        with ESMTP id S229496AbiL0JJu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Dec 2022 04:09:50 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8496549;
+        Tue, 27 Dec 2022 01:09:49 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id bp44so7400037qtb.0;
+        Tue, 27 Dec 2022 01:09:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wgi2g1n+nHbhC11kGT7UTTZnfTwUqhX8cOYNVdVe7V4=;
-        b=r1MGNW//HkCtVUMPEGyAhh+X0dAEfRTk/VVg30+rZSSa7WuLhn4M8Xq8fLdN3arMyX
-         ogW1F6paNHjsUbE+2zpw7r9NyNCd9172JpyU4dGh9Olv9rCyJu8Qdxtw+qY6I8fCoDN0
-         pcEpP/auTBcVAkZSfa4HC6j6TYZAA/xOQsEu6Zh1udwyhRWpWml0U7aCptl2qh1tQHKp
-         JcN4rkapcpiDI4IFVfzqA5loc9E0mBIzF0hjCFGNENqP+KW7EL7L9hpT39r4orrQjZqE
-         cCN/WhUgL16UOlWtKqocEFpav/0japT/Hs+rIAGrQYnZ+fRg+zmIk5lcSLtAGz2l5aGr
-         vKQA==
-X-Gm-Message-State: AFqh2kr3vOo0uxhL/0XHA3Oksp6w44Zwf1br780DwVHQue3rxAn3T2Ui
-        XxVCNmhWjKg4NZtT+hfelp6zTA==
-X-Google-Smtp-Source: AMrXdXu1DnHOT4QXJVWjYcj4KtoF8psUezFfIbrl97/RFTeb/sMUQipRBAEYDiflVCFEvtZSvjhcVw==
-X-Received: by 2002:a05:6512:169e:b0:4ca:fa2d:2686 with SMTP id bu30-20020a056512169e00b004cafa2d2686mr3993709lfb.35.1672132008806;
-        Tue, 27 Dec 2022 01:06:48 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z5-20020ac24f85000000b004b5480edf67sm2162766lfs.36.2022.12.27.01.06.47
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hyk7cPGA30ht9CIHOHoD2wEIGOPlfpDmF3Sx7wsll0k=;
+        b=jCYgmONV/YT8MpfL3Ek8gYg1aEr9iYLlijOC/GrU0BJnm2nNdOlG1kqDW0X7NrsPNW
+         ZhAisiKsQF/wbWLAVVGNVbjaLCIVt4FbH8aWvq1SRcL3HiBhiRnz61EpM0T+FH55Mk9g
+         4Mak3P5Y5PKi9AOWgzkw0Rn/n6wOJutFacEnEfRLy6yRzJzUusauRfkyxJGIu6iWnnGR
+         9mFvR8bGZRFYnZ3LNgrkWRS7YiF+YC8cE6FOf0V7llHBbDvcANo34P6mOpWBJwDXkc8o
+         4F9Rc/peCSW5rLfe0W20yu1DdpXZ+xgXL4zw254eY7VVFb4vg/nCpRp7+L4Cbi7zh/ow
+         02hA==
+X-Gm-Message-State: AFqh2kpfgDenk+UdDbmd1eyS5QH1UJ0ZCauOfT5V3lAYhlbF/zSvaMHd
+        jJ+nJKskj/PZKs2grnUw6DC1RcbuXboeMA==
+X-Google-Smtp-Source: AMrXdXsTUJgV9HRD45Nh8OkJCpo7w6mD1vYRoC6VzQ978bKYONPGJEgxyIq0wQ78Ty9wi2rQVrJlKg==
+X-Received: by 2002:a05:622a:2286:b0:3a5:f9eb:22e with SMTP id ay6-20020a05622a228600b003a5f9eb022emr24919267qtb.27.1672132188252;
+        Tue, 27 Dec 2022 01:09:48 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id bs7-20020a05620a470700b006b61b2cb1d2sm9295004qkb.46.2022.12.27.01.09.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 01:06:48 -0800 (PST)
-Message-ID: <2d62f33e-69d4-064c-f226-2d38396f0e9e@linaro.org>
-Date:   Tue, 27 Dec 2022 10:06:47 +0100
+        Tue, 27 Dec 2022 01:09:47 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 192so13768071ybt.6;
+        Tue, 27 Dec 2022 01:09:47 -0800 (PST)
+X-Received: by 2002:a25:3143:0:b0:77a:b5f3:d0ac with SMTP id
+ x64-20020a253143000000b0077ab5f3d0acmr584880ybx.202.1672132187403; Tue, 27
+ Dec 2022 01:09:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc
- cleanups
-Content-Language: en-US
-To:     Richard Weinberger <richard@nod.at>,
+References: <cover.1669213027.git.geert+renesas@glider.be> <167213158107.15520.15699943919910529014.b4-ty@linaro.org>
+ <2d62f33e-69d4-064c-f226-2d38396f0e9e@linaro.org>
+In-Reply-To: <2d62f33e-69d4-064c-f226-2d38396f0e9e@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 27 Dec 2022 10:09:34 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUT4eW0KPV8DD40kPD0Cr+QudBfOxfhKy9iWnrcGBSM0Q@mail.gmail.com>
+Message-ID: <CAMuHMdUT4eW0KPV8DD40kPD0Cr+QudBfOxfhKy9iWnrcGBSM0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc cleanups
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Sergey Shtylyov <s.shtylyov@omp.ru>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-References: <cover.1669213027.git.geert+renesas@glider.be>
- <167213158107.15520.15699943919910529014.b4-ty@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <167213158107.15520.15699943919910529014.b4-ty@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/12/2022 09:59, Krzysztof Kozlowski wrote:
-> On Wed, 23 Nov 2022 15:41:16 +0100, Geert Uytterhoeven wrote:
->> 	Hi all,
->>
->> The Renesas RPC-IF provides either HyperFlash or SPI host access.
->> To handle this, three drivers are used:
->>   1. The RPC-IF core diver,
->>   2. An HyperFlash child driver,
->>   3. An SPI child driver.
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/6] memory: renesas-rpc-if: Split-off private data from struct rpcif
->       https://git.kernel.org/krzk/linux-mem-ctrl/c/f8fa9cb3fb16e06514fec0bac58996015dedc453
+On Tue, Dec 27, 2022 at 10:06 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 27/12/2022 09:59, Krzysztof Kozlowski wrote:
+> > On Wed, 23 Nov 2022 15:41:16 +0100, Geert Uytterhoeven wrote:
+> >> The Renesas RPC-IF provides either HyperFlash or SPI host access.
+> >> To handle this, three drivers are used:
+> >>   1. The RPC-IF core diver,
+> >>   2. An HyperFlash child driver,
+> >>   3. An SPI child driver.
+> >>
+> >> [...]
+> >
+> > Applied, thanks!
+> >
+> > [1/6] memory: renesas-rpc-if: Split-off private data from struct rpcif
+> >       https://git.kernel.org/krzk/linux-mem-ctrl/c/f8fa9cb3fb16e06514fec0bac58996015dedc453
+>
+> Missing checkpatch. I corrected now:
+> WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1>
+> ("<title line>")' - ie: 'Fixes: ca7d8b980b67 ("memory: add Renesas
+> RPC-IF driver")'
 
-Missing checkpatch. I corrected now:
-WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1>
-("<title line>")' - ie: 'Fixes: ca7d8b980b67 ("memory: add Renesas
-RPC-IF driver")'
+Oh well... Merry Xmas ;-)
 
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
