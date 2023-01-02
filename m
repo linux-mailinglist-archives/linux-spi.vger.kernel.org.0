@@ -2,77 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C7965AEBE
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Jan 2023 10:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DF165B178
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jan 2023 12:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjABJhq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Jan 2023 04:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S232487AbjABLtV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Jan 2023 06:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjABJhp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Jan 2023 04:37:45 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9838B4;
-        Mon,  2 Jan 2023 01:37:44 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u18so37851665eda.9;
-        Mon, 02 Jan 2023 01:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
-        b=G19KnHZkfpxRRK8GEtPuLli3UOIw8JaGumkCm3OfvuuGgyvVoIItwF9UL+YKeEoziV
-         tVaLLp6LncTO3aVNx9fajlVFGGY7KPLBg9VJc5aEjDTIbcKpgiC20I7uipBOUNWxxKrm
-         7sp0QkboCr+8Ff/nn9QaP4Aj+bjlHzvfmjUG+/BPqrAI85dL9RC7fFT8iT78Y37gCR8G
-         4Trio+r7k/Xog96G03l5kDStW939gVOFO6X8zHcaM+ChvSCsr1iwZDqg6bBklfD5R3KL
-         TNn7fidXDuMzE2IAC671VcdQmkt2pAoq1Qw5K9XVeS9rMR/iCoCi45F1zjojjcYdLJ0I
-         jweg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
-        b=cf3O3hKxmNtt1XVIiwnhY7EDyaK3ZUgi0ihwgHOOEXsrwcuaZc14ZK8AIimftCacVx
-         RiPW4jCKJN/mzay1ndUJkC+/udS0xyy+nO32BK0QTy22cEpYXj7JwT/PrvRx/VmSxKXo
-         gLml51v/fvd9XkxtsfD3FwaG+d41YQvI6/I5X+X0GzwozqlSCIBoAqGeTTJNrCOy4HCF
-         Qko8QjxliqOx5S80iRSWCEtMqn1NiWzgu9BM07UreBjfk8xREV1z5/mlqq0CNDbWPb2N
-         X+csXZGmk/bcGfmkOQU1e+cjogOKaECgQAHvZLFayHu7/0ACUiHw6zRMCx7DltqQU5fQ
-         7/LQ==
-X-Gm-Message-State: AFqh2koanBu6ko70polwwFJTfZjZGdt/bVA95np0bp/KEsO4uRm6Q4KJ
-        kX8sX4puA46XcxP9IJ+F600=
-X-Google-Smtp-Source: AMrXdXuS1dQR4WrrMJ2ZYnuZUsvK51zUK97T9LdHUD8iN13xlT2i9x/voG32HeRtdP8fLD4ew6NlcQ==
-X-Received: by 2002:a05:6402:b3c:b0:47f:ab65:b3ff with SMTP id bo28-20020a0564020b3c00b0047fab65b3ffmr30127650edb.35.1672652262900;
-        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
-Received: from [192.168.0.104] ([82.77.81.242])
-        by smtp.gmail.com with ESMTPSA id bo6-20020a0564020b2600b0048ca2b6c370sm2385835edb.29.2023.01.02.01.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
-Message-ID: <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
-Date:   Mon, 2 Jan 2023 11:37:40 +0200
+        with ESMTP id S232103AbjABLs4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Jan 2023 06:48:56 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF32F18;
+        Mon,  2 Jan 2023 03:48:53 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 9C6CC1661;
+        Mon,  2 Jan 2023 12:48:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672660128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bZB9xNSjKSHWfa/0Wrk0B5Q8Ldv30xzUAM4GGiavhek=;
+        b=GdDrEvrpX2g6ZBosVIBuPXzFEmP+DGE3t2MEYRL+D77UWkCO5gkLzzPnnZZUnqvQB0Wnvt
+        ITWhkTF5ZlgdLOv5EHKZyDW5hcg0Cyrhl/WsMi6k1yK95MEJpaGA8xvDqsnWyj66GkQ4pY
+        HmFBRrzJhQDtLKzaZYQWMkeA+poNYkOujYHSHb7gxBW4Y2UNguCY73/YIUAFC7ernct+hf
+        mOAQxtSlbkW4bQllAT+nlbuQCZSdESHaQoME4rxRCBB2bJbJbSPnGGK34kE8DIfPN/aHDm
+        6ScpVVlLKN74aGqXuLO05ji0nYEs6bMOiRFDg1PkDW9kvDTmmUqbC2zmJCQPSA==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Michael Walle <michael@walle.cc>
-Cc:     tudor.ambarus@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
+Date:   Mon, 02 Jan 2023 12:48:48 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, tudor.ambarus@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
         nicolas.ferre@microchip.com, robh+dt@kernel.org
+Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
+In-Reply-To: <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
 References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
  <20221118141458.954646-1-michael@walle.cc> <Y3elIdM3Xz1H4kKk@sirena.org.uk>
-From:   Tudor Ambarus <tudor.ambarus@gmail.com>
-In-Reply-To: <Y3elIdM3Xz1H4kKk@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a2f58ad34ba74ff135852bc1e24da4d6@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,36 +64,61 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi,
 
-On 18.11.2022 17:30, Mark Brown wrote:
-> On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
->> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+Am 2023-01-02 10:37, schrieb Tudor Ambarus:
+> Hi,
 > 
->>> +  spi-cs-setup-ns:
->>> +    description:
->>> +      Delay in nanosecods to be introduced by the controller after CS is
->>> +      asserted.
+> On 18.11.2022 17:30, Mark Brown wrote:
+>> On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
+>>> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+>> 
+>>>> +  spi-cs-setup-ns:
+>>>> +    description:
+>>>> +      Delay in nanosecods to be introduced by the controller after 
+>>>> CS is
+>>>> +      asserted.
+>> 
+>>> Does this need a type as the spi-cs-setup-ns is apparently just 
+>>> 16bit? At
+>>> least the driver uses it that way.
+>> 
+>>> But IMHO this should just be a normal uint32 value to be consistent 
+>>> with
+>>> all the other properties. Also the max value with 16bit will be 
+>>> 'just'
+>>> 65us.
+>> 
+>> Making it 32 bit does seem safer.  I've applied the series
 > 
->> Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
->> least the driver uses it that way.
+> Thanks. There are few implications to consider before making this prop 
+> a
+> u32, and I'd like to check them with you.
 > 
->> But IMHO this should just be a normal uint32 value to be consistent with
->> all the other properties. Also the max value with 16bit will be 'just'
->> 65us.
+> struct spi_delay will have to be updated to have a u32 value, now it's 
+> a
+> u16. This means that we'll have to update spi_delay_to_ns() to either
+> return a s64 or to add a u64 *delay parameter to the function so that 
+> we
+> can still handle the conversions from usecs and the error codes in the
+> SPI_DELAY_UNIT_SCK case. Then all its callers have to be updated to
+> consider the u64 delay.
+
+I was talking about the device tree property. Even if the driver 
+continue
+to use just 16bit, the DT property could be 32bit IMHO.
+
+At the moment, the schema says its 32bit (if I'm not mistaken, because
+it doesn't have a type), but the driver will parse the property as
+16bit and your device tree also has this /bits/ thingy. So regardless
+if the driver is using 16bit or 32bit for the value, there seems to be
+a discrepancy between the schema and the devicetree (and driver).
+
+All other properties are just the regular 32bit values, thus I was
+suggesting to change the DT property to 32bit.
+
+-michael
+
+> I don't know what to say, I'm in between. 65us delays are improbable,
+> but I'm fine to update this as well. Let me know your preference.
 > 
-> Making it 32 bit does seem safer.  I've applied the series
-
-Thanks. There are few implications to consider before making this prop a
-u32, and I'd like to check them with you.
-
-struct spi_delay will have to be updated to have a u32 value, now it's a
-u16. This means that we'll have to update spi_delay_to_ns() to either
-return a s64 or to add a u64 *delay parameter to the function so that we
-can still handle the conversions from usecs and the error codes in the
-SPI_DELAY_UNIT_SCK case. Then all its callers have to be updated to
-consider the u64 delay.
-
-I don't know what to say, I'm in between. 65us delays are improbable,
-but I'm fine to update this as well. Let me know your preference.
-
-Thanks,
-ta
+> Thanks,
+> ta
