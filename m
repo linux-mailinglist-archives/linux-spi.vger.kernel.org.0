@@ -2,80 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF0F659C3E
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Dec 2022 21:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C7965AEBE
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jan 2023 10:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbiL3Ujj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Dec 2022 15:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S230196AbjABJhq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Jan 2023 04:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiL3Uj1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Dec 2022 15:39:27 -0500
-X-Greylist: delayed 20175 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Dec 2022 12:39:25 PST
-Received: from mail.vacuumatic.cc (vacuumatic.cc [163.123.140.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2CECD9;
-        Fri, 30 Dec 2022 12:39:25 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id 2980C70E1E10;
-        Fri, 30 Dec 2022 05:10:13 -0500 (EST)
-Received: from mail.vacuumatic.cc ([127.0.0.1])
-        by localhost (mail.vacuumatic.cc [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CwMzyfTDikvJ; Fri, 30 Dec 2022 05:10:11 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id E3E3570E1E17;
-        Fri, 30 Dec 2022 05:10:05 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vacuumatic.cc E3E3570E1E17
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vacuumatic.cc;
-        s=BD5E5048-7767-11ED-9AB1-AEF27DAD29AF; t=1672395006;
-        bh=8OSRQtZ/XGMt0m+/MV768q5oZkUB/T254Ol9zod/hVE=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=oB017uJM3+VILepDVCRHqbBAxlNXvfFNju4QVc0p3VUhVHhYs4DgNfLDW9wz1lU46
-         4LWvcI5Awkb/hOzV1UgLqeDN0zRIp52gDKoo2R56wNemOOP++kCUyb+LReDz9kz0zK
-         mNCXcATQ2SymudADNCITJFseZyWRbXACBVwjCTIstpKFy+Q93NDCbFJX0ZZ/Jgrchi
-         f7UbK64NokFfXnjhWY684sMSS2ON3oE68SPMv1lcx7npNSiGe4+ekt9Y7sIS4nzz2/
-         fhtX+gTaQo6W1cQFj+jA4uw6d2lCDziIaWDuWF7XsaedWUmUrC0v7Mbl50/YLrvj47
-         11lF+1Ok3fjeQ==
-X-Virus-Scanned: amavisd-new at vacuumatic.cc
-Received: from mail.vacuumatic.cc ([127.0.0.1])
-        by localhost (mail.vacuumatic.cc [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dQge5yDQT0pW; Fri, 30 Dec 2022 05:10:05 -0500 (EST)
-Received: from mail.vacuumatic.cc (mail.vacuumatic.cc [163.123.140.34])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id 82A4E70EDE27;
-        Fri, 30 Dec 2022 05:09:57 -0500 (EST)
-Date:   Fri, 30 Dec 2022 05:09:57 -0500 (EST)
-From:   Lukas Reinhardt <support@vacuumatic.cc>
-Reply-To: Lukas Reinhardt <lukreinhard1@vivaldi.net>
-Message-ID: <1565539681.269587.1672394997473.JavaMail.zimbra@vacuumatic.cc>
-In-Reply-To: <1397014707.241670.1672348232055.JavaMail.zimbra@vacuumatic.cc>
-References: <1397014707.241670.1672348232055.JavaMail.zimbra@vacuumatic.cc>
-Subject: 3% IR Loan Offer
+        with ESMTP id S229470AbjABJhp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Jan 2023 04:37:45 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9838B4;
+        Mon,  2 Jan 2023 01:37:44 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u18so37851665eda.9;
+        Mon, 02 Jan 2023 01:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
+        b=G19KnHZkfpxRRK8GEtPuLli3UOIw8JaGumkCm3OfvuuGgyvVoIItwF9UL+YKeEoziV
+         tVaLLp6LncTO3aVNx9fajlVFGGY7KPLBg9VJc5aEjDTIbcKpgiC20I7uipBOUNWxxKrm
+         7sp0QkboCr+8Ff/nn9QaP4Aj+bjlHzvfmjUG+/BPqrAI85dL9RC7fFT8iT78Y37gCR8G
+         4Trio+r7k/Xog96G03l5kDStW939gVOFO6X8zHcaM+ChvSCsr1iwZDqg6bBklfD5R3KL
+         TNn7fidXDuMzE2IAC671VcdQmkt2pAoq1Qw5K9XVeS9rMR/iCoCi45F1zjojjcYdLJ0I
+         jweg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XzIKgubKsbYp6CHbNgEC7oTL3o/23K1nX1884mvfwHU=;
+        b=cf3O3hKxmNtt1XVIiwnhY7EDyaK3ZUgi0ihwgHOOEXsrwcuaZc14ZK8AIimftCacVx
+         RiPW4jCKJN/mzay1ndUJkC+/udS0xyy+nO32BK0QTy22cEpYXj7JwT/PrvRx/VmSxKXo
+         gLml51v/fvd9XkxtsfD3FwaG+d41YQvI6/I5X+X0GzwozqlSCIBoAqGeTTJNrCOy4HCF
+         Qko8QjxliqOx5S80iRSWCEtMqn1NiWzgu9BM07UreBjfk8xREV1z5/mlqq0CNDbWPb2N
+         X+csXZGmk/bcGfmkOQU1e+cjogOKaECgQAHvZLFayHu7/0ACUiHw6zRMCx7DltqQU5fQ
+         7/LQ==
+X-Gm-Message-State: AFqh2koanBu6ko70polwwFJTfZjZGdt/bVA95np0bp/KEsO4uRm6Q4KJ
+        kX8sX4puA46XcxP9IJ+F600=
+X-Google-Smtp-Source: AMrXdXuS1dQR4WrrMJ2ZYnuZUsvK51zUK97T9LdHUD8iN13xlT2i9x/voG32HeRtdP8fLD4ew6NlcQ==
+X-Received: by 2002:a05:6402:b3c:b0:47f:ab65:b3ff with SMTP id bo28-20020a0564020b3c00b0047fab65b3ffmr30127650edb.35.1672652262900;
+        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
+Received: from [192.168.0.104] ([82.77.81.242])
+        by smtp.gmail.com with ESMTPSA id bo6-20020a0564020b2600b0048ca2b6c370sm2385835edb.29.2023.01.02.01.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 01:37:42 -0800 (PST)
+Message-ID: <28da9e33-57e8-7ac1-7e6c-13c297a945d6@gmail.com>
+Date:   Mon, 2 Jan 2023 11:37:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/8] spi: dt-bindings: Introduce spi-cs-setup-ns property
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Michael Walle <michael@walle.cc>
+Cc:     tudor.ambarus@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org
+References: <20221117105249.115649-2-tudor.ambarus@microchip.com>
+ <20221118141458.954646-1-michael@walle.cc> <Y3elIdM3Xz1H4kKk@sirena.org.uk>
+From:   Tudor Ambarus <tudor.ambarus@gmail.com>
+In-Reply-To: <Y3elIdM3Xz1H4kKk@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [163.123.140.34]
-X-Mailer: Zimbra 8.8.15_GA_4484 (zclient/8.8.15_GA_4484)
-Thread-Topic: 3% IR Loan Offer
-Thread-Index: u96i7u0zPj8LOsjj2ctwnSi+vmZef3ojmbos
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+Hi,
 
-We are a Kuwait Based Investment company offering corporate and personal loans at 3% interest rate for the duration of 10 years. We also give 1% commission to brokers, who introduce project owners for finance or other opportunities.
+On 18.11.2022 17:30, Mark Brown wrote:
+> On Fri, Nov 18, 2022 at 03:14:58PM +0100, Michael Walle wrote:
+>> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+> 
+>>> +  spi-cs-setup-ns:
+>>> +    description:
+>>> +      Delay in nanosecods to be introduced by the controller after CS is
+>>> +      asserted.
+> 
+>> Does this need a type as the spi-cs-setup-ns is apparently just 16bit? At
+>> least the driver uses it that way.
+> 
+>> But IMHO this should just be a normal uint32 value to be consistent with
+>> all the other properties. Also the max value with 16bit will be 'just'
+>> 65us.
+> 
+> Making it 32 bit does seem safer.  I've applied the series
 
-Please get back to me if you are interested in more details.
+Thanks. There are few implications to consider before making this prop a
+u32, and I'd like to check them with you.
 
+struct spi_delay will have to be updated to have a u32 value, now it's a
+u16. This means that we'll have to update spi_delay_to_ns() to either
+return a s64 or to add a u64 *delay parameter to the function so that we
+can still handle the conversions from usecs and the error codes in the
+SPI_DELAY_UNIT_SCK case. Then all its callers have to be updated to
+consider the u64 delay.
 
-Best Regards,
-Mr.Lukas Reinhardt
-Assistant Secretary
-General Global Financial Investment.
+I don't know what to say, I'm in between. 65us delays are improbable,
+but I'm fine to update this as well. Let me know your preference.
+
+Thanks,
+ta
