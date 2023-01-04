@@ -2,70 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E9E65D361
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Jan 2023 13:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C8065D51E
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Jan 2023 15:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236183AbjADMzi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Jan 2023 07:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S239615AbjADOJa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Jan 2023 09:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237684AbjADMzG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Jan 2023 07:55:06 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A85834762
-        for <linux-spi@vger.kernel.org>; Wed,  4 Jan 2023 04:54:54 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id l1so4139497qkg.11
-        for <linux-spi@vger.kernel.org>; Wed, 04 Jan 2023 04:54:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
-         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
-         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
-         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
-         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
-         yzWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=bDuGUWCLyLUBGuRRKdkm6Ck40Vg8h+F/36bo8ZyelexRk0GOFo9YjIqt/aJBw0ftN+
-         d/XTohsGqoxGfcImGO/a+gH04VXncYKGRGiTpqmGgHCYEsGZdqrALDOBFtHCwDGP35AG
-         qw6QYkpvmu9iAE91xpbyNfPsQpzLFvAR1j+vIEpHF6LLu+XpGuCY2npDloAQqSEo3py7
-         I/0x8XF14GuogoKpierrP5b/maRs7cn520N8OFtrCVljjlJB+pitYWDsr+PrbqfOu48k
-         SChvmyYGpOeckHByW74nRtchyN+psCg6qlugAzoG2K5vpF7Yj9jBZIV4eKXxCkCD4XJS
-         x8vw==
-X-Gm-Message-State: AFqh2krJUaAw1N+K5XVmuYbn+YJGKFrRC7jUqkItK3cu6O32Vcv0Vk0A
-        vFQ1tXqLAzxV3dGfYG3OYToqS2ltkvCRKHwD/rZ4TH5XC7Q=
-X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
-X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
- h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
- Jan 2023 04:54:42 -0800 (PST)
+        with ESMTP id S239557AbjADOJJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Jan 2023 09:09:09 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9A11EC5E;
+        Wed,  4 Jan 2023 06:08:57 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pD4Rp-00044n-Do; Wed, 04 Jan 2023 15:08:53 +0100
+Message-ID: <5db65fd1-575f-df19-0de3-b3e32e4bf1d1@leemhuis.info>
+Date:   Wed, 4 Jan 2023 15:08:51 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
- 04:54:41 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <mzsophie@gmail.com>
-Date:   Wed, 4 Jan 2023 12:54:41 +0000
-Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] spi: mediatek: Enable irq before the spi registration
+Content-Language: en-US, de-DE
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221225-mtk-spi-fixes-v1-0-bb6c14c232f8@chromium.org>
+ <167214860344.446872.17166503994226712534.b4-ty@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <167214860344.446872.17166503994226712534.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672841337;3790397a;
+X-HE-SMSGID: 1pD4Rp-00044n-Do
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Seasons Greetings!
+Hi Mark!
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+On 27.12.22 14:43, Mark Brown wrote:
+> On Sun, 25 Dec 2022 09:37:12 +0100, Ricardo Ribalda wrote:
+>> If the irq is enabled after the spi si registered, there can be a race
+>> with the initialization of the devices on the spi bus.
+>>
+>> Eg:
+>> mtk-spi 1100a000.spi: spi-mem transfer timeout
+>> spi-nor: probe of spi0.0 failed with error -110
+>> Unable to handle kernel NULL pointer dereference at virtual address
+>> 0000000000000010
+>> ...
+>> Call trace:
+>>  mtk_spi_can_dma+0x0/0x2c
+>>
+>> [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/1] spi: mediatek: Enable irq before the spi registration
+>       commit: b24cded8c065d7cef8690b2c7b82b828cce57708
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> [...]
+
+Quick question: why did you queue this for the next merge window? This
+change *afaics* is fixing a reported regression (a kernel oops)
+introduced this cycle:
+https://lore.kernel.org/lkml/Y6dL2ZWgd1BD6kew@makrotopia.org/
+
+Or have I missed or confused something?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+#regzbot poke
