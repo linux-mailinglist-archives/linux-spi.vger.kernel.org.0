@@ -2,84 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205BA65CFC5
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Jan 2023 10:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E9E65D361
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Jan 2023 13:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbjADJh4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Jan 2023 04:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S236183AbjADMzi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Jan 2023 07:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239084AbjADJhp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Jan 2023 04:37:45 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18C117E2B;
-        Wed,  4 Jan 2023 01:37:41 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7E0C0420D8;
-        Wed,  4 Jan 2023 09:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1672825060; bh=rdmw0AAv8JUVqSABjH94DjQUi17V4aIuJjoXwrcyMYw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cB9pcZPr25EvIeGxKjVqZHlQdUkDe0DMt87brdQs51n36VswtMKLT06WVoYsrWJUU
-         PA9zQke30TKjaDmuT/lHa4ZiPqOy/KTMNnNyjpUbfdM1ecv1JdxdhIjDG6A3Z/PN4o
-         pctFhC6SGPlOUh6rsit/sol6qmJv0oP97jEr9UTp6cb35o+2ymFBoO6Ron0qoiyP2/
-         p7t+rfdH675btv20WPEU+iUxUvujYi5oha6sc6x3zdgfUnt90SfWDeWbt/yqlmBqaL
-         OE6v1LNYR2730Lrhdu/XlqKfIqdsxq7svw3pIXf5KMKUXGd3tKo/nuQVWop/XKSHyA
-         5BtWOzosrkMyw==
-From:   Hector Martin <marcan@marcan.st>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Janne Grunau <j@jannau.net>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH 5/5] spi: Parse hold/inactive CS delay values from the DT
-Date:   Wed,  4 Jan 2023 18:36:31 +0900
-Message-Id: <20230104093631.15611-6-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230104093631.15611-1-marcan@marcan.st>
-References: <20230104093631.15611-1-marcan@marcan.st>
+        with ESMTP id S237684AbjADMzG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Jan 2023 07:55:06 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A85834762
+        for <linux-spi@vger.kernel.org>; Wed,  4 Jan 2023 04:54:54 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id l1so4139497qkg.11
+        for <linux-spi@vger.kernel.org>; Wed, 04 Jan 2023 04:54:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
+         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
+         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
+         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
+         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
+         yzWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=bDuGUWCLyLUBGuRRKdkm6Ck40Vg8h+F/36bo8ZyelexRk0GOFo9YjIqt/aJBw0ftN+
+         d/XTohsGqoxGfcImGO/a+gH04VXncYKGRGiTpqmGgHCYEsGZdqrALDOBFtHCwDGP35AG
+         qw6QYkpvmu9iAE91xpbyNfPsQpzLFvAR1j+vIEpHF6LLu+XpGuCY2npDloAQqSEo3py7
+         I/0x8XF14GuogoKpierrP5b/maRs7cn520N8OFtrCVljjlJB+pitYWDsr+PrbqfOu48k
+         SChvmyYGpOeckHByW74nRtchyN+psCg6qlugAzoG2K5vpF7Yj9jBZIV4eKXxCkCD4XJS
+         x8vw==
+X-Gm-Message-State: AFqh2krJUaAw1N+K5XVmuYbn+YJGKFrRC7jUqkItK3cu6O32Vcv0Vk0A
+        vFQ1tXqLAzxV3dGfYG3OYToqS2ltkvCRKHwD/rZ4TH5XC7Q=
+X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
+X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
+ h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
+ Jan 2023 04:54:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
+ 04:54:41 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <mzsophie@gmail.com>
+Date:   Wed, 4 Jan 2023 12:54:41 +0000
+Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Janne Grunau <j@jannau.net>
+Seasons Greetings!
 
-Now that we support parsing the setup time from the Device Tree, we can
-also easily support the remaining hold and inactive time delay values.
-
-Signed-off-by: Janne Grunau <j@jannau.net>
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/spi/spi.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 370e4c85dc54..0d84f90ab218 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2328,6 +2328,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 
- 	/* Device CS delays */
- 	of_spi_parse_dt_cs_delay(nc, &spi->cs_setup, "spi-cs-setup-delay-ns");
-+	of_spi_parse_dt_cs_delay(nc, &spi->cs_hold, "spi-cs-hold-delay-ns");
-+	of_spi_parse_dt_cs_delay(nc, &spi->cs_inactive, "spi-cs-inactive-delay-ns");
- 
- 	return 0;
- }
--- 
-2.35.1
-
+This will remind you again that I have not yet received your reply to
+my last message to you.
