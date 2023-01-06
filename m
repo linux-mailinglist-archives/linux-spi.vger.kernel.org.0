@@ -2,85 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E350660490
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 17:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E57566055A
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 18:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbjAFQml (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 11:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
+        id S231527AbjAFRLj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 12:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbjAFQmN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 11:42:13 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212777CBEE;
-        Fri,  6 Jan 2023 08:41:20 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 27C4D426F3;
-        Fri,  6 Jan 2023 16:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1673023256; bh=gXgieJ9sHytuKgJOAD+se1IXoDv6b4RgyKmGjkVDxlg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=pl5bPON7tKn3exZITOT4qR8AxmLqINqBe1EkSfPfTGJJ4pMwe95KLLviTxrwqLQwB
-         gB2OZCPWfbSTQe1RTYksbZw1P3rif1MD6OpxracZDpEAx7BZIXrHRCB81DG5EHfZy2
-         lRU8twI8hP0fnB7iVC1/8UFC26t0x3V2ExshBDsPmwEpyfU5YIVUwlCsHtLUh51bBt
-         E6IVUFQLb3mIk76yVZBPdCd8Homo90egFg/3zLW44enN2xZ4KpInASlBjQS7dArvEQ
-         RFMZwgH3qEQOmOtJurTRDdnruH+rymWSscLNP6ZhTKPUz1yDkrbQfWWvn+tH+AiveM
-         DLUFRPoqXdk1Q==
-Message-ID: <6a9371e6-6516-5966-f92c-10bb228c8db3@marcan.st>
-Date:   Sat, 7 Jan 2023 01:40:49 +0900
+        with ESMTP id S231638AbjAFRLe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 12:11:34 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C721EB60
+        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 09:11:33 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 78so1547504pgb.8
+        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 09:11:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=WkokK+c0Sr+irZu7nnC8iLgGb8L5C70UTLkGQ3LqnGTNEBUDq+Opgh1kHlgoItqC/X
+         +z7zLBeV+rJiHVyFpIhJTCAaKdzaVLRLqYj+e3LuttGswCkZzxFQtVVUoZWG/rwL/5yS
+         U1O5w9IbyZoH+G47c+5Hgzv9I5wr7t3ohQGA0MBPOUxRKPUoD7JFqtdJ0ZeCnX0qj18M
+         A2wDX6ihf8o1lvRU9s1a5PSM7/2SxZvtvbOejlnCUMbimDuSHPH/BWU2Jq5aoYyyEfYd
+         LAHB5+Wn98hoBDcaSCjv9KXepKvtBlEJlQdZA9JS3z/dWTGKWOITXAmxjukHEIhp4/eV
+         SExg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=phjQKz5SEYGkpFSVQiRbA0BLlIOb+jqMXLQI53g06ox000bh6ZY/fbdmWi79GltRG8
+         I1bHivWrrPy7MmhDcvBT18ZBizmqgrdK0wF+dVmB13v8i3N+DQiPClob3+A30slqTNNb
+         lMUhkb2b2FMBDh4vpwwhlNfYP+G3P8Ie/y8KyF2YdgpEdayQCcSlpS4SVx7S3MzjbWU1
+         6Hov8BcpuWMb8irBKxaHfr1CZxFTHpltjQmuD5fO+gDqeGwHjio0X6NzgFJxNVE21FGb
+         oSjYGzoXKyjqz1jxILt2t5AznLSuhc8dEg2CLrtfGXNILY6duT+N3DOmSM9larFGLsxm
+         To4Q==
+X-Gm-Message-State: AFqh2kq6g9ShoRjni/IlyT5s/kwBWw6s6IdYw8lblMwY/pgbrqkCsS+m
+        5xWSUtXtCPZDkVQ78rkKkC0elHe5wJUuNFKNwaU=
+X-Google-Smtp-Source: AMrXdXvsKtFEMjynR5GhYRyJ9zEc5pt1Bd6n/+GBzrFKgGbRcGtFoCNck39UT8aOx78WVO30kjw9feXKwuD0n5PhZ/4=
+X-Received: by 2002:aa7:8051:0:b0:582:e939:183d with SMTP id
+ y17-20020aa78051000000b00582e939183dmr1067436pfm.63.1673025093096; Fri, 06
+ Jan 2023 09:11:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/5] spi: Use a 32-bit DT property for
- spi-cs-setup-delay-ns
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Janne Grunau <j@jannau.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230104093631.15611-4-marcan@marcan.st>
- <Y7hLrxQO9GbgpW1h@sirena.org.uk>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <Y7hLrxQO9GbgpW1h@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:a483:b0:96:8605:6af7 with HTTP; Fri, 6 Jan 2023
+ 09:11:32 -0800 (PST)
+Reply-To: ava014708@gmail.com
+From:   Dr Ava Smith <smith0110sm@gmail.com>
+Date:   Fri, 6 Jan 2023 09:11:32 -0800
+Message-ID: <CABD4N3=8PoA79wSxVQJJAzcQSrt0+-iJRAmMBRxuPbYOupuW2A@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:535 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7177]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [smith0110sm[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ava014708[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/01/2023 01.26, Mark Brown wrote:
-> On Wed, Jan 04, 2023 at 06:36:29PM +0900, Janne Grunau wrote:
-> 
->> 65us is not a reasonable maximum for this property, as some devices
->> might need a much longer setup time (e.g. those driven by firmware on
->> the other end). Plus, device tree property values are in 32-bit cells
->> and smaller widths should not be used without good reason.
-> 
-> This breaks allmodconfig builds (I tested x86 but this should happen
-> for anything with -Werror):
-> 
-> /build/stage/linux/drivers/spi/spi.c: In function ‘of_spi_parse_dt’:
-> /build/stage/linux/drivers/spi/spi.c:2243:13: error: unused variable ‘cs_setup’ [-Werror=unused-variable]
->  2243 |         u16 cs_setup;
->       |             ^~~~~~~~
-> cc1: all warnings being treated as errors
-
-Yeah, the kernel test robot caught this one too. Sorry for missing it
-(it got buried in warning noise in a rather large rebuild on my side).
-That line should've been removed in #3 :(
-
-I see two patches got applied already. Do you want me to just respin #3-#5?
-
-- Hector
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava
