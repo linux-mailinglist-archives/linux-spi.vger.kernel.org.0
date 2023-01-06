@@ -2,85 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC6E6601D4
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 15:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39C5660216
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 15:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbjAFONg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 09:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
+        id S234520AbjAFO2M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 09:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjAFONf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 09:13:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5199277D36;
-        Fri,  6 Jan 2023 06:13:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB4B06164F;
-        Fri,  6 Jan 2023 14:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D72BC433D2;
-        Fri,  6 Jan 2023 14:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673014414;
-        bh=EvgeiMEksqyIUm/FI4vt5rIz7p/gmD7TtQdDbeVnY7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rvbf9V1GvTNjFwspNomILjaPgJSVQpuuKl4BTMGerMqahBqYfKawcURDbKCSnfuqy
-         my/Ebqru13J1Y5+EE01bWEBtmsaPEppqv/JG3drzuAlyEQXX6/yQu16zSAOwuNf4D5
-         GbiIUXCOvCne8yGQDaqfH/mzIrHItC4zA2xlkhsaZ05xkAngC+M51lSkOjEqcddZr2
-         3jmHx+UjdDE/OzRv1VubXKXpeyTJb6lT4Uiwqo7sCuRVDApbdASCzrmRY04DpR8gtH
-         RpSPREEJaTvzuO9ZLmQ4P7MjX0+8KkOW4z4JQmvvl9dzmENfryQ93MbnZ2ihkCUTXC
-         PY7QlkLs7sszg==
-Date:   Fri, 6 Jan 2023 14:13:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
+        with ESMTP id S234078AbjAFO2K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 09:28:10 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76681A059
+        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 06:28:09 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id a64so1611015vsc.2
+        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 06:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kMM1OY74tfbGddQUb6ZKJePw4/6yed/og9l1W9H7JVA=;
+        b=Yw2ih4DCRRNQOx2RNzOUzWndLvFAZP8G0HRaPqmfGYcZCSoIjGOufaNdLYhp1dPKaQ
+         9OaUtRi9D8e+WdaQffSJUiWpH1VMACYlgmMYQWwZpJDcKiEipUKqcUl85rQrfFVenE7e
+         oG9haiuJhty0GRRhSSWo85yTVRKJcf+7m8V9LrV4OPyc44hzLaVAm3xodkn5/Q1MopX+
+         O/jEVZvABOuaIkxBXnvUFp3soQM35/nR3FPXceQf1r63oP/szBw0TBydJ2ExIFhkNvyc
+         WXMvc/1ZuOtbOoneV5z+j2VtrxX8FAo9vewSYpa155wpf3Qra/y2Y2WTaVCoqwnw43pj
+         fR5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kMM1OY74tfbGddQUb6ZKJePw4/6yed/og9l1W9H7JVA=;
+        b=Pg6fGEk8qesILNsm+1mjeYpR4b0HTx4UHaNRJY+Q6G13qDbAS1roJIY+jbD54+M/Kr
+         a0eAdqRTVijhTvWKRFOjTEYBUhyyS/U0gVaOUjmB/7kMj5vWChBJbS/dsMx3ZueKUt3X
+         EoU1jnNAbdSnaNvEnk9JUdRqXBCvFHAR0SwH2NKexKXn3iga7suYNMNr2c0xH6498Z7T
+         iR+YEoOoWYN7bX7DBUGIrD91vZPKVijr9NZu1HlW/u+s+kn1ZE58SdMdtwosYhSrGKp3
+         D00TmTqTk0NCFmKQzIQekuFzlSwkGa6i52MxT64g0J2AblI3sywgTka0oNGg/UfL4XyY
+         AsKQ==
+X-Gm-Message-State: AFqh2krf4WAo/b4SydYyOp6yelBalFiu5IaXm82uSrMCENH3sFyGuVUU
+        +djOfF9dvt5AVuUxVCGol2SGlrrdA9lBhi/SDH6pXg==
+X-Google-Smtp-Source: AMrXdXuIXCCXkcH+l3mnFoJpDaYRjAVNk+SVVnWU1LUbZ5m8pTLFcWofhciLCqpCAWswg0RmxrbjdwHNpCNApTUGUrs=
+X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
+ h31-20020a0561023d9f00b003c44918080cmr5516214vsv.9.1673015288732; Fri, 06 Jan
+ 2023 06:28:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20230106100719.196243-1-brgl@bgdev.pl> <Y7gsiW6lAsz/krsV@sirena.org.uk>
+In-Reply-To: <Y7gsiW6lAsz/krsV@sirena.org.uk>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 6 Jan 2023 15:27:57 +0100
+Message-ID: <CAMRc=MfsUxuv6d4GXgf7aTDr3Af89JX1Na_+jWcQQGn2hngWzQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] spi: spidev: fix a race condition when accessing spidev->spi
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2 1/2] spi: spidev: fix a race condition when accessing
- spidev->spi
-Message-ID: <Y7gsiW6lAsz/krsV@sirena.org.uk>
-References: <20230106100719.196243-1-brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VI4bnjj3fr5nrV29"
-Content-Disposition: inline
-In-Reply-To: <20230106100719.196243-1-brgl@bgdev.pl>
-X-Cookie: Do not fold, spindle or mutilate.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Jan 6, 2023 at 3:13 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Jan 06, 2023 at 11:07:18AM +0100, Bartosz Golaszewski wrote:
+>
+> > - use a mutex instead of an RW semaphore (but for the record: I believe that
+> >   the semaphore is the better solution here)
+>
+> Why?  Like I said in my original reply I'm not clear what the extra
+> complication is buying us.
 
---VI4bnjj3fr5nrV29
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Typically, we'd want to keep locking as fine-grained as possible.
+Logically, there's no reason to exclude concurrent execution of
+file_operations callbacks. There's a bunch of code in there that could
+run at the same time that we're now covering by the mutex' critical
+section. We should only be protecting spidev->spi here so any other
+locking should be handled elsewhere.
 
-On Fri, Jan 06, 2023 at 11:07:18AM +0100, Bartosz Golaszewski wrote:
+IMO the complication of using an RW semaphore is insignificant and
+maybe a comment next to its declaration in struct spidev would
+suffice?
 
-> - use a mutex instead of an RW semaphore (but for the record: I believe that
->   the semaphore is the better solution here)
-
-Why?  Like I said in my original reply I'm not clear what the extra
-complication is buying us.
-
---VI4bnjj3fr5nrV29
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO4LIkACgkQJNaLcl1U
-h9Bf+Qf/cmN+eSdQ4r6oxBzEjKUvx4IbbsGGBa2ejQGhDTkO0YyZX8Mkd2bajdMj
-IktlRRXgGhB4Vbys7+vdZ8Vpw6GwyM77vIdEFu0DK2vhR0nUYux3Bg/6rKVGFrZs
-5QXMvzeG1AGCj921JwQ48Ld02QrA8ni9HLpTvXaFydMeNCw+GatGGsxm8BhoV7vF
-LCKzKU2LRL53hbFvLXBQQRmjoa4QzyC8hV6mTHKUR0kjQJ8KzYAwOUyXqbHgFdiR
-wzWlxQvGuBkAdXUarhHd8xKYeZjTIalP7+EdQFi4n7PB0dHkOlrdDLkrVW1IHCTj
-enLu/jJFav+wDuaO2Lz/sE3qx6rwig==
-=M5HA
------END PGP SIGNATURE-----
-
---VI4bnjj3fr5nrV29--
+Bart
