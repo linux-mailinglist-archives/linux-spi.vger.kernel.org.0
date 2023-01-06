@@ -2,46 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB55660931
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 23:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFFF660935
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jan 2023 23:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbjAFWBV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 17:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S236666AbjAFWBw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 17:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbjAFWAz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 17:00:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242B5872B9
-        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 14:00:19 -0800 (PST)
+        with ESMTP id S236693AbjAFWBL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 17:01:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351DF848E2;
+        Fri,  6 Jan 2023 14:00:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DC6BB81EF0
-        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 22:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F22BC433F0;
-        Fri,  6 Jan 2023 22:00:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 80B90CE1E6D;
+        Fri,  6 Jan 2023 22:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C46C433EF;
+        Fri,  6 Jan 2023 22:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673042417;
-        bh=3ffCJn0HH15SgeKiVlzQn04fu01udyWzP9YZlNod7dk=;
-        h=Subject:From:Date:To:From;
-        b=XePX9PseoTw0fhU7YjZxg0lma75NO6MtvDp369Tm5+VZbQEITdA41p47lWtohtm5s
-         nBaW/TXloPTUqLqoZEQIxz8L0Astiqgz9MOaWYNI5dOSemvFJEVR/6l8gDlUTE+ydw
-         a6MeokMvGXLM0jaZef9T4nOmtQ3NRo/+jf1HUq3NR5dVmFoNaa8LDNUyVnbej8OvuW
-         6w+d+B4cg4aNv6XKH5D+ZURUtu74Qur+negbAH47eIl0lBooFzkcIZAeARxMfln2q8
-         fIMJTt9bEtKHLPquEZqbJ2VEzjlwTLiY5ORDLUYzFsjwnJL4R6UBrer8tCUOElt7za
-         O6rt76DmfK6Cg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5FA7E57254;
-        Fri,  6 Jan 2023 22:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1673042453;
+        bh=nY98X/gx6KdA7uOLij50iqYabHvIksPSbU47iL15GCk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LVSEz8npgVEzW/6ZhgEBmyJlBraMWVJelVMT/C0CrxIOdzmNJl8lvGKUXuRc1DmXc
+         6uB038RuiDYugVZeiT/I6vmzWknWXmJqvMdk3JJaq37AD0WbfvRjSa6SYd1VkICZvA
+         coRBF/pWNUx9OR10Y67++CUXZIVhgqhXBkden9lzD+YYXNrcjtiXjXZYgUYMNA8h1X
+         F6sgeTVfp7XhhyneKZp4D0o3aioc0JiwvMBgiqNHl0NgJoH4phSD0wUYLMto73AL50
+         U2J23VEgFqgPrxhCSA3nPfqqAykGPoYjdJzLq5VPWzvZCDmiGscvv+DHdIXIMDjDXL
+         XcI99nmPUu1zA==
+Date:   Fri, 6 Jan 2023 22:00:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+Message-ID: <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <167304241680.27890.2186339934888729619.git-patchwork-summary@kernel.org>
-Date:   Fri, 06 Jan 2023 22:00:16 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="03fzSve1xfjNt8Ya"
+Content-Disposition: inline
+In-Reply-To: <20230106200809.330769-12-william.zhang@broadcom.com>
+X-Cookie: Do not fold, spindle or mutilate.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,23 +60,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+--03fzSve1xfjNt8Ya
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Series: [v2,1/2] spi: spidev: fix a race condition when accessing spidev->spi
-  Submitter: Bartosz Golaszewski <brgl@bgdev.pl>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=709492
-  Lore link: https://lore.kernel.org/r/20230106100719.196243-1-brgl@bgdev.pl
-    Patches: [v2,1/2] spi: spidev: fix a race condition when accessing spidev->spi
-             [v2,2/2] spi: spidev: remove debug messages that access spidev->spi without locking
+On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
+> Multiple transfers within a SPI message may be combined into one
+> transfer to the controller using its prepend feature. A SPI message is
+> prependable only if the following are all true:
+>   * One or more half duplex write transfer
+>   * Optional full duplex read/write at the end
+>   * No delay and cs_change between transfers
 
+There is nothing driver specific here, this should be implemented in the
+core - we have existing logic to rewrite messages to match driver
+constraints, this could be added there possibly with flags to allow
+drivers to disable or enable the merging if they've got special
+requirements.
 
-Total patches: 2
+--03fzSve1xfjNt8Ya
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO4mg8ACgkQJNaLcl1U
+h9ACJwf/UE1spDfA2xj1/PcQ+u3EwHKl083wfkb2q6wwMJqDHkKLmUA4U8gD5dU8
+/vZWPViLit19LVtn/P/v7n4yhwR4iks3mYnQKcvV9s88QKsuoY1hgfi4362VdbKf
+bqciz2t2WhxEu1eGFjYpdEazyEHH+OkzFJDIGgdsYM+s1CLq1R1PCIPB3KFeIopW
+5N2gk+83IHLPqNvHp5RM+fdU5kPv6tKLtcAoJO+0eI1HvOGs25Cp7wI7hgtOSR+V
+XozRJNL3Nd9TYjvIGJvatNMWACBZ5Xo7h9GHhVxUWNzWvJk5g8GmTvRJS97rBQOT
+5WgghfpwqkekaGIzRkCHfjEx4LFs6w==
+=M+9u
+-----END PGP SIGNATURE-----
 
+--03fzSve1xfjNt8Ya--
