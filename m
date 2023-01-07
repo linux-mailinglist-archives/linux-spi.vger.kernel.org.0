@@ -2,97 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B93660F66
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 15:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6394C660FE5
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 16:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjAGORf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Jan 2023 09:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S230238AbjAGPSJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Jan 2023 10:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbjAGORe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Jan 2023 09:17:34 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7B4D483;
-        Sat,  7 Jan 2023 06:17:32 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C534E1C0003;
-        Sat,  7 Jan 2023 14:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673101050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3vSlD9vjCmzG/8rJElMrfdFbS1XrvDaONmQUsaXCWKY=;
-        b=Kf2+8JwqCfDZofc4LQX/Nss0zvoyIjOfD4HtDOPTgIkrMThTREIpUk7EN8Xp1JApjr7Gf6
-        yg30je3wDF8CzQkbv0xu3KTrN7GMvtgt3LZKzLCEW/QbJvq/BJ5ZD+y8fF1PiVsNWczFgv
-        XWNKbjySPTftTVh/fs9k/h1HYKZbMSR9o39T5dbgky4rw2Zg1Trkhu7RkTfhmQ6x8zvYmG
-        Rcpx9Mo0F1gTrFO3CKN1JoKocyu/bzOR25dAwj55Wv/SSP5YbmBmAJIgP5NtzyieHR7ool
-        r/CgQLx3iyNPAP1+fH2m9+VxzXaJnzXo7+7BEvS4nrrZj+/RQmW2YWqYoJ+y8w==
-Date:   Sat, 7 Jan 2023 15:17:22 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>, <arnd@arndb.de>,
-        <richard@nod.at>, <krzysztof.kozlowski+dt@linaro.org>,
-        <herbert@gondor.apana.org.au>, <robh+dt@kernel.org>,
-        <claudiu.beznea@microchip.com>, <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <pratyush@kernel.org>, <michael@walle.cc>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] MAINTAINERS: Update email of Tudor Ambarus
-Message-ID: <20230107151722.743401bf@xps-13>
-In-Reply-To: <20230106164751.7ddaf5c54e0a764344806848@linux-foundation.org>
-References: <20221226144043.367706-1-tudor.ambarus@linaro.org>
-        <feb09bac-0ea4-9154-362b-6d81cba352a8@linaro.org>
-        <678ad800-7a3b-e2bf-6428-f06d696d8edb@linaro.org>
-        <20230106165506.0a34fa78@xps-13>
-        <f653b23f-cf25-61ec-60d4-91dd7823edd2@microchip.com>
-        <20230106164751.7ddaf5c54e0a764344806848@linux-foundation.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229785AbjAGPSH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Jan 2023 10:18:07 -0500
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B046F1704D;
+        Sat,  7 Jan 2023 07:18:06 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id o13so2444619ilc.7;
+        Sat, 07 Jan 2023 07:18:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qt3iT4aovtQ+3YTo4FRMDvWABE+Y3B6IyX+wff/2RkE=;
+        b=WrD6CCPDNIlMIDRA0IrqQPA2AOd2+AfTYWivllPN60WOcIYq71l/0SfGS29qBgo7Xn
+         xgEnCVwr4Za227Li0IEicjzD1Q0y+xxZGtIuK3OzrRw0P1NhaKU5lOJvjFSD/J5qBVc+
+         3zQkCLjaR18z6y7cGvo/hJLR6YyOgBjLMcRGwTqptKlXMAcrMi0fuy82EpZLxGuC7N+Y
+         RS6S3Ld/aOItzgTWqZcYecGgvON/Yduv8FYqlivsDxztKoAwzH8DrbihJdfmW/K0sA1p
+         ys1hb+P+bh+hoDlGAsCJ4HOYbOf32hrRgpzqJfIHB+oqdlIC9xlKhYENg19FpQxWvtcn
+         MiFQ==
+X-Gm-Message-State: AFqh2krE7iPBCrV8cUXuJzYi/ktClin3K3FUB84iLj0wFROx/hoVlvAC
+        2rrLYIN1diBEGw0mP2UZLw==
+X-Google-Smtp-Source: AMrXdXuBk+V3WJWqTsqMVyXlcUc2Ry4MJDOK+iidIpfuB8S7Y2PTqJuABcPa7DNShcvdFVZA2Yp0gw==
+X-Received: by 2002:a92:da4f:0:b0:30c:42d9:22a5 with SMTP id p15-20020a92da4f000000b0030c42d922a5mr17020681ilq.13.1673104685792;
+        Sat, 07 Jan 2023 07:18:05 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id f94-20020a0284e7000000b00389d02a032dsm747863jai.172.2023.01.07.07.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 07:18:05 -0800 (PST)
+Received: (nullmailer pid 1799735 invoked by uid 1000);
+        Sat, 07 Jan 2023 15:18:03 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     anand.gore@broadcom.com, joel.peshkin@broadcom.com,
+        dan.beygelman@broadcom.com,
+        Linux SPI List <linux-spi@vger.kernel.org>, dregan@mail.com,
+        tomer.yacoby@broadcom.com, f.fainelli@gmail.com,
+        kursad.oney@broadcom.com, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, jonas.gorski@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230106200809.330769-2-william.zhang@broadcom.com>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-2-william.zhang@broadcom.com>
+Message-Id: <167310423078.1757548.4915356991338777285.robh@kernel.org>
+Subject: Re: [PATCH 01/16] dt-bindings: spi: Convert bcm63xx-hsspi bindings to
+ json-schema
+Date:   Sat, 07 Jan 2023 09:18:03 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Nicolas & Andrew,
 
-akpm@linux-foundation.org wrote on Fri, 6 Jan 2023 16:47:51 -0800:
+On Fri, 06 Jan 2023 12:07:53 -0800, William Zhang wrote:
+> This is the preparation for updates on the bcm63xx hsspi driver. Convert
+> the text based bindings to json-schema per new dts requirement.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
+> 
+>  .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 52 +++++++++++++++++++
+>  .../bindings/spi/spi-bcm63xx-hsspi.txt        | 33 ------------
+>  2 files changed, 52 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-bcm63xx-hsspi.txt
+> 
 
-> On Fri, 6 Jan 2023 16:59:52 +0100 Nicolas Ferre <nicolas.ferre@microchip.=
-com> wrote:
->=20
-> > > Are MAINTAINERS changes accepted through fixes PR? I see a number of
-> > > experienced people in Cc:, I would like to hear from you folks, becau=
-se
-> > > I never had to do that before. If yes, then I'll do it right away,
-> > > otherwise I'll apply to mtd/next. I'm all ears :) =20
-> >=20
-> > I remember a conversation that stated that MAINTAINERS changes must lan=
-d=20
-> > in Linus' tree the quickest, because it'll just avoid confusion and=20
-> > bouncing emails. =20
->=20
-> Yes, I always merge MAINTAINERS fixes asap.
->=20
-> Probably these fixes should be backported into -stable kernels also -
-> we don't want incorrect email addresses in *any* kernel.  But I don't
-> do that.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks a lot for your feedback, I'll take care of it.
+yamllint warnings/errors:
 
-Cheers,
-Miqu=C3=A8l
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.example.dtb: spi@10001000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'num-cs' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230106200809.330769-2-william.zhang@broadcom.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
