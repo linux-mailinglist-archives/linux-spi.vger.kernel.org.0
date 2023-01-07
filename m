@@ -2,51 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB2A660C26
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73755660C2F
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjAGD1j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 22:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S231335AbjAGDgF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 22:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjAGD1i (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:27:38 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6A38B53D
-        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:27:37 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id l1-20020a17090a384100b00226f05b9595so1751105pjf.0
-        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:27:37 -0800 (PST)
+        with ESMTP id S229521AbjAGDgE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:36:04 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A26C07
+        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:36:02 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id v14so3825004qtq.3
+        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:36:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=DzqqunoMDXItKL3iMzA3hpNLKTDu0qv4Xzy6V68Gsqk=;
-        b=YZKvri2UKZL2/t7FB+c9DxjC/KeVH/GkjPGPaelGwy+dabAwsIKZf3Vdump+n+gKXU
-         VZWFAnB5fwbU+cIeEDrUcM0MVOYT+iH+Fg77oMST5/o1RVluX3WWUbYAZggFOOPRYn+5
-         qe0AZ3BVS9+D7eIwPD0xXax5YatazoyZZRg9A=
+        bh=8Cs/5+6LA9OtaicfH5IQoAfbsUYW0y6F32TrdTRPZyU=;
+        b=cf2D0KGrzTj0ad6LuOnX8pW8FixiroxbmrCRgm4lTqpHu2KT9KwSaDdYvrfCe/bTwy
+         AuZlNXYPkR1kw+oFE4cz4DtJDoOKZlrW5gDjSyXP8/kbbdzD6oxqPw8z021mG92hjtLO
+         GoH1qobPEKL4Vhu0p28J4ewC0JwjnEPynOVkQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DzqqunoMDXItKL3iMzA3hpNLKTDu0qv4Xzy6V68Gsqk=;
-        b=dNbtOmBnBsObDswnshE4B2XLNF2GxjFq+qKXn4BFELLATee+tpMpQWde+VzdHyMNXs
-         Ve4LEg9X+GdlILUzGNAdX7rlZhu1XO7WSVqXX2vk8SxVUuJn92ootafoz+/wdNYGCLTi
-         EFSLWgu6faTlMztJ/Rzf1mdsaMtgyIG2ckjaDCwa3j1U5hPXojyeha/XO01NsxjUdXz3
-         J+tqVNoCtoWS6exp9QXTFIwlkKrwMKT+Mr6AKGH9kzOgNr+CJ1IPZ97oDe9QupTBJg6w
-         ebS0e7JZL7DIo/0AJxA7ZCylroHedUvdmASNcU/NAhxT/8euVzRL73smUJfr+Q4Hu47p
-         4k8w==
-X-Gm-Message-State: AFqh2kq8aycuBUhlz2Sgv5JNKI+OkM6pTdRvGjAz5Khd/GLKRM5n/LBF
-        WW0hyS96G5vPx9maJx8ERV3EVQ==
-X-Google-Smtp-Source: AMrXdXuMz/toCYDKKdI5MtIQJXNm+5g1RMBs6R8uEWATXi6Z4DruBn6icDBxwIojuxvEfVSW6Icuxw==
-X-Received: by 2002:a05:6a20:4904:b0:9d:efbf:8156 with SMTP id ft4-20020a056a20490400b0009defbf8156mr76255830pzb.31.1673062056738;
-        Fri, 06 Jan 2023 19:27:36 -0800 (PST)
+        bh=8Cs/5+6LA9OtaicfH5IQoAfbsUYW0y6F32TrdTRPZyU=;
+        b=xAt3QmUTfA2RJDyq1K6hN8czw8AFhU4pRwUsvOL+h4Zecvvsd2tCFd2vBFRUROrE1T
+         v7YcdfUosb6cIsFcTyFeFfNdmV2AAzgsrcFVq3/HW6Dq7wPJzKmNPoOYM4ZpI6eFJB6X
+         7nrOF34nj1RU+UCfsrpYFPfzrIaZRO+u8iiAv89GGGx/m1MJVBdELWXLY4wSPLcv7Cv9
+         NwbYjA5+uhCCfPTk83wkfoEEn4troVGlWbMu3qVCsORO+Z172CXgfubmrcLkyiPb9SF4
+         1BCluZPnpCt2HnyJCerEl48EWuAwuN3hJCg5UpxwXHvgpH+Ogn8jXANYBcKYpI4i33Lj
+         qykQ==
+X-Gm-Message-State: AFqh2krOJiH/M2bzDWqBCUpvPG1xF4dXx/f+ei8/LPPRLUnXg92WHmqL
+        P/iEBwU/Dul9tP67GFSmCutx1w==
+X-Google-Smtp-Source: AMrXdXteuvYOh0s0azL7/PlZxuOlbvJoft3qH/CyIS1dgzSVUOCYFVJ6QCRUpF4sMJJZyUzgCd0e+w==
+X-Received: by 2002:ac8:7551:0:b0:3a7:f46b:7a82 with SMTP id b17-20020ac87551000000b003a7f46b7a82mr74882152qtr.21.1673062562030;
+        Fri, 06 Jan 2023 19:36:02 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id d7-20020a631d47000000b004a849d3d9c2sm1492646pgm.22.2023.01.06.19.27.34
+        by smtp.gmail.com with ESMTPSA id t13-20020ac8738d000000b003434d3b5938sm1417743qtp.2.2023.01.06.19.36.00
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Jan 2023 19:27:35 -0800 (PST)
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
+        Fri, 06 Jan 2023 19:36:01 -0800 (PST)
+Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
@@ -54,21 +53,19 @@ Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <Y7iPS48viBg0QRok@sirena.org.uk>
+ <20230106200809.330769-8-william.zhang@broadcom.com>
+ <Y7iW38Fsj0nIewDm@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
-Date:   Fri, 6 Jan 2023 19:27:34 -0800
+Message-ID: <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
+Date:   Fri, 6 Jan 2023 19:35:59 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y7iPS48viBg0QRok@sirena.org.uk>
+In-Reply-To: <Y7iW38Fsj0nIewDm@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000099738005f1a41d8b"
+        boundary="000000000000b74b4105f1a43bd6"
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -79,47 +76,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---00000000000099738005f1a41d8b
+--000000000000b74b4105f1a43bd6
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-Hi Mark,
 
-On 01/06/2023 01:14 PM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 12:07:55PM -0800, William Zhang wrote:
-> 
->> brcm,no-clk-gate is a Broadcom Broadband HS SPI controller specific
->> property for certain SPI device such as Broadcom ISI voice daughtercard
->> to work properly. It disables the clock gating feature when the chip
->> select is deasserted for any device that wants to keep the clock
->> running.
-> 
-> Why would this property be Broadcom specific?  Other devices could in
-> theory implement this.
-> 
-It does not need to be Broadcom specific if other SoC's SPI bus 
-controller support such function. I am not aware of such case but 
-certainly I am no expert on other chips. I can put it in the generic 
-spi-peripheral-props.yaml if that is what you suggest.
 
->> +properties:
->> +  brcm,no-clk-gate:
->> +    $ref: /schemas/types.yaml#/definitions/flag
->> +    description:
->> +      Some SPI device such as Broadcom ISI based voice daughtercard requires SPI
->> +      clock running even when chip select is deasserted. By default the
->> +      controller turns off or gate the clock when cs is not active to save
->> +      power. This flag tells the controller driver to keep the clock running
->> +      when chip select is not active.
+On 01/06/2023 01:47 PM, Mark Brown wrote:
+> On Fri, Jan 06, 2023 at 12:07:59PM -0800, William Zhang wrote:
 > 
-> This seems problematic with any host controlled chip select support...
+>> Polling mode provides better throughput in general by avoiding the
+>> interrupt overhead as the maximum data size one interrupt can handle is
+>> only 512 bytes.
 > 
-Yes those ISI chip based voice cards do need such strange requirement 
-and will not work with other controller.  That is one of the reason I 
-put this as Broadcom specific option.
+>> When interrupt is not defined in the HSSPI dts node, driver switches to
+>> polling mode for controller SPI message processing.  Also add driver
+>> banner message when the driver is loaded successfully.
+> 
+> This should not be something the user selects via the DT, if the polling
+> mode is better then the driver should just use it regardless of there
+> being an interrupt wired up.  Generally there's some point at which the
+> benefits of polling become minimal (and the costs more impactful) but if
+> the DMA setup is as bad as it sounds then the driver should just ignore
+> the interrupt.
+> 
+I agree but this is more for backward compatibility as the original 
+driver uses interrupt to work with MIPS based SoC and I do not want to 
+change that behavior.  For newer devices I added, they work in polling 
+mode by default with the dts I supplied.  IMHO it is also good to have 
+this fallback option to use interrupt in case user is sensitive to cpu 
+usage.
 
---00000000000099738005f1a41d8b
+--000000000000b74b4105f1a43bd6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -190,13 +179,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL3w0eWjk4HHJ9klGn3e86kzvJRQ
-hbbPq9FBv3Bm/UyAMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwNzAzMjczN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILTuZHwc70pLWt3J5L0/tR2V8/V2
+AAjiwVF8LLqjPiAGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEwNzAzMzYwMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAtZVaghz0Z6ZZX2e37beo/T6XwYsbXdAZ/NjoOQf+ZhJbj
-W4GflEKoaM9iGD8S9sQ8BT8SA6/hGMCn6+Z2TO7LasrvsF6FVu67rcC4bGGsgoyN3y4GALzbXHcn
-Usz9xqC1yZOs79fp93Ef3DiBkZzPOrwRiGq9M3m+LoCjSbeIVXgM3fFcpUi5PN9fH5DV+jW5t7uf
-NcwXlxwB6ws76dmTptFW2v5yQHonDcEVAgKqKEImfx49QrwBR3bKeaI979mPVD1T99qDfN5fVEL1
-XsPK5+WUUfXTyg7QWZvyAw/rUh6ja+g6yx6B1DSV2TBby4SBI2ZYIekbx37XdBukwlmb
---00000000000099738005f1a41d8b--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBYa9QuSZSpkEEaQxbPBh5Dn9R0QVmec4DyGIWVvuzidUDA
+sg2rgRVlas8Pbs1VjOdwLXtQBnjon7dP2GtKnkeHn0YkbuL+O8rLDb85fyordNevXzkSAmkM/3zB
+g/c8XPVi2QqlbSifW/d3tIij4tnnH3qOsVyUwj+DT1GGrsKXS7+1moGQLfMW/1ctpOZnOcsRuhdU
+xSa8i+IPeEJ8vSltWRn1kq6B6QJO6ky7ke4EzKNGs2tAhhcdl+yLaepfsNWj8TwAa6BTmuHs2BOR
+s8adk0qk7sL8ulI9unn7vmV/bEmwioaea9hxSM/hoC4lgnsCQNktOXIzyY9R4tDPk5Y9
+--000000000000b74b4105f1a43bd6--
