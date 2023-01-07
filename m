@@ -2,50 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A282E660C53
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C60D660C59
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbjAGDwk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 22:52:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S231394AbjAGD5W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 22:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbjAGDwj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:52:39 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822DF4E437
-        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:52:38 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id j9so2396038qvt.0
-        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:52:38 -0800 (PST)
+        with ESMTP id S229751AbjAGD5T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:57:19 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82532724
+        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:57:17 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso7191802pjp.4
+        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:57:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=mSjM1LQkNZ127BmE/3lzvLwaMn5NsNSqveWKl+eXYJc=;
-        b=CImLveVnywlm3i3+sDdXbuv0sYlb6qxfcG5ctphEWCKGAF2x9z9FVSYbXtip7Szd5P
-         gl7FuP2kij2wcKC1CzOCguefZUMkVV27fdQlxh3KGkO0n6VyhoAtdp5ujUZy23VaBGwH
-         0VHqsEDChfG+g2zFrL4KuTiKIfdTWW2K0Gilo=
+        bh=ZO21G+78rRotm2vhUiYhBvQX3DdMoDq2q1QyW799/1U=;
+        b=cxzCBnfbq6t3FqopqID/BfSuToo133jnHxfcPi0CjJD7IR8FOZT85OtD9+49hqw65W
+         n8OG5qCiqZwUVlwc/NzuznJicxr1f07Ig4AZOFIs7RLRnhK8bcerPgtjVwC1XHtEkA5G
+         ADFxfAB9rTbJvWrfQBMMqrG5mK+fRMbADNlOI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mSjM1LQkNZ127BmE/3lzvLwaMn5NsNSqveWKl+eXYJc=;
-        b=Pfd86+yTSMsG8Vz8dZFol5WkfoMByXe4mUpVdiUGBz2aQg6RW0rrEvaQ7fsbWizxxV
-         znpYh/QQNOtaiB3aIt/oizS5rDZ/2bAI0jEnGhKjag43/gIamVPHmhH3pECtOiacYf8m
-         DZ4wkJ8J+awas3id5TWttMs+gKarCJEpYJhiQlQK17zdmBN2SMpx+OP94V0Y6FhR+1lx
-         weasjOSm9qnkU4bkGxcBzu4tcIKCQXtMlkoIa3l1EVbX829mCIoVmIRLdmEkStNQjoNh
-         0g/Yj6g3Nrc6c6x4dutoewfWkog37ebG96AjIWM3JF1jFdaevshs2Ka6+4XULGO4WXQr
-         yoXA==
-X-Gm-Message-State: AFqh2krkv2XX9oC/FB6E1kfifeCDUUPLBFKsdG7tdaBIxlUSg/1h9p6G
-        xUIsO0pOoW1tBfZuXohQDm7Wag==
-X-Google-Smtp-Source: AMrXdXvss1Egca1hzcPaH2/XRmeKRAmopcCYpOiGWMADXU/H4t3yW1vlkYlrJKKfGconf+BEmcBWRw==
-X-Received: by 2002:a0c:fac4:0:b0:531:c0a1:5bf1 with SMTP id p4-20020a0cfac4000000b00531c0a15bf1mr31040136qvo.12.1673063557592;
-        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
+        bh=ZO21G+78rRotm2vhUiYhBvQX3DdMoDq2q1QyW799/1U=;
+        b=OrFRJRkStHslLWDACAVsnXDHYnBGInAMGQXP6pAacf93SHQrZwghgy6vjAVnnrBc4d
+         IsbYEXI5Zo+ytvaa9ZymWg/GQ+SA9uT7lak+K2mwDyV1YipIgeL6UzjUj3xfIngEkPhs
+         QAChBNmakakw7DDLGTmdNG1w2Avzb58IGbOIQXT643whbX7ekMi4RxlzAwY/PoY03gpm
+         wQ1MK0O8Io/f5eXgYuhHzjUkcm+nkzvow03ze+XRA6iHvR9eeSpeDvwjxEHngHljfyHF
+         Hxf7Om8wF72gvlSOVwCqLIC5tdTc8QVrqsGZh528xYw8V2IR274HvnRokFvX3ZVJPlRp
+         xDfA==
+X-Gm-Message-State: AFqh2kquA76JYvqlmiIXgBqGXaLSnSuzypgaenlqMYDWJBT/z5AsxKmg
+        OhwmQXdTmjCZYEr8SiJyQB7Vjg==
+X-Google-Smtp-Source: AMrXdXttZFJ5xTYfmgzZnOu/c9KRT1ipY26ux010mlhOvMWOUPNlMT0Q6blph3GkNOTWsI+51b3LbA==
+X-Received: by 2002:a17:903:31d5:b0:191:4539:d2c1 with SMTP id v21-20020a17090331d500b001914539d2c1mr57179900ple.47.1673063837270;
+        Fri, 06 Jan 2023 19:57:17 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006cebda00630sm1591951qkp.60.2023.01.06.19.52.35
+        by smtp.gmail.com with ESMTPSA id 185-20020a6303c2000000b004702eca61fcsm1526661pgd.36.2023.01.06.19.57.15
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+        Fri, 06 Jan 2023 19:57:16 -0800 (PST)
+Subject: Re: [PATCH 14/16] spi: bcm63xx-hsspi: prepend: Disable spi mem dual
+ io read op support
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
@@ -55,17 +56,17 @@ Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         kursad.oney@broadcom.com, dregan@mail.com,
         linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <20230106200809.330769-15-william.zhang@broadcom.com>
+ <Y7ibpEw8UKKwBksD@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
-Date:   Fri, 6 Jan 2023 19:52:35 -0800
+Message-ID: <1719d289-ae1a-708e-ffd7-889007465b4e@broadcom.com>
+Date:   Fri, 6 Jan 2023 19:57:15 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+In-Reply-To: <Y7ibpEw8UKKwBksD@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000dd15405f1a477ca"
+        boundary="000000000000ba902a05f1a48731"
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -76,45 +77,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---0000000000000dd15405f1a477ca
+--000000000000ba902a05f1a48731
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/06/2023 02:00 PM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
->> Multiple transfers within a SPI message may be combined into one
->> transfer to the controller using its prepend feature. A SPI message is
->> prependable only if the following are all true:
->>    * One or more half duplex write transfer
->>    * Optional full duplex read/write at the end
->>    * No delay and cs_change between transfers
+On 01/06/2023 02:07 PM, Mark Brown wrote:
+> On Fri, Jan 06, 2023 at 12:08:06PM -0800, William Zhang wrote:
+>> In general the controller supports SPI dual mode operation but the
+>> particular SPI flash dual io read op switches from single mode in cmd
+>> phase to dual mode in address and data phase. This is not compatible
+>> with prepend operation where cmd and address are sent out through the
+>> prepend buffer and they must use same the number of io pins.
+>>
+>> This patch disables these SPI flash dual io read ops through the mem_ops
+>> supports_op interface when prepend mode is used. This makes sure the SPI
+>> flash driver selects the compatible read ops at run time.
 > 
-> There is nothing driver specific here, this should be implemented in the
-> core - we have existing logic to rewrite messages to match driver
-> constraints, this could be added there possibly with flags to allow
-> drivers to disable or enable the merging if they've got special
-> requirements.
+> This suggests that your prepend mode is attempting to combine
+> incompatible transfers doesn't it?  Presumably other devices could
+> generate similar access patterns...
 > 
-My understanding of combining the spi transfer in the core level does 
-not quite work out to our controller.  For example, for a spi message 
-with three transfers, tx, tx and rx. We can possibly combine them in 
-single duplex tx/rx transfer in the core. But this will be treated as 
-duplex transaction in our controller level which require tx and rx data 
-happens at the same time. Obviously this won't work when rx depends on 
-tx happening first. We can not differentiate this combined duplex 
-transfer from the true duplex transfer unless there is some flag to 
-indicate that. Also there is limit of max tx length as the prepend 
-buffer so maybe another parameter.  And another reason to be done in the 
-driver level is this prepend mode has dependency on dummy cs workaround 
-which is driver level parameter currently.  I am not sure how practical 
-and useful this is to factor them out to the core level?  Maybe I didn't 
-fully understand your comments and appreciate if you can elaborate or 
-point me to the related core code.
+As far as I can see, only spi mem op has such pattern but agree it is 
+possible that other device can generate such usage. I can add a check 
+for this condition(all the prepend data must use same io width) so error 
+can be printed and user can switch to dummy cs workaround.
 
---0000000000000dd15405f1a477ca
+Thank you for your feedbacks so far and have a nice weekend!
+
+--000000000000ba902a05f1a48731
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -185,13 +178,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOkzfXRPNIeqdVwZLsSH44VeYyEC
-HRFznBfosYqb1hI+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwNzAzNTIzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOS95ZpN9YGbJM1vAbtMjAyF7+1r
+nolql+ERGUxr7iD/MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEwNzAzNTcxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCiMbKfvPslnk4o9ND0u/ZU+cAw6ZgbAXSwdOu+yZG3d3YO
-GT89FmSjns+eAiGx50rjS5EtRYW0FF46wsXLqc3aCTCfK6o7HrnBzar0taDN4ck4TIreF2KYTnbW
-hfON+Cjc/am/PVRU/iOwEC8sSnx8psSwhC074CQnnhb9u0o5vAHkCyGZuP+0XMAISLEpBi/4mklN
-sOEB9VQZVKi15d42wcEMXyj6+0Z7CFPELEfAmEEGPGtkyaD0N5mauYMPLtK7q/iYR4kJ+fwFoPkA
-t/Y7BZH5YJGkSabK11z4b+WvCi4+tY/O+t4N2rl3nHu7mNF95Y9qcfR6Xgt/IRJgZztd
---0000000000000dd15405f1a477ca--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQB9Q20bOVU2ECMvBLNfzyhK43IU9aBxcYsTcN60fuECpWbD
+IagPXMK+eDkZ5BSbf2IjDPdotm+3CNp3ax2pyLq+VbWakQnL4/sPlSrS9gUWLgLAOZSrwjBZOIRm
+NeY9luJ4h1XSYgYZK1sT4TVb/jBvxngnOFLmSBsFn0NeCG2Fh2nVoKER/dm3Bp+WZmq007eAbp2k
+l+0E6brprGhLgJca6gmulqsFsdKNrEEyo7TJtslig6Nnu1W5HZwVZ3fC4i+A3PiWbAMF0tjwZKA6
+VIJGwwknlo7mVkIR4hiSCH9AYGyqwv2Hi+2hmjyB6wc+iyZAAZvKeSM71+DmThn7vyDL
+--000000000000ba902a05f1a48731--
