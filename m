@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73755660C2F
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A282E660C53
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Jan 2023 04:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjAGDgF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Jan 2023 22:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S236811AbjAGDwk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Jan 2023 22:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjAGDgE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:36:04 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A26C07
-        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:36:02 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id v14so3825004qtq.3
-        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:36:02 -0800 (PST)
+        with ESMTP id S236767AbjAGDwj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Jan 2023 22:52:39 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822DF4E437
+        for <linux-spi@vger.kernel.org>; Fri,  6 Jan 2023 19:52:38 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id j9so2396038qvt.0
+        for <linux-spi@vger.kernel.org>; Fri, 06 Jan 2023 19:52:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Cs/5+6LA9OtaicfH5IQoAfbsUYW0y6F32TrdTRPZyU=;
-        b=cf2D0KGrzTj0ad6LuOnX8pW8FixiroxbmrCRgm4lTqpHu2KT9KwSaDdYvrfCe/bTwy
-         AuZlNXYPkR1kw+oFE4cz4DtJDoOKZlrW5gDjSyXP8/kbbdzD6oxqPw8z021mG92hjtLO
-         GoH1qobPEKL4Vhu0p28J4ewC0JwjnEPynOVkQ=
+        bh=mSjM1LQkNZ127BmE/3lzvLwaMn5NsNSqveWKl+eXYJc=;
+        b=CImLveVnywlm3i3+sDdXbuv0sYlb6qxfcG5ctphEWCKGAF2x9z9FVSYbXtip7Szd5P
+         gl7FuP2kij2wcKC1CzOCguefZUMkVV27fdQlxh3KGkO0n6VyhoAtdp5ujUZy23VaBGwH
+         0VHqsEDChfG+g2zFrL4KuTiKIfdTWW2K0Gilo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8Cs/5+6LA9OtaicfH5IQoAfbsUYW0y6F32TrdTRPZyU=;
-        b=xAt3QmUTfA2RJDyq1K6hN8czw8AFhU4pRwUsvOL+h4Zecvvsd2tCFd2vBFRUROrE1T
-         v7YcdfUosb6cIsFcTyFeFfNdmV2AAzgsrcFVq3/HW6Dq7wPJzKmNPoOYM4ZpI6eFJB6X
-         7nrOF34nj1RU+UCfsrpYFPfzrIaZRO+u8iiAv89GGGx/m1MJVBdELWXLY4wSPLcv7Cv9
-         NwbYjA5+uhCCfPTk83wkfoEEn4troVGlWbMu3qVCsORO+Z172CXgfubmrcLkyiPb9SF4
-         1BCluZPnpCt2HnyJCerEl48EWuAwuN3hJCg5UpxwXHvgpH+Ogn8jXANYBcKYpI4i33Lj
-         qykQ==
-X-Gm-Message-State: AFqh2krOJiH/M2bzDWqBCUpvPG1xF4dXx/f+ei8/LPPRLUnXg92WHmqL
-        P/iEBwU/Dul9tP67GFSmCutx1w==
-X-Google-Smtp-Source: AMrXdXteuvYOh0s0azL7/PlZxuOlbvJoft3qH/CyIS1dgzSVUOCYFVJ6QCRUpF4sMJJZyUzgCd0e+w==
-X-Received: by 2002:ac8:7551:0:b0:3a7:f46b:7a82 with SMTP id b17-20020ac87551000000b003a7f46b7a82mr74882152qtr.21.1673062562030;
-        Fri, 06 Jan 2023 19:36:02 -0800 (PST)
+        bh=mSjM1LQkNZ127BmE/3lzvLwaMn5NsNSqveWKl+eXYJc=;
+        b=Pfd86+yTSMsG8Vz8dZFol5WkfoMByXe4mUpVdiUGBz2aQg6RW0rrEvaQ7fsbWizxxV
+         znpYh/QQNOtaiB3aIt/oizS5rDZ/2bAI0jEnGhKjag43/gIamVPHmhH3pECtOiacYf8m
+         DZ4wkJ8J+awas3id5TWttMs+gKarCJEpYJhiQlQK17zdmBN2SMpx+OP94V0Y6FhR+1lx
+         weasjOSm9qnkU4bkGxcBzu4tcIKCQXtMlkoIa3l1EVbX829mCIoVmIRLdmEkStNQjoNh
+         0g/Yj6g3Nrc6c6x4dutoewfWkog37ebG96AjIWM3JF1jFdaevshs2Ka6+4XULGO4WXQr
+         yoXA==
+X-Gm-Message-State: AFqh2krkv2XX9oC/FB6E1kfifeCDUUPLBFKsdG7tdaBIxlUSg/1h9p6G
+        xUIsO0pOoW1tBfZuXohQDm7Wag==
+X-Google-Smtp-Source: AMrXdXvss1Egca1hzcPaH2/XRmeKRAmopcCYpOiGWMADXU/H4t3yW1vlkYlrJKKfGconf+BEmcBWRw==
+X-Received: by 2002:a0c:fac4:0:b0:531:c0a1:5bf1 with SMTP id p4-20020a0cfac4000000b00531c0a15bf1mr31040136qvo.12.1673063557592;
+        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id t13-20020ac8738d000000b003434d3b5938sm1417743qtp.2.2023.01.06.19.36.00
+        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006cebda00630sm1591951qkp.60.2023.01.06.19.52.35
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Jan 2023 19:36:01 -0800 (PST)
-Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
+        Fri, 06 Jan 2023 19:52:37 -0800 (PST)
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
@@ -55,17 +55,17 @@ Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         kursad.oney@broadcom.com, dregan@mail.com,
         linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-8-william.zhang@broadcom.com>
- <Y7iW38Fsj0nIewDm@sirena.org.uk>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
-Date:   Fri, 6 Jan 2023 19:35:59 -0800
+Message-ID: <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
+Date:   Fri, 6 Jan 2023 19:52:35 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y7iW38Fsj0nIewDm@sirena.org.uk>
+In-Reply-To: <Y7iaEOBP4TRBoDYy@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b74b4105f1a43bd6"
+        boundary="0000000000000dd15405f1a477ca"
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -76,39 +76,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---000000000000b74b4105f1a43bd6
+--0000000000000dd15405f1a477ca
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/06/2023 01:47 PM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 12:07:59PM -0800, William Zhang wrote:
+On 01/06/2023 02:00 PM, Mark Brown wrote:
+> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
+>> Multiple transfers within a SPI message may be combined into one
+>> transfer to the controller using its prepend feature. A SPI message is
+>> prependable only if the following are all true:
+>>    * One or more half duplex write transfer
+>>    * Optional full duplex read/write at the end
+>>    * No delay and cs_change between transfers
 > 
->> Polling mode provides better throughput in general by avoiding the
->> interrupt overhead as the maximum data size one interrupt can handle is
->> only 512 bytes.
+> There is nothing driver specific here, this should be implemented in the
+> core - we have existing logic to rewrite messages to match driver
+> constraints, this could be added there possibly with flags to allow
+> drivers to disable or enable the merging if they've got special
+> requirements.
 > 
->> When interrupt is not defined in the HSSPI dts node, driver switches to
->> polling mode for controller SPI message processing.  Also add driver
->> banner message when the driver is loaded successfully.
-> 
-> This should not be something the user selects via the DT, if the polling
-> mode is better then the driver should just use it regardless of there
-> being an interrupt wired up.  Generally there's some point at which the
-> benefits of polling become minimal (and the costs more impactful) but if
-> the DMA setup is as bad as it sounds then the driver should just ignore
-> the interrupt.
-> 
-I agree but this is more for backward compatibility as the original 
-driver uses interrupt to work with MIPS based SoC and I do not want to 
-change that behavior.  For newer devices I added, they work in polling 
-mode by default with the dts I supplied.  IMHO it is also good to have 
-this fallback option to use interrupt in case user is sensitive to cpu 
-usage.
+My understanding of combining the spi transfer in the core level does 
+not quite work out to our controller.  For example, for a spi message 
+with three transfers, tx, tx and rx. We can possibly combine them in 
+single duplex tx/rx transfer in the core. But this will be treated as 
+duplex transaction in our controller level which require tx and rx data 
+happens at the same time. Obviously this won't work when rx depends on 
+tx happening first. We can not differentiate this combined duplex 
+transfer from the true duplex transfer unless there is some flag to 
+indicate that. Also there is limit of max tx length as the prepend 
+buffer so maybe another parameter.  And another reason to be done in the 
+driver level is this prepend mode has dependency on dummy cs workaround 
+which is driver level parameter currently.  I am not sure how practical 
+and useful this is to factor them out to the core level?  Maybe I didn't 
+fully understand your comments and appreciate if you can elaborate or 
+point me to the related core code.
 
---000000000000b74b4105f1a43bd6
+--0000000000000dd15405f1a477ca
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -179,13 +185,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILTuZHwc70pLWt3J5L0/tR2V8/V2
-AAjiwVF8LLqjPiAGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwNzAzMzYwMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOkzfXRPNIeqdVwZLsSH44VeYyEC
+HRFznBfosYqb1hI+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEwNzAzNTIzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBYa9QuSZSpkEEaQxbPBh5Dn9R0QVmec4DyGIWVvuzidUDA
-sg2rgRVlas8Pbs1VjOdwLXtQBnjon7dP2GtKnkeHn0YkbuL+O8rLDb85fyordNevXzkSAmkM/3zB
-g/c8XPVi2QqlbSifW/d3tIij4tnnH3qOsVyUwj+DT1GGrsKXS7+1moGQLfMW/1ctpOZnOcsRuhdU
-xSa8i+IPeEJ8vSltWRn1kq6B6QJO6ky7ke4EzKNGs2tAhhcdl+yLaepfsNWj8TwAa6BTmuHs2BOR
-s8adk0qk7sL8ulI9unn7vmV/bEmwioaea9hxSM/hoC4lgnsCQNktOXIzyY9R4tDPk5Y9
---000000000000b74b4105f1a43bd6--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCiMbKfvPslnk4o9ND0u/ZU+cAw6ZgbAXSwdOu+yZG3d3YO
+GT89FmSjns+eAiGx50rjS5EtRYW0FF46wsXLqc3aCTCfK6o7HrnBzar0taDN4ck4TIreF2KYTnbW
+hfON+Cjc/am/PVRU/iOwEC8sSnx8psSwhC074CQnnhb9u0o5vAHkCyGZuP+0XMAISLEpBi/4mklN
+sOEB9VQZVKi15d42wcEMXyj6+0Z7CFPELEfAmEEGPGtkyaD0N5mauYMPLtK7q/iYR4kJ+fwFoPkA
+t/Y7BZH5YJGkSabK11z4b+WvCi4+tY/O+t4N2rl3nHu7mNF95Y9qcfR6Xgt/IRJgZztd
+--0000000000000dd15405f1a477ca--
