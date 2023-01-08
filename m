@@ -2,108 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0936615EE
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Jan 2023 15:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679DA6619FD
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Jan 2023 22:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbjAHOwu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 8 Jan 2023 09:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S234193AbjAHVbk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 8 Jan 2023 16:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjAHOwb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 8 Jan 2023 09:52:31 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F6FB1E4
-        for <linux-spi@vger.kernel.org>; Sun,  8 Jan 2023 06:52:29 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso4676399wmq.1
-        for <linux-spi@vger.kernel.org>; Sun, 08 Jan 2023 06:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XTPm22szfEgP2USzyDubKCBhEisV4thL30XHBSbnE2g=;
-        b=Id63Ng+QurBcI5owy8mPHWunVXGkmUQKEDc5nhp9256GKznn/qgp8RNp9fzaopQGTs
-         Lw5KN58+w6J+sZEY1wXxX/zkBn4RYxm4lKD2fP8itRn14HgWLrcpZcanfVNYrAApuj4t
-         Nj6+sWwoR2WoUJAP844/sOU7g6qAYEeftDcHOrYwYL02qDJgyqsEq0lzYktWrSxhIHIX
-         iy+4MXBBXu5PuO7XqE651g+PIAFUSZD/dB3tj41ORUJah4k/UHQmXbEACaIAHqbvgGHP
-         YarnGy7EeSSCjwsCspIaDwhJbr8pEDoPvVON8uCR/OXK64HYI18OA2w4nYTYfAGwIJDm
-         IIMQ==
+        with ESMTP id S234073AbjAHVbg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 8 Jan 2023 16:31:36 -0500
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA7B2652;
+        Sun,  8 Jan 2023 13:31:35 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id t17so4983771qvw.6;
+        Sun, 08 Jan 2023 13:31:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XTPm22szfEgP2USzyDubKCBhEisV4thL30XHBSbnE2g=;
-        b=yn+kbYiHuoBrlDC3F6Ww0MwcLoSIvRq8XfZdz1WS4d3yz72E5zGIwM6GwjDfiR49uf
-         AZtqVyz/XWulnn+a2UDTnma9aBqB3BAWE+OTKrT/f+T/Z+Rl8Kkdgj4mBqGLKkMgabU3
-         90K0E67hmdGZlYXD36i27skgnyOfjT4Jp9jOUuEocgdSd8lb7dpSYeD4qrTNHPOk8lJI
-         ZVgoizsm7rF060u00+HjRecMtqZCSHItxkJCy2WLKVA4K30nF4Rj8a3Ysn+N8FE1x6Ih
-         9Ui+Oo5ONLAqCIDuSwTq2DiC6YYH5e7zhlDKtGoEUAX5sCuF7oawTErjQawLkhbdeDlQ
-         4Dyw==
-X-Gm-Message-State: AFqh2kq0SnPv4cUefa3frUbKkSCA1c+cGvkU4KL9wS8v/D7rtZuPDx9V
-        ozQDQYA7FqMfgYMOQKd8V79WEQ==
-X-Google-Smtp-Source: AMrXdXsdekKuhU814b0ntj6vl2m5cp1iTya2rl8g8E9ks0gbmjFTyaS1duJ3r70lPhq8NWJP+2BeMg==
-X-Received: by 2002:a05:600c:3b29:b0:3cf:d18e:528b with SMTP id m41-20020a05600c3b2900b003cfd18e528bmr44997779wms.39.1673189547794;
-        Sun, 08 Jan 2023 06:52:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003d9b87296a9sm14057028wmo.25.2023.01.08.06.52.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 06:52:27 -0800 (PST)
-Message-ID: <dc23b376-6f1a-21d9-5d26-2ccde563fb34@linaro.org>
-Date:   Sun, 8 Jan 2023 15:52:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=js0w/jb+lh+/4h7Fj3cofK1pNZXgAj1iZs13t0WEx7U=;
+        b=O3/QB1oY2VD+0rDeVJtDR9ibPffXORKtQ6tvd+OxNbMUu0HxxZekTO8L3bGIBVc9pZ
+         PG0m2HW8BOsDAlQKksNKxVera2SPts8E5ScttGtnEtLg7xKbtzK7FBPb5EaVf7Ilw7L3
+         X/mNS3VOKtBc/a5gqe63WLMiRnIvcZ50yq0fSH/ysKPypODxq/hNIWQDfOI6N0q1j8kX
+         mwJFXhAvNehUbT2NMeld31oSUiWY1ZZR3URejApjLvZokuUwnuBr6k0CpkE7Qz7YK3LY
+         l7bv4CnM9KLrTp0ECE93oR3ZbZ1o5xSDE3cBOGPjFLEfK1w3NzaVEJVr8yxlmUyny1HK
+         4hJg==
+X-Gm-Message-State: AFqh2kr3oz8GZUT3VaTaWB1MdJg2fNqGc68Z74n6KtzeZJxZRuENOosI
+        qhjtt7r5QfBB+eRaDhgwww==
+X-Google-Smtp-Source: AMrXdXuBm+J+Rynuin0d2pDwJb7zmpV8C55xdiobHV2KiVZ4+Tky8PsFOPSUUj6AjwE8vmlqoBWtGw==
+X-Received: by 2002:a0c:80e4:0:b0:531:91cd:59de with SMTP id 91-20020a0c80e4000000b0053191cd59demr59201574qvb.26.1673213494064;
+        Sun, 08 Jan 2023 13:31:34 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80a5:9b51:39ae:24d1:33f3:811e])
+        by smtp.gmail.com with ESMTPSA id l23-20020a37f917000000b006fc2b672950sm4256353qkj.37.2023.01.08.13.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 13:31:33 -0800 (PST)
+Received: (nullmailer pid 306308 invoked by uid 1000);
+        Sun, 08 Jan 2023 21:31:19 -0000
+Date:   Sun, 8 Jan 2023 15:31:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        devicetree@vger.kernel.org, Janne Grunau <j@jannau.net>,
+        asahi@lists.linux.dev,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106200809.330769-4-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 4/5] spi: dt-bindings: Add hold/inactive CS delay
+ peripheral properties
+Message-ID: <167321346258.305589.13314015291667781400.robh@kernel.org>
+References: <20230104093631.15611-1-marcan@marcan.st>
+ <20230104093631.15611-5-marcan@marcan.st>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104093631.15611-5-marcan@marcan.st>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/01/2023 21:07, William Zhang wrote:
-> brcm,no-clk-gate is a Broadcom Broadband HS SPI controller specific
-> property for certain SPI device such as Broadcom ISI voice daughtercard
-> to work properly. It disables the clock gating feature when the chip
-> select is deasserted for any device that wants to keep the clock
-> running.
 
+On Wed, 04 Jan 2023 18:36:30 +0900, Hector Martin wrote:
+> From: Janne Grunau <j@jannau.net>
+> 
+> These two properties complete the bindings for the Linux spi_device cs
+> model, which includes cs_setup, cs_hold and cs_inactive delay values.
+> 
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
-> +additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> index ead2cccf658f..f85d777c7b67 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -108,5 +108,6 @@ allOf:
->    - $ref: cdns,qspi-nor-peripheral-props.yaml#
->    - $ref: samsung,spi-peripheral-props.yaml#
->    - $ref: nvidia,tegra210-quad-peripheral-props.yaml#
-> +  - $ref: brcm,bcm63xx-hsspi-peripheral-props.yaml#
-
-Don't break the order.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Rob Herring <robh@kernel.org>
