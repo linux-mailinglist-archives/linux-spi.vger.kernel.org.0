@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1648866128A
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Jan 2023 00:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504BC66130C
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Jan 2023 03:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjAGXXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Jan 2023 18:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S232831AbjAHCZU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Jan 2023 21:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjAGXX3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Jan 2023 18:23:29 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78913D5D3;
-        Sat,  7 Jan 2023 15:23:25 -0800 (PST)
+        with ESMTP id S231416AbjAHCZT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Jan 2023 21:25:19 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7066E18B24;
+        Sat,  7 Jan 2023 18:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673133805; x=1704669805;
+  t=1673144715; x=1704680715;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EAcwI3lKiz+ffwyHeityNsFYsRAp9OtUrm1+rUhFjVI=;
-  b=cyD358kidwSU1RdWi1IaZMrHBiLEbUUd7Ib5wGoIVIaINVmSDoPXvGeK
-   kIIsFO38VPAe7fKYLhfik+uHkucTLyFiNWfsyRU+GYmK0sYz6p2VeT6Hy
-   8ly0VIUTMo8rm5ShDLzd+LIXgsDMZw0TMYgJtVWeFcRWpHpoLaz7lExYO
-   eZ86tnt/J75QEko8IHaGN6HDWiBi800Pf/fVB2haSaJZMR8lfCOamkDYa
-   aprFctCPhW1RDrOqeqOIgjIXBjn/lx29X9k7uZLK4y77/to1GVdA3SAKh
-   SBY0qXEw8gK9rK+ESVaaSDGHmFMILJ/CevkRQkibqxP2jYdJCh13h/6Pk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="306199153"
+  bh=do5Ajbwu1N/8PeSu9mHJggF+5Z3b4wRdUkmDhogNRhk=;
+  b=GnYvdUR/0C86q2JQacvum+++fIAc+6c5tpVaJB2QU/H4MR2iJN3dYhXk
+   KWlNOBHjDiKCjn+I1nQ8h/aVFH9yZ4bX3jJJJ0/fEAuPXyf544Ol23/Sv
+   fwWFwOfvFemShstV8/mtgBS6R8zMB8T298j2q7Ejbucq9xelNyay3sw4C
+   tsnTwyEVAhG87Z+xfLSFWw+zZNZ3U0GiHJHHMN023CLz/n5zINIVyUrxL
+   sPot6sN2wGQoqn1iWrVxt8TV4aqeJ9K+d4pMZ/hlxcE0OIqV24Nftgft+
+   f+RYXj3+0o3NsOhQFCdxApB7ReKzVan9pGOAtZcVHC+AIHRwrRzzk0zAp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="323935951"
 X-IronPort-AV: E=Sophos;i="5.96,309,1665471600"; 
-   d="scan'208";a="306199153"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2023 15:23:24 -0800
+   d="scan'208";a="323935951"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2023 18:25:14 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="649644982"
+X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="985044531"
 X-IronPort-AV: E=Sophos;i="5.96,309,1665471600"; 
-   d="scan'208";a="649644982"
+   d="scan'208";a="985044531"
 Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jan 2023 15:23:19 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 07 Jan 2023 18:25:09 -0800
 Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pEIX1-0004vs-0s;
-        Sat, 07 Jan 2023 23:23:19 +0000
-Date:   Sun, 8 Jan 2023 07:23:11 +0800
+        id 1pELMy-00052g-17;
+        Sun, 08 Jan 2023 02:25:08 +0000
+Date:   Sun, 8 Jan 2023 10:25:03 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     William Zhang <william.zhang@broadcom.com>,
         Linux SPI List <linux-spi@vger.kernel.org>,
@@ -52,18 +52,21 @@ Cc:     oe-kbuild-all@lists.linux.dev, anand.gore@broadcom.com,
         joel.peshkin@broadcom.com, f.fainelli@gmail.com,
         jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
         William Zhang <william.zhang@broadcom.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/16] spi: bcm63xx-hsspi: Endianness fix for ARM based
- SoC
-Message-ID: <202301080727.s3qnZ8l1-lkp@intel.com>
-References: <20230106200809.330769-7-william.zhang@broadcom.com>
+        Mark Brown <broonie@kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/16] spi: bcmbca-hsspi: Add driver for newer HSSPI
+ controller
+Message-ID: <202301081006.79iS3Dsj-lkp@intel.com>
+References: <20230106200809.330769-16-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="AxLuMivo3vazFQTX"
+Content-Type: multipart/mixed; boundary="YPRA13d+izx1LDgj"
 Content-Disposition: inline
-In-Reply-To: <20230106200809.330769-7-william.zhang@broadcom.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230106200809.330769-16-william.zhang@broadcom.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,7 +74,7 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---AxLuMivo3vazFQTX
+--YPRA13d+izx1LDgj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -87,8 +90,8 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/William-Zhang/dt-bindings-spi-Convert-bcm63xx-hsspi-bindings-to-json-schema/20230107-042320
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230106200809.330769-7-william.zhang%40broadcom.com
-patch subject: [PATCH 06/16] spi: bcm63xx-hsspi: Endianness fix for ARM based SoC
+patch link:    https://lore.kernel.org/r/20230106200809.330769-16-william.zhang%40broadcom.com
+patch subject: [PATCH 15/16] spi: bcmbca-hsspi: Add driver for newer HSSPI controller
 config: sparc-randconfig-s051-20230108
 compiler: sparc64-linux-gcc (GCC) 12.1.0
 reproduce:
@@ -96,10 +99,10 @@ reproduce:
         chmod +x ~/bin/make.cross
         # apt-get install sparse
         # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/8a82a44b50d88a27e55065e9f1bd75f0fccf479a
+        # https://github.com/intel-lab-lkp/linux/commit/b4aa17674a91bffdc787dc83345cd2bce05e23a3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review William-Zhang/dt-bindings-spi-Convert-bcm63xx-hsspi-bindings-to-json-schema/20230107-042320
-        git checkout 8a82a44b50d88a27e55065e9f1bd75f0fccf479a
+        git checkout b4aa17674a91bffdc787dc83345cd2bce05e23a3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc olddefconfig
@@ -109,87 +112,105 @@ If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 sparse warnings: (new ones prefixed by >>)
->> drivers/spi/spi-bcm63xx-hsspi.c:197:30: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] w @@     got restricted __be16 [usertype] @@
-   drivers/spi/spi-bcm63xx-hsspi.c:197:30: sparse:     expected unsigned short [usertype] w
-   drivers/spi/spi-bcm63xx-hsspi.c:197:30: sparse:     got restricted __be16 [usertype]
+>> drivers/spi/spi-bcmbca-hsspi.c:300:30: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] w @@     got restricted __be16 [usertype] @@
+   drivers/spi/spi-bcmbca-hsspi.c:300:30: sparse:     expected unsigned short [usertype] w
+   drivers/spi/spi-bcmbca-hsspi.c:300:30: sparse:     got restricted __be16 [usertype]
 
-vim +197 drivers/spi/spi-bcm63xx-hsspi.c
+vim +300 drivers/spi/spi-bcmbca-hsspi.c
 
-   156	
-   157	static int bcm63xx_hsspi_do_txrx(struct spi_device *spi, struct spi_transfer *t)
-   158	{
-   159		struct bcm63xx_hsspi *bs = spi_master_get_devdata(spi->master);
-   160		unsigned int chip_select = spi->chip_select;
-   161		u16 opcode = 0;
-   162		int pending = t->len;
-   163		int step_size = HSSPI_BUFFER_LEN;
-   164		const u8 *tx = t->tx_buf;
-   165		u8 *rx = t->rx_buf;
-   166	
-   167		bcm63xx_hsspi_set_clk(bs, spi, t->speed_hz);
-   168		bcm63xx_hsspi_set_cs(bs, spi->chip_select, true);
-   169	
-   170		if (tx && rx)
-   171			opcode = HSSPI_OP_READ_WRITE;
-   172		else if (tx)
-   173			opcode = HSSPI_OP_WRITE;
-   174		else if (rx)
-   175			opcode = HSSPI_OP_READ;
-   176	
-   177		if (opcode != HSSPI_OP_READ)
-   178			step_size -= HSSPI_OPCODE_LEN;
-   179	
-   180		if ((opcode == HSSPI_OP_READ && t->rx_nbits == SPI_NBITS_DUAL) ||
-   181		    (opcode == HSSPI_OP_WRITE && t->tx_nbits == SPI_NBITS_DUAL))
-   182			opcode |= HSSPI_OP_MULTIBIT;
-   183	
-   184		__raw_writel(1 << MODE_CTRL_MULTIDATA_WR_SIZE_SHIFT |
-   185			     1 << MODE_CTRL_MULTIDATA_RD_SIZE_SHIFT | 0xff,
-   186			     bs->regs + HSSPI_PROFILE_MODE_CTRL_REG(chip_select));
-   187	
-   188		while (pending > 0) {
-   189			int curr_step = min_t(int, step_size, pending);
-   190	
-   191			reinit_completion(&bs->done);
-   192			if (tx) {
-   193				memcpy_toio(bs->fifo + HSSPI_OPCODE_LEN, tx, curr_step);
-   194				tx += curr_step;
-   195			}
-   196	
- > 197			__raw_writew(cpu_to_be16(opcode | curr_step), bs->fifo);
-   198	
-   199			/* enable interrupt */
-   200			__raw_writel(HSSPI_PINGx_CMD_DONE(0),
-   201				     bs->regs + HSSPI_INT_MASK_REG);
-   202	
-   203			/* start the transfer */
-   204			__raw_writel(!chip_select << PINGPONG_CMD_SS_SHIFT |
-   205				     chip_select << PINGPONG_CMD_PROFILE_SHIFT |
-   206				     PINGPONG_COMMAND_START_NOW,
-   207				     bs->regs + HSSPI_PINGPONG_COMMAND_REG(0));
-   208	
-   209			if (wait_for_completion_timeout(&bs->done, HZ) == 0) {
-   210				dev_err(&bs->pdev->dev, "transfer timed out!\n");
-   211				return -ETIMEDOUT;
-   212			}
-   213	
-   214			if (rx) {
-   215				memcpy_fromio(rx, bs->fifo, curr_step);
-   216				rx += curr_step;
-   217			}
-   218	
-   219			pending -= curr_step;
-   220		}
-   221	
-   222		return 0;
-   223	}
-   224	
+   254	
+   255	static int bcmbca_hsspi_do_txrx(struct spi_device *spi, struct spi_transfer *t,
+   256									struct spi_message *msg)
+   257	{
+   258		struct bcmbca_hsspi *bs = spi_master_get_devdata(spi->master);
+   259		unsigned int chip_select = spi->chip_select;
+   260		u16 opcode = 0;
+   261		int pending = t->len;
+   262		int step_size = HSSPI_BUFFER_LEN;
+   263		const u8 *tx = t->tx_buf;
+   264		u8 *rx = t->rx_buf;
+   265		u32 reg = 0, cs_act = 0;
+   266	
+   267		bcmbca_hsspi_set_clk(bs, spi, t->speed_hz);
+   268	
+   269		if (tx && rx)
+   270			opcode = HSSPI_OP_READ_WRITE;
+   271		else if (tx)
+   272			opcode = HSSPI_OP_WRITE;
+   273		else if (rx)
+   274			opcode = HSSPI_OP_READ;
+   275	
+   276		if (opcode != HSSPI_OP_READ)
+   277			step_size -= HSSPI_OPCODE_LEN;
+   278	
+   279		if ((opcode == HSSPI_OP_READ && t->rx_nbits == SPI_NBITS_DUAL) ||
+   280		    (opcode == HSSPI_OP_WRITE && t->tx_nbits == SPI_NBITS_DUAL)) {
+   281			opcode |= HSSPI_OP_MULTIBIT;
+   282	
+   283			if (t->rx_nbits == SPI_NBITS_DUAL)
+   284				reg |= 1 << MODE_CTRL_MULTIDATA_RD_SIZE_SHIFT;
+   285			if (t->tx_nbits == SPI_NBITS_DUAL)
+   286				reg |= 1 << MODE_CTRL_MULTIDATA_WR_SIZE_SHIFT;
+   287		}
+   288	
+   289		__raw_writel(reg | 0xff,
+   290			     bs->regs + HSSPI_PROFILE_MODE_CTRL_REG(chip_select));
+   291	
+   292		while (pending > 0) {
+   293			int curr_step = min_t(int, step_size, pending);
+   294	
+   295			reinit_completion(&bs->done);
+   296			if (tx) {
+   297				memcpy_toio(bs->fifo + HSSPI_OPCODE_LEN, tx, curr_step);
+   298				tx += curr_step;
+   299			}
+ > 300			__raw_writew(cpu_to_be16(opcode | curr_step), bs->fifo);
+   301	
+   302			/* enable interrupt */
+   303			if (bs->irq > 0)
+   304				__raw_writel(HSSPI_PINGx_CMD_DONE(0),
+   305				    bs->regs + HSSPI_INT_MASK_REG);
+   306	
+   307			if (!cs_act) {
+   308				bcmbca_hsspi_set_cs(bs, chip_select, true);
+   309				cs_act = 1;
+   310			}
+   311			reg = chip_select << PINGPONG_CMD_SS_SHIFT |
+   312				    chip_select << PINGPONG_CMD_PROFILE_SHIFT |
+   313				    PINGPONG_COMMAND_START_NOW;
+   314			__raw_writel(reg, bs->regs + HSSPI_PINGPONG_COMMAND_REG(0));
+   315	
+   316			if (bcmbca_hsspi_wait_cmd(bs, spi->chip_select))
+   317				return -ETIMEDOUT;
+   318	
+   319			pending -= curr_step;
+   320			if (pending == 0) {
+   321				if (list_is_last(&t->transfer_list, &msg->transfers)) {
+   322					if (!t->cs_change)
+   323						bcmbca_hsspi_set_cs(bs, spi->chip_select, false);
+   324				} else {
+   325					if (t->cs_change) {
+   326						bcmbca_hsspi_set_cs(bs, spi->chip_select, false);
+   327						udelay(10);
+   328						bcmbca_hsspi_set_cs(bs, spi->chip_select, true);
+   329					}
+   330				}
+   331			}
+   332			if (rx) {
+   333				memcpy_fromio(rx, bs->fifo, curr_step);
+   334				rx += curr_step;
+   335			}
+   336		}
+   337	
+   338		return 0;
+   339	}
+   340	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests
 
---AxLuMivo3vazFQTX
+--YPRA13d+izx1LDgj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -2141,6 +2162,7 @@ CONFIG_SPI_BCM2835AUX=m
 CONFIG_SPI_BCM63XX=m
 CONFIG_SPI_BCM63XX_HSSPI=m
 # CONFIG_SPI_BCM_QSPI is not set
+CONFIG_SPI_BCMBCA_HSSPI=m
 CONFIG_SPI_BITBANG=y
 CONFIG_SPI_CADENCE=m
 # CONFIG_SPI_CADENCE_QUADSPI is not set
@@ -7006,4 +7028,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---AxLuMivo3vazFQTX--
+--YPRA13d+izx1LDgj--
