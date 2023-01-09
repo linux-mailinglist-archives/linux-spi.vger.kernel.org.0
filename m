@@ -2,77 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1F066313F
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 21:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C932A6631BA
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 21:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237337AbjAIUSe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Jan 2023 15:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S230032AbjAIUoS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Jan 2023 15:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237689AbjAIUSO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 15:18:14 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175A35927
-        for <linux-spi@vger.kernel.org>; Mon,  9 Jan 2023 12:18:12 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so13998770pjk.3
-        for <linux-spi@vger.kernel.org>; Mon, 09 Jan 2023 12:18:12 -0800 (PST)
+        with ESMTP id S234779AbjAIUn4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 15:43:56 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EBE68C8C
+        for <linux-spi@vger.kernel.org>; Mon,  9 Jan 2023 12:43:55 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d9so10861752pll.9
+        for <linux-spi@vger.kernel.org>; Mon, 09 Jan 2023 12:43:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=3fpvRURwXUOIfrVy2+J4154tcURxJD0Gy4uJR5GfiFE=;
-        b=fSJ1R4Lkqa3MiA+ebyXMsTp7YIU3ZgPltmmNYMLn5QRJXIi3iWs7fD1FqSy5Sq1bxp
-         JxKILsODyl1N8JAqclmpiHRTUA2gF6qBiNh83KRY0gb1+LTFTep+sb08GoeHT+J5kn9t
-         +eohBxi0UPWT51lqDDcM9klIX2rUU2f4Eb3Hw=
+        bh=4tUUcuV9zv1EKSFPJq2jzRfnEnsuKJJblXsSSmeyhdg=;
+        b=fV8YaA0av3FsSOmVJQstUZREJIVqbs/lzzH2BW8Mm0dcQoX/eGI9nN4hB7hacCBmI9
+         4/p0v1BOkifVxlLV7nFVNFGwrLMKZeuHB2oJ+5RfB8/IcSxGDF7nZcBQZu83E+gKy0Y1
+         tW+IKTXlzXpjbjj9or2/kG+S7rdc7GSNs+pmw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3fpvRURwXUOIfrVy2+J4154tcURxJD0Gy4uJR5GfiFE=;
-        b=lOIIKaBuC+kw9q41bucb8EXsotiVIQ/1VFXcYVO7Gb8MaySCUfOXboFGtivyUjZRpW
-         wPEHf3vl4lHh/rKC27nRsk9nWlzTMxK62R8/9K8nfhkSy3gFFAS5Xq8sUppPuUgnG1bp
-         zlonv0C3SfNQkS21vS8snp90XVdVdtN3Cj5Oe3cYYVugWKRojUTT2X9pDWpcRHqE01DU
-         dhkdGVNpZXG4bK4wGgNGT3e6F8fcIrqNi/o/yRNVNNBHFO6yBMkSej0R51pXIlU7fNs5
-         LFFhSd8zpfqDWGc+0xQ0DRMcOn4Nu1pAI19y3yBPBtmWIf4llJRBx8hsG339sfQxqhSF
-         ZCvw==
-X-Gm-Message-State: AFqh2koZislgRWschnixm1vt/cKrBg/YL+dwPDrKm1uP4XhUaEjaEInq
-        U3SuU8Ecqy52BGZlPEKN7XfM6Q==
-X-Google-Smtp-Source: AMrXdXvnKJ8Ap6msxqKbVYFf6OBRmKS3xS5oGBo9RHsouAMSE3cy/qrhd5SY9eA9R2G9kOexo2p3Fw==
-X-Received: by 2002:a05:6a21:3949:b0:a7:9022:5d5e with SMTP id ac9-20020a056a21394900b000a790225d5emr78488151pzc.2.1673295492250;
-        Mon, 09 Jan 2023 12:18:12 -0800 (PST)
+        bh=4tUUcuV9zv1EKSFPJq2jzRfnEnsuKJJblXsSSmeyhdg=;
+        b=hN7jJdGBcocffB8eSvTtBmXTjnnqFc0KZQWfEkoyv5pW0fbFJonqhUxdV5QCUMEiry
+         4LVdWT5N1FUsoFAmO5alWUeEyaOzYoMPm1lzvnHrbSAwzutngrKnulydoacUpivwfQ6B
+         dhExk0/3nv+XJAK6FfqWeb4Yku6xgnslYjiJ/Lb+vVJCaCJqhBjd0ezI/0tDTBGHIqmW
+         Fan/ImPGab7ySy92fDKgxVimnBCy6PdCPCERFpixFq5OgQqc/sWLwtJkxW48sUqPZLFg
+         MSOOMxq+WOpTnVnyFXlTdXuhMAcLtT6+0BtWHTKJcqaV+GSsSfFC4wquSu5IZ5dl+aNP
+         dW7A==
+X-Gm-Message-State: AFqh2krJV4c1HFPEjhEcBUtFszE799+0akYsYnfo7FDIJQnhJzfQvLn6
+        N4Ii/PnxI7FexawHv5V8Ou8F0w==
+X-Google-Smtp-Source: AMrXdXvws7J1qmSfAhQIhRJk4KTFCG246r2YS9mc7sz4wfRXUaQS4wjyi4fvwDHKglC9cxwUqXTOpA==
+X-Received: by 2002:a17:902:f70c:b0:188:6b9c:d17d with SMTP id h12-20020a170902f70c00b001886b9cd17dmr86838478plo.16.1673297035026;
+        Mon, 09 Jan 2023 12:43:55 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id i7-20020a655b87000000b0049f476e9906sm5528264pgr.53.2023.01.09.12.18.09
+        by smtp.gmail.com with ESMTPSA id e2-20020a170902784200b0017d97d13b18sm6566604pln.65.2023.01.09.12.43.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:18:11 -0800 (PST)
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
+        Mon, 09 Jan 2023 12:43:54 -0800 (PST)
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <Y7iPS48viBg0QRok@sirena.org.uk>
- <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
- <CAL_JsqJ7kr-6xs53NYJufem=wXnXVRnj3-1t1rG+W6g09kJ3ew@mail.gmail.com>
- <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
- <Y7xosoZMJEwRi1ok@sirena.org.uk>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
+ <Y7xrhjhhY3g5DE25@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <f55ab390-a784-d598-8d0e-b78040fdbb73@broadcom.com>
-Date:   Mon, 9 Jan 2023 12:18:09 -0800
+Message-ID: <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
+Date:   Mon, 9 Jan 2023 12:43:53 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y7xosoZMJEwRi1ok@sirena.org.uk>
+In-Reply-To: <Y7xrhjhhY3g5DE25@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006ff34e05f1da779b"
+        boundary="00000000000065c24105f1dad36f"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -83,36 +78,78 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---0000000000006ff34e05f1da779b
+--00000000000065c24105f1dad36f
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-Hi Mark,
 
-On 01/09/2023 11:19 AM, Mark Brown wrote:
-> On Mon, Jan 09, 2023 at 12:06:13AM -0800, William Zhang wrote:
->>> On Fri, Jan 6, 2023 at 9:27 PM William Zhang <william.zhang@broadcom.com> wrote:
+
+On 01/09/2023 11:31 AM, Mark Brown wrote:
+> On Fri, Jan 06, 2023 at 07:52:35PM -0800, William Zhang wrote:
+>> On 01/06/2023 02:00 PM, Mark Brown wrote:
+>>> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
 > 
->>> Keeping the clock on or not would affect all devices unless you have a
->>> per device clock you can gate, so making this a per device flag
->>> doesn't make sense.
+>>>> Multiple transfers within a SPI message may be combined into one
+>>>> transfer to the controller using its prepend feature. A SPI message is
+>>>> prependable only if the following are all true:
+>>>>     * One or more half duplex write transfer
+>>>>     * Optional full duplex read/write at the end
+>>>>     * No delay and cs_change between transfers
 > 
->> This applies only to each chip select. There is only one device under each
->> chip select.  So won't impact any other devices under other cs.
+>>> There is nothing driver specific here, this should be implemented in the
+>>> core - we have existing logic to rewrite messages to match driver
+>>> constraints, this could be added there possibly with flags to allow
+>>> drivers to disable or enable the merging if they've got special
+>>> requirements.
 > 
-> I don't understand how this would work - usually a SPI controller has a
-> single set of clock, MOSI and MISO lines with the only per device thing
-> being the chip select.  If the clock line is used by all devices then it
-> must be kept on for all of them if it's to be kept on for one of them.
+>> My understanding of combining the spi transfer in the core level does not
+>> quite work out to our controller.  For example, for a spi message with three
+>> transfers, tx, tx and rx. We can possibly combine them in single duplex
+>> tx/rx transfer in the core. But this will be treated as duplex transaction
+>> in our controller level which require tx and rx data happens at the same
+>> time. Obviously this won't work when rx depends on tx happening first. We
+> 
+> I'm saying that if this logic is useful then implement in the core
+> rather than in the driver.
+> 
+>> can not differentiate this combined duplex transfer from the true duplex
+>> transfer unless there is some flag to indicate that. Also there is limit of
+>> max tx length as the prepend buffer so maybe another parameter.  And another
+>> reason to be done in the driver level is this prepend mode has dependency on
+>> dummy cs workaround which is driver level parameter currently.  I am not
+>> sure how practical and useful this is to factor them out to the core level?
+> 
+> If this relies on software control of the chip select (which is what I
+> *think* your dummy CS workaround thing is about, the other patch about
+> that is really hard to understand) then I'm confused about what the
+> advantage is?
+Dummy CS workaround is implemented by Jonas when he first upstream the 
+driver. It does not work on all the board designs so prepend mode is 
+introduced. I have some detail explanation on this in [PATCH 10/16] spi: 
+bcm63xx-hsspi: Make dummy cs workaround as an option.
+
+The controller only work in one mode and that's why driver code has some 
+dependency between these two modes. The advantage of the premode is it 
+works on all hw design however it does not support all types mem_ops 
+operation. That is why you see the patch 14 to disable the dual io mem 
+op. But dummy cs workaround can support this and in case there is such 
+pattern from non mem op spi transaction, dummy cs workaround can be used 
+as long as it does not have the board design limitation.   So neither 
+one is perfect but hopefully with both options available, we can cover 
+all the cases.
+
+You mentioned there is some existing logic to rewrite messages to match 
+driver constraints in the core driver.  I didn't see it when I did a 
+quick search on spi.c. I will take a deep look into the file. But if you 
+can point me where this logic is so I can be sure that I am looking at 
+the right place and will double check if this can be done or not in the 
+core level.  Thanks!
+
+
 > 
 
-This setting is set per spi message for particular chip select of the 
-device when starting the message through bcm63xx_hsspi_set_clk function 
-and restore to default(clock gating) when message is done through 
-bcm63xx_hsspi_restore_clk_gate.
-
---0000000000006ff34e05f1da779b
+--00000000000065c24105f1dad36f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -183,13 +220,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBCwCYzamUaEcJw6yoq+jrEOEhCf
-FWzrRN71jxd7j7WiMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwOTIwMTgxMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOZeyI1hHATA7iPHqNDCrVE6v1qm
+ddUIE5inDTu2svHeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEwOTIwNDM1NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCWBsBXMYDi/AjYd8Jfc2i7ozispw3mL7cZ41UcfehG1aA8
-7cSqeo0dmFybM2cbyKHSrHZweA7HCLF5txtdmAfp3CnzLaK2t4oZGZd+wWL4v9SWpu1Y1xY2/agK
-vWnxDYBI9zWiFMifw/fmXoO0lT+COAhCwZqOcVrbPFtZYLkWq23o1lEneMEyzU1v/J30L20fiEhd
-4lMFTCbCFylZFhSHT6U64+vwOQ0vebnIIeX80k4QX0jsUIgYqeplcK3fO2mPQ4eZIt1jT1v/IEZa
-jIGENSwrsf9pBBgob+RD7Dqg1fFQ0aHdwTB9/lsxAPHFQesNvFN8Lu4iKWY7gEymgB49
---0000000000006ff34e05f1da779b--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQASf4IteL1rCWanDrKof2wXNLGRjN2mjQd7AlKqQjL6B/f3
+iZoteBHn3oGFuo5rTibZFqoQZ3ja05Jnv7xm1eXiC1RHXgNhzkIfedbuehZrs+QdF264Es5pKKpv
+GRbWTvLrlm74B22Vj6Qf47IVIGDJ/vBIct1WsABVGtk91U+rqGPFFV814v2L2v8ykN9LaNumIDEP
+sw/3ITE7PPb15SkHY7RtGz26EQvtl6e1zsJawlbFDGbjMv9mQhW0Q57pUqlqV6pNFHR4A/bhGOR0
+ZJJr2ukKWpFFS1DPtOGU81b+8HVdzBAHoMgD0Fnv9nnUFBzo7n1G5t7iGRp6e6KdR3Jy
+--00000000000065c24105f1dad36f--
