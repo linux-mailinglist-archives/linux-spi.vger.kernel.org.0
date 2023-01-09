@@ -2,61 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D76966302E
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 20:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A690663064
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 20:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237609AbjAITTX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Jan 2023 14:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S235113AbjAITb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Jan 2023 14:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbjAITTX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 14:19:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40486111C;
-        Mon,  9 Jan 2023 11:19:22 -0800 (PST)
+        with ESMTP id S237494AbjAITbg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 14:31:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A79A58819;
+        Mon,  9 Jan 2023 11:31:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD5D2610AA;
-        Mon,  9 Jan 2023 19:19:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E782C433EF;
-        Mon,  9 Jan 2023 19:19:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7BA14CE117E;
+        Mon,  9 Jan 2023 19:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 513C2C433D2;
+        Mon,  9 Jan 2023 19:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673291961;
-        bh=I9vhhoMs3WFpRtM3ZAfcVlbwKo9qXFT3gHzyMFQGbpM=;
+        s=k20201202; t=1673292684;
+        bh=voMOK2gL2nh7msuzNJyPVNbAzEjPsrpJDCO0l7BH3Gc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ik95PrWuMaaoqHh+hzhd4DXDCynr1Zbrf7mpaj0QRYp41ZN8NwgXUXGaUKREWpIu3
-         jXZn4EZwon9Xao8ZDYi0Brum/mHx0x169//r3s186LRW8fT+ydJmr7gNDvenSISijc
-         AS/I9BRmf+2zNHoDNbZfdta5E1+CJ0m7RcVVedYux1HUmiF8Vp8Bwud6OB5rvpsiDL
-         dgMe5kzoRfMQEftgW+PIC+h6OkQMS1Qjm306yInoz1973ls2ZyjCzun4qYHpuilQlm
-         gSI8sS2J9oIPxZd6+dbYCHkRTlDjYUXZyoM1lFy1f0VT14T7rRZmSCri/fuAGq45iB
-         N3SGWLrcRUG5g==
-Date:   Mon, 9 Jan 2023 19:19:14 +0000
+        b=ZMNALv1YHlw3vp7QhbbGLlx5CEImDvKp59DkcDG/AUOwQ+LPQBJSBrMMZuhzKuuAV
+         8uu1ZSO3uxkz9CeeQ5xCchHcVLra6tWqHtl3qAFQ3omZUF+ABtB7devWj+0kfqPvCC
+         klmTnND+vEmx0EF/nDJZUgKWI6XfOJchrBo7iRFZzeDbsB9BJxUKVHIV7SD46ITCLW
+         vzsxY7A9wcHzUKxXfiOWkHT7+BWYCokCjzwm6Bz2/I5OaiMUq773Gkmvyag14YyfZg
+         c8ZxMiZ8WfET2g0HjjSsUfu6IY1ocU4GnDQocDGIDcc2XvOnmdXySu6/yiTxtwtXwq
+         6UhDQEXM2oZlQ==
+Date:   Mon, 9 Jan 2023 19:31:18 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
-Message-ID: <Y7xosoZMJEwRi1ok@sirena.org.uk>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+Message-ID: <Y7xrhjhhY3g5DE25@sirena.org.uk>
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <Y7iPS48viBg0QRok@sirena.org.uk>
- <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
- <CAL_JsqJ7kr-6xs53NYJufem=wXnXVRnj3-1t1rG+W6g09kJ3ew@mail.gmail.com>
- <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lmcZn8x/tmKJQ3ye"
+        protocol="application/pgp-signature"; boundary="yBS0HA2Gard2IIBC"
 Content-Disposition: inline
-In-Reply-To: <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
+In-Reply-To: <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
 X-Cookie: Editing is a rewording activity.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -68,38 +63,62 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---lmcZn8x/tmKJQ3ye
+--yBS0HA2Gard2IIBC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jan 09, 2023 at 12:06:13AM -0800, William Zhang wrote:
-> > On Fri, Jan 6, 2023 at 9:27 PM William Zhang <william.zhang@broadcom.com> wrote:
+On Fri, Jan 06, 2023 at 07:52:35PM -0800, William Zhang wrote:
+> On 01/06/2023 02:00 PM, Mark Brown wrote:
+> > On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
 
-> > Keeping the clock on or not would affect all devices unless you have a
-> > per device clock you can gate, so making this a per device flag
-> > doesn't make sense.
+> > > Multiple transfers within a SPI message may be combined into one
+> > > transfer to the controller using its prepend feature. A SPI message is
+> > > prependable only if the following are all true:
+> > >    * One or more half duplex write transfer
+> > >    * Optional full duplex read/write at the end
+> > >    * No delay and cs_change between transfers
 
-> This applies only to each chip select. There is only one device under each
-> chip select.  So won't impact any other devices under other cs.
+> > There is nothing driver specific here, this should be implemented in the
+> > core - we have existing logic to rewrite messages to match driver
+> > constraints, this could be added there possibly with flags to allow
+> > drivers to disable or enable the merging if they've got special
+> > requirements.
 
-I don't understand how this would work - usually a SPI controller has a
-single set of clock, MOSI and MISO lines with the only per device thing
-being the chip select.  If the clock line is used by all devices then it
-must be kept on for all of them if it's to be kept on for one of them.
+> My understanding of combining the spi transfer in the core level does not
+> quite work out to our controller.  For example, for a spi message with three
+> transfers, tx, tx and rx. We can possibly combine them in single duplex
+> tx/rx transfer in the core. But this will be treated as duplex transaction
+> in our controller level which require tx and rx data happens at the same
+> time. Obviously this won't work when rx depends on tx happening first. We
 
---lmcZn8x/tmKJQ3ye
+I'm saying that if this logic is useful then implement in the core
+rather than in the driver.
+
+> can not differentiate this combined duplex transfer from the true duplex
+> transfer unless there is some flag to indicate that. Also there is limit of
+> max tx length as the prepend buffer so maybe another parameter.  And another
+> reason to be done in the driver level is this prepend mode has dependency on
+> dummy cs workaround which is driver level parameter currently.  I am not
+> sure how practical and useful this is to factor them out to the core level?
+
+If this relies on software control of the chip select (which is what I
+*think* your dummy CS workaround thing is about, the other patch about
+that is really hard to understand) then I'm confused about what the
+advantage is?
+
+--yBS0HA2Gard2IIBC
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO8aLIACgkQJNaLcl1U
-h9DqAQf8CYCqNr+Diaohf358fnuLfnlMbJCW8n2slDDq0RjrhBRy8QpuXKsw6ug1
-hd7C56/d+UUDBgj0PtsQEcSRl1092xgblNfUTQPAeEltcRogkKwOuLxtP6Z0dlka
-T4mDP8iJOmREbLaN2P6oyS6DlXfnnEUMm0bjgeUCdqOLF0dBgNtcAkDTb7VH8nPO
-ZRUBnlcihawhrHZKfiwIYyhWqel4XylYCok+JURDvqVvTVbHQpC0epNk/zJJH3fg
-zQyZykohWUty87j+sTmYkhsLWiPZAC0nUlCJaoae4GDw7mc3V0gZNxP/zS6XqR4K
-qcs6uYpSzKkCGloysSZMs6UrfaZE/Q==
-=x6ap
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO8a4UACgkQJNaLcl1U
+h9DXXAf9GoBrf8OqIkt/3HWzEqQPSwgKjh1CzhsHVGlVfTNyP5J7vYcdUIJecKW4
+cwBUUoMPhKySCTSdL5+KzJO9Z2WpoIQSn2b09Hd4uKPYVtNR7J3N77uNBxYSWGQE
+4NBaJv5snRWcGyHjuWOqoy1s4TkZU03BHo+wQlpg7MR+vfTgquRxiY+L22vFSfF9
+SbSX6Bc6W61g+gLil9qGcjX2fRn6eGddO42d8GEXElga7G4oCPyT6YpZqqc6jHWN
+kh+0lqBlLWn6udC1bnyxGgXlFKAFVWuQHcg9ya1vw5SxLAqrbgMBhjhgcSBVRhQE
+NJ0W0y4yDi0HcjsXBJb3MAo9lcEqOA==
+=wvSh
 -----END PGP SIGNATURE-----
 
---lmcZn8x/tmKJQ3ye--
+--yBS0HA2Gard2IIBC--
