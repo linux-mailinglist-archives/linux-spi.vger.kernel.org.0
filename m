@@ -2,263 +2,292 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116EA6620E0
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 10:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE8D662B1C
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 17:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbjAIJDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Jan 2023 04:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S231586AbjAIQZP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Jan 2023 11:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237040AbjAIJD2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 04:03:28 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01071580B
-        for <linux-spi@vger.kernel.org>; Mon,  9 Jan 2023 00:56:38 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m3so5742059wmq.0
-        for <linux-spi@vger.kernel.org>; Mon, 09 Jan 2023 00:56:38 -0800 (PST)
+        with ESMTP id S233239AbjAIQZM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 11:25:12 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CD1C53;
+        Mon,  9 Jan 2023 08:25:10 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bt23so13765376lfb.5;
+        Mon, 09 Jan 2023 08:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WkS6ryyVO3m71hcn6THyhTm7nRya1cKN2SD9TksIJ68=;
-        b=b0I08kGC325puhFWUTfCzD/tGSB0juYwlttLEJO1fXogVoXNpAN2VPbC1mUW0CJ3Vj
-         7eTo5OR6+QcAVvfDF0/7oZo3j7pfvQqh/LcsAUBUF8ABGNIaaaVSjkVqoW27Hm6X3e2d
-         hmJsL9tUtIoxDl8SksSVIjkKtS7fMFG7iJcRGx6gfoYK3BXOq2a5H8gYG2PB+j8QAFyA
-         Qqwf2iXchSB9saLrXcde8KxSaPcJpDSyjxH3jM9WHSplKcv3r2nypKfUSKw1b1t9t1MX
-         ZnAfxJr5cm0NiuUKPs+z+VgmVNs0ofZ0ySF/FDIm6ROVLc8xTcpWEEt+2Hxb66wROMcS
-         RShQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPVe9k6xiQxoUlbt14zYIPRh4g1+8ixsVErgsbtB9oo=;
+        b=kPvbUvB7GfEtAQBQs2fBAi2zssHgmpoRuC4zqehMAmQnHecMND2AgbC+KTZtTRGKYu
+         Zo7c5tWB/VmrfKgWnXzynbK/axSnfllm5DxBJDG84+7re0oanLPPHsTg5QKDXtAw+u3o
+         ic0MjKEPk7qQS61baTD3+ZRstAV988iby0DyNM2RxRDLtA9g+JCm4RUraiSUKF+qpv47
+         UqCAyrx5rbZ3kYSet/xv7VZQ8wt2Y8AqtrzwjNbHLk+yrN5fwQju/bVPbOhTDRe+SPEs
+         zzGpZxLz8DqLBRdaT2NV2ZZ8Ty0Emh/jcUV5viASOEkom5HAvjS2NiSthO6MDuQ2I0Hu
+         pJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WkS6ryyVO3m71hcn6THyhTm7nRya1cKN2SD9TksIJ68=;
-        b=5kPkzzoEF4Yj8JvMpbt/vQ9mj1wCBFlDLFMDOCHJtb9x/dH9wSQFZgSzp7xc1eqs0K
-         ruO4LKHpQsPXeTlJV1FjwTG7R1HCdCz4TdcdpW+eH8hnroS/4A+08v3G4lkYqhv1Qx68
-         a00SSIrka8tF/YJuRimhjDJUEV0FPDbUwrdBIUA3XUhyr4dKXEi0gIlHMsOe/JPWaxmG
-         6YKsyy4fYnkCt8mCGk6He2zeBg2n5f6CT44Hfpjt3FWAYPCltS55F3lewtl2rvVJcxz6
-         I4eRhVMrDfedtdgw9SpL0o3vnXIlAH3RsqD/KlzbD+YiOx4FmGY5U0aluL32Q/q7zMqA
-         KIQQ==
-X-Gm-Message-State: AFqh2kpx7QnN6lN2TGw4N1U0OxVAG/JKsFUYS7Y71+SwP1M3d3Pg/vTj
-        SSkdagK/5vSbBBb9x1LMF5Dp1A==
-X-Google-Smtp-Source: AMrXdXv/LTfIUE+pq+r5uK163nL8BHMy1oBryyJ2UHDcDdfs95k58i+bGQQu6IoDYqKITcsK4/QE3Q==
-X-Received: by 2002:a05:600c:3584:b0:3d9:719a:8f7d with SMTP id p4-20020a05600c358400b003d9719a8f7dmr38331902wmq.35.1673254597292;
-        Mon, 09 Jan 2023 00:56:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n14-20020a05600c3b8e00b003b49bd61b19sm16872994wms.15.2023.01.09.00.56.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 00:56:36 -0800 (PST)
-Message-ID: <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
-Date:   Mon, 9 Jan 2023 09:56:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tPVe9k6xiQxoUlbt14zYIPRh4g1+8ixsVErgsbtB9oo=;
+        b=DeHXYgrIhqfM0dwLLALsKNqNAc8syjktINYJTXZELyWaunIGXTRLo6T7wFsuD1DJaT
+         U6qrcg2o7iNmsg0HFmbQAhMXmnv3UdGM4YYp9dJYTu3yGJ8Z7DdTz813B2gQWfdbQX4I
+         m8TIp/qmTgb8lX7rCkTtMn+oxdHKg3sWOrLL9RnVWXKPlfKh1hbEf6dWYf9YTHgXZSWM
+         yn6jY41zgQkwlTUnkQWLnovKbh+9VCuf32uetc8UuiPf4CAxqGxFDilQ9Gmj/z7of2c/
+         TicZnHjvc7F1QQugzRiL8jTVOdP1mLQOzO5s+B+wLsYol+gvcGDgdaK9eizTwebWYb+M
+         5C7Q==
+X-Gm-Message-State: AFqh2koWH63W7Auz4sWzf35U7Kc5PQO5Cmlg+wyVPsTs93lQhcWgRf62
+        e8Hhcx5CRkEH6hORpUl+sY0=
+X-Google-Smtp-Source: AMrXdXvdKy0bpU/Os2olN3rAMOHfWKUr7NqexHp3Y8yZL6kPzPbznIyLUVRUHaw+gQ4uoN3WWbTLvw==
+X-Received: by 2002:a05:6512:31d6:b0:4b5:7817:419d with SMTP id j22-20020a05651231d600b004b57817419dmr21481910lfe.41.1673281508802;
+        Mon, 09 Jan 2023 08:25:08 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id t13-20020a19ad0d000000b004cc82b7080bsm701765lfc.200.2023.01.09.08.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 08:25:08 -0800 (PST)
+Date:   Mon, 9 Jan 2023 19:25:05 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/15] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20230109162505.o3clvmwu3eremlyd@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+ <20221218174523.cke7ubh6nycd247c@mobilestation>
+ <20230104222036.h4ke6maxkdvuqtqc@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104222036.h4ke6maxkdvuqtqc@mobilestation>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/01/2023 09:27, William Zhang wrote:
-> Hi Krzysztof,
+Hello Sudip
+
+On Thu, Jan 05, 2023 at 01:20:39AM +0300, Serge Semin wrote:
+> Hi Sudip
 > 
-> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
->> On 06/01/2023 21:07, William Zhang wrote:
->>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
->>> controller. Add a new compatible string and required fields for the new
->>> driver.  Also add myself and Kursad as the maintainers.
->>>
->>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>> ---
->>>
->>>   .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
->>>   1 file changed, 78 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>> index 45f1417b1213..56e69d4a1faf 100644
->>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>> @@ -4,22 +4,51 @@
->>>   $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
->>>   $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>   
->>> -title: Broadcom BCM6328 High Speed SPI controller
->>> +title: Broadcom Broadband SoC High Speed SPI controller
->>>   
->>>   maintainers:
->>> +
->>
->> Drop blank line.
-> will fix in  v2.
+> On Sun, Dec 18, 2022 at 08:45:26PM +0300, Serge Semin wrote:
+> > Hi Sudip
+> > 
+> > On Mon, Dec 12, 2022 at 06:07:17PM +0000, Sudip Mukherjee wrote:
+> > > The is v2 of the patch series adding enhanced SPI support. Some Synopsys SSI
+> > > controllers support enhanced SPI which includes Dual mode, Quad mode and
+> > > Octal mode. DWC_ssi includes clock stretching feature in enhanced SPI modes
+> > > which can be used to prevent FIFO underflow and overflow conditions while
+> > > transmitting or receiving the data respectively.
+> > > 
+> > > This is almost a complete rework based on the review from Serge.
+> > 
+> > Thank you very much for the series. I'll have a look at it on the next
+> > week.
 > 
->>
->>> +  - William Zhang <william.zhang@broadcom.com>
->>> +  - Kursad Oney <kursad.oney@broadcom.com>
->>>     - Jonas Gorski <jonas.gorski@gmail.com>
->>
->>>   
->>> +description: |
->>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
->>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
->>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
->>> +
->>> +  It has a limitation that can not keep the chip select line active between
->>> +  the SPI transfers within the same SPI message. This can terminate the
->>> +  transaction to some SPI devices prematurely. The issue can be worked around by
->>> +  either the controller's prepend mode or using the dummy chip select
->>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
->>> +
->>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
->>> +  controller that add the capability to allow the driver to control chip select
->>> +  explicitly. This solves the issue in the old controller. This new controller
->>> +  uses the compatible string brcm,bcmbca-hsspi.
->>> +
->>>   properties:
->>>     compatible:
->>> -    const: brcm,bcm6328-hsspi
->>> +    enum:
->>> +      - brcm,bcm6328-hsspi
->>> +      - brcm,bcmbca-hsspi
->>
->> bca seems quite unspecific. Your description above mentions several
->> model numbers and "bca" is not listed as model. Compatibles cannot be
->> generic.
-> "bca" is not model number, rather it is a group (broadband carrier 
-> access) of chip that share the same spi host controller IP. Agree it is 
-> not particularly specific but it differentiate from other broadcom spi 
-> controller ip used by other groups.  We just don't have a specific name 
-> for this spi host controller but can we treat bcmbca as the ip name? 
+> Just so you know. I haven't forgot about the series. There are some
+> problematic parts which I need to give more thinking than I originally
+> expected. I'll submit my comments very soon. Sorry for the delay.
+> 
+> Good news is that I've got the HW-manual for the DW SSI v1.01a
+> IP-core. So I'll no longer need to ask of you about that device
+> implementation specifics.
 
-No, it is discouraged in such forms. Family or IP block compatibles
-should be prepended with a specific compatible. There were many issues
-when people insisted on generic or family compatibles...
+Finally I managed to consolidate my thoughts regarding your patchset.
+Here is the summary. Some specific comments will be sent in-reply to
+the corresponding patches.
 
-> Otherwise we will have to have a compatible string with chip model for 
-> each SoC even they share the same IP. We already have more than ten of 
-> SoCs and the list will increase.  I don't see this is a good solution too.
+First of all there is a crucial difference between eSPI capability
+available on DW APB SSI and DW AHB SSI controllers:
+DW APB SSI 4.x:
++ Tx until FIFO is empty
++ No clock stretching at all
+DW AHB SSI 1.x:
++ Tx until CTRLR1.NDF if clock stretching is available
++ If no clock stretching then Tx until FIFO is empty.
+See the DW APB SSI IP-cores don't have the clock stretching feature.
+That should be kept in mind while implementing the portable eSPI
+support in the DW SSI driver. Your version of the eSPI support is only
+applicable for the devices with the eSPI clock-stretching capability
+which significantly narrows down its applicability. Anyway you should
+convert your code to working only if the clock-stretching feature is
+detected.
 
-You will have to do it anyway even with generic fallback, so I don't get
-what is here to gain... I also don't get why Broadcom should be here
-special, different than others. Why it is not a good solution for
-Broadcom SoCs but it is for others?
+Moreover your implementation will only work on the platforms with the
+native chip-selects. If the GPIO-based CS setup is detected the standard
+SPI-messages/transfers-based kernel API will be utilized (see the
+spi_mem_exec_op() method implementation) which currently imply the
+single-laned SPI bus only. For the same reason the DMA capability won't
+work in your eSPI implementation.
 
+If you want that to be fixed then you'll need to update the standard
+transfer (+DMA) procedure so one would take the
+spi_transfer.{tx_nbits,rx_nbits} fields into account activating the
+eSPI modes accordingly. The dw_spi_transfer_handler() method and its
+DMA counterpart shall be altered too since the eSPI implies the
+Tx-only or Rx-only modes.
 
+Here are several notes applicable to all your patches:
+1. Please use the dw_spi_enh* prefix for all eSPI-related methods. That
+shall unify the eSPI-code a bit in the same way as it was done in the
+DMA-modules (see it has the method defined with the dw_spi_dma_* prefix).
+
+2. Please define the enhanced versions of the MEM-op methods below their
+non-enhanced counterparts. Thus we'll have a clearer driver code.
+
+3. It isn't normally welcome to add some code in one patch and fix it in
+some following up patch.
+
+4. I am pretty much sure you shouldn't touch the spi_controller data
+internals if it isn't platform-specific settings on the controller
+probe procedure. Mark won't bless such change. The
+spi_controller.xfer_complete field is the internal completion handler
+and should be used by the SPI core only.
+
+Regarding the patchset in general. It's ok to provide the eSPI mode
+support for the native chip-selects only. But since there are going to be
+not a few requests to you to fix I'd suggest to refactor the series in the
+next manner:
+
+[PATCH 1] spi: dw: Add Enhanced capabilities flags
+Just define the new capability flags
++ DW_SPI_CAP_ENH
++ DW_SPI_CAP_ENH_CLK_STR
+Note the capabilities auto-detection will be added later in this patchset.
+Yeah, I remember asking you to add the DW_SPI_CAP_EMODE macro, but adding
+the _ENH suffix instead seems more readable and would refer to the
+eSPI-related methods.
+
+[PATCH 2] spi: dw: Update enhanced frame forward config
+In this patch please fix the dw_spi_update_config() method so one would
+perform both standard and enhanced config setups:
++ Add new field dw_spi_cfg.enh_frf.
++ Declare new structure struct dw_spi_enh_cfg with the wait_c, addr_l,
+inst_l and trans_t fields.
++ Convert the dw_spi_update_config() method to accepting the optional
+struct dw_spi_enh_cfg *ecfg pointer.
++ Update the CTRLR1.NDF field for Tx-only transfers if
+DW_SPI_CAP_ENH_CLK_STR capability is available.
+
+[PATCH 3] spi: dw: Reduce mem-ops init method indentations
++ This is a prerequisite patch before adding the eSPI-related
+MEM-op methods to make the following up patches simpler and more
+coherent. It implies updating the dw_spi_init_mem_ops()
+function so one would return straight away if the platform-specific CS-methods
+or MEM-ops methods are specified. Thus further function updates would be
+performed in the more coherent patches with simpler changelog. (See my
+comments to your patch "[PATCH v2 04/15] spi: dw: add check for support of enhanced spi".)
+
+[PATCH 4] spi: dw: Add enhanced mem-op verification method
++ Almost the same as your patch "[PATCH v2 04/15] spi: dw: add check for support of enhanced spi"
+except the code will have one less indentation due to the patch #3.
+Some other issues shall be fixed too. See my comments to your patch for
+details. (init if DW_SPI_CAP_ENH_CLK_STR, op->dummy.nbytes / op->dummy.buswidth >= 4)
+
+[PATCH 5] spi: dw: Add enhanced mem-op size adjustment method
++ The same as your patch "[PATCH v2 11/15] spi: dw: adjust size of mem_op"
+
+[PATCH 6] spi: dw: Mask out IRQs if no xfer data available
++ Instead of checking the master->cur_msg pointer to be non-NULL I guess
+it would be ok to disable the IRQs if !dws->rx_len && !dws->tx_len in the
+dw_spi_irq() method. Although I have doubts that after the commit
+a1d5aa6f7f97 ("spi: dw: Disable all IRQs when controller is unused") there
+is need in that conditional statement especially seeing the dw_reader()
+and dw_writer() methods won't do anything if no data available to
+transfer.
+
+[PATCH 7] spi: dw: Move wait-function to the driver core
++ Instead of re-implementing the xfer completion wait function one more
+time (as you've done in "[PATCH v2 09/15] spi: dw: use irq handler for
+enhanced spi") just move the dw_spi_dma_wait() method from spi-dw-dma.c to
+spi-dw-core.c, accordingly fix the prototype and implementation, rename
+the dw_spi.dma_completion field to something like xfer_completion and use
+the new method in the DW SSI core and DMA modules.
+
+[PATCH 8] spi: dw: spi: dw: Add enhanced mem-op execution method
++ Just add the methods particularly implementing the mem-op execution
+process like:
+dw_spi_enh_irq_setup(): instead of updating the dw_spi_irq_setup() method
+just create a new one which would initialize the IRQ-handler and unmask
+IRQs accordingly (depending on the rx_len/rx_len values?).
+dw_spi_enh_transfer_handler(): similar to your implementation of the
+IRQ-handler except it will use the internal wait-for-completion infrastructure.
+dw_spi_enh_write_then_read(): shall write the cmd+addr and activate the
+CS line. After that the transfer shall begin.
+dw_spi_enh_exec_mem_op(): similar to the dw_spi_exec_mem_op() method. It
+shall update the controller config taking the enhanced part into account,
+activate the IRQs using the dw_spi_enh_irq_setup() method, call the
+dw_spi_enh_write_then_read() function and then wait until the IRQ-based
+transfer is completed.
+
+[PATCH 9] spi: dw: Add enhanced mem-op capability auto-detection
++ Just check whether the CTRLR0.SPI_FRF field is writable and values it
+accepts. Based on that set the DW_SPI_CAP_ENH capability flag and update
+spi_controller.mode_bits field. Similarly check whether the
+SPI_CTRLR0.CLK_STRETCH_EN bit is writable and set the
+DW_SPI_CAP_ENH_CLK_STR capability flag.
++ Note first you need to try detecting the eSPI capability and only
+then the eSPI clock stretching capability.
++ Note the best place for that is the dw_spi_hw_init() method where all
+the HW-init and auto-detection is done.
+
+[PATCH 10] spi: dt-bindings: dw-apb-ssi: Add DW AHB SSI compatible string
++ The same as your "[PATCH v2 14/15] spi: dt-bindings: snps,dw-ahb-ssi: Add generic dw-ahb-ssi version"
+
+[PATCH 11] spi: dw: Add DW AHB SSI compatible string
++ The same as your "[PATCH v2 15/15] spi: dw: initialize dwc-ssi controller"
+
+Some implementation-specific comments I'll submit in-reply to the
+corresponding patches.
+
+-Serge(y)
 
 > 
->>
->>>   
->>>     reg:
->>> -    maxItems: 1
->>> +    items:
->>> +      - description: main registers
->>> +      - description: miscellaneous control registers
->>> +    minItems: 1
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: hsspi
->>> +      - const: spim-ctrl
->>
->> This does not match reg
-> Do you mean it does not match the description?
-
-No. reg can be 1 item but you state reg-names cannot. These are always
-the same. If one is 1 item, second is as well.
-
->>
->>>   
->>>     clocks:
->>>       items:
->>> -      - description: spi master reference clock
->>> -      - description: spi master pll clock
->>> +      - description: SPI master reference clock
->>> +      - description: SPI master pll clock
->>
->> Really? You just added it in previous patch, didn't you?
-> The previous patch was just word to word conversion of the text file.  I 
-> will update that patch to include this change.
+> -Serge(y)
 > 
->>
->>>   
->>>     clock-names:
->>>       items:
->>> @@ -29,12 +58,43 @@ properties:
->>>     interrupts:
->>>       maxItems: 1
->>>   
->>> +  brcm,use-cs-workaround:
->>> +    $ref: /schemas/types.yaml#/definitions/flag
->>> +    description: |
->>> +      Enable dummy chip select workaround for SPI transfers that can not be
->>> +      supported by the default controller's prepend mode, i.e. delay or cs
->>> +      change needed between SPI transfers.
->>
->> You need to describe what is the workaround.
-> Will do.
->>
->>> +
->>>   required:
->>>     - compatible
->>>     - reg
->>>     - clocks
->>>     - clock-names
->>> -  - interrupts
->>> +
->>> +allOf:
->>> +  - $ref: "spi-controller.yaml#"
->>
->> No quotes. How this is related to this patch?
-> Will remove quote and put it in patch 1.
->>
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - brcm,bcm6328-hsspi
->>> +    then:
->>> +      properties:
->>> +        reg:
->>> +          minItems: 1
->>
->> Drop.
->>
->> reg-names now do not match.
-> Don't quite understand your comment. What do I need to drop and what is 
-> not matched?
-
-You need to add constraints for reg-names, same way as for reg.
-Disallowing the reg-names also could work, but there won't be benefit in
-it. Better to have uniform DTS.
-
-> 
-Best regards,
-Krzysztof
-
+> > 
+> > -Serge(y)
+> > 
+> > > 
+> > > 
+> > > -- 
+> > > Regards
+> > > Sudip
+> > > 
+> > > Sudip Mukherjee (15):
+> > >   spi: dw: Introduce spi_frf and STD_SPI
+> > >   spi: dw: update NDF while using enhanced spi mode
+> > >   spi: dw: update SPI_CTRLR0 register
+> > >   spi: dw: add check for support of enhanced spi
+> > >   spi: dw: Introduce enhanced mem_op
+> > >   spi: dw: Introduce dual/quad/octal spi
+> > >   spi: dw: send cmd and addr to start the spi transfer
+> > >   spi: dw: update irq setup to use multiple handler
+> > >   spi: dw: use irq handler for enhanced spi
+> > >   spi: dw: Calculate Receive FIFO Threshold Level
+> > >   spi: dw: adjust size of mem_op
+> > >   spi: dw: Add retry for enhanced spi mode
+> > >   spi: dw: detect enhanced spi mode
+> > >   spi: dt-bindings: snps,dw-ahb-ssi: Add generic dw-ahb-ssi version
+> > >   spi: dw: initialize dwc-ssi controller
+> > > 
+> > >  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+> > >  drivers/spi/spi-dw-core.c                     | 347 +++++++++++++++++-
+> > >  drivers/spi/spi-dw-mmio.c                     |   1 +
+> > >  drivers/spi/spi-dw.h                          |  27 ++
+> > >  4 files changed, 364 insertions(+), 12 deletions(-)
+> > > 
+> > > -- 
+> > > 2.30.2
+> > > 
