@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5DC662BC0
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 17:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD96662C47
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 18:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236196AbjAIQxy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Jan 2023 11:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S237240AbjAIRH5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Jan 2023 12:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbjAIQx2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 11:53:28 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EED3E0ED;
-        Mon,  9 Jan 2023 08:52:48 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id y18so5948158ljk.11;
-        Mon, 09 Jan 2023 08:52:48 -0800 (PST)
+        with ESMTP id S236528AbjAIRHK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 12:07:10 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3A01CB14;
+        Mon,  9 Jan 2023 09:06:15 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id e13so9580648ljn.0;
+        Mon, 09 Jan 2023 09:06:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/YojMvQCgjgpVq2imF+mNJMgcvG5QTIR+KQBSabztA=;
-        b=jqxs8APtMoqxBAsze64sbZIiObnKM5mcG4m+PYHo9Wbt2szmZicijlw986fvLX7UkE
-         DQlOhTnCQmlm8PysQ7YuhNW3enHFuvIXMuqQc2wGpdqTTRUSwTbgljcuVw5EzDrg/fac
-         uE5PvAP0onnTZ869icDtYJJ+LTMH2ldRt3C/+ox+BC3YkA89uGFytSbSQIGwXvllIF7H
-         dphJ84b03YY2on+6cGTLLr79cme31F1x5JeVdhFe9C5/t+lK1fREcV1LGlwfotUaCFM2
-         kaTHASMEUyF3SjhapFRpPWDN04xUsz5Zvk8ZE2OnEd/WRdhVhgKOhsB3gavsOt6nnINZ
-         mXbA==
+        bh=kptWDTw8vN/ZCKQXmhnZQhxDWISF/pzOgR+cERcTBEo=;
+        b=aU0yQBpi7eMjjiaYpWLTLlDxxal3Oc/k2SSM/iFVGM2hKtTwjxhExc5fXoZOYOmi33
+         ajovBpB1A8+Rjc3BTmkkckFkFoP31QkV1HNkzevXtXviap1Epr5rFrfbhDdR5rWK+bUQ
+         mHud4aARqE62eFyrxCZ2ObO0bqMA3p3Lxk6xHqXu+cvdP3VoJZ1EISXohooOTYm9fmi+
+         0kObSP55MGrD1PXZZ/9Uym1E7RuA2YKWNWq3+vfrYRpvO48UkXLusSUY4fX/i8PMwgqh
+         yMfD5uGwSp/TNWcVWZ/6FcVcPA22ZdJ/83x3cLs3MrtJGj5jsXtnHjxJeMRpr2lADrQz
+         6ROQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u/YojMvQCgjgpVq2imF+mNJMgcvG5QTIR+KQBSabztA=;
-        b=WL4PYEV86okLqtTkFSesWZQLJyKzreuKDhh3xSEJ/GxIDHprALgDgqnkRveoPoglCY
-         GbBLuJsxS0Do0Z+Uh6BNDbuOaRGdDrb78Tl7Crrn57wuZLR6K+A3Z5Kh1hFQERVI7+ny
-         RlPbafIwSUaPE6EImm8z++1Jq9V5x8WnVmp5PUDyIOXylYqyZQIH/e6E86bvchZyt9Nq
-         ydgWiMD95BNxyr1TjG+1PYtsiXPqcG0t73EHgUi4bXDhJaQYAP7TU/OjncIzPiKCcOwK
-         2RqmgJRjCRsL4pDgd+/gUou6SZLyGTvii8DPXy+bWG0Xx3uKheQjpBsRaipVCKW5ke5m
-         J05w==
-X-Gm-Message-State: AFqh2kpra9n+GhlHJims3vIAuyJ0PJp+EJdBNW6dyn6Ej10OeyjEROfh
-        JJENSYybp2AuSBPr2Wx29nMv28BZF7Y=
-X-Google-Smtp-Source: AMrXdXt2g86Ftt4VLNWExC41rbwR4hQ4PfQKbWrM9wlrZYFbpjO+p+wF87xKRk29liFbHWLrf8FrUQ==
-X-Received: by 2002:a05:651c:1992:b0:27f:b2cf:85a0 with SMTP id bx18-20020a05651c199200b0027fb2cf85a0mr18909499ljb.43.1673283167180;
-        Mon, 09 Jan 2023 08:52:47 -0800 (PST)
+        bh=kptWDTw8vN/ZCKQXmhnZQhxDWISF/pzOgR+cERcTBEo=;
+        b=0pwO6OMvfuLxvdCsEk71698qZDTElorZXDK+OgiFfQMK1mDvpgDR5INupcYbr+lquD
+         FdE6BALTJqCAySJldWnGMVLqaOjJUhu7phbd1dFJueQVjYJNdofHLt9IprRv77HzkKJ7
+         TFXf8XXMc/p6fxTBZ87b3AckdzvQ4JjqrEzbGz2yyTApYZbgZ6ltIykKipV0Pu+lruXC
+         LaYrKwiGA1XeoM7OBSizQaNF1Wp7UMjym0/xx8WOp15hGIJ1Rk6LU31QxKRl8XO7iySb
+         myrfVJjLmMG4N47dFg01jKXgRd4NoENaSghW8uIm5qE+6iq4U3EjtckjDwm2PrCwFSa5
+         vVWw==
+X-Gm-Message-State: AFqh2kp1oVXhOg5oeR5ChF6KZwFEF9QwqkcMJtmGBdjEBNuuIy6+l5hV
+        cNI0SQJr7Pg8TXnT16LWgIqnHX+CPBo=
+X-Google-Smtp-Source: AMrXdXsa9xskNF3bkLfKqhIFn0DxYnwV7EPVRdGhWywbwDSFG0QX8MSoRL+XZR31KsbUbOItUrCTzA==
+X-Received: by 2002:a2e:be29:0:b0:281:175d:fa46 with SMTP id z41-20020a2ebe29000000b00281175dfa46mr5788572ljq.23.1673283973728;
+        Mon, 09 Jan 2023 09:06:13 -0800 (PST)
 Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s29-20020a05651c201d00b0028000e909desm973923ljo.136.2023.01.09.08.52.45
+        by smtp.gmail.com with ESMTPSA id d25-20020a2eb059000000b0027fcbcc3bedsm986619ljl.51.2023.01.09.09.06.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 08:52:46 -0800 (PST)
-Date:   Mon, 9 Jan 2023 19:52:44 +0300
+        Mon, 09 Jan 2023 09:06:12 -0800 (PST)
+Date:   Mon, 9 Jan 2023 20:06:10 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -56,15 +56,14 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
         jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/15] spi: dw: update NDF while using enhanced spi
- mode
-Message-ID: <20230109165244.yck7ik26xb4zwtil@mobilestation>
+Subject: Re: [PATCH v2 03/15] spi: dw: update SPI_CTRLR0 register
+Message-ID: <20230109170610.6ndmqi57leb5scm7@mobilestation>
 References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221212180732.79167-3-sudip.mukherjee@sifive.com>
+ <20221212180732.79167-4-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212180732.79167-3-sudip.mukherjee@sifive.com>
+In-Reply-To: <20221212180732.79167-4-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,48 +74,125 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:07:19PM +0000, Sudip Mukherjee wrote:
-> If the transfer of Transmit only mode is using dual/quad/octal SPI then
-> NDF needs to be updated with the number of data frames.
-> If the Transmit FIFO goes empty in-between, DWC_ssi masks the serial
-> clock and wait for rest of the data until the programmed amount of
-> frames are transferred successfully.
+On Mon, Dec 12, 2022 at 06:07:20PM +0000, Sudip Mukherjee wrote:
+> If the SPI transfer is being done in enhanced mode then SPI_CTRLR0
+> register needs to be updated to mention the instruction length, address
+> length, address and instruction transfer format, wait cycles. And, we
+> also need to enable clock stretching.
 > 
 > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
 > ---
->  drivers/spi/spi-dw-core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/spi/spi-dw-core.c | 14 +++++++++++++-
+>  drivers/spi/spi-dw.h      | 11 +++++++++++
+>  2 files changed, 24 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 77c23772bb3d9..8c47a4d14b666 100644
+> index 8c47a4d14b666..d59401f16c47a 100644
 > --- a/drivers/spi/spi-dw-core.c
 > +++ b/drivers/spi/spi-dw-core.c
-> @@ -346,7 +346,9 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
->  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
+
+> @@ -320,7 +320,7 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+>  {
+>  	struct dw_spi_chip_data *chip = spi_get_ctldata(spi);
+>  	u32 cr0 = chip->cr0;
+
+I suggest to update the dw_spi_update_config() semantic to accepting
+optional eSPI configs by means of passing an additional argument
+struct dw_spi_enh_cfg *ecfg. If it's null, then no need in updating
+the SPI_CTRLR0 register.
+
+> -	u32 speed_hz;
+> +	u32 speed_hz, spi_ctrlr0;
+
+Just reuse the cr0 variable.
+
+>  	u16 clk_div;
 >  
->  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
+>  	/* CTRLR0[ 4/3: 0] or CTRLR0[ 20: 16] Data Frame Size */
+> @@ -365,6 +365,18 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+>  		dw_writel(dws, DW_SPI_RX_SAMPLE_DLY, chip->rx_sample_dly);
+>  		dws->cur_rx_sample_dly = chip->rx_sample_dly;
+>  	}
+> +
+> +	if (cfg->spi_frf != DW_SPI_CTRLR0_SPI_FRF_STD_SPI) {
+> +		spi_ctrlr0 = DW_SPI_SPI_CTRLR0_CLK_STRETCH_EN;
+> +		spi_ctrlr0 |= FIELD_PREP(DW_SPI_SPI_CTRLR0_WAIT_CYCLE_MASK,
+> +					 cfg->wait_c);
+> +		spi_ctrlr0 |= FIELD_PREP(DW_SPI_SPI_CTRLR0_INST_L_MASK,
+> +					 cfg->inst_l);
+> +		spi_ctrlr0 |= FIELD_PREP(DW_SPI_SPI_CTRLR0_ADDR_L_MASK,
+> +					 cfg->addr_l);
 
-> -	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO)
-> +	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO ||
-> +	    (cfg->tmode == DW_SPI_CTRLR0_TMOD_TO &&
-> +	     cfg->spi_frf != DW_SPI_CTRLR0_SPI_FRF_STD_SPI))
+> +		spi_ctrlr0 |= cfg->trans_t;
 
-First CTRLR1.NDF is meaningful for the Tx-only mode if non-zero eSPI
-mode is enabled and the clock-stretching feature is activated. Second
-the conditional statement already looks too bulky. Adding new parts
-will make it even harder to read. What about converting it to
-something like:
+Should be also handled by the FIELD_PREP() macro.
 
-< if (cfg->ndf)
-< 	dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf - 1);
+> +		dw_writel(dws, DW_SPI_SPI_CTRLR0, spi_ctrlr0);
+> +	}
+>  }
+>  EXPORT_SYMBOL_NS_GPL(dw_spi_update_config, SPI_DW_CORE);
+>  
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index 414a415deb42a..f29d89d05f34b 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -63,6 +63,7 @@
+>  #define DW_SPI_DR			0x60
+>  #define DW_SPI_RX_SAMPLE_DLY		0xf0
+                                            <-+
+>  #define DW_SPI_CS_OVERRIDE		0xf4  |
+                                              |
+> +#define DW_SPI_SPI_CTRLR0		0xf4 -+
 
-What do you think?
+Please replace SPI_CTRLR0 with ENH_CTRLR0 and move the macro
+definition to where the arrow points to.
+
+>  
+>  /* Bit fields in CTRLR0 (DWC APB SSI) */
+>  #define DW_PSSI_CTRLR0_DFS_MASK			GENMASK(3, 0)
+> @@ -126,6 +127,12 @@
+>  #define DW_SPI_DMACR_RDMAE			BIT(0)
+>  #define DW_SPI_DMACR_TDMAE			BIT(1)
+>  
+
+> +/* Bit fields in SPI_CTRLR0 */
+> +#define DW_SPI_SPI_CTRLR0_CLK_STRETCH_EN	BIT(30)
+> +#define DW_SPI_SPI_CTRLR0_WAIT_CYCLE_MASK	GENMASK(15, 11)
+> +#define DW_SPI_SPI_CTRLR0_INST_L_MASK		GENMASK(9, 8)
+> +#define DW_SPI_SPI_CTRLR0_ADDR_L_MASK		GENMASK(5, 2)
+
+First add DW_SPI_ENH_CTRLR0_TRANS_T_MASK macro too. Second please
+replace SPI_CTRLR0 with ENH_CTRLR0.
+
+> +
+>  /* Mem/DMA operations helpers */
+>  #define DW_SPI_WAIT_RETRIES			5
+>  #define DW_SPI_BUF_SIZE \
+> @@ -141,6 +148,10 @@ struct dw_spi_cfg {
+>  	u32 ndf;
+>  	u32 freq;
+>  	u8 spi_frf;
+
+> +	u8 trans_t;
+> +	u8 inst_l;
+> +	u8 addr_l;
+> +	u8 wait_c;
+
+Please move these to a separate structure:
+struct dw_spi_enh_cfg {
+	u8 wait_l;
+	u8 inst_l;
+	u8 addr_l;
+	u8 trans_t;
+};
+Thus we'll be able to add an optional argument to the
+dw_spi_update_config() method.
 
 -Serge(y)
 
->  		dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf ? cfg->ndf - 1 : 0);
+>  };
 >  
->  	/* Note DW APB SSI clock divider doesn't support odd numbers */
+>  struct dw_spi;
 > -- 
 > 2.30.2
 > 
