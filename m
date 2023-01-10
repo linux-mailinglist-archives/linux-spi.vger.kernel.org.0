@@ -2,328 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFDE663B6B
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 09:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46878663F11
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 12:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238041AbjAJIlX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 03:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S232003AbjAJLMK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 06:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbjAJIkp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 03:40:45 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE2C69
-        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bn26so10946900wrb.0
-        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
+        with ESMTP id S238183AbjAJLLl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 06:11:41 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988B5F90;
+        Tue, 10 Jan 2023 03:10:59 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bf43so17851951lfb.6;
+        Tue, 10 Jan 2023 03:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
-        b=KzQc8yML1zFUavhHO2vHTnfFIsHPyJzUZxKd5CQbiS4DMKLhfTVvo7CIcTsO9/05nG
-         FSVtujfArS0tXwJ+jL8+qKaiGMUBVeQZfqAUKj6xwfzxwpC3dl8j3snqS1HUc7IDtg2C
-         fv54KCUp+1QZ/q+EsUT/GWOykzl40qVIWe0x+Urmxj+1Z4sk0IiqnUS/d663Yt3YN/w1
-         4r/jbGq2D3MktMPUGDgZYtBjX2wnMhoXmVF8DymjMpy8TBVNLGWjz2IpdHqLfEMV6UZT
-         oGiLPLFJugj66swnl42/KYuNXky3ZwOtS6wezUwUWzc7nNz7fK4I2p7eidGn0YWy41nt
-         prdg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YGvqCEOPakewBuBmeyCn0TskhEMhIc1i+rfL7LvnWYM=;
+        b=EbAAGRIxN2UDmfiyarRd3jUP9k9c9bZuu8JdbhYRmtyrQgMn694hhcmrEvn7VtUw9D
+         IyogNRMQoEDbNYB5cab/+WCqcURYsWvPAFCqcxf2qVvXocJjvOaF0oXML/87Kz/YudrQ
+         kwFe5fRVNiDSmOrmOHL1t/rcesRAgF+tgqMjddRBKe/FzLwYoQBr5oPUyW8Hlo9hgjOi
+         4LgvSlClxm0+7rdIGBOcZnvCzqawxg4XoAEKJ/x91YtJqyl5O9VhTjnBu+f92mp2QGoF
+         EWH79wvQxCjQZe7P37scjczRyYvVmsSN8m3+OULyXAR3lFSolExGavMeijfZqOQg2hYI
+         43dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
-        b=IHW5mNq++uPK1rENfgqyDZ+ZfZ5qNAeYbcgeRu4yi5vB9FE1d2+1ryK0gkCqcvt5VF
-         C/8dojf5mIshNnu1k0r0fRbUt4FfO6GX5BxOh0SM0KR8SFEqfoY6DT9dWp/lCPExY2CN
-         oW3qf8reK0G8y4cuHnQdoyR4ZpSYkXqT2RYZR5F2M/9smxzW+AkZD7SVUwCCyl4ynMyW
-         IMV/pIMwP0JOYuhAUkV00haxohIyI5XCapLe0ytnVP01o03gJre0JcIfiuiRIOW/oC2Y
-         4mIMqMQg9u5bTmZ8AKraVmoMmonV5/a8QYke8Z0zlyiqWl1NiEixjLlH7agosLfFKb+c
-         +ftw==
-X-Gm-Message-State: AFqh2kqswga4Ku0kM2Nm1G56O/QtB5tMLVvqXYCacyLCWgamxX+Aqn7Y
-        51NSYDAkEnlf3hrYXQiYLlN0+A==
-X-Google-Smtp-Source: AMrXdXuXvs7kmxwud6wPlxYBXc1N2FBJ4gD32d1t6nFYov+QTX3Y1AZ4JwWjs8ntIBz+Gqb4C9t5Zg==
-X-Received: by 2002:a5d:54ce:0:b0:242:8b69:cf2b with SMTP id x14-20020a5d54ce000000b002428b69cf2bmr39013216wrv.47.1673340040850;
-        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q16-20020adff950000000b002bcaa47bf78sm1230690wrr.26.2023.01.10.00.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
-Message-ID: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
-Date:   Tue, 10 Jan 2023 09:40:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YGvqCEOPakewBuBmeyCn0TskhEMhIc1i+rfL7LvnWYM=;
+        b=Vyc7rU1z79LBzSYsQ2FW3eQpaKWyuHTkQhqpRQp7nHcdN0wHrj6GhekzsD299/R2NV
+         SaMs5p4m/X8egYQGZdZyu8kFEbs4pWwnVpexwhCeiQ4yHUXMMgoD+E55AKmJxB0i83by
+         ca9nyD34b/1m+Crm7r09GIEm7uA/vQKgVpoMd/X9b47NwrH4TeG1ma3WFmM5ThAmP1Mk
+         PYFqYSneyZiX0N7QYDU3NqnUufxp77BzwaKXwoAUgEkdz49imObSJQfwdjG07f6mkMYC
+         qa3uYoX43a1HHyFgLu7dhqeewjmN5HvskzdqNIkqxqYOwBf6aBkMuWk5nZNu1XfF8xcs
+         G65A==
+X-Gm-Message-State: AFqh2kpmKYXqxvk7bbVgy0JXyigjBoExhry8AYtmjYbRxFhtGzokf0k2
+        Xk8rnqPoFXRvbzdqh8LijLI=
+X-Google-Smtp-Source: AMrXdXuvW7VxKBzsyKsEACjOyrkXZyS0x3ay+QspKFGJyhC/ZycIFvMCpYCUAIvBHVTEpsmjCpkLxQ==
+X-Received: by 2002:ac2:4bd3:0:b0:4b4:a460:c995 with SMTP id o19-20020ac24bd3000000b004b4a460c995mr26422455lfq.5.1673349058083;
+        Tue, 10 Jan 2023 03:10:58 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id bq32-20020a056512152000b004b5766f48d8sm2139438lfb.19.2023.01.10.03.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 03:10:57 -0800 (PST)
+Date:   Tue, 10 Jan 2023 14:10:55 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
- <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
- <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] spi: dw: Introduce enhanced mem_op
+Message-ID: <20230110111055.ncleldwyqgcrnurq@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+ <20221212180732.79167-6-sudip.mukherjee@sifive.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212180732.79167-6-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/01/2023 20:13, William Zhang wrote:
+On Mon, Dec 12, 2022 at 06:07:22PM +0000, Sudip Mukherjee wrote:
+> If the DW_SPI_CAP_EMODE capability is enabled then dw_spi_exec_enh_mem_op()
+> will be used as the new enhanced mem_op. Lets initialize the buffer and
+> get the pointers to receive and transmit data buffers.
+> The DW_SPI_CAP_EMODE capability will be enabled in a later patch.
 > 
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 53 ++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 50 insertions(+), 3 deletions(-)
 > 
-> On 01/09/2023 12:56 AM, Krzysztof Kozlowski wrote:
->> On 09/01/2023 09:27, William Zhang wrote:
->>> Hi Krzysztof,
->>>
->>> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
->>>> On 06/01/2023 21:07, William Zhang wrote:
->>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
->>>>> controller. Add a new compatible string and required fields for the new
->>>>> driver.  Also add myself and Kursad as the maintainers.
->>>>>
->>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>>>> ---
->>>>>
->>>>>    .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
->>>>>    1 file changed, 78 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>> index 45f1417b1213..56e69d4a1faf 100644
->>>>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>> @@ -4,22 +4,51 @@
->>>>>    $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
->>>>>    $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>    
->>>>> -title: Broadcom BCM6328 High Speed SPI controller
->>>>> +title: Broadcom Broadband SoC High Speed SPI controller
->>>>>    
->>>>>    maintainers:
->>>>> +
->>>>
->>>> Drop blank line.
->>> will fix in  v2.
->>>
->>>>
->>>>> +  - William Zhang <william.zhang@broadcom.com>
->>>>> +  - Kursad Oney <kursad.oney@broadcom.com>
->>>>>      - Jonas Gorski <jonas.gorski@gmail.com>
->>>>
->>>>>    
->>>>> +description: |
->>>>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
->>>>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
->>>>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
->>>>> +
->>>>> +  It has a limitation that can not keep the chip select line active between
->>>>> +  the SPI transfers within the same SPI message. This can terminate the
->>>>> +  transaction to some SPI devices prematurely. The issue can be worked around by
->>>>> +  either the controller's prepend mode or using the dummy chip select
->>>>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
->>>>> +
->>>>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
->>>>> +  controller that add the capability to allow the driver to control chip select
->>>>> +  explicitly. This solves the issue in the old controller. This new controller
->>>>> +  uses the compatible string brcm,bcmbca-hsspi.
->>>>> +
->>>>>    properties:
->>>>>      compatible:
->>>>> -    const: brcm,bcm6328-hsspi
->>>>> +    enum:
->>>>> +      - brcm,bcm6328-hsspi
->>>>> +      - brcm,bcmbca-hsspi
->>>>
->>>> bca seems quite unspecific. Your description above mentions several
->>>> model numbers and "bca" is not listed as model. Compatibles cannot be
->>>> generic.
->>> "bca" is not model number, rather it is a group (broadband carrier
->>> access) of chip that share the same spi host controller IP. Agree it is
->>> not particularly specific but it differentiate from other broadcom spi
->>> controller ip used by other groups.  We just don't have a specific name
->>> for this spi host controller but can we treat bcmbca as the ip name?
->>
->> No, it is discouraged in such forms. Family or IP block compatibles
->> should be prepended with a specific compatible. There were many issues
->> when people insisted on generic or family compatibles...
->>
->>> Otherwise we will have to have a compatible string with chip model for
->>> each SoC even they share the same IP. We already have more than ten of
->>> SoCs and the list will increase.  I don't see this is a good solution too.
->>
->> You will have to do it anyway even with generic fallback, so I don't get
->> what is here to gain... I also don't get why Broadcom should be here
->> special, different than others. Why it is not a good solution for
->> Broadcom SoCs but it is for others?
->>
-> I saw a few other vendors like these qcom ones:
->   qcom,spi-qup.yaml
->       - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
->       - qcom,spi-qup-v2.1.1 # for 8974 and later
->       - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
->   qcom,spi-qup.yaml
->       const: qcom,geni-spi
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 49fad58ceb94a..89438ae2df17d 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -798,6 +798,51 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	return ret;
+>  }
+>  
+> +static void dw_spi_init_enh_mem_buf(struct dw_spi *dws, const struct spi_mem_op *op)
+> +{
+> +	unsigned int i, j;
+> +	u8 *out;
+> +
 
-IP block version numbers are allowed when there is clear mapping between
-version and SoCs using it. This is the case for Qualcomm because there
-is such clear mapping documented and available for Qualcomm engineers
-and also some of us (although not public).
+> +	out = dws->buf;
+> +	for (i = 0; i < DW_SPI_BUF_SIZE; ++i)
+> +		out[i] = 0;
+> +
+> +	for (i = 0, j = op->cmd.nbytes; i < op->cmd.nbytes; ++i, --j)
+> +		out[i] = DW_SPI_GET_BYTE(op->cmd.opcode, op->cmd.nbytes - j);
+> +
+> +	for (j = op->addr.nbytes, i = dws->reg_io_width; j > 0; ++i, --j)
+> +		out[i] = DW_SPI_GET_BYTE(op->addr.val, op->addr.nbytes - j);
 
-> I guess when individual who only has one particular board/chip and is 
-> not aware of the IP family,  it is understandable to use the chip 
-> specific compatible string.
+In case of the non-eSPI implementation the outbound data consolidation
+was required to get the most optimal loop of data transfer. In this
+case I don't see it was required since the clock stretching feature is
+available and the IRQ-based xfer procedure is implemented. Do I miss
+something?
 
-Family of devices is not a versioned IP block.
+-Serge(y)
 
-> But when company works on it, we have the 
-> visibility and access to all the chips and ip blocks in the family and 
-> IMHO it is very reasonable to use the IP family name for the same IP as 
-> these examples shows. 
-
-No, because family of devices is not a versioned IP block. I wrote
-before that families and wildcards are not allowed.
-
-> Are you saying these are not good example to 
-> follow?  
-
-It's nothing related to your case.
-
-> What are the issues with generic or family compatibles? 
->  Could 
-> you please elaborate?
-
-They stop matching and some point and cause ABI breaks. We had several
-cases where engineer believed "I have here family of devices" and then
-later it turned out that the family is different.
-
-
+> +
+> +	dws->n_bytes = 1;
+> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> +		dws->rx = op->data.buf.in;
+> +		dws->rx_len = op->data.nbytes;
+> +		dws->tx = NULL;
+> +		dws->tx_len = 0;
+> +	} else if (op->data.dir == SPI_MEM_DATA_OUT) {
+> +		dws->tx_len = op->data.nbytes;
+> +		dws->tx = (void *)op->data.buf.out;
+> +		dws->rx = NULL;
+> +		dws->rx_len = 0;
+> +	} else {
+> +		dws->rx = NULL;
+> +		dws->rx_len = 0;
+> +		dws->tx = NULL;
+> +		dws->tx_len = 0;
+> +	}
+> +}
+> +
+> +static int dw_spi_exec_enh_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +	struct spi_controller *ctlr = mem->spi->controller;
+> +	struct dw_spi *dws = spi_controller_get_devdata(ctlr);
+> +
+> +	/* Collect cmd and addr into a single buffer */
+> +	dw_spi_init_enh_mem_buf(dws, op);
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Initialize the default memory operations if a glue layer hasn't specified
+>   * custom ones. Direct mapping operations will be preserved anyway since DW SPI
+> @@ -812,11 +857,13 @@ static void dw_spi_init_mem_ops(struct dw_spi *dws)
+>  	if (!dws->mem_ops.exec_op && !(dws->caps & DW_SPI_CAP_CS_OVERRIDE) &&
+>  	    !dws->set_cs) {
+>  		dws->mem_ops.adjust_op_size = dw_spi_adjust_mem_op_size;
+> -		if (dws->caps & DW_SPI_CAP_EMODE)
+> +		if (dws->caps & DW_SPI_CAP_EMODE) {
+> +			dws->mem_ops.exec_op = dw_spi_exec_enh_mem_op;
+>  			dws->mem_ops.supports_op = dw_spi_supports_enh_mem_op;
+> -		else
+> +		} else {
+> +			dws->mem_ops.exec_op = dw_spi_exec_mem_op;
+>  			dws->mem_ops.supports_op = dw_spi_supports_mem_op;
+> -		dws->mem_ops.exec_op = dw_spi_exec_mem_op;
+> +		}
+>  		if (!dws->max_mem_freq)
+>  			dws->max_mem_freq = dws->max_freq;
+>  	}
+> -- 
+> 2.30.2
 > 
->>
->>
->>>
->>>>
->>>>>    
->>>>>      reg:
->>>>> -    maxItems: 1
->>>>> +    items:
->>>>> +      - description: main registers
->>>>> +      - description: miscellaneous control registers
->>>>> +    minItems: 1
->>>>> +
->>>>> +  reg-names:
->>>>> +    items:
->>>>> +      - const: hsspi
->>>>> +      - const: spim-ctrl
->>>>
->>>> This does not match reg
->>> Do you mean it does not match the description?
->>
->> No. reg can be 1 item but you state reg-names cannot. These are always
->> the same. If one is 1 item, second is as well.
->>
-> I'll drop the "minItems: 1" from the reg property then.
-
-Then it won't be correct, because it would mean two items are required
-always.
-
-> 
->>>>
->>>>>    
->>>>>      clocks:
->>>>>        items:
->>>>> -      - description: spi master reference clock
->>>>> -      - description: spi master pll clock
->>>>> +      - description: SPI master reference clock
->>>>> +      - description: SPI master pll clock
->>>>
->>>> Really? You just added it in previous patch, didn't you?
->>> The previous patch was just word to word conversion of the text file.  I
->>> will update that patch to include this change.
->>>
->>>>
->>>>>    
->>>>>      clock-names:
->>>>>        items:
->>>>> @@ -29,12 +58,43 @@ properties:
->>>>>      interrupts:
->>>>>        maxItems: 1
->>>>>    
->>>>> +  brcm,use-cs-workaround:
->>>>> +    $ref: /schemas/types.yaml#/definitions/flag
->>>>> +    description: |
->>>>> +      Enable dummy chip select workaround for SPI transfers that can not be
->>>>> +      supported by the default controller's prepend mode, i.e. delay or cs
->>>>> +      change needed between SPI transfers.
->>>>
->>>> You need to describe what is the workaround.
->>> Will do.
->>>>
->>>>> +
->>>>>    required:
->>>>>      - compatible
->>>>>      - reg
->>>>>      - clocks
->>>>>      - clock-names
->>>>> -  - interrupts
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: "spi-controller.yaml#"
->>>>
->>>> No quotes. How this is related to this patch?
->>> Will remove quote and put it in patch 1.
->>>>
->>>>> +  - if:
->>>>> +      properties:
->>>>> +        compatible:
->>>>> +          contains:
->>>>> +            enum:
->>>>> +              - brcm,bcm6328-hsspi
->>>>> +    then:
->>>>> +      properties:
->>>>> +        reg:
->>>>> +          minItems: 1
->>>>
->>>> Drop.
->>>>
->>>> reg-names now do not match.
->>> Don't quite understand your comment. What do I need to drop and what is
->>> not matched?
->>
->> You need to add constraints for reg-names, same way as for reg.
->> Disallowing the reg-names also could work, but there won't be benefit in
->> it. Better to have uniform DTS.
->>
-> I agree it is better to have the uniform DTS but the situation here is 
-> that the brcm,bcm6328-hsspi does not require reg name since there is 
-> only one register needed and it was already used in many chip dts for 
-> long time.  If I enforce it to have the corresponding reg name, that 
-
-No one told you to enforce to have a reg-names.
-
-> could potentially break the compatibility of those old device if the 
-> driver change to use reg name, right?
-
-How compatibility is broken by some optional, unrelated property?
-
-Best regards,
-Krzysztof
-
