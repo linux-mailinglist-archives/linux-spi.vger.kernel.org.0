@@ -2,75 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C932A6631BA
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jan 2023 21:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0DF66387C
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 06:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjAIUoS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Jan 2023 15:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S229576AbjAJFKt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 00:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbjAIUn4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Jan 2023 15:43:56 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EBE68C8C
-        for <linux-spi@vger.kernel.org>; Mon,  9 Jan 2023 12:43:55 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9so10861752pll.9
-        for <linux-spi@vger.kernel.org>; Mon, 09 Jan 2023 12:43:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tUUcuV9zv1EKSFPJq2jzRfnEnsuKJJblXsSSmeyhdg=;
-        b=fV8YaA0av3FsSOmVJQstUZREJIVqbs/lzzH2BW8Mm0dcQoX/eGI9nN4hB7hacCBmI9
-         4/p0v1BOkifVxlLV7nFVNFGwrLMKZeuHB2oJ+5RfB8/IcSxGDF7nZcBQZu83E+gKy0Y1
-         tW+IKTXlzXpjbjj9or2/kG+S7rdc7GSNs+pmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4tUUcuV9zv1EKSFPJq2jzRfnEnsuKJJblXsSSmeyhdg=;
-        b=hN7jJdGBcocffB8eSvTtBmXTjnnqFc0KZQWfEkoyv5pW0fbFJonqhUxdV5QCUMEiry
-         4LVdWT5N1FUsoFAmO5alWUeEyaOzYoMPm1lzvnHrbSAwzutngrKnulydoacUpivwfQ6B
-         dhExk0/3nv+XJAK6FfqWeb4Yku6xgnslYjiJ/Lb+vVJCaCJqhBjd0ezI/0tDTBGHIqmW
-         Fan/ImPGab7ySy92fDKgxVimnBCy6PdCPCERFpixFq5OgQqc/sWLwtJkxW48sUqPZLFg
-         MSOOMxq+WOpTnVnyFXlTdXuhMAcLtT6+0BtWHTKJcqaV+GSsSfFC4wquSu5IZ5dl+aNP
-         dW7A==
-X-Gm-Message-State: AFqh2krJV4c1HFPEjhEcBUtFszE799+0akYsYnfo7FDIJQnhJzfQvLn6
-        N4Ii/PnxI7FexawHv5V8Ou8F0w==
-X-Google-Smtp-Source: AMrXdXvws7J1qmSfAhQIhRJk4KTFCG246r2YS9mc7sz4wfRXUaQS4wjyi4fvwDHKglC9cxwUqXTOpA==
-X-Received: by 2002:a17:902:f70c:b0:188:6b9c:d17d with SMTP id h12-20020a170902f70c00b001886b9cd17dmr86838478plo.16.1673297035026;
-        Mon, 09 Jan 2023 12:43:55 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170902784200b0017d97d13b18sm6566604pln.65.2023.01.09.12.43.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:43:54 -0800 (PST)
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
- <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
- <Y7xrhjhhY3g5DE25@sirena.org.uk>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
-Date:   Mon, 9 Jan 2023 12:43:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        with ESMTP id S229655AbjAJFKr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 00:10:47 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FA1C91C;
+        Mon,  9 Jan 2023 21:10:46 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30A5AagC004343;
+        Mon, 9 Jan 2023 23:10:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673327436;
+        bh=Xh6UOOhZ9yrqrA92Pig4ktQ5WlS0xDpOIpgKAYnACGM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=P5jmO7dc14Aw//CYvY4Lst93HkldQ+Eslpn1P8tlIyrN3SjOmOiCZxZAotubZKJks
+         EMcgFDwiBnQ1ng9+DJVyDlWco99zEr224/KBtr7axM3K9//OjkGjh+SVSNR/Z7Ype5
+         7TduKoeZGhzTtnkMtCzLb0gFw8JMluKsq6qjaf/Q=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30A5Aajh037906
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 9 Jan 2023 23:10:36 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 9
+ Jan 2023 23:10:35 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 9 Jan 2023 23:10:35 -0600
+Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30A5AXwY006013;
+        Mon, 9 Jan 2023 23:10:34 -0600
+Message-ID: <3881d0e8-c2ec-1de7-a7d9-4eeb1565b0c1@ti.com>
+Date:   Tue, 10 Jan 2023 10:40:32 +0530
 MIME-Version: 1.0
-In-Reply-To: <Y7xrhjhhY3g5DE25@sirena.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000065c24105f1dad36f"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] spi: cadence-quadspi: use STIG mode for small reads
+Content-Language: en-US
+To:     Dhruva Gole <d-gole@ti.com>, <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Vignesh <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>
+References: <20230104062604.1556763-1-d-gole@ti.com>
+ <20230104062604.1556763-3-d-gole@ti.com>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <20230104062604.1556763-3-d-gole@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,155 +66,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---00000000000065c24105f1dad36f
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Hi Dhruva,
 
-
-
-On 01/09/2023 11:31 AM, Mark Brown wrote:
-> On Fri, Jan 06, 2023 at 07:52:35PM -0800, William Zhang wrote:
->> On 01/06/2023 02:00 PM, Mark Brown wrote:
->>> On Fri, Jan 06, 2023 at 12:08:03PM -0800, William Zhang wrote:
+On 04/01/23 11:56, Dhruva Gole wrote:
+> Fix the issue where some flash chips like cypress S25HS256T return the
+> value of the same register over and over in DAC mode.
 > 
->>>> Multiple transfers within a SPI message may be combined into one
->>>> transfer to the controller using its prepend feature. A SPI message is
->>>> prependable only if the following are all true:
->>>>     * One or more half duplex write transfer
->>>>     * Optional full duplex read/write at the end
->>>>     * No delay and cs_change between transfers
+> For example in the TI K3-AM62x Processors refer [0] Technical Reference
+> Manual there is a layer of digital logic in front of the QSPI/OSPI
+> Drive when used in DAC mode. This is part of the Flash Subsystem (FSS)
+> which provides access to external Flash devices.
 > 
->>> There is nothing driver specific here, this should be implemented in the
->>> core - we have existing logic to rewrite messages to match driver
->>> constraints, this could be added there possibly with flags to allow
->>> drivers to disable or enable the merging if they've got special
->>> requirements.
+> The FSS0_0_SYSCONFIG Register (Offset = 4h) has a BIT Field for
+> OSPI_32B_DISABLE_MODE which has a Reset value = 0. This means, OSPI 32bit
+> mode enabled by default.
 > 
->> My understanding of combining the spi transfer in the core level does not
->> quite work out to our controller.  For example, for a spi message with three
->> transfers, tx, tx and rx. We can possibly combine them in single duplex
->> tx/rx transfer in the core. But this will be treated as duplex transaction
->> in our controller level which require tx and rx data happens at the same
->> time. Obviously this won't work when rx depends on tx happening first. We
+> Thus, by default controller operates in 32 bit mode causing it to always
+> align all data to 4 bytes from a 4byte aligned address. In some flash
+> chips like cypress for example if we try to read some regs in DAC mode
+> then it keeps sending the value of the first register that was requested
+> and inorder to read the next reg, we have to stop and re-initiate a new
+> transaction.
 > 
-> I'm saying that if this logic is useful then implement in the core
-> rather than in the driver.
+> This causes wrong register values to be read than what is desired when
+> registers are read in DAC mode. Hence if the data.nbytes is very less
+> then prefer STIG mode for such small reads.
 > 
->> can not differentiate this combined duplex transfer from the true duplex
->> transfer unless there is some flag to indicate that. Also there is limit of
->> max tx length as the prepend buffer so maybe another parameter.  And another
->> reason to be done in the driver level is this prepend mode has dependency on
->> dummy cs workaround which is driver level parameter currently.  I am not
->> sure how practical and useful this is to factor them out to the core level?
+> [0] https://www.ti.com/lit/ug/spruiv7a/spruiv7a.pdf
 > 
-> If this relies on software control of the chip select (which is what I
-> *think* your dummy CS workaround thing is about, the other patch about
-> that is really hard to understand) then I'm confused about what the
-> advantage is?
-Dummy CS workaround is implemented by Jonas when he first upstream the 
-driver. It does not work on all the board designs so prepend mode is 
-introduced. I have some detail explanation on this in [PATCH 10/16] spi: 
-bcm63xx-hsspi: Make dummy cs workaround as an option.
-
-The controller only work in one mode and that's why driver code has some 
-dependency between these two modes. The advantage of the premode is it 
-works on all hw design however it does not support all types mem_ops 
-operation. That is why you see the patch 14 to disable the dual io mem 
-op. But dummy cs workaround can support this and in case there is such 
-pattern from non mem op spi transaction, dummy cs workaround can be used 
-as long as it does not have the board design limitation.   So neither 
-one is perfect but hopefully with both options available, we can cover 
-all the cases.
-
-You mentioned there is some existing logic to rewrite messages to match 
-driver constraints in the core driver.  I didn't see it when I did a 
-quick search on spi.c. I will take a deep look into the file. But if you 
-can point me where this logic is so I can be sure that I am looking at 
-the right place and will double check if this can be done or not in the 
-core level.  Thanks!
-
-
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 8c7938776cfc..f5188dc52db6 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1344,7 +1344,13 @@ static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	cqspi_configure(f_pdata, mem->spi->max_speed_hz);
+>  
+>  	if (op->data.dir == SPI_MEM_DATA_IN && op->data.buf.in) {
+> -		if (!op->addr.nbytes)
+> +	/*
+> +	 * Performing reads in DAC mode forces to read minimum 4 bytes
+> +	 * which is unsupported on some flash devices during register
+> +	 * reads, prefer STIG mode for such small reads.
+> +	 */
+> +		if (!op->addr.nbytes ||
+> +		    op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
+>  			return cqspi_command_read(f_pdata, op);
+>  
 
---00000000000065c24105f1dad36f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I am seeing issues while testing after applying this series,
 
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOZeyI1hHATA7iPHqNDCrVE6v1qm
-ddUIE5inDTu2svHeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwOTIwNDM1NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQASf4IteL1rCWanDrKof2wXNLGRjN2mjQd7AlKqQjL6B/f3
-iZoteBHn3oGFuo5rTibZFqoQZ3ja05Jnv7xm1eXiC1RHXgNhzkIfedbuehZrs+QdF264Es5pKKpv
-GRbWTvLrlm74B22Vj6Qf47IVIGDJ/vBIct1WsABVGtk91U+rqGPFFV814v2L2v8ykN9LaNumIDEP
-sw/3ITE7PPb15SkHY7RtGz26EQvtl6e1zsJawlbFDGbjMv9mQhW0Q57pUqlqV6pNFHR4A/bhGOR0
-ZJJr2ukKWpFFS1DPtOGU81b+8HVdzBAHoMgD0Fnv9nnUFBzo7n1G5t7iGRp6e6KdR3Jy
---00000000000065c24105f1dad36f--
+On J7200 EVM,
+[    2.164655] spi-nor spi7.0: Failed to parse optional parameter table: ff81
+[    2.171644] spi-nor spi7.0: s28hs512t (65536 Kbytes)
+
+On J721E EVM,
+[    5.565961] spi-nor spi7.0: mt35xu512aba (0 Kbytes)
+[    5.732084] spi-nor spi8.0: mt25qu512a (81753 Kbytes)
+
+In all the three cases above, the behavior is normal without these patches.
+
+>  		return cqspi_read(f_pdata, op);
+
+-- 
+Regards,
+Vaishnav
