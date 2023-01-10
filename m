@@ -2,136 +2,328 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0DF66387C
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 06:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFDE663B6B
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 09:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjAJFKt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 00:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S238041AbjAJIlX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 03:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjAJFKr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 00:10:47 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FA1C91C;
-        Mon,  9 Jan 2023 21:10:46 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30A5AagC004343;
-        Mon, 9 Jan 2023 23:10:36 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673327436;
-        bh=Xh6UOOhZ9yrqrA92Pig4ktQ5WlS0xDpOIpgKAYnACGM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=P5jmO7dc14Aw//CYvY4Lst93HkldQ+Eslpn1P8tlIyrN3SjOmOiCZxZAotubZKJks
-         EMcgFDwiBnQ1ng9+DJVyDlWco99zEr224/KBtr7axM3K9//OjkGjh+SVSNR/Z7Ype5
-         7TduKoeZGhzTtnkMtCzLb0gFw8JMluKsq6qjaf/Q=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30A5Aajh037906
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Jan 2023 23:10:36 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 9
- Jan 2023 23:10:35 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 9 Jan 2023 23:10:35 -0600
-Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30A5AXwY006013;
-        Mon, 9 Jan 2023 23:10:34 -0600
-Message-ID: <3881d0e8-c2ec-1de7-a7d9-4eeb1565b0c1@ti.com>
-Date:   Tue, 10 Jan 2023 10:40:32 +0530
+        with ESMTP id S237981AbjAJIkp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 03:40:45 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE2C69
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bn26so10946900wrb.0
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
+        b=KzQc8yML1zFUavhHO2vHTnfFIsHPyJzUZxKd5CQbiS4DMKLhfTVvo7CIcTsO9/05nG
+         FSVtujfArS0tXwJ+jL8+qKaiGMUBVeQZfqAUKj6xwfzxwpC3dl8j3snqS1HUc7IDtg2C
+         fv54KCUp+1QZ/q+EsUT/GWOykzl40qVIWe0x+Urmxj+1Z4sk0IiqnUS/d663Yt3YN/w1
+         4r/jbGq2D3MktMPUGDgZYtBjX2wnMhoXmVF8DymjMpy8TBVNLGWjz2IpdHqLfEMV6UZT
+         oGiLPLFJugj66swnl42/KYuNXky3ZwOtS6wezUwUWzc7nNz7fK4I2p7eidGn0YWy41nt
+         prdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
+        b=IHW5mNq++uPK1rENfgqyDZ+ZfZ5qNAeYbcgeRu4yi5vB9FE1d2+1ryK0gkCqcvt5VF
+         C/8dojf5mIshNnu1k0r0fRbUt4FfO6GX5BxOh0SM0KR8SFEqfoY6DT9dWp/lCPExY2CN
+         oW3qf8reK0G8y4cuHnQdoyR4ZpSYkXqT2RYZR5F2M/9smxzW+AkZD7SVUwCCyl4ynMyW
+         IMV/pIMwP0JOYuhAUkV00haxohIyI5XCapLe0ytnVP01o03gJre0JcIfiuiRIOW/oC2Y
+         4mIMqMQg9u5bTmZ8AKraVmoMmonV5/a8QYke8Z0zlyiqWl1NiEixjLlH7agosLfFKb+c
+         +ftw==
+X-Gm-Message-State: AFqh2kqswga4Ku0kM2Nm1G56O/QtB5tMLVvqXYCacyLCWgamxX+Aqn7Y
+        51NSYDAkEnlf3hrYXQiYLlN0+A==
+X-Google-Smtp-Source: AMrXdXuXvs7kmxwud6wPlxYBXc1N2FBJ4gD32d1t6nFYov+QTX3Y1AZ4JwWjs8ntIBz+Gqb4C9t5Zg==
+X-Received: by 2002:a5d:54ce:0:b0:242:8b69:cf2b with SMTP id x14-20020a5d54ce000000b002428b69cf2bmr39013216wrv.47.1673340040850;
+        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q16-20020adff950000000b002bcaa47bf78sm1230690wrr.26.2023.01.10.00.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
+Message-ID: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+Date:   Tue, 10 Jan 2023 09:40:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] spi: cadence-quadspi: use STIG mode for small reads
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
 Content-Language: en-US
-To:     Dhruva Gole <d-gole@ti.com>, <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Vignesh <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>
-References: <20230104062604.1556763-1-d-gole@ti.com>
- <20230104062604.1556763-3-d-gole@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20230104062604.1556763-3-d-gole@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Dhruva,
-
-On 04/01/23 11:56, Dhruva Gole wrote:
-> Fix the issue where some flash chips like cypress S25HS256T return the
-> value of the same register over and over in DAC mode.
+On 09/01/2023 20:13, William Zhang wrote:
 > 
-> For example in the TI K3-AM62x Processors refer [0] Technical Reference
-> Manual there is a layer of digital logic in front of the QSPI/OSPI
-> Drive when used in DAC mode. This is part of the Flash Subsystem (FSS)
-> which provides access to external Flash devices.
 > 
-> The FSS0_0_SYSCONFIG Register (Offset = 4h) has a BIT Field for
-> OSPI_32B_DISABLE_MODE which has a Reset value = 0. This means, OSPI 32bit
-> mode enabled by default.
+> On 01/09/2023 12:56 AM, Krzysztof Kozlowski wrote:
+>> On 09/01/2023 09:27, William Zhang wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
+>>>> On 06/01/2023 21:07, William Zhang wrote:
+>>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
+>>>>> controller. Add a new compatible string and required fields for the new
+>>>>> driver.  Also add myself and Kursad as the maintainers.
+>>>>>
+>>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>>>>> ---
+>>>>>
+>>>>>    .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
+>>>>>    1 file changed, 78 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> index 45f1417b1213..56e69d4a1faf 100644
+>>>>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> @@ -4,22 +4,51 @@
+>>>>>    $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
+>>>>>    $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>    
+>>>>> -title: Broadcom BCM6328 High Speed SPI controller
+>>>>> +title: Broadcom Broadband SoC High Speed SPI controller
+>>>>>    
+>>>>>    maintainers:
+>>>>> +
+>>>>
+>>>> Drop blank line.
+>>> will fix in  v2.
+>>>
+>>>>
+>>>>> +  - William Zhang <william.zhang@broadcom.com>
+>>>>> +  - Kursad Oney <kursad.oney@broadcom.com>
+>>>>>      - Jonas Gorski <jonas.gorski@gmail.com>
+>>>>
+>>>>>    
+>>>>> +description: |
+>>>>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
+>>>>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
+>>>>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
+>>>>> +
+>>>>> +  It has a limitation that can not keep the chip select line active between
+>>>>> +  the SPI transfers within the same SPI message. This can terminate the
+>>>>> +  transaction to some SPI devices prematurely. The issue can be worked around by
+>>>>> +  either the controller's prepend mode or using the dummy chip select
+>>>>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
+>>>>> +
+>>>>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
+>>>>> +  controller that add the capability to allow the driver to control chip select
+>>>>> +  explicitly. This solves the issue in the old controller. This new controller
+>>>>> +  uses the compatible string brcm,bcmbca-hsspi.
+>>>>> +
+>>>>>    properties:
+>>>>>      compatible:
+>>>>> -    const: brcm,bcm6328-hsspi
+>>>>> +    enum:
+>>>>> +      - brcm,bcm6328-hsspi
+>>>>> +      - brcm,bcmbca-hsspi
+>>>>
+>>>> bca seems quite unspecific. Your description above mentions several
+>>>> model numbers and "bca" is not listed as model. Compatibles cannot be
+>>>> generic.
+>>> "bca" is not model number, rather it is a group (broadband carrier
+>>> access) of chip that share the same spi host controller IP. Agree it is
+>>> not particularly specific but it differentiate from other broadcom spi
+>>> controller ip used by other groups.  We just don't have a specific name
+>>> for this spi host controller but can we treat bcmbca as the ip name?
+>>
+>> No, it is discouraged in such forms. Family or IP block compatibles
+>> should be prepended with a specific compatible. There were many issues
+>> when people insisted on generic or family compatibles...
+>>
+>>> Otherwise we will have to have a compatible string with chip model for
+>>> each SoC even they share the same IP. We already have more than ten of
+>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>
+>> You will have to do it anyway even with generic fallback, so I don't get
+>> what is here to gain... I also don't get why Broadcom should be here
+>> special, different than others. Why it is not a good solution for
+>> Broadcom SoCs but it is for others?
+>>
+> I saw a few other vendors like these qcom ones:
+>   qcom,spi-qup.yaml
+>       - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>       - qcom,spi-qup-v2.1.1 # for 8974 and later
+>       - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>   qcom,spi-qup.yaml
+>       const: qcom,geni-spi
+
+IP block version numbers are allowed when there is clear mapping between
+version and SoCs using it. This is the case for Qualcomm because there
+is such clear mapping documented and available for Qualcomm engineers
+and also some of us (although not public).
+
+> I guess when individual who only has one particular board/chip and is 
+> not aware of the IP family,  it is understandable to use the chip 
+> specific compatible string.
+
+Family of devices is not a versioned IP block.
+
+> But when company works on it, we have the 
+> visibility and access to all the chips and ip blocks in the family and 
+> IMHO it is very reasonable to use the IP family name for the same IP as 
+> these examples shows. 
+
+No, because family of devices is not a versioned IP block. I wrote
+before that families and wildcards are not allowed.
+
+> Are you saying these are not good example to 
+> follow?  
+
+It's nothing related to your case.
+
+> What are the issues with generic or family compatibles? 
+>  Could 
+> you please elaborate?
+
+They stop matching and some point and cause ABI breaks. We had several
+cases where engineer believed "I have here family of devices" and then
+later it turned out that the family is different.
+
+
 > 
-> Thus, by default controller operates in 32 bit mode causing it to always
-> align all data to 4 bytes from a 4byte aligned address. In some flash
-> chips like cypress for example if we try to read some regs in DAC mode
-> then it keeps sending the value of the first register that was requested
-> and inorder to read the next reg, we have to stop and re-initiate a new
-> transaction.
+>>
+>>
+>>>
+>>>>
+>>>>>    
+>>>>>      reg:
+>>>>> -    maxItems: 1
+>>>>> +    items:
+>>>>> +      - description: main registers
+>>>>> +      - description: miscellaneous control registers
+>>>>> +    minItems: 1
+>>>>> +
+>>>>> +  reg-names:
+>>>>> +    items:
+>>>>> +      - const: hsspi
+>>>>> +      - const: spim-ctrl
+>>>>
+>>>> This does not match reg
+>>> Do you mean it does not match the description?
+>>
+>> No. reg can be 1 item but you state reg-names cannot. These are always
+>> the same. If one is 1 item, second is as well.
+>>
+> I'll drop the "minItems: 1" from the reg property then.
+
+Then it won't be correct, because it would mean two items are required
+always.
+
 > 
-> This causes wrong register values to be read than what is desired when
-> registers are read in DAC mode. Hence if the data.nbytes is very less
-> then prefer STIG mode for such small reads.
-> 
-> [0] https://www.ti.com/lit/ug/spruiv7a/spruiv7a.pdf
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->  drivers/spi/spi-cadence-quadspi.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 8c7938776cfc..f5188dc52db6 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -1344,7 +1344,13 @@ static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
->  	cqspi_configure(f_pdata, mem->spi->max_speed_hz);
->  
->  	if (op->data.dir == SPI_MEM_DATA_IN && op->data.buf.in) {
-> -		if (!op->addr.nbytes)
-> +	/*
-> +	 * Performing reads in DAC mode forces to read minimum 4 bytes
-> +	 * which is unsupported on some flash devices during register
-> +	 * reads, prefer STIG mode for such small reads.
-> +	 */
-> +		if (!op->addr.nbytes ||
-> +		    op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
->  			return cqspi_command_read(f_pdata, op);
->  
+>>>>
+>>>>>    
+>>>>>      clocks:
+>>>>>        items:
+>>>>> -      - description: spi master reference clock
+>>>>> -      - description: spi master pll clock
+>>>>> +      - description: SPI master reference clock
+>>>>> +      - description: SPI master pll clock
+>>>>
+>>>> Really? You just added it in previous patch, didn't you?
+>>> The previous patch was just word to word conversion of the text file.  I
+>>> will update that patch to include this change.
+>>>
+>>>>
+>>>>>    
+>>>>>      clock-names:
+>>>>>        items:
+>>>>> @@ -29,12 +58,43 @@ properties:
+>>>>>      interrupts:
+>>>>>        maxItems: 1
+>>>>>    
+>>>>> +  brcm,use-cs-workaround:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>> +    description: |
+>>>>> +      Enable dummy chip select workaround for SPI transfers that can not be
+>>>>> +      supported by the default controller's prepend mode, i.e. delay or cs
+>>>>> +      change needed between SPI transfers.
+>>>>
+>>>> You need to describe what is the workaround.
+>>> Will do.
+>>>>
+>>>>> +
+>>>>>    required:
+>>>>>      - compatible
+>>>>>      - reg
+>>>>>      - clocks
+>>>>>      - clock-names
+>>>>> -  - interrupts
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: "spi-controller.yaml#"
+>>>>
+>>>> No quotes. How this is related to this patch?
+>>> Will remove quote and put it in patch 1.
+>>>>
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            enum:
+>>>>> +              - brcm,bcm6328-hsspi
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        reg:
+>>>>> +          minItems: 1
+>>>>
+>>>> Drop.
+>>>>
+>>>> reg-names now do not match.
+>>> Don't quite understand your comment. What do I need to drop and what is
+>>> not matched?
+>>
+>> You need to add constraints for reg-names, same way as for reg.
+>> Disallowing the reg-names also could work, but there won't be benefit in
+>> it. Better to have uniform DTS.
+>>
+> I agree it is better to have the uniform DTS but the situation here is 
+> that the brcm,bcm6328-hsspi does not require reg name since there is 
+> only one register needed and it was already used in many chip dts for 
+> long time.  If I enforce it to have the corresponding reg name, that 
 
-I am seeing issues while testing after applying this series,
+No one told you to enforce to have a reg-names.
 
-On J7200 EVM,
-[    2.164655] spi-nor spi7.0: Failed to parse optional parameter table: ff81
-[    2.171644] spi-nor spi7.0: s28hs512t (65536 Kbytes)
+> could potentially break the compatibility of those old device if the 
+> driver change to use reg name, right?
 
-On J721E EVM,
-[    5.565961] spi-nor spi7.0: mt35xu512aba (0 Kbytes)
-[    5.732084] spi-nor spi8.0: mt25qu512a (81753 Kbytes)
+How compatibility is broken by some optional, unrelated property?
 
-In all the three cases above, the behavior is normal without these patches.
+Best regards,
+Krzysztof
 
->  		return cqspi_read(f_pdata, op);
-
--- 
-Regards,
-Vaishnav
