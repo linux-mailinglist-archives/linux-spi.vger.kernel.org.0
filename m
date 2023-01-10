@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38AC663F6C
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 12:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EE4663FF8
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 13:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237998AbjAJLqr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 06:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S229749AbjAJMLg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 07:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237824AbjAJLqo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 06:46:44 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E0517F0;
-        Tue, 10 Jan 2023 03:46:41 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id v25so17937934lfe.12;
-        Tue, 10 Jan 2023 03:46:40 -0800 (PST)
+        with ESMTP id S238218AbjAJMLP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 07:11:15 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B3C2009;
+        Tue, 10 Jan 2023 04:08:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bq39so18114965lfb.0;
+        Tue, 10 Jan 2023 04:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLjxpJGNpLvyG9yHhgQJ1yjZMPsSmtr+fpz3920L3uo=;
-        b=WJYkrieonm2ZPiY9uT0qyAUC+gKBMZW/6J2IjwIX1Uq4JZYAnCFTpyhyyyeXALPPTI
-         FXoI8dIvp6UyvDmeSgvBEdIiaEyV1vp5Dd9cJHoPs37MzR6nSDA3kzXVQFQFNKcSnx5b
-         zdl/UqDbdMWoXyGOOpuVJfKneihc0zhInqVULk7E1OtyuPwDhDNV2Bn+hvvKSqwQIcnf
-         YwUtfbweOtYLH2D5izD70HT13tctuUhiw4don0YumWduZ0Fv9j0j1weZEWyvGwusLUuf
-         wuNuMVJCY0vU/liK9H9+BsXV/ocj41fnn5xjVnbJFZzu6tuQ2a10lW4XgWJHag+om9wf
-         pONA==
+        bh=6CJci5KqQGpU6nxS4CAw5MZMI44xkNZEkWm4NgJAkZM=;
+        b=OujkATZMDiNykq2g44d+ZXJ0qJTsXLlUCcO+xAkiS3W0TXEtlpMP5oYwd/B4mBosYs
+         5T1csjrYF39pK7yvg0YeC3fEKowOHNLmablV8igvguhxYVMwb7IFszVXoZxmUMkGd28e
+         /OebKXT8/AbJjYvocZS5tu4n2nu4Iy+KbUM6Z3HRDmam36zMc0hT3eSLIs7V4sFi/HUQ
+         gHzaxPjaCYGF9WELV38TE18GCs4a6y73fxcg33AabqI3karT3uSZlYVrRdacnTUJwIMJ
+         Z9zWc9A5DVGsV/OodfoV3J0wb6+K48NSXLuTvLKkpZ68gI3IQS81KGqhBFSCkKJwNdb2
+         1PwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OLjxpJGNpLvyG9yHhgQJ1yjZMPsSmtr+fpz3920L3uo=;
-        b=FJnfxDtCuxI0thcN2IqhbLjuzYL3NOJYkFuVD96xA3rPiP4SJbapjGMC5mcFq8jkoZ
-         Aoz6ZzhVfTaXWyihfhkdYY9TOeqigVULFbFkbof6erSd4YeKF3PsINS3K3UNLjEOY5HQ
-         6zxlvE7V84cbsP4eUikNOzRZnVK9TdnYkrTTi5tPfwR6ItRrTCrG4fiP9ReuEAdZAPP7
-         nSbsYQv4bJA8rAFvhCy440m7BfHaaHMiN4v6qz6hlNL7WPpn9XqzmI80j/ZeMR52QbBr
-         HQ8FOqyaBbwY08mWz8c9sqdodoN2jfzT5nJDUl01nqARnqiM5LWVlTHwMq0IgLdIaZbd
-         Mf7g==
-X-Gm-Message-State: AFqh2krsaw4CqgFY3+RYvrPnnYq4t8jV1batqP9DapBg6wF3mfXp/n5f
-        20+TBPmL5tzveGDGNEUqsgqtNwaZ8p4=
-X-Google-Smtp-Source: AMrXdXtqRfxhWoTdncqRUwyPzHxTOMK6ldZKL7yA+m67RT6V3O/PmdBCKjZzj0pFHl68TovDjne0ig==
-X-Received: by 2002:a05:6512:261a:b0:4ca:f432:3e45 with SMTP id bt26-20020a056512261a00b004caf4323e45mr19718725lfb.33.1673351199357;
-        Tue, 10 Jan 2023 03:46:39 -0800 (PST)
+        bh=6CJci5KqQGpU6nxS4CAw5MZMI44xkNZEkWm4NgJAkZM=;
+        b=gxA7dHxqN4dIzDUpNLueE2iePDk0YXXgu/YdcnE8Jb19/WI7UwvHvZNgs9o7HuFFsH
+         2vIjUSQ3tcuR16WJvFJhUX2cyT1NGBA2qsig3Pz1JPCATS7pyyNU+HZbBRMe3SCy6nh9
+         VXMjWeaPjuJ9fbjNVfXjyZlfMvFKAlku9QJlIOp2nLUKOmj8l/e8617KDCIVKL+aBn37
+         zlJUcF9CRqRJG5c9deOEmfdVMk1gdr19PP1GNmBGak+MBmYB+6H6r8vwe4A5go8pWVSb
+         K62EpS/axGWIOKKiXZixXa6fkeIKYoPZExpDgcxu0IxogOK/R1qbUGK86qIjr8WwPzDK
+         hH6Q==
+X-Gm-Message-State: AFqh2kqadB+51fpVIKPt7BAulVddqUQtUG9YsP/7LEOISHLihjsscGrl
+        k/52jKIScuD3bP2tEMJNYVQ=
+X-Google-Smtp-Source: AMrXdXsxhbAW5/WtZo2fkxUBe/3oaWhFvuggaypnX68IKzIThWxicfL9ubiUJJMw2ocsSx3d+XpzoA==
+X-Received: by 2002:a05:6512:3c88:b0:4b4:e4a1:2fc6 with SMTP id h8-20020a0565123c8800b004b4e4a12fc6mr24307012lfv.68.1673352508510;
+        Tue, 10 Jan 2023 04:08:28 -0800 (PST)
 Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id f7-20020a056512360700b004cc8698c3f4sm687212lfs.156.2023.01.10.03.46.38
+        by smtp.gmail.com with ESMTPSA id u15-20020a19790f000000b004cb344a8c77sm2146398lfc.54.2023.01.10.04.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 03:46:38 -0800 (PST)
-Date:   Tue, 10 Jan 2023 14:46:36 +0300
+        Tue, 10 Jan 2023 04:08:27 -0800 (PST)
+Date:   Tue, 10 Jan 2023 15:08:25 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -56,15 +56,14 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
         jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/15] spi: dw: update irq setup to use multiple
- handler
-Message-ID: <20230110114636.x7rhpzcevqjqepkh@mobilestation>
+Subject: Re: [PATCH v2 09/15] spi: dw: use irq handler for enhanced spi
+Message-ID: <20230110120825.pykbn7ym3ml2rv7s@mobilestation>
 References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221212180732.79167-9-sudip.mukherjee@sifive.com>
+ <20221212180732.79167-10-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212180732.79167-9-sudip.mukherjee@sifive.com>
+In-Reply-To: <20221212180732.79167-10-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,73 +74,139 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:07:25PM +0000, Sudip Mukherjee wrote:
-> The current mem_ops is not using interrupt based transfer so
-> dw_spi_irq_setup() only has one interrput handler to handle the non
-> mem_ops transfers. We will use interrupt based transfers in enhanced
-> spi and so we need a way to specify which irq handler to use.
+On Mon, Dec 12, 2022 at 06:07:26PM +0000, Sudip Mukherjee wrote:
+> Introduce the interrupt handler for enhanced spi to read or write based
+> on the generated irq. Also, use the xfer_completion from spi_controller
+> to wait for a timeout or completion from irq handler.
 > 
 > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
 > ---
->  drivers/spi/spi-dw-core.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  drivers/spi/spi-dw-core.c | 62 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 61 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index ecab0fbc847c7..f540165245a89 100644
+> index f540165245a89..10d453228368f 100644
 > --- a/drivers/spi/spi-dw-core.c
 > +++ b/drivers/spi/spi-dw-core.c
-> @@ -260,7 +260,8 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
->  	if (!irq_status)
->  		return IRQ_NONE;
+> @@ -251,6 +251,34 @@ static irqreturn_t dw_spi_transfer_handler(struct dw_spi *dws)
+>  	return IRQ_HANDLED;
+>  }
 >  
+> +static irqreturn_t dw_spi_enh_handler(struct dw_spi *dws)
+> +{
+> +	u16 irq_status = dw_readl(dws, DW_SPI_ISR);
+> +
+> +	if (dw_spi_check_status(dws, false)) {
 
-> -	if (!master->cur_msg) {
-> +	if (!master->cur_msg && dws->transfer_handler ==
-> +	    dw_spi_transfer_handler) {
+> +		spi_finalize_current_transfer(dws->master);
 
-What about replacing this with the (!dws->rx_len && !dws->tx_len)
-statement?
+As I suggested in the cover-letter please use the dw_spi_dma_wait()
+function for that.
 
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	if (irq_status & DW_SPI_INT_RXFI) {
+> +		dw_reader(dws);
+> +		if (dws->rx_len <= dw_readl(dws, DW_SPI_RXFTLR))
+> +			dw_writel(dws, DW_SPI_RXFTLR, dws->rx_len - 1);
+> +	}
+> +
+> +	if (irq_status & DW_SPI_INT_TXEI)
+> +		dw_writer(dws);
+> +
+
+> +	if (!dws->tx_len && dws->rx_len) {
+> +		dw_spi_mask_intr(dws, DW_SPI_INT_TXEI);
+> +	} else if (!dws->rx_len && !dws->tx_len) {
+> +		dw_spi_mask_intr(dws, 0xff);
+> +		spi_finalize_current_transfer(dws->master);
+
+Why so complicated? You have two types of the transfers: Tx-only and
+Rx-only. Thus you can unmask only one type of the IRQs and terminate
+the process upon both lengths are zero.
+
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+>  {
+>  	struct spi_controller *master = dev_id;
+> @@ -265,6 +293,12 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
 >  		dw_spi_mask_intr(dws, 0xff);
 >  		return IRQ_HANDLED;
 >  	}
-> @@ -380,7 +381,8 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+
+> +	if ((dws->transfer_handler == dw_spi_enh_handler &&
+> +	     !dws->rx_len && !dws->tx_len)) {
+> +		dw_spi_mask_intr(dws, 0xff);
+> +		spi_finalize_current_transfer(master);
+> +		return IRQ_HANDLED;
+
+Why? You already have this statement in the handler above.
+
+> +	}
+>  
+>  	return dws->transfer_handler(dws);
 >  }
->  EXPORT_SYMBOL_NS_GPL(dw_spi_update_config, SPI_DW_CORE);
+> @@ -862,6 +896,8 @@ static int dw_spi_exec_enh_mem_op(struct spi_mem *mem, const struct spi_mem_op *
+>  	struct spi_controller *ctlr = mem->spi->controller;
+>  	struct dw_spi *dws = spi_controller_get_devdata(ctlr);
+>  	struct dw_spi_cfg cfg;
+> +	int ret = 0;
+> +	unsigned long long ms;
 >  
-> -static void dw_spi_irq_setup(struct dw_spi *dws)
-> +static void dw_spi_irq_setup(struct dw_spi *dws,
-> +			     irqreturn_t (*t_handler)(struct dw_spi *))
->  {
->  	u16 level;
->  	u8 imask;
-> @@ -394,7 +396,7 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+>  	switch (op->data.buswidth) {
+>  	case 2:
+> @@ -909,11 +945,35 @@ static int dw_spi_exec_enh_mem_op(struct spi_mem *mem, const struct spi_mem_op *
+>  
+>  	dw_spi_update_config(dws, mem->spi, &cfg);
+>  
+> +	dw_spi_mask_intr(dws, 0xff);
+> +	reinit_completion(&ctlr->xfer_completion);
+>  	dw_spi_enable_chip(dws, 1);
+>  
+>  	dw_spi_enh_write_cmd_addr(dws, op);
+> +	dw_spi_set_cs(mem->spi, false);
+> +	dw_spi_irq_setup(dws, dw_spi_enh_handler);
+>  
+> -	return 0;
 
->  	dw_writel(dws, DW_SPI_TXFTLR, level);
->  	dw_writel(dws, DW_SPI_RXFTLR, level - 1);
->  
-> -	dws->transfer_handler = dw_spi_transfer_handler;
-> +	dws->transfer_handler = t_handler;
->  
->  	imask = DW_SPI_INT_TXEI | DW_SPI_INT_TXOI |
->  		DW_SPI_INT_RXUI | DW_SPI_INT_RXOI | DW_SPI_INT_RXFI;
+> +	/* Use timeout calculation from spi_transfer_wait() */
+> +	ms = 8LL * MSEC_PER_SEC * (dws->rx_len ? dws->rx_len : dws->tx_len);
+> +	do_div(ms, dws->current_freq);
+> +
+> +	/*
+> +	 * Increase it twice and add 200 ms tolerance, use
+> +	 * predefined maximum in case of overflow.
+> +	 */
+> +	ms += ms + 200;
+> +	if (ms > UINT_MAX)
+> +		ms = UINT_MAX;
+> +
+> +	ms = wait_for_completion_timeout(&ctlr->xfer_completion,
+> +					 msecs_to_jiffies(ms));
 
-I'd suggest to create a separate dw_spi_enh_irq_setup() method which
-would unmask only the required IRQs, initialize the threshold level
-depending on the transfer type and set the
-dw_spi_enh_transfer_handler() handler.
+All of that is already implemented in the dw_spi_dma_wait() method.
+Moreover addr+cmd write procedure, IRQ setup and wait-for-completion
+can be consolidate in the dw_spi_enh_write_then_read() function thus
+having the dw_spi_enh_exec_mem_op method looking similar to the
+standard dw_spi_exec_mem_op().
 
 -Serge(y)
 
-> @@ -486,7 +488,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
->  	else if (dws->irq == IRQ_NOTCONNECTED)
->  		return dw_spi_poll_transfer(dws, transfer);
->  
-> -	dw_spi_irq_setup(dws);
-> +	dw_spi_irq_setup(dws, dw_spi_transfer_handler);
->  
->  	return 1;
+> +
+> +	dw_spi_stop_mem_op(dws, mem->spi);
+> +
+> +	if (ms == 0)
+> +		ret = -EIO;
+> +
+> +	return ret;
 >  }
+>  
+>  /*
 > -- 
 > 2.30.2
 > 
