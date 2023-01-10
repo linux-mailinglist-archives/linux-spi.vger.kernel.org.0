@@ -2,146 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F8F664E9D
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 23:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E320A664F1A
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 23:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbjAJWSk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 17:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S235620AbjAJWwP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 17:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjAJWSg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 17:18:36 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694095B4B4;
-        Tue, 10 Jan 2023 14:18:34 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id n190so9957433vsc.11;
-        Tue, 10 Jan 2023 14:18:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CvfiNm0WJyHyuoYnmqirwokdxtOSW51hrMXv9a0fkss=;
-        b=eNh17eckrg8U0lBfR4ylmbQPn+TgH5QkCYJJzOyh9UDqKpVJaqGL/9VixR6PRGNyTe
-         n5VTHe80nju1fw0npVfZ+EcE4LG29xShsmqbtiNMS35kSiTBeQQdituarS7FpHJ6jSkO
-         zJddLrAWBdQM1+puLF/EvZSmLoNNy/jTU+aXaucf9WuHC/Dc6FZnJmN18NCR84YSTVfV
-         tknLRY++sO1xNS8JS/8l/wCCUTwyS2FqoIN978dxyNgqmzd1f2nISJoGzo/JZUnUKnPf
-         WXk7wdfbkhbF6tmQ1F7UwhhF/prYosuEw/NS6Ep4aEv7xY7Q8noIsA8tP/hxgr0MsEPU
-         QbbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvfiNm0WJyHyuoYnmqirwokdxtOSW51hrMXv9a0fkss=;
-        b=gLEZ2FGPCCw2B8FIvToBgpDneptwu2ipncNj/BR37e4diSopCu8Wx6rqRH3jhCj1CZ
-         Fsj90d1IHzIM2MAZSfbZlO4hMoN5ErpReFtQDBAwcPSW4wcuDf3p/WfJTFSlCnLdMI+w
-         /GrOEOu8B1wFkA7G9QrOFWX1LYzsK4Tb/lAT7QuK9tNyOARJorlehOXr9RBaiJ3AILrB
-         VnjcQwn07ZPJaf937f1bRgRWnofljGZM6WRVl3AmCG4XrmHVL0ilzTmaIri6jGXPs74c
-         dqIbNCgwY/alpCHoQjRfGw6J3w3eyhki1gSDwguSlfC1K7BeeA6Gm4ww387RHMLnhF3H
-         AXEA==
-X-Gm-Message-State: AFqh2krFOP1S0xnBOBeMPOa/D5mQQrmQyCFKRHd5m6KwGi7CBgfKpyWb
-        QorR8wOK+M79D93AfyQaytM=
-X-Google-Smtp-Source: AMrXdXt941idrP7caAjFbSXAN9KlUWV6nFXpFD8Lxpyfp3VNjrj2xrDsBwGzqCt5ABQsxiwv1bGJWw==
-X-Received: by 2002:a05:6102:244c:b0:3c5:ec9a:9347 with SMTP id g12-20020a056102244c00b003c5ec9a9347mr377567vss.5.1673389113334;
-        Tue, 10 Jan 2023 14:18:33 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l16-20020a37f910000000b00704df12317esm7916500qkj.24.2023.01.10.14.18.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 14:18:32 -0800 (PST)
-Message-ID: <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
-Date:   Tue, 10 Jan 2023 14:18:23 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        with ESMTP id S235989AbjAJWvz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 17:51:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245982F7A;
+        Tue, 10 Jan 2023 14:50:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE1561912;
+        Tue, 10 Jan 2023 22:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CDC433D2;
+        Tue, 10 Jan 2023 22:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673391005;
+        bh=+RkdLFz3felJy1/GEptQd9wZ3WaSQVIRl9ertAsb6Lo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uJAOUxYbEnY2lj99q3OGhbUBHfx49rU6a6bHt8u1k85iSLoRdmX22q9K/ZyZ5Hna9
+         +p+AjGai2rrmsaLbiDgS1sUvQTefVtKFkjwHWlSwP05prRqvMn3ge5GDfD37vNMFdQ
+         Ti16k4nvKTQ0Xz4LfiTYi+2OpHeGSyeulxiYO99poOHHDvz05wGc/dKxViIFJoRQIq
+         Pm7MU88zlZq8ruVmhO9JdEJ0SMuX5zs4nE2A0ftfs7nAWBi/NCaliOdJ90mmI9OA2e
+         rPd3322EwGLwsjuA+s54qi7U1iEc636nUQusvKGEBhNwH3nTcMjdsHe543uwgSpmnZ
+         0zCqO1nElAfYA==
+Date:   Tue, 10 Jan 2023 22:49:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
+Message-ID: <Y73rl8feUOnChWKF@sirena.org.uk>
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
- <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
- <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
- <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230106200809.330769-8-william.zhang@broadcom.com>
+ <Y7iW38Fsj0nIewDm@sirena.org.uk>
+ <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
+ <Y7xloRuHk5BHSOCb@sirena.org.uk>
+ <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dsTBb0yv/WOifVKY"
+Content-Disposition: inline
+In-Reply-To: <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+X-Cookie: Live free or die.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 1/10/23 00:40, Krzysztof Kozlowski wrote:
->>> No, it is discouraged in such forms. Family or IP block compatibles
->>> should be prepended with a specific compatible. There were many issues
->>> when people insisted on generic or family compatibles...
->>>
->>>> Otherwise we will have to have a compatible string with chip model for
->>>> each SoC even they share the same IP. We already have more than ten of
->>>> SoCs and the list will increase.  I don't see this is a good solution too.
->>>
->>> You will have to do it anyway even with generic fallback, so I don't get
->>> what is here to gain... I also don't get why Broadcom should be here
->>> special, different than others. Why it is not a good solution for
->>> Broadcom SoCs but it is for others?
->>>
->> I saw a few other vendors like these qcom ones:
->>    qcom,spi-qup.yaml
->>        - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
->>        - qcom,spi-qup-v2.1.1 # for 8974 and later
->>        - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
->>    qcom,spi-qup.yaml
->>        const: qcom,geni-spi
-> 
-> IP block version numbers are allowed when there is clear mapping between
-> version and SoCs using it. This is the case for Qualcomm because there
-> is such clear mapping documented and available for Qualcomm engineers
-> and also some of us (although not public).
-> 
->> I guess when individual who only has one particular board/chip and is
->> not aware of the IP family,  it is understandable to use the chip
->> specific compatible string.
-> 
-> Family of devices is not a versioned IP block.
 
-Would it be acceptable to define for instance:
+--dsTBb0yv/WOifVKY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-- compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+On Mon, Jan 09, 2023 at 12:10:30PM -0800, William Zhang wrote:
+> On 01/09/2023 11:06 AM, Mark Brown wrote:
 
-in which case, having a fallback compatible on the SoC family that sees 
-this IP being deployed is very useful for client programs of the DT 
-(u-boot or kernel). As long as the fallback works, we use it, the day it 
-stops and a quirk needs to be applied because SoC XYZ has a bug, match 
-the SoC XYZ compatible string.
+> > You can put whatever logic is needed in the code - for something like
+> > this an architecture based define isn't ideal but is probably good
+> > enough if need be (though I'd not be surprised if it turned out that
+> > there was also some performance benefit for the MIPS systems too, at
+> > least for smaller transfers).
 
-FWIW, and feel free to rant at me, we have adopted this convention a 
-while ago for STB chips whereby we want bindings to be defined with:
+> I just don't know what other logic I can put in the driver to select
+> interrupt or polling mode.  Only the end user know if performance or cpu
+> usage is more important to their application.
 
-<chip specific compatible>, <version of the IP>, <fallback>
+Usually you can take a reasonable guess as to what would be a good point
+to start switching, typically for short enough transfers the overhead of
+setting up DMA, waiting for interrupts and tearing things down is very
+much larger than the cost of just doing PIO - a bunch of other drivers
+have pick a number logic of some kind, often things like FIFO sizes are
+a good key for where to look.  A lot of the time this is good enough,
+and it means that users have much better facilities for making tradeoffs
+if they have a range of transfer sizes available - it's not an either/or
+thing but based on some features of the individual message/transfer.
 
-and the fallback may, or may not be matched, but defining in does not 
-hurt at all, in fact it dramatically helps with the boot loader looking 
-for specific nodes because it can search for the fallback.
+It is true that for people with heavy SPI traffic or otherwise very
+demanding requirements for a specific system and software stack
+additional tuning might produce better results, exposing some sysfs
+knobs to allow tuning of parameters at runtime would be helpful for them
+and I'd certainly be happy to see that added.
 
-If the version specific compatible is not available, it does not get used.
--- 
-Florian
+--dsTBb0yv/WOifVKY
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO965YACgkQJNaLcl1U
+h9BfgQf/T3FIrGTPXWBtb/Xe+nzT5F6/A5RXyCC+YpHtvFHHnqzXiD8j8sTyxYpk
+ejYT1iJsWVt5un0Fbiu9nijFuOcbdVr0e8ztt0ItyQJpde/+lQt9c6ucwf/0/hwn
+jCnjnQh5OSVmtvpRywW6HzYeEUM4xk1WcWtjgm5yj9tbMdKLx3WER6P6SB/Jtmhp
+EPdgxass3RdBTA9PnZASARpCTMPy2FZI3hUt21GvAQulYlNDWmO3cSpTI3KuCaTI
+a8HCev8ODbdHDO8FoQGjcZuq0tl6DrPuk8LkEQL5WWpd2uUkAtioK30fjM67PfjG
+qLmzXHgc1iWSVR7KYPRuodyqm8t1Kg==
+=5TDj
+-----END PGP SIGNATURE-----
+
+--dsTBb0yv/WOifVKY--
