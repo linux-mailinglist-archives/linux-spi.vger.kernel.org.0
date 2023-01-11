@@ -2,115 +2,420 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E320A664F1A
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jan 2023 23:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500586650D3
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 02:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235620AbjAJWwP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 17:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S232449AbjAKBAX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 20:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbjAJWvz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 17:51:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245982F7A;
-        Tue, 10 Jan 2023 14:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE1561912;
-        Tue, 10 Jan 2023 22:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CDC433D2;
-        Tue, 10 Jan 2023 22:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673391005;
-        bh=+RkdLFz3felJy1/GEptQd9wZ3WaSQVIRl9ertAsb6Lo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uJAOUxYbEnY2lj99q3OGhbUBHfx49rU6a6bHt8u1k85iSLoRdmX22q9K/ZyZ5Hna9
-         +p+AjGai2rrmsaLbiDgS1sUvQTefVtKFkjwHWlSwP05prRqvMn3ge5GDfD37vNMFdQ
-         Ti16k4nvKTQ0Xz4LfiTYi+2OpHeGSyeulxiYO99poOHHDvz05wGc/dKxViIFJoRQIq
-         Pm7MU88zlZq8ruVmhO9JdEJ0SMuX5zs4nE2A0ftfs7nAWBi/NCaliOdJ90mmI9OA2e
-         rPd3322EwGLwsjuA+s54qi7U1iEc636nUQusvKGEBhNwH3nTcMjdsHe543uwgSpmnZ
-         0zCqO1nElAfYA==
-Date:   Tue, 10 Jan 2023 22:49:59 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        with ESMTP id S235662AbjAKBAJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 20:00:09 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CC954D9D
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:00:01 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id x7so2490245qtv.13
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=vEgKLgapYkLpFApfQA0+5WZuidGrMEWqqNOuCo6Jyr4=;
+        b=VWU6/0EU0H4E9opmqBgS6Loj4IRHnA6FOjzSdGfIFE2xpFR2STt2FwPKkz+/Aag55h
+         nSnmu9yjZ8WIZp3AXLV8jU13qSPWffJ0ZD6p9/2hVtQEdiKD/Umnh0iIxrfoPA8F15Bn
+         urHcv3Nj+jP8+nMN+VKPpNGbQB4OSe+nqGbdY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vEgKLgapYkLpFApfQA0+5WZuidGrMEWqqNOuCo6Jyr4=;
+        b=UT/j6mypGj56c4fWt23JcCw+hgTVQ5lGjDSNkAhurZ0qEm4I7aprCfKPRXAzNScSVI
+         filAFXJ86fRPD5N1vjRtI1kHsd7k0nazDdZUegyVwd1ghdNdq7jcjMPi8YTe8OalPRrg
+         upV+6uwUaNGeqJXYZxe5pv++jzgYzjeYoCVqVyx6pNxD+Wyzfi0PvMW0Y2Gz6m9scyCQ
+         ZN5AtENPoWKEACFTYw/kf9eqqTprb6Lt7Pb7u35jh5vkP8hKbQ4MWTt620jAmIyALiY/
+         rPTe0xlnvbtj+DqQ/RvtL539Yqxwf/bWnqFkQaBRht7O8LDnWcvV83t1VAKLFlXzx7q5
+         8rQw==
+X-Gm-Message-State: AFqh2kq9fRJmPl/yfGY1Ft8z5TNtJ4dt978RSWUxWnYlzsqozT+y6qOz
+        6MG3JQJm3B13sBQzBuh6+YbMZg==
+X-Google-Smtp-Source: AMrXdXuU9oDRTVMziIXRsWYqadNF/pNc08qPsiXnW3HfxbivwyaOgHuzXqv/6urihO4ETZMLHlKFjQ==
+X-Received: by 2002:ac8:1e19:0:b0:3a7:242:501 with SMTP id n25-20020ac81e19000000b003a702420501mr106432240qtl.46.1673398800892;
+        Tue, 10 Jan 2023 17:00:00 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05620a034700b007054a238bf2sm8036038qkm.126.2023.01.10.16.59.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Jan 2023 17:00:00 -0800 (PST)
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
-Message-ID: <Y73rl8feUOnChWKF@sirena.org.uk>
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-8-william.zhang@broadcom.com>
- <Y7iW38Fsj0nIewDm@sirena.org.uk>
- <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
- <Y7xloRuHk5BHSOCb@sirena.org.uk>
- <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <0194391a-6aef-3a7d-0037-1f87e12a6b6e@broadcom.com>
+Date:   Tue, 10 Jan 2023 16:59:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dsTBb0yv/WOifVKY"
-Content-Disposition: inline
-In-Reply-To: <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
-X-Cookie: Live free or die.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001e59ea05f1f28562"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+--0000000000001e59ea05f1f28562
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
---dsTBb0yv/WOifVKY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Jan 09, 2023 at 12:10:30PM -0800, William Zhang wrote:
-> On 01/09/2023 11:06 AM, Mark Brown wrote:
 
-> > You can put whatever logic is needed in the code - for something like
-> > this an architecture based define isn't ideal but is probably good
-> > enough if need be (though I'd not be surprised if it turned out that
-> > there was also some performance benefit for the MIPS systems too, at
-> > least for smaller transfers).
+On 01/10/2023 12:40 AM, Krzysztof Kozlowski wrote:
+> On 09/01/2023 20:13, William Zhang wrote:
+>>
+>>
+>> On 01/09/2023 12:56 AM, Krzysztof Kozlowski wrote:
+>>> On 09/01/2023 09:27, William Zhang wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
+>>>>> On 06/01/2023 21:07, William Zhang wrote:
+>>>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
+>>>>>> controller. Add a new compatible string and required fields for the new
+>>>>>> driver.  Also add myself and Kursad as the maintainers.
+>>>>>>
+>>>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>>>>>> ---
+>>>>>>
+>>>>>>     .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
+>>>>>>     1 file changed, 78 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>>> index 45f1417b1213..56e69d4a1faf 100644
+>>>>>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>>> @@ -4,22 +4,51 @@
+>>>>>>     $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
+>>>>>>     $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>     
+>>>>>> -title: Broadcom BCM6328 High Speed SPI controller
+>>>>>> +title: Broadcom Broadband SoC High Speed SPI controller
+>>>>>>     
+>>>>>>     maintainers:
+>>>>>> +
+>>>>>
+>>>>> Drop blank line.
+>>>> will fix in  v2.
+>>>>
+>>>>>
+>>>>>> +  - William Zhang <william.zhang@broadcom.com>
+>>>>>> +  - Kursad Oney <kursad.oney@broadcom.com>
+>>>>>>       - Jonas Gorski <jonas.gorski@gmail.com>
+>>>>>
+>>>>>>     
+>>>>>> +description: |
+>>>>>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
+>>>>>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
+>>>>>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
+>>>>>> +
+>>>>>> +  It has a limitation that can not keep the chip select line active between
+>>>>>> +  the SPI transfers within the same SPI message. This can terminate the
+>>>>>> +  transaction to some SPI devices prematurely. The issue can be worked around by
+>>>>>> +  either the controller's prepend mode or using the dummy chip select
+>>>>>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
+>>>>>> +
+>>>>>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
+>>>>>> +  controller that add the capability to allow the driver to control chip select
+>>>>>> +  explicitly. This solves the issue in the old controller. This new controller
+>>>>>> +  uses the compatible string brcm,bcmbca-hsspi.
+>>>>>> +
+>>>>>>     properties:
+>>>>>>       compatible:
+>>>>>> -    const: brcm,bcm6328-hsspi
+>>>>>> +    enum:
+>>>>>> +      - brcm,bcm6328-hsspi
+>>>>>> +      - brcm,bcmbca-hsspi
+>>>>>
+>>>>> bca seems quite unspecific. Your description above mentions several
+>>>>> model numbers and "bca" is not listed as model. Compatibles cannot be
+>>>>> generic.
+>>>> "bca" is not model number, rather it is a group (broadband carrier
+>>>> access) of chip that share the same spi host controller IP. Agree it is
+>>>> not particularly specific but it differentiate from other broadcom spi
+>>>> controller ip used by other groups.  We just don't have a specific name
+>>>> for this spi host controller but can we treat bcmbca as the ip name?
+>>>
+>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>> should be prepended with a specific compatible. There were many issues
+>>> when people insisted on generic or family compatibles...
+>>>
+>>>> Otherwise we will have to have a compatible string with chip model for
+>>>> each SoC even they share the same IP. We already have more than ten of
+>>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>>
+>>> You will have to do it anyway even with generic fallback, so I don't get
+>>> what is here to gain... I also don't get why Broadcom should be here
+>>> special, different than others. Why it is not a good solution for
+>>> Broadcom SoCs but it is for others?
+>>>
+>> I saw a few other vendors like these qcom ones:
+>>    qcom,spi-qup.yaml
+>>        - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>        - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>        - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>    qcom,spi-qup.yaml
+>>        const: qcom,geni-spi
+> 
+> IP block version numbers are allowed when there is clear mapping between
+> version and SoCs using it. This is the case for Qualcomm because there
+> is such clear mapping documented and available for Qualcomm engineers
+> and also some of us (although not public).
+> 
+>> I guess when individual who only has one particular board/chip and is
+>> not aware of the IP family,  it is understandable to use the chip
+>> specific compatible string.
+> 
+> Family of devices is not a versioned IP block.
+> 
+>> But when company works on it, we have the
+>> visibility and access to all the chips and ip blocks in the family and
+>> IMHO it is very reasonable to use the IP family name for the same IP as
+>> these examples shows.
+> 
+> No, because family of devices is not a versioned IP block. I wrote
+> before that families and wildcards are not allowed.
+> 
+>> Are you saying these are not good example to
+>> follow?
+> 
+> It's nothing related to your case.
+> 
+>> What are the issues with generic or family compatibles?
+>>   Could
+>> you please elaborate?
+> 
+> They stop matching and some point and cause ABI breaks. We had several
+> cases where engineer believed "I have here family of devices" and then
+> later it turned out that the family is different.
+> 
+> 
+>>
+>>>
+>>>
+>>>>
+>>>>>
+>>>>>>     
+>>>>>>       reg:
+>>>>>> -    maxItems: 1
+>>>>>> +    items:
+>>>>>> +      - description: main registers
+>>>>>> +      - description: miscellaneous control registers
+>>>>>> +    minItems: 1
+>>>>>> +
+>>>>>> +  reg-names:
+>>>>>> +    items:
+>>>>>> +      - const: hsspi
+>>>>>> +      - const: spim-ctrl
+>>>>>
+>>>>> This does not match reg
+>>>> Do you mean it does not match the description?
+>>>
+>>> No. reg can be 1 item but you state reg-names cannot. These are always
+>>> the same. If one is 1 item, second is as well.
+>>>
+>> I'll drop the "minItems: 1" from the reg property then.
+> 
+> Then it won't be correct, because it would mean two items are required
+> always.
+Ah you are right. Add minItems: 1 for reg-name then.
+> 
+>>
+>>>>>
+>>>>>>     
+>>>>>>       clocks:
+>>>>>>         items:
+>>>>>> -      - description: spi master reference clock
+>>>>>> -      - description: spi master pll clock
+>>>>>> +      - description: SPI master reference clock
+>>>>>> +      - description: SPI master pll clock
+>>>>>
+>>>>> Really? You just added it in previous patch, didn't you?
+>>>> The previous patch was just word to word conversion of the text file.  I
+>>>> will update that patch to include this change.
+>>>>
+>>>>>
+>>>>>>     
+>>>>>>       clock-names:
+>>>>>>         items:
+>>>>>> @@ -29,12 +58,43 @@ properties:
+>>>>>>       interrupts:
+>>>>>>         maxItems: 1
+>>>>>>     
+>>>>>> +  brcm,use-cs-workaround:
+>>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>>> +    description: |
+>>>>>> +      Enable dummy chip select workaround for SPI transfers that can not be
+>>>>>> +      supported by the default controller's prepend mode, i.e. delay or cs
+>>>>>> +      change needed between SPI transfers.
+>>>>>
+>>>>> You need to describe what is the workaround.
+>>>> Will do.
+>>>>>
+>>>>>> +
+>>>>>>     required:
+>>>>>>       - compatible
+>>>>>>       - reg
+>>>>>>       - clocks
+>>>>>>       - clock-names
+>>>>>> -  - interrupts
+>>>>>> +
+>>>>>> +allOf:
+>>>>>> +  - $ref: "spi-controller.yaml#"
+>>>>>
+>>>>> No quotes. How this is related to this patch?
+>>>> Will remove quote and put it in patch 1.
+>>>>>
+>>>>>> +  - if:
+>>>>>> +      properties:
+>>>>>> +        compatible:
+>>>>>> +          contains:
+>>>>>> +            enum:
+>>>>>> +              - brcm,bcm6328-hsspi
+>>>>>> +    then:
+>>>>>> +      properties:
+>>>>>> +        reg:
+>>>>>> +          minItems: 1
+>>>>>
+>>>>> Drop.
+>>>>>
+>>>>> reg-names now do not match.
+>>>> Don't quite understand your comment. What do I need to drop and what is
+>>>> not matched?
+>>>
+>>> You need to add constraints for reg-names, same way as for reg.
+>>> Disallowing the reg-names also could work, but there won't be benefit in
+>>> it. Better to have uniform DTS.
+>>>
+>> I agree it is better to have the uniform DTS but the situation here is
+>> that the brcm,bcm6328-hsspi does not require reg name since there is
+>> only one register needed and it was already used in many chip dts for
+>> long time.  If I enforce it to have the corresponding reg name, that
+> 
+> No one told you to enforce to have a reg-names.
+> 
+>> could potentially break the compatibility of those old device if the
+>> driver change to use reg name, right?
+> 
+> How compatibility is broken by some optional, unrelated property?
+> 
+I think I misunderstand what you said.  You basically want the reg-name 
+minItem/maxItem constraints for brcm,bcm6328-hsspi compatible as well so 
+it is consistent for all the compatibles? I was confused and thought it 
+is not needed as reg-name is not required for brcm,bcm6328-hsspi compatible.
 
-> I just don't know what other logic I can put in the driver to select
-> interrupt or polling mode.  Only the end user know if performance or cpu
-> usage is more important to their application.
+> Best regards,
+> Krzysztof
+> 
 
-Usually you can take a reasonable guess as to what would be a good point
-to start switching, typically for short enough transfers the overhead of
-setting up DMA, waiting for interrupts and tearing things down is very
-much larger than the cost of just doing PIO - a bunch of other drivers
-have pick a number logic of some kind, often things like FIFO sizes are
-a good key for where to look.  A lot of the time this is good enough,
-and it means that users have much better facilities for making tradeoffs
-if they have a range of transfer sizes available - it's not an either/or
-thing but based on some features of the individual message/transfer.
+--0000000000001e59ea05f1f28562
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-It is true that for people with heavy SPI traffic or otherwise very
-demanding requirements for a specific system and software stack
-additional tuning might produce better results, exposing some sysfs
-knobs to allow tuning of parameters at runtime would be helpful for them
-and I'd certainly be happy to see that added.
-
---dsTBb0yv/WOifVKY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO965YACgkQJNaLcl1U
-h9BfgQf/T3FIrGTPXWBtb/Xe+nzT5F6/A5RXyCC+YpHtvFHHnqzXiD8j8sTyxYpk
-ejYT1iJsWVt5un0Fbiu9nijFuOcbdVr0e8ztt0ItyQJpde/+lQt9c6ucwf/0/hwn
-jCnjnQh5OSVmtvpRywW6HzYeEUM4xk1WcWtjgm5yj9tbMdKLx3WER6P6SB/Jtmhp
-EPdgxass3RdBTA9PnZASARpCTMPy2FZI3hUt21GvAQulYlNDWmO3cSpTI3KuCaTI
-a8HCev8ODbdHDO8FoQGjcZuq0tl6DrPuk8LkEQL5WWpd2uUkAtioK30fjM67PfjG
-qLmzXHgc1iWSVR7KYPRuodyqm8t1Kg==
-=5TDj
------END PGP SIGNATURE-----
-
---dsTBb0yv/WOifVKY--
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICdaNhqf9nmSgiFe4jrj/BtLLjyi
+Guc9FaGP/z+Vw+PYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTAxMDAwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAPB5g8j2brUFhmGDMuJq/jWtZjqBmma0EtrMfceJWi3SBA
+iNx6hVKVuakvi0wpXpYS19zuvV3UA1guch22sMBQTj1x29oRWmsKZSfLf3TSprZsh88QgFLJYlpI
+i10nF7DaMY1LO0KL69aGQT7cPUwyO6oICnLXTL1cqUrxi/vOxff+9J61nlpsYKjblW3gh8MBbX+t
+z85PZUcVASyJoGgY+xe7WUVUEEaxZQ8aWRE909+rrXwaDBmEASXwvaDNeMWffNqOi3jKvNnrfUqt
+nFQSErCZm9ypgfnuY2HUzuSkC478pWEvsyp34TFqASFscbHkxsaWVTh507z+8PHxt1Uy
+--0000000000001e59ea05f1f28562--
