@@ -2,82 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6597D6662F3
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 19:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBB76663E8
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 20:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbjAKSo2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Jan 2023 13:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S234387AbjAKTpM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Jan 2023 14:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjAKSo1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 13:44:27 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53EDF26
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 10:44:25 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 36so11152960pgp.10
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 10:44:25 -0800 (PST)
+        with ESMTP id S234294AbjAKToq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 14:44:46 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9863A2
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:42:59 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id h192so11265952pgc.7
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:42:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=rm/TekH17MYWhc83FXhY1OZ8K681O6BF5vC2qvnXAak=;
-        b=ESlw244f7OSwOedLwEIBmeY74JyVjBBO5cw/H32bX+9Yv922t5mW+uqcw3aGANx7/y
-         1XV0Q1j8sWDvoqnvb8pnddTzpxCi2/3jba2ytZ+9XngwudA4G/GzVpNPJ+kWKvbFEp96
-         NBQine42ifpxaGVKGy7y1+bxUHPQb7rxKvkuo=
+        bh=opiRbVbJMephLzpjsC3XKwkmycT3+yFeXpYqZppP32A=;
+        b=Z2q/CpskAMUYeCrY0t4EeaEASKTIcDE7Qm9kpGvaeTHC9xQ2j6mwynXsMevkpA/XUz
+         /qls14HNKZcZrMB0kNZj574WmXWp1wxi6QLN9J/lv1H32YVsCW/LvTr44QTn0uDWoXDV
+         9hps/9K6k/OuhSpGXJ44STA+r5JTfInLKpbV0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rm/TekH17MYWhc83FXhY1OZ8K681O6BF5vC2qvnXAak=;
-        b=7WhkixfhJiDVPujVgZT6dyXxGo9TRlXH7bXWykDYoJfNvRFZ81SjKgElPjWTWp7xP8
-         sHafT627AJM6TQdnirGbGNn3irz/ijQJpyN23dWqDd2DdkkNQQPQRxCUtJz/Pux69Fuk
-         Z6TtIrSnOER3ByAd7mCiquReNt9mEqV61Jt/GhOa2TUkLBq7gr1Ko4UMeDN85m63X3I2
-         CKUZLhZC1iRqeH1GJS1fPIU4qOPeYwIZ4RCZGgEAfQPtoY+1RaVJjieFXMdYSeOj/gVr
-         taocojyVAVn3qd71D9FN4Yut0eqC4DayWtbkrjWnCkHEMKGNs2OwkwSnzT425QWEpKOE
-         l+PA==
-X-Gm-Message-State: AFqh2kqY0Ty0VzJ3hfXZ64jubkyztLW3D2haAohtodATDW49ODCFVyuF
-        s4PDp8zRivmw7EkjmlYJtQIE1Q==
-X-Google-Smtp-Source: AMrXdXsrn2eI8eeQVpslDkNqDRG+ZZlMr1sgJv3/TClnObVN/UtD03GHAO6AOAU30jL+h/7GfZJwcA==
-X-Received: by 2002:aa7:9796:0:b0:58a:66a8:edf5 with SMTP id o22-20020aa79796000000b0058a66a8edf5mr7576017pfp.3.1673462665132;
-        Wed, 11 Jan 2023 10:44:25 -0800 (PST)
+        bh=opiRbVbJMephLzpjsC3XKwkmycT3+yFeXpYqZppP32A=;
+        b=L6d9oUQIThqu9LrTZ7pzy8SHV5wKW3gHxrfMHA1AlbEpevsQN+HfHKhgly/rxq832z
+         mtYfodcewMv880dx/QxZcWrXVAxWkntL7dYSaeNfgviBxbopjp64Tqt3uLNZWwRtsB0m
+         LC3pBuF7/ZV8aFnpQlJ7iD/WEU2lCR0W5ppA2hmhXgh4Z6cD1TxBkrQUzar9TgQkNLc0
+         Go/ISKZmia2tS8T0VlIQCAhNMzU4A1I2IZhmInKnfdXx9tK9H4MlotZRG4fTsCQs35o+
+         6lN0mqm981VZoi0ytWR9AGKGXfTIq74bKIFN+WaeU/t0Qs0AZyUkCNToUSi5rfNrVMKJ
+         JcnQ==
+X-Gm-Message-State: AFqh2krJbSjU/Bc/U4abk+NBqcsTL3pb5kiYw1YqpSwca3g0Bm8jqAqJ
+        HUNFllV430MQbTifndGsKlg3beIjOTHI2pcM
+X-Google-Smtp-Source: AMrXdXvNNK0XkXapqjQctrm/+MsFnPDrgGp7KuO6J4KmgGlGyXKLl1fMqEc8z6c41uDpxMMjhoqjMQ==
+X-Received: by 2002:aa7:93ad:0:b0:58a:9619:9b30 with SMTP id x13-20020aa793ad000000b0058a96199b30mr3589663pff.10.1673466178905;
+        Wed, 11 Jan 2023 11:42:58 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa7942f000000b00587e3bd696dsm7190396pfo.90.2023.01.11.10.44.23
+        by smtp.gmail.com with ESMTPSA id 184-20020a6206c1000000b005623f96c24bsm10276514pfg.89.2023.01.11.11.42.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 10:44:24 -0800 (PST)
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        Wed, 11 Jan 2023 11:42:58 -0800 (PST)
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
         linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
- <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
- <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
- <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
- <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
- <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
- <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
- <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
+ <Y7xrhjhhY3g5DE25@sirena.org.uk>
+ <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
+ <Y73WL3Gwo6w6dJJr@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
-Date:   Wed, 11 Jan 2023 10:44:22 -0800
+Message-ID: <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
+Date:   Wed, 11 Jan 2023 11:42:57 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+In-Reply-To: <Y73WL3Gwo6w6dJJr@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b9023705f20163a6"
+        boundary="0000000000002837e805f20235cb"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -88,101 +80,67 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---000000000000b9023705f20163a6
-Content-Type: text/plain; charset=utf-8; format=flowed
+--0000000000002837e805f20235cb
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/11/2023 10:12 AM, Krzysztof Kozlowski wrote:
-> On 11/01/2023 19:04, William Zhang wrote:
->>
->>
->> On 01/11/2023 01:02 AM, Krzysztof Kozlowski wrote:
->>> On 10/01/2023 23:18, Florian Fainelli wrote:
->>>> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
->>>>>>> No, it is discouraged in such forms. Family or IP block compatibles
->>>>>>> should be prepended with a specific compatible. There were many issues
->>>>>>> when people insisted on generic or family compatibles...
->>>>>>>
->>>>>>>> Otherwise we will have to have a compatible string with chip model for
->>>>>>>> each SoC even they share the same IP. We already have more than ten of
->>>>>>>> SoCs and the list will increase.  I don't see this is a good solution too.
->>>>>>>
->>>>>>> You will have to do it anyway even with generic fallback, so I don't get
->>>>>>> what is here to gain... I also don't get why Broadcom should be here
->>>>>>> special, different than others. Why it is not a good solution for
->>>>>>> Broadcom SoCs but it is for others?
->>>>>>>
->>>>>> I saw a few other vendors like these qcom ones:
->>>>>>      qcom,spi-qup.yaml
->>>>>>          - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
->>>>>>          - qcom,spi-qup-v2.1.1 # for 8974 and later
->>>>>>          - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
->>>>>>      qcom,spi-qup.yaml
->>>>>>          const: qcom,geni-spi
->>>>>
->>>>> IP block version numbers are allowed when there is clear mapping between
->>>>> version and SoCs using it. This is the case for Qualcomm because there
->>>>> is such clear mapping documented and available for Qualcomm engineers
->>>>> and also some of us (although not public).
->>>>>
->>>>>> I guess when individual who only has one particular board/chip and is
->>>>>> not aware of the IP family,  it is understandable to use the chip
->>>>>> specific compatible string.
->>>>>
->>>>> Family of devices is not a versioned IP block.
->>>>
->>>> Would it be acceptable to define for instance:
->>>>
->>>> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
->>>
->>> Yes, this is perfectly valid. Although it does not solve William
->>> concerns because it requires defining specific compatibles for all of
->>> the SoCs.
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> As I mentioned in another email,  I would be okay to use these
->> compatibles to differentiate by ip rev and to conforms to brcm convention:
->> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.0", "brcm,bcmbca-hsspi";
->> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi";
+On 01/10/2023 01:18 PM, Mark Brown wrote:
+> On Mon, Jan 09, 2023 at 12:43:53PM -0800, William Zhang wrote:
+>> On 01/09/2023 11:31 AM, Mark Brown wrote:
 > 
+>>> If this relies on software control of the chip select (which is what I
+>>> *think* your dummy CS workaround thing is about, the other patch about
+>>> that is really hard to understand) then I'm confused about what the
+>>> advantage is?
 > 
-> Drop the version in such case, no benefits. I assume XYZ is the SoC
-> model, so for example 6868.
+>> Dummy CS workaround is implemented by Jonas when he first upstream the
+>> driver. It does not work on all the board designs so prepend mode is
+>> introduced. I have some detail explanation on this in [PATCH 10/16] spi:
+>> bcm63xx-hsspi: Make dummy cs workaround as an option.
 > 
-Yes XYZ is the SoC model
->>
->> In the two drivers I included in this series, it will be bound to
->> brcm,bcmbca-hsspi-v1.0 (in additional to brcm,bcm6328-hsspi) and
->> brcm,bcmbca-hsspi-v1.1 respectively.  This way we don't need to update
->> the driver with a new soc specific compatible whenever a new chips comes
->> out.
+> Yes, it is the description in patch 10 that I was having a lot of
+> trouble following.
 > 
-> I don't understand why do you bring it now as an argument. You defined
-> before that your driver will bind to the generic bcmbca compatible, so
-> now it is not enough?
-> 
-No as we are adding chip model specific info here.  The existing driver 
-spi-bcm63xx-hsspi.c only binds to brcm,bcm6328-hsspi. This driver 
-supports all the chips with rev1.0 controller so I am using this 6328 
-string for other chips with v1.0 in the dts patch, which is not ideal.
-Now I have to add more compatible to this driver and for each new chip 
-with 1.0 in the future if any.
+Sorry that my description is not clear...  I can certainly improve it if 
+you can let me know what is not clear.
 
-With all the thoughts from you and Florian,  I think it is better to use 
-rev compatible in the driver but add on chip model compatible in the dts.
+>> The controller only work in one mode and that's why driver code has some
+>> dependency between these two modes. The advantage of the premode is it works
+>> on all hw design however it does not support all types mem_ops operation.
+>> That is why you see the patch 14 to disable the dual io mem op. But dummy cs
+>> workaround can support this and in case there is such pattern from non mem
+>> op spi transaction, dummy cs workaround can be used as long as it does not
+>> have the board design limitation.   So neither one is perfect but hopefully
+>> with both options available, we can cover all the cases.
+> 
+> We can't switch modes per message?
+> 
+Technically yes. If the code finds the message is not prependable,  it 
+can try to use dummy cs workaround to transfer the message but it may 
+also fail if the board design does not work with this workaround. I can 
+add this if you think this is good to have.
+
+>> You mentioned there is some existing logic to rewrite messages to match
+>> driver constraints in the core driver.  I didn't see it when I did a quick
+>> search on spi.c. I will take a deep look into the file. But if you can point
+>> me where this logic is so I can be sure that I am looking at the right place
+>> and will double check if this can be done or not in the core level.  Thanks!
+> 
+> spi_replace_transfers().
+> 
+Okay I saw this function is used by spi_split_transfers_maxsize which a 
+few drivers use to limit the transfer size and it make sense.  I can 
+come up something like spi_merge_transfers to be used by my driver's 
+prepend function.  But it has the same issue I mentioned early as the 
+these tx, rx transfers have the dependency on the order they present in 
+the original transfer list for my prepend function to work.  And for the 
+same reason, it won't be generally useful for other drivers.
 
 
-
-> Best regards,
-> Krzysztof
-> 
-
---000000000000b9023705f20163a6
+--0000000000002837e805f20235cb
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -253,13 +211,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPt6jCv3WfzRLoP/WY+sic5M7lvU
-Er5xihcrGqPZ6ULUMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExMTE4NDQyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMLfNOdQRzVV0loYnkw/AwZdfVJP
+xK+sKCbugyo2LTCLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTE5NDI1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBIRXSRpSeSdqbQmhpHDMiEWjNrwzQh2BY4ckT/3a1Oupkg
-6ZkEBJn384MFPxS4s+KwYXaFBRMTq/I5QVXcr6jlK+hk6nFQSvnR+EC9b0fBlge4xINovQZVIOuQ
-0IBeT3GA6n+5GKSpWRqDdqX2KIApwGfmqeCWG/DhXdhtS4S8duZQMyxIEHoku/NzoQmB/C54k8ZN
-aWzsSGkT2MjIubHcuonVJRou9crfiic3gGnxTc0Pm9MbfPGCAB9JzCwJbWk7htvs83bp5Kb5FgJD
-QFPwLuQsKMJRZhwhpXcROEvzzcE0J+xDj81o2ojcbjWb2FG6wA8hSjN1UOto+UPRmX3+
---000000000000b9023705f20163a6--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAaqpjhmwja7rPjmqyCog0PEc5zV20ZDl3hYH2C4tNFHc02
+hhAoRIZL0B4CcFnMGt1V6Cd5iO5giqnMTNV3Mh1Iuoi2q0fjCc1DSOntwVVSg1B2Vh0+KfTG8Fr4
+ANECLioRk+DLl9YYot1qZDOE6Bn0xTpc0YQIODEqfeKtf8fHT4onsHI27oiXN/04hR0ontOFTSkv
+2WL9Xc8DZQnvXvS+lGvSNkiF6i3d3diDxQDrLjpdz4R9Q0K2fKTXO0f/KruIHr3Rtyy/UQzzMVTG
+PSBphnh82+L78/y516LF2YxwB3a3wNMNrMMV2SwTb60zZ83rnDfF/UI+36hY6aIasYWq
+--0000000000002837e805f20235cb--
