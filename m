@@ -2,74 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBB76663E8
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 20:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99C96663FD
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 20:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbjAKTpM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Jan 2023 14:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S235713AbjAKTtG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Jan 2023 14:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234294AbjAKToq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 14:44:46 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9863A2
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:42:59 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id h192so11265952pgc.7
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:42:59 -0800 (PST)
+        with ESMTP id S230514AbjAKTsU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 14:48:20 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E5620E
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:48:19 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id d10so11258711pgm.13
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:48:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=opiRbVbJMephLzpjsC3XKwkmycT3+yFeXpYqZppP32A=;
-        b=Z2q/CpskAMUYeCrY0t4EeaEASKTIcDE7Qm9kpGvaeTHC9xQ2j6mwynXsMevkpA/XUz
-         /qls14HNKZcZrMB0kNZj574WmXWp1wxi6QLN9J/lv1H32YVsCW/LvTr44QTn0uDWoXDV
-         9hps/9K6k/OuhSpGXJ44STA+r5JTfInLKpbV0=
+        bh=enAhZlFkGrAGYyPjDKPsiFGN+sHjzn84LwIDmt42nLU=;
+        b=MRw4qhgWmByobzfodVcZY17e9KBuWftxoVfdUZCIf3PIfSiY6O5Vw8UMPOoIPoFlj5
+         AOqNsX17DfC33uq7Ysm3+9FqwOrPfaqFdkApfNbEysfHojR5om88vtrNi/d393s04X1+
+         j0TWaaJI24QR8ISSIhdVNS0Yw5O7z1LT4RlH8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=opiRbVbJMephLzpjsC3XKwkmycT3+yFeXpYqZppP32A=;
-        b=L6d9oUQIThqu9LrTZ7pzy8SHV5wKW3gHxrfMHA1AlbEpevsQN+HfHKhgly/rxq832z
-         mtYfodcewMv880dx/QxZcWrXVAxWkntL7dYSaeNfgviBxbopjp64Tqt3uLNZWwRtsB0m
-         LC3pBuF7/ZV8aFnpQlJ7iD/WEU2lCR0W5ppA2hmhXgh4Z6cD1TxBkrQUzar9TgQkNLc0
-         Go/ISKZmia2tS8T0VlIQCAhNMzU4A1I2IZhmInKnfdXx9tK9H4MlotZRG4fTsCQs35o+
-         6lN0mqm981VZoi0ytWR9AGKGXfTIq74bKIFN+WaeU/t0Qs0AZyUkCNToUSi5rfNrVMKJ
-         JcnQ==
-X-Gm-Message-State: AFqh2krJbSjU/Bc/U4abk+NBqcsTL3pb5kiYw1YqpSwca3g0Bm8jqAqJ
-        HUNFllV430MQbTifndGsKlg3beIjOTHI2pcM
-X-Google-Smtp-Source: AMrXdXvNNK0XkXapqjQctrm/+MsFnPDrgGp7KuO6J4KmgGlGyXKLl1fMqEc8z6c41uDpxMMjhoqjMQ==
-X-Received: by 2002:aa7:93ad:0:b0:58a:9619:9b30 with SMTP id x13-20020aa793ad000000b0058a96199b30mr3589663pff.10.1673466178905;
-        Wed, 11 Jan 2023 11:42:58 -0800 (PST)
+        bh=enAhZlFkGrAGYyPjDKPsiFGN+sHjzn84LwIDmt42nLU=;
+        b=6gAhW0OctBXCRgTJ2+DKDA2w6V5VHYnp/G1uQ3M0gN7+bIYOUHiWcoa1fDNjMYh0bx
+         vtv3ZfDBGbMKTUvrIRYf0SBNZI/MMiUjuqBiQUj3AbGkP+VtowipVjF6hD48JRjHG19O
+         CSgZNs6QaMHEjohuXuDwCO/L2fnwQ1ewsm4d1lORPvvzxPUVhxZOJ3jCf9Svg7UXp8GQ
+         +Z/KmAzNT2najvMIX4IyXi/s8FkqzA+J3L/9IvvD632Xxui2dQUvO+vxUCI1AWIbv5gA
+         CKPRwPCVXIUoMGNyhNUzEwWB4GUFw8ns2lBgQThnHZxqHRQ7op22C+8cAfB2YDJk1EMS
+         EI2w==
+X-Gm-Message-State: AFqh2kremzx2anoYc5SSplSnmBEjunFMJTOrt2zMPX38MqmHA1VvNv2V
+        RFZdLJkmOZtQBL6oVNcSakD4eg==
+X-Google-Smtp-Source: AMrXdXu70lr36Umvn0O72GVI5dkgMQUBwczSrT6+XK7TiZZGrY3ymN7j3qMyMsYvs6V7/JfUSn7RUw==
+X-Received: by 2002:a05:6a00:72a:b0:57d:56f1:6ae7 with SMTP id 10-20020a056a00072a00b0057d56f16ae7mr62388860pfm.33.1673466498307;
+        Wed, 11 Jan 2023 11:48:18 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 184-20020a6206c1000000b005623f96c24bsm10276514pfg.89.2023.01.11.11.42.57
+        by smtp.gmail.com with ESMTPSA id u127-20020a626085000000b00580fb018e4bsm6607563pfb.211.2023.01.11.11.48.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 11:42:58 -0800 (PST)
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+        Wed, 11 Jan 2023 11:48:17 -0800 (PST)
+Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
+ property
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
- <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
- <Y7xrhjhhY3g5DE25@sirena.org.uk>
- <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
- <Y73WL3Gwo6w6dJJr@sirena.org.uk>
+ <20230106200809.330769-4-william.zhang@broadcom.com>
+ <Y7iPS48viBg0QRok@sirena.org.uk>
+ <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
+ <CAL_JsqJ7kr-6xs53NYJufem=wXnXVRnj3-1t1rG+W6g09kJ3ew@mail.gmail.com>
+ <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
+ <Y7xosoZMJEwRi1ok@sirena.org.uk>
+ <f55ab390-a784-d598-8d0e-b78040fdbb73@broadcom.com>
+ <Y73gJhlzHz6waIvf@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
-Date:   Wed, 11 Jan 2023 11:42:57 -0800
+Message-ID: <a92a9107-66d6-adb2-e11b-2e9bccda0c81@broadcom.com>
+Date:   Wed, 11 Jan 2023 11:48:16 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y73WL3Gwo6w6dJJr@sirena.org.uk>
+In-Reply-To: <Y73gJhlzHz6waIvf@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002837e805f20235cb"
+        boundary="000000000000344b9205f20248a8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -80,67 +85,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---0000000000002837e805f20235cb
+--000000000000344b9205f20248a8
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/10/2023 01:18 PM, Mark Brown wrote:
-> On Mon, Jan 09, 2023 at 12:43:53PM -0800, William Zhang wrote:
->> On 01/09/2023 11:31 AM, Mark Brown wrote:
+On 01/10/2023 02:01 PM, Mark Brown wrote:
+> On Mon, Jan 09, 2023 at 12:18:09PM -0800, William Zhang wrote:
 > 
->>> If this relies on software control of the chip select (which is what I
->>> *think* your dummy CS workaround thing is about, the other patch about
->>> that is really hard to understand) then I'm confused about what the
->>> advantage is?
+>> This setting is set per spi message for particular chip select of the device
+>> when starting the message through bcm63xx_hsspi_set_clk function and restore
+>> to default(clock gating) when message is done through
+>> bcm63xx_hsspi_restore_clk_gate.
 > 
->> Dummy CS workaround is implemented by Jonas when he first upstream the
->> driver. It does not work on all the board designs so prepend mode is
->> introduced. I have some detail explanation on this in [PATCH 10/16] spi:
->> bcm63xx-hsspi: Make dummy cs workaround as an option.
+> In that case I am extremely confused about what the feature is supposed
+> to do.  The description says:
 > 
-> Yes, it is the description in patch 10 that I was having a lot of
-> trouble following.
+> +  brcm,no-clk-gate:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Some SPI device such as Broadcom ISI based voice daughtercard requires
+> +SPI
+> +      clock running even when chip select is deasserted. By default the
+> +      controller turns off or gate the clock when cs is not active to save
+> +      power. This flag tells the controller driver to keep the clock running
+> +      when chip select is not active.
 > 
-Sorry that my description is not clear...  I can certainly improve it if 
-you can let me know what is not clear.
+> 
+> which to me sounds like the clock should never be turned off and instead
+> left running at all times.  Switching back to clock gating after sending
+> the message doesn't seem to correspond to the above at all, the message
+> being done would normally also be the point at which chip select is
+> deasserted.
+> 
+This feature is used by our voice team and as far I can tell, it is used 
+to keep clock running between the transfers within the same message. 
+But now that we have prepend mode to combine to one transfer or dummy 
+workaround to keep cs always active between transfers, this indeed does 
+not seems right.   I will have to talk to the voice team why this is 
+still needed and get back here.
 
->> The controller only work in one mode and that's why driver code has some
->> dependency between these two modes. The advantage of the premode is it works
->> on all hw design however it does not support all types mem_ops operation.
->> That is why you see the patch 14 to disable the dual io mem op. But dummy cs
->> workaround can support this and in case there is such pattern from non mem
->> op spi transaction, dummy cs workaround can be used as long as it does not
->> have the board design limitation.   So neither one is perfect but hopefully
->> with both options available, we can cover all the cases.
-> 
-> We can't switch modes per message?
-> 
-Technically yes. If the code finds the message is not prependable,  it 
-can try to use dummy cs workaround to transfer the message but it may 
-also fail if the board design does not work with this workaround. I can 
-add this if you think this is good to have.
-
->> You mentioned there is some existing logic to rewrite messages to match
->> driver constraints in the core driver.  I didn't see it when I did a quick
->> search on spi.c. I will take a deep look into the file. But if you can point
->> me where this logic is so I can be sure that I am looking at the right place
->> and will double check if this can be done or not in the core level.  Thanks!
-> 
-> spi_replace_transfers().
-> 
-Okay I saw this function is used by spi_split_transfers_maxsize which a 
-few drivers use to limit the transfer size and it make sense.  I can 
-come up something like spi_merge_transfers to be used by my driver's 
-prepend function.  But it has the same issue I mentioned early as the 
-these tx, rx transfers have the dependency on the order they present in 
-the original transfer list for my prepend function to work.  And for the 
-same reason, it won't be generally useful for other drivers.
-
-
---0000000000002837e805f20235cb
+--000000000000344b9205f20248a8
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -211,13 +198,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMLfNOdQRzVV0loYnkw/AwZdfVJP
-xK+sKCbugyo2LTCLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExMTE5NDI1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJTXU/3646uoT2YllJWcPXEJ6CIa
+INxdNPLnxKnMHtx1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTE5NDgxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAaqpjhmwja7rPjmqyCog0PEc5zV20ZDl3hYH2C4tNFHc02
-hhAoRIZL0B4CcFnMGt1V6Cd5iO5giqnMTNV3Mh1Iuoi2q0fjCc1DSOntwVVSg1B2Vh0+KfTG8Fr4
-ANECLioRk+DLl9YYot1qZDOE6Bn0xTpc0YQIODEqfeKtf8fHT4onsHI27oiXN/04hR0ontOFTSkv
-2WL9Xc8DZQnvXvS+lGvSNkiF6i3d3diDxQDrLjpdz4R9Q0K2fKTXO0f/KruIHr3Rtyy/UQzzMVTG
-PSBphnh82+L78/y516LF2YxwB3a3wNMNrMMV2SwTb60zZ83rnDfF/UI+36hY6aIasYWq
---0000000000002837e805f20235cb--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBw6UcppnhDIdHOoGrPkZ9QgQAfUt5gM2pgpR0gX+zQxaau
+evBO92WFkc6sReU2crhInCUsyUx5PDqf+/xS6DUAr5gMzkmRZkOXjFDXPAMTDtJpuEBmondW/dJy
+XRYoDbGB5UKgf/+JbxZRrAuVyJr+a0gIF0C/OCuU/6qa1t7Vo1GccLPxsLcwye9f5ACWccBm08zQ
+Any+8xWMwB1rBhYpTlnYDdBQbtx1B7Ut0FgWm3Bccdk7/shHqVq1bD1z/eUIpzLbK5ojP0mJEuyr
+XE4oqCdeuAxNk/sQa1N/oHBU5bZ+04y4gR2b63GOxZW/TDkElMe+USYujryXNTApuQTn
+--000000000000344b9205f20248a8--
