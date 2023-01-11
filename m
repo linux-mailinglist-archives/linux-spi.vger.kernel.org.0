@@ -2,52 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A74A66657A
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 22:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAD2666655
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 23:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbjAKVTo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Jan 2023 16:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S232580AbjAKWl6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Jan 2023 17:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjAKVTm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 16:19:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBCEB57;
-        Wed, 11 Jan 2023 13:19:41 -0800 (PST)
+        with ESMTP id S234740AbjAKWlu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 17:41:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF06C222;
+        Wed, 11 Jan 2023 14:41:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA31AB81D73;
-        Wed, 11 Jan 2023 21:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40444C433EF;
-        Wed, 11 Jan 2023 21:19:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A35B6B81D76;
+        Wed, 11 Jan 2023 22:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D472DC433D2;
+        Wed, 11 Jan 2023 22:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673471978;
-        bh=MPlb+QHocflpiJ0Q3JQrEliJMD8CbH2Y/klzRCc5T7Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dk2jyBMvwl+s7sljuzsQkfK/9/zC7d474L6znon0/CTWl4mW5CrquyW0dZ5PMxE9P
-         DOJ6cx1/fE1+uQuLd4fRf/cERpq8w84bmkw4xAigop4lK6gNSrlnqrSXk5e+0dG0Q7
-         wtEnmKlu/BMlmAv5jBB7VnjVe9aWj7PrEAA9xFdNLGkEwhbVyo7pkLQVPkEgBjndbS
-         kr124r5lKeXevOevfjyxiqNz2DJRpmj2r8sUlcyQOVv/hO7jJn9/zj0yI54tQkQywO
-         rrU66W7RceiLykQzmGQWvKbdiWlxvvEEi/c2SJEhIkPP0T9UgKsgzkpCC/gEuvb3tf
-         WdEX06ktsjaaw==
+        s=k20201202; t=1673476906;
+        bh=iJc04xf432xUiDMocOnmf3RAIKw9PGxoDrge6aTW7GI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSEv2H7VebbwNy7z582w7LdipwyiRvo75PZUAkK2CtbxHYCJIURIjTSrA2o8+fMrm
+         IEzcX5E11U8mBl/61H6oFVmJX3Hl6R16/diovshiE0V3jy88WQ7Hn7Cjn81Hn1XZGu
+         EhGJZ7PZpDx2vm2W3/pVih8GGc6k9XGkMrmpfHSzSEHnKLoaQQrC07D/tQt/OpFDri
+         f9FfU9qlaVE02tK5TSHt3wJ0V9y3U6cfJKBf377uFXBUytVNBkSqRAJ+OOTij3B7Yz
+         PgLswz5YL3Yw57uEZVfrda10XJNp09ZKmPUX9nr4N/5D+Y44IaPs/zcVqgwEu9VQdb
+         iYu2oFMBUH05w==
+Date:   Wed, 11 Jan 2023 22:41:40 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent Tremblay <vincent@vtremblay.dev>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C7c1b2700f3727e94600f5f7e10beef16f8dc64ed=2E1673425?=
- =?utf-8?q?053=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
-References: =?utf-8?q?=3C7c1b2700f3727e94600f5f7e10beef16f8dc64ed=2E16734250?=
- =?utf-8?q?53=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
-Subject: Re: [PATCH] dt-bindings: trivial-devices: Remove trailing whitespace
-Message-Id: <167347197698.2692547.6376053519061876224.b4-ty@kernel.org>
-Date:   Wed, 11 Jan 2023 21:19:36 +0000
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
+Message-ID: <Y787JLl9Hdp0sWsC@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-8-william.zhang@broadcom.com>
+ <Y7iW38Fsj0nIewDm@sirena.org.uk>
+ <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
+ <Y7xloRuHk5BHSOCb@sirena.org.uk>
+ <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+ <Y73rl8feUOnChWKF@sirena.org.uk>
+ <dee51504-ccd2-3c27-ffc8-2e392f2bd781@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-8b3d1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1UceDFP/xmlKQ8dg"
+Content-Disposition: inline
+In-Reply-To: <dee51504-ccd2-3c27-ffc8-2e392f2bd781@broadcom.com>
+X-Cookie: Life is not for everyone.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,35 +66,51 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 11 Jan 2023 09:19:53 +0100, Geert Uytterhoeven wrote:
-> Remove trailing whitespace that hurts my eyes.
-> 
-> 
 
-Applied to
+--1UceDFP/xmlKQ8dg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Wed, Jan 11, 2023 at 12:13:43PM -0800, William Zhang wrote:
 
-Thanks!
+> Thanks for the explanation. I saw the spi-uniphier.c and spi-bcm2835.c doing
+> the trick you mentioned(thanks Kursad for pointing out).  In our case, even
+> the maximum fifo size usage(512bytes), the polling still have better
+> performance than interrupt. The MTD test result included in this patch is
+> based on maximum fifo usage. So there is no benefit to switch to interrupt
+> based on transfer size.
 
-[1/1] dt-bindings: trivial-devices: Remove trailing whitespace
-      commit: f66804bf7665f9d2db04791496ba2c7f4173941c
+> Does the spi framework has any requirement on how much time that the
+> driver's transfer_one function can spend?  I can see the polling function
+> might take quite some time in busy loop if the clock is low, for example, at
+> 100Hz(slowest clock this controller can go), it takes 512x8/100Hz ~= 41ms to
+> complete.  If this is something in concern,  I can do the interrupt switch
+> based on a time limit value if interrupt is available.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+There's no fixed limit, some hardware just doesn't have DMA.  Some
+doesn't even have interrupts which is even better.  If there's always a
+clear benefit for using PIO then just do that, perhaps creating a sysfs
+hook to allow people to switch to DMA if they need it (rather than
+requiring people to update their DT, this is really a runtime
+performance tradeoff rather than a description of the hardware).  If
+there's a point at which the performance is very similar then it's
+probably worth switching to DMA there to lower the CPU usage, but if
+it's always faster to use PIO then just defaulting to PIO seems like the
+best option.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--1UceDFP/xmlKQ8dg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO/OyMACgkQJNaLcl1U
+h9BNlgf9H7h7nFgPexNhok68PzYM2PTxKc53uRr1ddQwuYLg5cEgrLbZhpjONzKw
+H2at7UqiJzfu7eD8mQ4lUWHJcCU3eEfXqsBrokbE13ME+xK1HmSJ8E8e4txOlymK
+IIRscuM/aDtXE5oS2SDefmHYZHnDkGBjXe3n61EU2jTXHK0R5PEkB49sxdgf2v2f
+nXwGwDHqyjV2ZroFCemZ7NrWdVB62QV4tfTZ3FY59dMxX5QPjRKaJjgb4evbwklt
+arcRT/pWbx76wUrvUV8LnfnegDbcMmKzmP/+h1YzKDJmTSLSQnU1dlnYdTNIrEsh
+OVTgqgFGD5z9y4fcawqE2dj8ycfPYw==
+=tvzC
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
+--1UceDFP/xmlKQ8dg--
