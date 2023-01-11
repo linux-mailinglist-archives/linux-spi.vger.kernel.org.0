@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500586650D3
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 02:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4832A6650E4
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 02:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjAKBAX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Jan 2023 20:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
+        id S234570AbjAKBIx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Jan 2023 20:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbjAKBAJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 20:00:09 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CC954D9D
-        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:00:01 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id x7so2490245qtv.13
-        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:00:01 -0800 (PST)
+        with ESMTP id S235230AbjAKBIv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Jan 2023 20:08:51 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2181479E8
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:08:50 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id e10so9462262pgc.9
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jan 2023 17:08:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEgKLgapYkLpFApfQA0+5WZuidGrMEWqqNOuCo6Jyr4=;
-        b=VWU6/0EU0H4E9opmqBgS6Loj4IRHnA6FOjzSdGfIFE2xpFR2STt2FwPKkz+/Aag55h
-         nSnmu9yjZ8WIZp3AXLV8jU13qSPWffJ0ZD6p9/2hVtQEdiKD/Umnh0iIxrfoPA8F15Bn
-         urHcv3Nj+jP8+nMN+VKPpNGbQB4OSe+nqGbdY=
+        bh=pBUMjfgy2sQ4jsexKrZtXZ6ln2LhAn3hWDEJoGhnOik=;
+        b=Uy2ohkUqMnEuE0IX2qKApuzaclu2hqbz3o/AW6w43E828aTEmntXt27lypjipdmfq8
+         AekxkdeXbKz1RNM3PJ2EuuhErPv8N2V6S4Djj68DIq2VwqXEyEjDomtX3V1zSX+LsMrd
+         8a96wHN18ns1Hn2cJKUPe+HiN7AsaB+HzOWBk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vEgKLgapYkLpFApfQA0+5WZuidGrMEWqqNOuCo6Jyr4=;
-        b=UT/j6mypGj56c4fWt23JcCw+hgTVQ5lGjDSNkAhurZ0qEm4I7aprCfKPRXAzNScSVI
-         filAFXJ86fRPD5N1vjRtI1kHsd7k0nazDdZUegyVwd1ghdNdq7jcjMPi8YTe8OalPRrg
-         upV+6uwUaNGeqJXYZxe5pv++jzgYzjeYoCVqVyx6pNxD+Wyzfi0PvMW0Y2Gz6m9scyCQ
-         ZN5AtENPoWKEACFTYw/kf9eqqTprb6Lt7Pb7u35jh5vkP8hKbQ4MWTt620jAmIyALiY/
-         rPTe0xlnvbtj+DqQ/RvtL539Yqxwf/bWnqFkQaBRht7O8LDnWcvV83t1VAKLFlXzx7q5
-         8rQw==
-X-Gm-Message-State: AFqh2kq9fRJmPl/yfGY1Ft8z5TNtJ4dt978RSWUxWnYlzsqozT+y6qOz
-        6MG3JQJm3B13sBQzBuh6+YbMZg==
-X-Google-Smtp-Source: AMrXdXuU9oDRTVMziIXRsWYqadNF/pNc08qPsiXnW3HfxbivwyaOgHuzXqv/6urihO4ETZMLHlKFjQ==
-X-Received: by 2002:ac8:1e19:0:b0:3a7:242:501 with SMTP id n25-20020ac81e19000000b003a702420501mr106432240qtl.46.1673398800892;
-        Tue, 10 Jan 2023 17:00:00 -0800 (PST)
+        bh=pBUMjfgy2sQ4jsexKrZtXZ6ln2LhAn3hWDEJoGhnOik=;
+        b=YIzw5biRn2iyUKxdTt2ONPCbEjLuiwiALU0ntaANTvsVjSmhUwdINDPeHrUK8NfffT
+         C5ByS4G+A8pXwfQSOt6qzSPH8ssp23oQEdP/rTYUO6qSQA8zaeSwnH4YUdcUnBJQkCXM
+         eagwg4DG2pRb5UF981/z2E8Cc2x0kiI0xnTn/m+nui3CE/0s46pSUbURRt/47rQycDhT
+         oieDTZYtusciR8KKoc0ZbHRQRwDqm5oYdHmktpwpAxqLmrCfCQaoScmSIZwTUrMylum+
+         DamOc9w/jn0COMOm3Aqsi9H7oG9T0R1Aw+gG3UYy7Pipmo1hlS/0mw8yZNE+9FEh3xxC
+         kdOw==
+X-Gm-Message-State: AFqh2kqAQxtn+RZdVZ4ZCEwopCw7sgV9xQdpaaK2mIhkBE1Ir98+owcn
+        ZyU8QZ/mumjSUC/CaD6/m4LBtA==
+X-Google-Smtp-Source: AMrXdXsm9YvRMZUOQs4J2mhny9C01cPeX3Q3ZV+c6IE/olsoSKiv2NAwl3AtcRsToE1RnCeM5oVYhg==
+X-Received: by 2002:a05:6a00:80e:b0:581:f9d3:c9fc with SMTP id m14-20020a056a00080e00b00581f9d3c9fcmr51033296pfk.19.1673399330032;
+        Tue, 10 Jan 2023 17:08:50 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05620a034700b007054a238bf2sm8036038qkm.126.2023.01.10.16.59.58
+        by smtp.gmail.com with ESMTPSA id y186-20020a6232c3000000b00571cdbd0771sm8697294pfy.102.2023.01.10.17.08.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Jan 2023 17:00:00 -0800 (PST)
+        Tue, 10 Jan 2023 17:08:49 -0800 (PST)
 Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
  support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
 Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
@@ -65,15 +65,16 @@ References: <20230106200809.330769-1-william.zhang@broadcom.com>
  <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
  <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
  <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <0194391a-6aef-3a7d-0037-1f87e12a6b6e@broadcom.com>
-Date:   Tue, 10 Jan 2023 16:59:57 -0800
+Message-ID: <adbf1347-b81b-ee5b-f016-109d25b09f81@broadcom.com>
+Date:   Tue, 10 Jan 2023 17:08:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+In-Reply-To: <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001e59ea05f1f28562"
+        boundary="000000000000a92ffb05f1f2a411"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -84,261 +85,87 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---0000000000001e59ea05f1f28562
+--000000000000a92ffb05f1f2a411
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 01/10/2023 12:40 AM, Krzysztof Kozlowski wrote:
-> On 09/01/2023 20:13, William Zhang wrote:
->>
->>
->> On 01/09/2023 12:56 AM, Krzysztof Kozlowski wrote:
->>> On 09/01/2023 09:27, William Zhang wrote:
->>>> Hi Krzysztof,
+On 01/10/2023 02:18 PM, Florian Fainelli wrote:
+> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
+>>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>>> should be prepended with a specific compatible. There were many issues
+>>>> when people insisted on generic or family compatibles...
 >>>>
->>>> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
->>>>> On 06/01/2023 21:07, William Zhang wrote:
->>>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
->>>>>> controller. Add a new compatible string and required fields for the new
->>>>>> driver.  Also add myself and Kursad as the maintainers.
->>>>>>
->>>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>>>>> ---
->>>>>>
->>>>>>     .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
->>>>>>     1 file changed, 78 insertions(+), 6 deletions(-)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>>> index 45f1417b1213..56e69d4a1faf 100644
->>>>>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->>>>>> @@ -4,22 +4,51 @@
->>>>>>     $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
->>>>>>     $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>     
->>>>>> -title: Broadcom BCM6328 High Speed SPI controller
->>>>>> +title: Broadcom Broadband SoC High Speed SPI controller
->>>>>>     
->>>>>>     maintainers:
->>>>>> +
->>>>>
->>>>> Drop blank line.
->>>> will fix in  v2.
+>>>>> Otherwise we will have to have a compatible string with chip model for
+>>>>> each SoC even they share the same IP. We already have more than ten of
+>>>>> SoCs and the list will increase.  I don't see this is a good 
+>>>>> solution too.
 >>>>
->>>>>
->>>>>> +  - William Zhang <william.zhang@broadcom.com>
->>>>>> +  - Kursad Oney <kursad.oney@broadcom.com>
->>>>>>       - Jonas Gorski <jonas.gorski@gmail.com>
->>>>>
->>>>>>     
->>>>>> +description: |
->>>>>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
->>>>>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
->>>>>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
->>>>>> +
->>>>>> +  It has a limitation that can not keep the chip select line active between
->>>>>> +  the SPI transfers within the same SPI message. This can terminate the
->>>>>> +  transaction to some SPI devices prematurely. The issue can be worked around by
->>>>>> +  either the controller's prepend mode or using the dummy chip select
->>>>>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
->>>>>> +
->>>>>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
->>>>>> +  controller that add the capability to allow the driver to control chip select
->>>>>> +  explicitly. This solves the issue in the old controller. This new controller
->>>>>> +  uses the compatible string brcm,bcmbca-hsspi.
->>>>>> +
->>>>>>     properties:
->>>>>>       compatible:
->>>>>> -    const: brcm,bcm6328-hsspi
->>>>>> +    enum:
->>>>>> +      - brcm,bcm6328-hsspi
->>>>>> +      - brcm,bcmbca-hsspi
->>>>>
->>>>> bca seems quite unspecific. Your description above mentions several
->>>>> model numbers and "bca" is not listed as model. Compatibles cannot be
->>>>> generic.
->>>> "bca" is not model number, rather it is a group (broadband carrier
->>>> access) of chip that share the same spi host controller IP. Agree it is
->>>> not particularly specific but it differentiate from other broadcom spi
->>>> controller ip used by other groups.  We just don't have a specific name
->>>> for this spi host controller but can we treat bcmbca as the ip name?
->>>
->>> No, it is discouraged in such forms. Family or IP block compatibles
->>> should be prepended with a specific compatible. There were many issues
->>> when people insisted on generic or family compatibles...
->>>
->>>> Otherwise we will have to have a compatible string with chip model for
->>>> each SoC even they share the same IP. We already have more than ten of
->>>> SoCs and the list will increase.  I don't see this is a good solution too.
->>>
->>> You will have to do it anyway even with generic fallback, so I don't get
->>> what is here to gain... I also don't get why Broadcom should be here
->>> special, different than others. Why it is not a good solution for
->>> Broadcom SoCs but it is for others?
->>>
->> I saw a few other vendors like these qcom ones:
->>    qcom,spi-qup.yaml
->>        - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
->>        - qcom,spi-qup-v2.1.1 # for 8974 and later
->>        - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
->>    qcom,spi-qup.yaml
->>        const: qcom,geni-spi
-> 
-> IP block version numbers are allowed when there is clear mapping between
-> version and SoCs using it. This is the case for Qualcomm because there
-> is such clear mapping documented and available for Qualcomm engineers
-> and also some of us (although not public).
-> 
->> I guess when individual who only has one particular board/chip and is
->> not aware of the IP family,  it is understandable to use the chip
->> specific compatible string.
-> 
-> Family of devices is not a versioned IP block.
-> 
->> But when company works on it, we have the
->> visibility and access to all the chips and ip blocks in the family and
->> IMHO it is very reasonable to use the IP family name for the same IP as
->> these examples shows.
-> 
-> No, because family of devices is not a versioned IP block. I wrote
-> before that families and wildcards are not allowed.
-> 
->> Are you saying these are not good example to
->> follow?
-> 
-> It's nothing related to your case.
-> 
->> What are the issues with generic or family compatibles?
->>   Could
->> you please elaborate?
-> 
-> They stop matching and some point and cause ABI breaks. We had several
-> cases where engineer believed "I have here family of devices" and then
-> later it turned out that the family is different.
-> 
-> 
+>>>> You will have to do it anyway even with generic fallback, so I don't 
+>>>> get
+>>>> what is here to gain... I also don't get why Broadcom should be here
+>>>> special, different than others. Why it is not a good solution for
+>>>> Broadcom SoCs but it is for others?
+>>>>
+>>> I saw a few other vendors like these qcom ones:
+>>>    qcom,spi-qup.yaml
+>>>        - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>>        - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>>        - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>>    qcom,spi-qup.yaml
+>>>        const: qcom,geni-spi
 >>
->>>
->>>
->>>>
->>>>>
->>>>>>     
->>>>>>       reg:
->>>>>> -    maxItems: 1
->>>>>> +    items:
->>>>>> +      - description: main registers
->>>>>> +      - description: miscellaneous control registers
->>>>>> +    minItems: 1
->>>>>> +
->>>>>> +  reg-names:
->>>>>> +    items:
->>>>>> +      - const: hsspi
->>>>>> +      - const: spim-ctrl
->>>>>
->>>>> This does not match reg
->>>> Do you mean it does not match the description?
->>>
->>> No. reg can be 1 item but you state reg-names cannot. These are always
->>> the same. If one is 1 item, second is as well.
->>>
->> I'll drop the "minItems: 1" from the reg property then.
-> 
-> Then it won't be correct, because it would mean two items are required
-> always.
-Ah you are right. Add minItems: 1 for reg-name then.
-> 
+>> IP block version numbers are allowed when there is clear mapping between
+>> version and SoCs using it. This is the case for Qualcomm because there
+>> is such clear mapping documented and available for Qualcomm engineers
+>> and also some of us (although not public).
 >>
->>>>>
->>>>>>     
->>>>>>       clocks:
->>>>>>         items:
->>>>>> -      - description: spi master reference clock
->>>>>> -      - description: spi master pll clock
->>>>>> +      - description: SPI master reference clock
->>>>>> +      - description: SPI master pll clock
->>>>>
->>>>> Really? You just added it in previous patch, didn't you?
->>>> The previous patch was just word to word conversion of the text file.  I
->>>> will update that patch to include this change.
->>>>
->>>>>
->>>>>>     
->>>>>>       clock-names:
->>>>>>         items:
->>>>>> @@ -29,12 +58,43 @@ properties:
->>>>>>       interrupts:
->>>>>>         maxItems: 1
->>>>>>     
->>>>>> +  brcm,use-cs-workaround:
->>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
->>>>>> +    description: |
->>>>>> +      Enable dummy chip select workaround for SPI transfers that can not be
->>>>>> +      supported by the default controller's prepend mode, i.e. delay or cs
->>>>>> +      change needed between SPI transfers.
->>>>>
->>>>> You need to describe what is the workaround.
->>>> Will do.
->>>>>
->>>>>> +
->>>>>>     required:
->>>>>>       - compatible
->>>>>>       - reg
->>>>>>       - clocks
->>>>>>       - clock-names
->>>>>> -  - interrupts
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: "spi-controller.yaml#"
->>>>>
->>>>> No quotes. How this is related to this patch?
->>>> Will remove quote and put it in patch 1.
->>>>>
->>>>>> +  - if:
->>>>>> +      properties:
->>>>>> +        compatible:
->>>>>> +          contains:
->>>>>> +            enum:
->>>>>> +              - brcm,bcm6328-hsspi
->>>>>> +    then:
->>>>>> +      properties:
->>>>>> +        reg:
->>>>>> +          minItems: 1
->>>>>
->>>>> Drop.
->>>>>
->>>>> reg-names now do not match.
->>>> Don't quite understand your comment. What do I need to drop and what is
->>>> not matched?
->>>
->>> You need to add constraints for reg-names, same way as for reg.
->>> Disallowing the reg-names also could work, but there won't be benefit in
->>> it. Better to have uniform DTS.
->>>
->> I agree it is better to have the uniform DTS but the situation here is
->> that the brcm,bcm6328-hsspi does not require reg name since there is
->> only one register needed and it was already used in many chip dts for
->> long time.  If I enforce it to have the corresponding reg name, that
+>>> I guess when individual who only has one particular board/chip and is
+>>> not aware of the IP family,  it is understandable to use the chip
+>>> specific compatible string.
+>>
+>> Family of devices is not a versioned IP block.
 > 
-> No one told you to enforce to have a reg-names.
+> Would it be acceptable to define for instance:
 > 
->> could potentially break the compatibility of those old device if the
->> driver change to use reg name, right?
+> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
 > 
-> How compatibility is broken by some optional, unrelated property?
+> in which case, having a fallback compatible on the SoC family that sees 
+> this IP being deployed is very useful for client programs of the DT 
+> (u-boot or kernel). As long as the fallback works, we use it, the day it 
+> stops and a quirk needs to be applied because SoC XYZ has a bug, match 
+> the SoC XYZ compatible string.
 > 
-I think I misunderstand what you said.  You basically want the reg-name 
-minItem/maxItem constraints for brcm,bcm6328-hsspi compatible as well so 
-it is consistent for all the compatibles? I was confused and thought it 
-is not needed as reg-name is not required for brcm,bcm6328-hsspi compatible.
+> FWIW, and feel free to rant at me, we have adopted this convention a 
+> while ago for STB chips whereby we want bindings to be defined with:
+> 
+> <chip specific compatible>, <version of the IP>, <fallback>
+> 
+> and the fallback may, or may not be matched, but defining in does not 
+> hurt at all, in fact it dramatically helps with the boot loader looking 
+> for specific nodes because it can search for the fallback.
+> 
+> If the version specific compatible is not available, it does not get used.
 
-> Best regards,
-> Krzysztof
-> 
+Thanks Florian for jumping in! I was thinking to propose something with 
+version info:
+    brcm,bcmbca-hsspi-v1.0
+    brcm,bcmbca-hsspi-v1.1
 
---0000000000001e59ea05f1f28562
+To meet STB chip convention, then it would be:
+compatible = "brcm,bcm63138-hsspi", "brcm,bcmbca-hsspi-v1.0", 
+"brcm,bcmbca-hsspi";
+compatible = "brcm,bcm6756-hsspi", "brcm,bcmbca-hsspi-v1.1", 
+"brcm,bcmbca-hsspi";
+
+Although I am not a fan of having a chip specific compatible while we 
+already have IP version,  I am okay to have it to be consistent with 
+Broadcom convention. We will need to remember to update this yaml file 
+whenever we have a new chip.
+
+--000000000000a92ffb05f1f2a411
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -409,13 +236,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICdaNhqf9nmSgiFe4jrj/BtLLjyi
-Guc9FaGP/z+Vw+PYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExMTAxMDAwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDcMNtWvbKeEnDkyvH/A1V0v4Pe9
+8AcV8Ywxlemjv8ynMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTAxMDg1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAPB5g8j2brUFhmGDMuJq/jWtZjqBmma0EtrMfceJWi3SBA
-iNx6hVKVuakvi0wpXpYS19zuvV3UA1guch22sMBQTj1x29oRWmsKZSfLf3TSprZsh88QgFLJYlpI
-i10nF7DaMY1LO0KL69aGQT7cPUwyO6oICnLXTL1cqUrxi/vOxff+9J61nlpsYKjblW3gh8MBbX+t
-z85PZUcVASyJoGgY+xe7WUVUEEaxZQ8aWRE909+rrXwaDBmEASXwvaDNeMWffNqOi3jKvNnrfUqt
-nFQSErCZm9ypgfnuY2HUzuSkC478pWEvsyp34TFqASFscbHkxsaWVTh507z+8PHxt1Uy
---0000000000001e59ea05f1f28562--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBeruondMKn4kXANNCeZMMlDvyOztb/FIaHb1BRX3VOYg+A
+qyLXqm7e5DiwvZKnGH0DVp8kD4zwXTZz9mnBRmPoiA7gr/diQui3Skpi2OX0vy8fn6Y2cHkqdXY6
+Vm6AC+W1cHEFpX9hr5ai6JxQgaPd1OZ4foR/u+K5zlcvNASqCfmerQi1Z29+DEq0ukvdFBqbLabI
+WtIUJkL81/dG3HcJYY5rNWfpbGHsfXs5eJ8ciRD6vSLOcY0m4av3vtNeX/Q1YippBJoKqhOhHnrB
+2kHw37wMOoEMm91knJc1ItZy2O3w5yR5ZijjyRP12F2nMzkn2O+N38tK/Qzsok5/08pf
+--000000000000a92ffb05f1f2a411--
