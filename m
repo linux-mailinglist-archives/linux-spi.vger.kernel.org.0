@@ -2,79 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99C96663FD
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 20:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB696664A0
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jan 2023 21:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbjAKTtG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Jan 2023 14:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S236315AbjAKUN4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Jan 2023 15:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjAKTsU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 14:48:20 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E5620E
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:48:19 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id d10so11258711pgm.13
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 11:48:19 -0800 (PST)
+        with ESMTP id S239509AbjAKUNr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Jan 2023 15:13:47 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7262D2
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 12:13:45 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id jn22so17932124plb.13
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jan 2023 12:13:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=enAhZlFkGrAGYyPjDKPsiFGN+sHjzn84LwIDmt42nLU=;
-        b=MRw4qhgWmByobzfodVcZY17e9KBuWftxoVfdUZCIf3PIfSiY6O5Vw8UMPOoIPoFlj5
-         AOqNsX17DfC33uq7Ysm3+9FqwOrPfaqFdkApfNbEysfHojR5om88vtrNi/d393s04X1+
-         j0TWaaJI24QR8ISSIhdVNS0Yw5O7z1LT4RlH8=
+        bh=wIuY+u1+qGDelyONjLzDHJa2BHVILFqdKDVE8jSoa0M=;
+        b=R4xR+yG6QNUKSRsABaJKzLqG/d53d0i+9l141K4BkMGya21dZXK1CgI7G6XSp4IG63
+         RdhpUKmJgmmYd7tmQ7s9e4QKM5g/u1KZzHRblxSy2ZR5rKMvtrHYhySa+AzckoVf84RX
+         wS3X54O/6OnuCMpXXihBbTmMOz5kTCx4LHqz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=enAhZlFkGrAGYyPjDKPsiFGN+sHjzn84LwIDmt42nLU=;
-        b=6gAhW0OctBXCRgTJ2+DKDA2w6V5VHYnp/G1uQ3M0gN7+bIYOUHiWcoa1fDNjMYh0bx
-         vtv3ZfDBGbMKTUvrIRYf0SBNZI/MMiUjuqBiQUj3AbGkP+VtowipVjF6hD48JRjHG19O
-         CSgZNs6QaMHEjohuXuDwCO/L2fnwQ1ewsm4d1lORPvvzxPUVhxZOJ3jCf9Svg7UXp8GQ
-         +Z/KmAzNT2najvMIX4IyXi/s8FkqzA+J3L/9IvvD632Xxui2dQUvO+vxUCI1AWIbv5gA
-         CKPRwPCVXIUoMGNyhNUzEwWB4GUFw8ns2lBgQThnHZxqHRQ7op22C+8cAfB2YDJk1EMS
-         EI2w==
-X-Gm-Message-State: AFqh2kremzx2anoYc5SSplSnmBEjunFMJTOrt2zMPX38MqmHA1VvNv2V
-        RFZdLJkmOZtQBL6oVNcSakD4eg==
-X-Google-Smtp-Source: AMrXdXu70lr36Umvn0O72GVI5dkgMQUBwczSrT6+XK7TiZZGrY3ymN7j3qMyMsYvs6V7/JfUSn7RUw==
-X-Received: by 2002:a05:6a00:72a:b0:57d:56f1:6ae7 with SMTP id 10-20020a056a00072a00b0057d56f16ae7mr62388860pfm.33.1673466498307;
-        Wed, 11 Jan 2023 11:48:18 -0800 (PST)
+        bh=wIuY+u1+qGDelyONjLzDHJa2BHVILFqdKDVE8jSoa0M=;
+        b=H5TBRzYKomfd8I7sKh5k/VgxGj5XSAay/S9IbLWrR5wp4VEb3OUdUdZ7xWTFEaopjs
+         TvHyaF6KM4ko1qsauSWvY+10igtd64xnMEcb7G+Q4ggMi6wD5J7yg6Y7J+bTqruDyeHa
+         TsE0Z5MvACKO5OjhOmHa1YvX9CoT4emMjt1/p4gtmQyXJP66/BpCpWXsCwN/Z5+boBe+
+         aw5zxcnBnfr5VQelZHTOUcZ/YapT4E+5daOh2nQkrWJN/cRDK6GIMZZClp8oJwzlspTZ
+         xuX9aMSoLa2D/fPexxq5yeIPekfwkEG05tUYCt9RqdjV5dcKuS5VMaDi9QEW6swJQ1JD
+         1F8g==
+X-Gm-Message-State: AFqh2kp8Ie6Bz62vPCeiwVeiNByY1+IFkT0jwnCF14Y1nPzf/IMQZg5t
+        YrceFQwTBv68Gi17zepsISpbFA==
+X-Google-Smtp-Source: AMrXdXuHwmebxx0+pYRavtEcio1mbv2jdi9jLGNu8O5FnnABJYpyTEZKMX/qIsMhodHWACvt0iESsQ==
+X-Received: by 2002:a05:6a21:998a:b0:b0:1aa9:25bb with SMTP id ve10-20020a056a21998a00b000b01aa925bbmr112485172pzb.60.1673468025045;
+        Wed, 11 Jan 2023 12:13:45 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id u127-20020a626085000000b00580fb018e4bsm6607563pfb.211.2023.01.11.11.48.16
+        by smtp.gmail.com with ESMTPSA id y14-20020a63fa0e000000b004a7e39ff1e8sm8931958pgh.49.2023.01.11.12.13.43
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 11:48:17 -0800 (PST)
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
+        Wed, 11 Jan 2023 12:13:44 -0800 (PST)
+Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
         f.fainelli@gmail.com, jonas.gorski@gmail.com,
         kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <Y7iPS48viBg0QRok@sirena.org.uk>
- <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
- <CAL_JsqJ7kr-6xs53NYJufem=wXnXVRnj3-1t1rG+W6g09kJ3ew@mail.gmail.com>
- <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
- <Y7xosoZMJEwRi1ok@sirena.org.uk>
- <f55ab390-a784-d598-8d0e-b78040fdbb73@broadcom.com>
- <Y73gJhlzHz6waIvf@sirena.org.uk>
+ <20230106200809.330769-8-william.zhang@broadcom.com>
+ <Y7iW38Fsj0nIewDm@sirena.org.uk>
+ <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
+ <Y7xloRuHk5BHSOCb@sirena.org.uk>
+ <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+ <Y73rl8feUOnChWKF@sirena.org.uk>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <a92a9107-66d6-adb2-e11b-2e9bccda0c81@broadcom.com>
-Date:   Wed, 11 Jan 2023 11:48:16 -0800
+Message-ID: <dee51504-ccd2-3c27-ffc8-2e392f2bd781@broadcom.com>
+Date:   Wed, 11 Jan 2023 12:13:43 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y73gJhlzHz6waIvf@sirena.org.uk>
+In-Reply-To: <Y73rl8feUOnChWKF@sirena.org.uk>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000344b9205f20248a8"
+        boundary="0000000000003220fb05f202a3c0"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -85,49 +80,59 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---000000000000344b9205f20248a8
+--0000000000003220fb05f202a3c0
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/10/2023 02:01 PM, Mark Brown wrote:
-> On Mon, Jan 09, 2023 at 12:18:09PM -0800, William Zhang wrote:
+On 01/10/2023 02:49 PM, Mark Brown wrote:
+> On Mon, Jan 09, 2023 at 12:10:30PM -0800, William Zhang wrote:
+>> On 01/09/2023 11:06 AM, Mark Brown wrote:
 > 
->> This setting is set per spi message for particular chip select of the device
->> when starting the message through bcm63xx_hsspi_set_clk function and restore
->> to default(clock gating) when message is done through
->> bcm63xx_hsspi_restore_clk_gate.
+>>> You can put whatever logic is needed in the code - for something like
+>>> this an architecture based define isn't ideal but is probably good
+>>> enough if need be (though I'd not be surprised if it turned out that
+>>> there was also some performance benefit for the MIPS systems too, at
+>>> least for smaller transfers).
 > 
-> In that case I am extremely confused about what the feature is supposed
-> to do.  The description says:
+>> I just don't know what other logic I can put in the driver to select
+>> interrupt or polling mode.  Only the end user know if performance or cpu
+>> usage is more important to their application.
 > 
-> +  brcm,no-clk-gate:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Some SPI device such as Broadcom ISI based voice daughtercard requires
-> +SPI
-> +      clock running even when chip select is deasserted. By default the
-> +      controller turns off or gate the clock when cs is not active to save
-> +      power. This flag tells the controller driver to keep the clock running
-> +      when chip select is not active.
+> Usually you can take a reasonable guess as to what would be a good point
+> to start switching, typically for short enough transfers the overhead of
+> setting up DMA, waiting for interrupts and tearing things down is very
+> much larger than the cost of just doing PIO - a bunch of other drivers
+> have pick a number logic of some kind, often things like FIFO sizes are
+> a good key for where to look.  A lot of the time this is good enough,
+> and it means that users have much better facilities for making tradeoffs
+> if they have a range of transfer sizes available - it's not an either/or
+> thing but based on some features of the individual message/transfer.
 > 
+> It is true that for people with heavy SPI traffic or otherwise very
+> demanding requirements for a specific system and software stack
+> additional tuning might produce better results, exposing some sysfs
+> knobs to allow tuning of parameters at runtime would be helpful for them
+> and I'd certainly be happy to see that added.
 > 
-> which to me sounds like the clock should never be turned off and instead
-> left running at all times.  Switching back to clock gating after sending
-> the message doesn't seem to correspond to the above at all, the message
-> being done would normally also be the point at which chip select is
-> deasserted.
-> 
-This feature is used by our voice team and as far I can tell, it is used 
-to keep clock running between the transfers within the same message. 
-But now that we have prepend mode to combine to one transfer or dummy 
-workaround to keep cs always active between transfers, this indeed does 
-not seems right.   I will have to talk to the voice team why this is 
-still needed and get back here.
+Thanks for the explanation. I saw the spi-uniphier.c and spi-bcm2835.c 
+doing the trick you mentioned(thanks Kursad for pointing out).  In our 
+case, even the maximum fifo size usage(512bytes), the polling still have 
+better performance than interrupt. The MTD test result included in this 
+patch is based on maximum fifo usage. So there is no benefit to switch 
+to interrupt based on transfer size.
 
---000000000000344b9205f20248a8
+Does the spi framework has any requirement on how much time that the 
+driver's transfer_one function can spend?  I can see the polling 
+function might take quite some time in busy loop if the clock is low, 
+for example, at 100Hz(slowest clock this controller can go), it takes 
+512x8/100Hz ~= 41ms to complete.  If this is something in concern,  I 
+can do the interrupt switch based on a time limit value if interrupt is 
+available.
+
+--0000000000003220fb05f202a3c0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -198,13 +203,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJTXU/3646uoT2YllJWcPXEJ6CIa
-INxdNPLnxKnMHtx1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExMTE5NDgxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN8lIdnOi8ZOM95L8yp3bo3fofzT
+ZY638Ip31W1AZylyMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTIwMTM0NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBw6UcppnhDIdHOoGrPkZ9QgQAfUt5gM2pgpR0gX+zQxaau
-evBO92WFkc6sReU2crhInCUsyUx5PDqf+/xS6DUAr5gMzkmRZkOXjFDXPAMTDtJpuEBmondW/dJy
-XRYoDbGB5UKgf/+JbxZRrAuVyJr+a0gIF0C/OCuU/6qa1t7Vo1GccLPxsLcwye9f5ACWccBm08zQ
-Any+8xWMwB1rBhYpTlnYDdBQbtx1B7Ut0FgWm3Bccdk7/shHqVq1bD1z/eUIpzLbK5ojP0mJEuyr
-XE4oqCdeuAxNk/sQa1N/oHBU5bZ+04y4gR2b63GOxZW/TDkElMe+USYujryXNTApuQTn
---000000000000344b9205f20248a8--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBiJGKb56Hcg9H2fKVlw9sJNfauEUZq4xr6IAw2LfN76sag
+mB3pios2Tftk188pvaG7VJnLwkYlN5iaiOlASJORbXb6kD7NwPuVDJNlu6E/BnUV63p5EbEcOxej
+LCq5cu9GAbKNcjVoXnHAo/np9yCwLYCKZqjyfydtkMLeFt3oCG+b3w0+TYq7wzEmmq1DNMAvnvnc
+NguS0DoVZ4R79wBm0UEaEemRo8u8tbf/qR//C+PosJkLdBaHhe45mBSrcTi8L2jxJf6s/9IaJz/p
+DJPcB3LaZEcLGRcPUGk0qGGF28yRGFLesXXqdZju98z+roWx4iCa3bm9202FviLUiIWu
+--0000000000003220fb05f202a3c0--
