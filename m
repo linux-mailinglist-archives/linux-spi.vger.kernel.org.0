@@ -2,146 +2,284 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388FE667E32
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Jan 2023 19:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DA2667FA4
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Jan 2023 20:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbjALShn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Jan 2023 13:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S230124AbjALTyK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Jan 2023 14:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240151AbjALShL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Jan 2023 13:37:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CE67187;
-        Thu, 12 Jan 2023 10:08:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA852B81F02;
-        Thu, 12 Jan 2023 18:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE90C433EF;
-        Thu, 12 Jan 2023 18:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673546895;
-        bh=LITh+aXjMTjYXFbixbj6JWlvN9AC8dKaUcM9PfRjomE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qA8oGiUj/9CPAD09xGTeNPJf0MqCwc45WB2rfpCZsQOrN3T4sv6EIhF/k+pM6BY2N
-         EaQhyYIIUbV7FsZv3Aq4yaoCJUisUMn9T2DzKG9tSYNqGoVcu/CcOzKauH5MC6OHT8
-         FTArMJbCJ3RawQQrbteavn8y2SKtuYm3b41ZoDuR8Hpb9do8tTC64jTZH8nls7JZxh
-         8wKrTK31+DKgzvgnPId46ZATskfgFLCJ4oNylCkCYAhYauDkC2Y2CoaSiZDKhpwa23
-         O212Zcf+4lKY81KFhPGKGj21rkFpdTf3rn+yrYKWdGrZ1oAD/lDJLtf+PtGCQVbYfa
-         lZCWLjeyAr7Sw==
-Date:   Thu, 12 Jan 2023 18:08:08 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        with ESMTP id S239693AbjALTxh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Jan 2023 14:53:37 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B91057D
+        for <linux-spi@vger.kernel.org>; Thu, 12 Jan 2023 11:50:25 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id v23so16363698plo.1
+        for <linux-spi@vger.kernel.org>; Thu, 12 Jan 2023 11:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=r36G4zbUb8d4T9VGsQD0y4wn/4KAVI0V5B3c9qPKAPs=;
+        b=O8scXtM39a7ePP1EVi8E7tV6nwDYsinXuJ6fkzcW551F9XQv79L50ytEiAYKOqdAko
+         8crfEKNLwCa9Jvm9U024LSexwkyeJJiGDo6F/Wpk8kWRaPdv7PHQ9yUeKO3/RQXgVPvY
+         RwzTBy8t66jGin2KOIfqQxRwVOYeS0qFR3rtM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r36G4zbUb8d4T9VGsQD0y4wn/4KAVI0V5B3c9qPKAPs=;
+        b=kBaG7fytkxtBI5VkearXZuH5nUNAT9Spo9sKV56bk+Xn2UDtp9Gm36yZW3uZFbPqBZ
+         goboi/XXio+Lu9sr4pqJRnrfE1Qpr7GL7d3nUqy42DkWDF0tCfTUnlT1DeqroiNhpgIs
+         Mu+2qXzM+NkuZ+kXkae5EiKEWEhwnS52m3RXyXoE8zrrf17g5Kwyi8vWE/CxWIx+q0lc
+         2Js6ALyvHUwgO/foz2z24uiymaR5OPp90noohIEdI9K8bRlvaUWrHLw3TsYCV3jfwm7D
+         AeH1Zt1r4+tRk6Cfex6jLwVLXDVCqxhOttw1LdZSRqce+kd01ifDb67NViK/JWFaYhG5
+         PC6g==
+X-Gm-Message-State: AFqh2kq6M2H1FUZl6H06Ti4cpvQbmYRWY7giMw1aKdN8L+QNXHvo3otp
+        f6Ez5a0IWGZNMMZDfTe3ChRNJw==
+X-Google-Smtp-Source: AMrXdXv6EU4osdR5EHbTJexp2G6v1oXKI0xL/ibInboOzRjkp5Yo0nep+dEpFtABW0G0Nv6FvLfdkw==
+X-Received: by 2002:a17:90a:1d0b:b0:229:211:1de8 with SMTP id c11-20020a17090a1d0b00b0022902111de8mr3303797pjd.12.1673553024808;
+        Thu, 12 Jan 2023 11:50:24 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id om5-20020a17090b3a8500b002192a60e900sm12872938pjb.47.2023.01.12.11.50.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Jan 2023 11:50:23 -0800 (PST)
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/16] spi: bcm63xx-hsspi: Make dummy cs workaround as an
- option
-Message-ID: <Y8BMiOvbjncXK4RO@sirena.org.uk>
 References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-11-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+ <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+ <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+ <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
+ <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
+Date:   Thu, 12 Jan 2023 11:50:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bW0HKNDw1MvhDoNy"
-Content-Disposition: inline
-In-Reply-To: <20230106200809.330769-11-william.zhang@broadcom.com>
-X-Cookie: A watched clock never boils.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000094aa0805f2166dde"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+--00000000000094aa0805f2166dde
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
---bW0HKNDw1MvhDoNy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 06, 2023 at 12:08:02PM -0800, William Zhang wrote:
 
-> Due to the controller limitation to keep the chip select low during the
-> bus idle time between the transfer, a dummy cs workaround was used when
-> this driver was first upstreamed to the kernel.
->=20
-> The workaround picks dummy_cs as !actual_cs and usually cs is 0 and
-> dummy cs is 1. But this does not work out in all the situations as
-> customer reported issues for their board design. Due to SPI block design
-> constrain, the controller works in different mode internally depending
-> on the clock. When clock is 30MHz or above, controller works in faster
-> mode and cs 1 signal is used internally as feedback from the pad. So cs
-> 1 pin must be brought out and configured as chip select function in
-> pinmux. When clock is below 30MHz, only cs 0 pin is used. In summary
-> when clock is below 30MHz, the workaround always works as only cs 0 is
-> involved. For clock faster than 30MHz, it require cs1 pin used in the
-> board design and configured as chip selection function.
+On 01/12/2023 12:21 AM, Krzysztof Kozlowski wrote:
+> On 11/01/2023 19:44, William Zhang wrote:
+>>
+>>
+>> On 01/11/2023 10:12 AM, Krzysztof Kozlowski wrote:
+>>> On 11/01/2023 19:04, William Zhang wrote:
+>>>>
+>>>>
+>>>> On 01/11/2023 01:02 AM, Krzysztof Kozlowski wrote:
+>>>>> On 10/01/2023 23:18, Florian Fainelli wrote:
+>>>>>> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
+>>>>>>>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>>>>>>>> should be prepended with a specific compatible. There were many issues
+>>>>>>>>> when people insisted on generic or family compatibles...
+>>>>>>>>>
+>>>>>>>>>> Otherwise we will have to have a compatible string with chip model for
+>>>>>>>>>> each SoC even they share the same IP. We already have more than ten of
+>>>>>>>>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>>>>>>>>
+>>>>>>>>> You will have to do it anyway even with generic fallback, so I don't get
+>>>>>>>>> what is here to gain... I also don't get why Broadcom should be here
+>>>>>>>>> special, different than others. Why it is not a good solution for
+>>>>>>>>> Broadcom SoCs but it is for others?
+>>>>>>>>>
+>>>>>>>> I saw a few other vendors like these qcom ones:
+>>>>>>>>       qcom,spi-qup.yaml
+>>>>>>>>           - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>>>>>>>           - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>>>>>>>           - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>>>>>>>       qcom,spi-qup.yaml
+>>>>>>>>           const: qcom,geni-spi
+>>>>>>>
+>>>>>>> IP block version numbers are allowed when there is clear mapping between
+>>>>>>> version and SoCs using it. This is the case for Qualcomm because there
+>>>>>>> is such clear mapping documented and available for Qualcomm engineers
+>>>>>>> and also some of us (although not public).
+>>>>>>>
+>>>>>>>> I guess when individual who only has one particular board/chip and is
+>>>>>>>> not aware of the IP family,  it is understandable to use the chip
+>>>>>>>> specific compatible string.
+>>>>>>>
+>>>>>>> Family of devices is not a versioned IP block.
+>>>>>>
+>>>>>> Would it be acceptable to define for instance:
+>>>>>>
+>>>>>> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+>>>>>
+>>>>> Yes, this is perfectly valid. Although it does not solve William
+>>>>> concerns because it requires defining specific compatibles for all of
+>>>>> the SoCs.
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>>
+>>>> As I mentioned in another email,  I would be okay to use these
+>>>> compatibles to differentiate by ip rev and to conforms to brcm convention:
+>>>> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.0", "brcm,bcmbca-hsspi";
+>>>> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi";
+>>>
+>>>
+>>> Drop the version in such case, no benefits. I assume XYZ is the SoC
+>>> model, so for example 6868.
+>>>
+>> Yes XYZ is the SoC model
+>>>>
+>>>> In the two drivers I included in this series, it will be bound to
+>>>> brcm,bcmbca-hsspi-v1.0 (in additional to brcm,bcm6328-hsspi) and
+>>>> brcm,bcmbca-hsspi-v1.1 respectively.  This way we don't need to update
+>>>> the driver with a new soc specific compatible whenever a new chips comes
+>>>> out.
+>>>
+>>> I don't understand why do you bring it now as an argument. You defined
+>>> before that your driver will bind to the generic bcmbca compatible, so
+>>> now it is not enough?
+>>>
+>> No as we are adding chip model specific info here.  The existing driver
+>> spi-bcm63xx-hsspi.c only binds to brcm,bcm6328-hsspi. This driver
+>> supports all the chips with rev1.0 controller so I am using this 6328
+>> string for other chips with v1.0 in the dts patch, which is not ideal.
+> 
+> Why? This is perfectly ideal and usual case. Why changing it?
+> 
+>> Now I have to add more compatible to this driver and for each new chip
+>> with 1.0 in the future if any.
+> 
+> Why you cannot use compatibility with older chipset?
+> 
+IMHO it is really confusing that we have all the SoCs but have to bind 
+to an antique SoC's spi controller compatible and people may think it is 
+a mistake or typo when they don't know they are actually the same. I 
+know there are usage like that but when we have clear knowledge of the 
+IP block with rev info, I think it is much better to have a precise SoC 
+model number and a general revision info in the compatible. As you know 
+they are many usage of IP rev info in the compatible too. 
+brcm,bcm6328-hsspi will stay so it does not break any existing dts 
+reference to that.
 
-> In a typical usage of SPI flash on cs 0 that normally runs at 100MHz,
-> cs 1 pin must be used in the board design but this is not always the
-> case for many customer boards.
+Anyway if you still does not like this idea, I will drop the rev info 
+and you have it your way.
 
-> For voice daughtercard usage,  the SoC alway uses internal cs 7 for
-> voice card SPI control. Then it requires cs 0 pin as the dummy cs but
-> board with voice design may not use cs 0 pin at all.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-So I think what this is trying to say is that operation over 30MHz with
-the existing workaround requires that the board be designed to bring out
-the chip select used as the dummy as a physical chip select (or
-potentially it has to be the actual chip select for the device?) but
-that likely won't have been done?  And potentially this only works if CS
-1 is the one brought out?  I'm unclear if CS 1 is just the most common
-dummy chip select or if there's something else going on here.
+--00000000000094aa0805f2166dde
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> The controller actually has a prepend feature that can combine multiple
-> SPI transfers in a SPI message into one single transfer when the
-> transfers meet certain requirements. So there is no need for keeping cs
-> low when the message only has one transfer. Most of the SPI devices
-> including SPI NOR, SPI NAND flash, Broadcom voice card and etc can use
-> this feature without the dummy cs workaround.
-
-> This patch makes the dummy cs workaround as an option based on the
-> dts flag brcm,use-cs-workaround. By default dummy cs workaround is
-> hard coded to enable. We will use the prepend feature and disable this
-> workaround as default in the next patch of this series unless this flag
-> is set in dts.
-
-=2E..and based on your other comments I gather it's difficult to disable
-the workaround per message?  I'm also guessing that the overhead from
-always doing full duplex transfers is noticable so it's better to try
-the workaround.
-
-I wonder if we can't do this by selecting the workaround based on the
-configured device speed.  If the device is configured to use more than
-30MHz then disable the workaround, if it's set to lower then use it.  In
-practice most devices don't change their speed after setup, and the
-driver could check for and handle that case I guess (eg, limit the speed
-configured if the workaround has been activated or rewrite the message
-to a single transfer if neded).  That would be less error prone for
-users, there wouldn't be any possibility of them setting this flag
-incorrectly.
-
---bW0HKNDw1MvhDoNy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPATIgACgkQJNaLcl1U
-h9CcNgf/fWX0iEg9AyY7WMh0wES005sc4MvmRCSw8w5AOYN/t0Vc1fzakGhtkED1
-DrOI8Yji9L9vKpsm+yiGIZVH4fXuM13rmn74wtAm46TqX5QbiJeY65bOUmQepALh
-sRSGJRA4bVmtLloK+1Wmnu+rX45MRt9CJuEgDhZHbHzf6uSa+TnpJUFOYnFllnkJ
-szOLS2ITNFk5rKW/W/9bEEDZWF8Q/0iDGAxGSEzfbYmsm+Z0WyMaf8IYtQne1v9s
-Dxfh7e3hbzmHrPUJB22uMf81TYLA09REuvFXdVhjrPQgrr0PfeXICEOocX6uKTDd
-z6MSDZP2yqBDQD57wJe8/3w/y+DCVw==
-=c9io
------END PGP SIGNATURE-----
-
---bW0HKNDw1MvhDoNy--
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICNpLcJrc+r+/n3XQ2cbkts8RSSi
+wIgA4s4GdRXUzz2IMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMjE5NTAyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAFBOB+bPWyBzFDM8NAVsDL0KEjEbOycb5yhPCHWac4cCzY
+xRWAyBBM9v8pbNPclkEi73lt94eI9qWnBWRqbMnrG5wdDK7G6b+khdqnxQ08pQdYOHVeNsfVKVsw
+0eBkWAdwaYPRTZ4wvGERkvZn7O97sW4jwRJkFshAFVaXJi+911OyYf8ztqkdWv1uzNghMpHrHfv5
+Hncyo5qBi2pGOQUI/brot7jLbFc5wUyJ46YVbmWEdXGzwxcyhAm458HGf2mmVdpW/f81e2D4ciuX
+EWJSBrzc/I2gSfzkoS2OgtYZbJAsArRZKdplmzuX3KPtmss+VgGfsjUsDWTR9Xge9e90
+--00000000000094aa0805f2166dde--
