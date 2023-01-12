@@ -2,55 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2526671DD
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Jan 2023 13:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DCC667CAD
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Jan 2023 18:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbjALMQc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Jan 2023 07:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S234333AbjALRhi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Jan 2023 12:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbjALMQO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Jan 2023 07:16:14 -0500
+        with ESMTP id S232845AbjALRgz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Jan 2023 12:36:55 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDDEDF5C;
-        Thu, 12 Jan 2023 04:16:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91978CBBC8;
+        Thu, 12 Jan 2023 08:58:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6F16202D;
-        Thu, 12 Jan 2023 12:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AD97C433F2;
-        Thu, 12 Jan 2023 12:16:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 014DA620DC;
+        Thu, 12 Jan 2023 16:58:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4F3C43398;
+        Thu, 12 Jan 2023 16:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673525767;
-        bh=qKvxqJrQD6gMmrvKxQQZLRkeW/PDtQHGoQSY6zODWEQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fgqf+vuT59VayFnFnX4kDUMknwm2PO7RjK/UPx3MOcWJ4oydbECp/J3bRgHi2/Eni
-         Jsxtl6I0c6/rN+vSvHjItWR/YRhp6+nAcReHXHPD8iPeFRhjWC+iZw33UhzKYzS+Be
-         V9y6zMz7tjwwLAGGi5yftKlTuV59/hwPOGfJP2UpjfgfsG9wE7bh+jBpOQt1N5RIau
-         U5L6ZfN64xyyqecQylUUWCErWQVtSvt6Ns0HjCwzqZUlFRem6XB/uJ6xe7fex+qxeL
-         ECVGZqeYIeoCdVgSYN61tQo5YhU1CEF0KWfk5V9kXGdx9gwGXRVmYKaIoDvInoNDLn
-         BxKW75HoJpgLA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8267AC395C9;
-        Thu, 12 Jan 2023 12:16:07 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.2-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230112113333.DC00AC433D2@smtp.kernel.org>
-References: <20230112113333.DC00AC433D2@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230112113333.DC00AC433D2@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.2-rc3
-X-PR-Tracked-Commit-Id: b442990d244ba2ffe926c6603c42deb6fcc3b0db
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c757fc92a3f73734872c7793b97f06434773d65d
-Message-Id: <167352576753.4374.14190021290932194301.pr-tracker-bot@kernel.org>
-Date:   Thu, 12 Jan 2023 12:16:07 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
+        s=k20201202; t=1673542681;
+        bh=fFRqgsrl7Ewslx/ZwWvBlTVHZWIOjbNberPekWlv87Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJ1kIpslROY2MZ+qkiqGFEmYrbEbgPz1K1+ljcqoFfC4YRRzL+DLJ8HD00cpLPI77
+         iCXwCf+2nD5jZvYJhMOGhrC3cMP39qnG0M3HDS309gfnOwPYu0NZ1WxjrzAYtFqPdn
+         wViCjfbz02u8+vjIMSSKyOR6hmNm6psvkE4VWAJ8zvhnOZwIl8XQmqyO7mRARWnebP
+         +8tFSbZvWIkucAUmkNNZoCAQBCCHtNkHd3faMumvtIev6x32Zisz1nx5RCSZizwfmd
+         aTzdvXZQvDWkYTyQOHShHuSyGI7ww2j3y5cLrhQ89eCYhSumbufhAegpY3iLcQ0oQp
+         r0ZlSRaRL4W5g==
+Date:   Thu, 12 Jan 2023 16:57:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+Message-ID: <Y8A8EykJYWuu17ew@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
+ <Y7xrhjhhY3g5DE25@sirena.org.uk>
+ <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
+ <Y73WL3Gwo6w6dJJr@sirena.org.uk>
+ <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tB4e0N4NIUaXxw/e"
+Content-Disposition: inline
+In-Reply-To: <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
+X-Cookie: A watched clock never boils.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,15 +66,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Thu, 12 Jan 2023 11:33:19 +0000:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.2-rc3
+--tB4e0N4NIUaXxw/e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c757fc92a3f73734872c7793b97f06434773d65d
+On Wed, Jan 11, 2023 at 11:42:57AM -0800, William Zhang wrote:
+> On 01/10/2023 01:18 PM, Mark Brown wrote:
 
-Thank you!
+> > spi_replace_transfers().
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Okay I saw this function is used by spi_split_transfers_maxsize which a few
+> drivers use to limit the transfer size and it make sense.  I can come up
+> something like spi_merge_transfers to be used by my driver's prepend
+> function.  But it has the same issue I mentioned early as the these tx, rx
+> transfers have the dependency on the order they present in the original
+> transfer list for my prepend function to work.  And for the same reason, it
+> won't be generally useful for other drivers.
+
+I wouldn't be surprised if something else turned up which had similar
+constraints, SPI isn't the most complex thing ever so there's a lot of
+patterns in controlers that get reproduced.
+
+--tB4e0N4NIUaXxw/e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPAPBIACgkQJNaLcl1U
+h9B7owf+NOOGAbdzEW4Bw5MOOF0h1haRJ/Fc1hX/4OplSftennksQwctqCI9LB5s
+jxA3Rn8Itza83awPYWcIJ9fT5ZwNeXBTcNEsQ1KPhHBE+vzYTWYiNlTWABa7vFOE
+EFqu9erZJoYHYgXlb86MSuzC5om0zYGzt/xeGnvaZcMzqQNV3+Ib6urT0I0jRncL
+Uo3sjZoNyJ7FGCRGYVvBuqov9igoCLPFsV0C6+T6NtsE2YwDF9I000oWwmVGgRuo
+dOh8QAZYFfWxvmmw2tIzUGwfyxZshgBCKzlO7PFOprbLza3c1Tf34gLIzJ9lYJ4n
+Rt2HOSabCoThRauJ2p5o/HcW+WjBhw==
+=6GPD
+-----END PGP SIGNATURE-----
+
+--tB4e0N4NIUaXxw/e--
