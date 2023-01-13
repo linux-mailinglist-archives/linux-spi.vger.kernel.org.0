@@ -2,112 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7134966A2A2
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jan 2023 20:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D810766A2C1
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Jan 2023 20:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjAMTFi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Jan 2023 14:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S229527AbjAMTRm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Jan 2023 14:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjAMTFe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Jan 2023 14:05:34 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5580F544F5;
-        Fri, 13 Jan 2023 11:05:33 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pGPMg-003M27-Uf; Fri, 13 Jan 2023 20:05:22 +0100
-Received: from p57ae5361.dip0.t-ipconnect.de ([87.174.83.97] helo=[192.168.178.35])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pGPMg-000Hn8-Jc; Fri, 13 Jan 2023 20:05:22 +0100
-Message-ID: <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-Date:   Fri, 13 Jan 2023 20:05:20 +0100
+        with ESMTP id S229686AbjAMTRi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Jan 2023 14:17:38 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EC26276;
+        Fri, 13 Jan 2023 11:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673637457; x=1705173457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1SvtVZGvdj95Oi+1TLhuCqJ/YRqPXF2Bnfx5f3NXlBU=;
+  b=BzdEDlTpxQz+A1mfetCB/v6uJ5oVbn3OCXPvSuCdbee5ya/ZMj/7+7Lc
+   yNP9pMV3G5z/Yifdh86f632sBuzU6Ey22W/eCSzbKThBKaw7CjcosULdz
+   CHzR9jzbQ+ahTdsgtVuaTBSRGh2xSv/0uFnPZqdyFop2TMFjx1PzRLSTA
+   Mmid28UDYySua21rkFETanxBPpslL8iTHLL4kb3F5LRZxniUA8tVa/0Ba
+   3xPyo0X/GN3yAoQXCY3n5JHc2XqVSvw0qcfW1zh4IgtoG4UOuw7exCT0q
+   9ninN5OubibK15CFGRdt4dRUJa64U5zLofH0kSN0/+wBLsl1RYvjrkP8y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="322774246"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="322774246"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 11:17:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="608254838"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="608254838"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2023 11:17:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pGPYS-008mKf-2G;
+        Fri, 13 Jan 2023 21:17:32 +0200
+Date:   Fri, 13 Jan 2023 21:17:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: dw: Fix wrong FIFO level setting for long xfers
+Message-ID: <Y8GuTDmAxGweJ1/7@smile.fi.intel.com>
+References: <20230113165724.27199-1-Sergey.Semin@baikalelectronics.ru>
+ <20230113185942.2516-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     Rob Landley <rob@landley.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
- <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
- <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.174.83.97
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113185942.2516-1-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob!
-
-On 1/13/23 20:11, Rob Landley wrote:
->> I actually would be willing to do it but I'm a bit hesitant as I'm not 100%
->> sure my skills are sufficient. Maybe if someone can assist me?
+On Fri, Jan 13, 2023 at 09:59:42PM +0300, Serge Semin wrote:
+> Due to using the u16 type in the min_t() macros the SPI transfer length
+> will be cast to word before participating in the conditional statement
+> implied by the macro. Thus if the transfer length is greater than 64KB the
+> Tx/Rx FIFO threshold level value will be determined by the leftover of the
+> truncated after the type-case length. In the worst case it will cause the
+> dramatical performance drop due to the "Tx FIFO Empty" or "Rx FIFO Full"
+> interrupts triggered on each xfer word sent/received to/from the bus.
 > 
-> My skills aren't sufficient and I dunno how much time I have, but I can
-> certainly assist. I test sh4 regularlyish and it's in the list of architectures
-> I ship binaries and tiny VM images for, just refreshed tuesday:
+> The problem can be easily fixed by specifying the unsigned int type in the
+> min_t() macros thus preventing the possible data loss.
+
+LGTM,
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+thanks!
+
+> Fixes: ea11370fffdf ("spi: dw: get TX level without an additional variable")
+> Reported-by: Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> https://landley.net/toybox/downloads/binaries/0.8.9/
-> https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+> ---
 > 
-> (The sh2eb isn't a VM, it's a physical board I have here...)
+> Changelog v2:
+> - Use min_t(unisgned int, ...) macros instead of just min(). (@Andy)
+> ---
+>  drivers/spi/spi-dw-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> There is definitely interest in this architecture. I'm aware Rich hasn't been
-> the most responsive maintainer. (I'm told he's on vacation with his family at
-> the moment, according to the text I got about this issue from the J-core
-> hardware guys in Japan.)
-
-Well, maybe we can just give it a try together ...
-
-> The main reason we haven't converted everything to device tree is we only have
-> access to test hardware for a subset of the boards. Pruning the list of
-> supported boards and converting the rest to device tree might make sense. We can
-> always add/convert boards back later...
-
-There is a patch by Yoshinori Sato which adds device tree support to SH. Maybe we
-can revive it.
-
-Adrian
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b..c3bfb6c84cab 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -366,7 +366,7 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+>  	 * will be adjusted at the final stage of the IRQ-based SPI transfer
+>  	 * execution so not to lose the leftover of the incoming data.
+>  	 */
+> -	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
+> +	level = min_t(unsigned int, dws->fifo_len / 2, dws->tx_len);
+>  	dw_writel(dws, DW_SPI_TXFTLR, level);
+>  	dw_writel(dws, DW_SPI_RXFTLR, level - 1);
+>  
+> -- 
+> 2.39.0
+> 
+> 
 
 -- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+With Best Regards,
+Andy Shevchenko
+
 
