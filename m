@@ -2,234 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9E866A8E4
-	for <lists+linux-spi@lfdr.de>; Sat, 14 Jan 2023 04:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F4D66AEF2
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Jan 2023 01:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjANDR0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Jan 2023 22:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
+        id S230380AbjAOAna (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 14 Jan 2023 19:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjANDRY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Jan 2023 22:17:24 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D6F88DEA
-        for <linux-spi@vger.kernel.org>; Fri, 13 Jan 2023 19:17:23 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id jn22so25238724plb.13
-        for <linux-spi@vger.kernel.org>; Fri, 13 Jan 2023 19:17:23 -0800 (PST)
+        with ESMTP id S230445AbjAOAnZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Jan 2023 19:43:25 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881BE9ECC
+        for <linux-spi@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id r130so20562849oih.2
+        for <linux-spi@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=nkuquDPrgXuT49EqT8dOrFarf+xNkXYZbkue8RM4Jso=;
-        b=cw5FAUSXcz4JdJxq1Iy6L3kEPkA2IEg047tYkpyPVRxjCLqwprAPcI5ul5KvRuzt6H
-         JZeCSocPEz8vMY5y5eArL8NVCmkbumFbwsv2gMRQ1oyug7BotTaVguhfiwOEr2nH8JFB
-         EpgKkjM0527NP8rJ5aneVdAq9rW+eEJGYdUV4=
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
+        b=AWOVJoTRCZIzDDPEVrLicc1SKpwl7KTn8Ol48utvExDUblpnjljkkxvHgz5x7ZXre+
+         8m1djuSOUoerjvNlDkOsvOoru5Slmn51JdtG4yWzqApm65GcAawUt0a4970Ve8qE/PbE
+         WIpzUe/igEignY6RXJsMefYQMCJguWlv4sRLkistNu2yHDIEgQ5le/hWruMQxtCBR8qR
+         R0Xe1ZeaqdcCUIm6QnssL2hDeKkpiOJ4cANGy/HkgZiIyg5h2uIoq1Znienu3k+LNYC0
+         mG/pqdest+Z0kWbWIAyWD+qrcbh4pkalGKoAU1Y3Z3G0iffow+5qADIIMc/6gwB/2uWn
+         mYPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nkuquDPrgXuT49EqT8dOrFarf+xNkXYZbkue8RM4Jso=;
-        b=Jo0NXk1X6cFqmysWEXEGenq5njrLb4q/dhO1r4JVCiwHeOv0SkRajapFHtJ/e8HlGW
-         DUFoZET437LmLlLkLoW9qPcl05wMCLDGoBZrXe4QckxvpKWC59sTn44Buj+6xGDjbTk8
-         N5CenTsV0+FLW7yEFh+hPkHWtiQmnDyNqWF7PotGQKKEb7W1aOMziiWKILQ3q7f5Bmgw
-         CcsUHqnfMELn7D+SBc3HBLsAbt9LWb5xIQw45hW6t5wFwjIWLbNMUJq1U+NKdW2tZQ0r
-         z9XN1CAFPZQaEzdDL1uIePQuCdryv9bm7/wiuQPc8gBAJBx6Ce1cPHL1kyLfzI41af9R
-         PqIA==
-X-Gm-Message-State: AFqh2ko1rM0NaBqwCsIJ6yhSWhgEIjVnHahxbibzWE4izC4ILbzZ/h1S
-        70omPDiEfGqOw+oLDa3H54HLMw==
-X-Google-Smtp-Source: AMrXdXvhH+i0VF5ClamjDQgAOYCnlDSG0m7J4onNfPA/yLw1/z2qIVAC4GFUS2AvK6wu3Eii2drmaw==
-X-Received: by 2002:a17:90a:9b0f:b0:219:672a:42db with SMTP id f15-20020a17090a9b0f00b00219672a42dbmr13534630pjp.19.1673666242437;
-        Fri, 13 Jan 2023 19:17:22 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090a678b00b0022698aa22d9sm15035005pjj.31.2023.01.13.19.17.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 13 Jan 2023 19:17:20 -0800 (PST)
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
- <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
- <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
- <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
- <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
- <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
- <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
- <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
- <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
- <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
- <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
- <f4356898-de35-9728-5395-baecb07c843f@linaro.org>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <3c3955da-6b9f-c994-e345-03bcffa91473@broadcom.com>
-Date:   Fri, 13 Jan 2023 19:17:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
+        b=pvJZr2GWCRHJHKTHiS0WuniLtvMSvX0y/f7PZDpxVSSZlFqux+gRVun5/RU/47QuQM
+         SgU4ZgT2mOJRY0viF943ToNDhc76KnUvtjtv0CyaffCtA2g5wmJcamcgtaXlsZdz+Oqq
+         66sweaJtTIf3E8mEn9InMiwRSdsv0QzqwPXGzKRSibrm1M/k12at1C71O3NJqFS+xeZP
+         J2EsgE/G6FPPWNlIl6rRaFbcCHB9KOlxvfWM7Q2LkLn9gA2cTwnfA13ExtOIENjzHXJd
+         i7cn4Bw+Bukv3gnC0P2oCSzWs4LrJWVnbysBLjahKqfj532ixH1bMGag+yAfc0bgUmaK
+         bk4A==
+X-Gm-Message-State: AFqh2koCMbbAFunezqIMRwiwiYgjqrSN+Ht77P4SxZ9W45lopKi3x92S
+        ytXHZXaT4JT9BDldBB5umJK6aQ==
+X-Google-Smtp-Source: AMrXdXtmlbzCnjvw02a750r61CcJJIRVFXhgi7CC+Te697GM+nVvImU+iajKPZiIXIE5Si7tn9Lk3Q==
+X-Received: by 2002:aca:c189:0:b0:35a:6005:3dc5 with SMTP id r131-20020acac189000000b0035a60053dc5mr35396207oif.51.1673743401843;
+        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id l10-20020a056808020a00b00360e46a1edasm10935583oie.22.2023.01.14.16.43.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
+Message-ID: <fe206345-9445-f1be-02c1-b3cc39a533ef@landley.net>
+Date:   Sat, 14 Jan 2023 18:55:31 -0600
 MIME-Version: 1.0
-In-Reply-To: <f4356898-de35-9728-5395-baecb07c843f@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e1c54005f230c987"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---000000000000e1c54005f230c987
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 
 
+On 1/13/23 01:12, Greg Kroah-Hartman wrote:
+> On Fri, Jan 13, 2023 at 07:23:19AM +0100, Christoph Hellwig wrote:
+>> USB_OHCI_SH is a dummy option that never builds any code, remove it.
+>> 
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>> ---
+>>  drivers/usb/host/Kconfig | 11 -----------
+>>  1 file changed, 11 deletions(-)
+>> 
+>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+>> index 8d799d23c476e1..ca5f657c092cf4 100644
+>> --- a/drivers/usb/host/Kconfig
+>> +++ b/drivers/usb/host/Kconfig
+>> @@ -548,17 +548,6 @@ config USB_OHCI_HCD_SSB
+>>  
+>>  	  If unsure, say N.
+>>  
+>> -config USB_OHCI_SH
+>> -	bool "OHCI support for SuperH USB controller (DEPRECATED)"
+>> -	depends on SUPERH || COMPILE_TEST
+>> -	select USB_OHCI_HCD_PLATFORM
+>> -	help
+>> -	  This option is deprecated now and the driver was removed, use
+>> -	  USB_OHCI_HCD_PLATFORM instead.
+>> -
+>> -	  Enables support for the on-chip OHCI controller on the SuperH.
+>> -	  If you use the PCI OHCI controller, this option is not necessary.
+>> -
+>>  config USB_OHCI_EXYNOS
+>>  	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
+>>  	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+>> -- 
+>> 2.39.0
+>> 
+> 
+> Do you want all of these to go through a single tree, or can they go
+> through the different driver subsystem trees?
 
-On 01/12/2023 11:41 PM, Krzysztof Kozlowski wrote:
-> On 12/01/2023 20:50, William Zhang wrote:
->>>> No as we are adding chip model specific info here.  The existing driver
->>>> spi-bcm63xx-hsspi.c only binds to brcm,bcm6328-hsspi. This driver
->>>> supports all the chips with rev1.0 controller so I am using this 6328
->>>> string for other chips with v1.0 in the dts patch, which is not ideal.
->>>
->>> Why? This is perfectly ideal and usual case. Why changing it?
->>>
->>>> Now I have to add more compatible to this driver and for each new chip
->>>> with 1.0 in the future if any.
->>>
->>> Why you cannot use compatibility with older chipset?
->>>
->> IMHO it is really confusing that we have all the SoCs but have to bind
->> to an antique SoC's spi controller compatible and people may think it is
->> a mistake or typo when they don't know they are actually the same.
-> 
-> I am sorry, this is ridiculous argument. It's like saying - people
-> cannot understand what they are reading, therefore we need to present
-> them obfuscated information so they will think something else than their
-> minds created...
-> 
-This is clearly not to obfuscate. Rather it provide more accurate info 
-about the binding.  Is it a problem to have the correct and precise info 
-to make it easier for people to understand?
+Neither please. Multiple people are objecting.
 
->> I
->> know there are usage like that but when we have clear knowledge of the
->> IP block with rev info, I think it is much better to have a precise SoC
-> 
-> No, it's not particularly better and you were questioning it just before...
-> 
-Better than using the very old specific chip model number to bind all 
-other new chips while I have a chance to update the doc now. I guess we 
-have to agree to disagree. Enough discussion and I will send out v2 next 
-week.  Thanks for the review.
-
->> model number and a general revision info in the compatible. As you know
->> they are many usage of IP rev info in the compatible too.
->> brcm,bcm6328-hsspi will stay so it does not break any existing dts
->> reference to that.
-> 
-> Anyway your ship sailed - you already have bindings using SoC  versions...
-> 
->>
->> Anyway if you still does not like this idea, I will drop the rev info
->> and you have it your way.
-> 
-> Best regards,
-> Krzysztof
-> 
-
---000000000000e1c54005f230c987
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKBKwd2poC1z/mqu7QbA50jBJjvE
-LndJmjSIqYuJ8mixMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExNDAzMTcyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQB1Tkm9hojtRn5lQivK7HZHl0ZbTmrnxp1kUHf+qszo1z4M
-Ub8gvDe9g5sYQffADoMRcV1FOmxunaVaeas/rOxzXceaU+xTjV9pSaFU/e56f2Mm9AKOIJpEtMb4
-EnyWwfIs9HxovvG2cm6jTUk0zUxCFF+va4KA5jJMOz8aAnc9GVyAx7rR6rWzln5SQC5uByB/ebru
-UkOqu9F66vqjPhmJoK1WVz4L2keHKpqYvQcje97NQgcLdXyk1iaw4bSaJ+keGQP/QlkusyfsR5Pl
-hCPUPlmNOOI1ZodtOLJxiIxYRX6MtyNZK6oPcd43YMxgVPd3geKq+525a5GH8PdoJ8Zi
---000000000000e1c54005f230c987--
+Rob
