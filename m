@@ -2,133 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F4D66AEF2
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Jan 2023 01:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB8D66B189
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Jan 2023 15:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjAOAna (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 14 Jan 2023 19:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S231181AbjAOOb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Jan 2023 09:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjAOAnZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Jan 2023 19:43:25 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881BE9ECC
-        for <linux-spi@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id r130so20562849oih.2
-        for <linux-spi@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
+        with ESMTP id S231160AbjAOOb6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Jan 2023 09:31:58 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15B5113EB
+        for <linux-spi@vger.kernel.org>; Sun, 15 Jan 2023 06:31:56 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id cf18so56203165ejb.5
+        for <linux-spi@vger.kernel.org>; Sun, 15 Jan 2023 06:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
-        b=AWOVJoTRCZIzDDPEVrLicc1SKpwl7KTn8Ol48utvExDUblpnjljkkxvHgz5x7ZXre+
-         8m1djuSOUoerjvNlDkOsvOoru5Slmn51JdtG4yWzqApm65GcAawUt0a4970Ve8qE/PbE
-         WIpzUe/igEignY6RXJsMefYQMCJguWlv4sRLkistNu2yHDIEgQ5le/hWruMQxtCBR8qR
-         R0Xe1ZeaqdcCUIm6QnssL2hDeKkpiOJ4cANGy/HkgZiIyg5h2uIoq1Znienu3k+LNYC0
-         mG/pqdest+Z0kWbWIAyWD+qrcbh4pkalGKoAU1Y3Z3G0iffow+5qADIIMc/6gwB/2uWn
-         mYPA==
+        bh=Ka7RsGQ4vY+og58IhboXaj+SShDOCjiWCr/xxnDLPMk=;
+        b=bVppNKG2N5/nBD4Oj/iy4LGZE8V9y9i2K6RWx7k+vphMDkcXflrAeHP6/ig5syiAaw
+         PeE1M6XZIfFyulr7NEfQGB5V8p1j2clsUae/m+k2lZ27I/qW8jB04m62MMZu1+fGzs4m
+         daoR9ZnEMDSPHzko2DM3VU/VTpQQWjCck90eNclhf86QJjgOgQXkCmTU+GEaoj6KJR0y
+         YnCJM/52pGwqCfRZ4ib2b3NQPsA/cjwzG9SCAZDPT4VvqOfICQJKXvDneZscfkzXzVLv
+         sjTtrAjxK65mtdcrQuCrzsYgQw/ItBGGulk8En/gb1xex+Xng4kNFXNr7+hbpMb0bcqJ
+         WfTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
-        b=pvJZr2GWCRHJHKTHiS0WuniLtvMSvX0y/f7PZDpxVSSZlFqux+gRVun5/RU/47QuQM
-         SgU4ZgT2mOJRY0viF943ToNDhc76KnUvtjtv0CyaffCtA2g5wmJcamcgtaXlsZdz+Oqq
-         66sweaJtTIf3E8mEn9InMiwRSdsv0QzqwPXGzKRSibrm1M/k12at1C71O3NJqFS+xeZP
-         J2EsgE/G6FPPWNlIl6rRaFbcCHB9KOlxvfWM7Q2LkLn9gA2cTwnfA13ExtOIENjzHXJd
-         i7cn4Bw+Bukv3gnC0P2oCSzWs4LrJWVnbysBLjahKqfj532ixH1bMGag+yAfc0bgUmaK
-         bk4A==
-X-Gm-Message-State: AFqh2koCMbbAFunezqIMRwiwiYgjqrSN+Ht77P4SxZ9W45lopKi3x92S
-        ytXHZXaT4JT9BDldBB5umJK6aQ==
-X-Google-Smtp-Source: AMrXdXtmlbzCnjvw02a750r61CcJJIRVFXhgi7CC+Te697GM+nVvImU+iajKPZiIXIE5Si7tn9Lk3Q==
-X-Received: by 2002:aca:c189:0:b0:35a:6005:3dc5 with SMTP id r131-20020acac189000000b0035a60053dc5mr35396207oif.51.1673743401843;
-        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056808020a00b00360e46a1edasm10935583oie.22.2023.01.14.16.43.20
+        bh=Ka7RsGQ4vY+og58IhboXaj+SShDOCjiWCr/xxnDLPMk=;
+        b=EBELA/1kYMS+qDWs/A8ubgFT1iVto06MAgJ79hCWWyba0w4HCx/Jv1B+dSirkhSIh4
+         nxe5uNqvNdkKGsPo2syGv9filW+95YrJMK6CRiQxhjT8ZlfeTCrmvgciDwywH61FtDKC
+         hUXEQroh7QHXcY9OeJwFDUYDOOpfrHmxwpK9TpvKhYRLiB1/ERUUbaRsQcf2yo+X9Rh1
+         emQChWzb4QTHnYB7P4jRoIqDktw/n1mTUtY+jGtyhExPrtXU+L5uM9LGfuLJDLA3oHoc
+         gXfF9wd1j6eT1jTzJhdzhTFue6IgkOyUDfNSFyQsPbcRcZvVT6184AuEBqpC8SsALkIP
+         UmSA==
+X-Gm-Message-State: AFqh2kolV1r+089VdGEewA/BmhUa7JFwyyLQi9FSOG67pyCxBV6xyJs7
+        mshNLo05aTpFzcS/hDdI8ygW9g==
+X-Google-Smtp-Source: AMrXdXtcYn7Ys87GJP7CGaLmrovhaHQrVYKw4ENs4h80qYIv73jg2OMm+fHdPu2HqrC1CdKIEdORSw==
+X-Received: by 2002:a17:907:2c61:b0:86e:fccc:bc19 with SMTP id ib1-20020a1709072c6100b0086efcccbc19mr3597731ejc.43.1673793115401;
+        Sun, 15 Jan 2023 06:31:55 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1709060cd200b0084c723a626csm10654904ejh.209.2023.01.15.06.31.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
-Message-ID: <fe206345-9445-f1be-02c1-b3cc39a533ef@landley.net>
-Date:   Sat, 14 Jan 2023 18:55:31 -0600
+        Sun, 15 Jan 2023 06:31:54 -0800 (PST)
+Message-ID: <91737ee5-f751-9f5e-34fd-0eeae29d7077@linaro.org>
+Date:   Sun, 15 Jan 2023 15:31:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+ <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+ <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+ <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
+ <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+ <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
+ <f4356898-de35-9728-5395-baecb07c843f@linaro.org>
+ <3c3955da-6b9f-c994-e345-03bcffa91473@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3c3955da-6b9f-c994-e345-03bcffa91473@broadcom.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 14/01/2023 04:17, William Zhang wrote:
+>>> I
+>>> know there are usage like that but when we have clear knowledge of the
+>>> IP block with rev info, I think it is much better to have a precise SoC
+>>
+>> No, it's not particularly better and you were questioning it just before...
+>>
+> Better than using the very old specific chip model number to bind all 
+> other new chips while I have a chance to update the doc now. 
+
+It will be used to bind them anyway, it's already an ABI.
 
 
-On 1/13/23 01:12, Greg Kroah-Hartman wrote:
-> On Fri, Jan 13, 2023 at 07:23:19AM +0100, Christoph Hellwig wrote:
->> USB_OHCI_SH is a dummy option that never builds any code, remove it.
->> 
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  drivers/usb/host/Kconfig | 11 -----------
->>  1 file changed, 11 deletions(-)
->> 
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> index 8d799d23c476e1..ca5f657c092cf4 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -548,17 +548,6 @@ config USB_OHCI_HCD_SSB
->>  
->>  	  If unsure, say N.
->>  
->> -config USB_OHCI_SH
->> -	bool "OHCI support for SuperH USB controller (DEPRECATED)"
->> -	depends on SUPERH || COMPILE_TEST
->> -	select USB_OHCI_HCD_PLATFORM
->> -	help
->> -	  This option is deprecated now and the driver was removed, use
->> -	  USB_OHCI_HCD_PLATFORM instead.
->> -
->> -	  Enables support for the on-chip OHCI controller on the SuperH.
->> -	  If you use the PCI OHCI controller, this option is not necessary.
->> -
->>  config USB_OHCI_EXYNOS
->>  	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
->>  	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
->> -- 
->> 2.39.0
->> 
+> I guess we 
+> have to agree to disagree. Enough discussion and I will send out v2 next 
+> week.  Thanks for the review.
 > 
-> Do you want all of these to go through a single tree, or can they go
-> through the different driver subsystem trees?
+>>> model number and a general revision info in the compatible. As you know
+>>> they are many usage of IP rev info in the compatible too.
+>>> brcm,bcm6328-hsspi will stay so it does not break any existing dts
+>>> reference to that.
+>>
+>> Anyway your ship sailed - you already have bindings using SoC  versions...
 
-Neither please. Multiple people are objecting.
+As I said here...
 
-Rob
+Best regards,
+Krzysztof
+
