@@ -2,64 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F77E66C2D1
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 15:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE6A66C2DB
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 15:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjAPOyN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Jan 2023 09:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S232735AbjAPOzI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Jan 2023 09:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjAPOxo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 09:53:44 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B71F23D9D
-        for <linux-spi@vger.kernel.org>; Mon, 16 Jan 2023 06:42:00 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r9so4898818wrw.4
-        for <linux-spi@vger.kernel.org>; Mon, 16 Jan 2023 06:42:00 -0800 (PST)
+        with ESMTP id S230497AbjAPOyN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 09:54:13 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119D6233F3
+        for <linux-spi@vger.kernel.org>; Mon, 16 Jan 2023 06:43:19 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id a40so211557uad.12
+        for <linux-spi@vger.kernel.org>; Mon, 16 Jan 2023 06:43:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Ppko8Fem+qtirmYhp62EkgUMyaloOxSAW2RcoWpD8I=;
-        b=8EI8vtH1yUk28VFMj92vw5wTOII6JxqTmxqBGNvfxrRf9qrzwu1wy4qOATNSQxjc9d
-         R1UJ4qU2vEgWUuxmWQiWGyklnOrH5wV2LU+Ccv2embbP0WIETuvDcaXddLvjwyQRHD66
-         dbk5W9yLzTVC7r9xQ6kMStfb4kPSUEcfl+8j28OSk0lopTRCTRddJxa6EYyvsOuwUB3+
-         smD2q6ZAr6K+69W4Rv0jgvS8LM2gawH1uQamqOU0urnmv8/pZOTvCN7qxY7KuL1smhlz
-         bvL86lYGRzOFWlBB/pCJmRn6AiWnFm7YM5i/CBulRWnbqgGVaA+PY4tEOUd3FExj9W7v
-         vsXw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrkHVNRmnhZL9c7e/tiK9zbteggD/bg2MaRxrtXICaA=;
+        b=4hi68ap0w5TIliRa6FiT23ev6Yly6wfrRSYwDoOCoStkCiquhU9FZNpG8MYx+xhxp2
+         B699t8NGWIyLGkZMc19aTewjSSwoO/KDMSqHMfXUBeWUUxq3zJtjE+/AAhaBrW4nJbOF
+         Tp2TTirxp/AQcXahLlJe5a15vd3rmCxkISToBZXO8v8wIv8f3qwMsCIL6ZaXGdM7//po
+         xec5EGqZSJFDy80Prpnytz7R3WV9o4mTvvGyju/ogWcAwmKLZlua9yvTAG0dCWexU9mj
+         jNksVAB7Muc9KNbQDOtmEG1iJUu0W8D4Tbf6PX/i0Bz4pK4oXhhk9ui/tKq/X7IGDEn9
+         7rog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0Ppko8Fem+qtirmYhp62EkgUMyaloOxSAW2RcoWpD8I=;
-        b=CBqq2BgHbo8jH3h40UKGaGU0qQPGZllFeVgTzZMmdXhDtifiCoajKFxcJRnSA/NoXb
-         thQnxVCSQte4zhbIRtel4+WYMylIVAN30kcQM+kqWy3++F2mapfUVPhVobGTVJfOSxQU
-         afvLDXxcsxNj5R9mAoRD/xFand035AkD1feFjo3RmeiUmMWNnuu/TFvpBnvSQ3uXON15
-         nzCZ1gezYVEsp7Ursoxtk+iyOPOl1Gm/D3X32s3QMBeOTemaOZo0qFBdfhigVAaQ0ZzK
-         /C2LzPWGh7scuq5H/JdHvensaCQd5xUauZ2kpnCtRvlBB0fU1xwpAwmL6EsgQGzl2XoQ
-         h63Q==
-X-Gm-Message-State: AFqh2krTZlmhLbM1NndG9WAyZyMXy5cnCsR07amWrM7/aAnWeb9Za8i/
-        ZQGNjDS5tDpbG8vhGhzsRXhJnB8CPipgRwsX
-X-Google-Smtp-Source: AMrXdXvswhBZBHL3czGygVmuEp4kCJ4skGF7OFh/1qMOaUgNh5rRMgW34Z1OPN5a1reY/5IDqOTxPA==
-X-Received: by 2002:a5d:528e:0:b0:2bd:e99a:a8a9 with SMTP id c14-20020a5d528e000000b002bde99aa8a9mr7603936wrv.71.1673880119021;
-        Mon, 16 Jan 2023 06:41:59 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2f9d:c271:2ba9:4f2a])
-        by smtp.gmail.com with ESMTPSA id r10-20020adfda4a000000b0029a06f11022sm26691105wrl.112.2023.01.16.06.41.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 06:41:58 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Mark Brown <broonie@kernel.org>,
-        Francesco Dolcini <francesco@dolcini.it>,
-        Max Krummenacher <max.krummenacher@toradex.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH -next] spi: spidev: fix a recursive locking error
-Date:   Mon, 16 Jan 2023 15:41:49 +0100
-Message-Id: <20230116144149.305560-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        bh=JrkHVNRmnhZL9c7e/tiK9zbteggD/bg2MaRxrtXICaA=;
+        b=FQaU5/V15MS0aa+tz+3agEgY4kRc94gKkJ7kofLfbphVitJZxAgNn2+alRmDupszMf
+         Io9H36i0zqtwKy2BcXUwZqRLU7OmX3EcUAR2EzfpmN4ZLnvUZgV43muajIYZo0Th4p5F
+         sPdw5oq1Iv+/2DpB986DwVkl6+qQum8e5xzJOGZvG/qyEC4ilnBq9aRTUrjqor/SABqV
+         XvnC8uyIbqOmV/vfTRVnhhJM3I1TKZ7hFHdhw4sz2CSIK6kCbASR299Fg2Pe7P5eAzvs
+         45eSSro4l/MOj/zaSK7xBDyGHlcoLljdxYhNLFXc2ykWpAKsfUR/6WFSpMgR1QRHP4SX
+         evHw==
+X-Gm-Message-State: AFqh2kqVjL6iNeYEBZkSa/kGM0JgeDSiHXmgZGEyHPr3oiB6d67tGkPe
+        0XXqUpQXSsEyxdH3AbavHf8nc2JDhSH67Hq4UHSPig==
+X-Google-Smtp-Source: AMrXdXtyMquODUcwF8GI68Qc/1WycAYd52xwMGrrUlIOZhID3X1ycKOyqw6fPA9YoJfhslIgO5oXJDlTg8skb6vnyoo=
+X-Received: by 2002:a9f:362c:0:b0:5d2:c6ce:7c41 with SMTP id
+ r41-20020a9f362c000000b005d2c6ce7c41mr4591111uad.112.1673880198144; Mon, 16
+ Jan 2023 06:43:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+ <CAMRc=Mc5YgWqRsmw=n6EV8PW5OZfMZYotiqSy=gSvHH1PbVN4w@mail.gmail.com>
+ <CACMJSesujoLTRFXMRuA2tBAJhainmy6-CmoeuO8OwW9VifaiKw@mail.gmail.com>
+ <10740fc72ae6fb7aeb7d5ea243495bc225ca656f.camel@toradex.com> <CAMRc=Me0ewbyGi+e2mxijsvLUqUZSF5nNCtUfONT2-q=U0VCLw@mail.gmail.com>
+In-Reply-To: <CAMRc=Me0ewbyGi+e2mxijsvLUqUZSF5nNCtUfONT2-q=U0VCLw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 15:43:07 +0100
+Message-ID: <CAMRc=Mc36r-Qoq3HDhhVqF+OOQ9YSfsw1wddnXfHFmjL32Q=1g@mail.gmail.com>
+Subject: Re: spidev regression in 6.2-rc kernel
+To:     Max Krummenacher <max.krummenacher@toradex.com>,
+        "francesco@dolcini.it" <francesco@dolcini.it>
+Cc:     "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -69,119 +71,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Mon, Jan 16, 2023 at 2:45 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> Thanks Max, that makes sense now, working on a fix.
+>
+> Bart
 
-When calling spidev_message() from the one of the ioctl() callbacks, the
-spi_lock is already taken. When we then end up calling spidev_sync(), we
-get the following splat:
+Max, Francesco,
 
-[  214.047619]
-[  214.049198] ============================================
-[  214.054533] WARNING: possible recursive locking detected
-[  214.059858] 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1 Not tainted
-[  214.065969] --------------------------------------------
-[  214.071290] spidev_test/1454 is trying to acquire lock:
-[  214.076530] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x8e0/0xab8
-[  214.084164]
-[  214.084164] but task is already holding lock:
-[  214.090007] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
-[  214.097537]
-[  214.097537] other info that might help us debug this:
-[  214.104075]  Possible unsafe locking scenario:
-[  214.104075]
-[  214.110004]        CPU0
-[  214.112461]        ----
-[  214.114916]   lock(&spidev->spi_lock);
-[  214.118687]   lock(&spidev->spi_lock);
-[  214.122457]
-[  214.122457]  *** DEADLOCK ***
-[  214.122457]
-[  214.128386]  May be due to missing lock nesting notation
-[  214.128386]
-[  214.135183] 2 locks held by spidev_test/1454:
-[  214.139553]  #0: c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
-[  214.147524]  #1: c4925e14 (&spidev->buf_lock){+.+.}-{3:3}, at: spidev_ioctl+0x70/0xab8
-[  214.155493]
-[  214.155493] stack backtrace:
-[  214.159861] CPU: 0 PID: 1454 Comm: spidev_test Not tainted 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1
-[  214.169012] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-[  214.175555]  unwind_backtrace from show_stack+0x10/0x14
-[  214.180819]  show_stack from dump_stack_lvl+0x60/0x90
-[  214.185900]  dump_stack_lvl from __lock_acquire+0x874/0x2858
-[  214.191584]  __lock_acquire from lock_acquire+0xfc/0x378
-[  214.196918]  lock_acquire from __mutex_lock+0x9c/0x8a8
-[  214.202083]  __mutex_lock from mutex_lock_nested+0x1c/0x24
-[  214.207597]  mutex_lock_nested from spidev_ioctl+0x8e0/0xab8
-[  214.213284]  spidev_ioctl from sys_ioctl+0x4d0/0xe2c
-[  214.218277]  sys_ioctl from ret_fast_syscall+0x0/0x1c
-[  214.223351] Exception stack(0xe75cdfa8 to 0xe75cdff0)
-[  214.228422] dfa0:                   00000000 00001000 00000003 40206b00 bee266e8 bee266e0
-[  214.236617] dfc0: 00000000 00001000 006a71a0 00000036 004c0040 004bfd18 00000000 00000003
-[  214.244809] dfe0: 00000036 bee266c8 b6f16dc5 b6e8e5f6
+I've sent out a fix, please give it a spin and leave your Tested-by if
+you don't mind.
 
-Fix it by introducing an unlocked variant of spidev_sync() and calling it
-from spidev_message() while other users who don't check the spidev->spi's
-existence keep on using the locking flavor.
-
-Reported-by: Francesco Dolcini <francesco@dolcini.it>
-Fixes: 1f4d2dd45b6e ("spi: spidev: fix a race condition when accessing spidev->spi")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/spi/spidev.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 8ef22ebcde1f..892965ac8fdf 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -89,10 +89,22 @@ MODULE_PARM_DESC(bufsiz, "data bytes in biggest supported SPI message");
- 
- /*-------------------------------------------------------------------------*/
- 
-+static ssize_t
-+spidev_sync_unlocked(struct spi_device *spi, struct spi_message *message)
-+{
-+	ssize_t status;
-+
-+	status = spi_sync(spi, message);
-+	if (status == 0)
-+		status = message->actual_length;
-+
-+	return status;
-+}
-+
- static ssize_t
- spidev_sync(struct spidev_data *spidev, struct spi_message *message)
- {
--	int status;
-+	ssize_t status;
- 	struct spi_device *spi;
- 
- 	mutex_lock(&spidev->spi_lock);
-@@ -101,12 +113,10 @@ spidev_sync(struct spidev_data *spidev, struct spi_message *message)
- 	if (spi == NULL)
- 		status = -ESHUTDOWN;
- 	else
--		status = spi_sync(spi, message);
--
--	if (status == 0)
--		status = message->actual_length;
-+		status = spidev_sync_unlocked(spi, message);
- 
- 	mutex_unlock(&spidev->spi_lock);
-+
- 	return status;
- }
- 
-@@ -294,7 +304,7 @@ static int spidev_message(struct spidev_data *spidev,
- 		spi_message_add_tail(k_tmp, &msg);
- 	}
- 
--	status = spidev_sync(spidev, &msg);
-+	status = spidev_sync_unlocked(spidev->spi, &msg);
- 	if (status < 0)
- 		goto done;
- 
--- 
-2.37.2
-
+Bart
