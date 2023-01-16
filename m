@@ -2,207 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0155E66C3DE
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 16:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314E666C458
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 16:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAPPa3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Jan 2023 10:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S229883AbjAPPwO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Jan 2023 10:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjAPP3U (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 10:29:20 -0500
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37DF2886E
-        for <linux-spi@vger.kernel.org>; Mon, 16 Jan 2023 07:24:25 -0800 (PST)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2107.outbound.protection.outlook.com [104.47.22.107]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-3-tl8-r3JvOmKyx_tg8S2KzQ-1; Mon, 16 Jan 2023 16:24:19 +0100
-X-MC-Unique: tl8-r3JvOmKyx_tg8S2KzQ-1
-Received: from ZRAP278MB0237.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::13)
- by ZR0P278MB0012.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:19::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 15:24:17 +0000
-Received: from ZRAP278MB0237.CHEP278.PROD.OUTLOOK.COM
- ([fe80::bee2:f5b3:edc7:24a6]) by ZRAP278MB0237.CHEP278.PROD.OUTLOOK.COM
- ([fe80::bee2:f5b3:edc7:24a6%3]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 15:24:17 +0000
-From:   Max Krummenacher <max.krummenacher@toradex.com>
-To:     "francesco@dolcini.it" <francesco@dolcini.it>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] spi: spidev: fix a recursive locking error
-Thread-Topic: [PATCH -next] spi: spidev: fix a recursive locking error
-Thread-Index: AQHZKbiyuUx4OhmfjUuYmp6YDeINjK6hKcCA
-Date:   Mon, 16 Jan 2023 15:24:17 +0000
-Message-ID: <24cc363899ae8a7ca827287fd33ddf2dcb28e9b7.camel@toradex.com>
-References: <20230116144149.305560-1-brgl@bgdev.pl>
-In-Reply-To: <20230116144149.305560-1-brgl@bgdev.pl>
-Accept-Language: en-CH, de-DE, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZRAP278MB0237:EE_|ZR0P278MB0012:EE_
-x-ms-office365-filtering-correlation-id: b2f6a548-06ab-4aeb-c221-08daf7d5bbbe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: Wg+VlK3i6Kcnt6fYYlD28/2SuukejcTZpAQ51oZomWiXtJWKJdAB2kCUet8cydkTu+41lkccG4JbKXfrW47UsYamkviDdbHX+BO+z7Z5uhQjok2Ie6AU7ilNuZznXf4L24b9K7LTN7AZhm9DKhLfugAjwHdvuCE5pNAl5hBh5Uw1Q+AdfiIV+LvwBL/05pff0kIJ8Tv1YK4XRNp0CJIsz/Ph2y9NT2byhV/NK11EikTEJBswv9II80QpsUBoILsevgAZ1NKgMLmJWIUULen2me21GiZBDfO471MP51FXEZlNMrWz18FpIwoTwW8o7FmubSYdBoY7LY9kujhPV6xJHyyx0kZrh+VCn3qpQzuBx4/pyf1N4oaDhwSPoCzzGJeDmz4cOGDfBUZMWPp/zfjkcnmCnDUvnHA33mPBwB3JPaMeN2oc84WuDMzxtzrzezA7Qp+bNigOi0vz8aN1Km6uRgNI1E18ukYcCCqSP8pjaVX7xH5lYXyqLp2EWGxMPR0CA+so7Sonv6y4xmpSg5KtubkbrIlEoBUvp/yQ3oma3/xs31WHjUnOX9PxmC16EnP1Y2x+eAIsZAKa5aos9q4DVByzgudQ8+7UyMbF5iw6PaDk3hWAdbnbAaSqR/p+us8XtK0w5alE7KiHUK1O0s30ONkak9h2LzXfefBBBZfwfspPl5z8I0yz706OH78sXt8ySXPbdq7gCF2D4IxAgsX9fQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0237.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39840400004)(396003)(376002)(136003)(451199015)(83380400001)(122000001)(38070700005)(86362001)(8676002)(38100700002)(2906002)(5660300002)(8936002)(44832011)(76116006)(66476007)(64756008)(66946007)(66446008)(4326008)(66556008)(41300700001)(6512007)(186003)(6506007)(26005)(2616005)(54906003)(316002)(110136005)(478600001)(6486002)(71200400001)(36756003);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YzFQcVY0Zmlya1VaSFNDcEJZSENic2pNRDQxeGF2VWZwRTVaQ0ZqQ0tFZUNX?=
- =?utf-8?B?K1k2SERBcHQ4TUNxT0VEQTNOVlpXRVZlOWRhMmhqQ0tIVWxxQ093aExLa0o0?=
- =?utf-8?B?TDloUUd0TGd0YTc0eVlKc0RtQTFuQkZjWEh3WVlvTk5Zd0lGOXhVbXJJNzJL?=
- =?utf-8?B?S3g4QjNEdVhzcWU1TWlLUTJlYmZ5NGVVT2p6VjMwUWFGeUZzeDhNSmZaOVRk?=
- =?utf-8?B?Yy9DdGIwbm5TY01rYWlOc2VDMmQ0b3NTb0dLeGQ4YlU0b3lqQ2Z3U1R1QWcx?=
- =?utf-8?B?bEdOMFJvb20yT3F4K0VsYVZYTjF6M2UwZ3BSTUluUDFUaEV6QnhEbEg2QW5Z?=
- =?utf-8?B?S01kMWdUTkxKZGRReUFQcjBJcXMvMzcrV1FWc0hRTmVKWFRhT0VRV3dFZnNC?=
- =?utf-8?B?YWJieHJIR2dUNWYvK1ZKU0FVL0VrWmZtVHQ4VjA1STg2N3Vhc2libENSbzR4?=
- =?utf-8?B?ODZsVTEvMTNyaGhFVFBhNm5GeVgzQnppVU9uTy8rRWxsOU5vRHkvUUlEc2sy?=
- =?utf-8?B?WXEvd2NYek0wRm5CQi94VHF3b2ozVjNXd0lDSllaZWpQVklkZGtXblpNNEhh?=
- =?utf-8?B?RHN1QzBoMkFRY25OaVExR2JuSTRBT01VQmw3eUFWb1ljL2kyYXR4RkJCZ2JI?=
- =?utf-8?B?L0NrOTcwMnBPR1U5aHN0OEJjU2xhWWUwcW9lMmJRWjAreDlVQlYrR3o5SDZx?=
- =?utf-8?B?dnRzQk5TbTdFYXdDV3VBdGNEVVFHRTQ1YzM5bjdVcUMvRGZUcTZpVXZoUUZW?=
- =?utf-8?B?N1hLeTFyVG94b2R6bElGRkozSFluVGdlbmZSZGRJQktHUHJFL3JZOXNoR3Rl?=
- =?utf-8?B?SlRPMnRPWDRzNy8zSDIrdzBIYXpYanNDbEhydW5HZzBrbzExQ2FSbTVKZS81?=
- =?utf-8?B?OEdkRVkwb2dMK1JJYTA5UU0xbyt2Q2ovVnUydEJheVdZMURRT3J0OE00ZGU2?=
- =?utf-8?B?SWk0eTNyNDkwSTE2dG9KNzdLL1ltR05IVXpmM3ZUQzB4N3ZhUkdTb3N4blQ2?=
- =?utf-8?B?Zkc4SEZmaFUrWVJKZTEwaXBwRGdxTVZrRFBYVWhrT2E4eU1pdVJOOXBlcFdT?=
- =?utf-8?B?M2x6aVZpT0pSbUdPTytJWHBMd1hvWUN3ZjlxL3R5dVI1T0R3eWJEOXBDcWJO?=
- =?utf-8?B?RjUwUXZpOHpXSjd0ZThwa3RmdmowMkhOcnRhRU5YQkZaVUJUeldmOXFCWGVk?=
- =?utf-8?B?QnVSeVd2d0hWdVVwUyt0WDBIdURaWGlxZ1pOUTNWeFhSMExuTmRuK0VGamMv?=
- =?utf-8?B?cUQ4UnNTNWVIaEVmMlJvTlphcTh2NzkrcENHblIzTjlXc0hPK2ZVKy9wMm1S?=
- =?utf-8?B?TkRacFNNd3Q5bzdTYTkxdHlpVnJ0Ry9WRGE3aDh5WE9HclZoYkVseGQ0aFRZ?=
- =?utf-8?B?UjZ2bmhRMHd0eElKQjNvVnB4QTc3dVcrVFpsOXV1NkNXMVFzcHlDb1UxOVdN?=
- =?utf-8?B?R3RQTGJYS2RSNnJDbW8rM2dreWltMGpRaENmaGxwZGZvZHlsVk5WUkpVVXFt?=
- =?utf-8?B?L0lmVmNENWRvbHZwRGJLRUF1a01WdEprU0ZkcDc1YXJSMTN1TDVQc3BhZ1NT?=
- =?utf-8?B?TXNOeWs0K2JKbjZvbGx5RVBoTWtGTGNqZTBIeDlBVEVqSXNkNldVY3JZU1Mx?=
- =?utf-8?B?SnlwRnFYRzVDZFhwMERvYUhkWHFaOE5pclp5YlJOaVNhQkhWOHd5WGFvdWhB?=
- =?utf-8?B?US9zRWhuWUFwdzN3czFoM3JsYnZBb0grS09SL0tvcVlhNU4xTW9rc041QzMv?=
- =?utf-8?B?d3BCaUo2NzY4QTBxNFZDTGlnUlp1WjViYk5SUU5lZTh5ekZabU1Eb2xleHVn?=
- =?utf-8?B?WWR1dENOZlpTb2IvYzlNbXVlVHVEeXhSUTY4WUdOWE9CV1FJUmo1VTB6SDZN?=
- =?utf-8?B?KzVnV3F5YTM0OVNOVDQ2eDhCYWNuVWNwSVJ6L0NBZEkvSjhPdndGQTdKdldL?=
- =?utf-8?B?NGZZd2RNSlQzN1oxUG5PYWUvQWtDVTd4dnM4Mlp3VXM0L3JkWitoNzhEa2ZC?=
- =?utf-8?B?Q1RtVSs0VlQ2QnpybEdBOEVuRG5BR3M3L3ljdlo5aEZqUlVoY2t6TTRra28v?=
- =?utf-8?B?VFVXbk1QUnVxQWNDcnhSdS9neTYwZGRYb3ozdDNCSGRzcENHeUxKeUxoS1o4?=
- =?utf-8?B?VXFCb0tZUXdnSFhKSmFoc3AwWUJPbGxDS1RHY1R1aFRlWmErRjNhVE1LU21L?=
- =?utf-8?Q?UH76Kh42Bsjx1R2sW7oLWdA=3D?=
+        with ESMTP id S231424AbjAPPwH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 10:52:07 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B131CF78;
+        Mon, 16 Jan 2023 07:52:02 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pHRmB-0004On-Na; Mon, 16 Jan 2023 16:51:59 +0100
+Message-ID: <954a693d-09aa-1033-384a-53debf2a2d1c@leemhuis.info>
+Date:   Mon, 16 Jan 2023 16:51:58 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0237.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2f6a548-06ab-4aeb-c221-08daf7d5bbbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 15:24:17.6125
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DfIOuBJnb5OsEmmHA73ySjOkcWFVhSwj3O4e05jsMtKd8jHrHluG5FDDash3kt6dYFyABZN2H5RRCYudGJ1tVap8c/jGNkxJi/YhvPKhDis=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0012
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: spidev regression in 6.2-rc kernel
+Content-Language: en-US, de-DE
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mark Brown <broonie@kernel.org>, bartosz.golaszewski@linaro.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        max.krummenacher@toradex.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
 Content-Type: text/plain; charset=UTF-8
-Content-ID: <6586303D977D8646904B79C3D0CDF981@CHEP278.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673884323;7ce5b7c7;
+X-HE-SMSGID: 1pHRmB-0004On-Na
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkNCg0KT24gTW9uLCAyMDIzLTAxLTE2IGF0IDE1OjQxICswMTAwLCBCYXJ0b3N6IEdvbGFzemV3
-c2tpIHdyb3RlOg0KPiBGcm9tOiBCYXJ0b3N6IEdvbGFzemV3c2tpIDxiYXJ0b3N6LmdvbGFzemV3
-c2tpQGxpbmFyby5vcmc+DQo+IA0KPiBXaGVuIGNhbGxpbmcgc3BpZGV2X21lc3NhZ2UoKSBmcm9t
-IHRoZSBvbmUgb2YgdGhlIGlvY3RsKCkgY2FsbGJhY2tzLCB0aGUNCj4gc3BpX2xvY2sgaXMgYWxy
-ZWFkeSB0YWtlbi4gV2hlbiB3ZSB0aGVuIGVuZCB1cCBjYWxsaW5nIHNwaWRldl9zeW5jKCksIHdl
-DQo+IGdldCB0aGUgZm9sbG93aW5nIHNwbGF0Og0KPiANCj4gWyAgMjE0LjA0NzYxOV0NCj4gWyAg
-MjE0LjA0OTE5OF0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0N
-Cj4gWyAgMjE0LjA1NDUzM10gV0FSTklORzogcG9zc2libGUgcmVjdXJzaXZlIGxvY2tpbmcgZGV0
-ZWN0ZWQNCj4gWyAgMjE0LjA1OTg1OF0gNi4yLjAtcmMzLTAuMC4wLWRldmVsK2dpdC45N2VjNGQ1
-NTlkOTMgIzEgTm90IHRhaW50ZWQNCj4gWyAgMjE0LjA2NTk2OV0gLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gWyAgMjE0LjA3MTI5MF0gc3BpZGV2X3Rlc3Qv
-MTQ1NCBpcyB0cnlpbmcgdG8gYWNxdWlyZSBsb2NrOg0KPiBbICAyMTQuMDc2NTMwXSBjNDkyNWRi
-YyAoJnNwaWRldi0+c3BpX2xvY2speysuKy59LXszOjN9LCBhdDogc3BpZGV2X2lvY3RsKzB4OGUw
-LzB4YWI4DQo+IFsgIDIxNC4wODQxNjRdDQo+IFsgIDIxNC4wODQxNjRdIGJ1dCB0YXNrIGlzIGFs
-cmVhZHkgaG9sZGluZyBsb2NrOg0KPiBbICAyMTQuMDkwMDA3XSBjNDkyNWRiYyAoJnNwaWRldi0+
-c3BpX2xvY2speysuKy59LXszOjN9LCBhdDogc3BpZGV2X2lvY3RsKzB4NDQvMHhhYjgNCj4gWyAg
-MjE0LjA5NzUzN10NCj4gWyAgMjE0LjA5NzUzN10gb3RoZXIgaW5mbyB0aGF0IG1pZ2h0IGhlbHAg
-dXMgZGVidWcgdGhpczoNCj4gWyAgMjE0LjEwNDA3NV0gIFBvc3NpYmxlIHVuc2FmZSBsb2NraW5n
-IHNjZW5hcmlvOg0KPiBbICAyMTQuMTA0MDc1XQ0KPiBbICAyMTQuMTEwMDA0XSAgICAgICAgQ1BV
-MA0KPiBbICAyMTQuMTEyNDYxXSAgICAgICAgLS0tLQ0KPiBbICAyMTQuMTE0OTE2XSAgIGxvY2so
-JnNwaWRldi0+c3BpX2xvY2spOw0KPiBbICAyMTQuMTE4Njg3XSAgIGxvY2soJnNwaWRldi0+c3Bp
-X2xvY2spOw0KPiBbICAyMTQuMTIyNDU3XQ0KPiBbICAyMTQuMTIyNDU3XSAgKioqIERFQURMT0NL
-ICoqKg0KPiBbICAyMTQuMTIyNDU3XQ0KPiBbICAyMTQuMTI4Mzg2XSAgTWF5IGJlIGR1ZSB0byBt
-aXNzaW5nIGxvY2sgbmVzdGluZyBub3RhdGlvbg0KPiBbICAyMTQuMTI4Mzg2XQ0KPiBbICAyMTQu
-MTM1MTgzXSAyIGxvY2tzIGhlbGQgYnkgc3BpZGV2X3Rlc3QvMTQ1NDoNCj4gWyAgMjE0LjEzOTU1
-M10gICMwOiBjNDkyNWRiYyAoJnNwaWRldi0+c3BpX2xvY2speysuKy59LXszOjN9LCBhdDogc3Bp
-ZGV2X2lvY3RsKzB4NDQvMHhhYjgNCj4gWyAgMjE0LjE0NzUyNF0gICMxOiBjNDkyNWUxNCAoJnNw
-aWRldi0+YnVmX2xvY2speysuKy59LXszOjN9LCBhdDogc3BpZGV2X2lvY3RsKzB4NzAvMHhhYjgN
-Cj4gWyAgMjE0LjE1NTQ5M10NCj4gWyAgMjE0LjE1NTQ5M10gc3RhY2sgYmFja3RyYWNlOg0KPiBb
-ICAyMTQuMTU5ODYxXSBDUFU6IDAgUElEOiAxNDU0IENvbW06IHNwaWRldl90ZXN0IE5vdCB0YWlu
-dGVkIDYuMi4wLXJjMy0wLjAuMC1kZXZlbCtnaXQuOTdlYzRkNTU5ZDkzICMxDQo+IFsgIDIxNC4x
-NjkwMTJdIEhhcmR3YXJlIG5hbWU6IEZyZWVzY2FsZSBpLk1YNiBRdWFkL0R1YWxMaXRlIChEZXZp
-Y2UgVHJlZSkNCj4gWyAgMjE0LjE3NTU1NV0gIHVud2luZF9iYWNrdHJhY2UgZnJvbSBzaG93X3N0
-YWNrKzB4MTAvMHgxNA0KPiBbICAyMTQuMTgwODE5XSAgc2hvd19zdGFjayBmcm9tIGR1bXBfc3Rh
-Y2tfbHZsKzB4NjAvMHg5MA0KPiBbICAyMTQuMTg1OTAwXSAgZHVtcF9zdGFja19sdmwgZnJvbSBf
-X2xvY2tfYWNxdWlyZSsweDg3NC8weDI4NTgNCj4gWyAgMjE0LjE5MTU4NF0gIF9fbG9ja19hY3F1
-aXJlIGZyb20gbG9ja19hY3F1aXJlKzB4ZmMvMHgzNzgNCj4gWyAgMjE0LjE5NjkxOF0gIGxvY2tf
-YWNxdWlyZSBmcm9tIF9fbXV0ZXhfbG9jaysweDljLzB4OGE4DQo+IFsgIDIxNC4yMDIwODNdICBf
-X211dGV4X2xvY2sgZnJvbSBtdXRleF9sb2NrX25lc3RlZCsweDFjLzB4MjQNCj4gWyAgMjE0LjIw
-NzU5N10gIG11dGV4X2xvY2tfbmVzdGVkIGZyb20gc3BpZGV2X2lvY3RsKzB4OGUwLzB4YWI4DQo+
-IFsgIDIxNC4yMTMyODRdICBzcGlkZXZfaW9jdGwgZnJvbSBzeXNfaW9jdGwrMHg0ZDAvMHhlMmMN
-Cj4gWyAgMjE0LjIxODI3N10gIHN5c19pb2N0bCBmcm9tIHJldF9mYXN0X3N5c2NhbGwrMHgwLzB4
-MWMNCj4gWyAgMjE0LjIyMzM1MV0gRXhjZXB0aW9uIHN0YWNrKDB4ZTc1Y2RmYTggdG8gMHhlNzVj
-ZGZmMCkNCj4gWyAgMjE0LjIyODQyMl0gZGZhMDogICAgICAgICAgICAgICAgICAgMDAwMDAwMDAg
-MDAwMDEwMDAgMDAwMDAwMDMgNDAyMDZiMDAgYmVlMjY2ZTggYmVlMjY2ZTANCj4gWyAgMjE0LjIz
-NjYxN10gZGZjMDogMDAwMDAwMDAgMDAwMDEwMDAgMDA2YTcxYTAgMDAwMDAwMzYgMDA0YzAwNDAg
-MDA0YmZkMTggMDAwMDAwMDAgMDAwMDAwMDMNCj4gWyAgMjE0LjI0NDgwOV0gZGZlMDogMDAwMDAw
-MzYgYmVlMjY2YzggYjZmMTZkYzUgYjZlOGU1ZjYNCj4gDQo+IEZpeCBpdCBieSBpbnRyb2R1Y2lu
-ZyBhbiB1bmxvY2tlZCB2YXJpYW50IG9mIHNwaWRldl9zeW5jKCkgYW5kIGNhbGxpbmcgaXQNCj4g
-ZnJvbSBzcGlkZXZfbWVzc2FnZSgpIHdoaWxlIG90aGVyIHVzZXJzIHdobyBkb24ndCBjaGVjayB0
-aGUgc3BpZGV2LT5zcGkncw0KPiBleGlzdGVuY2Uga2VlcCBvbiB1c2luZyB0aGUgbG9ja2luZyBm
-bGF2b3IuDQo+IA0KPiBSZXBvcnRlZC1ieTogRnJhbmNlc2NvIERvbGNpbmkgPGZyYW5jZXNjb0Bk
-b2xjaW5pLml0Pg0KPiBGaXhlczogMWY0ZDJkZDQ1YjZlICgic3BpOiBzcGlkZXY6IGZpeCBhIHJh
-Y2UgY29uZGl0aW9uIHdoZW4gYWNjZXNzaW5nIHNwaWRldi0+c3BpIikNCj4gU2lnbmVkLW9mZi1i
-eTogQmFydG9zeiBHb2xhc3pld3NraSA8YmFydG9zei5nb2xhc3pld3NraUBsaW5hcm8ub3JnPg0K
-DQpUaGFua3MgZm9yIHRoZSBxdWljayBmaXguDQpJIHRlc3RlZCBvbiBhIENvbGlicmkgaU1YNyB3
-aGljaCBzaG93ZWQgdGhlIGJ1ZyBiZWZvcmUgdGhlIHBhdGNoIGlzIGFwcGxpZWQNCmJ1dCBub3Qg
-YWZ0ZXIuDQoNClRlc3RlZC1ieTogTWF4IEtydW1tZW5hY2hlciA8bWF4LmtydW1tZW5hY2hlckB0
-b3JhZGV4LmNvbT4NCg0KUmVnYXJkcw0KTWF4DQo+IC0tLQ0KPiAgZHJpdmVycy9zcGkvc3BpZGV2
-LmMgfCAyMiArKysrKysrKysrKysrKysrLS0tLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTYgaW5z
-ZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Nw
-aS9zcGlkZXYuYyBiL2RyaXZlcnMvc3BpL3NwaWRldi5jDQo+IGluZGV4IDhlZjIyZWJjZGUxZi4u
-ODkyOTY1YWM4ZmRmIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3NwaS9zcGlkZXYuYw0KPiArKysg
-Yi9kcml2ZXJzL3NwaS9zcGlkZXYuYw0KPiBAQCAtODksMTAgKzg5LDIyIEBAIE1PRFVMRV9QQVJN
-X0RFU0MoYnVmc2l6LCAiZGF0YSBieXRlcyBpbiBiaWdnZXN0IHN1cHBvcnRlZCBTUEkgbWVzc2Fn
-ZSIpOw0KPiAgDQo+ICAvKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qLw0KPiAgDQo+ICtzdGF0aWMgc3NpemVf
-dA0KPiArc3BpZGV2X3N5bmNfdW5sb2NrZWQoc3RydWN0IHNwaV9kZXZpY2UgKnNwaSwgc3RydWN0
-IHNwaV9tZXNzYWdlICptZXNzYWdlKQ0KPiArew0KPiArCXNzaXplX3Qgc3RhdHVzOw0KPiArDQo+
-ICsJc3RhdHVzID0gc3BpX3N5bmMoc3BpLCBtZXNzYWdlKTsNCj4gKwlpZiAoc3RhdHVzID09IDAp
-DQo+ICsJCXN0YXR1cyA9IG1lc3NhZ2UtPmFjdHVhbF9sZW5ndGg7DQo+ICsNCj4gKwlyZXR1cm4g
-c3RhdHVzOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgc3NpemVfdA0KPiAgc3BpZGV2X3N5bmMoc3Ry
-dWN0IHNwaWRldl9kYXRhICpzcGlkZXYsIHN0cnVjdCBzcGlfbWVzc2FnZSAqbWVzc2FnZSkNCj4g
-IHsNCj4gLQlpbnQgc3RhdHVzOw0KPiArCXNzaXplX3Qgc3RhdHVzOw0KPiAgCXN0cnVjdCBzcGlf
-ZGV2aWNlICpzcGk7DQo+ICANCj4gIAltdXRleF9sb2NrKCZzcGlkZXYtPnNwaV9sb2NrKTsNCj4g
-QEAgLTEwMSwxMiArMTEzLDEwIEBAIHNwaWRldl9zeW5jKHN0cnVjdCBzcGlkZXZfZGF0YSAqc3Bp
-ZGV2LCBzdHJ1Y3Qgc3BpX21lc3NhZ2UgKm1lc3NhZ2UpDQo+ICAJaWYgKHNwaSA9PSBOVUxMKQ0K
-PiAgCQlzdGF0dXMgPSAtRVNIVVRET1dOOw0KPiAgCWVsc2UNCj4gLQkJc3RhdHVzID0gc3BpX3N5
-bmMoc3BpLCBtZXNzYWdlKTsNCj4gLQ0KPiAtCWlmIChzdGF0dXMgPT0gMCkNCj4gLQkJc3RhdHVz
-ID0gbWVzc2FnZS0+YWN0dWFsX2xlbmd0aDsNCj4gKwkJc3RhdHVzID0gc3BpZGV2X3N5bmNfdW5s
-b2NrZWQoc3BpLCBtZXNzYWdlKTsNCj4gIA0KPiAgCW11dGV4X3VubG9jaygmc3BpZGV2LT5zcGlf
-bG9jayk7DQo+ICsNCj4gIAlyZXR1cm4gc3RhdHVzOw0KPiAgfQ0KPiAgDQo+IEBAIC0yOTQsNyAr
-MzA0LDcgQEAgc3RhdGljIGludCBzcGlkZXZfbWVzc2FnZShzdHJ1Y3Qgc3BpZGV2X2RhdGEgKnNw
-aWRldiwNCj4gIAkJc3BpX21lc3NhZ2VfYWRkX3RhaWwoa190bXAsICZtc2cpOw0KPiAgCX0NCj4g
-IA0KPiAtCXN0YXR1cyA9IHNwaWRldl9zeW5jKHNwaWRldiwgJm1zZyk7DQo+ICsJc3RhdHVzID0g
-c3BpZGV2X3N5bmNfdW5sb2NrZWQoc3BpZGV2LT5zcGksICZtc2cpOw0KPiAgCWlmIChzdGF0dXMg
-PCAwKQ0KPiAgCQlnb3RvIGRvbmU7DQo+ICANCg0K
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
+On 16.01.23 13:06, Francesco Dolcini wrote:
+> Hello,
+> we spotted a regression on spidev on latest 6.2-rc kernel.
+> 
+> [  214.047619]
+> [  214.049198] ============================================
+> [  214.054533] WARNING: possible recursive locking detected
+> [  214.059858] 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1 Not tainted
+> [  214.065969] --------------------------------------------
+> [  214.071290] spidev_test/1454 is trying to acquire lock:
+> [  214.076530] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x8e0/0xab8
+> [  214.084164]
+> [  214.084164] but task is already holding lock:
+> [  214.090007] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.097537]
+> [  214.097537] other info that might help us debug this:
+> [  214.104075]  Possible unsafe locking scenario:
+> [  214.104075]
+> [  214.110004]        CPU0
+> [  214.112461]        ----
+> [  214.114916]   lock(&spidev->spi_lock);
+> [  214.118687]   lock(&spidev->spi_lock);
+> [  214.122457]
+> [  214.122457]  *** DEADLOCK ***
+> [  214.122457]
+> [  214.128386]  May be due to missing lock nesting notation
+> [  214.128386]
+> [  214.135183] 2 locks held by spidev_test/1454:
+> [  214.139553]  #0: c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.147524]  #1: c4925e14 (&spidev->buf_lock){+.+.}-{3:3}, at: spidev_ioctl+0x70/0xab8
+> [  214.155493]
+> [  214.155493] stack backtrace:
+> [  214.159861] CPU: 0 PID: 1454 Comm: spidev_test Not tainted 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1
+> [  214.169012] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+> [  214.175555]  unwind_backtrace from show_stack+0x10/0x14
+> [  214.180819]  show_stack from dump_stack_lvl+0x60/0x90
+> [  214.185900]  dump_stack_lvl from __lock_acquire+0x874/0x2858
+> [  214.191584]  __lock_acquire from lock_acquire+0xfc/0x378
+> [  214.196918]  lock_acquire from __mutex_lock+0x9c/0x8a8
+> [  214.202083]  __mutex_lock from mutex_lock_nested+0x1c/0x24
+> [  214.207597]  mutex_lock_nested from spidev_ioctl+0x8e0/0xab8
+> [  214.213284]  spidev_ioctl from sys_ioctl+0x4d0/0xe2c
+> [  214.218277]  sys_ioctl from ret_fast_syscall+0x0/0x1c
+> [  214.223351] Exception stack(0xe75cdfa8 to 0xe75cdff0)
+> [  214.228422] dfa0:                   00000000 00001000 00000003 40206b00 bee266e8 bee266e0
+> [  214.236617] dfc0: 00000000 00001000 006a71a0 00000036 004c0040 004bfd18 00000000 00000003
+> [  214.244809] dfe0: 00000036 bee266c8 b6f16dc5 b6e8e5f6
+> 
+> 
+> This is not running the latest rc4, but on sha 97ec4d559d93 (this is
+> just what our CI had available when this test was run). I was not able
+> to bisect it, but it seems something that you could have introduced.
+> 
+> The log is from an apalis-imx6, but I have the same on other ARM SOC.
+
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 1f4d2dd45b6e
+#regzbot title spi: spidev: recursive locking error
+#regzbot monitor:
+https://lore.kernel.org/all/20230116144149.305560-1-brgl@bgdev.pl/
+#regzbot fix: spi: spidev: fix a recursive locking error
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
