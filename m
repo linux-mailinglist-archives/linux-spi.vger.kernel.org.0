@@ -2,50 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8447166C1E4
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 15:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB21666C2C5
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jan 2023 15:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjAPOQI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Jan 2023 09:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S230511AbjAPOxb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Jan 2023 09:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbjAPOOj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 09:14:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD82ED7E;
-        Mon, 16 Jan 2023 06:05:39 -0800 (PST)
+        with ESMTP id S229614AbjAPOwg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Jan 2023 09:52:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1656023D8A;
+        Mon, 16 Jan 2023 06:40:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3248060FD2;
-        Mon, 16 Jan 2023 14:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5F7C433EF;
-        Mon, 16 Jan 2023 14:05:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 88DE7CE1169;
+        Mon, 16 Jan 2023 14:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F89C433F0;
+        Mon, 16 Jan 2023 14:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673877938;
-        bh=jiR9o06vTGhhfdLJwvNevFXIKBYSDNLWdr9P0n0xhW8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rqN48pos5k8M4EsTU4ntzcIgGBX9unlxGHBcu4Y/gdPKPCBoQf8QjYYDllpFPHH01
-         2Z3AzNE36ZALqNmq4EG2xT1U9DSaaQuagccH/RzBtTI3JarRL5dmQOvWh10dFxAMQE
-         56OAFLwPPVd/wCm00P2qxKQF5cuKMnLk1CsNjfpPTEISDbT1I4OSbbosQo9VpFDGg0
-         cr8/LnrbduM7G2qOKuhnowy8xIPTj0U8ap49UAgs5z+09E/2dAlyh/lcbx3cEuQECz
-         ZZ7DnTy4OOYl6J7LZ0sbXisM96ZHpYQDfba92QdJzH8r0UDn6mVaTpwoO7mJkVvMO3
-         rpDIZvceFsyHw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 10/16] spi: spidev: remove debug messages that access spidev->spi without locking
-Date:   Mon, 16 Jan 2023 09:05:13 -0500
-Message-Id: <20230116140520.116257-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230116140520.116257-1-sashal@kernel.org>
-References: <20230116140520.116257-1-sashal@kernel.org>
+        s=k20201202; t=1673880009;
+        bh=qCQNprj6nr0lXLsaTVV6wQyMOyfyBoo19yyE5Px7Q6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AztPyLCvQ1+2OjD3/3xu098AjFJSckBiTwktM+DJ28eiB3Y+stOtqnFYFCMT6HfQ9
+         qXtHaqi4wSjVQtG7mZF8QubhbSEvAXnI9WlgEod94njvyXRPBT6zoiQ0Vg/2TTtxyF
+         Mz8pLE+Is2dJMe4BB2r+ud4E6thGUU+/mplq/5vov+YC7k79AwJz5ep+Xm2yZtyiJe
+         MxTjWaKC741NCzNH6QAw0qCiFgLRYVvVgwwF6VTnNYqx5ayrBK9ZtWxzVRKiSRMzj8
+         vxhNiw7bbJXv09e6MHUyNad67D22/lUTHs51V6ks1rT/iTEd9jmyFOqaq42nZIEKgT
+         l5frAUxY1xLMA==
+Date:   Mon, 16 Jan 2023 14:40:05 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.10 11/17] spi: spidev: fix a race condition
+ when accessing spidev->spi
+Message-ID: <Y8VhxYxMjwtu12k2@sirena.org.uk>
+References: <20230116140448.116034-1-sashal@kernel.org>
+ <20230116140448.116034-11-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HRyw640IPxuIZjTZ"
+Content-Disposition: inline
+In-Reply-To: <20230116140448.116034-11-sashal@kernel.org>
+X-Cookie: Serving suggestion.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,43 +57,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-[ Upstream commit 6b35b173dbc1711f8d272e3f322d2ad697015919 ]
+--HRyw640IPxuIZjTZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The two debug messages in spidev_open() dereference spidev->spi without
-taking the lock and without checking if it's not null. This can lead to
-a crash. Drop the messages as they're not needed - the user-space will
-get informed about ENOMEM with the syscall return value.
+On Mon, Jan 16, 2023 at 09:04:42AM -0500, Sasha Levin wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>=20
+> [ Upstream commit a720416d94634068951773cb9e9d6f1b73769e5b ]
+>=20
+> There's a spinlock in place that is taken in file_operations callbacks
+> whenever we check if spidev->spi is still alive (not null). It's also
+> taken when spidev->spi is set to NULL in remove().
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Link: https://lore.kernel.org/r/20230106100719.196243-2-brgl@bgdev.pl
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spidev.c | 2 --
- 1 file changed, 2 deletions(-)
+There are ongoing discussions of race conditions with this commit.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index a360dabdcb8b..74d13de15ca0 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -579,7 +579,6 @@ static int spidev_open(struct inode *inode, struct file *filp)
- 	if (!spidev->tx_buffer) {
- 		spidev->tx_buffer = kmalloc(bufsiz, GFP_KERNEL);
- 		if (!spidev->tx_buffer) {
--			dev_dbg(&spidev->spi->dev, "open/ENOMEM\n");
- 			status = -ENOMEM;
- 			goto err_find_dev;
- 		}
-@@ -588,7 +587,6 @@ static int spidev_open(struct inode *inode, struct file *filp)
- 	if (!spidev->rx_buffer) {
- 		spidev->rx_buffer = kmalloc(bufsiz, GFP_KERNEL);
- 		if (!spidev->rx_buffer) {
--			dev_dbg(&spidev->spi->dev, "open/ENOMEM\n");
- 			status = -ENOMEM;
- 			goto err_alloc_rx_buf;
- 		}
--- 
-2.35.1
+--HRyw640IPxuIZjTZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPFYcUACgkQJNaLcl1U
+h9B32Af/c2VYOXgQmB1VgAWYJ1esiMKPBMqNlhspvd31are1grJmxa1QlA21KMXR
+9meJyt94TbUOs22oJhx5Mrcegc80jfoRKFgtlOmWDviFBfDC634HOUuYGfVQHy1B
+croJdlBxTXJmSZwfarZxhFrXnQr0DBN/xs/6LWGNEErpiF2H9bJJg5rD5NsGBUcT
+b33P0Hdurru1D4HKBUzU0woy32SipUzn6fNmbAxyf5xOGvLiQJXbERWeYZQYyhpP
+y6vH91cIcrfxWDh5UaWIHrJtWsNcpZOgGgTZWCMzv8g7OIJGUKc2wkRyKqN9F8nW
+CEjbOAkOSsrMDrPVvgdJC2n7V3tdTA==
+=OmQE
+-----END PGP SIGNATURE-----
+
+--HRyw640IPxuIZjTZ--
