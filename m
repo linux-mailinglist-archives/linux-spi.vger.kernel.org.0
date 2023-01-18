@@ -2,55 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C59267252C
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jan 2023 18:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5409B6727D0
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jan 2023 20:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjARRkJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Jan 2023 12:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S229736AbjARTFR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Jan 2023 14:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjARRjz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 12:39:55 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD68589A5
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 09:39:53 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id b5so13562540wrn.0
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 09:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wtwVyM3K+4xfqOEqd0qS9jQUn3un4dIlOZ3IaOVmOyo=;
-        b=uG1LoW51EyTrR5K0su1WK7HgiV36VrKRpjf9MMIxBKxArggNiL2gx3cbAclzZEnGrX
-         173HD3BB4/BQRq2R/W1sT/l09f8WqPXdK9ZPSgaKxMRXJt+aOo4q9JY/ZqcxAv0tb9XJ
-         3TFUWt70aAnHCUa6YQWTveEKwbt/QJjGE5UYjs2tS0LyI0aNugkdYz3HNb7zquj5Ndkz
-         mtkMvQ18inXyuY2JCFt8qMVlOhEEzXZtKX0RscXIU/CXARgdk1SfAd2RxyqZZf0Bcm3l
-         qSz5PmQX71Tk4es9dGaQQe+EN2Th4RsmYJ0Ch2xaYIKqc+U24Fu5lJ1HvVj+ZL8rf0YJ
-         NTbQ==
+        with ESMTP id S229690AbjARTFI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 14:05:08 -0500
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FDA1817B;
+        Wed, 18 Jan 2023 11:05:07 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id 123so6183674ybv.6;
+        Wed, 18 Jan 2023 11:05:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wtwVyM3K+4xfqOEqd0qS9jQUn3un4dIlOZ3IaOVmOyo=;
-        b=Q9/QoWBTK0MHlcnICczK93/TjvEuh0RDLV7bjsi4Qv8x+qjKINmBNTHOcA+QvBSNOp
-         QTwBCG/75oGPKUWy6/M6McTaKeESltNeI/YJbgDfG4N0+c0+rT/roh6ZnS3w/xWNEKLn
-         hXylErEga02WKcFvoE2wfm805B7EfEqTWMNOI1CeXNeV9beIfewg3jUenq+DTpHmNLQd
-         spSOwrRgLFyGbn5CGD7ETt2HHHqF46WN6lR229qcLJhYCku+rb+5MzDYQMUo2k8R2CGA
-         4G/uD+vWp0k4d9cg60mIbxNn6oRmhMz7EyKfa3wBNP5VBxqdzFhClHfyce5VxxsLfnKH
-         8jfA==
-X-Gm-Message-State: AFqh2kr4kEjYppLDcdoUP+nMRCFV/Sdpgw9a67u8igyrVx66PaAi6Dua
-        U4HLAwFGvsdzwuA0rG4U+Yo91g==
-X-Google-Smtp-Source: AMrXdXssGP6UUIlZOO/mf0W4Agmrlx2dZmmc5gPJRGSrJysLLW8tVlfCePh1WGEBQI7iccNrD8TtpQ==
-X-Received: by 2002:a05:6000:110e:b0:2bd:db2a:ec8 with SMTP id z14-20020a056000110e00b002bddb2a0ec8mr2666620wrw.28.1674063591544;
-        Wed, 18 Jan 2023 09:39:51 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u24-20020adfa198000000b002bc84c55758sm28730074wru.63.2023.01.18.09.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:39:51 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TOwQfemle8oAtk5HhkSGbIU5cG/VOJmaf2KabL9UxvM=;
+        b=tzZtQC62c/NQYpKqjH8ROG+ZSczyrZ2tgxvzZhDOMRSksjEPHt1bMsye+1HPtuE8bE
+         cHZQTzSASIWkVEU5mlTteD3WROHaIBNiGmt1lrDr1f3GRjQtuewNgwutDcXAVPsrvEWy
+         ysErxmzkTZFIab3EFShg92KmULDTdWyx23j9XAcqC1VKVXTon+0V1S6VASDaWc2JKyBk
+         OTKXXIcnz++y84KvljGwM7AiD8efZy/Rl4mKJa1xqVVC7UPdYZUHox1bPzELoCI7u2iD
+         RmFPAyKALHHC9+d1Re0JCj7aEWL2iGUQCVPNpzIrDSqU2FmC/NtoQg+XrlF3rsRcrXit
+         nc1Q==
+X-Gm-Message-State: AFqh2koTLQUpRDwq9TdVyLHtQr4KZBoZ0rLLp3U3xclv4JM6rBnqug1q
+        iYxbiMXC+oXaaQE4/RVRbiTuYLCvEljononXDmA=
+X-Google-Smtp-Source: AMrXdXvMuIWb6NC4K83Ew19Qx4qYqKSwcTR/3Lptq3i5u7ielAzaMifOqVNIyWImdnTGoALqSE6MiQ==
+X-Received: by 2002:a25:f50a:0:b0:763:cf87:ea68 with SMTP id a10-20020a25f50a000000b00763cf87ea68mr2839228ybe.33.1674068706313;
+        Wed, 18 Jan 2023 11:05:06 -0800 (PST)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id y3-20020ab077c3000000b005de5a2cca24sm3366079uar.8.2023.01.18.11.05.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 11:05:05 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id u3so8841074uae.0;
+        Wed, 18 Jan 2023 11:05:05 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr846222ybg.202.1674068694405; Wed, 18
+ Jan 2023 11:04:54 -0800 (PST)
+MIME-Version: 1.0
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org> <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 Jan 2023 20:04:42 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWZOsrBwJrST=49v6JFqCyq_gT0kfA-QS7TS4oigZtM-w@mail.gmail.com>
+Message-ID: <CAMuHMdWZOsrBwJrST=49v6JFqCyq_gT0kfA-QS7TS4oigZtM-w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: dt-bindings: cleanup examples - indentation,
+ lowercase hex
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -60,7 +62,7 @@ To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
         Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
@@ -92,7 +94,7 @@ To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?q?=82ecki?= <rafal@milecki.pl>,
+        =?UTF-8?B?4oCaZWNraQ==?= <rafal@milecki.pl>,
         Vaishnav Achath <vaishnav.a@ti.com>,
         Parshuram Thombare <pthombar@cadence.com>,
         Leilk Liu <leilk.liu@mediatek.com>,
@@ -118,469 +120,39 @@ To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] spi: dt-bindings: cleanup examples - indentation, lowercase hex
-Date:   Wed, 18 Jan 2023 18:39:32 +0100
-Message-Id: <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
-References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Cleanup examples:
- - use 4-space indentation (for cases when it is neither 4 not 2 space),
- - drop redundant blank lines,
- - use lowercase hex.
+On Wed, Jan 18, 2023 at 6:39 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Cleanup examples:
+>  - use 4-space indentation (for cases when it is neither 4 not 2 space),
+>  - drop redundant blank lines,
+>  - use lowercase hex.
+>
+> No functional impact except adjusting to preferred coding style.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-No functional impact except adjusting to preferred coding style.
+>  .../devicetree/bindings/spi/renesas,rspi.yaml |  22 +--
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  26 +--
- .../bindings/spi/amlogic,meson6-spifc.yaml    |  22 +--
- .../bindings/spi/aspeed,ast2600-fmc.yaml      |  24 +--
- .../bindings/spi/brcm,spi-bcm-qspi.yaml       | 156 +++++++++---------
- .../bindings/spi/cdns,qspi-nor.yaml           |   4 +-
- .../bindings/spi/nvidia,tegra210-quad.yaml    |  42 ++---
- .../bindings/spi/qcom,spi-qcom-qspi.yaml      |   1 -
- .../devicetree/bindings/spi/renesas,rspi.yaml |  22 +--
- .../bindings/spi/spi-sunplus-sp7021.yaml      |   4 +-
- .../devicetree/bindings/spi/st,stm32-spi.yaml |   1 -
- 10 files changed, 150 insertions(+), 152 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-index e5eca3a6f132..4e28e6e9d8e0 100644
---- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-+++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-@@ -100,17 +100,17 @@ unevaluatedProperties: false
- examples:
-   - |
-     spi@c1108d80 {
--          compatible = "amlogic,meson-gx-spicc";
--          reg = <0xc1108d80 0x80>;
--          interrupts = <112>;
--          clocks = <&clk81>;
--          clock-names = "core";
--          #address-cells = <1>;
--          #size-cells = <0>;
--
--          display@0 {
--              compatible = "lg,lg4573";
--              spi-max-frequency = <1000000>;
--              reg = <0>;
--          };
-+        compatible = "amlogic,meson-gx-spicc";
-+        reg = <0xc1108d80 0x80>;
-+        interrupts = <112>;
-+        clocks = <&clk81>;
-+        clock-names = "core";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        display@0 {
-+            compatible = "lg,lg4573";
-+            spi-max-frequency = <1000000>;
-+            reg = <0>;
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
-index 806043fed4d1..8e769ccda97f 100644
---- a/Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
-+++ b/Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
-@@ -40,15 +40,15 @@ unevaluatedProperties: false
- examples:
-   - |
-     spi@c1108c80 {
--          compatible = "amlogic,meson6-spifc";
--          reg = <0xc1108c80 0x80>;
--          clocks = <&clk81>;
--          #address-cells = <1>;
--          #size-cells = <0>;
--
--          flash: flash@0 {
--              compatible = "spansion,m25p80", "jedec,spi-nor";
--              reg = <0>;
--              spi-max-frequency = <40000000>;
--          };
-+        compatible = "amlogic,meson6-spifc";
-+        reg = <0xc1108c80 0x80>;
-+        clocks = <&clk81>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        flash: flash@0 {
-+            compatible = "spansion,m25p80", "jedec,spi-nor";
-+            reg = <0>;
-+            spi-max-frequency = <40000000>;
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-index aae6fb139b5b..57d932af4506 100644
---- a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-+++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-@@ -60,23 +60,23 @@ examples:
-         interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
- 
-         flash@0 {
--                reg = < 0 >;
--                compatible = "jedec,spi-nor";
--                spi-max-frequency = <50000000>;
--                spi-rx-bus-width = <2>;
-+            reg = < 0 >;
-+            compatible = "jedec,spi-nor";
-+            spi-max-frequency = <50000000>;
-+            spi-rx-bus-width = <2>;
-         };
- 
-         flash@1 {
--                reg = < 1 >;
--                compatible = "jedec,spi-nor";
--                spi-max-frequency = <50000000>;
--                spi-rx-bus-width = <2>;
-+            reg = < 1 >;
-+            compatible = "jedec,spi-nor";
-+            spi-max-frequency = <50000000>;
-+            spi-rx-bus-width = <2>;
-         };
- 
-         flash@2 {
--                reg = < 2 >;
--                compatible = "jedec,spi-nor";
--                spi-max-frequency = <50000000>;
--                spi-rx-bus-width = <2>;
-+            reg = < 2 >;
-+            compatible = "jedec,spi-nor";
-+            spi-max-frequency = <50000000>;
-+            spi-rx-bus-width = <2>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml b/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml
-index ec5873919170..28222aae3077 100644
---- a/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml
-@@ -99,98 +99,98 @@ required:
- examples:
-   - | # BRCMSTB SoC: SPI Master (MSPI+BSPI) for SPI-NOR access
-     spi@f03e3400 {
--            compatible = "brcm,spi-brcmstb-qspi", "brcm,spi-bcm-qspi";
--            reg = <0xf03e3400 0x188>, <0xf03e3200 0x50>, <0xf03e0920 0x4>;
--            reg-names = "mspi", "bspi", "cs_reg";
--            interrupts = <0x5>, <0x6>, <0x1>, <0x2>, <0x3>, <0x4>, <0x0>;
--            interrupt-parent = <&gic>;
--            interrupt-names = "mspi_done",
--                              "mspi_halted",
--                              "spi_lr_fullness_reached",
--                              "spi_lr_session_aborted",
--                              "spi_lr_impatient",
--                              "spi_lr_session_done",
--                              "spi_lr_overread";
--            clocks = <&hif_spi>;
--            #address-cells = <0x1>;
--            #size-cells = <0x0>;
--
--            flash@0 {
--                    #size-cells = <0x2>;
--                    #address-cells = <0x2>;
--                    compatible = "m25p80";
--                    reg = <0x0>;
--                    spi-max-frequency = <0x2625a00>;
--                    spi-cpol;
--                    spi-cpha;
--            };
-+        compatible = "brcm,spi-brcmstb-qspi", "brcm,spi-bcm-qspi";
-+        reg = <0xf03e3400 0x188>, <0xf03e3200 0x50>, <0xf03e0920 0x4>;
-+        reg-names = "mspi", "bspi", "cs_reg";
-+        interrupts = <0x5>, <0x6>, <0x1>, <0x2>, <0x3>, <0x4>, <0x0>;
-+        interrupt-parent = <&gic>;
-+        interrupt-names = "mspi_done",
-+                          "mspi_halted",
-+                          "spi_lr_fullness_reached",
-+                          "spi_lr_session_aborted",
-+                          "spi_lr_impatient",
-+                          "spi_lr_session_done",
-+                          "spi_lr_overread";
-+        clocks = <&hif_spi>;
-+        #address-cells = <0x1>;
-+        #size-cells = <0x0>;
-+
-+        flash@0 {
-+            #size-cells = <0x2>;
-+            #address-cells = <0x2>;
-+            compatible = "m25p80";
-+            reg = <0x0>;
-+            spi-max-frequency = <0x2625a00>;
-+            spi-cpol;
-+            spi-cpha;
-+        };
-     };
-   - | # BRCMSTB SoC: MSPI master for any SPI device
-     spi@f0416000 {
--            clocks = <&upg_fixed>;
--            compatible = "brcm,spi-brcmstb-mspi", "brcm,spi-bcm-qspi";
--            reg = <0xf0416000 0x180>;
--            reg-names = "mspi";
--            interrupts = <0x14>;
--            interrupt-parent = <&irq0_aon_intc>;
--            interrupt-names = "mspi_done";
--            #address-cells = <1>;
--            #size-cells = <0>;
-+        clocks = <&upg_fixed>;
-+        compatible = "brcm,spi-brcmstb-mspi", "brcm,spi-bcm-qspi";
-+        reg = <0xf0416000 0x180>;
-+        reg-names = "mspi";
-+        interrupts = <0x14>;
-+        interrupt-parent = <&irq0_aon_intc>;
-+        interrupt-names = "mspi_done";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-     };
-   - | # iProc SoC
-     #include <dt-bindings/interrupt-controller/irq.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     spi@18027200 {
--            compatible = "brcm,spi-nsp-qspi", "brcm,spi-bcm-qspi";
--            reg = <0x18027200 0x184>,
--                  <0x18027000 0x124>,
--                  <0x1811c408 0x004>,
--                  <0x180273a0 0x01c>;
--            reg-names = "mspi", "bspi", "intr_regs", "intr_status_reg";
--            interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
--                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
--            interrupt-names = "mspi_done",
--                              "mspi_halted",
--                              "spi_lr_fullness_reached",
--                              "spi_lr_session_aborted",
--                              "spi_lr_impatient",
--                              "spi_lr_session_done";
--            clocks = <&iprocmed>;
--            num-cs = <2>;
--            #address-cells = <1>;
--            #size-cells = <0>;
-+        compatible = "brcm,spi-nsp-qspi", "brcm,spi-bcm-qspi";
-+        reg = <0x18027200 0x184>,
-+              <0x18027000 0x124>,
-+              <0x1811c408 0x004>,
-+              <0x180273a0 0x01c>;
-+        reg-names = "mspi", "bspi", "intr_regs", "intr_status_reg";
-+        interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "mspi_done",
-+                          "mspi_halted",
-+                          "spi_lr_fullness_reached",
-+                          "spi_lr_session_aborted",
-+                          "spi_lr_impatient",
-+                          "spi_lr_session_done";
-+        clocks = <&iprocmed>;
-+        num-cs = <2>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-     };
-   - | # NS2 SoC
-     #include <dt-bindings/interrupt-controller/irq.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     spi@66470200 {
--            compatible = "brcm,spi-ns2-qspi", "brcm,spi-bcm-qspi";
--            reg = <0x66470200 0x184>,
--                  <0x66470000 0x124>,
--                  <0x67017408 0x004>,
--                  <0x664703a0 0x01c>;
--            reg-names = "mspi", "bspi", "intr_regs", "intr_status_reg";
--            interrupts = <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>;
--            interrupt-names = "spi_l1_intr";
--            clocks = <&iprocmed>;
--            num-cs = <2>;
-+        compatible = "brcm,spi-ns2-qspi", "brcm,spi-bcm-qspi";
-+        reg = <0x66470200 0x184>,
-+              <0x66470000 0x124>,
-+              <0x67017408 0x004>,
-+              <0x664703a0 0x01c>;
-+        reg-names = "mspi", "bspi", "intr_regs", "intr_status_reg";
-+        interrupts = <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "spi_l1_intr";
-+        clocks = <&iprocmed>;
-+        num-cs = <2>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        flash@0 {
-             #address-cells = <1>;
--            #size-cells = <0>;
--
--            flash@0 {
--                    #address-cells = <1>;
--                    #size-cells = <1>;
--                    compatible = "m25p80";
--                    reg = <0x0>;
--                    spi-max-frequency = <12500000>;
--                    spi-cpol;
--                    spi-cpha;
--            };
-+            #size-cells = <1>;
-+            compatible = "m25p80";
-+            reg = <0x0>;
-+            spi-max-frequency = <12500000>;
-+            spi-cpol;
-+            spi-cpha;
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-index 9be4e2c5d1ee..7606b5a252b6 100644
---- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-+++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-@@ -117,7 +117,7 @@ examples:
-       reset-names = "qspi", "qspi-ocp";
- 
-       flash@0 {
--              compatible = "jedec,spi-nor";
--              reg = <0x0>;
-+        compatible = "jedec,spi-nor";
-+        reg = <0x0>;
-       };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-index 9f78b2c06494..9ae1611175f2 100644
---- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-+++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-@@ -74,25 +74,25 @@ examples:
-     #include <dt-bindings/reset/tegra210-car.h>
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     spi@70410000 {
--            compatible = "nvidia,tegra210-qspi";
--            reg = <0x70410000 0x1000>;
--            interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
--            #address-cells = <1>;
--            #size-cells = <0>;
--            clocks = <&tegra_car TEGRA210_CLK_QSPI>,
--                     <&tegra_car TEGRA210_CLK_QSPI_PM>;
--            clock-names = "qspi", "qspi_out";
--            resets = <&tegra_car 211>;
--            dmas = <&apbdma 5>, <&apbdma 5>;
--            dma-names = "rx", "tx";
--
--            flash@0 {
--                    compatible = "jedec,spi-nor";
--                    reg = <0>;
--                    spi-max-frequency = <104000000>;
--                    spi-tx-bus-width = <2>;
--                    spi-rx-bus-width = <2>;
--                    nvidia,tx-clk-tap-delay = <0>;
--                    nvidia,rx-clk-tap-delay = <0>;
--            };
-+        compatible = "nvidia,tegra210-qspi";
-+        reg = <0x70410000 0x1000>;
-+        interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        clocks = <&tegra_car TEGRA210_CLK_QSPI>,
-+                 <&tegra_car TEGRA210_CLK_QSPI_PM>;
-+        clock-names = "qspi", "qspi_out";
-+        resets = <&tegra_car 211>;
-+        dmas = <&apbdma 5>, <&apbdma 5>;
-+        dma-names = "rx", "tx";
-+
-+        flash@0 {
-+            compatible = "jedec,spi-nor";
-+            reg = <0>;
-+            spi-max-frequency = <104000000>;
-+            spi-tx-bus-width = <2>;
-+            spi-rx-bus-width = <2>;
-+            nvidia,tx-clk-tap-delay = <0>;
-+            nvidia,rx-clk-tap-delay = <0>;
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-index 85e7770703bd..e94d915e28c8 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-@@ -87,7 +87,6 @@ examples:
-                 spi-tx-bus-width = <2>;
-                 spi-rx-bus-width = <2>;
-             };
--
-         };
-     };
- ...
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-index f45d3b75d6de..4d8ec69214c9 100644
---- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-@@ -141,15 +141,15 @@ examples:
-     #include <dt-bindings/power/r8a7791-sysc.h>
- 
-     qspi: spi@e6b10000 {
--            compatible = "renesas,qspi-r8a7791", "renesas,qspi";
--            reg = <0xe6b10000 0x2c>;
--            interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
--            clocks = <&cpg CPG_MOD 917>;
--            dmas = <&dmac0 0x17>, <&dmac0 0x18>, <&dmac1 0x17>, <&dmac1 0x18>;
--            dma-names = "tx", "rx", "tx", "rx";
--            power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
--            resets = <&cpg 917>;
--            num-cs = <1>;
--            #address-cells = <1>;
--            #size-cells = <0>;
-+        compatible = "renesas,qspi-r8a7791", "renesas,qspi";
-+        reg = <0xe6b10000 0x2c>;
-+        interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cpg CPG_MOD 917>;
-+        dmas = <&dmac0 0x17>, <&dmac0 0x18>, <&dmac1 0x17>, <&dmac1 0x18>;
-+        dma-names = "tx", "rx", "tx", "rx";
-+        power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
-+        resets = <&cpg 917>;
-+        num-cs = <1>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-     };
-diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-index 69a463305274..edb5ba71af3a 100644
---- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-@@ -59,9 +59,9 @@ unevaluatedProperties: false
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/irq.h>
--    spi@9C002D80 {
-+    spi@9c002d80 {
-         compatible = "sunplus,sp7021-spi";
--        reg = <0x9C002D80 0x80>, <0x9C002E00 0x80>;
-+        reg = <0x9c002d80 0x80>, <0x9c002e00 0x80>;
-         reg-names = "master", "slave";
-         interrupt-parent = <&intc>;
-         interrupt-names = "dma_w",
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-index d35c6f7e2dd5..18afdaab946d 100644
---- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-@@ -95,7 +95,6 @@ examples:
-              <&dmamux1 1 40 0x400 0x05>;
-       dma-names = "rx", "tx";
-       cs-gpios = <&gpioa 11 0>;
--
-     };
- 
- ...
--- 
-2.34.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
