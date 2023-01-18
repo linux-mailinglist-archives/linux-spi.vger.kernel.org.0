@@ -2,57 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257D66717B2
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jan 2023 10:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854C8671AF2
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jan 2023 12:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjARJ2Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Jan 2023 04:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S230112AbjARLoX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Jan 2023 06:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjARJZX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 04:25:23 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B4A4708F
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 00:51:28 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id DC568B8B;
-        Wed, 18 Jan 2023 09:51:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1674031881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BzjI/eD/g/cYAAa/GfEEAFqCMUNeI0aSZEvb7n5U/zM=;
-        b=ddutgwBY+yRU9ND79tbhwdT/boOYkZCa6skiFzkA3y1sH8tmZXugYpvV8fQSMjSH8t1PMd
-        lnFHyZldv3Y8fZw/viGANFZDs/5T7z6xAke1p7GL6aMzWSQTT+Q8h4g+39nz93PvzfccRQ
-        LiBe4yJFME+pLGuqBns6nV2roI5EpDbthRaklwowtURgBNIJS2g6MX8ixWz8bUVH/M5YkY
-        +KSqtJd7WhnMGJhdDFM1PYbo0M9QiIzaWJoDg1LjPipCEYJSNrW5TOHXABt5hSYuudGNqR
-        9HBNWMwieLfCUKe7kClclCyV6g0n99CuKtyBmMavWI33c0/QjL4lJBMRxbUemw==
+        with ESMTP id S230126AbjARLnw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 06:43:52 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5517C656C0
+        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 03:02:21 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-15f64f2791dso4774301fac.7
+        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 03:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KuI0iwHsMdHgi9UUhJbv/FF6Zx1hDWv0kF6EEdUlD2I=;
+        b=5PCGooyhPIEuUA8LfHpgz2E1NSo9q7mSLwwd+kP7a2WQx5oIObawC1SZ8b3GjlhI6w
+         k+aUwf08xYT06HES1GVAUttTfmtlU/+2mUQ+E6nwI3mvpykPVqpS3CT4T1OK8Y7wh8Lh
+         OxdivEq+CnvHPuPDLKxMirSIFn7kanNvD0azdCBrxVrZC626tljgU09Q5NwDlRdCl5Pm
+         h30BKW+O6Gpe2j8vZBVS7nQX0CZx9F+vnTsIKQmfF0oeOZkgBCg3IFGxtjTVee8Llq3v
+         VTgrTzM1eGIkuy0knsusfqmXW3O1e3iUrjIXv4sd1h2zvdReBrfi+vZn6Ejf/45OptwH
+         w5QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KuI0iwHsMdHgi9UUhJbv/FF6Zx1hDWv0kF6EEdUlD2I=;
+        b=I7DA8UtY2svcPzDOw5dsvlwDx6drkXbHLiZugy47yd/4mIT/u4UUZ1P2LZPBuR2PCg
+         G0oomGAe1Vr7gwuCoG3CVDiJEpJfxVDhRS18q9kks0RNSyBtC4z3lYBR2ByOXhTRrqJV
+         6kdVfkJUktTg7vs5e2bkW8Gwxb+//GL4HjU+8YPAoETGQtY27mStTvkurMmkbdcCU/XC
+         DdhON5x2ZCsu+NaysDe9iTOWkcfhfANAxeqHSoyRB56bI26fi6bI41xcuuxr7gik/GXs
+         edZIYRNQL0tNdSct1ymUxfgX3U5zOBE4N0m7ObdzIlljOHgNeYwrZX+GzLqcrAKGbsns
+         PGnA==
+X-Gm-Message-State: AFqh2kpvLfxqHKwx+nDV4lET2aJVzA3QBX7l1GPh6dYUpgvSKYHhesoo
+        cBCzXXRYVibaPRvSzn2QsJJ1rA==
+X-Google-Smtp-Source: AMrXdXvlrp1Ed3XBrrhA3zCnrQ6Rbb/wKmg6UrVk+wIslhGo+AMwXBPpNO4DwySZY2+3rtlEwlTN+A==
+X-Received: by 2002:a05:6870:c190:b0:15e:cc77:1e6d with SMTP id h16-20020a056870c19000b0015ecc771e6dmr4364085oad.13.1674039741194;
+        Wed, 18 Jan 2023 03:02:21 -0800 (PST)
+Received: from ?IPV6:2607:fb91:120e:1c84:8038:3fff:fe9f:cbb4? ([2607:fb91:120e:1c84:8038:3fff:fe9f:cbb4])
+        by smtp.gmail.com with ESMTPSA id e19-20020a056871045300b001442fada152sm18099522oag.46.2023.01.18.03.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 03:02:20 -0800 (PST)
+Message-ID: <efa6a8aa-466e-cfaa-0113-b85002af008e@landley.net>
+Date:   Wed, 18 Jan 2023 05:14:36 -0600
 MIME-Version: 1.0
-Date:   Wed, 18 Jan 2023 09:51:21 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     han.xu@nxp.com, broonie@kernel.org, dev@kicherer.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, robh@kernel.org
-Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-fsl-qspi: add optional
- sampling-delay
-In-Reply-To: <2a684f19-6749-ddb0-6e32-4ffe35269cb3@linaro.org>
-References: <20230117210500.oimf4yjkkqh3o4hi@umbrella>
- <20230118080159.112295-1-michael@walle.cc>
- <2a684f19-6749-ddb0-6e32-4ffe35269cb3@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <30a7f1174b5c16f4f6c86eb8b25fba7a@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+ <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
+ <7329212f-b1a0-41eb-99b3-a56eb1d23138@landley.net>
+ <CAMuHMdXo3iR2C=CAaXO5tBRCncnQAAMR6BMPLOm_nBpFAeVhrA@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <CAMuHMdXo3iR2C=CAaXO5tBRCncnQAAMR6BMPLOm_nBpFAeVhrA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,52 +96,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
->>>>> unfortunately, the rx-sample-delay-ns property does not fit here, 
->>>>> as we
->>>>> can only delay
->>>>> the sampling point between zero and three "half cycles" (or edges), 
->>>>> not
->>>>> by an arbitrary
->>>>> number of nanoseconds.
->>>> 
->>>> Why this is a problem for FSL but not for other platforms having 
->>>> exactly
->>>> the same constraints/property?
->>> 
->>> Please use the common delay in DT and calculate to half cycle in 
->>> driver, we have
->>> the similar discussion before for fspi controller delay settings.
->> 
->> Do you mean [1]? There my suggestion was to use a -degrees property 
->> (because
->> it doesn't depend on the frequency). There wasn't any follow-up, or 
->> did I miss
->> something?
->> 
->> -michael
->> 
->> [1] 
->> https://lore.kernel.org/linux-spi/62f113a0cdb0d58bf04ab0b274912eb7@walle.cc/
+On 1/18/23 01:46, Geert Uytterhoeven wrote:
+> Again, I think you're talking about something different.
+> Does kexec work for you?
+
+Sorry, got woken up several hours early by sirens and flashy lights this morning
+(duplex on the corner caught fire, Austin has a LOT of emergency vehicles), been
+a bit underclocked all day.
+
+No, I haven't tried kexec on sh4. I'll add it to the todo heap.
+
+>> > I tried working my way up from 2.6.22, but gave up around 2.6.29.
+>> > Probably I should do this with r2d and qemu instead ;-)
+>>
+>> I have current running there. I've had current running there for years. Config
+>> attached...
+>>
+>> > Both r2d and landisk are SH7751.
+>>
+>> Cool. Shouldn't be hard to get landisk running current then.
 > 
-> I think the patch using existing ns property (and calculating cycles or
-> phase shift or whatever was needed) was merged. In such case please go
-> the same way.
+> Current kernels work fine on landisk with an old Debian userspace
+> on CF.  The 8139cp driver is a bit flaky: last time I tried nfsroot,
+> that didn't work well.
 
-I couldn't find anything that the fspi driver now supports this delay.
+I've never had luck with NFS, I was using NBD. Hadn't noticed the flake but
+haven't stress tested it too hard either?
 
-I still think this is the wrong way to go. Like I said, it depends on
-the frequency, which means that you need to change the delay-ns property
-everytime you change the frequency. Think of a bootloader which patches
-the frequency (or something like that). But what's worse is that you
-cannot have an enum in the binding for this property then.
+Mostly new userspace is what I'm testing...
 
-Now OTOH, you could actually have a hardware which take the
-delay as a time period, in that case this -delay-ns makes sense
-and recalculating that into -degrees would be impossible.
-
-Are there standard properties which expresses the same, but just in a
-different way? Like for example drive strength as an impedance or in
-current at a specific voltage. But having two different properties for
-the same thing might be just as bad..
-
--michael
+Rob
