@@ -2,71 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F9D67340C
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 09:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4876B67344B
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 10:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjASI5u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 03:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S229982AbjASJX0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 04:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjASI5q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 03:57:46 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D93A6796A;
-        Thu, 19 Jan 2023 00:57:44 -0800 (PST)
+        with ESMTP id S230026AbjASJXM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 04:23:12 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B43067796;
+        Thu, 19 Jan 2023 01:22:58 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id EC7655C006C;
-        Thu, 19 Jan 2023 03:57:40 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id ACDF25C00B3;
+        Thu, 19 Jan 2023 04:22:57 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 03:57:40 -0500
+  by compute6.internal (MEProxy); Thu, 19 Jan 2023 04:22:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674118660; x=1674205060; bh=mn2JbKYAQs
-        NeYnkRN5qpIkeRXL317vu4/izCeLSldg0=; b=rc+37mK0rgykOYr91sA8MJnxUK
-        JcUHSxUB69vOrQtZLXtQ2y3+34WpCXOv3Se7NsQYwRQjhOc/nxIogKjP2Cp3Pyy7
-        /bGWCTq29Nhfcr/I1Il7AkCRw5PxOB9wRp00ZE/IDjd0LBUJsr8zESXbA30FuT7u
-        FIe9Mziudr3VeSlEvXdg2vOFG2+3G2fJMvaYg2jxHhlGjy8jdEbr2XVSr3mw2cPP
-        Z/1GqQBp32x0h3HW5IgWBhPCjYP5lBi/XX8MJ3U+6SQE8sN1QuSZfDN/PZ+u5FFg
-        h12taYI556qigoUGGooWgAGvKAUHpVvtIZ+6XlEUlmubSroMCbZdjsLP9U9Q==
+        :subject:to:to; s=fm2; t=1674120177; x=1674206577; bh=/JsNdAytCy
+        nPTqBsyGElSPfW98eiVw7apSDHVMC4ZLc=; b=bHL+8hi3f1w7c68W16su2/woIi
+        p3/hVfC0K0wniFdYKdaMYxmZBqgZ6L9hgDIZLBacXerW+4niLyHPSv2XQb2P3CPu
+        ABfSHsCUUh9c1lDJP4oqeSWj377RaH0Jaa5c93nYJfshUOU9AyIs5m/VRwMpfEZf
+        nr9z1FkBNaIObcEkmOGZCksrSXwteN+chJNA95sTtDZfEk9wMv2HFyWWQzQkpPh+
+        +myZFKNmh1YsvjMXzldZ6KzmM0d4II/DbO1tU2/WyOg2POSDhI6mZ6HkMlPc5vL1
+        sZP0dEMSVGO1SeuhlMVXSu4jYdxlcu2Ky+jWpj5MM02PY/oLVHPZ1il0fmIw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674118660; x=1674205060; bh=mn2JbKYAQsNeYnkRN5qpIkeRXL31
-        7vu4/izCeLSldg0=; b=Z1Wc+S3Uwo5G8OQ47N8l6W0p2DSVnHbOqaJT5Lfwazt/
-        jLStp3Z0z7T3hPQYkOrgBsTUm2KAlHS3Vw8aot9X5U/ZAAJbxEt7wbl7UMcxpFqW
-        bfr2SLl7M3IVB0aCOVsVd7WQhoMYa0/ooT0EY89pcOT7LwA+lAaGwORxN8AySvgp
-        DDCDnDX4FNS7pLe8+md/xCCaXNr8/Wk/nksHhW0oDMKN/kUVjae/TLea1wEEJqCU
-        S7A0xfL25qYEBYOCErtUqJdDxriE3F5HvGjqmSEfkzRJoT4xRsl3d/O5FLl9ONEM
-        Brb1Ub0USVaO72dOJUCmDS+SQt1ZpJQcOKEj6/cLcQ==
-X-ME-Sender: <xms:AwbJY-DkTuOpk5u44J0x7IocCo8g_SnyL0S-7ewEnG-Jl_GgI5pjSg>
-    <xme:AwbJY4jPrjB_ynq5d0V35sAqI_RFKI3i32_2_vLHbE9N9AjPPw7qk3u43Tf8-M357
-    uln4SLYMHH-5XmXBlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:BAbJYxnlogFPWU-btDV4FqPMmP1wS6ncEsvY_z-Tdayd2bIBaZ5i3A>
-    <xmx:BAbJY8xtHzI6qEgYIfOrMUE7A7zbF8YWSHBFqVDm2Vp5L2yYy_8NwQ>
-    <xmx:BAbJYzTMWvDcUb7RNzQL-rJ_ArAFtZqMmtdDmIbJ451KoynkVaOdng>
-    <xmx:BAbJYzzBAtjYuSwk0drj5G6_GAGB4kmfMm6BLaELLIYFmZWIuvzhKA>
+        fm3; t=1674120177; x=1674206577; bh=/JsNdAytCynPTqBsyGElSPfW98ei
+        Vw7apSDHVMC4ZLc=; b=mcL8mzFLatm+U4TcbmKxB1Yygc7VY05chw0BSKnN4Yaw
+        lfwDO3QLiOvQOaboPIdOKe9TkkyHMz063oSSFaKKKHTveMp6DE0qzW4Yr75t1QfE
+        7zL+fKKqz6Vj4Q8jo4+KpRi9LPdY8iyx0X8AB5Isw6g1cMNhicG4NSVNhWERPwCJ
+        AHzMXPsL2fnyvRCFvxVW9TZOPw6d+wtSRpPU2ah/668Pvghf7nechsRlOKYw1W96
+        9j1dSzFeojb/LHRcdda0SS8PVs5MENWHmBm2amOQsngZbOuyMy629pVMBGoB1sDB
+        unIvQEWZJTN4EkWOsk4BCa7F1o4I6uu/kWXHfABqGw==
+X-ME-Sender: <xms:8QvJYxTegyit2P0J_Kyg1iz_5SfcC9tEY38DB9u4xGOm1dS_NEO3nw>
+    <xme:8QvJY6yiERTAKVvn0jGkSrRp-ErHsqKt19df2t9jkttmMHwk1lfdyU7dQy0M2U8rq
+    HVKP-61jZjTCW88dvU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:8QvJY20jmXmROYht_sErXSbsvrYIshdu7bQIcCJqe7UMQMF1_R0lBw>
+    <xmx:8QvJY5BvZ8-kb5SWq0Mxb_LTxg3nsVhxicrVtUOQMkvir_CsjUIVQA>
+    <xmx:8QvJY6ikSTKCoPjE8A3ov4fq3HUdQ5SHB2DHnyyW-LdZRF-h0TbG4g>
+    <xmx:8QvJYzA-2c5jILpcioQfhmfRzjj4KM2TStf_8tssIdvs-SmdjG4uiA>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EAAB2B60086; Thu, 19 Jan 2023 03:57:39 -0500 (EST)
+        id 056E3B60086; Thu, 19 Jan 2023 04:22:57 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
 Mime-Version: 1.0
-Message-Id: <a958eb22-39c9-4f91-8f72-cd1db7829a3d@app.fastmail.com>
-In-Reply-To: <20230119033918.44117-15-blarson@amd.com>
+Message-Id: <e7180562-dddf-47ff-8e6d-34265521b10d@app.fastmail.com>
+In-Reply-To: <20230119033918.44117-16-blarson@amd.com>
 References: <20230119033918.44117-1-blarson@amd.com>
- <20230119033918.44117-15-blarson@amd.com>
-Date:   Thu, 19 Jan 2023 09:57:20 +0100
+ <20230119033918.44117-16-blarson@amd.com>
+Date:   Thu, 19 Jan 2023 10:22:37 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Brad Larson" <brad@pensando.io>,
         linux-arm-kernel@lists.infradead.org
@@ -92,7 +92,7 @@ Cc:     linux-kernel@vger.kernel.org,
         "Tony Huang" <tonyhuang.sunplus@gmail.com>,
         "Ulf Hansson" <ulf.hansson@linaro.org>, vaishnav.a@ti.com,
         "Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 14/15] mmc: sdhci-cadence: Support mmc hardware reset
+Subject: Re: [PATCH v9 15/15] spi: pensando-sr: Add AMD Pensando SoC System Resource
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -105,11 +105,90 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On Thu, Jan 19, 2023, at 04:39, Brad Larson wrote:
-> 
-> +extern unsigned int sdhci_timeout_val;
+
+> drivers/spi/spi-pensando-sr.c
+
+I don't think that is the right place for this driver: it's not a spi
+controller implementation but rather a user interface driver that should
+be in another subsystem depending on its purpose. drivers/misc/ might
+be an option, but ideally I think there should be a higher-level
+interface.
+
+I'm still confused about what this driver actually does, and how
+the corresponding user space side is meant to be used.
+
+> +config SPI_PENSANDO_SR
+> +	bool "AMD Pensando SoC System Resource chip"
+> +	depends on SPI_MASTER=y
+
+Why can this not be a loadable module, i.e. a 'tristate' option?
+
 > +
+> +#define PENSR_MAX_REG		0xff
+> +#define PENSR_CTRL0_REG		0x10
+> +#define PENSR_SPI_CMD_REGRD	0x0b
+> +#define PENSR_SPI_CMD_REGWR	0x02
+> +#define SPI_IOC_MAGIC		'k'
+> +
+> +#define SPI_MSGSIZE(N) \
+> +	((((N)*(sizeof(struct spi_ioc_transfer))) < (1 << _IOC_SIZEBITS)) \
+> +		? ((N)*(sizeof(struct spi_ioc_transfer))) : 0)
+> +#define SPI_IOC_MESSAGE(N)	_IOW(SPI_IOC_MAGIC, 0, char[SPI_MSGSIZE(N)])
+> +
+> +struct spi_ioc_transfer {
+> +	__u64 tx_buf;
+> +	__u64 rx_buf;
+> +	__u32 len;
+> +	__u32 speed_hz;
+> +	__u16 delay_usecs;
+> +	__u8 bits_per_word;
+> +	__u8 cs_change;
+> +	__u8 tx_nbits;
+> +	__u8 rx_nbits;
+> +	__u8 word_delay_usecs;
+> +	__u8 pad;
+> +};
 
-This declaration should not be in the .c file, and I don't think
-there should be a global variable with this overly generic name either.
+When you create a new user interface, the interface definition should
+be in include/uapi/linux/*.h. The structure name and command name should
+indicate what driver they are used for, these names look overly
+generic.
 
-     Arnd
+> +struct pensr_device {
+> +	struct spi_device *spi_dev;
+> +	struct reset_controller_dev rcdev;
+> +	struct mutex buf_lock;
+> +	spinlock_t spi_lock;
+> +	u8 *tx_buffer;
+> +	u8 *rx_buffer;
+> +};
+> +
+> +static dev_t pensr_devt;
+> +static struct pensr_device *pensr;
+> +static struct class *pensr_class;
+> +static unsigned int bufsiz = 4096;
+
+Even if there is only ever a single instance of the device known to the
+kernel, it is better style to avoid static variables but instead make
+everything passed around as part of the device structure.
+
+
+> +
+> +	t[0].tx_buf = tx_buf;
+> +	t[0].len = u_xfer->len;
+> +	if (copy_from_user(tx_buf, (const u8 __user *) (uintptr_t) 
+> u_xfer->tx_buf, u_xfer->len)) {
+> +		ret = -EFAULT;
+> +		goto done;
+> +	}
+
+Use u64_to_user_ptr() instead of open-coding the type cast.
+
+> +static const struct file_operations pensr_spi_fops = {
+> +	.owner =	THIS_MODULE,
+> +	.unlocked_ioctl = pensr_spi_ioctl,
+
+There should be a '.compat_ioctl = compat_ptr_ioctl,' line here to
+allow the ioctl to work in 32-bit processes.
+
+      Arnd
