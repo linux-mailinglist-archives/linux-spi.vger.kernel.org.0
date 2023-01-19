@@ -2,109 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614216742D7
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 20:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAF8674C1A
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 06:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjASTag (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 14:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S231321AbjATFYF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Jan 2023 00:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjASTaa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 14:30:30 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E759574C
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jan 2023 11:30:28 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id c124so3847515ybb.13
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jan 2023 11:30:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XeirCJAnAvYHJRWOqOsfW1hYyWSjdT+Ia3hbkutfMMQ=;
-        b=W/jc15KxUCWrRIvEx3elqDdDeiflQ65ZJhZp5RrASRAKLlj4zO58m84Vj+u2t+A+Ub
-         LTjFrtDTgJJVd7gYUe/yqMbevOT6+SY5vxKbC7sV8tbxbtrGnJFNe0rIiMVMnvagfgub
-         diSVQG+En5UIkmCkzbRWk08gMCztKdMlKAI9UvkF/hmAgrg0797beeT50QqEuEn0RS40
-         tm/IcFVo5NUeEC9wdsBVfRhoMpB3tWv36YkrUuG5Gi2AIFAXdIW3wjzmrrB/pXM0V4k5
-         Zs9zKCNClN4iHq0g6JAKrnC4ukKpMa1cm6cZSasj4Dk1GA4WDzFW5GPg+SYXEq7L2S4J
-         P4Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XeirCJAnAvYHJRWOqOsfW1hYyWSjdT+Ia3hbkutfMMQ=;
-        b=0pPPl/Vy8M7/g2QM4aEHA7L4JsYzXJ8UjF4nujSDSaKeHh1u7yu/wPZmVZ8Gn9e85q
-         Z0t0yz6UB1WLC0Rv7y89Z7xUIp7HAbbvuh4XbFqJltCXfcrsQznDFxSfCPJPMXPP3hin
-         Y9cJBjwN0iazUY/80FPbK7dUg3z5BoDIx4iDOIGqEhzbu6v5KGFBD7W/5Vx6VdBPdPoA
-         JFuWsdRUaqpR2bkM1dHhijhsRX/Vfd6i8KhlNW/l1AybVg5SLnOQz0EWeWD+xfD9SuTq
-         rrdjrXwwZORNyjcem6m93Lkp3lCqzNngk5Hn/hoDqxbSf4rCWk8JTNq2cIL1ufCHh6a0
-         Zhaw==
-X-Gm-Message-State: AFqh2kpmEwFnQCiRql7mSuQfFNMVEMvchOaZA7vX01taOcxcIZ5iUoTM
-        LerifrNDAbftFNHLytLZ/iM8Bpl3KaIEU8q5R7Nm7w==
-X-Google-Smtp-Source: AMrXdXu2hI6GTxFM6roiARVxtIshJOJfKVdp6j55OgzYw67RgQhhNqIbaKmtFdYvzitjyQsXkdo2ssTrJkJ37MisEbw=
-X-Received: by 2002:a25:9291:0:b0:7c0:563:c516 with SMTP id
- y17-20020a259291000000b007c00563c516mr1162358ybl.529.1674156627804; Thu, 19
- Jan 2023 11:30:27 -0800 (PST)
+        with ESMTP id S231315AbjATFXk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 00:23:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8265360C86;
+        Thu, 19 Jan 2023 21:14:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6884B823D6;
+        Thu, 19 Jan 2023 13:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB92BC433F2;
+        Thu, 19 Jan 2023 13:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674136633;
+        bh=3P1Nc86yRs6xRt0uuD8SSAASBWVJ0TJDhG0FA7Feguc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=THgm7mSVdJKL0kAA+WIgCqGJbjB6wJt8FgOWbrAT1l2e1UGgX6T+NOch1V0VlI2Mw
+         F2eVMjUaFrMvKzf9tdgoqhhLh5c/jY/tg2mKGe5KQ51wE+6Q7vE1Se6iNwhYorEZIL
+         FeFTwU/U3Y52k1AJleh4dvTY0/SxmWOd6fIhcggZY9Xr7rdlY02YAA67zwUY5QK+6r
+         zQails68ACDxiAru/1wMhLmlgK4PXcjAwjys1D+4iDzPvKweRA1Ka/NpH+7OkumlfW
+         Y8ViudQncoii4+/NrdvBO1YH2lf9h6qnJpbEPbdAUDxdRZxO9Anlppo69uo0o8QBPB
+         8EWyimyRPg/qQ==
+Date:   Thu, 19 Jan 2023 13:57:09 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 15/15] spi: pensando-sr: Add AMD Pensando SoC System
+ Resource
+Message-ID: <Y8lMNUH/lJuJPbLp@sirena.org.uk>
+References: <20230119035136.21603-1-blarson@amd.com>
+ <20230119035136.21603-16-blarson@amd.com>
 MIME-Version: 1.0
-References: <20230118-mt8365-spi-support-v2-0-be3ac97a28c6@baylibre.com>
- <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com> <Y8l/mQjjgKJiE1/F@sirena.org.uk>
-In-Reply-To: <Y8l/mQjjgKJiE1/F@sirena.org.uk>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 19 Jan 2023 20:30:15 +0100
-Message-ID: <CAFGrd9pZ0Lso6LMKkN=ErujGgRi6t5_C3FvbMYHaV5V_DD0BnA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] spi: spidev: add new mediatek support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8D6WBjU4dhTr3Lss"
+Content-Disposition: inline
+In-Reply-To: <20230119035136.21603-16-blarson@amd.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Le jeu. 19 janv. 2023 =C3=A0 18:36, Mark Brown <broonie@kernel.org> a =C3=
-=A9crit :
->
-> On Thu, Jan 19, 2023 at 06:28:20PM +0100, Alexandre Mergnat wrote:
-> > Add the "mediatek,genio" compatible string to support Mediatek
-> > SPI controller on the genio boards.
->
-> All my previous review comments stand, please don't ignore review
-> feedback.
 
-Hi Mark,
+--8D6WBjU4dhTr3Lss
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Yes sorry about that, I wasn't aware that I've some feedback when I
-sent V2 for a quickfix.
+On Wed, Jan 18, 2023 at 07:51:36PM -0800, Brad Larson wrote:
 
-I will take care about your comment:
+> Add support for the AMD Pensando SoC System Resource chip using
+> the SPI interface.  The device functions are accessed using
+> four chip-selects and the device can be a CPLD or FPGA depending
+> on functionality.
 
-> We need a matching update to the binding document.
->
-> This does also seem like a terribly generic name - Google
-> suggests that this is actually a series of numbered products (eg,
-> Genio 700), perhaps we should be using the specific numbers here?
-> I guess users would care which they're talking to.  It really
-> parses as being "generic I/O" which would be an end run around
-> describing the actual product though it's not actually that.
+> ---
+>  drivers/spi/Kconfig           |  14 ++
+>  drivers/spi/Makefile          |   1 +
+>  drivers/spi/spi-pensando-sr.c | 454 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 469 insertions(+)
 
-Is there a binding documentation for spidev ? I didn't find it.
+This isn't a SPI controller driver so doesn't belong here,
+drivers/soc might be a better fit based on the summary above?
 
-My understanding is to have something more specific like:
-compatible =3D "mediatek,genio350"
-Or maybe use the SoC name, to be aligned with the DTS ?
-compatible =3D "mediatek,spi-mt8365"
+--8D6WBjU4dhTr3Lss
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Regards,
-Alex
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPJTDAACgkQJNaLcl1U
+h9AX9gf9GML5TThEYc7iRhGulDaUGtLkpUtyjl6vvp1rs5FAt6yU8pZ5smmtQK9G
+FzGZsvNDSPbQ952jyy7EBQQ7gswjo+kF4Eg+6UpE8WJTY95WPjkji0E/DPOxhruK
+2ByAWFyW8bx7r/Sqng7jJRN6/rc4F9+rppguTNKJGF5xdwArMulKAPwNW9qzUit4
+BmaUhuKxdVwLXCW6d9sAcOV7GDFW8iMTHXXE2uZcOijYpOz5jaOnSQu/esQZz/8D
+Sc7Xa9XLvJTWif+OxUB7qzWlyUTy5ul//1dJja5VYG/IUTWvfIH2LsgGAzEhv6zF
+8/ciby0aIavZsRidSNFBl4kexezCHQ==
+=/8v4
+-----END PGP SIGNATURE-----
+
+--8D6WBjU4dhTr3Lss--
