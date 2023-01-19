@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07740674BAD
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 06:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E384674C4A
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 06:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjATFEg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Jan 2023 00:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S231178AbjATF2u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Jan 2023 00:28:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjATFEQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 00:04:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5166DA10A;
-        Thu, 19 Jan 2023 20:51:12 -0800 (PST)
+        with ESMTP id S231173AbjATF21 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 00:28:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A646B76AC;
+        Thu, 19 Jan 2023 21:23:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 413ECB82622;
-        Thu, 19 Jan 2023 16:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72650C433EF;
-        Thu, 19 Jan 2023 16:39:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59DD4B826AA;
+        Thu, 19 Jan 2023 17:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C02DC433D2;
+        Thu, 19 Jan 2023 17:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674146366;
-        bh=3bJjdB+nWWOEDo4Kr2GKl2c8L2HL7kShd//vBhxQxIA=;
+        s=k20201202; t=1674149789;
+        bh=EQ1fSGGlGH77kXooVwbjybwU1LhFwJogktLoTx8jPAQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OAmesnlcLr4gXydaCxspVBHJl//Pg48EEE9Ac1TuOp9VDD22lqzx2tTzjv8ElSimU
-         pWOk7Tpp0yXR8fj7azquosDK8AHJhlQDRpdzhmLD0lfvBPvDM1bklUh/uEA76afBPg
-         gC/3E9MSVR5mRb3tWpVgRll+UrxNn6HRXTmG/DSYEtdLdxj9MgElxOuaJhm8BojqV5
-         6lc+OAZIpb4B/ZJpqUfKQFuMWQH55IZjFqgfbDtvV96U9AGQn9gGT06dMbsEZqp2wh
-         A5lS99N0Zg4L8gWvXMMr9qlhpA5dZN8pmF3UDJDBX/MFCXdZP8j6mnVo+Jz9JRA5sM
-         BN2z4OU8HN0KA==
-Date:   Thu, 19 Jan 2023 16:39:21 +0000
+        b=Mz7rCjR/A33xwAO7ZrvKUN7jh8KtBbd7CBPKGiVSdyLBLmM+cwcl38xhjCKqv8ey6
+         i9TkTBrT538e04b5/quBdE7b4XeTRQUEVPJ7EG09A5Y0FBRp7UYIlqin9YP7zj6CxP
+         RM+FC0eKo8W6L8jB0pFZr2ZjOeWRxNy7M5srSVRBIyMIwSLpppt4+ZfM784Vk21gUs
+         RsPxKj0NgF3FjMhNdhoW2YbOe4HsqpH3IorX9l22WD5lUDEqYvMPgGPx3Kn/987zuH
+         1Zm4hvm/A9fKsJC5eo5yY64TPTfJ8oI7B68xbMpWixcnm5ObJENOhSBJDFI5DHjJvn
+         RcMZ43COLKsjA==
+Date:   Thu, 19 Jan 2023 17:36:25 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
-Message-ID: <Y8lyORTrfmwIzEEO@sirena.org.uk>
-References: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
- <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] spi: spidev: add new mediatek support
+Message-ID: <Y8l/mQjjgKJiE1/F@sirena.org.uk>
+References: <20230118-mt8365-spi-support-v2-0-be3ac97a28c6@baylibre.com>
+ <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fQ/9xqKBaGbAnkd8"
+        protocol="application/pgp-signature"; boundary="Jz0aOHbv75kB/Hqi"
 Content-Disposition: inline
-In-Reply-To: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
+In-Reply-To: <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com>
 X-Cookie: Serving suggestion.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,40 +61,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---fQ/9xqKBaGbAnkd8
+--Jz0aOHbv75kB/Hqi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jan 19, 2023 at 05:28:50PM +0100, Alexandre Mergnat wrote:
+On Thu, Jan 19, 2023 at 06:28:20PM +0100, Alexandre Mergnat wrote:
 > Add the "mediatek,genio" compatible string to support Mediatek
 > SPI controller on the genio boards.
 
->  	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
->  	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
-> +	{ .compatible = "mediatek,genio", .data = &spidev_of_check },
+All my previous review comments stand, please don't ignore review
+feedback.
 
-We need a matching update to the binding document.
-
-This does also seem like a terribly generic name - Google
-suggests that this is actually a series of numbered products (eg,
-Genio 700), perhaps we should be using the specific numbers here?
-I guess users would care which they're talking to.  It really
-parses as being "generic I/O" which would be an end run around
-describing the actual product though it's not actually that.
-
---fQ/9xqKBaGbAnkd8
+--Jz0aOHbv75kB/Hqi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPJcjgACgkQJNaLcl1U
-h9CRKgf/aE9L/bycOwLdBtT6N4nGdMCTKRv3Lik1C75xILzdQEoMeSY6hbiIprsK
-akyYOAkVATInpreBpDdxVLBv2WRoF1gjCOyS658l/ZDWgPSYZ2oIe8cR2Ve4TYYX
-OiK6PPIcF/PiQ4/MMrHDd4V3GOQ9JUBukMUM88cbBsqMbHXiITvP83Omb04MPXV2
-xyAtq50UCaRGJnlwS1/ahDJ4wSL42RUKgu+6WJNeMckv3L3tM4hhs4qKcZVOfWPV
-yDflRvfSWw0mgd6x9C4CoRslSC9FRLEpniU8fRtwbkvP2CnBzJnx7o+mQ3KtFnor
-opcBdJ4aSzsX9xPuTU+M97GKibnXeg==
-=IObu
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPJf5gACgkQJNaLcl1U
+h9C0BAf+Jl+1E0pCscUWyq547PeayYiVt04DMkk+4q1qCXREpiJP/zLOicoEZCWz
+2xIkBo1hIB1RAJXIZWkrMO/kN5SbqsLQ+ySgMVaWK/Lp3aL0M8YyPF34pmEhLojN
+ly/WNvpWVwmdO6n6NGGsK1tgp7IE4pyEj9M08YmBcRbWzMddKO71u1YMgY+mmOcN
+NDEc2E1vmp4aWd22lsMmgtFlJgpRPAw0+/T6nA+XLdP4u3EvGo+Au3LOa3ij1xOA
+tWw3+wlro3nIC9+h0Iwy5rWLBzuaxMccUhM2ZEYAbj1a8Nq8yq8Of+7vlxOhiee/
+NdWsOYPhtLy6IuWthaMnaMi7vzliew==
+=uuJE
 -----END PGP SIGNATURE-----
 
---fQ/9xqKBaGbAnkd8--
+--Jz0aOHbv75kB/Hqi--
