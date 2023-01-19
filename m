@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBA96732E8
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 08:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D796732EF
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 08:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjASHue (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 02:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S230165AbjASHvK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 02:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjASHtX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 02:49:23 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35356B989
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 23:47:12 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id b7so973342wrt.3
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 23:47:12 -0800 (PST)
+        with ESMTP id S230322AbjASHuL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 02:50:11 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8437C68412
+        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 23:48:08 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so2967862wmb.2
+        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 23:48:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6Xf6l0pkTfUQcg4s8+KxcfrawM+/+acLE7U/I+YkgqU=;
-        b=HrbySDZwWkFSdLCzEXOLs+V+c7gkYZ6AExZCLr+NnmyUpp8N4Anc9Iifb0OmxEDgRK
-         LliDSj2RcZiSm2fEnw+hf/QjrpXb5sZE15ijxtyEOU6g2E1zpMKl26nT23mbVE8mYo0k
-         V17qUu5V196yRzkaQXIGyNi6UH+Qwoh9a5Vf3Lt5/V/JvaBh0iktV4lqC0dCeWB/2E0A
-         L8fFj9HhfFQSKZc7UnU0zps0mYU27k60DWTN2oy5VyYKa9lMpdxO4fWjsqQPqfhRpDTI
-         YbXzZGOxAdPjLIQJrN1ETEYU9M9jO21Ddp+adUdG7WO9uB1q47KLSlv9dmrSvXJ7W6Za
-         5Ysw==
+        bh=PC9kS18Wll2AIQihxyRmnUEmQXzt8UktjRNi3JOWYos=;
+        b=xzNjd2p0KKya2Qvs4jDOJHV/p2qR0PS9AbOSQ3eoeFqiAFXsgR3iRWNx+icJztnBs4
+         uWLg6VpEikIUqhaL2yQapXVVaphDxGuXCZ6CMCxkLp1LL7VhHoP+gqrX0jAbzxttrT0/
+         7lygOb2g2ShrwBvChxrlQU4OdM4PetPUFSOztpnziiF/wNog9GFA+tSpVcWBlfC7DnkN
+         lpFd+YCfbL9ll47bEG1TiuoXM8/0D1NLb6TUAinD83KAFANMjkf1wtZ7XNrS2KiIO1af
+         vle1nBkvAYiQwx7BxNZyehMILbJZ2I8Y1zQF03m9KBXkLR3Qyg0+vmtmbQdy8hwQ9UnS
+         okMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Xf6l0pkTfUQcg4s8+KxcfrawM+/+acLE7U/I+YkgqU=;
-        b=6yaVwVilnosQe5iIXDGAiv+ivL6RtBLYQJCsKadaKMxbdVBrCI3pfvAElm0JafT1W0
-         9vQtGN+dslRwP/vXi1R75LXcpfNHX6/26sn92jJ1mNAGARhC3jqw97dIOsp1rsY95OnJ
-         QM/H3Im8p6OZsteXmCO2imIHyG1npbIUWHYX1nb4lvO2YwCpU7CWbb/Ck1qj6BbQ0znV
-         kQcIg31/llVzaJ8DAq2zM2gYgrLZSfCq/JoFMUY8HYgEeHVGuRIy/ubGImZz4T/QkzKN
-         mAjzmbZ8Ik7vhJBkKM3aysk70f0Y3bDPRZhc81RSn2vevnVPBj72PNLWTDTDAYDhuBTi
-         aHcg==
-X-Gm-Message-State: AFqh2kr3uvd6xHLLGQFG3ktfZ0bZWwlvoFI993TGKLHExJ0QDu1NvURN
-        UOjzKKgr5usydJ8nFum+Ay/lnA==
-X-Google-Smtp-Source: AMrXdXuS8zdsDRinJUZd6MTyyHb3fpLxBdnccwy/4L69izCoZWdPOKRFFyFqnBBwK+HpW9Gq3M3pog==
-X-Received: by 2002:a5d:5251:0:b0:27e:7f5:6634 with SMTP id k17-20020a5d5251000000b0027e07f56634mr8289121wrc.60.1674114426892;
-        Wed, 18 Jan 2023 23:47:06 -0800 (PST)
+        bh=PC9kS18Wll2AIQihxyRmnUEmQXzt8UktjRNi3JOWYos=;
+        b=wvGBbO45hSgUs020ba4G60OMxNmjonbs2uo+xDTZ8tm6Ur4hydXvCp8ugZPXOET4cW
+         xN4auogynOvuE/BDGNX9nrG6mXkTaZTqk7EfOi9t9jiFCKtS2FHTVlca/wocaOnj4iYL
+         8Y1QyJ7jrZrv3B8WPqgT3Ps5WFR3muevnj5Pu4EdjJPSEQiHVpjMVi2vsFYostKSXNlN
+         Qr+riEuWwetcrKJ8C07RO6Bx30W+uGp4AJPgOaK4X5vhl0Fg7RWvQ66i3BWgzP38Z342
+         Ju/fQs/vgiyhg6NjrNiUgxvla17fum9ELCKlAVcLo4IqBU1vibi50DOPC5iwUvCJbmFX
+         5Jag==
+X-Gm-Message-State: AFqh2kq4uS73HQ4BqOqkyw+0NQr7CFbf2Kwh+/TS14j12bJGoN1F5fci
+        8x+o62FpntVF64oY+6Czanq4yw==
+X-Google-Smtp-Source: AMrXdXsT2dEW8VN8N4NTKGUY5keJk+HFf0/azc5a5xF6GRkvFOqTu6YpbOqPWBM8626gv9nyhQTeIA==
+X-Received: by 2002:a05:600c:3c8a:b0:3da:2a78:d7a4 with SMTP id bg10-20020a05600c3c8a00b003da2a78d7a4mr9182200wmb.21.1674114486962;
+        Wed, 18 Jan 2023 23:48:06 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q18-20020adfdfd2000000b002bdc129c8f6sm21608096wrn.43.2023.01.18.23.47.03
+        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003db11dfc687sm3947109wmc.36.2023.01.18.23.48.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 23:47:06 -0800 (PST)
-Message-ID: <f85cdf27-7ea0-14a8-10b0-7a9ac137a040@linaro.org>
-Date:   Thu, 19 Jan 2023 08:47:02 +0100
+        Wed, 18 Jan 2023 23:48:06 -0800 (PST)
+Message-ID: <06ed53f8-42eb-4b14-a867-64086e8b9998@linaro.org>
+Date:   Thu, 19 Jan 2023 08:48:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
@@ -138,12 +138,6 @@ On 19/01/2023 04:51, Brad Larson wrote:
 > +  resets:
 > +    description:
 > +      optional. phandle to the system reset controller with line index
-
-Drop "optional"
-Drop "phandle to the" and rephrase it to describe physical reset line.
-Don't describe here DT syntax (phandle) but the hardware. What is
-expected to be here?
-
 > +      for mmc hw reset line if exists.
 > +    maxItems: 1
 > +
@@ -154,32 +148,13 @@ expected to be here?
 >    - clocks
 >  
 > +if:
-
-Move the allO from the top here and put it under it. Saves indentation soon.
-
 > +  properties:
 > +    compatible:
 > +      const: amd,pensando-elba-sd4hc
-> +then:
-> +  properties:
-> +    reg:
-> +      minItems: 2
-> +else:
-> +  properties:
-> +    reg:
-> +      minItems: 1
-> +      maxItems: 2
 
-No, why do you suddenly allow two items on all variants? This was not
-described in your commit msg at all, so I expect here maxItems: 1.
-
-Also, unless your reset is applicable to all variants, resets: false and
-reset-names: false.
-
-> +
->  unevaluatedProperties: false
->  
->  examples:
+BTW, this probably won't even work and that's the answer why you added
+fake maxItems: 2... This should make you think about the bug. You must
+use contains.
 
 Best regards,
 Krzysztof
