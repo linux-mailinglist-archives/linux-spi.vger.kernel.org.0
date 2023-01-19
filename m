@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A417B673093
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 05:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD536730E0
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 06:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjASEvt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Jan 2023 23:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S230023AbjASFAV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 00:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjASEvP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 23:51:15 -0500
+        with ESMTP id S230121AbjASE7v (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 23:59:51 -0500
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF727C868;
-        Wed, 18 Jan 2023 20:45:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8271E252BB;
+        Wed, 18 Jan 2023 20:54:16 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 2E52F32002D8;
-        Wed, 18 Jan 2023 23:44:58 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 4732E3200933;
+        Wed, 18 Jan 2023 23:54:14 -0500 (EST)
 Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Wed, 18 Jan 2023 23:45:00 -0500
+  by compute6.internal (MEProxy); Wed, 18 Jan 2023 23:54:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674103497; x=1674189897; bh=RA62djbRjH
-        AtR5eYDGCg3s9PgydQzyaEPXFw3P5ADCE=; b=bQ1Lex1biSOsg9sZ0oCG32YJjg
-        ymUiX5FA89IlkUP0WnP4Mqbfg3cRGRfDMd/Q9HMHxZyPeveH/z8DNzb9Y2JyciS9
-        PbR458V7YzwoRUwih89rXDzIQeadvmjl4laV/9igg04WSdFxrnnOafzF1oehvDhV
-        0XayKr4JLT10lkAZu7NShyxFpzhNgRANVRnvZBuZpCszrKLwIWYebsJyx6jGy5lr
-        zkVjlgVd103/d/Z3i2laAkK2x0leJjXwsw5Wf+dzjJ3jK4CiVCz+0qPuE158uMq7
-        cWkgoFDu0cNjnseoQ+eeu9L4IPa6Le4Uc5xvVu8zdwPvQ9mUCD0aB3zHWiQQ==
+        :subject:to:to; s=fm2; t=1674104053; x=1674190453; bh=Jp0nEIifZi
+        HOJSvV20z7BP6fpn/Kau5COB1QREBO070=; b=MUTjYaga/VCVR8wOIxvTD1adQB
+        bVcsOamVjgMrs5qSWExP21qadvS9tslA8kaK8PAv1FY/Ij+tKRK4qMo/AkgwDK4u
+        +Egl+gmfZqsMV7bp+XfiZybdaBEKaPRO9xomqyOIi0rZrUMLuUT7Lz9xr3OMMRvr
+        WOcmHZVaDGAsYPVTh8VH/DEv8EmBtdKXnrgdt141UDjJIqFZZWJh/8WvaCFM6Rw3
+        K8rrIgzZFIWll7Q8TjYbSjpzmNJKqqeklTpZAL57RjU+vYBHXNx+zq25vqpvFXG8
+        mxFDlhr4IDsFMYzYFVBfOU38Ro7U3V/XGqGnnF4EBHvMktipbUfTiY73XyGw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674103497; x=1674189897; bh=RA62djbRjHAtR5eYDGCg3s9PgydQ
-        zyaEPXFw3P5ADCE=; b=gH4TLQKqQ3ouj/hKJKXkuCBSaYp1Utvr1tqT5JHO8dAS
-        LqMSLpW0Q1IiOhP11OGXZnGtFt6/CNcATiaWIEajheAAQqh/+sVZC1mKFZyV6Gfr
-        1zJShEs48+Id9p6LgF4Hv78ghevwRh/72pA3tZGN3pq9BF2LRG/kyuF1A+LofmL4
-        7oTrKkLV9/3vOJdY6eCabQcLB3OyzxsRmSreTHRKUCYT7vOqzXzafdg15xpCH/x3
-        0/+9NGh8xLdxaLeVwGSCyyqZKgHswU9a/IVf4B2mLGdH3fp2uWzroVajfJ8toLIG
-        XD+wjySvyoz7fvaZ5PVyU+V9eszLfmriVqQKpz7i2g==
-X-ME-Sender: <xms:yMrIY7pCyXxUMOvaDKg2BAcTqICUraG38J-Nrpj3Jqt5QjSlu4Tu_w>
-    <xme:yMrIY1qhEgvdxItp5fbsmCTEN1D2vbWb98Gg8GxGhXwrFWABp7HZHQV3cPqpLhGPC
-    OvL8Qv3UAAvNOjnZQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeehucetufdoteggodetrfdotf
+        fm3; t=1674104053; x=1674190453; bh=Jp0nEIifZiHOJSvV20z7BP6fpn/K
+        au5COB1QREBO070=; b=Q52GecV34my9RM50i4VjcIWg/PrSmrWYotOymHrXZiyQ
+        VHgeG2VvTiQD5hf6H8K2Ug2TVQhUQdbMzfGPs2WDeOUbjjUtk7ZC3FU7g6U7pm10
+        sOQt57lRcqImb454oTPbUCyqG6QweAJfGVw/Ms0iczG7rylZwDkQbv28kEu8fw2x
+        CN+pqnWIa895VWyzaiyb+CfEGWBJIYtduX9QiuhkaRVL32fme9CmuuKWRM4A0X93
+        hMBgFKlQsCaJ1HHV8X7MS0eH1iqmThckugzVf1mD9aajNyFnJUljp9iYDAD1/Cyd
+        EfQN5wgL9dF3KyR3Z1iXLxbPMR+91z+iar22sJH7Bg==
+X-ME-Sender: <xms:9czIY6kWaYeYw_FKjA7Nl7poJpuOj4scvZKNgvQWSRcttVOaIlC0GQ>
+    <xme:9czIYx2Y3Msp27EujWGe4TaFxUvoTP9gxq-_jT6sfZOTDYijUAZUD-tlvYYzE9tqB
+    IHD23qA3o33QjBZWA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
@@ -52,21 +52,20 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledgjeehucetufdoteggod
     grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
     hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
     eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:yMrIY4PnPTa0pI2mk7ylIXFS6WM5xsFnHxvupr09IJ7xciQy9a-poQ>
-    <xmx:yMrIY-6wAgKJPmeYq1fdu5mkCyeb74PoPwTI_8bMlCnagMBn9b8N2A>
-    <xmx:yMrIY67txgF_3CsmtcEk9pWkopnv4Fg3GzuNDnu2P2ykVK1LxhHxAg>
-    <xmx:ycrIY_pByLB2jT-LFgxAD3ro1NLEN5i3aZT12bkvkjM1hHQvuvnyIw>
+X-ME-Proxy: <xmx:9czIY4oqs1Uo2gRCmXk67fJ8llPsqDtXBwE7XqNCwaNyPfo-DgNM4Q>
+    <xmx:9czIY-mEnJ0P4Vqa60Ko5f3Hofzf5pgIN3gYWvf368x1UkzE1KD3Yw>
+    <xmx:9czIY42xHYz1PSscl1louZ3dhQXg6D_yYEuGVx7UM6aJ5wr_7QE2kQ>
+    <xmx:9czIY2m5I1IcHq89PeACGhMtafkHrE2oynuAdpnu6dTpWzSUSMEe4Q>
 Feedback-ID: idfb84289:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A40C61700089; Wed, 18 Jan 2023 23:44:56 -0500 (EST)
+        id 183811700089; Wed, 18 Jan 2023 23:54:12 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
 Mime-Version: 1.0
-Message-Id: <9a82d30a-c8ca-47fb-a976-f7f4d99cefec@app.fastmail.com>
-In-Reply-To: <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+Message-Id: <47290046-59a2-4bf0-8af0-3a7b4304deb3@app.fastmail.com>
+In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
 References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
- <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
-Date:   Thu, 19 Jan 2023 15:14:36 +1030
+Date:   Thu, 19 Jan 2023 15:23:52 +1030
 From:   "Andrew Jeffery" <andrew@aj.id.au>
 To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
         "Mark Brown" <broonie@kernel.org>,
@@ -138,8 +137,7 @@ To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
         linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 2/2] spi: dt-bindings: cleanup examples - indentation, lowercase
- hex
+Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -153,18 +151,16 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 On Thu, 19 Jan 2023, at 04:09, Krzysztof Kozlowski wrote:
-> Cleanup examples:
->  - use 4-space indentation (for cases when it is neither 4 not 2 space),
->  - drop redundant blank lines,
->  - use lowercase hex.
->
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
 > No functional impact except adjusting to preferred coding style.
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  26 +--
->  .../bindings/spi/amlogic,meson6-spifc.yaml    |  22 +--
->  .../bindings/spi/aspeed,ast2600-fmc.yaml      |  24 +--
+>  .../bindings/spi/allwinner,sun4i-a10-spi.yaml  |  2 +-
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml  |  2 +-
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml   |  6 +++---
+>  .../bindings/spi/amlogic,meson6-spifc.yaml     |  6 +++---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml       |  2 +-
 
 For the Aspeed change:
 
