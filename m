@@ -2,124 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5112F673487
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 10:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259036734EA
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 10:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjASJfs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 04:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S229626AbjASJ7F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 04:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjASJfm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 04:35:42 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500D65CE5A
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jan 2023 01:35:41 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pIRJv-0004DY-3L; Thu, 19 Jan 2023 10:34:55 +0100
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pIRJq-00049f-Qx; Thu, 19 Jan 2023 10:34:50 +0100
-Date:   Thu, 19 Jan 2023 10:34:50 +0100
-From:   Philipp Zabel <p.zabel@pengutronix.de>
+        with ESMTP id S229752AbjASJ7E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 04:59:04 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A064B53E41;
+        Thu, 19 Jan 2023 01:59:03 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id u7so884592qkk.10;
+        Thu, 19 Jan 2023 01:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7+Zs6gnnTdAd+D97a2ATi7zK4ycLCkd6CidyqSInY1Y=;
+        b=UVB6W5a+FK5ArV85JrvGH+fE1PJJGKjDzgy1NM486w13TwHk09pj5TYZLiLQrOF1b4
+         MS3WsRoatTuycWVrj1100PTaERrfi7aWgxiHRIleKWvWpWwjbpK1V6ystWsu6+C4crzv
+         uzOwMMGk8+L776v0tHNMH8NOcC0DdlaNDijt6y3Nq2aB+xp9ljnxGEpszBfOdrspGRRl
+         7nvxbGmx55WuywyrJyfoUykAmn6yFSwHMf1kb8iwc/mrrZymEpEJBizZlT+jupS8NUIt
+         JtUpRQ5rJnOgHxXQj6/lTFlLpSjm+FrFhzEwbUTKK2IvDwrlBw77W7v/J5FNOV1WtmFs
+         3X7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7+Zs6gnnTdAd+D97a2ATi7zK4ycLCkd6CidyqSInY1Y=;
+        b=4yYeCSwRykGF4aXE02uVmJDyCAIIovgchOeGY78P4vKKmFCm3Up0zImd1KNYQXL2FG
+         ZwpDMkqfwA/ibMJSFMta5cXeKSUkY8QrXl6DEocVbOxccTtXq1pg2wscwmx+/2voxaRw
+         ECnTdyQKWsaWcdgw6VfaGNtxsfnwVJgwJPRP0TVdgoC3Tkl95ighzkIl5x8j5RYduu/v
+         MDWCtPy6i8I5DBkazwSfV8s86Jlt5GT2k21JqX5+IV6+CVmmAJMhrPn+YFX5/iI9Bq8+
+         +WUYi8aWu8u2YZcYaPiRmLIxGpx2A1qxmOQcHZuTTpgejwPXLvSsZXVmS7gG0ln0tHyN
+         IRVw==
+X-Gm-Message-State: AFqh2koj4hbNC21N8JEcqyGNpjA/8quk2rAakVorDhIexG9+FIh6d7Zu
+        0T15XWplC+VwIEWlbVvZEVZ7q3F4lDPbAISn0rg=
+X-Google-Smtp-Source: AMrXdXuo4ZrtXMR/Q2FSoFIwK22LeSmwFHyHKtY1qPpJwahsDcF2y2KerSe48P74eOdW7USYk6MQHUExeU9LjMrUSIQ=
+X-Received: by 2002:a05:620a:56d:b0:706:5fba:6192 with SMTP id
+ p13-20020a05620a056d00b007065fba6192mr581153qkp.383.1674122342460; Thu, 19
+ Jan 2023 01:59:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20230119035136.21603-1-blarson@amd.com> <20230119035136.21603-12-blarson@amd.com>
+In-Reply-To: <20230119035136.21603-12-blarson@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 19 Jan 2023 11:58:26 +0200
+Message-ID: <CAHp75VfurZMfRbqDt7WRY368uu4NM3r2a6SDCogOukBZN5J8yQ@mail.gmail.com>
+Subject: Re: [PATCH v9 11/15] spi: dw: Add support for AMD Pensando Elba SoC
 To:     Brad Larson <blarson@amd.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
+        brad@pensando.io, brendan.higgins@linux.dev,
+        briannorris@chromium.org, brijeshkumar.singh@amd.com,
+        catalin.marinas@arm.com, davidgow@google.com, gsomlo@gmail.com,
+        gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
         lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 14/15] mmc: sdhci-cadence: Support mmc hardware reset
-Message-ID: <20230119093450.GA14049@pengutronix.de>
-References: <20230119035136.21603-1-blarson@amd.com>
- <20230119035136.21603-15-blarson@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119035136.21603-15-blarson@amd.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brad,
+On Thu, Jan 19, 2023 at 5:52 AM Brad Larson <blarson@amd.com> wrote:
+>
+> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
+> with device specific chip-select control.  The Elba SoC
+> provides four chip-selects where the native DW IP supports
+> two chip-selects.  The Elba DW_SPI instance has two native
+> CS signals that are always overridden.
 
-On Wed, Jan 18, 2023 at 07:51:35PM -0800, Brad Larson wrote:
-> Add support for mmc hardware reset using a reset-controller
-> that would need to be enabled in the device tree with
-> a supporting driver.  The default is disabled for all
-> existing designs.
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> ---
-> 
-> Changes since v6:
-> - Previously patch 17/17
-> - Changed delay after reset_control_assert() from 9 to 3 usec
-> - Renamed sdhci_mmc_hw_reset() to sdhci_cdns_mmc_hw_reset()
-> 
-> ---
->  drivers/mmc/host/sdhci-cadence.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> index e92aa79a8be2..62321cef41db 100644
-> --- a/drivers/mmc/host/sdhci-cadence.c
-> +++ b/drivers/mmc/host/sdhci-cadence.c
-> @@ -12,6 +12,7 @@
-[...]
->  static int sdhci_cdns_probe(struct platform_device *pdev)
->  {
->  	struct sdhci_host *host;
-> @@ -521,6 +541,17 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto free;
->  
-> +	if (host->mmc->caps & MMC_CAP_HW_RESET) {
-> +		priv->rst_hw = devm_reset_control_get_optional_exclusive(dev, "hw");
-> +		if (IS_ERR(priv->rst_hw)) {
-> +			ret = PTR_ERR(priv->rst_hw);
-> +			if (ret == -ENOENT)
-> +				priv->rst_hw = NULL;
+...
 
-The optional reset_control_get variants return NULL instead of -ENOENT
-if no reset is specified.
+> +struct dw_spi_elba {
+> +       struct regmap *syscon;
+> +};
 
-This should return on any error instead.
+Why can't struct regmap be used directly?
 
-> +		} else {
-> +			host->mmc_host_ops.card_hw_reset = sdhci_cdns_mmc_hw_reset;
+...
 
-This probably shouldn't be set if reset_control_get_optional returned NULL.
+> +static void dw_spi_elba_override_cs(struct dw_spi_elba *dwselba, int cs, int enable)
+> +{
+> +       regmap_update_bits(dwselba->syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
+> +                          ELBA_SPICS_SET(cs, enable));
 
-> +		}
-> +	}
 > +
->  	ret = sdhci_add_host(host);
 
-regards
-Philipp
+Redundant blank line.
+
+> +}
+
+...
+
+> +               dev_err(&pdev->dev, "failed to find %s\n", syscon_name);
+> +               return -ENODEV;
+
+return dev_err_probe();
+
+...
+
+> +               dev_err(&pdev->dev, "syscon regmap lookup failed\n");
+> +               return PTR_ERR(regmap);
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
