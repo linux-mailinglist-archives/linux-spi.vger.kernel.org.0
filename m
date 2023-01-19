@@ -2,127 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259036734EA
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 10:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF8867389D
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 13:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjASJ7F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 04:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
+        id S229505AbjASMcS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 07:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjASJ7E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 04:59:04 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A064B53E41;
-        Thu, 19 Jan 2023 01:59:03 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id u7so884592qkk.10;
-        Thu, 19 Jan 2023 01:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7+Zs6gnnTdAd+D97a2ATi7zK4ycLCkd6CidyqSInY1Y=;
-        b=UVB6W5a+FK5ArV85JrvGH+fE1PJJGKjDzgy1NM486w13TwHk09pj5TYZLiLQrOF1b4
-         MS3WsRoatTuycWVrj1100PTaERrfi7aWgxiHRIleKWvWpWwjbpK1V6ystWsu6+C4crzv
-         uzOwMMGk8+L776v0tHNMH8NOcC0DdlaNDijt6y3Nq2aB+xp9ljnxGEpszBfOdrspGRRl
-         7nvxbGmx55WuywyrJyfoUykAmn6yFSwHMf1kb8iwc/mrrZymEpEJBizZlT+jupS8NUIt
-         JtUpRQ5rJnOgHxXQj6/lTFlLpSjm+FrFhzEwbUTKK2IvDwrlBw77W7v/J5FNOV1WtmFs
-         3X7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7+Zs6gnnTdAd+D97a2ATi7zK4ycLCkd6CidyqSInY1Y=;
-        b=4yYeCSwRykGF4aXE02uVmJDyCAIIovgchOeGY78P4vKKmFCm3Up0zImd1KNYQXL2FG
-         ZwpDMkqfwA/ibMJSFMta5cXeKSUkY8QrXl6DEocVbOxccTtXq1pg2wscwmx+/2voxaRw
-         ECnTdyQKWsaWcdgw6VfaGNtxsfnwVJgwJPRP0TVdgoC3Tkl95ighzkIl5x8j5RYduu/v
-         MDWCtPy6i8I5DBkazwSfV8s86Jlt5GT2k21JqX5+IV6+CVmmAJMhrPn+YFX5/iI9Bq8+
-         +WUYi8aWu8u2YZcYaPiRmLIxGpx2A1qxmOQcHZuTTpgejwPXLvSsZXVmS7gG0ln0tHyN
-         IRVw==
-X-Gm-Message-State: AFqh2koj4hbNC21N8JEcqyGNpjA/8quk2rAakVorDhIexG9+FIh6d7Zu
-        0T15XWplC+VwIEWlbVvZEVZ7q3F4lDPbAISn0rg=
-X-Google-Smtp-Source: AMrXdXuo4ZrtXMR/Q2FSoFIwK22LeSmwFHyHKtY1qPpJwahsDcF2y2KerSe48P74eOdW7USYk6MQHUExeU9LjMrUSIQ=
-X-Received: by 2002:a05:620a:56d:b0:706:5fba:6192 with SMTP id
- p13-20020a05620a056d00b007065fba6192mr581153qkp.383.1674122342460; Thu, 19
- Jan 2023 01:59:02 -0800 (PST)
+        with ESMTP id S230409AbjASMaN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 07:30:13 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D57A798D0;
+        Thu, 19 Jan 2023 04:28:41 -0800 (PST)
+Received: from wf0783.dip.tu-dresden.de ([141.76.183.15] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pIU0w-0002qB-4T; Thu, 19 Jan 2023 13:27:30 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        =?ISO-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Parshuram Thombare <pthombar@cadence.com>,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        Gabor Juhos <juhosg@openwrt.org>,
+        Bert Vermeulen <bert@biot.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Marek Vasut <marex@denx.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
+Date:   Thu, 19 Jan 2023 13:27:26 +0100
+Message-ID: <4772603.GXAFRqVoOG@phil>
+In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230119035136.21603-1-blarson@amd.com> <20230119035136.21603-12-blarson@amd.com>
-In-Reply-To: <20230119035136.21603-12-blarson@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 19 Jan 2023 11:58:26 +0200
-Message-ID: <CAHp75VfurZMfRbqDt7WRY368uu4NM3r2a6SDCogOukBZN5J8yQ@mail.gmail.com>
-Subject: Re: [PATCH v9 11/15] spi: dw: Add support for AMD Pensando Elba SoC
-To:     Brad Larson <blarson@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
-        brad@pensando.io, brendan.higgins@linux.dev,
-        briannorris@chromium.org, brijeshkumar.singh@amd.com,
-        catalin.marinas@arm.com, davidgow@google.com, gsomlo@gmail.com,
-        gerg@linux-m68k.org, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 5:52 AM Brad Larson <blarson@amd.com> wrote:
->
-> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
-> with device specific chip-select control.  The Elba SoC
-> provides four chip-selects where the native DW IP supports
-> two chip-selects.  The Elba DW_SPI instance has two native
-> CS signals that are always overridden.
+Am Mittwoch, 18. Januar 2023, 18:39:31 CET schrieb Krzysztof Kozlowski:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-...
+[...]
 
-> +struct dw_spi_elba {
-> +       struct regmap *syscon;
-> +};
+> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> index 66e49947b703..e4941e9212d1 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> @@ -11,7 +11,7 @@ description:
+>    as flash and display controllers using the SPI communication interface.
+>  
+>  allOf:
+> -  - $ref: "spi-controller.yaml#"
+> +  - $ref: spi-controller.yaml#
+>  
+>  maintainers:
+>    - Heiko Stuebner <heiko@sntech.de>
 
-Why can't struct regmap be used directly?
+For Rockchip:
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-...
 
-> +static void dw_spi_elba_override_cs(struct dw_spi_elba *dwselba, int cs, int enable)
-> +{
-> +       regmap_update_bits(dwselba->syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
-> +                          ELBA_SPICS_SET(cs, enable));
-
-> +
-
-Redundant blank line.
-
-> +}
-
-...
-
-> +               dev_err(&pdev->dev, "failed to find %s\n", syscon_name);
-> +               return -ENODEV;
-
-return dev_err_probe();
-
-...
-
-> +               dev_err(&pdev->dev, "syscon regmap lookup failed\n");
-> +               return PTR_ERR(regmap);
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
