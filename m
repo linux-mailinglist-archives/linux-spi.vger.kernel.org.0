@@ -2,123 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1473E673ED0
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 17:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D9F673EF8
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 17:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjASQ3O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Jan 2023 11:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S230072AbjASQhP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Jan 2023 11:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjASQ3C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 11:29:02 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3500B46D73
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jan 2023 08:29:00 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id n7so2405496wrx.5
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jan 2023 08:29:00 -0800 (PST)
+        with ESMTP id S230182AbjASQhK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Jan 2023 11:37:10 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28576792B5;
+        Thu, 19 Jan 2023 08:37:06 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g13so4046402lfv.7;
+        Thu, 19 Jan 2023 08:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1V+AlAQyMB4Uszzz/3gFiK+c3DQOnNxo0R2UN0oOwaA=;
-        b=1Ii3UICPWS2xk2szN6TKxNtVqLxXZpXAyWJe4bS/rXv8cLPHGvbHaQzOUnUh3Lzbt8
-         i7YVIBNfBGGGHisVBzp91eiLHjEorjIYfxIvxen4O6YtGtSglKYnpD+QeXdX5tJDdGOU
-         W0SQ4HjqbOP6VFjjxdzGMHuKth2IEb1qPpZJ/+qTsQZufHnsLBhsLZUqHzNYHWTsegkn
-         qhLdJMHLeT23BOgcm8b9IPTJcp88V1e8LLqkQaEe7LKeNqxnxbDVqB7AB8KfQXI/Y8sZ
-         WWqLe3JaPHlVGyBrfsPDLDkDhhLqUkPMyukhTwrcH17yKCjv1f5QfhEJAyZ5iXcL1xhE
-         7tMw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JxOM0SJDbMq/E2lMPr2rz9jcbXZTrUs3W/H1oRDOJqU=;
+        b=M5sK1iS6RP6Lgmn/t4+bnczYflVb4Bc7XGV6pFhDAGf6maIYd+ECAUzEfu9IH1DPaM
+         1UL3iWbUAF+29ea5vTE1qduy/A5T8WATSm7PZSyCTIjBZQhv6wUKYVw4nlnlP7e9u0rE
+         D7azd/hO4b0ZQrBkMBzcWiAorhzHGBj/f97o97tHvz7MGynif1qwrbNigAJMXVFgV0Zk
+         c5s+5nndj4fcu9TSAqGiPO6nylXDl5iNyzUhq8TB2ePcQpBZYOYeYRIFFPfWOQFmXEh7
+         ketYQZULfmer69j8PmYt79j9+0klV425LxtJUjzGR3PWabcdnhZslvZqH8hQ2rqCd9TW
+         hADw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1V+AlAQyMB4Uszzz/3gFiK+c3DQOnNxo0R2UN0oOwaA=;
-        b=i54qRxBdMQfuCrIYpJPPmmHPW2S1gEt5MnSUZ7BEQ3NyVRWJiJCeLOBML7A2J6lUdQ
-         lv25dcjqKSGz0zP/wp5v4P6RcFniZucZEETJwpKrNftRzmUZy//Iixv2wnBroikwExJi
-         Tz/ekRDVELsDa83qpI2nLzBYmwZ/A4jl6fA90fVJP4dhFZWj8fa7dCaL7OtECtGllNq8
-         RT858PVojxUKcKfZNZdrl19L/MrzhrRF/HnlxyFFX7dtYdmGec6qWOBsEWZ2ApU86XMz
-         OG6xc+HSMvUyf1L6/waF4zKosQgLmRKBYCHqtsshvnG8AJq81qRQUY5XHDXv1SyvMdVr
-         kiFA==
-X-Gm-Message-State: AFqh2kpUJIGbRsgfgZYM1IwMTgMu1afOfb0PPgtmmmwPierB0edfZJS6
-        o6BDT9pHlBPne2swhg74Bg7cHRDUg84zez7i
-X-Google-Smtp-Source: AMrXdXsYJzDdhNIBBTnTZ+uBJMO11spDqDrXzN/K1DBeCx5SVzKoxdoPDU4KVOop7H0asFznIl+KFQ==
-X-Received: by 2002:a05:6000:3c2:b0:2bd:beff:9c47 with SMTP id b2-20020a05600003c200b002bdbeff9c47mr11873335wrg.67.1674145738767;
-        Thu, 19 Jan 2023 08:28:58 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id f7-20020a5d6647000000b002bbeb700c38sm29008771wrw.91.2023.01.19.08.28.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JxOM0SJDbMq/E2lMPr2rz9jcbXZTrUs3W/H1oRDOJqU=;
+        b=wsReJUkqQoOWSgdDYfcd4jXIHHo9dHNuQFWxTwSShfW1YqVY4JAwOSgGcwNCwT1sFN
+         4ruh+Xo27COxIdE/CAJAmujoapReWLQa0Ki2dW50HKDtpAZDOFEAUYCG1CYvoPk3ZlXv
+         rY/bc0+kj4AI9DwRo0MRWlKE73hI2/VRgzRCIBfTmbIH+aUsEM3qusGkKJnrNLrU8v6a
+         MvUiRLjFVJJI6OqhrZqUsOb4CbZ+Veepzs/pGRIFQFL1LNQZgnxLt7a5max0yB5KrnCu
+         Hx11GmalKdJBI9rj0603jy6WEtG3U5we3i6ONBiDrIQ2hwF8K282w5/DJ8egIrZE7M/V
+         dIcA==
+X-Gm-Message-State: AFqh2krbyw1xpcehs7less2k3NO2FkByG9d9zcXcQZn9jXmlOQz011HF
+        Et1MFv10rHUki8FNmA2CXas=
+X-Google-Smtp-Source: AMrXdXscH/Iwsv/mR2G4A45F9IX6RTFBG9ghByeaede0LbTWwhyyRsWwI5Pdr+VF6zVI/DsnoAIO/g==
+X-Received: by 2002:a05:6512:1108:b0:4d1:7923:3b92 with SMTP id l8-20020a056512110800b004d179233b92mr4083310lfg.50.1674146224464;
+        Thu, 19 Jan 2023 08:37:04 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05651233c400b004947a12232bsm5898873lfg.275.2023.01.19.08.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:28:58 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 19 Jan 2023 17:28:50 +0100
-Subject: [PATCH 2/2] spi: spidev: add new mediatek support
+        Thu, 19 Jan 2023 08:37:03 -0800 (PST)
+Date:   Thu, 19 Jan 2023 19:37:01 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/15] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20230119163701.3g7g74zfzmbgvqfh@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+ <20221218174523.cke7ubh6nycd247c@mobilestation>
+ <20230104222036.h4ke6maxkdvuqtqc@mobilestation>
+ <20230109162505.o3clvmwu3eremlyd@mobilestation>
+ <CAHyZL-foBcwQrMy1xAJ7LqnoB8B9DSxwtp6LtvLFBgVwC00avg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
-References: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
-In-Reply-To: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1039; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=jaqhN6R1aKzEEALosy8O3LyQm4i6Ldhz0IJK2z+QDNY=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjyW/GtkBwodHdGFmD9EQ72UZXLlxvUINHBPmmk0JC
- B+idxumJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY8lvxgAKCRArRkmdfjHURdICD/
- 9F9RCFLu01N7iObG0wc8Tgvr5yA0aeHOWo2PIKNnIBPbNRGJo2GxkqaMVB/N4zsqUTyTbkZGeehH5f
- VbjrNWVxt8+z0YswLnMqAW/z5ENprKNWCRVYJ1h11Zs0EoOGJuH6YqlxqRf68Rnhg6cmIz4RNvxJYL
- vo+JgnI0jjNzSIgTD7hBxJ2g36GAXmUiZSHpy1JphA5cwICG1HXyhZtEbXFPusY7PAMLypd3fpC2O6
- rPUXwaXMorjnQ31ggwFU52/6ttIIfTs2j+UkrYGijX+SWGJ26kc2KHk9GATC4x0AfiJFge/hKmlHOV
- NXgmZ/Xer7iVmC7KByc+Q7RXWJPX1WThxL5jKUaOKJ0bhI2l7KHmY8atkfagQEVE8icPHwbwXqyrKH
- tXj4/hHHMrtdzK4ClyxLro3M7Vp03EZbQHT5Xt4gRauxQmz4eAyBaFy9t5ufMTiuykTunPUM4PXe2S
- oO5IYllFbAsyvws5IsWV5bvX40KwhtaYFXk7f68WqFY9repyroyxJlMYW+z7tiSBgxvRYPxiHh8EJX
- 2an0sHMp3l9BOItxi1zUkjz5Wy48aEsYg/lm9P0I1ZtnaS0k/Wu/eJRbZ5C2C/W/TzGvFT6VFm3Cax
- f3oCaF6jsSD6Nvly3kvqP+sbaCX8xg91a6zvWkBv6ABz6VV1+RxmB/0V5seQ==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHyZL-foBcwQrMy1xAJ7LqnoB8B9DSxwtp6LtvLFBgVwC00avg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the "mediatek,genio" compatible string to support Mediatek
-SPI controller on the genio boards.
+On Thu, Jan 19, 2023 at 04:26:58PM +0000, Sudip Mukherjee wrote:
+> On Mon, Jan 9, 2023 at 4:25 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > Hello Sudip
+> >
+> > On Thu, Jan 05, 2023 at 01:20:39AM +0300, Serge Semin wrote:
+> > > Hi Sudip
+> > >
+> > > On Sun, Dec 18, 2022 at 08:45:26PM +0300, Serge Semin wrote:
+> > > > Hi Sudip
+> > > >
+> > > > On Mon, Dec 12, 2022 at 06:07:17PM +0000, Sudip Mukherjee wrote:
+> > > > > The is v2 of the patch series adding enhanced SPI support. Some Synopsys SSI
+> > > > > controllers support enhanced SPI which includes Dual mode, Quad mode and
+> > > > > Octal mode. DWC_ssi includes clock stretching feature in enhanced SPI modes
+> > > > > which can be used to prevent FIFO underflow and overflow conditions while
+> > > > > transmitting or receiving the data respectively.
+> > > > >
+> > > > > This is almost a complete rework based on the review from Serge.
+> > > >
+> > > > Thank you very much for the series. I'll have a look at it on the next
+> > > > week.
+> > >
+> > > Just so you know. I haven't forgot about the series. There are some
+> > > problematic parts which I need to give more thinking than I originally
+> > > expected. I'll submit my comments very soon. Sorry for the delay.
+> > >
+> > > Good news is that I've got the HW-manual for the DW SSI v1.01a
+> > > IP-core. So I'll no longer need to ask of you about that device
+> > > implementation specifics.
+> >
+> > Finally I managed to consolidate my thoughts regarding your patchset.
+> > Here is the summary. Some specific comments will be sent in-reply to
+> > the corresponding patches.
+> >
+> > First of all there is a crucial difference between eSPI capability
+> > available on DW APB SSI and DW AHB SSI controllers:
+> > DW APB SSI 4.x:
+> > + Tx until FIFO is empty
+> > + No clock stretching at all
+> 
 
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/spi/spidev.c | 2 ++
- 1 file changed, 2 insertions(+)
+> Thanks for your detailed review and all the additional details about
+> DW APB SSI. I did not have this datasheet to check.
+> So, that will mean I can remove the APB versiom detection from my next series.
+> But unfortunately, I don't have access to the hardware currently to
+> prepare and test the v3 series. It will be delayed a bit and I am
+> hoping I will be able to work on this by early March.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 6313e7d0cdf8..e23b825b8d30 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -702,6 +702,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
- 	{ .name = "m53cpld" },
- 	{ .name = "spi-petra" },
- 	{ .name = "spi-authenta" },
-+	{ .name = "genio" },
- 	{},
- };
- MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
-@@ -728,6 +729,7 @@ static const struct of_device_id spidev_dt_ids[] = {
- 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
- 	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
- 	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
-+	{ .compatible = "mediatek,genio", .data = &spidev_of_check },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+Ok. Thanks for the update. Whenever you're ready I'll be here for review.
 
--- 
-b4 0.10.1
+-Serge(y)
+
+> 
+> 
+> -- 
+> Regards
+> Sudip
