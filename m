@@ -2,78 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4304A673019
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 05:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE504672FF3
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jan 2023 05:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjASESY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Jan 2023 23:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S230053AbjASEHn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Jan 2023 23:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjASDqc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 22:46:32 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E4A6D37B
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 19:42:18 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id g205so521226pfb.6
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jan 2023 19:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uVSyIxd0zyi5DPAP831D9ZtXzLP6ZjtYK7g/s1ptTOw=;
-        b=CYcNjBOA4iXUjDqf0A2U3wySawGseGrC8O+CwtrYZlNnZmtVga6ezSlVGObFe68bfe
-         PDqckIQs4DeawALv2+6Mvdom3AeZu98c1Cwvx+B9ev7yP35lUOpVhoVfaXrCtk6zri4d
-         Sz1pU6ug/Pna7Aiuw4AKnZFJ9edOeTnVxi07NBxq417KftkTxIiIkD6/juWB4O1QPX+O
-         j+pDBrml8t0bpXQtWNDRztzI/W4HKiU6aJTqgQbaBVF6xfRs7UWapRtgav2sB+6flTPi
-         Fhx+k1R6eQPiY3bb5xzIziuvDXt7QpAVtrMpNB4u+aT6ln4Rc0GGqBBHSsXwS13cYabF
-         qelA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVSyIxd0zyi5DPAP831D9ZtXzLP6ZjtYK7g/s1ptTOw=;
-        b=KDYl6Q5+Bfivpa5aoGWACSoXwnHTqMAmg6cXBo3N3Dtfg2EupSu0Ke+sa9ugkZUkgO
-         YzKQyc31VOECi9SdpAQUZFKHnHtX/GX4gDUTymCz2R/vhoOHYXoY2ALvtilwvrWIPZ3J
-         qKoJ5p/d7Bido61p29SNfkKXuoHrxecS7s/Ex5nqhG1TrXhx/zLph5/3QJh7EvLoJJ6G
-         fm633f76u8XQjnWUC1AjCsbwHzDtieiPBpKqkHhEiI8/N4jNF0vzgNwAHF/wztayi6o/
-         BSYq5rI9iWErwZa3O+jhiq5zWR7B/a4V2+gJGSUzxeYYoJZ2Klok99iYEEwqt7LvlPlb
-         y69A==
-X-Gm-Message-State: AFqh2kryPdOXMxRGtFONFgWZgJt6Z81M3iRoC8xLxmw6bqgSZX2gEIGo
-        YVk3pnDI2FgSpHjYRmz/jm91oA==
-X-Google-Smtp-Source: AMrXdXu31sYvhMTGNmKeNMGDtn67A+7vFxdchzZgm01ST9jP/KJYHS7MLvPV/vuDH+ZYP8aICPTGsg==
-X-Received: by 2002:a62:6410:0:b0:58b:c873:54e9 with SMTP id y16-20020a626410000000b0058bc87354e9mr9103160pfb.4.1674099688066;
-        Wed, 18 Jan 2023 19:41:28 -0800 (PST)
-Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id f13-20020aa7968d000000b0056b4c5dde61sm11097879pfk.98.2023.01.18.19.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 19:41:27 -0800 (PST)
-From:   Brad Larson <brad@pensando.io>
-X-Google-Original-From: Brad Larson <blarson@amd.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
-        brad@pensando.io, blarson@amd.com, brendan.higgins@linux.dev,
-        briannorris@chromium.org, brijeshkumar.singh@amd.com,
-        catalin.marinas@arm.com, davidgow@google.com, gsomlo@gmail.com,
-        gerg@linux-m68k.org, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v9 15/15] spi: pensando-sr: Add AMD Pensando SoC System Resource
-Date:   Wed, 18 Jan 2023 19:39:18 -0800
-Message-Id: <20230119033918.44117-16-blarson@amd.com>
+        with ESMTP id S229928AbjASD4k (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Jan 2023 22:56:40 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A899D4995D;
+        Wed, 18 Jan 2023 19:53:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZTZkGYnUPjyB/pjVRgP5pjDGX2/z7nU8N3xmzUysMqEmaTA+oyqN5Kd3N3zVT2FBA+BJXtne8iEzccy+f/3TufuSvz1xvE+D4gDxFH2kVJ6FCV6lJRKwi0An5ZdolQrPWomdtRWS7lWHX87CS9/5ugAvs8FHv1Vhew42VKvgVrKvvg+5fU12knM1GOlRrsJElNIrBKOQIFhnC2eT6fKyZzJv8o6fH+381S8UEjuTbVLAu6cJjU0VPnWjwqj9YZ1FAZyu8DvwruXETrcJwKrG35XxPy2IsSVQUcHEgzAMhdaAcmmwjzA6R1A+fIHFUindxsxb2iADSxxunZJfKFj2Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3xnmV3pjfo47eAWg4NT1HzixPPrWIZETdNEOcuAL2l4=;
+ b=h1oBJCwmITFvEdLJDxoVouHVkicsk5H+GpmiwJxRkMlpj7VI6kW7HLvwhpD4co7OnZNXvX3JUihRgFyV8QgsEtMQx0FrNYicJTmsTdn79c6QsY6IdbJDbBsZxbJ2usJBpUcOC1rnHDR7kxbdEusNg2Yhd8FCSRvcl7mZ1q0H7VAKIozyClE6qerpcJ5evfq/3xMkEC+pmAMFNN2DrZqsyhv058UhFUV6strouvBFk6M723b+LDMwYPwhd7kgovbKYxQIh0TviOBvemjXO+47pZLaHS7mpgkKjKWl634d1+MeeupuNhjbGnRH7blb/LM4wBI3Gcv1KiPpWnzG/MB9vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3xnmV3pjfo47eAWg4NT1HzixPPrWIZETdNEOcuAL2l4=;
+ b=ApC+vFpe1ttgFbShTSfhiPiVRoQ0Oyo9Wo1t7OO41UNjsuEMdc8mtc92dpvetnuJ4EyTQbTfI0IhebKfM4qAxMOEGYB8C2oH8+jo7I0gc6fhyqqFeP6SiDoSBJPopgpt/uDmW+cP4ssO1i2IF4K48iJCW04+deNyyvIgiOoDy9U=
+Received: from MW4PR04CA0086.namprd04.prod.outlook.com (2603:10b6:303:6b::31)
+ by MN0PR12MB6080.namprd12.prod.outlook.com (2603:10b6:208:3c8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 03:52:14 +0000
+Received: from CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::f4) by MW4PR04CA0086.outlook.office365.com
+ (2603:10b6:303:6b::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
+ Transport; Thu, 19 Jan 2023 03:52:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT114.mail.protection.outlook.com (10.13.174.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.13 via Frontend Transport; Thu, 19 Jan 2023 03:52:13 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 18 Jan 2023 21:52:02 -0600
+From:   Brad Larson <blarson@amd.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <adrian.hunter@intel.com>,
+        <alcooperx@gmail.com>, <andy.shevchenko@gmail.com>,
+        <arnd@arndb.de>, <brad@pensando.io>, <blarson@amd.com>,
+        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
+        <brijeshkumar.singh@amd.com>, <catalin.marinas@arm.com>,
+        <davidgow@google.com>, <gsomlo@gmail.com>, <gerg@linux-m68k.org>,
+        <krzk@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <lee@kernel.org>, <lee.jones@linaro.org>, <broonie@kernel.org>,
+        <yamada.masahiro@socionext.com>, <p.zabel@pengutronix.de>,
+        <piotrs@cadence.com>, <p.yadav@ti.com>, <rdunlap@infradead.org>,
+        <robh+dt@kernel.org>, <samuel@sholland.org>,
+        <fancer.lancer@gmail.com>, <skhan@linuxfoundation.org>,
+        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
+        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
+        <vaishnav.a@ti.com>, <will@kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH v9 00/15] Support AMD Pensando Elba SoC
+Date:   Wed, 18 Jan 2023 19:51:21 -0800
+Message-ID: <20230119035136.21603-1-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230119033918.44117-1-blarson@amd.com>
-References: <20230119033918.44117-1-blarson@amd.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT114:EE_|MN0PR12MB6080:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ee979e5-9a3c-4e0a-ad91-08daf9d08cea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N5EnuuIidZnzcdLoqcK6YV0FRDZtTHdLH41gWh47NWGKuBwaYClAn/Pqtf5tSaf5aEkOZoWWBhP07pncIkA8xqCbdw+68Jn5AIlrsUOy4KpOiR3QoqJXiwL8IfJJYfB06NmPs8xKTgFSKHC9dBVqU6NF1bRGF6XpQh1OHGh07HLF9EWhDoYuinaUp/G9UvXmKv2/DFme/v2e5WLt/xc57yZT87zC7f8vKRqlAXRQKiDH/WSZOlVyqy/CgRFYnxbgvhA9FbqPFVeWZ4/OvM0+XhTHQUlE0eVYOp2wdWearSt+Af4yKNseQw5lVHALHJhHqTMgCgopPInn/3DKlqRGNADN+o40VvrmdKJK3QV+AW4hKVHSjM5Piee9hxpqBaY6h3N34p8Wib23Re6dF+LmwUjXJNVgZnowfkKGzmZ75hvNXeUNexYAJvaSAUDLonBLTnPoxOqPRi/gmLlYzNfdrPNC2qNB9vzDtdXccpCPJRQ9Yydo81U4VAYjx3wVoRttlibRJkMzJzaSNwt56WI5jorqZf1tgtJlfBW7eIX935Xf2rgl2sC8WX3Ph9jqb5IRsIpexnNCzuyUqaTpUFrM45ibRjxu0secZYJnQ3eIQaBs9ou8OdTXGghOWIpmMURy80SHd1j8QSW/0xKvl2fTQeTroXGo3wvRXlMX2m6nEVCeI5Eg0HbGm1E+p+PdQQ2RDYka+tCaOTh9TgI8TbgYgUW1XjhRnE50+dDNm+OOAX4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(8936002)(316002)(5660300002)(40460700003)(6666004)(36756003)(478600001)(2906002)(19627235002)(2616005)(426003)(47076005)(54906003)(336012)(81166007)(83380400001)(1076003)(70206006)(7406005)(7416002)(70586007)(4326008)(6916009)(30864003)(40480700001)(82740400003)(8676002)(36860700001)(356005)(26005)(186003)(16526019)(82310400005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 03:52:13.7488
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ee979e5-9a3c-4e0a-ad91-08daf9d08cea
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT114.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6080
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,15 +110,69 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support for the AMD Pensando SoC System Resource chip using
-the SPI interface.  The device functions are accessed using
-four chip-selects and the device can be a CPLD or FPGA depending
-on functionality.
+This series enables support for AMD Pensando Elba SoC based platforms.
 
-Signed-off-by: Brad Larson <blarson@amd.com>
----
+The Elba SoC has the following features:
+- Sixteen ARM64 A72 cores
+- Dual DDR 4/5 memory controllers
+- 32 lanes of PCIe Gen3/4 to the Host
+- Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+  also a single 1GE management port.
+- Storage/crypto offloads and 144 programmable P4 cores.
+- QSPI and EMMC for SoC storage
+- Two SPI interfaces for peripheral management
+- I2C bus for platform management
 
-Changes since v6:
+== V9 changes ==
+v9-0002-dt-bindings-mmc-cdns-Add-AMD-Pensando-Elba-SoC
+- Add reset-names and resets properties
+- Add if/then on property amd,pensando-elba-sd4hc to set reg property
+  values for minItems and maxItems
+
+v9-0003-dt-bindings-spi-cdns-Add-compatible-for-AMD-Pensa
+- Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
+
+v9-0004-dt-bindings-spi-dw-Add-AMD-Pensando-Elba-SoC-SPI-
+- Define property amd,pensando-elba-syscon
+- Move compatible amd,pensando-elba-spi ahead of baikal,bt1-ssi
+
+v9-0006-dt-bindings-mfd-amd-pensando-elbasr-Add-AMD-Pensa
+- Instead of four nodes, one per chip-select, a single
+  node is used with reset-cells in the parent.
+- No MFD API is used anymore in the driver so it made
+  sense to move this to drivers/spi.
+- This driver is common for all Pensando SoC based designs
+  so changed the name to pensando-sr.c to not make it Elba
+  SoC specific.
+- Added property cs for the chip-select number which is used
+  by the driver to create /dev/pensr0.<cs>
+
+v9-0009-arm64-dts-Add-AMD-Pensando-Elba-SoC-support
+- Single node for spi0 system-controller and squash
+  the reset-controller child into parent
+
+v9-0010-spi-cadence-quadspi-Add-compatible-for-AMD-Pensan
+- Rebase to linux-next 6.2.0-rc1
+
+v9-0011-spi-dw-Add-support-for-AMD-Pensando-Elba-SoC
+- Add use of macros GENMASK() and BIT()
+- Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
+
+v9-0012-mmc-sdhci-cadence-Enable-device-specific-override
+- No change to this patch but as some patches are deleted and this is
+  a respin the three successive patches to sdhci-cadence.c are
+  patches 12, 13, and 14 which do the following:
+  1. Add ability for Cadence specific design to have priv writel().
+  2. Add Elba SoC support that requires its own priv writel() for
+     byte-lane control .
+  3. Add support for mmc hardware reset.
+
+v9-0014-mmc-sdhci-cadence-Support-mmc-hardware-reset
+- Previously patch 17/17
+- Changed delay after reset_control_assert() from 9 to 3 usec
+- Renamed sdhci_mmc_hw_reset() to sdhci_cdns_mmc_hw_reset()
+
+v9-0015-spi-pensando-sr-Add-AMD-Pensando-SoC-System-Resou
 - Previously patch 14/17
 - After the change to the device tree node and squashing
   reset-cells into the parent simplified this to not use
@@ -98,510 +181,244 @@ Changes since v6:
   for all Pensando SoC designs .
 - Default yes SPI_PENSANDO_SR for ARCH_PENSANDO
 
----
- drivers/spi/Kconfig           |  14 ++
- drivers/spi/Makefile          |   1 +
- drivers/spi/spi-pensando-sr.c | 454 ++++++++++++++++++++++++++++++++++
- 3 files changed, 469 insertions(+)
+
+== V6 changes ==
+- Updated copyright and SPDX
+
+v6-0001-dt-bindings-arm-add-AMD-Pensando-boards
+- Delete 'Device Tree Bindings' in title
+
+v6-0002-dt-bindings-mmc-cdns-Add-AMD-Pensando-Elba-SoC
+- Change if/then for Elba which has a second reg for byte-lane control
+
+v6-0003-dt-bindings-spi-cdns-Add-compatible-for-AMD-Pensa
+- no change
+
+v6-0004-dt-bindings-spi-dw-Add-AMD-Pensando-Elba-SoC-SPI-
+- Add amd,pensando-elba-syscon
+
+v6-0005-dt-bindings-mfd-syscon-Add-amd-pensando-elba-sysc
+- no change
+
+v6-0006-dt-bindings-mfd-amd-pensando-elbasr-Add-AMD-Pensa
+- Expand description, rename nodes and change compatible usage
+
+v6-0007-dt-bindings-reset-amd-pensando-elbasr-reset-Add-A
+- Delete nodename pattern and changed spi0 to spi
+- File amd,pensando-elba-reset.h is deleted as there is only
+  one reset used.
+- Update example
+
+v6-0008-MAINTAINERS-Add-entry-for-AMD-PENSANDO
+- no change
+
+v6-0009-arm64-Add-config-for-AMD-Pensando-SoC-platforms
+- no change
+
+v6-0010-arm64-dts-Add-AMD-Pensando-Elba-SoC-support
+- Update node names and add amd,pensando-elba-syscon
+- Delete use of amd,pensando-elba-reset.h which had a single definition
+
+v6-0011-spi-cadence-quadspi-Add-compatible-for-AMD-Pensan
+- Remove (void) cast
+
+v6-0012-spi-dw-Add-support-for-AMD-Pensando-Elba-SoC
+- Update use of amd,pensando-elba-syscon
+
+v6-0013-mmc-sdhci-cadence-Enable-device-specific-override
+- Change this patch to add a priv_writel() callback where all
+  existing designs use writel().  This separates the Elba
+  support into three patches.  The second patch is added
+  to the end of the sequence for Elba support.  The third
+  patch enables mmc hardware reset.
+
+v6-0014-mfd-pensando-elbasr-Add-AMD-Pensando-Elba-System-
+- Updates from review comments
+- Use spi_message_init_with_transfers instead of init/add_tail API
+
+v6-0015-reset-elbasr-Add-AMD-Pensando-Elba-SR-Reset-Contr
+- Remove use of amd,pensando-elba-reset.h and use BIT()
+
+v6-0016-mmc-sdhci-cadence-Add-AMD-Pensando-Elba-SoC-suppo
+- Elba sdhci-cadence.c support added in this patch to build on
+  0013 which just adds a callback to override priv_writel()
+
+v6-0017-mmc-sdhci-cadence-Support-mmc-hardware-reset
+- New patch where Elba has a reset-controller for mmc hardware
+  reset.  The reset is implemented by a register in the cpld.
+
+== V5 changes ==
+- Change to AMD Pensando instead of Pensando.
+- No reference to spidev in the device tree.  Add multi-function driver
+  pensando-elbasr and sub-device reset-elbasr which provides mfd and
+  /dev interface to the cpld.
+- Rebase to linux-next tag next-20220609 5.19.0-rc1
+- Redo the email list after rebase and using scripts/get_maintainer.pl
+
+== V4 changes ==
+The version of dtschema used is 2022.3.2.
+
+v4-0001-dt-bindings-arm-add-Pensando-boards.patch
+- Add description and board compatible
+
+v4-0003-dt-bindings-mmc-Add-Pensando-Elba-SoC-binding.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+- Use minItems: 1 and maxItems: 2 to pass schema check
+
+v4-0005-dt-bindings-spi-dw-Add-Pensando-Elba-SoC-SPI-Control.patch
+- Add required property pensando,syscon-spics to go with
+  pensando,elba-spi
+
+v4-0006-MAINTAINERS-Add-entry-for-PENSANDO.patch
+- Change Maintained to Supported
+
+v4-0007-arm64-Add-config-for-Pensando-SoC-platforms.patch
+- Fix a typo on interface max speed
+
+v4-0008-spi-cadence-quadspi-Add-compatible-for-Pensando-Elba.patch
+- Update due to spi-cadence-quadspi.c changes
+
+v4-0009-mmc-sdhci-cadence-Add-Pensando-Elba-SoC-support.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+
+v4-0010-spi-dw-Add-support-for-Pensando-Elba-SoC.patch
+- Use more descriptive dt property pensando,syscon-spics
+- Minor changes from review input
+
+v4-0011-arm64-dts-Add-Pensando-Elba-SoC-support.patch
+- Changed to dual copyright (GPL-2.0+ OR MIT)
+- Minor changes from review input
+
+== V3 changes ==
+v3-0001-gpio-Add-Elba-SoC-gpio-driver-for-spi-cs-control.patch
+- This patch is deleted.  Elba SOC specific gpio spics control is
+  integrated into spi-dw-mmio.c.
+
+v3-0002-spi-cadence-quadspi-Add-QSPI-support-for-Pensando-El.patch
+- Changed compatible to "pensando,elba-qspi" to be more descriptive
+  in spi-cadence-quadspi.c.
+
+- Arnd wondered if moving to DT properties for quirks may be the
+  way to go.  Feedback I've received on other patches was don't
+  mix two efforts in one patch so I'm currently just adding the
+  Elba support to the current design.
+
+v3-0003-spi-dw-Add-support-for-Pensando-Elba-SoC-SPI.patch
+- Changed the implementation to use existing dw_spi_set_cs() and
+  integrated Elba specific CS control into spi-dw-mmio.c.  The
+  native designware support is for two chip-selects while Elba
+  provides 4 chip-selects.  Instead of adding a new file for
+  this support in gpio-elba-spics.c the support is in one
+  file (spi-dw-mmio.c).
+
+v3-0004-spidev-Add-Pensando-CPLD-compatible.patch
+- This patch is deleted.  The addition of compatible "pensando,cpld"
+  to spidev.c is not added and an existing compatible is used 
+  in the device tree to enable.
+
+v3-0005-mmc-sdhci-cadence-Add-Pensando-Elba-SoC-support.patch
+- Ulf and Yamada-san agreed the amount of code for this support
+  is not enough to need a new file.  The support is added into
+  sdhci-cadence.c and new files sdhci-cadence-elba.c and
+  sdhci-cadence.h are deleted.
+- Redundant defines are removed (e.g. use SDHCI_CDNS_HRS04 and
+  remove SDIO_REG_HRS4).
+- Removed phy init function sd4_set_dlyvr() and used existing
+  sdhci_cdns_phy_init(). Init values are from DT properties.
+- Replace  devm_ioremap_resource(&pdev->dev, iomem)
+     with  devm_platform_ioremap_resource(pdev, 1)
+- Refactored the elba priv_writ_l() and elba_write_l() to
+  remove a little redundant code.
+- The config option CONFIG_MMC_SDHCI_CADENCE_ELBA goes away.
+- Only C syntax and Elba functions are prefixed with elba_
+
+v3-0006-arm64-Add-config-for-Pensando-SoC-platforms.patch
+- Added a little more info to the platform help text to assist
+  users to decide on including platform support or not.
+
+v3-0007-arm64-dts-Add-Pensando-Elba-SoC-support.patch
+- Node names changed to DT generic names
+- Changed from using 'spi@' which is reserved
+- The elba-flash-parts.dtsi is kept separate as
+  it is included in multiple dts files.
+- SPDX license tags at the top of each file
+- The compatible = "pensando,elba" and 'model' are
+  now together in the board file.
+- UIO nodes removed
+- Ordered nodes by increasing unit address
+- Removed an unreferenced container node.
+- Dropped deprecated 'device_type' for uart0 node.
+
+v3-0010-dt-bindings-spi-cadence-qspi-Add-support-for-Pensand.patch
+- Updated since the latest documentation has been converted to yaml
+
+v3-0011-dt-bindings-gpio-Add-Pensando-Elba-SoC-support.patch
+- This patch is deleted since the Elba gpio spics is added to
+  the spi dw driver and documented there.
+
+Because of the deletion of patches and merging of code
+the new patchset is not similar.  A changelog is added into
+the patches for merged code to be helpful on the history.
+
+== V2 changes ==
+- 01    Fix typo, return code value and log message.
+- 03    Remove else clause, intrinsic DW chip-select is never used.
+- 08-11 Split out dts and bindings to sub-patches
+- 10    Converted existing cadence-quadspi.txt to YAML schema
+- 13    New driver should use <linux/gpio/driver.h>
+
+Brad Larson (15):
+  dt-bindings: arm: add AMD Pensando boards
+  dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC
+  dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
+  dt-bindings: spi: dw: Add AMD Pensando Elba SoC SPI Controller
+    bindings
+  dt-bindings: mfd: syscon: Add amd,pensando-elba-syscon compatible
+  dt-bindings: mfd: amd,pensando-elbasr: Add AMD Pensando System
+    Resource chip
+  MAINTAINERS: Add entry for AMD PENSANDO
+  arm64: Add config for AMD Pensando SoC platforms
+  arm64: dts: Add AMD Pensando Elba SoC support
+  spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
+  spi: dw: Add support for AMD Pensando Elba SoC
+  mmc: sdhci-cadence: Enable device specific override of writel()
+  mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
+  mmc: sdhci-cadence: Support mmc hardware reset
+  spi: pensando-sr: Add AMD Pensando SoC System Resource
+
+ .../devicetree/bindings/arm/amd,pensando.yaml |  26 +
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |  28 +-
+ .../bindings/spi/amd,pensando-sr.yaml         |  68 +++
+ .../bindings/spi/cdns,qspi-nor.yaml           |  14 +-
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  14 +
+ MAINTAINERS                                   |   8 +
+ arch/arm64/Kconfig.platforms                  |  12 +
+ arch/arm64/boot/dts/amd/Makefile              |   1 +
+ arch/arm64/boot/dts/amd/elba-16core.dtsi      | 189 ++++++++
+ arch/arm64/boot/dts/amd/elba-asic-common.dtsi |  82 ++++
+ arch/arm64/boot/dts/amd/elba-asic.dts         |  28 ++
+ arch/arm64/boot/dts/amd/elba-flash-parts.dtsi | 106 ++++
+ arch/arm64/boot/dts/amd/elba.dtsi             | 192 ++++++++
+ drivers/mmc/host/Kconfig                      |   1 +
+ drivers/mmc/host/sdhci-cadence.c              | 180 ++++++-
+ drivers/spi/Kconfig                           |  14 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-cadence-quadspi.c             |  19 +
+ drivers/spi/spi-dw-mmio.c                     |  78 +++
+ drivers/spi/spi-pensando-sr.c                 | 454 ++++++++++++++++++
+ 21 files changed, 1500 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/amd,pensando.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml
+ create mode 100644 arch/arm64/boot/dts/amd/elba-16core.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba-asic-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba-asic.dts
+ create mode 100644 arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+ create mode 100644 arch/arm64/boot/dts/amd/elba.dtsi
  create mode 100644 drivers/spi/spi-pensando-sr.c
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3b1c0878bb85..1e8605c59a0e 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -730,6 +730,20 @@ config SPI_PCI1XXXX
- 	  This driver can be built as module. If so, the module will be
- 	  called as spi-pci1xxxx.
- 
-+config SPI_PENSANDO_SR
-+	bool "AMD Pensando SoC System Resource chip"
-+	depends on SPI_MASTER=y
-+	depends on (ARCH_PENSANDO && OF) || COMPILE_TEST
-+	default y if ARCH_PENSANDO
-+	select REGMAP_SPI
-+	select MFD_SYSCON
-+	help
-+	  Support for the AMD Pensando SoC System Resource chip using the
-+	  SPI interface.  This driver provides userspace access to the SPI
-+	  device functions via multiple chip selects.  The device can be
-+	  a CPLD or FPGA depending on the functionality required and is
-+	  present in all Pensando SoC based designs.
-+
- config SPI_PIC32
- 	tristate "Microchip PIC32 series SPI"
- 	depends on MACH_PIC32 || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index be9ba40ef8d0..71e0a95c6d88 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -95,6 +95,7 @@ obj-$(CONFIG_SPI_OMAP_100K)		+= spi-omap-100k.o
- obj-$(CONFIG_SPI_OMAP24XX)		+= spi-omap2-mcspi.o
- obj-$(CONFIG_SPI_TI_QSPI)		+= spi-ti-qspi.o
- obj-$(CONFIG_SPI_ORION)			+= spi-orion.o
-+obj-$(CONFIG_SPI_PENSANDO_SR)		+= spi-pensando-sr.o
- obj-$(CONFIG_SPI_PCI1XXXX)		+= spi-pci1xxxx.o
- obj-$(CONFIG_SPI_PIC32)			+= spi-pic32.o
- obj-$(CONFIG_SPI_PIC32_SQI)		+= spi-pic32-sqi.o
-diff --git a/drivers/spi/spi-pensando-sr.c b/drivers/spi/spi-pensando-sr.c
-new file mode 100644
-index 000000000000..91c64bcfba04
---- /dev/null
-+++ b/drivers/spi/spi-pensando-sr.c
-@@ -0,0 +1,454 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * AMD Pensando SoC System Resource Driver
-+ *
-+ * Userspace interface and reset driver support for SPI
-+ * connected Pensando SoC System Resource Chip.  This
-+ * device is present in all Pensando SoC based designs.
-+ * This file is derived in part from spi/spidev.c.
-+ *
-+ * Copyright (C) 2006 SWAPP
-+ *      Andrea Paterniani <a.paterniani@swapp-eng.it>
-+ * Copyright (C) 2007 David Brownell (simplification, cleanup)
-+ * Copyright 2023 Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/cdev.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/fs.h>
-+#include <linux/init.h>
-+#include <linux/ioctl.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/reset-controller.h>
-+#include <linux/spi/spi.h>
-+#include <linux/types.h>
-+
-+#define PENSR_MAX_REG		0xff
-+#define PENSR_CTRL0_REG		0x10
-+#define PENSR_SPI_CMD_REGRD	0x0b
-+#define PENSR_SPI_CMD_REGWR	0x02
-+#define SPI_IOC_MAGIC		'k'
-+
-+#define SPI_MSGSIZE(N) \
-+	((((N)*(sizeof(struct spi_ioc_transfer))) < (1 << _IOC_SIZEBITS)) \
-+		? ((N)*(sizeof(struct spi_ioc_transfer))) : 0)
-+#define SPI_IOC_MESSAGE(N)	_IOW(SPI_IOC_MAGIC, 0, char[SPI_MSGSIZE(N)])
-+
-+struct spi_ioc_transfer {
-+	__u64 tx_buf;
-+	__u64 rx_buf;
-+	__u32 len;
-+	__u32 speed_hz;
-+	__u16 delay_usecs;
-+	__u8 bits_per_word;
-+	__u8 cs_change;
-+	__u8 tx_nbits;
-+	__u8 rx_nbits;
-+	__u8 word_delay_usecs;
-+	__u8 pad;
-+};
-+
-+struct pensr_device {
-+	struct spi_device *spi_dev;
-+	struct reset_controller_dev rcdev;
-+	struct mutex buf_lock;
-+	spinlock_t spi_lock;
-+	u8 *tx_buffer;
-+	u8 *rx_buffer;
-+};
-+
-+static dev_t pensr_devt;
-+static struct pensr_device *pensr;
-+static struct class *pensr_class;
-+static unsigned int bufsiz = 4096;
-+
-+static struct spi_ioc_transfer *
-+pensr_spi_get_ioc_message(unsigned int cmd,
-+			  struct spi_ioc_transfer __user *u_ioc,
-+			  unsigned int *n_ioc)
-+{
-+	u32 tmp;
-+
-+	/* Check type, command number and direction */
-+	if (_IOC_TYPE(cmd) != SPI_IOC_MAGIC
-+			|| _IOC_NR(cmd) != _IOC_NR(SPI_IOC_MESSAGE(0))
-+			|| _IOC_DIR(cmd) != _IOC_WRITE)
-+		return ERR_PTR(-ENOTTY);
-+
-+	tmp = _IOC_SIZE(cmd);
-+	if ((tmp % sizeof(struct spi_ioc_transfer)) != 0)
-+		return ERR_PTR(-EINVAL);
-+	*n_ioc = tmp / sizeof(struct spi_ioc_transfer);
-+	if (*n_ioc == 0)
-+		return NULL;
-+
-+	/* copy into scratch area */
-+	return memdup_user(u_ioc, tmp);
-+}
-+
-+static long
-+pensr_spi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-+{
-+	struct spi_transfer t[2] = { 0 };
-+	struct spi_ioc_transfer	*u_xfers;
-+	struct spi_ioc_transfer *u_xfer;
-+	struct pensr_device *pensr;
-+	struct spi_device *spi_dev;
-+	unsigned int n_xfers;
-+	struct spi_message m;
-+	u8 *tx_buf;
-+	u8 *rx_buf;
-+	int ret;
-+
-+	/* Check type and command number */
-+	if (_IOC_TYPE(cmd) != SPI_IOC_MAGIC)
-+		return -ENOTTY;
-+
-+	pensr = filp->private_data;
-+	if (!pensr)
-+		return -ESHUTDOWN;
-+
-+	tx_buf = pensr->tx_buffer;
-+	rx_buf = pensr->rx_buffer;
-+
-+	spin_lock_irq(&pensr->spi_lock);
-+	spi_dev = spi_dev_get(pensr->spi_dev);
-+	spin_unlock_irq(&pensr->spi_lock);
-+	if (spi_dev == NULL)
-+		return -ESHUTDOWN;
-+
-+	/* Use the buffer lock here for triple duty:
-+	 *  - prevent I/O (from us) so calling spi_setup() is safe;
-+	 *  - prevent concurrent SPI_IOC_WR_* from morphing
-+	 *    data fields while SPI_IOC_RD_* reads them;
-+	 *  - SPI_IOC_MESSAGE needs the buffer locked "normally".
-+	 */
-+	mutex_lock(&pensr->buf_lock);
-+
-+	u_xfers = pensr_spi_get_ioc_message(cmd,
-+			(struct spi_ioc_transfer __user *)arg, &n_xfers);
-+	if (IS_ERR(u_xfers)) {
-+		ret = PTR_ERR(u_xfers);
-+		goto done;
-+	}
-+	if (!u_xfers)
-+		goto done;
-+	u_xfer = u_xfers;
-+
-+	t[0].tx_buf = tx_buf;
-+	t[0].len = u_xfer->len;
-+	if (copy_from_user(tx_buf, (const u8 __user *) (uintptr_t) u_xfer->tx_buf, u_xfer->len)) {
-+		ret = -EFAULT;
-+		goto done;
-+	}
-+
-+	if (n_xfers > 1) {
-+		u_xfer++;
-+		t[1].rx_buf = rx_buf;
-+		t[1].len = u_xfer->len;
-+	}
-+
-+	spi_message_init_with_transfers(&m, t, n_xfers);
-+	ret = spi_sync(spi_dev, &m);
-+	if (ret < 0)
-+		goto done;
-+
-+	if (n_xfers > 1) {
-+		if (copy_to_user((u8 __user *)(uintptr_t)u_xfer->rx_buf, rx_buf, u_xfer->len)) {
-+			ret = -EFAULT;
-+			goto done;
-+		}
-+	}
-+
-+done:
-+	mutex_unlock(&pensr->buf_lock);
-+	spi_dev_put(spi_dev);
-+	return ret;
-+}
-+
-+static int pensr_spi_open(struct inode *inode, struct file *filp)
-+{
-+	struct spi_device *spi_dev;
-+	int status = -ENXIO;
-+	u8 current_cs;
-+
-+	if (!pensr)
-+		return -ENODEV;
-+
-+	filp->private_data = pensr;
-+	current_cs = iminor(inode);
-+	spi_dev = pensr->spi_dev;
-+	spi_dev->chip_select = current_cs;
-+	spi_dev->cs_gpiod = spi_dev->controller->cs_gpiods[current_cs];
-+	spi_setup(spi_dev);
-+
-+	if (!pensr->tx_buffer) {
-+		pensr->tx_buffer = kmalloc(bufsiz, GFP_KERNEL);
-+		memset(pensr->tx_buffer, 0, bufsiz);
-+		if (!pensr->tx_buffer) {
-+			status = -ENOMEM;
-+			goto err_alloc_tx_buf;
-+		}
-+	}
-+	if (!pensr->rx_buffer) {
-+		pensr->rx_buffer = kmalloc(bufsiz, GFP_KERNEL);
-+		memset(pensr->rx_buffer, 0, bufsiz);
-+		if (!pensr->rx_buffer) {
-+			status = -ENOMEM;
-+			goto err_alloc_rx_buf;
-+		}
-+	}
-+	stream_open(inode, filp);
-+	return 0;
-+
-+err_alloc_rx_buf:
-+	kfree(pensr->tx_buffer);
-+	pensr->tx_buffer = NULL;
-+err_alloc_tx_buf:
-+	return status;
-+}
-+
-+static int pensr_spi_release(struct inode *inode, struct file *filp)
-+{
-+	filp->private_data = NULL;
-+	return 0;
-+}
-+
-+static const struct file_operations pensr_spi_fops = {
-+	.owner =	THIS_MODULE,
-+	.unlocked_ioctl = pensr_spi_ioctl,
-+	.open =		pensr_spi_open,
-+	.release =	pensr_spi_release,
-+	.llseek =	no_llseek,
-+};
-+
-+static int pensr_regs_read(struct pensr_device *pensr, u32 reg, u32 *val)
-+{
-+	struct spi_device *spi_dev = pensr->spi_dev;
-+	struct spi_transfer t[2] = { 0 };
-+	struct spi_message m;
-+	u8 txbuf[3];
-+	u8 rxbuf[1];
-+	int ret;
-+
-+	txbuf[0] = PENSR_SPI_CMD_REGRD;
-+	txbuf[1] = reg;
-+	txbuf[2] = 0x0;
-+	t[0].tx_buf = (u8 *)txbuf;
-+	t[0].len = 3;
-+
-+	rxbuf[0] = 0x0;
-+	t[1].rx_buf = rxbuf;
-+	t[1].len = 1;
-+
-+	spi_message_init_with_transfers(&m, t, ARRAY_SIZE(t));
-+	ret = spi_sync(spi_dev, &m);
-+	if (ret == 0) {
-+		/* 3 Tx + 1 Rx = 4 */
-+		*val = rxbuf[0];
-+	}
-+	return ret;
-+}
-+
-+static int pensr_regs_write(struct pensr_device *pensr, u32 reg, u32 val)
-+{
-+	struct spi_device *spi_dev = pensr->spi_dev;
-+	struct spi_transfer t[1] = { 0 };
-+	struct spi_message m;
-+	u8 txbuf[4];
-+	int ret;
-+
-+	spi_dev->chip_select = 0;
-+	spi_dev->cs_gpiod = spi_dev->controller->cs_gpiods[0];
-+	spi_setup(spi_dev);
-+
-+	txbuf[0] = PENSR_SPI_CMD_REGWR;
-+	txbuf[1] = reg;
-+	txbuf[2] = val;
-+	txbuf[3] = 0;
-+
-+	t[0].tx_buf = txbuf;
-+	t[0].len = 4;
-+	spi_message_init_with_transfers(&m, t, ARRAY_SIZE(t));
-+	ret = spi_sync(spi_dev, &m);
-+	return ret;
-+}
-+
-+static int pensr_reset_assert(struct reset_controller_dev *rcdev,
-+			      unsigned long id)
-+{
-+	struct pensr_device *pensr =
-+		container_of(rcdev, struct pensr_device, rcdev);
-+	struct spi_device *spi_dev = pensr->spi_dev;
-+	unsigned int val;
-+	int ret;
-+
-+	spin_lock_irq(&pensr->spi_lock);
-+	spi_dev->chip_select = 0;
-+	spi_dev->cs_gpiod = spi_dev->controller->cs_gpiods[spi_dev->chip_select];
-+	spi_setup(spi_dev);
-+
-+	ret = pensr_regs_read(pensr, PENSR_CTRL0_REG, &val);
-+	if (ret) {
-+		dev_err(&spi_dev->dev, "error reading ctrl0 reg\n");
-+		goto done;
-+	}
-+
-+	val |= BIT(6);
-+	ret = pensr_regs_write(pensr, PENSR_CTRL0_REG, val);
-+	if (ret)
-+		dev_err(&spi_dev->dev, "error writing ctrl0 reg\n");
-+
-+done:
-+	spin_unlock_irq(&pensr->spi_lock);
-+	return ret;
-+}
-+
-+static int pensr_reset_deassert(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct pensr_device *pensr =
-+		container_of(rcdev, struct pensr_device, rcdev);
-+	struct spi_device *spi_dev = pensr->spi_dev;
-+	unsigned int val;
-+	int ret;
-+
-+	spin_lock_irq(&pensr->spi_lock);
-+	spi_dev->chip_select = 0;
-+	spi_dev->cs_gpiod = spi_dev->controller->cs_gpiods[spi_dev->chip_select];
-+	spi_setup(spi_dev);
-+
-+	ret = pensr_regs_read(pensr, PENSR_CTRL0_REG, &val);
-+	if (ret) {
-+		dev_err(&spi_dev->dev, "error reading ctrl0 reg\n");
-+		goto done;
-+	}
-+
-+	val &= ~BIT(6);
-+	ret = pensr_regs_write(pensr, PENSR_CTRL0_REG, val);
-+	if (ret)
-+		dev_err(&spi_dev->dev, "error writing ctrl0 reg\n");
-+
-+done:
-+	spin_unlock_irq(&pensr->spi_lock);
-+	return ret;
-+}
-+
-+static const struct reset_control_ops pensr_reset_ops = {
-+	.assert = pensr_reset_assert,
-+	.deassert = pensr_reset_deassert,
-+};
-+
-+static int pensr_spi_probe(struct spi_device *spi_dev)
-+{
-+	struct device_node *np;
-+	struct property *prop;
-+	struct device *dev;
-+	struct cdev *cdev;
-+	const __be32 *p;
-+	int status;
-+	u32 num_cs;
-+	u32 cs;
-+
-+	np = spi_dev->dev.parent->of_node;
-+	status = of_property_read_u32(np, "num-cs", &num_cs);
-+	if (status)
-+		return dev_err_probe(&spi_dev->dev, status,
-+				     "number of chip-selects not defined");
-+
-+	status = alloc_chrdev_region(&pensr_devt, 0, num_cs, "pensr");
-+	if (status)
-+		return dev_err_probe(&spi_dev->dev, status,
-+				     "failed to alloc chrdev region\n");
-+
-+	pensr_class = class_create(THIS_MODULE, "pensr");
-+	if (IS_ERR(pensr_class)) {
-+		unregister_chrdev(MAJOR(pensr_devt), "pensr");
-+		return dev_err_probe(&spi_dev->dev, PTR_ERR(pensr_class),
-+				     "failed to create class\n");
-+	}
-+
-+	cdev = cdev_alloc();
-+	if (!cdev) {
-+		dev_err(&spi_dev->dev, "allocation of cdev failed");
-+		status = -ENOMEM;
-+		goto cdev_failed;
-+	}
-+	cdev->owner = THIS_MODULE;
-+	cdev_init(cdev, &pensr_spi_fops);
-+
-+	status = cdev_add(cdev, pensr_devt, num_cs);
-+	if (status) {
-+		dev_err(&spi_dev->dev, "register of cdev failed");
-+		goto cdev_delete;
-+	}
-+
-+	/* Allocate driver data */
-+	pensr = kzalloc(sizeof(*pensr), GFP_KERNEL);
-+	if (!pensr) {
-+		status = -ENOMEM;
-+		dev_err(&spi_dev->dev, "allocate driver data failed");
-+		goto cdev_delete;
-+	}
-+
-+	pensr->spi_dev = spi_dev;
-+	spin_lock_init(&pensr->spi_lock);
-+	mutex_init(&pensr->buf_lock);
-+
-+	/* Create a device for each chip select */
-+	np = spi_dev->dev.of_node;
-+	of_property_for_each_u32(np, "cs", prop, p, cs) {
-+		dev = device_create(pensr_class,
-+				    &spi_dev->dev,
-+				    MKDEV(MAJOR(pensr_devt), cs),
-+				    pensr,
-+				    "pensr0.%d",
-+				    cs);
-+		if (IS_ERR(dev)) {
-+			status = IS_ERR(dev);
-+			dev_err(&spi_dev->dev, "error creating device\n");
-+			goto cdev_delete;
-+		}
-+		dev_dbg(&spi_dev->dev, "created device major %u, minor %d\n",
-+			MAJOR(pensr_devt), cs);
-+	}
-+
-+	spi_set_drvdata(spi_dev, pensr);
-+
-+	/* Register emmc hardware reset */
-+	pensr->rcdev.nr_resets = 1;
-+	pensr->rcdev.owner = THIS_MODULE;
-+	pensr->rcdev.dev = &spi_dev->dev;
-+	pensr->rcdev.ops = &pensr_reset_ops;
-+	pensr->rcdev.of_node = spi_dev->dev.of_node;
-+	status = reset_controller_register(&pensr->rcdev);
-+	if (status)
-+		return dev_err_probe(&spi_dev->dev, status,
-+				     "failed to register reset controller\n");
-+	return status;
-+
-+cdev_delete:
-+	cdev_del(cdev);
-+cdev_failed:
-+	device_destroy(pensr_class, pensr_devt);
-+	return status;
-+}
-+
-+static const struct of_device_id pensr_dt_match[] = {
-+	{ .compatible = "amd,pensando-sr" },
-+	{ /* sentinel */ }
-+};
-+
-+static struct spi_driver pensr_spi_driver = {
-+	.probe = pensr_spi_probe,
-+	.driver = {
-+		.name = "pensando-sr",
-+		.of_match_table = pensr_dt_match,
-+	},
-+};
-+builtin_driver(pensr_spi_driver, spi_register_driver)
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 -- 
 2.17.1
 
