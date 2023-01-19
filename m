@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAF8674C1A
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 06:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFED7674BF5
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 06:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbjATFYF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Jan 2023 00:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S230176AbjATFQo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Jan 2023 00:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjATFXk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 00:23:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8265360C86;
-        Thu, 19 Jan 2023 21:14:03 -0800 (PST)
+        with ESMTP id S230095AbjATFOo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 00:14:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BDA2B28F;
+        Thu, 19 Jan 2023 21:03:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6884B823D6;
-        Thu, 19 Jan 2023 13:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB92BC433F2;
-        Thu, 19 Jan 2023 13:57:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A8F0B82498;
+        Thu, 19 Jan 2023 14:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9EAC433D2;
+        Thu, 19 Jan 2023 14:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674136633;
-        bh=3P1Nc86yRs6xRt0uuD8SSAASBWVJ0TJDhG0FA7Feguc=;
+        s=k20201202; t=1674137864;
+        bh=Ub7+BpDI8pbldr8h6coNNOTxSsE0eO00I8v8ShlQ32c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=THgm7mSVdJKL0kAA+WIgCqGJbjB6wJt8FgOWbrAT1l2e1UGgX6T+NOch1V0VlI2Mw
-         F2eVMjUaFrMvKzf9tdgoqhhLh5c/jY/tg2mKGe5KQ51wE+6Q7vE1Se6iNwhYorEZIL
-         FeFTwU/U3Y52k1AJleh4dvTY0/SxmWOd6fIhcggZY9Xr7rdlY02YAA67zwUY5QK+6r
-         zQails68ACDxiAru/1wMhLmlgK4PXcjAwjys1D+4iDzPvKweRA1Ka/NpH+7OkumlfW
-         Y8ViudQncoii4+/NrdvBO1YH2lf9h6qnJpbEPbdAUDxdRZxO9Anlppo69uo0o8QBPB
-         8EWyimyRPg/qQ==
-Date:   Thu, 19 Jan 2023 13:57:09 +0000
-From:   Mark Brown <broonie@kernel.org>
+        b=atVFTvAI6uwoH5ovmOoTs+0dyVBgtLYbb07M4wXWVLkhGskb+zpb5DQ2i8PXwOIve
+         syECb49nftFmT0P2Pmh8YJQ8lUfjv+WDjDjy/a44kPBdFYuRS/d8iglZgHuBewMLXY
+         gnjsWkOGHSorlSgZW8ZtDlINK8ZMpBWa8R1UClNRD4K9e3FSNHX4pYzyxFoD5zjYMF
+         UVWGvgWvG/htcl0rP2H2lbQRlZJgqTg60EwnkcubYGFmAI0psdBa1e0369Hcv3sDK/
+         v4XlpXgWVmZUcEeEsf7RqB6c0mJncyIj9jMCoxm1P7a8CVFp2ulIMqQs6gPVxUlwOw
+         SdfnkAtk9OhWg==
+Date:   Thu, 19 Jan 2023 14:17:32 +0000
+From:   Lee Jones <lee@kernel.org>
 To:     Brad Larson <blarson@amd.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
@@ -41,25 +41,25 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         brendan.higgins@linux.dev, briannorris@chromium.org,
         brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
         davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, yamada.masahiro@socionext.com,
-        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 15/15] spi: pensando-sr: Add AMD Pensando SoC System
- Resource
-Message-ID: <Y8lMNUH/lJuJPbLp@sirena.org.uk>
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 06/15] dt-bindings: mfd: amd,pensando-elbasr: Add AMD
+ Pensando System Resource chip
+Message-ID: <Y8lQ/G2OcjpXqNTt@google.com>
 References: <20230119035136.21603-1-blarson@amd.com>
- <20230119035136.21603-16-blarson@amd.com>
+ <20230119035136.21603-7-blarson@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8D6WBjU4dhTr3Lss"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230119035136.21603-16-blarson@amd.com>
-X-Cookie: Serving suggestion.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230119035136.21603-7-blarson@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,40 +69,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 18 Jan 2023, Brad Larson wrote:
 
---8D6WBjU4dhTr3Lss
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Jan 18, 2023 at 07:51:36PM -0800, Brad Larson wrote:
-
-> Add support for the AMD Pensando SoC System Resource chip using
-> the SPI interface.  The device functions are accessed using
-> four chip-selects and the device can be a CPLD or FPGA depending
-> on functionality.
-
+> Add support for the AMD Pensando SoC System Resource chip using the
+> SPI interface.  The device functions are accessed using four
+> chip-selects.  This device is present for all Pensando SoC designs.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 > ---
->  drivers/spi/Kconfig           |  14 ++
->  drivers/spi/Makefile          |   1 +
->  drivers/spi/spi-pensando-sr.c | 454 ++++++++++++++++++++++++++++++++++
->  3 files changed, 469 insertions(+)
+> 
+> Changes since v6:
+> - Instead of four nodes, one per chip-select, a single
+>   node is used with reset-cells in the parent.
+> - No MFD API is used anymore in the driver so it made
+>   sense to move this to drivers/spi.
+> - This driver is common for all Pensando SoC based designs
+>   so changed the name to pensando-sr.c to not make it Elba
+>   SoC specific.
+> - Added property cs for the chip-select number which is used
+>   by the driver to create /dev/pensr0.<cs> 
+> 
+> ---
+>  .../bindings/spi/amd,pensando-sr.yaml         | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml
 
-This isn't a SPI controller driver so doesn't belong here,
-drivers/soc might be a better fit based on the summary above?
+Please change the subject line - this doesn't appear to have anything to
+do with MFD.
 
---8D6WBjU4dhTr3Lss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPJTDAACgkQJNaLcl1U
-h9AX9gf9GML5TThEYc7iRhGulDaUGtLkpUtyjl6vvp1rs5FAt6yU8pZ5smmtQK9G
-FzGZsvNDSPbQ952jyy7EBQQ7gswjo+kF4Eg+6UpE8WJTY95WPjkji0E/DPOxhruK
-2ByAWFyW8bx7r/Sqng7jJRN6/rc4F9+rppguTNKJGF5xdwArMulKAPwNW9qzUit4
-BmaUhuKxdVwLXCW6d9sAcOV7GDFW8iMTHXXE2uZcOijYpOz5jaOnSQu/esQZz/8D
-Sc7Xa9XLvJTWif+OxUB7qzWlyUTy5ul//1dJja5VYG/IUTWvfIH2LsgGAzEhv6zF
-8/ciby0aIavZsRidSNFBl4kexezCHQ==
-=/8v4
------END PGP SIGNATURE-----
-
---8D6WBjU4dhTr3Lss--
+-- 
+Lee Jones [李琼斯]
