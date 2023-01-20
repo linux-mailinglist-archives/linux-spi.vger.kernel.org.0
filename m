@@ -2,115 +2,198 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F284674F68
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 09:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ADA675189
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jan 2023 10:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjATI0F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Jan 2023 03:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S230153AbjATJtY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Jan 2023 04:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjATI0F (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 03:26:05 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB86C13D
-        for <linux-spi@vger.kernel.org>; Fri, 20 Jan 2023 00:26:04 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j17so3423675wms.0
-        for <linux-spi@vger.kernel.org>; Fri, 20 Jan 2023 00:26:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTRZvfgys5BMzm7lyZzx3IwyLZCOTcEWGWGvAUBCun4=;
-        b=x18X4m58Ubq3+tsZ5sfAsS1lmtZyDd08w0d5HhTMqf3E0diwMxz9Mqpq+bucvaETHn
-         eRTVA/rwPys0U5qH5UxUyjhZBWQQ8l7GRb734qtXRE0pwy4NZ32lkndN/X6XsZS3PAa3
-         ynwIBUu38PLRm+7E7l0LHFs0Y3/9nIObIIiUs/gCjkKn5mg2kuBTd1z56x0Kl07VL1mc
-         zMgaqas7t7HuHoXwkIWtp4ySV4OrhGaZWDRIk2JOzJrLH7pWM7Y7Ax/wb4udgxY05qwf
-         RagW5DsO6P+lF5MorXsMCnmoROhTvJ7IM9Mki4C1sLYrrsDzwEEcPFe9nCqhhofX1bd9
-         Jeww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTRZvfgys5BMzm7lyZzx3IwyLZCOTcEWGWGvAUBCun4=;
-        b=uZMH0IKJs9qOq1OO+rqRsQO4No9turGHBblL4wN+bZWp4CmOWUAxiu7Q+jhK5qbfUS
-         qy3U3omu8D206vSXvclw2OnqD4UE5e+fGiOlrmVV1mM6XPlHwRM1vvE4h5PXGHAg5VZ9
-         A+xxcqM+d6EWk31dZ5YeTXMGgSAclZD+sO1TpRaHckm5OMLcOt+DVXcocyJYbvdRxdMF
-         UnY5ltyEutwTn6ctV/6ufET7OLUmr2lKTBsSju3ZcU+VVNGD2xOnHPB2uVsMzDlbSc8e
-         xTD533Yudq+In4ukO1YavCGQ9/45VZgwKZ8H8MsuTb2121IC6pSH7es4i3jba7g8tDiw
-         2Gag==
-X-Gm-Message-State: AFqh2kp0+bXiYm/PUcUxjSqI5NLFSPmefK2+W5Z5Vz0Ivx9XgmDsl5K+
-        v5c5zpwuAmjiOUH1lwUK9f8GHQ==
-X-Google-Smtp-Source: AMrXdXuBGs2ahzP+zP0qO4mSMKPgoFnX6XiCqs04Cf2aJRXt9rHNIBQbQxnFLrwuJ+Y7N+39Kjt9lw==
-X-Received: by 2002:a05:600c:ccf:b0:3db:f34:e9e0 with SMTP id fk15-20020a05600c0ccf00b003db0f34e9e0mr9895613wmb.35.1674203162609;
-        Fri, 20 Jan 2023 00:26:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m31-20020a05600c3b1f00b003dafadd2f77sm1664880wms.1.2023.01.20.00.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 00:26:02 -0800 (PST)
-Message-ID: <e31fb866-49c4-1540-6fda-6e86ed7bb33c@linaro.org>
-Date:   Fri, 20 Jan 2023 09:26:00 +0100
+        with ESMTP id S229473AbjATJtX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Jan 2023 04:49:23 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415143CE39;
+        Fri, 20 Jan 2023 01:49:20 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pInzo-0002mL-W5; Fri, 20 Jan 2023 10:47:41 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
+        pratyush@kernel.org, sanju.mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        narmstrong@baylibre.com, khilman@baylibre.com,
+        matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, j.neuschaefer@gmx.net,
+        vireshk@kernel.org, rmfrfs@gmail.com, johan@kernel.org,
+        elder@kernel.org, gregkh@linuxfoundation.org,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, amitrkcian2002@gmail.com
+Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and spi->cs_gpiod
+ references with function call
+Date:   Fri, 20 Jan 2023 10:47:37 +0100
+Message-ID: <3658396.MHq7AAxBmi@diego>
+In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
+ <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 2/2] spi: spidev: add new mediatek support
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org
-References: <20230118-mt8365-spi-support-v2-0-be3ac97a28c6@baylibre.com>
- <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118-mt8365-spi-support-v2-2-be3ac97a28c6@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/01/2023 18:28, Alexandre Mergnat wrote:
-> Add the "mediatek,genio" compatible string to support Mediatek
-> SPI controller on the genio boards.
+Am Donnerstag, 19. Januar 2023, 19:53:31 CET schrieb Amit Kumar Mahapatra:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
+> spi->cs_gpiod references with get or set API calls.
+> While adding multi-cs support in further patches the chip_select & cs_gpiod
+> members of the spi_device structure would be converted to arrays & the
+> "idx" parameter of the APIs would be used as array index i.e.,
+> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
 > 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 > ---
->  drivers/spi/spidev.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-> index 6313e7d0cdf8..e23b825b8d30 100644
-> --- a/drivers/spi/spidev.c
-> +++ b/drivers/spi/spidev.c
-> @@ -702,6 +702,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
->  	{ .name = "m53cpld" },
->  	{ .name = "spi-petra" },
->  	{ .name = "spi-authenta" },
-> +	{ .name = "genio" },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
-> @@ -728,6 +729,7 @@ static const struct of_device_id spidev_dt_ids[] = {
->  	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
->  	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
->  	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
-> +	{ .compatible = "mediatek,genio", .data = &spidev_of_check },
 
-Please, stop adding stuff to the end. It leads to unnecessary conflicts
-with simultaneous edits and increases overall entropy.
+> diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
+> index bd87d3c92dd3..246e81453ec3 100644
+> --- a/drivers/spi/spi-rockchip-sfc.c
+> +++ b/drivers/spi/spi-rockchip-sfc.c
+> @@ -346,7 +346,7 @@ static int rockchip_sfc_xfer_setup(struct rockchip_sfc *sfc,
+>  
+>  	/* set the Controller */
+>  	ctrl |= SFC_CTRL_PHASE_SEL_NEGETIVE;
+> -	cmd |= mem->spi->chip_select << SFC_CMD_CS_SHIFT;
+> +	cmd |= spi_get_chipselect(mem->spi, 0) << SFC_CMD_CS_SHIFT;
+>  
+>  	dev_dbg(sfc->dev, "sfc addr.nbytes=%x(x%d) dummy.nbytes=%x(x%d)\n",
+>  		op->addr.nbytes, op->addr.buswidth,
+> diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+> index 79242dc5272d..adc5638eff4b 100644
+> --- a/drivers/spi/spi-rockchip.c
+> +++ b/drivers/spi/spi-rockchip.c
+> @@ -246,28 +246,30 @@ static void rockchip_spi_set_cs(struct spi_device *spi, bool enable)
+>  	bool cs_asserted = spi->mode & SPI_CS_HIGH ? enable : !enable;
+>  
+>  	/* Return immediately for no-op */
+> -	if (cs_asserted == rs->cs_asserted[spi->chip_select])
+> +	if (cs_asserted == rs->cs_asserted[spi_get_chipselect(spi, 0)])
+>  		return;
+>  
+>  	if (cs_asserted) {
+>  		/* Keep things powered as long as CS is asserted */
+>  		pm_runtime_get_sync(rs->dev);
+>  
+> -		if (spi->cs_gpiod)
+> +		if (spi_get_csgpiod(spi, 0))
+>  			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, 1);
+>  		else
+> -			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, BIT(spi->chip_select));
+> +			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER,
+> +					      BIT(spi_get_chipselect(spi, 0)));
+>  	} else {
+> -		if (spi->cs_gpiod)
+> +		if (spi_get_csgpiod(spi, 0))
+>  			ROCKCHIP_SPI_CLR_BITS(rs->regs + ROCKCHIP_SPI_SER, 1);
+>  		else
+> -			ROCKCHIP_SPI_CLR_BITS(rs->regs + ROCKCHIP_SPI_SER, BIT(spi->chip_select));
+> +			ROCKCHIP_SPI_CLR_BITS(rs->regs + ROCKCHIP_SPI_SER,
+> +					      BIT(spi_get_chipselect(spi, 0)));
+>  
+>  		/* Drop reference from when we first asserted CS */
+>  		pm_runtime_put(rs->dev);
+>  	}
+>  
+> -	rs->cs_asserted[spi->chip_select] = cs_asserted;
+> +	rs->cs_asserted[spi_get_chipselect(spi, 0)] = cs_asserted;
+>  }
+>  
+>  static void rockchip_spi_handle_err(struct spi_controller *ctlr,
+> @@ -541,7 +543,7 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
+>  	if (spi->mode & SPI_LSB_FIRST)
+>  		cr0 |= CR0_FBM_LSB << CR0_FBM_OFFSET;
+>  	if (spi->mode & SPI_CS_HIGH)
+> -		cr0 |= BIT(spi->chip_select) << CR0_SOI_OFFSET;
+> +		cr0 |= BIT(spi_get_chipselect(spi, 0)) << CR0_SOI_OFFSET;
+>  
+>  	if (xfer->rx_buf && xfer->tx_buf)
+>  		cr0 |= CR0_XFM_TR << CR0_XFM_OFFSET;
+> @@ -724,7 +726,7 @@ static int rockchip_spi_setup(struct spi_device *spi)
+>  	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
+>  	u32 cr0;
+>  
+> -	if (!spi->cs_gpiod && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
+> +	if (!spi_get_csgpiod(spi, 0) && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
+>  		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
+>  		return -EINVAL;
+>  	}
+> @@ -735,10 +737,10 @@ static int rockchip_spi_setup(struct spi_device *spi)
+>  
+>  	cr0 &= ~(0x3 << CR0_SCPH_OFFSET);
+>  	cr0 |= ((spi->mode & 0x3) << CR0_SCPH_OFFSET);
+> -	if (spi->mode & SPI_CS_HIGH && spi->chip_select <= 1)
+> -		cr0 |= BIT(spi->chip_select) << CR0_SOI_OFFSET;
+> -	else if (spi->chip_select <= 1)
+> -		cr0 &= ~(BIT(spi->chip_select) << CR0_SOI_OFFSET);
+> +	if (spi->mode & SPI_CS_HIGH && spi_get_chipselect(spi, 0) <= 1)
+> +		cr0 |= BIT(spi_get_chipselect(spi, 0)) << CR0_SOI_OFFSET;
+> +	else if (spi_get_chipselect(spi, 0) <= 1)
+> +		cr0 &= ~(BIT(spi_get_chipselect(spi, 0)) << CR0_SOI_OFFSET);
+>  
+>  	writel_relaxed(cr0, rs->regs + ROCKCHIP_SPI_CTRLR0);
 
-Best regards,
-Krzysztof
+for the two Rockchip drivers
+Acked-by: Heiko Stuebner <heiko@sntech.de>
+
 
