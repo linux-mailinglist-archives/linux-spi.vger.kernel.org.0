@@ -2,149 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E7B676769
-	for <lists+linux-spi@lfdr.de>; Sat, 21 Jan 2023 17:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85010676828
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Jan 2023 19:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjAUQjP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 21 Jan 2023 11:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S229643AbjAUS5K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 21 Jan 2023 13:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjAUQjO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 21 Jan 2023 11:39:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8880827488;
-        Sat, 21 Jan 2023 08:39:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CD08B8075D;
-        Sat, 21 Jan 2023 16:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FBD0C433D2;
-        Sat, 21 Jan 2023 16:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674319150;
-        bh=gT/5AvVpeDrgKjkh47OXtzrBPwHm9WVXPk88PeHkYdg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T2T2vnT1Xs4tW5V/oTrCVF/YscJHiNq+7HTjvmQMO07kIVdALzUWUY/Lg7jgN8oeV
-         wDH/jrinV14zyuMq2EWtvqw0MJqCVYQkQmSM97I02rGKmkJT8mWnP+XySroZ4rplWG
-         RlAswjzAZLSIUe5xREEi1xk7mpGRJ+el+yXQps4AW3OLVqJhTAobryzkTKQ7IcmeFR
-         gz9n7eY4kKn03iiqGBkjRAI/u36bgFn5jBskRGSmm4cNBL/uaGM08TtLTQYXpHtqxx
-         meoZpovFIIHToxzFIsTk068dsFlMtc5YJ3ropDVVqr5LoNdkRAl4Bqac9L/I3U7BVM
-         lonUWh/lOpEIw==
-Date:   Sat, 21 Jan 2023 16:52:35 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <tudor.ambarus@microchip.com>,
-        <pratyush@kernel.org>, <sanju.mehta@amd.com>,
-        <chin-ting_kuo@aspeedtech.com>, <clg@kaod.org>,
-        <kdasu.kdev@gmail.com>, <f.fainelli@gmail.com>,
-        <rjui@broadcom.com>, <sbranden@broadcom.com>,
-        <eajames@linux.ibm.com>, <olteanv@gmail.com>, <han.xu@nxp.com>,
-        <john.garry@huawei.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <narmstrong@baylibre.com>,
-        <khilman@baylibre.com>, <matthias.bgg@gmail.com>,
-        <haibo.chen@nxp.com>, <linus.walleij@linaro.org>,
-        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
-        <robert.jarzmik@free.fr>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <heiko@sntech.de>,
-        <krzysztof.kozlowski@linaro.org>, <andi@etezian.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-        <masahisa.kojima@linaro.org>, <jaswinder.singh@linaro.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <l.stelmach@samsung.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <alex.aring@gmail.com>, <stefan@datenfreihafen.org>,
-        <kvalo@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <skomatineni@nvidia.com>,
-        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <j.neuschaefer@gmx.net>, <vireshk@kernel.org>, <rmfrfs@gmail.com>,
-        <johan@kernel.org>, <elder@kernel.org>,
-        <gregkh@linuxfoundation.org>, <git@amd.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <joel@jms.id.au>, <andrew@aj.id.au>, <radu_nicolae.pirea@upb.ro>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>,
-        <bcm-kernel-feedback-list@broadcom.com>, <fancer.lancer@gmail.com>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
-        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <yogeshgaur.83@gmail.com>,
-        <konrad.dybcio@somainline.org>, <alim.akhtar@samsung.com>,
-        <ldewangan@nvidia.com>, <michal.simek@amd.com>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
-        <libertas-dev@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
-        <linux-iio@vger.kernel.org>, <michael@walle.cc>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <greybus-dev@lists.linaro.org>, <linux-staging@lists.linux.dev>,
-        <amitrkcian2002@gmail.com>
-Subject: Re: [PATCH v2 04/13] iio: imu: Replace all spi->chip_select and
- spi->cs_gpiod references with function call
-Message-ID: <20230121165235.13da9db2@jic23-huawei>
-In-Reply-To: <20230119185342.2093323-5-amit.kumar-mahapatra@amd.com>
-References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
-        <20230119185342.2093323-5-amit.kumar-mahapatra@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        with ESMTP id S229645AbjAUS5J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 21 Jan 2023 13:57:09 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181CF4ED8
+        for <linux-spi@vger.kernel.org>; Sat, 21 Jan 2023 10:57:08 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b7so7501652wrt.3
+        for <linux-spi@vger.kernel.org>; Sat, 21 Jan 2023 10:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BFIsuTdWlrwQOTf1CbRte8ztz1IctUB0UWMATDFDLyI=;
+        b=oGiUtj0aoYKHqpNz/tW/5M8TsTMmxVCCkEDnzXKPh5oYB6WS6LSY4/rf6jzugCyCeV
+         Vw9/GzvHPpaqB6tvXmysPjVt2V/BB10I4sr95wgflIDiWugUZf9TqvXdfw+X7rYQx0M7
+         bj8Hc8rqwvtF3q0QpKaB/sfrCe9vXadAnEmAbo+KEX9GSb8Zt8PYw/Xq0xtoy1775sgX
+         qCZxfOFNiNX3KgaWY9TB/30BoXgltCdl7Cm+6NJcwHNnwKHLWcYj4lQ7W6VTTQrCea/K
+         +2pl6nUxX5tYjeF55XoCu1G/YrT5u55sRXTnIhmpTf0/1QHh7VrSLd3OZv1waxHLX3wL
+         scEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BFIsuTdWlrwQOTf1CbRte8ztz1IctUB0UWMATDFDLyI=;
+        b=saHGrQ3+QLMVHg28LdzJxbSe1Uz93tE0bZLxSYP2siSaui+PwX1HC7sk2+pHtc18ww
+         90Np8RcKLUF/rAkoZkxq6oKIAvWbJ/Mv0P/g16uDYPtEePrFZTzXMkY2GJLErkUElR7y
+         IWdIceTenyk+d4NlMEDL9vQFgpLDsOJjN1oCH3ZM5A/6MT6KNOJv6bSm6kkfM9HMZaoN
+         ofIAj/8ozpJi5xiBvRsTunEEpE+wqwQHf+LVVDOWi89Jgnd6CCtZaVeMYgXY3FPpAfzj
+         MMnyNUqyjRTyDNuzRb/GoVd5MopSqtARDP8Foct8duM/XercP+iBRl32c9jDRXBYnHnn
+         LHzw==
+X-Gm-Message-State: AFqh2kqQpe/gOEReYCap4bRlyqTr5Y651JyIvv+A6tDLU8tVVuI4MuMo
+        rNSGCPLHcrXAWQIZfxbBhfHbPw==
+X-Google-Smtp-Source: AMrXdXt1q1YuvTu5Dd5G/0qnIktkSIElMwkz4o/ZEZWuTZR8ntFo9qnXoeVZYpjkshqeHeUknS2jxg==
+X-Received: by 2002:adf:e70a:0:b0:2b5:90e:cfa5 with SMTP id c10-20020adfe70a000000b002b5090ecfa5mr16667862wrm.29.1674327426596;
+        Sat, 21 Jan 2023 10:57:06 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i10-20020a05600011ca00b002bf94527b9esm3365260wrx.85.2023.01.21.10.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Jan 2023 10:57:06 -0800 (PST)
+Message-ID: <f3ec87a3-1a67-9d65-e470-eb527ffd6e0b@linaro.org>
+Date:   Sat, 21 Jan 2023 19:57:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v9 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
+ SoC
+Content-Language: en-US
+To:     Brad Larson <blarson@amd.com>
+Cc:     adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, broonie@kernel.org,
+        catalin.marinas@arm.com, davidgow@google.com,
+        devicetree@vger.kernel.org, fancer.lancer@gmail.com,
+        gerg@linux-m68k.org, gsomlo@gmail.com, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        lee@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, p.yadav@ti.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, rdunlap@infradead.org, robh+dt@kernel.org,
+        samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, yamada.masahiro@socionext.com
+References: <f85cdf27-7ea0-14a8-10b0-7a9ac137a040@linaro.org>
+ <20230121011004.38654-1-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230121011004.38654-1-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 20 Jan 2023 00:23:33 +0530
-Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com> wrote:
-
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
-> members of struct spi_device to be an array. But changing the type of these
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpiod
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/iio/imu/adis16400.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/imu/adis16400.c b/drivers/iio/imu/adis16400.c
-> index c02fc35dceb4..3eda32e12a53 100644
-> --- a/drivers/iio/imu/adis16400.c
-> +++ b/drivers/iio/imu/adis16400.c
-> @@ -466,7 +466,7 @@ static int adis16400_initial_setup(struct iio_dev *indio_dev)
+On 21/01/2023 02:10, Brad Larson wrote:
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - interrupts
+>    - clocks
 >  
->  		dev_info(&indio_dev->dev, "%s: prod_id 0x%04x at CS%d (irq %d)\n",
->  			indio_dev->name, prod_id,
-> -			st->adis.spi->chip_select, st->adis.spi->irq);
-> +			spi_get_chipselect(st->adis.spi, 0), st->adis.spi->irq);
->  	}
->  	/* use high spi speed if possible */
->  	if (st->variant->flags & ADIS16400_HAS_SLOW_MODE) {
+> +allOf:
+> +  - $ref: mmc-controller.yaml
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: amd,pensando-elba-sd4hc
+> +    then:
+> +      required:
+> +        - reset-names
+> +        - resets
+
+Looks correct, just put required: after properties: below.
+
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +    else:
+
+Best regards,
+Krzysztof
 
