@@ -2,69 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A65677E85
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 15:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626EF677EB2
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 16:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjAWO6P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Jan 2023 09:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S232190AbjAWPFE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Jan 2023 10:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjAWO6O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 09:58:14 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C30A7DB5
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 06:58:11 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4b718cab0e4so175006727b3.9
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 06:58:11 -0800 (PST)
+        with ESMTP id S231778AbjAWPFC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 10:05:02 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C9728D0E;
+        Mon, 23 Jan 2023 07:05:01 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x40so18602104lfu.12;
+        Mon, 23 Jan 2023 07:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xvTqSv9IiiqJO7FY0k9EPMcUo95Z2K5HRqvuXpd73A4=;
-        b=weCELVEjnhgirLS0yfICmHlYM1tJJK/1wLN12zzmlA69lZ/8m7OZl49Sz1klvbgzoU
-         ne/WEVg5nXjUUCYdrmxXAnOYWpxrm0aQPTqm0gFH1HGewVCAs3YecycYgaTPaBcocZW3
-         UizWpTtV2T6B1V0KueIpIOc5VABYaNPLZNPyDWZEV128P67OAl5aVs6DoR1asmQAwz5R
-         CLePFN0oG16pKNmhr3T1iga/Y2bQK58xHS9mw4iNNDJZUnmUehfF/q+DX4P+TplSGWVR
-         Mz22E+WC/kxzVjbef1FVlrkj46Nq11iZ4Wa8Q+Qp0DLV1m0TzVzc8/5c7iaHVfV6u06g
-         Rj6Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P3rqFJi0wYIMyx4eFEnrANXBYlUWFGjnlOrB4sJY0mc=;
+        b=VSvjd1+J+2hfVE0rK2aWfDA0OVUPFITcaGU/EEk+ovd3PB+LZoSIbLXjg/6O4g0QkX
+         wQSOdPQHW8ShVOvuv6K4ehak+/FUBZ6bBjlKapxHcHQImaA7q7t1gEwYZmwObqGrP/PP
+         CuO1Q1/NA1X4wba91SbkMkbJ02vBgbwFgxkUGAZz0utThM5EFRk4Y/dHFQrqiTC3T8XY
+         pxEaA9cykcbArWN/Q14sLzrf2oqArLVwTmvV0IHeWZXjaXfjdJS++GDWvaf9CtXKja5B
+         /+o8WCQ6Z8OG5i90gfUfiXJhw6rQk2gldlIFYsb4njbrpXyfD3NMkTBxEGrhoTwav/UE
+         HUzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xvTqSv9IiiqJO7FY0k9EPMcUo95Z2K5HRqvuXpd73A4=;
-        b=00a9g4AMR/KyNNeU/E7ArpPy1U2XmD3xX+V5OcUpAvKZivF7Ev67qFS9br1OOvHg0r
-         pQpr9HJ8dz0ZQVGyciwFouDZe42tT8yMkCqX3t+6RIB3MP3UkpmryvlHy7pGSDVlwOCX
-         HDH1fCt9TPWOnNoIdUmm3KOcWjNuCnEm5dUiG0EBhPUFMyo+kL3KJabNwLRpUmKvqCLf
-         1cjbT+TObOysnOiD6cQoDq6kQihRu2I1Kvb8iRaeUOyXEo2XX7I9AXPhuvpLstnduzU9
-         hYQWtxWYgD3x4o2ewwPKBzu3afMcZrjK5w7bFsSqwB0nBNyKZqpUU1ICpzGXzq/E91ly
-         idAA==
-X-Gm-Message-State: AFqh2kpu1wqI8MLFOpXwurwUCm/hVqLceJKH4zYBoA5q8QbK/ejjSJdn
-        vklQrXfRutbNVAeb4ngxlk3mZ7P0X8PehPEQhzjES/B+A5IWKcdQ
-X-Google-Smtp-Source: AMrXdXvb8K7VSIORVsr8Qw4LbxKTz53T405uI7iUamoWMQKa2zwGzQKmuAxlkobEyafiMl05CCpJpwK2s4Bv3QBaFj0=
-X-Received: by 2002:a81:11c2:0:b0:3e8:76df:4afd with SMTP id
- 185-20020a8111c2000000b003e876df4afdmr2507306ywr.380.1674485890612; Mon, 23
- Jan 2023 06:58:10 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P3rqFJi0wYIMyx4eFEnrANXBYlUWFGjnlOrB4sJY0mc=;
+        b=RXKXSeDWVED+HTRoYIVS3h1Kg/2Xiwsf6GLEeVRsELkNLw7N+TVP54n2nL5vSwxCd+
+         ge4q+NmxOeiCFmZ+E6D6dgCb2EB9dI7stkmIXIUXfGbuY60MTiNTiYkjT592Yis2nkWw
+         ge8anLLBKkO9wJ/L6eZEW9r4xGHS2qTnecRrzHOuCTpTkVxcJBmW7maQR5JgnstmWh70
+         TBXpDsKLokpLyawQpAf4mNSiAXxObo7ctOoO9s6FitJqtmhsc8yITJhF1btrN4ddApCA
+         RO89iMg9380Zi/cFnk6MhT4uJkZCu8YQEUpHwtJTUw51Vt+xHZ8KivybTNN8eCJqQwCG
+         n2PA==
+X-Gm-Message-State: AFqh2kpF1iGzmvy+cExxcY7VfLFck5DoMWF7ZhxATtKKUZ9sKGUUjpi/
+        EYOwfb3jvVI7arcLAg75UkI=
+X-Google-Smtp-Source: AMrXdXuHnINfpXEMI/5P6IHfO27xMrOaiT1cQnmYVDzQ2npYaq/u8eUakJKoBBnDu0eFJD/hs2QaqA==
+X-Received: by 2002:a05:6512:340a:b0:4d2:551e:3838 with SMTP id i10-20020a056512340a00b004d2551e3838mr7464162lfr.29.1674486299330;
+        Mon, 23 Jan 2023 07:04:59 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id b8-20020a0565120b8800b004d593f218absm1011508lfv.108.2023.01.23.07.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:04:58 -0800 (PST)
+Date:   Mon, 23 Jan 2023 18:04:56 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     broonie@kernel.org, miquel.raynal@bootlin.com,
+        linus.walleij@linaro.org, krzysztof.kozlowski@linaro.org,
+        vireshk@kernel.org, gregkh@linuxfoundation.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Message-ID: <20230123145953.ytaaq3x4tetgepyf@mobilestation>
+References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
+ <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-References: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
- <20230120082054.610626-1-michael@walle.cc> <CAFGrd9qXL-u4XzG9MLK2zbKoDudhTYpr-gJaZPjbysJ9Fo2gnQ@mail.gmail.com>
- <2aa2ff64cfd3b5ccd1342873fffa6cb4@walle.cc>
-In-Reply-To: <2aa2ff64cfd3b5ccd1342873fffa6cb4@walle.cc>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 23 Jan 2023 15:57:59 +0100
-Message-ID: <CAFGrd9pKuMsjmqg=mPsrwn=u7pCHdHEGaiW5PnwA_=TSte5sDw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
-To:     Michael Walle <michael@walle.cc>
-Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +90,67 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Le lun. 23 janv. 2023 =C3=A0 11:44, Michael Walle <michael@walle.cc> a =C3=
-=A9crit :
->
-> Hi,
->
-> Am 2023-01-23 10:37, schrieb Alexandre Mergnat:
-> > Le ven. 20 janv. 2023 =C3=A0 09:20, Michael Walle <michael@walle.cc> a =
-=C3=A9crit
-> > :
-> >>
-> >> From: Alexandre Mergnat <amergnat@baylibre.com>
-> >>
-> >> > Add the "mediatek,genio" compatible string to support Mediatek
-> >> > SPI controller on the genio boards.
-> >>
-> >> What is the use case of having the spidev? What if I want to
-> >> connect a device with a linux driver to it? It seems like you
-> >> just want to expose the SPI bus on the pin header. There was a
-> >> similar discussion for a mikrobus connector [1].
-> >>
-> > Yes I want to expose the SPI on the pin header for two reasons:
->
-> Then "mediatek,genio" doesn't really describe the hardware, does it?
-> If you read that linked thread, NXP was also trying exposing the SPI
-> bus on a pin header. IMHO this is just misusing the userspace spi-dev.
->
-> That being said, exposing something on a pinheader (or on a standardized
-> connector) seems like a common thing and we should be working towards
-> a good solution. I still think Robs proposal for the mikrobus connector
-> makes also sense for your case.
->
+On Fri, Jan 20, 2023 at 12:23:31AM +0530, Amit Kumar Mahapatra wrote:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
+> spi->cs_gpiod references with get or set API calls.
+> While adding multi-cs support in further patches the chip_select & cs_gpiod
+> members of the spi_device structure would be converted to arrays & the
+> "idx" parameter of the APIs would be used as array index i.e.,
+> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+> 
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
 
-I don't think this is the same case. For the mikrobus case, it's
-consistent to have a connector because it fit with other "add-on"
-board which can be plug on the "mother board".
-Here I've just a simple debug pin header. I've taken a look at
-raspberry pi and Beaglebone black DTS, they don't use connector, but
-DTS overlay to enable SPI. I think you're right when you say that I'm
-misusing the userspace spi-dev.
+[nip]
+
+>  drivers/spi/spi-dw-core.c         |  2 +-
+>  drivers/spi/spi-dw-mmio.c         |  4 ++--
+
+[nip]
+
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b..4fd1aa800cc3 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -103,7 +103,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  	 * support active-high or active-low CS level.
+>  	 */
+>  	if (cs_high == enable)
+> -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+> +		dw_writel(dws, DW_SPI_SER, BIT(spi_get_chipselect(spi, 0)));
+>  	else
+>  		dw_writel(dws, DW_SPI_SER, 0);
+>  }
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 26c40ea6dd12..d511da766ce8 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -65,7 +65,7 @@ static void dw_spi_mscc_set_cs(struct spi_device *spi, bool enable)
+>  	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+>  	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+>  	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
+> -	u32 cs = spi->chip_select;
+> +	u32 cs = spi_get_chipselect(spi, 0);
+>  
+>  	if (cs < 4) {
+>  		u32 sw_mode = MSCC_SPI_MST_SW_MODE_SW_PIN_CTRL_MODE;
+> @@ -138,7 +138,7 @@ static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
+>  	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+>  	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+>  	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
+> -	u8 cs = spi->chip_select;
+> +	u8 cs = spi_get_chipselect(spi, 0);
+>  
+>  	if (!enable) {
+>  		/* CS override drive enable */
+
+For the DW SSI part:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+[nip]
