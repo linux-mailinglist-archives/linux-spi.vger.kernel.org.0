@@ -2,100 +2,175 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB70A678362
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 18:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128C3678755
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 21:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbjAWRgS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Jan 2023 12:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S232996AbjAWUPN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Jan 2023 15:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbjAWRgH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 12:36:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC4830191
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 09:35:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85E7AB80E1A
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 17:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2EBC4339B;
-        Mon, 23 Jan 2023 17:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674495325;
-        bh=if5ERRmjKg/QTuuC/d1VDiUmFQSQRowr8ntQTS0LU18=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OMAA/aD+ZM7x4dte/a7Rc3sMNn1+D20Jci1L6xWingjzjdT8zEitYHpEUVxkU3rPC
-         OeYLDCVPeqs1VQ4alb7DCVnzTc3oGU9gOV4an6Si5IuLAUeTG6Hw8gl4vw+AqEkTMC
-         aGHTGiX/0sDCdtUYnSYPfYAlHKJTI/Td6FmHZ77ux7nybi4QpjVRnoeWyA0sN51aKP
-         E08yUcZacGaqF7ZRFUqI46ueOckftnSCrLFgTl/O6VSa2e5+62xzIKxcgl2W2olBIW
-         mfDSIUoP16D7nskzfyOXFWU7HCwZN9Zl/VAqtHxZ/ck0Ql2YlhGyBGMU/jx7m4U4M+
-         lXUnOxi2hA13w==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, geert@linux-m68k.org, lukas@wunner.de
-In-Reply-To: <20230110131805.2827248-1-yangyingliang@huawei.com>
-References: <20230110131805.2827248-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next 0/3] spi: atmel: switch to use modern name
-Message-Id: <167449532355.1496106.6234871055126124286.b4-ty@kernel.org>
-Date:   Mon, 23 Jan 2023 17:35:23 +0000
+        with ESMTP id S232562AbjAWUPN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 15:15:13 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F168D303FD;
+        Mon, 23 Jan 2023 12:15:10 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-15bb8ec196aso15343000fac.3;
+        Mon, 23 Jan 2023 12:15:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W9JOc294Un2/0rB0FUKryYqic16naXseJPC92bOtRF0=;
+        b=TFugDuwwVpBY+jJEIKbuxoYP7oCrGmKv3g0a/mKEIbywee4wXzlEDUp/YtL6T7tq8x
+         wVRrbGRjfJpgvEg/KSKgiBCBY2wWJDalnkPNEgkX1wpObPkZj/z/dkGM0QsUg5DuX6bd
+         jYIn67roGkkX2NvuRDe3r7rzRTzzKQ4IIFCvL9gcyWvrCGtZrQn0gufEx27YJ9gios6m
+         qw6yzBZiF/6xAWYHUB4Zohir4HbiUL46oNTT77vzYOp1CPijvF/TWMEqEqYmG48XyBpc
+         iIMwkfToRVETERnnTAff6w6gnQ1GvIyvgrlzvTmfg1N/y99ZJGzEO2eF7zE3myzFvFl8
+         3nFg==
+X-Gm-Message-State: AFqh2kqOphnNSGO+vqzbfqVC/4874+l4TeWg1aiTTKPGkghyjmnqaWCz
+        6psyhaQjoh6AQ0jWRZKa3A==
+X-Google-Smtp-Source: AMrXdXv7/0UWYAVSm7F28zXqx2erH3WvlYts86KO/fBElTBfrToCx8V4nVQwijpoo96jnpY39d8zVA==
+X-Received: by 2002:a05:6871:4506:b0:154:988a:d32d with SMTP id nj6-20020a056871450600b00154988ad32dmr14480326oab.27.1674504910165;
+        Mon, 23 Jan 2023 12:15:10 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056870390a00b001435fe636f2sm25818920oap.53.2023.01.23.12.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 12:15:09 -0800 (PST)
+Received: (nullmailer pid 2450508 invoked by uid 1000);
+        Mon, 23 Jan 2023 20:15:07 -0000
+Date:   Mon, 23 Jan 2023 14:15:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        Bert Vermeulen <bert@biot.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-rockchip@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>, linux-sunxi@lists.linux.dev,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Han Xu <han.xu@nxp.com>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Andy Gross <agross@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-riscv@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        openbmc@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-spi@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Marek Vasut <marex@denx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-aspeed@lists.ozlabs.org,
+        Parshuram Thombare <pthombar@cadence.com>,
+        linux-amlogic@lists.infradead.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-tegra@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Gabor Juhos <juhosg@openwrt.org>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: drop unneeded quotes
+Message-ID: <167450490674.2450465.12158974323906034097.robh@kernel.org>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 10 Jan 2023 21:18:02 +0800, Yang Yingliang wrote:
-> After introducing devm_spi_alloc_host/spi_alloc_host(), the legacy
-> named function devm_spi_alloc_master/spi_alloc_master() can be replaced.
-> And also change other legacy name master/slave to modern name host/target
-> or controller.
+
+On Wed, 18 Jan 2023 18:39:31 +0100, Krzysztof Kozlowski wrote:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
 > 
-> Yang Yingliang (3):
->   spi: atmel: switch to use modern name
->   spi: at91-usart: switch to use modern name
->   spi: atmel-quadspi: switch to use modern name
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/spi/allwinner,sun4i-a10-spi.yaml  |  2 +-
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml  |  2 +-
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml   |  6 +++---
+>  .../bindings/spi/amlogic,meson6-spifc.yaml     |  6 +++---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml       |  2 +-
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml |  2 +-
+>  .../devicetree/bindings/spi/cdns,xspi.yaml     |  6 +++---
+>  .../bindings/spi/fsl,spi-fsl-qspi.yaml         |  2 +-
+>  .../devicetree/bindings/spi/fsl-imx-cspi.yaml  |  2 +-
+>  .../bindings/spi/mediatek,spi-mt65xx.yaml      |  2 +-
+>  .../spi/mediatek,spi-slave-mt27xx.yaml         |  2 +-
+>  .../bindings/spi/mikrotik,rb4xx-spi.yaml       |  2 +-
+>  .../bindings/spi/mxicy,mx25f0a-spi.yaml        |  2 +-
+>  .../devicetree/bindings/spi/mxs-spi.yaml       |  2 +-
+>  .../bindings/spi/nvidia,tegra210-quad.yaml     |  2 +-
+>  .../bindings/spi/qcom,spi-qcom-qspi.yaml       |  5 ++---
+>  .../bindings/spi/realtek,rtl-spi.yaml          |  2 +-
+>  .../bindings/spi/snps,dw-apb-ssi.yaml          |  2 +-
+>  .../devicetree/bindings/spi/spi-cadence.yaml   |  2 +-
+>  .../devicetree/bindings/spi/spi-fsl-lpspi.yaml |  2 +-
+>  .../devicetree/bindings/spi/spi-gpio.yaml      |  4 ++--
+>  .../devicetree/bindings/spi/spi-mux.yaml       |  4 ++--
+>  .../devicetree/bindings/spi/spi-nxp-fspi.yaml  |  2 +-
+>  .../devicetree/bindings/spi/spi-pl022.yaml     | 18 +++++++++---------
+>  .../devicetree/bindings/spi/spi-rockchip.yaml  |  2 +-
+>  .../devicetree/bindings/spi/spi-sifive.yaml    |  6 +++---
+>  .../bindings/spi/spi-sunplus-sp7021.yaml       |  2 +-
+>  .../devicetree/bindings/spi/spi-xilinx.yaml    |  2 +-
+>  .../bindings/spi/spi-zynqmp-qspi.yaml          |  2 +-
+>  .../devicetree/bindings/spi/sprd,spi-adi.yaml  |  5 ++---
+>  .../devicetree/bindings/spi/st,stm32-qspi.yaml |  2 +-
+>  .../devicetree/bindings/spi/st,stm32-spi.yaml  |  2 +-
+>  .../bindings/spi/xlnx,zynq-qspi.yaml           |  2 +-
+>  33 files changed, 53 insertions(+), 55 deletions(-)
 > 
-> [...]
 
-Applied to
-
-   broonie/spi.git for-next
-
-Thanks!
-
-[1/3] spi: atmel: switch to use modern name
-      commit: b94a26d95cb2790ab62d4c27a6383eeb3d2ddab0
-[2/3] spi: at91-usart: switch to use modern name
-      commit: 747d4e2c5f0e0469ad6055849f99516ca4b03e82
-[3/3] spi: atmel-quadspi: switch to use modern name
-      commit: ccbc6554ed66dc37778b8ed823bcaaabfb1731cf
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Acked-by: Rob Herring <robh@kernel.org>
