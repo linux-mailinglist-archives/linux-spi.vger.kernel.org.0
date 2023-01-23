@@ -2,93 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE4A677EBF
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 16:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AAA67809D
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jan 2023 16:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjAWPHz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Jan 2023 10:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S232954AbjAWPzy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Jan 2023 10:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAWPHw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 10:07:52 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DCF748
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 07:07:50 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 188so15132068ybi.9
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 07:07:50 -0800 (PST)
+        with ESMTP id S232868AbjAWPzx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Jan 2023 10:55:53 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912C55250
+        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 07:55:50 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4566013wmq.1
+        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 07:55:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JM1EiOocNtSZA8MsnSOByXfINK+alIpF0Dhm3T9y7wc=;
-        b=M2x2MjTHjmUlY72HKk4rlnXeJkdFfgeXmtMqYIyp8cmQJ8MtURsID4V59mR9+0Cn8U
-         stkKjYi7X8vbNQipHx9DzCo5RgQyzvB6dknGpuiE2l1ptYtEc2rzCbOVgw0m7H4XAL8o
-         +33Ibf5zFZ7swAPkUpjetRJkoz78HepNsRNWQ6hKfnyVD+7J3g+/TWrKGY9bKjHhpOAB
-         UpYZdp852Txr3UQCAxYOFzoCRl8im3RVsf6FIRyK4TTq6k6UUy8cfgqeU7UC2MbTxumt
-         Pu1wxP/1iGZTTYVkRqg3vdhp89nB6/obEXACanGagUvroApU7sosjl94Y0xWiiFpDO7k
-         v56g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UQ+/a8w/qFj3luZoDJ3OxPjYbwogmzi2kqkpt3vBPmQ=;
+        b=VWS7PSmLmcJaTf6s/uhF+6wnvE+BRrCrll9s928FrSFccqhWO2UJvnlL2172c3R4BG
+         baRGfNGYybTJ1LR97ouds3lNSYT8qGmBhAdsjsUV546yl55AzJOKPYUWxLnfbvYeSrx9
+         QCWrCKMzl1u9q/CRqKphUzwokHw+oju5ZLZq1JnFj+d40qH6lzC00YG8Pb7PWDDux65R
+         aZmNwO97F8yUgYsLPeyQMTsoJTJzwr9v9V8yqrcwR4eDRbH1Er+hFD3lgoowNAy2hzjE
+         NF2x6ukHrhImJI21NHC0LyBw30x1IOvup7SRC4sbmDvQOjrajtr07Jn770O8tTq4viIJ
+         2qLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JM1EiOocNtSZA8MsnSOByXfINK+alIpF0Dhm3T9y7wc=;
-        b=I6rvQ+YeCZDwUmR7eQKKnsdWKspMAkDTPPi9uXdiv7Edc65xMBJhPAA5feSuVvsVJW
-         IKZa6EpzV7t+tjUlB/WbZkGiu88gly5uZjO+n0fg5OOcTzoGHW+uLtbReWR8ipBc4ozz
-         IsMsXH6E0VxP31nIGsRCn5TbTw4quE9GlxIF4DKX10xHjGUpc+EZt1CJGTrUgT1B6NYu
-         zegupUgJwn5+RUvMWLBH6TY4/1v6Pmu97OQ6y0ywX9YtszIGE9DFOvbXotFQUhwt84AP
-         OB+5d3K09pnfZ71PBG33Sl9iEdYiXfFj68jEoyB1BqY/OnCREtCHH6h5XMYqs2iXrflW
-         H6bw==
-X-Gm-Message-State: AFqh2kpFzKPx15GA+W/nI83Gj1B6jrstEcvPirSYySqb22e9+styMfL/
-        KhV6fSXj9Tq8CAqBfJvNUjZnRwoaiLIu7U/l8MKG77WJgxOYDhbM
-X-Google-Smtp-Source: AMrXdXtou+r1eGkUjO+yV5sepHYYEBThh559isR/Qxq8Kt/3Do7Ef2BAHj6FQrPgGPw8IKZFv6I1Yuaq3ctMN14OTH4=
-X-Received: by 2002:a25:690a:0:b0:70b:87c6:4fe with SMTP id
- e10-20020a25690a000000b0070b87c604femr2900478ybc.550.1674486469535; Mon, 23
- Jan 2023 07:07:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQ+/a8w/qFj3luZoDJ3OxPjYbwogmzi2kqkpt3vBPmQ=;
+        b=O58Yi/+OWUDJSfIRUEH2pPdIne4kYswe+xcBHVYCyLp1BVusD83lOyprFO1cTd8xQX
+         ndWlHB1qyNtV4QVWq9qNiYG+KpGsUaLDvimrkKxpcG0g6luE9QSv4ibOEDnlSqO104dh
+         LE4efBmqKGmk8TtS8XyytGNPEbOiP0qtYID9ipC7xlazWyv7D221oSkajfKIgwQvTj8o
+         guSXnWmNMfUZj3p4HJ/k1Ufj4mgZ3BP205/e6SxFtP+XoAGBaMFuUuqJyfoZSeCH2yMT
+         XdVmNiF9VAtQuX/ZsXTOoSELQQE8GXv4SOfF+YAWTATVcrygOCObWqx+i7MD1ZaTNFpF
+         pzig==
+X-Gm-Message-State: AFqh2ko5FSsaTdQ+9pd4wS1EEBqeZREgPybSKXx3INHvq7H5nYWCbqu+
+        UH76Bwjo2URL+pd/+1JII73qUA==
+X-Google-Smtp-Source: AMrXdXt8WYT9onKbkfM8CaJV81Gp9fudEaR2Scx8A4s5srCWVOUCIqmfOHP0RzuwYfOTN5WR9mt20w==
+X-Received: by 2002:a05:600c:2d05:b0:3d0:85b5:33d3 with SMTP id x5-20020a05600c2d0500b003d085b533d3mr23415558wmf.16.1674489349204;
+        Mon, 23 Jan 2023 07:55:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o24-20020a05600c511800b003d9de0c39fasm14623257wms.36.2023.01.23.07.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 07:55:48 -0800 (PST)
+Message-ID: <b2fee032-cd19-eea9-730f-0502274884ba@linaro.org>
+Date:   Mon, 23 Jan 2023 16:55:47 +0100
 MIME-Version: 1.0
-References: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
- <20230120082054.610626-1-michael@walle.cc> <CAFGrd9qXL-u4XzG9MLK2zbKoDudhTYpr-gJaZPjbysJ9Fo2gnQ@mail.gmail.com>
- <Y857VOG5upNJfpdM@sirena.org.uk>
-In-Reply-To: <Y857VOG5upNJfpdM@sirena.org.uk>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 23 Jan 2023 16:07:38 +0100
-Message-ID: <CAFGrd9qww=s1iox+cye_-JW=LPpUdKjLfGO1+V_1J92z7eniOw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
 Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230118-mt8365-spi-support-v1-0-842a21e50494@baylibre.com>
+ <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
+ <60766c7b-abb2-3afb-aa16-0e1385b88a73@linaro.org>
+ <CAFGrd9rtO0B2XWEEU6gtv39PndjdjLL6tbRWimWT3RvLu1GFrQ@mail.gmail.com>
+ <259d738b-5717-8fda-22f0-c61db4660e95@linaro.org>
+ <CAFGrd9qENTZV2fs52HPv291=AJdcBHpd2L_uoc9PhbO1vcKw=w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFGrd9qENTZV2fs52HPv291=AJdcBHpd2L_uoc9PhbO1vcKw=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Le lun. 23 janv. 2023 =C3=A0 13:19, Mark Brown <broonie@kernel.org> a =C3=
-=A9crit :
->
-> On Mon, Jan 23, 2023 at 10:37:58AM +0100, Alexandre Mergnat wrote:
->
-> > Yes I want to expose the SPI on the pin header for two reasons:
-> > - It's an Evaluation Kit board, I believe exposing SPI helps new
-> > customers to try/understand it.
->
-> That's not how this works.  Anyone connecting something to the
-> SPI header will need to update the DT to reflect whatever they
-> have connected, if that is something that should be controlled
-> with spidev then they should add the compatible for that thing
-> to the driver.  If that is something that has a regular driver
-> then the regular driver will be used.
+On 23/01/2023 11:06, Alexandre Mergnat wrote:
+>  Because there are no logical order:
+>     { .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
+>     { .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
+>     { .compatible = "semtech,sx1301", .data = &spidev_of_check },
+>     { .compatible = "lwn,bk4", .data = &spidev_of_check },
+>     { .compatible = "dh,dhcom-board", .data = &spidev_of_check },
+>     { .compatible = "menlo,m53cpld", .data = &spidev_of_check },
+>     { .compatible = "cisco,spi-petra", .data = &spidev_of_check },
+>     { .compatible = "micron,spi-authenta", .data = &spidev_of_check },
+>     { .compatible = "mediatek,genio", .data = &spidev_of_check },
+> 
+> I can put it first then before "rohm", or before
+> "micron,spi-authenta" you prefer.
 
-Got it. I think this series should be dropped then. If someone needs
-the SPI, then he should use overlay (or modify the DTS locally).
-I thought I could use spidev to bring SPI into the userspace, to help
-future users play with it ("/dev/spidev0.0").
+Yeah, I noticed it afterwards.
+
+> 
+> I can also introduce another patch in my serie to re-order everything.
+
+I already sent a patch for it.
+
+Best regards,
+Krzysztof
+
