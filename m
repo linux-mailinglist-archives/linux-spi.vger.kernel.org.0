@@ -2,93 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C115E67A627
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jan 2023 23:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02FF67A62F
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jan 2023 23:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjAXWup (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Jan 2023 17:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S233196AbjAXW4X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Jan 2023 17:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjAXWuo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 17:50:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB611E86;
-        Tue, 24 Jan 2023 14:50:44 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id be8so3338476plb.7;
-        Tue, 24 Jan 2023 14:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m3d2xUJzcuTZwxJedz3ZzVGOlQpQeoNyDwzZ+VWtnWw=;
-        b=bntIqt6hWU2W3cGziRRZV3oC6YWNpg8GpErUTMXsWMqAKG5BlJLnk6/k8Lm0o4vuMV
-         v+6oLpXAHLxTugmoAVORIcpanh/rNWCayI7FZiBCKImbA7yhNGlkaKAVcLPWoJFZ4LM/
-         gqqO7bckhbOUwZshLtDBu6iwzUmJLk7a4eXSOGTLCobQy/Z2AAQ1lMyZvlJ25ZWRMgGa
-         hQPRIOz9cFBHUTbvpC1z4PgqwFvhE8bxp0pqoxkSWxsW6/hlwzXYHv8ajBQ+2BWpukvd
-         crWgVvufgJyZtO7yQ4a9Llbrlt+GoZoib6MOgDAQHKYHmhSSPowLa8u6P93/I4O5uYdQ
-         8FaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m3d2xUJzcuTZwxJedz3ZzVGOlQpQeoNyDwzZ+VWtnWw=;
-        b=hrnS22PfecyX1B9B++fOZLvm1GPle/aWxcR/Lz9iFCdbKBlTf8Rajt3U11rTcHzZzK
-         uq1QAKVGgoJ5G/kT3uakSIk5ZGNN5oHBQHecVR58hUWZ4SU1hzqkdHm3lpecQQHwjSl9
-         GBczJqf5qwwfrD/MZou9YJeNyRARlIN8R7HNstu8KE1O5/C1bHlfI26/LJz5YS1COb7h
-         UXdTR0IJcJVWDoZKJNHBCUp1w+OxjG+SKS23Qr3dz3gvUKAekhybQlKqETDHJUo481Xw
-         QzGMxTbBb6uvquEn0aTYh0Y+Eg51gCs6hNkh1a8Uhfn84MaeGkd71dHBmma6UJS4HJxr
-         AG2g==
-X-Gm-Message-State: AFqh2kqpKCfzxMglW1RWz0uH5DqV93op475glyVhzXMH7sT4rIMDGBYz
-        wCjtaUn103NuHIp18nRoTP+UXpjTJnefWw==
-X-Google-Smtp-Source: AMrXdXsR/vURbmZYx/xStcEi7ddQ/TJMFPrjoT1oHcobziT+TBb6hSDR+4Ap5lpLJAfTx6FCIZif+w==
-X-Received: by 2002:a05:6a20:45b:b0:b9:5fc4:6e3b with SMTP id b27-20020a056a20045b00b000b95fc46e3bmr17802418pzb.34.1674600643280;
-        Tue, 24 Jan 2023 14:50:43 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id pg4-20020a17090b1e0400b0020b21019086sm5095625pjb.3.2023.01.24.14.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 14:50:42 -0800 (PST)
-Message-ID: <f6022623-23c2-6e1e-596d-e092f7259f2e@gmail.com>
-Date:   Tue, 24 Jan 2023 14:50:40 -0800
+        with ESMTP id S229715AbjAXW4X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 17:56:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845A3474F4
+        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 14:56:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B9EF6137B
+        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 22:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D405C4339B;
+        Tue, 24 Jan 2023 22:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674600981;
+        bh=asSmkmjAOzO/341M/jDozQuTT5pQVTDpqhweXQuz7gY=;
+        h=Subject:From:Date:To:From;
+        b=Kh5d9wfyqlEXYPQDSHCs9Y8jIveCuZy3L5Imwy33fCYvXH87V2OSl5FSHXX9NQ1jG
+         FskpuYflOkGrfp+U4DnVmf0XBRf8JahgQRpfwerg2Ah4xKVTLZSdHfA/Y+mZsUKDA7
+         n2XZJjQlsZ6qxsb7ywTFOGOFCLNHBy2PxhsxVSEwcLfQv5FXnbpRbpAVD4z+VWA9EI
+         tvYaw5uvK6Dpo8iFYGki47pM2cbdKY97+L9XMgZyWwvH61FN/3MPbR8NmD3P1Fm9YM
+         HvilsjyTyDPIi7rUzR6XeZGOkNBe5V09RzTzCq1GtmWaSe7Nbac7TNoNPoafOc7L2T
+         BdOzUiXwx5ihg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 641CFE5250F;
+        Tue, 24 Jan 2023 22:56:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 14/14] MAINTAINERS: Add entry for Broadcom Broadband
- SoC HS SPI drivers
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, linux-kernel@vger.kernel.org
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-15-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230124221218.341511-15-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167460098140.21095.8988385313483842106.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 24 Jan 2023 22:56:21 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 1/24/23 14:12, William Zhang wrote:
-> The driver and device tree doc were originally authored by Jonas Gorski
-> and it has been updated from Broadcom recently including the dts yaml
-> file and a new driver for the updated controller. Add Jonas Gorski and
-> Broadcom engineers William Zhang and Kursad Oney as the maintainers.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Latest series: [v2] spi: bcm63xx-hsspi: driver and doc updates (2023-01-24T22:12:03)
+  Superseding: [v1] spi: bcm63xx-hsspi: driver and doc updates (2023-01-06T20:08:04):
+    [01/16] dt-bindings: spi: Convert bcm63xx-hsspi bindings to json-schema
+    [02/16] dt-bindings: spi: Add bcmbca-hsspi controller support
+    [03/16] dt-bindings: spi: Add spi peripheral specific property
+    [04/16] ARM: dts: broadcom: bcmbca: Add spi controller node
+    [05/16] arm64: dts: broadcom: bcmbca: Add spi controller node
+    [06/16] spi: bcm63xx-hsspi: Endianness fix for ARM based SoC
+    [07/16] spi: bcm63xx-hsspi: Add polling mode support
+    [08/16] spi: bcm63xx-hsspi: Handle cs_change correctly
+    [09/16] spi: bcm63xx-hsspi: Fix multi-bit mode setting
+    [10/16] spi: bcm63xx-hsspi: Make dummy cs workaround as an option
+    [11/16] spi: bcm63xx-hsspi: Add prepend feature support
+    [12/16] spi: bcm63xx-hsspi: Add clock gate disable option support
+    [13/16] spi: spi-mem: Allow controller supporting mem_ops without exec_op
+    [14/16] spi: bcm63xx-hsspi: prepend: Disable spi mem dual io read op support
+    [15/16] spi: bcmbca-hsspi: Add driver for newer HSSPI controller
+    [16/16] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+
 -- 
-Florian
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
