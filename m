@@ -2,132 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF41B6791D6
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jan 2023 08:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C002679242
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jan 2023 08:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbjAXHXA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Jan 2023 02:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S232143AbjAXHrT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Jan 2023 02:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjAXHW7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 02:22:59 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADD212057
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 23:22:57 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id n7so12931653wrx.5
-        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 23:22:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hOqIhKWmcWZHOP0TZmwFeKFhIjE5xH+rrbYLVFlCH54=;
-        b=HlnNsx1iPxPtbfpnVdPKdWVG8suPrAviFixXmIx4fqt1mo3cs95gRsDFo1LkAyACg9
-         +Gjf59A/1JloygRmOugHZHlqSx5zy3E2w4OyJPZK7sArtb6QlinASrtFhTX7Z4+sMepg
-         6W18cLx0YrHJtGMFWmbchimC1aSIGdhQclufRAVX0bogB4NF4zB35EURROHjYbdSNF5m
-         LGIol1qNNgUgMJA0dSGTFX5zB3ikCfmej1JNz9dxL+YzXBxQw8h74hZzjtZEAnRCGGda
-         qIiazs6A21ZBVXLX/WP4WnZ2l6AwbCobHjOsZBZqKkkQjMfDoifB1edlkbUKpwb1SltP
-         45kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hOqIhKWmcWZHOP0TZmwFeKFhIjE5xH+rrbYLVFlCH54=;
-        b=waLqqVli9eT4pjNd0yQXkpnHQdbNOD+zxz1OaTON7iHq+fxBj9rUUhgHdb3H+Tx5r+
-         yMFYML4weylx04cVuiVFwKiTBCu/RUZzvCw1GnpKN1vJNdGFfvd5x7SnoyVujmzJFYOc
-         oWrHuuEcD7WVAOt97WhpR5FbfH1ufFfb7UDhcSFsJucpWIycLArfONSo1HZ6rSEas5Ly
-         wPd90NGqhQ9kZZYA07uHon81t1nlwrp0a/+WG4IBHI2rPeYEMcG823p/KZprjbVaNXj5
-         mhKlgmnvc19RCR0tLKt6F5uqdRQncPSpbZSXYWXXOaeheFXgUNLSj3IKDkesjzeGIwkh
-         QAtQ==
-X-Gm-Message-State: AFqh2kpwiBTn10SNX8R8satpzyYE4RW384bPjResXpz3j1t2nqxJLP5O
-        IISg6wrzWrPhFusMUSlPwp2zXQ==
-X-Google-Smtp-Source: AMrXdXvmvg2tOjBvWsrSICSJ6SCvBHlj8KhJwTP4+sjwYqWpPuD963rZLRunfa+RjjRE3GpeDKF4Vg==
-X-Received: by 2002:a05:6000:603:b0:26b:e7e1:ad03 with SMTP id bn3-20020a056000060300b0026be7e1ad03mr26799070wrb.55.1674544975569;
-        Mon, 23 Jan 2023 23:22:55 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w14-20020a5d608e000000b002bc84c55758sm1407059wrt.63.2023.01.23.23.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 23:22:55 -0800 (PST)
-Message-ID: <84233b60-2468-4be9-7aa7-bdd296fd96e8@linaro.org>
-Date:   Tue, 24 Jan 2023 08:22:51 +0100
+        with ESMTP id S232605AbjAXHrS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 02:47:18 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1583EFC8
+        for <linux-spi@vger.kernel.org>; Mon, 23 Jan 2023 23:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=EbWA+E6Gia5xCf1Kh7/yqqHAyYP
+        MfZ/BUMYaBrefxRM=; b=AOQCh8PW6cQHAHuLQ6GA2IFtt7Rp6gzFN5uVB97+1wA
+        2N7O+KWA88Va6dm1qfUMnmnir7IKDZOIfI4lDSeeITZk1x3kwCfI9La7YtTOTke0
+        jz1L4vZXcpAb+rD0cFxYrWaES2no+tqUFmPN8mnSuyYzbIFg0El7j6EERNi1K4w8
+        =
+Received: (qmail 2603269 invoked from network); 24 Jan 2023 08:47:11 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Jan 2023 08:47:11 +0100
+X-UD-Smtp-Session: l3s3148p1@eaw4uf3yWMYujnvx
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] spi: sh-msiof: Enforce fixed DTDL for R-Car H3
+Date:   Tue, 24 Jan 2023 08:47:06 +0100
+Message-Id: <20230124074706.13383-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v9 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba SoC
- SPI Controller bindings
-To:     Brad Larson <blarson@amd.com>
-Cc:     adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de, brad@pensando.io,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, broonie@kernel.org,
-        catalin.marinas@arm.com, davidgow@google.com,
-        devicetree@vger.kernel.org, fancer.lancer@gmail.com,
-        gerg@linux-m68k.org, gsomlo@gmail.com, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        lee@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, p.yadav@ti.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, rdunlap@infradead.org, robh+dt@kernel.org,
-        samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, yamada.masahiro@socionext.com
-References: <322383a5-5c2b-a1e0-d14c-6c038085301d@linaro.org>
- <20230124015721.2285-1-blarson@amd.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124015721.2285-1-blarson@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24/01/2023 02:57, Brad Larson wrote:
-> On 19/01/2023 7:55 UTC, Krzysztof Kozlowski wrote:
->> On 19/01/2023 04:51, Brad Larson wrote:
->>> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
->>>
-> ...
->>>  .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   | 14 ++++++++++++++
->>>  1 file changed, 14 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->>> index d33b72fabc5d..96b072835de0 100644
->>> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->>> @@ -37,6 +37,18 @@ allOf:
->>>      else:
->>>        required:
->>>          - interrupts
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: amd,pensando-elba-spi
->>> +    then:
->>> +      properties:
->>> +        amd,pensando-elba-syscon:
->>> +          $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +          description: AMD Pensando Elba SoC system controller
->>
->> And nothing here - neither in commit msg nor here - explains why do you
->> need it and what is it for.
-> 
-> Adding property amd,pensando-elba-syscon was a result of this thread:
-> https://lore.kernel.org/lkml/20220621101159.stvan53rvr6qugna@mobilestation/
-> 
+Documentation says only DTDL of 200 is allowed for this SoC.
 
-But it is not in the code. The code should tell what the property does,
-what is its purpose, how it is used etc. Your property description
-basically copies the name without giving any new information.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Best regards,
-Krzysztof
+Tested with MSIOF0 on a Salvator-XS with R-Car H3 ES2.0 by creating a
+loopback with a wire.
+
+ drivers/spi/spi-sh-msiof.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index 9bca3d076f05..609f48ec84dd 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -30,12 +30,15 @@
+ 
+ #include <asm/unaligned.h>
+ 
++#define SH_MSIOF_FLAG_FIXED_DTDL_200 	BIT(0)
++
+ struct sh_msiof_chipdata {
+ 	u32 bits_per_word_mask;
+ 	u16 tx_fifo_size;
+ 	u16 rx_fifo_size;
+ 	u16 ctlr_flags;
+ 	u16 min_div_pow;
++	u32 flags;
+ };
+ 
+ struct sh_msiof_spi_priv {
+@@ -1073,6 +1076,16 @@ static const struct sh_msiof_chipdata rcar_gen3_data = {
+ 	.min_div_pow = 1,
+ };
+ 
++static const struct sh_msiof_chipdata rcar_r8a7795_data = {
++	.bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
++			      SPI_BPW_MASK(24) | SPI_BPW_MASK(32),
++	.tx_fifo_size = 64,
++	.rx_fifo_size = 64,
++	.ctlr_flags = SPI_CONTROLLER_MUST_TX,
++	.min_div_pow = 1,
++	.flags = SH_MSIOF_FLAG_FIXED_DTDL_200,
++};
++
+ static const struct of_device_id sh_msiof_match[] = {
+ 	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
+ 	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
+@@ -1083,6 +1096,7 @@ static const struct of_device_id sh_msiof_match[] = {
+ 	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
+ 	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
+ 	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
++	{ .compatible = "renesas,msiof-r8a7795",   .data = &rcar_r8a7795_data },
+ 	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
+ 	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
+ 	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen3_data },
+@@ -1280,6 +1294,9 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
++	if (chipdata->flags & SH_MSIOF_FLAG_FIXED_DTDL_200)
++		info->dtdl = 200;
++
+ 	if (info->mode == MSIOF_SPI_SLAVE)
+ 		ctlr = spi_alloc_slave(&pdev->dev,
+ 				       sizeof(struct sh_msiof_spi_priv));
+-- 
+2.30.2
 
