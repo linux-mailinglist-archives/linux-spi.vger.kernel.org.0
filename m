@@ -2,43 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A80367A689
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jan 2023 00:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8760C67A692
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jan 2023 00:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbjAXXAz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Jan 2023 18:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S233911AbjAXXCe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Jan 2023 18:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjAXXAx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 18:00:53 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3590D8A54;
-        Tue, 24 Jan 2023 15:00:51 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id u13-20020a056830118d00b00686def09868so2817840otq.7;
-        Tue, 24 Jan 2023 15:00:51 -0800 (PST)
+        with ESMTP id S229740AbjAXXCd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Jan 2023 18:02:33 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FA4391C;
+        Tue, 24 Jan 2023 15:02:30 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id r9so14763522oie.13;
+        Tue, 24 Jan 2023 15:02:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=GI/5UOaSfmciN645orkiQBi7mLRaRF0ZS1ZUuYBdNvc=;
-        b=yKIgP4O58YsfeOvOQLzS5VKssaRxxNgVynRaRubV5uKNVAeEJdrVRUQaGqwrzbd8JF
-         rXn5Xi/0VoPBuauTAhGg8ZkiXLWx8iuK8GqiXSJg3gcDFm7IoTDiX/pIPZwo9GAY1a2/
-         IhjLZWhsGo+V3QMondhbBwuNCpMbvx+BWUSq5x0wpxXnrCXqlv3kwdt7FGP6YM7mYTc/
-         tti7idSIt5MXZx6Reap7IwCJK6Ee3PQbiXkRUAzcuVz5/KIBjJOqRfWFNqNZKYu/YlC/
-         bowWvx+BpjS4IJ80g+i7yZkDBuuHIm6dsgdsQw3H1zJMpzMbFti97dFMdseO+XB3cTQs
-         waHw==
-X-Gm-Message-State: AFqh2krzpBaDkbXjgM7Dn1IQqaiqbZKylfERZitDa9rgaBZLRzdBiak6
-        c9QfIYazclyWCMIycK8lXA==
-X-Google-Smtp-Source: AMrXdXtwZAvSnvJGaUSS3u1UoHFrxbCEGZ5ra6dbyH4du4dP2dJIPhqJdNtyQ1xoNiu1fbBJcFGzZA==
-X-Received: by 2002:a9d:3c5:0:b0:684:d418:573b with SMTP id f63-20020a9d03c5000000b00684d418573bmr14339968otf.29.1674601250284;
-        Tue, 24 Jan 2023 15:00:50 -0800 (PST)
+        b=EpefCg/H5v65djKr/1q8mYN3RWqIJ9Ds1MPza/8T8cEcW6lmUGhVPXqXgV708a2qVR
+         AoGzVbEO6QhUuxjHTvn2H+2FyPyd/aXl+a5tfsdJ9BIMbpIUbjD1OkGktb+voE87MFI8
+         EO4KgjUhM/4udrXLDIFVeaKErAXuA36cw8XJ3rKcrACetl+rROPkeOaJ6Tp4IoNXZG1d
+         zvgd39GCGETlkVFtrRphYVue1COrZ0StEdGdb4krgvQIzFAf24oHxNJoW5CMJeGYMpyw
+         KAZrJ1HZ+WWZ6hBsIzS1Sxm/VpHlIA9Z7Z13RZrGlHqHMHkdRS4uCbdZEwed6+ygRZGT
+         AUyw==
+X-Gm-Message-State: AFqh2kobiof0CmffllBjBaGQ8M1Yc7MPz75CjtEhp1mSI5Y0nC9GYOVV
+        HrwvrCAZ1oMs7Nen7ZkC2A==
+X-Google-Smtp-Source: AMrXdXvdr0agArHpsAjC0SYwsKJoe5IWZplu6bM//bvuJYMGkb3h85lvSOD5D3tM8CDFXlVRI5Kcdw==
+X-Received: by 2002:a05:6808:2191:b0:361:8570:d3cf with SMTP id be17-20020a056808219100b003618570d3cfmr19282175oib.6.1674601349894;
+        Tue, 24 Jan 2023 15:02:29 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f10-20020a9d2c0a000000b0068848d6b231sm322689otb.30.2023.01.24.15.00.48
+        by smtp.gmail.com with ESMTPSA id q64-20020acac043000000b0035e7ed5daa1sm1555463oif.26.2023.01.24.15.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 15:00:49 -0800 (PST)
-Received: (nullmailer pid 371735 invoked by uid 1000);
-        Tue, 24 Jan 2023 23:00:48 -0000
+        Tue, 24 Jan 2023 15:02:29 -0800 (PST)
+Received: (nullmailer pid 373886 invoked by uid 1000);
+        Tue, 24 Jan 2023 23:02:28 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         David Airlie <airlied@gmail.com>,
@@ -67,16 +67,15 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
         linux-usb@vger.kernel.org
 Subject: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties on child node schemas
-Date:   Tue, 24 Jan 2023 17:00:48 -0600
-Message-Id: <20230124230048.371144-1-robh@kernel.org>
+Date:   Tue, 24 Jan 2023 17:02:28 -0600
+Message-Id: <20230124230228.372305-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
