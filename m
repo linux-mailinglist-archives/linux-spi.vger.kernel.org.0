@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B0067AAEE
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jan 2023 08:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8DF67AAF6
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jan 2023 08:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbjAYHbs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Jan 2023 02:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S235087AbjAYHfy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Jan 2023 02:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234859AbjAYHbr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Jan 2023 02:31:47 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5011E2A4
-        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 23:31:46 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t18so3272510wro.1
-        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 23:31:46 -0800 (PST)
+        with ESMTP id S235068AbjAYHfw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Jan 2023 02:35:52 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B544997D
+        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 23:35:49 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id k16so13058188wms.2
+        for <linux-spi@vger.kernel.org>; Tue, 24 Jan 2023 23:35:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v1Heg0qkvtVQKYMAQh92dkHLnZ6nkSndgk7XA0KOw2Y=;
-        b=izLLoNlPy1AYqSm655DVnMSX9cVyFfh5NZR5blD4Kt41CPkFiCHe8lekltUmfzSSTU
-         Lxe5lIWihCIRPdp74I5YkpzDOpjYqhFSXyTQ5Tymj2pADsuakSMVSl921R6wB6lTuFQ+
-         xwGfklho5fH6mdPMS4K9F6BGrygaNfXz7H61Eowb7VkArXENliL1y96Lwg/2mkf5yM8T
-         KpLVchFdZNhpvVovR+HWD90g28/fTsv2O8/jLqNkqTEw+3yNZSW+HiLx3KiCad7rB0jb
-         pMSec8JFvqEcewLYEWvz4m1DteDHVU6gT/MZQcXMYM1Yg1B4pOkm43PLVRRlCIsjXl7f
-         ZnDw==
+        bh=JilbJ+cblhy+PqQNTAQwMy6f3HzCZej4Wl4GSB5gwcc=;
+        b=VVmrmbCy6V9T0j/KC6r6+8tu6zyHlUJ9XOm+8gHqiWcd28d3q97+VzXJcsG1G0/Omu
+         5TQXADLFI/q6u/wcESMo+NHO/NNOXOJZI26aEJDwmFTv2y51nRJ6MSDEYYLXO7J72vYu
+         QCvaoUay96G1jiR3ZOcnU1V0+66QctlIpoxwDthS++OtyuOTp4KoMftigAheeHFw3Yum
+         YPR08jCfVkDJGf4vauUs6xVNzWu/kJq0eKWxPy4aXljln3lxH/sUoRvW6YffSI8pOAjB
+         nloE0gk+ODDO0LkHLjwiBgue3ZWoTqNBxlXRI6Q7ipv2Z4cJOjvTe7hSEWtXEm95wb2C
+         8WDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1Heg0qkvtVQKYMAQh92dkHLnZ6nkSndgk7XA0KOw2Y=;
-        b=EpPefLkZOPMp41aFzVlFoaJyPYfJfoRbRc1NBz2LCaG9afEAseOTm1QEBHDIG4p2fa
-         3HqcqysZbcV/yUkrmQ5oEIOAcc88cqjLs7Ir0mqMjjtQXctocaGJb5vdJLbUu1NXyci2
-         CiR973GZypcQiweVSDTXZqArZpTbdgjzIeyrs64Syfu4JCirLqGbo+35g0z6UP5fpB0c
-         lXmNf7o11euYfHH/w1TD9RNux7UnlRRt344mTCt/sbj/SwQvMHO05A5BUwrtZAvfvTYK
-         rt5Xl3yRkkbqQ5kKoT54fpVy74hCMPj+JQQw+5RCn4wM2712sWVOwESb/szbTcrdRzEV
-         QIBA==
-X-Gm-Message-State: AFqh2koYuLPyAJWnWkppi4vlknGxozUt29y+zkLtvgbkSx2sJ8wBlts9
-        vKMNcTvTWCawtS9zLb1Nd0MPSw==
-X-Google-Smtp-Source: AMrXdXs7IvJxYrqaViVH7PHdEijBL/2Ap8J0gqK3IfGK/PYgnMGs2mssIOxJHv8mJlvw7W3rROp09g==
-X-Received: by 2002:a5d:6a51:0:b0:2bb:e7ac:af73 with SMTP id t17-20020a5d6a51000000b002bbe7acaf73mr27554884wrw.42.1674631904675;
-        Tue, 24 Jan 2023 23:31:44 -0800 (PST)
+        bh=JilbJ+cblhy+PqQNTAQwMy6f3HzCZej4Wl4GSB5gwcc=;
+        b=cBh+3jWDihTREnvJo5W8kvgCMP2hj4K9IcQogiftoXXt2XrGY9pZDMmI+FqN9xdYvM
+         7+bujdrXyB8CtdKE6aVeaGE52lCQimSdT8Yb919bm6SQgh7xkGFN7oTCUECBbVA9VKuj
+         HjyZkA6Sbz5FYGG08zqHdkGvkTKNVZVVMk/39nTN9LR6uGuPKugXcmxdVu5Alpsb0VMQ
+         x9gTpSRghZU/Qe5wwCdtutBjbBQhgrUtYx69tsrm+TNKT8tTQtY3POqo07wyE5yVbOwV
+         T5ocW0ZdmnGJzYdRCB3SN+Ixb0hveoy9Tlv0XKLn7iqrCAswwB5n1D+C9zyYXz8mJgSC
+         W6ew==
+X-Gm-Message-State: AFqh2kpdEod9yROKlrkKKakGt0lmpR0LKNgagsEYDexZvsuPPvyBq22F
+        WY4UnbwquZk0C4vXZ4dy5bTqbQ==
+X-Google-Smtp-Source: AMrXdXvwcRoKfOpVUsX76d9kLJ2jphtZE/GVoBczc3bhEDJX5/yaBT4a/4HtazmNo6bGDPmIcxvSdg==
+X-Received: by 2002:a05:600c:4687:b0:3db:2e06:4091 with SMTP id p7-20020a05600c468700b003db2e064091mr20541619wmo.37.1674632147867;
+        Tue, 24 Jan 2023 23:35:47 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z18-20020a056000111200b002366dd0e030sm3593460wrw.68.2023.01.24.23.31.43
+        by smtp.gmail.com with ESMTPSA id r1-20020a05600c424100b003d9a86a13bfsm971111wmm.28.2023.01.24.23.35.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 23:31:44 -0800 (PST)
-Message-ID: <6245a63c-8d9b-1bb0-fe8f-43516a17f3a3@linaro.org>
-Date:   Wed, 25 Jan 2023 08:31:42 +0100
+        Tue, 24 Jan 2023 23:35:47 -0800 (PST)
+Message-ID: <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
+Date:   Wed, 25 Jan 2023 08:35:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH v2 01/14] dt-bindings: spi: Convert bcm63xx-hsspi bindings
- to json-schema
+Subject: Re: [PATCH v2 02/14] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
 Content-Language: en-US
 To:     William Zhang <william.zhang@broadcom.com>,
         Linux SPI List <linux-spi@vger.kernel.org>,
@@ -69,9 +69,9 @@ Cc:     tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-2-william.zhang@broadcom.com>
+ <20230124221218.341511-3-william.zhang@broadcom.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124221218.341511-2-william.zhang@broadcom.com>
+In-Reply-To: <20230124221218.341511-3-william.zhang@broadcom.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,14 +85,201 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 24/01/2023 23:12, William Zhang wrote:
-> This is the preparation for updates on the bcm63xx hsspi driver. Convert
-> the text based bindings to json-schema per new dts requirement.
+> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
+> controller. Add new compatible strings to differentiate the old and new
+> controller while keeping MIPS based chip with the old compatible. Update
+> property requirements for these two revisions of the controller.  Also
+> add myself and Kursad as the maintainers.
 > 
 > Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > 
+> ---
+> 
+> Changes in v2:
+> - Update new compatible string to follow Broadcom convention <chip
+> specific compatible>, <version of the IP>, <fallback>
+> - Add reg-names min/maxItem constraints to be consistent with reg
+> property
+> - Make interrupts required property
+> - Remove double quote from spi-controller.yaml reference
+> - Remove brcm,use-cs-workaround flag
+> - Update the example with new compatile and interrupts property
+> - Update commit message
+> 
+>  .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 106 +++++++++++++++++-
+>  1 file changed, 101 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+> index d1a0c9adee7a..d39604654c9e 100644
+> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+> @@ -4,20 +4,73 @@
+>  $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Broadcom BCM6328 High Speed SPI controller
+> +title: Broadcom Broadband SoC High Speed SPI controller
+>  
+>  maintainers:
+> +
 
+This is a friendly reminder during the review process.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
+
+Thank you.
+
+> +  - William Zhang <william.zhang@broadcom.com>
+> +  - Kursad Oney <kursad.oney@broadcom.com>
+>    - Jonas Gorski <jonas.gorski@gmail.com>
+>  
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+
+In your previous patch, put it already in desired place (after
+"required:"), so you will not have to shuffle it.
+
+> +description: |
+> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
+> +  early MIPS based chips such as BCM6328 and BCM63268.  This initial rev 1.0
+> +  controller was carried over to recent ARM based chips, such as BCM63138,
+> +  BCM4908 and BCM6858. The old MIPS based chip should continue to use the
+> +  brcm,bcm6328-hsspi compatible string. The recent ARM based chip is required to
+> +  use the brcm,bcmbca-hsspi-v1.0 as part of its compatible string list as
+> +  defined below to match the specific chip along with ip revision info.
+> +
+> +  This rev 1.0 controller has a limitation that can not keep the chip select line
+> +  active between the SPI transfers within the same SPI message. This can
+> +  terminate the transaction to some SPI devices prematurely. The issue can be
+> +  worked around by either the controller's prepend mode or using the dummy chip
+> +  select workaround. Driver automatically picks the suitable mode based on
+> +  transfer type so it is transparent to the user.
+> +
+> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
+> +  controller rev 1.1 that add the capability to allow the driver to control chip
+> +  select explicitly. This solves the issue in the old controller.
+>  
+>  properties:
+>    compatible:
+> -    const: brcm,bcm6328-hsspi
+> +    oneOf:
+> +      - const: brcm,bcm6328-hsspi
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm47622-hsspi
+> +              - brcm,bcm4908-hsspi
+> +              - brcm,bcm63138-hsspi
+> +              - brcm,bcm63146-hsspi
+> +              - brcm,bcm63148-hsspi
+> +              - brcm,bcm63158-hsspi
+> +              - brcm,bcm63178-hsspi
+> +              - brcm,bcm6846-hsspi
+> +              - brcm,bcm6856-hsspi
+> +              - brcm,bcm6858-hsspi
+> +              - brcm,bcm6878-hsspi
+> +          - const: brcm,bcmbca-hsspi-v1.0
+> +          - const: brcm,bcmbca-hsspi
+
+Why do you need "brcm,bcmbca-hsspi"? Nothing binds to it, so it's
+useless and very generic.
+
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm4912-hsspi
+> +              - brcm,bcm6756-hsspi
+> +              - brcm,bcm6813-hsspi
+> +              - brcm,bcm6855-hsspi
+> +          - const: brcm,bcmbca-hsspi-v1.1
+> +          - const: brcm,bcmbca-hsspi
+
+Same here.
+
+>  
+>    reg:
+> -    maxItems: 1
+> +    items:
+> +      - description: main registers
+> +      - description: miscellaneous control registers
+> +    minItems: 1
+> +
+> +  reg-names:
+> +    items:
+> +      - const: hsspi
+> +      - const: spim-ctrl
+> +    minItems: 1
+>  
+>    clocks:
+>      items:
+> @@ -39,10 +92,39 @@ required:
+>    - clock-names
+>    - interrupts
+>  
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - brcm,bcm6328-hsspi
+> +              - brcm,bcmbca-hsspi-v1.0
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 1
+
+drop minItems
+
+> +          maxItems: 1
+> +        reg-names:
+> +          minItems: 1
+
+drop minItems
+
+> +          maxItems: 1
+> +    else:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reg-names:
+> +          minItems: 2
+> +          maxItems: 2
+> +      required:
+> +        - reg-names
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>      spi@10001000 {
+>          compatible = "brcm,bcm6328-hsspi";
+>          reg = <0x10001000 0x600>;
+> @@ -53,3 +135,17 @@ examples:
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+>      };
+> +  - |
+> +    spi@ff801000 {
+> +        compatible = "brcm,bcm6756-hsspi", "brcm,bcmbca-hsspi-v1.1",
+> +                     "brcm,bcmbca-hsspi";
+> +        reg = <0xff801000 0x1000>,
+> +              <0xff802610 0x4>;
+> +        reg-names = "hsspi", "spim-ctrl";
+> +        interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&hsspi>, <&hsspi_pll>;
+> +        clock-names = "hsspi", "pll";
+> +        num-cs = <8>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +    };
+
+Drop new example - the difference is only in reg. Or change old example
+to have only one (newer, more complex).
 
 Best regards,
 Krzysztof
