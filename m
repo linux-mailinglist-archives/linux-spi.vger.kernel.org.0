@@ -2,98 +2,298 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FDC67D04C
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jan 2023 16:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561A167D138
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Jan 2023 17:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjAZPeA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Jan 2023 10:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S232660AbjAZQWt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Jan 2023 11:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjAZPd7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 10:33:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3912D1555D;
-        Thu, 26 Jan 2023 07:33:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC33EB81E14;
-        Thu, 26 Jan 2023 15:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122E1C433D2;
-        Thu, 26 Jan 2023 15:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674747234;
-        bh=NYPRTBRgH3+T+bKZolHRIAsE66fPlc/ZmTUUn3fbQy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QHL1o7CTsYvYsLQyil0FZWHCm5PST3D0N+PEc45yZdvxt5t40Vt90DnBwLDBD5IiQ
-         mwUXD6YmQWU7aTJrR9hLpYAX3BKxDfoSOn6YDSBnpIY8pI6uclH7lcLylVZRklIp+h
-         uODkxJC6Bnnbjo9KRRh3rC63/H2zr87NYp+v/u0SpeHt3vzJpGv05n9bX4Ocw9zAuu
-         KOtz7ymZWVp0HKCVNzmmlqZ/8DxVim66NFeVcBBBmOEJmUdc2GzgJ9TwfZpfHmv6P6
-         TlwkCADoffekV+HFDG3arman89JVr9QbRnb9889gkxLZ82i9BAaDnZqPq2quTjO4Bj
-         G/9s7d0LIfrbg==
-Date:   Thu, 26 Jan 2023 15:33:51 +0000
-From:   Mark Brown <broonie@kernel.org>
+        with ESMTP id S232676AbjAZQWr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 11:22:47 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485E55BC
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 08:22:29 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j17so3841578lfr.3
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 08:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GHkK1DmkrPFJhPJqo/BNlt0ujD/zoBxOW4bIJ6AgCCA=;
+        b=WIrt38nI3mHVGYmUEykoGu72pgKD37Nr4h9ZdVfZcrl5erEIljHVf01aCERDjavn7p
+         Kg2YFCQEmlc9/F8NdDn62Lkmwv5ncE+PlEuOTuJmhtLsK6UlNhbB62uGagFwokqM3US9
+         rgaominkrMFTUc+TwEeT44kiGiltQAT4oULaM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GHkK1DmkrPFJhPJqo/BNlt0ujD/zoBxOW4bIJ6AgCCA=;
+        b=R+w9TRgeLiA2BX5p7A6CsLjfCrI3GIYz6NiAqmwpzxIW1yBvK4YF7l36ERtw83Xqz8
+         PULGeR+WIN497L9CuBIt9kkSrWjsE0xZQuQ0go5wUo4tGobLivyc1KmY+bLbW/4qRnPP
+         i2jFgC9LX9V+lIZGeC1/WDn6g83D+Z7dT2E4DNwSTA+AGWOSM1tx6TB3nWGBij/KusWl
+         iL7X/5nV77tPC43MXJsXTDHzhbgIqyHVs/YBqmWfJviFMH23NglCyJuu8HREHc3W7vcm
+         Gvyl9SGWXqE7XyiLYJLCM+TFFY9txrO/vk+4JZ8A8uHLi4fsjqopID827fZqhMXbBhrG
+         A1Cw==
+X-Gm-Message-State: AFqh2kp6B32293BinpaR14+OlJJlCjZVwjAVYnoUoD0KyKZ6+a6slk16
+        tF4S6m8rPmzq9U0FaTyriOY83x80Aq9wIbhYtS1t9g==
+X-Google-Smtp-Source: AMrXdXuwM68Z14kqcJpHXIU3u8z2GRTvjB35o2vtIgrFBUeXZcJuGv4OEZEXIJiFd+53C+UpxVwdfofuKWafaAVvTUs=
+X-Received: by 2002:ac2:4a78:0:b0:4ae:5b4d:b124 with SMTP id
+ q24-20020ac24a78000000b004ae5b4db124mr1673542lfp.261.1674750147577; Thu, 26
+ Jan 2023 08:22:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20230124221218.341511-1-william.zhang@broadcom.com>
+ <20230124221218.341511-9-william.zhang@broadcom.com> <CAOiHx=mQJXAkSsXkgGzpJUCzwxD1nC-Hbw3WX3OfRmp7cfFiww@mail.gmail.com>
+In-Reply-To: <CAOiHx=mQJXAkSsXkgGzpJUCzwxD1nC-Hbw3WX3OfRmp7cfFiww@mail.gmail.com>
+From:   Kursad Oney <kursad.oney@broadcom.com>
+Date:   Thu, 26 Jan 2023 11:22:15 -0500
+Message-ID: <CAMm8Nh0Lh+oUXZGCTBC-zQPQeg9-1dPUyoq34BP2ZP_vJqWX-A@mail.gmail.com>
+Subject: Re: [PATCH v2 08/14] spi: bcm63xx-hsspi: Handle cs_change correctly
 To:     Jonas Gorski <jonas.gorski@gmail.com>
 Cc:     William Zhang <william.zhang@broadcom.com>,
         Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        kernel test robot <lkp@intel.com>,
+        tomer.yacoby@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
+        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        joel.peshkin@broadcom.com, Mark Brown <broonie@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/14] spi: bcm63xx-hsspi: Add prepend mode support
-Message-ID: <Y9KdX5MFkKFI2ie3@sirena.org.uk>
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-11-william.zhang@broadcom.com>
- <CAOiHx=nfKnXwhYKfuQP4KKT-URfAg4jz-8QOh8EP3L=mvc=pUQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WcK/yTqIMBb/1oCw"
-Content-Disposition: inline
-In-Reply-To: <CAOiHx=nfKnXwhYKfuQP4KKT-URfAg4jz-8QOh8EP3L=mvc=pUQ@mail.gmail.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a7d16905f32d2786"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+--000000000000a7d16905f32d2786
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---WcK/yTqIMBb/1oCw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Jonas, William,
 
-On Thu, Jan 26, 2023 at 04:15:00PM +0100, Jonas Gorski wrote:
-> On Tue, 24 Jan 2023 at 23:33, William Zhang <william.zhang@broadcom.com> wrote:
+
+On Thu, Jan 26, 2023 at 10:13 AM Jonas Gorski <jonas.gorski@gmail.com> wrot=
+e:
+>
+> On Tue, 24 Jan 2023 at 23:33, William Zhang <william.zhang@broadcom.com> =
+wrote:
 > >
-> > Due to the controller limitation to keep the chip select low during the
-> > bus idle time between the transfer, a dummy cs workaround was used when
-> > this driver was first upstreamed to the kernel.  It basically picks the
-> > dummy cs as !actual_cs so typically dummy cs is 1 when most of the case
+> > The kernel SPI interface includes the cs_change flag that alters how
+> > the CS behaves.
+> >
+> > If we're in the middle of transfers, it tells us to unselect the
+> > CS momentarily since the target device requires that.
+> >
+> > If we're at the end of a transfer, it tells us to keep the CS
+> > selected, perhaps because the next transfer is likely targeted
+> > to the same device.
+> >
+> > We implement this scheme in the HSSPI driver in this change.
+> >
+> > Prior to this change, the CS would toggle momentarily if cs_change
+> > was set for the last transfer. This can be ignored by some or
+> > most devices, but the Microchip TPM2 device does not ignore it.
+> >
+> > With the change, the behavior is corrected and the 'glitch' is
+> > eliminated.
+> >
+> > Signed-off-by: Kursad Oney <kursad.oney@broadcom.com>
+> > Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> >
+> > ---
+> >
+> > Changes in v2:
+> > - Fix unused variable =E2=80=98reg=E2=80=99 compile warning
+> >
+> >  drivers/spi/spi-bcm63xx-hsspi.c | 29 +++++++++++++++++++++--------
+> >  1 file changed, 21 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-=
+hsspi.c
+> > index 55cbe7deba08..696e14abba2d 100644
+> > --- a/drivers/spi/spi-bcm63xx-hsspi.c
+> > +++ b/drivers/spi/spi-bcm63xx-hsspi.c
+> > @@ -338,7 +338,7 @@ static int bcm63xx_hsspi_transfer_one(struct spi_ma=
+ster *master,
+> >         struct spi_device *spi =3D msg->spi;
+> >         int status =3D -EINVAL;
+> >         int dummy_cs;
+> > -       u32 reg;
+> > +       bool restore_polarity =3D true;
+>
+> While restore polarity is how this is implemented, I think using a
+> more semantic name like keep_cs would be better.
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+This sounds reasonable to me.
 
+>
+> >
+> >         mutex_lock(&bs->msg_mutex);
+> >         /* This controller does not support keeping CS active during id=
+le.
+> > @@ -367,16 +367,29 @@ static int bcm63xx_hsspi_transfer_one(struct spi_=
+master *master,
+> >
+> >                 spi_transfer_delay_exec(t);
+> >
+> > -               if (t->cs_change)
+> > +               /*
+> > +                * cs_change rules:
+> > +                * (1) cs_change =3D 0 && last_xfer =3D 0:
+> > +                *     Do not touch the CS. On to the next xfer.
+> > +                * (2) cs_change =3D 1 && last_xfer =3D 0:
+> > +                *     Set cs =3D false before the next xfer.
+> > +                * (3) cs_change =3D 0 && last_xfer =3D 1:
+> > +                *     We want CS to be deactivated. So do NOT set cs =
+=3D false,
+> > +                *     instead just restore the original polarity. This=
+ has the
+> > +                *     same effect of deactivating the CS.
+> > +                * (4) cs_change =3D 1 && last_xfer =3D 1:
+> > +                *     We want to keep CS active. So do NOT set cs =3D =
+false, and
+> > +                *     make sure we do NOT reverse polarity.
+> > +                */
+> > +               if (t->cs_change && !list_is_last(&t->transfer_list, &m=
+sg->transfers))
+> >                         bcm63xx_hsspi_set_cs(bs, spi->chip_select, fals=
+e);
+> > +
+> > +               restore_polarity =3D !t->cs_change;
+> >         }
+>
+> I still find setting restore_polarity on each loop iteration when only
+> its last set value matters confusing and hard to read, so I still
+> propose keeping close to the generic implementation (
+> https://elixir.bootlin.com/linux/v6.1.8/source/drivers/spi/spi.c#L1560
+> ) and do
+>
+> if (t->cs_change) {
+>    if (list_is_last())
+>        restore_polarity =3D false;
+>    else
+>        bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
+> }
 
---WcK/yTqIMBb/1oCw
-Content-Type: application/pgp-signature; name="signature.asc"
+OK I think this makes sense too but it might be a bit clearer to do:
 
------BEGIN PGP SIGNATURE-----
+if (list_is_last()) {
+    if (cs_change)
+        keep_cs =3D false;
+    else
+        bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
+}
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPSnV4ACgkQJNaLcl1U
-h9BB0Qf/cXGSWLvUVl2Z61FCqmMiBXZaH8+QfbXHiYwLT8edFj3IYGwdOqcoo83z
-bMTVLnePDxBIjQBW2VFS4UegS9UwZM4dLLKSOh50Ennwfn4fWcalmWnWYELe00AY
-WCFu/Ti7R4wu27k+2XjgRBANFozx56kdFEpndNERocrFTzz9Q3kzO/2yQ1JA5aSq
-eeV8UIMLDtgpWUJifitLbEneKGmiMyqiU+fuHv759V1uzfyzVAoc1wqGZ3afd1Kj
-HSNWRmwSt0TnbbP54fueiNjveeVtBbfdMPdgpgOZlk1ZARK7SMJJv4VvtbI4MYKr
-g+FoevI2izHkSb5JDPpGNW59snuOkA==
-=ydxe
------END PGP SIGNATURE-----
+The gating condition here is when we reach the final transfer. But
+list_is_last() is more expensive, so that's another consideration.
 
---WcK/yTqIMBb/1oCw--
+>
+> While there, you might also want to check the cs_off value(s) as well.
+
+Can you explain this please?
+
+>
+>
+>
+> >
+> > -       mutex_lock(&bs->bus_mutex);
+> > -       reg =3D __raw_readl(bs->regs + HSSPI_GLOBAL_CTRL_REG);
+> > -       reg &=3D ~GLOBAL_CTRL_CS_POLARITY_MASK;
+> > -       reg |=3D bs->cs_polarity;
+> > -       __raw_writel(reg, bs->regs + HSSPI_GLOBAL_CTRL_REG);
+> > -       mutex_unlock(&bs->bus_mutex);
+> > +       bcm63xx_hsspi_set_cs(bs, dummy_cs, false);
+> > +       if (restore_polarity)
+> > +               bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
+> >
+> >         mutex_unlock(&bs->msg_mutex);
+> >         msg->status =3D status;
+> > --
+> > 2.37.3
+> >
+
+--000000000000a7d16905f32d2786
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+H97gptZzNuD5FN8AnEYMQC6vPslbDQ8OeHrqANhF8taWK+SSbnl4/km7NnYL6pYm2/HulJ7szr6k
+Bga+i8qlQQLDYjSqVnvSx4I0lnIx8mkbKOjKUkaTAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGGt1cnNhZC5vbmV5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUKWCMBqRGX3LrgDeTNWWULeUnAkw
+DQYJKoZIhvcNAQELBQADggEBAGiGVwLlVHzCwc131bPGlyqtSUpcV3ZIrDzgI5b9P928irKwLLfx
+42XWJIfF5VAW8uJunv6HyQcNeBRM52s06xq2dcX7RdXXPLUU/YX5f3PGhzcRRC6UMknFS8JuNiK2
+RdXw0IUu9RCTfRpaM27WGAYxZ7JV9ifux005OUgthb9fXYbMWSVRTm68SS3zmWnEQFFLCVK7X2/W
+eX50x5mei/gYP8RsWh/OebUYfGNnz3I6D7hU/yeXOIXxSqWJU3e87v7O4nntiBsS+np8/aI0DPwO
+9taRRqYu6VYqshU5nPIYjgZWPwbumnWj5akjBeUPbItThOMNwidMbPamkAkQI+YxggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwXP8QzF7cAzvmLbq4wDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAXouJwYpstNqblnDjK6EyH+AKFBPdtJp9HA
+tZ72hiFWMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDEyNjE2
+MjIyN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQCWmK/i2FrX38pkQpA1HCoOmWC7vtSuu35rHZedjmPry1Tr4QGSBLMw
+hvQxSbNruWfoSSKx8MnjGWDH25iK32A0u5wPW+0HWEOnAp7HJvdy0tnXJkWYBNZxCjB8kK5wDPco
+3gq8RRShrXmJqsQJRLjXApMXwZbZtw34v7441AcVDpT7OMUwiMvC8inALrChXtzZsQwsoprN4icl
+j4QCeA1MYawNIOWG59t5W/BJ2wXvU/SG12Yk1vxiKQm2TPLW4tngs5CKBiX3MuVRcJGzHGX/IFw8
+CSYAtCJOycHamH2DZ5k91kPz2thzaMBfF2aBxLvZ2DgS5j0TZ40LAtSCGKrh
+--000000000000a7d16905f32d2786--
