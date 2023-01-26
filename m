@@ -2,138 +2,190 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0DD67CCFB
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jan 2023 14:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A1167CF83
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Jan 2023 16:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjAZN54 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Jan 2023 08:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S229886AbjAZPNO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Jan 2023 10:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjAZN5y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 08:57:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82A5A5EE;
-        Thu, 26 Jan 2023 05:57:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6F6361812;
-        Thu, 26 Jan 2023 13:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49963C4339E;
-        Thu, 26 Jan 2023 13:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674741427;
-        bh=A4FypTxPt7KtjZ3a/ZCUVPqWgiTChOiIy6RcBgD/1JU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gkaXnwVcYEjaV9cKX+jk22movsCf0mow5QoNroNM4enlyYMVrd0BX9SSSpVKG4aKB
-         kKJcyiYU1Ibl/HIC9y+rRzltRAIiFTkyDCnl2iAO9vlc+6Z6pJsKr1Fb6avi6aPMMF
-         Ahq3Vu/tWoCf1/CKnYJCeD9Tp16XP45lf+BTFzvv9BnrkpdYfF9pzx5Lu/JuwSiVzc
-         CW0vbZrYiPEMLAI40mKDt5QDtkrhXGO6hv59TK98b2mxfWa+U8fvKf6gcIE84P12gL
-         WBdnpj7uRr65R5ca5j/N3VHMzdkU9cyQYT4kk9jFQ0EbqmE4oK1RnU+TIU9wnQ8y0C
-         wrYll7Oqn7Xug==
-Received: by mail-vk1-f174.google.com with SMTP id v81so910962vkv.5;
-        Thu, 26 Jan 2023 05:57:07 -0800 (PST)
-X-Gm-Message-State: AFqh2ko+7suRGPphN7Mbvkp0TaD6xBPKO15MW01+etfC+QLLHrnLzOX+
-        XBK2/lcq49J6FDbQko7cw98fZhOjMEVdYSmyVg==
-X-Google-Smtp-Source: AMrXdXvRhY3YBxnwfuP26lobnBE5EYhYWq39LHxcmJlb1XlBGvEHYkW37o5avlOJSpGKu8CjXvG7+ZOtuESLmcYg5mQ=
-X-Received: by 2002:a1f:a002:0:b0:3d5:d30f:81c2 with SMTP id
- j2-20020a1fa002000000b003d5d30f81c2mr4632814vke.14.1674741426154; Thu, 26 Jan
- 2023 05:57:06 -0800 (PST)
+        with ESMTP id S229713AbjAZPNM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 10:13:12 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FC1530C4;
+        Thu, 26 Jan 2023 07:13:00 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id be8so2078850plb.7;
+        Thu, 26 Jan 2023 07:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fJLihLuF0yKMMg408sSjk4wJtac1oa0MPZR4v84EZyk=;
+        b=ajYvFORYwYT2aGu312rNzNZC4DzemKiWaReBFW2DpSBaAOIb+hW0Bi+2bQpfmJDWL2
+         EZFkK0ABOzEEWBGifZOFcYYG64Stklwf8VHjKPiHylrsYl5TbVBWFflI8Kyqq51W+TYx
+         8gTl0i3GsOAgI/S0/wctI0nzJQuYcScjv8J8PCqXREqPlms4lPZFZ7IuI80E4nRFHCj2
+         a6vG83j3Dx7xJFt9uJkJJb2DHJlAlA5gGwAcXXzF01euoZkAZrsj5pF/wmlX4Uga7RqV
+         JYffJ4MFsvRT1RRd9Mh7jgM8CroVZiWM9HJTRXp5dvvz5J7uwMrcsT/09/VDrLiwT211
+         QEUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fJLihLuF0yKMMg408sSjk4wJtac1oa0MPZR4v84EZyk=;
+        b=I8XU35G6iBG+9xC/5bR+jhBAx7NKZmgfzhlGenWXKj6OiuCSgyiCBT9SGf0a+biq4r
+         9bgPfUGUSPGi7oBYLOVCYplWBfcIqFcwF4Eb1CJajFB/2V/i4/LegSLoS2q596y0Xa1B
+         2XVdt5VQm9VVrj0mQtETBetktyT4nYe0LAbPiVrPbEcuj7hRtfY9zPp07g8QYEcwnglA
+         rgdq9FiVp7nOjDcpUmZWvEjDDjPqbOAFLbGFoTsRNvdQeVZWgvHUtw88zU8J5aBHxH0B
+         V6y1P2wISPkYN2MZ5fxw02cVN8VenRA6vprQ1NCIgOMnheNs4ie4BnEf4dPy+Y1mavjH
+         cf0w==
+X-Gm-Message-State: AFqh2kppM0UdzDzfiC3m8SbTMWp/KoUEyl0TEQuasoLSP6jRo7zaUSVN
+        Yanp6QjWvd9k480rXoAC8NTwN14/Ifb5jWH30mw=
+X-Google-Smtp-Source: AMrXdXsaYvTBw1/bD43wF5Qyc8/V0QyLm+C2IC6gpKECwS+f8f6MVHeMq2wX1HQeAccctpOmIJCXEM/s04WRHLqpbes=
+X-Received: by 2002:a17:90b:291:b0:227:3f:57be with SMTP id
+ az17-20020a17090b029100b00227003f57bemr5724649pjb.158.1674745980446; Thu, 26
+ Jan 2023 07:13:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-3-william.zhang@broadcom.com> <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
- <ee4727e1-5705-edb0-c724-2ae4d4d1a8e2@broadcom.com> <20230125205123.GA2864330-robh@kernel.org>
- <1489564a-59d3-6d38-fad7-02119bfedbeb@broadcom.com>
-In-Reply-To: <1489564a-59d3-6d38-fad7-02119bfedbeb@broadcom.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 26 Jan 2023 07:56:54 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
-Message-ID: <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/14] dt-bindings: spi: Add bcmbca-hsspi controller support
+References: <20230124221218.341511-1-william.zhang@broadcom.com> <20230124221218.341511-9-william.zhang@broadcom.com>
+In-Reply-To: <20230124221218.341511-9-william.zhang@broadcom.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Thu, 26 Jan 2023 16:12:48 +0100
+Message-ID: <CAOiHx=mQJXAkSsXkgGzpJUCzwxD1nC-Hbw3WX3OfRmp7cfFiww@mail.gmail.com>
+Subject: Re: [PATCH v2 08/14] spi: bcm63xx-hsspi: Handle cs_change correctly
 To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
         dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 3:41 PM William Zhang
-<william.zhang@broadcom.com> wrote:
-> On 01/25/2023 12:51 PM, Rob Herring wrote:
-> > On Wed, Jan 25, 2023 at 11:23:52AM -0800, William Zhang wrote:
-> >> On 01/24/2023 11:35 PM, Krzysztof Kozlowski wrote:
-> >>> On 24/01/2023 23:12, William Zhang wrote:
-> >>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
-> >>>> controller. Add new compatible strings to differentiate the old and new
-> >>>> controller while keeping MIPS based chip with the old compatible. Update
-> >>>> property requirements for these two revisions of the controller.  Also
-> >>>> add myself and Kursad as the maintainers.
+On Tue, 24 Jan 2023 at 23:33, William Zhang <william.zhang@broadcom.com> wr=
+ote:
+>
+> The kernel SPI interface includes the cs_change flag that alters how
+> the CS behaves.
+>
+> If we're in the middle of transfers, it tells us to unselect the
+> CS momentarily since the target device requires that.
+>
+> If we're at the end of a transfer, it tells us to keep the CS
+> selected, perhaps because the next transfer is likely targeted
+> to the same device.
+>
+> We implement this scheme in the HSSPI driver in this change.
+>
+> Prior to this change, the CS would toggle momentarily if cs_change
+> was set for the last transfer. This can be ignored by some or
+> most devices, but the Microchip TPM2 device does not ignore it.
+>
+> With the change, the behavior is corrected and the 'glitch' is
+> eliminated.
+>
+> Signed-off-by: Kursad Oney <kursad.oney@broadcom.com>
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>
+> ---
+>
+> Changes in v2:
+> - Fix unused variable =E2=80=98reg=E2=80=99 compile warning
+>
+>  drivers/spi/spi-bcm63xx-hsspi.c | 29 +++++++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hs=
+spi.c
+> index 55cbe7deba08..696e14abba2d 100644
+> --- a/drivers/spi/spi-bcm63xx-hsspi.c
+> +++ b/drivers/spi/spi-bcm63xx-hsspi.c
+> @@ -338,7 +338,7 @@ static int bcm63xx_hsspi_transfer_one(struct spi_mast=
+er *master,
+>         struct spi_device *spi =3D msg->spi;
+>         int status =3D -EINVAL;
+>         int dummy_cs;
+> -       u32 reg;
+> +       bool restore_polarity =3D true;
 
-[...]
+While restore polarity is how this is implemented, I think using a
+more semantic name like keep_cs would be better.
 
-> >>>>    properties:
-> >>>>      compatible:
-> >>>> -    const: brcm,bcm6328-hsspi
-> >>>> +    oneOf:
-> >>>> +      - const: brcm,bcm6328-hsspi
-> >>>> +      - items:
-> >>>> +          - enum:
-> >>>> +              - brcm,bcm47622-hsspi
-> >>>> +              - brcm,bcm4908-hsspi
-> >>>> +              - brcm,bcm63138-hsspi
-> >>>> +              - brcm,bcm63146-hsspi
-> >>>> +              - brcm,bcm63148-hsspi
-> >>>> +              - brcm,bcm63158-hsspi
-> >>>> +              - brcm,bcm63178-hsspi
-> >>>> +              - brcm,bcm6846-hsspi
-> >>>> +              - brcm,bcm6856-hsspi
-> >>>> +              - brcm,bcm6858-hsspi
-> >>>> +              - brcm,bcm6878-hsspi
-> >>>> +          - const: brcm,bcmbca-hsspi-v1.0
-> >>>> +          - const: brcm,bcmbca-hsspi
-> >>>
-> >>> Why do you need "brcm,bcmbca-hsspi"? Nothing binds to it, so it's
-> >>> useless and very generic.
-> >>>
-> >> This was from Florian's suggestion and Broadcom's convention. See [1] and
-> >> you are okay with that [2].  I added the rev compatible and you were not
-> >> objecting it finally if I understand you correctly.
-> >
-> > Can you have a driver that only understands what 'brcm,bcmbca-hsspi' is
-> > work on all h/w that includes the compatible string? It doesn't seem
-> > like it since v1.1 is a completely new driver. Therefore
-> > 'brcm,bcmbca-hsspi' is pretty much useless.
-> >
-> 'brcm,bcmbca-hsspi' should be added to the binding table of
-> spi-bcm63xx-hsspi.c driver.   This is the initial driver that works for
-> v1.0 controller.  For v1.1 controller, yes it can fallback and work with
-> 1.0 driver spi-bcm63xx-hsspi.c simply not using the new feature in
-> v1.1(chip select signal control through software) and keeping using the
-> prepend mode or dummy cs workaround supported in 1.0 driver.
+>
+>         mutex_lock(&bs->msg_mutex);
+>         /* This controller does not support keeping CS active during idle=
+.
+> @@ -367,16 +367,29 @@ static int bcm63xx_hsspi_transfer_one(struct spi_ma=
+ster *master,
+>
+>                 spi_transfer_delay_exec(t);
+>
+> -               if (t->cs_change)
+> +               /*
+> +                * cs_change rules:
+> +                * (1) cs_change =3D 0 && last_xfer =3D 0:
+> +                *     Do not touch the CS. On to the next xfer.
+> +                * (2) cs_change =3D 1 && last_xfer =3D 0:
+> +                *     Set cs =3D false before the next xfer.
+> +                * (3) cs_change =3D 0 && last_xfer =3D 1:
+> +                *     We want CS to be deactivated. So do NOT set cs =3D=
+ false,
+> +                *     instead just restore the original polarity. This h=
+as the
+> +                *     same effect of deactivating the CS.
+> +                * (4) cs_change =3D 1 && last_xfer =3D 1:
+> +                *     We want to keep CS active. So do NOT set cs =3D fa=
+lse, and
+> +                *     make sure we do NOT reverse polarity.
+> +                */
+> +               if (t->cs_change && !list_is_last(&t->transfer_list, &msg=
+->transfers))
+>                         bcm63xx_hsspi_set_cs(bs, spi->chip_select, false)=
+;
+> +
+> +               restore_polarity =3D !t->cs_change;
+>         }
 
-If v1.1 is compatible with v1.0, then say that:
+I still find setting restore_polarity on each loop iteration when only
+its last set value matters confusing and hard to read, so I still
+propose keeping close to the generic implementation (
+https://elixir.bootlin.com/linux/v6.1.8/source/drivers/spi/spi.c#L1560
+) and do
 
-soc-compat, "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi-v1.0"
+if (t->cs_change) {
+   if (list_is_last())
+       restore_polarity =3D false;
+   else
+       bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
+}
 
-IOW, 'brcm,bcmbca-hsspi' is redundant with 'brcm,bcmbca-hsspi-v1.0'.
-They have the same meaning. So pick which one you want to use. Not
-both.
+While there, you might also want to check the cs_off value(s) as well.
 
-Also, if that is the case, you shouldn't be introducing a whole new
-driver for v1.1.
 
-Rob
+
+>
+> -       mutex_lock(&bs->bus_mutex);
+> -       reg =3D __raw_readl(bs->regs + HSSPI_GLOBAL_CTRL_REG);
+> -       reg &=3D ~GLOBAL_CTRL_CS_POLARITY_MASK;
+> -       reg |=3D bs->cs_polarity;
+> -       __raw_writel(reg, bs->regs + HSSPI_GLOBAL_CTRL_REG);
+> -       mutex_unlock(&bs->bus_mutex);
+> +       bcm63xx_hsspi_set_cs(bs, dummy_cs, false);
+> +       if (restore_polarity)
+> +               bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
+>
+>         mutex_unlock(&bs->msg_mutex);
+>         msg->status =3D status;
+> --
+> 2.37.3
+>
