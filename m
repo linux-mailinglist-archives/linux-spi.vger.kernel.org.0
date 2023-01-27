@@ -2,69 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA1A67DC1C
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jan 2023 03:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B3B67DC34
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jan 2023 03:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbjA0CGk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Jan 2023 21:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S232019AbjA0CSG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Jan 2023 21:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbjA0CGW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 21:06:22 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC677528
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:04:31 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id o5so2979520qtr.11
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:04:31 -0800 (PST)
+        with ESMTP id S231593AbjA0CSE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 21:18:04 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7461518144
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:18:01 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k13so3691547plg.0
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=QferL0wyM7JiwOxUGFvJ9v9caKx1cok3pmy/R7sU5Ps=;
-        b=ZEi2ihOXQxZVyn+G1EE72YKTYiqEZdLqCJ5twq/1MIRx2OLW96Rfy4eoOyHrnTDlht
-         R2G2ylMeSzB3ESTz6tTEE+V8HS3XL61buvO6tN6NovyJ48xWDkTZFfGhGcrg435tmJsn
-         xkQ9QTqidkuwUL6dfPQnS00sMirTkqEdEO3eE=
+        bh=/SFEWhRKWq4bBCvVAmBuN5CnSjlStrLOKxX+bI75dZU=;
+        b=VwcR/iMI379IAoyBvZERRftiuAq6mQ0b6heoJrwZYj/g/HOn5Nh1yEmQQ/DZuQpKHk
+         7sTjdxT9Wr6hu5pFoL+OiEPeZHsd3pH+rmDBE1ceBysR+BIR55mgPRUtJfdSpl3PYSSo
+         Si8RAe/5xElAAFy/SPuWG192FKBQPb3Ky6MHg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QferL0wyM7JiwOxUGFvJ9v9caKx1cok3pmy/R7sU5Ps=;
-        b=lKi3/U/Y4Mh4s6zGbOP3L3UzkdW+LD25t5TcvLDjarQH6V3qRQR+pv0VyqdpRdl03N
-         Rle/wT6VNtwVuvMcsupbSzOjf03XZntI3SxGoxthEavRsZpS85ixfsb0a0rKneKjbES4
-         TqaRwjQXmMaV/GaTNlUt4yW0v5VFPd//8k9hA6JRYPjMo8BIRx47/TabW0xgUdwZgX9b
-         Uv2W8Ho4U461QGhd1O9MCHjE+r7WuRYZ9uVFg8zFRExS7rKKTmQuyStZ0j2CapicBWMT
-         96GBCdMqVuQlkmiRspOUDPyxmi/RFo+TkqBlDz8/EEzT03ugk3nGRAQYjbi3T7fkbkXq
-         gS/w==
-X-Gm-Message-State: AFqh2kqFAyVYukkKVylzCGwEooLt+PUW/FdkwD1OXBWvpgxRR62vrW36
-        scnjzFs5qfz8NHtl9Z71NzUa+w==
-X-Google-Smtp-Source: AMrXdXsPJeRc0t92rbmg6HWq4QBJ4oiXB60f+2yn0dE+dhwRAE0RVofvSK9K9/kA+Aq9ukDRAd5Q1A==
-X-Received: by 2002:ac8:7ec4:0:b0:3b6:3c9c:59f0 with SMTP id x4-20020ac87ec4000000b003b63c9c59f0mr55066584qtj.15.1674785070449;
-        Thu, 26 Jan 2023 18:04:30 -0800 (PST)
+        bh=/SFEWhRKWq4bBCvVAmBuN5CnSjlStrLOKxX+bI75dZU=;
+        b=LTVRlCSRL/TfaIZWXSiNQMV/ARHHxZeKB+M6IeJ6ZUUDojNzz4ISwa3i6q87H8u7hU
+         wbHuc7sDWd7uzoEq6KhzmGdPQz0VSssAzVW6UMRJmmC2izTcjr6knz8bI5G5AlAgivVy
+         eY1W+I3t0SC4+ZO/15ROSz4l9RCP8BhLRVSMLL7opa+ewdgU6obhc+4ljaBH0rwkw1Od
+         dnImQwhrorYArMPClG3Jz2/8Gt8cB0w8hYvohfMpWantJ2Cbbo3D/izy0VgygHu4NbZp
+         cayHtxncGBkrKAmmGCbfnv/gHm3vCR8CrMzXalGeSvaWlOhJOpJXFcHt5dA4xutlbT8w
+         QsEQ==
+X-Gm-Message-State: AFqh2krH6kA5l0BoHvOZVSG6mdQYvJI44LJjcXtrAoAZpZiOLqo9dvJY
+        CdbGkmmqwCXqOEp8g/RwLD0XiZdswR6B/Tou
+X-Google-Smtp-Source: AMrXdXseNqAgP9wCNRzhf2QziSFajnJYJ+k9DdTvEhhfSPPyez1pwdhk8QQorkFeNd/PCThepPLPOA==
+X-Received: by 2002:a17:902:b48f:b0:189:b4d0:aee with SMTP id y15-20020a170902b48f00b00189b4d00aeemr34267897plr.67.1674785880869;
+        Thu, 26 Jan 2023 18:18:00 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id n20-20020ae9c314000000b00708fd79fab7sm2014667qkg.101.2023.01.26.18.04.28
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709026a8c00b0019603cb63d4sm1599027plk.280.2023.01.26.18.17.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Jan 2023 18:04:29 -0800 (PST)
-Subject: Re: [PATCH v2 12/14] spi: bcm63xx-hsspi: Disable spi mem dual io
+        Thu, 26 Jan 2023 18:18:00 -0800 (PST)
+Subject: Re: [PATCH v2 13/14] spi: bcmbca-hsspi: Add driver for newer HSSPI
+ controller
 To:     Jonas Gorski <jonas.gorski@gmail.com>
 Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
         dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
         dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+        kernel test robot <lkp@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-13-william.zhang@broadcom.com>
- <CAOiHx=nX5GUnE-y0HfbA3j=-YNRD6qfuYJPjyKpn0hGhOUCLLQ@mail.gmail.com>
+ <20230124221218.341511-14-william.zhang@broadcom.com>
+ <CAOiHx=mgEGe5_sn++QcPkX14+DzTw7cthabsyJaJZYQVsjLhsw@mail.gmail.com>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <ad787286-b417-83f0-0e45-b97bbe058a7f@broadcom.com>
-Date:   Thu, 26 Jan 2023 18:04:27 -0800
+Message-ID: <2f4c0e38-af4a-8b01-8327-b6d6b666780c@broadcom.com>
+Date:   Thu, 26 Jan 2023 18:17:58 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <CAOiHx=nX5GUnE-y0HfbA3j=-YNRD6qfuYJPjyKpn0hGhOUCLLQ@mail.gmail.com>
+In-Reply-To: <CAOiHx=mgEGe5_sn++QcPkX14+DzTw7cthabsyJaJZYQVsjLhsw@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003740fc05f3354929"
+        boundary="00000000000086895e05f3357974"
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -75,43 +79,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---0000000000003740fc05f3354929
+--00000000000086895e05f3357974
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/26/2023 07:15 AM, Jonas Gorski wrote:
->>
->> +static bool bcm63xx_hsspi_mem_supports_op(struct spi_mem *mem,
->> +                           const struct spi_mem_op *op)
+On 01/26/2023 07:16 AM, Jonas Gorski wrote:
+>> +static void bcmbca_hsspi_set_cs(struct bcmbca_hsspi *bs, unsigned int cs,
+>> +                                bool active)
 >> +{
->> +       if (!spi_mem_default_supports_op(mem, op))
->> +               return false;
+>> +       u32 reg;
 >> +
->> +       /* Controller doesn't support spi mem dual/quad read cmd in prepend mode */
->> +       if ((op->cmd.opcode == 0xbb) || (op->cmd.opcode == 0xeb))
+>> +       /* No cs orerriden needed for SS7 internal cs on pcm based voice dev */
+>> +       if (cs == 7)
+>> +               return;
+>> +
+>> +       mutex_lock(&bs->bus_mutex);
+>> +
+>> +       if (active) {
+>> +               /* activate cs by setting the override bit and active value bit*/
+>> +               reg = __raw_readl(bs->spim_ctrl);
+>> +               reg |= BIT(cs+SPIM_CTRL_CS_OVERRIDE_SEL_SHIFT);
 > 
-> There are defines in linux/mtd/spi-nor.h you can use:
+> Doesn't checkpatch complain about missing spaces around the operator (+)?
 > 
-> if ((op->cmd.opcode == SPINOR_OP_READ_1_2_2) || (op->cmd.opcode ==
-> SPINOR_OP_READ_1_4_4))
-> 
-> Though SPINOR_OP_READ_1_4_4 seems to be redundant, since the
-> controller does not support quad mode, and does not advertise it, so
-> it should never even be an option.
-> 
-> Looking at that file, instead what is missing is
-> SPINOR_OP_READ_1_2_2_4B (0xbc) which shouldn't be usable either.
-> 
+Nope...
 
-You are right.  I was only looking at the spi nand header which does not 
-have this clear definition.  Will use them and drop the quad IO opcode 
-for the reason you mentioned.
+>> +               reg &= ~BIT(cs+SPIM_CTRL_CS_OVERRIDE_VAL_SHIFT);
+>> +               if (bs->cs_polarity & BIT(cs))
+>> +                       reg |= BIT(cs+SPIM_CTRL_CS_OVERRIDE_VAL_SHIFT);
+> 
+> Does the CS_OVERRIDE_VAL get reset on clearing the OVERRIDE_SEL bit or
+> it is persistent? If the latter, you could initialize its value in
+> bcmbca_hsspi_setup() and then this becomes:
+> 
+> reg = _raw_readl(bs->spim_ctrl);
+> if (active)
+>     reg |= BIT(cs+SPIM_CTRL_CS_OVERRIDE_SEL_SHIFT);
+> else
+>     reg &= ~BIT(cs + SPIM_CTRL_CS_OVERRIDE_SEL_SHIFT);
+>   __raw_writel(reg, bs->spim_ctrl);
+> 
+> and you can drop the cs_polarity field.
+> 
+> 
+No. So I will try this optimization and see if that actually works in 
+the controller.
 
+>> +               __raw_writel(reg, bs->spim_ctrl);
+>> +       } else {
+>> +               /* clear the cs override bit */
+>> +               reg = __raw_readl(bs->spim_ctrl);
+>> +               reg &= ~BIT(cs+SPIM_CTRL_CS_OVERRIDE_SEL_SHIFT);
+>> +               __raw_writel(reg, bs->spim_ctrl);
+>> +       }
+>> +
+>> +       mutex_unlock(&bs->bus_mutex);
+>> +}
+>> +
 
---0000000000003740fc05f3354929
+--00000000000086895e05f3357974
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -182,13 +211,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINTmPiKFBSkM+m227PKJQfwiM2BO
-6fMo80rOaqMMzk6uMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEyNzAyMDQzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJqezjFJqwBwb/5FLvs0oxh6G86l
+/eGHqE9SrdAxE/jnMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEyNzAyMTgwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCSLNbsxkadN6Sei0S0MtvrdXbmHRlKTv3wYzzeZzDB0bo7
-gtUnLTcrS70lzoCfdlh2I0yHNsUAwOIocSCEYpFKZa8uzG/qZ3UZjRk0ncNCtWDg5fq06nK3+cRn
-v89eRyz5r2VwmABVRF+Cs23LwksdNZVzsnUkCF78WHu4WBKzdVxQXawd3Xtz4LP3LvXgonpl97LV
-y4WHxriiYwLbMKs01pboN977HyB5hDSt5CJ355AbQvqCKSafLJvM15YIer5EXPnZFjVTutCyyPm7
-ga7a3z6IqPv0Nrpa6vxid6oPQCgRfOYSHd7p9K67Z/zaSYWcXKHoUKjllJBiAzQXxQ1m
---0000000000003740fc05f3354929--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQDFr38u9wSy01cbxAuPvfm0Z1SENPDYlnrshrHFaS8/h1c5
+Lic+tyVu9+moY096G2jTQwmerq9jraOqCDnuLkyHp+hQr7Jp/7BFIU2Qfd7aDNlL4svlkrBtv2l/
+imrHT9/ARBEQtnU+CO5JEARdnjbTjtEch+5Uu2dI5BsjPar3fOT0W6simurBBr7MhBIQI0lQrbQZ
+cGm6QKluRp2dR7OuqH9LOHJPrFPK2swbsQ3X7Xw762NuI5Mz66O3CJvuWr5Wkwek5WegChz57DKd
+xEu/ViaUa6cq2tWEjdI+MBBNHVCkZD0QzjoVvY8qdaf5d5j6O/yFZTDz8ww0gP5+BOWN
+--00000000000086895e05f3357974--
