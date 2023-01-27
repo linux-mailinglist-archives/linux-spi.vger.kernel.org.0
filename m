@@ -2,70 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03C767DC7A
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jan 2023 04:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E6367DC89
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jan 2023 04:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbjA0DAA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Jan 2023 22:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S229930AbjA0DK0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Jan 2023 22:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbjA0C76 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 21:59:58 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7A32ED64
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:59:52 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id g16so3089346qtu.2
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:59:52 -0800 (PST)
+        with ESMTP id S229663AbjA0DK0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 22:10:26 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB5C1C31C
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 19:10:25 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n2so2443631pfo.3
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 19:10:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=W9G3siBeoypE2/zAYU+vYTHqMPKdzCq1snDYPev4FGY=;
-        b=a0zWvcf5RT7XcfsKhX2Sho8dgrhbpnywV0ctOsVYQK72YEedYpSYzLKHpLO+MXoYDu
-         nYJ1g6Owvq1T2WVwtLwdZFguf7LZQH3nlp+CsbVspel/hxFi7J3DTBV4A6sM2lCtF0CA
-         CkRI/KNL0FJyqVbwaDhybteNm+i3E/t8cpUxY=
+        bh=tlMb+spqh8yi+237LfkIolldX8/VSA+NRwv1BYSAgwc=;
+        b=O3TFdOALRUCHYvLv3t0gUjwv2rpaUud8IXVjIc+URChGs7H2bbmC5S6W2D2TP5tGoq
+         Ij2D05i5aYidbX3Gej6CrJM+23KrjqGrQvCcAUHaVDHbdtQiatGFX7nrL+73p7lDdGi1
+         KAZqdvbu3GKaioOnqKreCsbEBt7grkxfFVQUw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W9G3siBeoypE2/zAYU+vYTHqMPKdzCq1snDYPev4FGY=;
-        b=r0Wq0KRDfetH4WWsgtJoDoRjOgtk5BU9CSTEvFPdzRIGwi8bjkAg9SbMeTt4t8LkxZ
-         WWUD3wfYZiaQrPNzrwGpefdSExsOohhbfRQDLjJy8xKtKmnbAAxk2xqnkrGisg2rWvlW
-         Ialg3y7CATLBEWUddmUW0lXB/f4pZvBSZFRjNFjX4sSi7bncoGYb3ZnYVDZj4QtbUe96
-         f/+U2kfBODvgBUylwXl3bFK7/T0tOvijFAfbpi7MRfmGbM78ek9UIXPZFR5CW3NxTvWq
-         DWCe+J2xuWZD3WCB/lmDhfbeBfYdle01hgIeQMj9bsaQ4nee2JM8RIRSSTVYr9eEKR+N
-         YNtQ==
-X-Gm-Message-State: AO0yUKXFI77vYY0kaK1RvnHDSTcJ3047ajtZFXZYNmbfCXRDU2rsEZ67
-        WpmBb5qHgxe046hQYRRT8Ynlsg==
-X-Google-Smtp-Source: AK7set9iiF0M9KTCJRRB5kot2CQ0Jr+FTEyBDwuJEGMMPsM8bn6J48LYD0lD9i1e5RgKOs838oaNqw==
-X-Received: by 2002:ac8:5cc6:0:b0:3b6:414f:c2ba with SMTP id s6-20020ac85cc6000000b003b6414fc2bamr15080524qta.38.1674788391235;
-        Thu, 26 Jan 2023 18:59:51 -0800 (PST)
+        bh=tlMb+spqh8yi+237LfkIolldX8/VSA+NRwv1BYSAgwc=;
+        b=E3ZTxh95YQYswn27B8qLf97plk+UkOnPh0KEMLlS2ywu+oom49ACz8NoaGJvD3VJ9D
+         l/QiLT5Ds6NixomB0sIlTkWVZ5XOVwZtUsXgmWXy1aLToE6FMKqrMgEVTti6viQFL6mn
+         Pw/eIrT0SSmCT15Vb/y4LrgUlisgiCu2cuNRCd4LijEcO7HLGFt4Ly0AYqpRuLIzoLmG
+         AF0rkBBM68BhtxUh+NxFDeiqIKNlmzqvpB+mB6WvWCoO3aREZkaA/wSxXJPFrKglTfHj
+         hB8Ec7DUFdCaLYEIPHuPwR8v1N/UOAo3J5ZZzXYK9xs87ac8vcBNtYJ4CXB8N7eCQVIv
+         DQyg==
+X-Gm-Message-State: AFqh2kprmNQFdmQ9wqj//b2sB4jw6eqF1xxScqJ1i/3pOwb2k39Yioab
+        +AinWN3d1d8FUjSY3WQWP+f0QQ==
+X-Google-Smtp-Source: AMrXdXsbpsv7AhejQYbX21h0+j8gpQphDW1/eDkQeylyCX9HmU8wTIKlLW+wJdzi7bnBjKpQ4oUBhA==
+X-Received: by 2002:aa7:8611:0:b0:582:df2e:595d with SMTP id p17-20020aa78611000000b00582df2e595dmr36462203pfn.4.1674789024445;
+        Thu, 26 Jan 2023 19:10:24 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id i1-20020a37b801000000b00702d1c6e7bbsm2014532qkf.130.2023.01.26.18.59.48
+        by smtp.gmail.com with ESMTPSA id b17-20020aa78ed1000000b00580e3917af7sm1521348pfr.117.2023.01.26.19.10.22
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Jan 2023 18:59:50 -0800 (PST)
-Subject: Re: [PATCH v2 10/14] spi: bcm63xx-hsspi: Add prepend mode support
-To:     Jonas Gorski <jonas.gorski@gmail.com>
+        Thu, 26 Jan 2023 19:10:23 -0800 (PST)
+Subject: Re: [PATCH v2 08/14] spi: bcm63xx-hsspi: Handle cs_change correctly
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Kursad Oney <kursad.oney@broadcom.com>
 Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+        tomer.yacoby@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
+        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        joel.peshkin@broadcom.com, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org
 References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-11-william.zhang@broadcom.com>
- <CAOiHx=nfKnXwhYKfuQP4KKT-URfAg4jz-8QOh8EP3L=mvc=pUQ@mail.gmail.com>
+ <20230124221218.341511-9-william.zhang@broadcom.com>
+ <CAOiHx=mQJXAkSsXkgGzpJUCzwxD1nC-Hbw3WX3OfRmp7cfFiww@mail.gmail.com>
+ <CAMm8Nh0Lh+oUXZGCTBC-zQPQeg9-1dPUyoq34BP2ZP_vJqWX-A@mail.gmail.com>
+ <CAOiHx=nZBot4xuZ4aG6-4Ch18wNOK0Ud2+z7B2W7+YEc+U3DHg@mail.gmail.com>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <dfba682c-c855-df9c-4081-cd65ada5f61b@broadcom.com>
-Date:   Thu, 26 Jan 2023 18:59:48 -0800
+Message-ID: <f208f86e-06dd-5d46-071d-501968c773bc@broadcom.com>
+Date:   Thu, 26 Jan 2023 19:10:22 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <CAOiHx=nfKnXwhYKfuQP4KKT-URfAg4jz-8QOh8EP3L=mvc=pUQ@mail.gmail.com>
+In-Reply-To: <CAOiHx=nZBot4xuZ4aG6-4Ch18wNOK0Ud2+z7B2W7+YEc+U3DHg@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000027b4e605f3360fcf"
+        boundary="000000000000e67f7505f33634ac"
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -76,297 +78,73 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---00000000000027b4e605f3360fcf
+--000000000000e67f7505f33634ac
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/26/2023 07:15 AM, Jonas Gorski wrote:
->> +static int bcm63xx_hsspi_wait_cmd(struct bcm63xx_hsspi *bs)
->> +{
->> +       unsigned long limit;
->> +       u32 reg = 0;
->> +       int rc = 0;
+On 01/26/2023 09:33 AM, Jonas Gorski wrote:
+> Hi Kursad,
 > 
-> If the only possible return values are 0 and 1, maybe this should be a bool?
-> 
-Well it is possible we may want to return to some specific error code so 
-I would prefer to keep it as is.
-
->> +
->> +       if (bs->wait_mode == HSSPI_WAIT_MODE_INTR) {
->> +               if (wait_for_completion_timeout(&bs->done, HZ) == 0)
->> +                       rc = 1;
->> +       } else {
->> +               /* polling mode checks for status busy bit */
->> +               limit = jiffies + msecs_to_jiffies(HSSPI_POLL_STATUS_TIMEOUT_MS);
->> +
->> +               while (!time_after(jiffies, limit)) {
->> +                       reg = __raw_readl(bs->regs + HSSPI_PINGPONG_STATUS_REG(0));
->> +                       if (reg & HSSPI_PINGPONG_STATUS_SRC_BUSY)
->> +                               cpu_relax();
->> +                       else
->> +                               break;
->> +               }
->> +               if (reg & HSSPI_PINGPONG_STATUS_SRC_BUSY)
->> +                       rc = 1;
->> +       }
->> +
->> +       if (rc)
->> +               dev_err(&bs->pdev->dev, "transfer timed out!\n");
->> +
->> +       return rc;
->> +}
->> +
->> +static bool bcm63xx_check_msg_prependable(struct spi_master *master,
->> +                                         struct spi_message *msg,
->> +                                         struct spi_transfer *t_prepend)
-> 
-> This function does more than just checking, so I think a more
-> appropriate name would be something like
-> 
-> bcm63xx_prepare_prepend_transfer()
-> 
-That's reasonable. The function kind of evolved from the checking only.
-
->> +{
->> +
->> +       struct bcm63xx_hsspi *bs = spi_master_get_devdata(master);
->> +       bool prepend = false, tx_only = false;
->> +       struct spi_transfer *t;
->> +
->> +       /* If it is forced cs dummy workaround mode, no need to prepend message */
->> +       if (bs->xfer_mode == HSSPI_XFER_MODE_DUMMYCS)
->> +               return false;
-> 
-> That's a weird point for that, why not just move this to the caller
-> and check it before calling the function.
-> 
-True following your above function name change suggestion.
-
->> +
->> +       /*
->> +        * Multiple transfers within a message may be combined into one transfer
->> +        * to the controller using its prepend feature. A SPI message is prependable
->> +        * only if the following are all true:
->> +        *   1. One or more half duplex write transfer in single bit mode
->> +        *   2. Optional full duplex read/write at the end
->> +        *   3. No delay and cs_change between transfers
->> +        */
->> +       bs->prepend_cnt = 0;
->> +       list_for_each_entry(t, &msg->transfers, transfer_list) {
->> +               if ((spi_delay_to_ns(&t->delay, t) > 0) || t->cs_change) {
->> +                       dev_warn(&bs->pdev->dev,
->> +                                "Delay or cs change not supported in prepend mode!\n");
-> 
-> I don't think warn is the right level. If we are on XFER_MODE_AUTO,
-> this should be _dbg, since we will just fall back to the dummy cs
-> mode, if we are on XFER_MODE_PREPEND, this should be dev_err, since we
-> cannot do the message.
-> 
-I was relying on this to see the message when we fall back. But 
-certainly I can fine tune the message level as you suggested
-
-> cs->change is technically supported when all that's requested is a
-> between transfer cs toggle (t->cs_change is true, t->cs_off is false
-> and next transfer's cs_off is also false), which automatically happens
-> after the transfer. Not sure if it is worth the effort implementing
-> that though.
-> 
-If this cs toggling is between the transfers that we are merging here, 
-then no as the cs will be always active during merged transfer in 
-prepend mode.
-
->> +                       break;
->> +               }
->> +
->> +               tx_only = false;
->> +               if (t->tx_buf && !t->rx_buf) {
->> +                       tx_only = true;
->> +                       if (bs->prepend_cnt + t->len >
->> +                               (HSSPI_BUFFER_LEN - HSSPI_OPCODE_LEN)) {
->> +                               dev_warn(&bs->pdev->dev,
->> +                                        "exceed max buf len, abort prepending transfers!\n");
->> +                               break;
-> 
-> why not just return false here directly? And everywhere else where you
-> decided that you cannot use prepend.
-> Sure I can eliminate the prepend variable and return directly
-
->> +                       }
->> +
->> +                       if (t->tx_nbits > SPI_NBITS_SINGLE &&
->> +                               !list_is_last(&t->transfer_list, &msg->transfers)) {
->> +                               dev_warn(&bs->pdev->dev,
->> +                                        "multi-bit prepend buf not supported!\n");
->> +                               break;
->> +                       }
->> +
->> +                       if (t->tx_nbits == SPI_NBITS_SINGLE) {
->> +                               memcpy(bs->prepend_buf + bs->prepend_cnt, t->tx_buf, t->len);
->> +                               bs->prepend_cnt += t->len;
->> +                       }
->> +               } else {
->> +                       if (!list_is_last(&t->transfer_list, &msg->transfers)) {
->> +                               dev_warn(&bs->pdev->dev,
->> +                                        "rx/tx_rx transfer not supported when it is not last one!\n");
-> 
-> This is only an issue if doing multi-bit RX/TX; for single bit you can
-> just upgrade the whole transfer/message to duplex, you just need to
-> pick the read bytes then from the right offsets.
-> 
-I am not sure if this will work all the case.  Considering two transfers 
-rx 3 bytes then tx 3 bytes in the message(not sure if there is any 
-device requires this kind of message but just for discussion 
-purpose...),  if I upgrade it to duplex message,  the controller will 
-transfer and receive 6 bytes data in duplex mode where prepend count is 
-zero.  So the extra 3 tx bytes while receiving the first 3 bytes may 
-disturb the device as they are not expected.  It may or may not work. I 
-would rather just fallback to dummy cs workaround instead of causing 
-potentially issue.
-
->> +                               break;
->> +                       }
->> +               }
->> +
->> +               if (list_is_last(&t->transfer_list, &msg->transfers)) {
->> +                       memcpy(t_prepend, t, sizeof(struct spi_transfer));
->> +
->> +                       if (tx_only && t->tx_nbits == SPI_NBITS_SINGLE) {
->> +                               /*
->> +                                * if the last one is also a single bit tx only transfer, merge
->> +                                * all of them into one single tx transfer
->> +                                */
->> +                               t_prepend->len = bs->prepend_cnt;
->> +                               t_prepend->tx_buf = bs->prepend_buf;
->> +                               bs->prepend_cnt = 0;
->> +                       } else {
->> +                               /*
->> +                                * if the last one is not a tx only transfer or dual tx xfer, all
->> +                                * the previous transfers are sent through prepend bytes and
->> +                                * make sure it does not exceed the max prepend len
->> +                                */
->> +                               if (bs->prepend_cnt > HSSPI_MAX_PREPEND_LEN) {
->> +                                       dev_warn(&bs->pdev->dev,
->> +                                               "exceed max prepend len, abort prepending transfers!\n");
->> +                                       break;
-> 
-> Likewise, you can merge any amount or rx/tx/rxtx single bit transfers
-> together as a duplex transfer with prepend len set to 0 (so
-> technically not a prepend anymore ;-)
-Same here.  Let's just fallback to dummy cs workaround mode.
-
-> 
->> +                               }
->> +                       }
->> +                       prepend = true;
->> +               }
->> +       }
->> +
->> +       return prepend;
-> 
-> and then if you already returned false if you cannot do prepend, you
-> just need to return true here and don't need the prepend variable.
-> 
->> +}
->> +
+> On Thu, 26 Jan 2023 at 17:22, Kursad Oney <kursad.oney@broadcom.com> wrote:
+>>>
+>>> While there, you might also want to check the cs_off value(s) as well.
 >>
-
-
->>   static int bcm63xx_hsspi_setup(struct spi_device *spi)
->> @@ -344,9 +578,23 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
->>          int status = -EINVAL;
->>          int dummy_cs;
->>          bool restore_polarity = true;
->> +       struct spi_transfer t_prepend;
->>
->>          mutex_lock(&bs->msg_mutex);
->> -       /* This controller does not support keeping CS active during idle.
->> +       if (bcm63xx_check_msg_prependable(master, msg, &t_prepend)) {
->> +               status = bcm63xx_hsspi_do_prepend_txrx(spi, &t_prepend);
->> +               msg->actual_length += (t_prepend.len + bs->prepend_cnt);
+>> Can you explain this please?
 > 
-> why +=? shouldn't this be the only place in this case where this is set?
+> I'm talking about the transfer property cs_off:
 > 
-probably copy/paste error from the dummy cs loop.  Will fix.
-
->> +               goto msg_done;
->> +       }
->> +
->> +       if (bs->xfer_mode == HSSPI_XFER_MODE_PREPEND) {
->> +               dev_warn(&bs->pdev->dev,
->> +                       "User set prepend mode but msg not prependable! Fail the xfer!\n");
+> " @cs_off: performs the transfer with chipselect off."
 > 
-> If we are failing, this should be a dev_err, not a dev_warn
+> See how it is handled in the generic spi_transfer_one_message():
 > 
-Will fix.
-
->> +               goto msg_done;
->> +       }
-> 
-> I think from a readability standpoint it would be better to move the
-> cs_workaround parts into their own function, and have this as
-> 
->      bool prependable = false;
-> 
->      if (bs->xfer_mode != HSSPI_XFER_MODE_DUMMYCS)
->          prependable = bcm63xx_prepare_prepend_transfer(...);
-> 
->      if (prependable) {
->        status = bcm63xx_hsspi_do_prepend_txrx(...);
->        msg->actual_legth += ...;
->      } else {
->        if (bs->xfer_mode == HSSPI_XFER_MODE_PREPEND) {
->             /* we may not use dummy cs */
->             dev_err(...);
->             status = -EINVAL;
->        } else {
->             status = bcm63xx_hsspi_do_dummy_cs_txrx(...);
+>          spi_set_cs(msg->spi, !xfer->cs_off, false);
+>          ...
+>          list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+>                  ...
+>                  if (xfer->cs_change) {
+>                          if (list_is_last(&xfer->transfer_list,
+>                                           &msg->transfers)) {
+>                                  keep_cs = true;
+>                          } else {
+>                                  if (!xfer->cs_off)
+>                                          spi_set_cs(msg->spi, false, false);
+>                                  _spi_transfer_cs_change_delay(msg, xfer);
+>                                  if (!list_next_entry(xfer,
+> transfer_list)->cs_off)
+>                                          spi_set_cs(msg->spi, true, false);
+>                          }
+>                  } else if (!list_is_last(&xfer->transfer_list,
+> &msg->transfers) &&
+>                             xfer->cs_off != list_next_entry(xfer,
+> transfer_list)->cs_off) {
+>                          spi_set_cs(msg->spi, xfer->cs_off, false);
+>                  }
+>                  ...
 >        }
->      }
 > 
-> with (bcm63xx_hsspi_do_dummy_cs_txrx being the proposed function name).
+> if we fix the cs_change handling, we might as well bring it up to state.
 > 
-Sound good to me.
+We can blindly port this logic over but this cs_off stuff (from the 
+spi.h comment @cs_off: performs the transfer with chipselect off) sounds 
+weird.  What kind of device do transfer when cs is off? I don't have any 
+device like this to test.
 
->> +
->> +       /*
->> +        * This controller does not support keeping CS active during idle.
->>           * To work around this, we use the following ugly hack:
->>           *
->>           * a. Invert the target chip select's polarity so it will be active.
->> @@ -364,6 +612,17 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
->>          bcm63xx_hsspi_set_cs(bs, dummy_cs, true);
->>
->>          list_for_each_entry(t, &msg->transfers, transfer_list) {
->> +               /*
->> +                * We are here because one of reasons below:
->> +                * a. Message is not prependable and in default auto xfer mode. This mean
->> +                *    we fallback to dummy cs mode at maximum 25MHz safe clock rate.
->> +                * b. User set to use the dummy cs mode.
->> +                */
->> +               if (bs->xfer_mode == HSSPI_XFER_MODE_AUTO) {
->> +                       if (t->speed_hz > HSSPI_MAX_SYNC_CLOCK)
->> +                               t->speed_hz = HSSPI_MAX_SYNC_CLOCK;
+> In theory I would suggest to switch to implementing the set_cs() /
+> transfer_one() so you could let the core take care of all of that, but
+> that wouldn't work with dynamically switching to prepend mode. Might
+> be something for v1.1 though.
 > 
-> OTOH, this may be a point where a dev_warn (once?) might be a good
-> idea, since the device may depend on a certain speed to avoid buffer
-> overruns (e.g. audio streams - not sure if that exists), so a warning
-> that the transfer speed was reduced will help identifying the source.
-> 
-> 
-That make sense. Should add a warning here.
+That is good idea and I can certainly try that.
 
 > 
->> +               }
->> +
->>                  status = bcm63xx_hsspi_do_txrx(spi, t);
->>                  if (status)
->>                          break;
+> Regards
+> Jonas
+> 
 
---00000000000027b4e605f3360fcf
+--000000000000e67f7505f33634ac
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -437,13 +215,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ4oAm31JAlaovkLG5KsQD8AF2P3
-7BKU70cVsnPwgra0MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEyNzAyNTk1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEII0Syt/4wKGIwpf6W99XvQer8GxJ
+KTzW+QTTV8Ce0qt9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEyNzAzMTAyNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQB/QkoU4zO3tNiRQEYaQtveWlVahJQy0AAmjF/YoQ5xK9B9
-RXrgf1yn769PMW2QpkAolkXOhcET3a16umRQ/icbX4OMqQQcp9rDhasZ96UHu/wQ6G13V/lGLrIk
-lIbqjLeIC/tz47Pg6v7PzpwQ4jk34JVfzo30oVfsYBKgYY7U0bmq2vXVpOv6m5re/QCn7JUqQ99U
-8hFQKaVuDBUD74gSGSlgFv2t/25HIWrXM27LB4sCjD8a9JqKu0zvf5VWEf79eSSJDcLZ3lfm1uQo
-n1tJeiKMwI6fZXfePKOgD2JU0QzJZx/vQV0AKkZC66PF5+DOMANjPOCUro3Qfy9OEDzO
---00000000000027b4e605f3360fcf--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQC2Uy3cBxOlz73NOzJ1svJfVfcxj0ZqtHD1GRfALuNH2omG
+4nd7DyVq3iEjxczlnEzULY0Ekq9cAa32CtvqpwQ5bF7zzu4q/afsSEU+4Gz+S7TBcTf8J5rcs4+B
++mC8h8UvfJbHfKi8L/WViOwlOPx+o7ufqWJ52V33i4PjTB6xkln/Pw5yG4QAtLMqi9aYDbQNBad+
+r5G6pwLSvR7PNmJAbqPr4YqiFy0lrPH99+CwSP1VNlB7FcGeEJIMMfdvkrQSV/YZSTlrZhXl27vy
++UsEgegxV4i7IUNn35UxWOrDWzkqMDXMVpjVvRmIfFFRkXiV/FThxu/I0nYBBG13OAc8
+--000000000000e67f7505f33634ac--
