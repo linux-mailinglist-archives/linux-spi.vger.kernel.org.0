@@ -2,78 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE74A67D5DF
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jan 2023 21:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA1A67DC1C
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jan 2023 03:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjAZUEM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Jan 2023 15:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S233751AbjA0CGk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Jan 2023 21:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjAZUEL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 15:04:11 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FBB4C12
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 12:04:10 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id z9so2272737qtv.5
-        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 12:04:10 -0800 (PST)
+        with ESMTP id S233749AbjA0CGW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Jan 2023 21:06:22 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC677528
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:04:31 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id o5so2979520qtr.11
+        for <linux-spi@vger.kernel.org>; Thu, 26 Jan 2023 18:04:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RcYb7zcPWIcfX8+IQjzFuJJfaYOZn0QIV8B5GrtyP0=;
-        b=RBLAoIk/PbIEFYSMHuQGB+bki5lK5XbzGypVR642wukqypx6or1EhC6NWC9F4anLv9
-         dGnKLJW98u7AhXWxp1qPqaU6zWhFXK9Y4p8hxGeqbQnV0nFzIdzwjOgJ7xxSSWycl3nS
-         /HDPfq0djyM75DaZpD7+xv8ywHdu1mCeGiE4M=
+        bh=QferL0wyM7JiwOxUGFvJ9v9caKx1cok3pmy/R7sU5Ps=;
+        b=ZEi2ihOXQxZVyn+G1EE72YKTYiqEZdLqCJ5twq/1MIRx2OLW96Rfy4eoOyHrnTDlht
+         R2G2ylMeSzB3ESTz6tTEE+V8HS3XL61buvO6tN6NovyJ48xWDkTZFfGhGcrg435tmJsn
+         xkQ9QTqidkuwUL6dfPQnS00sMirTkqEdEO3eE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2RcYb7zcPWIcfX8+IQjzFuJJfaYOZn0QIV8B5GrtyP0=;
-        b=c9RVlanIJP6+/+/FLJDaaY1EatklMURZk68pPfcFi5mWd91AtDk1jiAyJM3o3wh91k
-         FvNrAFBJbtB8hFCJH+5r6aUsGZQuDhHEKcUpAUHJVoTkTL/KTJsyf0YpM9hCHG148zUY
-         sY5AMFr+cAIDPyhFhIxFkZYweoYarFy6h0gBYw3Y44kmX9eMDYh8YVfnYViiEhAVaaEr
-         5GvhJw+Gjj1DGWxO41Bx8FpeosMlGq76ORHx4PmeqsoR+zc3Cl7S7QQg6vPfvpw2yxTC
-         KTOqzqWc/tq9ikMDRCSWZ8Q+TYYePT5diqdd4HfXkWV0KCdmbXCcTUk3w4h93vL2i4J6
-         /z2Q==
-X-Gm-Message-State: AFqh2kouVsfyqw1voCpKw8x/Pp/vMIbbFKyzay47U24o9haQBkUm9Pzj
-        riON8Q2Jp2hG06Zf5TMI66+DfQ==
-X-Google-Smtp-Source: AMrXdXs9TrtAUQH+Y68dUB0PdATb7y3pkRpnEl9NJ3W5MCt2sqcU2IJmq7e4g3SE1PZ7y60h0fi55w==
-X-Received: by 2002:ac8:6f09:0:b0:3b6:309e:dfde with SMTP id bs9-20020ac86f09000000b003b6309edfdemr63509297qtb.27.1674763449895;
-        Thu, 26 Jan 2023 12:04:09 -0800 (PST)
+        bh=QferL0wyM7JiwOxUGFvJ9v9caKx1cok3pmy/R7sU5Ps=;
+        b=lKi3/U/Y4Mh4s6zGbOP3L3UzkdW+LD25t5TcvLDjarQH6V3qRQR+pv0VyqdpRdl03N
+         Rle/wT6VNtwVuvMcsupbSzOjf03XZntI3SxGoxthEavRsZpS85ixfsb0a0rKneKjbES4
+         TqaRwjQXmMaV/GaTNlUt4yW0v5VFPd//8k9hA6JRYPjMo8BIRx47/TabW0xgUdwZgX9b
+         Uv2W8Ho4U461QGhd1O9MCHjE+r7WuRYZ9uVFg8zFRExS7rKKTmQuyStZ0j2CapicBWMT
+         96GBCdMqVuQlkmiRspOUDPyxmi/RFo+TkqBlDz8/EEzT03ugk3nGRAQYjbi3T7fkbkXq
+         gS/w==
+X-Gm-Message-State: AFqh2kqFAyVYukkKVylzCGwEooLt+PUW/FdkwD1OXBWvpgxRR62vrW36
+        scnjzFs5qfz8NHtl9Z71NzUa+w==
+X-Google-Smtp-Source: AMrXdXsPJeRc0t92rbmg6HWq4QBJ4oiXB60f+2yn0dE+dhwRAE0RVofvSK9K9/kA+Aq9ukDRAd5Q1A==
+X-Received: by 2002:ac8:7ec4:0:b0:3b6:3c9c:59f0 with SMTP id x4-20020ac87ec4000000b003b63c9c59f0mr55066584qtj.15.1674785070449;
+        Thu, 26 Jan 2023 18:04:30 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id c16-20020ac80090000000b003b323387c1asm1311953qtg.18.2023.01.26.12.04.07
+        by smtp.gmail.com with ESMTPSA id n20-20020ae9c314000000b00708fd79fab7sm2014667qkg.101.2023.01.26.18.04.28
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Jan 2023 12:04:08 -0800 (PST)
-Subject: Re: [PATCH v2 02/14] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
+        Thu, 26 Jan 2023 18:04:29 -0800 (PST)
+Subject: Re: [PATCH v2 12/14] spi: bcm63xx-hsspi: Disable spi mem dual io
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
         dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
 References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-3-william.zhang@broadcom.com>
- <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
- <ee4727e1-5705-edb0-c724-2ae4d4d1a8e2@broadcom.com>
- <20230125205123.GA2864330-robh@kernel.org>
- <1489564a-59d3-6d38-fad7-02119bfedbeb@broadcom.com>
- <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
+ <20230124221218.341511-13-william.zhang@broadcom.com>
+ <CAOiHx=nX5GUnE-y0HfbA3j=-YNRD6qfuYJPjyKpn0hGhOUCLLQ@mail.gmail.com>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <90d9a7a9-4127-7fb7-ed31-d73096759424@broadcom.com>
-Date:   Thu, 26 Jan 2023 12:04:06 -0800
+Message-ID: <ad787286-b417-83f0-0e45-b97bbe058a7f@broadcom.com>
+Date:   Thu, 26 Jan 2023 18:04:27 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
+In-Reply-To: <CAOiHx=nX5GUnE-y0HfbA3j=-YNRD6qfuYJPjyKpn0hGhOUCLLQ@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000088245c05f33040e1"
+        boundary="0000000000003740fc05f3354929"
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -84,92 +75,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---00000000000088245c05f33040e1
+--0000000000003740fc05f3354929
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/26/2023 05:56 AM, Rob Herring wrote:
-> On Wed, Jan 25, 2023 at 3:41 PM William Zhang
-> <william.zhang@broadcom.com> wrote:
->> On 01/25/2023 12:51 PM, Rob Herring wrote:
->>> On Wed, Jan 25, 2023 at 11:23:52AM -0800, William Zhang wrote:
->>>> On 01/24/2023 11:35 PM, Krzysztof Kozlowski wrote:
->>>>> On 24/01/2023 23:12, William Zhang wrote:
->>>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
->>>>>> controller. Add new compatible strings to differentiate the old and new
->>>>>> controller while keeping MIPS based chip with the old compatible. Update
->>>>>> property requirements for these two revisions of the controller.  Also
->>>>>> add myself and Kursad as the maintainers.
+On 01/26/2023 07:15 AM, Jonas Gorski wrote:
+>>
+>> +static bool bcm63xx_hsspi_mem_supports_op(struct spi_mem *mem,
+>> +                           const struct spi_mem_op *op)
+>> +{
+>> +       if (!spi_mem_default_supports_op(mem, op))
+>> +               return false;
+>> +
+>> +       /* Controller doesn't support spi mem dual/quad read cmd in prepend mode */
+>> +       if ((op->cmd.opcode == 0xbb) || (op->cmd.opcode == 0xeb))
 > 
-> [...]
+> There are defines in linux/mtd/spi-nor.h you can use:
 > 
->>>>>>     properties:
->>>>>>       compatible:
->>>>>> -    const: brcm,bcm6328-hsspi
->>>>>> +    oneOf:
->>>>>> +      - const: brcm,bcm6328-hsspi
->>>>>> +      - items:
->>>>>> +          - enum:
->>>>>> +              - brcm,bcm47622-hsspi
->>>>>> +              - brcm,bcm4908-hsspi
->>>>>> +              - brcm,bcm63138-hsspi
->>>>>> +              - brcm,bcm63146-hsspi
->>>>>> +              - brcm,bcm63148-hsspi
->>>>>> +              - brcm,bcm63158-hsspi
->>>>>> +              - brcm,bcm63178-hsspi
->>>>>> +              - brcm,bcm6846-hsspi
->>>>>> +              - brcm,bcm6856-hsspi
->>>>>> +              - brcm,bcm6858-hsspi
->>>>>> +              - brcm,bcm6878-hsspi
->>>>>> +          - const: brcm,bcmbca-hsspi-v1.0
->>>>>> +          - const: brcm,bcmbca-hsspi
->>>>>
->>>>> Why do you need "brcm,bcmbca-hsspi"? Nothing binds to it, so it's
->>>>> useless and very generic.
->>>>>
->>>> This was from Florian's suggestion and Broadcom's convention. See [1] and
->>>> you are okay with that [2].  I added the rev compatible and you were not
->>>> objecting it finally if I understand you correctly.
->>>
->>> Can you have a driver that only understands what 'brcm,bcmbca-hsspi' is
->>> work on all h/w that includes the compatible string? It doesn't seem
->>> like it since v1.1 is a completely new driver. Therefore
->>> 'brcm,bcmbca-hsspi' is pretty much useless.
->>>
->> 'brcm,bcmbca-hsspi' should be added to the binding table of
->> spi-bcm63xx-hsspi.c driver.   This is the initial driver that works for
->> v1.0 controller.  For v1.1 controller, yes it can fallback and work with
->> 1.0 driver spi-bcm63xx-hsspi.c simply not using the new feature in
->> v1.1(chip select signal control through software) and keeping using the
->> prepend mode or dummy cs workaround supported in 1.0 driver.
+> if ((op->cmd.opcode == SPINOR_OP_READ_1_2_2) || (op->cmd.opcode ==
+> SPINOR_OP_READ_1_4_4))
 > 
-> If v1.1 is compatible with v1.0, then say that:
+> Though SPINOR_OP_READ_1_4_4 seems to be redundant, since the
+> controller does not support quad mode, and does not advertise it, so
+> it should never even be an option.
 > 
-> soc-compat, "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi-v1.0"
-> 
-> IOW, 'brcm,bcmbca-hsspi' is redundant with 'brcm,bcmbca-hsspi-v1.0'.
-> They have the same meaning. So pick which one you want to use. Not
-> both.
-> 
-Agree brcm,bcmbca-hsspi fallback is redundant to brcm,bcmbca-hsspi-v1.0. 
-I added it to conform Broadcom convention.  But I understand your and 
-Krzystof's concern so I'll drop the brcm,bcmbca-hsspi in v3 to get 
-things going.
-
-> Also, if that is the case, you shouldn't be introducing a whole new
-> driver for v1.1.
-> 
-Technically I can combine the new feature to the existing driver v1.0 
-but I prefer to start the a new driver so it will be much cleaner and 
-simpler to follow without all the workarounds and complex logic.
-
-> Rob
+> Looking at that file, instead what is missing is
+> SPINOR_OP_READ_1_2_2_4B (0xbc) which shouldn't be usable either.
 > 
 
---00000000000088245c05f33040e1
+You are right.  I was only looking at the spi nand header which does not 
+have this clear definition.  Will use them and drop the quad IO opcode 
+for the reason you mentioned.
+
+
+--0000000000003740fc05f3354929
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -240,13 +182,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKGwjAIbbqov5kq2GC6p8w8AmtBv
-PS/nPrL+3eCgm0/iMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEyNjIwMDQxMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINTmPiKFBSkM+m227PKJQfwiM2BO
+6fMo80rOaqMMzk6uMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDEyNzAyMDQzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBe3q0mCOQ59x+Bs6dpUZKcuLJJFZ2tFuh/K2ucDAqJyQdL
-RkGOx3DD02dqBsFWoU7LUugzZpmZwn+oFHjkPrOLrIxMG1TVJxS8h53mXUGO1dbqkZHYMovv66mC
-eNkIVF3DgAWKVu16w+7LLJD6bPCkd9i0Ta9gowWCQT06V9JXlMiBXa6u7VPkOGvz2QfmtXO2UJdq
-yBxheLMhOj+5Hgt8L+LQychj324PYvsygH0hMuLOOT1nzs4vgtALHmXKPAVEBjpuYV5ds+qyqBcU
-2zL/KIEkUzsfiakjM/szaqf6Qj4l4JdndtPK7tRgKHsiCfqkeToZXbr4hq3UpHiYQo3a
---00000000000088245c05f33040e1--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCSLNbsxkadN6Sei0S0MtvrdXbmHRlKTv3wYzzeZzDB0bo7
+gtUnLTcrS70lzoCfdlh2I0yHNsUAwOIocSCEYpFKZa8uzG/qZ3UZjRk0ncNCtWDg5fq06nK3+cRn
+v89eRyz5r2VwmABVRF+Cs23LwksdNZVzsnUkCF78WHu4WBKzdVxQXawd3Xtz4LP3LvXgonpl97LV
+y4WHxriiYwLbMKs01pboN977HyB5hDSt5CJ355AbQvqCKSafLJvM15YIer5EXPnZFjVTutCyyPm7
+ga7a3z6IqPv0Nrpa6vxid6oPQCgRfOYSHd7p9K67Z/zaSYWcXKHoUKjllJBiAzQXxQ1m
+--0000000000003740fc05f3354929--
