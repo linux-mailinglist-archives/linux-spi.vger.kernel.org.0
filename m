@@ -2,107 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476E1687035
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 21:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD846870C0
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 22:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjBAU4g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Feb 2023 15:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S229677AbjBAV4Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Feb 2023 16:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjBAU40 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Feb 2023 15:56:26 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD62B7B79C
-        for <linux-spi@vger.kernel.org>; Wed,  1 Feb 2023 12:55:50 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1442977d77dso25241187fac.6
-        for <linux-spi@vger.kernel.org>; Wed, 01 Feb 2023 12:55:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V8njp51nuRtlO7Of7CeKyMB+B4IiW6XL4bE1shX39ZI=;
-        b=ZrAB6sSTG08LxQMs74Fs94IvwbxtgBz3rYa3dZQtmFus6Fv4FrNGpjyFC6+qOTcdLv
-         0uKu3QQnBa+K21JbpyHNE4AlQOvUp6MsB1jVwHjBsAtgQk7ZdrkSpWgUpeTvbTytIwDn
-         SP9M3XEK7oONwGJUKlhb6scVn9KiVLR/M5JMLdsZSnfBnv+/KqXefPgNeq0UEFo3j6ck
-         C3fXx7OaGOJVCs4RVXto4Rc0+ZN1MFdZeMEhiz8rMDDDEJpwXqQ8F4FizMKzk7m9adSj
-         I3jr2sv5fgR4zckufj03bXHxyCDJl74HTx2fuXNxKCrXMHQw3aN0iYnWpXIjFwUr6hha
-         s6pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V8njp51nuRtlO7Of7CeKyMB+B4IiW6XL4bE1shX39ZI=;
-        b=xIbk11uOU2VgIBcPwHKtZlmOfJT6uIIZ8F4z1er1Z/p4X3jIe8H1zK+vAKNVevK0PK
-         CQRr4Dpr5rIZ/1vrFXX8KO4yv+TEapwu2D3owfN65LZ3m4hOv62KhOD3CE2nV9+CbyNw
-         N3Ego2m/O/mqCrevmLfVWyQ2Zqd/tjdj3gOBLFV8y9qx3gpas9fsVmLSM7Q/9MvClNBq
-         YBosnHPG5LxvTRO8Ymy0dC4paZk098dshRqpyRVB+rToOIUPfIbt5DuEL84+0xv0KWcd
-         3FZs6eXPh6YknQpwDTFSb/C0VZpFZOd3IIknI+ILjxU8Ms0vTnCzVDE+xjXtGR7Enud9
-         7xbw==
-X-Gm-Message-State: AO0yUKVqh0ZPekEPjKQxuNoP+xp6hwA8yrlROiJuqXxde4MUEG6ifk+I
-        G6wF/iBWvI0cdFK3+amLiLPH/w==
-X-Google-Smtp-Source: AK7set8kih1MG30YvRyHjNdBoBKSt2QKauDlODSe5wp8bgxQaE5Ba+dmGzd/hUH2FpiOs4nOCaYt5w==
-X-Received: by 2002:a05:6871:6a3:b0:15e:efc5:35fc with SMTP id l35-20020a05687106a300b0015eefc535fcmr1962456oao.30.1675284948589;
-        Wed, 01 Feb 2023 12:55:48 -0800 (PST)
-Received: from fedora.. ([186.122.181.28])
-        by smtp.gmail.com with ESMTPSA id n18-20020a056870971200b0014fe4867dc7sm8245908oaq.56.2023.02.01.12.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 12:55:48 -0800 (PST)
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-To:     mika.westerberg@linux.intel.com
-Cc:     broonie@kernel.org, alok.a.tiwari@oracle.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Lima <mauro.lima@eclypsium.com>
-Subject: [PATCH v2 2/2] spi: intel: Add support for controllers
-Date:   Wed,  1 Feb 2023 17:54:55 -0300
-Message-Id: <20230201205455.550308-3-mauro.lima@eclypsium.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201205455.550308-1-mauro.lima@eclypsium.com>
-References: <20230201205455.550308-1-mauro.lima@eclypsium.com>
+        with ESMTP id S229471AbjBAV4X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Feb 2023 16:56:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5E969B39
+        for <linux-spi@vger.kernel.org>; Wed,  1 Feb 2023 13:56:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E91CEB82234
+        for <linux-spi@vger.kernel.org>; Wed,  1 Feb 2023 21:56:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AC06C433EF;
+        Wed,  1 Feb 2023 21:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675288580;
+        bh=bPaYixaZ6IXo3zp1IXcRv+lsWpztNxDBDiDGoixH6SQ=;
+        h=Subject:From:Date:To:From;
+        b=TPGz1uGdVgm45PAipmc0I69LAofobgEbAT13hda9mMpQ5SP5hlwpiwVNO5B1ShfGV
+         7LbrdZPjF2qwRgZH0V/SviveM2QA4xeZnrxG1kUnAL4Q/iCshvDPphODS8Zb4NhU5J
+         yv5MHd6DQ67qiBrYgN1lu0diE9i/Gvr8gVpsSG0IOQUYNnP9Gi6R8JqT8zsqQfLaB8
+         kVRpVK9lmVgoqqzWXh6nvIvyLOAR9zPlRtD+WkdALkxc9aUn3mfwBWhKSLOSXN9z58
+         L4/+Q/WCAzVEt93LrmwmiVoQ/f4VNRUr/N9OkQgPkA0UzIzeGaQwwGP1qjCm70Fxmt
+         NfOBKHQhIuo5w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6ECF3E21ED2;
+        Wed,  1 Feb 2023 21:56:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167528858044.13890.3842520007715656918.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 01 Feb 2023 21:56:20 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add Device IDs to the module table for the following controllers:
-	- 9da4  Cannon Lake 300 Series On-Package
-	- a2a4  200 Series/Z370 Chipset Family SPI Controller
-	- 9d24  Intel® 200 Series Chipset Family (Including Intel® X299),
-		Intel® Z370 Intel® H310C,B365,
-		also Intel® B460 and H410 Chipset Platform Controller Hub
+Latest series: [v2] spi: intel: PCI driver housekeeping (2023-02-01T20:54:53)
+  Superseding: [v1] spi: intel: PCI driver housekeeping (2023-02-01T05:04:53):
+    [1/2] spi: intel: Fix device private data and PR_NUM for BXT
+    [2/2] spi: intel: Add support for controllers
 
-Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- drivers/spi/spi-intel-pci.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 10fa3a7fa4f5..4d69e320d018 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -75,9 +75,12 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7e23), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x9d24), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x9da4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa0a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa1a4), (unsigned long)&bxt_info },
- 	{ PCI_VDEVICE(INTEL, 0xa224), (unsigned long)&bxt_info },
-+	{ PCI_VDEVICE(INTEL, 0xa2a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
- 	{ },
 -- 
-2.39.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
