@@ -2,156 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C3E686C43
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 17:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BA4687032
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 21:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjBAQ6E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Feb 2023 11:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231276AbjBAUzr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Feb 2023 15:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBAQ6A (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Feb 2023 11:58:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E6A7B402;
-        Wed,  1 Feb 2023 08:57:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D37961889;
-        Wed,  1 Feb 2023 16:57:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4DFC433D2;
-        Wed,  1 Feb 2023 16:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675270673;
-        bh=wgoFWDzet3MEnQEk+UbM8HUIOsFtAK8npPJ49HGAO1o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=u9X4Gr7TjZ6UkgVwjSehC9yfCUt//67EjPYTXTHnJ+aTE6aXNoDaG/fZz03jXnElM
-         c315hFd6D+lNgE3Ekgg0QaNB3z7pxxWqm4plvstpHb14GQ0FGDiib2q7//3OZr4/JT
-         i0jWp+SqAe/OVftlr6AN17B1kIJdLkIF0i/EuIo2IVSpqxiD6qKmMLkB+1ogV6NLc6
-         JidEOiKwk15fIiFO+dc5Qsvoe66Y0tsqMeopIu++n7efbaGm5W5Uc31U7fqGait52w
-         WnE8sOF8lc6h19Dd3hynSSTPWQGh4Vapzj+sPUAC+hBsgiEQz8Z/aI5T8L99Afd+Hr
-         1f40qveSqB9TQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
-        sanju.mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
-        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
-        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, khilman@baylibre.com,
-        matthias.bgg@gmail.com, haibo.chen@nxp.com,
-        linus.walleij@linaro.org, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
-        andi@etezian.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
-        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
-        kvalo@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, j.neuschaefer@gmx.net,
-        vireshk@kernel.org, rmfrfs@gmail.com, johan@kernel.org,
-        elder@kernel.org, gregkh@linuxfoundation.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     git@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
-        alim.akhtar@samsung.com, ldewangan@nvidia.com,
-        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-mtd@lists.infradead.org, lars@metafoo.de,
-        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
-        michael@walle.cc, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, amitrkcian2002@gmail.com
-In-Reply-To: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
-References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
-Subject: Re: (subset) [PATCH v2 00/13] spi: Add support for
- stacked/parallel memories
-Message-Id: <167527065195.537421.10361370461620477483.b4-ty@kernel.org>
-Date:   Wed, 01 Feb 2023 16:57:31 +0000
+        with ESMTP id S231719AbjBAUzq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Feb 2023 15:55:46 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733E9783EB
+        for <linux-spi@vger.kernel.org>; Wed,  1 Feb 2023 12:55:12 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-163adf0cfc4so13983834fac.7
+        for <linux-spi@vger.kernel.org>; Wed, 01 Feb 2023 12:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlWTce92nQlg/802bLA6DdGA+q4nEqDW0SzseRRjZrU=;
+        b=XMDzUFtIjOioeXfMZYX4brOWpvhNVyGvzKXnW45esMvmF72CdyTaA75mevt990Nh+h
+         R1TxHybLuh3VAurNy0WOIqpD2FDqxFeLlJgrpApb9K1/Q5aH4V2qMM0D8m04rbDgTfFu
+         XXWUvafvXcYO4+jP+hHQJgwpPSRmZ8unsNTqldqj4kAtq50GxASGaM0K0feQ8Uadh0iA
+         qml4WDzLCYGQDBRnlROEtjC8cuQ5GMHqhxVsPYgNAqfyStSt46N0lhdAnvgFqXc0D/3E
+         gQ+mcELmA9DX4VU5FHHlKsoTBg8CFTNwyXnHj2ze6huTrOz1RuTCpHOk96F83TbM84cY
+         ANtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FlWTce92nQlg/802bLA6DdGA+q4nEqDW0SzseRRjZrU=;
+        b=ekNJDyoOVUGhzmLu9ZyxfFpsg3sCXEzre+UzLKmaY2jlX/YJEBnA7MO8GGATrA4QAf
+         teVvCBUMNUUm+uzuEdOZz1IUQPhPBeluIUjRfN7LV9ZcCm/QGgesqtnIo3dlsmyUZSNy
+         RaKBgOrSwbkVva4svRHEhBLtt4vtxI7OhxuqlkcHmfDjN+gk45XRxZvT7pdK/r++HuOp
+         HbxujWnVKoB/z3Dulf/h5ZLopp0va9BFLkgFi0PDzBMUXFp9rwqDpfuvaNh2EY2OmQN2
+         gm8Gkr2qbY7BHWgH+HRd4g6Fk9R96oYMzT0FytfSrn0J653mqmN5pheAUMo6kKf5FOoc
+         jsmw==
+X-Gm-Message-State: AO0yUKXEMnQwSytPFQjvujbCIY95sLL2FtKM+4vM3rJsuhFv9NOr5/1/
+        RTE4lKn/JrvVlGcolP7r4rSJQKXO0NIgsrsY
+X-Google-Smtp-Source: AK7set8T38usyswFkVRq7QWdynZz30Oqy3aWZZZK+c0TAz8aD/Sw+RDko+j+XEeT7qHSAVbOISIDaA==
+X-Received: by 2002:a05:6870:390a:b0:163:b5e9:7717 with SMTP id b10-20020a056870390a00b00163b5e97717mr2105096oap.51.1675284911730;
+        Wed, 01 Feb 2023 12:55:11 -0800 (PST)
+Received: from fedora.. ([186.122.181.28])
+        by smtp.gmail.com with ESMTPSA id n18-20020a056870971200b0014fe4867dc7sm8245908oaq.56.2023.02.01.12.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 12:55:11 -0800 (PST)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     broonie@kernel.org, alok.a.tiwari@oracle.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH v2 0/2] spi: intel: PCI driver housekeeping
+Date:   Wed,  1 Feb 2023 17:54:53 -0300
+Message-Id: <20230201205455.550308-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 20 Jan 2023 00:23:29 +0530, Amit Kumar Mahapatra wrote:
-> This patch is in the continuation to the discussions which happened on
-> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
-> adding dt-binding support for stacked/parallel memories.
-> 
-> This patch series updated the spi-nor, spi core and the spi drivers
-> to add stacked and parallel memories support.
-> 
-> [...]
+Found some controllers' private data that were wrong according
+to the documentation. Also, the number of Protected Regions from 
+Broxton types was changed.
+The second patch adds more Device IDs to the module table.
+Probably good candidates to stable?
 
-Applied to
+Changes since v1:
+	* Change BXT to Broxton in commit message
+	* Sort new Device IDs by hex value in the driver's module table
+	* Add ack from Mika Westerberg to the first patch
+	Link: https://lore.kernel.org/r/20230201050455.505135-1-mauro.lima@eclypsium.com
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Mauro Lima (2):
+  spi: intel: Fix device private data and PR_NUM for Broxton controllers
+  spi: intel: Add support for controllers
 
-Thanks!
+ drivers/spi/spi-intel-pci.c | 13 ++++++++-----
+ drivers/spi/spi-intel.c     |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-[01/13] spi: Add APIs in spi core to set/get spi->chip_select and spi->cs_gpiod
-        commit: 303feb3cc06ac0665d0ee9c1414941200e60e8a3
-[02/13] spi: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[03/13] net: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[04/13] iio: imu: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[05/13] mtd: devices: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[06/13] staging: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[07/13] platform/x86: serial-multi-instantiate: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.39.1
 
