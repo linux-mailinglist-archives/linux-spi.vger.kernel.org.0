@@ -2,100 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1B9685D24
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 03:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585D4685EB0
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Feb 2023 06:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjBACKF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Jan 2023 21:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S230520AbjBAFFH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Feb 2023 00:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjBACJ4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Jan 2023 21:09:56 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FC84B4B7;
-        Tue, 31 Jan 2023 18:09:36 -0800 (PST)
-X-UUID: 77f59f96a1d511eda06fc9ecc4dadd91-20230201
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xfxOyIUqvJdjIUdIV7o0cMFXghWPkVqR/RyOXrnqn2M=;
-        b=lGii2uo7LzhucmhHDHXoXDYbvKtwLj4rdK07nRGrBe9WyOiRSl5pze5ZyzOVgVzLnokFAyZ0yYNKopRpCJkZ4aDC+ef9D+ETPyg+RTwDdF6vSwc7mZFVQh2v767jk35eMmB29/Pqf7psTqb+S+guIcyXvSdWWFNJap6bzC7BG08=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:02ac8fa6-d00b-4395-b362-db591c783958,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:f303858d-8530-4eff-9f77-222cf6e2895b,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 77f59f96a1d511eda06fc9ecc4dadd91-20230201
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-        (envelope-from <xiangsheng.hou@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 687145495; Wed, 01 Feb 2023 10:09:33 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 1 Feb 2023 10:09:31 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 1 Feb 2023 10:09:30 +0800
-From:   Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Chuanhong Guo <gch981213@gmail.com>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <benliang.zhao@mediatek.com>,
-        <bin.zhang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v6 5/5] dt-bindings: spi: mtk-snfi: Add read latch latency property
-Date:   Wed, 1 Feb 2023 10:09:21 +0800
-Message-ID: <20230201020921.26712-6-xiangsheng.hou@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230201020921.26712-1-xiangsheng.hou@mediatek.com>
-References: <20230201020921.26712-1-xiangsheng.hou@mediatek.com>
+        with ESMTP id S230317AbjBAFFF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Feb 2023 00:05:05 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B767A4F344
+        for <linux-spi@vger.kernel.org>; Tue, 31 Jan 2023 21:05:04 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id e21-20020a9d5615000000b006884e5dce99so6099284oti.5
+        for <linux-spi@vger.kernel.org>; Tue, 31 Jan 2023 21:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFYcNel/Q2GQJL9XoH2s47LEJcta3F35GHGftrB3A3w=;
+        b=Ea5i83I2CXZqQXspWK2Ax27Zy741SAd0GXG5IexoQd7CE1sWpvXfSrzfQuP8JwghAS
+         4rLbzbinfuVbqeG3+bSWjrKbiJuIfQW17m7xEO2eOyEbEQ4QKfQzpMoxvgJMfE+f6fwv
+         2J1OisSAZHh0hrF8mw5f9IS4TtUagLrGa5TxVxzTsSubSq9gpA/LqwBFc8FwdZXuwyfL
+         XXM68ffecTfDYGIE4Eewyh+CQ3TwIJPeSJX7yJgrrFRORBpCCa4L0q/HDsiRoU7wVdqf
+         8jTrYl7zJlf0QyKZuJTB7U/KLzYpif8/5cuVM+WakcOlRanGj1Qel6n0YgNj2W5m7Kjz
+         unVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFYcNel/Q2GQJL9XoH2s47LEJcta3F35GHGftrB3A3w=;
+        b=nSyVeOF/q8vmJkSRrZqRp+0MpIuxVhe6npZ8+PP5P4hq6/6KiM5HrYS1TwWYCvuEjO
+         llShrG/9GWyXUTPaVkFdN/jIp1vNmzNijimHaU9dcLGA1lDdJ2F9itE7tQ3RNLx13dxi
+         o4XECTBCV0l/z1SOcZieYV40kdst+DMqBXff3dzO3Q3HtSCV6oBSyoZWI6p5MR0w2MNG
+         cuzuKeJrSl3WMuwX30MlkyHx2skSnvlJ91QVLsCG9NJsgs2z07ZU6+WMiB9xRLItguB9
+         uJEveckWRb6Lt4TkM+1kBCZtjv+0PS5kqzkO3upOJDxE9jpaD/cJUMHlau9eni9AX5P7
+         KbZg==
+X-Gm-Message-State: AO0yUKVg4CSDn5aSRZHmj+ApTNsWTbL4SwGGZijN9Aq9sM3OERDAMb+I
+        QK23vdMi9z00uQRuAaIx0y4DoEvX5p28sr1P
+X-Google-Smtp-Source: AK7set8KeuNtvBFotSzeEtOdjHVaV5Th4l75UFiGeDLXMeuzJcMuKyU4woiV+JArxxJz/h4vGD42Jw==
+X-Received: by 2002:a9d:560c:0:b0:671:cacb:681b with SMTP id e12-20020a9d560c000000b00671cacb681bmr555143oti.22.1675227903841;
+        Tue, 31 Jan 2023 21:05:03 -0800 (PST)
+Received: from fedora.. ([186.122.181.28])
+        by smtp.gmail.com with ESMTPSA id cd26-20020a056830621a00b0068be61a7ac6sm1123445otb.56.2023.01.31.21.05.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 21:05:03 -0800 (PST)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH 0/2] spi: intel: PCI driver housekeeping
+Date:   Wed,  1 Feb 2023 02:04:53 -0300
+Message-Id: <20230201050455.505135-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add mediatek,rx-latch-latency-ns property which adjust data read
-latch latency in the unit of nanoseconds.
+Found some controllers' private data that were wrong according
+to the documentation. Also, the number of Protected Regions from 
+BXT types was changed.
+The second patch adds more Device IDs to the module table.
+Probably good candidates to stable?
 
-Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml         | 3 +++
- 1 file changed, 3 insertions(+)
+Mauro Lima (2):
+  spi: intel: Fix device private data and PR_NUM for BXT
+  spi: intel: Add support for controllers
 
-diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-index bab23f1b11fd..1e5e89a693c3 100644
---- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-+++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-@@ -45,6 +45,9 @@ properties:
-     description: device-tree node of the accompanying ECC engine.
-     $ref: /schemas/types.yaml#/definitions/phandle
- 
-+  mediatek,rx-latch-latency-ns:
-+    description: Data read latch latency, unit is nanoseconds.
-+
- required:
-   - compatible
-   - reg
+ drivers/spi/spi-intel-pci.c | 13 ++++++++-----
+ drivers/spi/spi-intel.c     |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+
 -- 
-2.25.1
+2.39.1
 
