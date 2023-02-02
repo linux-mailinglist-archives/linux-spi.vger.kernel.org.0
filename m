@@ -2,248 +2,174 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617726884A4
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Feb 2023 17:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B08688804
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Feb 2023 21:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjBBQko (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Feb 2023 11:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S232502AbjBBUJ6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Feb 2023 15:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBBQkn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Feb 2023 11:40:43 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482576A33D;
-        Thu,  2 Feb 2023 08:40:42 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gr7so7634633ejb.5;
-        Thu, 02 Feb 2023 08:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JxadcUmstQQisxG5SMmC/yE89rXvA6AYxcU2YUnVDQ=;
-        b=F0H3B8NAgseBrYAc9OhvFrrJcHUs5RxsmEgusiWeYI4oHZkbOFHj9Ncu15Uvbi4tCO
-         GCoGClEA/o94QYw0U1UfeOAEL80uwq+5tCfPJWGsWnHH8HpmO1lWGzeCrAsIdF4Fu6zR
-         kNR+WhBg1xqNyaBWvq3l+bklN9GSWeF5rkZflnjP5JjP6Pm7phnd2Ab56G7cA8boFLp0
-         xzt+aopsRq/bEYAtjRCwCMmTji3jBwX9xCOCD4tzAC2fkbovQWodfYFH0SLzujYlkR2S
-         3SeXJQSQvZdrRrWbPhPWjXi7p2pGkVjdnp+X80CVTlvacpypSO18F0i1MgCSG84IgzXR
-         jpqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1JxadcUmstQQisxG5SMmC/yE89rXvA6AYxcU2YUnVDQ=;
-        b=kIYh5nPLxn++Y2JG3hn9AfOEfKPVuMBW1ZEk0WdU+5sMNs9QBxkQVMOlwQqn3TTvrq
-         52J8oee9p/Z7OnuEfLBVRRO+DUav15ojCYfDXFKk04c5V3dQzTC6rehhpczLrw8quLIT
-         Pj221va3ZlAci508fXMS1WnqJo++wgUN2Oj2KWfGn2cfnRDnyCmCGPbKOxi23vtODWML
-         7jT64ztKn0tW//fuQq54g2EFZSGvWHEb0+0ajvH4sgtNXmM1/xiknndhKYd5kLqy9DlQ
-         X9PjkONYDnVLt8nnQSMSGNiymkc1QhaL5J5yDoGCpruDEYkxB3EhWg10my6BlBlWJmNc
-         6ntA==
-X-Gm-Message-State: AO0yUKWPAXovexVWMXoxw29qPbOUTZ8tYZvL3wVSLY6zLi5FNHgFEaS4
-        MLKj3YLcOsHbzLsza1RYve8=
-X-Google-Smtp-Source: AK7set8DElzpOFybgSqmpPkVSDP76pQ9uMXg+BggB0EZ9TIGd1XdSGpOOvGTm4L9iJVvil59yp3mTw==
-X-Received: by 2002:a17:906:c156:b0:88d:ba89:1835 with SMTP id dp22-20020a170906c15600b0088dba891835mr2844484ejc.6.1675356040636;
-        Thu, 02 Feb 2023 08:40:40 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id by13-20020a0564021b0d00b004a277d55a6csm3387108edb.1.2023.02.02.08.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:40:40 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
-        pratyush@kernel.org, sanju.mehta@amd.com,
-        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
-        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        narmstrong@baylibre.com, khilman@baylibre.com,
-        matthias.bgg@gmail.com, haibo.chen@nxp.com,
-        linus.walleij@linaro.org, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
-        krzysztof.kozlowski@linaro.org, andi@etezian.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        wens@csie.org, samuel@sholland.org, masahisa.kojima@linaro.org,
-        jaswinder.singh@linaro.org, rostedt@goodmis.org, mingo@redhat.com,
-        l.stelmach@samsung.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, alex.aring@gmail.com,
-        stefan@datenfreihafen.org, kvalo@kernel.org,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        palmer@dabbelt.com
-Cc:     git@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
-        alim.akhtar@samsung.com, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 01/13] spi: Replace all spi->chip_select and spi->cs_gpiod
- references with function call
-Date:   Thu, 02 Feb 2023 17:40:35 +0100
-Message-ID: <4802797.31r3eYUQgx@jernej-laptop>
-In-Reply-To: <20230202152258.512973-2-amit.kumar-mahapatra@amd.com>
-References: <20230202152258.512973-1-amit.kumar-mahapatra@amd.com>
- <20230202152258.512973-2-amit.kumar-mahapatra@amd.com>
+        with ESMTP id S231936AbjBBUJx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Feb 2023 15:09:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAC7DBC5;
+        Thu,  2 Feb 2023 12:09:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675368591; x=1706904591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EdGFswneWv/1WxwuBCK/pyMs4jxFBv++s6r7X4nvUeI=;
+  b=a9XWL4BmAh0bwTFVYZmPQdlW78S0cdz8eqYFbN+ISWFr+uF31b437qLo
+   w2xZLDZScKTeBB98cViYbBSQWLyXIO7VS5a+MK00RYcrgieMtQufRsfbA
+   FFdUZ0Q4tbFABecl+2D1wLoahXr+e5jGnXojg902UR0N7CguCIplVeP1D
+   Wkh/k+FjY2H9kTsbmUM251bjkfcxj9HY27zLbLXXdJG2cbNZiKEnuSZ12
+   3WL2pINEzT8+E0W5U5trjewMXcvVnreV945DATWwzoR3cf1SVPqprF3P9
+   ta1HkEdQi5kBjX2Whrk+PMtTm6rvyKZ7M7VGb0zu9St17FQdEWRmabLBb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308899347"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="308899347"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 12:09:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="994239335"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="994239335"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2023 12:09:47 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNftz-0006oI-0G;
+        Thu, 02 Feb 2023 20:09:47 +0000
+Date:   Fri, 3 Feb 2023 04:08:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
+Message-ID: <202302030428.MRyuAj03-lkp@intel.com>
+References: <20230202161750.21210-3-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+Hi Krishna,
 
-Dne =C4=8Detrtek, 02. februar 2023 ob 16:22:46 CET je Amit Kumar Mahapatra=
-=20
-napisal(a):
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpi=
-od
-> members of struct spi_device to be an array. But changing the type of the=
-se
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpi=
-od
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
->=20
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> Acked-by: Heiko Stuebner <heiko@sntech.de> # Rockchip drivers
-> Reviewed-by: Michal Simek <michal.simek@amd.com>
-> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org> # Aspeed driver
-> Reviewed-by: Dhruva Gole <d-gole@ti.com> # SPI Cadence QSPI
-> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com> # spi-stm32-qs=
-pi
-> Acked-by: William Zhang <william.zhang@broadcom.com> # bcm63xx-hsspi driv=
-er
-> ---
->  drivers/spi/spi-altera-core.c     |  2 +-
->  drivers/spi/spi-amd.c             |  4 ++--
->  drivers/spi/spi-ar934x.c          |  2 +-
->  drivers/spi/spi-armada-3700.c     |  4 ++--
->  drivers/spi/spi-aspeed-smc.c      | 13 +++++++------
->  drivers/spi/spi-at91-usart.c      |  2 +-
->  drivers/spi/spi-ath79.c           |  4 ++--
->  drivers/spi/spi-atmel.c           | 26 +++++++++++++-------------
->  drivers/spi/spi-au1550.c          |  4 ++--
->  drivers/spi/spi-axi-spi-engine.c  |  2 +-
->  drivers/spi/spi-bcm-qspi.c        | 10 +++++-----
->  drivers/spi/spi-bcm2835.c         | 19 ++++++++++---------
->  drivers/spi/spi-bcm2835aux.c      |  4 ++--
->  drivers/spi/spi-bcm63xx-hsspi.c   | 22 +++++++++++-----------
->  drivers/spi/spi-bcm63xx.c         |  2 +-
->  drivers/spi/spi-cadence-quadspi.c |  5 +++--
->  drivers/spi/spi-cadence-xspi.c    |  4 ++--
->  drivers/spi/spi-cadence.c         |  4 ++--
->  drivers/spi/spi-cavium.c          |  8 ++++----
->  drivers/spi/spi-coldfire-qspi.c   |  8 ++++----
->  drivers/spi/spi-davinci.c         | 18 +++++++++---------
->  drivers/spi/spi-dln2.c            |  6 +++---
->  drivers/spi/spi-dw-core.c         |  2 +-
->  drivers/spi/spi-dw-mmio.c         |  4 ++--
->  drivers/spi/spi-falcon.c          |  2 +-
->  drivers/spi/spi-fsi.c             |  2 +-
->  drivers/spi/spi-fsl-dspi.c        | 16 ++++++++--------
->  drivers/spi/spi-fsl-espi.c        |  6 +++---
->  drivers/spi/spi-fsl-lpspi.c       |  2 +-
->  drivers/spi/spi-fsl-qspi.c        |  6 +++---
->  drivers/spi/spi-fsl-spi.c         |  2 +-
->  drivers/spi/spi-geni-qcom.c       |  6 +++---
->  drivers/spi/spi-gpio.c            |  4 ++--
->  drivers/spi/spi-gxp.c             |  4 ++--
->  drivers/spi/spi-hisi-sfc-v3xx.c   |  2 +-
->  drivers/spi/spi-img-spfi.c        | 14 +++++++-------
->  drivers/spi/spi-imx.c             | 30 +++++++++++++++---------------
->  drivers/spi/spi-ingenic.c         |  4 ++--
->  drivers/spi/spi-intel.c           |  2 +-
->  drivers/spi/spi-jcore.c           |  4 ++--
->  drivers/spi/spi-lantiq-ssc.c      |  6 +++---
->  drivers/spi/spi-mem.c             |  4 ++--
->  drivers/spi/spi-meson-spicc.c     |  2 +-
->  drivers/spi/spi-microchip-core.c  |  6 +++---
->  drivers/spi/spi-mpc512x-psc.c     |  8 ++++----
->  drivers/spi/spi-mpc52xx.c         |  2 +-
->  drivers/spi/spi-mt65xx.c          |  6 +++---
->  drivers/spi/spi-mt7621.c          |  2 +-
->  drivers/spi/spi-mux.c             |  8 ++++----
->  drivers/spi/spi-mxic.c            | 10 +++++-----
->  drivers/spi/spi-mxs.c             |  2 +-
->  drivers/spi/spi-npcm-fiu.c        | 20 ++++++++++----------
->  drivers/spi/spi-nxp-fspi.c        | 10 +++++-----
->  drivers/spi/spi-omap-100k.c       |  2 +-
->  drivers/spi/spi-omap-uwire.c      |  8 ++++----
->  drivers/spi/spi-omap2-mcspi.c     | 24 ++++++++++++------------
->  drivers/spi/spi-orion.c           |  4 ++--
->  drivers/spi/spi-pci1xxxx.c        |  4 ++--
->  drivers/spi/spi-pic32-sqi.c       |  2 +-
->  drivers/spi/spi-pic32.c           |  4 ++--
->  drivers/spi/spi-pl022.c           |  4 ++--
->  drivers/spi/spi-pxa2xx.c          |  6 +++---
->  drivers/spi/spi-qcom-qspi.c       |  2 +-
->  drivers/spi/spi-rb4xx.c           |  2 +-
->  drivers/spi/spi-rockchip-sfc.c    |  2 +-
->  drivers/spi/spi-rockchip.c        | 26 ++++++++++++++------------
->  drivers/spi/spi-rspi.c            | 10 +++++-----
->  drivers/spi/spi-s3c64xx.c         |  2 +-
->  drivers/spi/spi-sc18is602.c       |  4 ++--
->  drivers/spi/spi-sh-msiof.c        |  6 +++---
->  drivers/spi/spi-sh-sci.c          |  2 +-
->  drivers/spi/spi-sifive.c          |  6 +++---
->  drivers/spi/spi-sn-f-ospi.c       |  2 +-
->  drivers/spi/spi-st-ssc4.c         |  2 +-
->  drivers/spi/spi-stm32-qspi.c      | 12 ++++++------
->  drivers/spi/spi-sun4i.c           |  2 +-
->  drivers/spi/spi-sun6i.c           |  2 +-
+Thank you for the patch! Perhaps something to improve:
 
-=46or sun4i, sun6i:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Best regards,
-Jernej
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
+patch link:    https://lore.kernel.org/r/20230202161750.21210-3-kyarlagadda%40nvidia.com
+patch subject: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230203/202302030428.MRyuAj03-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9a454b022e5273e483b968f1998e0b177e71fcb2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
+        git checkout 9a454b022e5273e483b968f1998e0b177e71fcb2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
 
->  drivers/spi/spi-synquacer.c       |  6 +++---
->  drivers/spi/spi-tegra114.c        | 28 ++++++++++++++--------------
->  drivers/spi/spi-tegra20-sflash.c  |  2 +-
->  drivers/spi/spi-tegra20-slink.c   |  6 +++---
->  drivers/spi/spi-tegra210-quad.c   |  8 ++++----
->  drivers/spi/spi-ti-qspi.c         | 16 ++++++++--------
->  drivers/spi/spi-topcliff-pch.c    |  4 ++--
->  drivers/spi/spi-wpcm-fiu.c        | 12 ++++++------
->  drivers/spi/spi-xcomm.c           |  2 +-
->  drivers/spi/spi-xilinx.c          |  6 +++---
->  drivers/spi/spi-xlp.c             |  4 ++--
->  drivers/spi/spi-zynq-qspi.c       |  2 +-
->  drivers/spi/spi-zynqmp-gqspi.c    |  2 +-
->  drivers/spi/spidev.c              |  6 +++---
->  include/trace/events/spi.h        | 10 +++++-----
->  92 files changed, 315 insertions(+), 310 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
+      23 | int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
 
+    22	
+  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+    24				       u8 *in, const u8 *out)
+    25	{
+    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+    27		int ret = 0;
+    28		struct spi_message m;
+    29		struct spi_transfer spi_xfer[3];
+    30		u8 transfer_len;
+    31	
+    32		spi_bus_lock(phy->spi_device->master);
+    33	
+    34		while (len) {
+    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+    36	
+    37			spi_message_init(&m);
+    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+    39			phy->iobuf[1] = 0xd4;
+    40			phy->iobuf[2] = addr >> 8;
+    41			phy->iobuf[3] = addr;
+    42	
+    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
+    44	
+    45			spi_xfer[0].tx_buf = phy->iobuf;
+    46			spi_xfer[0].len = 1;
+    47			spi_message_add_tail(&spi_xfer[0], &m);
+    48	
+    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
+    50			spi_xfer[1].len = 3;
+    51			spi_message_add_tail(&spi_xfer[1], &m);
+    52	
+    53			if (out) {
+    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
+    55				spi_xfer[2].rx_buf = NULL;
+    56				memcpy(&phy->iobuf[4], out, transfer_len);
+    57				out += transfer_len;
+    58			}
+    59			if (in) {
+    60				spi_xfer[2].tx_buf = NULL;
+    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
+    62			}
+    63			spi_xfer[2].len = transfer_len;
+    64			spi_message_add_tail(&spi_xfer[2], &m);
+    65	
+    66			reinit_completion(&phy->ready);
+    67			ret = spi_sync_locked(phy->spi_device, &m);
+    68			if (ret < 0)
+    69				goto exit;
+    70	
+    71			if (in) {
+    72				memcpy(in, &phy->iobuf[4], transfer_len);
+    73				in += transfer_len;
+    74			}
+    75	
+    76			len -= transfer_len;
+    77		}
+    78	
+    79	exit:
+    80		spi_bus_unlock(phy->spi_device->master);
+    81		return ret;
+    82	}
+    83	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
