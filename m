@@ -2,92 +2,186 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2AF68A50C
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Feb 2023 22:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA1368A700
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Feb 2023 00:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbjBCV5Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Feb 2023 16:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S232127AbjBCXod (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Feb 2023 18:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbjBCV5P (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Feb 2023 16:57:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33031AB5EC;
-        Fri,  3 Feb 2023 13:56:57 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313LUfr6031846;
-        Fri, 3 Feb 2023 21:56:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=vQ5+qWzgpqiVjrznsV2/OvhJ7RTj4rYACnN/rjEubAE=;
- b=DIYh1f+mGXQxFMcaQgQ0WlaYNUGpZRhQ2oqzmWqN3lhWmow3nLM/WAUiKz7dwwpjdFsq
- whKYqbLXeAKvo0VMrxbukUgoO6J11384oDotMoUX9TfirzjPGMds7k+xKRpQ3Up6h20R
- Sb+0I5b3tJWkJxEyCGvnZnEfx4Mv3ZzgfZ2/zrUIic1TzfA3jlW5q7GS6LVSqwSL2O7G
- PA0BgFyBKT9GOSNsGfEOzdn7Ge7GqqVLFENSZNq8PJAqUBDrWVcWZNYW9YGri71t8KJ1
- 6Bi6JI5EMC6c0l8KJB1bMvGyRYtqKfwb0I5Atrl94+2Jdp9nshXPSDgeqIDikdRVoM/6 lQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngwd01qxf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 21:56:51 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313LuoRV028692
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 21:56:50 GMT
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
- 13:56:50 -0800
-Date:   Fri, 3 Feb 2023 13:56:48 -0800
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Visweswara Tanuku <quic_vtanuku@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH] soc: qcom: geni-se: Move qcom-geni-se.h to
- linux/soc/qcom/geni-se.h
-Message-ID: <20230203215648.GB10258@quicinc.com>
-References: <20230203210133.3552796-1-quic_eberman@quicinc.com>
+        with ESMTP id S232932AbjBCXoc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Feb 2023 18:44:32 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5110641098;
+        Fri,  3 Feb 2023 15:44:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675467871; x=1707003871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uZ0qNhDCqz4L2s+QoHLo0NAhbxb3fK+YiXc/q8MtHUA=;
+  b=G4aWql6NAzhhEtozfewYvinxO9F7kDWeKkQrj37EEonNBoFUwoUfVJE+
+   oGF3m2T42Tvmsf1bOT11+v/zUwg5iKrliTjm4BH4qtlIiDvPDUmj6Gqya
+   P4GwZC2KJ5CQ8+rAxwcvGzLolbAj17rGDUxM08g04GB+KDtHv8OZRAGL2
+   dgSW2MiRxqhY+nzDOc18NP6xUr1cY+4lfy4bMG+cv9bT4nO+yD2WMAEzT
+   cCoSWKpchKYi/kjJ9WmM9kz3YhE81aIWtwwNC5klJkCOI3SIn8E5jJG1G
+   GRqeAPxrSG7g7sLp65ZDERpepMi94fIdQwI8p8XIPATx40+sYAQalfXEA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="331016972"
+X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
+   d="scan'208";a="331016972"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 15:44:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="698243366"
+X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
+   d="scan'208";a="698243366"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Feb 2023 15:44:26 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pO5jA-0000qp-2x;
+        Fri, 03 Feb 2023 23:44:20 +0000
+Date:   Sat, 4 Feb 2023 07:43:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
+Message-ID: <202302040739.VbsIprzH-lkp@intel.com>
+References: <20230203130133.32901-3-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203210133.3552796-1-quic_eberman@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: drGMzA3-chlOZMczk-1KeNJ8Sr-sk2mv
-X-Proofpoint-ORIG-GUID: drGMzA3-chlOZMczk-1KeNJ8Sr-sk2mv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_19,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- adultscore=0 impostorscore=0 phishscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=708 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030198
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203130133.32901-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Feb 03 2023 13:01, Elliot Berman wrote:
-> Move include/linux/qcom-geni-se.h to include/linux/soc/qcom/geni-se.h.
-> This removes 1 of a few remaining Qualcomm-specific headers into a more
-> approciate subdirectory under include/.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Hi Krishna,
 
-Reviewed-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
+patch link:    https://lore.kernel.org/r/20230203130133.32901-3-kyarlagadda%40nvidia.com
+patch subject: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
+config: x86_64-randconfig-k001 (https://download.01.org/0day-ci/archive/20230204/202302040739.VbsIprzH-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
+        git checkout 825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/char/tpm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/char/tpm/tpm_tis_spi_tegra.c:18:
+   In file included from drivers/char/tpm/tpm_tis_core.h:22:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for function 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
+   int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+       ^
+   drivers/char/tpm/tpm_tis_spi_tegra.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
+
+    22	
+  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+    24				       u8 *in, const u8 *out)
+    25	{
+    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+    27		int ret = 0;
+    28		struct spi_message m;
+    29		struct spi_transfer spi_xfer[3];
+    30		u8 transfer_len;
+    31	
+    32		spi_bus_lock(phy->spi_device->master);
+    33	
+    34		while (len) {
+    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+    36	
+    37			spi_message_init(&m);
+    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+    39			phy->iobuf[1] = 0xd4;
+    40			phy->iobuf[2] = addr >> 8;
+    41			phy->iobuf[3] = addr;
+    42	
+    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
+    44	
+    45			spi_xfer[0].tx_buf = phy->iobuf;
+    46			spi_xfer[0].len = 1;
+    47			spi_message_add_tail(&spi_xfer[0], &m);
+    48	
+    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
+    50			spi_xfer[1].len = 3;
+    51			spi_message_add_tail(&spi_xfer[1], &m);
+    52	
+    53			if (out) {
+    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
+    55				spi_xfer[2].rx_buf = NULL;
+    56				memcpy(&phy->iobuf[4], out, transfer_len);
+    57				out += transfer_len;
+    58			}
+    59			if (in) {
+    60				spi_xfer[2].tx_buf = NULL;
+    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
+    62			}
+    63			spi_xfer[2].len = transfer_len;
+    64			spi_message_add_tail(&spi_xfer[2], &m);
+    65	
+    66			reinit_completion(&phy->ready);
+    67			ret = spi_sync_locked(phy->spi_device, &m);
+    68			if (ret < 0)
+    69				goto exit;
+    70	
+    71			if (in) {
+    72				memcpy(in, &phy->iobuf[4], transfer_len);
+    73				in += transfer_len;
+    74			}
+    75	
+    76			len -= transfer_len;
+    77		}
+    78	
+    79	exit:
+    80		spi_bus_unlock(phy->spi_device->master);
+    81		return ret;
+    82	}
+    83	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
