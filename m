@@ -2,174 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B08688804
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Feb 2023 21:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904AE689041
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Feb 2023 08:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjBBUJ6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Feb 2023 15:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S232291AbjBCHOh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Feb 2023 02:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjBBUJx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Feb 2023 15:09:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAC7DBC5;
-        Thu,  2 Feb 2023 12:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675368591; x=1706904591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EdGFswneWv/1WxwuBCK/pyMs4jxFBv++s6r7X4nvUeI=;
-  b=a9XWL4BmAh0bwTFVYZmPQdlW78S0cdz8eqYFbN+ISWFr+uF31b437qLo
-   w2xZLDZScKTeBB98cViYbBSQWLyXIO7VS5a+MK00RYcrgieMtQufRsfbA
-   FFdUZ0Q4tbFABecl+2D1wLoahXr+e5jGnXojg902UR0N7CguCIplVeP1D
-   Wkh/k+FjY2H9kTsbmUM251bjkfcxj9HY27zLbLXXdJG2cbNZiKEnuSZ12
-   3WL2pINEzT8+E0W5U5trjewMXcvVnreV945DATWwzoR3cf1SVPqprF3P9
-   ta1HkEdQi5kBjX2Whrk+PMtTm6rvyKZ7M7VGb0zu9St17FQdEWRmabLBb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308899347"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="308899347"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 12:09:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="994239335"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="994239335"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2023 12:09:47 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNftz-0006oI-0G;
-        Thu, 02 Feb 2023 20:09:47 +0000
-Date:   Fri, 3 Feb 2023 04:08:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
-        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-Message-ID: <202302030428.MRyuAj03-lkp@intel.com>
-References: <20230202161750.21210-3-kyarlagadda@nvidia.com>
+        with ESMTP id S231748AbjBCHOd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Feb 2023 02:14:33 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52A770997;
+        Thu,  2 Feb 2023 23:14:28 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9CB7868C4E; Fri,  3 Feb 2023 08:14:23 +0100 (CET)
+Date:   Fri, 3 Feb 2023 08:14:23 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: remove arch/sh
+Message-ID: <20230203071423.GA24833@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de> <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krishna,
+On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> We have had a discussion between multiple people invested in the SuperH port and
+> I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> when he isn't available.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
-patch link:    https://lore.kernel.org/r/20230202161750.21210-3-kyarlagadda%40nvidia.com
-patch subject: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230203/202302030428.MRyuAj03-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a454b022e5273e483b968f1998e0b177e71fcb2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
-        git checkout 9a454b022e5273e483b968f1998e0b177e71fcb2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
-      23 | int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
-
-    22	
-  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-    24				       u8 *in, const u8 *out)
-    25	{
-    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-    27		int ret = 0;
-    28		struct spi_message m;
-    29		struct spi_transfer spi_xfer[3];
-    30		u8 transfer_len;
-    31	
-    32		spi_bus_lock(phy->spi_device->master);
-    33	
-    34		while (len) {
-    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-    36	
-    37			spi_message_init(&m);
-    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-    39			phy->iobuf[1] = 0xd4;
-    40			phy->iobuf[2] = addr >> 8;
-    41			phy->iobuf[3] = addr;
-    42	
-    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
-    44	
-    45			spi_xfer[0].tx_buf = phy->iobuf;
-    46			spi_xfer[0].len = 1;
-    47			spi_message_add_tail(&spi_xfer[0], &m);
-    48	
-    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
-    50			spi_xfer[1].len = 3;
-    51			spi_message_add_tail(&spi_xfer[1], &m);
-    52	
-    53			if (out) {
-    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
-    55				spi_xfer[2].rx_buf = NULL;
-    56				memcpy(&phy->iobuf[4], out, transfer_len);
-    57				out += transfer_len;
-    58			}
-    59			if (in) {
-    60				spi_xfer[2].tx_buf = NULL;
-    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
-    62			}
-    63			spi_xfer[2].len = transfer_len;
-    64			spi_message_add_tail(&spi_xfer[2], &m);
-    65	
-    66			reinit_completion(&phy->ready);
-    67			ret = spi_sync_locked(phy->spi_device, &m);
-    68			if (ret < 0)
-    69				goto exit;
-    70	
-    71			if (in) {
-    72				memcpy(in, &phy->iobuf[4], transfer_len);
-    73				in += transfer_len;
-    74			}
-    75	
-    76			len -= transfer_len;
-    77		}
-    78	
-    79	exit:
-    80		spi_bus_unlock(phy->spi_device->master);
-    81		return ret;
-    82	}
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+So, this still isn't reflected in MAINTAINERS in linux-next.  When
+do you plan to take over?  What platforms will remain supported and
+what can we start dropping due to being unused and unmaintained?
