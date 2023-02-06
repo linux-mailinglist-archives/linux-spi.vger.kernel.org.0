@@ -2,164 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F1368C591
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Feb 2023 19:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AC668C5D3
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Feb 2023 19:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBFSRw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Feb 2023 13:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S230103AbjBFScQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Feb 2023 13:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjBFSRu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Feb 2023 13:17:50 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50E922A37;
-        Mon,  6 Feb 2023 10:17:44 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316Dw1Mr003538;
-        Mon, 6 Feb 2023 18:17:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dJJ13g6rj+xIrq0T3eUEIbV10GxuSSR5Gcak2Juy/lM=;
- b=XtQxUCLz6Y3AyjDUMsjJ1ieYJ2KdSaDxIulaEFH/QGB/1BDDVbTGFvu+MyFGgXqd3317
- +xNLSS1PvD+e09Y3jKpiWxOmkvCb2Ev0IECUyt+BlHOPjOvQzPUHzfsT+ZQwf5VkLpX7
- iEorYsQCNOeZAbupmHVEdJTDI/rI5+0fVjqGhvh7vx79GJALjqK0xOzYwswhQc3/w/4s
- JnWDniGmAmD1y0DCOC2kSGQDSPVVTYyLaDy95RraLHg2bWHDxpqbxB/rTPDywqM130Re
- /tPne3FMszTdgHZrnqA5toXJQSeZXdYB86jKm+fypK3AqDmv0az5REO2E2TqfeAS0i/E Sw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nheb0vdak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 18:17:40 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316IHdfF011629
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 18:17:39 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 10:17:39 -0800
-Message-ID: <298c709e-5873-7aa8-3c00-b1a0ddc5c436@quicinc.com>
-Date:   Mon, 6 Feb 2023 10:17:39 -0800
+        with ESMTP id S229718AbjBFScL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Feb 2023 13:32:11 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35362D16C
+        for <linux-spi@vger.kernel.org>; Mon,  6 Feb 2023 10:32:01 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id c15so10345082oic.8
+        for <linux-spi@vger.kernel.org>; Mon, 06 Feb 2023 10:32:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3R35btLzZbHPl58Fti6FPVqu8yocbe+OIcF7pssrt44=;
+        b=caWGDnEP0gHmgt5wz8cYMEKJhGE9vsLcWPyFafv27EqAdwyimtUr42B8jNtgEGpaal
+         6vVhLSvAlGKSeDb9bZ5aUzuswZ4l1p9YgarFjr/+4VlmYn3QfvatHRuy1pDyZTJSSjoT
+         TyyZRyxl3J1woLeTSzmRUXldqM5q1unFpFGKwl9bufCEipNul6zfzTL55FBbu9nCv+zp
+         h7xYJMjEUAt4obrW9Ck8awPaSyJLlnS7kr16hzD50AX7QP1NH6m2Mz5jPJACi9zC2f/m
+         vCRYicD3bWC88yu5oiQPMZ+giGTK7tnhuV4wToIMUhIxazbBwzajJVAPg67IBczPwYW6
+         WUag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3R35btLzZbHPl58Fti6FPVqu8yocbe+OIcF7pssrt44=;
+        b=xsK7H+K6lwIz7FD4vT9QkFNsOlf9SDSUecJKGWRAAoeAWAbveKoR7suaTZIEV0QwYB
+         MIaTO/EgcI+T+WtK3zhqD45Ot7aVKdhkDOi/F1Ydv6z01mh+d1+fuIXxZhXUfN8oDtWQ
+         HsDhojfaiZJOiZnaB0+SBfT6uzN/WXVzQcGLBoJPNUzJRz2WgeYyn10+wIXcGGpE2Ohf
+         eOtnuFx2g18pn/TKB1VJROBg6bwJuUwwS1MUf2ATzbmskv0vvqg0nvU3u6TUMR9xq4DH
+         j0d1jfI9jnbOroC58F6bhKPiLMdzeqq8WdmJ6m5MzlBTuuIXtGkK6r4lWhGSDECWF2nw
+         utfw==
+X-Gm-Message-State: AO0yUKXacUD35mRKhStdhtN2Mou04/mkY8swKIRhoQwp/ttYbJsQb7pw
+        IKTLQG0Tm7vZ6MMNG6jL0+cK5w==
+X-Google-Smtp-Source: AK7set+sjRWcF+59Wc/e8Mitxz/ILejpj90jTLWsYXX1Y1VwI7ytTQkH57L+RC5oYKpEXjmlOI0Ciw==
+X-Received: by 2002:a05:6808:274b:b0:378:974b:4fe6 with SMTP id eh11-20020a056808274b00b00378974b4fe6mr9814098oib.8.1675708320931;
+        Mon, 06 Feb 2023 10:32:00 -0800 (PST)
+Received: from fedora.. ([186.122.48.201])
+        by smtp.gmail.com with ESMTPSA id x39-20020a056830246700b0068bb7bd2668sm5201636otr.73.2023.02.06.10.31.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 10:32:00 -0800 (PST)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH 0/1] spi: intel: Remove DANGEROUS tag from pci driver
+Date:   Mon,  6 Feb 2023 15:31:42 -0300
+Message-Id: <20230206183143.75274-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] soc: qcom: geni-se: Move qcom-geni-se.h to
- linux/soc/qcom/geni-se.h
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-CC:     Visweswara Tanuku <quic_vtanuku@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>
-References: <20230203210133.3552796-1-quic_eberman@quicinc.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <20230203210133.3552796-1-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: UDYBliO-YNogq6ZqeomTMFdH1cyj3V5s
-X-Proofpoint-GUID: UDYBliO-YNogq6ZqeomTMFdH1cyj3V5s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302060158
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Given that the PCI driver handles controllers that only work with
+hardware sequencing, we can remove the dangerous tag.
+This patch is the second part of Mika's suggestion [1].
+The first part was accepted in [2].
+
+[1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
+[2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
+
+Mauro Lima (1):
+  spi: intel: Remove DANGEROUS tag from pci driver
+
+ drivers/spi/Kconfig | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 
-On 2/3/2023 1:01 PM, Elliot Berman wrote:
-> Move include/linux/qcom-geni-se.h to include/linux/soc/qcom/geni-se.h.
-> This removes 1 of a few remaining Qualcomm-specific headers into a more
-> approciate subdirectory under include/.
+base-commit: 6437d7e4505debf3e2ea6cf1d04e9f8afd834445
+-- 
+2.39.1
 
-Need to s/approciate/appropriate/ (Thanks Mukesh!)
-
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   drivers/i2c/busses/i2c-qcom-geni.c                   | 2 +-
->   drivers/soc/qcom/qcom-geni-se.c                      | 2 +-
->   drivers/spi/spi-geni-qcom.c                          | 2 +-
->   drivers/tty/serial/qcom_geni_serial.c                | 2 +-
->   include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} | 0
->   5 files changed, 4 insertions(+), 4 deletions(-)
->   rename include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} (100%)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index fd70794bfcee..80d586b0be7a 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -14,7 +14,7 @@
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
->   #include <linux/pm_runtime.h>
-> -#include <linux/qcom-geni-se.h>
-> +#include <linux/soc/qcom/geni-se.h>
->   #include <linux/spinlock.h>
->   
->   #define SE_I2C_TX_TRANS_LEN		0x26c
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index f0475b93ca73..795a2e1d59b3 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -14,7 +14,7 @@
->   #include <linux/of_platform.h>
->   #include <linux/pinctrl/consumer.h>
->   #include <linux/platform_device.h>
-> -#include <linux/qcom-geni-se.h>
-> +#include <linux/soc/qcom/geni-se.h>
->   
->   /**
->    * DOC: Overview
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 4e83cc5b445d..e05e40a49294 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -12,7 +12,7 @@
->   #include <linux/platform_device.h>
->   #include <linux/pm_opp.h>
->   #include <linux/pm_runtime.h>
-> -#include <linux/qcom-geni-se.h>
-> +#include <linux/soc/qcom/geni-se.h>
->   #include <linux/spi/spi.h>
->   #include <linux/spinlock.h>
->   
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index b487823f0e61..52f3a0184577 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -16,7 +16,7 @@
->   #include <linux/platform_device.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/pm_wakeirq.h>
-> -#include <linux/qcom-geni-se.h>
-> +#include <linux/soc/qcom/geni-se.h>
->   #include <linux/serial.h>
->   #include <linux/serial_core.h>
->   #include <linux/slab.h>
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/soc/qcom/geni-se.h
-> similarity index 100%
-> rename from include/linux/qcom-geni-se.h
-> rename to include/linux/soc/qcom/geni-se.h
-> 
-> base-commit: 3866989ec2c319341e2cf69ec6116269b634a271
