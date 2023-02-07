@@ -2,68 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B792468D9B4
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 14:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59CF68DA17
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 15:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjBGNxB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Feb 2023 08:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S232013AbjBGOGB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Feb 2023 09:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBGNxB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 08:53:01 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D35F4;
-        Tue,  7 Feb 2023 05:53:00 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id DC32B87;
-        Tue,  7 Feb 2023 14:52:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1675777979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3WxcfI63mtIII59k4Jv/2QN4RreNK4p1T15pIT1Atjw=;
-        b=tM0TuD2IQIBkvLNeFLTsFZoxK6Qs4r1/X3EcW8ciUVQyTNgVRb6i1aeh38dTOVULGdiMEp
-        srUaINfujjIJwzcHCYRf0NLyDIsjCcGWsZ/SNih4fvMF7/bBQhO7n3MqgK2/w4ghbFWaWk
-        QASnu59Yx4o6hlzvZFBXnJjdu9bBQVqGJeEg+kn2Hj4mPxyvS4Sra+gjh3E8QULcnMTTkx
-        bQxHs33Cp3dWKIER+rlrGdHSpogO0HBicW471t+FdMLj/HhRPuQB0g8GB5K3/2m5NTekoz
-        eY+L8VgT1qD317V3vHFIJfs3F+R6l0mkx8Lqu4uhqqbyFQ1jGTnK5mmR49839w==
-From:   Michael Walle <michael@walle.cc>
-To:     mauro.lima@eclypsium.com
-Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, mika.westerberg@linux.intel.com,
-        Michael Walle <michael@walle.cc>
+        with ESMTP id S231326AbjBGOF6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 09:05:58 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B0CD53E;
+        Tue,  7 Feb 2023 06:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675778743; x=1707314743;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mkEL9K9dbw3j0hR5Y0jMzBAGrvZ+x1Pz9OzilWESy/k=;
+  b=lhdnwGV5N4tN6jQskw3C3gYcKKySQAacO5H9O1J9Bu+U010T2te1xTld
+   Fspmtpbex1Uo8QLlmsupEzlHFBhAjHCqPuNrikIbz3f6h1v1fOcSIdr0I
+   b4V1rcQTDkcdW3LHmMs0gyCd1CXD4HsetyPWMAKMOAD5OTot63l3Nguhu
+   mP8eVfET2SZAqchyG4PYgOlDr+6x1o7qfLUeP+XAsGFALrHNzyz/CgE0m
+   VUhGymBLLr7UrYVAVFRFpX18+0stFL/RpT6z0cydix/YI8MqhXuYOxRLz
+   L+t4dcNHL8GxVny9GNmHuIDeJs3XwnVnWlDxYwEimg4GjI4hr37jcMjGP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="329529775"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="329529775"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:02:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="730440011"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="730440011"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2023 06:02:42 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id B34E21C5; Tue,  7 Feb 2023 16:03:20 +0200 (EET)
+Date:   Tue, 7 Feb 2023 16:03:20 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     mauro.lima@eclypsium.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Subject: Re: [PATCH 1/1] spi: intel: Remove DANGEROUS tag from pci driver
-Date:   Tue,  7 Feb 2023 14:52:54 +0100
-Message-Id: <20230207135254.2465816-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230206183143.75274-2-mauro.lima@eclypsium.com>
+Message-ID: <Y+JaKF4FZQKqeGs7@black.fi.intel.com>
 References: <20230206183143.75274-2-mauro.lima@eclypsium.com>
+ <20230207135254.2465816-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230207135254.2465816-1-michael@walle.cc>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> Modern CPUs exposes this controller as PCI device that only uses
-> hardware sequencing capabilities which is safer than software
-> sequencing.
-> Leave the platform driver as *DANGEROUS* and update help text since
-> most of these controllers are using software sequencing.
+Hi,
 
-Out of curiosity, what is hardware sequencing? Maybe this should
-be explained a bit more in the Kconfig help text. Looks like the
-dangerous was there because you can update the bios and that
-could eventually lead to a bricked mainboard. So hardware
-sequencing helps there? how?
+On Tue, Feb 07, 2023 at 02:52:54PM +0100, Michael Walle wrote:
+> > Modern CPUs exposes this controller as PCI device that only uses
+> > hardware sequencing capabilities which is safer than software
+> > sequencing.
+> > Leave the platform driver as *DANGEROUS* and update help text since
+> > most of these controllers are using software sequencing.
+> 
+> Out of curiosity, what is hardware sequencing? Maybe this should
+> be explained a bit more in the Kconfig help text. Looks like the
+> dangerous was there because you can update the bios and that
+> could eventually lead to a bricked mainboard. So hardware
+> sequencing helps there? how?
 
--michael
+Hardware sequencing means the controller exposes just a bunch of "high
+level" operations to the software. Such as read, write, erase and so on
+but does not allow running the actual "low level" SPI-NOR opcodes.
+Software sequencing on the other hand allows running pretty much any
+opcode and this is what caused problems for certain Lenovo laptops few
+years back that then resulted adding DANGEROUS to the Kconfig.
+
+Typically the flash is locked by the BIOS so ordinary users cannot
+really overwrite it, even by accident.
