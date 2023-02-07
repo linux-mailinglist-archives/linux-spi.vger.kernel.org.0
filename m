@@ -2,89 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D8968D5F9
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 12:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA0268D840
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 14:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjBGLvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Feb 2023 06:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
+        id S232230AbjBGNH7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Feb 2023 08:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjBGLvy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 06:51:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79BD1720;
-        Tue,  7 Feb 2023 03:51:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BDBE6134A;
-        Tue,  7 Feb 2023 11:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC53C4339B;
-        Tue,  7 Feb 2023 11:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675770712;
-        bh=NuV4isujyR9+A4tE7QmJErckCg1VM8t4faGWpD/9Hlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tx04d/dFXhXrFpV0On8Y1e3uZzuagt1mtopstLXWWZbHwd6YToYex/lwflmU2SX+d
-         5A0woErm1Y4ZpO8kS7JDnnveN7RAO9nmZnEMn/+R11FyuhAVIPSxdaPhCXZD06qrE9
-         FgmPDdcDBnKg3IOwBS3TCrWLbSBB0sy1pp7o7GTmevTBXSs5yQ/oUBtt+2+6hRu0GO
-         ELw9sgplMx8YexOLpkqhgzo8Z/F8FHwR4ZMoJLs7WVS/nOG7/zx+xTZ9xV4d2oGTQ1
-         AAWla7DcdNPZxenR94SbEmI1cgpcbVk9cO/JPtdEyMBoQJUTRUU3BOa9Tk7HWlg+DO
-         omepZRdA8NoLQ==
-Date:   Tue, 7 Feb 2023 11:51:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Lima <mauro.lima@eclypsium.com>
-Cc:     mika.westerberg@linux.intel.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] spi: intel: Remove DANGEROUS tag from pci driver
-Message-ID: <Y+I7VG4w7LLfizLo@sirena.org.uk>
-References: <20230206183143.75274-1-mauro.lima@eclypsium.com>
+        with ESMTP id S232248AbjBGNH5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 08:07:57 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C233B0C8;
+        Tue,  7 Feb 2023 05:07:33 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 317D6CsR033880;
+        Tue, 7 Feb 2023 07:06:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675775172;
+        bh=ekpjB4H4unY73nJ7BkdNZHsEInjoxv8tnvp+z0/THYw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=SCEbkJ2JVL81GhMal0ahTjr9ZTbbGSd8TKcQIa4oRBAIu6mb9j1H0tabPyPO0VffD
+         FuyDvoy7q9/99tVHVuZiwhjxfeX6cQrRiPLdTqJhWONkdCAzN9B28XyOn0Ct4fPi/r
+         zkr9KGvedmNaoDGAZxRerzS6sliLz5U3i3X31rHI=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 317D6CE3036467
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Feb 2023 07:06:12 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
+ Feb 2023 07:06:12 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 7 Feb 2023 07:06:12 -0600
+Received: from [172.24.221.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 317D67Rc025797;
+        Tue, 7 Feb 2023 07:06:09 -0600
+Message-ID: <f624e2f0-5fcf-a5b4-8376-6ef37a799493@ti.com>
+Date:   Tue, 7 Feb 2023 18:36:07 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nke6NR22QPsJS30V"
-Content-Disposition: inline
-In-Reply-To: <20230206183143.75274-1-mauro.lima@eclypsium.com>
-X-Cookie: Do not flush.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/4] spi: cadence-quadspi: Reset CMD_CTRL Reg on cmd
+ r/w completion
+Content-Language: en-US
+To:     Pratyush Yadav <ptyadav@amazon.de>
+CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Takahiro.Kuwano@infineon.com>
+References: <20230125081023.1573712-1-d-gole@ti.com>
+ <20230125081023.1573712-2-d-gole@ti.com> <mafs07cx8f1oc.fsf_-_@amazon.de>
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <mafs07cx8f1oc.fsf_-_@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Thanks for taking a look Pratyush!
 
---nke6NR22QPsJS30V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 1/27/2023 8:46 PM, Pratyush Yadav wrote:
+> Hi,
+>
+> On Wed, Jan 25 2023, Dhruva Gole wrote:
+>
+>> If one leaves the CQSPI_REG_CMDCTRL in an unclean state this may cause
+>> issues in future command reads. This issue came to light when some flash
+>> reads in STIG mode were coming back dirty.
+> Can you explain in more detail what you mean by "reads coming back
+> dirty"? Because I don't see any clear reason why not resetting the
+> register would break anything. We re-create the register value from the
+> scratch on the next read anyway, and as soon as you writel() that, the
+> old fields get thrown away anyway.
+There's a hardware bug due to which clearing of this register is necessary.
+> [...]
 
-On Mon, Feb 06, 2023 at 03:31:42PM -0300, Mauro Lima wrote:
-> Given that the PCI driver handles controllers that only work with
-> hardware sequencing, we can remove the dangerous tag.
-> This patch is the second part of Mika's suggestion [1].
-> The first part was accepted in [2].
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
 
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
-
---nke6NR22QPsJS30V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPiO1MACgkQJNaLcl1U
-h9CLTgf/Qq8N+KpvDckJoxiM0NaOhZFj5XhalERzmrJFSOBKde+8m53XkBnmu40B
-+Nc9SiOFNVYCcO1ECc+cNzLbsyyzK+lw/WCV4+L/Zp2INJRjhOQPOB4YeVtBoF8O
-6ul3y+de5ksGR+T+g7vBpE/+JWWJKhwbk/m2F5w8tQs1TJnKR0aifE2xyWr0ILmF
-MPQ4ll6glTpHUw0DQhMeT5Zpvz9jkmQhRZphJnhimjQF35Dz3vg8Rcsq241Ams3z
-f+EpVYzOm6ATSvM4mNWPWWjlwhfsnnyn5OWLqHnITlQy6NS/bQa/q65bgSdd6YYt
-jFxTvcKYuA3hyEdPJt+kRldYFV3E1g==
-=u+36
------END PGP SIGNATURE-----
-
---nke6NR22QPsJS30V--
