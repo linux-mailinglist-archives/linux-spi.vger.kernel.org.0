@@ -2,96 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE1068D21A
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 10:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D8968D5F9
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Feb 2023 12:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjBGJHO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 7 Feb 2023 04:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S230445AbjBGLvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Feb 2023 06:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjBGJHM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 04:07:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68931234DF;
-        Tue,  7 Feb 2023 01:07:08 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pPJwG-001RJZ-JC; Tue, 07 Feb 2023 10:06:56 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pPJwE-000mCw-Hc; Tue, 07 Feb 2023 10:06:56 +0100
-Message-ID: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Tue, 07 Feb 2023 10:06:53 +0100
-In-Reply-To: <20230203071423.GA24833@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S230284AbjBGLvy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Feb 2023 06:51:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79BD1720;
+        Tue,  7 Feb 2023 03:51:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BDBE6134A;
+        Tue,  7 Feb 2023 11:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC53C4339B;
+        Tue,  7 Feb 2023 11:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675770712;
+        bh=NuV4isujyR9+A4tE7QmJErckCg1VM8t4faGWpD/9Hlo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tx04d/dFXhXrFpV0On8Y1e3uZzuagt1mtopstLXWWZbHwd6YToYex/lwflmU2SX+d
+         5A0woErm1Y4ZpO8kS7JDnnveN7RAO9nmZnEMn/+R11FyuhAVIPSxdaPhCXZD06qrE9
+         FgmPDdcDBnKg3IOwBS3TCrWLbSBB0sy1pp7o7GTmevTBXSs5yQ/oUBtt+2+6hRu0GO
+         ELw9sgplMx8YexOLpkqhgzo8Z/F8FHwR4ZMoJLs7WVS/nOG7/zx+xTZ9xV4d2oGTQ1
+         AAWla7DcdNPZxenR94SbEmI1cgpcbVk9cO/JPtdEyMBoQJUTRUU3BOa9Tk7HWlg+DO
+         omepZRdA8NoLQ==
+Date:   Tue, 7 Feb 2023 11:51:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     mika.westerberg@linux.intel.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/1] spi: intel: Remove DANGEROUS tag from pci driver
+Message-ID: <Y+I7VG4w7LLfizLo@sirena.org.uk>
+References: <20230206183143.75274-1-mauro.lima@eclypsium.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nke6NR22QPsJS30V"
+Content-Disposition: inline
+In-Reply-To: <20230206183143.75274-1-mauro.lima@eclypsium.com>
+X-Cookie: Do not flush.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Christoph!
 
-On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
-> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
-> > We have had a discussion between multiple people invested in the SuperH port and
-> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
-> > when he isn't available.
-> 
-> So, this still isn't reflected in MAINTAINERS in linux-next.  When
-> do you plan to take over?  What platforms will remain supported and
-> what can we start dropping due to being unused and unmaintained?
+--nke6NR22QPsJS30V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm getting everything ready now with Geert's help and I have a probably dumb
-question regarding the MAINTAINERS file change: Shall I just add myself as an
-additional maintainer first or shall I also drop Yoshinori Sato?
+On Mon, Feb 06, 2023 at 03:31:42PM -0300, Mauro Lima wrote:
+> Given that the PCI driver handles controllers that only work with
+> hardware sequencing, we can remove the dangerous tag.
+> This patch is the second part of Mika's suggestion [1].
+> The first part was accepted in [2].
 
-Also, is it desirable to add a "T:" entry for the kernel tree?
+Please don't send cover letters for single patches, if there is anything
+that needs saying put it in the changelog of the patch or after the ---
+if it's administrative stuff.  This reduces mail volume and ensures that=20
+any important information is recorded in the changelog rather than being
+lost.=20
 
-Thanks,
-Adrian
+--nke6NR22QPsJS30V
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPiO1MACgkQJNaLcl1U
+h9CLTgf/Qq8N+KpvDckJoxiM0NaOhZFj5XhalERzmrJFSOBKde+8m53XkBnmu40B
++Nc9SiOFNVYCcO1ECc+cNzLbsyyzK+lw/WCV4+L/Zp2INJRjhOQPOB4YeVtBoF8O
+6ul3y+de5ksGR+T+g7vBpE/+JWWJKhwbk/m2F5w8tQs1TJnKR0aifE2xyWr0ILmF
+MPQ4ll6glTpHUw0DQhMeT5Zpvz9jkmQhRZphJnhimjQF35Dz3vg8Rcsq241Ams3z
+f+EpVYzOm6ATSvM4mNWPWWjlwhfsnnyn5OWLqHnITlQy6NS/bQa/q65bgSdd6YYt
+jFxTvcKYuA3hyEdPJt+kRldYFV3E1g==
+=u+36
+-----END PGP SIGNATURE-----
+
+--nke6NR22QPsJS30V--
