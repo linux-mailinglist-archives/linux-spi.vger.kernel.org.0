@@ -2,143 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA3C68F070
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Feb 2023 15:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2990868F623
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Feb 2023 18:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjBHONI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S229663AbjBHRxH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Feb 2023 12:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjBHONB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Feb 2023 09:13:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5437F1E;
-        Wed,  8 Feb 2023 06:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99DC5B81C76;
-        Wed,  8 Feb 2023 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6EF7C4339C;
-        Wed,  8 Feb 2023 14:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675865539;
-        bh=CM9X2AuKUJbsYimacCNPKUAK4TpbgQFBIKIrx7h4lJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVucjxu+REx2vxJaU73V9LeqN0VfNlpVqOVjlgapAR7+Js6CJh2wUlBGjryat06Mx
-         D9i30JRbIJdOspvFUtAoFUTSjc7q9zKrJAeQbeBiwFIiiX8euIEbk0Ty1Tz6V657+T
-         FLA5gRRVsKUOtlkaWGYAvOyX2NIaQlgKRJiFZbCRwtUw7qjRf/eGTg/jPYZv/0q1tt
-         FcUOC2BCeTia4s8YYIZRIs5mKBJvajFbiu7xD8C4mv+0OOcBl6e5vyuvgWOBBh+MUZ
-         xz5q4YEAPB/J4RrPpxV69F8ll/mVwhh9Od/sV4/BiL8f+TOBF8F2/I8j5Fv6bLISdE
-         LVYCGEEzxvGgw==
-Date:   Wed, 8 Feb 2023 15:12:16 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <Y+OtwCqt26UjCwkZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
- <CAAhV-H57bV855SMr6iBqoQzdak5QSnaRLjQ9oAbOtYZnik5SoQ@mail.gmail.com>
- <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
+        with ESMTP id S230462AbjBHRxG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Feb 2023 12:53:06 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AEC6E89
+        for <linux-spi@vger.kernel.org>; Wed,  8 Feb 2023 09:53:05 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id bd6so7191012oib.6
+        for <linux-spi@vger.kernel.org>; Wed, 08 Feb 2023 09:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LSfgmHIZnIl2zNyWMyXqpCYt+vH29jA6dvbtFBb/0fM=;
+        b=JWFDqbheTcrXXsmy+6eGyTKyBReLQO0vyGRPfm9zagkFy0NUPaUZVQX2tolzAV+qoG
+         ObhbLO6tfV0Ce6aiXaehCdEY40QKAr0eVeaJEO5ZB/SEjRWEilAdAYd5waS8yCTA1y+N
+         lrKimZKz39LMLTPNOaiCGeCFmi24QU17tulGYCmLP9WPWbc88YMQegUG7+ogzgk43n7E
+         K7WaLNIyoarzmaFagzdmvoonsmZmTb1UwJHAWKuZry1lqeGdp9JmptEMZMlJD4E42f75
+         W/d3vSUxcT0250WOvBw6wpMEK8wWy3hpDw8WBedxzjdg4ffPY0jDyUoLJ3YygI2WA0Ta
+         /UNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LSfgmHIZnIl2zNyWMyXqpCYt+vH29jA6dvbtFBb/0fM=;
+        b=sP9VnmCh1Ylrp5El2CCD5Jg2AFi1A1vJDX9l/7EnJ3mdNnJNq25ylkbAxVqK4fpK9W
+         d+b2CuqbWDwrQ5RB0HhqWt20lSxafSazRtvyLOydoNB5zPf8rD0ePM86QgJw0aNK+4aO
+         p4KzFSgHxRLmncdMOQtK5fKSvMfs+SgWg8R6yR6ANFf1zEGwjTRgPngLacLWgqGBdm+6
+         nTbrZ9oBFd0GXgX5yncjwLzAFar9w/suAhJQsfkEUmJHu9hFUw3BhzsCptMah4Xw+hPK
+         wkntaLUk6qFMvzkndOFwPuniuhPsWnYinRe1rARITGvG8+KG2eex/qIOsm2+AySZW08G
+         ZkFg==
+X-Gm-Message-State: AO0yUKX/h/s4poDWYFiHuUB+s/YYL7f9wJm4lsuZubGAUpN+t4ZHaHib
+        /yz4M0Fs6q2qYqJMRdFSQ0z9ooDoA3by6JoL
+X-Google-Smtp-Source: AK7set8obQpznCYM0FQ0CO46Cz5b0n/SF7X6ncai4VaiRr8NX5J3ge5F3573CgIYM/Fj3HGb6sqYvw==
+X-Received: by 2002:a05:6808:647:b0:377:f87c:2b27 with SMTP id z7-20020a056808064700b00377f87c2b27mr3638702oih.36.1675878784466;
+        Wed, 08 Feb 2023 09:53:04 -0800 (PST)
+Received: from fedora.capitalinasdc.com ([190.123.123.9])
+        by smtp.gmail.com with ESMTPSA id r24-20020a0568080ab800b003783caeaf61sm7282094oij.13.2023.02.08.09.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 09:53:04 -0800 (PST)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH] spi: intel: Update help text of PCI driver
+Date:   Wed,  8 Feb 2023 14:52:53 -0300
+Message-Id: <20230208175253.117714-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H/y3lZ2MEalioY2m"
-Content-Disposition: inline
-In-Reply-To: <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Modern intel hardware uses controllers that work in hardware
+sequencing mode. In this mode, the controller exposes a subset
+of operations, like read, write and erase, making it easier
+and less error-prone for use.
+On the other hand, most of the controllers handled by the
+platform driver use software sequencing that exposes the
+entire set of opcodes i.e. include the low-level operations
+available from the controller.
 
---H/y3lZ2MEalioY2m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since the PCI driver works with modern controllers, remove the
+DANGEROUS tag from it.
+Update the driver's help text and leave the DANGEROUS tag of
+the platform driver.
 
+Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
+---
+ For the record of the base commit:
 
-> Yes, that's the plan. We're collecting the various patches people have se=
-nt
-> in for arch/sh, review and test them and apply them.
->=20
-> My test board is running the latest kernel now, so I can test new patches=
-, too.
+ Given that the PCI driver handles controllers that only work with
+ hardware sequencing, we can remove the dangerous tag.
+ This patch is the second part of Mika's suggestion [1].
+ The first part was accepted in [2].
 
-I am just witnessing this development, but I want to say thanks for your
-effort and congrats on your progress. Looks like you do the right things
-correctly, cool! Kudos also to Geert and others for their assistance.
+ [1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
+ [2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
 
+ This patch continues the work addressing the comments in the previous
+ patch adding information about hardware and software sequencing.
+ Discussion: https://lore.kernel.org/r/20230206183143.75274-1-mauro.lima@eclypsium.com/
 
---H/y3lZ2MEalioY2m
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/spi/Kconfig | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 3a362c450cb6..9eb3c72d7cd8 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -454,13 +454,16 @@ config SPI_INTEL_PCI
+ 	select SPI_INTEL
+ 	help
+ 	  This enables PCI support for the Intel PCH/PCU SPI controller in
+-	  master mode. This controller is present in modern Intel hardware
+-	  and is used to hold BIOS and other persistent settings. This
+-	  driver only supports hardware sequencing mode. Using this
+-	  driver it is possible to upgrade BIOS directly from Linux.
++	  master mode. This controller is used to hold BIOS and other
++	  persistent settings. Controllers present in modern Intel hardware
++	  only work in hardware sequencing mode, this means that the
++	  controller exposes a subset of operations that makes it easier
++	  and safer to use. Using this driver it is possible to upgrade BIOS
++	  directly from Linux.
+ 
+-	  Say N here unless you know what you are doing. Overwriting the
+-	  SPI flash may render the system unbootable.
++	  Say N here unless you want to overwrite the flash memory and
++	  know what you are doing or you want to read the memory's content.
++	  Overwriting the SPI flash may render the system unbootable.
+ 
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called spi-intel-pci.
+@@ -473,8 +476,10 @@ config SPI_INTEL_PLATFORM
+ 	help
+ 	  This enables platform support for the Intel PCH/PCU SPI
+ 	  controller in master mode that is used to hold BIOS and other
+-	  persistent settings. Most of these controllers are using
+-	  software sequencing mode. Using this driver it is possible to
++	  persistent settings. Most of these controllers work in
++	  software sequencing mode, which means that the controller
++	  exposes the full set of operations that supports, making it
++	  more complex for use. Using this driver it is possible to
+ 	  upgrade BIOS directly from Linux.
+ 
+ 	  Say N here unless you know what you are doing. Overwriting the
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjrbwACgkQFA3kzBSg
-KbYHCw//YV/RG0PWJ1txmpgpA0mLX7EfhxqJS6vwNlqziCSd910A+/ZNL7p2Q5Hx
-wVdeRoLHd9OcZFYXr0HLH0VCIJUYpr57DCy0AoIKL9q9CWET1hAMZjsIv5Kx2uVa
-1obdyCX46XEMqpSBhcsq8Vsq0TMQ4sCLdpVq/wPqBEDGUBGAIhkWX1UMQv2kiS1T
-uuYPKgsFmI2kl52owcOU2yZ42SVZNTEWiO2A8/4BXFfhhzKLWVcZQpEV9OInJ30n
-iXm6abMFAsFavgI90NZl1H4UKKLOzD5Jgr9Rv6DfYuyeADsKe2oQN1NvioHHVqvm
-qWG2b2UnZ7oS+dXxhS7YsQeiiTyZP/mpUprmrCrm0HMsl6iKCgCU8ceuRzy80Obt
-7u9CpA+ceRJ05Gfgo18YElk42l4Qhwk4zSWDQdOwtOlk1FpX9TBxOtOVngYEprMM
-UDRSSXFIJZTEyUAbqWqsMDuGRVcq3S9XAPYINbzig3H+Iy7an/wpxWBnYrRm+eCz
-/eb7eQ/iQYmBd7Zn8XO74E6vvH+pG8f9nqr2sRPpk89ZDPsZEk0wFCHpJQShIYJt
-iSeMDaLVGP+e+YlW7qvKavsdPISxlLhNFA1kj66ccHNZVbNQ5xyGhps/8qefpitG
-nN9N+KCLmNvyC8QCuMiMRDD9RVq8OSQ3VcL2zT8pj3XuJo2po4s=
-=9hIS
------END PGP SIGNATURE-----
+base-commit: 7db738b5fea4533fa217dfb05c506c15bd0964d9
+-- 
+2.39.1
 
---H/y3lZ2MEalioY2m--
