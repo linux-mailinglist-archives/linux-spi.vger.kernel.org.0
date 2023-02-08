@@ -2,147 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2990868F623
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Feb 2023 18:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B5568F77D
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Feb 2023 19:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjBHRxH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Feb 2023 12:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S231233AbjBHSyj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Feb 2023 13:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjBHRxG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Feb 2023 12:53:06 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AEC6E89
-        for <linux-spi@vger.kernel.org>; Wed,  8 Feb 2023 09:53:05 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id bd6so7191012oib.6
-        for <linux-spi@vger.kernel.org>; Wed, 08 Feb 2023 09:53:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSfgmHIZnIl2zNyWMyXqpCYt+vH29jA6dvbtFBb/0fM=;
-        b=JWFDqbheTcrXXsmy+6eGyTKyBReLQO0vyGRPfm9zagkFy0NUPaUZVQX2tolzAV+qoG
-         ObhbLO6tfV0Ce6aiXaehCdEY40QKAr0eVeaJEO5ZB/SEjRWEilAdAYd5waS8yCTA1y+N
-         lrKimZKz39LMLTPNOaiCGeCFmi24QU17tulGYCmLP9WPWbc88YMQegUG7+ogzgk43n7E
-         K7WaLNIyoarzmaFagzdmvoonsmZmTb1UwJHAWKuZry1lqeGdp9JmptEMZMlJD4E42f75
-         W/d3vSUxcT0250WOvBw6wpMEK8wWy3hpDw8WBedxzjdg4ffPY0jDyUoLJ3YygI2WA0Ta
-         /UNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LSfgmHIZnIl2zNyWMyXqpCYt+vH29jA6dvbtFBb/0fM=;
-        b=sP9VnmCh1Ylrp5El2CCD5Jg2AFi1A1vJDX9l/7EnJ3mdNnJNq25ylkbAxVqK4fpK9W
-         d+b2CuqbWDwrQ5RB0HhqWt20lSxafSazRtvyLOydoNB5zPf8rD0ePM86QgJw0aNK+4aO
-         p4KzFSgHxRLmncdMOQtK5fKSvMfs+SgWg8R6yR6ANFf1zEGwjTRgPngLacLWgqGBdm+6
-         nTbrZ9oBFd0GXgX5yncjwLzAFar9w/suAhJQsfkEUmJHu9hFUw3BhzsCptMah4Xw+hPK
-         wkntaLUk6qFMvzkndOFwPuniuhPsWnYinRe1rARITGvG8+KG2eex/qIOsm2+AySZW08G
-         ZkFg==
-X-Gm-Message-State: AO0yUKX/h/s4poDWYFiHuUB+s/YYL7f9wJm4lsuZubGAUpN+t4ZHaHib
-        /yz4M0Fs6q2qYqJMRdFSQ0z9ooDoA3by6JoL
-X-Google-Smtp-Source: AK7set8obQpznCYM0FQ0CO46Cz5b0n/SF7X6ncai4VaiRr8NX5J3ge5F3573CgIYM/Fj3HGb6sqYvw==
-X-Received: by 2002:a05:6808:647:b0:377:f87c:2b27 with SMTP id z7-20020a056808064700b00377f87c2b27mr3638702oih.36.1675878784466;
-        Wed, 08 Feb 2023 09:53:04 -0800 (PST)
-Received: from fedora.capitalinasdc.com ([190.123.123.9])
-        by smtp.gmail.com with ESMTPSA id r24-20020a0568080ab800b003783caeaf61sm7282094oij.13.2023.02.08.09.53.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 09:53:04 -0800 (PST)
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-To:     mika.westerberg@linux.intel.com
-Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
-Subject: [PATCH] spi: intel: Update help text of PCI driver
-Date:   Wed,  8 Feb 2023 14:52:53 -0300
-Message-Id: <20230208175253.117714-1-mauro.lima@eclypsium.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229479AbjBHSyh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Feb 2023 13:54:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7ED18A95;
+        Wed,  8 Feb 2023 10:54:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C5BEB81F4D;
+        Wed,  8 Feb 2023 18:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB21C433D2;
+        Wed,  8 Feb 2023 18:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675882473;
+        bh=xTtM9WlSf7bwExmahb6XOjPHbEjpNPb+C9ZLErT3mV8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kJN28UveNEt23ZFALxkKRAduymcXqKXXhl5ZE6krYfbalb6HMbzHo9qeVzvcHI7Wm
+         H7S6jcL16vD7PqCbUM676t6Ujn2JFJPW6F8SYQEY0t+JColJ5tdmzL8HnmWP59Mv+N
+         h1XG21jruiC7Pqu0lZhIHvhdf8KfE3r2XiOfPuEIw7UtbGW+1gt8cYhRh3sZd6iQB0
+         OKQT0joBdQfoYqU3AXs0x+0ro+BNaKQvYiFcCdFS93pX8FTqdLs62iSLZQceti8ikH
+         8vqlPouh7hbFMq94LAL+5Wj+RTZZwiFzYMUZ+IE2R0duumYDsHSZLH3uCg57RDgxC5
+         5i80rfFHy/R9Q==
+Date:   Wed, 8 Feb 2023 19:08:33 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Loic PALLARDY <loic.pallardy@st.com>
+Subject: Re: [PATCH v3 4/6] bus: stm32_sys_bus: add support for STM32MP15
+ and STM32MP13 system bus
+Message-ID: <20230208190833.532cd60c@jic23-huawei>
+In-Reply-To: <d6c659d8-2e5c-cb60-d950-685c4ba319e2@foss.st.com>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+        <20230127164040.1047583-5-gatien.chevallier@foss.st.com>
+        <20230128161217.0e79436e@jic23-huawei>
+        <d6c659d8-2e5c-cb60-d950-685c4ba319e2@foss.st.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Modern intel hardware uses controllers that work in hardware
-sequencing mode. In this mode, the controller exposes a subset
-of operations, like read, write and erase, making it easier
-and less error-prone for use.
-On the other hand, most of the controllers handled by the
-platform driver use software sequencing that exposes the
-entire set of opcodes i.e. include the low-level operations
-available from the controller.
+On Tue, 7 Feb 2023 15:12:23 +0100
+Gatien CHEVALLIER <gatien.chevallier@foss.st.com> wrote:
 
-Since the PCI driver works with modern controllers, remove the
-DANGEROUS tag from it.
-Update the driver's help text and leave the DANGEROUS tag of
-the platform driver.
+> Hi Jonathan,
+> 
+> On 1/28/23 17:12, Jonathan Cameron wrote:
+> > On Fri, 27 Jan 2023 17:40:38 +0100
+> > Gatien Chevallier <gatien.chevallier@foss.st.com> wrote:
+> >   
+> >> This driver is checking the access rights of the different
+> >> peripherals connected to the system bus. If access is denied,
+> >> the associated device tree node is skipped so the platform bus
+> >> does not probe it.
+> >>
+> >> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> >> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>  
+> > 
+> > Hi Gatien,
+> > 
+> > A few comments inline,
+> > 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> >> diff --git a/drivers/bus/stm32_sys_bus.c b/drivers/bus/stm32_sys_bus.c
+> >> new file mode 100644
+> >> index 000000000000..c12926466bae
+> >> --- /dev/null
+> >> +++ b/drivers/bus/stm32_sys_bus.c
+> >> @@ -0,0 +1,168 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
+> >> + */
+> >> +
+> >> +#include <linux/bitfield.h>
+> >> +#include <linux/bits.h>
+> >> +#include <linux/device.h>
+> >> +#include <linux/err.h>
+> >> +#include <linux/io.h>
+> >> +#include <linux/init.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/of.h>
+> >> +#include <linux/of_platform.h>
+> >> +#include <linux/platform_device.h>
+> >> +
+> >> +/* ETZPC peripheral as firewall bus */
+> >> +/* ETZPC registers */
+> >> +#define ETZPC_DECPROT			0x10
+> >> +
+> >> +/* ETZPC miscellaneous */
+> >> +#define ETZPC_PROT_MASK			GENMASK(1, 0)
+> >> +#define ETZPC_PROT_A7NS			0x3
+> >> +#define ETZPC_DECPROT_SHIFT		1  
+> > 
+> > This define makes the code harder to read.  What we care about is
+> > the number of bits in the register divided by number of entries.
+> > (which is 2) hence the shift by 1. See below for more on this.
+> > 
+> >   
+> >> +
+> >> +#define IDS_PER_DECPROT_REGS		16  
+> >   
+> >> +#define STM32MP15_ETZPC_ENTRIES		96
+> >> +#define STM32MP13_ETZPC_ENTRIES		64  
+> > 
+> > These defines just make the code harder to check.
+> > They aren't magic numbers, but rather just telling us how many
+> > entries there are, so I would just put them in the structures directly.
+> > Their use make it clear what they are without needing to give them a name.
+> >   
+> 
+> Honestly, I'd rather read the hardware configuration registers to get 
+> this information instead of differentiating MP13/15. Would you agree on 
+> that?
 
-Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- For the record of the base commit:
+Sure, if they are discoverable even better.
 
- Given that the PCI driver handles controllers that only work with
- hardware sequencing, we can remove the dangerous tag.
- This patch is the second part of Mika's suggestion [1].
- The first part was accepted in [2].
-
- [1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
- [2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
-
- This patch continues the work addressing the comments in the previous
- patch adding information about hardware and software sequencing.
- Discussion: https://lore.kernel.org/r/20230206183143.75274-1-mauro.lima@eclypsium.com/
-
- drivers/spi/Kconfig | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3a362c450cb6..9eb3c72d7cd8 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -454,13 +454,16 @@ config SPI_INTEL_PCI
- 	select SPI_INTEL
- 	help
- 	  This enables PCI support for the Intel PCH/PCU SPI controller in
--	  master mode. This controller is present in modern Intel hardware
--	  and is used to hold BIOS and other persistent settings. This
--	  driver only supports hardware sequencing mode. Using this
--	  driver it is possible to upgrade BIOS directly from Linux.
-+	  master mode. This controller is used to hold BIOS and other
-+	  persistent settings. Controllers present in modern Intel hardware
-+	  only work in hardware sequencing mode, this means that the
-+	  controller exposes a subset of operations that makes it easier
-+	  and safer to use. Using this driver it is possible to upgrade BIOS
-+	  directly from Linux.
- 
--	  Say N here unless you know what you are doing. Overwriting the
--	  SPI flash may render the system unbootable.
-+	  Say N here unless you want to overwrite the flash memory and
-+	  know what you are doing or you want to read the memory's content.
-+	  Overwriting the SPI flash may render the system unbootable.
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called spi-intel-pci.
-@@ -473,8 +476,10 @@ config SPI_INTEL_PLATFORM
- 	help
- 	  This enables platform support for the Intel PCH/PCU SPI
- 	  controller in master mode that is used to hold BIOS and other
--	  persistent settings. Most of these controllers are using
--	  software sequencing mode. Using this driver it is possible to
-+	  persistent settings. Most of these controllers work in
-+	  software sequencing mode, which means that the controller
-+	  exposes the full set of operations that supports, making it
-+	  more complex for use. Using this driver it is possible to
- 	  upgrade BIOS directly from Linux.
- 
- 	  Say N here unless you know what you are doing. Overwriting the
-
-base-commit: 7db738b5fea4533fa217dfb05c506c15bd0964d9
--- 
-2.39.1
 
