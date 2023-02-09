@@ -2,90 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBC4690C51
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 15:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC0D690DB6
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 16:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjBIO7y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Feb 2023 09:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S230060AbjBIP5D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Feb 2023 10:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjBIO7x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 09:59:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD56196A0;
-        Thu,  9 Feb 2023 06:59:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4279761ACF;
-        Thu,  9 Feb 2023 14:59:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3548DC433EF;
-        Thu,  9 Feb 2023 14:59:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675954791;
-        bh=yP2cdaF/taunaTm0QZJAnNFJRyoecu6bhHnrp8Jt+Qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OcJBozYBxqxqscY6AHa49dPW9aZyLEYOLfsGL8mb72REUDltiJAkuNAS0Peoov59T
-         43bMGKAyL9onw0GjiUakTvrItihAPWpICBAGIYVraTZiFm/hwIYridH+OeKQilFOLr
-         WgFN1nxLqgfx4NlaOTRx/O2pWPaHNeYdiG0ycg6JxoX5h7pqkM2zg3oN8wZCw3PbtN
-         YOa8P6SYLaIWyg673wp6Al+y/xeLbCbWVJe2amjILMBQ3OTXpwnyv1IrGRzohNV5rz
-         Vz53PLAwWTaeji7/D+fnk3TW4s0Hs5iG7/bfFuIs+CAME7uNpV1Z/JooldvLoZfj9X
-         pbTNx6OIFwzpg==
-Date:   Thu, 9 Feb 2023 14:59:46 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
-        joel.peshkin@broadcom.com, jonas.gorski@gmail.com,
-        tomer.yacoby@broadcom.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 08/15] spi: export spi_transfer_cs_change_delay_exec
- function
-Message-ID: <Y+UKYuY3K7PUakLE@sirena.org.uk>
-References: <20230207065826.285013-1-william.zhang@broadcom.com>
- <20230207065826.285013-9-william.zhang@broadcom.com>
+        with ESMTP id S229574AbjBIP5B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 10:57:01 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F16AA5E2;
+        Thu,  9 Feb 2023 07:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675958219; x=1707494219;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nPgSjSnHTmQsvwxH0O6W9fGsy0DfRfu4PfopvC3aaII=;
+  b=I6iTYI2arRNm7OuqOzlqjdJ53+KI8Xc279MPjae7ZPbHenB4h0790zB3
+   W0jkjHsOU4hprfU7TonbO4YXTL6hBps51lHycRMm0PBB6dN/DB7MY9yoW
+   /Q9OG7AyJe0YPasRRG3iff9LR9hzRkrwLhAGALk23SWagdy1TLK3iTn41
+   OVP+ClnwkS4Ej8xIhT1gdjFqRNB0Onoc5u+aVRCF7DqF/wKd/N5DkSpHB
+   d+tX/dkRBgarOxUzme/iuRI1v5xTEi/+dEI7PLi8jAlUwXD8vaavFtIx3
+   uXy7oEq3H5sYtuGrZzvlXYC43CrgmmjrY3mWkt8ZaMvwYMSvl0cYWY8zD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394748489"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="394748489"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:56:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669625073"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="669625073"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Feb 2023 07:56:57 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 413A31C5; Thu,  9 Feb 2023 17:57:35 +0200 (EET)
+Date:   Thu, 9 Feb 2023 17:57:35 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: intel: Update help text of PCI driver
+Message-ID: <Y+UX7yOrtY0gz4ci@black.fi.intel.com>
+References: <20230208175253.117714-1-mauro.lima@eclypsium.com>
+ <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
+ <CAArk9MM4ZBL=_+xcJzb3X7yGyKQ6knbbsKAS+y_09Vs6pD4W=w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Cj3dh+KR4Pkcvs08"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230207065826.285013-9-william.zhang@broadcom.com>
-X-Cookie: No passing zone.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAArk9MM4ZBL=_+xcJzb3X7yGyKQ6knbbsKAS+y_09Vs6pD4W=w@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---Cj3dh+KR4Pkcvs08
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Feb 09, 2023 at 11:16:36AM -0300, Mauro Lima wrote:
+> Hi Mika,
+> >   "Say N here unless you want to overwrite the flash memory.."
+> >
+> > At least to me this means that if you enable this option your flash
+> > memory will be overwritten.
+> Do you have a suggestion for the "Say N here" text? Maybe remove it
+> since this is safe for use now? I found it difficult to rephrase it
 
-On Mon, Feb 06, 2023 at 10:58:19PM -0800, William Zhang wrote:
-> For SPI controller that implements transfer_one_message, it needs to
-> insert the delay that required by cs change event between the transfers.
-> Add a wrapper for the local function _spi_transfer_cs_change_delay_exec
-> and export it for SPI controller driver to use.
-
-This doesn't apply against current code, please check and resend.
-
---Cj3dh+KR4Pkcvs08
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPlCmEACgkQJNaLcl1U
-h9DNmQf8CN1rykAYS7g3iYE5bg3PuHtwNLHo/MLTDjtYCIfSsUlAeT0cKHSAYa3n
-MY19CwOBuo0jXSjjE7WBWMpLBqfuhHWDZQlAdNceDU7rP28hu7hV1IKOIgcCPZZw
-OyvJHm9BeHsgxYA6AF7nAFIf2g1ph80Des8n7uOJUj0BXu2HCBRCH6/0Gv1ebpAB
-RPykqYBtMOmgQg4RZI+vMFm6ZwQvCv8jPUwZVUWb/m4+YZDco/m84xKbUoDAJqjW
-MKBLMXlF/+dpvo2nE6mfDXCMf97GFYTg01uXLN2HgR3QtPMgbPaBY8ZcgMWjPBoH
-6bMIrxMcIfa4peNC+BmLLLMuYdOQ5A==
-=yCyf
------END PGP SIGNATURE-----
-
---Cj3dh+KR4Pkcvs08--
+Agree, just remove it.
