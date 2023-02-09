@@ -2,76 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B135691076
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 19:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804566910CD
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 19:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjBISjm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Feb 2023 13:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S229791AbjBISyN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Feb 2023 13:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjBISjT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 13:39:19 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746B16590;
-        Thu,  9 Feb 2023 10:39:18 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id b5so3854740plz.5;
-        Thu, 09 Feb 2023 10:39:18 -0800 (PST)
+        with ESMTP id S229865AbjBISyL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 13:54:11 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DFD27494
+        for <linux-spi@vger.kernel.org>; Thu,  9 Feb 2023 10:54:08 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id z5so3085432qtn.8
+        for <linux-spi@vger.kernel.org>; Thu, 09 Feb 2023 10:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MXrxNJPo4710vQXfLlUqnKiFqVdmV4GK7KJqHS2H9NA=;
-        b=ZSzYUSL+OaZ/dcA3qRT4wBFw3528/581THPDhVKDzi/JypnlDtTO/9WjzuL/SlvRu0
-         CGPtQRp1VI2R0lavWI3q3+csWqMgovF4e544eX8ag2PEXQZe6tjOOWjbQJloevPLNZAH
-         dXmEXmcQ74ZuUCPgCdOLcweb92Raoq2uZ8mA+gF0OibcsZUqzbXeLHaFH4rBDs4vcCsI
-         rU1Np0oo4swoES613OTmuO5Ki305GGaCqUfrWM/4pEXa//r0Q8lVYijLG9MzC76NTdfO
-         vaFOjPNohhywx42mLoVdr7lI1TQ0FxmVnEeODU5YHGsx+8TDhbze5RWPh0Uv+KC/P7mJ
-         nMNQ==
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=yxmIA/UBLGAZQUfT5li730Ng/YxAbGHMsLQSbeLr9Ps=;
+        b=PHQ++iH0kb4Det0BETwQIY9KpspI3Ij2/Fg8lNfw9aVM2deJBlbJ1qTaH+22uXVdnj
+         WvSd/DiVN29cNBIQQvd3+Y7UKByWdpfaip6vEu3X9OB1ixwZMU94YNfI0gwF6VYBM+t4
+         +MXYNiYxKYseXmYfQxTWQmIUxB0+KKPhZh5FU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MXrxNJPo4710vQXfLlUqnKiFqVdmV4GK7KJqHS2H9NA=;
-        b=rX5dRDAsrhfW5iDwvF7oBEF5707odDR16s0DA3cYJSqxPnUBKzEvDmR+A0IxatfYQG
-         cCwTbniU65tTOSUZULKbDhyPv3IKFrlf6kC0SU5PclxVpdVz34v6zkpuyTmEbpi82vK5
-         1EtpP3jH7RdjlCmXaiEjfB86UY2tsnZfl6221DboMHuB4CuLKdErTiXWOKzaawvcTdox
-         lyO/m96ar7Q1Y/LFobjwkFqZBIuW0E5ydqdrP40wspjNQJQnL5trcCzXk6k/8QSt+o1N
-         saKHBpAbbxXh2wMnFuiv3ZNGx4zuHwjD9T+85KaDsro1/grf2A5zigB7YaVvbahbJZCO
-         dPcA==
-X-Gm-Message-State: AO0yUKVTJzYFqKP5LS0sEV61Rnbf2bprPr+a1RZHSPyf8g6Ofx+kAnlY
-        f+XlLz6XGyZ+ishHMTvilKNBCh78deo+NQ==
-X-Google-Smtp-Source: AK7set+KaXa4HvuatK30HE/98Z4oxO2W2R6X52b3BN6yHMAmMzCCHP5RiClDNS/WVP1AcwsRmx2jfA==
-X-Received: by 2002:a05:6a21:164b:b0:bc:f665:8653 with SMTP id no11-20020a056a21164b00b000bcf6658653mr9298603pzb.45.1675967957890;
-        Thu, 09 Feb 2023 10:39:17 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 2-20020aa79142000000b00575caf80d08sm1790144pfi.31.2023.02.09.10.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 10:39:17 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>
-Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, dregan@mail.com,
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yxmIA/UBLGAZQUfT5li730Ng/YxAbGHMsLQSbeLr9Ps=;
+        b=H2nUbmOl2KqsJjMUkgylqb21ldqXpnqSJU8ILabfcr/OZNGRbu3FAj4zm+eKF20HKH
+         measKBhjKa54Xhshcb1RhpFz7V4RLqKWlOW2PkKAlXrIjD9H6KEkSrXa73j/tqSnV1oG
+         9Ru36IjvB/bOnVN/EtMn8ic8EbMiORGF3rDr4gA5Pr9gnxYGnv/JwZIGvgTS08MsZOYk
+         v1EGY/angj4p0bm8IdIrGv222+kFbVrO8r2c8KZazbQSsTO9oONKPHWnQaGt3BUkP3XT
+         P55kP6z/ZxMlPmm5Aqs1NusRY99W9Rm9MoPUpQKnOOcSEyRtnxYz1ZJGjLk/ICSuYt4J
+         59fA==
+X-Gm-Message-State: AO0yUKUPIg2OFwFXuT1qPJ4Jmr+GFmy+uZGuot+Z0Ka0gGLlXtcT9aHE
+        D+j+IfFp+Sja3RpD7lmlZS/Pcg==
+X-Google-Smtp-Source: AK7set8v8KL18uldWj1UW23Nte3RVGbeVrOPE0Ivzj847bhIiOwGQ1yo5xOlwkHOHpnKVPHa9Jumxg==
+X-Received: by 2002:a05:622a:1889:b0:3a8:efd:2ef0 with SMTP id v9-20020a05622a188900b003a80efd2ef0mr20958041qtc.60.1675968847910;
+        Thu, 09 Feb 2023 10:54:07 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id l26-20020ac8459a000000b0039cc0fbdb61sm1757903qtn.53.2023.02.09.10.54.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Feb 2023 10:54:06 -0800 (PST)
+Subject: Re: [PATCH v3 08/15] spi: export spi_transfer_cs_change_delay_exec
+ function
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
         joel.peshkin@broadcom.com, jonas.gorski@gmail.com,
-        tomer.yacoby@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/15] arm64: dts: broadcom: bcmbca: Add spi controller node
-Date:   Thu,  9 Feb 2023 10:39:15 -0800
-Message-Id: <20230209183915.2317171-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207065826.285013-5-william.zhang@broadcom.com>
-References: <20230207065826.285013-1-william.zhang@broadcom.com> <20230207065826.285013-5-william.zhang@broadcom.com>
+        tomer.yacoby@broadcom.com, linux-kernel@vger.kernel.org
+References: <20230207065826.285013-1-william.zhang@broadcom.com>
+ <20230207065826.285013-9-william.zhang@broadcom.com>
+ <Y+UKYuY3K7PUakLE@sirena.org.uk>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <0c72ceb1-f2f3-a836-dcde-9edcc1179f05@broadcom.com>
+Date:   Thu, 9 Feb 2023 10:54:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y+UKYuY3K7PUakLE@sirena.org.uk>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d97bdf05f448e7b2"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,13 +76,101 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon,  6 Feb 2023 22:58:15 -0800, William Zhang <william.zhang@broadcom.com> wrote:
-> Add support for HSSPI controller in ARMv8 chip dts files.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> 
-> ---
+--000000000000d97bdf05f448e7b2
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
---
-Florian
+Will send out v4.  Thanks Mark for taking this series of the patches!
+
+On 02/09/2023 06:59 AM, Mark Brown wrote:
+> On Mon, Feb 06, 2023 at 10:58:19PM -0800, William Zhang wrote:
+>> For SPI controller that implements transfer_one_message, it needs to
+>> insert the delay that required by cs change event between the transfers.
+>> Add a wrapper for the local function _spi_transfer_cs_change_delay_exec
+>> and export it for SPI controller driver to use.
+> 
+> This doesn't apply against current code, please check and resend.
+> 
+
+--000000000000d97bdf05f448e7b2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDQVKa+HhWLTyta8vW7CeUbARIO0
+JLNG1iypjUg4X4mqMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDIwOTE4NTQwOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAQeExiV/khDHRvtqJhWMln8n8W4/wLEe0Ekky2OEByVvjp
+PsDBxAxZ0xtd00S8he/J5eNEqAlSBkjDCBo3F7zJEUVWXoNoJE/7YvG9v1JIDtUqERSkrTH3jCOE
+vSXRRKd8EWuEHWfgVEmfagV+KVmb7UXo2PHQBPEWRX1qQdLh0EY9Wm/Z07QX+crvm2ud2E5O4Smn
+RlF6aFhEbrneQk4DGQCUFthXdMmc4jSwP4Kc+gU79x+PBCwf02Bc99IhzyoSj4gyaQH96ZV+sGQL
+Y1grzDZkOtRHbDtmL9IfAVaEEhuKgRmXA2nWaRxa9x6lIcSVOXPrVA765EuSmW4r8Hbv
+--000000000000d97bdf05f448e7b2--
