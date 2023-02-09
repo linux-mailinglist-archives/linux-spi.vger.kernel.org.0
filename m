@@ -2,102 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE47E6911CF
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 21:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF369124C
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 21:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjBIUEr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Feb 2023 15:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S230136AbjBIU4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Feb 2023 15:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjBIUEg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 15:04:36 -0500
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C5F5ACFF;
-        Thu,  9 Feb 2023 12:04:29 -0800 (PST)
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 67C8CC0000E1;
-        Thu,  9 Feb 2023 12:04:29 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 67C8CC0000E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1675973069;
-        bh=DsAlP10gPvRY1JXNvs4aQnZPuO7rXG9WzZMGauhs5QA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NwmWvyYN23OsfBDGlTJVdrGkv0vWHkFbxPX8+vby3WKrX1kna1jcyTN7NiI3ickcb
-         CDH+84fjclRkb+x8FN6u/G01Ob3uO3TNJmIGgHjQ1ivhxz4RmV1ig+PsRidlHztSLR
-         /DrESjTwE8butPgHiyTmTS3TdjQueBvctY4zP6w8=
-Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
+        with ESMTP id S230038AbjBIU4i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 15:56:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70E86ADDE
+        for <linux-spi@vger.kernel.org>; Thu,  9 Feb 2023 12:56:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id 6631418041CAC6;
-        Thu,  9 Feb 2023 12:04:29 -0800 (PST)
-Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id A8C8F101B7C; Thu,  9 Feb 2023 12:04:23 -0800 (PST)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     f.fainelli@gmail.com, dregan@mail.com, joel.peshkin@broadcom.com,
-        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
-        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        jonas.gorski@gmail.com, William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 15/15] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
-Date:   Thu,  9 Feb 2023 12:02:46 -0800
-Message-Id: <20230209200246.141520-16-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230209200246.141520-1-william.zhang@broadcom.com>
-References: <20230209200246.141520-1-william.zhang@broadcom.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C730B82318
+        for <linux-spi@vger.kernel.org>; Thu,  9 Feb 2023 20:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25B0BC433D2;
+        Thu,  9 Feb 2023 20:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675976185;
+        bh=YDKkAulCpvPgL5lQlcQIOGFm2LCRNtq214zr2UkmJMw=;
+        h=Subject:From:Date:To:From;
+        b=qapugQilHPo+wNSG1/HNF7tuWRm7/oXz5qHL9SgJwRh11g7wYCIytQOgUzWlVghxE
+         IBhEycoSwxrPX/E0WraK+1tOzw2OmG7jnZD2B5kLXjD2tsBwpOe2fc1zv8IL1Rc5lK
+         YIL8bcfgzdcBsU5Px+wfMnzyqJ3Hc2iZiS/hB915ZkYgkEG8CeNs1Ymsd5/B8M6RqI
+         wplH3bBM2QqD5v0Y3P4cWluVT8ECR2DIiUnHiTYwlvko9Oz9BjcadmAi4uxoMAU77Z
+         2kHUgEDgK1ui3m/uJl8fnzdO7e05Q43sgXNRoAleSJnrkQYa9PHIHSNQJP6nCTE71E
+         inAZFNT+jXelg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06CE7E21EC9;
+        Thu,  9 Feb 2023 20:56:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167597618502.32044.251509936482299615.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 09 Feb 2023 20:56:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver and device tree doc were originally authored by Jonas Gorski
-and it has been updated from Broadcom recently including the dts yaml
-file and a new driver for the updated controller. Add Jonas Gorski and
-Broadcom engineers William Zhang and Kursad Oney as the maintainers.
+Latest series: [v4] spi: bcm63xx-hsspi: driver and doc updates (2023-02-09T20:02:32)
+  Superseding: [v3] spi: bcm63xx-hsspi: driver and doc updates (2023-02-07T06:58:11):
+    [v3,01/15] dt-bindings: spi: Convert bcm63xx-hsspi bindings to json-schema
+    [v3,02/15] dt-bindings: spi: Add bcmbca-hsspi controller support
+    [v3,03/15] ARM: dts: broadcom: bcmbca: Add spi controller node
+    [v3,04/15] arm64: dts: broadcom: bcmbca: Add spi controller node
+    [v3,05/15] spi: bcm63xx-hsspi: Add new compatible string support
+    [v3,06/15] spi: bcm63xx-hsspi: Endianness fix for ARM based SoC
+    [v3,07/15] spi: bcm63xx-hsspi: Add polling mode support
+    [v3,08/15] spi: export spi_transfer_cs_change_delay_exec function
+    [v3,09/15] spi: bcm63xx-hsspi: Handle cs_change correctly
+    [v3,10/15] spi: bcm63xx-hsspi: Fix multi-bit mode setting
+    [v3,11/15] spi: bcm63xx-hsspi: Add prepend mode support
+    [v3,12/15] spi: spi-mem: Allow controller supporting mem_ops without exec_op
+    [v3,13/15] spi: bcm63xx-hsspi: Disable spi mem dual io read op support
+    [v3,14/15] spi: bcmbca-hsspi: Add driver for newer HSSPI controller
+    [v3,15/15] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 
----
-
-(no changes since v3)
-
-Changes in v3:
-- Add Acked-by tag
-
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f61eb221415b..c6a2c3175ea3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4299,6 +4299,18 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	drivers/phy/broadcom/phy-brcm-usb*
- 
-+BROADCOM Broadband SoC High Speed SPI Controller DRIVER
-+M:	William Zhang <william.zhang@broadcom.com>
-+M:	Kursad Oney <kursad.oney@broadcom.com>
-+M:	Jonas Gorski <jonas.gorski@gmail.com>
-+R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi-peripheral-props.yaml
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
-+F:	drivers/spi/spi-bcm63xx-hsspi.c
-+F:	drivers/spi/spi-bcmbca-hsspi.c
-+
- BROADCOM ETHERNET PHY DRIVERS
- M:	Florian Fainelli <f.fainelli@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
 -- 
-2.37.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
