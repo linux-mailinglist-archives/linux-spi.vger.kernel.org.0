@@ -2,56 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E616908AF
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 13:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AB4690B7C
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 15:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBIM1i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Feb 2023 07:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S229586AbjBIOQu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Feb 2023 09:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIM1h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 07:27:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1CE2D6D;
-        Thu,  9 Feb 2023 04:27:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7CA2B8164F;
-        Thu,  9 Feb 2023 12:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEECFC433D2;
-        Thu,  9 Feb 2023 12:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675945653;
-        bh=D+nGnWzczf+mcGc087BP9v6X7kdlHtQOfrzRsw8KHUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wnhBsLWELkudMkbnGpP+vqDJIEiLLygGEbdZCHbKO5wL7nGpO8cAiKW1Vqe0NfE55
-         mxFCARMiHekcT/gvuaBCLgpc/UMcOUn6EtC9kTt4S8j9VkiEQ32VsHeDetktt9w9m4
-         Fu9WY8auL5zROXDX2O/84GzanYdXGr7AFfUY2spY=
-Date:   Thu, 9 Feb 2023 13:27:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Visweswara Tanuku <quic_vtanuku@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] soc: qcom: geni-se: Move qcom-geni-se.h to
- linux/soc/qcom/geni-se.h
-Message-ID: <Y+TmsqQZvX/rJW2U@kroah.com>
-References: <20230203210133.3552796-1-quic_eberman@quicinc.com>
- <Y94On1PIUQw4/qX2@kroah.com>
- <20230209031440.yu3mentazf6gk4m7@ripper>
+        with ESMTP id S229997AbjBIOQu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 09:16:50 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8128CE39F
+        for <linux-spi@vger.kernel.org>; Thu,  9 Feb 2023 06:16:48 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id x4so2522491ybp.1
+        for <linux-spi@vger.kernel.org>; Thu, 09 Feb 2023 06:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S3LhjlGAoOIaNmMnea1gJTwjbr7JWRXAi3r+eUWSseo=;
+        b=Wp0LBviDkRG9btkeltk0cs+U7e6O8uvQJHsH/Y1H8T8Cg3U4/SotkUq9opub8jPnhb
+         qsCb13jrVjPFtwcxqjzBQ5GuhfzaiCs3lNNBciAlAVrNhGn8Pl2fLsLOjD9BE3B8n2VJ
+         2t5PoifwBruK/wJ/GrG+/jBnYzDKubpdIKwRtS6XxozEzNUuUGfqbvwanK9SZWfTihQ5
+         UEUjX7mXUogbVYme4EmtsBquQy5Zod8jXWrb7TclLuCHWLuBg6PC7T6X3uUuLyq/CtBF
+         ipzgcJIU/G8ckejMV+KkAoX4/sEmTX1VF9gsZE4UwazrNJHcWJx043hf/FcrqmOMRUmS
+         VcIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S3LhjlGAoOIaNmMnea1gJTwjbr7JWRXAi3r+eUWSseo=;
+        b=n0SdU+aJInW8p/Wysg6QLdJEY3C+UDrYaMqXyuXN8RMyqaZBlwuWCrEIR05p7NTyei
+         YeHbPjQnmlVm0gY6dPOTDTrXdWfjKp6T9r6a1cSL7THhOZSb7NoGDI/qH4xMGgmUOUAJ
+         m5Zp61SUXAy/8Don0y6m2WbEZc7e8dYybb99NGSwVFU6Rwgx2070t/1m+q2xkG3TafuG
+         zPRn2si/En4kyGoyviNLmH67OvdaSuk1IvU7Re29jQLrThlRnidL+FJalcq5UdnbDXCh
+         gszA7fINWymiNta5qMLj78u753MeT8daCx5KrMyVQDje4a3+IyxeC89fnIwOa+NlLQUR
+         K2cA==
+X-Gm-Message-State: AO0yUKWKlDfQnZIoW+dIS18bVnNjLYHhD6/5cQBnO3J4zpYpSVoRyPS1
+        FNAm6vC7oX5CYsgksYRIGGyDD8Obw69DiFjmF5QBGg==
+X-Google-Smtp-Source: AK7set+8s6alxg2Gdtgth43zuRJPxNL8Sj2DVgRo67+4nX4VEDIS4u4HMQ4H6bGKYl/BVbVUuNp0v17FjA/IAhzukxg=
+X-Received: by 2002:a25:f301:0:b0:859:2acc:deb6 with SMTP id
+ c1-20020a25f301000000b008592accdeb6mr1205990ybs.79.1675952207653; Thu, 09 Feb
+ 2023 06:16:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209031440.yu3mentazf6gk4m7@ripper>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230208175253.117714-1-mauro.lima@eclypsium.com> <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
+In-Reply-To: <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+Date:   Thu, 9 Feb 2023 11:16:36 -0300
+Message-ID: <CAArk9MM4ZBL=_+xcJzb3X7yGyKQ6knbbsKAS+y_09Vs6pD4W=w@mail.gmail.com>
+Subject: Re: [PATCH] spi: intel: Update help text of PCI driver
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,32 +65,118 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 07:14:40PM -0800, Bjorn Andersson wrote:
-> On Sat, Feb 04, 2023 at 08:51:59AM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 03, 2023 at 01:01:32PM -0800, Elliot Berman wrote:
-> > > Move include/linux/qcom-geni-se.h to include/linux/soc/qcom/geni-se.h.
-> > > This removes 1 of a few remaining Qualcomm-specific headers into a more
-> > > approciate subdirectory under include/.
-> > > 
-> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > > ---
-> > >  drivers/i2c/busses/i2c-qcom-geni.c                   | 2 +-
-> > >  drivers/soc/qcom/qcom-geni-se.c                      | 2 +-
-> > >  drivers/spi/spi-geni-qcom.c                          | 2 +-
-> > >  drivers/tty/serial/qcom_geni_serial.c                | 2 +-
-> > >  include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} | 0
-> > >  5 files changed, 4 insertions(+), 4 deletions(-)
-> > >  rename include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} (100%)
-> > 
-> > Who do you want to take this patch?  Through what tree?  I can take it
-> > through the tty tree if no one objects, otherwise if someone else is:
-> > 
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> I'm happy with that, please go ahead Greg.
-> 
-> Acked-by: Bjorn Andersson <andersson@kernel.org>
+Hi Mika,
 
-Great, now queued up, thanks.
+On Thu, Feb 9, 2023 at 2:39 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Wed, Feb 08, 2023 at 02:52:53PM -0300, Mauro Lima wrote:
+> > Modern intel hardware uses controllers that work in hardware
+> > sequencing mode. In this mode, the controller exposes a subset
+> > of operations, like read, write and erase, making it easier
+> > and less error-prone for use.
+> > On the other hand, most of the controllers handled by the
+> > platform driver use software sequencing that exposes the
+> > entire set of opcodes i.e. include the low-level operations
+> > available from the controller.
+> >
+> > Since the PCI driver works with modern controllers, remove the
+> > DANGEROUS tag from it.
+> > Update the driver's help text and leave the DANGEROUS tag of
+> > the platform driver.
+>
+> This is not done in this commit. You just update the help texts, right?
+Yes, you are right, I will update it.
 
-greg k-h
+> > Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
+> > ---
+> >  For the record of the base commit:
+> >
+> >  Given that the PCI driver handles controllers that only work with
+> >  hardware sequencing, we can remove the dangerous tag.
+> >  This patch is the second part of Mika's suggestion [1].
+> >  The first part was accepted in [2].
+> >
+> >  [1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
+> >  [2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
+> >
+> >  This patch continues the work addressing the comments in the previous
+> >  patch adding information about hardware and software sequencing.
+> >  Discussion: https://lore.kernel.org/r/20230206183143.75274-1-mauro.lima@eclypsium.com/
+> >
+> >  drivers/spi/Kconfig | 21 +++++++++++++--------
+> >  1 file changed, 13 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> > index 3a362c450cb6..9eb3c72d7cd8 100644
+> > --- a/drivers/spi/Kconfig
+> > +++ b/drivers/spi/Kconfig
+> > @@ -454,13 +454,16 @@ config SPI_INTEL_PCI
+> >       select SPI_INTEL
+> >       help
+> >         This enables PCI support for the Intel PCH/PCU SPI controller in
+> > -       master mode. This controller is present in modern Intel hardware
+> > -       and is used to hold BIOS and other persistent settings. This
+> > -       driver only supports hardware sequencing mode. Using this
+> > -       driver it is possible to upgrade BIOS directly from Linux.
+> > +       master mode. This controller is used to hold BIOS and other
+> > +       persistent settings. Controllers present in modern Intel hardware
+> > +       only work in hardware sequencing mode, this means that the
+> > +       controller exposes a subset of operations that makes it easier
+> > +       and safer to use. Using this driver it is possible to upgrade BIOS
+>
+> I would remove the "easier" part because from user perspective there is
+> really no difference.
+Will do, thanks.
+
+> > +       directly from Linux.
+> >
+> > -       Say N here unless you know what you are doing. Overwriting the
+> > -       SPI flash may render the system unbootable.
+> > +       Say N here unless you want to overwrite the flash memory and
+>
+> Putting it like this surely scares all distro folks from ever enabling
+> this ;-)
+>
+>   "Say N here unless you want to overwrite the flash memory.."
+>
+> At least to me this means that if you enable this option your flash
+> memory will be overwritten.
+Do you have a suggestion for the "Say N here" text? Maybe remove it
+since this is safe for use now? I found it difficult to rephrase it
+
+> > +       know what you are doing or you want to read the memory's content.
+> > +       Overwriting the SPI flash may render the system unbootable.
+> >
+> >         To compile this driver as a module, choose M here: the module
+> >         will be called spi-intel-pci.
+> > @@ -473,8 +476,10 @@ config SPI_INTEL_PLATFORM
+> >       help
+> >         This enables platform support for the Intel PCH/PCU SPI
+> >         controller in master mode that is used to hold BIOS and other
+> > -       persistent settings. Most of these controllers are using
+> > -       software sequencing mode. Using this driver it is possible to
+> > +       persistent settings. Most of these controllers work in
+> > +       software sequencing mode, which means that the controller
+> > +       exposes the full set of operations that supports, making it
+> > +       more complex for use. Using this driver it is possible to
+>
+> Here,
+>
+> exposes the low level SPI-NOR opcodes to the software
+Ok
+>
+> I think is better. Also here too drop the "complex" as it looks similar
+> from user perspective.
+I agree
+> >         upgrade BIOS directly from Linux.
+> >
+> >         Say N here unless you know what you are doing. Overwriting the
+> >
+> > base-commit: 7db738b5fea4533fa217dfb05c506c15bd0964d9
+> > --
+> > 2.39.1
+
+Thanks
