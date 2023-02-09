@@ -2,93 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C1269031A
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 10:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E616908AF
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Feb 2023 13:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjBIJQQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 9 Feb 2023 04:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S229657AbjBIM1i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Feb 2023 07:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIJQM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 04:16:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558EB5B92;
-        Thu,  9 Feb 2023 01:16:10 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pQ323-003ncL-Bt; Thu, 09 Feb 2023 10:15:55 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pQ323-0012H8-3k; Thu, 09 Feb 2023 10:15:55 +0100
-Message-ID: <ed4a36508c3d047f9e9a882475388be18b790b76.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Rob Landley <rob@landley.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Thu, 09 Feb 2023 10:15:52 +0100
-In-Reply-To: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
-         <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-         <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S229567AbjBIM1h (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Feb 2023 07:27:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1CE2D6D;
+        Thu,  9 Feb 2023 04:27:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CA2B8164F;
+        Thu,  9 Feb 2023 12:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEECFC433D2;
+        Thu,  9 Feb 2023 12:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675945653;
+        bh=D+nGnWzczf+mcGc087BP9v6X7kdlHtQOfrzRsw8KHUY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wnhBsLWELkudMkbnGpP+vqDJIEiLLygGEbdZCHbKO5wL7nGpO8cAiKW1Vqe0NfE55
+         mxFCARMiHekcT/gvuaBCLgpc/UMcOUn6EtC9kTt4S8j9VkiEQ32VsHeDetktt9w9m4
+         Fu9WY8auL5zROXDX2O/84GzanYdXGr7AFfUY2spY=
+Date:   Thu, 9 Feb 2023 13:27:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Visweswara Tanuku <quic_vtanuku@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: geni-se: Move qcom-geni-se.h to
+ linux/soc/qcom/geni-se.h
+Message-ID: <Y+TmsqQZvX/rJW2U@kroah.com>
+References: <20230203210133.3552796-1-quic_eberman@quicinc.com>
+ <Y94On1PIUQw4/qX2@kroah.com>
+ <20230209031440.yu3mentazf6gk4m7@ripper>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209031440.yu3mentazf6gk4m7@ripper>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2023-02-08 at 21:09 -0600, Rob Landley wrote:
-> > Geert has suggested to wait with adding a tree source to the entry until I get my
-> > own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> > on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+On Wed, Feb 08, 2023 at 07:14:40PM -0800, Bjorn Andersson wrote:
+> On Sat, Feb 04, 2023 at 08:51:59AM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 03, 2023 at 01:01:32PM -0800, Elliot Berman wrote:
+> > > Move include/linux/qcom-geni-se.h to include/linux/soc/qcom/geni-se.h.
+> > > This removes 1 of a few remaining Qualcomm-specific headers into a more
+> > > approciate subdirectory under include/.
+> > > 
+> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > ---
+> > >  drivers/i2c/busses/i2c-qcom-geni.c                   | 2 +-
+> > >  drivers/soc/qcom/qcom-geni-se.c                      | 2 +-
+> > >  drivers/spi/spi-geni-qcom.c                          | 2 +-
+> > >  drivers/tty/serial/qcom_geni_serial.c                | 2 +-
+> > >  include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} | 0
+> > >  5 files changed, 4 insertions(+), 4 deletions(-)
+> > >  rename include/linux/{qcom-geni-se.h => soc/qcom/geni-se.h} (100%)
+> > 
+> > Who do you want to take this patch?  Through what tree?  I can take it
+> > through the tty tree if no one objects, otherwise if someone else is:
+> > 
+> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-> but push to kernel.org and ask Linus to pull from there?
+> I'm happy with that, please go ahead Greg.
+> 
+> Acked-by: Bjorn Andersson <andersson@kernel.org>
 
-Yes, that's what Geert recommended.
+Great, now queued up, thanks.
 
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+greg k-h
