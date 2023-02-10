@@ -2,199 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227C2691C9F
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Feb 2023 11:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189BC691F57
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Feb 2023 13:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjBJKVa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Feb 2023 05:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S231609AbjBJMyF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Feb 2023 07:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjBJKV3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Feb 2023 05:21:29 -0500
-X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Feb 2023 02:21:28 PST
-Received: from pv50p00im-ztdg10012101.me.com (pv50p00im-ztdg10012101.me.com [17.58.6.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471856D8E6
-        for <linux-spi@vger.kernel.org>; Fri, 10 Feb 2023 02:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676024053; bh=rBbjYxRh64IfU3vXrqNjeu6KfF5z7Q6kjGhO7g7nJJo=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=d9/ivSueKskIiulVdK7blukoTm+YyY3ORb3E4oSP52sFTk+kkFI5VPBx6yeX1P0k4
-         3wGmo+yBDggouWMQ5vHRHhW3AzQk3mGrkdefKyqYipOs1mb8wX8jQUeLCBpvzSlwvh
-         S1RlwfspLTMyUu8sJk+fJvUKKGG1SAuI9T1sJ3fv+wx1vHAbpPedVURzsSshpDgmd2
-         y7Thx+GHcKmtTHi8HqSoLkuyefaRabXVBxPbfwhc1EqbEYbeFgvJt+fn7igTnWelBe
-         k7JSeeqD3E+Wb1AQuGJEx1zSPzRkV046pJyCgjdx1B2r2eQCHxACVOZbMoqRYX2ZDI
-         piim09cEMXCww==
-Received: from localhost (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-ztdg10012101.me.com (Postfix) with ESMTPSA id 902307403A0;
-        Fri, 10 Feb 2023 10:14:11 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Alain Volmat <avolmat@me.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: spi: conversion of spi-st-ssc into DT schema YAML
-Date:   Fri, 10 Feb 2023 11:14:01 +0100
-Message-Id: <20230210101403.14609-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231976AbjBJMyE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Feb 2023 07:54:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78356CC68;
+        Fri, 10 Feb 2023 04:54:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55FB7B824F8;
+        Fri, 10 Feb 2023 12:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C472C433EF;
+        Fri, 10 Feb 2023 12:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676033640;
+        bh=Du2ZKc2SD8ZEuWZsYr57fBOFhcnDr6EcpR4q2D36XKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VUZVtlYlvJfCLKDiyaboSA8PYsrgD6aOEf0MqrOqPnEpAplY7kspbS5Q85h09hhVw
+         GoAwZA/rR3/ZtW204dyyLNZ5NmOtRuzPUldNsBuEjww8Qywc/a9QAKUixpKCwavwd5
+         UI1y4zktGYu6cZNAM0MLrtQPYQ1VLxJXZudE9axpyH7+NOS2G8rlHsxV467dvLF5DP
+         S8CHnh+SneZn+bIBGwKFyy21swzylWkpdCW/mfa4nhNBZeOmF7emMn8aNaAbuJ4vhQ
+         TBFX/l3ut+h27jrpxAlVkRuF/ppsPpaaNxMyCqjradqtPst0BLdpP9nFzm0L9eOufl
+         eK3BwDPOzibdg==
+Date:   Fri, 10 Feb 2023 12:53:54 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        f.fainelli@gmail.com, dregan@mail.com, joel.peshkin@broadcom.com,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
+        jonas.gorski@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/15] spi: bcm63xx-hsspi: driver and doc updates
+Message-ID: <Y+Y+Yq1zab9gZV/x@sirena.org.uk>
+References: <20230209200246.141520-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 3h639xTX_ZTwEJj09vl8wvKfdJqAMtho
-X-Proofpoint-ORIG-GUID: 3h639xTX_ZTwEJj09vl8wvKfdJqAMtho
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- phishscore=0 malwarescore=0 clxscore=1011 adultscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302100085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l9DIe4HKawK7ZnJy"
+Content-Disposition: inline
+In-Reply-To: <20230209200246.141520-1-william.zhang@broadcom.com>
+X-Cookie: Brain fried -- Core dumped
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-File st,ssc-spi.yaml replaces spi-st-ssc.txt for the
-ST Microelectronics SSC SPI driver.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- .../devicetree/bindings/spi/spi-st-ssc.txt    | 40 ------------
- .../devicetree/bindings/spi/st,ssc-spi.yaml   | 61 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 62 insertions(+), 40 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-st-ssc.txt
- create mode 100644 Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+--l9DIe4HKawK7ZnJy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-st-ssc.txt b/Documentation/devicetree/bindings/spi/spi-st-ssc.txt
-deleted file mode 100644
-index 1bdc4709e474..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-st-ssc.txt
-+++ /dev/null
-@@ -1,40 +0,0 @@
--STMicroelectronics SSC (SPI) Controller
-----------------------------------------
--
--Required properties:
--- compatible	: "st,comms-ssc4-spi"
--- reg		: Offset and length of the device's register set
--- interrupts	: The interrupt specifier
--- clock-names	: Must contain "ssc"
--- clocks	: Must contain an entry for each name in clock-names
--		    See ../clk/*
--- pinctrl-names	: Uses "default", can use "sleep" if provided
--		    See ../pinctrl/pinctrl-bindings.txt
--
--Optional properties:
--- cs-gpios	: List of GPIO chip selects
--		    See ../spi/spi-bus.txt
--
--Child nodes represent devices on the SPI bus
--  See ../spi/spi-bus.txt
--
--Example:
--	spi@9840000 {
--		compatible	= "st,comms-ssc4-spi";
--		reg		= <0x9840000 0x110>;
--		interrupts	= <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
--		clocks		= <&clk_s_c0_flexgen CLK_EXT2F_A9>;
--		clock-names	= "ssc";
--		pinctrl-0	= <&pinctrl_spi0_default>;
--		pinctrl-names	= "default";
--		cs-gpios	= <&pio17 5 0>;
--		#address-cells	= <1>;
--		#size-cells	= <0>;
--
--		st95hf@0{
--			compatible		= "st,st95hf";
--			reg			= <0>;
--			spi-max-frequency	= <1000000>;
--			interrupts		= <2 IRQ_TYPE_EDGE_FALLING>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml b/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-new file mode 100644
-index 000000000000..496118df3a1b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/st,ssc-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics SSC SPI Controller
-+
-+description: |
-+  The STMicroelectronics SSC SPI controller can be found on STi platforms
-+  and it used to communicate with external devices using the
-+  Serial Peripheral Interface.
-+
-+maintainers:
-+  - Patrice Chotard <patrice.chotard@foss.st.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    const: st,comms-ssc4-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: ssc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stih407-clks.h>
-+    spi@9840000 {
-+      compatible        = "st,comms-ssc4-spi";
-+      reg               = <0x9840000 0x110>;
-+      interrupts	= <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks		= <&clk_s_c0_flexgen CLK_EXT2F_A9>;
-+      clock-names	= "ssc";
-+      pinctrl-0         = <&pinctrl_spi0_default>;
-+      pinctrl-names	= "default";
-+      #address-cells	= <1>;
-+      #size-cells	= <0>;
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2e32eb8d44f5..0fc3e4c6c1e5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2926,6 +2926,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- W:	http://www.stlinux.com
- F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
-+F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
- F:	arch/arm/boot/dts/sti*
- F:	arch/arm/mach-sti/
- F:	drivers/ata/ahci_st.c
--- 
-2.34.1
+On Thu, Feb 09, 2023 at 12:02:31PM -0800, William Zhang wrote:
+> This patch series include the accumulative updates and fixes for the
+> driver from Broadcom. It also added a new driver for the updated SPI
+> controller found in the new BCMBCA SoC. The device tree document is
+> converted to yaml format and updated accordingly.
 
+Please do not submit new versions of already applied patches, please
+submit incremental updates to the existing code.  Modifying existing
+commits creates problems for other users building on top of those
+commits so it's best practice to only change pubished git commits if
+absolutely essential.
+
+--l9DIe4HKawK7ZnJy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPmPmEACgkQJNaLcl1U
+h9Cdmwf+KbbBnAO2y+kpg7mhf1IH84cGJ36v7XrE2+Lg8O4CpuiC0mds+TigLqVb
+tRMdqwo9ClRhlxfnzdvUVGJOA7MnnXkOCknRzr3/DFrxObJJAj7Cv+44eMcgxDLu
+XXhaf6xLhJtvvYmUW6HC3/c3cREY/WKbfk+SjzslTlT77S7hPu9mGseLhBgNJg7K
+83gsZtaP6F97e5YfE+68bOvj5dvx1p/UQAY8uNGvYcTKfsWCSBgzkuFJnm7n5Ges
+lVeppGNTf0Ugl3c2eV9JU7mS4HJzPozXK8BLfVQkfDEkqruyOmb4cELkz58wiTXW
+R4Lf8GilCRoBf4tK7NUXDWkJVdxNyw==
+=5u0R
+-----END PGP SIGNATURE-----
+
+--l9DIe4HKawK7ZnJy--
