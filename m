@@ -2,164 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6316928E8
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Feb 2023 22:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357B1692C4C
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Feb 2023 01:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjBJVFw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Feb 2023 16:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S229589AbjBKAyW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Feb 2023 19:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbjBJVFv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Feb 2023 16:05:51 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AE76CC42
-        for <linux-spi@vger.kernel.org>; Fri, 10 Feb 2023 13:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676063150; x=1707599150;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+S/K8eMD3x9PIF1tFFiF+7qJDB4BvX1h427QlI/NJZE=;
-  b=KEXg1Yj94bDFkrXcRZXpFPa2Al2cVtrcDCHt+rDRP1T0RrMNMltmIAEl
-   TWoQpcud77HjBp4ZjLCLoqTrAr4okdWjV/9bPHYAHiz9RFj+SG5MQWCKq
-   w0OYUGCbbQC2WfA2H6oHqbvBmT0FTOe/hfVe2t9YJR1JfTYd2UUGH1EP/
-   TZcK0cJPp0JH8N7bwvVq9Yr897cQk+S3XBovSZ/by3x6keehSH3cb6txI
-   iQlLHWUqi3rG73mRxhuArinjhn3oNK5XtcaNGtnB6uk/rIkf1s/hL4Fyg
-   1WEJr0gPIXi2bgwPkhQy53EMS6JzxCKsi2wpgM2/Vjo/3LAuQVtmXWxF7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="328217551"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="328217551"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 13:05:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="913674545"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="913674545"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Feb 2023 13:05:48 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQaaY-00063h-2g;
-        Fri, 10 Feb 2023 21:05:46 +0000
-Date:   Sat, 11 Feb 2023 05:05:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Kursad Oney <kursad.oney@broadcom.com>
-Subject: [broonie-spi:for-next 32/35] drivers/spi/spi-bcm63xx-hsspi.c:197:31:
- sparse: sparse: cast from restricted __be16
-Message-ID: <202302110438.sQwQnU54-lkp@intel.com>
+        with ESMTP id S229576AbjBKAyW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Feb 2023 19:54:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0904C7FEF2;
+        Fri, 10 Feb 2023 16:54:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A2D5B82657;
+        Sat, 11 Feb 2023 00:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A46C433D2;
+        Sat, 11 Feb 2023 00:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676076858;
+        bh=yt97aBQpCfcRc66XUblzdp8nwkFSLAY1fGBKH97Mnoc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LtaBBXj57r0jydp+wl1Ll7p2JyXn9qdY0l6Y6O2tmh/BigxgVAEKxMq8IwJkewQEA
+         cK50Ccn85tVvJAziK0yoggLVfKpG4Cf5d6cSEx3d43a56oEVAOz8+woAOsjoIPVsZJ
+         j00vJPPosyaDfPcc+QGDE950/NsSN9Uyzo3Y06r16KAcnve7a4+QRJXrC65OSZld75
+         a9nlAdudiExhFAnbBO+glpJhKhY9l7jmasnsVxlgw6IOJQkpKg0u6myciQ1PQG3qKJ
+         0qU3/d6tv8Ta+/UWoDqZ+xIqCOpbgZq4zXz6b4Cei/6QUR5+5V1p8Tj7P9lv0hKO2O
+         z0oBQLDEJNx6A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     f.fainelli@gmail.com, dregan@mail.com, joel.peshkin@broadcom.com,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
+        jonas.gorski@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230209200246.141520-1-william.zhang@broadcom.com>
+References: <20230209200246.141520-1-william.zhang@broadcom.com>
+Subject: Re: (subset) [PATCH v4 00/15] spi: bcm63xx-hsspi: driver and doc
+ updates
+Message-Id: <167607685438.1700011.1415945825989404804.b4-ty@kernel.org>
+Date:   Sat, 11 Feb 2023 00:54:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-head:   2ea9b08a661274b9b7b182327bf6ffe29605d671
-commit: 85a84a61699990db6a025b5073f337f49933a875 [32/35] spi: bcm63xx-hsspi: Endianness fix for ARM based SoC
-config: arm-randconfig-s032-20230210 (https://download.01.org/0day-ci/archive/20230211/202302110438.sQwQnU54-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?id=85a84a61699990db6a025b5073f337f49933a875
-        git remote add broonie-spi https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-        git fetch --no-tags broonie-spi for-next
-        git checkout 85a84a61699990db6a025b5073f337f49933a875
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/spi/
+On Thu, 09 Feb 2023 12:02:31 -0800, William Zhang wrote:
+> This patch series include the accumulative updates and fixes for the
+> driver from Broadcom. It also added a new driver for the updated SPI
+> controller found in the new BCMBCA SoC. The device tree document is
+> converted to yaml format and updated accordingly.
+> 
+> Changes in v4:
+> - Add Reviewed-by tag in patch 2
+> - Update patch 8 based on latest linux spi git for-next branch code
+> 
+> [...]
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302110438.sQwQnU54-lkp@intel.com/
+Applied to
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/spi/spi-bcm63xx-hsspi.c:197:31: sparse: sparse: cast from restricted __be16
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-vim +197 drivers/spi/spi-bcm63xx-hsspi.c
+Thanks!
 
-   156	
-   157	static int bcm63xx_hsspi_do_txrx(struct spi_device *spi, struct spi_transfer *t)
-   158	{
-   159		struct bcm63xx_hsspi *bs = spi_master_get_devdata(spi->master);
-   160		unsigned int chip_select = spi->chip_select;
-   161		u16 opcode = 0;
-   162		int pending = t->len;
-   163		int step_size = HSSPI_BUFFER_LEN;
-   164		const u8 *tx = t->tx_buf;
-   165		u8 *rx = t->rx_buf;
-   166	
-   167		bcm63xx_hsspi_set_clk(bs, spi, t->speed_hz);
-   168		bcm63xx_hsspi_set_cs(bs, spi->chip_select, true);
-   169	
-   170		if (tx && rx)
-   171			opcode = HSSPI_OP_READ_WRITE;
-   172		else if (tx)
-   173			opcode = HSSPI_OP_WRITE;
-   174		else if (rx)
-   175			opcode = HSSPI_OP_READ;
-   176	
-   177		if (opcode != HSSPI_OP_READ)
-   178			step_size -= HSSPI_OPCODE_LEN;
-   179	
-   180		if ((opcode == HSSPI_OP_READ && t->rx_nbits == SPI_NBITS_DUAL) ||
-   181		    (opcode == HSSPI_OP_WRITE && t->tx_nbits == SPI_NBITS_DUAL))
-   182			opcode |= HSSPI_OP_MULTIBIT;
-   183	
-   184		__raw_writel(1 << MODE_CTRL_MULTIDATA_WR_SIZE_SHIFT |
-   185			     1 << MODE_CTRL_MULTIDATA_RD_SIZE_SHIFT | 0xff,
-   186			     bs->regs + HSSPI_PROFILE_MODE_CTRL_REG(chip_select));
-   187	
-   188		while (pending > 0) {
-   189			int curr_step = min_t(int, step_size, pending);
-   190	
-   191			reinit_completion(&bs->done);
-   192			if (tx) {
-   193				memcpy_toio(bs->fifo + HSSPI_OPCODE_LEN, tx, curr_step);
-   194				tx += curr_step;
-   195			}
-   196	
- > 197			__raw_writew((u16)cpu_to_be16(opcode | curr_step), bs->fifo);
-   198	
-   199			/* enable interrupt */
-   200			__raw_writel(HSSPI_PINGx_CMD_DONE(0),
-   201				     bs->regs + HSSPI_INT_MASK_REG);
-   202	
-   203			/* start the transfer */
-   204			__raw_writel(!chip_select << PINGPONG_CMD_SS_SHIFT |
-   205				     chip_select << PINGPONG_CMD_PROFILE_SHIFT |
-   206				     PINGPONG_COMMAND_START_NOW,
-   207				     bs->regs + HSSPI_PINGPONG_COMMAND_REG(0));
-   208	
-   209			if (wait_for_completion_timeout(&bs->done, HZ) == 0) {
-   210				dev_err(&bs->pdev->dev, "transfer timed out!\n");
-   211				return -ETIMEDOUT;
-   212			}
-   213	
-   214			if (rx) {
-   215				memcpy_fromio(rx, bs->fifo, curr_step);
-   216				rx += curr_step;
-   217			}
-   218	
-   219			pending -= curr_step;
-   220		}
-   221	
-   222		return 0;
-   223	}
-   224	
+[08/15] spi: export spi_transfer_cs_change_delay_exec function
+        commit: 6e80133abeb09721ec4601de5b1e68be67135309
+[09/15] spi: bcm63xx-hsspi: Handle cs_change correctly
+        commit: c00d5e93ea018786d98670fc1d0dab4c36c2217c
+[10/15] spi: bcm63xx-hsspi: Fix multi-bit mode setting
+        commit: 811ff802aaf878ebbbaeac0307a0164fa21e7d40
+[11/15] spi: bcm63xx-hsspi: Add prepend mode support
+        commit: b7a82103f7c3a9168f0077e35688d4f9ce97294e
+[12/15] spi: spi-mem: Allow controller supporting mem_ops without exec_op
+        commit: 76a85704cb917e3b25e00f02d5fd46e4e0a9077d
+[13/15] spi: bcm63xx-hsspi: Disable spi mem dual io read op support
+        commit: c6182a187b33cd00a763ac2490c0f5210b2c4742
+[14/15] spi: bcmbca-hsspi: Add driver for newer HSSPI controller
+        commit: a38a2233f23b568ca06ca679fb2327447d6b0224
+[15/15] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
+        commit: 80323599e33f9c19287a1a3707481fb157b27052
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
