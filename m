@@ -2,74 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCC2692FD6
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Feb 2023 11:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915456931C3
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Feb 2023 15:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjBKKAI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 11 Feb 2023 05:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229461AbjBKOrY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 11 Feb 2023 09:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBKKAH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 11 Feb 2023 05:00:07 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9A2518E4;
-        Sat, 11 Feb 2023 02:00:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1676109597; bh=D8qkab8ssGlw+mVmXbLNkbKTP7mF/04quddJMJ9bcPI=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=LNyUKIjnMXfBc0Wbiu39t9xuDjIuxKXRaULH7tGo+0TeGnEB82BT3QOcSFEVAB4Z/
-         dVcDgtQcyF+1zgTisYfrq16dnYOYT8NnExj0CQPjFNHHlEo/uTrfZoBGNcGMGgCBRz
-         5Tm+zlwFyKfrn3xhZRn7Od3I0yOsBdHaLarU9D3U=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 11 Feb 2023 10:59:51 +0100 (CET)
-X-EA-Auth: 09/7if+Hd+nnm3A4C9p10cPGy55DiZZia/OkdlQlKSreoSpOCF6BZgSzqKVq3WjWv+uRyDhPs+qAhJTwyPEBN0HMV4S/DA+W
-Date:   Sat, 11 Feb 2023 15:29:48 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] spi: Remove extra/duplicate constant from expression
-Message-ID: <Y+dnFKut9qiQUxjW@ubun2204.myguest.virtualbox.org>
+        with ESMTP id S229560AbjBKOrX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 11 Feb 2023 09:47:23 -0500
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE88CDFD
+        for <linux-spi@vger.kernel.org>; Sat, 11 Feb 2023 06:46:51 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id Qr95pNL9rOJaFQr95pI1Nk; Sat, 11 Feb 2023 15:46:32 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 11 Feb 2023 15:46:32 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <e8ce6ab5-5db0-305b-f025-a4cef95fde58@wanadoo.fr>
+Date:   Sat, 11 Feb 2023 15:46:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] spi: Remove extra/duplicate constant from expression
+To:     drv@mailo.com
+Cc:     broonie@kernel.org, kumarpraveen@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        ssengar@microsoft.com
+References: <Y+dnFKut9qiQUxjW@ubun2204.myguest.virtualbox.org>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <Y+dnFKut9qiQUxjW@ubun2204.myguest.virtualbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Constant SPI_TX_OCTAL is included twice while building the controller
-mode bits. Remove the extra constant.
-Issue identified using doublebitand.cocci Coccinelle semantic patch.
+Le 11/02/2023 à 10:59, Deepak R Varma a écrit :
+> Constant SPI_TX_OCTAL is included twice while building the controller
+> mode bits. Remove the extra constant.
+> Issue identified using doublebitand.cocci Coccinelle semantic patch.
+> 
+> Signed-off-by: Deepak R Varma <drv-asAA5fHt7EIAvxtiuMwx3w@public.gmane.org>
+> ---
+>   drivers/spi/spi-sn-f-ospi.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
+> index 348c6e1edd38..19284d6914fc 100644
+> --- a/drivers/spi/spi-sn-f-ospi.c
+> +++ b/drivers/spi/spi-sn-f-ospi.c
+> @@ -611,7 +611,7 @@ static int f_ospi_probe(struct platform_device *pdev)
+>   		return -ENOMEM;
+>   
+>   	ctlr->mode_bits = SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL
+> -		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL
+> +		| SPI_RX_DUAL | SPI_RX_QUAD
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/spi/spi-sn-f-ospi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Or maybe s/SPI_TX_OCTAL/SPI_RX_OCTAL/ ?
 
-diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
-index 348c6e1edd38..19284d6914fc 100644
---- a/drivers/spi/spi-sn-f-ospi.c
-+++ b/drivers/spi/spi-sn-f-ospi.c
-@@ -611,7 +611,7 @@ static int f_ospi_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	ctlr->mode_bits = SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL
--		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL
-+		| SPI_RX_DUAL | SPI_RX_QUAD
- 		| SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;
- 	ctlr->mem_ops = &f_ospi_mem_ops;
- 	ctlr->bus_num = -1;
--- 
-2.34.1
+CJ
 
-
+>   		| SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;
+>   	ctlr->mem_ops = &f_ospi_mem_ops;
+>   	ctlr->bus_num = -1;
 
