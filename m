@@ -2,53 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D9B6934DA
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Feb 2023 00:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9643E693545
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Feb 2023 00:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjBKXNm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 11 Feb 2023 18:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S229447AbjBKXZ2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 11 Feb 2023 18:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBKXNl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 11 Feb 2023 18:13:41 -0500
+        with ESMTP id S229496AbjBKXZ2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 11 Feb 2023 18:25:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE64F16303;
-        Sat, 11 Feb 2023 15:13:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820FA12846;
+        Sat, 11 Feb 2023 15:25:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BDEBB80064;
-        Sat, 11 Feb 2023 23:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA9DC4339C;
-        Sat, 11 Feb 2023 23:13:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42ADCB80B03;
+        Sat, 11 Feb 2023 23:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8DEC433D2;
+        Sat, 11 Feb 2023 23:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676157217;
-        bh=y5kaCLM1NcAVq1JUjJMedwgWfbxerTHH5u6jIxnlh+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JTmv90nIfc/t2kHg1QLgayGQxHRqPtwIt9PS8Z5wRyInWmES3KAzDGb7FD4xo0213
-         e0nZupur2O1lVELT1ymgmGcle6N1etRwZlmWuqUk7wFIqlNY03P2qWGRfVCD+HcUip
-         LeQiv+NcQ2B/0iB3wB1u5jRSYkgj4zKe/zOqTjdNK8AQmqLsb0nPUq2LV834smgBqK
-         nIrS6dNoW51PDTosz98kuNs+uLxD3loe79UHygxdQYFIBya/6QBJtHDmBIpmOnb2jB
-         eOHC/AQ4lrbF0q2vejkxMa33rDALoEUJtCzEbRfMJBS1rh3C78N38qWNkldCql4+6p
-         +eyl0P1sT5Pcw==
-Date:   Sat, 11 Feb 2023 23:13:35 +0000
+        s=k20201202; t=1676157924;
+        bh=e4wjNKz+lNpXFkGW45k8O521ZMwggG5GHVudmevaWK8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ob5dVR1r87sz4ELODkaa+AOsPjnqzoIqZejWHAHkHqFnSOMiqlZcY6Dl4vo+o8sZz
+         MTXoJf+UmRsZZvoaDbek+ClvUXnLUO92mo/ixByh2rMtKvKBQEP9GZ0VQAgFGM/VRA
+         PI5LUcU0M/2OnuncEMxWh5llc7U1Cli4pLCCd8NbysooVOyECkuwSq83kmaAcFIhgd
+         TOwHkziJ4zqeVgSSiHfR21dDJjVxxXrL3gNzb0Dtdajv1S6Z+wAZQZYPVjdLZEiebd
+         ZBdXk/6o9f/hYqbVotx5EIKpde34PlRE0rTM4yBrLjvvcn7Ct/yT9eFvtDXgQtsStL
+         5pxVYbvMwAGDA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH -next] spi: spidev: fix a recursive locking error
-Message-ID: <Y+ghH6yUARqinhuJ@sirena.org.uk>
-References: <20230116144149.305560-1-brgl@bgdev.pl>
- <167395356741.524535.13729434862127399808.b4-ty@kernel.org>
- <Y+exzSwy1UJQCUKg@francesco-nb.int.toradex.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gfpYWqG9KgsG0r0L"
-Content-Disposition: inline
-In-Reply-To: <Y+exzSwy1UJQCUKg@francesco-nb.int.toradex.com>
-X-Cookie: Serving suggestion.
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.2-rc7
+Date:   Sat, 11 Feb 2023 23:25:10 +0000
+Message-Id: <20230211232523.6A8DEC433D2@smtp.kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,33 +47,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following changes since commit b442990d244ba2ffe926c6603c42deb6fcc3b0db:
 
---gfpYWqG9KgsG0r0L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  spi: Merge rename of spi-cs-setup-ns DT property (2023-01-11 14:15:22 +0000)
 
-On Sat, Feb 11, 2023 at 04:18:37PM +0100, Francesco Dolcini wrote:
+are available in the Git repository at:
 
-> Any plan to have this fix sent to Linus for v6.2? The reason for asking
-> is that because of this bug our whole test infrastructure crashes
-> preventing the normal testing we normally do on mainline kernel (that is
-> also how this issue was spotted in the first place).
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.2-rc7
 
-I already did.
+for you to fetch changes up to eede42c9459b58b71edc99303dad65216a655810:
 
---gfpYWqG9KgsG0r0L
-Content-Type: application/pgp-signature; name="signature.asc"
+  spi: spidev: fix a recursive locking error (2023-01-27 16:38:05 +0000)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+spi: Fixes for v6.2
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPoIR4ACgkQJNaLcl1U
-h9C5jgf/ePPLCvgY2pc9i/gFk31lDVpyu68cP2JiSfI2OooLJrYd0P1H7Rep3jnl
-fvCLk2C6JKW23vB7rVoFNk6WDUV+XTdCehh9nyYP52XTTVT/6IVkNH7/umjGnZFh
-W+laHFXBX35czfY7VtKcmTsU0CnhC6DmrRoYaXSFmajhyboaGqOm7V37662HAEZ7
-eRGJfQooeCR3NPB90YWEFBhkTvZRJopNJTD/hTK//70jGGrWu+4zJ3HOeIU0FWtP
-hVuo6c0Axoon94FFSf7PPw2Xx0uyH/0tUeFfOPOPbHsHf2yvGZMzHcSK7jm2h4KH
-7UWYzjWVmtN6JqVPK6/osRzmHAH31w==
-=y7cP
------END PGP SIGNATURE-----
+A couple of hopefully final fixes for spi, one driver specific fix for
+an issue with very large transfers and a fix for an issue with the
+locking fixes in spidev merged earlier this release cycle which was
+missed.
 
---gfpYWqG9KgsG0r0L--
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      spi: spidev: fix a recursive locking error
+
+Serge Semin (1):
+      spi: dw: Fix wrong FIFO level setting for long xfers
+
+ drivers/spi/spi-dw-core.c |  2 +-
+ drivers/spi/spidev.c      | 22 ++++++++++++++++------
+ 2 files changed, 17 insertions(+), 7 deletions(-)
