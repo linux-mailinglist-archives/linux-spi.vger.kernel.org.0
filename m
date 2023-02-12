@@ -2,66 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D56E6939DC
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Feb 2023 21:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A34FF693A01
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Feb 2023 21:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBLUfJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Feb 2023 15:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S229622AbjBLUvU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Feb 2023 15:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBLUfJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Feb 2023 15:35:09 -0500
-Received: from smtp-out-05.comm2000.it (smtp-out-05.comm2000.it [212.97.32.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F619E3A6;
-        Sun, 12 Feb 2023 12:35:06 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        with ESMTP id S229614AbjBLUvT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Feb 2023 15:51:19 -0500
+Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4DCF757;
+        Sun, 12 Feb 2023 12:51:18 -0800 (PST)
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
+        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 661E0C0000D4;
+        Sun, 12 Feb 2023 12:51:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 661E0C0000D4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1676235077;
+        bh=GKrIYCf+0Gl9AWmvUN8MRMAVt29qZUg+xsdxn48Wdl0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HDqJreQZA37Gne8MrKfuzBAf72Ns8bEFvqn8UnAnpC5bVfLnP5O0XAx1KW9ikp/3Y
+         KgI/Uol7m1V+STRfqtZ7zANqXN24T53Bg5izlsykSTu2hRNgcEd5rAtNXk9XJYr/uV
+         aPhtOgPpIXMQbjX7SSoE6LV+/+NBrl/LJ1n5jyIk=
+Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-05.comm2000.it (Postfix) with ESMTPSA id AEE67822C7E;
-        Sun, 12 Feb 2023 21:35:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1676234102;
-        bh=7Lx22zUQi0g/ZwZL9hzv0bvKFvbvJqfOahGwdFTb6H8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=XyUJbVRtWfXWqevva7BQqHzziTysrAb9tJX37hbyqwDJZJ7AVAUSzvhIzAVS8lVC9
-         d3Ud4d1Zab/vmlDCaIf3r2SE6V+XrA8bEVW+ytcOb0mk6GSg9HoUQdJK6YdeEvMWb/
-         ZntZDbOTLpncQCJFc8qekylSnuDdTjgpRQwQbuPDscRrUYVcj7e8qdmDhQmSjfJOLL
-         x2YW3BnCamVzTImrUG2dzvwIOwrVwq601kWRmINm0n0qPMGWXhQNWro0I442CVLmyG
-         uJYuVhDcnK1ui0h2N4bR3YOZjCrBsmbBe4+VOZg2tNg7TvDo2rzJXDS6WVslmuZUDl
-         MMR2NyY7Q4uUg==
-Date:   Sun, 12 Feb 2023 21:34:57 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH -next] spi: spidev: fix a recursive locking error
-Message-ID: <Y+lNceqOoWgqncOZ@francesco-nb.int.toradex.com>
-References: <20230116144149.305560-1-brgl@bgdev.pl>
- <167395356741.524535.13729434862127399808.b4-ty@kernel.org>
- <Y+exzSwy1UJQCUKg@francesco-nb.int.toradex.com>
- <Y+ghH6yUARqinhuJ@sirena.org.uk>
+        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id 2C02E18041CAC6;
+        Sun, 12 Feb 2023 12:51:17 -0800 (PST)
+Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
+        id 4FC2B101AB0; Sun, 12 Feb 2023 12:51:09 -0800 (PST)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        joel.peshkin@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
+        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
+        jonas.gorski@gmail.com, William Zhang <william.zhang@broadcom.com>,
+        kernel test robot <lkp@intel.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Remove file reference for Broadcom Broadband SoC HS SPI driver entry
+Date:   Sun, 12 Feb 2023 12:50:54 -0800
+Message-Id: <20230212205054.26348-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+ghH6yUARqinhuJ@sirena.org.uk>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 11:13:35PM +0000, Mark Brown wrote:
-> On Sat, Feb 11, 2023 at 04:18:37PM +0100, Francesco Dolcini wrote:
-> > Any plan to have this fix sent to Linus for v6.2? The reason for asking
-> I already did.
-Thanks a lot - appreciated!
+brcm,bcm63xx-hsspi-peripheral-props.yaml is not in use at least for now.
+Remove it from the maintainer entry.
 
-Francesco
+Fixes: 80323599e33f ("MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers")
+Reported-by: kernel test robot <lkp@intel.com>
+https://lore.kernel.org/oe-kbuild-all/202302121840.GtduUT37-lkp@intel.com/
+
+Signed-off-by: William Zhang <william.zhang@broadcom.com>
+
+---
+
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c6a2c3175ea3..df1c71ca1a69 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4306,7 +4306,6 @@ M:	Jonas Gorski <jonas.gorski@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-spi@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi-peripheral-props.yaml
+ F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+ F:	drivers/spi/spi-bcm63xx-hsspi.c
+ F:	drivers/spi/spi-bcmbca-hsspi.c
+-- 
+2.37.3
 
