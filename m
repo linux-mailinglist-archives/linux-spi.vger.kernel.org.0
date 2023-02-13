@@ -2,86 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34FF693A01
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Feb 2023 21:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A326941CF
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Feb 2023 10:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBLUvU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Feb 2023 15:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S231150AbjBMJrI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Feb 2023 04:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjBLUvT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Feb 2023 15:51:19 -0500
-Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4DCF757;
-        Sun, 12 Feb 2023 12:51:18 -0800 (PST)
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 661E0C0000D4;
-        Sun, 12 Feb 2023 12:51:17 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 661E0C0000D4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1676235077;
-        bh=GKrIYCf+0Gl9AWmvUN8MRMAVt29qZUg+xsdxn48Wdl0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HDqJreQZA37Gne8MrKfuzBAf72Ns8bEFvqn8UnAnpC5bVfLnP5O0XAx1KW9ikp/3Y
-         KgI/Uol7m1V+STRfqtZ7zANqXN24T53Bg5izlsykSTu2hRNgcEd5rAtNXk9XJYr/uV
-         aPhtOgPpIXMQbjX7SSoE6LV+/+NBrl/LJ1n5jyIk=
-Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id 2C02E18041CAC6;
-        Sun, 12 Feb 2023 12:51:17 -0800 (PST)
-Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id 4FC2B101AB0; Sun, 12 Feb 2023 12:51:09 -0800 (PST)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
-        kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
-        jonas.gorski@gmail.com, William Zhang <william.zhang@broadcom.com>,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Remove file reference for Broadcom Broadband SoC HS SPI driver entry
-Date:   Sun, 12 Feb 2023 12:50:54 -0800
-Message-Id: <20230212205054.26348-1-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.37.3
+        with ESMTP id S230495AbjBMJq4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Feb 2023 04:46:56 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16647AD25
+        for <linux-spi@vger.kernel.org>; Mon, 13 Feb 2023 01:46:51 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id bx13so9652673oib.13
+        for <linux-spi@vger.kernel.org>; Mon, 13 Feb 2023 01:46:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oOQ2wStLDIWhmzCg/kQjZqe8nkA7gHbgKI7k4Tq3KeA=;
+        b=PJ9K5C8euPwt4QgN/sCjnNDRqHs5KcqpJToWHCv/pqVyO5tikAg2vz1ZNbRJIYsvaL
+         kGjJlwE2s8GNMg7r9NNlw1sslG1Bci/49awXs38lsHum7npFSaVbHWpGHuNqloHHzyzo
+         JuMRu3qRvVf4cpklKc0EmFtw1YcNKg8kq7LV8Yy6WFa5jSVdO7usOUCfCgvA7wcXKlV0
+         WHhgZabHzwEunbtUbZ1jc+1kee6jZYKl5E9IfROBRFRmt7oKqw+lOMo2wlRDiNLTHZRA
+         NtT9eexOiMjj8RJzjKCpxsfSENKPvL3dpQagxXJ0qTHMeg6Tk6hA/XL9zximculrYYWq
+         1PwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOQ2wStLDIWhmzCg/kQjZqe8nkA7gHbgKI7k4Tq3KeA=;
+        b=rTDrReiDailF1XXrkrLCYhKwpvcgaumuExI18OJH51uHmQQPj4BfwErnK1ySqBCfVy
+         bCUw6AH5E51Mfp1/ccNFBDFkcFepThcHSSlOa6hv8LOKwJBAZ8acOXlTQAs/RuPolbKy
+         UxFunN3/IxjEIm9gUwcyJJAF/rZz1hsL7k1AABhm9ufZ5ZLzTRpbNXVmRuKrNyLj0o5H
+         K8pEl+B3zXn0YwiDGzbYe98vNfFSL6VqE2584qTmVTIHAMrCWttbwPJLDMvkZKRIDpFV
+         TRcrKNIlhSAzif/Cu859SZT2txnGW3c+PnIsTdV9ybJPW+T+jtBo03kFjdvAVbRlNQZx
+         rSoA==
+X-Gm-Message-State: AO0yUKWY0SZWfF/iKsdLPKHisKr4VOTUghzBBWv0CPeYP5CwRodjjULK
+        5f5FKKpUTsSrmx/Z4ToZwGZ6l/bgrOjZ6+MXo2Y=
+X-Google-Smtp-Source: AK7set8w60IG+HF0GkhBS7klRCnSIavpDoqyCKQuXcIp48R8IorQRHGVq8a05wzJgqvzmTEh5syyDRajFm/rOERewnU=
+X-Received: by 2002:a05:6808:258:b0:37d:a044:45ac with SMTP id
+ m24-20020a056808025800b0037da04445acmr157460oie.202.1676281610361; Mon, 13
+ Feb 2023 01:46:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Sender: maritbrunel@gmail.com
+Received: by 2002:a05:6358:8404:b0:cb:ccf4:f2f6 with HTTP; Mon, 13 Feb 2023
+ 01:46:49 -0800 (PST)
+From:   Hannah Wilson <hannahdavid147@gmail.com>
+Date:   Mon, 13 Feb 2023 09:46:49 +0000
+X-Google-Sender-Auth: 4szbdd-LlydrsrxGKB9pXPa5b0E
+Message-ID: <CADJK9p+5AfwXbuB4ujCTrycg2Y1UdqYb7HC3DxqKw3KuGT4y4A@mail.gmail.com>
+Subject: Good Day My beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-brcm,bcm63xx-hsspi-peripheral-props.yaml is not in use at least for now.
-Remove it from the maintainer entry.
+Good Day My Beloved,
 
-Fixes: 80323599e33f ("MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers")
-Reported-by: kernel test robot <lkp@intel.com>
-https://lore.kernel.org/oe-kbuild-all/202302121840.GtduUT37-lkp@intel.com/
+It is my pleasure to communicate with you, I know that this message
+will be a surprise to you my name is Mrs. David Hannah Wilson, I am
+diagnosed with ovarian cancer which my doctor have confirmed that I
+have only some weeks to live so I have decided you handover the sum
+of($12,000.000 ,00) through I decided handover the money in my account
+to you for help of the orphanage homes and the needy once
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Please   kindly reply me here as soon as possible to enable me give
+you more information but before handing over my bank to you please
+assure me that you will only take 40%  of the money and share the rest
+to the poor orphanage home and the needy once, thank you am waiting to
+hear from you
 
----
-
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c6a2c3175ea3..df1c71ca1a69 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4306,7 +4306,6 @@ M:	Jonas Gorski <jonas.gorski@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi-peripheral-props.yaml
- F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
- F:	drivers/spi/spi-bcm63xx-hsspi.c
- F:	drivers/spi/spi-bcmbca-hsspi.c
--- 
-2.37.3
-
+Mrs,David Hannah Wilson.
