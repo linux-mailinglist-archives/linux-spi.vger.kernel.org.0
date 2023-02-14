@@ -2,105 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B716A69629C
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Feb 2023 12:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D717A696423
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Feb 2023 14:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjBNLnA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Feb 2023 06:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S232531AbjBNNDm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Feb 2023 08:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbjBNLm7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Feb 2023 06:42:59 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0485161B3
-        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 03:42:57 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id b1so6746880ybn.2
-        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 03:42:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ntp1DJWrxSiz7pO5E4hFDYQiVmTGWOANMpWU4mf0omY=;
-        b=KQnrfPqqOfyOqcr9XzQZqWemi6CSPpoD3v+hCAvuWaTiNJSz497LNQOu8ZUzuvAEYZ
-         cvmMZeBgUgKabCzl1rKD06BtopsxdWp28DilpSHW+JnaDj88wyjWwOYEtC3g0qCQXutd
-         2PQs/hVaaBfj4Nu84Ck02xCHbl8Z9kWxoIZxnrcGXTAQA5fMyYNr3j9i8pNgBk9n/qL0
-         RxVTGqS0Cycs+a31399edIfdbJUMaw7FYUf0MA5j2/WHGOzQE0WClDfoFq68DwUF9mS5
-         xhJC1on+VLMuRDZnoqw6EBbnCowwfjTRta9t1dmoMlKIQyk/fVBOuHyFv9QMc/903guC
-         UkVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ntp1DJWrxSiz7pO5E4hFDYQiVmTGWOANMpWU4mf0omY=;
-        b=Eha7aNZYxLAepgjGrGiabe8z7JYD3rHmYgF/dG/5/BYvGnhSLuET9sd5tsnv7jzZgj
-         IPLhBHrSO26WjVUpPVp4Ie+DU2AuZElhN9n16T4XnWX2TfDIM1p5mrq1T4/HQjaI7vB2
-         Ei5K/nWMlQcCo4CyQXTsM6C6mlFJC26LMVpw2Osnfr2Nwzw0M9RyaQ8Gx3tXdvpcf2DQ
-         bNoFYDCX571fsDGnRqI578PGebxt81uhJZvg8OaIym3GZBiRETTMYhZz9i/3KzAhYnUZ
-         s1tceFd0Xc2Pf2U6KK1Eh989pihdUD0GnqabT1J/rGdxd7FpI0i0a/5qV3Yav07ymL31
-         oUlQ==
-X-Gm-Message-State: AO0yUKVJ41HmeAkxxqd+uCq9yxTG7eXlVJMMs68hoUFsDXiI/pVW4Awz
-        /YMvb1+qEfkuvZmJ25QRZDKGzjo9RRHZDVbU69M=
-X-Google-Smtp-Source: AK7set/mEQX++sZn6+z6jREbhm6Nvx8QW+HmlTYfc3rgLoKCI2xPTvBkKB7LBZxw4JIKh7TmJanpOpIC8R6heuxoN9k=
-X-Received: by 2002:a5b:691:0:b0:86e:1225:b335 with SMTP id
- j17-20020a5b0691000000b0086e1225b335mr289892ybq.455.1676374976380; Tue, 14
- Feb 2023 03:42:56 -0800 (PST)
+        with ESMTP id S231593AbjBNNDm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Feb 2023 08:03:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790623860;
+        Tue, 14 Feb 2023 05:03:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8CF1B81D52;
+        Tue, 14 Feb 2023 13:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2CD3C433D2;
+        Tue, 14 Feb 2023 13:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676379815;
+        bh=MHDYka/ZDMHL6lJhmsMxhG+q+n7bvOhWhH3cKlaHVak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kO3pNMThmktgf+HrbQ7D682OVJSli1hTvgHRncyS9DYCSwxKEtKd1VkG/XxlETx9w
+         ABiSpl/xHnmNegkzcOd4VRIz1c4y8LUpFCUlXw6rGjAaje6Kb6ttO+RvTH8VI2OLUk
+         tzPHhcbc3meWqZlvcpulZA8CloaKva5OYIA91tqKkHSgl6ARPwPYHZYPZgLKVroCk6
+         WA95wCJH+XvREBq0fNQAICb9Us0hqcqZW7KLc42un6C5vjTAwjWu14VroSM3g6pt3W
+         xDb+eX2+skill2ZT6Gun489jmVxdDnaq9sl2lcc1cZ4yrWI62cLLoqnOvqecj2wAz+
+         5MVDoVe7WWg7w==
+Date:   Tue, 14 Feb 2023 13:03:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Alain Volmat <avolmat@me.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] dt-bindings: spi: spi-st-ssc: convert to DT schema
+Message-ID: <Y+uGpJviop/66Kpk@sirena.org.uk>
+References: <20230213192349.17101-1-avolmat@me.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6919:ce04:b0:12c:b3b6:5b2b with HTTP; Tue, 14 Feb 2023
- 03:42:56 -0800 (PST)
-Reply-To: brommel32@yahoo.com
-From:   Rommel Bautista <frankraymo78@gmail.com>
-Date:   Tue, 14 Feb 2023 12:42:56 +0100
-Message-ID: <CAK3g952yXRbXgB65kTCGaczOCkYbnBU-YNBwnCW-NwaPigGcvA@mail.gmail.com>
-Subject: YOUR RESPONSE IS URGENTLY NEEDED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b30 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [brommel32[at]yahoo.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [frankraymo78[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [frankraymo78[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rCEjhhAvduqhiov+"
+Content-Disposition: inline
+In-Reply-To: <20230213192349.17101-1-avolmat@me.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Greetings,
-I have information that needs your urgent attention.
-Please kindly Contact me for details on the below provided email
-address as soon as possible..
 
-Email(brommel32@yahoo.com)
+--rCEjhhAvduqhiov+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regards,
-Rommel Bautista.
-Manila, Philippines
+On Mon, Feb 13, 2023 at 08:23:48PM +0100, Alain Volmat wrote:
+> Convert spi-st-ssc.txt into st,ssc-spi.yaml for the
+> ST Microelectronics SSC SPI driver.
+
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+--rCEjhhAvduqhiov+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPrhqMACgkQJNaLcl1U
+h9Bn2AgAgxldXNFUP19NOpKn/+rFAEfCPVsP2ERPGq/hnp7Vd+efTzRR9188Phfl
+QOHzv3R3Y8VEJO39hgBGVl+vwiI43HdANeDfBWHXuKHMWBWLm4L4U9ak+hssS0bR
+2PvXPiwLv5HitW1fYTwwYoEA2fMYjJbKCRd2V92LXGCuUmnPkhVCrDM/29wZhOAb
+RXtLtMDz6CI0z6OoFwZTOyXe4pSP3DqjzSD4g9XxJRKRuoqcjp9sCtQuYXNMMItD
+L92ro3ywbDmlG1VaaAyCfiDv89PIuepJWWMlSJ8KLAphoOynfmuyCv/n0gOr2UTT
+XhZwHwQuA5PMWR4PWTOQOLa0z/N2Vw==
+=hvJ2
+-----END PGP SIGNATURE-----
+
+--rCEjhhAvduqhiov+--
