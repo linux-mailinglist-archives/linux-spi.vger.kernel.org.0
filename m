@@ -2,55 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3253696EE7
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Feb 2023 22:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9762696F27
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Feb 2023 22:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjBNVLG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Feb 2023 16:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S232289AbjBNVUU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Feb 2023 16:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbjBNVLE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Feb 2023 16:11:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E942CFF7;
-        Tue, 14 Feb 2023 13:11:00 -0800 (PST)
+        with ESMTP id S232221AbjBNVUT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Feb 2023 16:20:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C909E
+        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 13:20:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EA13618D1;
-        Tue, 14 Feb 2023 21:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F2DC4339B;
-        Tue, 14 Feb 2023 21:10:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 400EF618F2
+        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 21:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A5CD0C433D2;
+        Tue, 14 Feb 2023 21:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676409059;
-        bh=fDIAaeLvnV9bS7cSr3lrCN+H7tSKNpzTS60LB1VS550=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OYpoOHHcfZA2DoLCNbBAVzJp8sFxNPyS2f/SZUonAGV6v84jwoP6HqzaINqJtJx+V
-         eNmLIK6bSwMZgADeM3pRNmocG+FeYNk+b2jLHgYGEO4Syrmg1sms51h2Pt1t/JASMr
-         YnRDg5v8rcyKFFpsgpX5QG1bx89dNfflDCBybv4Y0t943O27UPUnPCpGi1M2wRZYDv
-         ydw57lZOktRsllTgxazuatWX1dI+cHkYEl/g3N0VhTVcuQON4t471d8GUtHahLcnQ6
-         r+PRS9MX7YFgBVhye1WUn+fM7FlmI66WbRT7vi9zOQaMcfmuR/grFUbU7g36CKCWBf
-         FShqN3cntzCKA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, Takahiro.Kuwano@infineon.com,
-        Pratyush Yadav <ptyadav@amazon.de>,
-        Pratyush Yadav <pratyush@kernel.org>
-In-Reply-To: <20230125081023.1573712-1-d-gole@ti.com>
-References: <20230125081023.1573712-1-d-gole@ti.com>
-Subject: Re: [PATCH v2 0/4] STIG Mode Fixes for spi-cadence-qspi driver
-Message-Id: <167640905650.3115947.2076945563527929294.b4-ty@kernel.org>
-Date:   Tue, 14 Feb 2023 21:10:56 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1676409617;
+        bh=ZjD3ihB/VrGIJNz1pvszhZHfjzKFtfjh9ykwqSD0Tuc=;
+        h=Subject:From:Date:To:From;
+        b=ntT9VQuqlyQqVmzPzsAkcF0Z+VKk+888yRNaxCbCOZCVNZGMemfhqBbHxGVS+pqc7
+         L+TCamX8Gd9OXstzIbiCD1mLZFDXR7TjywvVlWcD7dvuhCd0niAKByyXO5F0G85Cci
+         Qwvxk6dxj9kBALYlk7C9OoQ5oG106A5iefnoqN/CE9r5b/ooA9SLOAxsKOCVfLtG5Z
+         wVL76MlnP2vaaMc5W1UwHTGm84oBA9tBSCzw3WfX5zhA0JK/q7ASpXy7pCGPLx/Q5u
+         WKwaHMeFBxxlwPCKxAAdVw1Vrvj2oz6RuN1YhOBWErUmScvOCes/GL3ZP8kx7MTPSC
+         UP6WklRUqA2rw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8107EE68D35;
+        Tue, 14 Feb 2023 21:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167640961746.1666.7238271632385101485.git-patchwork-summary@kernel.org>
+Date:   Tue, 14 Feb 2023 21:20:17 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +51,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 25 Jan 2023 13:40:19 +0530, Dhruva Gole wrote:
-> * Reset the CMD_CTRL Register, without which read/writes in STIG mode
-> were failing in some cases. The issue came to light while using STIG
-> Mode for small reads.
-> * Also add a flag that can allow us to do direct reads but distinguish
-> direct writes, thus enabling us to disable writes in DAC mode in some
-> cases that require it. (Like to write to some connected Flash registers)
-> * Fix register reads in STIG mode and also use STIG mode while reading flash
-> registers.
-> Currently if you try to read a register while in STIG mode there is no
-> support for ADDR and thus naturally a register never gets read from the
-> flash.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   broonie/spi.git for-next
+Patch: [v2] dt-bindings: spi: spi-st-ssc: convert to DT schema
+  Submitter: Alain Volmat <avolmat@me.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=721403
+  Lore link: https://lore.kernel.org/r/20230213192349.17101-1-avolmat@me.com
 
-Thanks!
+Series: spi: cqspi: Fix register reads in STIG Mode
+  Submitter: Gole, Dhruva <d-gole@ti.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=708669
+  Lore link: https://lore.kernel.org/r/20230104062604.1556763-1-d-gole@ti.com
+    Patches: [1/2] spi: cadence-quadspi: setup ADDR Bits in cmd reads
 
-[1/4] spi: cadence-quadspi: Reset CMD_CTRL Reg on cmd r/w completion
-      commit: d4f43a2d05faf7febb839edb2e9e8f85dfb9d2d2
-[2/4] spi: cadence-quadspi: Add flag for direct mode writes
-      commit: e8c51b164355c1d519a4b8ad0873f131035d26b7
-[3/4] spi: cadence-quadspi: setup ADDR Bits in cmd reads
-      commit: a8674ae02db232927385c2d0a063e10c0118f5ca
-[4/4] spi: cadence-quadspi: use STIG mode for small reads
-      commit: d403fb6e76bf854ef0f7d84e797e51b9494788e0
+Series: STIG Mode Fixes for spi-cadence-qspi driver
+  Submitter: Gole, Dhruva <d-gole@ti.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=715383
+  Lore link: https://lore.kernel.org/r/20230125081023.1573712-1-d-gole@ti.com
+    Patches: [v2,1/4] spi: cadence-quadspi: Reset CMD_CTRL Reg on cmd r/w completion
+             [v2,2/4] spi: cadence-quadspi: Add flag for direct mode writes
+             [v2,3/4] spi: cadence-quadspi: setup ADDR Bits in cmd reads
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Total patches: 5
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
