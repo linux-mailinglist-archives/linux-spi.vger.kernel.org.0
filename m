@@ -2,204 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130D7695094
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Feb 2023 20:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57107695CC8
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Feb 2023 09:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjBMTYu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Feb 2023 14:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S231992AbjBNIUv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Feb 2023 03:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjBMTYq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Feb 2023 14:24:46 -0500
-Received: from pv50p00im-zteg10021401.me.com (pv50p00im-zteg10021401.me.com [17.58.6.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961762057D
-        for <linux-spi@vger.kernel.org>; Mon, 13 Feb 2023 11:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676316271; bh=xkmJJqu6MolKJdoAjsMp0nlBp8nKSB4Kl7pZsLx6TUk=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=r/M6sjS5+L5YkZo5Ws5mZsv2Hz3oYUlnXUl7gzCyggfijeRIqHJ9zFRsZTSaB3+Sj
-         oYIiLizNgoCK+hPv+HE7hGf53JdMCIbFAF1C8VPNRoiDL8tJ+sauAFeXDZV8FxtvUU
-         b5T95e2nDMqWpTVpPfQgHWAI5G/1z1rq310UZqEFc4ZK38F27N6CWIvMtHGx//e2Jj
-         3zeJHLY159NVmdnGTREtwEikrNlpXx1mpc3n2MMwckVFGms78uiNwGNpwPIa0InS5R
-         ZymRxo74P7WH2HQtUn/Uy8OdzjwnSAC8vC6nHm20tQmVSniBhlg08WU9Zd7m/tMVa+
-         vmMO/Eulu528g==
-Received: from localhost (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-zteg10021401.me.com (Postfix) with ESMTPSA id 4419F8E095F;
-        Mon, 13 Feb 2023 19:24:29 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S231922AbjBNIUu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Feb 2023 03:20:50 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B581220D2A
+        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 00:20:49 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id g6-20020a05600c310600b003e1f6dff952so417312wmo.1
+        for <linux-spi@vger.kernel.org>; Tue, 14 Feb 2023 00:20:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=izobyQ1NMEnMgYx3aG67EjKArFST7vbQadFNv+PRN14=;
+        b=e623hJjY0nq55QmrV3FmDZhsTaGnlYGpkb5a/NlwJ8OVeVyBRVHfzEO5WsEXYr6jr9
+         ji4WqXKAi7P0AnvbP5em/LPa4F/QCJdN4EuqHs4fkjSQ0FOqq/hkt/kO2u0PCEyG9FYp
+         Ud35cWzurwv5A+ZP6zmC+JZR4q7tfgJe8wsa4q3S9Ena2pyVSIaCpWpNfNz52Ls8YrLM
+         zz+CWpkLTzimvlytrUxGojyrZVRUbw/TXPzt42Omb0yJWrvMMtp4KQrvlWeGFEoeAwMz
+         yWkIsPgarmN0fOM2MRznlGBvDDh/dE4ogTXXT/rvLUHwliWOQbH88SVI1IZI5zg/4YVN
+         UD0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=izobyQ1NMEnMgYx3aG67EjKArFST7vbQadFNv+PRN14=;
+        b=28NygayREXmQURzi4PU6D2TWU1YhvG3NEwrTsBCF3dxXKXVxs4b/AzEN7zGqOvuGkL
+         IWQbSV/KgBBLEQgp59mrMOISLe0XtwJ65nZEYXAUahMh1b7RW3/8i54gPFM722x2oEYV
+         DioNn2WcchLxyfKnRYjqR7fzF0A/yzTYZqTDOKVvcHiJpE1dlgPFmRJ0bKe3EnXoKjmF
+         ANWccMuaTdEoXKy/fwZAwzG/lv+yrHmH5yjT5J8lNZg94jQDoaR5v+Axj77PS1nmZ2Op
+         NUCbyp2oUVUzPKD1XT1THaGWNe77mzpseqaMQo9Rj82XnOb5ygBjauE9j3BSVpR09yQ6
+         L7PA==
+X-Gm-Message-State: AO0yUKUQ2pexPC6u9CYJf9K/b9hAYbykiIiLEm2G5Jdq9/3rmYji3j6A
+        2Yc3zLHmyGoZ08/i1HKfA/t0Iw==
+X-Google-Smtp-Source: AK7set/BYiTFnAIR6oywWOJ6lKyzhUlLWXUgWHgo5JkvWZIniPygAfmd/X9e8qtSTAsEYVTIj7ymVQ==
+X-Received: by 2002:a05:600c:3319:b0:3dc:5b79:2dbb with SMTP id q25-20020a05600c331900b003dc5b792dbbmr1409975wmp.25.1676362848324;
+        Tue, 14 Feb 2023 00:20:48 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c10-20020a05600c170a00b003df241f52e8sm15364898wmn.42.2023.02.14.00.20.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 00:20:47 -0800 (PST)
+Message-ID: <8a3d2e67-359b-2d7c-6f98-42d716b870c9@linaro.org>
+Date:   Tue, 14 Feb 2023 09:20:45 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] dt-bindings: spi: spi-st-ssc: convert to DT schema
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Alain Volmat <avolmat@me.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] dt-bindings: spi: spi-st-ssc: convert to DT schema
-Date:   Mon, 13 Feb 2023 20:23:48 +0100
-Message-Id: <20230213192349.17101-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 2Gvif1CpBDyyDTT7F6ljF9AvkEw--yut
-X-Proofpoint-ORIG-GUID: 2Gvif1CpBDyyDTT7F6ljF9AvkEw--yut
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.572,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F01:2022-06-21=5F01,2020-02-14=5F11,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
- malwarescore=0 clxscore=1015 mlxlogscore=999 mlxscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302130169
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230213192349.17101-1-avolmat@me.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230213192349.17101-1-avolmat@me.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert spi-st-ssc.txt into st,ssc-spi.yaml for the
-ST Microelectronics SSC SPI driver.
+On 13/02/2023 20:23, Alain Volmat wrote:
+> Convert spi-st-ssc.txt into st,ssc-spi.yaml for the
+> ST Microelectronics SSC SPI driver.
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
-v2: correct subject & commit log
-    drop quotes around spi-controller.yaml
-    remove extra spaces within example
 
- .../devicetree/bindings/spi/spi-st-ssc.txt    | 40 ------------
- .../devicetree/bindings/spi/st,ssc-spi.yaml   | 61 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 62 insertions(+), 40 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-st-ssc.txt
- create mode 100644 Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-st-ssc.txt b/Documentation/devicetree/bindings/spi/spi-st-ssc.txt
-deleted file mode 100644
-index 1bdc4709e474..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-st-ssc.txt
-+++ /dev/null
-@@ -1,40 +0,0 @@
--STMicroelectronics SSC (SPI) Controller
-----------------------------------------
--
--Required properties:
--- compatible	: "st,comms-ssc4-spi"
--- reg		: Offset and length of the device's register set
--- interrupts	: The interrupt specifier
--- clock-names	: Must contain "ssc"
--- clocks	: Must contain an entry for each name in clock-names
--		    See ../clk/*
--- pinctrl-names	: Uses "default", can use "sleep" if provided
--		    See ../pinctrl/pinctrl-bindings.txt
--
--Optional properties:
--- cs-gpios	: List of GPIO chip selects
--		    See ../spi/spi-bus.txt
--
--Child nodes represent devices on the SPI bus
--  See ../spi/spi-bus.txt
--
--Example:
--	spi@9840000 {
--		compatible	= "st,comms-ssc4-spi";
--		reg		= <0x9840000 0x110>;
--		interrupts	= <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
--		clocks		= <&clk_s_c0_flexgen CLK_EXT2F_A9>;
--		clock-names	= "ssc";
--		pinctrl-0	= <&pinctrl_spi0_default>;
--		pinctrl-names	= "default";
--		cs-gpios	= <&pio17 5 0>;
--		#address-cells	= <1>;
--		#size-cells	= <0>;
--
--		st95hf@0{
--			compatible		= "st,st95hf";
--			reg			= <0>;
--			spi-max-frequency	= <1000000>;
--			interrupts		= <2 IRQ_TYPE_EDGE_FALLING>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml b/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-new file mode 100644
-index 000000000000..6a77cd3f5d6e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/st,ssc-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics SSC SPI Controller
-+
-+description: |
-+  The STMicroelectronics SSC SPI controller can be found on STi platforms
-+  and it used to communicate with external devices using the
-+  Serial Peripheral Interface.
-+
-+maintainers:
-+  - Patrice Chotard <patrice.chotard@foss.st.com>
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: st,comms-ssc4-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: ssc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stih407-clks.h>
-+    spi@9840000 {
-+      compatible = "st,comms-ssc4-spi";
-+      reg = <0x9840000 0x110>;
-+      interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
-+      clock-names = "ssc";
-+      pinctrl-0 = <&pinctrl_spi0_default>;
-+      pinctrl-names = "default";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2e32eb8d44f5..0fc3e4c6c1e5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2926,6 +2926,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- W:	http://www.stlinux.com
- F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
-+F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
- F:	arch/arm/boot/dts/sti*
- F:	arch/arm/mach-sti/
- F:	drivers/ata/ahci_st.c
--- 
-2.34.1
+Best regards,
+Krzysztof
 
