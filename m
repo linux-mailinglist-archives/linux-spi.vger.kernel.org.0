@@ -2,67 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80CC6982D1
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 19:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72876982D5
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 19:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjBOSBQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Feb 2023 13:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S230030AbjBOSBv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Feb 2023 13:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjBOSBP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 13:01:15 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C929B31E2B
-        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 10:01:09 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id d2so18906570pjd.5
-        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 10:01:09 -0800 (PST)
+        with ESMTP id S229721AbjBOSBu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 13:01:50 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B2D27D6E
+        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 10:01:49 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id kk7-20020a17090b4a0700b00234463de251so3012599pjb.3
+        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 10:01:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=bYiu7fO21hO46zPnbnKSczjvoi5G9nF8NB1raKRGEng=;
-        b=Ayh1ttEikW334jG61S976MWd1WQ1+yB4hF8Brp+0edvhj577vg8XTcQAulxpjnYZI9
-         NGFMy9mWHTipgMtx4iJC9/1UoJscw+DNPqysqrZb10GkwArer62ez9gJh/VGQh0ceNhN
-         THXlSPKHmCvPWHiBxwyyugJU13N5LnzKsKeSw=
+        bh=RNo1yepGw25l0/boacf73DD5usBo7kVztH5b5WlpZX0=;
+        b=gGEOBI8SoiPLNc1G0TTCNrGmuBB7ZHIwmEIr6URRFrIiG+QXRqt5hVYTIW8HU0UAyI
+         3TwTmo1ZFc36nqybbkQqjOsyqx5xAkc+NylPq1CgvLYfyvEZ1Ka6J+cE7y3wjPoJhsBU
+         j8Q14yx3M00vNO7223JJyIrbL1P3EBFIx/2TA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bYiu7fO21hO46zPnbnKSczjvoi5G9nF8NB1raKRGEng=;
-        b=LYV/oI5XfbBYEwfgG94dJ/ty0b1kqO+4gg0x0o9uepzrdlzPn7zYLWOzkM+S5hnfvv
-         xRVKygmYhl4MdfrO9zGyF7wedacxJD4zs/GDPE1Ws4z4uNn7ketk77TYLRGrMO//CfPy
-         dEVRYDW1igygUnkze8k9pJK3DVDj5StR97UWiFK7EyXggY+nXDfuanzKE28jpIi3fdFb
-         MSfpshcBMURw74fM0hzjty5q2nieiasP+lFFPuzFVZ1y3EEMmgh+Wy1GjcSgyV5j43GB
-         T7zXUx9kTFY3RyUt47oOOliSFse1874xP18BAL2beuYp3tI3Wui55TyG9VYhM8WJGDIo
-         dp9A==
-X-Gm-Message-State: AO0yUKVKsP42o9ojMSO08eQwegoNkWvhGfaUK+C807tkXCZ4Nj3yK7RK
-        vFElfzYcZEp7UGKjCPvo+CmrhA==
-X-Google-Smtp-Source: AK7set98uB8qMmiJVc1JXFTFwKNcN1BPVuA+c00jE1XY0hl8cv1xocH6CZX93SEzImoIufga2z1eqg==
-X-Received: by 2002:a05:6a20:8f0d:b0:bc:4d0c:ce45 with SMTP id b13-20020a056a208f0d00b000bc4d0cce45mr3273651pzk.53.1676484069122;
-        Wed, 15 Feb 2023 10:01:09 -0800 (PST)
+        bh=RNo1yepGw25l0/boacf73DD5usBo7kVztH5b5WlpZX0=;
+        b=CsCeYVlxO2YSzGwShluEhpQUkm8mcTsgtQmVZ/O+zy44R49hgh3z/pvftrgxAW38Tt
+         y0rBhgZ+Q+jjBsHMee5GEmv3kkqL8uno890MM/dbEKcrU35g17f7brhOBuvtBbr88Dyi
+         Z7EtzIiA5LSJuS0gNfh1boTOKrMxrGgkRT7wHhLLvvY9ADJNtFdyNIo+YpLsULI3mLqN
+         X8CWQZF+7rk9qQHpvfK4xR7egkXTmNHCazlfp7sUF94aogBPFmVjCXox6foMzbKWBq9S
+         eyi3I+SWYHxj7jtYgOjb4h5NpGJWztWJmMvDLJJLmqegHKcCevU7tDil9qB3zHhXgSid
+         ejLg==
+X-Gm-Message-State: AO0yUKUG5pkn/D3PKE+hAWwJ93/VRhz34yI40Y46fHzdrCL7JNp+UeGY
+        ijABUlW94bzhyytfHfn5tQC1yg==
+X-Google-Smtp-Source: AK7set9oq1EAzYiiE4UIKy8/HR75rg3dEDnHlAjIyAZMloLIngZQPzdaEMPmRHHkPzInltIKYoV9Vw==
+X-Received: by 2002:a17:902:d48c:b0:19a:b6bf:1e16 with SMTP id c12-20020a170902d48c00b0019ab6bf1e16mr3516260plg.51.1676484108659;
+        Wed, 15 Feb 2023 10:01:48 -0800 (PST)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id c15-20020aa78c0f000000b00589605fb0a1sm2442302pfd.96.2023.02.15.10.01.07
+        by smtp.gmail.com with ESMTPSA id g16-20020a1709029f9000b0019956f23fc1sm4078184plq.302.2023.02.15.10.01.47
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Feb 2023 10:01:08 -0800 (PST)
-Subject: Re: [PATCH] spi: bcm63xx-hsspi: fix error code in probe
+        Wed, 15 Feb 2023 10:01:48 -0800 (PST)
+Subject: Re: [PATCH] spi: bcmbca-hsspi: Fix error code in probe() function
 To:     Dan Carpenter <error27@gmail.com>
 Cc:     Kursad Oney <kursad.oney@broadcom.com>,
         Jonas Gorski <jonas.gorski@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <Y+zmoGH6LubPhiI0@kili>
+        Mark Brown <broonie@kernel.org>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <Y+zmrNJ9zjNQpzWq@kili>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <c54b2da0-8c53-1ad9-b9ef-f385b46a2dee@broadcom.com>
-Date:   Wed, 15 Feb 2023 10:01:07 -0800
+Message-ID: <45707dce-300c-078c-ca24-dc09afb3cde3@broadcom.com>
+Date:   Wed, 15 Feb 2023 10:01:46 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <Y+zmoGH6LubPhiI0@kili>
+In-Reply-To: <Y+zmrNJ9zjNQpzWq@kili>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000070452a05f4c0dd52"
+        boundary="000000000000cab60005f4c0dfb6"
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -73,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---00000000000070452a05f4c0dd52
+--000000000000cab60005f4c0dfb6
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -83,22 +86,22 @@ Content-Transfer-Encoding: 7bit
 On 02/15/2023 06:05 AM, Dan Carpenter wrote:
 > This code accidentally returns success instead of a negative error code.
 > 
-> Fixes: 50a6620dd1fb ("spi: bcm63xx-hsspi: Add polling mode support")
+> Fixes: a38a2233f23b ("spi: bcmbca-hsspi: Add driver for newer HSSPI controller")
 > Signed-off-by: Dan Carpenter <error27@gmail.com>
 > ---
->   drivers/spi/spi-bcm63xx-hsspi.c | 3 ++-
+>   drivers/spi/spi-bcmbca-hsspi.c | 3 ++-
 >   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-> index 1e9e906d297c..e481c8d5e5d6 100644
-> --- a/drivers/spi/spi-bcm63xx-hsspi.c
-> +++ b/drivers/spi/spi-bcm63xx-hsspi.c
-> @@ -847,7 +847,8 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+> diff --git a/drivers/spi/spi-bcmbca-hsspi.c b/drivers/spi/spi-bcmbca-hsspi.c
+> index d58033251c02..c14c1969e2cb 100644
+> --- a/drivers/spi/spi-bcmbca-hsspi.c
+> +++ b/drivers/spi/spi-bcmbca-hsspi.c
+> @@ -546,7 +546,8 @@ static int bcmbca_hsspi_probe(struct platform_device *pdev)
 >   
 >   	pm_runtime_enable(&pdev->dev);
 >   
-> -	if (sysfs_create_group(&pdev->dev.kobj, &bcm63xx_hsspi_group)) {
-> +	ret = sysfs_create_group(&pdev->dev.kobj, &bcm63xx_hsspi_group);
+> -	if (sysfs_create_group(&pdev->dev.kobj, &bcmbca_hsspi_group)) {
+> +	ret = sysfs_create_group(&pdev->dev.kobj, &bcmbca_hsspi_group);
 > +	if (ret) {
 >   		dev_err(&pdev->dev, "couldn't register sysfs group\n");
 >   		goto out_pm_disable;
@@ -107,7 +110,9 @@ On 02/15/2023 06:05 AM, Dan Carpenter wrote:
 
 Reviewed-by: William Zhang <william.zhang@broadcom.com>
 
---00000000000070452a05f4c0dd52
+Thanks Dan for fixing both drivers!
+
+--000000000000cab60005f4c0dfb6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -178,13 +183,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN7w5FJrcPzha5qWycv2r6VukwG8
-gL6bOlHwiue6Z1K+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDIxNTE4MDEwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEII5sBuB4RaLGbncIwWeXxtDxQoqg
+9iD/YCpriPlMHnyeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDIxNTE4MDE0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBTQEqZWO9TxZi1XObtEbHkw+fzf03zjt/dWiXn0eD1aKT1
-FmACvIrkoR9ZGEj2GMJCJi6LSX7x5m/mgTzlEoNTlWkPz2I7O9x7cgUlFwLhNFod431bpxcKOm6o
-5zAkKhR0QFQ7InJ9+2FgMkCV5DVCtU4+afq7062n+q7atM0ffEVZyzPUQzsd4DmP6MaxhnU8hyO7
-+bH9wGy7hFOOKyXLxPBsyv9FZJpvz8VV+2sRelHLE7ioZlTtCWGp2hFKy8IlBON3x2dzoPprcxMA
-Zpx5dMRozsY44CMaTsH9cIhmB1raR/tDrU+iCWQqW49dBWXc09r2Gd4Hhz3LxmsH2Dde
---00000000000070452a05f4c0dd52--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAUrnUWC3ztZ6GOw3OKXc1qGJPrAW44Fi3KBVksN0z+V7Xe
+ptmtslbDpFNJmwhLFQBK+ydmYJE5GJ9HvWJYB4Si03IIEVZ2Qg8ChCveEiBdqvGMjLqMJGDQrKXx
+3Yis7oGoMM71AGtK0a1AJ7Qm1ZGk6yc7ZjNWlW2fufKXhx2hT9K3B5kd8UmpjsMRL0ChvESSMbbh
+B4kx3ybPzwaMJm/sdAhp0EH1EfdrxXpIdmkm8Q3c+0SzSwKfJKnpotS1tm/MoAhLnDK7fPtnzAHm
+HcLU4ryye015/OXu7OFM0uy6HtCNH9/ATk4qebClmWbHCpPU3vnEO9NVmR9U0MuRGkGJ
+--000000000000cab60005f4c0dfb6--
