@@ -2,100 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D126697A59
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 12:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A35D697C98
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 14:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjBOLAE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Feb 2023 06:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S229578AbjBONBl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Feb 2023 08:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjBOLAD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 06:00:03 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE139728B
-        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 03:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676458802; x=1707994802;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cf8b+iDfRofdtn0yJ2mtRL2M9+DLI6A9yuJaHJdBefU=;
-  b=TAMqWRGgC7AUR1Ld+TFSU5V5YZQQKyX+wJpcu1o6mc9WeUoEQi6hxz62
-   cDRH1Vvnt1L0ZBt/4imuNU1VoA0c/Z8PpdGYGR06NduHIC60gJad7LTyV
-   ea+2pnwzMG4vIunk94klacN/MzKI87B+WPK3quSwLYc1QjLn1dV88yX1k
-   UAm/GF6jrJRgY94UQUGBa/YRKwF9h5frWkZr2vBwlMq1PvbsQFEAEhQ1r
-   +xHX92zicgHRky6BavY5RsG1UsnR/DIDdAZKQ2SOJGoIIQCTjzizy4YTx
-   NRNkv3KS0QZsD3NN8KmtGfUfZzbTrlQU2RCzS2tIeip2ULk39Q5Q6V3WZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="329117970"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="329117970"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 03:00:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699919159"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="699919159"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 15 Feb 2023 03:00:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id D50CD1A6; Wed, 15 Feb 2023 13:00:40 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Marcin Witkowski <marcin.witkowski@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        with ESMTP id S229847AbjBONBi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 08:01:38 -0500
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C55C36695
+        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 05:01:33 -0800 (PST)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id SHPepPq8UqIOtSHPepCxKZ; Wed, 15 Feb 2023 14:01:31 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 15 Feb 2023 14:01:31 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-spi@vger.kernel.org
-Subject: [PATCH] spi: intel: Check number of chip selects after reading the descriptor
-Date:   Wed, 15 Feb 2023 13:00:40 +0200
-Message-Id: <20230215110040.42186-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+Subject: [PATCH] spi: synquacer: Fix timeout handling in synquacer_spi_transfer_one()
+Date:   Wed, 15 Feb 2023 14:01:28 +0100
+Message-Id: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The flash decriptor contains the number of flash components that we use
-to figure out how many flash chips there are connected. Therefore we
-need to read it first before deciding how many chip selects the
-controller has.
+wait_for_completion_timeout() never returns a <0 value. It returns either
+on timeout or a positive value (at least 1, or number of jiffies left
+till timeout)
 
-Reported-by: Marcin Witkowski <marcin.witkowski@intel.com>
-Fixes: 3f03c618bebb ("spi: intel: Add support for second flash chip")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+So, fix the error handling path and return -ETIMEDOUT should a timeout
+occur.
+
+Fixes: b0823ee35cf9 ("spi: Add spi driver for Socionext SynQuacer platform")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/spi/spi-intel.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Compile tested only.
+---
+ drivers/spi/spi-synquacer.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index f619212b0d5c..627287925fed 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -1368,14 +1368,14 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
- 	if (!spi_new_device(ispi->master, &chip))
- 		return -ENODEV;
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index 47cbe73137c2..dc188f9202c9 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -472,10 +472,9 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+ 		read_fifo(sspi);
+ 	}
  
--	/* Add the second chip if present */
--	if (ispi->master->num_chipselect < 2)
--		return 0;
--
- 	ret = intel_spi_read_desc(ispi);
- 	if (ret)
- 		return ret;
+-	if (status < 0) {
+-		dev_err(sspi->dev, "failed to transfer. status: 0x%x\n",
+-			status);
+-		return status;
++	if (status == 0) {
++		dev_err(sspi->dev, "failed to transfer. Timeout.\n");
++		return -ETIMEDOUT;
+ 	}
  
-+	/* Add the second chip if present */
-+	if (ispi->master->num_chipselect < 2)
-+		return 0;
-+
- 	chip.platform_data = NULL;
- 	chip.chip_select = 1;
- 
+ 	return 0;
 -- 
-2.39.1
+2.34.1
 
