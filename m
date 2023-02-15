@@ -2,64 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53370697F78
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 16:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A026981A2
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 18:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjBOPYc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Feb 2023 10:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S229705AbjBORI6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Feb 2023 12:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjBOPYc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 10:24:32 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECA68684
-        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 07:24:31 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15f97c478a8so23249539fac.13
-        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 07:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TadElbv/yECNyRvG0Pa2vpl29upi4rkpMkJRcewsa7k=;
-        b=suGbtRbva9mfsiS7LLNx13Qf0OsA9bc4rRjOkogLlK5PHAndCm/2000O593bVAfNf/
-         xhOdda5c+ELAQMSxZTkfuSXJNR2+nRui+95nMQBWRQsz1Pi8XjPRsay1cW7L3ddi0x6N
-         nfVr7EjSjgyyL/DdR2HlYEqRWaUGwit3MSkgYIDgXgBf+rb9zYfU5mBxMIVANBS/HjGT
-         i9WzCuXmnCEJCv07wvufZUhXrFMu7OUSH9tWTM8KU+ykyrVa8OpBfXEjbEThDtys6Y87
-         cli2MqN2J6bAscc++INea8g3hkk2xNtczFkn54zsnIZLswfmJiDuOSOc5QQn9f9Zigqw
-         eVKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TadElbv/yECNyRvG0Pa2vpl29upi4rkpMkJRcewsa7k=;
-        b=u/ZrJ0kuszGIcTDvgO0WK5uoqvZcEYd5Otqz3kGjFZHEthO4cdECfZ8ByxlcdDvPC0
-         I49TYCFctTOTZmrv71n996HqOtdG1dP96Cgd8RnAIxVbetIEg5mQW/uth/wDXHDZ7tTM
-         jt16tZYTENCOIYJjqAfzLcHSBx3BJOYfBhlbvD5pkSM8csoSknCvPvrgjbyxRsqBsIQ+
-         0pIBkwki4LW3s84RCLk7i4PKtzQqAnvpSkFgMlGEkkUmEKrCFw9k45E1qIOlYMXmC3zj
-         d2GBOdZ8keX7NqETnmt4k32HoVP3BMMYkBaDeFbDMtZgMKHUFU9BdsD3qxw61i5umKlz
-         Hllg==
-X-Gm-Message-State: AO0yUKWx0mBlGGiDjC5BKP/D4YMcKF924fHV+4fnfOBXfQPLTgpLKkQh
-        ECdwhkGwk3WDHB46y9brnJ7CsJ+c9cz321mfDAsHnQ==
-X-Google-Smtp-Source: AK7set89dOBFzBa3roM7yTkRgWk8K9U1srlYYE4cn1E4jBK5Jx6T2MYTeWX22QqOnM8AabgZmdbBdRcqAPmxGXlBDHI=
-X-Received: by 2002:a05:6871:9a:b0:16e:44ad:c9fb with SMTP id
- u26-20020a056871009a00b0016e44adc9fbmr362093oaa.82.1676474670678; Wed, 15 Feb
- 2023 07:24:30 -0800 (PST)
+        with ESMTP id S229881AbjBORI5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 12:08:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0E0274AE
+        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 09:08:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 004A861CFB
+        for <linux-spi@vger.kernel.org>; Wed, 15 Feb 2023 17:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC9BC433D2;
+        Wed, 15 Feb 2023 17:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676480934;
+        bh=QP1P9UIsTSfHgOMQWLc7pijXIPuwOBSOtqKVz3JoYWc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Z8uF9c9+W556QgP/UhaLl19sRl1pBkKJSpAZbtvqq+ojDGnBdBK1wfvyB2ELU/G9K
+         psDoBiF2MyQF8jZ44Ckx8mB52R/mquJVbtgV4Xoq4I4JwvIJUqnM/Qnw9kRlaQ50hu
+         6hGzz20D4Rmg3ql1xUcI5bhZuUG03fBNORdByBAgvaDXu81jlDjOC+ILjsM65OoDHn
+         6TvEeGZ8hDhzZTSVfZYyhN/sC68WXYxc4UwIU3YvpGCcB7GH7uV0chMCXSFuPqO/ue
+         u+otjyV18Wd3tAlYO9GHNxE+it8Qfa1WzjOTlDMBxY0ym10Tu6rCooJoBfkUvANjTW
+         JP7EJeAMYfpPw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Marcin Witkowski <marcin.witkowski@intel.com>,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20230215110040.42186-1-mika.westerberg@linux.intel.com>
+References: <20230215110040.42186-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] spi: intel: Check number of chip selects after reading
+ the descriptor
+Message-Id: <167648093330.3474735.3443382740046621289.b4-ty@kernel.org>
+Date:   Wed, 15 Feb 2023 17:08:53 +0000
 MIME-Version: 1.0
-References: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <c2040bf3cfa201fd8890cfab14fa5a701ffeca14.1676466072.git.christophe.jaillet@wanadoo.fr>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Wed, 15 Feb 2023 09:24:19 -0600
-Message-ID: <CAJe_Zhf9E49MkySeqoSFsuy7=j8vmjngda60GEUzTTSNMjj0LA@mail.gmail.com>
-Subject: Re: [PATCH] spi: synquacer: Fix timeout handling in synquacer_spi_transfer_one()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,43 +54,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 15 Feb 2023 at 07:01, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> wait_for_completion_timeout() never returns a <0 value. It returns either
-> on timeout or a positive value (at least 1, or number of jiffies left
-> till timeout)
->
-> So, fix the error handling path and return -ETIMEDOUT should a timeout
-> occur.
->
-> Fixes: b0823ee35cf9 ("spi: Add spi driver for Socionext SynQuacer platform")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Compile tested only.
-> ---
->  drivers/spi/spi-synquacer.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
-> index 47cbe73137c2..dc188f9202c9 100644
-> --- a/drivers/spi/spi-synquacer.c
-> +++ b/drivers/spi/spi-synquacer.c
-> @@ -472,10 +472,9 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
->                 read_fifo(sspi);
->         }
->
-> -       if (status < 0) {
-> -               dev_err(sspi->dev, "failed to transfer. status: 0x%x\n",
-> -                       status);
-> -               return status;
-> +       if (status == 0) {
-> +               dev_err(sspi->dev, "failed to transfer. Timeout.\n");
-> +               return -ETIMEDOUT;
->         }
->
->         return 0;
->
-Acked-by: Jassi Brar <jaswinder.singh@linaro.org>
+On Wed, 15 Feb 2023 13:00:40 +0200, Mika Westerberg wrote:
+> The flash decriptor contains the number of flash components that we use
+> to figure out how many flash chips there are connected. Therefore we
+> need to read it first before deciding how many chip selects the
+> controller has.
+> 
+> 
 
-thanks
+Applied to
+
+   broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: intel: Check number of chip selects after reading the descriptor
+      commit: 574fbb95cd9d88bdc9c9c4c64223a38a61d7de9a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
