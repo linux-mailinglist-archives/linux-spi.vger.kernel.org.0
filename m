@@ -2,101 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C94697DFA
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 15:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F83A697E2F
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Feb 2023 15:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjBOOFm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Feb 2023 09:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S229551AbjBOOTX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Feb 2023 09:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBOOFl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 09:05:41 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AD72940C;
-        Wed, 15 Feb 2023 06:05:40 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id bk16so19247958wrb.11;
-        Wed, 15 Feb 2023 06:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=972VoMBEa6AEd5FN2/lOAlKbuTVirIIEUgWJdtgNhrk=;
-        b=Z7AuVxpZ7+aG0J9RWhAOeJi0WARhsOmwTKIEwiYdmZxKNXWs17jhMu6vhl7Yb7zQIS
-         PVvzOF0m35YOTUHVrPJ9Dio5MHGBtUn1Wzv/dL3SNvaktz4lASes5LymX7/yUjSU5Gc9
-         tu5FZ+ODhoFRYZHdkGufVEJ9p798YxJkswsUpV95faWq8jxmtq9bL4ZMC/k31bYKXTSC
-         P7fmUWxuhLfjp0EtNpM5Vt0FJ1OqAc5bUU3SxQI26VYv0qA8vKQDI//xJ3jEFvmQdpNp
-         jjQzhaGsZsYv0RRJmgRLJKqtZTG5briVYJ7yZ3GlLrg4zi0jHOpzTZI6+MWisdl+7Y3z
-         o2qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=972VoMBEa6AEd5FN2/lOAlKbuTVirIIEUgWJdtgNhrk=;
-        b=EIUsclFhvnbjc/qYSNqxdAreidaBSg0ohJ8cqg1sIrgdIEt/3poJqQLlHGsFjWyqa2
-         XITvoSzALMc6yFif0Vg2l7YP/xU4ROXpHvAhtJFpvo3Zae7Py73tp2N0fhZ4jRQK2ATN
-         tnBT5MurcICaHbVedsqjYpyeya2Qp2z9gfh3J+j2sQqBQTDX3USfCxrP0vq4CjSJms10
-         3BuoaxPOBrQP98v7gCmwNcgD9fAEm0vMAM9LRKxiZVt761/itlxlSKk8z9hvKNr7n3q9
-         bU7fzwqSXUcBJmFoDwGl+l/B6U3T5CU/ff2ioAm7j4eJBdVppR2SePadDjYcN9BOm8iu
-         3I9g==
-X-Gm-Message-State: AO0yUKXY3xnR99hhPilaZ3aIJ8VTNk4ex9m2H9IdjVjyA753JAVC/t4w
-        IYj38h9hOrakWGW8onomopI=
-X-Google-Smtp-Source: AK7set+GLef0sPdlxOXpLIRtTD1n07tDrM5SLCe5jLJ5Z6ny0t+62MBEXleQXABcfzSRt+rTFLDVBg==
-X-Received: by 2002:a5d:564c:0:b0:2c5:5ef8:fa36 with SMTP id j12-20020a5d564c000000b002c55ef8fa36mr1579131wrw.70.1676469938528;
-        Wed, 15 Feb 2023 06:05:38 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h12-20020adff4cc000000b002be505ab59asm15882649wrp.97.2023.02.15.06.05.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 06:05:38 -0800 (PST)
-Date:   Wed, 15 Feb 2023 17:05:32 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Kursad Oney <kursad.oney@broadcom.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] spi: bcmbca-hsspi: Fix error code in probe() function
-Message-ID: <Y+zmrNJ9zjNQpzWq@kili>
+        with ESMTP id S229462AbjBOOTW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Feb 2023 09:19:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610FB6181;
+        Wed, 15 Feb 2023 06:19:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE53961C33;
+        Wed, 15 Feb 2023 14:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56C4C4339B;
+        Wed, 15 Feb 2023 14:19:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676470760;
+        bh=gQEel9EdWJL6nindAVV89iHXQOyC9ETUfqvkvbtD2gg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PEGQwrEr7+4WeFzY/RpUMkgnLnkz3fghVF7WJBwbfnBSFv/l/K9ykEmLj7kWn6gss
+         boN+28fkVXq2qh9YXa3j66y4Hj/kpEL9EYG3AiTTfxOrke1JcvDKQydudVbzQ17IGH
+         ZL4MG5W5BmvBAd6rx1y4zhrf/hs2iovXQ0Y1T2Z28UEqyKBjNDQkO60YWp04Z15os0
+         LITBxJhiNSW/UvxDu/uH5bdF9unqvUhGcL4wXv6m2shBXdbZI7J9XcZ3STxeTl72a0
+         U4bJYIhivyPi3krbtjRY1d/s/g+7MAdiLn1pDItsS9gGz71pmYvlLxV6SmGbJp+ikl
+         VT4QJaIeWDiZw==
+Date:   Wed, 15 Feb 2023 14:19:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
+        sanju.mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
+        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
+        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
+        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, narmstrong@baylibre.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com, Dhruva Gole <d-gole@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        William Zhang <william.zhang@broadcom.com>
+Subject: Re: [PATCH v4 01/15] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Message-ID: <Y+zp5F2l8pffEEvN@sirena.org.uk>
+References: <20230210193647.4159467-1-amit.kumar-mahapatra@amd.com>
+ <20230210193647.4159467-2-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mHMK7QDQWaz9I52Q"
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230210193647.4159467-2-amit.kumar-mahapatra@amd.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This code accidentally returns success instead of a negative error code.
 
-Fixes: a38a2233f23b ("spi: bcmbca-hsspi: Add driver for newer HSSPI controller")
-Signed-off-by: Dan Carpenter <error27@gmail.com>
----
- drivers/spi/spi-bcmbca-hsspi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--mHMK7QDQWaz9I52Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-bcmbca-hsspi.c b/drivers/spi/spi-bcmbca-hsspi.c
-index d58033251c02..c14c1969e2cb 100644
---- a/drivers/spi/spi-bcmbca-hsspi.c
-+++ b/drivers/spi/spi-bcmbca-hsspi.c
-@@ -546,7 +546,8 @@ static int bcmbca_hsspi_probe(struct platform_device *pdev)
- 
- 	pm_runtime_enable(&pdev->dev);
- 
--	if (sysfs_create_group(&pdev->dev.kobj, &bcmbca_hsspi_group)) {
-+	ret = sysfs_create_group(&pdev->dev.kobj, &bcmbca_hsspi_group);
-+	if (ret) {
- 		dev_err(&pdev->dev, "couldn't register sysfs group\n");
- 		goto out_pm_disable;
- 	}
--- 
-2.35.1
+On Sat, Feb 11, 2023 at 01:06:32AM +0530, Amit Kumar Mahapatra wrote:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
 
+This again doesn't apply against my current code - I think the
+best thing to do here is going to be to rebase against -rc1 when
+it comes out and resend then, that will also make the issues
+integrating with other trees easier as then I can make a clean
+branch against -rc1 that other trees will be able to merge as
+needed.
+
+--mHMK7QDQWaz9I52Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPs6eMACgkQJNaLcl1U
+h9DMTQf7BClrpZ6y6mPa14iVbIWKtokY4RW9qSMUPLjIFwC9eRXAa0tO9cEn7yie
+Dhg3Nh0HQil5b3ETrpYSZcezEkC0LjXhOcrQL2AaNPnYqp8rwD3n4tFQXOY7hA9R
+fhdZQcSulOPdvy2GDwF7fvgenpxkVDIZM0OyEYKr5amWKxjhGICMWTBjvHmWJWo5
+Kh34j6KD6URlG9Rlf2b8CSTbJrwj5bREjrjMOvUNQWTt775APe+cKcZF6Jp3IhOC
+q8wYya1VrWoegeXxgG6IJW/I5BYCmloUtbj8BTpW9CIHMuOTdeqMduuExe3cWHOx
+xEsHIS5meBbApEDmthwKyZw5q9xE6w==
+=3UQL
+-----END PGP SIGNATURE-----
+
+--mHMK7QDQWaz9I52Q--
