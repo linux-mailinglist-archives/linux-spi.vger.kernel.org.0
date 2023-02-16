@@ -2,88 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0BA698F3F
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 10:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BEA699459
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 13:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjBPJER (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Feb 2023 04:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S230236AbjBPMaX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Feb 2023 07:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBPJEP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 04:04:15 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED13121A2D;
-        Thu, 16 Feb 2023 01:04:12 -0800 (PST)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id 295AE26F7A6; Thu, 16 Feb 2023 10:04:11 +0100 (CET)
-Date:   Thu, 16 Feb 2023 10:04:11 +0100
-From:   Janne Grunau <j@jannau.net>
+        with ESMTP id S230255AbjBPMaU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 07:30:20 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5872E0D7
+        for <linux-spi@vger.kernel.org>; Thu, 16 Feb 2023 04:30:18 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id he5so1436376wmb.3
+        for <linux-spi@vger.kernel.org>; Thu, 16 Feb 2023 04:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o4HpK3cjUVPs02UtjGQEhBq3wtY5D4vf0Bk162oyCpw=;
+        b=FFhdQDlfID6RCMnrwS+WdPOUkO2Q9eD6wGx4D4o3fxTBwo7l/rVY4dErohjDJ7jum7
+         /WL9jo2GSlkFepo8JT256xI3EK1r2fnxZhicPgAd1wT7rGNWJOnFXPg07lg/Ro+kVvob
+         l2jelsx8lSF7EEoOGJPEDdIOzs5QMYFJ3UUkrIt85oBNfPb/IVOHM5xPI52pgdHjsZxL
+         zMMhiCwXYsWGT9+/CGoFuCSnpVaNbwvm8de3Pq2HC3pRCGY+vCqqCppeH85WmvLbL4Zq
+         RjuHNDvb9icCl5/5k7stcPWhR6oAZ/rtxFjVYwZQh9DNn65/35Tm3aUFjbzUMMXB6mYC
+         41aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o4HpK3cjUVPs02UtjGQEhBq3wtY5D4vf0Bk162oyCpw=;
+        b=DDXPwGroQRSWVuIfk01YkhZTrjoO7ppaAwDCv7Ary1u6HhzDCaE2jLIB0QtdhmocSL
+         WYMZx4dlIiaht939hwRpdWeFPf1N6WlnnJbpDp3EaXsHGqDUzInzc7jBpQDmhdQHmghd
+         CB/Y9ZYRQyH/EAup199vySUAuf+B/HAwVp6gvJ8fAp+gN6XEhtLeiZdyV5dmvG/lpV7e
+         iSwGQEtOq5cLtofNptgpDDo+AjbFknPK89f36BIP0PmqvRyL4q/T9vawuu87KEQet+lu
+         H6Oq7iHd0cBCz9JLEEBDFms+AGYX+XfwDRmmQwYx+yvpMpZfjW8o6cW+ZDxzO8bTUckn
+         GYEA==
+X-Gm-Message-State: AO0yUKXEo/b43c65GOKZf7hdxA1VXPhiT4pDcMuVZwy9UCNHx/LeEAdu
+        3Q47mNXut6xs6/39Uw6h7L1WYw==
+X-Google-Smtp-Source: AK7set9qAKB6cOlrTi4kiYnTrQ5aJrcyakUvHs+g9QJ6iS0wpxXElr2KKcnCqc0QLVWRF+qh9FYdIQ==
+X-Received: by 2002:a05:600c:997:b0:3dc:5b88:e6dd with SMTP id w23-20020a05600c099700b003dc5b88e6ddmr5280342wmp.10.1676550617367;
+        Thu, 16 Feb 2023 04:30:17 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:7c5b:1160:db5d:72da])
+        by smtp.gmail.com with ESMTPSA id u1-20020a7bc041000000b003d1d5a83b2esm5237739wmc.35.2023.02.16.04.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 04:30:16 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Kazuki <kazukih0205@gmail.com>
-Subject: Re: [PATCH v2 0/3] SPI core CS delay fixes and additions
-Message-ID: <20230216090411.GH17933@jannau.net>
-References: <20230113102309.18308-1-marcan@marcan.st>
- <167362544665.163457.10878671229075890152.b4-ty@kernel.org>
- <20230214185234.uj63aovylzixs6xa@kazuki-mac>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] spi: spidev: drop the incorrect notice from Kconfig
+Date:   Thu, 16 Feb 2023 13:30:14 +0100
+Message-Id: <20230216123014.110541-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214185234.uj63aovylzixs6xa@kazuki-mac>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hej Mark,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On 2023-02-15 03:52:34 +0900, Kazuki wrote:
-> On Fri, Jan 13, 2023 at 03:57:26PM +0000, Mark Brown wrote:
-> > On Fri, 13 Jan 2023 19:23:07 +0900, Hector Martin wrote:
-> > > Commits f6c911f3308c ("spi: dt-bindings: Introduce
-> > > spi-cs-setup-ns property") and 33a2fde5f77b ("spi: Introduce
-> > > spi-cs-setup-ns property") introduced a new property to represent the
-> > > CS setup delay in the device tree, but they have some issues:
-> > > 
-> > > - The property is only parsed as a 16-bit integer number of nanoseconds,
-> > >   which limits the maximum value to ~65us. This is not a reasonable
-> > >   upper limit, as some devices might need a lot more.
-> > > - The property name is inconsistent with other delay properties, which
-> > >   use a "*-delay-ns" naming scheme.
-> > > - Only the setup delay is introduced, but not the related hold and
-> > >   inactive delay times.
-> > > 
-> > > [...]
-> > 
-> > Applied to
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> > 
-> > Thanks!
-> > 
-> > [1/3] spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
-> >       commit: f276aacf5d2f7fb57e400db44c807ea3b9525fd6
-> 
-> Shouldn't this be sent to 6.2 before the property becomes a stable ABI?
+The spidev interface has been de-facto stable for many years. This notice
+has been unchanged since 2007 and is incorrect so remove it.
 
-can we still get "spi: Use a 32-bit DT property for 
-spi-cs-setup-delay-ns" into 6.2?
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/spi/Kconfig | 3 ---
+ 1 file changed, 3 deletions(-)
 
-If not I can send a single line patch which switches 
-of_property_read_u16() to of_property_read_u32() to avoid defining 
-"spi-cs-setup-delay-ns" to u16 as stable devicetree ABI.
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 3b1c0878bb85..2a2ac3aa13c9 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -1166,9 +1166,6 @@ config SPI_SPIDEV
+ 	help
+ 	  This supports user mode SPI protocol drivers.
+ 
+-	  Note that this application programming interface is EXPERIMENTAL
+-	  and hence SUBJECT TO CHANGE WITHOUT NOTICE while it stabilizes.
+-
+ config SPI_LOOPBACK_TEST
+ 	tristate "spi loopback test framework support"
+ 	depends on m
+-- 
+2.37.2
 
-sorry this comes so late before 6.2, we missed to track the patches.
-
-Thanks,
-Janne
