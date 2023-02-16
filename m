@@ -2,48 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B866999F8
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 17:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D24699A13
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 17:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjBPQ0z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Feb 2023 11:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S229496AbjBPQdX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Feb 2023 11:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBPQ0y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 11:26:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FC497D2;
-        Thu, 16 Feb 2023 08:26:53 -0800 (PST)
+        with ESMTP id S229666AbjBPQdV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 11:33:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0DC497CF;
+        Thu, 16 Feb 2023 08:33:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166D661573;
-        Thu, 16 Feb 2023 16:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D196C433EF;
-        Thu, 16 Feb 2023 16:26:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B212B828EE;
+        Thu, 16 Feb 2023 16:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26DEC4339C;
+        Thu, 16 Feb 2023 16:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676564812;
-        bh=vbHAxZJYXbMklTvORNYKsL9yojiYsRz76iRI93JSV+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9N4tdFyLM4rwcMlvUTogdhaXT8q6UoM0R5s4pwJV6N/Hh7BgROd7RR0LjlIHBqhv
-         YB5TrGtkf/F77Gq4O9KwDd7uimRwPjZ9riPIn+VvNL5Lr1LwcV9q+WfDfSGKLgMTNP
-         jRxneHSml4ox+hH6lu0OYgm5W4mmn2FLyvi0O1r48iOzzuGqodiRSXdxNcq9whhAza
-         YqfhZa7tAoZSMf9t2ZpdVxTVxaU/r6Acl8P9q15u0c2b4qTWl9DfgSz9djf+Ma8BLI
-         jboKBSUxfk3Z+9GSJfxdbD0m2o8CZp98xrPCMfZiqhxVaLKh6wN0C5rTYlDNiYE+uh
-         piALQ540mdpdQ==
-Date:   Thu, 16 Feb 2023 16:26:49 +0000
+        s=k20201202; t=1676565193;
+        bh=nMVHmIqfaHt08Slvr0nYctMoK6XHgT9o9PCB3tkVwMM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tRHuxIl2U6ktQg70qCgMQu7QRzybFUQFlAz6fRrdN4HLZlfgQwRNiKw5QJR1OZ9Yu
+         CiY4DEAy+A5xcCYaNDgiDOJ8J7EGTQp6ZDhqWLv1lqUlLMm5ZnFlZYFmu+HIYvjmBG
+         CLS/0J6okaldrafpDdKA9oSBJhJ7Wkm+LX3tFcY3pzA7FAfjPGe5rQZQ05Igj6bs7a
+         qaQSTrJi7hVoh8FoEpQiu56xOxPamXtBe4zhb2DjnN6ABZIbkzBNOCVX5IIhQm6ps/
+         rJfvbSR4HID+1RtVRLsqr10IcSfO2QTI4/MIb4M37H6Cibu6iXjdo0Z2+A8YOeXxIZ
+         AdG75UPF3zCyg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] SPI updates for v6.2-rc8-abi
-Message-ID: <Y+5ZSUB8WYPdA0az@sirena.org.uk>
-References: <20230216131125.4A6FAC433D2@smtp.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nmlF8D8AVX6jJdyq"
-Content-Disposition: inline
-In-Reply-To: <20230216131125.4A6FAC433D2@smtp.kernel.org>
-X-Cookie: Serving suggestion.
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v6.2-rc8-abi
+Date:   Thu, 16 Feb 2023 16:33:04 +0000
+Message-Id: <20230216163312.A26DEC4339C@smtp.kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,35 +47,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following changes since commit e0fe6a31cac84735939c29d1e05055d58325c6c0:
 
---nmlF8D8AVX6jJdyq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  spi: Rename spi-cs-setup-ns property to spi-cs-setup-delay-ns (2023-01-05 16:07:09 +0000)
 
-On Thu, Feb 16, 2023 at 01:11:08PM +0000, Mark Brown wrote:
+are available in the Git repository at:
 
-> spi: Update for v6.2
->=20
-> One more last minute patch for v6.2 updating the parsing of the
-> newly added spi-cs-setup-delay-ns - it's been pointed out that
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.2-rc8-abi
 
-Sorry, operator error here - this is clearly pulling in far more
-than I had intended.  Please ignore this pull request.
+for you to fetch changes up to f276aacf5d2f7fb57e400db44c807ea3b9525fd6:
 
---nmlF8D8AVX6jJdyq
-Content-Type: application/pgp-signature; name="signature.asc"
+  spi: Use a 32-bit DT property for spi-cs-setup-delay-ns (2023-01-13 12:31:49 +0000)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+spi: Update for v6.2
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWUgACgkQJNaLcl1U
-h9AfIgf9FJvjYEVplolqrBAzdYUxCPtzJvQL3nMjuRMRJpL/8gEhPYnsx3U7bDAh
-HIkPavuh8t6SvLJwF72RhHgC50VQfkkcqB4gRQZA+gDQ+D8sKInMAEHKeqGa4zmN
-i3XbVCgk05q3pTLczOctWYBGtjizc0GnA92BEaOJCKvuTgOwLixCTInua98tDKhl
-oPSR+ITrA87XNailk/C2G7Zv8a3Y51HLpTKyCG9bcD6A0K29Jed71UTAevnx3mw0
-4y5Vae6eOpnCF2pKSaONIWyIWapPyeblzo9kPqE+ST1nlFWdbVu81Ke63Bj+Sjfk
-nfJuzMPDq2ctWHHXe87RroqRRcLd4Q==
-=YH4M
------END PGP SIGNATURE-----
+One more last minute patch for v6.2 updating the parsing of the
+newly added spi-cs-setup-delay-ns - it's been pointed out that
+due to the way DT parsing works the change in property size is
+ABI visible so let's not let a release go out without it being
+fixed.  The change got split from some earlier ABI related fixes
+to the property since the first version sent had a build error.
 
---nmlF8D8AVX6jJdyq--
+----------------------------------------------------------------
+Janne Grunau (1):
+      spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
+
+ drivers/spi/spi.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
