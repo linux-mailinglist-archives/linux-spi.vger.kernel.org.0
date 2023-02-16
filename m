@@ -2,62 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C26999F3
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 17:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B866999F8
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 17:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBPQZk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Feb 2023 11:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S229833AbjBPQ0z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Feb 2023 11:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjBPQZj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 11:25:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8B5171C;
-        Thu, 16 Feb 2023 08:25:39 -0800 (PST)
+        with ESMTP id S229517AbjBPQ0y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 11:26:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FC497D2;
+        Thu, 16 Feb 2023 08:26:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3962B828E5;
-        Thu, 16 Feb 2023 16:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D7FC4339C;
-        Thu, 16 Feb 2023 16:25:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 166D661573;
+        Thu, 16 Feb 2023 16:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D196C433EF;
+        Thu, 16 Feb 2023 16:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676564736;
-        bh=nve5Ue1AJALAEX5aeOHUuJl3EWYyR+RvB0oWPuHaAPo=;
+        s=k20201202; t=1676564812;
+        bh=vbHAxZJYXbMklTvORNYKsL9yojiYsRz76iRI93JSV+A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KBZMIvmfJx1sZUYx1H8P5shukqoca3HUxhoEXbs4GcQ92K/u/FoElpUYqPYSpvRiV
-         Fm1P02Pa6E5qop2uEvlLhHd6SFcUXyOX8QR0zQt6uNxFfiad4C7pjw5jUv61G9+BzS
-         QPnytouh/mh+JXwcXq1k5wM5nGWp0QhVbFSPStv0jHJyLNQWG1E6yIzd25BLdJn9iE
-         80TIEb/pxpt0pjPclxiVe1x8PmRbjbBZ4RuNBKMELesl0AH/AksyCQfNVxl3xI5ZG/
-         v6wHirlmmX922evaG3Gxfy+GmO1E/Mjf77j33GoJy5orW4V0ad22xj5+MIq1wJCgJD
-         hN2LdYcwkPsFA==
-Date:   Thu, 16 Feb 2023 16:25:33 +0000
+        b=K9N4tdFyLM4rwcMlvUTogdhaXT8q6UoM0R5s4pwJV6N/Hh7BgROd7RR0LjlIHBqhv
+         YB5TrGtkf/F77Gq4O9KwDd7uimRwPjZ9riPIn+VvNL5Lr1LwcV9q+WfDfSGKLgMTNP
+         jRxneHSml4ox+hH6lu0OYgm5W4mmn2FLyvi0O1r48iOzzuGqodiRSXdxNcq9whhAza
+         YqfhZa7tAoZSMf9t2ZpdVxTVxaU/r6Acl8P9q15u0c2b4qTWl9DfgSz9djf+Ma8BLI
+         jboKBSUxfk3Z+9GSJfxdbD0m2o8CZp98xrPCMfZiqhxVaLKh6wN0C5rTYlDNiYE+uh
+         piALQ540mdpdQ==
+Date:   Thu, 16 Feb 2023 16:26:49 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Janne Grunau <j@jannau.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Kazuki <kazukih0205@gmail.com>
-Subject: Re: [PATCH v2 0/3] SPI core CS delay fixes and additions
-Message-ID: <Y+5Y/ZW/FFJ5rRwv@sirena.org.uk>
-References: <20230113102309.18308-1-marcan@marcan.st>
- <167362544665.163457.10878671229075890152.b4-ty@kernel.org>
- <20230214185234.uj63aovylzixs6xa@kazuki-mac>
- <20230216090411.GH17933@jannau.net>
- <Y+5SCAj4Vk8NLrW9@sirena.org.uk>
- <20230216162107.GJ17933@jannau.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] SPI updates for v6.2-rc8-abi
+Message-ID: <Y+5ZSUB8WYPdA0az@sirena.org.uk>
+References: <20230216131125.4A6FAC433D2@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8Skpj9itf0StfGeN"
+        protocol="application/pgp-signature"; boundary="nmlF8D8AVX6jJdyq"
 Content-Disposition: inline
-In-Reply-To: <20230216162107.GJ17933@jannau.net>
+In-Reply-To: <20230216131125.4A6FAC433D2@smtp.kernel.org>
 X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +54,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---8Skpj9itf0StfGeN
+--nmlF8D8AVX6jJdyq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 16, 2023 at 05:21:07PM +0100, Janne Grunau wrote:
+On Thu, Feb 16, 2023 at 01:11:08PM +0000, Mark Brown wrote:
 
-> I think something went wrong with "[GIT PULL] SPI updates for=20
-> v6.2-rc8-abi". The message reads is if you intended to just send
-> "spi: Use a 32-bit DT property for spi-cs-setup-delay-ns" and not 62=20
-> commits.
+> spi: Update for v6.2
+>=20
+> One more last minute patch for v6.2 updating the parsing of the
+> newly added spi-cs-setup-delay-ns - it's been pointed out that
 
-You're right, thanks for noticing.
+Sorry, operator error here - this is clearly pulling in far more
+than I had intended.  Please ignore this pull request.
 
---8Skpj9itf0StfGeN
+--nmlF8D8AVX6jJdyq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWPwACgkQJNaLcl1U
-h9Dt5Qf/V37kgFrW3nZL8VczgXJCUxn0MrUOxlKpy/vM+ZfigCJE9UiOOuyfJDBj
-yfuYyHRtTPSNwAPavgUVH820gCixnE80ipxKe2X3ot7PonmsvLiq0lwqvx9qQYkc
-w51k3981ZGo835FVP1+mH0gt4ZuyUj7W40K5v3r4sM4N+zyctFhPNdVB3k+TsdHJ
-qoIyZprlsDL+JmO009DqGTiVI3Ov/0yQDq5VpWDS7mnRrFaFh5wNBjkgOy+4S7H5
-6KLAJAQ7n4IeQTQsoltTufBfnlDkRcMcpSx+CekxsbugvxgRla+QqcCUYzFYEdVX
-06htheZlFcCLELzYpHanojB+V3r/BA==
-=1u9h
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuWUgACgkQJNaLcl1U
+h9AfIgf9FJvjYEVplolqrBAzdYUxCPtzJvQL3nMjuRMRJpL/8gEhPYnsx3U7bDAh
+HIkPavuh8t6SvLJwF72RhHgC50VQfkkcqB4gRQZA+gDQ+D8sKInMAEHKeqGa4zmN
+i3XbVCgk05q3pTLczOctWYBGtjizc0GnA92BEaOJCKvuTgOwLixCTInua98tDKhl
+oPSR+ITrA87XNailk/C2G7Zv8a3Y51HLpTKyCG9bcD6A0K29Jed71UTAevnx3mw0
+4y5Vae6eOpnCF2pKSaONIWyIWapPyeblzo9kPqE+ST1nlFWdbVu81Ke63Bj+Sjfk
+nfJuzMPDq2ctWHHXe87RroqRRcLd4Q==
+=YH4M
 -----END PGP SIGNATURE-----
 
---8Skpj9itf0StfGeN--
+--nmlF8D8AVX6jJdyq--
