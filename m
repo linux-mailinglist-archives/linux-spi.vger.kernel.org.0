@@ -2,42 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4242C699541
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 14:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C780169959F
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Feb 2023 14:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjBPNLb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Feb 2023 08:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S230099AbjBPNXq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Feb 2023 08:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBPNL2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 08:11:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE264DE12;
-        Thu, 16 Feb 2023 05:11:27 -0800 (PST)
+        with ESMTP id S229794AbjBPNXp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Feb 2023 08:23:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6765456B;
+        Thu, 16 Feb 2023 05:23:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A014261F93;
-        Thu, 16 Feb 2023 13:11:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6FAC433D2;
-        Thu, 16 Feb 2023 13:11:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59E07B827F7;
+        Thu, 16 Feb 2023 13:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DCEC433EF;
+        Thu, 16 Feb 2023 13:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676553086;
-        bh=8HP84T5xzTRr9arAoHmnKo6b5R2ydrxAxiMz5UoJk48=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nsgN+DylRHOeYfbNBL3d5LynFqrvEDtAq+9S+91FueoLIL66qy/mlTIHSrEl8vBY1
-         Y9xLSi6+OrTVpzjfSO5WTjTuaNsO0sUhHqHtfFKoz/TfqP8PiiRhX8JlpuSFZxP1d8
-         gFU3jPbo1M1F+8Z3PJXIDKfvfZMFUztHJMCu21DntDRE/ezqpFuf0PI+vXt7/4dNYp
-         fo1DvKAL2rELShnba2yLTbnfCfmbhTBfxCl5OegC0cMfdR7PW+766nLcXWR+pii/2w
-         KmIjkvFnofwqwemLIPCZdkEtnx3rrV0HULr2OvSZ7d0nw73SFGMd92TOlc46jZ1KdN
-         mSjdLGNgtICFA==
+        s=k20201202; t=1676553822;
+        bh=QoC6w+W5+IjPC7lXTWwpGP9CeD1GjolKIUfcqf2VQAU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=gv+SoxJGxFb5KKAY2Tq3LNIU0gJRm0sv2857l/HvuqvEkOTlK0kHdxUfWE13v9Deq
+         2+oDkiS1XWNVnnj5iB9JoRV7WW/Jw8trlk2y0imA3tn7Xg+hZiTooDFurbDzdDCLSj
+         nnrp7n5eg5WwUxEWUJIgLRp1K5893RHY0m4QuH36Fupl5WUFp5ucUTzDYJwmQoegEC
+         hA2kP2d9Q/m+u7bQ0SHGFIzuZzYR2Deul+uL7RQFyDsWDFadrCT+kttrNi2tA21MRu
+         6xLqC7Cyd9/R4/0vpPzJpZD6btSwQvXsVpZf6zDOaXzef8lklnJbVz/hO/QtSR/CIW
+         Kr8DqeQCwkgoA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI updates for v6.2-rc8-abi
-Date:   Thu, 16 Feb 2023 13:11:08 +0000
-Message-Id: <20230216131125.4A6FAC433D2@smtp.kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     Kursad Oney <kursad.oney@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <Y+zmrNJ9zjNQpzWq@kili>
+References: <Y+zmrNJ9zjNQpzWq@kili>
+Subject: Re: [PATCH] spi: bcmbca-hsspi: Fix error code in probe() function
+Message-Id: <167655381929.3676429.15587417251493299810.b4-ty@kernel.org>
+Date:   Thu, 16 Feb 2023 13:23:39 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,192 +60,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit eede42c9459b58b71edc99303dad65216a655810:
+On Wed, 15 Feb 2023 17:05:32 +0300, Dan Carpenter wrote:
+> This code accidentally returns success instead of a negative error code.
+> 
+> 
 
-  spi: spidev: fix a recursive locking error (2023-01-27 16:38:05 +0000)
+Applied to
 
-are available in the Git repository at:
+   broonie/spi.git for-next
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.2-rc8-abi
+Thanks!
 
-for you to fetch changes up to 80323599e33f9c19287a1a3707481fb157b27052:
+[1/1] spi: bcmbca-hsspi: Fix error code in probe() function
+      commit: 0696532e12524855fa8044590d374079f271f216
 
-  MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers (2023-02-10 21:36:45 +0000)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-----------------------------------------------------------------
-spi: Update for v6.2
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-One more last minute patch for v6.2 updating the parsing of the
-newly added spi-cs-setup-delay-ns - it's been pointed out that
-due to the way DT parsing works the change in property size is
-ABI visible so let's not let a release go out without it being
-fixed.  The change got split from some earlier ABI related fixes
-to the property since the first version sent had a build error.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-----------------------------------------------------------------
-Amit Kumar Mahapatra (1):
-      spi: Add APIs in spi core to set/get spi->chip_select and spi->cs_gpiod
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Arnd Bergmann (1):
-      spi: dw_bt1: fix MUX_MMIO dependencies
+Thanks,
+Mark
 
-Bartosz Golaszewski (2):
-      spi: spidev: fix a race condition when accessing spidev->spi
-      spi: spidev: remove debug messages that access spidev->spi without locking
-
-Dan Carpenter (1):
-      spi: spidev: Fix double unlock in spidev_sync()
-
-Geert Uytterhoeven (1):
-      dt-bindings: trivial-devices: Remove trailing whitespace
-
-Janne Grunau (3):
-      spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
-      spi: dt-bindings: Add hold/inactive CS delay peripheral properties
-      spi: Parse hold/inactive CS delay values from the DT
-
-Krzysztof Kozlowski (4):
-      spi: spidev: order compatibles alphabetically
-      dt-bindings: trivial-devices: document SPI dev compatibles
-      spi: dt-bindings: drop unneeded quotes
-      spi: dt-bindings: cleanup examples - indentation, lowercase hex
-
-Mark Brown (9):
-      spi: switch to use modern name
-      spi: SPI core CS delay property rename From: Hector Martin <marcan@marcan.st> Date: Wed, 04 Jan 2023 18:36:26 +0900 Message-Id: <20230104093631.15611-1-marcan@marcan.st> MIME-Version: 1.0 Content-Type: text/plain; charset="utf-8" Content-Transfer-Encoding: 7bit
-      SPI core CS delay fixes and additions
-      spi: SPI core CS delay fixes and additions
-      spi: atmel: switch to use modern name
-      Merge remote-tracking branch 'spi/for-6.2' into spi-6.2
-      spi: Abstract access to chip selects
-      spi: Merge fixes
-      Add MediaTek MT7986 SPI NAND support
-
-Mauro Lima (4):
-      spi: intel: Fix device private data and PR_NUM for Broxton controllers
-      spi: intel: Add support for controllers
-      spi: intel: Remove DANGEROUS tag from pci driver
-      spi: intel: Update help text of PCI and Platform drivers
-
-Randy Dunlap (2):
-      spi: Kconfig: fix a spelling mistake & hyphenation
-      spi: correct spelling
-
-Vijaya Krishna Nivarthi (1):
-      spi: spi-geni-qcom: Add support for SE DMA mode
-
-Vincent Tremblay (4):
-      dt-bindings: trivial-devices: Add silabs,em3581
-      spidev: Add Silicon Labs EM3581 device compatible
-      dt-bindings: trivial-devices: Add silabs,si3210
-      spidev: Add Silicon Labs SI3210 device compatible
-
-Vincent Whitchurch (2):
-      spi: pl022: Only use DT-specified DMA channels
-      spi: spi-loopback-test: Allow skipping delays
-
-William Zhang (13):
-      spi: Convert bcm63xx-hsspi bindings to json-schema
-      spi: Add bcmbca-hsspi controller bindings
-      spi: bcm63xx-hsspi: Add new compatible string support
-      spi: bcm63xx-hsspi: Endianness fix for ARM based SoC
-      spi: bcm63xx-hsspi: Add polling mode support
-      spi: export spi_transfer_cs_change_delay_exec function
-      spi: bcm63xx-hsspi: Handle cs_change correctly
-      spi: bcm63xx-hsspi: Fix multi-bit mode setting
-      spi: bcm63xx-hsspi: Add prepend mode support
-      spi: spi-mem: Allow controller supporting mem_ops without exec_op
-      spi: bcm63xx-hsspi: Disable spi mem dual io read op support
-      spi: bcmbca-hsspi: Add driver for newer HSSPI controller
-      MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
-
-Xiangsheng Hou (5):
-      spi: mtk-snfi: Change default page format to setup default setting
-      spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
-      spi: mtk-snfi: Add snfi sample delay and read latency adjustment
-      spi: dt-bindings: mtk-snfi: Add compatible for MT7986
-      spi: dt-bindings: mtk-snfi: Add read latch latency property
-
-Yang Yingliang (9):
-      spi: altera: switch to use modern name
-      spi: spi-altera-dfl: switch to use modern name
-      spi: spi-altera-platform: switch to use modern name
-      spi: ath79: switch to use modern name
-      spi: a3700: switch to use modern name
-      spi: ar934x: switch to use modern name
-      spi: atmel: switch to use modern name
-      spi: at91-usart: switch to use modern name
-      spi: atmel-quadspi: switch to use modern name
-
- .../bindings/spi/allwinner,sun4i-a10-spi.yaml      |   2 +-
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml      |   2 +-
- .../bindings/spi/amlogic,meson-gx-spicc.yaml       |  32 +-
- .../bindings/spi/amlogic,meson6-spifc.yaml         |  28 +-
- .../bindings/spi/aspeed,ast2600-fmc.yaml           |  26 +-
- .../bindings/spi/brcm,bcm63xx-hsspi.yaml           | 134 +++++
- .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml | 156 ++---
- .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |  36 +-
- .../devicetree/bindings/spi/cdns,xspi.yaml         |   6 +-
- .../devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml  |   2 +-
- .../devicetree/bindings/spi/fsl-imx-cspi.yaml      |   2 +-
- .../bindings/spi/mediatek,spi-mt65xx.yaml          |   2 +-
- .../bindings/spi/mediatek,spi-mtk-snfi.yaml        |  54 +-
- .../bindings/spi/mediatek,spi-slave-mt27xx.yaml    |   2 +-
- .../bindings/spi/mikrotik,rb4xx-spi.yaml           |   2 +-
- .../devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml |   2 +-
- Documentation/devicetree/bindings/spi/mxs-spi.yaml |   2 +-
- .../bindings/spi/nvidia,tegra210-quad.yaml         |  44 +-
- .../bindings/spi/qcom,spi-qcom-qspi.yaml           |   6 +-
- .../devicetree/bindings/spi/realtek,rtl-spi.yaml   |   2 +-
- .../devicetree/bindings/spi/renesas,rspi.yaml      |  22 +-
- .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   2 +-
- .../devicetree/bindings/spi/spi-bcm63xx-hsspi.txt  |  33 --
- .../devicetree/bindings/spi/spi-cadence.yaml       |   2 +-
- .../devicetree/bindings/spi/spi-fsl-lpspi.yaml     |   2 +-
- .../devicetree/bindings/spi/spi-gpio.yaml          |   4 +-
- Documentation/devicetree/bindings/spi/spi-mux.yaml |   4 +-
- .../devicetree/bindings/spi/spi-nxp-fspi.yaml      |   2 +-
- .../bindings/spi/spi-peripheral-props.yaml         |  10 +
- .../devicetree/bindings/spi/spi-pl022.yaml         |  18 +-
- .../devicetree/bindings/spi/spi-rockchip.yaml      |   2 +-
- .../devicetree/bindings/spi/spi-sifive.yaml        |   6 +-
- .../bindings/spi/spi-sunplus-sp7021.yaml           |   6 +-
- .../devicetree/bindings/spi/spi-xilinx.yaml        |   2 +-
- .../devicetree/bindings/spi/spi-zynqmp-qspi.yaml   |   2 +-
- .../devicetree/bindings/spi/sprd,spi-adi.yaml      |   5 +-
- .../devicetree/bindings/spi/st,stm32-qspi.yaml     |   2 +-
- .../devicetree/bindings/spi/st,stm32-spi.yaml      |  25 +-
- .../devicetree/bindings/spi/xlnx,zynq-qspi.yaml    |   2 +-
- .../devicetree/bindings/trivial-devices.yaml       |  14 +
- Documentation/spi/pxa2xx.rst                       |  12 +-
- Documentation/spi/spi-lm70llp.rst                  |   2 +-
- Documentation/spi/spi-summary.rst                  |   2 +-
- MAINTAINERS                                        |  12 +
- drivers/spi/Kconfig                                |  35 +-
- drivers/spi/Makefile                               |   1 +
- drivers/spi/atmel-quadspi.c                        |   8 +-
- drivers/spi/spi-altera-core.c                      |  30 +-
- drivers/spi/spi-altera-dfl.c                       |  36 +-
- drivers/spi/spi-altera-platform.c                  |  36 +-
- drivers/spi/spi-ar934x.c                           |  10 +-
- drivers/spi/spi-armada-3700.c                      |  98 ++--
- drivers/spi/spi-at91-usart.c                       |  40 +-
- drivers/spi/spi-ath79.c                            |  40 +-
- drivers/spi/spi-atmel.c                            | 254 ++++----
- drivers/spi/spi-bcm63xx-hsspi.c                    | 488 +++++++++++++--
- drivers/spi/spi-bcmbca-hsspi.c                     | 651 +++++++++++++++++++++
- drivers/spi/spi-geni-qcom.c                        | 211 +++++--
- drivers/spi/spi-intel-pci.c                        |  13 +-
- drivers/spi/spi-intel.c                            |   2 +-
- drivers/spi/spi-loopback-test.c                    |   8 +-
- drivers/spi/spi-mem.c                              |   2 +-
- drivers/spi/spi-mtk-snfi.c                         |  41 +-
- drivers/spi/spi-pl022.c                            |   1 -
- drivers/spi/spi.c                                  |  90 +--
- drivers/spi/spidev.c                               |  13 +-
- include/linux/spi/altera.h                         |   4 +-
- include/linux/spi/spi.h                            |  23 +-
- 68 files changed, 2162 insertions(+), 708 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-bcm63xx-hsspi.txt
- create mode 100644 drivers/spi/spi-bcmbca-hsspi.c
