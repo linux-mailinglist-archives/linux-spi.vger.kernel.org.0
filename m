@@ -2,98 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDD69B53C
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Feb 2023 23:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FCB69C1DC
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Feb 2023 19:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjBQWGM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Feb 2023 17:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
+        id S231251AbjBSSbG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Feb 2023 13:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBQWGM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Feb 2023 17:06:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B04D5DE31;
-        Fri, 17 Feb 2023 14:06:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2400B82DD1;
-        Fri, 17 Feb 2023 22:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB33C433EF;
-        Fri, 17 Feb 2023 22:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676671568;
-        bh=IjMYXqZfSaF0uyHmjW79JznzTpnlZIbAQMOTrHR9bm0=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=rRxsE3x6aNrX4qK9JzhvD8tFwxpsmNWeJjd8nIHRFmaAgk3D/ofYu3BbPcNqrvsJk
-         V4sHHGMUtPZ8r4DiDcyiK2kmlvpP0kj/37AmyMFyTTwIGQBNLxhiQgQ/rEsJCr2YCO
-         YpxzgLQXaYrp8I75HteqDNBTvn1UG0qQZUgp/lluXab4vmbRC7Hx8DTKi6kriIYZz0
-         d26HBBjhoXgpSX0M/Rvz/iC3effFvZ9nblZRhjukxf+s4AOz+mI8j7YXp63oCiSRM4
-         fWh8OtbdcFqnbl6HH04BCzEEI81KmhxYGddemrz6LAU8q4lDgNWnphU2uW6wgJIXOC
-         S4CpvirCzWtKQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230217155802.848178-1-krzysztof.kozlowski@linaro.org>
-References: <20230217155802.848178-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-qcom-qspi: document OPP and
- power-domains
-Message-Id: <167667156624.105826.15926331460082215742.b4-ty@kernel.org>
-Date:   Fri, 17 Feb 2023 22:06:06 +0000
+        with ESMTP id S231248AbjBSSbF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Feb 2023 13:31:05 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F6D12060;
+        Sun, 19 Feb 2023 10:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676831464; x=1708367464;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rxO9Sfhn2wj9n4LS9X8ZK7gT0EqU8TJ1InY3k6whKXs=;
+  b=l7WsVR1LayXxMgnukUnWOROd5qoTPucRkmWtvbhPnKA9YY2I4gXj4gd7
+   uZOpJJLSLY8+n++eY7TYQo+eeBK7v1QGcW26Te/uUOCc8l7J34lvZAj19
+   5FCbpxX/SU08CspaLIsTOkfuJP2gWE65j5EJkdTx8QzzvaGk0cnEl2/Sh
+   hhmDeXK7bu4oeE18YB6KWIPYaGZSy/u8UytHIuUDS7Bdi2JzrjEkT2lPM
+   dN3FclftfGAHK6R+lVVVQuUEoPihdOuO8sTjA21wbmVkT+iidCRvoE77/
+   7IP7tyZDLYFKWU62iS0vHhGtzo77n3CnXmEBfKH3Bjiz9ouXaF4oiOB7P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="333634347"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="333634347"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2023 10:31:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10626"; a="845107088"
+X-IronPort-AV: E=Sophos;i="5.97,310,1669104000"; 
+   d="scan'208";a="845107088"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by orsmga005.jf.intel.com with ESMTP; 19 Feb 2023 10:30:57 -0800
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH 0/5] Add Intel LJCA device driver
+Date:   Mon, 20 Feb 2023 02:30:54 +0800
+Message-Id: <20230219183059.1029525-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 17 Feb 2023 16:58:02 +0100, Krzysztof Kozlowski wrote:
-> QSPI on Qualcomm SDM845, SC7180 and SC7280 SoCs uses OPP table (both in
-> DTS and Linux driver) and is suuplied by CX power domain.  Document
-> missing properties to fix:
-> 
->   sc7280-idp2.dtb: spi@88dc000: Unevaluated properties are not allowed ('operating-points-v2', 'power-domains' were unexpected)
-> 
-> 
-> [...]
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-Applied to
+Ye Xiang (5):
+  mfd: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
 
-   broonie/spi.git for-next
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  22 +
+ drivers/gpio/Kconfig                          |  10 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 454 ++++++++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 357 +++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ljca.c                            | 977 ++++++++++++++++++
+ drivers/spi/Kconfig                           |  10 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 291 ++++++
+ include/linux/mfd/ljca.h                      |  95 ++
+ 14 files changed, 2243 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/mfd/ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 include/linux/mfd/ljca.h
 
-Thanks!
-
-[1/1] spi: dt-bindings: qcom,spi-qcom-qspi: document OPP and power-domains
-      commit: 7234d746a8339066313518bfa024fa03f363a55e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.34.1
 
