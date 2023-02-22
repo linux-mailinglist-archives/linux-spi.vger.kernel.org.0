@@ -2,65 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3875B69F083
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Feb 2023 09:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D9769F145
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Feb 2023 10:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjBVIk2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Feb 2023 03:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S231753AbjBVJWS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Feb 2023 04:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjBVIk1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Feb 2023 03:40:27 -0500
-Received: from mail.crawnon.pl (mail.crawnon.pl [51.68.198.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230F2D142
-        for <linux-spi@vger.kernel.org>; Wed, 22 Feb 2023 00:40:27 -0800 (PST)
-Received: by mail.crawnon.pl (Postfix, from userid 1002)
-        id D92B0A469E; Wed, 22 Feb 2023 08:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crawnon.pl; s=mail;
-        t=1677055225; bh=C5hX24svv/9/TME4wPCHfYjl17BCtmuxEd1i9B4zdYs=;
-        h=Date:From:To:Subject:From;
-        b=WtuFR9cSIZAA7I9rSSM4Yz9uNhh/yZc1AIkcFEbKqGYkvnZswM5WXfAaPgssPS9cH
-         R5DdrumhRnjVE+48M+6FhQn2TDPOfRocpQ12/E3lYM5hXdH3eAmd06b+TIUwUmKk3J
-         CxM7lZ6u4+qIA1kAk/VZXQpNrEu7MUyxxPz215zqlPpNOBDruEwr77MigAuwIb0XE3
-         rymsXW6CadPS7CIwtlOxlYvwLN1iP3s5OjZ/PBEwFBCo/NDy+XBI/XrX/+KF5qmdYv
-         TBV2ZnjezwBik48XB0PLhqCH35l52bcllwROr714WxG2f/jEbaA6rGEcI+wDIZrc2D
-         VcX9g31MFnT/w==
-Received: by mail.crawnon.pl for <linux-spi@vger.kernel.org>; Wed, 22 Feb 2023 08:39:39 GMT
-Message-ID: <20230222073001-0.1.9b.luzt.0.3ob59todgm@crawnon.pl>
-Date:   Wed, 22 Feb 2023 08:39:39 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Fiodorczyk" ?= 
-        <mikolaj.fiodorczyk@crawnon.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: Fotowoltaika - nowe warunki
-X-Mailer: mail.crawnon.pl
+        with ESMTP id S231194AbjBVJWG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Feb 2023 04:22:06 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B75E23800B;
+        Wed, 22 Feb 2023 01:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DeQ/6
+        Wg6lCPjtMRr4pxv9XxI1Hel4asFkhrnEA7ev8o=; b=WTcqOP1keISfPABnywlkF
+        cNZFX67faoKmnJRzrwb0YYRDHV78MJ6uoMoEJbkjeByeEQpdoFCYhEamCMCQhfmc
+        XiEUFQ/h0ntSVrskfqu9pPQ/RipQCZ16/8ZQgtYa0VP8e6+zxpjYmNjEVRuu0GtA
+        Lq3/DsxH9mjRb6VlpLZhhQ=
+Received: from localhost.localdomain (unknown [113.105.127.219])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wAH3Cmn3vVjDYgBAw--.40923S2;
+        Wed, 22 Feb 2023 17:21:43 +0800 (CST)
+From:   Hongbin Ji <jhb_ee@163.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongbin Ji <jhb_ee@163.com>
+Subject: [PATCH] spi: cadence-quadspi: Fix cancel the indirect read mask
+Date:   Wed, 22 Feb 2023 17:21:28 +0800
+Message-Id: <20230222092128.4237-1-jhb_ee@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAH3Cmn3vVjDYgBAw--.40923S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWfArW3trWUXr4rZrW5Jrb_yoW3uwcEkF
+        n7GF12qFsxKr4a93Wayr15ZFn2qFWUZ3W8uF1qq3W5ArZrZry7ZrZav398GrWUAw47CF13
+        uF1xX3yvyr13tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtq2NJUUUUU==
+X-Originating-IP: [113.105.127.219]
+X-CM-SenderInfo: 5mkesvrh6rljoofrz/1tbiRQgefGDuywgB+AAAsb
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This is to cancel the indirect read transfer process,
+so should be use CQSPI_REG_INDIRECTRD_CANCEL_MASK
 
-chcia=C5=82bym poinformowa=C4=87, i=C5=BC mog=C4=85 Pa=C5=84stwo uzyska=C4=
-=87 dofinansowanie na systemy fotowoltaiczne w ramach nowej edycji progra=
-mu M=C3=B3j Pr=C4=85d.
+Signed-off-by: Hongbin Ji <jhb_ee@163.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Program zapewnia 6000 z=C5=82 dofinansowania na instalacj=C4=99 paneli i =
-16 000 z=C5=82 na magazyn energii, ni=C5=BCsze cen pr=C4=85du i mo=C5=BCl=
-iwo=C5=9B=C4=87 odliczenia koszt=C3=B3w zwi=C4=85zanych z instalacj=C4=85=
- fotowoltaiki w ramach rozliczenia PIT (tzw. ulga termomodernizacyjna).
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 676313e1bdad..967cb8ec0eec 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -766,7 +766,7 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 	writel(0, reg_base + CQSPI_REG_IRQMASK);
+ 
+ 	/* Cancel the indirect read */
+-	writel(CQSPI_REG_INDIRECTWR_CANCEL_MASK,
++	writel(CQSPI_REG_INDIRECTRD_CANCEL_MASK,
+ 	       reg_base + CQSPI_REG_INDIRECTRD);
+ 	return ret;
+ }
+-- 
+2.34.1
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam,
-Miko=C5=82aj Fiodorczyk
