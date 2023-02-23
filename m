@@ -2,45 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0166A0E96
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFD06A0E97
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjBWRUt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Feb 2023 12:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S229525AbjBWRVA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Feb 2023 12:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBWRUp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:20:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7A580F0
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:38 -0800 (PST)
+        with ESMTP id S229461AbjBWRU7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:20:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A905940F
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5357B61768
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72488C433EF;
-        Thu, 23 Feb 2023 17:20:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E00EB81AB0
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68334C433A1;
+        Thu, 23 Feb 2023 17:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172838;
-        bh=gUCiOzbK+aIjnXKothUbHhcc+6jqPM8lYzv50HQoTdk=;
-        h=From:Subject:Date:To:From;
-        b=ZJ/i2faRItipWVz+UT91ljhDFXuz1igU6lZxBEeJI3HJpPM103IbLVMazXcvsk4yg
-         1uY04FfrCu/odV9bsiMKaUqITEMIJa4zwiqORuBuRwqN1XgjwRG2msa3ltOBqRf/eE
-         G0/3+S+qutjJeBYC9U0eQPDmangL87NdpRJiy/1ezw+/IUh7UN+qvyHI/QyQ5yAyNf
-         qjabJyQFy4LFv/Qacs9i+LdW/XtKevIWpYWt4K0nKpssnN9hV8LbnDa6JFe1KSNyAF
-         c1mqPeFmQG/M/WJmFb17V0IcnNP5HbZSu/pPX1PhTigwMIFlaZVCGFetI6MP/IYFKq
-         Y9gGqewZhVm4g==
+        s=k20201202; t=1677172840;
+        bh=KpZrMcf7ixkUooTm4ZJyR62JzSP4YNfIBSe808okMR4=;
+        h=From:Date:Subject:References:In-Reply-To:To:From;
+        b=T6zlzhxNMqcQ6OpbwnkyG1unzp5im9uVORZz7fzloFWK6s3E6+PXfpEcVmi/ubUkP
+         rUFv32yeCJnFt0kyFUDWMraP0UycnnkdUo9KL8y1u6atmrOuK4Wg1JOg38+fa/bzZk
+         ZPqL45NIbpGWn5hVLYSVqnTkbCmvlcVvYfc14Z4Jz4p7DliQ9KjGJgIin8s+P1mbJO
+         eR9fPz42QcAEj7JoA00stVazCbBLr9S5Kb3fVE4iE7/ExZIkERypEdTc458PAsB/6R
+         Q9eK7FkA9NfRSQyJRLCAlMj63bh+qUclvKKSRFW9zCDVgyqFiKDji1n8Q/6EigPq9l
+         VcEwQQivExFgg==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/8] spi: Build coverage cleanups and improvements
-Date:   Thu, 23 Feb 2023 17:20:20 +0000
-Message-Id: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
+Date:   Thu, 23 Feb 2023 17:20:21 +0000
+Subject: [PATCH 1/8] spi: s3c24xx: Fix dependencies when FIQ support is
+ enabled
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFWg92MC/x2N0QrCMAwAf2Xk2cBSmTB/RXxI22iD0JUEdDD27
- 3Z7vIPjNnAxFYf7sIHJV12X2oEuA6TC9S2ouTOEMVzHEAi9KbKlglmaY45MdOOZJpmhN5FdMBr
- XVI7qt9jn0M3kpeu5eTz3/Q/XLzdadgAAAA==
+Message-Id: <20230221-spi-arch-deps-v1-1-83d1566474cf@kernel.org>
+References: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
+In-Reply-To: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 To:     linux-spi@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andi Shyti <andi@etezian.org>,
@@ -54,15 +54,15 @@ To:     linux-spi@vger.kernel.org,
         Heiko Stuebner <heiko@sntech.de>,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1228; i=broonie@kernel.org;
- h=from:subject:message-id; bh=gUCiOzbK+aIjnXKothUbHhcc+6jqPM8lYzv50HQoTdk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BcD2KcSgl2wyf1QMdg7t1/2hyILlcuHLC7k0FA
- A9IVbpuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXAAKCRAk1otyXVSH0PUoB/
- 9xvprgJSfksJJe5Z20P+tKWdypt7s0TSeYcYWEnDavkLt5CKep3k/FWQRfA8r+VWme48GkLEsgV4HX
- M/+L7ZL1MMPwfkhU66gcEZOpGcayAwNsuy4uKKQuWCaLsPU/z00m6vj0ugecDQBySwc9ymSJiG//OR
- YdYNsjC71VAEcgIXSIwBceifEf2lY9c0770Gxqk/jUufSdLSLZUpKTIvKEeJNshGG4Fatry1foX65j
- 55fZQ7WwFPOk8VIpE3eRa3mXvSaxORZ9jp0J3nHCSfYQqF8bdtYfWt2mOTXdGoRQ8vBc+CWqOX+n65
- T+gj4KnaX8VD1ECeHPoKjFtY9N9Gnf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=715; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=KpZrMcf7ixkUooTm4ZJyR62JzSP4YNfIBSe808okMR4=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BcKttCoHtav+/JByjKeMwfRBh5mKLLMWAxRiSO
+ DWadwzqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXAAKCRAk1otyXVSH0JAfB/
+ 4pIPpUC1cU073QEzoVrJR7jn8nvBe/TzQn5WGvZ2tvT+unjpeZO8I6VZGUdOEmvI05pJHSTJPBRWn/
+ LpW2PAJ8FJD9KZIodG0H6qOCBsmpAx5uSJKQAVJh9mFd4tg4UpZpi/VusHsmB7o2rouAbHdgtB82GO
+ FJo02j0cwZM7C5CpofG7bimsthfQ+jKRxhELb+vMfoJYPBLmkalPsqadpxnuPvseigX3EWTU4Psd8y
+ 6p8xYo8PCYa+VkSbwovxYmc2nRk/0dunx3kF95qWbb0acNheemEbWqcQtp23KxYuscRfpq/FTrIwkE
+ HDGzcPKwPGN/X8tKhb170UuJZS8mqA
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -74,33 +74,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This series opens up build coverage of a bunch of SPI drivers by
-allowing build under COMPILE_TEST where possible, while also adding
-appropriate architecture specific dependencies to a couple of drivers
-that didn't have them so they don't show up in builds when they're not
-useful.  We also have one fix for the dependencies of the s3c24xx driver
-which was turned up in the process of doing this.
+The FIQ APIs aren't exported symbols so can't be used from modules, meaning
+that the s3c24xx driver can only have FIQ support enabled when it's built
+in.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (8):
-      spi: s3c24xx: Fix dependencies when FIQ support is enabled
-      spi: rockchip: Add architecture dependency
-      spi: nxp-flexspi: Fix ARCH_LAYERSCAPE dependency
-      spi: davinci: Make available for build test
-      spi: fsi: Make available for build test
-      spi: qcom-qspi: Make available for build test
-      spi: s3c24xx: Only have compile time references to FIQ when building it
-      spi: s3c24xx: Allow build test coverage
+ drivers/spi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/spi/Kconfig       | 15 +++++++++------
- drivers/spi/spi-s3c24xx.c |  4 ++++
- 2 files changed, 13 insertions(+), 6 deletions(-)
----
-base-commit: 7234d746a8339066313518bfa024fa03f363a55e
-change-id: 20230221-spi-arch-deps-dba116a915e9
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 6fb17efb35f0..d1ee27d55a5f 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -862,7 +862,7 @@ config SPI_S3C24XX
+ 
+ config SPI_S3C24XX_FIQ
+ 	bool "S3C24XX driver with FIQ pseudo-DMA"
+-	depends on SPI_S3C24XX
++	depends on SPI_S3C24XX=y
+ 	select FIQ
+ 	help
+ 	  Enable FIQ support for the S3C24XX SPI driver to provide pseudo
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
