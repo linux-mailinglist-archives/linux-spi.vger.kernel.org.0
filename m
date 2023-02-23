@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727666A0E99
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097056A0E9A
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjBWRVJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Feb 2023 12:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
+        id S229461AbjBWRVK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Feb 2023 12:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjBWRVI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:21:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D2C52DE0
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:49 -0800 (PST)
+        with ESMTP id S229783AbjBWRVJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:21:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74EB55C2A
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D834B8198C
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508A8C433EF;
-        Thu, 23 Feb 2023 17:20:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 200566170B
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41257C433A0;
+        Thu, 23 Feb 2023 17:20:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172846;
-        bh=wcvqKNkspYwlagqVvOHfXZLMH0ae03tonNORwXGCGz4=;
+        s=k20201202; t=1677172849;
+        bh=ziAuI48GFaqv/DZiLVrk2Vz0Yhhm5PgD8SQLslzjrIA=;
         h=From:Date:Subject:References:In-Reply-To:To:From;
-        b=HrKL0xTEbb6Doob/0BQQ1PRMU615k/3ZUn+lbxfxnS3f2TxrkQUQl+Mrwi3wsJmMI
-         7gnRmj4HguJVkjvwf7e2ULiWLs1G7TgmPrkRccVYDekLTO69/lZbntV/Ibs0Z5YGLI
-         GQBolpUvg9S55veL45RJxTz0IYdyFbpyTv+8fQ/yrTw2krpWXLi52DqF0Z0wfTFqOI
-         QNja981oI3rvmPCn43efg+KxIOfEM4p7cMHWMCYnydfKHeLNuLWg+x+TGrAWaNHmGU
-         LYhJXglNNlwf1jzWyd9tADeoQfS686icSt/vIl+dNNwWB7NCekE2I++JftNJf0Tix/
-         w5ABizTyduvQQ==
+        b=TWiX8cf2Pqdl0SXqNwQRH/C1IbpWcvK/CVtzr1hebkxzAHfvpdhXVA8BffuHiagyD
+         Y0WUTfrEsI+0T7f8hBGwmV8SRhPRDDj5f5m6SoNeAv31dw6G+GhPosEiM3b9EZ7Hg7
+         DtvYpMFh1IaKZCHxX2P54pElQonJEhUKL4bGFHrFCjBfMMdPiyRaAILux3FRUw9rhs
+         mNKWrB/oxCzxQAASe7zho6IeQebn5hsEngWu6GbbzTYop0vCFJAuLCqizlYwGs9bHM
+         KRg1cQxEhtr6H+jSfdsbtk+jisaVoM1cIDZ9dpgV6i64eOXfnmKifcSnqn2htnHOdD
+         WColAUrQkbqHQ==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 23 Feb 2023 17:20:23 +0000
-Subject: [PATCH 3/8] spi: nxp-flexspi: Fix ARCH_LAYERSCAPE dependency
+Date:   Thu, 23 Feb 2023 17:20:24 +0000
+Subject: [PATCH 4/8] spi: davinci: Make available for build test
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230221-spi-arch-deps-v1-3-83d1566474cf@kernel.org>
+Message-Id: <20230221-spi-arch-deps-v1-4-83d1566474cf@kernel.org>
 References: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 In-Reply-To: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 To:     linux-spi@vger.kernel.org,
@@ -53,15 +53,15 @@ To:     linux-spi@vger.kernel.org,
         Heiko Stuebner <heiko@sntech.de>,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=988; i=broonie@kernel.org;
- h=from:subject:message-id; bh=wcvqKNkspYwlagqVvOHfXZLMH0ae03tonNORwXGCGz4=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BezfsmQpbUbZNKujj70AoM4kYPipuDDj3FO96H
- pBM1hvmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXgAKCRAk1otyXVSH0K88B/
- 90piFFLbFr7KbAACARx4qDnhv7OMapUbVvctOsYYLPV7zBx/yGNemkJAoYoGMWDKvzKiaGIP69lBMs
- yCjB9/Uzvm1viEOTom/gTUzrvbUUwW/ZH0uWP1El1KVVKbmOT+TvvCbYx+Q5DHPIPUXbiktdK6rNdL
- /nDch/gAM+R8eqK+Gh2D45zFpgdL0DXMSLk8Jd4KedeAl9YZgsIiQ7B1hZS4x2LIUkIV29wSAE0nWB
- nk14KQ6dt2sNna+KTpDxWEAZ4Y6EBt2vlo43QDfKz4LLPta5YbjEKGFa5qdxf6rbLbWN8QafIWj9zz
- HpgTdJxBoDqD8PddCI5fMDxk7Etcj/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=810; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ziAuI48GFaqv/DZiLVrk2Vz0Yhhm5PgD8SQLslzjrIA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BfRLwnMXEVx/RWiFxOI94ELwGeqbO7/+a9psP8
+ F44Y+pOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXwAKCRAk1otyXVSH0CXMB/
+ wNgUCD2o/IQwuFZKx3RQSx1jXT4rDHWnA9k0ya4yWLn75PwYEAes6iMnE+HfIJeCWJjbNboMWSYcmJ
+ gbwEekAeC+ztVK1b3kNibbYj7CXCcbTlUpmvyfoDZV/NTPf2i4Kpp0WQ6F1fC3YIRZRn8zKSydYUGJ
+ 3TiJpH63fF6HoFE8xDFg7nncYA5kqdYgsglRb7B949q6C/YHr3ISrZHDCr480gG9FC0RXErV6nuiZh
+ mEaPSk7SJc3g+ur6ajuxYskXJtDfhdULJRSyNARRRdcRWRgGhtwLNbVPdqCcOjHWt04CXDf5mDX0gA
+ Sgmij7Czx2zzUaglDVU1UsmPPNxvW/
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,31 +73,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Currently the NXP Flex SPI driver has a dependency on ARCH_LAYERSCAPE ||
-HAS_IOMEM which means that the dependency is almost always true and the
-driver available. Really these should be two separate dependencies, with
-an || COMPILE_TEST dependency for the architecture to ensure build coverage
-is maintained.
+There is no build time dependency on the DaVicni or Keystone architecture
+support so add an || COMPILE_TEST so we've got better build coverage of the
+driver.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index f765b4ce226d..714c9089272a 100644
+index 714c9089272a..00c6c41d2df7 100644
 --- a/drivers/spi/Kconfig
 +++ b/drivers/spi/Kconfig
-@@ -406,7 +406,8 @@ config SPI_HISI_SFC_V3XX
+@@ -276,7 +276,7 @@ config SPI_COLDFIRE_QSPI
  
- config SPI_NXP_FLEXSPI
- 	tristate "NXP Flex SPI controller"
--	depends on ARCH_LAYERSCAPE || HAS_IOMEM
-+	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-+	depends on HAS_IOMEM
+ config SPI_DAVINCI
+ 	tristate "Texas Instruments DaVinci/DA8x/OMAP-L/AM1x SoC SPI controller"
+-	depends on ARCH_DAVINCI || ARCH_KEYSTONE
++	depends on ARCH_DAVINCI || ARCH_KEYSTONE || COMPILE_TEST
+ 	select SPI_BITBANG
  	help
- 	  This enables support for the Flex SPI controller in master mode.
- 	  Up to four slave devices can be connected on two buses with two
+ 	  SPI master controller for DaVinci/DA8x/OMAP-L/AM1x SPI modules.
 
 -- 
 2.30.2
