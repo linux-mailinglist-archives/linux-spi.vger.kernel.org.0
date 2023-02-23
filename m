@@ -2,54 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5717C6A0E8B
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0166A0E96
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBWRTF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Feb 2023 12:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S229793AbjBWRUt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Feb 2023 12:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBWRTE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:19:04 -0500
+        with ESMTP id S229803AbjBWRUp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:20:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A1A16302;
-        Thu, 23 Feb 2023 09:19:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7A580F0
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A076170B;
-        Thu, 23 Feb 2023 17:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0384FC433D2;
-        Thu, 23 Feb 2023 17:18:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5357B61768
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72488C433EF;
+        Thu, 23 Feb 2023 17:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172742;
-        bh=aZu6ntK+R/n0LBJGGEpFgcMMTDGBBpmpfVg/f1+RK30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UX1oaKX1mIA/ZgsOM53jj21anheNjYm8fQL2pMg4sEg9IwL9m1G5bUbp7L1KTr10y
-         vbqx0ThlabpbAVYmk8BqIk4/sDk91aRrGSQ6vXpNOMI44hTNqyKj5OPZkIikNyJHxs
-         ceuErG78iFZk8LGF85v4+AGsmFs/t/60tK3DlyP1fY6ZhOoDRx+TrwOHl+cJCD9BlB
-         qA2yMfWv7ThH8HrFDGGZiPRHIeKhr5RjYo+e5LC2DyDb36GxVrySMuJIILVi44k/Pu
-         GabcD9LSvpGHxQHXcI5WnMXTc2VUUbSCkSAimm1/JcEgHmRzTbCa0ezciVaGwYWt4q
-         NwRF/I8fnEPbg==
-Date:   Thu, 23 Feb 2023 17:18:56 +0000
+        s=k20201202; t=1677172838;
+        bh=gUCiOzbK+aIjnXKothUbHhcc+6jqPM8lYzv50HQoTdk=;
+        h=From:Subject:Date:To:From;
+        b=ZJ/i2faRItipWVz+UT91ljhDFXuz1igU6lZxBEeJI3HJpPM103IbLVMazXcvsk4yg
+         1uY04FfrCu/odV9bsiMKaUqITEMIJa4zwiqORuBuRwqN1XgjwRG2msa3ltOBqRf/eE
+         G0/3+S+qutjJeBYC9U0eQPDmangL87NdpRJiy/1ezw+/IUh7UN+qvyHI/QyQ5yAyNf
+         qjabJyQFy4LFv/Qacs9i+LdW/XtKevIWpYWt4K0nKpssnN9hV8LbnDa6JFe1KSNyAF
+         c1mqPeFmQG/M/WJmFb17V0IcnNP5HbZSu/pPX1PhTigwMIFlaZVCGFetI6MP/IYFKq
+         Y9gGqewZhVm4g==
 From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/egACRAp6nKZWdN@sirena.org.uk>
-References: <20230223162635.19747-1-kyarlagadda@nvidia.com>
- <20230223162635.19747-2-kyarlagadda@nvidia.com>
+Subject: [PATCH 0/8] spi: Build coverage cleanups and improvements
+Date:   Thu, 23 Feb 2023 17:20:20 +0000
+Message-Id: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jD9PyuoFogP+Kbsz"
-Content-Disposition: inline
-In-Reply-To: <20230223162635.19747-2-kyarlagadda@nvidia.com>
-X-Cookie: Hindsight is an exact science.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFWg92MC/x2N0QrCMAwAf2Xk2cBSmTB/RXxI22iD0JUEdDD27
+ 3Z7vIPjNnAxFYf7sIHJV12X2oEuA6TC9S2ouTOEMVzHEAi9KbKlglmaY45MdOOZJpmhN5FdMBr
+ XVI7qt9jn0M3kpeu5eTz3/Q/XLzdadgAAAA==
+To:     linux-spi@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Eddie James <eajames@linux.ibm.com>, Han Xu <han.xu@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1228; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=gUCiOzbK+aIjnXKothUbHhcc+6jqPM8lYzv50HQoTdk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BcD2KcSgl2wyf1QMdg7t1/2hyILlcuHLC7k0FA
+ A9IVbpuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXAAKCRAk1otyXVSH0PUoB/
+ 9xvprgJSfksJJe5Z20P+tKWdypt7s0TSeYcYWEnDavkLt5CKep3k/FWQRfA8r+VWme48GkLEsgV4HX
+ M/+L7ZL1MMPwfkhU66gcEZOpGcayAwNsuy4uKKQuWCaLsPU/z00m6vj0ugecDQBySwc9ymSJiG//OR
+ YdYNsjC71VAEcgIXSIwBceifEf2lY9c0770Gxqk/jUufSdLSLZUpKTIvKEeJNshGG4Fatry1foX65j
+ 55fZQ7WwFPOk8VIpE3eRa3mXvSaxORZ9jp0J3nHCSfYQqF8bdtYfWt2mOTXdGoRQ8vBc+CWqOX+n65
+ T+gj4KnaX8VD1ECeHPoKjFtY9N9Gnf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,74 +74,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This series opens up build coverage of a bunch of SPI drivers by
+allowing build under COMPILE_TEST where possible, while also adding
+appropriate architecture specific dependencies to a couple of drivers
+that didn't have them so they don't show up in builds when they're not
+useful.  We also have one fix for the dependencies of the s3c24xx driver
+which was turned up in the process of doing this.
 
---jD9PyuoFogP+Kbsz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (8):
+      spi: s3c24xx: Fix dependencies when FIQ support is enabled
+      spi: rockchip: Add architecture dependency
+      spi: nxp-flexspi: Fix ARCH_LAYERSCAPE dependency
+      spi: davinci: Make available for build test
+      spi: fsi: Make available for build test
+      spi: qcom-qspi: Make available for build test
+      spi: s3c24xx: Only have compile time references to FIQ when building it
+      spi: s3c24xx: Allow build test coverage
 
-On Thu, Feb 23, 2023 at 09:56:33PM +0530, Krishna Yarlagadda wrote:
+ drivers/spi/Kconfig       | 15 +++++++++------
+ drivers/spi/spi-s3c24xx.c |  4 ++++
+ 2 files changed, 13 insertions(+), 6 deletions(-)
+---
+base-commit: 7234d746a8339066313518bfa024fa03f363a55e
+change-id: 20230221-spi-arch-deps-dba116a915e9
 
-> +       spi_bus_lock(phy->spi_device->master);
-> +
-> +       while (len) {
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Why?
-
-> +		spi_xfer[0].tx_buf = phy->iobuf;
-> +		spi_xfer[0].len = 1;
-> +		spi_message_add_tail(&spi_xfer[0], &m);
-> +
-> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> +		spi_xfer[1].len = 3;
-> +		spi_message_add_tail(&spi_xfer[1], &m);
-
-Why would we make these two separate transfers?
-
-> +		if (out) {
-> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> +			spi_xfer[2].rx_buf = NULL;
-> +			memcpy(&phy->iobuf[4], out, transfer_len);
-> +			out += transfer_len;
-> +		}
-> +
-> +		if (in) {
-> +			spi_xfer[2].tx_buf = NULL;
-> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> +		}
-
-This will use the same buffer for rx and tx if some bug manages to leave
-them both set.  That shouldn't be an issue but it's an alarm bell
-reading the code.
-
-> index 988aabc31871..b88494e31239 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -184,8 +184,9 @@ struct spi_device {
->  	u8			chip_select;
->  	u8			bits_per_word;
->  	bool			rt;
-> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
-> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
-> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
-> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
-> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM flow control */
-
-Additions to the SPI API should be a separate commit for SPI rather than
-merged into a driver change.
-
---jD9PyuoFogP+Kbsz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP3n/8ACgkQJNaLcl1U
-h9CRtAf9FFsG6QfCTNSairafqsZ3vz7HSuZQD2JqZrR15XiModR6Vy+VZVPY8CZX
-202aKZVbykOJWqUuYHa2peCZzZzEbPJwCJCTebUK10mNNOuVZimWm6bgM+CjeK1v
-FXO9+inTecIXDuaOWQAyuPcLZ/RzX+Yslb3oG/QdWrdnDlCdOrpHbcdj4UzMO1Us
-3rYWvFeznoJuIG/KPs0T8rVW7f+Ayofa+gzAMdX+nJLNM8+weCX0G1ygPZlr0YMa
-PAV3Kmxex68xxsRxbN4nSPaPEh42oTsRHUfeIRPEBWGjh1rw6oipkgrB4fr1ziXY
-7yma0+7zY30UX8NsLhsSzAobhEI2rA==
-=rA+v
------END PGP SIGNATURE-----
-
---jD9PyuoFogP+Kbsz--
