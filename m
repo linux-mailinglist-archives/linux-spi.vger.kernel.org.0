@@ -2,101 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0816A03BB
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 09:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608A46A0549
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 10:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjBWIWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Feb 2023 03:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        id S233493AbjBWJwv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Feb 2023 04:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbjBWIWx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 03:22:53 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5E94C35;
-        Thu, 23 Feb 2023 00:22:52 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31N8MdTj092504;
-        Thu, 23 Feb 2023 02:22:39 -0600
+        with ESMTP id S234152AbjBWJwt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 04:52:49 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B584ECEC;
+        Thu, 23 Feb 2023 01:52:47 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31N9qcBl077086;
+        Thu, 23 Feb 2023 03:52:38 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1677140559;
-        bh=bbjFmqWgZLG2QiNlY4cBosekaW9FxOBGspuA7O0F4DY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=pyRI48om+ITil0PGUr8iM3wOMs4Zr7pS5yfgIfmM1RglIU7Ar1rQOeAn2kq9crrFM
-         N1iD//abcUODOvkqfHAYGN6oRvqLqGC5h9GLRLoG0vJc0XeX1dqKiTVayQtgB4m0KU
-         MadfXQpt2riH46ZAWY6ya2ywB11iDEJHQzOEUmDU=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31N8MdFF070558
+        s=ti-com-17Q1; t=1677145958;
+        bh=kN2RfnUUgzUkwI/ceg/z1+1sFH16ZWxamJeuThGZBG4=;
+        h=From:To:CC:Subject:Date;
+        b=RsGg7G6EjFczahcvt4jv5U3I45u+EasuFuc3C8GNmf0XlwfQXpPkZvmOykWP3BusP
+         Ox14gX4nz5GHeXl+dSwaKFEFawgxKfG4Hi2sEYYkHhDdom2uoGwOAjRdmiK7m9z8RT
+         POB/p5cE4ItiZMZjb5E7j1N2dNy5VFExulWLCYlU=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31N9qcaJ007277
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Feb 2023 02:22:39 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Feb 2023 03:52:38 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
- Feb 2023 02:22:39 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2023 03:52:37 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 23 Feb 2023 02:22:39 -0600
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31N8Mbom115443;
-        Thu, 23 Feb 2023 02:22:37 -0600
-Message-ID: <454a16ff-1492-d4c5-44b8-4631abe6ee58@ti.com>
-Date:   Thu, 23 Feb 2023 13:52:36 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix cancel the indirect read mask
-Content-Language: en-US
-To:     Hongbin Ji <jhb_ee@163.com>, <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230222092128.4237-1-jhb_ee@163.com>
+ Frontend Transport; Thu, 23 Feb 2023 03:52:37 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31N9qarm120592;
+        Thu, 23 Feb 2023 03:52:37 -0600
 From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230222092128.4237-1-jhb_ee@163.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Mark Brown <broonie@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        Pratyush Yadav <ptyadav@amazon.de>,
+        <linux-spi@vger.kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        <linux-kernel@vger.kernel.org>,
+        David Binderman <dcb314@hotmail.com>, <stable@vger.kernel.org>
+Subject: [PATCH] spi: spi-sn-f-ospi: fix duplicate flag while assigning to mode_bits
+Date:   Thu, 23 Feb 2023 15:22:02 +0530
+Message-ID: <20230223095202.924626-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Hongbin,
+Replace the SPI_TX_OCTAL flag that appeared two time with SPI_RX_OCTAL
+in the chain of '|' operators while assigning to mode_bits
 
-On 22/02/23 14:51, Hongbin Ji wrote:
-> This is to cancel the indirect read transfer process,
-> so should be use CQSPI_REG_INDIRECTRD_CANCEL_MASK
+Fixes: 1b74dd64c861 ("spi: Add Socionext F_OSPI SPI flash controller driver")
 
-Good catch!
-Both macros expand to BIT(1) so probably we did not face any issues so
-far.
+Reported-by: David Binderman <dcb314@hotmail.com>
+Link: https://lore.kernel.org/all/DB6P189MB0568F3BE9384315F5C8C1A3E9CA49@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM/
 
-> 
-> Signed-off-by: Hongbin Ji <jhb_ee@163.com>
-> ---
+Cc: stable@vger.kernel.org
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+ drivers/spi/spi-sn-f-ospi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
->   drivers/spi/spi-cadence-quadspi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 676313e1bdad..967cb8ec0eec 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -766,7 +766,7 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
->   	writel(0, reg_base + CQSPI_REG_IRQMASK);
->   
->   	/* Cancel the indirect read */
-> -	writel(CQSPI_REG_INDIRECTWR_CANCEL_MASK,
-> +	writel(CQSPI_REG_INDIRECTRD_CANCEL_MASK,
->   	       reg_base + CQSPI_REG_INDIRECTRD);
->   	return ret;
->   }
-
+diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
+index 348c6e1edd38..333b22dfd8db 100644
+--- a/drivers/spi/spi-sn-f-ospi.c
++++ b/drivers/spi/spi-sn-f-ospi.c
+@@ -611,7 +611,7 @@ static int f_ospi_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	ctlr->mode_bits = SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL
+-		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL
++		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL
+ 		| SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;
+ 	ctlr->mem_ops = &f_ospi_mem_ops;
+ 	ctlr->bus_num = -1;
 -- 
-Thanks and Regards,
-Dhruva Gole
+2.25.1
+
