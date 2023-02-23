@@ -2,43 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFD06A0E97
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E86F6A0E98
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Feb 2023 18:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjBWRVA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Feb 2023 12:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S229646AbjBWRVC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Feb 2023 12:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBWRU7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:20:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A905940F
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:43 -0800 (PST)
+        with ESMTP id S229461AbjBWRVC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Feb 2023 12:21:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D112B55C15
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 09:20:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E00EB81AB0
-        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68334C433A1;
-        Thu, 23 Feb 2023 17:20:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36A2F6175F
+        for <linux-spi@vger.kernel.org>; Thu, 23 Feb 2023 17:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56514C4339E;
+        Thu, 23 Feb 2023 17:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677172840;
-        bh=KpZrMcf7ixkUooTm4ZJyR62JzSP4YNfIBSe808okMR4=;
+        s=k20201202; t=1677172843;
+        bh=3bbZc6GfrmW1NmWc6Pp71spy6au5cLDlsBo8niaEj6U=;
         h=From:Date:Subject:References:In-Reply-To:To:From;
-        b=T6zlzhxNMqcQ6OpbwnkyG1unzp5im9uVORZz7fzloFWK6s3E6+PXfpEcVmi/ubUkP
-         rUFv32yeCJnFt0kyFUDWMraP0UycnnkdUo9KL8y1u6atmrOuK4Wg1JOg38+fa/bzZk
-         ZPqL45NIbpGWn5hVLYSVqnTkbCmvlcVvYfc14Z4Jz4p7DliQ9KjGJgIin8s+P1mbJO
-         eR9fPz42QcAEj7JoA00stVazCbBLr9S5Kb3fVE4iE7/ExZIkERypEdTc458PAsB/6R
-         Q9eK7FkA9NfRSQyJRLCAlMj63bh+qUclvKKSRFW9zCDVgyqFiKDji1n8Q/6EigPq9l
-         VcEwQQivExFgg==
+        b=obsQdEPhbZu9DpMZidANyOoNNqV8v3A5PKHxkGkrWU4rloLruigFdmFOUaF62dulx
+         oBPpteET2pibGRmnn3MrpbaQMzK1BP2dNvdBHjLUpn53nEU3Lj0xv/2HJ7mmsozL3h
+         pdoJ621VRqHOeLD51QpP+9LBf8veeDu6DvuIALUJ7jmIbcXUfdO+EyKIoDupXrSnOy
+         mMhqZEb2h4Ch6MieuZU+LFir9jYITzewhaoup3Ffy8AvYVkg6QXOwttvX41Y0ThU59
+         dfRPqclJAl8ABkYoXlwrCFOt1gUAjiRjxXq9eHYMX/KdVjv4yV/IUGUiPCNaGe6BQI
+         6Msc7pHzfXziA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 23 Feb 2023 17:20:21 +0000
-Subject: [PATCH 1/8] spi: s3c24xx: Fix dependencies when FIQ support is
- enabled
+Date:   Thu, 23 Feb 2023 17:20:22 +0000
+Subject: [PATCH 2/8] spi: rockchip: Add architecture dependency
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230221-spi-arch-deps-v1-1-83d1566474cf@kernel.org>
+Message-Id: <20230221-spi-arch-deps-v1-2-83d1566474cf@kernel.org>
 References: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 In-Reply-To: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
 To:     linux-spi@vger.kernel.org,
@@ -54,19 +53,19 @@ To:     linux-spi@vger.kernel.org,
         Heiko Stuebner <heiko@sntech.de>,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=715; i=broonie@kernel.org;
- h=from:subject:message-id; bh=KpZrMcf7ixkUooTm4ZJyR62JzSP4YNfIBSe808okMR4=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BcKttCoHtav+/JByjKeMwfRBh5mKLLMWAxRiSO
- DWadwzqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXAAKCRAk1otyXVSH0JAfB/
- 4pIPpUC1cU073QEzoVrJR7jn8nvBe/TzQn5WGvZ2tvT+unjpeZO8I6VZGUdOEmvI05pJHSTJPBRWn/
- LpW2PAJ8FJD9KZIodG0H6qOCBsmpAx5uSJKQAVJh9mFd4tg4UpZpi/VusHsmB7o2rouAbHdgtB82GO
- FJo02j0cwZM7C5CpofG7bimsthfQ+jKRxhELb+vMfoJYPBLmkalPsqadpxnuPvseigX3EWTU4Psd8y
- 6p8xYo8PCYa+VkSbwovxYmc2nRk/0dunx3kF95qWbb0acNheemEbWqcQtp23KxYuscRfpq/FTrIwkE
- HDGzcPKwPGN/X8tKhb170UuJZS8mqA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=698; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3bbZc6GfrmW1NmWc6Pp71spy6au5cLDlsBo8niaEj6U=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj96BdjSDy7nYkQ9eIgl9yjuydUzOSUa273q7xwy3z
+ aIVO5sKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY/egXQAKCRAk1otyXVSH0M4aB/
+ 4ylHBmsrsi6C85FZ7H0jYiF/kFw7SeyBy5PsYh394+HB43oTaQ9aKFZIb7e+kEi9qN3kIY/3ZMo+32
+ f3h9FtwTDeRs9rxqp1fUtW5A4vztSVaIkURROUhZN7xoIWd9IM6Xwavha9859zth5gv61mBbVzW5In
+ Rg3lO+YZTHl2EBtaZc1AKck1joq9AvW1XbkmiA5JzD1iLWRuMXFQ7G+cd/avzYEawlQguTmbi4eXIm
+ QC3hgvK/x2AMcZOJ4g3/xbdFrykbz5L5/nkYPZxh7kill7M7UiYr4Heo14IfRKfa2k3gWAXpiVx4Mc
+ nOV7xpbO8VDaRXBXYRySOY/YsyMrLV
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +73,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The FIQ APIs aren't exported symbols so can't be used from modules, meaning
-that the s3c24xx driver can only have FIQ support enabled when it's built
-in.
+If base support for Rockchip SoCs has been disabled then the SPI driver
+won't be terribly useful, add a dependency on ARCH_ROCKCHIP || COMPILE_TEST
+to avoid it appearing when not needed.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 6fb17efb35f0..d1ee27d55a5f 100644
+index d1ee27d55a5f..f765b4ce226d 100644
 --- a/drivers/spi/Kconfig
 +++ b/drivers/spi/Kconfig
-@@ -862,7 +862,7 @@ config SPI_S3C24XX
+@@ -783,6 +783,7 @@ config SPI_PXA2XX_PCI
  
- config SPI_S3C24XX_FIQ
- 	bool "S3C24XX driver with FIQ pseudo-DMA"
--	depends on SPI_S3C24XX
-+	depends on SPI_S3C24XX=y
- 	select FIQ
+ config SPI_ROCKCHIP
+ 	tristate "Rockchip SPI controller driver"
++	depends on ARCH_ROCKCHIP || COMPILE_TEST
  	help
- 	  Enable FIQ support for the S3C24XX SPI driver to provide pseudo
+ 	  This selects a driver for Rockchip SPI controller.
+ 
 
 -- 
 2.30.2
