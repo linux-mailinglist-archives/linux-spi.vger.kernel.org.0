@@ -2,66 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854096A1EF2
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Feb 2023 16:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417DF6A1F07
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Feb 2023 16:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjBXPvx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Feb 2023 10:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S229625AbjBXP4V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Feb 2023 10:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBXPvw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Feb 2023 10:51:52 -0500
+        with ESMTP id S229491AbjBXP4U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Feb 2023 10:56:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2DD66977;
-        Fri, 24 Feb 2023 07:51:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D43C6ADE4
+        for <linux-spi@vger.kernel.org>; Fri, 24 Feb 2023 07:56:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAC866191A;
-        Fri, 24 Feb 2023 15:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F26BC433EF;
-        Fri, 24 Feb 2023 15:51:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 973146191A
+        for <linux-spi@vger.kernel.org>; Fri, 24 Feb 2023 15:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFA6BC433D2;
+        Fri, 24 Feb 2023 15:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677253909;
-        bh=xyswDycFYOnH3OLm6yjdEnadl171xXYVSUGbW9DmNHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JVX36u2yZISWcQ3QXyTFcdSES/tw6/23dFtMGG+tCD/ohprehx2yX4V/6rTAEUP4S
-         2+UOYpey9/D0PvrLUx6zV2StvNM38B1sVh2nUKGufqiHRpT4vulvb36JOBCIlyD0Vx
-         rWpkB7sIBEtvSEvpPAy+ren2eyLnBiq3078vac10wGPsDpm+mZneWhMg02DkGiODr5
-         AsOnK0p0BwZS6fErJgzRYortzdUQCCB/8y+wtgmsvarkE8IbC3Xy++FZvywfv+feDh
-         6ET9IXyfO1ASSPkXAJ5oKbH1iFcGStzgxXRKrZiBelaSFEWKmTu2afWvU/VB/loBLR
-         U74bX7sHr6Ejg==
-Date:   Fri, 24 Feb 2023 15:51:41 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V3 1/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/jdDeBPM//W5WG8@sirena.org.uk>
-References: <20230223162635.19747-1-kyarlagadda@nvidia.com>
- <20230223162635.19747-2-kyarlagadda@nvidia.com>
- <Y/egACRAp6nKZWdN@sirena.org.uk>
- <DM4PR12MB57695DE127286D1DA436E804C3AB9@DM4PR12MB5769.namprd12.prod.outlook.com>
- <Y/ezwaFCn5h86u6X@sirena.org.uk>
- <DM4PR12MB5769C60EFD807376CE09DC3FC3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
+        s=k20201202; t=1677254179;
+        bh=YPw+JIsaE5sSeadLXcuzDTDru3lBqfKbaoIMDqFLtuA=;
+        h=Subject:From:Date:To:From;
+        b=dMPwhmr6e03M4k/VdUD+b0Hq/rrVDb5rCZ+m5xQ12GWs3E70NvM+LPfeDg8IPtvOQ
+         uiEm4KhZL9yZAtT4RS2AAuKxK0cWYeK1xEKzdpJSPK4EXFOl0eVOQ3maesgsdzW5zI
+         k5WNZuHuLJCsCAA1eMxmr/r4j5FBDxMSARZwF+4oDdMmtAcQG8u7h29OndLDfMm1Gc
+         o/CKxFJUgb1tyl4JXYpSqGCaVLknRO6ylZhAhoV838WT3phZPbzokzPFbJced2OGwB
+         GmCbu24FDYPTr5sJ1r7lU+X0xhl/2obPNVZK1jfoVbxpj8mFZvP367BsfXAhwOADlK
+         eHCEpvgrFPIbg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6F8EE68D37;
+        Fri, 24 Feb 2023 15:56:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SemSX6WN8QUcTnlj"
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5769C60EFD807376CE09DC3FC3A89@DM4PR12MB5769.namprd12.prod.outlook.com>
-X-Cookie: The early worm gets the bird.
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167725417887.9444.6065854778156547074.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 24 Feb 2023 15:56:18 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,42 +51,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Latest series: [v4] Tegra TPM driver with HW flow control (2023-02-24T15:49:38)
+  Superseding: [v3] Tegra TPM driver with HW flow control (2023-02-23T16:26:32):
+    [V3,1/3] tpm_tis-spi: Support hardware wait polling
+    [V3,2/3] spi: tegra210-quad: set half duplex flag
+    [V3,3/3] spi: tegra210-quad: Enable TPM wait polling
 
---SemSX6WN8QUcTnlj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Feb 24, 2023 at 02:16:27PM +0000, Krishna Yarlagadda wrote:
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> > > > > +       spi_bus_lock(phy->spi_device->master);
-> > > > > +
-> > > > > +       while (len) {
-
-> > > > Why?
-
-> > > TPM supports max 64B in single transaction. Loop to send rest of it.
-
-> > No, why is there a bus lock?
-
-> Bus lock to avoid other clients to be accessed between TPM transfers.
-
-That's what a bus lock does but what would be the problem if something
-else sent a message between messages?  Note that a message will always
-be sent atomically.
-
---SemSX6WN8QUcTnlj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP43QwACgkQJNaLcl1U
-h9A9sAgAhiW1GDLXSwrMMR4lVUh3Y2wiwwwbVC8An/U4WxMaAY4JkLdmk/PkSR2F
-phAVWcUQpvwSsfrb2BYAFARC2ic/Y7iY+q7Aqxf8CAYJnT1ZjfR2cNGyYhwJm0lx
-VMcxLMyGG9VF8egmG9nyUC8BvSqkX0PMpm2J6gVRg/I7RNpEtD2d7+afgwrEWORL
-vefU0LC4cAKdXpeHWL8BwLVgErx6pjW4QGYo3WtQ+IiU/eiZdA9R3DolaBq4x119
-zA3kN1HRpLO4R16i0pLZ/GHiyY6oIOzQmI7vzxOH2dRUnwkNZwZAB+NX0DhnkEC0
-7T+RBfloSG2qeF/xfhwnEsZjWbjLXA==
-=XLe0
------END PGP SIGNATURE-----
-
---SemSX6WN8QUcTnlj--
