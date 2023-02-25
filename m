@@ -2,65 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1344F6A2A5A
-	for <lists+linux-spi@lfdr.de>; Sat, 25 Feb 2023 15:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B066A2ACA
+	for <lists+linux-spi@lfdr.de>; Sat, 25 Feb 2023 17:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjBYO40 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 25 Feb 2023 09:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S229715AbjBYQlm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 25 Feb 2023 11:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBYO4Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 25 Feb 2023 09:56:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AE516AE3
-        for <linux-spi@vger.kernel.org>; Sat, 25 Feb 2023 06:56:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 847C560AFD
-        for <linux-spi@vger.kernel.org>; Sat, 25 Feb 2023 14:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D0C46C433EF;
-        Sat, 25 Feb 2023 14:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677336982;
-        bh=b3NR0Wd2Saz04mliSTjmhzOvd8jD0u2OzQFVEoYg50U=;
-        h=Subject:From:Date:To:From;
-        b=auj9n/azHdMk9I/j6SZ5u/bkHDO0PH8V8U3nxZacZGJ04W9Si+h8yLAiw1Rz962Ts
-         UUm9hliS3rQ4Fsq9vZ/sT932uHCOW0Qx26i17JBFGsXZTfHtJ9esGOWsBMsq4NdyJ0
-         tkrAk/hOLpUC0+H8SRhaJ25x5Ad8pwUbH4F2v+9n+YYr8hyR7zz1dcd838tQfaCdxP
-         UUbQJ0R3dW/3T7WYkyaw3JxWuWeH/e6LadO/NE05/Ih6Z9V7no/fPvXogrKJvH5bS2
-         UlpRuo29a2AZ2L6V/l7AYbkgeqztnQEnvDnyCbUcqrFpbuG2fpqEy9kKfM59S+NlCJ
-         Di3r7CeB1Dfog==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB847E68D26;
-        Sat, 25 Feb 2023 14:56:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229656AbjBYQll (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 25 Feb 2023 11:41:41 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831BE125AF;
+        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-172a623ad9aso3027885fac.13;
+        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
+        b=JeAIBpYUvNiXAA121YTlLRE7xs6FpBBdLcnKmViFAKnx0CAyuikX7hInf+ybRgcPU2
+         +qxGszBkgPNH4cJ4wAI4569+t1Xqf6fh5xaaQD98MO1fYRYlLG3zyXte2pP0cX/Oe5DZ
+         iSk5+0t1cywz6YkzojDiSA0c2orMUnZLEtqT/+iPn16CmlC3iLxUIKNnWvmULxuDanUC
+         jFwxulUiH4rLfylMJcybmUuXmvj6jcewXl5auogL9CVK1z8HLdut85UvNOLa2AdE3QPn
+         RjZzs+2BDhqeqYVEVmdYunlYeDNE0J71QG7PZ4iKjxXy3svG2dNR7jHcKrEGsF4WxZQ1
+         Qbmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
+        b=QjTgcFXsbrMfsNhCkeBMLJbhS7SoS7l+2qnEw1wNZmtXHCk7UXfH8kySz9/fUJ08r3
+         pgfIrr3+yqouF9v/KUaCdVv5sDeo0RipvoDNMzdtc2RMJrWm+iPZ3bFixPj1q5d4deDV
+         HDqdBwJVWM4mR4ZXj/BSdCt5nrzwSHVWL19t36KWa1jRd5jwKFliiXQFWWaoUIa4tUjW
+         NNdfHXW+z63ezFycliWCBL+VacKLzDMw8bO98pDnV+1VofIAum+7zH3d0oWC6TcFytcr
+         0eHOX0FZ1jnsW8Si6RcfeNGkpzQYGMVM8z+VJyqfPMjJGioYCRHuAw2rEi6X9JxWCneg
+         A78A==
+X-Gm-Message-State: AO0yUKXEj8pbiN+tUZOyP5lKiCy0pB2sjwzXFS4KAVCyeu2Rq8wv9HbS
+        UpUlqejPF2vGF49noNcTCjm0twyipIY=
+X-Google-Smtp-Source: AK7set9nFJwgKU2JNnNF/RkpGiT2OOeIvv/dN+67jI23lAI/UoG09P6nrZwOJLRbeHtMWkberKCg4w==
+X-Received: by 2002:a05:6870:910c:b0:16d:c18d:4074 with SMTP id o12-20020a056870910c00b0016dc18d4074mr15754800oae.12.1677343294607;
+        Sat, 25 Feb 2023 08:41:34 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t2-20020a05687044c200b001726cfeea97sm718811oai.29.2023.02.25.08.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Feb 2023 08:41:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 25 Feb 2023 08:41:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        jic23@kernel.org, chaotian.jing@mediatek.com,
+        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
+        chunfeng.yun@mediatek.com, broonie@kernel.org,
+        wim@linux-watchdog.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 08/17] dt-bindings: watchdog: mtk-wdt: Add MT8365 SoC
+ bindings
+Message-ID: <20230225164132.GA2905933@roeck-us.net>
+References: <20220531135026.238475-1-fparent@baylibre.com>
+ <20220531135026.238475-9-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <167733698261.3986.17052757604752934064.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 25 Feb 2023 14:56:22 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531135026.238475-9-fparent@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Add Intel LJCA device driver (2023-02-25T14:01:13)
-  Superseding: [v1] Add Intel LJCA device driver (2023-02-19T18:30:54):
-    [1/5] mfd: Add support for Intel LJCA device
-    [2/5] gpio: Add support for Intel LJCA USB GPIO driver
-    [3/5] i2c: Add support for Intel LJCA USB I2C driver
-    [4/5] spi: Add support for Intel LJCA USB SPI driver
-    [5/5] Documentation: Add ABI doc for attributes of LJCA device
+On Tue, May 31, 2022 at 03:50:17PM +0200, Fabien Parent wrote:
+> Add binding documentation for the MT8365 SoC.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 
+Going through my old e-mails:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This patch never made it upstream and would have to be rewritten to apply
+to Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml.
 
+Guenter
+
+> ---
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index a97418c74f6b..0e63c4ba3785 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -19,6 +19,7 @@ Required properties:
+>  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+>  	"mediatek,mt8192-wdt": for MT8192
+>  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
+> +	"mediatek,mt8365-wdt", "mediatek,mt6589-wdt": for MT8365
+>  
+>  - reg : Specifies base physical address and size of the registers.
+>  
