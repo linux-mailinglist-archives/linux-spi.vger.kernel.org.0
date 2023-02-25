@@ -2,92 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F2C6A2183
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Feb 2023 19:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F8E6A2A28
+	for <lists+linux-spi@lfdr.de>; Sat, 25 Feb 2023 15:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjBXSae (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Feb 2023 13:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S229591AbjBYOBT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 25 Feb 2023 09:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBXSad (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Feb 2023 13:30:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DC96BF5C;
-        Fri, 24 Feb 2023 10:30:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 685A0B81CAB;
-        Fri, 24 Feb 2023 18:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30EFC433EF;
-        Fri, 24 Feb 2023 18:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677263426;
-        bh=O4Mwg3w0JpRgJui6yoNsXmx/h3NhYcrFggVezAyqKTc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Dd3v1cAycWoH9PcbX9WncZTrSPPZCUF6mqNHAigNs55MehLmbwMTFjiM8qxaX0liF
-         SnwY5yPxSq2k9p7R0m/lH5lZa46NWGtacvEY89mmAPBRyTxTrz6+hhCNR+3ZiRIDhK
-         VFMAKxR1rYqw7e4lrSbV9eQ4FjPWUAteYPYGhB0rVeciEY2AHjewYPr4irhvcNCQDQ
-         g6r1j+Y+b8A65iWc1OH+/WhEBXPg/ah0am1fJafoi07ZNsxT2E9ZtKFo0ang3701BR
-         vISUSpjyw0dlUbIGa72R6NRmGwkSedxM7k50dTNLBUBDOmCMEXn2pTaDUUQcy+vdcR
-         SxIsQwb2fNoPA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-In-Reply-To: <20230224164034.56933-1-kyarlagadda@nvidia.com>
-References: <20230224164034.56933-1-kyarlagadda@nvidia.com>
-Subject: Re: [PATCH] spi: tegra210-quad: Fix validate combined sequence
-Message-Id: <167726342439.539434.8001216354479584360.b4-ty@kernel.org>
-Date:   Fri, 24 Feb 2023 18:30:24 +0000
+        with ESMTP id S229379AbjBYOBT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 25 Feb 2023 09:01:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E917CD2;
+        Sat, 25 Feb 2023 06:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677333678; x=1708869678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GLhdLw+oFWOLlJlG8A53g2nXQ0av44AQE7yKJKyYA+4=;
+  b=NgBPKZ5l/+zdEdx1kdMqfeglOhxt/eAzezyj+c72sitvcaULbpTAvM93
+   he6iinbpsNULC4DpB8m4s5c4etogwRa9ckLIEDECUcDl4sTOYGSO5ccUq
+   cCcNcBuPIzP7xmIDkZ1YUtBN82nAcPVCYeIOl43H+uloL7XehthKnWZAk
+   NbkeSEiuJJwj7rMHBa8nLt2ZGC1gak2bT6TOeP3/81VktGadl+rO5SAn1
+   1542v3ef11Ul3OgWkHn4eMG8d23F3Ms6C5buw5okdUkXNR4nizmIuzyvB
+   LEsXu6MNJfkKE9p0Q5DwzpGtnFDVSNNLdHQwdwRbA5aGfIcsQuJwGVeK2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314053383"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="314053383"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 06:01:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="918740157"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="918740157"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Feb 2023 06:01:14 -0800
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v2 0/5] Add Intel LJCA device driver
+Date:   Sat, 25 Feb 2023 22:01:13 +0800
+Message-Id: <20230225140118.2037220-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 24 Feb 2023 22:10:34 +0530, Krishna Yarlagadda wrote:
-> Check for non dma transfers that do not fit in FIFO has issue and skips
-> combined sequence for Tegra234 & Tegra241 which does not have GPCDMA.
-> 
-> Fixes: 1b8342cc4a38 ("spi: tegra210-quad: combined sequence mode")
-> 
-> 
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-Applied to
+---
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Ye Xiang (5):
+  mfd: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
 
-Thanks!
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  22 +
+ drivers/gpio/Kconfig                          |  12 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 454 ++++++++
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 357 +++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ljca.c                            | 969 ++++++++++++++++++
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 291 ++++++
+ include/linux/mfd/ljca.h                      |  95 ++
+ 14 files changed, 2239 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/mfd/ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 include/linux/mfd/ljca.h
 
-[1/1] spi: tegra210-quad: Fix validate combined sequence
-      commit: 047ee71ae4f412d8819e39e4b08c588fa299cfc2
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.34.1
 
