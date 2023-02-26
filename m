@@ -2,82 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B066A2ACA
-	for <lists+linux-spi@lfdr.de>; Sat, 25 Feb 2023 17:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C50D6A2EA6
+	for <lists+linux-spi@lfdr.de>; Sun, 26 Feb 2023 07:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjBYQlm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 25 Feb 2023 11:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S229636AbjBZGum (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 26 Feb 2023 01:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBYQll (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 25 Feb 2023 11:41:41 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831BE125AF;
-        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-172a623ad9aso3027885fac.13;
-        Sat, 25 Feb 2023 08:41:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
-        b=JeAIBpYUvNiXAA121YTlLRE7xs6FpBBdLcnKmViFAKnx0CAyuikX7hInf+ybRgcPU2
-         +qxGszBkgPNH4cJ4wAI4569+t1Xqf6fh5xaaQD98MO1fYRYlLG3zyXte2pP0cX/Oe5DZ
-         iSk5+0t1cywz6YkzojDiSA0c2orMUnZLEtqT/+iPn16CmlC3iLxUIKNnWvmULxuDanUC
-         jFwxulUiH4rLfylMJcybmUuXmvj6jcewXl5auogL9CVK1z8HLdut85UvNOLa2AdE3QPn
-         RjZzs+2BDhqeqYVEVmdYunlYeDNE0J71QG7PZ4iKjxXy3svG2dNR7jHcKrEGsF4WxZQ1
-         Qbmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rmn+cqYTvDT85OGvCMKkjTNE8FVd8ZGTaREnVmw8Y5k=;
-        b=QjTgcFXsbrMfsNhCkeBMLJbhS7SoS7l+2qnEw1wNZmtXHCk7UXfH8kySz9/fUJ08r3
-         pgfIrr3+yqouF9v/KUaCdVv5sDeo0RipvoDNMzdtc2RMJrWm+iPZ3bFixPj1q5d4deDV
-         HDqdBwJVWM4mR4ZXj/BSdCt5nrzwSHVWL19t36KWa1jRd5jwKFliiXQFWWaoUIa4tUjW
-         NNdfHXW+z63ezFycliWCBL+VacKLzDMw8bO98pDnV+1VofIAum+7zH3d0oWC6TcFytcr
-         0eHOX0FZ1jnsW8Si6RcfeNGkpzQYGMVM8z+VJyqfPMjJGioYCRHuAw2rEi6X9JxWCneg
-         A78A==
-X-Gm-Message-State: AO0yUKXEj8pbiN+tUZOyP5lKiCy0pB2sjwzXFS4KAVCyeu2Rq8wv9HbS
-        UpUlqejPF2vGF49noNcTCjm0twyipIY=
-X-Google-Smtp-Source: AK7set9nFJwgKU2JNnNF/RkpGiT2OOeIvv/dN+67jI23lAI/UoG09P6nrZwOJLRbeHtMWkberKCg4w==
-X-Received: by 2002:a05:6870:910c:b0:16d:c18d:4074 with SMTP id o12-20020a056870910c00b0016dc18d4074mr15754800oae.12.1677343294607;
-        Sat, 25 Feb 2023 08:41:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2-20020a05687044c200b001726cfeea97sm718811oai.29.2023.02.25.08.41.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 08:41:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 08:41:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
-        jic23@kernel.org, chaotian.jing@mediatek.com,
-        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
-        chunfeng.yun@mediatek.com, broonie@kernel.org,
-        wim@linux-watchdog.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 08/17] dt-bindings: watchdog: mtk-wdt: Add MT8365 SoC
- bindings
-Message-ID: <20230225164132.GA2905933@roeck-us.net>
-References: <20220531135026.238475-1-fparent@baylibre.com>
- <20220531135026.238475-9-fparent@baylibre.com>
+        with ESMTP id S229628AbjBZGuh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Feb 2023 01:50:37 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3630E070
+        for <linux-spi@vger.kernel.org>; Sat, 25 Feb 2023 22:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=IvUAk
+        44qX53mrmFeOTcMDnglMNl9yyPwVkGy2yi2D1Y=; b=QV4sIn1p8CQDw71lxR4UL
+        MbzvVFJveAbBp2CfL97jqs1HH8WI/IbLMukbwXmWnczpJ0bW05bqSvAi/+clBhVn
+        YiXzWg9ePy/XA8gYgbiqFELqSbSBvdBvsZ45i6XM6ynDJtfszipgQhqOautKaZFH
+        jvPAwC2BNEJPGjiBXXOEOA=
+Received: from lizhe.. (unknown [120.245.132.180])
+        by zwqz-smtp-mta-g4-2 (Coremail) with SMTP id _____wC3FrdB_fpj1ZL2BA--.35734S4;
+        Sun, 26 Feb 2023 14:34:16 +0800 (CST)
+From:   Lizhe <sensor1010@163.com>
+To:     broonie@kernel.org, heiko@sntech.de
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lizhe <sensor1010@163.com>
+Subject: [PATCH v1] drivers/spi-rockchip.c : Remove redundant variable slave
+Date:   Sun, 26 Feb 2023 14:33:34 +0800
+Message-Id: <20230226063334.7489-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531135026.238475-9-fparent@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wC3FrdB_fpj1ZL2BA--.35734S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XrWxKr17Ww1DXw4rtr43Wrg_yoW3Grc_ua
+        1UuF4xWw48trsaya18K343CrZYvFsagr1v9F4qqFWSg3yDAr18ZwnYvay5J3WUZw4xCr97
+        CFyjqw1akF98CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRM5l8UUUUUU==
+X-Originating-IP: [120.245.132.180]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiSAsiq1+FhCf6VQAAsc
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +51,26 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 31, 2022 at 03:50:17PM +0200, Fabien Parent wrote:
-> Add binding documentation for the MT8365 SoC.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+variable slave in spi_alloc_master() or spi_alloc_slave()
+has been assigned. it is not necessary to be assigned again
 
-Going through my old e-mails:
+Signed-off-by: Lizhe <sensor1010@163.com>
+---
+ drivers/spi/spi-rockchip.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-This patch never made it upstream and would have to be rewritten to apply
-to Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml.
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 79242dc5272d..a45717eb8890 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -772,7 +772,6 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, ctlr);
+ 
+ 	rs = spi_controller_get_devdata(ctlr);
+-	ctlr->slave = slave_mode;
+ 
+ 	/* Get basic io resource and map it */
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-- 
+2.34.1
 
-Guenter
-
-> ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> index a97418c74f6b..0e63c4ba3785 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> @@ -19,6 +19,7 @@ Required properties:
->  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
->  	"mediatek,mt8192-wdt": for MT8192
->  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
-> +	"mediatek,mt8365-wdt", "mediatek,mt6589-wdt": for MT8365
->  
->  - reg : Specifies base physical address and size of the registers.
->  
