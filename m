@@ -2,48 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3FC6A4214
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Feb 2023 13:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863006A43D0
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Feb 2023 15:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjB0M40 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Feb 2023 07:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S229705AbjB0OJf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Feb 2023 09:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB0M40 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Feb 2023 07:56:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EE21CF5F
-        for <linux-spi@vger.kernel.org>; Mon, 27 Feb 2023 04:56:24 -0800 (PST)
+        with ESMTP id S229749AbjB0OJe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Feb 2023 09:09:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23EF4222;
+        Mon, 27 Feb 2023 06:09:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35899B80C98
-        for <linux-spi@vger.kernel.org>; Mon, 27 Feb 2023 12:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D82A5C4339B;
-        Mon, 27 Feb 2023 12:56:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76A3F60E8E;
+        Mon, 27 Feb 2023 14:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D3FCC4339B;
+        Mon, 27 Feb 2023 14:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677502581;
-        bh=EHbAOp+BMqf1U4wl7ZWko6fRbHHVTPvuHTvUJUL7Zcs=;
-        h=Subject:From:Date:To:From;
-        b=tNFnjNw30LfkSQsVXNxyqvB3awNJh8+i67ucICEexqTwggm5Kg5It7GglQ/++ex6c
-         5SSSg8NVBWY2+LXBuu8iTZTz23IYdCafGt3xrbor1A8JqDdftccQtC8kyaLMloYCcW
-         IqgzqtLsSlOKymQdUoRJbXxLr7xTBYtDhMr67t4YAamJNVvqJcF7MS43HDd+iBZpMK
-         Bn9kg3gLyqTP5ccAud+t8p06j9oWUkDd2OzAzi124vGm8NpSRLqwSIbFSNWSLECS84
-         NGxBAUZOmFh6T38wfhNzBTN62giXVvGjxG57pX3RoA+LrjvdsyTqliKd3l6pkyNCEG
-         or7Yce485W0Sw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7195E68D2D;
-        Mon, 27 Feb 2023 12:56:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1677506972;
+        bh=ZrX51T3bj5l6PWQT6PquHiFIL3Ckc1PPjA85uQwSV/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qK96yYXJuVTbSEnSrKFzn36zkCF3brWyKICgfsk1+r2UbNAButkLGWVAb++x7iq9U
+         8MfRPXH9acHVHj2FC2d8UIkV/O0n120wBN2Ow6rhATNgGcussL/1CbNwBu5gHtU5nG
+         IxTlYMJbGH6TKGgXrHV0DafGIi9kXqzrMx7L05eO0OLlNmEKmcfOtfVjwGut/HFMjM
+         vKRTQx3hUB19wcPj0qF66fJkV2BH1P4Jiq/QGA/MoEecr1Ev5mFFW1Mn4lHf/ZYTi8
+         oV/iEZqta9DgeWXiCrJUiUE+ybDAVhZKyotSxZPp1O1dFY0ADQVPErsS+EEkp8ie1T
+         mGZZugiqVY/OQ==
+Date:   Mon, 27 Feb 2023 14:09:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Pratyush Yadav <ptyadav@amazon.de>, linux-spi@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-sn-f-ospi: fix white spaces and improve code
+ formatting
+Message-ID: <Y/y5mHklSYINwnA5@sirena.org.uk>
+References: <20230223102918.985376-1-d-gole@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <167750258164.3306.1095726946156136631.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 27 Feb 2023 12:56:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E3uVSNsRZkeCHrbH"
+Content-Disposition: inline
+In-Reply-To: <20230223102918.985376-1-d-gole@ti.com>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,14 +57,59 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Tegra TPM driver with HW flow control (2023-02-27T12:06:59)
-  Superseding: [v4] Tegra TPM driver with HW flow control (2023-02-24T15:49:38):
-    [V4,1/3] spi: Add TPM HW flow flag
-    [V4,2/3] tpm_tis-spi: Support hardware wait polling
-    [V4,3/3] spi: tegra210-quad: set half duplex flag
 
+--E3uVSNsRZkeCHrbH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Thu, Feb 23, 2023 at 03:59:18PM +0530, Dhruva Gole wrote:
 
+> Fixes: 1b74dd64c861 ("spi: Add Socionext F_OSPI SPI flash controller driver")
+
+This is clearly not a good fit for using Fixes.
+
+> Allignment issues in all the macro definitions of this driver have been
+> fixed for better asthetics
+
+In what way?
+
+> -#define OSPI_PROT_CTL_INDIR			0x00
+> -#define   OSPI_PROT_MODE_DATA_MASK		GENMASK(31, 30)
+> -#define   OSPI_PROT_MODE_ALT_MASK		GENMASK(29, 28)
+> -#define   OSPI_PROT_MODE_ADDR_MASK		GENMASK(27, 26)
+> -#define   OSPI_PROT_MODE_CODE_MASK		GENMASK(25, 24)
+> -#define     OSPI_PROT_MODE_SINGLE		0
+> -#define     OSPI_PROT_MODE_DUAL			1
+> -#define     OSPI_PROT_MODE_QUAD			2
+> -#define     OSPI_PROT_MODE_OCTAL		3
+
+> +#define	OSPI_PROT_CTL_INDIR			0x00
+> +#define	OSPI_PROT_MODE_DATA_MASK		GENMASK(31, 30)
+> +#define	OSPI_PROT_MODE_ALT_MASK			GENMASK(29, 28)
+> +#define	OSPI_PROT_MODE_ADDR_MASK		GENMASK(27, 26)
+> +#define	OSPI_PROT_MODE_CODE_MASK		GENMASK(25, 24)
+> +#define	OSPI_PROT_MODE_SINGLE			0
+> +#define	OSPI_PROT_MODE_DUAL			1
+> +#define	OSPI_PROT_MODE_QUAD			2
+> +#define	OSPI_PROT_MODE_OCTAL			3
+
+As far as I can tell this is just removing all the intentation which
+differentiates register, field and value - that looks like a clear step
+back?
+
+--E3uVSNsRZkeCHrbH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP8uZcACgkQJNaLcl1U
+h9AT+wf+Iz6NiD9htps/GXrMKp7hG52bv7Evyotkrw0wj8spIx1ACpodFE9dR67t
+G+W0yvnmmCfC3sWlh8iq2hROvCQYnXOLJGW7ZvdMv7rm0bKIqWg0JNP4zrB0KPwr
+fxhVgrPZejFsBCSOyfnF8Wpc/aj2FyTqGy0SZECZUugHl2H8yp7BtGuAWhCKIcxS
+6B29+vuZ8gDWi6/TZKQPVijJ5ydgcS6518H7XFuOPf+q8SZuVSuaPoDbYEJHvp5A
+cQhYiMSRUsjQ4Wb2S0xoBPEBzJ9bAa5BGWw6DVKqJWN24dSSeFw6VCJmhhv1mYZz
+QnnvjuLi3n3vN6jAD6DK2KAxAnYHxQ==
+=oakk
+-----END PGP SIGNATURE-----
+
+--E3uVSNsRZkeCHrbH--
