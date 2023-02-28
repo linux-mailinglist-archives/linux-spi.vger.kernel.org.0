@@ -2,302 +2,202 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7739F6A51D4
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Feb 2023 04:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE776A531F
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Feb 2023 07:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjB1Dc3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Feb 2023 22:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S229695AbjB1Glf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Feb 2023 01:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1Dc2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Feb 2023 22:32:28 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2076.outbound.protection.outlook.com [40.107.95.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFDF23850;
-        Mon, 27 Feb 2023 19:32:27 -0800 (PST)
+        with ESMTP id S229525AbjB1Gle (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Feb 2023 01:41:34 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C5C22002;
+        Mon, 27 Feb 2023 22:41:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677566493; x=1709102493;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=b08UPA4IuvrNn3I+Yve3A/yRmijSbKGhLROsw0d/Kas=;
+  b=lNMxN6YaoEczAMOwK+H96wLIOI6PfR3nKmWxaUNRmOoiVfzcH1cqefdZ
+   +8asr0Nn+jIzRhRiiKtGN3sybuTx5wqzFVJVnYV5KXL5P4kKYC/rLmCeu
+   6ccJBQIoSF1/8LztZdAz8Ex+lcYCgTKvFNtNq/2nbtDLK2AtUFdHXpiWq
+   QN3FyED1oWa7ezXLfyIOZ0c5Zmr3Io5kVt6yFi3qrdK9sKT5uYNC+VQtv
+   eehyrWxLmE2M2K0ABNByeyT6rJw3JWi2cu87VRdr6MuTxAkveg5JEOprR
+   nUaSnm9h/kOd0VhN3+flDjq8BVy1cQBeiUlulZNQ+2INDKfekNMmJdSQT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313736783"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="313736783"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 22:41:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="667334031"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="667334031"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2023 22:41:31 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 22:41:31 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 27 Feb 2023 22:41:31 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 27 Feb 2023 22:41:30 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rp7u/+cQXlc0VeAH8O31xdut+YWBXUIiXClwPoYqRo6qzDRPUtNP2osS7j3SwVYgPi5ikyBPBeToRunwMQuMGspS0rBw6YYCsLIfsScB9xWTJSghqme9zBZLlmlEN1C+BXNhmcsaFxRzkaa0IWb1/5WuBkVi5WPl4U+T+txWpemf2EXoYQ8FMMy6Hj3a/tCGLO8F+FKebJ6rn7iRwq5ooupEkBal8Agi9outsTW2yjDd1anwFG/nI3Ki2KVIOl4OXfIChE9WWlNa/IBl4KjjLNSB95wKwInIyKUbM/9daThY0nh7bgZm6PeZLTnQvM3ay+01aVRjIPXWq7HHvJKjMg==
+ b=kobyMpRvnxPWm2s/5dLKEQxaRCG15tN0yhqaiDNTCHcjWBFn0fJoy25RxtrzbHRoarShGeqfiv6UwZjol/50ASLtI22Ox4qJF+n8iTK1OCG41qfYZMqNSull3HrZcMiAa5ptHRusMk8kptmYo5FsiiHmCtx4G/NOae3bANL3bNO675DL06fdCezs+OsXbdha9F1Xuw76tqobjQQEQjYhy/x3Vg4K9s1CiDGTX0mJvugAv0ew3X5KhIh2iV8l03r1Ri7ON7zQyt76GCuyO+kC9/lzI4iJnpksznGNK+jaKT9sw3N1pLfc8ofJwVTPg6mUFYLjHn28einAgYIz4BKxWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fiKLwnEMHkz0LUInNLaSTrxbxGUw1v7ckvpPZX/gX3Y=;
- b=VMt6NWRBBd6byE09xz4FH6IVYEmrv8Cy7AfMdtQZBkCQHqT91rxE45DJxty+OZgG5YD3AfRP2yKYXR9q4pDkpPLoRPSMaR8tkfgSoTxoOa+I46QrC9nwGCb7GlYRWCmag6FZ7XViRHHvocYAY9nM7sP2RVMWusolyZ5E5i1idp12rUPhzbH9jiIoiOnqkON6Kpi3fxdqu7znMpUJar5Ad/mhVdsB/tFFLrPJ99zSWXuvDJRCDfELg/jdY/YAyhBmHJ03luwyjPZxW2QRVUeNsEsgtjpfhx32R1A9gnFAyo64NvQDDhUfm23f2+SC0JDNE18AWf016UF/eix+gx5KlA==
+ bh=w5PUkn4BRnqovqHNHP/5+Tv1+YmrR9L2mhyzsqMLMQE=;
+ b=QjYKg9rjBLbQ2+9g+nJ1zMUXwYWoFQgJy9g6gi6KOEdGfON4IuiOdtwAamfrQNkhIYR/enP4TqX5d8pUuUu6KEHbPaJKksewloeMPVMIcqPMFhmEDNFddo+jP25MRpe+8ch62HSUHy8X4kYepq06sdooi/yErD6mKQQySIEmeWb5/nL4WIu03pMEQU8tVg6NoePs/2bNYlrggyrWIM3/C3dx2CWplHzzhSVl0HjKFGTQJWOkTAp5SA/w6JdHYuxQaXE4J9E2lqKFu4/YH9BtUil50encQ9kqESC7uZFmkyiq36sQiOFYJriJmdj1b0FnLg2ewseyXSrSf2vmMeK6qA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fiKLwnEMHkz0LUInNLaSTrxbxGUw1v7ckvpPZX/gX3Y=;
- b=FD0u4/K4g5Iotc4abYBKGO0gX6vNP6LIVoQu0hg1BpoI/qejUPRpWQ4LOpOgVHsyg7DUgC6uO/0iX0HcZVASLDkBVnB1UmU5bWK4euY7Q0DF1lyUEXznmZJY7gWfkaDWzB2lZYBQLbPZ577EITOyof59clZBk051ff2oEXcS7pEZ+vHkGcVUn6l8mCLPR7q4gfsODXKvZCFJUl3jfPBxxCtQo1/ssBUteytpqxzE9fhvpiQnxxPr8PzCis2ZTEGnOMvjuiCaGcxjXcjwO3vMfj04zIoXl37zihPmjysKzd29uQVqpCGZ5hfVshCxWcRWxLm2Xpgc4WBJYhbw2VFecQ==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- DS0PR12MB7770.namprd12.prod.outlook.com (2603:10b6:8:138::18) with Microsoft
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
+ DS7PR11MB6296.namprd11.prod.outlook.com (2603:10b6:8:94::19) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.29; Tue, 28 Feb 2023 03:32:25 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
- 03:32:24 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+ 15.20.6134.27; Tue, 28 Feb 2023 06:41:24 +0000
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
+ 06:41:23 +0000
+Date:   Tue, 28 Feb 2023 14:41:14 +0800
+From:   "Ye, Xiang" <xiang.ye@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: RE: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Topic: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Index: AQHZSqQUcW4yC19F/EyRW9qbZsaOO67jpaAAgAANsKA=
-Date:   Tue, 28 Feb 2023 03:32:24 +0000
-Message-ID: <DM4PR12MB5769BCBCD410C75DF3EB26FBC3AC9@DM4PR12MB5769.namprd12.prod.outlook.com>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com> <Y/1oqr0RfD7KVA4y@kernel.org>
-In-Reply-To: <Y/1oqr0RfD7KVA4y@kernel.org>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|DS0PR12MB7770:EE_
-x-ms-office365-filtering-correlation-id: 66d596a3-dc7f-4de6-90c8-08db193c6897
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rFuZaSW2Iu/KP7icdQVEeKYSaWjnXiRrBlVEw7IBLli4qyRgCE/S/hRvY7Ari8yzKZKMgYSp2gUPSFFxGRWcFBha6DLJU1//1OVetLLvjQxu+sJPVTsSsddWjjbbwxkwP9h+ICYlBkOMlDHtNByB8uecuwV7ZDVWqeauNM4fM5pIuKIKNaBTWbQdGSARoJy4uL4nQAGFsSJHZ1OBNZkO954r6Xod+/6XJSD1Jc76UFw0TyK+du8pOnchi5JRRQ5QGjzY9Wbt0i/Ztasnnr9Lp2DvCjYG6cVIO8HQQxh6OHQsE3RJjGL/rP9sVJtgMdGFp1FtTE/UtfuinsFhP9ls5uGHLit2YCbdN1HpL6tvUE7nL2TmrndyX0ZZfGjS9fCnnEdxMuSfPHnTPxaZcsb/Ms8IqMhSMJLhY2xYyTvrI1EvBm88PmHB4BaM+eAaH+EX8sNPT2tjKD0RfuN8YgTBWIFUiztpAcO5ZcQF+XOme1LeDIXa/qYMdN/jdngQUHJdkyR/oafR03fO9yiXgUowXXaUCmCwO7IhgaOnQ/F+UlYnrtlXImTbCdUQtj9ooHFBXbUPpSS29NIOJ/1tZIXmx0R6tEQ/tYn1fdSzdbSPtnmVqueG+kSItxTGgBOY5jaw/uC8T93wUn0sdL+m6DidmC16cm9VNN2NSRpY/nvt/oiru8Ig4VkKHH8d/+CfNWzg+32Ab0En7NK3nk2f/PKK/Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199018)(107886003)(53546011)(316002)(66476007)(64756008)(8676002)(54906003)(83380400001)(66946007)(76116006)(41300700001)(66556008)(5660300002)(52536014)(66446008)(6916009)(4326008)(8936002)(26005)(6506007)(186003)(478600001)(7696005)(71200400001)(38070700005)(9686003)(33656002)(55016003)(86362001)(2906002)(7416002)(122000001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xWlbzMXKu8Su0p3CORQKfNApO/KdGyNK2IUmfZS1SNyVaoqLiNVME08ZHc5q?=
- =?us-ascii?Q?U8i1NqcxDi6cCOwbUtmj33Av7RKpq2+SyeDlXF2W7FGnd9HeouyG1RqjyRSx?=
- =?us-ascii?Q?/2xCC8NlAvzAmOyfMVLGwHOTQxBgWC4g/Y9pnCjvJO+tOy+7yW85C1ecYYrO?=
- =?us-ascii?Q?4UWClXDBX1IGu2nuaonDKS5pT+vnXmQdpGQGAyjOIhgVwMfNdI0klQOMxU5a?=
- =?us-ascii?Q?RoKagVH1v8enNZwBwLtUlfjRMP0cTS1WVPQHHDGzDQpwCftxB+mS4o5qQgp3?=
- =?us-ascii?Q?qttpM+8opo4vZ8oRPh3yg0Xg2vgtHnxoY+ttoCvsI7jZEx8gyrwgB0jANWJc?=
- =?us-ascii?Q?m60vAeyZID4EbtxqRfWycsNySM7l0A7biflyLG1lAtQpYG9MACUlNSEc7IgX?=
- =?us-ascii?Q?SFS4A08zCWKD8aVf5TCN+p4KM//sVJfVFp60ASEoe0IhyoWwdWzB+VnTaL73?=
- =?us-ascii?Q?2IgrU18AMaAWfe3PJBgLStb4Urwzaoaunq3c/0UPhrEaZRrzUQYpbU35thTv?=
- =?us-ascii?Q?8ETmL6YFklk3muMELv69vSl9DQO+GNieghtQRtKYRm08qEAfW+vyL0Lzk741?=
- =?us-ascii?Q?o2MJwBs2f0r8MeLBUUdvbQgAevKHRxlbZ66J3764t68XYu4/kwFjT4sDaHnB?=
- =?us-ascii?Q?pwTnwmOn4id70kwA3eFMfAcB7ZF325DtyAmnD7KjaBA+r4eTK55wSkRFCJuK?=
- =?us-ascii?Q?aJgJY912gYKB949VUq2Z44kxg3dYOs57Yi4QgUH7bkMm1o8ov5+MLaDJhkmy?=
- =?us-ascii?Q?Ihj+LV5PTNndcM3rTLV8MXVjXwFziviDrC6rR5OP5ArivxT7FnJWvuMmGqqh?=
- =?us-ascii?Q?nl71PAaOFGioqueduGPY5rVk1IOdwhZGu8GVk5ECTirofQVrs3ZUKybQTSUC?=
- =?us-ascii?Q?HYZvzzMxPXtm+SorClTPJgCpqIpHo+0CokWrjTdqltVSA4QpF0yu+vy9e/Fa?=
- =?us-ascii?Q?MrRDLSLZfW7KE0Cemjf+eFqGVU15I9FLUXWsQI9SlvF2QnBZHgl4PMRDRN7f?=
- =?us-ascii?Q?nojL4uGgIYgoey385xvPOPYUq8LIkIb5KdAViKjjAJ5/9v8sgmL0PT43S+nn?=
- =?us-ascii?Q?7fZ0EW4rrAVOUmGm4JX2LdCqWupoGsOA4aQZmT1x/3nsOIZ/rkK7MJmI6Y9Q?=
- =?us-ascii?Q?5ok8IPk9bO2EIN/jcumA5PoJdKkviF+AJg+YwMbZWjXlxudJkFRGGnQ2T8lS?=
- =?us-ascii?Q?p5QyKh9Ce0GPybrWDXuVk1oiXP31KfsROs4XZorisjnY80K8GRF/dwTX6kC1?=
- =?us-ascii?Q?0nTeIvf4HCOXTC5Le8cJtZ/MGgcmf4AUAZQndWtV/v5ElhhbSyowlKy+6BUn?=
- =?us-ascii?Q?7ahRmMXERXUdcDc2mhhSdi8g0YCjtKbxm8tBYZ4boG3V/Lu7+KDME6su6Cbv?=
- =?us-ascii?Q?b1YI+kVDktZ8bb4fWu7RUedT0gnoFV2k5aRrkwnLnv9h/p6Sg3upD/plwyOf?=
- =?us-ascii?Q?6w2eeqClN2zW92Nx3tKuDbhnYpuqrrlEMRLtFLuXWaOL4JHWcqjN6VKVob2e?=
- =?us-ascii?Q?RILbbmc7RGPk4Hf/874MhUKiz+DYm6aul75Y9GBqQSAzLErXJlZnaeuI9fPY?=
- =?us-ascii?Q?T1TzX56gcXVQ4jq6FyS1z9NNp+nxFX96QUVMHYUM?=
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "Wu, Wentong" <Wentong.Wu@intel.com>,
+        "Zhang, Lixu" <Lixu.Zhang@intel.com>
+Subject: Re: [PATCH v2 4/5] spi: Add support for Intel LJCA USB SPI driver
+Message-ID: <Y/2iCn6M/+HWsjZD@ye-NUC7i7DNHE>
+References: <20230225140118.2037220-1-xiang.ye@intel.com>
+ <20230225140118.2037220-5-xiang.ye@intel.com>
+ <Y/zm/Uk/d6VRxLBx@sirena.org.uk>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <Y/zm/Uk/d6VRxLBx@sirena.org.uk>
+X-ClientProxiedBy: SG2PR03CA0126.apcprd03.prod.outlook.com
+ (2603:1096:4:91::30) To DM5PR11MB1418.namprd11.prod.outlook.com
+ (2603:10b6:3:8::9)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DS7PR11MB6296:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa5b8b0c-0018-4e38-3ff9-08db1956cf05
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w+0KcC62JhnaOM22BoNuaeraOasUwskbQFz2GQ4TmZso8E/VSwJPGFLvZ/himMugcVFfr7W89iOahDboP1vt7IxKX8hehQmDVMlbWCaMZsF3SKvtQGqW1NhIgeha+mCODKMDYwBCWN3AGXDGmU3Ci6azlWbQOalqqgfGD2WUqqtpnMfTB5q5VblMMORA9Fkvm3Ik+F3mERHMHPNuaQDGbyqL0i7RDd1Zu4J5xvkTFntWgDyBdWKlEI/NnVP9AE4in/IfQmo9rkXx3R10pirINi8aIQQAV4dpd/csDvDD4Nsl00W1LNQqzbQl8NYqBYZXZlpokp4fN25Zefa8Ne2g3LoF9MEayFDHcqQMEHCwfyhEOF4C8MYI4hRx0iKpQLdq4IRo6lqj4XoovV4xNFDmM1wpKjeaFfo3aZEUr8AhoaGwzb/3QNTYYE0G80zgnJSM8v0IwViD963Qo66qKASQG3vr6g1XavD44R9nZ3XF4ojvE4HGEsDa9U25AaQdKNP+fkCrKpCRe8AgmA7jmSoO/XVR+01eiiYyT5akRmw5auxx27WktCFnwZ4XKrAXgfIPKbeZKgF+vTFAb2BfdtU8M4TFIJ0+Tj5DtBBfwZYV3GeyvGLL5l245Y8Z/+aXFGZTDO3BIUgvxzVL9RFLtlwudw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(396003)(39860400002)(346002)(366004)(136003)(376002)(451199018)(54906003)(478600001)(86362001)(9686003)(33716001)(316002)(4326008)(26005)(186003)(6486002)(6666004)(6506007)(38100700002)(8676002)(66556008)(8936002)(5660300002)(41300700001)(2906002)(66476007)(7416002)(6916009)(6512007)(82960400001)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mvKnwpm2U1Gn/k6YtkR0Le+w9+AWF1IyzO2rAy+/ZhDfKilNLLdbK9oILgWp?=
+ =?us-ascii?Q?utCVJpEWA7Jp4JFHTxIIuDJ6UMqGdAwrhw4gZY0isvioHGJPSR57nC0V0WPM?=
+ =?us-ascii?Q?JeKbaUCzCk7/3zef9v9bd1qQHHjtFrvVbBPH84bo9EvC0wEnLQHwEG0MIVYQ?=
+ =?us-ascii?Q?AXSoSWaLv2JJCQgUFG2VbPZqX4Y3OhtTJGF+WHte9ay8gIr/QGN/unJGFQch?=
+ =?us-ascii?Q?rWONQiu+XqnAikvB3QedNj0oSxIzW1TaXxd82fCn3TGFgch+CkSP/War7F4u?=
+ =?us-ascii?Q?de27Meg2mqPOUll9qSREa7dmOOVRKsUdaVQdD2kFsdWak5tKMJtoGU8WTcwN?=
+ =?us-ascii?Q?xM3kZoEfpsaPbe7fDkN9JZtMhmFr8XFX8wSKzJFxKPFRmdnbLjW6BrE7UfFP?=
+ =?us-ascii?Q?9m6mhqOZOuurYRCmEoz4kfC6QNnT4KQz+JFeQuGo8fceazaYVe54qd4O0Lls?=
+ =?us-ascii?Q?PXAdg/vx9NwDQirTWs5hh8rllZsk6lpeJUNRjh9MC3TYPvJrhFSQd+qch7ub?=
+ =?us-ascii?Q?eOjC19vVGk+HuBBIH/NMUr23aiFXPPtYwF47gieOVE4wv4xKR5zyxZ2ZQzB6?=
+ =?us-ascii?Q?78wVktlthzhRIzDcSbp+ijRD9MDPxmEIzFM4IV26ms016BmJC/OkRSdo55eb?=
+ =?us-ascii?Q?6+N23BqM9tAG/89702i2W8puhMwopWi+tZOvervLjiiINEb9LICAf1nWqOxU?=
+ =?us-ascii?Q?xPoxcVdlWtaqzt7lb+7ZAjwrDqH7XD91py6pxKCG+/Sc3sPv2WCK7Q9US8KZ?=
+ =?us-ascii?Q?gEM6dhMMmfeUqyzbPQBgoUREDx1cWqWszC7Pq0UmR08614HJOhjNEgQgXsMl?=
+ =?us-ascii?Q?3e0vwb2e36MVQgseqt6Gp/wUh8KBOrF6RGUUPtNcJOoStdxvj2mtgMoZr+Eb?=
+ =?us-ascii?Q?QH3t59/fSngcU+mctvjYMVgL775aQHNxfvKT88ZkrQ3WfLrppOhHrbg8koP0?=
+ =?us-ascii?Q?ds/lp0UqFI9v0nkW4OKj0o6PQs9Hr7dBXiQ6EdZ9HmXUk0V0zY7zwXdjoBtD?=
+ =?us-ascii?Q?daPhtkrHnzaxWX7M6TEhPNA+aBSABrFfHDS53bd42kwuE2jOld6YCNvdacCX?=
+ =?us-ascii?Q?LA80wAKGxjXHnms8FcjGEgI/HaIMnGhwqcZcoeiiH73ZRRVtv7GJbNeCu4z6?=
+ =?us-ascii?Q?eIvIiAKQ5FVoihuXQmYIWGBcPulO3qA5iyhU1yzuNMFLez8v6XbQ7s6xqbzF?=
+ =?us-ascii?Q?cZVNtd/WArV+di8nff+iKnn2oBVNGmryxnGm9Cqu6f4pyFoqrIPFxhfoLlgx?=
+ =?us-ascii?Q?3NqbwlVQBvHP80NnPWXAk16J6CnqHXJAgqzdkDckmGBZq5arS6hOsy/tWkwI?=
+ =?us-ascii?Q?WcWPgCpDBJ4TXVpDSoQBuPgJSwA1IyKhPBXkJC/aCqrH7KI4HygR8lFD4IeU?=
+ =?us-ascii?Q?g5kApssRssQbZqu1+YjH4TZ+1mfuI8BCd6ui/Z/jdChNOpdg5Vlcg81r0Qnv?=
+ =?us-ascii?Q?tw9KXzMzCSR6/UMFLNqksq/rTlTZokl8x28yMWkhnIq+ok11n0YMSmSHdBY0?=
+ =?us-ascii?Q?i6vC3eJQpVJzI0Os74u72an6wPEFxCln6wU0buHcVRf4f4gzQkU+XAY70+Yl?=
+ =?us-ascii?Q?tBEGGiSm72FxG7zV0LbTqlFzhK7agcRPvkAoxpjB?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa5b8b0c-0018-4e38-3ff9-08db1956cf05
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66d596a3-dc7f-4de6-90c8-08db193c6897
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 03:32:24.6083
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 06:41:23.6197
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EwIJGU2R/PxPJODJVDtaiLc0g7T637f+XJFjHPs5qNcYlz7sXRRAemkbyr2/DHc30+J6D3g2IEBuCwCdkS02bA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7770
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SbEje9jIdKpQuk6KAXc1tcTVTapvJUTRMUAquYuHB5WXaes5dA2ohoc+nkrkmrcatqlib/L48Wx4++Sp+Ke84g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6296
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> -----Original Message-----
-> From: Jarkko Sakkinen <jarkko@kernel.org>
-> Sent: 28 February 2023 08:06
-> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> Cc: robh+dt@kernel.org; broonie@kernel.org; peterhuewe@gmx.de;
-> jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.or=
-g;
-> linux-tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>; Sowjanya Komatineni
-> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
-> > TPM devices raise wait signal on last addr cycle. This can be detected
-> > by software driver by reading MISO line on same clock which requires
-> > full duplex support. In case of half duplex controllers wait detection
-> > has to be implemented in HW.
-> > Support hardware wait state detection by sending entire message and let
-> > controller handle flow control.
->=20
-> When a is started sentence with the word "support" it translates to "I'm
-> too lazy to write a proper and verbose description of the implementation"
-> :-)
->=20
-> It has some abstract ideas of the implementation, I give you that, but do
-> you think anyone ever will get any value of reading that honestly? A bit
-> more concrette description of the change helps e.g. when bisecting bugs.
->=20
-I presented why we are making the change. Will add explanation on how
-it is implemented as well.
+Hi Mark,
 
-> > QSPI controller in Tegra236 & Tegra241 implement TPM wait polling.
-> >
-> > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_spi_main.c | 92
-> ++++++++++++++++++++++++++++-
-> >  1 file changed, 90 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c
-> b/drivers/char/tpm/tpm_tis_spi_main.c
-> > index a0963a3e92bd..5f66448ee09e 100644
-> > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct
-> tpm_tis_spi_phy *phy,
-> >       return 0;
-> >  }
-> >
-> > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > -                      u8 *in, const u8 *out)
-> > +/*
-> > + * Half duplex controller with support for TPM wait state detection li=
-ke
-> > + * Tegra241 need cmd, addr & data sent in single message to manage HW
-> flow
-> > + * control. Each phase sent in different transfer for controller to id=
-enity
-> > + * phase.
-> > + */
-> > +int tpm_tis_spi_hw_flow_transfer(struct tpm_tis_data *data, u32 addr,
-> u16 len,
-> > +                              u8 *in, const u8 *out)
+Thanks for the review.
+On Tue, Feb 28, 2023 at 01:23:09AM +0800, Mark Brown wrote:
+> On Sat, Feb 25, 2023 at 10:01:17PM +0800, Ye Xiang wrote:
+> 
+> > +struct spi_xfer_packet {
+> > +	u8 indicator;
+> > +	s8 len;
+> > +	u8 data[];
+> > +} __packed;
+> 
+> > +static int ljca_spi_read_write(struct ljca_spi_dev *ljca_spi, const u8 *w_data, u8 *r_data, int len,
+> > +			       int id, int complete, int cmd)
 > > +{
-> > +     struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> > +     struct spi_transfer spi_xfer[3];
-> > +     struct spi_message m;
-> > +     u8 transfer_len;
-> > +     int ret;
+> > +	struct spi_xfer_packet *w_packet = (struct spi_xfer_packet *)ljca_spi->obuf;
+> > +	struct spi_xfer_packet *r_packet = (struct spi_xfer_packet *)ljca_spi->ibuf;
+> > +	unsigned int ibuf_len = LJCA_SPI_BUF_SIZE;
+> > +	int ret;
 > > +
-> > +     while (len) {
-> > +             transfer_len =3D min_t(u16, len, MAX_SPI_FRAMESIZE);
+> > +	w_packet->indicator = FIELD_PREP(LJCA_SPI_XFER_INDICATOR_ID, id) |
+> > +			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_CMPL, complete) |
+> > +			      FIELD_PREP(LJCA_SPI_XFER_INDICATOR_INDEX,
+> > +					 ljca_spi->spi_info->id);
 > > +
-> > +             spi_message_init(&m);
-> > +             phy->iobuf[0] =3D (in ? 0x80 : 0) | (transfer_len - 1);
-> > +             phy->iobuf[1] =3D 0xd4;
-> > +             phy->iobuf[2] =3D addr >> 8;
-> > +             phy->iobuf[3] =3D addr;
-> > +
-> > +             memset(&spi_xfer, 0, sizeof(spi_xfer));
-> > +
-> > +             spi_xfer[0].tx_buf =3D phy->iobuf;
-> > +             spi_xfer[0].len =3D 1;
-> > +             spi_message_add_tail(&spi_xfer[0], &m);
-> > +
-> > +             spi_xfer[1].tx_buf =3D phy->iobuf + 1;
-> > +             spi_xfer[1].len =3D 3;
-> > +             spi_message_add_tail(&spi_xfer[1], &m);
-> > +
-> > +             if (out) {
-> > +                     spi_xfer[2].tx_buf =3D &phy->iobuf[4];
-> > +                     spi_xfer[2].rx_buf =3D NULL;
-> > +                     memcpy(&phy->iobuf[4], out, transfer_len);
-> > +                     out +=3D transfer_len;
-> > +             }
-> > +
-> > +             if (in) {
-> > +                     spi_xfer[2].tx_buf =3D NULL;
-> > +                     spi_xfer[2].rx_buf =3D &phy->iobuf[4];
-> > +             }
-> > +
-> > +             spi_xfer[2].len =3D transfer_len;
-> > +             spi_message_add_tail(&spi_xfer[2], &m);
-> > +
-> > +             reinit_completion(&phy->ready);
-> > +
-> > +             ret =3D spi_sync_locked(phy->spi_device, &m);
-> > +             if (ret < 0)
-> > +                     return ret;
-> > +
-> > +             if (in) {
-> > +                     memcpy(in, &phy->iobuf[4], transfer_len);
-> > +                     in +=3D transfer_len;
-> > +             }
-> > +
-> > +             len -=3D transfer_len;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +int tpm_tis_spi_sw_flow_transfer(struct tpm_tis_data *data, u32 addr,
-> u16 len,
-> > +                              u8 *in, const u8 *out)
-> >  {
-> >       struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> >       int ret =3D 0;
-> > @@ -140,6 +206,28 @@ int tpm_tis_spi_transfer(struct tpm_tis_data
-> *data, u32 addr, u16 len,
-> >       return ret;
-> >  }
-> >
-> > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > +                      u8 *in, const u8 *out)
+> > +	if (cmd == LJCA_SPI_READ) {
+> > +		w_packet->len = sizeof(u16);
+> > +		*(u16 *)&w_packet->data[0] = len;
+> 
+> Are there no endianness considerations here?
+Yes, it should be little endian. Will address this.
+> 
+> > +static int ljca_spi_transfer(struct ljca_spi_dev *ljca_spi, const u8 *tx_data,
+> > +			     u8 *rx_data, u16 len)
 > > +{
-> > +     struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> > +     struct spi_controller *ctlr =3D phy->spi_device->controller;
-> > +
-> > +     /*
-> > +      * TPM flow control over SPI requires full duplex support.
-> > +      * Send entire message to a half duplex controller to handle
-> > +      * wait polling in controller.
-> > +      * Set TPM HW flow control flag..
-> > +      */
-> > +     if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-> > +             phy->spi_device->mode |=3D SPI_TPM_HW_FLOW;
-> > +             return tpm_tis_spi_hw_flow_transfer(data, addr, len, in,
-> > +                                                 out);
-> > +     } else {
-> > +             return tpm_tis_spi_sw_flow_transfer(data, addr, len, in,
-> > +                                                 out);
-> > +     }
-> > +}
-> > +
-> >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
-> >                                 u16 len, u8 *result, enum tpm_tis_io_mo=
-de io_mode)
-> >  {
-> > --
-> > 2.17.1
-> >
->=20
-> Looking pretty good but do you really want to export
-> tpm_tis_spi_{hw,sw}_flow_transfer?
->=20
-> BR, Jarkko
-No need to export tpm_tis_spi_{hw,sw}_flow_transfer as well.
-I will update this in next version.
+> 
+> This function has one caller with barely anything in it - perhaps just
+> inline it?
+Agree. Will make this function inline.
 
-KY
+--
+Thanks
+Ye Xiang
+
