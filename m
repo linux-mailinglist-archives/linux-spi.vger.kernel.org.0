@@ -2,138 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D0F6A5AF9
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Feb 2023 15:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E3D6A5B6E
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Feb 2023 16:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjB1OnP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Feb 2023 09:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S229587AbjB1PLd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Feb 2023 10:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB1OnP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Feb 2023 09:43:15 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ACD1025A
-        for <linux-spi@vger.kernel.org>; Tue, 28 Feb 2023 06:43:11 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:87f0:788:3682:ec7a])
-        by michel.telenet-ops.be with bizsmtp
-        id Sej92900Q5KNCAn06ej9Ay; Tue, 28 Feb 2023 15:43:10 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pX1Bg-00AORc-Ry;
-        Tue, 28 Feb 2023 15:43:09 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pX1C9-00H9WG-Bi;
-        Tue, 28 Feb 2023 15:43:09 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mark Brown <broonie@kernel.org>, David Jander <david@protonic.nl>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] spi: Replace spi_pcpu_stats_totalize() macro by a C function
-Date:   Tue, 28 Feb 2023 15:43:08 +0100
-Message-Id: <cb7690d9d04c06eec23dbb98fbb5444082125cff.1677594432.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229815AbjB1PLb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Feb 2023 10:11:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188228864;
+        Tue, 28 Feb 2023 07:11:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE1A61151;
+        Tue, 28 Feb 2023 15:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55002C433EF;
+        Tue, 28 Feb 2023 15:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677597073;
+        bh=l6f4S677J1oI+Hevv9J+NgW8xZwXr9Mo8/Hp0wT+LBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G1gYlQct9BpzQb6cSoGeN9vByCZ1aj2brN9VPRsrBfc2j5VUFhDfbp6mvEzOz6LZq
+         6lZG4Xq/v4+GMQWzXKmsTFhCnmr3TYMvSUxd/9oU63H4NrQfv91f/lL9DZGO81gBRU
+         LB8iye1x1sxariTOuqTydRslFx70begLJG37zZVzD+AzmpOAInybXTlO/v/vg6h6Gd
+         GvVJuoroLUzRzJfssj23w2FS5Or0mD7u3xb8si8TwY1bWYhmLoMr4lYs17thM8PAbQ
+         uj24cHyotg/vd5BZDzWHnXn7vqS0LEsAhvQmkNnMGa3UNLGyE+zyAvqOZ/430V3t7L
+         oxRC6MIXnAsjw==
+Date:   Tue, 28 Feb 2023 15:11:09 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     David Jander <david@protonic.nl>, Andrew Lunn <andrew@lunn.ch>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] spi: Replace spi_pcpu_stats_totalize() macro by a C
+ function
+Message-ID: <Y/4ZjVKXBuOPznUF@sirena.org.uk>
+References: <cb7690d9d04c06eec23dbb98fbb5444082125cff.1677594432.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="24Lj3i//jS8PQg3C"
+Content-Disposition: inline
+In-Reply-To: <cb7690d9d04c06eec23dbb98fbb5444082125cff.1677594432.git.geert+renesas@glider.be>
+X-Cookie: For external use only.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-spi_pcpu_stats_totalize() is a rather large macro, and is instantiated
-28 times, causing a large amount of duplication in the amount of
-generated code.
 
-Reduce the duplication by replacing spi_pcpu_stats_totalize() by a real
-C function, and absorb all other common code from
-spi_statistics_##name##_show().  As (a) the old "field" parameter was
-the name of a structure member, which cannot be passed to a function,
-and (b) passing a pointer to the member is also not an option, due to
-the loop over all possible CPUs, the "field" parameter is replaced by an
-"offset" parameter, pointing to a location within the structure.
+--24Lj3i//jS8PQg3C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This reduces kernel size by ca. 4 KiB (on arm32 and arm64).
+On Tue, Feb 28, 2023 at 03:43:08PM +0100, Geert Uytterhoeven wrote:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Should the address calculation use RELOC_HIDE()? I.e.
+> Should the address calculation use RELOC_HIDE()? I.e.
+>=20
+>     field =3D RELOC_HIDE((void *)pcpu_stats, offset);
 
-    field = RELOC_HIDE((void *)pcpu_stats, offset);
----
- drivers/spi/spi.c | 47 ++++++++++++++++++++++++-----------------------
- 1 file changed, 24 insertions(+), 23 deletions(-)
+I have no real idea there, I'd hope per_cpu_ptr() was taking care of any
+issue there.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 6d41cef7f9c93934..56d078bac4236a09 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -117,24 +117,28 @@ static struct spi_statistics __percpu *spi_alloc_pcpu_stats(struct device *dev)
- 	return pcpu_stats;
- }
- 
--#define spi_pcpu_stats_totalize(ret, in, field)				\
--do {									\
--	int i;								\
--	ret = 0;							\
--	for_each_possible_cpu(i) {					\
--		const struct spi_statistics *pcpu_stats;		\
--		u64 inc;						\
--		unsigned int start;					\
--		pcpu_stats = per_cpu_ptr(in, i);			\
--		do {							\
--			start = u64_stats_fetch_begin(		\
--					&pcpu_stats->syncp);		\
--			inc = u64_stats_read(&pcpu_stats->field);	\
--		} while (u64_stats_fetch_retry(			\
--					&pcpu_stats->syncp, start));	\
--		ret += inc;						\
--	}								\
--} while (0)
-+static ssize_t spi_emit_pcpu_stats(struct spi_statistics __percpu *stat,
-+				   char *buf, size_t offset)
-+{
-+	u64 val = 0;
-+	int i;
-+
-+	for_each_possible_cpu(i) {
-+		const struct spi_statistics *pcpu_stats;
-+		u64_stats_t *field;
-+		unsigned int start;
-+		u64 inc;
-+
-+		pcpu_stats = per_cpu_ptr(stat, i);
-+		field = (void *)pcpu_stats + offset;
-+		do {
-+			start = u64_stats_fetch_begin(&pcpu_stats->syncp);
-+			inc = u64_stats_read(field);
-+		} while (u64_stats_fetch_retry(&pcpu_stats->syncp, start));
-+		val += inc;
-+	}
-+	return sysfs_emit(buf, "%llu\n", val);
-+}
- 
- #define SPI_STATISTICS_ATTRS(field, file)				\
- static ssize_t spi_controller_##field##_show(struct device *dev,	\
-@@ -165,11 +169,8 @@ static struct device_attribute dev_attr_spi_device_##field = {		\
- static ssize_t spi_statistics_##name##_show(struct spi_statistics __percpu *stat, \
- 					    char *buf)			\
- {									\
--	ssize_t len;							\
--	u64 val;							\
--	spi_pcpu_stats_totalize(val, stat, field);			\
--	len = sysfs_emit(buf, "%llu\n", val);				\
--	return len;							\
-+	return spi_emit_pcpu_stats(stat, buf,				\
-+			offsetof(struct spi_statistics, field));	\
- }									\
- SPI_STATISTICS_ATTRS(name, file)
- 
--- 
-2.34.1
+--24Lj3i//jS8PQg3C
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP+GYwACgkQJNaLcl1U
+h9AlTAf8DTkgTlP8Xd1eJWTfRDa+I1Rqnkviw9lqaSrwUbWjCbPFJ9Wptr+bqUEV
+20MKAtja9tnWqze6AITBL0ElSMSOlGShoepMlVM0tq7Gk/qTjHmr3IkKlOl2Myok
+adSLHJXkh+Ypg5eQQn+8cRTFStQUVfEkACCw1u3jlubHI/wHfwNXYuOjZz+gLRmw
+p60pJQU3l8xBGXnrJTZUG/peGaONES2FWOJuLlq+oWwLODuWkBT8cYgy8QmUWGAL
+2Y71Al5D5uXEbImevl52NXgE/WjuZI2Cuybv+mnsN7PWIRqAp1Hcm9X5oTjZ+Q25
+j1d/WhjO/o03AJII3HnbknDPeVnRoQ==
+=4wW5
+-----END PGP SIGNATURE-----
+
+--24Lj3i//jS8PQg3C--
