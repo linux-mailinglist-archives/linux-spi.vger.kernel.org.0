@@ -2,158 +2,148 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25306A75AE
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Mar 2023 21:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935996A76F2
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Mar 2023 23:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCAU7B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Mar 2023 15:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S229781AbjCAWns (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Mar 2023 17:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCAU67 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Mar 2023 15:58:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B6D521D4
-        for <linux-spi@vger.kernel.org>; Wed,  1 Mar 2023 12:58:56 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id XTXKp7HLjYdrCXTXKp7FeZ; Wed, 01 Mar 2023 21:58:55 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 01 Mar 2023 21:58:55 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: Reorder fields in 'struct spi_message'
-Date:   Wed,  1 Mar 2023 21:58:52 +0100
-Message-Id: <c112aad16eb47808e1ec10abd87b3d273c969a68.1677704283.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229494AbjCAWnr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Mar 2023 17:43:47 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762971A66B;
+        Wed,  1 Mar 2023 14:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677710623; x=1709246623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QcM62RcTYi5zvoGJymyxGLnQj3e1/GlbLkfJR0EShdo=;
+  b=AULRsfYdZyqxS0WG/ztpDuMe+RLMHl48R8BfLqGyDFI6H5TaPYd8R67V
+   Z95mlpIGr4Mye76jPSe45/f1eozgGTnl/FwyIHdnpIxiKqlph5yfh/lYn
+   AoQGjGx5meNOqXdL4Lwh9zQ/KlWsLImCVvMcf9uq4NiGmbQFKij7K0oHo
+   BTWMT7ftL+APcPI+NB1YWPHNod3pK4IJ9V/+gwun/cmAXVCY1rOP0+IMS
+   e3Xq9S9KnAkhNbXY2ttis8QN7vLj5ScYhwm6H9IrgRXOdUZDECzu1x+yt
+   7q2Bi/gTk9kPXGq/nXbyEJFcli9OT82dLrOCkUApe7RnhBQd0ICFdLqei
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="334571891"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="334571891"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:43:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848838873"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="848838873"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 14:43:37 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXVAe-0006TP-38;
+        Wed, 01 Mar 2023 22:43:36 +0000
+Date:   Thu, 2 Mar 2023 06:43:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <202303020622.v3NqL5mg-lkp@intel.com>
+References: <20230301173353.28673-3-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301173353.28673-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Group some variables based on their sizes to reduce hole and avoid padding.
-On x86_64, this shrinks the size from 112 to 96 bytes.
+Hi Krishna,
 
-This should have no real impact on memory allocation because 'struct
-spi_message' is mostly used on stack, but it can save a few cycles
-when the structure is initialized with spi_message_init() and co.
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2 next-20230301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Before:
-======
-struct spi_message {
-	struct list_head           transfers;            /*     0    16 */
-	struct spi_device *        spi;                  /*    16     8 */
-	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230301173353.28673-3-kyarlagadda%40nvidia.com
+patch subject: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020622.v3NqL5mg-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d47344c6b9ab634483742457f6692b01f02c4698
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
+        git checkout d47344c6b9ab634483742457f6692b01f02c4698
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/char/tpm/
 
-	/* XXX 31 bits hole, try to pack */
-	/* XXX 4 bytes hole, try to pack */
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020622.v3NqL5mg-lkp@intel.com/
 
-	void                       (*complete)(void *);  /*    32     8 */
-	void *                     context;              /*    40     8 */
-	unsigned int               frame_length;         /*    48     4 */
-	unsigned int               actual_length;        /*    52     4 */
-	int                        status;               /*    56     4 */
+All warnings (new ones prefixed by >>):
 
-	/* XXX 4 bytes hole, try to pack */
-
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	struct list_head           queue;                /*    64    16 */
-	void *                     state;                /*    80     8 */
-	struct list_head           resources;            /*    88    16 */
-	bool                       prepared;             /*   104     1 */
-
-	/* size: 112, cachelines: 2, members: 12 */
-	/* sum members: 93, holes: 2, sum holes: 8 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
-	/* padding: 7 */
-	/* last cacheline: 48 bytes */
-};
+   drivers/char/tpm/tpm_tis_spi_main.c:335:36: warning: 'acpi_tis_spi_match' defined but not used [-Wunused-const-variable=]
+     335 | static const struct acpi_device_id acpi_tis_spi_match[] = {
+         |                                    ^~~~~~~~~~~~~~~~~~
+   drivers/char/tpm/tpm_tis_spi_main.c: In function 'tpm_tis_spi_probe':
+>> drivers/char/tpm/tpm_tis_spi_main.c:263:42: warning: 'phy' is used uninitialized [-Wuninitialized]
+     263 |         struct spi_controller *ctlr = phy->spi_device->controller;
+         |                                       ~~~^~~~~~~~~~~~
+   drivers/char/tpm/tpm_tis_spi_main.c:262:33: note: 'phy' was declared here
+     262 |         struct tpm_tis_spi_phy *phy;
+         |                                 ^~~
 
 
-After:
-=====
-struct spi_message {
-	struct list_head           transfers;            /*     0    16 */
-	struct spi_device *        spi;                  /*    16     8 */
-	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
+vim +/phy +263 drivers/char/tpm/tpm_tis_spi_main.c
 
-	/* XXX 7 bits hole, try to pack */
-	/* Bitfield combined with next fields */
+   259	
+   260	static int tpm_tis_spi_probe(struct spi_device *dev)
+   261	{
+   262		struct tpm_tis_spi_phy *phy;
+ > 263		struct spi_controller *ctlr = phy->spi_device->controller;
+   264		int irq;
+   265	
+   266		phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
+   267				   GFP_KERNEL);
+   268		if (!phy)
+   269			return -ENOMEM;
+   270	
+   271		phy->flow_control = tpm_tis_spi_flow_control;
+   272	
+   273		if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
+   274			phy->spi_device->mode |= SPI_TPM_HW_FLOW;
+   275	
+   276		/* If the SPI device has an IRQ then use that */
+   277		if (dev->irq > 0)
+   278			irq = dev->irq;
+   279		else
+   280			irq = -1;
+   281	
+   282		init_completion(&phy->ready);
+   283		return tpm_tis_spi_init(dev, phy, irq, &tpm_spi_phy_ops);
+   284	}
+   285	
 
-	bool                       prepared;             /*    25     1 */
-
-	/* XXX 2 bytes hole, try to pack */
-
-	int                        status;               /*    28     4 */
-	void                       (*complete)(void *);  /*    32     8 */
-	void *                     context;              /*    40     8 */
-	unsigned int               frame_length;         /*    48     4 */
-	unsigned int               actual_length;        /*    52     4 */
-	struct list_head           queue;                /*    56    16 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	void *                     state;                /*    72     8 */
-	struct list_head           resources;            /*    80    16 */
-
-	/* size: 96, cachelines: 2, members: 12 */
-	/* sum members: 93, holes: 1, sum holes: 2 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 7 bits */
-	/* last cacheline: 32 bytes */
-};
----
- include/linux/spi/spi.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 4fa26b9a3572..bdb35a91b4bf 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -1093,6 +1093,9 @@ struct spi_message {
- 
- 	unsigned		is_dma_mapped:1;
- 
-+	/* spi_prepare_message() was called for this message */
-+	bool			prepared;
-+
- 	/* REVISIT:  we might want a flag affecting the behavior of the
- 	 * last transfer ... allowing things like "read 16 bit length L"
- 	 * immediately followed by "read L bytes".  Basically imposing
-@@ -1105,11 +1108,11 @@ struct spi_message {
- 	 */
- 
- 	/* Completion is reported through a callback */
-+	int			status;
- 	void			(*complete)(void *context);
- 	void			*context;
- 	unsigned		frame_length;
- 	unsigned		actual_length;
--	int			status;
- 
- 	/* For optional use by whatever driver currently owns the
- 	 * spi_message ...  between calls to spi_async and then later
-@@ -1120,9 +1123,6 @@ struct spi_message {
- 
- 	/* List of spi_res reources when the spi message is processed */
- 	struct list_head        resources;
--
--	/* spi_prepare_message() was called for this message */
--	bool			prepared;
- };
- 
- static inline void spi_message_init_no_memset(struct spi_message *m)
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
