@@ -2,148 +2,244 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935996A76F2
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Mar 2023 23:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154F26A779D
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Mar 2023 00:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjCAWns (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Mar 2023 17:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S229501AbjCAXRz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Mar 2023 18:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCAWnr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Mar 2023 17:43:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762971A66B;
-        Wed,  1 Mar 2023 14:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677710623; x=1709246623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QcM62RcTYi5zvoGJymyxGLnQj3e1/GlbLkfJR0EShdo=;
-  b=AULRsfYdZyqxS0WG/ztpDuMe+RLMHl48R8BfLqGyDFI6H5TaPYd8R67V
-   Z95mlpIGr4Mye76jPSe45/f1eozgGTnl/FwyIHdnpIxiKqlph5yfh/lYn
-   AoQGjGx5meNOqXdL4Lwh9zQ/KlWsLImCVvMcf9uq4NiGmbQFKij7K0oHo
-   BTWMT7ftL+APcPI+NB1YWPHNod3pK4IJ9V/+gwun/cmAXVCY1rOP0+IMS
-   e3Xq9S9KnAkhNbXY2ttis8QN7vLj5ScYhwm6H9IrgRXOdUZDECzu1x+yt
-   7q2Bi/gTk9kPXGq/nXbyEJFcli9OT82dLrOCkUApe7RnhBQd0ICFdLqei
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="334571891"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="334571891"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:43:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848838873"
-X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
-   d="scan'208";a="848838873"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 14:43:37 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXVAe-0006TP-38;
-        Wed, 01 Mar 2023 22:43:36 +0000
-Date:   Thu, 2 Mar 2023 06:43:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
-        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: Re: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <202303020622.v3NqL5mg-lkp@intel.com>
-References: <20230301173353.28673-3-kyarlagadda@nvidia.com>
+        with ESMTP id S229868AbjCAXRx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Mar 2023 18:17:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0B6457C6;
+        Wed,  1 Mar 2023 15:17:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 672A7B81183;
+        Wed,  1 Mar 2023 23:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC06C433EF;
+        Wed,  1 Mar 2023 23:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677712668;
+        bh=a5p54BH4pGYiXavR+aIFVBU1D29SfcQwo6GgaAoUoPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mOl4c0nj89BA+58NY0R4VkaRxweQOYPTE2GLtYsVclHreqQI7Sz8bow96o4iJ8c0P
+         BY2xw5HYPD6pcP0yh87GJB5CVhPRjxR2MPBLfDRkZxsyX1l5aqcMJ/RlTRLNi66vxI
+         Bl8Xkg5JXdTXf3hdAfJ36j3wgKCPqw9JZ1YFDLA0RtlpxMagsJRIkLVR8TbkR3eZ2I
+         KvZNASV+1/+txQRmRNq4WjYukUnNawYKuQi9Px4epadSZ4M/MVbAY9s68/ZpF0DxTJ
+         C4veeSY7QrLKEZf3FvTiq3cxEUEfF0mANlcKCfC3mcCqCMbaS2bi/AQJ8eqSLyZyAg
+         4SSOAmrasF1+g==
+Date:   Thu, 2 Mar 2023 01:17:45 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Message-ID: <Y//dGe+uXnvNjkvn@kernel.org>
+References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
+ <20230227120702.13180-3-kyarlagadda@nvidia.com>
+ <Y/1oqr0RfD7KVA4y@kernel.org>
+ <DM4PR12MB5769BCBCD410C75DF3EB26FBC3AC9@DM4PR12MB5769.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230301173353.28673-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DM4PR12MB5769BCBCD410C75DF3EB26FBC3AC9@DM4PR12MB5769.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krishna,
+On Tue, Feb 28, 2023 at 03:32:24AM +0000, Krishna Yarlagadda wrote:
+> > -----Original Message-----
+> > From: Jarkko Sakkinen <jarkko@kernel.org>
+> > Sent: 28 February 2023 08:06
+> > To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> > Cc: robh+dt@kernel.org; broonie@kernel.org; peterhuewe@gmx.de;
+> > jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org;
+> > linux-tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
+> > <jonathanh@nvidia.com>; Sowjanya Komatineni
+> > <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
+> > Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+> > 
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
+> > > TPM devices raise wait signal on last addr cycle. This can be detected
+> > > by software driver by reading MISO line on same clock which requires
+> > > full duplex support. In case of half duplex controllers wait detection
+> > > has to be implemented in HW.
+> > > Support hardware wait state detection by sending entire message and let
+> > > controller handle flow control.
+> > 
+> > When a is started sentence with the word "support" it translates to "I'm
+> > too lazy to write a proper and verbose description of the implementation"
+> > :-)
+> > 
+> > It has some abstract ideas of the implementation, I give you that, but do
+> > you think anyone ever will get any value of reading that honestly? A bit
+> > more concrette description of the change helps e.g. when bisecting bugs.
+> > 
+> I presented why we are making the change. Will add explanation on how
+> it is implemented as well.
 
-Thank you for the patch! Perhaps something to improve:
+OK, cool, thank you.
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2 next-20230301]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> > > QSPI controller in Tegra236 & Tegra241 implement TPM wait polling.
+> > >
+> > > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> > > ---
+> > >  drivers/char/tpm/tpm_tis_spi_main.c | 92
+> > ++++++++++++++++++++++++++++-
+> > >  1 file changed, 90 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c
+> > b/drivers/char/tpm/tpm_tis_spi_main.c
+> > > index a0963a3e92bd..5f66448ee09e 100644
+> > > --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> > > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> > > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct
+> > tpm_tis_spi_phy *phy,
+> > >       return 0;
+> > >  }
+> > >
+> > > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> > > -                      u8 *in, const u8 *out)
+> > > +/*
+> > > + * Half duplex controller with support for TPM wait state detection like
+> > > + * Tegra241 need cmd, addr & data sent in single message to manage HW
+> > flow
+> > > + * control. Each phase sent in different transfer for controller to idenity
+> > > + * phase.
+> > > + */
+> > > +int tpm_tis_spi_hw_flow_transfer(struct tpm_tis_data *data, u32 addr,
+> > u16 len,
+> > > +                              u8 *in, const u8 *out)
+> > > +{
+> > > +     struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> > > +     struct spi_transfer spi_xfer[3];
+> > > +     struct spi_message m;
+> > > +     u8 transfer_len;
+> > > +     int ret;
+> > > +
+> > > +     while (len) {
+> > > +             transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+> > > +
+> > > +             spi_message_init(&m);
+> > > +             phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+> > > +             phy->iobuf[1] = 0xd4;
+> > > +             phy->iobuf[2] = addr >> 8;
+> > > +             phy->iobuf[3] = addr;
+> > > +
+> > > +             memset(&spi_xfer, 0, sizeof(spi_xfer));
+> > > +
+> > > +             spi_xfer[0].tx_buf = phy->iobuf;
+> > > +             spi_xfer[0].len = 1;
+> > > +             spi_message_add_tail(&spi_xfer[0], &m);
+> > > +
+> > > +             spi_xfer[1].tx_buf = phy->iobuf + 1;
+> > > +             spi_xfer[1].len = 3;
+> > > +             spi_message_add_tail(&spi_xfer[1], &m);
+> > > +
+> > > +             if (out) {
+> > > +                     spi_xfer[2].tx_buf = &phy->iobuf[4];
+> > > +                     spi_xfer[2].rx_buf = NULL;
+> > > +                     memcpy(&phy->iobuf[4], out, transfer_len);
+> > > +                     out += transfer_len;
+> > > +             }
+> > > +
+> > > +             if (in) {
+> > > +                     spi_xfer[2].tx_buf = NULL;
+> > > +                     spi_xfer[2].rx_buf = &phy->iobuf[4];
+> > > +             }
+> > > +
+> > > +             spi_xfer[2].len = transfer_len;
+> > > +             spi_message_add_tail(&spi_xfer[2], &m);
+> > > +
+> > > +             reinit_completion(&phy->ready);
+> > > +
+> > > +             ret = spi_sync_locked(phy->spi_device, &m);
+> > > +             if (ret < 0)
+> > > +                     return ret;
+> > > +
+> > > +             if (in) {
+> > > +                     memcpy(in, &phy->iobuf[4], transfer_len);
+> > > +                     in += transfer_len;
+> > > +             }
+> > > +
+> > > +             len -= transfer_len;
+> > > +     }
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +int tpm_tis_spi_sw_flow_transfer(struct tpm_tis_data *data, u32 addr,
+> > u16 len,
+> > > +                              u8 *in, const u8 *out)
+> > >  {
+> > >       struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> > >       int ret = 0;
+> > > @@ -140,6 +206,28 @@ int tpm_tis_spi_transfer(struct tpm_tis_data
+> > *data, u32 addr, u16 len,
+> > >       return ret;
+> > >  }
+> > >
+> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> > > +                      u8 *in, const u8 *out)
+> > > +{
+> > > +     struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> > > +     struct spi_controller *ctlr = phy->spi_device->controller;
+> > > +
+> > > +     /*
+> > > +      * TPM flow control over SPI requires full duplex support.
+> > > +      * Send entire message to a half duplex controller to handle
+> > > +      * wait polling in controller.
+> > > +      * Set TPM HW flow control flag..
+> > > +      */
+> > > +     if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
+> > > +             phy->spi_device->mode |= SPI_TPM_HW_FLOW;
+> > > +             return tpm_tis_spi_hw_flow_transfer(data, addr, len, in,
+> > > +                                                 out);
+> > > +     } else {
+> > > +             return tpm_tis_spi_sw_flow_transfer(data, addr, len, in,
+> > > +                                                 out);
+> > > +     }
+> > > +}
+> > > +
+> > >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
+> > >                                 u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
+> > >  {
+> > > --
+> > > 2.17.1
+> > >
+> > 
+> > Looking pretty good but do you really want to export
+> > tpm_tis_spi_{hw,sw}_flow_transfer?
+> > 
+> > BR, Jarkko
+> No need to export tpm_tis_spi_{hw,sw}_flow_transfer as well.
+> I will update this in next version.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20230301173353.28673-3-kyarlagadda%40nvidia.com
-patch subject: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020622.v3NqL5mg-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d47344c6b9ab634483742457f6692b01f02c4698
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
-        git checkout d47344c6b9ab634483742457f6692b01f02c4698
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/char/tpm/
+Great.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303020622.v3NqL5mg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/char/tpm/tpm_tis_spi_main.c:335:36: warning: 'acpi_tis_spi_match' defined but not used [-Wunused-const-variable=]
-     335 | static const struct acpi_device_id acpi_tis_spi_match[] = {
-         |                                    ^~~~~~~~~~~~~~~~~~
-   drivers/char/tpm/tpm_tis_spi_main.c: In function 'tpm_tis_spi_probe':
->> drivers/char/tpm/tpm_tis_spi_main.c:263:42: warning: 'phy' is used uninitialized [-Wuninitialized]
-     263 |         struct spi_controller *ctlr = phy->spi_device->controller;
-         |                                       ~~~^~~~~~~~~~~~
-   drivers/char/tpm/tpm_tis_spi_main.c:262:33: note: 'phy' was declared here
-     262 |         struct tpm_tis_spi_phy *phy;
-         |                                 ^~~
-
-
-vim +/phy +263 drivers/char/tpm/tpm_tis_spi_main.c
-
-   259	
-   260	static int tpm_tis_spi_probe(struct spi_device *dev)
-   261	{
-   262		struct tpm_tis_spi_phy *phy;
- > 263		struct spi_controller *ctlr = phy->spi_device->controller;
-   264		int irq;
-   265	
-   266		phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
-   267				   GFP_KERNEL);
-   268		if (!phy)
-   269			return -ENOMEM;
-   270	
-   271		phy->flow_control = tpm_tis_spi_flow_control;
-   272	
-   273		if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-   274			phy->spi_device->mode |= SPI_TPM_HW_FLOW;
-   275	
-   276		/* If the SPI device has an IRQ then use that */
-   277		if (dev->irq > 0)
-   278			irq = dev->irq;
-   279		else
-   280			irq = -1;
-   281	
-   282		init_completion(&phy->ready);
-   283		return tpm_tis_spi_init(dev, phy, irq, &tpm_spi_phy_ops);
-   284	}
-   285	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+BR, Jarkko
