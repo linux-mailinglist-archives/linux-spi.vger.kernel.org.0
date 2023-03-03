@@ -2,55 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36566A9DB6
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5496A9DEB
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjCCRaW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 3 Mar 2023 12:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S231458AbjCCRo5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Mar 2023 12:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCCRaU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:30:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F6E858B59
-        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:30:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60B47106F;
-        Fri,  3 Mar 2023 09:31:02 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03EEB3F67D;
-        Fri,  3 Mar 2023 09:30:17 -0800 (PST)
-Date:   Fri, 3 Mar 2023 17:30:15 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        with ESMTP id S231444AbjCCRox (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:44:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D98B13516
+        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:44:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B880B8191E
+        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 17:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6517CC433EF;
+        Fri,  3 Mar 2023 17:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677865490;
+        bh=xud2gjW8VOUUIuL3oEVZaetezfIAxATDZm0MEYpXJ04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QkI9UA1D+NMSFv2UV4A7tlAYDYtfXBKmL2vzeX+TSNht1hgVo/7uekqpsvLYIfdCr
+         Gm3IIdc4s46pt1ZxFe0ujEsfZ0RCAsdNHpz/InR1tV5kkeg8KiU5M/AZtYiQog4TkJ
+         b9YOH1/S6jnsAO//qcNfpCD8R76OlFLBR71BAWfukVCF9UkAPdG/vS50c13SVYYmct
+         QxQeHZBX1XR5FEoFMCZnRratoeE/F2Ecud+zRfzKp+mSlwHwzAcDH6h8i1fgrz9mlB
+         i2lK9E2edvRYvsa2moTadXj/EYVs27VSRnNQ3xmOLpnwUcfLHZn6IU0iiqO29l3T8G
+         lNMvsKDTXJHFw==
+Date:   Fri, 3 Mar 2023 17:44:45 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
-Subject: Re: [PATCH 75/87] spi: sun6i: Convert to platform remove callback
- returning void
-Message-ID: <20230303173015.620567b2@donnerap.cambridge.arm.com>
-In-Reply-To: <20230303172041.2103336-76-u.kleine-koenig@pengutronix.de>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 37/87] spi: microchip-core: Convert to platform remove
+ callback returning void
+Message-ID: <7aee8e72-d7f5-4f13-8b8b-81feaf394ce7@spud>
 References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
-        <20230303172041.2103336-76-u.kleine-koenig@pengutronix.de>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+ <20230303172041.2103336-38-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="iAZQem5ygUBbukJK"
+Content-Disposition: inline
+In-Reply-To: <20230303172041.2103336-38-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri,  3 Mar 2023 18:20:29 +0100
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
+--iAZQem5ygUBbukJK
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 03, 2023 at 06:19:51PM +0100, Uwe Kleine-K=F6nig wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -58,49 +73,69 @@ Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 > quest to make the remove callback return void. In the first step of this
 > quest all drivers are converted to .remove_new() which already returns
 > void.
-> 
+>=20
 > Trivially convert this driver from always returning zero in the remove
 > callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Cheers,
-Andre
+Thanks,
+Conor.
 
 > ---
->  drivers/spi/spi-sun6i.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-> index 23ad052528db..43c29afea6bb 100644
-> --- a/drivers/spi/spi-sun6i.c
-> +++ b/drivers/spi/spi-sun6i.c
-> @@ -683,7 +683,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
->  	return ret;
+>  drivers/spi/spi-microchip-core.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip=
+-core.c
+> index aeaa1da88f39..e6cf6ff08061 100644
+> --- a/drivers/spi/spi-microchip-core.c
+> +++ b/drivers/spi/spi-microchip-core.c
+> @@ -566,7 +566,7 @@ static int mchp_corespi_probe(struct platform_device =
+*pdev)
+>  	return 0;
 >  }
->  
-> -static int sun6i_spi_remove(struct platform_device *pdev)
-> +static void sun6i_spi_remove(struct platform_device *pdev)
+> =20
+> -static int mchp_corespi_remove(struct platform_device *pdev)
+> +static void mchp_corespi_remove(struct platform_device *pdev)
 >  {
->  	struct spi_master *master = platform_get_drvdata(pdev);
->  
-> @@ -693,7 +693,6 @@ static int sun6i_spi_remove(struct platform_device *pdev)
->  		dma_release_channel(master->dma_tx);
->  	if (master->dma_rx)
->  		dma_release_channel(master->dma_rx);
+>  	struct spi_master *master  =3D platform_get_drvdata(pdev);
+>  	struct mchp_corespi *spi =3D spi_master_get_devdata(master);
+> @@ -574,8 +574,6 @@ static int mchp_corespi_remove(struct platform_device=
+ *pdev)
+>  	mchp_corespi_disable_ints(spi);
+>  	clk_disable_unprepare(spi->clk);
+>  	mchp_corespi_disable(spi);
+> -
 > -	return 0;
 >  }
->  
->  static const struct of_device_id sun6i_spi_match[] = {
-> @@ -710,7 +709,7 @@ static const struct dev_pm_ops sun6i_spi_pm_ops = {
->  
->  static struct platform_driver sun6i_spi_driver = {
->  	.probe	= sun6i_spi_probe,
-> -	.remove	= sun6i_spi_remove,
-> +	.remove_new = sun6i_spi_remove,
->  	.driver	= {
->  		.name		= "sun6i-spi",
->  		.of_match_table	= sun6i_spi_match,
+> =20
+>  #define MICROCHIP_SPI_PM_OPS (NULL)
+> @@ -599,7 +597,7 @@ static struct platform_driver mchp_corespi_driver =3D=
+ {
+>  		.pm =3D MICROCHIP_SPI_PM_OPS,
+>  		.of_match_table =3D of_match_ptr(mchp_corespi_dt_ids),
+>  	},
+> -	.remove =3D mchp_corespi_remove,
+> +	.remove_new =3D mchp_corespi_remove,
+>  };
+>  module_platform_driver(mchp_corespi_driver);
+>  MODULE_DESCRIPTION("Microchip coreSPI SPI controller driver");
+> --=20
+> 2.39.1
+>=20
 
+--iAZQem5ygUBbukJK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAIyDQAKCRB4tDGHoIJi
+0gjEAP4iTpLd9NzvzdbUUnK7BPLTDps60QAtbMaVC690u8EhgwEAzXhkz29RTq/J
+uXXQX+BftEtLzsAEQ+xwTcJo//Xe2Ag=
+=dG4f
+-----END PGP SIGNATURE-----
+
+--iAZQem5ygUBbukJK--
