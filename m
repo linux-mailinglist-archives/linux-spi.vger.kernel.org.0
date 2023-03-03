@@ -2,43 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431276A9D39
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851AE6A9D7B
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjCCRVT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Mar 2023 12:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S231598AbjCCRWR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Mar 2023 12:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjCCRVJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:21:09 -0500
+        with ESMTP id S231157AbjCCRVo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:21:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A14391F
-        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:21:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111F4D62F
+        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:21:22 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95b-0006tp-LR; Fri, 03 Mar 2023 18:21:03 +0100
+        id 1pY95d-0006zL-5A; Fri, 03 Mar 2023 18:21:05 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95a-001bmn-Jd; Fri, 03 Mar 2023 18:21:02 +0100
+        id 1pY95b-001bnH-TU; Fri, 03 Mar 2023 18:21:03 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95Z-001tlJ-Pv; Fri, 03 Mar 2023 18:21:01 +0100
+        id 1pY95Z-001tlN-Vr; Fri, 03 Mar 2023 18:21:01 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 54/87] spi: ppc4xx: Convert to platform remove callback returning void
-Date:   Fri,  3 Mar 2023 18:20:08 +0100
-Message-Id: <20230303172041.2103336-55-u.kleine-koenig@pengutronix.de>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 55/87] spi: pxa2xx: Convert to platform remove callback returning void
+Date:   Fri,  3 Mar 2023 18:20:09 +0100
+Message-Id: <20230303172041.2103336-56-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
 References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1813; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=tC2otOylt51PYMHjIuRFgHI9ye83HjbKhT0Og66FB4I=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAivcYOoi30HPYjfIfti2fTkcG88B37Xg2QdXY KUG7lNuOZiJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAIr3AAKCRDB/BR4rcrs CSZmB/9mS2tiYS8Z/MrC7P2xPdLwsIZHZF4fOwHc91B4VX6HWW3Sv9XO2ZF5iA+mmEdsChN0q9p FTkXAzeRZj3WqVnDxQ5LBbIZ3ePIpk71NiVYQlDZcaMdK0T2o21KzxHgPTjlqGrUos79lkFVVkX 3U5o03m81dFZ0ihBL+RM5ZEOiZ3duT6LoCZoxk0lPGfrC/4/Jc/Xc7xbu/ESxGkDW5PBSNzypoG DgnBFubVjBHkBxcEso6LctbJ/kEyIgT0ycOBaa12OfUwk0f+9AWOXMFY9MpHjVPTWE39XNMmAR5 mb5H7AsF80phdxCz3Je6HJYFeVbFWZIUyrDsmJpFS6KnF6OZ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1726; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=cfAQbVsukiD70ufHL0JB6MzHRyk5ItfVack94AX7bTk=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAivg4TDFtLosRPByFAO/KazfGn0zLVxPpaHB7 bg36KK9VoyJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAIr4AAKCRDB/BR4rcrs CeXsB/0VxEWZ9Pr2d+qnSUKYlUR5LKANES5SkJGd0NKt2Ebag7Gcdgk7wq2oHUXTPtMcwaBhdnq +3vNVkslPZnW1qCFCxlJNfkhkWjp5mIGykcFP6zx+V9cJ2/sIbm9oYOEfAnXptzqb5vCvy0m+4V R4ZeK0zqNPYHTX3OtHzZspjNQKbLci1dgo0nP2SLqSp2WnSUnAHz9R7/hEdrg45KJbFKjkEwAMV 7YI5zacCo5vmPZz5vGpDhe+wI2mFzyv8NF+1+BXJEXgml8dshC57HOjg4nQd2gww4VRWAwAwmcV eEyLgYICHIjgUkBupg4jjzfyy6+yrwFbkna7yY/KHymZqz55
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,39 +70,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/spi/spi-ppc4xx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-ppc4xx.c b/drivers/spi/spi-ppc4xx.c
-index d65f047b6c82..d725e915025d 100644
---- a/drivers/spi/spi-ppc4xx.c
-+++ b/drivers/spi/spi-ppc4xx.c
-@@ -464,7 +464,7 @@ static int spi_ppc4xx_of_probe(struct platform_device *op)
- 	return ret;
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 32cc82a89ec1..a75ba2993f3c 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1659,7 +1659,7 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
+ 	return status;
  }
  
--static int spi_ppc4xx_of_remove(struct platform_device *op)
-+static void spi_ppc4xx_of_remove(struct platform_device *op)
+-static int pxa2xx_spi_remove(struct platform_device *pdev)
++static void pxa2xx_spi_remove(struct platform_device *pdev)
  {
- 	struct spi_master *master = platform_get_drvdata(op);
- 	struct ppc4xx_spi *hw = spi_master_get_devdata(master);
-@@ -474,7 +474,6 @@ static int spi_ppc4xx_of_remove(struct platform_device *op)
- 	free_irq(hw->irqnum, hw);
- 	iounmap(hw->regs);
- 	spi_master_put(master);
+ 	struct driver_data *drv_data = platform_get_drvdata(pdev);
+ 	struct ssp_device *ssp = drv_data->ssp;
+@@ -1684,8 +1684,6 @@ static int pxa2xx_spi_remove(struct platform_device *pdev)
+ 
+ 	/* Release SSP */
+ 	pxa_ssp_free(ssp);
+-
 -	return 0;
  }
  
- static const struct of_device_id spi_ppc4xx_of_match[] = {
-@@ -486,7 +485,7 @@ MODULE_DEVICE_TABLE(of, spi_ppc4xx_of_match);
+ static int pxa2xx_spi_suspend(struct device *dev)
+@@ -1770,7 +1768,7 @@ static struct platform_driver driver = {
+ 		.of_match_table = of_match_ptr(pxa2xx_spi_of_match),
+ 	},
+ 	.probe = pxa2xx_spi_probe,
+-	.remove = pxa2xx_spi_remove,
++	.remove_new = pxa2xx_spi_remove,
+ };
  
- static struct platform_driver spi_ppc4xx_of_driver = {
- 	.probe = spi_ppc4xx_of_probe,
--	.remove = spi_ppc4xx_of_remove,
-+	.remove_new = spi_ppc4xx_of_remove,
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = spi_ppc4xx_of_match,
+ static int __init pxa2xx_spi_init(void)
 -- 
 2.39.1
 
