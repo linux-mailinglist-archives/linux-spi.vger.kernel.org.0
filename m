@@ -2,75 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2F56A9D8C
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA34A6A9D90
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCCRY0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Mar 2023 12:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S230228AbjCCRY6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Mar 2023 12:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjCCRYL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:24:11 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6FC474F5
-        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:24:10 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n6so3406051plf.5
-        for <linux-spi@vger.kernel.org>; Fri, 03 Mar 2023 09:24:10 -0800 (PST)
+        with ESMTP id S231641AbjCCRYw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:24:52 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6F4DE31
+        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:24:51 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id y2so3235018pjg.3
+        for <linux-spi@vger.kernel.org>; Fri, 03 Mar 2023 09:24:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677864250;
+        d=gmail.com; s=20210112; t=1677864291;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
         bh=Cflsrsd4DH35NrBMKE9wKoAedVoIv4Gk+lJYLvS7AbE=;
-        b=ZY1Xtp+N75Q7MyCANI2IrEDd87x3yZ712Nqtywzyc9SjC1IBrjJ0MvRZ5zwI71ZWJ5
-         YZB2MRHDIxtcccUUsAm3slWjPFxA5xxOgpNNLUEXVdtvn95Cj4iGsERUyQuZo1W9u/Yr
-         F733yZUgwNOLRdQbb0lRVjxwZRalizkTrdQ7GETdoM+sM10Ox1Nk38pNKhw6fxb3L0QQ
-         7WmXJpZMeqGsUbHcCTsXMmkWkt9iFxAduzkCNEXnm/YxtPR9lFh0fp8bhGcq0mtvO3qI
-         LXkV/4we+zRW10lLwoWDTWDnYCrl7kwKfjIAtoLCUTPVInbUPAkgS3Bj1Gs1FF8H0kcJ
-         ke8w==
+        b=Rgb9yXHizvp/HqKe2uFUcK9e2lweS1kO1LSw1MLvLTk5GSH8oGzoKstcAHMxwDNLi9
+         g7wrW0Ffin5vXYtpbmZyX+daRGbI0xlX5Nhp78YoVvbQj31rW63Q2GI03EiJ0rmUxaRk
+         nKiBSbF4xbh5cYUCmgsMjvPlWn4Dtsa8D2EP7BfltS4kqXb1Ab0WJFKGHApM1hluGqaY
+         tommTiQ48Zdr85R1DaHHczwweuMAnp7cnwhYeEbz1mGxGEj2qjxBgerxgEmCe5k6Etwo
+         iclBBvVhfGLMCttEJU+rnW9aypEFSk63cP1XQygW2Vd7yVm85dIe2R5XAYMR4ZzgJIGV
+         MENw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677864250;
+        d=1e100.net; s=20210112; t=1677864291;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=Cflsrsd4DH35NrBMKE9wKoAedVoIv4Gk+lJYLvS7AbE=;
-        b=ZVQVP5wZReomXcvwCIr9xZ9ooYSw/3zNhaNstJIETV2BB3iv9Ia+BviW0ESqnGbSp9
-         WdmbalN9H29lZ9eHFxkdJWu2jFvHnaMpopM7Fvo2rVhx1D8YieEnZxv+GkMu8+OQ59on
-         tcIbVB4YsnOF/uDrCVjKcCmujf4jqcqlamdKYBofUHEvWzCh5Ie1sIEcDhg02JNp2H/M
-         x2tIPU20cJZ8WNjVQ6tTRBgE/PZptbFljfUnhXuKW4wKLek9JWtsai7M1lL1Y3TfcdOD
-         YnYn9p7JGVIvVW0ttbt9AP07g+gGEKhTu2+0/1FfpDCinvCjR4yfZwDjJSE31K6vDhnA
-         BLnQ==
-X-Gm-Message-State: AO0yUKVBxeUDvn9X6LO6SRr7lYI+dTIVtw3JGO6l0Q5t8neU8hT0rd7W
-        QmCJ3ObEvLYpyDdCGGk/M4Y=
-X-Google-Smtp-Source: AK7set9R6y1aCmfUQFnyaYHIK6E66YJuzqKmIw3LYqznsYnLSJm2evM1lmug9fkaN9iaB4qqKLLFqA==
-X-Received: by 2002:a05:6a20:394b:b0:b8:c6ec:a269 with SMTP id r11-20020a056a20394b00b000b8c6eca269mr3293755pzg.16.1677864249926;
-        Fri, 03 Mar 2023 09:24:09 -0800 (PST)
+        b=bfqIUypGA+E1qjhS3nboSxUmlULjObNMOMzQTeR0okKMhY2ndYBm5yqr92ZZ2LR7Ka
+         EZ1BJhgwe9KhI7N5vipszmYZWmv0n3z28E4C6VXYdbleK2pvGSrezcGlH3cPVuQ287f1
+         lq4d/DYzXYBrTTjwtsjWU82dvOq5WAa1iuc7cXwi+ZiHyYtBOqlGpNP7FZoFk/Qj58Bs
+         gu4S4ngrq8AgKI5IsY26aM9tAvXAoTNfjxFtchRuDXnoVvXPbmsmFVwPBSwNCXwcGn8g
+         EJ8YmXkuBM2fGBAD1UkJKX2PCg9OhyQMk7dVodlVSey5vToZxgVof7QMHljdpOxjfaGZ
+         a2Vg==
+X-Gm-Message-State: AO0yUKUGXtDencXZ/4aRfEVHtB3BmGbrkoE4v/v5TQb1utlt40STL4bX
+        WepcdWee/ehkOt81oMuWKtY=
+X-Google-Smtp-Source: AK7set9NhleWNBOUJFKGVyS4QRS1NFQM1NSQwa8Lhrm1/AN/w+xlp6iXL2eXy14+BZSfF8B5NU8wiA==
+X-Received: by 2002:a05:6a20:548a:b0:cb:e735:65a5 with SMTP id i10-20020a056a20548a00b000cbe73565a5mr3613077pzk.40.1677864291021;
+        Fri, 03 Mar 2023 09:24:51 -0800 (PST)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w18-20020a63af12000000b004fbdfdffa40sm1814399pge.87.2023.03.03.09.24.08
+        by smtp.googlemail.com with ESMTPSA id d13-20020a63ed0d000000b00503006d9b50sm1772574pgi.92.2023.03.03.09.24.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 09:24:09 -0800 (PST)
-Message-ID: <1b96cf73-2d96-c70f-b4b0-8f95ad85951f@gmail.com>
-Date:   Fri, 3 Mar 2023 09:24:07 -0800
+        Fri, 03 Mar 2023 09:24:50 -0800 (PST)
+Message-ID: <059df7ce-4d5b-abbe-1630-df775fd52dca@gmail.com>
+Date:   Fri, 3 Mar 2023 09:24:48 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 13/87] spi: bcmbca-hsspi: Convert to platform remove
+Subject: Re: [PATCH 14/87] spi: brcmstb-qspi: Convert to platform remove
  callback returning void
 Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Mark Brown <broonie@kernel.org>
 Cc:     Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
 References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
- <20230303172041.2103336-14-u.kleine-koenig@pengutronix.de>
+ <20230303172041.2103336-15-u.kleine-koenig@pengutronix.de>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230303172041.2103336-14-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230303172041.2103336-15-u.kleine-koenig@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
