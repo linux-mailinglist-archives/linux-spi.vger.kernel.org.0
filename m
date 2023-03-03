@@ -2,116 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27B36AA569
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Mar 2023 00:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CF56AA5B7
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Mar 2023 00:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjCCXKH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Mar 2023 18:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S229692AbjCCXlL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Mar 2023 18:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjCCXKH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 18:10:07 -0500
-Received: from smtpout2.mo529.mail-out.ovh.net (smtpout2.mo529.mail-out.ovh.net [79.137.123.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D345EF9B
-        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 15:10:05 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.138.188])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id E32522147F;
-        Fri,  3 Mar 2023 21:52:42 +0000 (UTC)
-Received: from kaod.org (37.59.142.95) by DAG4EX2.mxp5.local (172.16.2.32)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 3 Mar
- 2023 22:52:41 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-95G001d732c472-8cab-4b6b-bb7d-bfc5848c7217,
-                    D247C90D5DACFD620130D6A3F59DE8A1FE9C6D23) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 86.250.25.177
-Message-ID: <6a1826c6-3951-03eb-d38c-56e7517c3c6e@kaod.org>
-Date:   Fri, 3 Mar 2023 22:52:41 +0100
+        with ESMTP id S229703AbjCCXlK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 18:41:10 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1F367817
+        for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 15:41:08 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id i34so16576001eda.7
+        for <linux-spi@vger.kernel.org>; Fri, 03 Mar 2023 15:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yMNrZUp6pzMsmCIoeKDAki7FuOXM5/PO0f2N1n3xENo=;
+        b=Gke87oANQT5GpbGgDOYrs+zl7R4QeSxtcAbfDZX4/SLj63HpyKS0gItIdeZqgDFfnx
+         Jcvh+eVekTl10KlChVgiZWYKKYV0NrG9jBs/lYC27Co0/knP6Z8zLhBwPLMZhPFHQlMi
+         25i6zGeSjVG/IelJI5qZAQPAvbuk8FOkAOPpO62v43b3pHRs99IWs3dC2bDk8Hthb+Ml
+         GUpb60f6CCWiyzhJYk+OzC0DCQLdI4jr5kObO5q8jJDFT5dzVEAEtAWiigiqE9U5PcHN
+         +26u7YQg/iHnR0fQe+B1tOYgzxfnNGZ3MDb5UVMLAd1ogSIBcHqTtIDIjQBZtAyNGqFE
+         uqxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMNrZUp6pzMsmCIoeKDAki7FuOXM5/PO0f2N1n3xENo=;
+        b=ta8QNEu2t1Q3h0iBfQNbv8XWrpZ+8gFM2/Id2EUb4QuRZ4kKlmpHc9fxIkWRXWPdtC
+         HnU2QWDHCsvtNH8GZQ1smKI9YGM8QAh9jRQeL2UVv9aaRzai85GhA75OIEz0UEL+DZg+
+         hpsMlGUd3ngIyZQxTLCWXIxUwWzVbEApIZFELl+rs+XT8DUmv/rOg1k2oKDQ7j0rkNZh
+         MWFB3oNaDbcbvEmKKF225UNNiaEgliJRjt28xlzFEqQnaoAxfBk0M4SBsApvx4pe6jdb
+         dvTmPO7s+X9cvzUl6enY+sxIrvKrwg9I9PhlcAYVEsg6sB1ygOQXE9M1j2O9AmAmhY5g
+         641A==
+X-Gm-Message-State: AO0yUKUQZRarKTpZqA69UDpaTdwL3DJdmSPps1Rvj6OtiFVk4ubtVi09
+        YHmbF9kI6jrUdBg4Bts/XGlSYQ==
+X-Google-Smtp-Source: AK7set8R5K0Uxk42QxMR14lIf20ANl3YTOCrvpvH4LIk+JBOzaYhoc1dhxDaczVoPUaJ+pKQ9+171A==
+X-Received: by 2002:a17:906:d542:b0:8b2:e93:3f59 with SMTP id cr2-20020a170906d54200b008b20e933f59mr3843838ejc.31.1677886866782;
+        Fri, 03 Mar 2023 15:41:06 -0800 (PST)
+Received: from [10.203.3.194] ([185.202.34.81])
+        by smtp.gmail.com with ESMTPSA id ca5-20020a170906a3c500b008bc2c2134c5sm1452968ejb.216.2023.03.03.15.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 15:41:06 -0800 (PST)
+Message-ID: <d5e39671-fe26-e136-4ba0-fa5324414799@linaro.org>
+Date:   Sat, 4 Mar 2023 01:41:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 03/87] spi: aspeed-smc: Convert to platform remove
- callback returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>
-CC:     Andrew Jeffery <andrew@aj.id.au>, <linux-aspeed@lists.ozlabs.org>,
-        <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel@pengutronix.de>
-References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
- <20230303172041.2103336-4-u.kleine-koenig@pengutronix.de>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20230303172041.2103336-4-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.95]
-X-ClientProxiedBy: DAG5EX1.mxp5.local (172.16.2.41) To DAG4EX2.mxp5.local
- (172.16.2.32)
-X-Ovh-Tracer-GUID: 827e19ec-485e-4362-bb35-131486e0838d
-X-Ovh-Tracer-Id: 7794042108611103666
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgudegkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitgcunfgvucfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepffdufeeliedujeeffffhjeffiefghffhhfdvkeeijeehledvueffhfejtdehgeegnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrdelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegtlhhgsehkrghougdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepuhdrkhhlvghinhgvqdhkohgvnhhighesphgvnhhguhhtrhhonhhigidruggvpdgthhhinhdqthhinhhgpghkuhhosegrshhpvggvughtvggthhdrtghomhdpsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhjohgvlhesjhhmshdrihgurdgruhdprghnughrvgifsegrjhdrihgurdgruhdplhhinhhugidqrghsphgvvggusehlihhsthhsrdhoiihlrggsshdrohhrghdpohhpvghnsghmtgeslhhishhtshdrohiilhgrsghsrdhorhhgpdhlihhnuhigqdhsphhisehvghgvrhdrkh
- gvrhhnvghlrdhorhhgpdhlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdpkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdpoffvtefjohhsthepmhhohedvledpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dt-bindings: yamllint: Require a space after a comment
+ '#'
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org,
+        linux-spi@vger.kernel.org
+References: <20230303214223.49451-1-robh@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230303214223.49451-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 3/3/23 18:19, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
+On 03/03/2023 23:42, Rob Herring wrote:
+> Enable yamllint to check the prefered commenting style of requiring a
+> space after a comment character '#'. Fix the cases in the tree which
+> have a warning with this enabled. Most cases just need a space after the
+> '#'. A couple of cases with comments which were not intended to be
+> comments are revealed. Those were in ti,sa2ul.yaml, ti,cal.yaml, and
+> brcm,bcmgenet.yaml.
 > 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Acked-by: Cédric Le Goater <clg@kaod.org>
-
-Thanks,
-
-C.
-
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/spi/spi-aspeed-smc.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index 873ff2cf72c9..3f2548860317 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -787,13 +787,12 @@ static int aspeed_spi_probe(struct platform_device *pdev)
->   	return ret;
->   }
->   
-> -static int aspeed_spi_remove(struct platform_device *pdev)
-> +static void aspeed_spi_remove(struct platform_device *pdev)
->   {
->   	struct aspeed_spi *aspi = platform_get_drvdata(pdev);
->   
->   	aspeed_spi_enable(aspi, false);
->   	clk_disable_unprepare(aspi->clk);
-> -	return 0;
->   }
->   
->   /*
-> @@ -1201,7 +1200,7 @@ MODULE_DEVICE_TABLE(of, aspeed_spi_matches);
->   
->   static struct platform_driver aspeed_spi_driver = {
->   	.probe			= aspeed_spi_probe,
-> -	.remove			= aspeed_spi_remove,
-> +	.remove_new		= aspeed_spi_remove,
->   	.driver	= {
->   		.name		= DEVICE_NAME,
->   		.of_match_table = aspeed_spi_matches,
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Rob Clark <robdclark@gmail.com>
+> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Sean Paul <sean@poorly.run>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Conor Dooley <conor.dooley@microchip.com>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: freedreno@lists.freedesktop.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-spi@vger.kernel.org
+> ---
+>   Documentation/devicetree/bindings/.yamllint   |  2 +-
+>   .../bindings/clock/qcom,a53pll.yaml           |  4 ++--
+>   .../devicetree/bindings/crypto/ti,sa2ul.yaml  |  4 ++--
+>   .../bindings/display/msm/qcom,mdp5.yaml       |  2 +-
+>   .../interrupt-controller/arm,gic.yaml         |  4 ++--
+>   .../loongson,pch-msi.yaml                     |  2 +-
+>   .../bindings/media/renesas,vin.yaml           |  4 ++--
+>   .../devicetree/bindings/media/ti,cal.yaml     |  4 ++--
+>   .../bindings/net/brcm,bcmgenet.yaml           |  2 --
+>   .../bindings/net/cortina,gemini-ethernet.yaml |  6 ++---
+>   .../devicetree/bindings/net/mdio-gpio.yaml    |  4 ++--
+>   .../phy/marvell,armada-cp110-utmi-phy.yaml    |  2 +-
+>   .../bindings/phy/phy-stm32-usbphyc.yaml       |  2 +-
+>   .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      |  2 +-
+>   .../bindings/pinctrl/pinctrl-mt8192.yaml      |  2 +-
+>   .../regulator/nxp,pca9450-regulator.yaml      |  8 +++----
+>   .../regulator/rohm,bd71828-regulator.yaml     | 20 ++++++++--------
+>   .../regulator/rohm,bd71837-regulator.yaml     |  6 ++---
+>   .../regulator/rohm,bd71847-regulator.yaml     |  6 ++---
+>   .../bindings/soc/renesas/renesas.yaml         |  2 +-
+>   .../devicetree/bindings/soc/ti/ti,pruss.yaml  |  2 +-
+>   .../bindings/sound/amlogic,axg-tdm-iface.yaml |  2 +-
+>   .../bindings/sound/qcom,lpass-rx-macro.yaml   |  4 ++--
+>   .../bindings/sound/qcom,lpass-tx-macro.yaml   |  4 ++--
+>   .../bindings/sound/qcom,lpass-va-macro.yaml   |  4 ++--
+>   .../sound/qcom,q6dsp-lpass-ports.yaml         |  2 +-
+>   .../bindings/sound/simple-card.yaml           | 24 +++++++++----------
+>   .../bindings/spi/microchip,mpfs-spi.yaml      |  2 +-
+>   28 files changed, 65 insertions(+), 67 deletions(-)
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> # drm/msm
+(and other Qualcom-specific schemas)
+
+-- 
+With best wishes
+Dmitry
 
