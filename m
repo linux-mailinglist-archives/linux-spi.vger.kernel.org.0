@@ -2,46 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BC6A9D50
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE116A9D52
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Mar 2023 18:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjCCRV3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Mar 2023 12:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S230523AbjCCRVa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Mar 2023 12:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjCCRVN (ORCPT
+        with ESMTP id S231607AbjCCRVN (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Mar 2023 12:21:13 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323044FA90
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EF515C1
         for <linux-spi@vger.kernel.org>; Fri,  3 Mar 2023 09:21:09 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95e-00071m-D4; Fri, 03 Mar 2023 18:21:06 +0100
+        id 1pY95e-00072T-PP; Fri, 03 Mar 2023 18:21:06 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95d-001bns-BD; Fri, 03 Mar 2023 18:21:05 +0100
+        id 1pY95d-001bnz-N2; Fri, 03 Mar 2023 18:21:05 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pY95c-001tm9-JU; Fri, 03 Mar 2023 18:21:04 +0100
+        id 1pY95c-001tmD-Q0; Fri, 03 Mar 2023 18:21:04 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mark Brown <broonie@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: [PATCH 67/87] spi: sifive: Convert to platform remove callback returning void
-Date:   Fri,  3 Mar 2023 18:20:21 +0100
-Message-Id: <20230303172041.2103336-68-u.kleine-koenig@pengutronix.de>
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 68/87] spi: slave-mt27xx: Convert to platform remove callback returning void
+Date:   Fri,  3 Mar 2023 18:20:22 +0100
+Message-Id: <20230303172041.2103336-69-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
 References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1848; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Tl7WkauIutM+b3al3H9SYheO/VLRXWleqG0ok9ZALEM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAiwP6Nec85xqvkHvbxOkc/4mdy7srvBaTQekZ w0Q1BH74N+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAIsDwAKCRDB/BR4rcrs CdjyCACLr+zFqnQpOA6JiQxM9YjKlvQVr0zzLOTl4aT/8OfjOzJgE99fhZXdxWktwMpl1qs4pLY 9eg8Ti2aLX+ZnB4ZXgHnvbSGiA9qMkRaCHVvLkU/nVeGIYe1GFEB+qcopMOl0oFbnNR3cnK05k6 LQ5Nnd/QHNLI7loh6Lb+67uo+48wzGYmvtn17jFVZbfPH53MECPjlf8cBFz0sNMR6ojTsyD43cu VK0y9iqxmu0D+PMKC9Q3YjRFRBu30VDEcSzg2zR69vLayDbyWaZPlyDAZ7+81BbEWlrkN3Hmtf0 9sA9nQk8NVTOz1bSvED4ILUiOnao/fJw0mQmr6RmaK84cZ4s
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1552; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Ab4V5NZ+okWKX88AVYBLab3mtSDdyIcxQSnuSDgLtMc=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAiwT3SuZ+Wa6QRrFub8PA8YPepqvMK8nLySg/ F6MJWnuZ1eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAIsEwAKCRDB/BR4rcrs CWxhB/0QoEU2fib10Z3O5+cd2d4MMANVQKhB9U1xAcy0sCH2otwxcRCmtJfY3bICNK79r2QvLKM UPwWjN81Pgc/bvman9ENlcKIEDhXAxAnkdWU2xKyk+Gw0KBrOanaPxHQ/ORa1XuD1gvaSxcdtUN RGcpnEk9T70XagXceIfBK2W63eFeDRNANA/lNODnhuOXNqbkknB/k6oTKnoqGcXbqr5XBBsDNUu Q6eFp4vL1frpNANodvE6LiRQYfQVhmvaSadM83mFqfFiRhHZG2DxFit4dSIeCAPMqDj1+d5FJMA vYXHVo5UPbkRVQB4cTTnsEQkRimpfPFdCXgUegD6fKZyedAo
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,40 +70,35 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/spi/spi-sifive.c | 6 ++----
+ drivers/spi/spi-slave-mt27xx.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
-index e29e85cee88a..055de44e0d22 100644
---- a/drivers/spi/spi-sifive.c
-+++ b/drivers/spi/spi-sifive.c
-@@ -415,7 +415,7 @@ static int sifive_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx.c
+index f199a6c4738a..4e4d426bfb43 100644
+--- a/drivers/spi/spi-slave-mt27xx.c
++++ b/drivers/spi/spi-slave-mt27xx.c
+@@ -474,11 +474,9 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int sifive_spi_remove(struct platform_device *pdev)
-+static void sifive_spi_remove(struct platform_device *pdev)
+-static int mtk_spi_slave_remove(struct platform_device *pdev)
++static void mtk_spi_slave_remove(struct platform_device *pdev)
  {
- 	struct spi_master *master = platform_get_drvdata(pdev);
- 	struct sifive_spi *spi = spi_master_get_devdata(master);
-@@ -423,8 +423,6 @@ static int sifive_spi_remove(struct platform_device *pdev)
- 	/* Disable all the interrupts just in case */
- 	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
- 	clk_disable_unprepare(spi->clk);
+ 	pm_runtime_disable(&pdev->dev);
 -
 -	return 0;
  }
  
- static int sifive_spi_suspend(struct device *dev)
-@@ -473,7 +471,7 @@ MODULE_DEVICE_TABLE(of, sifive_spi_of_match);
+ #ifdef CONFIG_PM_SLEEP
+@@ -560,7 +558,7 @@ static struct platform_driver mtk_spi_slave_driver = {
+ 		.of_match_table = mtk_spi_slave_of_match,
+ 	},
+ 	.probe = mtk_spi_slave_probe,
+-	.remove = mtk_spi_slave_remove,
++	.remove_new = mtk_spi_slave_remove,
+ };
  
- static struct platform_driver sifive_spi_driver = {
- 	.probe = sifive_spi_probe,
--	.remove = sifive_spi_remove,
-+	.remove_new = sifive_spi_remove,
- 	.driver = {
- 		.name = SIFIVE_SPI_DRIVER_NAME,
- 		.pm = &sifive_spi_pm_ops,
+ module_platform_driver(mtk_spi_slave_driver);
 -- 
 2.39.1
 
