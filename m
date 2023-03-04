@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307976AACC2
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Mar 2023 22:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6C06AACC3
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Mar 2023 22:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCDVnd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 4 Mar 2023 16:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S229600AbjCDVnp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 4 Mar 2023 16:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDVnc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Mar 2023 16:43:32 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9F4E068
-        for <linux-spi@vger.kernel.org>; Sat,  4 Mar 2023 13:43:31 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so23811045edb.9
-        for <linux-spi@vger.kernel.org>; Sat, 04 Mar 2023 13:43:31 -0800 (PST)
+        with ESMTP id S229484AbjCDVno (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Mar 2023 16:43:44 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFE3E068
+        for <linux-spi@vger.kernel.org>; Sat,  4 Mar 2023 13:43:43 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id da10so23954775edb.3
+        for <linux-spi@vger.kernel.org>; Sat, 04 Mar 2023 13:43:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=IVdfTRzagZpxrbPS5j0VXfk6cXHcDvqw5oLXINe0eUM=;
-        b=AdsIcWEfClxOK/eImiVP68J7ArzbxApR51jRAXUa6RPrDaVOdaaF+LcQ+Tbd+uni0J
-         yws+bPF4VjlMvCpsH8q9ZoXr20HgrWwLuIZu6Id5DefOChd+L2d3pEDCss+GHTy/u1vy
-         fcyfFbGcHWjvbhXXEWDt3JQiO84QavCMk4iLr0Y4f7oj01vNspYOlYtmjP+Xj70o9vYS
-         CmpHo9sBnym6OKL2uqcG/gngSSjnMO8PhC/fMg0ow0GH4/HbEFwN4Oub4E1kx+/q4LoJ
-         27fp2UcxizZOuWC/scsKiRMyCTwDCT/x7rhhUXb3oY0YvVlPvQRFhlAojL8WkixcTBdT
-         DGXw==
+        b=KH9O3NKPoK8JOIJrxiYSbYUUv+6/3s/y3vevE/holb4QYp4HO/Ed+aW/pQ1wb2JDIs
+         48FxkGdEG/ZM/AjHLViSMTrlHXiYYvlRE+AQaRAOnoJK6Y/qn8cap4E4uJSSl/99Jr8O
+         AXqFtve5u+fisJGCoEZJ+yfIJamppq3oTW+amJo57NxfKY0oyWCzgNuocWdCa8oijuqw
+         sAHkAA1D0gvzWc2mXQSvwGJ28Fkap2pPzj3x3IVwmeYI0ebdxkgqO+eZ1OQ0+TGmj3QB
+         /Ek+VlXQ9LuhgozkYpvnJIax1Ix0ciZhV4JiB0Cn4l/u0GUeKxXHno+qGr4au1B+MNMM
+         5qIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=IVdfTRzagZpxrbPS5j0VXfk6cXHcDvqw5oLXINe0eUM=;
-        b=vEfiUeMqJCbvZOhfyQmtikkckgzyALPPoAY9RfhJgsjdhflsG93vF9aZRWkasStPJk
-         QGVu6rwyIn2jwyXW4h5tlsoQhvpKWdIQLUBK26jTn6lFlYMjaJJonbq1tV5m/t+sYrI7
-         ++x0Mgcm1gKHUVBtIEHgoq4UEzd9V3x/V0yrDy4V0DWneBGTfiMQXTz0JD2IU76sCQCJ
-         jW1bEpIfacxJpVQiOZY7ZGHC4lx2PKWeq5udRXnZlMxLqyRBxlvJPW/zg2hZjrIMCviC
-         KK6w69/gw48rBTsgB9UaY9iXqoeLqUBhr7A+3q6SUS8yAqulrgXBvo87qykw8WNxRRxk
-         0xPg==
-X-Gm-Message-State: AO0yUKXRgjXxlIb6hwr4atZ3zGjX7fLiIrDv5iUOzA6ha5mxocemL58v
-        v3UQ+IPmTF1tKuDe3yhlkEzm/73caEMe7GHUaxM=
-X-Google-Smtp-Source: AK7set/Q/N204TLUp9rYTAplOSGGKTHM46UUEpnPCOuXBduR9v7W3yM5Y8gVcuFhnO9M0+konGtN0Icw095lXkYFuio=
-X-Received: by 2002:a50:ce19:0:b0:4bc:2776:5b61 with SMTP id
- y25-20020a50ce19000000b004bc27765b61mr3349823edi.6.1677966209891; Sat, 04 Mar
- 2023 13:43:29 -0800 (PST)
+        b=OCVL1t+PAn6o+JAkMCim2Vw8MCTPQ9TDBPpNXE+73vlC4y52LbTnL03SPTL+bFqJHN
+         wqdpqoEKOw2jNKii/Lpgj7i7UV58dntMnVpKCzaQJbZdsdEFOYxYzruqKgRGyTy4eOvn
+         YCDUuwEOAObrgOsaswiS9t5oAOseEm+JNomU1MRNXI/EtFib7kCTWsPzjvg69qjghpud
+         pO/EgslkAPqCMyuzUZPx6Gne7iZ3/T/MOKmImW3sPuYbod1powenluN+r1LuS59jyiLC
+         xp2uBOS63835d9BS1xKjFSA9dmwo1j1MeV5YxWSOloOVjDxI95SeFtkHd/AtShjYeV6r
+         XfoA==
+X-Gm-Message-State: AO0yUKUQjj6zi5Tbeec/+pe/g4aI+JXiPWPlUpsMjBMAHCcixxvV7JQZ
+        8h+PNbfdhuxqE6YcQtxMQ9XWGWpdk1z9o+UhuoQ=
+X-Google-Smtp-Source: AK7set+10mRjo9ATOn559XRqhqAnLr+AsGfHkSGLroL9AShCLDdP3latr/YZ1F0TqTBbjYDE1LUD8iFfpiKLdmz0QtA=
+X-Received: by 2002:a17:906:5857:b0:8dd:76b6:65b3 with SMTP id
+ h23-20020a170906585700b008dd76b665b3mr2900086ejs.4.1677966221622; Sat, 04 Mar
+ 2023 13:43:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de> <20230303172041.2103336-35-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230303172041.2103336-35-u.kleine-koenig@pengutronix.de>
+References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de> <20230303172041.2103336-36-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230303172041.2103336-36-u.kleine-koenig@pengutronix.de>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 4 Mar 2023 22:43:18 +0100
-Message-ID: <CAFBinCA0OQc2n6A18-ey0E11PArDQNX5eWTCSwWgVnZJa_EbPQ@mail.gmail.com>
-Subject: Re: [PATCH 34/87] spi: meson-spicc: Convert to platform remove
+Date:   Sat, 4 Mar 2023 22:43:30 +0100
+Message-ID: <CAFBinCB8V6CNB5n1E4C2SrZEqw4bU4c+i8udEsmke9eBXSkSag@mail.gmail.com>
+Subject: Re: [PATCH 35/87] spi: meson-spifc: Convert to platform remove
  callback returning void
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
