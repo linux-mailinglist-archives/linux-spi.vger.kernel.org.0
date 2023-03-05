@@ -2,91 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6C06AACC3
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Mar 2023 22:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D336AAF1B
+	for <lists+linux-spi@lfdr.de>; Sun,  5 Mar 2023 11:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCDVnp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 4 Mar 2023 16:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S229518AbjCEKfK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 5 Mar 2023 05:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDVno (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Mar 2023 16:43:44 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFE3E068
-        for <linux-spi@vger.kernel.org>; Sat,  4 Mar 2023 13:43:43 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id da10so23954775edb.3
-        for <linux-spi@vger.kernel.org>; Sat, 04 Mar 2023 13:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IVdfTRzagZpxrbPS5j0VXfk6cXHcDvqw5oLXINe0eUM=;
-        b=KH9O3NKPoK8JOIJrxiYSbYUUv+6/3s/y3vevE/holb4QYp4HO/Ed+aW/pQ1wb2JDIs
-         48FxkGdEG/ZM/AjHLViSMTrlHXiYYvlRE+AQaRAOnoJK6Y/qn8cap4E4uJSSl/99Jr8O
-         AXqFtve5u+fisJGCoEZJ+yfIJamppq3oTW+amJo57NxfKY0oyWCzgNuocWdCa8oijuqw
-         sAHkAA1D0gvzWc2mXQSvwGJ28Fkap2pPzj3x3IVwmeYI0ebdxkgqO+eZ1OQ0+TGmj3QB
-         /Ek+VlXQ9LuhgozkYpvnJIax1Ix0ciZhV4JiB0Cn4l/u0GUeKxXHno+qGr4au1B+MNMM
-         5qIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IVdfTRzagZpxrbPS5j0VXfk6cXHcDvqw5oLXINe0eUM=;
-        b=OCVL1t+PAn6o+JAkMCim2Vw8MCTPQ9TDBPpNXE+73vlC4y52LbTnL03SPTL+bFqJHN
-         wqdpqoEKOw2jNKii/Lpgj7i7UV58dntMnVpKCzaQJbZdsdEFOYxYzruqKgRGyTy4eOvn
-         YCDUuwEOAObrgOsaswiS9t5oAOseEm+JNomU1MRNXI/EtFib7kCTWsPzjvg69qjghpud
-         pO/EgslkAPqCMyuzUZPx6Gne7iZ3/T/MOKmImW3sPuYbod1powenluN+r1LuS59jyiLC
-         xp2uBOS63835d9BS1xKjFSA9dmwo1j1MeV5YxWSOloOVjDxI95SeFtkHd/AtShjYeV6r
-         XfoA==
-X-Gm-Message-State: AO0yUKUQjj6zi5Tbeec/+pe/g4aI+JXiPWPlUpsMjBMAHCcixxvV7JQZ
-        8h+PNbfdhuxqE6YcQtxMQ9XWGWpdk1z9o+UhuoQ=
-X-Google-Smtp-Source: AK7set+10mRjo9ATOn559XRqhqAnLr+AsGfHkSGLroL9AShCLDdP3latr/YZ1F0TqTBbjYDE1LUD8iFfpiKLdmz0QtA=
-X-Received: by 2002:a17:906:5857:b0:8dd:76b6:65b3 with SMTP id
- h23-20020a170906585700b008dd76b665b3mr2900086ejs.4.1677966221622; Sat, 04 Mar
- 2023 13:43:41 -0800 (PST)
+        with ESMTP id S229568AbjCEKfI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 5 Mar 2023 05:35:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E439125A7;
+        Sun,  5 Mar 2023 02:35:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBE47B80A4C;
+        Sun,  5 Mar 2023 10:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45133C433D2;
+        Sun,  5 Mar 2023 10:35:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678012503;
+        bh=kkAo0RWQbrnXSYn3lBtTlTDr7m0uhLYL3o/jC1gwPMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SeXfxStGobQ1hLFDEsNKBdnTkJmIseIFIIVrEdrFb4/drzfNj8nddBwLQ9bDV2yFE
+         qia0LIo6SgIRdwDFNartZ0/N7cCdGu/usWvGlmFM65qCl0tsHyDWMPhZVI/yD4qQOy
+         oC//1TyrSaAxeJgNz1hZj7hrio52NJxWEWMUHuoc1BAssF260SZ7ul/i/bxOx3Im8v
+         bgeBs2aVkaI60fPM5v1lhMRG3nnMzHy1t9QFRwbPzRUHuheuelH7naEUpPbmXoisQv
+         gvxlLVpidNPMX383CY97/RDYIxPgcy3XhB3QR8yjdBiLw58ZnXlwagNRncTlULrq4A
+         ymlcK7T7CWX0g==
+Date:   Sun, 5 Mar 2023 10:34:56 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH 1/5] mfd: Add support for Intel LJCA device
+Message-ID: <20230305103456.GF2574592@google.com>
+References: <20230219183059.1029525-1-xiang.ye@intel.com>
+ <20230219183059.1029525-2-xiang.ye@intel.com>
 MIME-Version: 1.0
-References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de> <20230303172041.2103336-36-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230303172041.2103336-36-u.kleine-koenig@pengutronix.de>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 4 Mar 2023 22:43:30 +0100
-Message-ID: <CAFBinCB8V6CNB5n1E4C2SrZEqw4bU4c+i8udEsmke9eBXSkSag@mail.gmail.com>
-Subject: Re: [PATCH 35/87] spi: meson-spifc: Convert to platform remove
- callback returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230219183059.1029525-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 6:21=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Mon, 20 Feb 2023, Ye Xiang wrote:
+
+> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA).
+
+The "USB part" should live in drivers/usb.
+
+You can use MFD to register each of the components, but all of the USB
+functionality needs moving somewhere else.
+ 
+> The communication between the various LJCA module drivers and the
+> hardware will be muxed/demuxed by this driver. The sub-module of
+> LJCA can use ljca_transfer() to issue a transfer between host
+> and hardware.
+> 
+> Each sub-module of LJCA device is identified by type field within
+> the LJCA message header.
+> 
+> The minimum code in ASL that covers this board is
+> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+>     {
+>         Device (GPIO)
+>         {
+>             Name (_ADR, Zero)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (I2C)
+>         {
+>             Name (_ADR, One)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (SPI)
+>         {
+>             Name (_ADR, 0x02)
+>             Name (_STA, 0x0F)
+>         }
+>     }
+> 
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> ---
+>  drivers/mfd/Kconfig      |  13 +
+>  drivers/mfd/Makefile     |   1 +
+>  drivers/mfd/ljca.c       | 977 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/ljca.h |  95 ++++
+>  4 files changed, 1086 insertions(+)
+>  create mode 100644 drivers/mfd/ljca.c
+>  create mode 100644 include/linux/mfd/ljca.h
+
+-- 
+Lee Jones [李琼斯]
