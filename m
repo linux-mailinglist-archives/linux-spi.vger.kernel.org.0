@@ -2,136 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D62E6AB872
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 09:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0916ABBF1
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 11:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCFIgv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 03:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S230440AbjCFKXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 05:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCFIgu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 03:36:50 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2DC7
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 00:36:49 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id j11so15616918edq.4
-        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 00:36:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678091807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=63HRbRwWzcpKqYalyNzeBO90DICoMp8EPtmeHo1nNuY=;
-        b=WaZQilGe/8pjkfbsolKohbGGZCHAzFW0NDLxH38iZC5KLYtopd/AVagWOHWt7xvWkH
-         An6mMmVAiZGPhMXiPLnYk1YH0QZ/yTgrvIG6Ypdq8fWv72JpQAuOeFv/4sbiS1No6a3I
-         TeD/WKXRbuXW9ISZ6SUuZImwGTZ5yh28uyt6CJMOH4UfrXr6umejdporFQLBvM1N8IgC
-         P7hoFqCIlbD4eFDnVZNMhR1edBH4jBoxKph97XQiS62D1LaKmrrpZ/xEYlQPzYDXt2rf
-         mWumSK5kpXF/ZzlN/TAtQiVhwEOCmOyU/blz9N6i+EAxCwB5CjPqbfg2MGda5pVlfJN+
-         Jmyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678091807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=63HRbRwWzcpKqYalyNzeBO90DICoMp8EPtmeHo1nNuY=;
-        b=fTJ3bnw7/b6dO4htIFbaUVm9YkeURRaBuYgzMoIMUUyXz87Q68jq7jXerw1JdYLB+e
-         4jI9eH3qjQyqTKhhfoAZAtbVzMfj+kOE3EWUmR5CroWm5QmHQ4quGYnPUs8XMhacU0LK
-         I9OQvSv9uw1ZLkd76yVywg0sFMKlPoxC+tNYN7cv+ruNknkyylLomo7ZurSOu2Nar05l
-         V8EjMl34Nx8xncO20/PKHpNB9xHYcydRCeoE+TCWiBgqW4ZyuclhThKqoh80/SL+nT6g
-         3KQ0Nyy17oRAh4AgMEkyBa4a6GUECkyy65Y1PVJzogIumnWGT/2qD296gg12Tq3kRy9Y
-         KIrA==
-X-Gm-Message-State: AO0yUKVd1/TH4OHd/jLWlT8kK2HGBFHsWrQfGw9KHcX/BPWhvR4HeI3f
-        pam7W04YV3Qssiu3YG60avqarA==
-X-Google-Smtp-Source: AK7set+Q7Wa9E1bhKgOjdiBS3UQloHFzRMv4/c3qDMvX199R0Hd+uHkJr0idtxLPWDEFJq8rz0mywg==
-X-Received: by 2002:a05:6402:31fb:b0:4ac:c3c0:24d7 with SMTP id dy27-20020a05640231fb00b004acc3c024d7mr10352500edb.42.1678091807520;
-        Mon, 06 Mar 2023 00:36:47 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id p24-20020a50cd98000000b004af6163f845sm4707551edi.28.2023.03.06.00.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:36:47 -0800 (PST)
-Message-ID: <e82ca6f6-0870-f9b0-172f-bc6d54a9749b@linaro.org>
-Date:   Mon, 6 Mar 2023 09:36:45 +0100
+        with ESMTP id S230357AbjCFKXa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 05:23:30 -0500
+X-Greylist: delayed 3596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 02:23:26 PST
+Received: from 4.mo581.mail-out.ovh.net (4.mo581.mail-out.ovh.net [178.32.122.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BEC196B7
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 02:23:26 -0800 (PST)
+Received: from director11.ghost.mail-out.ovh.net (unknown [10.109.138.205])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id 15BDF26251
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 09:06:59 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-jbrfz (unknown [10.110.103.233])
+        by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 127281FE8C;
+        Mon,  6 Mar 2023 09:06:56 +0000 (UTC)
+Received: from etezian.org ([37.59.142.101])
+        by ghost-submission-6684bf9d7b-jbrfz with ESMTPSA
+        id 8aX6LTCtBWR9AgAA58LVJg
+        (envelope-from <andi@etezian.org>); Mon, 06 Mar 2023 09:06:56 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-101G004ac770ce1-db47-4670-b400-4d32ddd5c3e6,
+                    E6EC2E320FFEB7B5CA07697FBFAF7FF511F3A6BF) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 178.238.173.28
+Date:   Mon, 6 Mar 2023 10:06:56 +0100
+From:   Andi Shyti <andi@etezian.org>
+To:     Jaewon Kim <jaewon02.kim@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
+Message-ID: <ZAWtMIDHGd+nBTA1@intel.intel>
+References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
+ <20230306014239.80570-1-jaewon02.kim@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 05/15] dt-bindings: soc: amd: amd,pensando-elbasr: Add
- AMD Pensando SoC System Controller
-Content-Language: en-US
-To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
-References: <20230306040739.51488-1-blarson@amd.com>
- <20230306040739.51488-6-blarson@amd.com>
- <52fb81e2-0d9b-600d-42af-1405fdd6509b@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <52fb81e2-0d9b-600d-42af-1405fdd6509b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
+X-Ovh-Tracer-Id: 12480037520701262555
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddthedguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihesvghtvgiiihgrnhdrohhrgheqnecuggftrfgrthhtvghrnhepjefgleegkeeiffejgeevuedvheegleevteevjeduffevvdelhedvfeelheduleeunecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedupdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/03/2023 09:35, Krzysztof Kozlowski wrote:
-> On 06/03/2023 05:07, Brad Larson wrote:
->> Support the AMD Pensando SoC Controller which is a SPI connected device
->> providing a miscellaneous set of essential board control/status registers.
->> This device is present in all Pensando SoC based designs.
->>
->> Signed-off-by: Brad Larson <blarson@amd.com>
->> ---
->>
->> v10 changes:
->> - Property renamed to amd,pensando-ctrl
->> - Driver is renamed and moved to soc/drivers/amd affecting binding
->> - Delete cs property, driver handles device node creation from parent num-cs
->>   fixing schema reg error in a different way
->>
->> v9 changes:
->> - Instead of four nodes, one per chip-select, a single
->>   node is used with reset-cells in the parent.
->> - No MFD API is used anymore in the driver so it made
->>   sense to move this to drivers/spi.
->> - This driver is common for all Pensando SoC based designs
->>   so changed the name to pensando-sr.c to not make it Elba
->>   SoC specific.
->> - Added property cs for the chip-select number which is used
->>   by the driver to create /dev/pensr0.<cs>
->>
->> ---
->>  .../bindings/soc/amd/amd,pensando-ctrl.yaml   | 60 +++++++++++++++++++
->>  1 file changed, 60 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
->> new file mode 100644
->> index 000000000000..36694077b2e6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
+Hi Jaewon,
+
+On Mon, Mar 06, 2023 at 10:42:39AM +0900, Jaewon Kim wrote:
+> This patch adds missing variable no_cs descriptions.
 > 
-> Your subject suggests this is pensando-elbasr but you write everywhere
-> pensando-ctrl. Confusing. Pick one.
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 
-Actually pensando-ctrl is for sure not correct, because it misses the
-name of the SoC (you call it everywhere "elba").
+Reviewed-by: Andi Shyti <andi@etezian.org>
 
-Best regards,
-Krzysztof
+Thanks,
+Andi
 
+> ---
+>  include/linux/platform_data/spi-s3c64xx.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+> index 5df1ace6d2c9..3101152ce449 100644
+> --- a/include/linux/platform_data/spi-s3c64xx.h
+> +++ b/include/linux/platform_data/spi-s3c64xx.h
+> @@ -29,6 +29,7 @@ struct s3c64xx_spi_csinfo {
+>   * struct s3c64xx_spi_info - SPI Controller defining structure
+>   * @src_clk_nr: Clock source index for the CLK_CFG[SPI_CLKSEL] field.
+>   * @num_cs: Number of CS this controller emulates.
+> + * @no_cs: Used when CS line is not connected.
+>   * @cfg_gpio: Configure pins for this SPI controller.
+>   */
+>  struct s3c64xx_spi_info {
+> -- 
+> 2.17.1
