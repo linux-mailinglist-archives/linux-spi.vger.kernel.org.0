@@ -2,48 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96236AB5C9
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 05:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B8B6AB64A
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 07:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjCFE4d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 5 Mar 2023 23:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S229633AbjCFG0m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 01:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCFE4d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 5 Mar 2023 23:56:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD1CE079
-        for <linux-spi@vger.kernel.org>; Sun,  5 Mar 2023 20:56:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D684AB80C0A
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 04:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86E75C433EF;
-        Mon,  6 Mar 2023 04:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678078589;
-        bh=09jCZQ/Mk8Rr9YbTb4EQ9wMCBJb6K/7JyXe1g5wUH9Y=;
-        h=Subject:From:Date:To:From;
-        b=S0P+06DppWkQvJIDetZVRAeHQPHKjK6PHCYFNtPRU0lEnYdhivd7ac4Io51sI3VhP
-         ZsbZ13ZB35PHuZ3cNz+vDAapdpG9gcW77slqaz8JqwlKTEIGKNjNxcvjc2apE6WIIv
-         g/dYTPZXbGFX8yxpyHSpZ4HewZEN0RRTnnIZ4+AY6dPWg5AyXy4W6895UbOprXu6F3
-         bMJQoyR5QeS0vcEG1OU7RNB91M8JeytqwtrByskPOFgeaocj/VwoJAgqQglax2Rqyt
-         JWf+wOlLoz2ECgcXQZTRrZVdIFYtIJAbiUUnOCyZHcPILJpdxq8KLwU3Z8b6My2/gY
-         KrfNJF2cxhH9Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60524E55B14;
-        Mon,  6 Mar 2023 04:56:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229556AbjCFG0l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 01:26:41 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E63DEC69
+        for <linux-spi@vger.kernel.org>; Sun,  5 Mar 2023 22:26:40 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id g3so34089363eda.1
+        for <linux-spi@vger.kernel.org>; Sun, 05 Mar 2023 22:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678083999;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h2EVWs3pTg/fWY1PZtABlXR6f2sNu/d27mccEdhWh7U=;
+        b=c2B/lU6CRWGnrc5QdLUOzoB5rfafH2gCgrW5YIvUTBtsNX+/RsnYuGL/hOKA/oONey
+         xORE5C+oDdsUeHmt847wbHn51SnBdX0iOX6t3dGOSeZi9cjmGJMKKGMvKXKqFnnyLqgl
+         w4/rygv7dmvuUfGaQZd84YvLI9zRQ7Mcp3gKJAPHa+441ISzHQAT2rVhS43PHwIqWDRK
+         hFuXIhyGO8iBJxJUng8GxFFpqLJk3ZUE3FNLvHKYgbBSx1UokpPhzhKL4hl3Q1TjBtPs
+         Z03ycgEiOVyEnxzlSjOgVDEnjcFYqRWxXfRsxUky5ESdJDfQJ8Gts1UxdV5eciZ94fdQ
+         pBEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678083999;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h2EVWs3pTg/fWY1PZtABlXR6f2sNu/d27mccEdhWh7U=;
+        b=7qUccLXtiJDMZv8cX58UkZC+VLQz3Lx0kxnY0f09cDb/vNgUYRjZ7akTakQP+dSFqm
+         iSNmVXQmv3mARqxLndkS8lbnvAX1cjUF7sSdQOIUpsNPM67JhlpJOV0dUML+sQENpmJK
+         6JUik1LvcvPY5niQqyk6jABB4fJaFV6rwwtdsm6daPYjQKH+SSrkshZ81YlgA66OWCEt
+         GDON+kJK8P3kAthl6H2DS4/j6QZJ+qeArz2D26V4wRBullTSeN7ya+kRRQNUn5jMgTcz
+         7O4oJmNzd2D8IKE2ybiIg1wd7gPrpFEswVjFc5/znliF7VSES9Slu76mJYzSn5RePmo3
+         K4PA==
+X-Gm-Message-State: AO0yUKXsvPgfX/78HXoS1JXBTvfEhN7mFTU2QKGJT69lxJqBx6I+zjo0
+        HVxnfAgPu4BIWC5oUInC8gTwkiI363cg5JajCVA=
+X-Google-Smtp-Source: AK7set8n0rli9ksDBadVCoR2Qgpw1GH9WCld0Ejgjbj5d0mwffklxq/8uct/NXu8bhNw4ZCqxqvpUw==
+X-Received: by 2002:a17:907:7da6:b0:888:b764:54e5 with SMTP id oz38-20020a1709077da600b00888b76454e5mr12048360ejc.71.1678083998999;
+        Sun, 05 Mar 2023 22:26:38 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
+        by smtp.gmail.com with ESMTPSA id t30-20020a50ab5e000000b004ad601533a3sm4629001edc.55.2023.03.05.22.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 22:26:38 -0800 (PST)
+Message-ID: <422b00ec-1ef4-95e3-db49-672da29e6e24@linaro.org>
+Date:   Mon, 6 Mar 2023 07:26:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <167807858932.22217.14872997778977047807.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 06 Mar 2023 04:56:29 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
+ <20230306014239.80570-1-jaewon02.kim@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +76,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v10] Support AMD Pensando Elba SoC (2023-03-06T04:07:24)
-  Superseding: [v9] Support AMD Pensando Elba SoC (2023-01-19T03:51:23):
-    [v9,01/15] dt-bindings: arm: add AMD Pensando boards
-    [v9,02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC
-    [v9,03/15] dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
-    [v9,04/15] dt-bindings: spi: dw: Add AMD Pensando Elba SoC SPI Controller bindings
-    [v9,05/15] dt-bindings: mfd: syscon: Add amd,pensando-elba-syscon compatible
-    [v9,06/15] dt-bindings: mfd: amd,pensando-elbasr: Add AMD Pensando System Resource chip
-    [v9,07/15] MAINTAINERS: Add entry for AMD PENSANDO
-    [v9,08/15] arm64: Add config for AMD Pensando SoC platforms
-    [v9,09/15] arm64: dts: Add AMD Pensando Elba SoC support
-    [v9,10/15] spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
-    [v9,11/15] spi: dw: Add support for AMD Pensando Elba SoC
-    [v9,12/15] mmc: sdhci-cadence: Enable device specific override of writel()
-    [v9,13/15] mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
-    [v9,14/15] mmc: sdhci-cadence: Support mmc hardware reset
-    [v9,15/15] spi: pensando-sr: Add AMD Pensando SoC System Resource
+On 06/03/2023 02:42, Jaewon Kim wrote:
+> This patch adds missing variable no_cs descriptions.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
