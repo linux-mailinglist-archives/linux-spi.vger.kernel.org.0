@@ -2,158 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7596AC59D
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 16:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9807E6AC5CA
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 16:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjCFPia (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 10:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S231211AbjCFPo7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 10:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjCFPiI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 10:38:08 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79273CA35;
-        Mon,  6 Mar 2023 07:37:29 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f18so13313152lfa.3;
-        Mon, 06 Mar 2023 07:37:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678116992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+6yc/IA9VHnC8pRgu9mfVgrlBPbE5fizj7nSsV8E5g=;
-        b=c25DXBkA1fKBCQDejUspbB/QBrzWnK1DDLCQSlbyFSZy5E2XrYtc9eD+FIkRoTaTbX
-         02Jmw6W7I+HHbBi6rbCJk89Zq6gPkhp2HM6YpW14m9KDSlzSkQW8zI7HbWRVPRs6ewRL
-         L8e/a+rk4QE1amPPk2Cf/afm9cwqZF7K55P68TqgkJqWEdXTP33RVmeyGM5goHped1Fd
-         NeySw4RZm2auNypOy/vihLdE2T6qD+VjYnywyTgjzenkI7RgO8kz8nnYXLK+ngDnQDMd
-         s2DVcf3oaXWsXtLgCMJcUpPTH0+aPgGUVk4EYQAnEIt8Ey5rmSixz1/801CgFtDDk+pW
-         oSeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678116992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L+6yc/IA9VHnC8pRgu9mfVgrlBPbE5fizj7nSsV8E5g=;
-        b=T8UUVkhnxStuxN2wO3TaOfu2TNiyJ3nEOtpqAjfiZtncZJVX7beNurH1udfieOcnmM
-         +heb7LVOmL2zcoMc23laLlWk+7LaUVsYNYsM15RrClIu01s7M5J2k/zVhVriKQToXu3/
-         TfZlRFn0c2DfRuTTarrxyYW9lAi9zWMzIna3GpyTQiUKGouY7QCFu7Ca9SwG2wI5E3wd
-         GLoaNXaTuWxiirxohcayR19rDchKWIG2ayD7teba4U6W2gWUTgyCppU5U3jVyPbQWB1v
-         ELHGrmY8CiAQ1YIBvK4hIg1vGZoqI8gtOfgR4kuzaNn7wNNeyxD4nc1YOQxqoBD58DNc
-         o7lg==
-X-Gm-Message-State: AO0yUKVUlJWq1b5k9jFZ7uBFGFRFSCbPz0nBBt28zZBOkyqrePn13EPk
-        PZq2Qna/Sa5oJy6UzlFulOA=
-X-Google-Smtp-Source: AK7set/P9MuC7QjNHQu2OSksykfEn4TKWHwShmUSZNDa4bY/+Z6gtUpVsIzDKKxIDfMMUA8V15HsWQ==
-X-Received: by 2002:ac2:558d:0:b0:4db:3882:8f42 with SMTP id v13-20020ac2558d000000b004db38828f42mr3451671lfg.45.1678116992425;
-        Mon, 06 Mar 2023 07:36:32 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id 21-20020ac24835000000b004db1d3bf9b4sm1675178lft.26.2023.03.06.07.36.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 07:36:31 -0800 (PST)
-Date:   Mon, 6 Mar 2023 18:36:28 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <blarson@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v10 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba
- SoC SPI Controller
-Message-ID: <20230306153628.kg7kzm52ft2j57fa@mobilestation>
-References: <20230306040739.51488-1-blarson@amd.com>
- <20230306040739.51488-5-blarson@amd.com>
+        with ESMTP id S230398AbjCFPo6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 10:44:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7631629169;
+        Mon,  6 Mar 2023 07:44:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3978C61007;
+        Mon,  6 Mar 2023 15:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72517C433EF;
+        Mon,  6 Mar 2023 15:44:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678117466;
+        bh=Y/COJMV555nCCQenbT3ey1M4VPyf33xQgwNmG1ZwQFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YavORBuYHkKxe5naUomSULHwHbfKbDqI0ABgcMlLotGAFOhs+oWPPBm80rUujAhKw
+         6pRUslqE/+QbfyzKhmAQBA29E3h9hhmdIpc8MUb+ZDlzw3S7UaXHJEjtzUV0TddsHH
+         wMprD0aYI+4lMjuEQeCjXcYbru9t6A8F0vMPxFfMhfkacOP4/M1BjhXw+PO0a87FvP
+         SBXbFN28kllnBIhE2OsBh9BQ1e7+6QOlQNfHsVKjn0vUCyU+c8JehtR0rE0wLEVII8
+         LTyVktgTXwuLHZnaihY9zBInTlMTehj7YCCcQUqwjx/d4tNBV5O0W1H9wUtiXSStWK
+         ItNjlgDnK0Khw==
+Date:   Mon, 6 Mar 2023 15:44:20 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
+        quic_srichara@quicinc.com, quic_varada@quicinc.com
+Subject: Re: [PATCH 2/5] spi: qup: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <9ca4c6a5-3d1a-4a66-9a5f-43f6f41ed7a1@sirena.org.uk>
+References: <20230306144404.15517-1-quic_mdalam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+iMhURA0px+4jxu2"
 Content-Disposition: inline
-In-Reply-To: <20230306040739.51488-5-blarson@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230306144404.15517-1-quic_mdalam@quicinc.com>
+X-Cookie: teamwork, n.:
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 08:07:28PM -0800, Brad Larson wrote:
-> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
 
-Looks good. Thanks!
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+--+iMhURA0px+4jxu2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--Serge(y)
+On Mon, Mar 06, 2023 at 08:14:04PM +0530, Md Sadre Alam wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 
-> ---
-> 
-> v10 changes:
-> - Move definition of amd,pensando-elba-syscon into properties
->   with a better description
-> - Add amd,pensando-elba-syscon: false for non elba designs
-> 
-> v9 changes:
-> - Define property amd,pensando-elba-syscon
-> - Move compatible amd,pensando-elba-spi ahead of baikal,bt1-ssi
-> 
-> ---
->  .../bindings/spi/snps,dw-apb-ssi.yaml         | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index a132b5fc56e0..2383d6497b1e 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -37,6 +37,17 @@ allOf:
->      else:
->        required:
->          - interrupts
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: amd,pensando-elba-spi
-> +    then:
-> +      required:
-> +        - amd,pensando-elba-syscon
-> +    else:
-> +      properties:
-> +        amd,pensando-elba-syscon: false
->  
->  properties:
->    compatible:
-> @@ -63,6 +74,8 @@ properties:
->          const: intel,keembay-ssi
->        - description: Intel Thunder Bay SPI Controller
->          const: intel,thunderbay-ssi
-> +      - description: AMD Pensando Elba SoC SPI Controller
-> +        const: amd,pensando-elba-spi
->        - description: Baikal-T1 SPI Controller
->          const: baikal,bt1-ssi
->        - description: Baikal-T1 System Boot SPI Controller
-> @@ -136,6 +149,12 @@ properties:
->        of the designware controller, and the upper limit is also subject to
->        controller configuration.
->  
-> +  amd,pensando-elba-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      Block address to control SPI chip-selects.  The Elba SoC
-> +      does not use ssi.
-> +
->  patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
-> -- 
-> 2.17.1
-> 
+You've not copied me on the rest of the series so I don't know what's
+going on with dependencies.  When sending a patch series it is important
+to ensure that all the various maintainers understand what the
+relationship between the patches as the expecation is that there will be
+interdependencies.  Either copy everyone on the whole series or at least
+copy them on the cover letter and explain what's going on.  If there are
+no strong interdependencies then it's generally simplest to just send
+the patches separately to avoid any possible confusion.
+
+--+iMhURA0px+4jxu2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQGClQACgkQJNaLcl1U
+h9DeUgf+I7TkDa9+pExZ7PF0RjD1DSGHUq6nFVQMYqV5ezQ0fPeJYUIy9M4ybjSZ
+6BQ52rPYOrT02b/IefjOOjVq9uHhIFaeVgC6CpIk4ddEN04trz9VgTipm2sWRazD
+GaMarbOtHN1oPO+yKgVYkaMuRcp6zqEcgYXdPqE4PBJYXX1zguz/wTTjM4BDxg9s
+OTVaK6HyIc28j0QpufJT1fbmKLfhGg5eXX+h299o/rv6ijCZ2KrHk9WiB67JBMCG
+rr5X5gfNYYvovPIjxc5gSl4We6wgASXa/LQhiHNdidK06gJ4bgip8JQliUzYijZX
+2TosnptR/OxSG/THTopOdeR8Kgg6fg==
+=TfgZ
+-----END PGP SIGNATURE-----
+
+--+iMhURA0px+4jxu2--
