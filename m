@@ -2,53 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854426AB732
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 08:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919836AB83E
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 09:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjCFHmF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 02:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S229749AbjCFI20 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 03:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCFHmE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 02:42:04 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB201EBDD;
-        Sun,  5 Mar 2023 23:42:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678088523; x=1709624523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nc5ZI3xJXsWmlWJorUz0dbKuzJ4vSL3vUWdpw8BF3H4=;
-  b=EKvtqAo9tJTtVRrJZHEhT9Y5/OQig9O9u19ZGcUgMyXvJtONytN//5T4
-   rFHj9JRq0c7RKcZzLomhxHRik90B1xsGcrLrCfxFPjMPQ/r4gYWa/H8sD
-   /aPUmDC9yKgcdpG2TcySgfg1MWiq76yb/xjlGaUAGuWInP1Qvpm4zWSmB
-   iyyAw4lGGrg6NTLOokLZNsbMJ85HoXHypYaA/5gm48Bo7Kb4BT9IrOlgl
-   gGYrHj4oD9zVqLSmgILvwJuofrvQkWN9E3vEitkt4KRkfc+71tjONNt0C
-   HJGjbYdEwcVEROXhJenEcpOn7oMfaozYH5eS+AYsG5inSXIOMGygHxm0d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="398073778"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="398073778"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 23:41:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="786109284"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="786109284"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Mar 2023 23:41:53 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZ5Tk-00008Z-16;
-        Mon, 06 Mar 2023 07:41:52 +0000
-Date:   Mon, 6 Mar 2023 15:41:25 +0800
-From:   kernel test robot <lkp@intel.com>
+        with ESMTP id S229645AbjCFI2Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 03:28:25 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D5A240
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 00:28:20 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id j11so15528816edq.4
+        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 00:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678091299;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xecz6ussmUhqr0DqCyFglil/ccCTFFUQlWxGXA+3RTQ=;
+        b=ZaLx6dxK7OT5Bht7kJsm5572fLZbMjqg4zMvrRZLSpCDVcQLpVMpi2jwwN/wzuDSzS
+         owM3t+vyckvLMdqy1mYbknXN44pIqc4VOAE9GASwSSU3ruEZVB27PRjF8+bJ+CKG0uMB
+         RFcICc0huyIjqG/2OJD+dDqO96M1XgrvMRLD9cr5qSAkf4JW+Jd+hQGmDeHY3KJ0bNmI
+         +H+hzKrNv/SooLwrqCIFsi/E2RkIjHNmUxcuqejwpKU3i/Zk3Stn8V8EkEafKm+Ofo+0
+         xLLb6r8xIMx8ABTj4iAU1kzVUFlnCG24kKrq8qhPJKwm4xdbOGLCj/DHi6DzOWa452+K
+         Ogaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678091299;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xecz6ussmUhqr0DqCyFglil/ccCTFFUQlWxGXA+3RTQ=;
+        b=mkfo8n/ySCfkOAE2TCc535j4UVGi3SC6l1I5NPEK/AufHMU6IUo9qIssRFw2pbOUg9
+         ol4WR3sRXKz/IbKMgtC/X3QKesX/ZuzAYwT4SLf8W0O+ASAIGzOTlKym6weWg0mYzxpk
+         4BzazJzOkdHDimz09l0ZOzUPQ+ol8CRKYZrMLO1/Kva8FqE0rTSFHCmxcq0+86JlM+7H
+         gB0QLRaPwbtmqGyOa5/JfFW1G0xrEq3Mnp1dkLMOTerWWJNd/OB3P1r/IB7qKNIpeYI8
+         eaggDfxLdC3968zxd6YzBQ0SmonnXoRMcgmtCGeKGfKHD8c0eLkqxpUsoGn6Rh7aWS88
+         BawA==
+X-Gm-Message-State: AO0yUKWmvqsVf4TE1xSvVsA8NcWsDW1koJ21C5TjieDZOrJwRql8GjQM
+        WqgqgeAOtzSuxMUMKHUt9sheHA==
+X-Google-Smtp-Source: AK7set+p+Mer2nEKiLRDEocuOY20i/239atWCIiAcZjBm10XZpP5lBqpZuEei5bgPvi8Ay0HnQWGwA==
+X-Received: by 2002:a17:906:28c1:b0:8b1:75a5:4a92 with SMTP id p1-20020a17090628c100b008b175a54a92mr10751427ejd.72.1678091298971;
+        Mon, 06 Mar 2023 00:28:18 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
+        by smtp.gmail.com with ESMTPSA id m17-20020a50c191000000b004e7ffb7db11sm499133edf.76.2023.03.06.00.28.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:28:18 -0800 (PST)
+Message-ID: <ebbc1c7a-2a96-409c-0e92-ae0f57ae5335@linaro.org>
+Date:   Mon, 6 Mar 2023 09:28:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
+ SoC
+Content-Language: en-US
 To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
         brendan.higgins@linux.dev, briannorris@chromium.org,
         brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
         davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
@@ -57,159 +69,131 @@ Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
         yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
         piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
         robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v10 15/15] soc: amd: Add support for AMD Pensando SoC
- Controller
-Message-ID: <202303061526.I8VPcR1M-lkp@intel.com>
-References: <20230306040739.51488-16-blarson@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306040739.51488-16-blarson@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230306040739.51488-1-blarson@amd.com>
+ <20230306040739.51488-3-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230306040739.51488-3-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brad,
+On 06/03/2023 05:07, Brad Larson wrote:
+> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> v10 changes:
+> - Move reset-names property definition next to existing resets prop
+> - Move allOf to the bottom and set resets/reset-names required only for pensando
+> - Fix reg maxItems for existing, must be 1
+> 
+> v9 changes:
+> - Add reset-names and resets properties
+> - Add if/then on property amd,pensando-elba-sd4hc to set reg property
+>   values for minItems and maxItems
+> 
+> ---
+>  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 33 ++++++++++++++++---
+>  1 file changed, 29 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index adacd0535c14..0c4d6d4b2b58 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -9,19 +9,18 @@ title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
+>  maintainers:
+>    - Masahiro Yamada <yamada.masahiro@socionext.com>
+>  
+> -allOf:
+> -  - $ref: mmc-controller.yaml
+> -
+>  properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - amd,pensando-elba-sd4hc
+>            - microchip,mpfs-sd4hc
+>            - socionext,uniphier-sd4hc
+>        - const: cdns,sd4hc
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -30,8 +29,13 @@ properties:
+>      maxItems: 1
+>  
+>    resets:
+> +    description: physical line number to hardware reset the mmc
 
-I love your patch! Perhaps something to improve:
+This part seems to be not needed anymore. Resets field was already added.
 
-[auto build test WARNING on fe15c26ee26efa11741a7b632e9f23b01aca4cc6]
+>      maxItems: 1
+>  
+> +  reset-names:
+> +    items:
+> +      - const: hw
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Brad-Larson/dt-bindings-arm-add-AMD-Pensando-boards/20230306-121545
-base:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-patch link:    https://lore.kernel.org/r/20230306040739.51488-16-blarson%40amd.com
-patch subject: [PATCH v10 15/15] soc: amd: Add support for AMD Pensando SoC Controller
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230306/202303061526.I8VPcR1M-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b4bbd78c769f6618e07ec1607fdd3d964dd13083
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Brad-Larson/dt-bindings-arm-add-AMD-Pensando-boards/20230306-121545
-        git checkout b4bbd78c769f6618e07ec1607fdd3d964dd13083
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/soc/amd/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303061526.I8VPcR1M-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/soc/amd/amd-pensando-ctrl.c: In function 'penctrl_ioctl':
->> drivers/soc/amd/amd-pensando-ctrl.c:97:36: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-      97 |         if (copy_from_user(tx_buf, (void __user *)msg->tx_buf, msg->len)) {
-         |                                    ^
-   drivers/soc/amd/amd-pensando-ctrl.c:120:26: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     120 |         if (copy_to_user((void __user *)msg->rx_buf, rx_buf, msg->len))
-         |                          ^
+Why did you add reset-names for one item? There is no v8 of this patch,
+so I cannot find previous discussion about it.
 
 
-vim +97 drivers/soc/amd/amd-pensando-ctrl.c
+>    # PHY DLL input delays:
+>    # They are used to delay the data valid window, and align the window to
+>    # sampling clock. The delay starts from 5ns (for delay parameter equal to 0)
+> @@ -120,6 +124,27 @@ required:
+>    - interrupts
+>    - clocks
+>  
+> +allOf:
+> +  - $ref: mmc-controller.yaml
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: amd,pensando-elba-sd4hc
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
 
-    35	
-    36	static long
-    37	penctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-    38	{
-    39		struct spi_transfer t[2] = { 0 };
-    40		struct penctrl_device *penctrl;
-    41		struct penctrl_spi_xfer *msg;
-    42		struct spi_device *spi_dev;
-    43		unsigned int num_msgs;
-    44		struct spi_message m;
-    45		u8 tx_buf[PENCTRL_MAX_MSG_LEN];
-    46		u8 rx_buf[PENCTRL_MAX_MSG_LEN];
-    47		u32 size;
-    48		int ret;
-    49	
-    50		/* Check for a valid command */
-    51		if (_IOC_TYPE(cmd) != PENCTRL_IOC_MAGIC)
-    52			return -ENOTTY;
-    53	
-    54		if (_IOC_NR(cmd) > PENCTRL_IOC_MAXNR)
-    55			return -ENOTTY;
-    56	
-    57		if (_IOC_DIR(cmd) & _IOC_READ)
-    58			ret = !access_ok((void __user *)arg, _IOC_SIZE(cmd));
-    59		else if (_IOC_DIR(cmd) & _IOC_WRITE)
-    60			ret = !access_ok((void __user *)arg, _IOC_SIZE(cmd));
-    61	
-    62		if (ret)
-    63			return -EFAULT;
-    64	
-    65		/* Get a reference to the SPI device */
-    66		penctrl = filp->private_data;
-    67		if (!penctrl)
-    68			return -ESHUTDOWN;
-    69	
-    70		spi_dev = spi_dev_get(penctrl->spi_dev);
-    71		if (!spi_dev)
-    72			return -ESHUTDOWN;
-    73	
-    74		/* Verify and prepare spi message */
-    75		size = _IOC_SIZE(cmd);
-    76		if ((size % sizeof(struct penctrl_spi_xfer)) != 0) {
-    77			ret = -EINVAL;
-    78			goto done;
-    79		}
-    80		num_msgs = size / sizeof(struct penctrl_spi_xfer);
-    81		if (num_msgs == 0) {
-    82			ret = -EINVAL;
-    83			goto done;
-    84		}
-    85		msg = memdup_user((struct penctrl_spi_xfer __user *)arg, size);
-    86		if (!msg) {
-    87			ret = PTR_ERR(msg);
-    88			goto done;
-    89		}
-    90		if (msg->len > PENCTRL_MAX_MSG_LEN) {
-    91			ret = -EINVAL;
-    92			goto done;
-    93		}
-    94	
-    95		t[0].tx_buf = tx_buf;
-    96		t[0].len = msg->len;
-  > 97		if (copy_from_user(tx_buf, (void __user *)msg->tx_buf, msg->len)) {
-    98			ret = -EFAULT;
-    99			goto done;
-   100		}
-   101		if (num_msgs > 1) {
-   102			msg++;
-   103			if (msg->len > PENCTRL_MAX_MSG_LEN) {
-   104				ret = -EINVAL;
-   105				goto done;
-   106			}
-   107			t[1].rx_buf = rx_buf;
-   108			t[1].len = msg->len;
-   109		}
-   110		spi_message_init_with_transfers(&m, t, num_msgs);
-   111	
-   112		/* Perform the transfer */
-   113		mutex_lock(&spi_lock);
-   114		ret = spi_sync(spi_dev, &m);
-   115		mutex_unlock(&spi_lock);
-   116	
-   117		if (ret || (num_msgs == 1))
-   118			goto done;
-   119	
-   120		if (copy_to_user((void __user *)msg->rx_buf, rx_buf, msg->len))
-   121			ret = -EFAULT;
-   122	
-   123	done:
-   124		spi_dev_put(spi_dev);
-   125		return ret;
-   126	}
-   127	
+Hm, we missed to mention it before, but what is the second reg for? It's
+not obvious from the binding so probably you need to describe it instead
+minItems:
+  items:
+    - description: foo
+    - description: bar
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +      required:
+> +        - reset-names
+> +        - resets
+> +    else:
+> +      properties:
+> +        reset-names: false
+> +        resets: false
+> +        reg:
+> +          maxItems: 1
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+Best regards,
+Krzysztof
+
