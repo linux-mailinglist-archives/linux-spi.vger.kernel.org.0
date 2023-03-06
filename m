@@ -2,73 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65416ACEB5
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 21:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A046ACEC1
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 21:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjCFUAl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 15:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S230073AbjCFUBU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 15:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjCFUAf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 15:00:35 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF617D547;
-        Mon,  6 Mar 2023 12:00:06 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id bl39so3639673qkb.10;
-        Mon, 06 Mar 2023 12:00:06 -0800 (PST)
+        with ESMTP id S230144AbjCFUBO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 15:01:14 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3EC67024;
+        Mon,  6 Mar 2023 12:00:56 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so14280355pjb.3;
+        Mon, 06 Mar 2023 12:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678132805;
+        d=gmail.com; s=20210112; t=1678132856;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOHJOzqPvQPks7ewcZEge43RgKk8xjbbGR/W6FZli4o=;
-        b=n/CS1HG5g9PNCu3723xgx5TZttbLnMrfbsw+b0TMdjyaRVLYozddRpSAaKI0TiK0Yu
-         RHmKKiUAB9bjrubIKG/ue281pgYg3va5N7frVWd0nFBC7f59S4XnWPg9SQQsu+TAfHg+
-         XuweGm/37wlKHIMWCN8r8btL1VsPl/WBTtUW4i4wSkhIN6XZ6qVlbXTlQoCB7wLbfL46
-         hDwrhl6YHfvrHEZW0QgISAwEOEmOyESvqQ6+IAntIMTZqI6eBQ+v0JjIm9k/O1gl66Tg
-         N7JgRKkqPgZoftg9cEZtb9sbWsnFojknM5kFYRy9CSyDbXEuFAJzv1JdSy/aqBSSaN5y
-         Nk7A==
+        bh=uXR1hBuNmG/TwC91AeVvsW1UVH/MwkAfhUSEnuvNaoY=;
+        b=o6hZefnQYEnFw3COvoTdyyoXo9Zv4P0LTShB301lkw0/gGr+x1ou0XeYCSdcXXLXoz
+         Ie/lwSIsRhh9vBh4c56fFPeCbh1Mg/u0f+SLHuOsNnA01L3iQxuD6tKvCodPDyUeqcUA
+         ipzyAtvRXWR1nR5U0W8m7xh6fPIYtpAYIZVYRkCJb0GTxixFtDSEeec8W6O4TIR9SFvb
+         8TyLwk+heXtYmzhntJcZ54SphmylZPrikYFa1PRdJ8V5j+VefclzJKcG1hcN/EBRiJ2z
+         A5LjdstbOHhVHAVRXA7o2dTcBNuVBc27QoVtU1tjX+Yepbtmilj428R4Os2Xd6WiLWnA
+         Of4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678132805;
+        d=1e100.net; s=20210112; t=1678132856;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eOHJOzqPvQPks7ewcZEge43RgKk8xjbbGR/W6FZli4o=;
-        b=b73z8Lk5i03vkAiLk6dxVL3c1BMNe1bHjYHxPglcdWNoPnxZuk56hBKA6VV1LGSCMt
-         V6HMRjIM6FGuRzovPHtdqo+b6D8ZuCmjaJ7AIROdF9JxseKpMQ4Hjriua07F1wzaRvkD
-         5q2dFm9mp5PN3jyO1SduOCbX/1EYXGLtFPJ7QfpWNaLC7tiLrh6/8TcpfA3nIQeOOr0l
-         EeMNvzomMbGACyeG1GCrCwtXSPihhrNCgVqLffV7bfGH1YF2pXBoZZa2KSY1bSvkO9eg
-         2JK1SkNpaEFdoFFlkHr9B9TDxUFjlWqR1Nex/mp0uSyKn+sMwsUzo1hnxtLu6uyU2Tg+
-         h3Yg==
-X-Gm-Message-State: AO0yUKVzZjGZ9FFOcmvY5Ham7BOJGamvju9sjromDNlIOO+hwhFRZS/R
-        yvayot/qAF9XUfZyL/FWxEnDQQIBscDBrUF0jv0=
-X-Google-Smtp-Source: AK7set80n5xFsKwOyX/PqUToJxUafo7yFE3/DjxPH/ROkBXEXcxDkrr4pDX3fsHyFCEHodiU6XFkw+iu9YZlHvFtFt4=
-X-Received: by 2002:ae9:eb4e:0:b0:71f:b908:7b7e with SMTP id
- b75-20020ae9eb4e000000b0071fb9087b7emr2936826qkg.10.1678132805183; Mon, 06
- Mar 2023 12:00:05 -0800 (PST)
+        bh=uXR1hBuNmG/TwC91AeVvsW1UVH/MwkAfhUSEnuvNaoY=;
+        b=aXlIsS33Jjsuul+qMNL2sbI/Xqukq2wbEWP7Zdwtlj7bv64XyL7zxFEoY23RZ0YQor
+         Bqbh5zVr8LntGonP2exW1FvIEe3AwE9XlYZmNS8BKWTAWJs46K5D88Cz1tVysYW6l+vP
+         FlMoMohxRfMxV4J+TUf+f7Bz1HpG6jA9mHubAYpMaJGTADnDWXZk6nHVD+RgpSfy8wnl
+         /+/YGrN5IjCieKDYZ32gkewHxI34PwOi60E7Fm7h+ZsDbXdaNQooMMjB7VEGiEr6rL0+
+         lQojxCgDm1YNLkaokb9PWqj3WmVVVML7lZp7/PlVkSmU5avaYieldMHSE8tJs0W+SvaY
+         B+Qw==
+X-Gm-Message-State: AO0yUKXAbIFP23mAPtL3C28xLpxvoISrBRzI+Kq+PG803rUuLclFekw1
+        m8OB/pmYca24tx4TYBNZYeUG77vaa6Wk3reLCVE=
+X-Google-Smtp-Source: AK7set/DxZtiZhO+z+A0Is7yokDniYYkETavBEcleYa7IPSvIEQBIV7zty9Y+UWe1CWFM73JZ5CBgh34wQSFC4iK+eg=
+X-Received: by 2002:a17:90a:5993:b0:233:b520:1544 with SMTP id
+ l19-20020a17090a599300b00233b5201544mr6625621pji.0.1678132856231; Mon, 06 Mar
+ 2023 12:00:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306040739.51488-1-blarson@amd.com> <20230306040739.51488-11-blarson@amd.com>
- <20230306160017.ptd3ogundxvus5zm@mobilestation>
-In-Reply-To: <20230306160017.ptd3ogundxvus5zm@mobilestation>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 6 Mar 2023 21:59:29 +0200
-Message-ID: <CAHp75VfFMiy35Q1bX3Az3HgkhK+4bfH+pCE2XwOYVpqT8UiFXA@mail.gmail.com>
-Subject: Re: [PATCH v10 10/15] spi: dw: Add support for AMD Pensando Elba SoC
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Brad Larson <blarson@amd.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com> <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
+In-Reply-To: <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Mon, 6 Mar 2023 21:00:44 +0100
+Message-ID: <CAOiHx=nmsAh3ADL3s0eZKpEZJqCB_POi=8YjfxrHYLEbjRfwHg@mail.gmail.com>
+Subject: Re: [PATCH V5 09/15] spi: Add stacked and parallel memories support
+ in SPI core
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
+        pratyush@kernel.org, Sanju.Mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        narmstrong@baylibre.com, khilman@baylibre.com,
+        matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        william.zhang@broadcom.com, kursad.oney@broadcom.com,
+        anand.gore@broadcom.com, rafal@milecki.pl, git@amd.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, radu_nicolae.pirea@upb.ro,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -80,32 +120,58 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 6:00 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> On Sun, Mar 05, 2023 at 08:07:34PM -0800, Brad Larson wrote:
+Hi,
 
-...
-
-> > -     node = of_parse_phandle(np, syscon_name, 0);
+On Mon, 6 Mar 2023 at 18:26, Amit Kumar Mahapatra
+<amit.kumar-mahapatra@amd.com> wrote:
 >
->         node = of_parse_phandle(dev_of_node(pdev->dev), syscon_name, 0);
-
-Side note: I would rather see syscon_fwnode_to_regmap() instead of
-this. And IIRC syscon already has an API to find by name.
-
-> > +     if (!node)
+> For supporting multiple CS the SPI device need to be aware of all the CS
+> values. So, the "chip_select" member in the spi_device structure is now an
+> array that holds all the CS values.
 >
-> > +             return dev_err_probe(&pdev->dev, -ENODEV, "failed to find %s\n",
-> > +                                  syscon_name);
+> spi_device structure now has a "cs_index_mask" member. This acts as an
+> index to the chip_select array. If nth bit of spi->cs_index_mask is set
+> then the driver would assert spi->chip_select[n].
 >
-> Hm, using dev_err_probe() with known error value seems overkill.
+> In parallel mode all the chip selects are asserted/de-asserted
+> simultaneously and each byte of data is stored in both devices, the even
+> bits in one, the odd bits in the other. The split is automatically handled
+> by the GQSPI controller. The GQSPI controller supports a maximum of two
+> flashes connected in parallel mode. A "multi-cs-cap" flag is added in the
+> spi controntroller data, through ctlr->multi-cs-cap the spi core will make
+> sure that the controller is capable of handling multiple chip selects at
+> once.
+>
+> For supporting multiple CS via GPIO the cs_gpiod member of the spi_device
+> structure is now an array that holds the gpio descriptor for each
+> chipselect.
+>
+> Multi CS support using GPIO is not tested due to unavailability of
+> necessary hardware setup.
+>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>  drivers/spi/spi.c       | 213 +++++++++++++++++++++++++++-------------
+>  include/linux/spi/spi.h |  34 +++++--
+>  2 files changed, 173 insertions(+), 74 deletions(-)
+>
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 5866bf5813a4..8ec7f58fa111 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -613,7 +613,8 @@ static int spi_dev_check(struct device *dev, void *data)
+>         struct spi_device *new_spi = data;
+>
+>         if (spi->controller == new_spi->controller &&
+> -           spi_get_chipselect(spi, 0) == spi_get_chipselect(new_spi, 0))
+> +           spi_get_chipselect(spi, 0) == spi_get_chipselect(new_spi, 0) &&
+> +           spi_get_chipselect(spi, 1) == spi_get_chipselect(new_spi, 1))
+>                 return -EBUSY;
 
-It's allowed use and it helps to drop a few unnecessary lines of code.
+This will only reject new devices if both chip selects are identical,
+but not if they only share one, e.g. CS 1 + 2 vs 1 + 3, or 1 + 2 vs
+only 2, or if the order is different (1 + 2 vs 2 + 1 - haven't read
+the code too close to know if this is allowed/possible).
 
-> > +     syscon = syscon_node_to_regmap(node);
-> > +     if (IS_ERR(syscon))
-> > +             return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
-> > +                                  "syscon regmap lookup failed\n");
-
--- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Jonas
