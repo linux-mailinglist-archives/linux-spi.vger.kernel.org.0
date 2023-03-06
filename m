@@ -2,84 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D09A6AB950
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 10:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0A56ABC18
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 11:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCFJJL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 04:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S230104AbjCFKZR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 05:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjCFJJK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 04:09:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE7E1985;
-        Mon,  6 Mar 2023 01:09:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 389DA606A0;
-        Mon,  6 Mar 2023 09:09:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B99EC433D2;
-        Mon,  6 Mar 2023 09:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678093748;
-        bh=4CQ+7V5IKk6e8eq1xtI0aIOQ48igDukd8H1orLjLpLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TrY/K48EzxywXdcyXJ3sQoP5+IC0Jon20pOHTcyoX7Ug7vKsFhfdJskbHVORuyhFx
-         95K408pF2i8Y6ftRDyX06uK2noRGVADF5bq5DA3Ry8C10kSZg+6tYlAqiVX40YREjx
-         NhloeI/v45hZRjvubeLzdFMphaLqDkFK0KDEEt4oS1/bpCDF4RuJMB5JBEO340y4in
-         /0hhFHjN1XW2wR4F+RooHJMUujn8aWqmCV8D7KZRY23Z0fuhMs42bM9vz6NghwG2oi
-         mxpSLAqb3s8Bmdg7j3Pba5+nABF7FjM3yhZ1mO6rnuTg1JHQC8B8ixGod3GZvZZqrY
-         ku49lsMZh7WjQ==
-Date:   Mon, 6 Mar 2023 09:09:01 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH 1/5] mfd: Add support for Intel LJCA device
-Message-ID: <20230306090901.GC9667@google.com>
-References: <20230219183059.1029525-1-xiang.ye@intel.com>
- <20230219183059.1029525-2-xiang.ye@intel.com>
- <20230305103456.GF2574592@google.com>
- <ZAVWMp2LyxY7w6N0@ye-NUC7i7DNHE>
+        with ESMTP id S230081AbjCFKZM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 05:25:12 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5BC22DFB
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 02:25:09 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id x1so6049064uav.9
+        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 02:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=XLGWJIk9ngr+DzzO288LuvJaM4tXJNvPNwQ2aS9Ags44qiVmrxsinzlSTI373SWvQL
+         +6SgUcT0EwDOIVN2f57batbL6WGkZ2VjHiZD2U0ZfoB3ufKNwLox0AmmmOFBlt9HJ6RH
+         OS5dvcaELSOGwrw7xfZFJ2NbgVH7MQKiyCspd7sI5fG3WOcHvbeWf9pH0zYeQabOYzn3
+         yw9gnSfWn+YHaL2P9olrtireCVfXlHXeG4tpX1ltR43P7LxaSqE8ArqnuABg3RgkQyVT
+         NPOLZ1x9kR7oCsOGhR6lezPY8aiclxT9jA/o8x8OVtbG9/bfL0WUzRZuLJI8IqemKCfK
+         Id5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=BS2ClefVjyH/EZc2LBmiLs2awe40CAwG5CS9L2rg8hLsOZ62H3S1a2PkBxaLbH6C2t
+         RHomjBNVOrBN0BzE9c02UDjBKKWR88UEqBBW3UafIQkB4EmaqMSAFki7xM6hLD4ZIHUU
+         5HwqB2GCRsXPA966jf0FsZDLxfW8QPGHNPuZ6l5GKbmwSnH9v4jBFHm84XJbWfgIcFah
+         5lxAO/42DBAbDVKbNg7CzhPptCEkpVieHywW71PG8U+r9vuJo5avg8X6mgQuEiSb7pq4
+         +BQH+I5/7g/7gELCrwj7Rd+GMPE/nJBKMM6DoPCcvEZ1cWTtelcxCUnzc04p4PDanFXD
+         2KQw==
+X-Gm-Message-State: AO0yUKX461aaKVnh4zBci0YqJ/AIaDUlVYTMv47/+K/xsJMcGlLA13jW
+        Te14GSWImynaomQuWJoXIsV+XzKtwbQWUl7Q46foEyZZLJI=
+X-Google-Smtp-Source: AK7set+HbxOG8fRWYdSd2Spe8YgeAHrZJbrwpyn/MCNLktCdTFpedrqR91TU0+OXtW6ZaqP/6B7py4FyO7omWVyWxwo=
+X-Received: by 2002:a1f:1752:0:b0:401:f65:99c2 with SMTP id
+ 79-20020a1f1752000000b004010f6599c2mr6566336vkx.3.1678098308425; Mon, 06 Mar
+ 2023 02:25:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAVWMp2LyxY7w6N0@ye-NUC7i7DNHE>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:ce6f:0:b0:3ae:930b:3e70 with HTTP; Mon, 6 Mar 2023
+ 02:25:08 -0800 (PST)
+Reply-To: madis.scarl@terlera.it
+From:   "Ms Eve from U.N" <denisagotou@gmail.com>
+Date:   Mon, 6 Mar 2023 11:25:08 +0100
+Message-ID: <CAD6bNBj=acZn6jpkuAhuMAxbq=prud3DvWJUd6YsqM0swBt35Q@mail.gmail.com>
+Subject: Re: Claim of Fund:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:932 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8772]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [denisagotou[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.0 HK_SCAM No description available.
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 06 Mar 2023, Ye, Xiang wrote:
+Hello Good Morning,
+This is to bring to your notice that all our efforts to contact you
+through this your email ID failed Please Kindly contact Barrister.
+Steven Mike { mbarrsteven@gmail.com } on his private email for the
+claim of your compensation entitlement
 
-> Hi Lee,
-> 
-> Thanks for the review.
-> On Sun, Mar 05, 2023 at 10:34:56AM +0000, Lee Jones wrote:
-> > On Mon, 20 Feb 2023, Ye Xiang wrote:
-> > 
-> > > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> > > device named "La Jolla Cove Adapter" (LJCA).
-> > 
-> > The "USB part" should live in drivers/usb.
-> What about putting ljca.c to drivers/usb/misc?
-
-Sounds reasonable to to me at first glance.
- 
-However, that will ultimately be up to the USB maintainers.
-
--- 
-Lee Jones [李琼斯]
+Note: You have to pay for the delivery fee.
+Yours Sincerely
+Mrs EVE LEWIS
