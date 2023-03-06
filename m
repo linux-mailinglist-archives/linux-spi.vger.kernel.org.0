@@ -2,104 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C876AC3A7
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 15:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527966AC4AE
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 16:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjCFOo7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 09:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S229642AbjCFPWS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 10:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCFOo6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 09:44:58 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F104712042;
-        Mon,  6 Mar 2023 06:44:40 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3264grvA003048;
-        Mon, 6 Mar 2023 14:44:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=VW6B8LsWDMY2hWOF9uwJP75jKcyNad+r7ywddka38A4=;
- b=lGkI7AeMYKl1WtR4tT3FZYkHaLCTTGCaH6aBDYEDTOiAOPtXa1GTAwic1EZ5zRbYSfNW
- /H8mSCstSvzGu2rIZ4HDJj6rcJ1Q17kdO3EQMPHWdqDQtQvO3LiFgTlHoicQ8nEQGxKo
- r28aqRNfLGW5EhrBW/MxdGM/XuG0pZ5m6X8l8k/t8vuFGI9LgsyU/nOryxBS482GyuY6
- Uw9+tC5CdSPowbBD9Qnzg/rsiWsE1yQYajHzz4s+h2/F/8QVNTyykAIUZZhPQ4b0Rt3o
- YA+MEkgUcgRYhlh1y6LcO7s9x2Ko8Euj5bvyum/hySwyWBcdH21Q7RhaFGfxKGbDh7jp Sg== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417jw0cf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 14:44:11 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 326Ei7xV013294;
-        Mon, 6 Mar 2023 14:44:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3p4fft5hve-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 06 Mar 2023 14:44:07 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326Ei720013289;
-        Mon, 6 Mar 2023 14:44:07 GMT
-Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 326Ei7BL013288;
-        Mon, 06 Mar 2023 14:44:07 +0000
-Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
-        id 639F012010CA; Mon,  6 Mar 2023 20:14:06 +0530 (IST)
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_varada@quicinc.com, quic_mdalam@quicinc.com
-Subject: [PATCH 2/5] spi: qup: Use devm_platform_get_and_ioremap_resource()
-Date:   Mon,  6 Mar 2023 20:14:04 +0530
-Message-Id: <20230306144404.15517-1-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ih2T7pzTrIoFdI_e-r0eGHo3rsyuNYmv
-X-Proofpoint-ORIG-GUID: ih2T7pzTrIoFdI_e-r0eGHo3rsyuNYmv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1011 adultscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=712 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060129
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229486AbjCFPWR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 10:22:17 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2202BF3A
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 07:22:16 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z42so9976266ljq.13
+        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 07:22:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678116134;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2mkisKma0bo2GeAEB+dhQXhYKz8ANbxEzJ9U4Ikm+E0=;
+        b=bIizPdSncfhSymzhTIMugmuioUfw3Y6itp5NktW7SkGwpXONsd1jYQ2zq6N2n6D9Mg
+         7OEf2FR9QQXquNYoH5UINrKD99D88XMRUYYEflaY/dGVsOMXa9V+waDtdQmQY0nqVI/i
+         WyikS72VhukkE0J9IGRGDq9fvnp8fLbGkcOt72NvrCrePbWqKLkdyZj1SLwmBDcJ3n3N
+         VED0YWM1piJRXD9sLbCXam+FFJk/vq+93QqVILGUDfdMKbkfwIHqIEkUJ+WW0yQ59EMM
+         1rKgr3A712UZk6gFTcBrfAiKNPp3BPNGyRg/dZciWbFj+5GXtOdnu+kepuhqHkn//qCR
+         WE0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678116134;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2mkisKma0bo2GeAEB+dhQXhYKz8ANbxEzJ9U4Ikm+E0=;
+        b=nNomyiZ9NgudWrs11BdjErj3six70WflDb7/78W4splaHR4Q9ZtVrjQTVjHz0qRKjh
+         hsuXtWnNQ3EgFyfTepqF2coq3WrTZQy7qWEhWO2lBIYY49pbsCc6tTZ1B9FT+MSvHgTx
+         nxG3H9VnpGg7B1nYIjgsYxzDV/2THbWGDq0LGyGBahmAtIZFXcjiNYKecygWmflWzsIR
+         ndV0TLn5W5jiI9p+z8t3e22LKtkuUdlat4SuugMjQ+B1mnkTRa5TVQ0QQxM8QwveXSM2
+         AtF6lCwe7NNqZdovQRufkwuqK2SuDEXDjQJQCmjsfHO5IO8F0v2/UMlW+WkVxOeOYoQE
+         DA9w==
+X-Gm-Message-State: AO0yUKXylXodoOV2oEjJ0XYZZKzvpyWaMal5rL8zq+4nBg/G+2FQrWa+
+        CBtiEFVAvu6QJdzqxk0Yrt3Z0YiYtxM=
+X-Google-Smtp-Source: AK7set+BfahFUdqT7eMLunvPO8aWh5KFCNq+7QoJS0RQjsVoN3A44wiXQ641Ib2orKaAXNadHiDQtQ==
+X-Received: by 2002:a2e:351a:0:b0:295:906d:b98 with SMTP id z26-20020a2e351a000000b00295906d0b98mr3193683ljz.31.1678116134708;
+        Mon, 06 Mar 2023 07:22:14 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id bi12-20020a05651c230c00b002935390c0b3sm1753587ljb.36.2023.03.06.07.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 07:22:13 -0800 (PST)
+Date:   Mon, 6 Mar 2023 18:22:12 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 22/87] spi: dw-mmio: Convert to platform remove callback
+ returning void
+Message-ID: <20230306152212.o7v756zwsrlgrlw5@mobilestation>
+References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
+ <20230303172041.2103336-23-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303172041.2103336-23-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On Fri, Mar 03, 2023 at 06:19:36PM +0100, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
 
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
- drivers/spi/spi-qup.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks!
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 678dc51ef017..71fc65e094e7 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1003,8 +1003,7 @@ static int spi_qup_probe(struct platform_device *pdev)
- 	int ret, irq, size;
- 
- 	dev = &pdev->dev;
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(dev, res);
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--- 
-2.17.1
+-Serge(y)
 
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/spi/spi-dw-mmio.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 26c40ea6dd12..6ae124c30969 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -328,7 +328,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static int dw_spi_mmio_remove(struct platform_device *pdev)
+> +static void dw_spi_mmio_remove(struct platform_device *pdev)
+>  {
+>  	struct dw_spi_mmio *dwsmmio = platform_get_drvdata(pdev);
+>  
+> @@ -337,8 +337,6 @@ static int dw_spi_mmio_remove(struct platform_device *pdev)
+>  	clk_disable_unprepare(dwsmmio->pclk);
+>  	clk_disable_unprepare(dwsmmio->clk);
+>  	reset_control_assert(dwsmmio->rstc);
+> -
+> -	return 0;
+>  }
+>  
+>  static const struct of_device_id dw_spi_mmio_of_match[] = {
+> @@ -366,7 +364,7 @@ MODULE_DEVICE_TABLE(acpi, dw_spi_mmio_acpi_match);
+>  
+>  static struct platform_driver dw_spi_mmio_driver = {
+>  	.probe		= dw_spi_mmio_probe,
+> -	.remove		= dw_spi_mmio_remove,
+> +	.remove_new	= dw_spi_mmio_remove,
+>  	.driver		= {
+>  		.name	= DRIVER_NAME,
+>  		.of_match_table = dw_spi_mmio_of_match,
+> -- 
+> 2.39.1
+> 
