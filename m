@@ -2,99 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC2F6AC131
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 14:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC906AC20F
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 15:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjCFNdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 08:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S230013AbjCFOAt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 09:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjCFNc4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 08:32:56 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617382F78C;
-        Mon,  6 Mar 2023 05:32:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 169EDCE127A;
-        Mon,  6 Mar 2023 13:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD95C433A1;
-        Mon,  6 Mar 2023 13:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678109546;
-        bh=r2YevUTaEioy0IiiN4oIORAATS724rvNMW2/rHghHCQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=T25nklooE0ahT7WUzKCeUE4BraSm+vDbPKMRF2OXSEFIP+4lRgO7Wshph58T3JAt3
-         jniU6sOuca3s247kwAySQQkJH//HS4IeA7hnjgcyObifJnRGe2VxXSk4uuHzklwXFP
-         /YUGrbi3SYG2cNwJtRH4DESQD48Yemx5ZkxuYPsjJD+A9qvQtvKQlc/CeX+6XGgKSf
-         ieeoU/3jHTvqm9V3K5lHQYKINzJ2vMrroqmO+XPvZfLkb52ZHTIwFnZwL/Wsw3zTWp
-         YEaJqY6KYe1uutES9F7wKJ4CSW4D0w9bF75y1vd13a95U1JEtBM5yKmPEKYTaI14oP
-         79dlnmO/CpwlQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        William Qiu <william.qiu@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-In-Reply-To: <20230302105221.197421-1-william.qiu@starfivetech.com>
-References: <20230302105221.197421-1-william.qiu@starfivetech.com>
-Subject: Re: [PATCH v1 0/2] Add Quad SPI driver for StarFive JH7110 SoC
-Message-Id: <167810954467.76172.7217821282766106312.b4-ty@kernel.org>
-Date:   Mon, 06 Mar 2023 13:32:24 +0000
+        with ESMTP id S230165AbjCFOAp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 09:00:45 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876EA302BB
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 06:00:40 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id t4so8138530ybg.11
+        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 06:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678111240;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/Y94Pc8yhv157LBUch/tn3T/6KugP9L4mHMFv2Mi1c=;
+        b=vA6tYOcfyoBCdfKlR/1Lr7HvkVd06OiCVrXU4TOnwFiit65IdM0kFbVBLqZW5cMmK+
+         A5yUU9Mw/tLMUDAf7NRanaVp4fZU9TqqacCQeyq6sJnEI+FMxoGagywCeMfqEPqOeBlu
+         nXZe3GT1ey9hKarOppW/jvJi0wQDqDiDWkgi+zWo3VL53r/o2qQ6XywZjqGNfVs+aziJ
+         vFDiFhoPpunDokD6pdrYjro1heNldIyNfmCy5fkj2rW2gZBBy0mMduKlEM3Hcg2IYroD
+         KAvVMKy94smfbRsD0o8BkZJR9a+/t+J9dmoQ7IUmtTEfx2oHWkOThNqkknbmyZqubsnk
+         Ti0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678111240;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j/Y94Pc8yhv157LBUch/tn3T/6KugP9L4mHMFv2Mi1c=;
+        b=nIN5ePhHSPmg99ZcJcRPqw7DczAt6O1jF+qiAmNUBHaK1OFfpa1tN5gULtG8DiiEoI
+         ItZG2x5S2Vh4JoNGoEaIE0JVsQYISu7cYnlJvg4TS25Xb4hMTcGEI6xVYcicrZv8hQqJ
+         Uszf4er7gDMtqPWbkqxlV2nmOSwgkWEbQ9rIq/rZvViNjI+fqddWrz16uIyn4nfRJEju
+         aO8bgWum/nBFUbhIrpIWVgwtCdheX9GGVbbg/r4BBg0rlGxYjcmEmoekhFYZIDupXImb
+         kEjwcpHyRMnngrrQQJbsbgFsIAXWCwX4CKkb7uYO1K4aLPQUkMkOcWCezcYI+1rNFq9L
+         ArNA==
+X-Gm-Message-State: AO0yUKVNv4slu+9pLN/GJ7FlsMcf7x02H4NNw9Gb9la2W+7HF/RZEuN3
+        4JQWR2Ju7eUuX/i+POdBTNkrKh94T8Jv/H7LFHKxQQ==
+X-Google-Smtp-Source: AK7set/+qd3FzcDCbbQjlLKSyczCieknA6kNFFX6l4uSmFR+66HJ7iMYS6i/ooDX/uospypKCFmfiNndLJj2B5M0Ve0=
+X-Received: by 2002:a25:8b8f:0:b0:906:307b:1449 with SMTP id
+ j15-20020a258b8f000000b00906307b1449mr6437900ybl.5.1678111239717; Mon, 06 Mar
+ 2023 06:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-6-xiang.ye@intel.com>
+ <CACRpkdbAve++nA0zwHvOm3fy0t9J9g0fR_FO71TTv=TwM6CJYA@mail.gmail.com> <Y/j7cAQaaCXXYe6s@ye-NUC7i7DNHE>
+In-Reply-To: <Y/j7cAQaaCXXYe6s@ye-NUC7i7DNHE>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 15:00:28 +0100
+Message-ID: <CACRpkdbg4zu9-yKy3AEKqxTiNKa-LUO2Lokg3pufT0nBz3ubKg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
+To:     "Ye, Xiang" <xiang.ye@intel.com>
+Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 02 Mar 2023 18:52:19 +0800, William Qiu wrote:
-> This patchset adds initial rudimentary support for the StarFive
-> Quad SPI controller driver. And this driver will be used in
-> StarFive's VisionFive 2 board.The first patch constrain
-> minItems/maxItems of resets for JH7110 QSPI and Patch 2 adds
-> support for StarFive JH7110 QSPI.
-> 
-> The patch series is based on v6.2.
-> 
-> [...]
+On Fri, Feb 24, 2023 at 7:02 PM Ye, Xiang <xiang.ye@intel.com> wrote:
+> On Fri, Feb 24, 2023 at 11:53:08AM +0100, Linus Walleij wrote:
 
-Applied to
+> > Is the idea that e.g. fwupdmgr should provide a front-end for this?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> We haven't implemented a front-end in fwupdmgr. dfu-util is used to
+> update LJCA firmware manually currently. Maybe we will consider
+> implementing this in fwupdmgr later.
 
-Thanks!
+It's a matter of process rather than implementation really, but if you can
+please communicate upward to the project that if this is to go into
+consumer hands (i.e. be used by random people on random laptops)
+the firmware update should come via fwupdmgr.
 
-[1/2] dt-bindings: qspi: cdns,qspi-nor: constrain minItems/maxItems of resets
-      commit: 13f1033e07588b7d1151d22d7ee3ca8f16181de7
-[2/2] spi: cadence-quadspi: Add support for StarFive JH7110 QSPI
-      commit: 47fef94afeae2a125607b6b45145594713471320
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Yours,
+Linus Walleij
