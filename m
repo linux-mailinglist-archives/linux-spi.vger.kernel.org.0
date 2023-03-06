@@ -2,73 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B8B6AB64A
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 07:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A34B6AB6B4
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 07:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjCFG0m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 01:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S229700AbjCFG56 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 01:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjCFG0l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 01:26:41 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E63DEC69
-        for <linux-spi@vger.kernel.org>; Sun,  5 Mar 2023 22:26:40 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id g3so34089363eda.1
-        for <linux-spi@vger.kernel.org>; Sun, 05 Mar 2023 22:26:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678083999;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h2EVWs3pTg/fWY1PZtABlXR6f2sNu/d27mccEdhWh7U=;
-        b=c2B/lU6CRWGnrc5QdLUOzoB5rfafH2gCgrW5YIvUTBtsNX+/RsnYuGL/hOKA/oONey
-         xORE5C+oDdsUeHmt847wbHn51SnBdX0iOX6t3dGOSeZi9cjmGJMKKGMvKXKqFnnyLqgl
-         w4/rygv7dmvuUfGaQZd84YvLI9zRQ7Mcp3gKJAPHa+441ISzHQAT2rVhS43PHwIqWDRK
-         hFuXIhyGO8iBJxJUng8GxFFpqLJk3ZUE3FNLvHKYgbBSx1UokpPhzhKL4hl3Q1TjBtPs
-         Z03ycgEiOVyEnxzlSjOgVDEnjcFYqRWxXfRsxUky5ESdJDfQJ8Gts1UxdV5eciZ94fdQ
-         pBEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678083999;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h2EVWs3pTg/fWY1PZtABlXR6f2sNu/d27mccEdhWh7U=;
-        b=7qUccLXtiJDMZv8cX58UkZC+VLQz3Lx0kxnY0f09cDb/vNgUYRjZ7akTakQP+dSFqm
-         iSNmVXQmv3mARqxLndkS8lbnvAX1cjUF7sSdQOIUpsNPM67JhlpJOV0dUML+sQENpmJK
-         6JUik1LvcvPY5niQqyk6jABB4fJaFV6rwwtdsm6daPYjQKH+SSrkshZ81YlgA66OWCEt
-         GDON+kJK8P3kAthl6H2DS4/j6QZJ+qeArz2D26V4wRBullTSeN7ya+kRRQNUn5jMgTcz
-         7O4oJmNzd2D8IKE2ybiIg1wd7gPrpFEswVjFc5/znliF7VSES9Slu76mJYzSn5RePmo3
-         K4PA==
-X-Gm-Message-State: AO0yUKXsvPgfX/78HXoS1JXBTvfEhN7mFTU2QKGJT69lxJqBx6I+zjo0
-        HVxnfAgPu4BIWC5oUInC8gTwkiI363cg5JajCVA=
-X-Google-Smtp-Source: AK7set8n0rli9ksDBadVCoR2Qgpw1GH9WCld0Ejgjbj5d0mwffklxq/8uct/NXu8bhNw4ZCqxqvpUw==
-X-Received: by 2002:a17:907:7da6:b0:888:b764:54e5 with SMTP id oz38-20020a1709077da600b00888b76454e5mr12048360ejc.71.1678083998999;
-        Sun, 05 Mar 2023 22:26:38 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id t30-20020a50ab5e000000b004ad601533a3sm4629001edc.55.2023.03.05.22.26.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 22:26:38 -0800 (PST)
-Message-ID: <422b00ec-1ef4-95e3-db49-672da29e6e24@linaro.org>
-Date:   Mon, 6 Mar 2023 07:26:37 +0100
+        with ESMTP id S229689AbjCFG55 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 01:57:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040CDCD
+        for <linux-spi@vger.kernel.org>; Sun,  5 Mar 2023 22:57:53 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4n1-0003SS-ND; Mon, 06 Mar 2023 07:57:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4mz-002BSE-UH; Mon, 06 Mar 2023 07:57:41 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4mz-002a93-9A; Mon, 06 Mar 2023 07:57:41 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Stefan Agner <stefan@agner.ch>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] spi: imx: Fix cleanup in remove and convert to .remove_new()
+Date:   Mon,  6 Mar 2023 07:57:31 +0100
+Message-Id: <20230306065733.2170662-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
- <20230306014239.80570-1-jaewon02.kim@samsung.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=716; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=iiPlfkNGTQtHIdeLCyT911x4K26qGgM1r4nTBJQWiAs=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBY7RTAkRL5NRvNzODTQz/oDx232L+yMCPvB+G /3cNhC3I1SJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWO0QAKCRDB/BR4rcrs CTqTB/9WGavBEyJ/eKFU/UHp4ITgLOMqrkH3F7uS/dOK47YGSJlJZCziLGICdP4xF+roi5Ef9XN HPiLSdYK7kox26FREe0eHj+Jnr2/DRd/PUb5AnQ0pTOVFr1AQKQhQ6oyQwK7E6HLgjlc1tFrWmF SMnjnPIvenR8m2h9Ag/ka3nOep7ZYwU2u2AurLaGu1k8t635PK+sn+zMqaXetXDRCqjFAsCcMwH zaCkXZb/6I8OkDljDajb1yuvaAp3HaWgXNnhPMjxaiX901Chq3+TRMlSxDQ854h7AIEzWP1tJss aHX1L4DNRCRoJ5rMXjGr+gT8AtJDBjjkf/+pBizH69PDt3DG
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,14 +58,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/03/2023 02:42, Jaewon Kim wrote:
-> This patch adds missing variable no_cs descriptions.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+From: Uwe Kleine-König <uwe@kleine-koenig.org>
+
+Hello,
+
+this small series converts the spi-imx driver to .remove_new(). The
+motivation for this tree-wide effort are drivers that don't properly
+cleanup and return an error code. This is broken as this results in
+resource leaks. The spi-imx driver is such a driver. The idea is that if
+the remove callback returns void it's obvious that an early error return
+is wrong.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (2):
+  spi: imx: Don't skip cleanup in remove's error path
+  spi: imx: Convert to platform remove callback returning void
+
+ drivers/spi/spi-imx.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+base-commit: b01fe98d34f3bed944a93bd8119fed80c856fad8
+-- 
+2.39.1
 
