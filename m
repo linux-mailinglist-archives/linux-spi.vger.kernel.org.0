@@ -2,59 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BDA6AC139
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 14:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC2F6AC131
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 14:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjCFNde (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 08:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S231320AbjCFNdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 08:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjCFNdI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 08:33:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271552F7A9
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 05:32:46 -0800 (PST)
+        with ESMTP id S231334AbjCFNc4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 08:32:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617382F78C;
+        Mon,  6 Mar 2023 05:32:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE6AEB80E40
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 13:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA765C433EF;
-        Mon,  6 Mar 2023 13:32:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 169EDCE127A;
+        Mon,  6 Mar 2023 13:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD95C433A1;
+        Mon,  6 Mar 2023 13:32:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678109544;
-        bh=4wwI0hQDakHiL7l0I0rRMWYhIVloyJWyXyiQc5eRiRM=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=vApjjlMZqCNAqvSdqdLPXuP7wEz73skQXQka3Zv1EiDOeUn9DVDdwLK+XMVNGdx50
-         7N3LDB1FJ8lA9BkW8okboZBmpQ4S+j4focxWAW7MDDvCUjpx0B17DHCxoAo9z0RBpE
-         c+n/ZpPoTOiSasUkdoR8mCu5bVV/9xcMw/Onv2ZWiFJBjdK2B1ecrwKlpIMI9mrBrm
-         NGMosIzh8L9aef9qHsNP4UdEysyTEP2DjM04oHzW3lFbsFuwhfDd5bMnxlktR5pzG6
-         aDQ3m6ZijsnFOIrQA53Fmw0ohynElCMk+2uZWohLDBazLr2elDW2NW+OiJxweHI07m
-         ZdbCwlGdX5FqA==
+        s=k20201202; t=1678109546;
+        bh=r2YevUTaEioy0IiiN4oIORAATS724rvNMW2/rHghHCQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=T25nklooE0ahT7WUzKCeUE4BraSm+vDbPKMRF2OXSEFIP+4lRgO7Wshph58T3JAt3
+         jniU6sOuca3s247kwAySQQkJH//HS4IeA7hnjgcyObifJnRGe2VxXSk4uuHzklwXFP
+         /YUGrbi3SYG2cNwJtRH4DESQD48Yemx5ZkxuYPsjJD+A9qvQtvKQlc/CeX+6XGgKSf
+         ieeoU/3jHTvqm9V3K5lHQYKINzJ2vMrroqmO+XPvZfLkb52ZHTIwFnZwL/Wsw3zTWp
+         YEaJqY6KYe1uutES9F7wKJ4CSW4D0w9bF75y1vd13a95U1JEtBM5yKmPEKYTaI14oP
+         79dlnmO/CpwlQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Eddie James <eajames@linux.ibm.com>, Han Xu <han.xu@nxp.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mark Brown <broonie@kernel.org>
-In-Reply-To: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
-References: <20230221-spi-arch-deps-v1-0-83d1566474cf@kernel.org>
-Subject: Re: [PATCH 0/8] spi: Build coverage cleanups and improvements
-Message-Id: <167810954160.76172.6882624542653908410.b4-ty@kernel.org>
-Date:   Mon, 06 Mar 2023 13:32:21 +0000
+To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        William Qiu <william.qiu@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+In-Reply-To: <20230302105221.197421-1-william.qiu@starfivetech.com>
+References: <20230302105221.197421-1-william.qiu@starfivetech.com>
+Subject: Re: [PATCH v1 0/2] Add Quad SPI driver for StarFive JH7110 SoC
+Message-Id: <167810954467.76172.7217821282766106312.b4-ty@kernel.org>
+Date:   Mon, 06 Mar 2023 13:32:24 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,13 +57,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 23 Feb 2023 17:20:20 +0000, Mark Brown wrote:
-> This series opens up build coverage of a bunch of SPI drivers by
-> allowing build under COMPILE_TEST where possible, while also adding
-> appropriate architecture specific dependencies to a couple of drivers
-> that didn't have them so they don't show up in builds when they're not
-> useful.  We also have one fix for the dependencies of the s3c24xx driver
-> which was turned up in the process of doing this.
+On Thu, 02 Mar 2023 18:52:19 +0800, William Qiu wrote:
+> This patchset adds initial rudimentary support for the StarFive
+> Quad SPI controller driver. And this driver will be used in
+> StarFive's VisionFive 2 board.The first patch constrain
+> minItems/maxItems of resets for JH7110 QSPI and Patch 2 adds
+> support for StarFive JH7110 QSPI.
+> 
+> The patch series is based on v6.2.
 > 
 > [...]
 
@@ -78,22 +74,10 @@ Applied to
 
 Thanks!
 
-[1/8] spi: s3c24xx: Fix dependencies when FIQ support is enabled
-      (no commit info)
-[2/8] spi: rockchip: Add architecture dependency
-      commit: 330a200d360f8b140b31d7da8b657da0472484e6
-[3/8] spi: nxp-flexspi: Fix ARCH_LAYERSCAPE dependency
-      commit: c6b15b2437a10b7b381d32f4a5341f655bfa296f
-[4/8] spi: davinci: Make available for build test
-      commit: e48d57d7203441b7a32b4275462ebb9296ea3fa0
-[5/8] spi: fsi: Make available for build test
-      commit: f916c7080d28831493518364492e33fc6a437907
-[6/8] spi: qcom-qspi: Make available for build test
-      commit: ada850541ad33f621425a382d0810b839cb3169e
-[7/8] spi: s3c24xx: Only have compile time references to FIQ when building it
-      (no commit info)
-[8/8] spi: s3c24xx: Allow build test coverage
-      (no commit info)
+[1/2] dt-bindings: qspi: cdns,qspi-nor: constrain minItems/maxItems of resets
+      commit: 13f1033e07588b7d1151d22d7ee3ca8f16181de7
+[2/2] spi: cadence-quadspi: Add support for StarFive JH7110 QSPI
+      commit: 47fef94afeae2a125607b6b45145594713471320
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
