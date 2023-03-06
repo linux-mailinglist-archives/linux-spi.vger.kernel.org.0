@@ -2,107 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20C06ACC92
+	by mail.lfdr.de (Postfix) with ESMTP id 906FB6ACC91
 	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 19:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjCFSak (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S229579AbjCFSak (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Mon, 6 Mar 2023 13:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjCFSak (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 13:30:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104A530195;
+        with ESMTP id S229718AbjCFSaj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 13:30:39 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E88170F;
         Mon,  6 Mar 2023 10:30:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1678127439; x=1709663439;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SzDNxv/R8pxYIbdy4sFf5lgkB072RjOTFq/X3ZPzELA=;
-  b=VZvs11m4tIt75iNGgZMH4odbY0PE5+tGbTYy7aJUR95xEVD0OZF5MHw5
-   BRdkea3aN/8BHpoNn+eEe7BmJsQHAo/DFXya4z1duT0PTijMBCOu8g3qa
-   ko07r39mBWJL6CGdFhJ94zFLCbkN+U5Zi5Z8WOBqLGMbPpNkSLWuAfIsr
-   OMcCWSYbvAsK4pbbeqFDECZVR7GjXNOmhB3I01IyEwZoCjBwAwDe729xb
-   rA33ltoAqAc0+G5kksr1okcVLvV7BZEN9Yl1QexmONBpLC0BZB4LB1G2i
-   rv6IrVIvWqamRs21lSnfPHDmVQsxLxVo5+XkO7NzX+S1EC8y+B8Z5xquw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="363257686"
+  bh=VvQq/hiW3ciMZLoERkUkYzqWpN07fmrNja7l175IvIY=;
+  b=L8h8F49OtVGAMTSjKU6Xd0Rb5fbsnW8wV1Qeaps6DbG6LXTzJ2Cf990F
+   D+OzjSYIebSUghZ7OKxnazoOsPfo96boW0u39HCxF9Eka6HuobGxy1gGT
+   QXMTUWQxcLGlO+hxS1l4WYFKPhPUCedds6x/KewDLLfT6zSM+skelAkyg
+   5LukkjHppCH6ViWnlYSQT48bMENrLu6qOKvEQf8xYqH6q4vP0sVI/XFLQ
+   drTtfCrWj7efefNUXBWivJSNVOWd6ZJuXuuysbvn5vgsc3qXCnkebRmt1
+   U9ZwXbWs14Vo+8oarCQF4Eir7KW2SE836FGEvxMYH07A4TyW9UT6pATMz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333109220"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="363257686"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:30:38 -0800
+   d="scan'208";a="333109220"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:30:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="786348696"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="669559042"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="786348696"
+   d="scan'208";a="669559042"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Mar 2023 10:30:36 -0800
+  by orsmga007.jf.intel.com with ESMTP; 06 Mar 2023 10:30:36 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 54D0387; Mon,  6 Mar 2023 20:31:19 +0200 (EET)
+        id 5E83C14F; Mon,  6 Mar 2023 20:31:19 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/5] spi: mpc5xxx-psc: Correct error check for devm_platform_get_and_ioremap_resource()
-Date:   Mon,  6 Mar 2023 20:31:11 +0200
-Message-Id: <20230306183115.87314-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/5] spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable
+Date:   Mon,  6 Mar 2023 20:31:12 +0200
+Message-Id: <20230306183115.87314-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
 References: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-devm_platform_get_and_ioremap_resource() may return pointer or error
-pointer, never the NULL. Correct error check for it.
+Return immediately if IRQ resource is unavailable. This will also
+propagate the correct error code in such cases.
 
-Fixes: 60a6c8257f41 ("spi: mpc5xxx-psc: Use platform resources instead of parsing DT properties")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-mpc512x-psc.c | 4 ++--
- drivers/spi/spi-mpc52xx-psc.c | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ drivers/spi/spi-mpc512x-psc.c | 3 +++
+ drivers/spi/spi-mpc52xx-psc.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
 diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
-index 5bdfe4a740e9..a2ea24a63cb4 100644
+index a2ea24a63cb4..8a436d1906eb 100644
 --- a/drivers/spi/spi-mpc512x-psc.c
 +++ b/drivers/spi/spi-mpc512x-psc.c
-@@ -483,8 +483,8 @@ static int mpc512x_psc_spi_of_probe(struct platform_device *pdev)
- 	master->dev.of_node = dev->of_node;
- 
- 	tempp = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
--	if (!tempp)
--		return dev_err_probe(dev, -EFAULT, "could not ioremap I/O port range\n");
-+	if (IS_ERR(tempp))
-+		return dev_err_probe(dev, PTR_ERR(tempp), "could not ioremap I/O port range\n");
- 	mps->psc = tempp;
- 	mps->fifo =
+@@ -490,6 +490,9 @@ static int mpc512x_psc_spi_of_probe(struct platform_device *pdev)
  		(struct mpc512x_psc_fifo *)(tempp + sizeof(struct mpc52xx_psc));
+ 
+ 	mps->irq = platform_get_irq(pdev, 0);
++	if (mps->irq < 0)
++		return mps->irq;
++
+ 	ret = devm_request_irq(dev, mps->irq, mpc512x_psc_spi_isr, IRQF_SHARED,
+ 				"mpc512x-psc-spi", mps);
+ 	if (ret)
 diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
-index 95a4a511c388..1bf728f4d766 100644
+index 1bf728f4d766..b75bc2457883 100644
 --- a/drivers/spi/spi-mpc52xx-psc.c
 +++ b/drivers/spi/spi-mpc52xx-psc.c
-@@ -321,8 +321,9 @@ static int mpc52xx_psc_spi_of_probe(struct platform_device *pdev)
- 	master->dev.of_node = dev->of_node;
- 
- 	mps->psc = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
--	if (!mps->psc)
--		return dev_err_probe(dev, -EFAULT, "could not ioremap I/O port range\n");
-+	if (IS_ERR(mps->psc))
-+		return dev_err_probe(dev, PTR_ERR(mps->psc), "could not ioremap I/O port range\n");
-+
- 	/* On the 5200, fifo regs are immediately ajacent to the psc regs */
+@@ -328,6 +328,9 @@ static int mpc52xx_psc_spi_of_probe(struct platform_device *pdev)
  	mps->fifo = ((void __iomem *)mps->psc) + sizeof(struct mpc52xx_psc);
  
+ 	mps->irq = platform_get_irq(pdev, 0);
++	if (mps->irq < 0)
++		return mps->irq;
++
+ 	ret = devm_request_irq(dev, mps->irq, mpc52xx_psc_spi_isr, 0,
+ 			       "mpc52xx-psc-spi", mps);
+ 	if (ret)
 -- 
 2.39.1
 
