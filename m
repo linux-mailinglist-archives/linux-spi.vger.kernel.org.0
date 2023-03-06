@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919836AB83E
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 09:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F4F6AB848
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Mar 2023 09:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCFI20 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 03:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S229457AbjCFI35 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 03:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCFI2Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 03:28:25 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D5A240
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 00:28:20 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j11so15528816edq.4
-        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 00:28:20 -0800 (PST)
+        with ESMTP id S229689AbjCFI34 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 03:29:56 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F80BBB3
+        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 00:29:53 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id a25so35316100edb.0
+        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 00:29:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678091299;
+        d=linaro.org; s=google; t=1678091392;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xecz6ussmUhqr0DqCyFglil/ccCTFFUQlWxGXA+3RTQ=;
-        b=ZaLx6dxK7OT5Bht7kJsm5572fLZbMjqg4zMvrRZLSpCDVcQLpVMpi2jwwN/wzuDSzS
-         owM3t+vyckvLMdqy1mYbknXN44pIqc4VOAE9GASwSSU3ruEZVB27PRjF8+bJ+CKG0uMB
-         RFcICc0huyIjqG/2OJD+dDqO96M1XgrvMRLD9cr5qSAkf4JW+Jd+hQGmDeHY3KJ0bNmI
-         +H+hzKrNv/SooLwrqCIFsi/E2RkIjHNmUxcuqejwpKU3i/Zk3Stn8V8EkEafKm+Ofo+0
-         xLLb6r8xIMx8ABTj4iAU1kzVUFlnCG24kKrq8qhPJKwm4xdbOGLCj/DHi6DzOWa452+K
-         Ogaw==
+        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
+        b=lYA8d4n5q3CvWYp9VCtKFvChADNU0XNfiO1TRzPCRAbGiuZ0Zm3urX8c0q89LiLBXy
+         jSlbxv0ITZV2ZbFiDQ6U0bkpsQ0Uad8cwU10kzwHnrgYbtokv5s2Urwx+kcScuCkLpty
+         Sav+Xqu0psOcZTL+WB+FO3X1xxnjsfI1pVT3AscDJ7p8XbZ6jU3hModd49k7EdFiV1P2
+         7Kf3K9d5BfdRY+XXuMLOpxtAkZFmWoU3t/ojZeextEwOvlOfOxteFpHHYs4+TzgkYasA
+         P9GgT3s+2xCEyGcNDKU7LTYsxbuyebaNhcInWYW1swJ9h4Ddg4L3cLY28A64pM32C+iD
+         TxYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678091299;
+        d=1e100.net; s=20210112; t=1678091392;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xecz6ussmUhqr0DqCyFglil/ccCTFFUQlWxGXA+3RTQ=;
-        b=mkfo8n/ySCfkOAE2TCc535j4UVGi3SC6l1I5NPEK/AufHMU6IUo9qIssRFw2pbOUg9
-         ol4WR3sRXKz/IbKMgtC/X3QKesX/ZuzAYwT4SLf8W0O+ASAIGzOTlKym6weWg0mYzxpk
-         4BzazJzOkdHDimz09l0ZOzUPQ+ol8CRKYZrMLO1/Kva8FqE0rTSFHCmxcq0+86JlM+7H
-         gB0QLRaPwbtmqGyOa5/JfFW1G0xrEq3Mnp1dkLMOTerWWJNd/OB3P1r/IB7qKNIpeYI8
-         eaggDfxLdC3968zxd6YzBQ0SmonnXoRMcgmtCGeKGfKHD8c0eLkqxpUsoGn6Rh7aWS88
-         BawA==
-X-Gm-Message-State: AO0yUKWmvqsVf4TE1xSvVsA8NcWsDW1koJ21C5TjieDZOrJwRql8GjQM
-        WqgqgeAOtzSuxMUMKHUt9sheHA==
-X-Google-Smtp-Source: AK7set+p+Mer2nEKiLRDEocuOY20i/239atWCIiAcZjBm10XZpP5lBqpZuEei5bgPvi8Ay0HnQWGwA==
-X-Received: by 2002:a17:906:28c1:b0:8b1:75a5:4a92 with SMTP id p1-20020a17090628c100b008b175a54a92mr10751427ejd.72.1678091298971;
-        Mon, 06 Mar 2023 00:28:18 -0800 (PST)
+        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
+        b=0f6O+7rlfYuxMI2a3v4TMuASM/2vaA7BQiEjWRht0bMrbzd7cIAczP4Vnn+/dFKdDR
+         pFBZEiwfI2h+HekFCK6e0S9L6MQPRGrPU0XZ44PfVleoUoBTxoupp/zy6IpCQcElOsaQ
+         XfjiPFrcvytT1MDvs94MJexCz9um4MuPK1edQZap9QFeoolb8JLcOYG/LioQfUMXndEM
+         TK3x9z9Fg7Lay3VGu9UMsAWsqLW2sXpaHavqny/LHauqB8WhtESIZ4tis9zgMPnLfjnX
+         q/bfhl7hTSzUkZQUJokJOgr+/S3tC32Fxy+mS60KGdNm7tlrKKs0OoJSJERq0xYnXDbU
+         bhnw==
+X-Gm-Message-State: AO0yUKXtVZObtpN1cpxDFiVPMkWCUKn/RGnLCOboHXndWDCAFRrbwcrL
+        leanYXw3KL3nrYPOj5eVZ50vGA==
+X-Google-Smtp-Source: AK7set9Rt/mceRfZItcu0lyJvR3AEI+TwG4140OrkenXDQ5rRvMtEVEEDO6b88AMzw1Nmhy+0qthMw==
+X-Received: by 2002:a17:906:b007:b0:8aa:c038:974c with SMTP id v7-20020a170906b00700b008aac038974cmr9617550ejy.54.1678091392390;
+        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
 Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id m17-20020a50c191000000b004e7ffb7db11sm499133edf.76.2023.03.06.00.28.16
+        by smtp.gmail.com with ESMTPSA id mb3-20020a170906eb0300b008e772c97db6sm4211562ejb.128.2023.03.06.00.29.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:28:18 -0800 (PST)
-Message-ID: <ebbc1c7a-2a96-409c-0e92-ae0f57ae5335@linaro.org>
-Date:   Mon, 6 Mar 2023 09:28:16 +0100
+        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
+Message-ID: <7dca5cec-5b7b-a3d6-e165-47a5fa26b73a@linaro.org>
+Date:   Mon, 6 Mar 2023 09:29:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v10 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
- SoC
+Subject: Re: [PATCH v10 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
 Content-Language: en-US
 To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -74,14 +74,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
         devicetree@vger.kernel.org
 References: <20230306040739.51488-1-blarson@amd.com>
- <20230306040739.51488-3-blarson@amd.com>
+ <20230306040739.51488-4-blarson@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230306040739.51488-3-blarson@amd.com>
+In-Reply-To: <20230306040739.51488-4-blarson@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,111 +90,60 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 06/03/2023 05:07, Brad Larson wrote:
-> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
-> explicitly controls byte-lane enables.
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
 > 
 > Signed-off-by: Brad Larson <blarson@amd.com>
 > ---
 > 
 > v10 changes:
-> - Move reset-names property definition next to existing resets prop
-> - Move allOf to the bottom and set resets/reset-names required only for pensando
-> - Fix reg maxItems for existing, must be 1
+> - Fix cdns,fifo-depth, only amd,pensando-elba-qspi is 1024 bytes
 > 
 > v9 changes:
-> - Add reset-names and resets properties
-> - Add if/then on property amd,pensando-elba-sd4hc to set reg property
->   values for minItems and maxItems
+> - Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
 > 
 > ---
->  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 33 ++++++++++++++++---
->  1 file changed, 29 insertions(+), 4 deletions(-)
+>  .../bindings/spi/cdns,qspi-nor.yaml           | 30 +++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index adacd0535c14..0c4d6d4b2b58 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -9,19 +9,18 @@ title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
->  maintainers:
->    - Masahiro Yamada <yamada.masahiro@socionext.com>
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> index 5c01db128be0..18e4bc04f091 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> @@ -20,11 +20,39 @@ allOf:
+>        required:
+>          - power-domains
 >  
-> -allOf:
-> -  - $ref: mmc-controller.yaml
-> -
->  properties:
->    compatible:
->      items:
->        - enum:
-> +          - amd,pensando-elba-sd4hc
->            - microchip,mpfs-sd4hc
->            - socionext,uniphier-sd4hc
->        - const: cdns,sd4hc
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->  
->    interrupts:
->      maxItems: 1
-> @@ -30,8 +29,13 @@ properties:
->      maxItems: 1
->  
->    resets:
-> +    description: physical line number to hardware reset the mmc
-
-This part seems to be not needed anymore. Resets field was already added.
-
->      maxItems: 1
->  
-> +  reset-names:
-> +    items:
-> +      - const: hw
-
-Why did you add reset-names for one item? There is no v8 of this patch,
-so I cannot find previous discussion about it.
-
-
->    # PHY DLL input delays:
->    # They are used to delay the data valid window, and align the window to
->    # sampling clock. The delay starts from 5ns (for delay parameter equal to 0)
-> @@ -120,6 +124,27 @@ required:
->    - interrupts
->    - clocks
->  
-> +allOf:
-> +  - $ref: mmc-controller.yaml
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amd,pensando-elba-qspi
+> +    then:
+> +      properties:
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256, 1024 ]
+> +          default: 1024
+> +
 > +  - if:
 > +      properties:
 > +        compatible:
 > +          contains:
-> +            const: amd,pensando-elba-sd4hc
+> +            const: amd,pensando-elba-qspi
+
+This does not make any sense. You have two ifs for the same.
+
 > +    then:
 > +      properties:
-> +        reg:
-> +          minItems: 2
-
-Hm, we missed to mention it before, but what is the second reg for? It's
-not obvious from the binding so probably you need to describe it instead
-minItems:
-  items:
-    - description: foo
-    - description: bar
-
-> +      required:
-> +        - reset-names
-> +        - resets
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256, 1024 ]
+> +          default: 1024
 > +    else:
 > +      properties:
-> +        reset-names: false
-> +        resets: false
-> +        reg:
-> +          maxItems: 1
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256 ]
+> +          default: 128
 > +
->  unevaluatedProperties: false
->  
->  examples:
-
 Best regards,
 Krzysztof
 
