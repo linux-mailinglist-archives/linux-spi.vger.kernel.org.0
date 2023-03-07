@@ -2,139 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9CE6AF741
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 22:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407A26AF751
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 22:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjCGVKj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Mar 2023 16:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S231336AbjCGVOr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Mar 2023 16:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjCGVKi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Mar 2023 16:10:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE75A100B
-        for <linux-spi@vger.kernel.org>; Tue,  7 Mar 2023 13:10:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1A8EB8117B
-        for <linux-spi@vger.kernel.org>; Tue,  7 Mar 2023 21:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8457C433EF;
-        Tue,  7 Mar 2023 21:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678223434;
-        bh=B4Dh4KncAE2aEGeTAf+L2fVPNFrYC/F98Asp9eM3RR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dxux7lRJw8NTWvfV+zEA1rHbM9C9Af+fFa9YbW6rpFSqViay7ZPM0vGCjCDGpnJmU
-         +6uxBZngFZkfau1TwuTcDFT1/GyBlNSDYnQFG3dnXGqvrpHChj8YSN170IJcKM31au
-         gCDvEUGe2v2jl0EgoIAGMqRuFrfBDmzN0gQ0wS9YYEPRNELAL3fzB7bQC/C3TAVADA
-         Wp65AmMQLZcN2Zl3uycRYw0jdeVOOMMDXAe8cnDTzHSe/GHysdo+bMDzW10nJvyWXX
-         Md3+7yoLiKaiXt32KzkElNLyYTVoehY2pnEnWxrFmaJAWRhYLS0+E4IDzzoFb0Hnru
-         qQl05x/jsC34g==
-Date:   Tue, 7 Mar 2023 21:10:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: Looking for a solution for CPM FSL SPI driver that swaps 16 bits
- words
-Message-ID: <e6c44ee3-fd31-4341-96d6-bf542ecd6111@sirena.org.uk>
-References: <764971c9-fe57-160c-d073-a519934da767@csgroup.eu>
- <8fd7715b-1dba-4cdd-916d-8c9dce004031@sirena.org.uk>
- <e21b9465-664e-bdf8-71ec-b7818c04c171@csgroup.eu>
- <84d3426c-47fe-44e9-ad04-be120fbbcd03@sirena.org.uk>
- <f9593ae5-a3e4-9bce-faa1-4761d76238ca@csgroup.eu>
+        with ESMTP id S231296AbjCGVOn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Mar 2023 16:14:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262D297FD8
+        for <linux-spi@vger.kernel.org>; Tue,  7 Mar 2023 13:14:40 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZedk-0002H2-LT; Tue, 07 Mar 2023 22:14:32 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZedj-002ZBe-Jg; Tue, 07 Mar 2023 22:14:31 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZedi-0037BZ-JO; Tue, 07 Mar 2023 22:14:30 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 0/2] spi: sprd: Convert to platform remove callback returning void
+Date:   Tue,  7 Mar 2023 22:14:24 +0100
+Message-Id: <20230307211426.2331483-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9AJuvD2ehKpuOFSJ"
-Content-Disposition: inline
-In-Reply-To: <f9593ae5-a3e4-9bce-faa1-4761d76238ca@csgroup.eu>
-X-Cookie: A rolling stone gathers momentum.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=758; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=20uOaUxM/0tfQrqOVznZg/A7D+RGNsgmvlaSGH0PAoI=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkB6kmawKClBubr3G51sW9zDxSruseVLoRwty6W +Tl1hsqw0uJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAepJgAKCRDB/BR4rcrs Cc7OB/9fv30xQSbfJyALZSo9w7ShqDEqb5D5G7AJPRtoqsBC9rvHrtOxeVBKP3uyak9gUlPtT21 CyS2mwq003SEQjoPOgZpA3N9+a0HrU++iCP0PxYiHeqO4sIsFy0jMqu4bgZ87WjKF1tQiRH6Gsc m0L+Z34VIE5GPm6l4xATbNgMEWLDDaHQ+j2fqwQOunTTnekC+5XurQD5Hd2WLhRCNj7982E8n9e YJwn4o/AmfY4MZq76FZQT1J9+SIepi8sOkVRRqLaWHGL0ykq+nW2K5MYRGhKpXOCVow4KQ1UAh5 0GMcYbwxMugwswlqzrFR+osk0l4rqG7s81gYtuuE0vcNkHBK
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Uwe Kleine-König <uwe@kleine-koenig.org>
 
---9AJuvD2ehKpuOFSJ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-On Tue, Mar 07, 2023 at 07:43:42PM +0000, Christophe Leroy wrote:
-> Le 07/03/2023 =E0 20:19, Mark Brown a =E9crit=A0:
+An early error return from a remove callback is usally wrong. In the
+case of the spi-sprd driver it's not that critical because the skipped
+steps are mainly undoing the things that a successful runtime-resume
+would have done.
 
-> > Oh, so the issue is that your controller is *not* swapping data?  In
-> > that case if 16 bit transfers are more efficient and a buffer formatted
-> > for 8 bit transfers is already in the correct format then why not just
-> > tell the controller to use 16 bit words where possible?  Nothing outside
+Still it's cleaner to not exit early and not return an (mostly ignored)
+error value. The second patch converts to .remove_new (which is the
+motivation for this series).
 
-=2E..
+Best regards
+Uwe
 
-> No no, 8 bits mode is slower, or should I say it consumes more CPU for=20
-> the same clock rate, which means we have to use slower rate in order to=
-=20
-> not saturate the RISC controller of the Communication Processor.
+Uwe Kleine-König (2):
+  spi: sprd: Don't skip cleanup in remove's error path
+  spi: sprd: Convert to platform remove callback returning void
 
-Please read what I wrote above.
+ drivers/spi/spi-sprd.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-> Well I not sure what you mean by swapping / not swapping data. Powerpc=20
-> 8xx is natively a big endian processor like all PPC32. But its=20
-> Communication Processor (CPM) is apparently fetching data as little=20
-> endian when told to perform transfer of 16 bits word on SPI.
 
-The default wire format for SPI is big endian (MSB first), as covered in
-spi.h:
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.1
 
- * In-memory data values are always in native CPU byte order, translated
- * from the wire byte order (big-endian except with SPI_LSB_FIRST).  So
- * for example when bits_per_word is sixteen, buffers are 2N bytes long
- * (@len =3D 2N) and hold N sixteen bit words in CPU byte order.
-
-LSB_FIRST has only one in tree user other than spidev so I'd question
-how often it's correctly implemented.
-
-> So, my problem really is the GPIO MAX7301 driver which requests 16 bits=
-=20
-> transfers, because then the SPI controller sends the 2 bytes in reversed=
-=20
-> order. Do I understand correctly that from your point of view, that=20
-> driver shouldn't request a 16 bits tranfer ? It is done here, in the=20
-> max7301_probe() function,=20
-> https://elixir.bootlin.com/linux/v6.3-rc1/source/drivers/gpio/gpio-max730=
-1.c#L50
-
-It would certainly improve interoperability with controllers to request
-8 bit, but so long as the driver is reading and writing data in the
-expected format it should work perfectly well.  Looking at the lack of
-any endianness handling in the driver that doesn't seem to be the case
-though, it's just handling data in CPU endian format which isn't
-portable.
-
-> Because if I clamp the CPM SPI driver to 8 bits transfers, then I cannot=
-=20
-> anymore perform 16 bits transfer for loading my FPGA, then it means I=20
-> must reduce data rate then loading the FPGA takes ages.
-
-Why?
-
---9AJuvD2ehKpuOFSJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQHqEUACgkQJNaLcl1U
-h9C9Jgf/SOCPBy7vcM8uyd+1Fw8/Ud+OrK7Y1BKYMpkZgFUOujTvk59zS60FweJf
-QYb7HpOtQKRKqEqXHGZuR6cY3TOQytwISoCpamLHtDym2KMCIaqrM5eE9Ptn1o3R
-b1c6/jFlOVifAkB22K3n60H6ruSHZfmFrUUZHorWyx/I5/D249GRYytUTQcGgko9
-/VZYtlm/J3dm+kp97fssI/OqvmUUTShb8Zl4t9Pl0OH9GwIs/rea52hzlnmuWtbE
-/2zlv+rjGfk2h0fVhGdxmhfcrpnCD8BflZbc8xnzreArWj34TGsfyh+lCaoW3AU5
-zSK8o1rOH8j4ebhB16nzoi08xEOXBg==
-=daDw
------END PGP SIGNATURE-----
-
---9AJuvD2ehKpuOFSJ--
