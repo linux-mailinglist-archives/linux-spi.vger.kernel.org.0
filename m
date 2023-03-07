@@ -2,43 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A4C6AD471
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 03:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F2B6AD478
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 03:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCGCLc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 21:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S229725AbjCGCNr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Mar 2023 21:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCGCLb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 21:11:31 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2057.outbound.protection.outlook.com [40.107.100.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958F436470;
-        Mon,  6 Mar 2023 18:11:26 -0800 (PST)
+        with ESMTP id S229780AbjCGCNq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 21:13:46 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD3037F11;
+        Mon,  6 Mar 2023 18:13:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DZGAVl1UZOs2kFhosbad441K0wUW0//TZuakLdJFkRGySuyLa9iI/Cmvg9+N84qZw9Z0VaKus0Eqt/zdCp7wsPoXQmfbaV8CmkQCnLfmeR0oIJraZBqjt85AYT5dt+6lVLQ1mweB6af82+GLPrj3nd76KTk8Ol1wFVXsZq78jCOTXfF6etCjwznJWkSMzoUsv3y6g6nU4j5xm0DsDlqdLGJaWF8DK9L7tlWtgQYnqOiO6gd/+EShc0/VLqc9cDgb3KiX5gQA6lXLvlT36GPRqi9Nm7biVH9UmwslzFBU40uHMi6NtWAm1UpI3lGcGa+WZT2bA3qthFidYkab6CJs3Q==
+ b=KqizdIo9WyQB5GkVemCgOSpNOAlj9fD04ecmVhzlxzk6X3Cjpgk7nk14R2pwLxn1r3efNntHTTffBpOEkaQXeteUrbKOKbm22Ab8PZJq+iGDVkoNdJoPl1eAaMu4o+9v9nfC55Nnz8urAdH43fplcnOzl9nwRGsIldFXxi5VvjUOEu5MsH8gQbaMxf56xEOpR+1b1ZfJGaptZSBSTRgXqNWV/u6CT/vTfVoI/2tRJk/i8eXAcbVCjxEJDD/ZnDc2/Sp4btGw5wvW0XiSf1o3ZEbr8J11i34E+rMKQiSPIr67CM7jEYNexeKtlD7ZrxwDOa+8ohygzp19ci6E/YRiKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k6R1lQXnS3wwIjwkDVZbBZiQkVT2ofu+R+3D/xqKUdA=;
- b=Syo9/Oa9SWytmoX0Drrp2Ym3FWfFmsBfHZ3DRO3A8Sa4z16BoT+21DVTO+ABJ8aH5Y7+kEFnoZikRCW9e1sUstr90pblpm4W+URwZiM6Q0N3CR0+J0WPBwKBAGxc885eHG5eQQEhdB3Wk9SMIs2O+uhWG9dzBSnUeCspUTiFQidx+V+TIjyQ9HahjOpdf0DsBDkB3TJ3TRQ+0FbBgQ4cgkkyl2MBWcrk9vfjVMEmxVrDDmFX2Ed9dR1Tran5ySpOtdbJKVyV7CkXwcaSEzQrLy/WdVdVmx34evq0FJps+q+a7yFG/ul1tzralfDq3u2lXFw+cPu6oskWyGG1pbzVMw==
+ bh=RhACSqdShteYAmPtktMj+6aIE+hFeya/kolO2okn5fE=;
+ b=WWsqt9ydBuAYMkWr2v5TxfZnMW3TmEfC8xkz3NYrgzG8tAVwBHVWDCxQWORY823bpOQ8gwEhE9j4zEGKlzhfu6xqo3/p2uahZyAUNIjcSencLJ5yqvaGJYtWznZHmEI2+pCtuOB8Xs43XQPB6i04CVWKaCRvGxuxiZMnk1H8RBeSL6l2yqyPORjhefcGKP6IoulxD//ylvsrQjRIA7VS8phrUBApIe9Bl1KMZoYqX9Q7ZkkKiZDAffMOORfjUz2xIsDY6kgJgu9+wOG8RS7ES+ENsiDiKhTC5m5/6DqmrxJuJz1wgg4Pbwk0DFRUJwtY+sawPC+1UCJLDQ78+GXl0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k6R1lQXnS3wwIjwkDVZbBZiQkVT2ofu+R+3D/xqKUdA=;
- b=mmAg3TegbKd3ctZcgS2X7QWj3YrY40HfY9wfKYSUrHRCyaGrcs8W/IIp7xPlRG4x2i2FnX3zdlnNWYgyc6Gm9adHQnX5IDDmVNJubSOXKAHmWn2UbdyVbaYsgXV1ZkmvAm7V03d/dCWOlovQlvz73BQbu4gfQVIZN2OfplZH05M=
-Received: from BN9PR03CA0440.namprd03.prod.outlook.com (2603:10b6:408:113::25)
- by MN0PR12MB5905.namprd12.prod.outlook.com (2603:10b6:208:379::15) with
+ bh=RhACSqdShteYAmPtktMj+6aIE+hFeya/kolO2okn5fE=;
+ b=q1Ge2X13MomEGNsEZ797vb0naJKD6fSIapL9pyeG0j2tP4t+qQ3yq3EFp6LGUxEWihDxFvIKMYeUT2QUWMgFfkxq2m8lUt1oJ3PfH3M3phJfhvReNNCOoMkI+zVbIgcTcVRyfAFQQ+KHtacYk+7AnRX0ZLnVm7LJGIj9DFqSWd8=
+Received: from BN9P222CA0001.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::6)
+ by DM8PR12MB5463.namprd12.prod.outlook.com (2603:10b6:8:27::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
- 2023 02:11:24 +0000
-Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::a8) by BN9PR03CA0440.outlook.office365.com
- (2603:10b6:408:113::25) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 02:13:41 +0000
+Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10c:cafe::c2) by BN9P222CA0001.outlook.office365.com
+ (2603:10b6:408:10c::6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
- Transport; Tue, 7 Mar 2023 02:11:24 +0000
+ Transport; Tue, 7 Mar 2023 02:13:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
+ BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 02:11:23 +0000
+ 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 02:13:41 +0000
 Received: from platform-dev1.pensando.io (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Mar 2023 20:11:16 -0600
+ 15.1.2375.34; Mon, 6 Mar 2023 20:13:38 -0600
 From:   Brad Larson <blarson@amd.com>
 To:     <krzysztof.kozlowski@linaro.org>
 CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
@@ -73,12 +73,12 @@ CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
         <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
         <vaishnav.a@ti.com>, <will@kernel.org>,
         <yamada.masahiro@socionext.com>
-Subject: Re: [PATCH v10 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC
-Date:   Mon, 6 Mar 2023 18:11:03 -0800
-Message-ID: <20230307021103.25299-1-blarson@amd.com>
+Subject: Re: [PATCH v10 03/15] dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
+Date:   Mon, 6 Mar 2023 18:13:30 -0800
+Message-ID: <20230307021330.4208-1-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <ebbc1c7a-2a96-409c-0e92-ae0f57ae5335@linaro.org>
-References: <ebbc1c7a-2a96-409c-0e92-ae0f57ae5335@linaro.org>
+In-Reply-To: <7dca5cec-5b7b-a3d6-e165-47a5fa26b73a@linaro.org>
+References: <7dca5cec-5b7b-a3d6-e165-47a5fa26b73a@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.180.168.240]
@@ -86,23 +86,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT055:EE_|MN0PR12MB5905:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3862969-b35e-4d13-6730-08db1eb14018
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT093:EE_|DM8PR12MB5463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4563f417-e956-425b-a6bc-08db1eb19262
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t85SJwzMCYJJ5Kc8sbvjas0hnhRlnZPj55qjG2GHu6yDel7HBzs3XR96vn7tSp4LYDE3c8iXOWIqMIMc+9dhj8fedOnHsBA3IsuZVHhaPrEXtlAhImRVCQl6FLyDHwREfOnesRGojGLoP/FMxHPElKITvFe5jQSeyeRJxC/groKDmMg63kh1yYmhnrHs9VW0N/RykZV88M6c8oFg8WXBgzfJtnQIJT81JdiAzNXjzk5UCTzO3LMnL/v0f6/K/fFKjelBCdHEU86ROFbDksHygeFMwWTzbL3uQJtLBtb3jNkWbNcEb9PMTKZnc38cVMcqMj2DiNSNOIVyZ2nkDNlHAnMDCiRFOckZsbpv9FnQITwR0aPBQOAtKjUS4n1SNJV4DX8oWEOQcUPmKxhTDOhftU8yfP7RpAlwenrvpdbdsZ+foKPuA6sC7Nn914grnAw1y+fCGfyVOs4dYN0tVP01bMLEQYN3dRKd3KM+WJXscalW4dG9sLEeuJ5qPvrs0X9CPE2LlG0q5Z9LNNKLYjlXWzmEM9AL+mKOTvOaVGgY+TMq2zTxlsTPRE8xXkZfJNnGwhIbhd8kS0UlPwAl6fu/7WHxzWnDdHCDg3BqX9eNSgUv3vQ7ESOaH2m3MlBVfElNkqeRQ1NgvyG3TJ67fJ3AiWsRsZHpnuVRxhq8SqVHg3BtuGoWvAZu2EQeyvwMx7JAWCtMzpEawn9eeRpLkrjmMQOkJ/M/74lsD/9H4aLnj/4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(40460700003)(186003)(16526019)(70206006)(81166007)(356005)(6916009)(8936002)(36860700001)(8676002)(2906002)(41300700001)(4326008)(478600001)(7406005)(82740400003)(5660300002)(70586007)(7416002)(26005)(47076005)(53546011)(6666004)(1076003)(426003)(2616005)(336012)(54906003)(36756003)(316002)(40480700001)(82310400005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: brlI/oNDYTVDYS+2egEY8c7fWuh+X3xjTfidLGt1lfJgvEQoNb3udiMNtac2S+Tt0/MPD/XGOcXOskkupy724mtqY43H4T645IdVyh5bdBEAnn3H6JzVXyvugzbB2ixvluwDJf26WFKhwAJbsVEQzCCeBXE6Xji0MXAwjYP6bx1qNQkJX8HlBowXE6MiXqFDNGo+O03NaBG99DaLBw2+tYUz9PN35LXNFEIFwTdExP+6VUg9VIC5jpxSz59+juiDDWizwKE5l1MLcLtZPkZM9fglZG0Z6rkD0Xa1OAXaABpAvWK8X1tCIF+ZFBzFtMN5xl/Dms9Grn1vObmGLwtpfWkVMhjXl7RkP4NBymOIx7ZkUoaAcTwKd5ljUenzuC6tfgLu8e9GT0Aqtkvz0+zpRnp/YwmXNVOWWqqCLYnySdYhTXNHXEWtbidr9g+SQ3/7qN9yLc00Xs+c2cc43aN4ZIxVZ0vLVN9HvO+TBywHSp1pKsvfgPfi3FJmHTQjVEWgEzf0Ir3gwomXMYLgsPAoR55xlyBss2roQrWz6f9b0lBVQ+2QEbYi8pKFCL9rio/dh9rSMmyHdZ5+lHsnLnXg0pZTL7XQwTsUC3vTarb/ED8V4cUSLrooPaAbNwnXnb6P0vkla8Q/FDEz3aM/hcUvHCE3tUnJnriPNngTAQWYu+h+yd63011rOyyFc5zj+f6rUrqr0yVA73DycOAgHc4HT2F+9F3VKCJtfkWtBbYOiNE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(36860700001)(356005)(81166007)(82740400003)(36756003)(40140700001)(7406005)(2906002)(5660300002)(4326008)(70206006)(70586007)(7416002)(6916009)(40480700001)(41300700001)(8676002)(8936002)(6666004)(82310400005)(47076005)(336012)(186003)(2616005)(26005)(53546011)(16526019)(83380400001)(40460700003)(426003)(54906003)(316002)(478600001)(1076003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 02:11:23.5505
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 02:13:41.6259
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3862969-b35e-4d13-6730-08db1eb14018
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4563f417-e956-425b-a6bc-08db1eb19262
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5905
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5463
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -113,138 +113,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/03/2023 8:28, Krzysztof Kozlowski wrote: 
+On 06/03/2023 8:29, Krzysztof Kozlowski wrote:
 > On 06/03/2023 05:07, Brad Larson wrote:
->> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
->> explicitly controls byte-lane enables.
+>> Document the cadence qspi controller compatible for AMD Pensando
+>> Elba SoC boards.  The Elba qspi fifo size is 1024.
 >> 
 >> Signed-off-by: Brad Larson <blarson@amd.com>
 >> ---
 >> 
 >> v10 changes:
->> - Move reset-names property definition next to existing resets prop
->> - Move allOf to the bottom and set resets/reset-names required only for pensando
->> - Fix reg maxItems for existing, must be 1
+>> - Fix cdns,fifo-depth, only amd,pensando-elba-qspi is 1024 bytes
 >> 
 >> v9 changes:
->> - Add reset-names and resets properties
->> - Add if/then on property amd,pensando-elba-sd4hc to set reg property
->>   values for minItems and maxItems
+>> - Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
 >> 
 >> ---
->>  .../devicetree/bindings/mmc/cdns,sdhci.yaml   | 33 ++++++++++++++++---
->>  1 file changed, 29 insertions(+), 4 deletions(-)
+>>  .../bindings/spi/cdns,qspi-nor.yaml           | 30 +++++++++++++++++--
+>>  1 file changed, 28 insertions(+), 2 deletions(-)
 >> 
->> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
->> index adacd0535c14..0c4d6d4b2b58 100644
->> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
->> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
->> @@ -9,19 +9,18 @@ title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
->>  maintainers:
->>    - Masahiro Yamada <yamada.masahiro@socionext.com>
+>> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> index 5c01db128be0..18e4bc04f091 100644
+>> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> @@ -20,11 +20,39 @@ allOf:
+>>        required:
+>>          - power-domains
 >>  
->> -allOf:
->> -  - $ref: mmc-controller.yaml
->> -
->>  properties:
->>    compatible:
->>      items:
->>        - enum:
->> +          - amd,pensando-elba-sd4hc
->>            - microchip,mpfs-sd4hc
->>            - socionext,uniphier-sd4hc
->>        - const: cdns,sd4hc
->>  
->>    reg:
->> -    maxItems: 1
->> +    minItems: 1
->> +    maxItems: 2
->>  
->>    interrupts:
->>      maxItems: 1
->> @@ -30,8 +29,13 @@ properties:
->>      maxItems: 1
->>  
->>    resets:
->> +    description: physical line number to hardware reset the mmc
->
-> This part seems to be not needed anymore. Resets field was already added.
-
-Yes, see below.
-
->
->>      maxItems: 1
->>  
->> +  reset-names:
->> +    items:
->> +      - const: hw
->
-> Why did you add reset-names for one item? There is no v8 of this patch,
-> so I cannot find previous discussion about it.
-
-I found resets property was added recently when I rebased.
-
-cb7f090171393 (Kunihiko Hayashi    2023-02-13 13:52:33 +0900  32)   resets:
-cb7f090171393 (Kunihiko Hayashi    2023-02-13 13:52:33 +0900  33)     maxItems: 1
-
-I've deleted reset-names and dropped description for resets.
-
->
->>    # PHY DLL input delays:
->>    # They are used to delay the data valid window, and align the window to
->>    # sampling clock. The delay starts from 5ns (for delay parameter equal to 0)
->> @@ -120,6 +124,27 @@ required:
->>    - interrupts
->>    - clocks
->>  
->> +allOf:
->> +  - $ref: mmc-controller.yaml
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          enum:
+>> +            - amd,pensando-elba-qspi
+>> +    then:
+>> +      properties:
+>> +        cdns,fifo-depth:
+>> +          enum: [ 128, 256, 1024 ]
+>> +          default: 1024
+>> +
 >> +  - if:
 >> +      properties:
 >> +        compatible:
 >> +          contains:
->> +            const: amd,pensando-elba-sd4hc
->> +    then:
->> +      properties:
->> +        reg:
->> +          minItems: 2
+>> +            const: amd,pensando-elba-qspi
 >
-> Hm, we missed to mention it before, but what is the second reg for? It's
-> not obvious from the binding so probably you need to describe it instead
-> minItems:
->   items:
->     - description: foo
->     - description: bar
->
+> This does not make any sense. You have two ifs for the same.
 
-The second reg is byte lane enable for writes.  The following passed dtbs_check
-after getting: hint: "minItems" is only needed if less than the "items" list length
+That's an oops, only this is needed
 
-    then:
-      properties:
-        reg:
-          items:
-            - description: Host controller registers
-            - description: Elba byte-lane enable register for writes
-      required:
-        - resets
-    else:
-      properties:
-        resets: false
-        reg:
-          maxItems: 1
-
->> +      required:
->> +        - reset-names
->> +        - resets
->> +    else:
->> +      properties:
->> +        reset-names: false
->> +        resets: false
->> +        reg:
->> +          maxItems: 1
->> +
->>  unevaluatedProperties: false
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: amd,pensando-elba-qspi
++    then:
++      properties:
++        cdns,fifo-depth:
++          enum: [ 128, 256, 1024 ]
++          default: 1024
++    else:
++      properties:
++        cdns,fifo-depth:
++          enum: [ 128, 256 ]
++          default: 128
 
 Regards,
 Brad
