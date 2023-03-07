@@ -2,91 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A0E6AD62F
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 05:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECD46AD6C8
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Mar 2023 06:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCGEWC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Mar 2023 23:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229611AbjCGF3Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Mar 2023 00:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjCGEVn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Mar 2023 23:21:43 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B9180E24
-        for <linux-spi@vger.kernel.org>; Mon,  6 Mar 2023 20:21:13 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id i34so47406289eda.7
-        for <linux-spi@vger.kernel.org>; Mon, 06 Mar 2023 20:21:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678162872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R6hqEkT/LNIvtq4ZHl1mUunRseH00GHLQMY6WXXGwOM=;
-        b=u+d6SR1Z/9lh6/d/v7YLU5EvQpi4JWlyT7b9prNf+4U5AoEgCQQVnm8OdlYQzJZOIZ
-         rrsMK7F6DKD0B0zFC/tThzB/VtSGXossihkiH6CqXNt2iaJTaHq7BFl5peXPNz4ncLjt
-         ewpE90AghDEbOlkFxovEti0nIUTyq9f2FCXOmNffaxOilR+RjGmgtido6cPX4WNylNmP
-         npiPJZ5asIycPfjVsKrJNI+VlUG+Dqcg2sYRkRqcP6KERqe/R3ftwDQ+wKIdAHXCojM0
-         K8i1biFqUW/O4UMCpOKkLBx2lD2cjaiWq5PHKi7FFs2WfD/wR4yt0BtrvKOpjEgfbXHn
-         up+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678162872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6hqEkT/LNIvtq4ZHl1mUunRseH00GHLQMY6WXXGwOM=;
-        b=2dsbOP6zP/2Zc51nFrDjrXVQyf/tIdChmuhB1cX6ABTAJFJj+/JBXD4PvYdP39gkz9
-         dIxuzjhYC8ZjBF4N5MwD9oau0K3P8tC2B8tfHru9Zzi3lT3Df8Veq4PJuBPXfuzHgxOh
-         xBQEIhEb/PZnra9R8DQRrc0pW7RSQxk81UwthQLcvcENHh/Wo045DSGCy5p0HJyaM1Lw
-         dDJORx8PJfuuY/Tru1fR+gs9UnOAr/SplXlzXahQ8IQjGFhFP6HFh3IjoJWt07EuKVhT
-         JYUNdE+4s9C4V4EaZg8jl3Z/LTi9SC34GaQfvQiv6wiwyWir46b4fG1fkIyIsYZGQfGS
-         DuMg==
-X-Gm-Message-State: AO0yUKWPPv5STEv04ed131EFXanZhnVqEp/5TBb4EQNTfvbR5tHNRozt
-        1FeXfWzX3h/tfp9JUtACiQopmw==
-X-Google-Smtp-Source: AK7set+r0tF6JBXxJqwMfhX4rBE0rEOE9RzrvS5/X9eHIIFUmglTdwr4eZPvR7zlr6tvrFh3wGOs3A==
-X-Received: by 2002:a17:906:308e:b0:878:7a0e:5730 with SMTP id 14-20020a170906308e00b008787a0e5730mr13215080ejv.56.1678162872128;
-        Mon, 06 Mar 2023 20:21:12 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id n24-20020a1709062bd800b008b17aa6afc8sm5429013ejg.30.2023.03.06.20.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 20:21:11 -0800 (PST)
-Message-ID: <1bbda9e6-37fb-195b-fd62-0e437847c636@linaro.org>
-Date:   Tue, 7 Mar 2023 04:21:10 +0000
+        with ESMTP id S229591AbjCGF3P (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Mar 2023 00:29:15 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298CA303EC;
+        Mon,  6 Mar 2023 21:29:14 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3274vBFG023618;
+        Tue, 7 Mar 2023 05:29:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zIcPVBUeUBQdl6AWsmE3wWjlUlrp0aiR2TixVhS40IE=;
+ b=dxoG765QjYFELpF7tugo8xwAIYKi0otjjl22E2ovLRFqsXRiBO4q76yvUIF0iKMPC9pg
+ DqoxCMv5EK47BezXjmNPzkpXhyXTX6rd38A1rt3dycvNINAmj9hXYg9oDuTEHnVh79ja
+ CVEa9vHn6vxZNxRL7uJqNHDGhba+K/dlcDZySYrfc0AxLj7B12pU/BXJWDNk9uM6DB8c
+ zkj9A7x1snnZ49ecxd7ILF4/yOgCVLJnmn3JFdegBAdMlfGZJBy1Z+LzYZPz0CifkU+Z
+ 32c2YSsqKugc0x6LdFIshdmOMp7UiI53aMyoBl21hZb9j/osU1ztMKxk3jOjkPSndC62 Bg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5x5c83v0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:29:04 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3275T3qe027367
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 05:29:03 GMT
+Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
+ 21:29:00 -0800
+Message-ID: <cb86687c-f07c-f484-b4fa-ae73e124a59a@quicinc.com>
+Date:   Tue, 7 Mar 2023 10:58:57 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V5 09/15] spi: Add stacked and parallel memories support
- in SPI core
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/5] spi: qup: Use
+ devm_platform_get_and_ioremap_resource()
 Content-Language: en-US
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, jic23@kernel.org, pratyush@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
- <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mark Brown <broonie@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_sjaganat@quicinc.com>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>
+References: <20230306144404.15517-1-quic_mdalam@quicinc.com>
+ <9ca4c6a5-3d1a-4a66-9a5f-43f6f41ed7a1@sirena.org.uk>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <9ca4c6a5-3d1a-4a66-9a5f-43f6f41ed7a1@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: J73DZkt2zmbQbNpWNVhpNh_cGajjRV3o
+X-Proofpoint-GUID: J73DZkt2zmbQbNpWNVhpNh_cGajjRV3o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=640
+ phishscore=0 suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070048
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There were too many recipients in To and Cc and I couldn't reply to the
-email. I whipped off the Cc filed and most of the people from To and
-added the lists in Cc.
 
-On 3/6/23 17:21, Amit Kumar Mahapatra wrote:
-> Multi CS support using GPIO is not tested due to unavailability of
-> necessary hardware setup.
+On 3/6/2023 9:14 PM, Mark Brown wrote:
+> On Mon, Mar 06, 2023 at 08:14:04PM +0530, Md Sadre Alam wrote:
+>> Convert platform_get_resource(), devm_ioremap_resource() to a single
+>> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+>> what this function does.
+> You've not copied me on the rest of the series so I don't know what's
+> going on with dependencies.  When sending a patch series it is important
+> to ensure that all the various maintainers understand what the
+> relationship between the patches as the expecation is that there will be
+> interdependencies.  Either copy everyone on the whole series or at least
+> copy them on the cover letter and explain what's going on.  If there are
+> no strong interdependencies then it's generally simplest to just send
+> the patches separately to avoid any possible confusion.
 
-Please don't add code that is not used or tested.
+Thanks for you update. Yes! these all patches are not dependent at all.
 
-Cheers,
-ta
+So i will send these all patches separately.
+
+
