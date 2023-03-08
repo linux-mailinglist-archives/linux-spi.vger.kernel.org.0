@@ -2,147 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF9B6B05FC
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Mar 2023 12:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB5B6B0A03
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Mar 2023 14:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCHLaa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Mar 2023 06:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S231882AbjCHNyP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Mar 2023 08:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCHLa2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Mar 2023 06:30:28 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A01943B2
-        for <linux-spi@vger.kernel.org>; Wed,  8 Mar 2023 03:30:26 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id j11so44876003edq.4
-        for <linux-spi@vger.kernel.org>; Wed, 08 Mar 2023 03:30:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678275025;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8KH8jGCskjaNO6GyEN+UrKrvr+UwiHKuZCM0jBvEJmU=;
-        b=Hn8D2tuSDeLvUpJemAU3Y2rDaUEXrNGwojqaIuc0E3mH++EWRYxQAUMFjiSGWo8LoP
-         HvWZcWovZEYEo23tpdd2n6XNyDT34/jA2NsrHi+EWA5y23d78SRtJOM8YeQeDFlc1M5b
-         IH8M1ItC+GUhNQxB+WHnB9ORVR+2AxAmPEYyIDvCFm1O6i10aZhEa5qan99tNEToYsXC
-         4IRxNTmiunc7RMQA798/w56C+54/TXkY1GMG28Evly8psChxm8v5YAyuGFDa2VuhHd+F
-         hzjOei/kiE553pjO/bC/EWtVRhmF4l+1gMCTSvlQoqUssy9fyHxUkAHMvKs3IpaWPzQ+
-         +4cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678275025;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8KH8jGCskjaNO6GyEN+UrKrvr+UwiHKuZCM0jBvEJmU=;
-        b=SvhNPeiJFBHZ2jUbmZCCudjLAuuaO2e79YFts/TJbXqbfwocgi1ztbxVeupezQNoxT
-         irYWftbNK7pghSfcF8IBklHdOE56+YLlyH1k3tdtkuMywVeWPShIzTWzIF2sJfFsZ35P
-         aPLoXr4/CwuHWdm+rHKE2gAhgyWaNfIrg7FpPCfRd6yvxQfeCg/Ieb78y94ezwjy375B
-         TG6BIwh+WAQsfHn3GXf8w11x+OWLohcGWtoKUSN6rmrIpCcz5pRwWPC0bBqnmhoZM7xy
-         aW6emlESatFeCaTEMREF3Si9guwdBGMpZGztErPHua5Q8yvFs3/fRqcN9WRuSKbSksDe
-         I4yw==
-X-Gm-Message-State: AO0yUKUcdYUgB5YAR8QxlWD4Rv5X9qwH833UGnbKrsTBU0dggBIlsp5U
-        9vBbbWyElSg2weNxJ398jQ6S0A==
-X-Google-Smtp-Source: AK7set+JDKS84dLj+XNBBSsiuysoWkOblH/R/IWBfCaEcIAnjtKriFx9dlfVOudbggyySIqODUtewg==
-X-Received: by 2002:a17:906:1846:b0:8b8:c06e:52d8 with SMTP id w6-20020a170906184600b008b8c06e52d8mr16504253eje.36.1678275025487;
-        Wed, 08 Mar 2023 03:30:25 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
-        by smtp.gmail.com with ESMTPSA id y4-20020a170906524400b008d71e08c78dsm7273070ejm.81.2023.03.08.03.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 03:30:24 -0800 (PST)
-Message-ID: <8d20dcfb-480b-3f1a-02b0-294a05a566f7@linaro.org>
-Date:   Wed, 8 Mar 2023 12:30:23 +0100
+        with ESMTP id S231597AbjCHNxf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Mar 2023 08:53:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AD17FD5E;
+        Wed,  8 Mar 2023 05:53:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79A09B81CD1;
+        Wed,  8 Mar 2023 13:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A85C433EF;
+        Wed,  8 Mar 2023 13:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678283591;
+        bh=iLlFVOoDIQjiaILiJHm0ULqCparcbp/ihxWOpbFu1sc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jtc+Uz2XdCMX1sfOw1xSMdKhFhqK2jTbUiesH11psFB434aicpdPBGwpSbkDoXZU/
+         deviAHfJ2CQQYlrquQpCXu2PoP5V1/mupB8SloUWTO2Zla3ekuuCJr1uItb8vQ3WwR
+         0WWJhxo+V9konAhTrl/2Z+G+MSoBc/mSgkKhL0E/QMQ3dC35y6Ieofm583Am+05mNL
+         ANLtJ+TqzMy4dwrVEeXk/EFKmRwXb/S85idJuBIGlVZ74gH/xlq7O1kEsyl4l2Ssdd
+         ISYnJphhFMCJ7y1QJ8szxtU9bMmVHEXqZlhG0CkCaYd3fmvhGWBY06XrvG4tVfmy4U
+         EDh1quZyYVLFQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rob Herring <robh@kernel.org>
+In-Reply-To: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
+References: <20230306183115.87314-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/5] spi: mpc5xxx-psc: Clean up even more and fix
+Message-Id: <167828359003.32144.38378478063789166.b4-ty@kernel.org>
+Date:   Wed, 08 Mar 2023 13:53:10 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308025908.21491-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/03/2023 03:59, Yinbo Zhu wrote:
-> Add the Loongson platform spi binding with DT schema format using
-> json-schema.
+On Mon, 06 Mar 2023 20:31:10 +0200, Andy Shevchenko wrote:
+> The recent cleanup series broke the error path in the drivers.
+> So fix it and do even more cleanups.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-
-Filename matching the compatible.
-
+> Andy Shevchenko (5):
+>   spi: mpc5xxx-psc: Correct error check for
+>     devm_platform_get_and_ioremap_resource()
+>   spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable
+>   spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock
+>   spi: mpc5xxx-psc: Propagate firmware node
+>   spi: mpc5xxx-psc: Consistently use device property APIs
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> new file mode 100644
-> index 000000000000..8a13a96b3818
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> [...]
 
-Drop the quotes. What was the base of your code here?
+Applied to
 
-> +
-> +title: Loongson SPI controller
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: boot
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Drop clock-names, not needed for single entry.
+Thanks!
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +unevaluatedProperties: false
+[1/5] spi: mpc5xxx-psc: Correct error check for devm_platform_get_and_ioremap_resource()
+      commit: ee493fa5d91dec02402239a072820b18beb36265
+[2/5] spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable
+      commit: 208ee586f86237969a91ac60ea10f48db9135143
+[3/5] spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock
+      commit: 9e21720a49589304aef9e37e8b6c6a4196daf156
+[4/5] spi: mpc5xxx-psc: Propagate firmware node
+      commit: 289c084ddc1317e6ed911911f95371679c10af1e
+[5/5] spi: mpc5xxx-psc: Consistently use device property APIs
+      commit: 3169c5816a55ba671e9c8a671c6c75818d30c657
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Best regards,
-Krzysztof
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
