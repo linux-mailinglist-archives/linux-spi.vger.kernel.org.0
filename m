@@ -2,151 +2,184 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F362E6B1E8C
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 09:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6056B1F8C
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 10:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCIIrH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Mar 2023 03:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S231270AbjCIJLy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Mar 2023 04:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjCIIrF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 03:47:05 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59A44BEA5
-        for <linux-spi@vger.kernel.org>; Thu,  9 Mar 2023 00:47:03 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id g3so4061977eda.1
-        for <linux-spi@vger.kernel.org>; Thu, 09 Mar 2023 00:47:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678351622;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cGqSi8rJkPEYNb50K8BZLZGOLTylgAMP+xBcfwszraY=;
-        b=uWrOPunOG/IX7IXgMC9nNzBAL3RVSJDMIQAhPRLPF7D7yJ63ZEUf6n4B9kZXT8EJra
-         5+lMkJFQGjwuxI/vKqAjH7GCS7/mokXszHTPnV4wsXEkyAViezjc+qd0H9KpnnQXibsk
-         cexqB/EpVgwEZTQVDS1OjOmQtO5/c7FKZHQdDC+TJb2EGxdpf/ulhTWLcngwpatM0bqU
-         xKMAnSRae3omimeoZUwNa0/Zu6XM4MK1h1k+wy2uTIii0U4oLtklUv/mrZXkWWz1KHg3
-         yXLIz1kjPyFqXSHnvpKygQSNhB+OrnXxWB4gRxWbTafxbX/LvQUFLue7GldjnhLB5oAv
-         Frow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678351622;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGqSi8rJkPEYNb50K8BZLZGOLTylgAMP+xBcfwszraY=;
-        b=oole5SrATMkt7HVzBH8JC3GUF+M3E3SPoBC4Hej4h9WtCX+wLeRGjEjNtfcs92S6cT
-         BNRcMleo35JacCWK4W9HN/pfMtkfiZXUrB26AmarYu9vJ6ShBF0LfwPfSaedvwqzpnQ/
-         dWRYXEqeEeQ1Md0kOQe+QyW4f8jZ6ci7JGfHpfSeGxAPGHi5e7/GtT1JNZMTqYcJhA9Q
-         GyXbDeYlXHQYImYByhob8QZRbdTbEa/Fb+si+cmdYRS2X00wtyS/WXcs7CcwPeTe5qCN
-         cMi2G+679KPy8FoO1R5kBzXiFm8Wgl8DW7uq8LRXWElb8ukNLfEu9QZCAWocj3Y1IHsA
-         ALsA==
-X-Gm-Message-State: AO0yUKX8Su6Wztxa5FsFa8a266cUygDWxvsVca0hmJQge63GuojUqIe6
-        +OSoX56gPPSy7q3xnPAY1Qlajg==
-X-Google-Smtp-Source: AK7set8c8UmjoKmMwhvKXt6i586YTl/YQ9n2bzrcv3YZRo7O7HO0PDCg9C2uNGptPLP5DV9WQJiM/Q==
-X-Received: by 2002:a05:6402:2028:b0:4af:70a5:55ee with SMTP id ay8-20020a056402202800b004af70a555eemr18130112edb.3.1678351622391;
-        Thu, 09 Mar 2023 00:47:02 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id a25-20020a509b59000000b004c0eac41829sm9183008edj.63.2023.03.09.00.47.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 00:47:01 -0800 (PST)
-Message-ID: <2691debf-0596-c265-468f-bb66d19f6db0@linaro.org>
-Date:   Thu, 9 Mar 2023 09:46:59 +0100
+        with ESMTP id S230304AbjCIJL3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 04:11:29 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E871CBCB;
+        Thu,  9 Mar 2023 01:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678353065; x=1709889065;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=uzSwTzYmuirE2t1RVyqqLXco8jZUtWj6cD5l5IatId4=;
+  b=HRUu7iorM50LUK3QxuFcWBKh9lTgw12nak43rbSVAbAEFYYGSahWC7Zh
+   Ga7x50QLkWSw8d/44DUuoNkepCi9utCHQVmuCxv6Ck1YlYz75scQPrGaU
+   4dUNkp1pHSsi3zGkTaJJDCZFu6BKllrPGdnXGQpAZ0iVmenYe7Ll73qly
+   xzVxcW6QqQ8d3IBzt2E2hY3kXA7dDZzHsSbRr5A8aBJHHmmM9BYde6wt6
+   9SvuUjAW4BLNl0FVl+cxF1IMi6u7+xTX0EOjnRSVqWfwVW83wxwdCAlv6
+   AeLPYDRPX+NHAHPZV80tAvcUm7bBtpipo6Rz2Cye/S3C9IY4QnAKk6LyR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316055525"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="316055525"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 01:11:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="654687400"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="654687400"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 01:11:03 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 9 Mar 2023 01:11:03 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 9 Mar 2023 01:11:03 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DmyEJKVHFhtklESqwpNQLW/SPkZnMWr6s0m5KTicmyf/NlBRqZeGuLQtbJQwD3U6A42xDe82LlOOhusYbwTbfTTD4Bt1uKowrrGshRaGC02DTgkJilW1Xp/DNo/pPMGGb+NRB2Ul/Co7DLdIyUJu03Ti7FMa9h69cyFboxOOtEfFkWlMIw7AwLuzFP6BqoCS2Xjq3CcYch8heXXkPLVxjTtkvniAsvw5nhUXZqAjlGFpmJYNhhKVZfcVwYtyG1wnzIjFCMRJ+w65SwD6soEaiu8l3VR9qX3fKeuhfkMQqGZr52CzNaA7YzlHWpSNfVBA58EggyWt8uhpnOw3DY52ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eBSPJxtZ9gMsGhVc80P/1K4G9O/GOIQGpLJDUOHkeG4=;
+ b=LYPY0H0hVNStwtXCU9Tf9XTlBLyts8sL3Ocz0DIbhbyGGeN48pnHPgv6iWJuggE9YOdrf6IClFB9YB5XyE5JU0Cm12taNB1UoCskGyC82TZhqx1P6gwZfQcw3k9X+giBKuGPp6TmA0rLiId8ETK8qMP5Nt9vq2xCYd5HJnOyKDYCK6y9vOZjJClde7zTMA2ynZjkQbFlLEh80OVTX6oJLq3DQTSM+qQnnzmRL9qurOmshfVWj3pKmWOaJZS8zqLRtSsMAv09Aw1QoEP7HmPLHFxf+CQohm4ftVcxcEk63N+gaE3dXD4k+Ky0OHqWcAoJJ65Tf2Dr8MPIp07TfIOirA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
+ DM4PR11MB5264.namprd11.prod.outlook.com (2603:10b6:5:38b::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.18; Thu, 9 Mar 2023 09:10:56 +0000
+Received: from DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1]) by DM5PR11MB1418.namprd11.prod.outlook.com
+ ([fe80::7ef8:2573:5a1b:c9f1%6]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
+ 09:10:56 +0000
+Date:   Thu, 9 Mar 2023 17:10:48 +0800
+From:   "Ye, Xiang" <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Lee Jones" <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.pandruvada@intel.com>,
+        <heikki.krogerus@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
+        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
+Subject: Re: [PATCH v4 1/5] mfd: Add support for Intel LJCA device
+Message-ID: <ZAmimLMY49ktjagX@ye-NUC7i7DNHE>
+References: <20230309071100.2856899-1-xiang.ye@intel.com>
+ <20230309071100.2856899-2-xiang.ye@intel.com>
+ <ZAmPjfH6rA0pbiUa@kroah.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAmPjfH6rA0pbiUa@kroah.com>
+X-ClientProxiedBy: SG2PR03CA0094.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::22) To DM5PR11MB1418.namprd11.prod.outlook.com
+ (2603:10b6:3:8::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 05/15] dt-bindings: soc: amd: amd,pensando-elbasr: Add
- AMD Pensando SoC System Controller
-Content-Language: en-US
-To:     Brad Larson <blarson@amd.com>
-Cc:     adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, broonie@kernel.org,
-        catalin.marinas@arm.com, davidgow@google.com,
-        devicetree@vger.kernel.org, fancer.lancer@gmail.com,
-        gerg@linux-m68k.org, gsomlo@gmail.com, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        lee@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, p.yadav@ti.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, rdunlap@infradead.org, robh+dt@kernel.org,
-        samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, yamada.masahiro@socionext.com
-References: <e82ca6f6-0870-f9b0-172f-bc6d54a9749b@linaro.org>
- <20230307021822.71245-1-blarson@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230307021822.71245-1-blarson@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|DM4PR11MB5264:EE_
+X-MS-Office365-Filtering-Correlation-Id: bbdeb555-8485-4769-0916-08db207e30c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N4xRrCs46xElKJJN9dMt7t2MW4inRZl6UPMzRdp9DAWCBb+eOeZ9lInD3KYOElu3rsvrHscxqLxT1yIfDRJDQWKPosdkDh/DGzu5Ao8WKWQ4nVC9CZL6XzlEm+kWhBLbwfY3Oj3Wkcpn8DXORq057R9eRsa/DQYMHVVJZ3RWHRs/0alNMRUIH7Cv1cvG/igCbzci2pgDch/JJrKN8Ov6SkMoSaJ5+i5UfbqC3v6q/KAlJRzNAMTgxtOTVo6+8RxmDbnPereYx6dbzA4O02HgO9ZUeITnW1ZgXpVUjz8U/QPRAYbeBP5VHTDRUKhGtpHXZEsDA/kCdHFVdLH30bYlrv0aI1UiN1w1qa+OdcGOkCpIwTwNC/PWuajSl+xMCdsLoTyu9X8KBst8iPukoDQaw01j8aamqAtuyVgNHu0rAnplKPQYUCpYIZX7BSaOwpBzJhKgYui4XEhVdQ1zDJq1lk4LLqMa3SCeRBWdxC+KTa42+c0XogXiqOdaJ9gQYf/84Xrry/B4aHNAJZIo66CGF0VeQ4qUgCv2XPsjEKvgDJ+XLj27x/dyXPCkqJ789MdfGKsMGKBwEC7ZjjouLkBLxsubiZXR9NoRu7F+fK7r8wXzblngL0zlrgUV3r7U3DNW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199018)(8676002)(41300700001)(66556008)(33716001)(66476007)(4326008)(66946007)(82960400001)(6916009)(2906002)(316002)(54906003)(8936002)(38100700002)(5660300002)(186003)(7416002)(9686003)(478600001)(4744005)(966005)(6486002)(6512007)(26005)(6506007)(83380400001)(6666004)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BHiXBC18yZLotk+qwcrA+s1d8NX73zummMhAP31pIgyrFdBdPtrMsth5D6wA?=
+ =?us-ascii?Q?TgmdwGNUNiLoJ3MPNx/irXJ9k/rpx1J5g0d9gNxvi+GRaXuJDzsEiJR2+k7x?=
+ =?us-ascii?Q?kJntakFSOhsYkvMSsYD4k/1A+WQSurJzQn5bOYHblG3EXpkA7gztXJeHu145?=
+ =?us-ascii?Q?RutlI+LZdhE9Zmczr8+iDEbBVJR564VULrE5YUCTW9EXknskQSrGPgswVrls?=
+ =?us-ascii?Q?wYM8rCCVJ1bMh4/SuGh8AXdDjGFK0gxsUgUARmz9l6PWSxdHyQDGgUfTzcPH?=
+ =?us-ascii?Q?dp97RFFYFK6wPtwQcBbdy7TwLFuZD4USrxy1toeQ2xy5PwEe5bqyEuain8UL?=
+ =?us-ascii?Q?ejZwBhqrPmD5ZYzdi+P03Knbe4ghkazmATdzNmaUDLsCeyF8VNuulMLCVO9L?=
+ =?us-ascii?Q?A0xrGvQLclyucDFV1n/3bzg/oIIGsKKvrAcabUzzHh51OlgBPNVewKH6uqAy?=
+ =?us-ascii?Q?OaOWbFM4vfE242ojBTx8Co2WIo9Kf1fxrQas71YEqJPdk5gS+KigO91x86qz?=
+ =?us-ascii?Q?O1gv9fVGOZR7AHhsg+Xjr46MqazTX4sxVlxE98MnH0Vz5zvUXOeMyZDDE/3T?=
+ =?us-ascii?Q?17KwjBsz/PDmcMbYSvNnH5iOz4qA/HSMqFQGh1hTuiEE/mroTqnED7G6RQn9?=
+ =?us-ascii?Q?CgLnEIuX07AVd7N5H27x7NJ+H8SVl5igpCjaMgD7lGKFygikjqbcVF+X/O9I?=
+ =?us-ascii?Q?MiEFMw4Lkiv1zLePaq7OQOvj89fb4XJfMJtWxZ28znXzZF1wIce39t8Azdtw?=
+ =?us-ascii?Q?JNkbGL6zdF+WlByLeibUmdNGXAdkTAug3KeFFewWDW2bcYx8bVcZn9/8g0v9?=
+ =?us-ascii?Q?3KbATDFwkW2F1J+GDHIYHkVDqF4476pz95vCRMZYLoe17rFTTPFdoUmKng32?=
+ =?us-ascii?Q?0Wwmfi2h/BSw3Ui+eTPyw7Fn9iM5EG5vcwtZzKmrx34PEgmei7kUv5GPfMJ9?=
+ =?us-ascii?Q?BFo1b3FRxwNB/gbx8qlwLVqjfCHFsyZzgRrNWQO9VfyIyD/8oM5t9BDst5vS?=
+ =?us-ascii?Q?Zi1FtlWqg0R8Ta/4EfL+kt97gQ7Bk6zHvt8wh1qYoL7HtRpGrmP78mQluPb5?=
+ =?us-ascii?Q?ohEdxdCd/HciS/4xjjBVptecp/+k5g0wT9t/QtjFyrZNbMcndUEs6Ull4a9o?=
+ =?us-ascii?Q?C+HgAoKKdWLReYPecTpM8Brp6mifTAnw4XbstbPt2IrI1atdCkkLqUG28KcQ?=
+ =?us-ascii?Q?Kmjro3nrtvmyXgYqdiFww9GLOoMZu0SlBK3yyhpDUbz0PhuHSajzmEsXY5EK?=
+ =?us-ascii?Q?Jai1yB/KACD/kJp6BMAGa9OaT0BfsOoL8mS7Ed1104YZAtp4MLq+y9kfOgeb?=
+ =?us-ascii?Q?482aHlcposQXVE5FfB0MLqL0rTalYfTqc4uvhBHOyZBoWWO44ZVnLjaxOEUN?=
+ =?us-ascii?Q?Oif3VsG25ZNLZEVPkl/BiGDcOHKwBNuEYcjwh1Gfh8OrwLN3xX+UdiNuF7wU?=
+ =?us-ascii?Q?ge39dW8QpFyVwumnITON+UfufapVa6dqwmQzaPEABHi5RNzs6yKFL/ljX9Fj?=
+ =?us-ascii?Q?mEegxg5plPq8dVhiHFz9thFQk3/WGpVsFRMrDvkpSHVoK0o3Z2jsOFWwrCdQ?=
+ =?us-ascii?Q?RrNE6fwBScLBhOu/3Fq4K2EOzm9Y0znzGWrcgOb9?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbdeb555-8485-4769-0916-08db207e30c7
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 09:10:56.3125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eiOIrqnKd3p1XvEaG0KBCFt7SCiomyMvZp7iV3L0jX3URGTLC2QLS55qAqhsm/dyRFgfZI4M4dPYYnPi/FJRoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5264
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/03/2023 03:18, Brad Larson wrote:
-> On 06/03/2023 09:35, Krzysztof Kozlowski wrote:
->>> On 06/03/2023 05:07, Brad Larson wrote:
->>>> Support the AMD Pensando SoC Controller which is a SPI connected device
->>>> providing a miscellaneous set of essential board control/status registers.
->>>> This device is present in all Pensando SoC based designs.
->>>>
->>>> Signed-off-by: Brad Larson <blarson@amd.com>
->>>> ---
->>>>
->>>> v10 changes:
->>>> - Property renamed to amd,pensando-ctrl
->>>> - Driver is renamed and moved to soc/drivers/amd affecting binding
->>>> - Delete cs property, driver handles device node creation from parent num-cs
->>>>   fixing schema reg error in a different way
->>>>
->>>> v9 changes:
->>>> - Instead of four nodes, one per chip-select, a single
->>>>   node is used with reset-cells in the parent.
->>>> - No MFD API is used anymore in the driver so it made
->>>>   sense to move this to drivers/spi.
->>>> - This driver is common for all Pensando SoC based designs
->>>>   so changed the name to pensando-sr.c to not make it Elba
->>>>   SoC specific.
->>>> - Added property cs for the chip-select number which is used
->>>>   by the driver to create /dev/pensr0.<cs>
->>>>
->>>> ---
->>>>  .../bindings/soc/amd/amd,pensando-ctrl.yaml   | 60 +++++++++++++++++++
->>>>  1 file changed, 60 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
->>>> new file mode 100644
->>>> index 000000000000..36694077b2e6
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
->>>
->>> Your subject suggests this is pensando-elbasr but you write everywhere
->>> pensando-ctrl. Confusing. Pick one.
->>
->> Actually pensando-ctrl is for sure not correct, because it misses the
->> name of the SoC (you call it everywhere "elba").
+Hi Greg,
+
+Thanks for the review.
+On Thu, Mar 09, 2023 at 08:49:33AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 09, 2023 at 03:10:56PM +0800, Ye Xiang wrote:
+> > This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> > device named "La Jolla Cove Adapter" (LJCA).
 > 
-> The reason I dropped elba as part of the name is this driver and its associated 
-> SPI attached device (cpld or fpga depending on the board design) will be used
-> across a series of SoCs starting with Elba.  Implying its Elba specific is misleading.
+> Then why is this called "mfd" in the subject line?
+Sorry, it's a mistake. I forget to change mfd to usb in the commit message
+because I just move the ljca.c from driver/mfd to drivers/usb/misc according
+to previous review comments[1]. And I will address this on v5.
 
-Compatibles must be specific.
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-If this is SoC part it must match SoC. What is misleading in this? Why
-Pensando is different than all other SoCs (I am really getting tired
-everytime asking why people think their solution is special)?
+[1] https://www.spinics.net/lists/kernel/msg4708451.html
+> 
+> >  include/linux/mfd/ljca.h  |  95 ++++
+> 
+> Why is this .h file in the mfd directory?
+It's a mistake as well. Will address it by moving include/linux/mfd/ljca.h
+to include/linux/usb/ljca.h.
+>
+> thanks,
+> 
+> greg k-h
 
-If this is not part of the SoC, then your commit msg is misleading.
-Maybe bindings as well, so rework it.
-
-Best regards,
-Krzysztof
-
+--
+Thanks
+Ye Xiang
