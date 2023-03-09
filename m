@@ -2,117 +2,180 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8403F6B27C0
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 15:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9626B28F8
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 16:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjCIOvr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Mar 2023 09:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S231320AbjCIPlN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Mar 2023 10:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjCIOvV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 09:51:21 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04732ED0E6;
-        Thu,  9 Mar 2023 06:49:59 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 34C3332009A3;
-        Thu,  9 Mar 2023 09:49:10 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 09 Mar 2023 09:49:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678373349; x=1678459749; bh=HW
-        lttmWBWkFFImvGFkmHbThBBRgnq5qfVnSMPiiuprE=; b=HFa6s2VhjmiI/OmIZT
-        dul4vSKtbrmVMYGXrfcOSo6E/uyuqMWsqZ/VVF/S7WfeFrUGKULn/pmRMwvhbR7S
-        3qU5ShCRoSJ+qlL0FHcQyeJt03jjinbMXKL98JxTGFSKYdzXjfqXe5cX8/z9Vblp
-        ba7kVAtNTXIaDIpqL8L0W4HAcR/eElpSsGdu/f6OfBup4/mri5ebuJY8rIGUcinH
-        3Lw5awbzLFtt2rAbhALs6JvXtnNDe7Yjng43XYH3YjdUNGSz0OAen66+/DM0l+bx
-        ukJDZRPjpMkIE5/a6VwgEbtrjDpFvuDfweBdzwD95mE8ISh5nQE1uU0g2qW/C2FB
-        DLlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678373349; x=1678459749; bh=HWlttmWBWkFFI
-        mvGFkmHbThBBRgnq5qfVnSMPiiuprE=; b=MrirbUSp6BM76BrjA/JqObhWc0wLd
-        pxZSF0Mr53AeFaITIZ8KuMTctmlqmqaCrHVzHr0x6Y/utR39LiPNzPwXfpF+TBm6
-        4NrmiWldOCHq73SWP032Cso3E2QF0eS9XRbzSzgySoBlTroo4oGQWNGUUgUlytP4
-        h9kD5dPMDxTP7yje/pW70h99DhKFWLJdLo2Cti7h270QnD/q3/R2j0zKU7n62+KU
-        CC7nN7KkUXwWExiMHvuzaf9OlsV5SVtDpfSF7JnxeMLoMQHNxSdN7ePQjDvilRKK
-        ddlWHuWnk8F9XmkpQSk9dcTr/1MIpmA2n+BDCL7Yws1p2OERYSBs1I51Q==
-X-ME-Sender: <xms:5PEJZImbpDwP6HjUpCUgc1MfTLnqYdPzwnjW45YBJnqOOr-1Uy2YCQ>
-    <xme:5PEJZH1rFS5JhDK7T3Ncq9OzUFwY5sC3coPbtWwr2HIc5kHOBR8xepbqmhpX1AHkq
-    QdgoG8tQ3SaOBPyVtw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5PEJZGpqTVJHj6yk9ML2avOR9nQ7tBw5qAdN6Erul2Gsc3K_NgkCUA>
-    <xmx:5PEJZEn3LONMSgE8hjF2x1CS8QfC5gLP92rk4WKCQApbIveS2O5vBQ>
-    <xmx:5PEJZG2k4KE3uLJn7BGIELbnTBMw28T3DF-Y8_DTrp1mBk3ftQBG5A>
-    <xmx:5fEJZP5BOhksONANfnhcedrGW2aUYKAYmfcv1Gz19X-tTZM69mUvHw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 342DDB60086; Thu,  9 Mar 2023 09:49:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <d307b36e-4901-458d-a366-eaf478a77412@app.fastmail.com>
-In-Reply-To: <CACRpkdYQfT=JXvmjKR_9O74H2dmwx1EF4QjCHM6fKAetpbrMOg@mail.gmail.com>
-References: <20230309071100.2856899-1-xiang.ye@intel.com>
- <20230309071100.2856899-3-xiang.ye@intel.com>
- <2865f3d0-428b-0df1-fc50-f6af3cb9dac3@suse.com>
- <ZAnku01goVDCuNM+@smile.fi.intel.com>
- <CACRpkdYQfT=JXvmjKR_9O74H2dmwx1EF4QjCHM6fKAetpbrMOg@mail.gmail.com>
-Date:   Thu, 09 Mar 2023 15:48:47 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc:     "Oliver Neukum" <oneukum@suse.com>,
-        "Ye Xiang" <xiang.ye@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        "Lee Jones" <lee@kernel.org>, "Wolfram Sang" <wsa@kernel.org>,
-        "Tyrone Ting" <kfting@nuvoton.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v4 2/5] gpio: Add support for Intel LJCA USB GPIO driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230259AbjCIPlM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 10:41:12 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E88E2C4F
+        for <linux-spi@vger.kernel.org>; Thu,  9 Mar 2023 07:41:11 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m25-20020a7bcb99000000b003e7842b75f2so1504337wmi.3
+        for <linux-spi@vger.kernel.org>; Thu, 09 Mar 2023 07:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678376469;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=thHKQQTXmNqo7+agzCDK9DfO3aLKYlwKu3AriL3BjPg=;
+        b=gJ2r1RFLFeBfkIT/MugmSb5mkRuueMrpeZW9ljS6WJwcDSNGf609jDWEGhUDaHEezx
+         cZ2rzK8O84Ns9L3RtlsXsMJRPxISQd1EIm/PK9KtKi5sy/DnsXChGUZ+rDKG6diE8pR1
+         bvqxe64DPNRU+Y3LVE795yrOjPTh/8LMBVj/AFkzsYU6KDhfcV18n1doWjxTyXqEyBrA
+         xdb5EG61TWJtW1P5i7IQkl6EAZy5htVaEvuJJZhD92utvd6odYUZwwcIcRg7H2ZYWCkt
+         sN8F8s+f/2dKAKUwUrpJ19SobSCbYCghvKAu424U1Jj7fh2YzZxH3g7DP6XiW1U2c1T/
+         LT1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678376469;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=thHKQQTXmNqo7+agzCDK9DfO3aLKYlwKu3AriL3BjPg=;
+        b=p45RU0KGJE8DwgJtGxrlPEQZkbLuqp1w/JSR831qO7uJy4vOy5YGNrjlrACB0pMG72
+         ySHHMtjngPM2w/aHWF1yqGqLJDDF2cFKsqB//D3NlE4TzeayXuTmNJrFn2s4Py1DiifQ
+         Rt6BKiSBLdZzBBTutt5fECJotO6WHhJxGfCHMcgq3D84jNLBMBzDIOunJtG/U80akmR6
+         bOnrJW1rKxar6/JEw5RUAiB5TpYMjPj9zG50K5wJK1XOIkQ3gSlbs0DRoFTJUyYgSomn
+         sz5u5Hky1ulVQurn7ZVYwgkcbRHg6u5zS3l3JyvUpAqWk4e/slFsqGEqP51+we9RK04Z
+         N5wQ==
+X-Gm-Message-State: AO0yUKUGCpPsbNIVkWK1LQxgGOZ/pjZu1N2NEig6qG1SrndMYjz0k54k
+        qsfmepXqIFBZSxC3ivys1iVSAw==
+X-Google-Smtp-Source: AK7set85qnSSVIK+/VfxFa63URER6rmyYNQB/XVwahWExbs8/RUsgm9XOIYiq9V5NrA4EQ+yUhQcHA==
+X-Received: by 2002:a05:600c:4ecf:b0:3eb:399d:ab1a with SMTP id g15-20020a05600c4ecf00b003eb399dab1amr19180672wmq.21.1678376469612;
+        Thu, 09 Mar 2023 07:41:09 -0800 (PST)
+Received: from [192.168.0.173] ([79.115.63.78])
+        by smtp.gmail.com with ESMTPSA id 18-20020a05600c229200b003dc4a47605fsm257344wmf.8.2023.03.09.07.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 07:41:09 -0800 (PST)
+Message-ID: <99ff644b-7734-44a4-6b3e-493dab843334@linaro.org>
+Date:   Thu, 9 Mar 2023 17:41:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] spi: Replace `dummy.nbytes` with `dummy.ncycles`
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, Sergiu.Moga@microchip.com,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, chin-ting_kuo@aspeedtech.com,
+        clg@kaod.org, joel@jms.id.au, andrew@aj.id.au,
+        kdasu.kdev@gmail.com, han.xu@nxp.com, john.garry@huawei.com,
+        matthias.bgg@gmail.com, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, haibo.chen@nxp.com,
+        yogeshgaur.83@gmail.com, heiko@sntech.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        michal.simek@xilinx.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20220911174551.653599-1-sergiu.moga@microchip.com>
+ <20220925220304.buk3yuqoh6vszfci@mobilestation>
+ <18e6e8a8-6412-7e31-21e0-6becd4400ac1@microchip.com>
+ <20220926172454.kbpzck7med5bopre@mobilestation>
+ <1766f6ef-d9d8-04f7-a6bf-0ea6bc0b3d23@linaro.org>
+ <f647e713a65f5d3f0f2e3af95c4d0a89@walle.cc>
+ <1849e2c8-54f5-9e56-4ed8-8b0e4a826d04@linaro.org>
+ <302ecf0421fe4c99fca3eb0ca2f66127@walle.cc>
+ <5183a184-c72d-3acd-70cd-6aa1e31533f5@linaro.org>
+ <03a9f117316ab81f1b5a18100f771e65@walle.cc>
+ <6c2090bf-d102-a333-3a83-03abe81ff70e@linaro.org>
+ <460ef5ff3846b409b322ca53559e2476@walle.cc>
+ <b8b61fc0-1e4f-146b-2036-03fda5359585@linaro.org>
+ <bf57f3aafc3e0a02c81dab905ce9497e@walle.cc>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <bf57f3aafc3e0a02c81dab905ce9497e@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Mar 9, 2023, at 15:18, Linus Walleij wrote:
-> On Thu, Mar 9, 2023 at 2:53 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
->
-> Yups. And I think the solution looks something like this:
->
-> u8 obuf[LJCA_GPIO_BUF_SIZE] __aligned(8);
-> u8 ibuf[LJCA_GPIO_BUF_SIZE] __aligned(8);
->
-> __aligned(4) if it's 32bit DMA I guess? 8 always works that's
-> why we use it all over the IIO subsystem.
 
-I think it must be __aligned(ARCH_DMA_MINALIGN), to account
-for architectures with non-coherent DMA.
 
-     Arnd
+On 09.03.2023 16:01, Michael Walle wrote:
+> Am 2023-03-09 14:54, schrieb Tudor Ambarus:
+>> On 09.03.2023 15:33, Michael Walle wrote:
+>>>>>> The controllers that can talk in dummy ncycles don't need the
+>>>>>> dummy.{buswidth, dtr} fields.
+>>>>>>
+>>>>>> The controllers that can't talk in dummy cycles, but only on a "byte"
+>>>>>> boundary need both buswidth and dtr fields. Assume a flash needs 32
+>>>>>> dummy cycles for an op on 8D-8D-8D mode. If the controller does 
+>>>>>> not have
+>>>>>> the buswidth and dtr info, it can't convert the dummy ncycles to 
+>>>>>> nbytes.
+>>>>>> If he knows only that buswidth is 8, it will convert ncycles to 4 
+>>>>>> bytes.
+>>>>>> If dtr is also specified it converts ncycles to 2 bytes.
+>>>>>
+>>>>> No they don't need it. Lets take your semper flash and assume it needs
+>>>>> 12 latency cycles. SPI-NOR will set ncycles to 12 *regardless of 
+>>>>> the mode
+>>>>> or dtr setting*. The controller then knows we need 12 clock cycles. 
+>>>>> It has
+>>>>> then to figure out how that can be achieved. E.g. if it can only do 
+>>>>> the
+>>>>> "old" byte programming and is in quad mode, good for it. It will 
+>>>>> send 6
+>>>>> dummy bytes, which will result in 12 dummy clock cycles, because 1 
+>>>>> byte
+>>>>> takes two clock cycles in quad SDR mode. If its in octal mode, send 12
+>>>>> bytes. If its in dual mode, send 3 bytes. Obiously, it cannot be in
+>>>>> single bit mode, because it cannot send 1.5 bytes..
+>>>>>
+>>>>
+>>>> You miss the fact that you can have 1-1-4. What buswidth do you use
+>>>> for dummy, the address buswidth or the data buswidth?
+>>>
+>>> Doesn't matter, does it? The driver is free to chose, 1, 4, or anything
+>>> else. You don't sample any data during the dummy phase.
+>>> To answer your question: single for instruction, single for address,
+>>> whatever you choose for dummy as long as there are ncycles space between
+>>> address and data, and quad for data.
+>>
+>> Huh? How does the controller chose, based on what?
+> 
+> Based on its own capabilities. It can choose either way. In the end
+
+Okay, I'll go again through all the spi controllers and check if we can
+determine the dummy nbytes based on controller caps. Thanks!
+
+> what matters is how many clock cycles there are between the address
+> and data phase. And you only need to convey that information to the
+> SPI controller - your new ncycles.
+> 
+> -michael
+> 
+>>> Depending on the capabilites of the hardware it will likely be 1 or 4.
+>>>
+>>>> What happens if crazy protocols like 1S-1S-8D appear? What buswidth
+>>>> and transfer mode are you going to use for dummy?
+>>>
+>>> Also doesn't matter. What matters is how many dummy clock cycles you
+>>> do. Again, they don't depent on the mode. You just have to count
+>>> the clock cycles between the address and the data phase (and that is
+>>> what your ncycle parameter will tell the controller).
+>>>
+>>>> And please don't tell me that "we're going to assume that
+>>>> dummy.buswidth = address.buswidth because that's what we currently do
+>>>> in SPI NOR", because I'm not convinced that the assumption is correct.
+>>>
+>>> No, it doesn't matter :)
+>>>
+>>> -michael
