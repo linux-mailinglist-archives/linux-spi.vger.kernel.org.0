@@ -2,145 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E891C6B1B60
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 07:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BDB6B1BFE
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 08:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCIGYJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Mar 2023 01:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S229799AbjCIHK7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Mar 2023 02:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjCIGXv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 01:23:51 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999AB61336
-        for <linux-spi@vger.kernel.org>; Wed,  8 Mar 2023 22:23:30 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cy23so2745265edb.12
-        for <linux-spi@vger.kernel.org>; Wed, 08 Mar 2023 22:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678343008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w/cB2X4DKaCs0XHvpzyjGZGOto29HE+FyDV3PNPULEA=;
-        b=ftnvBkb3co+JGb7NOfKIAR5dBBS2MMedePUfXNzIc1qTDIigSLeT0+lFySMbBA5+/x
-         mmiHx7WHkA7S4fOYKnihmsi3gFGKm9CtU756NpXwsxvNqAiaOhCLc6ctOqJrkacPgQzS
-         jsCDPOn+nv3xKSUILQNeXm4zS81S4sk4IQN1MvIeW6vhNOUibO9ch/cDrzPNcinWjT3O
-         GFsbE5CopVq7smC/pGr6znmoFQTbMrNBq5o1ZYUZmD4VwUotmXfwwGKIypgtZ90ML68a
-         3n6MAU0AeLmcUA6XNVYUJrF4oVwXjqLG94Vg4q+jBoiwVfVuyU5UM32G/RJm2wSoHKXD
-         RYlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678343008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/cB2X4DKaCs0XHvpzyjGZGOto29HE+FyDV3PNPULEA=;
-        b=LNKdeLPWsLCuZfQRiiWsORswxbRFVF6D0NyRkQnWKwhuxzWDG9lLAkDCx/BV9smtEe
-         4xRSp9qLXftlwdm/rzG9BetFpVZGH32ooE4za+XrH/o14wV6NZ9uSLwiqhPJxAEL8c8p
-         nzJpDmXteC+s03rdWMmB+Q5dahGh4fXqpk54nEQMa5aDa4azAA4RufCkSohzcYMUzLy6
-         9Vjjpe/39oA5Kiu1z3IBpkOQaDlcmkBfoPkRXQpp74vNg/DIgbRZbs6tk8qBK4psOB5E
-         Po3qD1OajZ4swCxAUW/DBATCjWl8oOMV0VARwKPmplzpRHCTa+8je3GMuBX7So8AFIdg
-         QLzw==
-X-Gm-Message-State: AO0yUKWAEHfPI00KfoM/y8FF4NCNfH4DMUrX4aw5MddWAeLCiw8tSCrf
-        pv7m4sf7BUdlxgdq3MzZHEImDg==
-X-Google-Smtp-Source: AK7set+yA/GXBROzW3g/KbTovsWEgzYdsLr7SRE0c6LLnfsKkJK0Z/2d8qTyxEU2z47Z/nEir1RoNA==
-X-Received: by 2002:aa7:c693:0:b0:4be:7311:113a with SMTP id n19-20020aa7c693000000b004be7311113amr18463752edq.17.1678343008567;
-        Wed, 08 Mar 2023 22:23:28 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id gw5-20020a170906f14500b008c1f68ba0e2sm8306827ejb.85.2023.03.08.22.23.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 22:23:28 -0800 (PST)
-Message-ID: <ecd867a1-207d-774f-882b-22f0973286ae@linaro.org>
-Date:   Thu, 9 Mar 2023 07:23:27 +0100
+        with ESMTP id S229742AbjCIHK6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 02:10:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12729A3B40;
+        Wed,  8 Mar 2023 23:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678345858; x=1709881858;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0JC8EdQCQu79Tbr/nJ/2g2CWrJledfFqbEALgkGmyiQ=;
+  b=VOyYJtkE4o6lgzpqFzgwXwHo7WT1xtjMGEk1wp7J4PwnNJa/tfz4VeTC
+   v3n4XuSr1JKBKuUGfGDsrnFm+HILfw/oRrPk+bqyWyddg4YmsMUurSzxB
+   n+RtJ1ZMXF32eflXdLb5oHbd1bLW04h+nCS/wYB6fpPR28ET1qfNte6T0
+   0jYrRt3eG3DDO93knILVaD0b+VOTQTzjDSMKf4ZfRRoQcWaBHw7C58CjK
+   u71l2YxB2Y69hEFxC/Mx6890vvKCgp3tbwaRDZTffWLBRbChk/G7QOfVl
+   podqxlCNuio8espO2tM6IBdu16shjoqqPhsft59UOAkhb2KmiRQDO2AFs
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316767645"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="316767645"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 23:10:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="923126288"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="923126288"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Mar 2023 23:10:53 -0800
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v4 0/5] Add Intel LJCA device driver
+Date:   Thu,  9 Mar 2023 15:10:55 +0800
+Message-Id: <20230309071100.2856899-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
- <8d20dcfb-480b-3f1a-02b0-294a05a566f7@linaro.org>
- <dd2e6c68-7460-caa1-0d54-53aeb5619a18@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dd2e6c68-7460-caa1-0d54-53aeb5619a18@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/03/2023 03:08, zhuyinbo wrote:
-> 
-> 在 2023/3/8 下午7:30, Krzysztof Kozlowski 写道:
->> On 08/03/2023 03:59, Yinbo Zhu wrote:
->>> Add the Loongson platform spi binding with DT schema format using
->>> json-schema.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> ---
->>>   .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
->>>   MAINTAINERS                                   |  6 +++
->>>   2 files changed, 53 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->> Filename matching the compatible.
-> 
-> loongson,ls-spi.yaml is for ls2k-spi and ls7a-spi, I will add following 
-> desription:
-> 
-> 
-> properties:
->    compatible:
->      enum:
->        - loongson,ls2k-spi
->        - loongson,ls7a-spi
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-OK then.
+---
+v4:
+ - move ljca.c from drivers/mfd to drivers/usb/misc folder.
+ - fix index warning in sysfs-bus-devices-ljca.
 
->>
->>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>> new file mode 100644
->>> index 000000000000..8a13a96b3818
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>> @@ -0,0 +1,47 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +
->>> +%YAML 1.2
->>> +---
->>> +$id: "http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#"
->>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> Drop the quotes. What was the base of your code here?
-> 
-> okay, I will drop the quotes.    and I don't got it  about the code base 
-> that you said.
-> 
-> you meaning is advice me add a line  as follows ?
+v3:
+ - spi: make ljca_spi_transfer inline and fix an endian issue.
 
-I meant, from which other file did you copy it?
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
 
->>> +
->>> +  clock-names:
->>> +    const: boot
->> Drop clock-names, not needed for single entry.
-> 
-> if drop the clock-names entry, the yaml file will compile fail.
+Ye Xiang (5):
+  mfd: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
 
-Obviously you have to also drop it from DTS and driver...
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  22 +
+ drivers/gpio/Kconfig                          |  12 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 454 ++++++++
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 357 +++++++
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 291 ++++++
+ drivers/usb/misc/Kconfig                      |  13 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/ljca.c                       | 969 ++++++++++++++++++
+ include/linux/mfd/ljca.h                      |  95 ++
+ 14 files changed, 2239 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/ljca.c
+ create mode 100644 include/linux/mfd/ljca.h
 
-
-Best regards,
-Krzysztof
+-- 
+2.34.1
 
