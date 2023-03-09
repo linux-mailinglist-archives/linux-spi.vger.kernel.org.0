@@ -2,30 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610BA6B208B
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 10:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C9D6B2089
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Mar 2023 10:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCIJsD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Mar 2023 04:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S229892AbjCIJsB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Mar 2023 04:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCIJro (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 04:47:44 -0500
+        with ESMTP id S229995AbjCIJrn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Mar 2023 04:47:43 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C87C85A6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B11BCB98
         for <linux-spi@vger.kernel.org>; Thu,  9 Mar 2023 01:47:11 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1paCrc-0007fw-K6; Thu, 09 Mar 2023 10:47:08 +0100
+        id 1paCrc-0007fx-K7; Thu, 09 Mar 2023 10:47:08 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1paCrb-002uv7-34; Thu, 09 Mar 2023 10:47:07 +0100
+        id 1paCrb-002uv8-3P; Thu, 09 Mar 2023 10:47:07 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1paCra-003VnE-5J; Thu, 09 Mar 2023 10:47:06 +0100
+        id 1paCra-003VnH-C3; Thu, 09 Mar 2023 10:47:06 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mark Brown <broonie@kernel.org>,
@@ -35,13 +35,15 @@ Cc:     AngeloGioacchino Del Regno
         linux-spi@vger.kernel.org, kernel@pengutronix.de,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 0/3] spi: mt65xx: Convert to platform remove callback returning void
-Date:   Thu,  9 Mar 2023 10:47:01 +0100
-Message-Id: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 1/3] spi: mt65xx: Properly handle failures in .remove()
+Date:   Thu,  9 Mar 2023 10:47:02 +0100
+Message-Id: <20230309094704.2568531-2-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
+References: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=885; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=GAA9NNA1eTFeCZToI//iP4zdyMxlzjlonJ6Yd3JZGzQ=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkCasJ9by57QrgVJwLr1WcRX1JKly2s5tmgWY3O DIuR5ioHueJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAmrCQAKCRDB/BR4rcrs CaBiB/0fKV7QCeyHztzEj87HC/VU6N9POqBn12jkY8NtAyfwaoqSDxR5EdEbMZIOdPlYwvGCeQF jeiU8B1nPmmxhZ2fCdiu4zPayo1sS1vYgzeY26wnoujisQw/C2/0J0lrSES7Bld7jscEjYWyasa WXDAbnb5dIM040gTbEJ5ZArw+45HVfYprK+uXWjSGbpDLF+P5+56/tePMp20q/e6367mlKxBcFc /7AnS2O9SNKtDraviCwv31VUIbMZ01jHxxq/oS45cFn9b/h2EaSAm3Dlmm0jOk68YL69u/zowKk AOB9vY4u38uXGFhfM039u3en76/Kk+0oAf/4SUl+6dTos/Ep
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1578; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=yh/+04G2mPy0dKpao1v1bYKj6AZtMwDC3Z1eft87mk8=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkCasNEPvAeZV5KK/fHmPsGkPJLZO1RWfvtok0y vsIcxFeGvKJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAmrDQAKCRDB/BR4rcrs Cdu4CACSHiTTHFcll04uCZUeJeS6AR0504iswcnVvtXCR0dvRFXwtXIAj5DvGLMrkygpvLzy8Fz D4SbbRNC4So/Ceks6J9QWMLbZ/IKNoxLop7z7vEEYHIsHzLcwsbj37ayJy11VQhRQB37LhGwfu5 0r02zYlvSfCIqn/AFLhxgS69bCZ3IueW2KOj7pAxeatoSKbsOpo3HfXw2Lb9n8gLNM8RDC77c5H VBLIk9vUpn4LB4uvVkM+esu6R9MjHz2AXoagZuSWSbkWyoNjqFFRpWENSLur8yKpsurqFHBPdqb R5Ayfg7SUenHGDpwcIcube0sXIbKW32Ym15STa+1XDXKVqBM
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -56,29 +58,51 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+Returning an error code in a platform driver's remove function is wrong
+most of the time and there is an effort to make the callback return
+void. To prepare this rework the function not to exit early.
 
-this series converts the spi-mt65xx driver to .remove_new(). While the
-preparing patch that gets rid of an early error return is in many cases
-a bug fix, it's not tragic here, as the early return only skips steps
-that are not necessary after resume failed. Still rework the code flow
-to prepare for conversion to .remove_new(). The 2nd patch actually
-converts the driver. The third is a small nitpick cleanup the I noticed
-while working on the driver.
+There wasn't a real problem because if pm runtime resume failed the only
+step missing was pm_runtime_disable() which isn't an issue.
 
-Best regards
-Uwe
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/spi/spi-mt65xx.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-Uwe Kleine-König (3):
-  spi: mt65xx: Properly handle failures in .remove()
-  spi: mt65xx: Convert to platform remove callback returning void
-  spi: mt65xx: Don't disguise a "return 0" as "return ret"
-
- drivers/spi/spi-mt65xx.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
-
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 9eab6c20dbc5..b1cf7bbb2c08 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -1275,15 +1275,20 @@ static int mtk_spi_remove(struct platform_device *pdev)
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 	int ret;
+ 
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
+-
+-	mtk_spi_reset(mdata);
++	ret = pm_runtime_get_sync(&pdev->dev);
++	/*
++	 * If pm runtime resume failed, clks are disabled and unprepared. So
++	 * don't access the hardware and skip clk unpreparing.
++	 */
++	if (ret >= 0) {
++		mtk_spi_reset(mdata);
+ 
+-	if (mdata->dev_comp->no_need_unprepare) {
+-		clk_unprepare(mdata->spi_clk);
+-		clk_unprepare(mdata->spi_hclk);
++		if (mdata->dev_comp->no_need_unprepare) {
++			clk_unprepare(mdata->spi_clk);
++			clk_unprepare(mdata->spi_hclk);
++		}
++	} else {
++		dev_warn(&pdev->dev, "Failed to resume hardware (%pe)\n", ERR_PTR(ret));
+ 	}
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
 -- 
 2.39.1
 
