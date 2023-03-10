@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DF56B3D4B
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 12:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6840E6B3D4F
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 12:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjCJLKG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Mar 2023 06:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S230116AbjCJLKj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Mar 2023 06:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCJLKF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 06:10:05 -0500
+        with ESMTP id S229550AbjCJLKe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 06:10:34 -0500
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29B1F2090;
-        Fri, 10 Mar 2023 03:10:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDE3F209B;
+        Fri, 10 Mar 2023 03:10:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678446604; x=1709982604;
+  t=1678446631; x=1709982631;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=/+tFdW/YBwQDnb1ty9VRIvJdaL18kxs2PMLLcO8L0DU=;
-  b=RGRp34MJUxpUfyxEl78Xy3HzzGeoAJi4WtxRovbJxSJRddhgJ3K56YKc
-   XILKCq3yc2GT6ff2zmtQsybILkRXFYD2qFeUVCNfhkD/GmSgjD8n9zbt9
-   IzRC6ziw0+qLgak0XkKJ3IMe302eQro2BHlkoICIazCxHDQ5iU70Yxrai
-   ZpqfkWD2outhHzhds7DwPNA41FGb+22qS1/62If9Ict33pVZYanPAKDK9
-   K6qc3DWXYwfcp6/UXlBeNZWy2bZsG/kaCZnqYRzD1p6wlp6MD0z2XKfwJ
-   qYRpJz9ajqpMy6n//eO/t7/uEbTzIOfgqwj71Q6wm1I5N8AF0npEm+tS8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336722988"
+  bh=vJqPlIdV6UQrU8di3GtSZjZo8V4cHDZdnObXwRJMPHk=;
+  b=hMtFI7P+9osXKgKFM2eYty36w3u157cWMzVKUbfCPiMkYwbfxd5DGGS6
+   72I1gS8WZwKZRuGGFbzQm37flQHU2j5XKoixPbnDmAQwF+wrZKlkmNfyi
+   /hlEfq5Q8/RweAObLZCNXUhhD/Dik3XvQ5oJ4rDRLxlLtZbdQqqzVO9Sl
+   HXMiQIwOFcJmGocqhTaySN8IpcD6cjKoEr5B/4f8cnVx9Q3jzR70x1Fdb
+   d/2Epk9KYUuwtp/BAhh/mud80GhuEtpKI4Z9jwaxrq9c6LkzOS7bSea0m
+   K/skHfnrcLDaS18wzmTtWrHYzFZ5sN2TaFK6nqz31jx0UMyB8B69SSMY0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336723078"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="336722988"
+   d="scan'208";a="336723078"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:10:04 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:10:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707973911"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707974042"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="707973911"
+   d="scan'208";a="707974042"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.222])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:09:55 -0800
-Message-ID: <8d034a7c-8702-a146-3021-2101b3382848@intel.com>
-Date:   Fri, 10 Mar 2023 13:09:50 +0200
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:10:22 -0800
+Message-ID: <dd4f8ab5-88c6-b992-dd83-fc3faf623175@intel.com>
+Date:   Fri, 10 Mar 2023 13:10:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v10 11/15] mmc: sdhci-cadence: Enable device specific
- override of writel()
+Subject: Re: [PATCH v10 12/15] mmc: sdhci-cadence: Support device specific
+ init during probe
 Content-Language: en-US
 To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -63,11 +63,11 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
         devicetree@vger.kernel.org
 References: <20230306040739.51488-1-blarson@amd.com>
- <20230306040739.51488-12-blarson@amd.com>
+ <20230306040739.51488-13-blarson@amd.com>
 From:   Adrian Hunter <adrian.hunter@intel.com>
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
  Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230306040739.51488-12-blarson@amd.com>
+In-Reply-To: <20230306040739.51488-13-blarson@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -81,9 +81,9 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 6/03/23 06:07, Brad Larson wrote:
-> SoCs with device specific Cadence implementation, such as setting
-> byte-enables before the write, need to override writel().  Add a
-> callback where the default is writel() for all existing chips.
+> Move struct sdhci_pltfm_data under new struct sdhci_cdns_drv_data.
+> Add an init() into sdhci_cdns_drv_data for platform specific device
+> initialization in the device probe which is not used for existing devices.
 > 
 > Signed-off-by: Brad Larson <blarson@amd.com>
 
@@ -92,95 +92,93 @@ Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
 > 
 > v10 changes:
-> - The 1st patch adding private writel() is unchanged.  The 2nd patch is split
->   into two patches to provide for device specific init in one patch with no
->   effect on existing designs.  Then add the pensando support into the next patch.
->   Then the 4th patch is mmc hardware reset support which is unchanged.
-> 
-> v9 changes:
-> - No change to this patch but as some patches are deleted and this is
->   a respin the three successive patches to sdhci-cadence.c are
->   patches 12, 13, and 14 which do the following:
-> 
->   1. Add ability for Cadence specific design to have priv writel().
->   2. Add Elba SoC support that requires its own priv writel() for
->      byte-lane control .
->   3. Add support for mmc hardware reset.
+> - New patch to provide for platform specific init() with no change
+>   to existing designs.
 > 
 > ---
->  drivers/mmc/host/sdhci-cadence.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+>  drivers/mmc/host/sdhci-cadence.c | 32 +++++++++++++++++++++++---------
+>  1 file changed, 23 insertions(+), 9 deletions(-)
 > 
 > diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> index 6f2de54a5987..708d4297f241 100644
+> index 708d4297f241..c528a25f48b8 100644
 > --- a/drivers/mmc/host/sdhci-cadence.c
 > +++ b/drivers/mmc/host/sdhci-cadence.c
-> @@ -67,6 +67,7 @@ struct sdhci_cdns_phy_param {
->  struct sdhci_cdns_priv {
->  	void __iomem *hrs_addr;
->  	bool enhanced_strobe;
-> +	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
->  	unsigned int nr_phy_params;
->  	struct sdhci_cdns_phy_param phy_params[];
->  };
-> @@ -90,6 +91,12 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
->  	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+> @@ -77,6 +77,11 @@ struct sdhci_cdns_phy_cfg {
+>  	u8 addr;
 >  };
 >  
-> +static inline void cdns_writel(struct sdhci_cdns_priv *priv, u32 val,
-> +			       void __iomem *reg)
-> +{
-> +	writel(val, reg);
-> +}
+> +struct sdhci_cdns_drv_data {
+> +	int (*init)(struct platform_device *pdev);
+> +	const struct sdhci_pltfm_data pltfm_data;
+> +};
 > +
->  static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
->  				    u8 addr, u8 data)
+>  static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+>  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
+>  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
+> @@ -325,13 +330,17 @@ static const struct sdhci_ops sdhci_cdns_ops = {
+>  	.set_uhs_signaling = sdhci_cdns_set_uhs_signaling,
+>  };
+>  
+> -static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
+> -	.ops = &sdhci_cdns_ops,
+> -	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> +static const struct sdhci_cdns_drv_data sdhci_cdns_uniphier_drv_data = {
+> +	.pltfm_data = {
+> +		.ops = &sdhci_cdns_ops,
+> +		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> +	},
+>  };
+>  
+> -static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
+> -	.ops = &sdhci_cdns_ops,
+> +static const struct sdhci_cdns_drv_data sdhci_cdns_drv_data = {
+> +	.pltfm_data = {
+> +		.ops = &sdhci_cdns_ops,
+> +	},
+>  };
+>  
+>  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+> @@ -357,7 +366,7 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+>  static int sdhci_cdns_probe(struct platform_device *pdev)
 >  {
-> @@ -104,17 +111,17 @@ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+>  	struct sdhci_host *host;
+> -	const struct sdhci_pltfm_data *data;
+> +	const struct sdhci_cdns_drv_data *data;
+>  	struct sdhci_pltfm_host *pltfm_host;
+>  	struct sdhci_cdns_priv *priv;
+>  	struct clk *clk;
+> @@ -376,10 +385,10 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
 >  
->  	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
->  	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
-> -	writel(tmp, reg);
-> +	priv->priv_writel(priv, tmp, reg);
+>  	data = of_device_get_match_data(dev);
+>  	if (!data)
+> -		data = &sdhci_cdns_pltfm_data;
+> +		data = &sdhci_cdns_drv_data;
 >  
->  	tmp |= SDHCI_CDNS_HRS04_WR;
-> -	writel(tmp, reg);
-> +	priv->priv_writel(priv, tmp, reg);
->  
->  	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
->  	if (ret)
->  		return ret;
->  
->  	tmp &= ~SDHCI_CDNS_HRS04_WR;
-> -	writel(tmp, reg);
-> +	priv->priv_writel(priv, tmp, reg);
->  
->  	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
->  				 0, 10);
-> @@ -191,7 +198,7 @@ static void sdhci_cdns_set_emmc_mode(struct sdhci_cdns_priv *priv, u32 mode)
->  	tmp = readl(priv->hrs_addr + SDHCI_CDNS_HRS06);
->  	tmp &= ~SDHCI_CDNS_HRS06_MODE;
->  	tmp |= FIELD_PREP(SDHCI_CDNS_HRS06_MODE, mode);
-> -	writel(tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
-> +	priv->priv_writel(priv, tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
->  }
->  
->  static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
-> @@ -223,7 +230,7 @@ static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
->  	 */
->  	for (i = 0; i < 2; i++) {
->  		tmp |= SDHCI_CDNS_HRS06_TUNE_UP;
-> -		writel(tmp, reg);
-> +		priv->priv_writel(priv, tmp, reg);
->  
->  		ret = readl_poll_timeout(reg, tmp,
->  					 !(tmp & SDHCI_CDNS_HRS06_TUNE_UP),
-> @@ -386,6 +393,7 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
->  	priv->nr_phy_params = nr_phy_params;
->  	priv->hrs_addr = host->ioaddr;
->  	priv->enhanced_strobe = false;
-> +	priv->priv_writel = cdns_writel;
+>  	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+> -	host = sdhci_pltfm_init(pdev, data,
+> +	host = sdhci_pltfm_init(pdev, &data->pltfm_data,
+>  				struct_size(priv, phy_params, nr_phy_params));
+>  	if (IS_ERR(host)) {
+>  		ret = PTR_ERR(host);
+> @@ -397,6 +406,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
 >  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
 >  	host->mmc_host_ops.hs400_enhanced_strobe =
 >  				sdhci_cdns_hs400_enhanced_strobe;
+> +	if (data->init) {
+> +		ret = data->init(pdev);
+> +		if (ret)
+> +			goto free;
+> +	}
+>  	sdhci_enable_v4_mode(host);
+>  	__sdhci_read_caps(host, &version, NULL, NULL);
+>  
+> @@ -461,7 +475,7 @@ static const struct dev_pm_ops sdhci_cdns_pm_ops = {
+>  static const struct of_device_id sdhci_cdns_match[] = {
+>  	{
+>  		.compatible = "socionext,uniphier-sd4hc",
+> -		.data = &sdhci_cdns_uniphier_pltfm_data,
+> +		.data = &sdhci_cdns_uniphier_drv_data,
+>  	},
+>  	{ .compatible = "cdns,sd4hc" },
+>  	{ /* sentinel */ }
 
