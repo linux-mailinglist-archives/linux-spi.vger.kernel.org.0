@@ -2,98 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8A6B3A4D
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 10:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C23D6B3ABA
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 10:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjCJJ0R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Mar 2023 04:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S229999AbjCJJhN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Mar 2023 04:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjCJJ0C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 04:26:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971DA115B55
-        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 01:21:58 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1paYwN-0002lF-P7; Fri, 10 Mar 2023 10:21:31 +0100
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1paYwM-0038yl-36; Fri, 10 Mar 2023 10:21:30 +0100
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1paYwL-004Dqb-De; Fri, 10 Mar 2023 10:21:29 +0100
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     Alain Volmat <alain.volmat@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     kernel@pengutronix.de,
-        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] spi: stm32: split large transfers based on word size instead of bytes
-Date:   Fri, 10 Mar 2023 10:20:53 +0100
-Message-Id: <20230310092053.1006459-2-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230310092053.1006459-1-l.goehrs@pengutronix.de>
-References: <20230310092053.1006459-1-l.goehrs@pengutronix.de>
+        with ESMTP id S231194AbjCJJgo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 04:36:44 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01A3814E88;
+        Fri, 10 Mar 2023 01:34:04 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJPxj+Qpk5u0KAA--.14919S3;
+        Fri, 10 Mar 2023 17:33:23 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxSL1e+QpkTcxRAA--.10888S3;
+        Fri, 10 Mar 2023 17:33:22 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn,
+        zhuyinbo@loongson.cn
+References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
+ <20230308025908.21491-2-zhuyinbo@loongson.cn>
+ <167828359942.2612999.3798783623764270312.robh@kernel.org>
+ <1f14658a-5dc3-fc48-5291-28e14f88abaa@loongson.cn>
+ <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <3370cbee-1b17-3473-4462-c574398fb83d@loongson.cn>
+Date:   Fri, 10 Mar 2023 17:33:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8BxSL1e+QpkTcxRAA--.10888S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar45uw4UCr1fuF4UGF48Zwb_yoW8WF4Upw
+        48Can8tF4Utr13Kw4Sq345Kw1YqrWrGryYqF9xKr17GFyqg3WFvr4akr1UuFsruF17GFyx
+        ZF15Kw15KryUZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The TSIZE register in CR2, to which the number of words to transfer
-is written, is only 16 Bit. This limits transfers to 65535 SPI
-_words_ at a time. The existing code uses spi_split_transfers_maxsize
-to limit transfers to 65535 _bytes_ at a time.
 
-This breaks large transfers with bits_per_word > 8, as they are
-split inside of a word boundary by the odd size limit.
+在 2023/3/10 下午5:08, Krzysztof Kozlowski 写道:
+> On 10/03/2023 03:31, zhuyinbo wrote:
+>> 在 2023/3/8 下午10:06, Rob Herring 写道:
+>>> On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
+>>>> Add the Loongson platform spi binding with DT schema format using
+>>>> json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
+>>>>    MAINTAINERS                                   |  6 +++
+>>>>    2 files changed, 53 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+>>> FATAL ERROR: Unable to parse input tree
+>>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+>>> make[1]: *** Waiting for unfinished jobs....
+>>> make: *** [Makefile:1512: dt_binding_check] Error 2
+>>>
+>>> doc reference errors (make refcheckdocs):
+>> This yaml patch need depend on
+>>
+>> https://lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+>>
+>> , then yaml  compile will be successfull.
+> Nothing in the patch changelog (where it is preferred), not even cover
+> letter, mention dependencies.
 
-Split transfers based on the number of words instead.
-This has the added benefit of not artificially limiting the maximum
-length of bpw > 8 transfers to half or a quarter of the actual limit.
+okay, I will add it in changelog  in next version.
 
-The combination of very large transfers and bits_per_word = 16 is triggered
-e.g. by MIPI DBI displays when updating large parts of the screen.
-
-Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
----
- drivers/spi/spi-stm32.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index def09cf0dc14..d2e16f16fae6 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -984,9 +984,9 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
- 	if (spi->cfg->set_number_of_data) {
- 		int ret;
- 
--		ret = spi_split_transfers_maxsize(master, msg,
--						  STM32H7_SPI_TSIZE_MAX,
--						  GFP_KERNEL | GFP_DMA);
-+		ret = spi_split_transfers_maxwords(master, msg,
-+						   STM32H7_SPI_TSIZE_MAX,
-+						   GFP_KERNEL | GFP_DMA);
- 		if (ret)
- 			return ret;
- 	}
--- 
-2.30.2
+>
+> Best regards,
+> Krzysztof
 
