@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4A36B546C
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 23:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355756B546B
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 23:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjCJWaO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Mar 2023 17:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S231987AbjCJWaN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Mar 2023 17:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjCJW3x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 17:29:53 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116441241FA
-        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:19 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id da10so26542962edb.3
-        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:19 -0800 (PST)
+        with ESMTP id S232132AbjCJW3z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 17:29:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385B1125DBD
+        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:20 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x3so26395678edb.10
+        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678487359;
+        d=linaro.org; s=google; t=1678487360;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/3O5N03pwwa5CISBXEL2uh41ANV84DtyZX9Qqc/gvOE=;
-        b=k/86A8NzfMfImxqB7+KDGVg/tynJ0FVCkA4dmZsWIIwO7Ykre8VGNhhLmaoZxK5KT6
-         H3l6ZZCxmyioRniLqshH544hiliBpuPql4rrcaGN9SPUaoBgt/mYjvy3lFkcooWp+CQj
-         /cZd6t1wB+DD9btEFmW4rhD/UxwGgSLeoP8+6PQdjvt2yfEZsUiYi1auwiNr2YRkL0Ae
-         eGYX/hpVFD0YR9ZjOD9aXNAFS55flsLUNlQ/EodMAcU9+jDwOEUYGcDlVb/I+8XQi7AC
-         +dBZ6c8c6uYJIAAEPOJ4odu80gqrKfSiQSXkSlCWkyr1U2hFPRdYKsgGWKGkJMfxst9s
-         c+eQ==
+        bh=p4C8ul8r4FTTSiZJ472TZ7PsXvPEhmFf5+M7zLcSIw8=;
+        b=rrEwy1/EkKM2hXYDjXm39vr4v4A3eFp0vxvvErw0JyGtOLyGzIPJjSe+i9/9yBHwBo
+         ggaHhX0ARMHrz05m76okNh3eCxxkXswhGfFQlh8eLEaz5q4totxmsxrVKzzBcVPBlD/r
+         43Om/8th0/4GENyp64/VX1I0z8locQldE8GoKn//2LSXEUixCVdNQJcwBsfbBKvRF4Nw
+         1L0+7vFPvhd6M4ExGtj4xFecNGFGuBJbBwpaN5Ez6o4kPkYXI5CclN4jOfC5FSg96/K5
+         A3HVNgymCz5jus/z1ws+Kq28D+AiPQyBaTjxTt2vechjWxkcXHoPWEnZqCMB8j+ZvSaF
+         TWUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487359;
+        d=1e100.net; s=20210112; t=1678487360;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/3O5N03pwwa5CISBXEL2uh41ANV84DtyZX9Qqc/gvOE=;
-        b=COyyzDyNFkr8DVRGNNQM+BIAkVVza1hr8IbvcIRI6WG7ZwMaiY3WTq5scCzHBpRvsq
-         hSBYrAKEvNu+un8dkyX00rHSjp35aSsqNo/4IBCoUAIeN/NQ/Ye4nx7a06Gup/ifwZUc
-         e4eoy8QuEK+73uov0B7ZjpOZnaVA7tG21TcnTxsXRsi5i8+uKq4lGNk6cDHuiDBOByLs
-         8ZOuEvshWCWbCt3pW5/XoC/GF4cLWs8Z/2f13wp6znqQnHe71ByhQMTxX+jVPJW4dtw/
-         QEfqPV+BrAC5drd7P+Rzk0LlU5+gP+eFgTqSAmeJeBDdcuwINR7896eZHz1nf85UCVzx
-         aZ9A==
-X-Gm-Message-State: AO0yUKXMH8N7bPrr0yZzFoK9DgYKWVyKDzxVLkRSI237vHS8OMCmWxfI
-        TNxU2S22A83l4+HQBV2UuFzxFA==
-X-Google-Smtp-Source: AK7set9Rvn4y0BGnLTV87CbBg91zcO1xpeU2J1xLOi9EFaaPOkq+Z2ChtSGd5/YJsuzGlHU4/phxIA==
-X-Received: by 2002:a05:6402:3d9:b0:4af:69e2:529f with SMTP id t25-20020a05640203d900b004af69e2529fmr26991968edw.27.1678487359382;
-        Fri, 10 Mar 2023 14:29:19 -0800 (PST)
+        bh=p4C8ul8r4FTTSiZJ472TZ7PsXvPEhmFf5+M7zLcSIw8=;
+        b=KWJMaWy7+VLKMGadvAfn+pMtD/F7T52VSCbkM2CoBJJf+1q7Y70CGXIcyicdlH0CoK
+         Nx29+Bpy6dBLqph/+K0Py3uRZ0LIoWx6PJDVm5a/wZ8h7e5C3ZJkL4yGtahEErJWJJxe
+         vhrubF2aKd8P0feHJIIWHoMCyoE29hqJgQwTiEqCIP4U8v+NxtDOLDmDkAE/AH96wKlz
+         yZ06eWih8ZEZx8Dgbi97/f9l3tNO05kZiUCMIXBmr32zg5UiuUwccqzkEWIAXGY7j1E/
+         kBtPaxQs+P7RlVLhPjEmXySa2aSFr8l5Ejewj3HOculdqeprNpKj0I3/RWPqwZDubKn5
+         KUgQ==
+X-Gm-Message-State: AO0yUKWG/XVBH31GDskMXr8E7CHCxtODvKAEXRPQvsS7T/Zj/ZPHIIKf
+        weI8AgGlChhNeRKXKO2gXXWyaA==
+X-Google-Smtp-Source: AK7set9Dxapp5m7YmqmEU473go9gZsJAewh+nBqHr15xGDvrxDQqScmrTjf4oppgDcLOYI+pKl+ozg==
+X-Received: by 2002:a17:906:3002:b0:8b2:fb3d:9f22 with SMTP id 2-20020a170906300200b008b2fb3d9f22mr25973054ejz.33.1678487360596;
+        Fri, 10 Mar 2023 14:29:20 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.18
+        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:29:18 -0800 (PST)
+        Fri, 10 Mar 2023 14:29:20 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
@@ -74,9 +74,9 @@ To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 15/16] spi: sc18is602: Mark OF related data as maybe unused
-Date:   Fri, 10 Mar 2023 23:28:56 +0100
-Message-Id: <20230310222857.315629-15-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 16/16] spi: rspi: Mark OF related data as maybe unused
+Date:   Fri, 10 Mar 2023 23:28:57 +0100
+Message-Id: <20230310222857.315629-16-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
@@ -85,37 +85,65 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver can be compile tested with !CONFIG_OF making certain data
-unused:
+Driver can match via ID or OF ID table, thus several OF-related methods
+will be unused.  Mark the OF structures as __maybe_unused so compiler
+can drop them:
 
-  drivers/spi/spi-sc18is602.c:318:34: error: ‘sc18is602_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/spi/spi-rspi.c:1203:29: error: ‘qspi_ops’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-sc18is602.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-rspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
-index 983b3621bc2a..5c2c255f70e8 100644
---- a/drivers/spi/spi-sc18is602.c
-+++ b/drivers/spi/spi-sc18is602.c
-@@ -315,7 +315,7 @@ static const struct i2c_device_id sc18is602_id[] = {
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index f494c86bafea..4724854e6726 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -1190,7 +1190,7 @@ static const struct spi_ops rspi_ops = {
+ 	.num_hw_ss =		2,
  };
- MODULE_DEVICE_TABLE(i2c, sc18is602_id);
  
--static const struct of_device_id sc18is602_of_match[] = {
-+static const struct of_device_id sc18is602_of_match[] __maybe_unused = {
- 	{
- 		.compatible = "nxp,sc18is602",
- 		.data = (void *)sc18is602
+-static const struct spi_ops rspi_rz_ops = {
++static const struct spi_ops rspi_rz_ops __maybe_unused = {
+ 	.set_config_register =	rspi_rz_set_config_register,
+ 	.transfer_one =		rspi_rz_transfer_one,
+ 	.min_div =		2,
+@@ -1200,7 +1200,7 @@ static const struct spi_ops rspi_rz_ops = {
+ 	.num_hw_ss =		1,
+ };
+ 
+-static const struct spi_ops qspi_ops = {
++static const struct spi_ops qspi_ops __maybe_unused = {
+ 	.set_config_register =	qspi_set_config_register,
+ 	.transfer_one =		qspi_transfer_one,
+ 	.extra_mode_bits =	SPI_TX_DUAL | SPI_TX_QUAD |
+@@ -1212,8 +1212,7 @@ static const struct spi_ops qspi_ops = {
+ 	.num_hw_ss =		1,
+ };
+ 
+-#ifdef CONFIG_OF
+-static const struct of_device_id rspi_of_match[] = {
++static const struct of_device_id rspi_of_match[] __maybe_unused = {
+ 	/* RSPI on legacy SH */
+ 	{ .compatible = "renesas,rspi", .data = &rspi_ops },
+ 	/* RSPI on RZ/A1H */
+@@ -1225,6 +1224,7 @@ static const struct of_device_id rspi_of_match[] = {
+ 
+ MODULE_DEVICE_TABLE(of, rspi_of_match);
+ 
++#ifdef CONFIG_OF
+ static void rspi_reset_control_assert(void *data)
+ {
+ 	reset_control_assert(data);
 -- 
 2.34.1
 
