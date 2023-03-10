@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83B76B5452
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 23:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110286B544F
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 23:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjCJW3S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Mar 2023 17:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S231811AbjCJW3R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Mar 2023 17:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbjCJW3O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 17:29:14 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1CC123CC7
-        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:08 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id k10so26370575edk.13
-        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:08 -0800 (PST)
+        with ESMTP id S231869AbjCJW3P (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 17:29:15 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB3F1241C1
+        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:09 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id cw28so26492999edb.5
+        for <linux-spi@vger.kernel.org>; Fri, 10 Mar 2023 14:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678487347;
+        d=linaro.org; s=google; t=1678487349;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b4aKAo6MFb3QMb21J3aoV2riVolfD7kZUTP9+kgcCSU=;
-        b=RZ3qkTbRBfZNiA0cqYlVVp21HmjVtY20XaGBwrmGNBazyP6QOIQ0QQeeiMkL7MUPJz
-         X7C/0rDhWN32MdR45MbZNH2J+UJZgUl6YA2jF1RnkLqBWV5zT8h0JcGqbLJkYQHJcBap
-         S0dnyle/sIgSi32MaROVKLa5wvqJ5gvHk8RJz3hldiuC+82cjq7IpInFb/frDBMPszfJ
-         7DJ/vCeaRAhX6wQYox60fKxT9TUKzvESrlhC4kWCfK+0Tj+1dNSd259NjGnwOrpfuWzT
-         GvPzpcatvo59dJWBtopFntOFKv4E48mBMqf/6T9rg8W2ymkjI1gSdguO9gia/RG4pRBz
-         4Fvg==
+        bh=BSow9olcoHPDQWGX+9sZKUw+pImGguqL+rxp9AEhbQU=;
+        b=WMD94TIdueIJwD4R0dzXoVlrA+lBE3XxCJOkt5lcGwJl3T9aSx5oXLSImUAdS8gGWj
+         nevEWuDRfJ5RPH0TtzsEO8S3/WbblgN6c7T0caLdrg4JVyKOqAgZy1gYCF24w5rLBjjL
+         MGSsSfrwG4aZGC+l8fhUpOJRtBywlP3akFV3IGOYCLF3G4b5n7kiyAbJDLHKhRR8a7LS
+         Z2ZsSKJ0xALhO2Jtv+CXbxq0jXTpVzfN+2istoSvNEtpe8cznSwbbzPN3KeRr/R4kSF7
+         IFSRNgff5R+GmFDJEXkLP5PhiObPKCY/RCtarbKc44EdzHR0zp2QleIG+ceGsJi5jxoD
+         dz9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678487347;
+        d=1e100.net; s=20210112; t=1678487349;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b4aKAo6MFb3QMb21J3aoV2riVolfD7kZUTP9+kgcCSU=;
-        b=QYh+iZUekgrpQJ/mCp5bccfTxN2SccZENb1pjxQ+m6yoE2oTsyoVfq0X29axaQPePT
-         MCphkDlZH9usYaDihelQAbZXcQ3FzxvMJgxW39CetGL4x/N3jmTcazdxMhXK2YBMRYQO
-         BLftgEQvX9ag+6tf3sauOYiGqNmVLREQ6LxkQOTF0iLk5E8X4BYvEI03waFkh/EFaZuL
-         W0hbwaDdx1VAUhonqdyKyOQJ2/XM6iQEgrpqlLIPB480uq29r134jLOHcFmXzw1Q4LQn
-         66JCwD6ideX9fKXP9E6nx4DskQzQsGwRGB8+TIrSrAK/38S3XKArwan6aUyfpu70GA0a
-         oijA==
-X-Gm-Message-State: AO0yUKVBArn+8PrrY4bO7SQ+jgjV/7Kd6fZUxvRcxvwV2PMmvPLMmnq9
-        s6e5LEIfWU/wPPD+mmXfkUsehA==
-X-Google-Smtp-Source: AK7set/W0kTwiGlItblh7tf5JTPG4Jzj41fZ0/kDRrZaCweil86ynzpBOA1iUGvgXuT1rUSP46ReMw==
-X-Received: by 2002:aa7:d60b:0:b0:4be:d5b8:c007 with SMTP id c11-20020aa7d60b000000b004bed5b8c007mr23483407edr.25.1678487347617;
-        Fri, 10 Mar 2023 14:29:07 -0800 (PST)
+        bh=BSow9olcoHPDQWGX+9sZKUw+pImGguqL+rxp9AEhbQU=;
+        b=ik76U1fp9Dp0ASCNUOxfN6paxmMq+GARcWoXRBCT9STC2hSnxHOQzVPLzAenSM8axX
+         +PEpU72NG+OwND47EP89AZms44n1hqZ0Gis7HhhiXaNdoZgY8MQUB8XqahkWmbXdG/69
+         PZdxDLdW4kqKLRMK/MK+od22MtPC/5x7i7F4GoKwXXd9pM7F6k8JU4t6Q5fMDoMqQtIB
+         e/yuNCuOS4WEA/P6jW8aGTNq9C8+hPKVdTLJw+E752IcwQg2JEB2sc3/ZdTHH93i+rcL
+         K8f4OWQ2cKHq2rPsGrIAWevLd9ael3ykdLZ37VYgfACOB1P7PIF0ef9YceuLuUtxOrmA
+         mA5Q==
+X-Gm-Message-State: AO0yUKWdj/wnU0eN58attLcNPoztvp6TfMLjiLHRXNK649xOmPb5Zf+3
+        0AgbONvtZERCkAWyv+j6VtIHaA==
+X-Google-Smtp-Source: AK7set+ZEfdl5RMmf1uVdzsphu0VuJcqw6uo7c4Au9pdNtDAtzSnz6tjiqyq5MBaqY6lf3+ZmyTllQ==
+X-Received: by 2002:a17:906:8156:b0:886:221b:44e5 with SMTP id z22-20020a170906815600b00886221b44e5mr26872458ejw.62.1678487348858;
+        Fri, 10 Mar 2023 14:29:08 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:34:52e3:a77e:cac5])
-        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.06
+        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm525467ede.24.2023.03.10.14.29.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 14:29:07 -0800 (PST)
+        Fri, 10 Mar 2023 14:29:08 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
@@ -74,9 +74,9 @@ To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 06/16] spi: rockchip: Drop of_match_ptr for ID table
-Date:   Fri, 10 Mar 2023 23:28:47 +0100
-Message-Id: <20230310222857.315629-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 07/16] spi: s3c64xx: Drop of_match_ptr for ID table
+Date:   Fri, 10 Mar 2023 23:28:48 +0100
+Message-Id: <20230310222857.315629-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
@@ -93,30 +93,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it is not relevant here).
+The driver can match only via the DT table (all platforms are OF-only)
+so the table should be always used and the of_match_ptr does not have
+any sense (this also allows ACPI matching via PRP0001, even though it is
+not relevant here).
 
-  drivers/spi/spi-rockchip.c:1051:34: error: ‘rockchip_spi_dt_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/spi/spi-s3c64xx.c:1496:34: error: ‘s3c64xx_spi_dt_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-rockchip.c | 2 +-
+ drivers/spi/spi-s3c64xx.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index a66fff0ee20e..57ae58bf7a62 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -1069,7 +1069,7 @@ static struct platform_driver rockchip_spi_driver = {
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index cc69f8ffdbdc..7aec496070e2 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -1526,7 +1526,7 @@ static struct platform_driver s3c64xx_spi_driver = {
  	.driver = {
- 		.name	= DRIVER_NAME,
- 		.pm = &rockchip_spi_pm,
--		.of_match_table = of_match_ptr(rockchip_spi_dt_match),
-+		.of_match_table = rockchip_spi_dt_match,
+ 		.name	= "s3c64xx-spi",
+ 		.pm = &s3c64xx_spi_pm,
+-		.of_match_table = of_match_ptr(s3c64xx_spi_dt_match),
++		.of_match_table = s3c64xx_spi_dt_match,
  	},
- 	.probe = rockchip_spi_probe,
- 	.remove_new = rockchip_spi_remove,
+ 	.probe = s3c64xx_spi_probe,
+ 	.remove_new = s3c64xx_spi_remove,
 -- 
 2.34.1
 
