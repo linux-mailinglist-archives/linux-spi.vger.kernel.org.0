@@ -2,54 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C23D6B3ABA
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 10:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D63F6B3B93
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Mar 2023 11:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCJJhN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Mar 2023 04:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S230078AbjCJKBe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Mar 2023 05:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjCJJgo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 04:36:44 -0500
+        with ESMTP id S230021AbjCJKBb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Mar 2023 05:01:31 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01A3814E88;
-        Fri, 10 Mar 2023 01:34:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CF4AEE2BB;
+        Fri, 10 Mar 2023 02:01:29 -0800 (PST)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJPxj+Qpk5u0KAA--.14919S3;
-        Fri, 10 Mar 2023 17:33:23 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8Bxedn3_wpkr_IKAA--.14685S3;
+        Fri, 10 Mar 2023 18:01:27 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxSL1e+QpkTcxRAA--.10888S3;
-        Fri, 10 Mar 2023 17:33:22 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn,
-        zhuyinbo@loongson.cn
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxOL3z_wpkSNNRAA--.10580S3;
+        Fri, 10 Mar 2023 18:01:26 +0800 (CST)
+Subject: Re: [PATCH v1 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
 References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
- <167828359942.2612999.3798783623764270312.robh@kernel.org>
- <1f14658a-5dc3-fc48-5291-28e14f88abaa@loongson.cn>
- <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
+ <20230308025908.21491-3-zhuyinbo@loongson.cn>
+ <1f0c2592-4433-47cb-9b73-d345e157dbf2@sirena.org.uk>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <3370cbee-1b17-3473-4462-c574398fb83d@loongson.cn>
-Date:   Fri, 10 Mar 2023 17:33:18 +0800
+Message-ID: <fb502e11-a12f-58ca-4171-edec55b71fa5@loongson.cn>
+Date:   Fri, 10 Mar 2023 18:01:23 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <c254b2f1-2086-498f-35c6-c87d838bcb2d@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <1f0c2592-4433-47cb-9b73-d345e157dbf2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-CM-TRANSID: AQAAf8BxSL1e+QpkTcxRAA--.10888S3
+X-CM-TRANSID: AQAAf8AxOL3z_wpkSNNRAA--.10580S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar45uw4UCr1fuF4UGF48Zwb_yoW8WF4Upw
-        48Can8tF4Utr13Kw4Sq345Kw1YqrWrGryYqF9xKr17GFyqg3WFvr4akr1UuFsruF17GFyx
-        ZF15Kw15KryUZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJFy8tr1UAr4xAF4UWFyUWrg_yoWrtr4xpF
+        yYya1Ygr4fJr48Arn8XrWDXF1ayryrJr9xGaySy3yUKryDZw1fXFyUWF13CF4SyFyxCF17
+        Zry09rWkGF4FkFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
         bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
         kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
@@ -72,44 +69,126 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-在 2023/3/10 下午5:08, Krzysztof Kozlowski 写道:
-> On 10/03/2023 03:31, zhuyinbo wrote:
->> 在 2023/3/8 下午10:06, Rob Herring 写道:
->>> On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
->>>> Add the Loongson platform spi binding with DT schema format using
->>>> json-schema.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
->>>>    MAINTAINERS                                   |  6 +++
->>>>    2 files changed, 53 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>
->>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>
->>> yamllint warnings/errors:
->>>
->>> dtschema/dtc warnings/errors:
->>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
->>> FATAL ERROR: Unable to parse input tree
->>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
->>> make[1]: *** Waiting for unfinished jobs....
->>> make: *** [Makefile:1512: dt_binding_check] Error 2
->>>
->>> doc reference errors (make refcheckdocs):
->> This yaml patch need depend on
->>
->> https://lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
->>
->> , then yaml  compile will be successfull.
-> Nothing in the patch changelog (where it is preferred), not even cover
-> letter, mention dependencies.
+在 2023/3/8 下午11:03, Mark Brown 写道:
+> On Wed, Mar 08, 2023 at 10:59:08AM +0800, Yinbo Zhu wrote:
+>
+>> +config SPI_LOONGSON
+>> +	tristate "Loongson SPI Controller Support"
+>> +	depends on LOONGARCH && OF && PCI
+> I'm not seeing any build time dependencies here (possibly PCI?) so
+> please add an || COMPILE_TEST to improve build coverage.  It'd be better
+> to have separate modules for the platform and PCI functionality, that
+> way someone who has a system without PCI can still use the driver even
+> with PCI support disabled.
 
-okay, I will add it in changelog  in next version.
+I will add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI 
+macro
+
+to limit some pci code.
 
 >
-> Best regards,
-> Krzysztof
+>> +++ b/drivers/spi/spi-loongson.c
+>> @@ -0,0 +1,502 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Loongson SPI Support
+>> + *
+>> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> Please make the entire comment block a C++ one so things look more
+> intentional.
+okay, I got it.
+>
+>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>> +				     struct spi_device *spi, struct spi_transfer *t)
+>> +{
+>> +	unsigned int hz;
+>> +	unsigned int div, div_tmp;
+>> +	unsigned int bit;
+>> +	unsigned char val;
+>> +	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+>> +
+>> +	hz  = t ? t->speed_hz : spi->max_speed_hz;
+> Please write normal conditional statements so that things are legible,
+> though in this case the core will ensure that there's a speed_hz in
+> every transfer so there's no need for any of the logic around ensuring
+> it's set.
+Do you mean to achieve the following ?  and drop spi->max_speed_hz.
+
+if (t)
+
+       hz = t->speed_hz;
+
+
+>
+>> +static int loongson_spi_setup(struct spi_device *spi)
+>> +{
+>> +	struct loongson_spi *loongson_spi;
+>> +
+>> +	loongson_spi = spi_master_get_devdata(spi->master);
+>> +	if (spi->bits_per_word % 8)
+>> +		return -EINVAL;
+>> +
+>> +	if (spi->chip_select >= spi->master->num_chipselect)
+>> +		return -EINVAL;
+>> +
+>> +	loongson_spi_update_state(loongson_spi, spi, NULL);
+>> +	loongson_spi_set_cs(loongson_spi, spi, 1);
+> Note that setup() needs to be able to run for one device while there are
+> transfers for other devices on the same controller active.
+okay, I will add a spin_lock for it.
+>
+>> +static int loongson_spi_write_read_8bit(struct spi_device *spi, const u8 **tx_buf,
+>> +					u8 **rx_buf, unsigned int num)
+>> +{
+>> +	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
+>> +
+>> +	if (tx_buf && *tx_buf) {
+>> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, *((*tx_buf)++));
+>> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1)
+>> +			;
+> A timeout would be good on these spins in case the controller gets
+> stuck.  It'd also be polite to have a cpu_relax() somewhere either here
+> or in the caller given that it's busy waiting.
+okay, I got it.
+>
+>> +static void loongson_spi_work(struct work_struct *work)
+>> +{
+>> +	int param;
+>> +	struct spi_message *m;
+>> +	struct spi_device  *spi;
+>> +	struct spi_transfer *t = NULL;
+>> +	struct loongson_spi *loongson_spi = container_of(work, struct loongson_spi, work);
+>> +
+>> +	spin_lock(&loongson_spi->lock);
+>> +	param = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
+>> +	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, param&~1);
+>> +	while (!list_empty(&loongson_spi->msg_queue)) {
+>> +		m = container_of(loongson_spi->msg_queue.next, struct spi_message, queue);
+>> +
+> This all looks like it's open coding the core's message pump, only
+> without the heavy optimisation work that the core has and missing some
+> handling of cs_change and delays.  You should implement
+> spi_transfer_one() instead, this will save a lot of code and should be
+> more performant.
+okay, I will try to add a spi_transfer_one for this.
+>
+>> +static int loongson_spi_transfer(struct spi_device *spi, struct spi_message *m)
+>> +{
+> In general you'd need an extremely strong reason to implement transfer()
+> in a new driver.
+okay, I got it.
+>
+>> +static int __maybe_unused loongson_spi_resume(struct device *dev)
+>> +{
+>> +static const struct dev_pm_ops loongson_spi_dev_pm_ops = {
+>> +	.suspend = loongson_spi_suspend,
+>> +	.resume = loongson_spi_resume,
+>> +};
+> The suspend/resume ops are assigned unconditionally.
+sorry, I don't got it,  you mean was to  add a CONFIG_PM to limit code ?
+>
+>> +subsys_initcall(loongson_spi_init);
+>> +module_exit(loongson_spi_exit);
+> Why not just a regular module initcall like most SPI drivers?
+okay, I will use module_init for register spi drivers.
 
