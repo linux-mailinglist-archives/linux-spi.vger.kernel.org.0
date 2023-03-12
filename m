@@ -2,65 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1B56B6B9A
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Mar 2023 21:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D056B6BBB
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Mar 2023 22:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjCLU6Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Mar 2023 16:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S231256AbjCLVQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Mar 2023 17:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjCLU6U (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 16:58:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A0144A1
-        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 13:58:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id k10so40950464edk.13
-        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 13:58:18 -0700 (PDT)
+        with ESMTP id S231400AbjCLVQf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 17:16:35 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F72A158;
+        Sun, 12 Mar 2023 14:16:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b10so10724009ljr.0;
+        Sun, 12 Mar 2023 14:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678654697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=20W8M2TdEhNy7aTngidW3iiHvYf5XABL/NJb+wNETK0=;
-        b=I02JLnAeOEVaZGRIcfS1UM3P7RFH2leQ9zMuXN0HLdN6J02MDaQ42e2WEap6Oag1/S
-         rlVO9nY9zT/MfLkpF0/zzHMTskhAY5n0MEzIvuXptYExJZwIBcfo8uIGEjspnYq8L8W1
-         1bNl1jJFWQGbH0/NbsXk+vJxYlaLdXjiaW+CskmXjzFyoXihJqmi8K0T9sMOfj4omYz9
-         amkplJ5I8OPoIKAyD1IxHN4jlSh/FFSrvm2gNtQBi6NGRjZVOAaVHEb8b2qQXCjGzmKD
-         xe2+NPZSr0NP/WmauDsYzCJGX2MXyEfJG/P+GZ8rq9QyyPuX1a4Dqs//a7XG1UbqZ6uD
-         IyTg==
+        d=gmail.com; s=20210112; t=1678655790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WvfL5LA+JxDsCD8VVb6BVbqdfgMrfiE/5AuTtyrJsUg=;
+        b=XOe05FDdER8j6fWyWmjhrccSgTXO2w6gqsqtvL6yZk5yIsbqPHFOU+dfDMo0p41Qrd
+         z2hD7v5+OdaUrKzomdbcUtrpc4SLialkEywWzGHRwTn/7otDB1Qs9Es56A3ARDIAaAZx
+         +Z7lVpi2WR2hfR4w3tHC6lVvLhOoFlt1Mqt0kAHjn247/8OdkMNNosQqYmkGEcpzha80
+         QeejozUnbl9BDDqZJ9zKrYVbyGATQL2ahyeyjwb4TCYAI0sIQC/lfT2pzW+DMlyac1BB
+         fygT9BTgEfmWkzOn69H/Gi1LGO7h8ZHu3SZHD4vv7bmUvxUpaQP9yPuMV1hLYnLxzuE+
+         JzqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678654697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=20W8M2TdEhNy7aTngidW3iiHvYf5XABL/NJb+wNETK0=;
-        b=W47wRJEzxcvsJQxFo6LINoMC38I3F0Gy+ytQMS5LeqExqiRSaD+edrewDITjKVMlzJ
-         Lvmsd0Q2rOQKS4yh2Qd8nt7GYEDA7lqcBDoEhEIw7uDjFaJyT/BXOI4YgEnDjPnqJS9Y
-         /r7sK4hZM61wDnIjiH7WlB5HjZ3OToQhdHon23khiVcbjLLzjKJF+Xvq92dVrmhqEnx9
-         zrF89jPMA88gbWqN9wociFQBND6JXfTYbzqIyC25jSyWAkOr4jbOdzADVVrAQCV49X0J
-         jLHVrowT6TSpGQNmm3GsDZRXEQBaOcUL1ZuFJD62BRDqBaikFB70ecTC3Dh6xPx8K4Nz
-         +s/A==
-X-Gm-Message-State: AO0yUKXJlIxYfaYAlHQ9BwAZDkl4XavL2LtA+u3ZOrzRUk25VDfQk7lB
-        FWDdtiut6VCWcjO3AKguh2DT/Q==
-X-Google-Smtp-Source: AK7set8XaKUkz6qbzkBRl5y1qtqalHLBAv3RLKmkgmCfyFwnymmDsiDYn1Y3sC5kXO3E2WOOjEkW4w==
-X-Received: by 2002:a17:907:a04:b0:8af:370b:da59 with SMTP id bb4-20020a1709070a0400b008af370bda59mr45390936ejc.17.1678654697314;
-        Sun, 12 Mar 2023 13:58:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id oq12-20020a170906cc8c00b008d68d018153sm2597511ejb.23.2023.03.12.13.58.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 13:58:16 -0700 (PDT)
-Message-ID: <92b4970a-f904-884b-f0fe-0ab8f024210c@linaro.org>
-Date:   Sun, 12 Mar 2023 21:58:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v11 05/15] dt-bindings: soc: amd: amd,pensando-elba-ctrl:
- Add Pensando SoC Controller
-Content-Language: en-US
-To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        d=1e100.net; s=20210112; t=1678655790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WvfL5LA+JxDsCD8VVb6BVbqdfgMrfiE/5AuTtyrJsUg=;
+        b=u8lp5q7D/yzl6C7IXDBws2W9YtbtS5nJxWmxkqh6DiyO1Ts5+SgsAXn8SO4LrqIT9L
+         MCw0SPDeGSRRCg/ppLfNncc1sl8Yu5dxmFuqzMhES5YWxljY+568FYu3h/5s2NbibKfx
+         T6H6m4l3DPS40rHal+AH0hYpe5ivTpQxblL2F79rmo8FXpNNO2uZ2ZNsV3BhU3ZZfFue
+         BsLER24vXL6IdYtaTTW8TS59KrXrZNEdaXBM5y2AImEHO1ml5aWWPMX39Rbc7vw6C/qa
+         CEHt2vodDC5FlpVv+KhLCR/BMnLXjZ8xMxXLw+EKK8zDfDb5x3W/7W6jSQBG+PxFM6Yd
+         HOXg==
+X-Gm-Message-State: AO0yUKXO2qauofqVxzIdUxP6Jj7oraJv2LaCRm52oirvnENewtVOR1Q3
+        DhNfsAD9ZTRl/pZGTsm0QMU=
+X-Google-Smtp-Source: AK7set8AZ5yW15J55R3C8ci16efEg+FH7c7955xy/u7fX2ifb9NPdfEbIxmxsmL4MbVMXpB0gNZpFw==
+X-Received: by 2002:a2e:a984:0:b0:295:a5a6:ee4d with SMTP id x4-20020a2ea984000000b00295a5a6ee4dmr14600642ljq.8.1678655789714;
+        Sun, 12 Mar 2023 14:16:29 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id a20-20020a05651c031400b00295a96a0f6csm746936ljp.102.2023.03.12.14.16.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 14:16:28 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 00:16:26 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
         brendan.higgins@linux.dev, briannorris@chromium.org,
         brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
         davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
@@ -68,45 +62,142 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         lee.jones@linaro.org, broonie@kernel.org,
         yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
         piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
+        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v11 10/15] spi: dw: Add support for AMD Pensando Elba SoC
+Message-ID: <20230312211626.pxhkypodrdwnbozr@mobilestation>
 References: <20230312004445.15913-1-blarson@amd.com>
- <20230312004445.15913-6-blarson@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312004445.15913-6-blarson@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20230312004445.15913-11-blarson@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312004445.15913-11-blarson@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/03/2023 01:44, Brad Larson wrote:
-> Support the AMD Pensando Elba SoC Controller which is a SPI connected
-> device providing a miscellaneous set of essential board control/status
-> registers.  This device is present in all Pensando SoC based designs.
+On Sat, Mar 11, 2023 at 04:44:40PM -0800, Brad Larson wrote:
+> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
+> with device specific chip-select control.  The Elba SoC
+> provides four chip-selects where the native DW IP supports
+> two chip-selects.  The Elba DW_SPI instance has two native
+> CS signals that are always overridden.
 > 
 > Signed-off-by: Brad Larson <blarson@amd.com>
 > ---
 > 
 > v11 changes:
-> - Fixed the compatible which should have stayed as 'amd,pensando-elba-ctrl',
->   the commit message, and the filename
-> - Reference spi-peripheral-props
-> - Delete spi-max-frequency 
-> - Remove num-cs from example
+> - Simplify dw_spi_elb_init by using syscon_regmap_lookup_by_phandle()
+> 
+> v10 changes:
+> - Delete struct dw_spi_elba, use regmap directly in priv
+> 
+> v9 changes:
+> - Add use of macros GENMASK() and BIT()
+> - Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
+> 
+> ---
+>  drivers/spi/spi-dw-mmio.c | 57 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 26c40ea6dd12..5851ecc6e1e9 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -53,6 +53,20 @@ struct dw_spi_mscc {
+>  	void __iomem        *spi_mst; /* Not sparx5 */
+>  };
+>  
+> +/*
+> + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
+> + * gpios for cs 2,3 as defined in the device tree.
+> + *
+> + * cs:  |       1               0
+> + * bit: |---3-------2-------1-------0
+> + *      |  cs1   cs1_ovr   cs0   cs0_ovr
+> + */
+> +#define ELBA_SPICS_REG			0x2468
+> +#define ELBA_SPICS_OFFSET(cs)		((cs) << 1)
+> +#define ELBA_SPICS_MASK(cs)		(GENMASK(1, 0) << ELBA_SPICS_OFFSET(cs))
+> +#define ELBA_SPICS_SET(cs, val)		\
+> +		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
+> +
+>  /*
+>   * The Designware SPI controller (referred to as master in the documentation)
+>   * automatically deasserts chip select when the tx fifo is empty. The chip
+> @@ -237,6 +251,48 @@ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
+>  	return 0;
+>  }
+>  
+> +static void dw_spi_elba_override_cs(struct regmap *syscon, int cs, int enable)
+> +{
+> +	regmap_update_bits(syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
+> +			   ELBA_SPICS_SET(cs, enable));
+> +}
+> +
+> +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+> +{
+> +	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+> +	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+> +	struct regmap *syscon = dwsmmio->priv;
+> +	u8 cs;
+> +
+> +	cs = spi->chip_select;
+> +	if (cs < 2)
+> +		dw_spi_elba_override_cs(syscon, spi->chip_select, enable);
+> +
+> +	/*
+> +	 * The DW SPI controller needs a native CS bit selected to start
+> +	 * the serial engine.
+> +	 */
+> +	spi->chip_select = 0;
+> +	dw_spi_set_cs(spi, enable);
+> +	spi->chip_select = cs;
+> +}
+> +
+> +static int dw_spi_elba_init(struct platform_device *pdev,
+> +			    struct dw_spi_mmio *dwsmmio)
+> +{
+> +	struct regmap *syscon;
+> +
+> +	syscon = syscon_regmap_lookup_by_phandle(dev_of_node(&pdev->dev),
+> +						 "amd,pensando-elba-syscon");
+> +	if (IS_ERR(syscon))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
+> +				     "syscon regmap lookup failed\n");
+                                              <----+
+> +	dwsmmio->priv = syscon;                    |
+> +	dwsmmio->dws.set_cs = dw_spi_elba_set_cs;  |
+             +-------------------------------------+
+             |
+Newline here + would be nice. Other than that looks good.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
+-Serge(y)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> +
+> +	return 0;
+> +}
+> +
+>  static int dw_spi_mmio_probe(struct platform_device *pdev)
+>  {
+>  	int (*init_func)(struct platform_device *pdev,
+> @@ -352,6 +408,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
+>  	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
+>  	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+>  	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
+> +	{ .compatible = "amd,pensando-elba-spi", .data = dw_spi_elba_init},
+>  	{ /* end of table */}
+>  };
+>  MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
+> -- 
+> 2.17.1
+> 
