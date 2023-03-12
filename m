@@ -2,126 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BA66B6A84
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Mar 2023 20:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BF66B6ACF
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Mar 2023 20:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCLTFt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Mar 2023 15:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S229671AbjCLT4f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Mar 2023 15:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjCLTFo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 15:05:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2F6301B0;
-        Sun, 12 Mar 2023 12:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678647919; x=1710183919;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RzvP9oLfBGrZorh7RhxLEqxpEVo3Q5M/0WZA1nvvuD4=;
-  b=bmhuP0zXS1RO7a+QwS/EcOdBiKdl85gU8IyoQu5EjHwVRyA1rdTDl6Kw
-   6RlBzndXlT5UKSqclQlz+7So756v0/f+/GZYQsesLvRL2Mj5fIVg2sH3i
-   lwsP2+r4wbwlo+cIpk9m4gBLh7pE72sILpgLb4N3VxigteUWOV3ZGLBFG
-   iRIBfkC6ZgDAdgCouUoKbCoNV5T70MSVk7zjZptl/KAdgQVUiiyqTzKZQ
-   ckhdlzOTACTVf4aaXEXgggQls69xOcTxtzHcg9q/PdsJKvH0Jwlsrnd+4
-   4Sa6LnWJkuKdLPx0Vu2sOHyDmmgD526irsS+P1wpHH3kCcH3hzUw/2dNv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338568387"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="338568387"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 12:05:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655749382"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="655749382"
-Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
-  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2023 12:05:14 -0700
-From:   Ye Xiang <xiang.ye@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: [PATCH v5 5/5] Documentation: Add ABI doc for attributes of LJCA device
-Date:   Mon, 13 Mar 2023 03:04:35 +0800
-Message-Id: <20230312190435.3568212-6-xiang.ye@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230312190435.3568212-1-xiang.ye@intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
+        with ESMTP id S229805AbjCLT4e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 15:56:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A27298D5
+        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 12:56:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C258B80C2E
+        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 19:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AA68C433EF;
+        Sun, 12 Mar 2023 19:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678650989;
+        bh=R6PuaWP2v/sPlrmybCUsCmkIjAp102KQgsYQ9G5uhkg=;
+        h=Subject:From:Date:To:From;
+        b=KA0H+fRSE/BV4QdE2tLKFdWoq+8lt6F3fcs3Azr8YbYzEb/4kSzoJ2PYz8enSzNgJ
+         KYE7BuBngkUvM77407p5ylm0aEc1UVzRd4gnMixz+HQa3mpgPAbO6gWhSxop5n999J
+         anClsq4slfgK4qTFqSyK93eHUTMQ4NCcsvJgSOAFrLqF3kt/qDks59alDgRE0tRfI4
+         szCW8rTy2lfdxXHNOG+7F70YsNcgt2OacfsalomKSUCM6hKWvGMfICsBoK1NHPnC40
+         0uYRRPqxCGal3fyJiT7HE3Y0j5yrt6bysgGiwH55dpCFtbERAHID04oLoxsyzgsg5B
+         GnlCQyY6XRdmA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DA35EE61B75;
+        Sun, 12 Mar 2023 19:56:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167865098888.9034.4272375193047965740.git-patchwork-housekeeping@kernel.org>
+Date:   Sun, 12 Mar 2023 19:56:28 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add sysfs attributes Documentation entries for LJCA device
+Latest series: [v5] Add Intel LJCA device driver (2023-03-12T19:04:30)
+  Superseding: [v4] Add Intel LJCA device driver (2023-03-09T07:10:55):
+    [v4,1/5] mfd: Add support for Intel LJCA device
+    [v4,2/5] gpio: Add support for Intel LJCA USB GPIO driver
+    [v4,3/5] i2c: Add support for Intel LJCA USB I2C driver
+    [v4,4/5] spi: Add support for Intel LJCA USB SPI driver
+    [v4,5/5] Documentation: Add ABI doc for attributes of LJCA device
 
-Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../ABI/testing/sysfs-bus-usb-devices-ljca    | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-new file mode 100644
-index 000000000000..16eecaf870e2
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
-@@ -0,0 +1,36 @@
-+What:		/sys/bus/usb/.../ljca_version
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Provides the current firmware version of LJCA device.
-+		The format is Major.Minor.Patch.Build, where
-+		Major, Minor, Patch, and Build are decimal numbers.
-+		For example: 1.0.0.256
-+
-+What:		/sys/bus/usb/.../ljca_enable_dfu
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Writing 1 to this file to force the LJCA device into DFU
-+		mode so the firmware can be updated. After firmware
-+		updating has been done, the device will back to normal
-+		working mode.
-+
-+What:		/sys/bus/usb/.../ljca_trace_level
-+Date:		July 2023
-+KernelVersion:	6.4
-+Contact:	Ye Xiang <xiang.ye@intel.com>
-+Description:
-+		Writing N to this file to set firmware log level of LJCA
-+		device. The log can be printed to another computer through
-+		UART ports in LJCA device. Valid values:
-+
-+		  ==	==========
-+		   0	LEVEL_ERROR
-+		   1	LEVEL_WARNING
-+		   2	LEVEL_INFO
-+		   3	LEVEL_DEBUG
-+		   4	LEVEL_OFF
-+		  ==	==========
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
