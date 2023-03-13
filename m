@@ -2,61 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF276B80E1
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 19:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED65E6B81AE
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 20:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCMSlK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Mar 2023 14:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S231148AbjCMTWk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Mar 2023 15:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjCMSlI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 14:41:08 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0369A1A94A
-        for <linux-spi@vger.kernel.org>; Mon, 13 Mar 2023 11:40:31 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id fd5so18682997edb.7
-        for <linux-spi@vger.kernel.org>; Mon, 13 Mar 2023 11:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678732787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9zExCwPnErlKajEOP0iCBdbzhLSrwamo47isrOodA8E=;
-        b=uIeD7q3LNKkRWYZ9x8e/DAt+K6iRlUftQBydBEx4UHpvBDJR0suSy6kKS6TldE9c34
-         SmKeIpWFcWo2C4Q8oCZBpXd9MrPJICfDSlUXHnSWoW9QBQCzXO5kW1+Rc0/OzP7YdHjr
-         YpKt/FL3vDjk59/IKcM3Hjl0tBFQXWnZfqUBKEkQplyCg9nu7co6+ODh1oOaxYAjiqhu
-         oVN62b79jjOSFMcBGMCdjJVHqf4qucXnYktTu9HEOlEs5cv3IKf2DHByIFn2kf4CFeMG
-         rqUkBqFdPK7U7r5Tw10fD7v2Zb+cJdcd3N7no0lHMaGkFh8m+9+A3aLpKVdabeeaNxqM
-         ZFbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678732787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9zExCwPnErlKajEOP0iCBdbzhLSrwamo47isrOodA8E=;
-        b=Jqapwu4XkApdC5xqDzcaO+d6ckq3SmeIRvUQAzYxgd9kY4ue5Ux6Yrty2JKtrBPKEF
-         2yC60r91Oexpi7mTpTDj4ztLiAVfRwOot0q32NbhmhqaXsjh5qiay72xUMVzLAhq8esC
-         imFMe3RoWrcEJyQZ0y64Ejk1GsLjvahGd1mymEgHo8lv9KIkBSvAgsZz1njjAQajMm3f
-         m+H1itROJQmOLRNOmveE14togYnPuGpPECUzq2Muom4/WZuhonscE39AaCKcizh/NOyO
-         yJ7bdswtXCm5eoONa05Ji+9IV0AMC+M9Ur7hUK2b90eFE5lrMj/MG9ztu7L4wRt5+Xsr
-         skUQ==
-X-Gm-Message-State: AO0yUKUhDrTc1LkYv2OrMbzHhOE2l/+X2+msrHXCLFd7FY01WrTN+kKo
-        bHONUx8FYU/83304VhdAieMHew==
-X-Google-Smtp-Source: AK7set81xBbnSqYRHnX0F1ox3kM2TNm7ygVSDDdDqZIaM3C2UJ2RgnK9MzZ5m7B9CkB5dN74bv4LDw==
-X-Received: by 2002:a17:906:178f:b0:878:72d0:2817 with SMTP id t15-20020a170906178f00b0087872d02817mr33528937eje.29.1678732787544;
-        Mon, 13 Mar 2023 11:39:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:69db:4882:d071:27c4? ([2a02:810d:15c0:828:69db:4882:d071:27c4])
-        by smtp.gmail.com with ESMTPSA id c37-20020a509fa8000000b004fb17f10326sm133916edf.10.2023.03.13.11.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 11:39:47 -0700 (PDT)
-Message-ID: <08e98d1d-e79b-fe7e-0d59-827f72277fc5@linaro.org>
-Date:   Mon, 13 Mar 2023 19:39:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S230448AbjCMTWi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 15:22:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C07C769FA;
+        Mon, 13 Mar 2023 12:22:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3DB46148B;
+        Mon, 13 Mar 2023 19:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF695C433A0;
+        Mon, 13 Mar 2023 19:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678735338;
+        bh=ZkbNkZ34NZMdf0rITcJevdNA8xkyXVHk3RQ3QHQCPo8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FYRY/VOEfWWIWUGkUCEd2cUc6VwsJNb9sQK7C/5po95pQcevLD7l0xgF0y6QmJ/Tm
+         eNj5ZgbZf07KGpnlv0sHLqA1u5wZT0twxjYVECSoYCaXO76bNQS4iFXDW7j1ubbi5l
+         JYEPa6C9b/XNYnXmhBYcWPZ3g07cMVQbfCzCd+0tIpcdMnYqk51NEXVVLMbLpTrRFf
+         MRw1pjkhKY72BsZ57jxfMu5FlyeusoXdjuIffEqvxR3MJIOP+hy8V2KMXtYLDpgvZl
+         pnIRq8MjquCtUDVkmqock3S5sWKiNTiW32jKwkGSc5Rfjphd83d35JcoL8yK/iB0QT
+         HV2ZFtRbGLYCA==
+Date:   Mon, 13 Mar 2023 19:22:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
@@ -80,43 +57,72 @@ Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for ID table
+Message-ID: <9bf3dd37-71c2-4118-a8da-40e656b42d10@sirena.org.uk>
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
  <7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <08e98d1d-e79b-fe7e-0d59-827f72277fc5@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w3ox4e/H/VGMGGHy"
+Content-Disposition: inline
+In-Reply-To: <08e98d1d-e79b-fe7e-0d59-827f72277fc5@linaro.org>
+X-Cookie: Type louder, please.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 13/03/2023 14:55, Mark Brown wrote:
-> On Fri, Mar 10, 2023 at 11:28:42PM +0100, Krzysztof Kozlowski wrote:
->> The driver can match only via the DT table so the table should be always
->> used and the of_match_ptr does not have any sense (this also allows ACPI
->> matching via PRP0001, even though it is not relevant here).
->>
->>   drivers/spi/spi-armada-3700.c:807:34: error: ‘a3700_spi_dt_ids’ defined but not used [-Werror=unused-const-variable=]
-> 
-> It would be much better to fix of_match_ptr() and/or the module stuff
-> that also references the match table here.
 
-Why? The recommendation is in general not to use of_match_ptr, because
-there are little benefits but it disables matching via PRP0001. Jonathan
-in parallel thread explicitly said of_match_ptr should disappear and he
-is not accepting any new code with it. And in general he is right.
+--w3ox4e/H/VGMGGHy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/all/20230311183534.1d0dfd64@jic23-huawei/
+On Mon, Mar 13, 2023 at 07:39:45PM +0100, Krzysztof Kozlowski wrote:
+> On 13/03/2023 14:55, Mark Brown wrote:
+> > On Fri, Mar 10, 2023 at 11:28:42PM +0100, Krzysztof Kozlowski wrote:
 
-and earlier:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=444f5f854b35
+> >>   drivers/spi/spi-armada-3700.c:807:34: error: =E2=80=98a3700_spi_dt_i=
+ds=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 
-Best regards,
-Krzysztof
+> > It would be much better to fix of_match_ptr() and/or the module stuff
+> > that also references the match table here.
 
+> Why? The recommendation is in general not to use of_match_ptr, because
+> there are little benefits but it disables matching via PRP0001. Jonathan
+> in parallel thread explicitly said of_match_ptr should disappear and he
+> is not accepting any new code with it. And in general he is right.
+
+If that's the case then why are you adding maybe unused annotations for
+half the drivers rather than removing their of_match_ptr() usages?
+There doesn't seem to be any logic here, it's just randomly making
+changes as far as I can tell.
+
+The PRP0001 stuff isn't an issue, of_match_ptr() can just be changed to
+do the right thing for CONFIG_ACPI.  It doesn't buy us huge amounts but
+it also costs us very little and may be useful in future.  When there's
+missing annotations it's not causing issues for practical configurations
+as far as I can tell, and if the macro were updated for CONFIG_ACPI it'd
+be even less of an issue.
+
+--w3ox4e/H/VGMGGHy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQPd+EACgkQJNaLcl1U
+h9DNrwf/S3t3cwLWoA+nkWX0VuXmOpSbOw7CSZL7nvCqVHn162nrIu6LmmcfJG/5
+TvxaEb4hrOmkhboKNrvX8JYqykzRJE12GtrxlveQhR45dqP5F9pFGMDpR62fk0LL
+NChJLRUKXP9asPzr3MxBXKfZ1PdpCctyZTIQb2hF6+u4FDHA7v0jinpxpyKXiJjI
+PyAjXx4BUFspLxkUdkJE8coTxx1IeckxcmbEtpSj3iSDUzmIM0mfzc2ZpvoKPCBo
+PNjLoEXpL1MRbe7LyijpEe66LxerpAYjUKtav8A4iJERLpIB4o1QY8wqNwZ3+P5+
+NdQrFLt5aqs/+fwE4YQl+4Q6BNUkWQ==
+=fkKm
+-----END PGP SIGNATURE-----
+
+--w3ox4e/H/VGMGGHy--
