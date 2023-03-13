@@ -2,171 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2866B6BCE
-	for <lists+linux-spi@lfdr.de>; Sun, 12 Mar 2023 22:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28906B6D4F
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 03:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjCLVmN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Mar 2023 17:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S229633AbjCMCJ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Mar 2023 22:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCLVmL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 17:42:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6F636452;
-        Sun, 12 Mar 2023 14:42:10 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id m6so13376258lfq.5;
-        Sun, 12 Mar 2023 14:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678657328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3rijjmcd0H9JBLz+kOnyMNiTilGp+r33BtDPyjKasc=;
-        b=I++jHapzTgT8ulnNiHlEeUUovVAe1EuX7MeM98wmpamJlI0jzO9Pkbq5/aQPOhJZVR
-         834eq51o68Qkq7WLAsij7+XueV6+/LMeNzeWGoiBVD7zupVpqXz6xNxkPIeULwZPjiIM
-         uyCSdT1S5j2l7h6f4otCyn6ESaxcqy9RQGFAJsG8UKiyc6lIdkkTIDuXHPcR/eR51vAa
-         XlxZj8TsOrU/2icEw2aieDrDlpKhaCpnRdB10CSCuhlpIkVkxGQGQPsESso2OQA/VCWd
-         qlHDc0NfohNxhcv4pO4lF8zza1dj9aaTePIKaazamlW1qy403jHVl8pK1fSFE72HV7g+
-         Cy5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678657328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R3rijjmcd0H9JBLz+kOnyMNiTilGp+r33BtDPyjKasc=;
-        b=11DpAVmXUkvtRWJfy/yLKP8502JVWcBPkuuEZvh91FGN3ERTpHWcmAsQZTfoLwfYXv
-         K0LoAL1SJNkHWnAB9IX3QD4jJCpwKjbSR1sMcVfzPXKTwxtOSer3YlhZZlTpxyqcucVB
-         YuaNt1joScR5UUAXV+339/CRYGpXT31UNWyD71IkcqkQwJPHYYA8xWhpwlkMImypEb0Y
-         61+0arq/qhOmN4iVDIDDZO0xB0cHRA3jI3Rmc5WdmERbaXMl/srpyAPS+niRG9hI/Kr2
-         riJwxieYH+ch7thJ3BAjr/5c/iJM4ZOOZIBOO36P1tkir3D6mnxWnC9TMY0/XHUAgObY
-         I3JA==
-X-Gm-Message-State: AO0yUKUWEPYBGYD0nRECm6fpOSmD1CzbBJ5DqXCw6HeiYv+7JxD/wTAL
-        rFyrzSZUwApSYwsKRZYF1XU=
-X-Google-Smtp-Source: AK7set9xDWFn1iZwRkOPYUXEj8c4lqqoFbz9NkTxgaALsntAQ75+QHJ3xpNXMEt6Ohxe7GWyNUwIUw==
-X-Received: by 2002:a05:6512:21d:b0:4c6:4ff7:ba04 with SMTP id a29-20020a056512021d00b004c64ff7ba04mr9509778lfo.2.1678657328312;
-        Sun, 12 Mar 2023 14:42:08 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id a22-20020a2eb176000000b0029870223d23sm767676ljm.73.2023.03.12.14.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 14:42:07 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 00:42:04 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <blarson@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba
- SoC SPI Controller
-Message-ID: <20230312214204.sjycq3xyk56ny2on@mobilestation>
-References: <20230312004445.15913-1-blarson@amd.com>
- <20230312004445.15913-5-blarson@amd.com>
+        with ESMTP id S229437AbjCMCJZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Mar 2023 22:09:25 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5620B28E9E;
+        Sun, 12 Mar 2023 19:09:23 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxMI_ShQ5kycoLAA--.16518S3;
+        Mon, 13 Mar 2023 10:09:22 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax97zJhQ5kS8NVAA--.16519S3;
+        Mon, 13 Mar 2023 10:09:18 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn,
+        zhuyinbo@loongson.cn
+References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
+ <20230308025908.21491-2-zhuyinbo@loongson.cn>
+ <8d20dcfb-480b-3f1a-02b0-294a05a566f7@linaro.org>
+ <dd2e6c68-7460-caa1-0d54-53aeb5619a18@loongson.cn>
+ <ecd867a1-207d-774f-882b-22f0973286ae@linaro.org>
+ <9bfeef4b-f498-12d1-6f21-97289a3127bd@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <29b2a024-8b5a-70ff-17b6-0fb46d871925@loongson.cn>
+Date:   Mon, 13 Mar 2023 10:09:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230312004445.15913-5-blarson@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9bfeef4b-f498-12d1-6f21-97289a3127bd@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Ax97zJhQ5kS8NVAA--.16519S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGr13XrWUXF1kZF1rGFykXwb_yoW5uF1Upr
+        n3Ca1DtryxGF1xXwn7ta48Gr90y34rJw1DXr12qFy7GF9Fqa4jqF4aqF1q9347AF4xJayD
+        XF4Yg3yxur1UAr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1tl1PUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 04:44:34PM -0800, Brad Larson wrote:
-> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> 
-> v10 changes:
-> - Move definition of amd,pensando-elba-syscon into properties
->   with a better description
-> - Add amd,pensando-elba-syscon: false for non elba designs
-> 
-> v9 changes:
-> - Define property amd,pensando-elba-syscon
-> - Move compatible amd,pensando-elba-spi ahead of baikal,bt1-ssi
-> 
-> ---
->  .../bindings/spi/snps,dw-apb-ssi.yaml         | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index a132b5fc56e0..2383d6497b1e 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -37,6 +37,17 @@ allOf:
->      else:
->        required:
->          - interrupts
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: amd,pensando-elba-spi
-> +    then:
-> +      required:
-> +        - amd,pensando-elba-syscon
-> +    else:
-> +      properties:
-> +        amd,pensando-elba-syscon: false
->  
->  properties:
->    compatible:
-> @@ -63,6 +74,8 @@ properties:
->          const: intel,keembay-ssi
->        - description: Intel Thunder Bay SPI Controller
->          const: intel,thunderbay-ssi
-> +      - description: AMD Pensando Elba SoC SPI Controller
-> +        const: amd,pensando-elba-spi
->        - description: Baikal-T1 SPI Controller
->          const: baikal,bt1-ssi
->        - description: Baikal-T1 System Boot SPI Controller
-> @@ -136,6 +149,12 @@ properties:
->        of the designware controller, and the upper limit is also subject to
->        controller configuration.
->  
-> +  amd,pensando-elba-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
 
-> +    description: |
-                    ^
-     +--------------+
-This + modifier is redundant.
+在 2023/3/9 下午3:22, zhuyinbo 写道:
+>
+> 在 2023/3/9 下午2:23, Krzysztof Kozlowski 写道:
+>> On 09/03/2023 03:08, zhuyinbo wrote:
+>>> 在 2023/3/8 下午7:30, Krzysztof Kozlowski 写道:
+>>>> On 08/03/2023 03:59, Yinbo Zhu wrote:
+>>>>> Add the Loongson platform spi binding with DT schema format using
+>>>>> json-schema.
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>> ---
+>>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 
+>>>>> +++++++++++++++++++
+>>>>>    MAINTAINERS                                   |  6 +++
+>>>>>    2 files changed, 53 insertions(+)
+>>>>>    create mode 100644 
+>>>>> Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>> Filename matching the compatible.
+>>> loongson,ls-spi.yaml is for ls2k-spi and ls7a-spi, I will add following
+>>> desription:
+>>>
+>>>
+>>> properties:
+>>>     compatible:
+>>>       enum:
+>>>         - loongson,ls2k-spi
+>>>         - loongson,ls7a-spi
+>> OK then.
+>
+> I was to explain why that yaml was name as "loongson,ls-spi.yaml" 
+> rather than "loongson,ls2k-spi.yaml"
+>
+> because that need consider about  yaml filename to match 
+> "loongson,ls2k-spi" and "loongson,ls7a-spi".
+>
+>>
+>>>>> diff --git 
+>>>>> a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml 
+>>>>> b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..8a13a96b3818
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>>> @@ -0,0 +1,47 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>> +
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: "http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#"
+>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>> Drop the quotes. What was the base of your code here?
+>>> okay, I will drop the quotes.    and I don't got it  about the code 
+>>> base
+>>> that you said.
+>>>
+>>> you meaning is advice me add a line  as follows ?
+>> I meant, from which other file did you copy it?
+> okay,  but I maybe forgot it,  I should be refer other spi yaml file.
+>>
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    const: boot
+>>>> Drop clock-names, not needed for single entry.
+>>> if drop the clock-names entry, the yaml file will compile fail.
+>> Obviously you have to also drop it from DTS and driver...
+>
+> drop clock-names should be not  affect my driver,  but I notice other 
+> lots of arm64 platform dts
+>
+> was keep clock-names and clock in dts when use grep search "clock-names".
+>
+> [zhuyinbo@localhost www.kernel.org]$ grep -rns "clock-names" arch/arm64/
+>
+> arch/arm64/boot/dts/sprd/sc9863a.dtsi:280:            clock-names = 
+> "apb_pclk";
+> arch/arm64/boot/dts/sprd/sc9863a.dtsi:305:            clock-names = 
+> "apb_pclk";
+> arch/arm64/boot/dts/sprd/sc9863a.dtsi:330:            clock-names = 
+> "apb_pclk";
+> arch/arm64/boot/dts/sprd/sc9863a.dtsi:367:            clock-names = 
+> "apb_pclk";
 
-> +      Block address to control SPI chip-selects.  The Elba SoC
-> +      does not use ssi.                          ^
-                                                    |
-1. Drop one of the whitespaces ---------------------+
-2. The description is misleading. SSI means "Synchronous Serial
-Interface" which basically means SPI. If you meant SS (slave-select)
-signals then Elba SoC do use them. What would sound correctly here is
-that Elba SoC system controller provides an interface to override the
-native DWC SSI CS control.
+so , if you think it is okay I will keep clock-names and clock in yaml 
+file like other platform.
 
-Please fix the notes above. Then feel free to add
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+>
+>>
+>>
+>> Best regards,
+>> Krzysztof
 
--Serge(y)
-
-> +
->  patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
-> -- 
-> 2.17.1
-> 
