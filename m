@@ -2,106 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87166B713C
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 09:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CAF6B717D
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 09:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCMIg1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Mar 2023 04:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S230230AbjCMIsf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Mar 2023 04:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjCMIg1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 04:36:27 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578D434F73
-        for <linux-spi@vger.kernel.org>; Mon, 13 Mar 2023 01:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678696585; x=1710232585;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oWYIpVHHEfm+SpwZqUwvAnHp4G93jr7Yp499pIwnfmw=;
-  b=eQ53znX9emzJ8Y/zji4RGWZ/8e3aGXBQd98GlnB0PWcXiWxWrKcop5jk
-   H4kSMVDKYsQGA73P3Rlc95cLu1QZoB6oxI8tofxZE1fXmgpAD6X49Wtf5
-   IlsTTOkGClbke4oWhSIcgN+TIW4aR6m7vI7TKaw95DgWG4pK6ymjYapNu
-   YZObT1pa+D42arBbOO3ba7fow6FrGGjT1QZdkpi7rYdOa6xAkteF+CHrN
-   o/c25ecSrS+h1EpM3tZzHL66cRsLFiR9mernCoEh04FDeUrGyGxMS4fmj
-   +WiF1YoJ7BJG2uXzvwTr1b3HMTVjmMSSyFMbPUL3hJXv8+5jOKD/BVcRn
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,256,1673910000"; 
-   d="scan'208";a="29637222"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 13 Mar 2023 09:36:23 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 13 Mar 2023 09:36:23 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 13 Mar 2023 09:36:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678696583; x=1710232583;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oWYIpVHHEfm+SpwZqUwvAnHp4G93jr7Yp499pIwnfmw=;
-  b=YYXlG01KKXk3DtCNfP0EwxmZ4ergy9ZHZQwsfB52cg+UxxPCWKwiLWK6
-   JQbugeIupTtvCWl91sqnWO7xRoJ1+WD7CFDo9fnKj3Oc+LPWpZMy2um4g
-   KSQW9sUDZVIXj3SQV1dzj2IyyL3zf1fJ+iqdOSsFMu+iZP4uHiVgEy1A4
-   pzg2PnFexR3qVlq3ee8uBNp6dJCmGOi73YEYf4HE5VUZb4IKP/66KbtAY
-   lgpDGb/iFHX1mX7NHKIWyfQarO7lDdurkl2lh6zOiabFhju0XIdWZmn+u
-   //JDRKdtJPjwkCm1t5oZEKB06qorULJ1kHGCZiEA6BynxAZtJZxebJldq
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,256,1673910000"; 
-   d="scan'208";a="29637221"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 13 Mar 2023 09:36:23 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S230326AbjCMIsB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 04:48:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F68570B5;
+        Mon, 13 Mar 2023 01:46:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5F14E280056;
-        Mon, 13 Mar 2023 09:36:23 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH 1/1] spi: nxp-flexspi: Add i.MX platform dependency
-Date:   Mon, 13 Mar 2023 09:36:21 +0100
-Message-Id: <20230313083621.154729-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E15D96603084;
+        Mon, 13 Mar 2023 08:46:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678697193;
+        bh=8yx6yY1hIFnSlFOt6Ae/ktF810mVDMO69d3Xgz1ediQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=FcT6YiIXHxAYJSYrlm4aaFdR2JA24hnL8IUtQdKCVmff1DL67YegZk1nql04DEP4f
+         E/v2btPWLLruhXJhQ3RqEkiDh4FyA4yd3bHFkpd5qNQL+s9WKVvVJHTVPsl3cJPEs3
+         tQQHwCWvek2Sneg1P+SIt428A7kkigFChZOy6SgZRrDxUDgZB+ODxp4GqpeIki3pAn
+         jcie3DnrSywuoSRPFVTAY2a2LiWftozT9jxtOvHFTAmPQp8HQOKJt1RorGWqk1jXCz
+         yZrUHyznrSqogLhUmVGPOEK6t3K7CFYTQAtt2k4Ty+YkRdHd1JMX12nLavWu2JYlm1
+         RKacX3+wG/Y5A==
+Message-ID: <436b3285-0166-61f0-7c0d-fa6ff1c21c5e@collabora.com>
+Date:   Mon, 13 Mar 2023 09:46:29 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 02/16] spi: mtk-pmif: Drop of_match_ptr for ID table
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
+ <20230310222857.315629-2-krzysztof.kozlowski@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230310222857.315629-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This driver also supports various i.MX8 platforms. Add ARCH_MXC for
-selecting this driver without Layerscape support.
+Il 10/03/23 23:28, Krzysztof Kozlowski ha scritto:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it is not relevant here).
+> 
+>    drivers/spmi/spmi-mtk-pmif.c:517:34: error: ‘mtk_spmi_match_table’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: c6b15b2437a10 ("spi: nxp-flexspi: Fix ARCH_LAYERSCAPE dependency")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-While technically c6b15b2437a10 did nothing wrong, it was not possible
-to select this driver on i.MX and non-Layerscape kernel configs.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 36a18c215163f..0a8bbafde2c69 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -406,7 +406,7 @@ config SPI_HISI_SFC_V3XX
- 
- config SPI_NXP_FLEXSPI
- 	tristate "NXP Flex SPI controller"
--	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-+	depends on ARCH_LAYERSCAPE || ARCH_MXC || COMPILE_TEST
- 	depends on HAS_IOMEM
- 	help
- 	  This enables support for the Flex SPI controller in master mode.
--- 
-2.34.1
 
