@@ -2,178 +2,378 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCD26B6F90
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 07:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9946B6FBA
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 07:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjCMGnA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Mar 2023 02:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S229846AbjCMG5I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Mar 2023 02:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjCMGm7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 02:42:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543CB1BC1
-        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 23:42:55 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r15so17129886edq.11
-        for <linux-spi@vger.kernel.org>; Sun, 12 Mar 2023 23:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678689774;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct3fbY7RVEKB9YRXgDHYdKGpI1hyfFOcZ+mEvPScFNw=;
-        b=CSHSDudwYP7AsHbyClAvWnm3t5hhLx9PcYp7yd1rS6Y4FNABLARXs8qtx42oUW3czp
-         7yuootjZD8mNkRSc6zZuExApEMA8t2bJR5yQmpeWC5Pq52xCb7lMvVVr1FXf16K/loj8
-         3ZeUCapZT6oZCumAmO5/NPdBOcSw4UIINH/iL9BGSB6LjC2DSTnf8LHIhr/ybYLoLP5G
-         xMPE1zysB/et9Uz46sdllTWVyOIOOEHToK+CQjWVBfI7MQmBdelk2158YhqzIdyd0hSZ
-         j5sp5yHTDPE1QHVFQQJ5nitlaPSXaXyQb+UOiuK24r4vtsrg3e7YmR8Z+xXNiK8SX6Zu
-         C0+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678689774;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct3fbY7RVEKB9YRXgDHYdKGpI1hyfFOcZ+mEvPScFNw=;
-        b=Q/u8ZzXmYgMBFmI/Ol/x/1DSDb+RayoTgKffhbgw7YXNsR3d7PsZMYAFuwLMaeA5mS
-         9pxQ31Ya73Wk+Oestba8mh/xVOhLQX9s+IoGzE7z0Q0s84VnoiZV6F4gY6Lc2lDcZvTX
-         ap3szHGYF+TIxwW3/6hE7GwLQ0N0DwvNrNFTQ2PK1R5SDuga+5zmZB33D3vyI6JPqlC4
-         cNU8s4bXxVjVzqf+lloqiupAbKYAt+xbVpYZUOlhL4n8mspr3uDAGlep8SsB+gL3lwMn
-         KXV3EQ8qVBcMIL+IwtX9jrPn9MKVUeZxRDjpK/YGisA7G8KWHhE+StkbuKgxkH5AT9Ih
-         LshA==
-X-Gm-Message-State: AO0yUKV4TIzWwS1DN+JxA61JYCLskPd73pNI2QwfX/PSPjATdl2awdbA
-        qJTvjHixTkA5qHZeB/Xo67N6jg==
-X-Google-Smtp-Source: AK7set8BOVZLBV0Vjn5uzvQJAYs2AWPASTtYs1zyPvWJ/7yY4iX5x4DALEaseEbwtC+lNjy6+Gx6PA==
-X-Received: by 2002:a17:906:5387:b0:8b1:7857:2331 with SMTP id g7-20020a170906538700b008b178572331mr29766278ejo.65.1678689773789;
-        Sun, 12 Mar 2023 23:42:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f052:f15:3f90:fcb3? ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170906bc4300b008c1952b63d8sm3054372ejv.137.2023.03.12.23.42.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:42:53 -0700 (PDT)
-Message-ID: <b43463d7-032a-93be-889f-4bb6a2a7377a@linaro.org>
-Date:   Mon, 13 Mar 2023 07:42:52 +0100
+        with ESMTP id S229847AbjCMG5G (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 02:57:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7383A4DE16;
+        Sun, 12 Mar 2023 23:56:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E249761092;
+        Mon, 13 Mar 2023 06:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC061C433D2;
+        Mon, 13 Mar 2023 06:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678690613;
+        bh=sUNbC2N5a1VJCUaka4niLvSZTcQfTVeVCuBrEpSgNsg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qKlCKAwkDumbVYaUoeNWYPDRbpPyDlLd+ulFA/F+3ZVxFbO3aqjp5Cj+JP44FbvCs
+         9vn78muigttGikWY6y6R1H5uRZ6Mj/mRy37zg1wb7/iUSXJYceppQ6hVl7TI5LjjCA
+         +pJKKueveNiNwsQT5/MW68PtA4g5huJdlJPPIqPo=
+Date:   Mon, 13 Mar 2023 07:56:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
+Message-ID: <ZA7JMimTCkp3qc8U@kroah.com>
+References: <20230312190435.3568212-1-xiang.ye@intel.com>
+ <20230312190435.3568212-2-xiang.ye@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
- <8d20dcfb-480b-3f1a-02b0-294a05a566f7@linaro.org>
- <dd2e6c68-7460-caa1-0d54-53aeb5619a18@loongson.cn>
- <ecd867a1-207d-774f-882b-22f0973286ae@linaro.org>
- <9bfeef4b-f498-12d1-6f21-97289a3127bd@loongson.cn>
- <29b2a024-8b5a-70ff-17b6-0fb46d871925@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <29b2a024-8b5a-70ff-17b6-0fb46d871925@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312190435.3568212-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 13/03/2023 03:09, zhuyinbo wrote:
+On Mon, Mar 13, 2023 at 03:04:31AM +0800, Ye Xiang wrote:
+> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA).
 > 
-> 在 2023/3/9 下午3:22, zhuyinbo 写道:
->>
->> 在 2023/3/9 下午2:23, Krzysztof Kozlowski 写道:
->>> On 09/03/2023 03:08, zhuyinbo wrote:
->>>> 在 2023/3/8 下午7:30, Krzysztof Kozlowski 写道:
->>>>> On 08/03/2023 03:59, Yinbo Zhu wrote:
->>>>>> Add the Loongson platform spi binding with DT schema format using
->>>>>> json-schema.
->>>>>>
->>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>> ---
->>>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 
->>>>>> +++++++++++++++++++
->>>>>>    MAINTAINERS                                   |  6 +++
->>>>>>    2 files changed, 53 insertions(+)
->>>>>>    create mode 100644 
->>>>>> Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>> Filename matching the compatible.
->>>> loongson,ls-spi.yaml is for ls2k-spi and ls7a-spi, I will add following
->>>> desription:
->>>>
->>>>
->>>> properties:
->>>>     compatible:
->>>>       enum:
->>>>         - loongson,ls2k-spi
->>>>         - loongson,ls7a-spi
->>> OK then.
->>
->> I was to explain why that yaml was name as "loongson,ls-spi.yaml" 
->> rather than "loongson,ls2k-spi.yaml"
->>
->> because that need consider about  yaml filename to match 
->> "loongson,ls2k-spi" and "loongson,ls7a-spi".
->>
->>>
->>>>>> diff --git 
->>>>>> a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml 
->>>>>> b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..8a13a96b3818
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>>> @@ -0,0 +1,47 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>> +
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: "http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#"
->>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>>>> Drop the quotes. What was the base of your code here?
->>>> okay, I will drop the quotes.    and I don't got it  about the code 
->>>> base
->>>> that you said.
->>>>
->>>> you meaning is advice me add a line  as follows ?
->>> I meant, from which other file did you copy it?
->> okay,  but I maybe forgot it,  I should be refer other spi yaml file.
->>>
->>>>>> +
->>>>>> +  clock-names:
->>>>>> +    const: boot
->>>>> Drop clock-names, not needed for single entry.
->>>> if drop the clock-names entry, the yaml file will compile fail.
->>> Obviously you have to also drop it from DTS and driver...
->>
->> drop clock-names should be not  affect my driver,  but I notice other 
->> lots of arm64 platform dts
->>
->> was keep clock-names and clock in dts when use grep search "clock-names".
->>
->> [zhuyinbo@localhost www.kernel.org]$ grep -rns "clock-names" arch/arm64/
->>
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:280:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:305:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:330:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:367:            clock-names = 
->> "apb_pclk";
-> 
-> so , if you think it is okay I will keep clock-names and clock in yaml 
-> file like other platform.
+> The communication between the various LJCA module drivers and the
+> hardware will be muxed/demuxed by this driver. The sub-module of
+> LJCA can use ljca_transfer() to issue a transfer between host
+> and hardware.
 
-No, it's not ok.
+So you have 2 different things happening in this driver.  One is the USB
+interaction and control and stuff, and one is the creation of an api
+that is to be used by other parts of the kernel.
 
-Best regards,
-Krzysztof
+Can you split this up into 2 different commits, one for the api, and one
+for the USB stuff?  I think you will find that the API is going to need
+a bunch of work, as it's not "normal" for what the kernel is expecting
+to have.
 
+Some other review comments below:
+
+> +struct ljca_event_cb_entry {
+> +	ljca_event_cb_t notify;
+> +	void *context;
+
+Why a void *?
+
+> +};
+> +
+> +struct ljca_dev {
+> +	struct usb_device *udev;
+> +	struct usb_interface *intf;
+
+If you have the interface, you can get the usb device.  Why store both?
+
+> +	u8 in_ep; /* the address of the bulk in endpoint */
+> +	u8 out_ep; /* the address of the bulk out endpoint */
+> +
+> +	/* the urb/buffer for read */
+> +	struct urb *in_urb;
+> +	unsigned char *ibuf;
+> +	size_t ibuf_len;
+> +
+> +	bool started;
+
+You can't just use a boolean as a "flag" without any locking, that is
+not going to work, sorry.
+
+> +	struct list_head stubs_list;
+> +
+> +	/* to wait for an ongoing write ack */
+> +	wait_queue_head_t ack_wq;
+> +
+> +	struct mfd_cell *cells;
+> +	int cell_count;
+> +	/* mutex to protect package transfer with LJCA device */
+> +	struct mutex mutex;
+
+Why is this not protecting "started" as well as the other fields in this
+structure?
+
+> +};
+> +
+> +struct ljca {
+> +	u8 type;
+> +	struct ljca_dev *dev;
+> +};
+> +
+> +struct ljca_stub_packet {
+> +	unsigned int *ibuf_len;
+> +	u8 *ibuf;
+> +};
+> +
+> +struct ljca_stub {
+> +	struct list_head list;
+> +	struct usb_interface *intf;
+> +	struct ljca_stub_packet ipacket;
+> +	u8 type;
+> +
+> +	/* for identify ack */
+> +	bool acked;
+> +	int cur_cmd;
+> +
+> +	struct ljca_event_cb_entry event_entry;
+> +	/* lock to protect event_entry */
+> +	spinlock_t event_cb_lock;
+> +
+> +	struct ljca ljca;
+> +	unsigned long priv[];
+
+What is "priv" for?  Why is it unsigned long and not a real type?
+
+> +};
+> +
+> +static inline void *ljca_priv(struct ljca_stub *stub)
+> +{
+> +	return stub->priv;
+
+Why is this a void *?
+
+
+> +}
+> +
+> +static bool ljca_validate(struct ljca_msg *header, u32 data_len)
+> +{
+> +	return header->len + sizeof(*header) == data_len;
+> +}
+> +
+> +static struct ljca_stub *ljca_stub_alloc(struct ljca_dev *dev, u8 type, int priv_size)
+> +{
+> +	struct ljca_stub *stub;
+> +
+> +	stub = kzalloc(struct_size(stub, priv, priv_size), GFP_KERNEL);
+> +	if (!stub)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	stub->type = type;
+> +	stub->intf = dev->intf;
+> +	stub->ljca.dev = dev;
+
+You are saving a reference to a reference counted device, yet never
+grabbing the reference?  That is ripe for disaster.
+
+> +	stub->ljca.type = stub->type;
+> +	spin_lock_init(&stub->event_cb_lock);
+> +	list_add_tail(&stub->list, &dev->stubs_list);
+
+Where is the reference counting on this new structure that you just
+created?  Who controls the lifespan of it?
+
+> +	return stub;
+> +}
+> +
+> +static struct ljca_stub *ljca_stub_find(struct ljca_dev *dev, u8 type)
+> +{
+> +	struct ljca_stub *stub;
+> +
+> +	list_for_each_entry(stub, &dev->stubs_list, list) {
+> +		if (stub->type == type)
+> +			return stub;
+> +	}
+> +
+> +	dev_err(&dev->intf->dev, "USB stub not found, type:%d\n", type);
+> +
+> +	return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static void ljca_stub_notify(struct ljca_stub *stub, u8 cmd, const void *evt_data, int len)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&stub->event_cb_lock, flags);
+> +	if (stub->event_entry.notify && stub->event_entry.context)
+> +		stub->event_entry.notify(stub->event_entry.context, cmd, evt_data, len);
+> +	spin_unlock_irqrestore(&stub->event_cb_lock, flags);
+> +}
+> +
+> +static int ljca_parse(struct ljca_dev *dev, struct ljca_msg *header)
+> +{
+> +	struct ljca_stub *stub;
+> +
+> +	stub = ljca_stub_find(dev, header->type);
+> +	if (IS_ERR(stub))
+> +		return PTR_ERR(stub);
+> +
+> +	if (!(header->flags & LJCA_ACK_FLAG)) {
+> +		ljca_stub_notify(stub, header->cmd, header->data, header->len);
+> +		return 0;
+> +	}
+> +
+> +	if (stub->cur_cmd != header->cmd) {
+> +		dev_err(&dev->intf->dev, "header and stub current command mismatch (%x vs %x)\n",
+> +			header->cmd, stub->cur_cmd);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (stub->ipacket.ibuf && stub->ipacket.ibuf_len) {
+> +		unsigned int newlen;
+> +
+> +		newlen = min_t(unsigned int, header->len, *stub->ipacket.ibuf_len);
+> +
+> +		*stub->ipacket.ibuf_len = newlen;
+> +		memcpy(stub->ipacket.ibuf, header->data, newlen);
+> +	}
+> +
+> +	stub->acked = true;
+> +	wake_up(&dev->ack_wq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ljca_stub_write(struct ljca_stub *stub, u8 cmd, const void *obuf, unsigned int obuf_len,
+
+Why is obuf a void *?  It's a real structure (or u8 stream), make it so.
+
+> +			   void *ibuf, unsigned int *ibuf_len, bool wait_ack, unsigned long timeout)
+
+Same for ibuf.
+
+> +{
+> +	struct ljca_dev *dev = usb_get_intfdata(stub->intf);
+> +	u8 flags = LJCA_CMPL_FLAG;
+> +	struct ljca_msg *header;
+> +	unsigned int msg_len = sizeof(*header) + obuf_len;
+> +	int actual;
+> +	int ret;
+> +
+> +	if (msg_len > LJCA_MAX_PACKET_SIZE)
+> +		return -EINVAL;
+> +
+> +	if (wait_ack)
+> +		flags |= LJCA_ACK_FLAG;
+> +
+> +	header = kmalloc(msg_len, GFP_KERNEL);
+> +	if (!header)
+> +		return -ENOMEM;
+> +
+> +	header->type = stub->type;
+> +	header->cmd = cmd;
+> +	header->flags = flags;
+> +	header->len = obuf_len;
+> +
+> +	if (obuf)
+> +		memcpy(header->data, obuf, obuf_len);
+> +
+> +	dev_dbg(&dev->intf->dev, "send: type:%d cmd:%d flags:%d len:%d\n", header->type,
+> +		header->cmd, header->flags, header->len);
+> +
+> +	usb_autopm_get_interface(dev->intf);
+> +	if (!dev->started) {
+> +		kfree(header);
+> +		ret = -ENODEV;
+> +		goto error_put;
+> +	}
+> +
+> +	mutex_lock(&dev->mutex);
+> +	stub->cur_cmd = cmd;
+> +	stub->ipacket.ibuf = ibuf;
+> +	stub->ipacket.ibuf_len = ibuf_len;
+> +	stub->acked = false;
+> +	ret = usb_bulk_msg(dev->udev, usb_sndbulkpipe(dev->udev, dev->out_ep), header, msg_len,
+> +			   &actual, LJCA_USB_WRITE_TIMEOUT_MS);
+> +	kfree(header);
+> +	if (ret) {
+> +		dev_err(&dev->intf->dev, "bridge write failed ret:%d\n", ret);
+> +		goto error_unlock;
+> +	}
+> +
+> +	if (actual != msg_len) {
+> +		dev_err(&dev->intf->dev, "bridge write length mismatch (%d vs %d)\n", msg_len,
+> +			actual);
+> +		ret = -EINVAL;
+> +		goto error_unlock;
+> +	}
+> +
+> +	if (wait_ack) {
+> +		ret = wait_event_timeout(dev->ack_wq, stub->acked, msecs_to_jiffies(timeout));
+> +		if (!ret) {
+> +			dev_err(&dev->intf->dev, "acked wait timeout\n");
+> +			ret = -ETIMEDOUT;
+> +			goto error_unlock;
+> +		}
+> +	}
+> +
+> +	stub->ipacket.ibuf = NULL;
+> +	stub->ipacket.ibuf_len = NULL;
+> +	ret = 0;
+> +error_unlock:
+> +	mutex_unlock(&dev->mutex);
+> +error_put:
+> +	usb_autopm_put_interface(dev->intf);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ljca_transfer_internal(struct ljca *ljca, u8 cmd, const void *obuf,
+> +				  unsigned int obuf_len, void *ibuf, unsigned int *ibuf_len,
+> +				  bool wait_ack)
+> +{
+> +	struct ljca_stub *stub;
+> +
+> +	stub = ljca_stub_find(ljca->dev, ljca->type);
+> +	if (IS_ERR(stub))
+> +		return PTR_ERR(stub);
+> +
+> +	return ljca_stub_write(stub, cmd, obuf, obuf_len, ibuf, ibuf_len, wait_ack,
+> +			       LJCA_USB_WRITE_ACK_TIMEOUT_MS);
+> +}
+> +
+> +int ljca_transfer(struct ljca *ljca, u8 cmd, const void *obuf, unsigned int obuf_len, void *ibuf,
+> +		  unsigned int *ibuf_len)
+> +{
+> +	return ljca_transfer_internal(ljca, cmd, obuf, obuf_len, ibuf, ibuf_len, true);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(ljca_transfer, LJCA);
+> +
+> +int ljca_transfer_noack(struct ljca *ljca, u8 cmd, const void *obuf, unsigned int obuf_len)
+> +{
+> +	return ljca_transfer_internal(ljca, cmd, obuf, obuf_len, NULL, NULL, false);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(ljca_transfer_noack, LJCA);
+> +
+> +int ljca_register_event_cb(struct ljca *ljca, ljca_event_cb_t event_cb, void *context)
+
+What are these magic events you are registering?  What do they do and
+why would anyone need them?
+
+You have global functions here that other drivers are using, yet no
+documentation about them at all for any way to review that the api
+really is doing what you are wanting it to do.
+
+So again, please split this up into at least 2 changes, and document
+this new api you are creating, so that we have a chance to review it
+properly.  Otherwise it's almost impossible to do so.
+
+thanks,
+
+greg k-h
