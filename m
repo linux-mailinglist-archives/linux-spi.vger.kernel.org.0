@@ -2,59 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8726B7D51
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 17:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA596B7E17
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 17:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjCMQVw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Mar 2023 12:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        id S229617AbjCMQuZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Mar 2023 12:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCMQVv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 12:21:51 -0400
+        with ESMTP id S229622AbjCMQuX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 12:50:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1186F4A9;
-        Mon, 13 Mar 2023 09:21:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A271D915;
+        Mon, 13 Mar 2023 09:50:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22ED76132A;
-        Mon, 13 Mar 2023 16:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FEBC433EF;
-        Mon, 13 Mar 2023 16:21:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3214161382;
+        Mon, 13 Mar 2023 16:49:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD418C433EF;
+        Mon, 13 Mar 2023 16:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678724509;
-        bh=cue9QvwsImcv6UUL81tuuFLV5LdqK4geTRiYyrIUYZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G06mdbhJwW/k+9rd5EZlDYKJ+sR+2soOIpp+F/8O43q+1jFQsny6IWDnGJa+yBE8e
-         zeAbxwE2Teq3zNu/70veSmcq9+GFd0ScZn+tEmmumE2DNtwRykAvfC30aCbvvXJGs6
-         zvgIDijaxbruoLOxhaqL/aMzWMUfLg/KA1y6Xmx8xTVv+Qsp2yQet8hHQMsfpzWO2/
-         G1SrpDMENEI+jUbczvQ7ED6CabHhn/jeAg8Oyi9zEN+YyR426QShmcjCtU9n5kWC8L
-         ySNegOosVNKO+i/+/X3YosCWkYGjgG/7urHQZyxahevxALZ4/VSHLgP/VlZX8gHYEF
-         LOSUZF6bpaLMw==
-Date:   Mon, 13 Mar 2023 17:21:46 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <20230313162146.eag5z6micbpczbt2@intel.intel>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
+        s=k20201202; t=1678726182;
+        bh=8KYXMoHAD5Z4NBIseAq6bsT/0yPZHnSTiR9g+F3H6mQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=a2JoV3Ky1b2rAYHvjxOxSJk1TNI3heElPwvSF5YrOvneNeV0VdzwNhQXiUrffvmto
+         JA7P0WeiStnDt/6J8n1J9O5jnVgObXfH8lS4KXLMLBqO4DJUKBDJIvP6ivTa/Y09Sn
+         HR1pOKRuwrPDI/baAtt5wUZ6Gocqmmqr2buMgjA/aCshs3yaJSkT/BdMx60/VeJQN4
+         dkvphu6x3RN4fI6sEcajBAho9BdeW92stv1wsZ7bHVNaqIqINFZydvDFvpdEiWiF0m
+         eG/X/a/XjC1FXr2cscVZU8Cm2pQpTkDOWTAiQQum9/Cqx4Qc/c+wOmHVG5htVbTJPc
+         eI6rbG1xa4RhQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jic23@kernel.org, pratyush@kernel.org, Sanju.Mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
+        andi@etezian.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        william.zhang@broadcom.com, kursad.oney@broadcom.com,
+        jonas.gorski@gmail.com, anand.gore@broadcom.com, rafal@milecki.pl,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com
+In-Reply-To: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
+References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: (subset) [PATCH V5 00/15] spi: Add support for
+ stacked/parallel memories
+Message-Id: <167872615942.75015.12960472969249845825.b4-ty@kernel.org>
+Date:   Mon, 13 Mar 2023 16:49:19 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230312190435.3568212-2-xiang.ye@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,108 +108,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Ye,
+On Mon, 06 Mar 2023 22:50:54 +0530, Amit Kumar Mahapatra wrote:
+> This patch is in the continuation to the discussions which happened on
+> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+> adding dt-binding support for stacked/parallel memories.
+> 
+> This patch series updated the spi-nor, spi core and the spi drivers
+> to add stacked and parallel memories support.
+> 
+> [...]
 
-On top of what Greg has already said, few things from my side
-through the lines.
+Applied to
 
-[...]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +static int ljca_mng_link(struct ljca_dev *dev, struct ljca_stub *stub)
-> +{
-> +	int ret;
-> +
-> +	ret = ljca_mng_reset_handshake(stub);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* try to enum all the stubs */
-> +	ljca_mng_enum_gpio(stub);
-> +	ljca_mng_enum_i2c(stub);
-> +	ljca_mng_enum_spi(stub);
+Thanks!
 
-We are ignoring here the return value. So either make the
-whole function call chain to be void or please check the return
-values here.
+[01/15] spi: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: 9e264f3f85a56cc109cc2d6010a48aa89d5c1ff1
 
-[...]
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> +static ssize_t ljca_enable_dfu_store(struct device *dev, struct device_attribute *attr,
-> +				     const char *buf, size_t count)
-> +{
-> +	struct usb_interface *intf = to_usb_interface(dev);
-> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> +	struct ljca_stub *mng_stub = ljca_stub_find(ljca_dev, LJCA_MNG_STUB);
-> +	bool enable;
-> +	int ret;
-> +
-> +	ret = kstrtobool(buf, &enable);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (enable) {
-> +		ret = ljca_mng_set_dfu_mode(mng_stub);
-> +		if (ret)
-> +			return ret;
-> +	}
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-What is the DFU mode?
-Is it an operational mode?
-Do we enter and exit from it?
-Does the device leave this mode on its own?
-What if I write twice in a raw enable?
-Can I check if I am in DFU mode or not?
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Would you mind adding some comments here?
-
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_WO(ljca_enable_dfu);
-> +
-> +static ssize_t ljca_trace_level_store(struct device *dev, struct device_attribute *attr,
-> +				      const char *buf, size_t count)
-> +{
-> +	struct usb_interface *intf = to_usb_interface(dev);
-> +	struct ljca_dev *ljca_dev = usb_get_intfdata(intf);
-> +	struct ljca_stub *diag_stub = ljca_stub_find(ljca_dev, LJCA_DIAG_STUB);
-> +	u8 level;
-> +	int ret;
-> +
-> +	if (kstrtou8(buf, 0, &level))
-> +		return -EINVAL;
-> +
-> +	ret = ljca_diag_set_trace_level(diag_stub, level);
-> +	if (ret)
-> +		return ret;
-
-do we need any range check for the levels? What happens if I do:
-
-echo "I am too cool" > /sys/.../ljca_trace_level
-
-As there were questions here, would you mind adding some comments
-so that the next reader won't make the same questions?
-
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_WO(ljca_trace_level);
-
-[...]
-
-> +static int ljca_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> +{
-> +	struct ljca_dev *dev;
-> +	struct usb_endpoint_descriptor *bulk_in, *bulk_out;
-> +	int ret;
-> +
-> +	/* allocate memory for our device state and initialize it */
-> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-
-devm_kzalloc()
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Andi
+Mark
 
-> +	if (!dev)
-> +		return -ENOMEM;
