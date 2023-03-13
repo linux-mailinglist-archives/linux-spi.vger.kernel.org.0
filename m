@@ -2,37 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D21B6B8050
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 19:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF276B80E1
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Mar 2023 19:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCMSVa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Mar 2023 14:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S230388AbjCMSlK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Mar 2023 14:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjCMSVB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 14:21:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21016A9DE;
-        Mon, 13 Mar 2023 11:20:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F9ECB811D8;
-        Mon, 13 Mar 2023 18:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB93AC433D2;
-        Mon, 13 Mar 2023 18:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678731629;
-        bh=1k+17pceWuz4rSCcRjkRFIddbKW4ybClD+tgo7no39E=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Ilby0VO8KhswP+sNBOB1Scx6AP/OGbMJswQgv6SUaOS/JihC1/IN66ytBUWIYi/L9
-         jg1hnG1M4HK7pzXvCisry0+UdXjEQeyE0jEmIR9wieYbq+9hIKVXZwAh6Rb0HN2Qos
-         qYwaGbi3GO1cwASGE05A+h2zZ4Dgm6K0whZdHye188J7bVITqcTeL6GjWu1bPC2RBB
-         3wBN+JNxQuUglraoSEBrhIaund88t9dkv2zpiK37WJHYkx0ahbQth9HmhERlb76Egu
-         fuudSeztn+3Pd45badX1HRQODgBEWpcEmqvXtYag7AYFMm6jcNNxOb1YwlY/us59uf
-         Nz+oFG/J9J1aw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        with ESMTP id S229805AbjCMSlI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Mar 2023 14:41:08 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0369A1A94A
+        for <linux-spi@vger.kernel.org>; Mon, 13 Mar 2023 11:40:31 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id fd5so18682997edb.7
+        for <linux-spi@vger.kernel.org>; Mon, 13 Mar 2023 11:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678732787;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9zExCwPnErlKajEOP0iCBdbzhLSrwamo47isrOodA8E=;
+        b=uIeD7q3LNKkRWYZ9x8e/DAt+K6iRlUftQBydBEx4UHpvBDJR0suSy6kKS6TldE9c34
+         SmKeIpWFcWo2C4Q8oCZBpXd9MrPJICfDSlUXHnSWoW9QBQCzXO5kW1+Rc0/OzP7YdHjr
+         YpKt/FL3vDjk59/IKcM3Hjl0tBFQXWnZfqUBKEkQplyCg9nu7co6+ODh1oOaxYAjiqhu
+         oVN62b79jjOSFMcBGMCdjJVHqf4qucXnYktTu9HEOlEs5cv3IKf2DHByIFn2kf4CFeMG
+         rqUkBqFdPK7U7r5Tw10fD7v2Zb+cJdcd3N7no0lHMaGkFh8m+9+A3aLpKVdabeeaNxqM
+         ZFbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678732787;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9zExCwPnErlKajEOP0iCBdbzhLSrwamo47isrOodA8E=;
+        b=Jqapwu4XkApdC5xqDzcaO+d6ckq3SmeIRvUQAzYxgd9kY4ue5Ux6Yrty2JKtrBPKEF
+         2yC60r91Oexpi7mTpTDj4ztLiAVfRwOot0q32NbhmhqaXsjh5qiay72xUMVzLAhq8esC
+         imFMe3RoWrcEJyQZ0y64Ejk1GsLjvahGd1mymEgHo8lv9KIkBSvAgsZz1njjAQajMm3f
+         m+H1itROJQmOLRNOmveE14togYnPuGpPECUzq2Muom4/WZuhonscE39AaCKcizh/NOyO
+         yJ7bdswtXCm5eoONa05Ji+9IV0AMC+M9Ur7hUK2b90eFE5lrMj/MG9ztu7L4wRt5+Xsr
+         skUQ==
+X-Gm-Message-State: AO0yUKUhDrTc1LkYv2OrMbzHhOE2l/+X2+msrHXCLFd7FY01WrTN+kKo
+        bHONUx8FYU/83304VhdAieMHew==
+X-Google-Smtp-Source: AK7set81xBbnSqYRHnX0F1ox3kM2TNm7ygVSDDdDqZIaM3C2UJ2RgnK9MzZ5m7B9CkB5dN74bv4LDw==
+X-Received: by 2002:a17:906:178f:b0:878:72d0:2817 with SMTP id t15-20020a170906178f00b0087872d02817mr33528937eje.29.1678732787544;
+        Mon, 13 Mar 2023 11:39:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:69db:4882:d071:27c4? ([2a02:810d:15c0:828:69db:4882:d071:27c4])
+        by smtp.gmail.com with ESMTPSA id c37-20020a509fa8000000b004fb17f10326sm133916edf.10.2023.03.13.11.39.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 11:39:47 -0700 (PDT)
+Message-ID: <08e98d1d-e79b-fe7e-0d59-827f72277fc5@linaro.org>
+Date:   Mon, 13 Mar 2023 19:39:45 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for ID table
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -54,70 +79,44 @@ To:     Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-amlogic@lists.infradead.org,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
+        linux-mediatek@lists.infradead.org
 References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for
- ID table
-Message-Id: <167873162468.102913.17330751630125213207.b4-ty@kernel.org>
-Date:   Mon, 13 Mar 2023 18:20:24 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+ <7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 10 Mar 2023 23:28:42 +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it is not relevant here).
+On 13/03/2023 14:55, Mark Brown wrote:
+> On Fri, Mar 10, 2023 at 11:28:42PM +0100, Krzysztof Kozlowski wrote:
+>> The driver can match only via the DT table so the table should be always
+>> used and the of_match_ptr does not have any sense (this also allows ACPI
+>> matching via PRP0001, even though it is not relevant here).
+>>
+>>   drivers/spi/spi-armada-3700.c:807:34: error: ‘a3700_spi_dt_ids’ defined but not used [-Werror=unused-const-variable=]
 > 
->   drivers/spi/spi-armada-3700.c:807:34: error: ‘a3700_spi_dt_ids’ defined but not used [-Werror=unused-const-variable=]
-> 
-> 
-> [...]
+> It would be much better to fix of_match_ptr() and/or the module stuff
+> that also references the match table here.
 
-Applied to
+Why? The recommendation is in general not to use of_match_ptr, because
+there are little benefits but it disables matching via PRP0001. Jonathan
+in parallel thread explicitly said of_match_ptr should disappear and he
+is not accepting any new code with it. And in general he is right.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+https://lore.kernel.org/all/20230311183534.1d0dfd64@jic23-huawei/
 
-Thanks!
+and earlier:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=444f5f854b35
 
-[12/16] spi: pxa2xx: Mark OF related data as maybe unused
-        commit: d94df25e8b9c8deefc5d7fcd344eb5d4bd41cf7b
-[13/16] spi: bcm-qspi: Mark OF related data as maybe unused
-        commit: 6340fdf2e13c5f1ff3a9622f0cb3b8e9c3955a31
-[14/16] spi: sh-msiof: Mark OF related data as maybe unused
-        commit: d946b6b0ed01949b1a3856e03469361fc9168318
-[15/16] spi: sc18is602: Mark OF related data as maybe unused
-        commit: 833f43308234600e934e9c6fa70fd8b7eebc632b
-[16/16] spi: rspi: Mark OF related data as maybe unused
-        commit: edfa970370a759c2c6a38b2884887937b1aea552
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+Krzysztof
 
