@@ -2,88 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E326B8DB3
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 09:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1666B8D86
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 09:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjCNIoH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Mar 2023 04:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S230356AbjCNIhj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Mar 2023 04:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjCNIoG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 04:44:06 -0400
-X-Greylist: delayed 472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 01:44:05 PDT
-Received: from mail.docworker.pl (mail.docworker.pl [94.177.230.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E9815558
-        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 01:44:05 -0700 (PDT)
-Received: by mail.docworker.pl (Postfix, from userid 1002)
-        id 610AC82B5F; Tue, 14 Mar 2023 09:35:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=docworker.pl; s=mail;
-        t=1678782971; bh=F9Uuk9o83BVy7SpscM/nJos6FHfnp2pKrNUqPErj3yg=;
-        h=Date:From:To:Subject:From;
-        b=UIxpAGDKdcpVkUcy1kFnoIygETXN6/Gda6GyD3Ls0tnH+XRLsSZETF8WDGjMXA1tK
-         69sRJ3Nx++yAPb9OmM6zLUZUm2/Op1XqnbIOUJU9ABjhBQ06vCvxSiFpWXk+7cEBq1
-         873/J65j/9jRVsHAfCyCe7f9NzNpAX7onlorlV6u8t6l1jHNKiNbrdqDFd6gDujIeR
-         MR36AAEL2G7EoSWpEaJ6erP3V9MNGMZrScre31mK8lL8gTRsUf2BabjfgoznZQG+C2
-         XOPIxbZp7NSuJjlZsFxSTDq9B5usGG/php36BK3UE+M0UZX0+R/m2qb96nmAOpqEvF
-         ZZjGQRC+ta2MQ==
-Received: by mail.docworker.pl for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 08:35:29 GMT
-Message-ID: <20230314084505-0.1.f.xmv.0.kaddkxwnig@docworker.pl>
-Date:   Tue, 14 Mar 2023 08:35:29 GMT
-From:   =?UTF-8?Q? "Mi=C5=82osz_G=C3=B3recki" ?= 
-        <milosz.gorecki@docworker.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: Zapytanie ofertowe 
-X-Mailer: mail.docworker.pl
+        with ESMTP id S229605AbjCNIhg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 04:37:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3D7302A;
+        Tue, 14 Mar 2023 01:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678783034; x=1710319034;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7W0I/PhY7JPekbwd4aR0lUx73mBpPX/p3TSCW0u/h7I=;
+  b=AP9LDq+E+Yu/RtcLsW2KVe17FDB95yPHBb+XJxk1doSnbPoyYeBjUAmD
+   gWKLo2ZwWdDoeO4UoseuFiT3qtRtTYtPjQPmM33NEHghXzpOFxtE3piJa
+   HREJV2Wb7iBITWBBz49nJY0GBRHRMJx6T8vYYfzEA+1PxrJaeie1hi9+3
+   Lk5ZaiLriMYWHgj49ck7mDH2AcCpyPP4+vseH4pWnrOXyW4gZV/msMxEb
+   PgSKKt5dqAGRgBx/hWC/qQSGA4RBzCuIdXAKbydnUmIS+DCxpdg8rjlZ8
+   C4U8IfVeDRXPyr/4iUr7ip8xssTX7OHEzGw2CQej5NP3th/EzXy+y9wny
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399954398"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="399954398"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:37:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822283207"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="822283207"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 14 Mar 2023 01:36:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Mar 2023 10:36:57 +0200
+Date:   Tue, 14 Mar 2023 10:36:57 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Ye, Xiang" <xiang.ye@intel.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
+Message-ID: <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
+References: <20230312190435.3568212-1-xiang.ye@intel.com>
+ <20230312190435.3568212-2-xiang.ye@intel.com>
+ <20230313170341.GV9667@google.com>
+ <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: docworker.pl]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: docworker.pl]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [94.177.230.24 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: docworker.pl]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Szanowni Pa=C5=84stwo,
+Hi Xiang,
 
-Od blisko 8 lat skutecznie wspieramy naszych partner=C3=B3w w pozyskiwani=
-u klient=C3=B3w. =C5=9Awiadczymy us=C5=82ug=C4=99 generowania lead=C3=B3w=
- z kilkoma unikalnymi cechami jak gwarancja realnego uruchomienia rozm=C3=
-=B3w lub wymiana kontaktu. Nadmieni=C4=99 tak=C5=BCe, i=C5=BC kontakty pr=
-zekazywane s=C4=85 na wy=C5=82=C4=85czno=C5=9B=C4=87.
+On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
+> > Please don't use the MFD API outside of drivers/mfd.
+> > 
+> > If you wish to use the API, please do.
+> > 
+> > Strip out (only) the MFD parts and move them into drivers/mfd.
+> I have no idea about how to split MFD parts out from this driver
+> currently. The MFD part just have mfd cells filling and the call
+> mfd_add_hotplug_devices to register mfd devices. How to module them
+> as an independent driver?
+> Would you give some hints or recommendations?
+> 
+> And I am a little comfused about where this USB device driver should
+> be put to (drivers/mfd or drivers/usb).
+> 
+> As far as I know, where a driver should be put is based on what
+> it provides. This driver just do some urb package transfer to provides
+> multi-functions, such as GPIO function, I2C function, SPI function.
+> so it should be under drivers/mfd folder. Please correct me, if
+> something is wrong. Thanks
 
-Je=C5=9Bli w chwili obecnej poszukujecie Pa=C5=84stwo nowych zapyta=C5=84=
- i lead=C3=B3w sprzeda=C5=BCowych prosz=C4=99 o kontakt lub wskazanie ter=
-minu rozmowy.
+You don't really seem to get any benefit from MFD. Perhaps it would be
+more appropriate and clear if you just registered auxiliary devices in
+this driver. Check drivers/base/auxiliary.c.
 
+thanks,
 
-Pozdrawiam serdecznie
-Mi=C5=82osz G=C3=B3recki
+-- 
+heikki
