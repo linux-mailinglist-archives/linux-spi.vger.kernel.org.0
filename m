@@ -2,104 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDB56B9F30
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 19:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3366BA076
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 21:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCNS6W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Mar 2023 14:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S230104AbjCNUMC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Mar 2023 16:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjCNS6V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 14:58:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564A11678
-        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 11:58:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 400E2618C4
-        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 18:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2300C433D2;
-        Tue, 14 Mar 2023 18:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678820299;
-        bh=TELwoUppgWwsbK+QA3FECszEK9h/kol+OmJkC/gIUvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pkk4LFWuA96cWSDZA4RIIKmv/y+lO+vwCDXIb58JfyswUBWzQaWJYu+93Wy7duXAT
-         gNdNKP26oqIs0WqsSTVww+n7o1/LDDwaVINGogulI0u1QGmy6KWVNG4s76UDFMKTil
-         HjgcyPVsWlttu9uQM0ZQdMZr9Ubc321GwfufKugfTetpq++bIGfG7fSXShC47tZFK+
-         T+IxaDwfn1Drfb4S3hk6aHIOqqTFWJiwArHQ9/3hpEiEku8JFHkTVN/0oQj1oXOwNb
-         aZQBIfDrCcwY9beooTbkrcU6N20QCrkBthLX9YL2/0RDj0jsyg+9Htn49QtIM7TCEC
-         g88hrjWxK0cXw==
-Date:   Tue, 14 Mar 2023 18:58:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: Looking for a solution for CPM FSL SPI driver that swaps 16 bits
- words
-Message-ID: <4ee54bf5-e984-4c91-bdbf-6794cf4be305@sirena.org.uk>
-References: <764971c9-fe57-160c-d073-a519934da767@csgroup.eu>
- <8fd7715b-1dba-4cdd-916d-8c9dce004031@sirena.org.uk>
- <e21b9465-664e-bdf8-71ec-b7818c04c171@csgroup.eu>
- <84d3426c-47fe-44e9-ad04-be120fbbcd03@sirena.org.uk>
- <f9593ae5-a3e4-9bce-faa1-4761d76238ca@csgroup.eu>
- <e6c44ee3-fd31-4341-96d6-bf542ecd6111@sirena.org.uk>
- <247b27c9-7753-cf8a-6983-157e6def7301@csgroup.eu>
- <4c46ffe5-6793-4149-998d-d76c37fca7aa@sirena.org.uk>
- <85e02cb8-935d-b715-0e40-9cdcfca1abda@csgroup.eu>
+        with ESMTP id S230034AbjCNUMB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 16:12:01 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A9C27D69
+        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 13:11:57 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x3so66881133edb.10
+        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 13:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678824715;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Psn+ZNsvz+f0rmdAxM3umOGfhwT8TclOdJfGLvd1awU=;
+        b=kn2N25+ZV2LJk+6Q8gXk5Piw+tlJzE3G6tcycy73tBvEv6yTaWxMc6PPO8SWiJ1kUX
+         IO1XuElrqYEmiQ20elOKMnRL+wuTZw21TgzEI1/KSyvc0TxxUzqJhfgGrkkDpmGfgsTu
+         ymJjKCF5p29DlEvQJCYPO/lYkb2Vnylj3aV0L/Ca/EyUCs2Ieiaf/7rGYVCHakUztSud
+         AiaHcnueqiHNtzRXfSPMj4/+LQq5jrhXzAgj+d6I9L030W9RuZqSQOYzG6xMv7wIsun0
+         FJj09/5ufbcVBiO66Di7L/snpOVUYWYREkAZKfiyQNI9Os6i20yTbkZQffoP4SvDRdHN
+         vosg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678824715;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Psn+ZNsvz+f0rmdAxM3umOGfhwT8TclOdJfGLvd1awU=;
+        b=u4aaR5mJcQnAg+QUiNhbLM7MelpIDr7m0BVz9rFGYIrs/DaZ09/Rq1sRo9iv7l3aHz
+         rMoTWsXYgGuAqzm4Auk3yaKOmRIVoj/76YRNJBazjqhJ0EDi4OINi9iqZ8MoLeTHzwy4
+         88XqRoS5VUN9G6LzBsVere8IudvU/LQfR/SSeR4cVAuqPAg4B+8p5+1nATMeGZ6rBqZt
+         iSYUNrXMcIB+XPjWure8UcXFw/c0ftT8re77ClyVdLNmSGK4p4WufAumOQnRmKFx7gOp
+         a+NJQvNT+7r2ibWBNK2lGMZsfQM+uuQJ3wp7bUKDgifs7j+XhQlrFGd2FgOqTFa2TYqH
+         C3sg==
+X-Gm-Message-State: AO0yUKVKDZ9XbCRxWtNpW3jue1pSIee3vIg1vUujDEOp0jHte0wza1yO
+        oYiVBHTYQRoqrOPyQ8/ckXxZaeVp0rsw4+k8
+X-Google-Smtp-Source: AK7set81Sdi8Ag2OLXzypBycmwWBYTYONBGYNe393ehQSP6TWWFhDRJaFujDkZqUi3eH6EGl8ZgfWg==
+X-Received: by 2002:a17:907:2097:b0:8af:1a8c:f13f with SMTP id pv23-20020a170907209700b008af1a8cf13fmr4045889ejb.71.1678824715561;
+        Tue, 14 Mar 2023 13:11:55 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id n10-20020a50c20a000000b004fb542dd8cdsm1520471edf.29.2023.03.14.13.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 13:11:55 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
+Subject: Re: [PATCH 74/87] spi: sun4i: Convert to platform remove callback returning
+ void
+Date:   Tue, 14 Mar 2023 21:11:54 +0100
+Message-ID: <5811350.MhkbZ0Pkbq@jernej-laptop>
+In-Reply-To: <20230303172041.2103336-75-u.kleine-koenig@pengutronix.de>
+References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
+ <20230303172041.2103336-75-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xy0THG92OjQVxOb9"
-Content-Disposition: inline
-In-Reply-To: <85e02cb8-935d-b715-0e40-9cdcfca1abda@csgroup.eu>
-X-Cookie: For office use only.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Dne petek, 03. marec 2023 ob 18:20:28 CET je Uwe Kleine-K=F6nig napisal(a):
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>=20
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
---Xy0THG92OjQVxOb9
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-On Mon, Mar 13, 2023 at 09:55:25AM +0000, Christophe Leroy wrote:
-> Le 07/03/2023 =E0 23:16, Mark Brown a =E9crit=A0:
+Best regards,
+Jernej
 
-> > So the CPU is big endian, memory has a big endian word in it and the
-> > controller is then sending as little endian?  That would mean that the
-> > driver for the controller is implementing SPI_LSB_FIRST mode without
-> > being asked (IIRC there is an option to run these systems LE, I don't
-> > know if the controller is just always little endian or always byte
-> > swapping).  That seems like a bug in the driver for the controller.
+>  drivers/spi/spi-sun4i.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+> index 6000d0761206..994d0fb50e68 100644
+> --- a/drivers/spi/spi-sun4i.c
+> +++ b/drivers/spi/spi-sun4i.c
+> @@ -516,11 +516,9 @@ static int sun4i_spi_probe(struct platform_device
+> *pdev) return ret;
+>  }
+>=20
+> -static int sun4i_spi_remove(struct platform_device *pdev)
+> +static void sun4i_spi_remove(struct platform_device *pdev)
+>  {
+>  	pm_runtime_force_suspend(&pdev->dev);
+> -
+> -	return 0;
+>  }
+>=20
+>  static const struct of_device_id sun4i_spi_match[] =3D {
+> @@ -536,7 +534,7 @@ static const struct dev_pm_ops sun4i_spi_pm_ops =3D {
+>=20
+>  static struct platform_driver sun4i_spi_driver =3D {
+>  	.probe	=3D sun4i_spi_probe,
+> -	.remove	=3D sun4i_spi_remove,
+> +	.remove_new =3D sun4i_spi_remove,
+>  	.driver	=3D {
+>  		.name		=3D "sun4i-spi",
+>  		.of_match_table	=3D sun4i_spi_match,
 
-> What does SPI_LSB_FIRST stands for ? From what you say, shall I=20
-> understand that it means Least Significant _Byte_ first ?
 
-> I'm asking because as far as I can see, for the controller SPI_LSB_FIRST=
-=20
-> means Least Significant _bit_ first. Is that wrong ?
 
-Ah, you're right - it's bit rather than byte.
 
---Xy0THG92OjQVxOb9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQQw8YACgkQJNaLcl1U
-h9B6zwf/ec3TvWBcQwK4zA3SA8ReOSeDWj6uXQk3FjJHU7LuHBMTJmuYsjQX2iu5
-icFho2lz/w2gNWEft1hcfh7bD2m4MJwxHusX2hY6bZpO/JpCBuXIPzqzBIzUjsQd
-JZdZvU3k1d1tszO8eh3Cfz+jpCllu7pgNbwWQP6pyM1J5AzyASwJZ5JqxvtuKhSO
-kX2D9yfH7NtNKI6LDE+tpV/GEWig2hvIZM51/ykCHDQAKnMdsfjX7r5fbqe3WlM6
-wh5NfZEeHScpnvVyCBFZQer+qhqG37zxqleRRk5U5n9MOo25ZzBza3dAVEWZYx3e
-9ZCegFx3+1v9NV70KI5tWYEStc+1/A==
-=2b+Z
------END PGP SIGNATURE-----
-
---Xy0THG92OjQVxOb9--
