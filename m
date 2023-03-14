@@ -2,107 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1666B8D86
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 09:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC826B9554
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 14:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjCNIhj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Mar 2023 04:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S229436AbjCNNFF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Mar 2023 09:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCNIhg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 04:37:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3D7302A;
-        Tue, 14 Mar 2023 01:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678783034; x=1710319034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7W0I/PhY7JPekbwd4aR0lUx73mBpPX/p3TSCW0u/h7I=;
-  b=AP9LDq+E+Yu/RtcLsW2KVe17FDB95yPHBb+XJxk1doSnbPoyYeBjUAmD
-   gWKLo2ZwWdDoeO4UoseuFiT3qtRtTYtPjQPmM33NEHghXzpOFxtE3piJa
-   HREJV2Wb7iBITWBBz49nJY0GBRHRMJx6T8vYYfzEA+1PxrJaeie1hi9+3
-   Lk5ZaiLriMYWHgj49ck7mDH2AcCpyPP4+vseH4pWnrOXyW4gZV/msMxEb
-   PgSKKt5dqAGRgBx/hWC/qQSGA4RBzCuIdXAKbydnUmIS+DCxpdg8rjlZ8
-   C4U8IfVeDRXPyr/4iUr7ip8xssTX7OHEzGw2CQej5NP3th/EzXy+y9wny
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399954398"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="399954398"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:37:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822283207"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="822283207"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Mar 2023 01:36:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Mar 2023 10:36:57 +0200
-Date:   Tue, 14 Mar 2023 10:36:57 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Ye, Xiang" <xiang.ye@intel.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
+        with ESMTP id S232060AbjCNNEj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 09:04:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E82A2C2F
+        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 06:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAF74B811F5
+        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 13:00:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE18CC4339B;
+        Tue, 14 Mar 2023 13:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678798804;
+        bh=JKZcG52nxc6PnQXj2135tN/CylKY5M6+sI7Y8ubhkOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qmjd7SzCKTLs0Q/WnD9KauPr51nvkLrlonbSGdbRj5sVGuh+ljgEsjQNh2emX3PeD
+         2Fzjhcq64skDiKqTsBWVJ1il4EhVvn1RbuIiWlHAyvJp5Wyc6nFyh1pCcW7hYo0sAK
+         FE8EhO1flhRes9MHjXfLJouBpylm4/Dwe5lJvShCbF7PS7n2Ls3matPpFbA33IyfIo
+         7ADT97jdeztt9lNOm14g6SE8Io36fGJZkpsn/D4qgagz9EYjYvny9H0L7FwEtto2c6
+         ntksTTbJPRkjEo/Myd7w98d+rw1qx+N+9ZTHAvw/FMC/nmP/5ZnLEa81B0d40/6hw/
+         ynNkYyA2SBVBA==
+Date:   Tue, 14 Mar 2023 13:00:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: Looking for a solution for CPM FSL SPI driver that swaps 16 bits
+ words
+Message-ID: <c4d651cf-ed23-4d5c-9536-40f70fd52a6f@sirena.org.uk>
+References: <764971c9-fe57-160c-d073-a519934da767@csgroup.eu>
+ <8fd7715b-1dba-4cdd-916d-8c9dce004031@sirena.org.uk>
+ <e21b9465-664e-bdf8-71ec-b7818c04c171@csgroup.eu>
+ <84d3426c-47fe-44e9-ad04-be120fbbcd03@sirena.org.uk>
+ <f9593ae5-a3e4-9bce-faa1-4761d76238ca@csgroup.eu>
+ <e6c44ee3-fd31-4341-96d6-bf542ecd6111@sirena.org.uk>
+ <247b27c9-7753-cf8a-6983-157e6def7301@csgroup.eu>
+ <4c46ffe5-6793-4149-998d-d76c37fca7aa@sirena.org.uk>
+ <69b1b437-1e8c-1854-a036-5cbc8a81cbab@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ICJxC532CPfoxgBT"
 Content-Disposition: inline
-In-Reply-To: <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <69b1b437-1e8c-1854-a036-5cbc8a81cbab@csgroup.eu>
+X-Cookie: For office use only.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Xiang,
 
-On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
-> > Please don't use the MFD API outside of drivers/mfd.
-> > 
-> > If you wish to use the API, please do.
-> > 
-> > Strip out (only) the MFD parts and move them into drivers/mfd.
-> I have no idea about how to split MFD parts out from this driver
-> currently. The MFD part just have mfd cells filling and the call
-> mfd_add_hotplug_devices to register mfd devices. How to module them
-> as an independent driver?
-> Would you give some hints or recommendations?
-> 
-> And I am a little comfused about where this USB device driver should
-> be put to (drivers/mfd or drivers/usb).
-> 
-> As far as I know, where a driver should be put is based on what
-> it provides. This driver just do some urb package transfer to provides
-> multi-functions, such as GPIO function, I2C function, SPI function.
-> so it should be under drivers/mfd folder. Please correct me, if
-> something is wrong. Thanks
+--ICJxC532CPfoxgBT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You don't really seem to get any benefit from MFD. Perhaps it would be
-more appropriate and clear if you just registered auxiliary devices in
-this driver. Check drivers/base/auxiliary.c.
+On Mon, Mar 13, 2023 at 10:33:10PM +0000, Christophe Leroy wrote:
 
-thanks,
+> Looking at another driver I'm even more puzzled. That's driver=20
+> drivers/leds/leds-dac124s085.c
 
--- 
-heikki
+> It also sets spi->bits_per_word =3D 16 , but is uses cpu_to_le16() to=20
+> prepare that data. So this one should then work with any host=20
+> endianness, but why the hell is it doing cpu_to_le16() if the data=20
+> should be big endian ?
+
+I wouldn't take some random client driver as being particulary
+meaningful - people often abuse APIs.  I wouldn't be sure that that
+endianness conversion was doing anything on the system that the driver
+was developed on.
+
+> To be honnest, I'm really not sure anymore what is the way to go.
+
+The expected behaviour is very clearly documented, I've quoted that
+documentation at you and recommended that anything being done for
+performance reasons be done in the controller driver.  I'm really not
+sure what else to tell you, especially given that if the client driver
+uses a byte stream (which is what it wants) this all becomes purely
+internal to the controller
+driver.
+
+--ICJxC532CPfoxgBT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQQb88ACgkQJNaLcl1U
+h9Cyzgf9GWyfJ6s6RGY7MlHZUYowsJrJgBXNg2NGOFUzlTQtAXOFWM/hy+ca00xK
+Jln8cw+L3W9R5d5F5VV8i5RCtLSKJfQeV4oH+LGFPFtIgRLDtZpP8eTIdI1/Qxns
+sjj+sMje+htJb3LVKS+xO/ieLKxdMD3rxXToa5pLYh3A9xAl9f7CARBGuGZD1xdT
+JEfWbR3VXsk+Q5MOU2C9Fz8d9M46N8e3a48bxgpy5CoA2O4PiSAHA4UgjyptPWYp
+fBPkWPwdoxu7GNWbf0FH4p/m+tc9P6scKRHM0HpRQvJ+fWCaqV5RlU92sOBC2/Zn
+Dtcvd4uVeLTmDtKJbu/arwNoTZtnag==
+=j1hI
+-----END PGP SIGNATURE-----
+
+--ICJxC532CPfoxgBT--
