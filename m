@@ -2,71 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447E46BD4DD
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Mar 2023 17:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9A56BDAA5
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Mar 2023 22:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCPQOl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Mar 2023 12:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S229634AbjCPVNO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Mar 2023 17:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCPQOg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Mar 2023 12:14:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7E4E1FC4;
-        Thu, 16 Mar 2023 09:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E32F56208A;
-        Thu, 16 Mar 2023 16:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72759C433D2;
-        Thu, 16 Mar 2023 16:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678983229;
-        bh=x//uJIncR/2xcTiOX+T5UG+4xIMNq70skcorvIQZLVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ELgRUA08ehqMMlyIEIsoDzKPY9ySq+KbwdNd+FWGq92ecyZeALelzAw9vMnpgDqUE
-         4kGnwlNSdjmG6tn4elYk5oVnZfbZm6ov6YEz7FW64DhYe1tbOHvlCvE0HNA/+CHOGN
-         0a8NDHxfgv137ETt526P/JkrGSlytoPyyW1hEheEBxlopHy+egMgjPAGxcR9IQjMzN
-         S/gFjVCRuFtBFuCoQ0eNJrTut90yhZLu4JYFBb09lB6aiF1g904/v4o9Pi4AgvHveT
-         nTKiUWMmj4t0TW7MOUjNUBtsQSRIKive+NKK+UU9siI0B8R/lPG6m7YoRojJPSZMUF
-         8Yt+vl6WyZrhQ==
-Date:   Thu, 16 Mar 2023 16:13:44 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Mark Brown <broonie@kernel.org>, Min Li <min.li.xe@renesas.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] mfd: rsmu_spi: Remove unneeded casts of void *
-Message-ID: <20230316161344.GU9667@google.com>
-References: <cover.1678704562.git.geert+renesas@glider.be>
- <ae84c1751e79cb49ab584557f4ecd835a8493d7c.1678704562.git.geert+renesas@glider.be>
+        with ESMTP id S229595AbjCPVNO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Mar 2023 17:13:14 -0400
+Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id ECBA5C082F
+        for <linux-spi@vger.kernel.org>; Thu, 16 Mar 2023 14:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
+         h=mime-version:content-type:content-transfer-encoding:date:from
+        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
+        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=LSCdXHqFoFJAuHDviISOIOwj
+        jChwdBzqWOgpVAltJdLy9w4uGtKrqD1SkGY0LhrKU49UriqK9bEGxqEjvNZ5UpkD
+        dDbVbHNgMAYTlnF46CneA3JbSYPASXxHS7Wg1X5CJFcCwrzfhUddKuCHhNZ+kaXa
+        pYHi/DBr+wW2aGnMEVboujSxF/zwSn6o0g7LijIdZOpWqAGpXsrBh62ujiXTCv0I
+        tATM//RtPf76R0Y+NmhxTwHAcyQCQpTVIyXnrWiurrbnEFbruSpP8ARrOy/hTT9G
+        +gPj2LWp6CCoOtHY5i8D92/3R+N4XJZFJLCx68MIUO+mu3s/bJMOCX/9dK329w==
+Received: (qmail 67537 invoked from network); 15 Mar 2023 02:20:08 -0000
+Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
+  by localhost with SMTP; 15 Mar 2023 02:20:08 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ae84c1751e79cb49ab584557f4ecd835a8493d7c.1678704562.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 14 Mar 2023 19:20:07 -0700
+From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
+To:     undisclosed-recipients:;
+Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE.!
+Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Message-ID: <49ee8a9919fb0d709a11a58148c8fcf8@sragenkab.go.id>
+X-Sender: jurnalsukowati@sragenkab.go.id
+User-Agent: Roundcube Webmail/0.8.1
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 13 Mar 2023, Geert Uytterhoeven wrote:
 
-> There is no need to cast a "void *" to a different type of pointer.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/mfd/rsmu_spi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks
+-- 
+Greetings,
+   I am contacting you based on the Investment/Loan opportunity for 
+companies in need of financing a project/business, We have developed a 
+new method of financing that doesn't take long to receive financing from 
+our clients.
+    If you are looking for funds to finance your project/Business or if 
+you are willing to work as our agent in your country to find clients in 
+need of financing and earn commissions, then get back to me for more 
+details.
 
---
-Lee Jones [李琼斯]
+Regards,
+Ibrahim Tafa
+ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
