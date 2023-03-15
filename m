@@ -2,174 +2,235 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053056BB85C
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 16:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212E36BBBAB
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 19:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjCOPrh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Mar 2023 11:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S232111AbjCOSGu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Mar 2023 14:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjCOPrg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 11:47:36 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2084.outbound.protection.outlook.com [40.107.212.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6E7B471;
-        Wed, 15 Mar 2023 08:47:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QKIkfHnHfZ2SzCZwRCPIGxb2qSyzfJ2Gs8/61JRLVb5b5EA2s1zMGMsTI3ED1BDBSPdF9O3SmD0j08Ok2zqXQpOPXSFG3+hqtgqysMm+YVDOry4QNLIfnR9lwgGdwS3yP9tItwgl2yKtwan3/UUjj6aSL6JCMwzUjjqUkiZNFmwDGB73GrxGc5+WD4BBG1iad914qBeWSSqAHxlcwyYTofT4H98mbYqDe2Dxum4VnG3mDZo4kL/WZkPFeTCT+nhTmWHoIHEB2hVYwBDfMpZNMknkckxfoZsZrYY6fZ6m4NMOKEvRBkBkVdGKoXMuIJphcmmd8L5LuuUNJhHdUEPTLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aVDCCqANAqdvMzRq/FubMasicKudqtb4q4wgoyn/PHM=;
- b=jtCgRtxVHq/9Y4WOJapbnkY5VPhYNtGLYTlSk0lAKQqgpC+7mBoUEugTU9QMcqlxgzJwz45R11YIatOq7xR3jrHZjxlXMgLfNeoTIORs0+QIlDs8Jr2yNbq5iCid+ZD8D9MtNXncfv+NB6hGBgNTfwOf1l8JMPbM9/l8t8TKZJEGcUfsdsOl58DYhqwngVoB5ENqMZXDtR4H2sWgfpMznkRzm7ZoddBV5dIRSigjzlhnAiDQn6l8pPBhH6dk0WrKh6oUw8MSOeqHGcAH54BavqMA5r+YUi2uYdg0pddx55lDXOnhnmUBuUM6EpTDbtyo54KfMBKnhR+YohvGr3pGRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aVDCCqANAqdvMzRq/FubMasicKudqtb4q4wgoyn/PHM=;
- b=QAEd/2gvIcgIhMql5xoYwEIxBNFLSYs07hbCSV2C9h7VqHtLWlFSYOqZ7edeheueJRx932gWrxCz4j5vW+lWfJnXK5tdLcbZr1ph4dyl8W7mDnWawoN6mryq9CPPBLPPbueiwMketkSRKTwRTZraJXj3NUxdRFSrXxvFIfnpYvWVXqrNryWArMfRNM39faioRHy6M2rN2mJ/iVTTfKxZUYcK50wD1uFILQOA88mmw01C9NNOmhc3LrdnzSz5hMn4OSGuiWEuKAur96cQHYOu5UNCBU4jWjM1QRr7NVkm3ockmj10OaRKrptDHCGLhu2f2DAyrCQ7MflB07t46YqRdA==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- BL1PR12MB5350.namprd12.prod.outlook.com (2603:10b6:208:31d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
- 2023 15:47:33 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 15:47:33 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: RE: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-Thread-Topic: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-Thread-Index: AQHZTL4LmmU2weVzlkGZavw5z7vfj672LROAgAXjllA=
-Date:   Wed, 15 Mar 2023 15:47:33 +0000
-Message-ID: <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
-References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
-         <20230302041804.24718-3-kyarlagadda@nvidia.com>
- <01959c869e01075705cd436afa822f2586d0509c.camel@kernel.org>
-In-Reply-To: <01959c869e01075705cd436afa822f2586d0509c.camel@kernel.org>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|BL1PR12MB5350:EE_
-x-ms-office365-filtering-correlation-id: b0bfdac7-a830-406d-ac5c-08db256c979e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t+Fy00UxYLW7rHVCLt+N+L2OyjOcRx+fsy7iear3q8lofHLpjdkaExHfzp/kS7YSi3ymfQgf54jUbgyUxjJA1/qPJE3g58tWOZwHiK8ASSX1eMoj8INa+izppN+YTL12HK3rBI4nwFiwU4hHAU9Jz8i107Y36d3UX1WLIZum+roMvrepltTGHRgOANGzkIpPj8Ipjyb1IkfrwQVdnPDpzNbAk1TEap1GDytm/l5bpWtrKk63icm12fvnx2riYeG5t8bzo2+1/DSxBoL5TtgipPtDHBFB0J8WK32yh7NOf8yGWa7pV8RYMQ73BlPE0rTmS/n0MteoLF4UDtIOQML3JM0KlPjuDxBwexUjfjCe3CdfZ0sGlZjXaC3//3NI0W/kRk6bna2qJQOH+if2hK8ShtvvfdbVlKh4d2xjee0Hx3D1adOQXxGANHgmHR2z8tCM7unw5eTg7Iuj2Ke2zd+yucR/pc4k8sWW8sxgsTDjeDMIgbb+sjAH4HnhSVuVHn4HVIlvxqwLwB6/PH5R0HIM3Ys3+gTW1mbe9KLlt+eqZxCaiOngwDpjfa4QpafrU/wpHF2d+a11T35F5nTW9dURVwliYWh6/2EpxmfAmS952B3X87COSxW8/tQA4cnyMRlHi+82UYq2mWhDmHvRjyLGQtylQBP6qwJRE8dpxQUtcl7U1hEciNS9VLxtyr8b5zFRGoVjryRtuYQc85OBKvVOUolPrsQ5GcIQTP5rqMxcqXw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(366004)(136003)(346002)(451199018)(5660300002)(7416002)(83380400001)(66446008)(478600001)(66556008)(7696005)(26005)(107886003)(53546011)(71200400001)(6506007)(9686003)(186003)(921005)(38070700005)(76116006)(4326008)(66476007)(52536014)(64756008)(8676002)(55016003)(33656002)(8936002)(41300700001)(66946007)(86362001)(316002)(110136005)(54906003)(38100700002)(122000001)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YzN5S0Y0bitLekVWTkIvbTBSTWE0cUN2YjlVbjRNeTdVWVdoSnRvZXpkVW1K?=
- =?utf-8?B?QkxwMEpWaE5JY0xXZmd3YlErZ2kzR0QrL1NLcVlsYkNMdGZIK1h3eGhBdjlw?=
- =?utf-8?B?TXJ6bUFONDF4ckdUWEhNV0pkUmJQMFVHYSszZUtWbjl4NVFFUytoNjQwZ3FY?=
- =?utf-8?B?dUZ5VS9yYWgybG55WlVGanllZzVZWUMzVncvWXoyS3VIRmxnWk96bHdmN3Ux?=
- =?utf-8?B?KzdTYWJvMUs4WFovenh0RU9RZ295dVF6TlZvZU9OWmh6UVF1RmhhUzI0ZDdL?=
- =?utf-8?B?dHpabktMa0RvbnkvZTlrL3pzUlB4S1JzeG02V1pERHFqS1duS2RYdnE5M3NF?=
- =?utf-8?B?SGF2RmpYczhpZWNHVmFKdk9CL0g5SHMxRFZ4S3NyMkZoMG0yUjRxRmMxK0VH?=
- =?utf-8?B?ZEpRUEgvZFVKNzBFWWRpQVlETHY2aHRxZW5xZzB2K3RSOHg3bGo1MVFIYmZy?=
- =?utf-8?B?T1JmaDRhcWIzb3Z4V3RzcCtaeGhCbXJKbXFNbHh6aEgxMTBONzdxMXd3VUNr?=
- =?utf-8?B?eEZjL3BpLzUzUGoyelEzbEI1RXJlUGE2YURpVDZLWk1yRVI1K3orRUNPQXNn?=
- =?utf-8?B?alVuWmwxd0JGL3A0LzlYWkoxWUEyM3JXdTdFeURaWDFRd0NlbzB3QXdncWx1?=
- =?utf-8?B?Q0FNNzFSRWF5TUs4V0FndjFicXcrelFqZXM5akVDL3dlWnM0Y1IvOXhXUzc1?=
- =?utf-8?B?SDd4SURXZEJkQTh0UEprZWNuQ3M3MkE5ckpaTTJDY2tjTUxJUDZQZVoxdkFP?=
- =?utf-8?B?REpkVGRzUjhucndlb2xkNHVzc1FqVFZ2ZGNWVjZ4MWp2UnJPamJZU1lzWmxK?=
- =?utf-8?B?SENIS3pZYnVsMVNDcG4wUDNub2dkMzdDNGFlSkxYMm13eE9sNW5oZUdDc2d6?=
- =?utf-8?B?WnNRN2hZbEE3aUUvQVRnUG1OZWZJNXRzMFlENnhxalUxdzRlWVZZc212Zjcy?=
- =?utf-8?B?Y1dIdExFanZtYXZ0RmkrNDVmMzBJTnNKNjV3eE9ISGF2elQ2WTkyc2I4MmM4?=
- =?utf-8?B?cElST0F0bEhLU01kVFNpYldLbFEraGZBaWlkNEtkUmlFQTBFdkV5ZWljZzBp?=
- =?utf-8?B?S0QxY1kzWDBTNWY5a2tYczdFdW9ETVlOZjFNT1hNcWFNN01Lb1p3cGtNcnc5?=
- =?utf-8?B?Z0t5aDdEMlBlc1lQd0FDd2U2cnk4dGc0VkJZWTBwQnhxbjFaSUpTaTJpNlJk?=
- =?utf-8?B?RDhqazJzNk1tay81Qm1yR2s4dzA3emlGVnBMT1hWNStSblJ3VUpUKzlQYXY2?=
- =?utf-8?B?bG9vNkl2OFRtRXN2TkwvVWIvYlV5bjl5SS94MDBWcSt0UVdhU3Bnc2hKS01V?=
- =?utf-8?B?dm9yaVB2K1Y3THV0VXl0anBGSE5YKy9yQnRvdTFKaHBMZitLaEpSZHkvN3lk?=
- =?utf-8?B?Y2pxQnZnNlNDRHo2b2RPd2xzQmpKbnZzVERuZ1JNeGVvT1dhcWVaTzdJOXlP?=
- =?utf-8?B?MVNVODhJeUg3SGlZL2VpWHlLT1JYaTBLa0RWUEtHb0J1cGVVaEdROGlkNGNr?=
- =?utf-8?B?WFZ5VHBnQzQralhrV29oWDBFdUUwUjhsOG1TWFdCVjQzcURTNVNwOHRPKzJl?=
- =?utf-8?B?ZWFlSE9sSGVqMnVyMTBVTGxQL1hRbXk2aUVhcTFtU0EwVUNqK1JNSXVKRzRz?=
- =?utf-8?B?cVZ5WDRwV05iOGVScVgrTWY2WnVISDdmSURTTmd3UkhTTUNJK2hRZkRBdlpw?=
- =?utf-8?B?czdEZ3hVS1k4THRIVzB4OGp2bEc0RllxTHZGNkE5MlFlRmRLWkt1ajhlNW5j?=
- =?utf-8?B?QlM4QzlMUTNhUDZEbDZJRXFDYlhYUjZMOXR3bFhUdFhwcjRWZkV5dGdyNUVY?=
- =?utf-8?B?MmJ0UUFTQXE2WCtha2xTYXpVQmJCb0hqbTNmcFhTUG9STFJIdTJlYSthMDMv?=
- =?utf-8?B?dTFURC92MWVFbjQxMmZpRmxNWDFDRE9CS0xuTHJYcHZXS3NxejRUd21ZM3p2?=
- =?utf-8?B?RDJuUTZXanFCNWZsbjgwTUtMWXRmVUJhcEFEbHB2VHJ6bTUrbldIbEVMa09h?=
- =?utf-8?B?eHdycURyL2NrMFNVVGUwNWdaQVJrZVhJd1dDWCtycC91YW15ZDQ5VG5uSVl0?=
- =?utf-8?B?eEZqOGdraldydXZ6WmRxVUFtMDY3WEw5STYwRkF0M0VXUWVGNENaMTZMNU5j?=
- =?utf-8?Q?XfgXyqgMxoyTYK3D7Wm0QBHDd?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231253AbjCOSGu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 14:06:50 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45423497DA
+        for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 11:06:48 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5418c2b8ef2so216434187b3.5
+        for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 11:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678903607;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yEN+4igpQnsaZDWFE65KuKe5vYz6+U5Kq6oQlxkGgp4=;
+        b=fT/0rkq91CZJKKkYi1eYGD0jl6CfHlvLWz+hbKRlg4EjJn1y0xjZUIINhgF/e9HWuB
+         3QstKXsB6XxbFYPpDRPUV7TCv4ydC62EQLm7PqRVTAjpkkelqLVZDWNc2LdQsRMa2qKx
+         KJKR4MvXg8l692WnMFP/zJrLzs5yRUJoKIO4je/G7zzn5q4owHC7mc/IDZZd5Jer0Rsc
+         cBCj09BpvJQrO5jbNRmo8g5j5TY5PfabOVKQemktuzVjWP5B6Kv4gPbYgm6bh99Am0Gn
+         c1fJsaH5rkAKmHckDWuN/UXznNcdSBChdlrqX4OTZHcMblxm7Sd/+Vi5HChmd776OQpg
+         6EZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678903607;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yEN+4igpQnsaZDWFE65KuKe5vYz6+U5Kq6oQlxkGgp4=;
+        b=mDo1MUzmbqCk8+knAr9DqekW6BYG+zuEUdy+SFVHL+vngkWJ0jndhHmy4e5XLVok9I
+         /moMGhxv35Tt1+s5iT7Qy1izwnC7nUR41GmmuZFxXT4hy+5dR9t/K/T/YAF0lIqWp5ya
+         dNYQ8ASyfyPXbG/DZHjAOD/AXDkSFc8m0pd8YnPDS/VQrYR8X0PCDXrEjATAJuwICZv+
+         qvzKjy3WuwNirtytF8zMjcINlr9hrspN9QYaC6WQjYsYK1/L3yvoezZ8D7MFMW5No5M+
+         sAAyn/63Plo+pAc3f6Za+3iw79ob4MCCYIk8Qh5ngXE+Uy1rDrIkVtEXoECtjfgwFG9k
+         hghQ==
+X-Gm-Message-State: AO0yUKU/ggemhUWV8o/AqDejUhWa5Jx6UkviVZP2Bxu5Y9doK1oCPLql
+        8chaKvdlPQMNjL1uu4Ek1oCI9klJdrycZTUSdrUnXQ==
+X-Google-Smtp-Source: AK7set/tGno4/NUFj4FeC/s/GZj7L8oEWZAxPlKwtJt+H+A7Ebdk41cyh63hbkvM2AxaMcKQ0IYhxJJEopYuV5Wmh/M=
+X-Received: by 2002:a81:d302:0:b0:541:359c:103a with SMTP id
+ y2-20020a81d302000000b00541359c103amr481255ywi.8.1678903607298; Wed, 15 Mar
+ 2023 11:06:47 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0bfdac7-a830-406d-ac5c-08db256c979e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 15:47:33.3355
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YPp/xmED/BluQIlqdFwpEv5aijHOcef26dfKUwFRHCEVX5acmr34VPus7jI8/Zff3fM9D9HIulunrHX18G9rdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5350
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310153151.293608-1-zenghuchen@google.com> <20230311022334.he6ev6tswfc2xcwo@mobilestation>
+In-Reply-To: <20230311022334.he6ev6tswfc2xcwo@mobilestation>
+From:   Jack Chen <zenghuchen@google.com>
+Date:   Wed, 15 Mar 2023 14:06:36 -0400
+Message-ID: <CALvyBcWewTs5pRwXktKcAuCOogXgQ8jkiwp5ToG7T+Dr2qaJjA@mail.gmail.com>
+Subject: Re: [PATCH] spi: dw: remove delay between write and read
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Mark Slevinsky <markslevinsky@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEphcmtrbyBTYWtraW5lbiA8
-amFya2tvQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDEyIE1hcmNoIDIwMjMgMDM6MTkNCj4gVG86IEty
-aXNobmEgWWFybGFnYWRkYSA8a3lhcmxhZ2FkZGFAbnZpZGlhLmNvbT47IHJvYmgrZHRAa2VybmVs
-Lm9yZzsNCj4gYnJvb25pZUBrZXJuZWwub3JnOyBwZXRlcmh1ZXdlQGdteC5kZTsgamdnQHppZXBl
-LmNhOw0KPiBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc7IGxpbnV4LXNwaUB2Z2Vy
-Lmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiB0ZWdyYUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWludGVn
-cml0eUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
-IENjOiB0aGllcnJ5LnJlZGluZ0BnbWFpbC5jb207IEpvbmF0aGFuIEh1bnRlciA8am9uYXRoYW5o
-QG52aWRpYS5jb20+Ow0KPiBTb3dqYW55YSBLb21hdGluZW5pIDxza29tYXRpbmVuaUBudmlkaWEu
-Y29tPjsgTGF4bWFuIERld2FuZ2FuDQo+IDxsZGV3YW5nYW5AbnZpZGlhLmNvbT4NCj4gU3ViamVj
-dDogUmU6IFtQYXRjaCBWOCAyLzNdIHRwbV90aXMtc3BpOiBBZGQgaGFyZHdhcmUgd2FpdCBwb2xs
-aW5nDQo+IA0KPiBFeHRlcm5hbCBlbWFpbDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBvciBh
-dHRhY2htZW50cw0KPiANCj4gDQo+IE9uIFRodSwgMjAyMy0wMy0wMiBhdCAwOTo0OCArMDUzMCwg
-S3Jpc2huYSBZYXJsYWdhZGRhIHdyb3RlOg0KPiA+ICtpbnQgdHBtX3Rpc19zcGlfdHJhbnNmZXIo
-c3RydWN0IHRwbV90aXNfZGF0YSAqZGF0YSwgdTMyIGFkZHIsIHUxNg0KPiA+IGxlbiwNCj4gPiAr
-ICAgICAgICAgICAgICAgICAgICAgICAgdTggKmluLCBjb25zdCB1OCAqb3V0KQ0KPiA+ICt7DQo+
-ID4gKyAgICAgICBzdHJ1Y3QgdHBtX3Rpc19zcGlfcGh5ICpwaHkgPSB0b190cG1fdGlzX3NwaV9w
-aHkoZGF0YSk7DQo+ID4gKyAgICAgICBzdHJ1Y3Qgc3BpX2NvbnRyb2xsZXIgKmN0bHIgPSBwaHkt
-PnNwaV9kZXZpY2UtPmNvbnRyb2xsZXI7DQo+ID4gKw0KPiA+ICsgICAgICAgLyoNCj4gPiArICAg
-ICAgICAqIFRQTSBmbG93IGNvbnRyb2wgb3ZlciBTUEkgcmVxdWlyZXMgZnVsbCBkdXBsZXggc3Vw
-cG9ydC4NCj4gPiArICAgICAgICAqIFNlbmQgZW50aXJlIG1lc3NhZ2UgdG8gYSBoYWxmIGR1cGxl
-eCBjb250cm9sbGVyIHRvIGhhbmRsZQ0KPiA+ICsgICAgICAgICogd2FpdCBwb2xsaW5nIGluIGNv
-bnRyb2xsZXIuDQo+ID4gKyAgICAgICAgKiBTZXQgVFBNIEhXIGZsb3cgY29udHJvbCBmbGFnLi4N
-Cj4gPiArICAgICAgICAqLw0KPiA+ICsgICAgICAgaWYgKGN0bHItPmZsYWdzICYgU1BJX0NPTlRS
-T0xMRVJfSEFMRl9EVVBMRVgpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiB0cG1fdGlzX3Nw
-aV9od19mbG93X3RyYW5zZmVyKGRhdGEsIGFkZHIsIGxlbiwNCj4gPiBpbiwNCj4gPiArICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb3V0KTsNCj4gPiAr
-ICAgICAgIGVsc2UNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIHRwbV90aXNfc3BpX3N3X2Zs
-b3dfdHJhbnNmZXIoZGF0YSwgYWRkciwgbGVuLA0KPiA+IGluLA0KPiA+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvdXQpOw0KPiA+ICt9DQo+ID4g
-Kw0KPiANCj4gQmFzZWQgb24gdGhlIGNvbmRpdGlvbiwgYmV0dGVyIG5hbWVzIHdvdWxkIGJlDQpU
-aG91Z2ggY29uZGl0aW9uIGlzIGJhc2VkIG9uIGhhbGYgZHVwbGV4LCBmdW5jdGlvbnMgYXJlIGlt
-cGxlbWVudGluZw0KSFcgb3IgU1cgZmxvdyBvZiB0aGUgdHJhbnNmZXIuDQpLWQ0KPiANCj4gMS4g
-dHBtX3Rpc19zcGlfdHJhbnNmZXJfaGFsZigpDQo+IDIuIHRwbV90aXNfc3BpX3RyYW5zZmVyX2Z1
-bGwoKQ0KPiANCj4gQlIsIEphcmtrbw0K
+Hi Serge,
+
+> On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
+> > Delay between write and read in polling mode is not necessary in dw spi
+> > driver. It was added assuming that dw spi controller need the delay to
+> > send data from tx fifo to spi devices. But it is not needed because
+> > following reasons:
+> > 1) dw spi datasheet claims transfer begins when first data word is
+> >    present in the transmit FIFO and a slave is enabled. So at least we
+> >    do not need the full fifo-size-transfer time delay.
+> > 2) in practice, due to spi devices implementation, spi full-duplex
+> >    (write and read real data) is always split into two transfers.
+
+> In practice the delay is specifically added to minimize the dummy
+> loops in the poll-based transfer. It's calculated based on the number
+> of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
+> the spi_transfer.effective_speed_hz field is initialized in the
+> driver). So after all of them are transferred we get to start reading
+> data from the Rx FIFO. Until then the kernel thread is supposed to
+> sleep giving up the CPU for another tasks.
+
+Thanks so much for your feedback. I understand the purpose of the specifica=
+lly
+calculated delay now. However, whether freeing cpu to other threads actuall=
+y
+depends on the size of delay. If the delay is smaller than 10 us, normally =
+it
+will cause busy-looping in cpu instead of freeing it.
+And the delay does not work in all cases. For example:
+if I am running the spi at 20M with a fifo size to be 8, and transfering a =
+huge
+chunk of data (4096 bytes) in one transfer, based on the delay calculation,=
+ it
+would add a 3200 ns delay between each sub-transfer, which is transformed t=
+o
+4us delay and in most cases on most platforms, udelay is not precise enough=
+ and
+I measured >=3D 5 us delay in most cases on my platform. So at least 1.8 us=
+ extra
+delay is added. Considering the time to fill tx_fifo, let's round it to 2us=
+.
+The actual time needed to transfer 8 bytes at 20M speed is just 3.2 us but =
+we
+added an extra delay of 2 us on average. When we consider the whole chunk o=
+f
+data (4096 bytes) in the whole transfer, we added more than 1 ms delay. Thi=
+s
+extra delay is long enough to fail a big chunk of data transfer application=
+s (
+e.g. image, audio.).
+
+To overcome the extra delay, maybe we can consider the following two
+proposals:
+1) add a node in dts and allow users to enable the delay in polling mode.
+2) Let's compare the needed delay time (bytes to transfer in tx fifo) to 10=
+ us,
+        and only call spi_delay_exec when the delay is bigger than 10 us. S=
+ince
+        When the delay is smaller than 10 us, short delay calls
+(ndelay/udelay)
+        are just busy-loops, even calling delay won't freeing cpu to
+other tasks.
+What is your opinion?
+Thanks
+Jack Chen
+
+On Fri, Mar 10, 2023 at 9:23=E2=80=AFPM Serge Semin <fancer.lancer@gmail.co=
+m> wrote:
+>
+> Hi Jack
+>
+> On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
+> > Delay between write and read in polling mode is not necessary in dw spi
+> > driver. It was added assuming that dw spi controller need the delay to
+> > send data from tx fifo to spi devices. But it is not needed because
+> > following reasons:
+> > 1) dw spi datasheet claims transfer begins when first data word is
+> >    present in the transmit FIFO and a slave is enabled. So at least we
+> >    do not need the full fifo-size-transfer time delay.
+> > 2) in practice, due to spi devices implementation, spi full-duplex
+> >    (write and read real data) is always split into two transfers.
+>
+> In practice the delay is specifically added to minimize the dummy
+> loops in the poll-based transfer. It's calculated based on the number
+> of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
+> the spi_transfer.effective_speed_hz field is initialized in the
+> driver). So after all of them are transferred we get to start reading
+> data from the Rx FIFO. Until then the kernel thread is supposed to
+> sleep giving up the CPU for another tasks.
+>
+> > Delay between spi transfers may be needed. But this can be introduced b=
+y
+> > using a more formal helper function "spi_transfer_delay_exec", in which
+> > the delay time is passed by users through spi_ioc_transfer.
+>
+> This is wrong. spi_transfer.delay is supposed to be executed after the
+> whole transfer is completed. You suggest to to do that in between some
+> random data chunks pushed and pulled from the controller FIFO.
+> Moreover that delay is already performed by the SPI-core:
+> https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L1570
+>
+> -Serge(y)
+>
+> >
+> > Signed-off-by: Jack Chen <zenghuchen@google.com>
+> > ---
+> >  drivers/spi/spi-dw-core.c | 20 +++++++-------------
+> >  1 file changed, 7 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> > index c3bfb6c84cab..7c10fb353567 100644
+> > --- a/drivers/spi/spi-dw-core.c
+> > +++ b/drivers/spi/spi-dw-core.c
+> > @@ -379,9 +379,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+> >
+> >  /*
+> >   * The iterative procedure of the poll-based transfer is simple: write=
+ as much
+> > - * as possible to the Tx FIFO, wait until the pending to receive data =
+is ready
+> > - * to be read, read it from the Rx FIFO and check whether the performe=
+d
+> > - * procedure has been successful.
+> > + * as possible to the Tx FIFO, then read from the Rx FIFO and check wh=
+ether the
+> > + * performed procedure has been successful.
+> > + *
+> > + * Delay is introduced in the end of each transfer before (optionally)=
+ changing
+> > + * the chipselect status, then starting the next transfer or completin=
+g the
+> > + * list of @spi_message.
+> >   *
+> >   * Note this method the same way as the IRQ-based transfer won't work =
+well for
+> >   * the SPI devices connected to the controller with native CS due to t=
+he
+> > @@ -390,21 +393,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+> >  static int dw_spi_poll_transfer(struct dw_spi *dws,
+> >                               struct spi_transfer *transfer)
+> >  {
+> > -     struct spi_delay delay;
+> > -     u16 nbits;
+> >       int ret;
+> >
+> > -     delay.unit =3D SPI_DELAY_UNIT_SCK;
+> > -     nbits =3D dws->n_bytes * BITS_PER_BYTE;
+> > -
+> >       do {
+> >               dw_writer(dws);
+> > -
+> > -             delay.value =3D nbits * (dws->rx_len - dws->tx_len);
+> > -             spi_delay_exec(&delay, transfer);
+> > -
+> >               dw_reader(dws);
+> > -
+> > +             spi_transfer_delay_exec(transfer);
+> >               ret =3D dw_spi_check_status(dws, true);
+> >               if (ret)
+> >                       return ret;
+> > --
+> > 2.40.0.rc1.284.g88254d51c5-goog
+> >
