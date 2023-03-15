@@ -2,105 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1E26BB4C5
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 14:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9D16BB511
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 14:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjCONfJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Mar 2023 09:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
+        id S232103AbjCONqw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Mar 2023 09:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjCONfC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 09:35:02 -0400
+        with ESMTP id S231724AbjCONqa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 09:46:30 -0400
 Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A604D125A9;
-        Wed, 15 Mar 2023 06:34:48 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230315133447euoutp02b129aa10d95607d72f1b4c1ec19f91c1~Mmxest6t03083630836euoutp02b;
-        Wed, 15 Mar 2023 13:34:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230315133447euoutp02b129aa10d95607d72f1b4c1ec19f91c1~Mmxest6t03083630836euoutp02b
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF36118A9D;
+        Wed, 15 Mar 2023 06:46:01 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230315134557euoutp02687217738e0e59bad747a0b03cc0dc1a~Mm7O0F6vN1055410554euoutp02S;
+        Wed, 15 Mar 2023 13:45:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230315134557euoutp02687217738e0e59bad747a0b03cc0dc1a~Mm7O0F6vN1055410554euoutp02S
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678887287;
-        bh=LLlYUXQsEgYLxFHapQub+mE4WV568RXHequuRWq1S8I=;
+        s=mail20170921; t=1678887957;
+        bh=JXRyNUIEG+gdqt/gKm16841UWvGjaQNDR6Ep6qXLvw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jNFPcfR4PtyNiG5leIVYPHPp4xa/O9mSQ3KZcx4/bsoSHCVl0HQXz5YC/gNOQSGFY
-         YvddKVJx16/Jrk9LNdMHqLK4BTealXMsQ+RoryNfwaqN0z70G0uTGFB6+QtB16EPBu
-         ECDw3dlL4Srz+iNx25aPqCLmrWPIj8qv4n8O0iC8=
+        b=I/vUx9VWCI/pT9omCAAx+g5TRGupfWjeoz7T/+6WzNAKtWYz7/zuuQJ3jfCi2uIcM
+         klna9a4oalRtxUI7Y5vkpn1HYRqpfvFnHUXMuRYS/2MNePneBm7GVqDVZF84a8BNtt
+         T4Nsj8sJdZRRpAhRJIFJwB1EgCpazV0+E1PGY2Vg=
 Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230315133446eucas1p170c863f52e7bb7ab1dda9cf31231d74b~MmxeTuAek0494604946eucas1p1k;
-        Wed, 15 Mar 2023 13:34:46 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 86.6E.09503.679C1146; Wed, 15
-        Mar 2023 13:34:46 +0000 (GMT)
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230315134556eucas1p257bd4f1ce90bc98b139c146d99ddcdaa~Mm7OkdKVl1259112591eucas1p2T;
+        Wed, 15 Mar 2023 13:45:56 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 9F.E0.09503.41CC1146; Wed, 15
+        Mar 2023 13:45:56 +0000 (GMT)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230315133446eucas1p2e6acaf7a67368b99022b1dca5ef25a17~MmxeBPDeb2839828398eucas1p2t;
-        Wed, 15 Mar 2023 13:34:46 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        20230315134556eucas1p27459c63c810443c1a94d9683ebf9aed6~Mm7OTeiFC1312413124eucas1p2T;
+        Wed, 15 Mar 2023 13:45:56 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230315133446eusmtrp188925be0af5d009449d83fba095d08b5~MmxeAo6-r1697116971eusmtrp1e;
-        Wed, 15 Mar 2023 13:34:46 +0000 (GMT)
-X-AuditID: cbfec7f2-e8fff7000000251f-31-6411c976ee4f
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id CD.59.09583.679C1146; Wed, 15
-        Mar 2023 13:34:46 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
+        20230315134556eusmtrp1091696b8b5e172317c9c7212d959e999~Mm7OSkvg02385123851eusmtrp1k;
+        Wed, 15 Mar 2023 13:45:56 +0000 (GMT)
+X-AuditID: cbfec7f2-ea5ff7000000251f-53-6411cc142940
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id CB.BD.08862.41CC1146; Wed, 15
+        Mar 2023 13:45:56 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.111]) by eusmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20230315133446eusmtip12befc2096e02957706115f35429d8c85~Mmxdz0MWg0839508395eusmtip1S;
-        Wed, 15 Mar 2023 13:34:46 +0000 (GMT)
+        20230315134556eusmtip2f92a02e0963f9395d5ed44f4b43f010a~Mm7OEhgZb2553225532eusmtip2K;
+        Wed, 15 Mar 2023 13:45:56 +0000 (GMT)
 From:   Lukasz Stelmach <l.stelmach@samsung.com>
 To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 Cc:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <netdev@vger.kernel.org>
-Subject: Re: [PATCH V5 02/15] net: Replace all spi->chip_select and
+Subject: Re: [PATCH V6 02/15] net: Replace all spi->chip_select and
  spi->cs_gpiod references with function call
-Date:   Wed, 15 Mar 2023 14:34:37 +0100
-In-Reply-To: <20230306172109.595464-3-amit.kumar-mahapatra@amd.com> (Amit
-        Kumar Mahapatra's message of "Mon, 6 Mar 2023 22:50:56 +0530")
-Message-ID: <dleftjwn3i16ky.fsf%l.stelmach@samsung.com>
+Date:   Wed, 15 Mar 2023 14:45:51 +0100
+In-Reply-To: <20230310173217.3429788-3-amit.kumar-mahapatra@amd.com> (Amit
+        Kumar Mahapatra's message of "Fri, 10 Mar 2023 23:02:04 +0530")
+Message-ID: <dleftj35661628.fsf%l.stelmach@samsung.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
         protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKKsWRmVeSWpSXmKPExsWy7djPc7plJwVTDL6uUbH4s1jV4vKuOWwW
-        jR9vslscWyDmwOLReukvm8fnTXIBTFFcNimpOZllqUX6dglcGdPOP2AueGdfcfteWQPjHrMu
-        Rk4OCQETiX1LLrB0MXJxCAmsYJTY1HqUDSQhJPCFUWLl2goI+zOjxJSXOjANd34+YoVoWM4o
-        cfZFPytE0QtGidO/i7oYOTjYBPQk1q6NAAmLCJhLXF3ynwnEZhaIkbh67zMjiC0sUCix9d05
-        sDiLgKrE0YtHwI7gFOhilDi0ew/YTF6g5jkz5oI1iApYSvx59pEdIi4ocXLmExaIobkSM8+/
-        YQRplhA4wiGxf+EOJohLXSTOL1zECGELS7w6voUdwpaROD25hwWioZ1RounKQlYIZwKjxOeO
-        Jqhua4k7536xQdiOEpMv72YHeU1CgE/ixltBiM18EpO2TWeGCPNKdLQJQVSrSKzr38MCYUtJ
-        9L5aAXWDh8SMUyvYICE3jVHi193P7BMYFWYheWgWkodmAY1lFtCUWL9LHyKsLbFs4WtmCNtW
-        Yt269ywLGFlXMYqnlhbnpqcWG+allusVJ+YWl+al6yXn525iBKaW0/+Of9rBOPfVR71DjEwc
-        jIcYVYCaH21YfYFRiiUvPy9VSYQ3nEUgRYg3JbGyKrUoP76oNCe1+BCjNAeLkjivtu3JZCGB
-        9MSS1OzU1ILUIpgsEwenVANTxsmDJ3nuvk0Ibn7RxHft7MxjR1Z+616v92pBSHLFzqkHnf7t
-        3ntEb2fd21eT9Zqtd3vuLqvXla48Ehf4h+O71e4X9crbQ3NsnZrehU/TWnhX79LsWLYutx4L
-        tp3JMW9NjLs3smlqdqRNi+N22H32J++pFcnb53GKyHI5LefeWa3g7/L/upr7vSetX7quKc9Z
-        Hs2l+NL/lZDjsVPuy5YGNxqpqP27WrQyY/P/3kh+thXPzgY51qyus7u4Slt7yZUpX/kmWB5m
-        LlAtMKp89979j+E8ESH9C2py+4/e1LP3Pbnm96Tf3PLKjuwL1hq/dYo5kmP3zTtJ6u/H1qCJ
-        T27p3X67PNjFeJ/u3P4m3+mPlFiKMxINtZiLihMBAdfS1qgDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42I5/e/4Xd2yk4IpBl9m8lv8WaxqcXnXHDaL
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKKsWRmVeSWpSXmKPExsWy7djP87oiZwRTDM73m1v8WaxqcXnXHDaL
+        xo832S2OLRBzYPFovfSXzePzJrkApigum5TUnMyy1CJ9uwSujCUbrjMWfLavmP+thbGB8aBZ
+        FyMHh4SAiUTv0YQuRi4OIYEVjBLHFm9jg3C+MEocblnGAuF8ZpQ4MHMhaxcjJ1jHl+m3oBLL
+        GSXWzHjPBJIQEngB5GyzABnLJqAnsXZtBEhYRMBc4uqS/2AlzAIxElfvfWYEKREWKJR4vF8F
+        JMwioCrx8+c8RpCRnAI9jBIv5x9hAUnwAvUuX7QTbK+ogKXEn2cf2SHighInZz5hgZiZKzHz
+        /BtGiNtOcEjM7iuFsF0k/t7fyAZhC0u8Or6FHcKWkTg9uQfsfgmBdkaJpisgj4E4ExglPnc0
+        MUFUWUvcOfcLqttRorH/JzMkvPgkbrwVhFjMJzFp23SoMK9ER5sQRLWKxLr+PSwQtpRE76sV
+        ULd5SPTt/8QECbfpjBJfn1xkmsCoMAvJP7OQ/DMLaCyzgKbE+l36EGFtiWULXzND2LYS69a9
+        Z1nAyLqKUTy1tDg3PbXYMC+1XK84Mbe4NC9dLzk/dxMjMLWc/nf80w7Gua8+6h1iZOJgPMSo
+        AtT8aMPqC4xSLHn5ealKIrzhLAIpQrwpiZVVqUX58UWlOanFhxilOViUxHm1bU8mCwmkJ5ak
+        ZqemFqQWwWSZODilGphiA0IDtW3OG7ZGbnH4M322wawvlX4FPeaN9z4IPuMu5XUpiw41fBYm
+        d/fwUW8vm5fmuw0vXXzVxzPlarJs8aX8u1Pu6O0XrRLZM+P1Y69Zxdon7J68kOz71Pb0XrzJ
+        JOPCQJuoyBNvXzy9WmET+HG2w3vTO+ae+9R3Httl+OWHVsW8XVoxtptyLY4xchQH7VnFdnrl
+        +Yn1bztCrj1OdVoekyvfZ5i98bBkaXqfy4/rs+R3CpVLXtAyei1bu7WGZRPz1xb3E2f3LVtd
+        ctZIy79u+xce47MvjzHs/LrimrhnvSW3ifnkN24Hb3x8XPjT6+kBv+C1ptv3KDLYXZ/+WfnJ
+        NWubCSnJVhkvDO4rPctQYinOSDTUYi4qTgQAQCgdEKgDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmkeLIzCtJLcpLzFFi42I5/e/4PV2RM4IpBkvOKVj8WaxqcXnXHDaL
         xo832S2OLRBzYPFovfSXzePzJrkApig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NY
-        KyNTJX07m5TUnMyy1CJ9uwS9jGnnHzAXvLOvuH2vrIFxj1kXIyeHhICJxJ2fj1i7GLk4hASW
-        Mkpcu/IKyOEASkhJrJybDlEjLPHnWhcbRM0zRonrO24xgtSwCehJrF0bAVIjImAucXXJfyYQ
-        m1kgVmLjrOtgtrBAocTWd+fAbCEBJ4nFn7tYQGwWAVWJoxePsIDM5BToYpQ4tHsPK0iCF2jQ
-        nBlzGUFsUQFLiT/PPrJDxAUlTs58wgKxIFvi6+rnzBMYBWYhSc1CkpoFdB6zgKbE+l36EGFt
-        iWULXzND2LYS69a9Z1nAyLqKUSS1tDg3PbfYSK84Mbe4NC9dLzk/dxMjMC62Hfu5ZQfjylcf
-        9Q4xMnEwHmJUAep8tGH1BUYplrz8vFQlEd5wFoEUId6UxMqq1KL8+KLSnNTiQ4ymQL9NZJYS
-        Tc4HRmxeSbyhmYGpoYmZpYGppZmxkjivZ0FHopBAemJJanZqakFqEUwfEwenVAOTnKRmetWs
-        Gu/0QL0ijf9BIRli56YUhNlWfDFcecSq9WeQwy4Lj0vBjof8Dy7VWzCtlsew9HqQ9+69fK/f
-        H31eyGTUMuO9RIxfWshR5pqHc0I//r9pebrBdSHf+usKU1w0vjB4cCalrGeepRTda+LT7qk2
-        /dVvE/enX1bOlTLmfPSW0Whdr/1hzwnzAzqd2GQucAfVZb4TKzjBt/nryuibXn4sn9Yrmr+K
-        6s4yOCG96VDKV6ksm39c+zVSJNSve9zaviOz3Ytl+aJCn0dH4o8/c5WcOufbPrHp55KSjjZJ
-        xcz/PX9m8/aHNZ/neyze7Ra4aUVHUYJQiLvpqcbVR9b/27WPo89XWvyNCNPmiEtKLMUZiYZa
-        zEXFiQBwqwiXIAMAAA==
-X-CMS-MailID: 20230315133446eucas1p2e6acaf7a67368b99022b1dca5ef25a17
+        KyNTJX07m5TUnMyy1CJ9uwS9jCUbrjMWfLavmP+thbGB8aBZFyMnh4SAicSX6bdYuhi5OIQE
+        ljJKzFv+lq2LkQMoISWxcm46RI2wxJ9rXWwgtpDAM0aJy0cyQUrYBPQk1q6NAAmLCJhLXF3y
+        nwnEZhaIkdj2+z4jSImwQKHE4/0qIKaQgLPEoX+mIBUsAqoSP3/OYwRZyinQwyjxcv4RFpAE
+        L9CY5Yt2soLYogKWEn+efWSHiAtKnJz5hAVifLbE19XPmScwCsxCkpqFJDULaB2zgKbE+l36
+        EGFtiWULXzND2LYS69a9Z1nAyLqKUSS1tDg3PbfYUK84Mbe4NC9dLzk/dxMjMCa2Hfu5eQfj
+        vFcf9Q4xMnEwHmJUAep8tGH1BUYplrz8vFQlEd5wFoEUId6UxMqq1KL8+KLSnNTiQ4ymQL9N
+        ZJYSTc4HRmteSbyhmYGpoYmZpYGppZmxkjivZ0FHopBAemJJanZqakFqEUwfEwenVAPTgcpT
+        LS6rvmi9m3GeSUSlRKhPqkdk2tpFzK8/bLk/T9/utcn2T587pffbm85+u4f95wXhRd+6n73Z
+        J6Nmwuyf+IaXJeLVtouSm727Je9Kzgs6+EdXw6XA/tSzrO9zNyqfPfY3LnhucIk7zz0hvrcV
+        5lxynj82Pgp/t+fMjpXrU4xEE9ZalMz7W8IkxGHR+/1Tdrmt2sGIaHu1yuiHOh+bzzBPmu6/
+        LDTzUVP7rK4HHNEX3YNd3i/he6JvkbDK+ECu5NWwuYY8O+MuPTmQuHPmwvXfnzRtDPorw/7J
+        iuHDc7W/1dNmLt8Za8cV+sX1yHn/ayWney4k/7/qrOJxaLrxyvT1bGdU+44YndkqlSKTocRS
+        nJFoqMVcVJwIAN2XFfYeAwAA
+X-CMS-MailID: 20230315134556eucas1p27459c63c810443c1a94d9683ebf9aed6
 X-Msg-Generator: CA
-X-RootMTR: 20230315133446eucas1p2e6acaf7a67368b99022b1dca5ef25a17
+X-RootMTR: 20230315134556eucas1p27459c63c810443c1a94d9683ebf9aed6
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230315133446eucas1p2e6acaf7a67368b99022b1dca5ef25a17
-References: <20230306172109.595464-3-amit.kumar-mahapatra@amd.com>
-        <CGME20230315133446eucas1p2e6acaf7a67368b99022b1dca5ef25a17@eucas1p2.samsung.com>
+X-CMS-RootMailID: 20230315134556eucas1p27459c63c810443c1a94d9683ebf9aed6
+References: <20230310173217.3429788-3-amit.kumar-mahapatra@amd.com>
+        <CGME20230315134556eucas1p27459c63c810443c1a94d9683ebf9aed6@eucas1p2.samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -115,7 +115,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-It was <2023-03-06 pon 22:50>, when Amit Kumar Mahapatra wrote:
+It was <2023-03-10 pi=C4=85 23:02>, when Amit Kumar Mahapatra wrote:
 > Supporting multi-cs in spi drivers would require the chip_select & cs_gpi=
 od
 > members of struct spi_device to be an array. But changing the type of the=
@@ -149,7 +149,7 @@ Reviewed-by: Lukasz Stelmach <l.stelmach@samsung.com>
 
 > diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/a=
 di/adin1110.c
-> index 0805f249fff2..aee7a98725ba 100644
+> index 3f316a0f4158..f5c2d7a9abc1 100644
 > --- a/drivers/net/ethernet/adi/adin1110.c
 > +++ b/drivers/net/ethernet/adi/adin1110.c
 > @@ -515,7 +515,7 @@ static int adin1110_register_mdiobus(struct adin1110_=
@@ -293,13 +293,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmQRyW0ACgkQsK4enJil
-gBDJlAf/aYXd6wQmEWnzTCPS3UEyuItQ4kCQDTXXsZ6I8XpLkWZRYNRlh78OBmcq
-QJWlOlnTMGAszElpaHLrncc38gA4DiZooB61wmkCsW1Za0oyT2k0ZPRAD0EOGui4
-B4nUc1lmH+tkXrSfKffd2wAzQKC+B/lthb31gHfkKOe5m8zjuYhtJNFSU5F1XHGE
-tJOdFkFmXdYqKS3hC62Asbm8HTeZD4TaJr0p1EpbsQzDeRn1DxG0KTC8dADi8ihQ
-GqLOKli52KlzuJvnnAN6UA8aYFNIanTyyt4JwYzqYQcZR1eSEhuVzLGvFPnctyso
-/d2wjHBp1xzd1tGgdo9hxdHcsgW09Q==
-=xR/R
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmQRzA8ACgkQsK4enJil
+gBBCmQgAlXCc5LGsVIU+TBjNuqDGd+fnQffgk+zNgUXtjahrkxEArw/O3Roouwlw
+pzaQmiLjxXA1R2TWihm5u3VyvJ1/V/uCd3DCLKl9xdqexmnvKpQCvUFjohVDePhU
+lmCRx6jqyPkVhY8u6KkzrFNYTh4KCxU5PSyMdI/npk9PgKeqXoOGVvrl58b1c7Ta
+49fiqENYiLnqyKW27JYr6QLFO0N8KS5KcXSHh+Kz9HGTNenwLPp1+jy92FcyhhFZ
+wVYt12QILDfjqe857FKtLbcG5yilisFH92ZIIA06Y9W6uNLPDyFER+cg3WhphhBk
+TOC+htf9rQ8++tcMNKi+uJ40X9bbdA==
+=tHGA
 -----END PGP SIGNATURE-----
 --=-=-=--
