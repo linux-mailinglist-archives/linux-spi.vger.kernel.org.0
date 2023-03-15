@@ -2,113 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2E16BABBF
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 10:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2746E6BB0BF
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 13:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjCOJKt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Mar 2023 05:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S232290AbjCOMVG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Mar 2023 08:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjCOJKD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 05:10:03 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421720552;
-        Wed, 15 Mar 2023 02:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678871400; x=1710407400;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/9hlg9yvvgpQ82GIW45TeHtdlD4HR1qF/6Lf3lWQJgw=;
-  b=UenlTkr4nijzWFtp2dEEFevoy+XXLGM1IHQxaq1KodPfW1v6dYPBtrWc
-   iloj+Wd/9+SZFn7zhr67tDaYqoes2cOrITqpGxwQ9++h+H25m3XLhV4tp
-   CVJjIcM2edmAx5V8uFK5U3Sel7KpzuF6aCJMRJUHrtckRSI16S7ONVsYU
-   uQiTkDUsONynEP874ihTs9K20u0Vv6Z7XePFBm6m1ZtUg1bkrn1qaR1R6
-   ZQFbfW8z4MWcX+89lKD1e6+l7YpJrVbvtPFFm6CQMG2ecKf7ENHhUwQld
-   /8KrmHIwv9xQ64ye8LjIhr3lsv9Nzw9cK8pFYHTSpe8l4m6NSAuNPTbd+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335137374"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335137374"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:09:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822702202"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="822702202"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 15 Mar 2023 02:09:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 15 Mar 2023 11:09:53 +0200
-Date:   Wed, 15 Mar 2023 11:09:53 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>, Lee Jones <lee@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S232145AbjCOMUf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 08:20:35 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3326CD1
+        for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 05:20:14 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id t4so1394820vsq.1
+        for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 05:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678882814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T7ECRY0Te14ADf7d1i4el7TwH1rvkn6nOgcFPiWQeeE=;
+        b=qfV7NVpQG2DvX+Cj58PBVyZL6NOvhyh3tUT4nWftgX1LcK7MVqiP1AWrrKOEcNa6Sd
+         2mObvmjze4rBW3GbOX7GdaQMcaHGETycNH5CuXEYX0TApmcVW34vXSnJylFSWo79niya
+         oyq7D7qYpmLgkEoMm8zgpW4CuCzA4FKVRHlY54Q5WP480NhFbZJFydD7l3aqwRc8h6e0
+         bFp5knWRl73B+XFEowhf6qCH3nCy8yO9gafgGNc9IYzNxob1jw9Ry5uYghSuJ8kYhP35
+         9ht3aN7i4WBoHFQLZkCGGOW4pSHkGa5Z4YHtGsL4688cPfZXe74oEqJ4oYIZK4hUIfc9
+         gX9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678882814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T7ECRY0Te14ADf7d1i4el7TwH1rvkn6nOgcFPiWQeeE=;
+        b=RfEpCLjFb6d685OZwPGBvbRqtoT73gQnf4/QEoouLbmL7sVYrPNFkiZyJc4XA8Bz2E
+         OuXRHSP/Nd4C8TgFMOkh7cIIquIs3Qxm07/vS9ncSro25gj00qrMLpZ74Z93CT8leCtA
+         IczMi5LMaR13P3cjiwEhPbxCXda9ZX0JOXND/ZlZF6XXEmfJWDIHwdhy6lnuN6SElIc1
+         E78MhDoIR/usYZlOqtUvBCEDjhYbkUbIXTg3p4LkKRPa2graWGa79w4i0Heu6+itxeI5
+         52+ssdISyqYwWt+fSeX/QEtRZXV7bR7VitbgJDroyZpRtvlaRiWzqy5g7u02pSzjl3H+
+         wEeA==
+X-Gm-Message-State: AO0yUKUnZROg9YuZJJlZ3MHTz7GaAXIVtAR6n8ovOGxMOVQ5R0bHzubT
+        cmzMSaf6vafnTqD4kblirDiAN+Kketz6dMHiZP3hiA==
+X-Google-Smtp-Source: AK7set8xf9erliFQjg7b8zKj5RwEcJ2NN9wMH4S6n+20ZmGyEH+og3UG9ei8Qjt+sSDngPD1/GcLB+pn3QA5m4E3CK8=
+X-Received: by 2002:a67:f254:0:b0:425:b61a:9c13 with SMTP id
+ y20-20020a67f254000000b00425b61a9c13mr2414569vsm.0.1678882813726; Wed, 15 Mar
+ 2023 05:20:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230312190435.3568212-1-xiang.ye@intel.com> <20230312190435.3568212-3-xiang.ye@intel.com>
+In-Reply-To: <20230312190435.3568212-3-xiang.ye@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Mar 2023 13:20:02 +0100
+Message-ID: <CAMRc=Mfynj1STC54v7SBKZxBk2rJ6VTW+XV56hZ896rOCpKd1Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <kfting@nuvoton.com>,
         Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
- <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
-> 
-> ...
-> 
-> > > You don't really seem to get any benefit from MFD. Perhaps it would be
-> > > more appropriate and clear if you just registered auxiliary devices in
-> > > this driver. Check drivers/base/auxiliary.c.
-> > Yes, it should be a work. I have a question.
-> > MFD provides the ACPI binding for sub-devices through
-> > struct mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> > If using auxiliary bus to implement the LJCA sub-devices, we need to do
-> > the sub-devices acpi binding manually in ljca.c.
-> > 
-> > Something Like:
-> > adr = LJCA_ACPI_MATCH_GPIO
-> > adev = acpi_find_child_device(parent, adr, false);
-> > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
-> > 
-> > Is that acceptable?
+On Sun, Mar 12, 2023 at 8:05=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
+:
+>
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA US=
+B
+> driver.
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Looks ok to me.
-
-> Maybe you can implement this on the level of auxiliary bus.
-
-I would actually prefer that the auxiliary bus itself does not make
-any assumptions regarding the whereabouts of the fwnodes at this
-stage. Maybe later, when(if) there are more users.
-
-thanks,
-
--- 
-heikki
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
