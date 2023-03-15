@@ -2,135 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299996BA077
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Mar 2023 21:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31206BAB29
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Mar 2023 09:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCNUMO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Mar 2023 16:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S231354AbjCOIvm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Mar 2023 04:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjCNUMN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Mar 2023 16:12:13 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A042622DE8
-        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 13:12:12 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id eh3so11037886edb.11
-        for <linux-spi@vger.kernel.org>; Tue, 14 Mar 2023 13:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678824731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KRAW+s3YRlQq9ELNdyAribiRoHUxDdhi6TfZn0sTs4U=;
-        b=an/WrmIBb1xG0QZHI4bFzwDDiU4LoZagCTuDLCMZq4SGTA7QhTyJMXewtP/nJt3R5j
-         Bp1+mwcGA7Dgs7dXcMNTz3mpqWNSPMyuLxuFrSqIPlQ1ypJ+jw6SDassBderY+eXdIio
-         YlqOr44qiXSz9eVxW7HMw3tEaEWNCfnNIdr9h9dAzQZ4IQaJRHF9tV7RJLOXej+ImfYr
-         vb68azsqM2oTLBP5qoHGzXzzoVZPf1AS1jpi4FUo30KNscwR9reTSYz5+/WUoR0gEOWA
-         SyjuEq/p+QWUWmpKLqn2+maQFSlm8aB7U/TgxJmQNAUN+9L3mxAMdbRcUQfxMgRA4WUZ
-         YgLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KRAW+s3YRlQq9ELNdyAribiRoHUxDdhi6TfZn0sTs4U=;
-        b=ICj1xkUe2U+aax/gMUvHwaDbMqF/t+Zqrm7pCpvwYbSPffY8i9vLVquLjdK/Qt+ntG
-         7VuMX7QKkzra+dtOd7H91kSemfGiY9hlWdY1ube5VKrbvCs2oo1Xk2+yjgseBE0DI+vQ
-         EUhQD1OUvoFQ2GFtiiXvNqXS+4s3ltd9bXdcIH7t5TCASy32xpad6Pb4J9gLMvtmfi6K
-         IJ0t/y5/6FwqsrNqEqQOlMMMh9Vu7f3b0fjfKn8PARqnsrtcPSVNsm9sYFNSqNhFpSLF
-         ra/NbzcNQ7P/Kbufrr6htkL4pGRHKcbr3tsqjIprXe48qi/U0aVJYJ4iZCRcj+jCeAXg
-         i6mA==
-X-Gm-Message-State: AO0yUKVF/p+Mcd9R1O6fj6zfueKykzOOtdjv83m9gAlWU/NBi4ejxtsq
-        UWFmCOcQBkbaTQGnD0WRb0A=
-X-Google-Smtp-Source: AK7set/atfmmI/iiWSLj+6Q8qdeuejUSglqHN4Ir/kY6mIHUaNZh5/6ToQiam39SOdRa/z5WUQPoIA==
-X-Received: by 2002:a17:907:2d93:b0:8aa:33c4:87d5 with SMTP id gt19-20020a1709072d9300b008aa33c487d5mr4590746ejc.10.1678824731247;
-        Tue, 14 Mar 2023 13:12:11 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id qa14-20020a170907868e00b008f702684c51sm1528290ejc.161.2023.03.14.13.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:12:10 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
-Subject: Re: [PATCH 75/87] spi: sun6i: Convert to platform remove callback returning
- void
-Date:   Tue, 14 Mar 2023 21:12:09 +0100
-Message-ID: <8231800.NyiUUSuA9g@jernej-laptop>
-In-Reply-To: <20230303172041.2103336-76-u.kleine-koenig@pengutronix.de>
-References: <20230303172041.2103336-1-u.kleine-koenig@pengutronix.de>
- <20230303172041.2103336-76-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S231781AbjCOIvY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Mar 2023 04:51:24 -0400
+Received: from mail.amblevebiz.com (mail.amblevebiz.com [80.211.239.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE4661519
+        for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 01:50:55 -0700 (PDT)
+Received: by mail.amblevebiz.com (Postfix, from userid 1002)
+        id 5953382C41; Wed, 15 Mar 2023 09:50:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=amblevebiz.com;
+        s=mail; t=1678870254;
+        bh=mG5KF9rXIT2hCcIXZaMY449X9Ndwb1czFhgZLlqDg7A=;
+        h=Date:From:To:Subject:From;
+        b=gVqB8LzMgtC3yIV7rV6/qvBUHXqaau1rDCgeeKTaEs0+crVySYSdG0Tg8drd1pu3b
+         j+THVW9FnzIdhEMCdIz4VeTXSIIpofOjptetESgnZCT9HTU2nhkgOASz1fpqThyui3
+         QqTHc63sJZwsw4YFWtUl/LSrvNy3mC/Doyt77r5ZZQt/cLWojWUEpP2OMT02izrcH0
+         0Xs8Nhnkgg4kyl1ecHG5m/AQnJb4WDQVoe08ub7re1nDjo6Ys46tQB7Hr8t65qupr8
+         Dn89lUlblVbsQLUxI+ti6ifqPzUeGFMFs2QCcHmjYoAYBmfjqO4m/+B8YJBlxKnK8Z
+         HILcb7ID8ZEqA==
+Received: by mail.amblevebiz.com for <linux-spi@vger.kernel.org>; Wed, 15 Mar 2023 08:50:43 GMT
+Message-ID: <20230315084500-0.1.p.1hdm.0.r0q94418rd@amblevebiz.com>
+Date:   Wed, 15 Mar 2023 08:50:43 GMT
+From:   =?UTF-8?Q? "Luk=C3=A1=C5=A1_Horv=C3=A1th" ?= 
+        <lukas.horvath@amblevebiz.com>
+To:     <linux-spi@vger.kernel.org>
+Subject: =?UTF-8?Q?Technick=C3=BD_audit_podlah?=
+X-Mailer: mail.amblevebiz.com
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URIBL_CSS_A,
+        URIBL_DBL_SPAM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dne petek, 03. marec 2023 ob 18:20:29 CET je Uwe Kleine-K=F6nig napisal(a):
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
+Dobr=C3=A9 r=C3=A1no,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+uva=C5=BEujete o bezesp=C3=A1rov=C3=A9 podlaze pro v=C3=BDrobn=C3=AD prov=
+oz?
 
-Best regards,
-Jernej
+Jako sv=C4=9Btov=C3=BD l=C3=ADdr ve v=C3=BDrob=C4=9B a pokl=C3=A1dce podl=
+ah =C5=99e=C5=A1=C3=ADme probl=C3=A9my vypl=C3=BDvaj=C3=ADc=C3=AD z vlivu=
+ chemick=C3=BDch slou=C4=8Denin, ot=C4=9Bru, n=C3=A1raz=C5=AF, vlhkosti n=
+ebo n=C3=A1hl=C3=BDch zm=C4=9Bn teplot - na=C5=A1e podlahov=C3=A9 syst=C3=
+=A9my jsou p=C5=99izp=C5=AFsobeny nejt=C4=9B=C5=BE=C5=A1=C3=ADm podm=C3=AD=
+nk=C3=A1m prost=C5=99ed=C3=AD.
 
->  drivers/spi/spi-sun6i.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-> index 23ad052528db..43c29afea6bb 100644
-> --- a/drivers/spi/spi-sun6i.c
-> +++ b/drivers/spi/spi-sun6i.c
-> @@ -683,7 +683,7 @@ static int sun6i_spi_probe(struct platform_device *pd=
-ev)
-> return ret;
->  }
->=20
-> -static int sun6i_spi_remove(struct platform_device *pdev)
-> +static void sun6i_spi_remove(struct platform_device *pdev)
->  {
->  	struct spi_master *master =3D platform_get_drvdata(pdev);
->=20
-> @@ -693,7 +693,6 @@ static int sun6i_spi_remove(struct platform_device
-> *pdev) dma_release_channel(master->dma_tx);
->  	if (master->dma_rx)
->  		dma_release_channel(master->dma_rx);
-> -	return 0;
->  }
->=20
->  static const struct of_device_id sun6i_spi_match[] =3D {
-> @@ -710,7 +709,7 @@ static const struct dev_pm_ops sun6i_spi_pm_ops =3D {
->=20
->  static struct platform_driver sun6i_spi_driver =3D {
->  	.probe	=3D sun6i_spi_probe,
-> -	.remove	=3D sun6i_spi_remove,
-> +	.remove_new =3D sun6i_spi_remove,
->  	.driver	=3D {
->  		.name		=3D "sun6i-spi",
->  		.of_match_table	=3D sun6i_spi_match,
+Garantujeme v=C3=A1m =C5=99e=C5=A1en=C3=AD, kter=C3=A1 jsou =C5=A1etrn=C3=
+=A1 k =C5=BEivotn=C3=ADmu prost=C5=99ed=C3=AD, odoln=C3=A1 a snadno se =C4=
+=8Dist=C3=AD, hygienick=C3=A1, protiskluzov=C3=A1 a bezpe=C4=8Dn=C3=A1 pr=
+o zam=C4=9Bstnance.
+
+Poskytujeme kr=C3=A1tkou dobu instalace a nep=C5=99etr=C5=BEit=C3=BD prov=
+oz i o v=C3=ADkendech a sv=C3=A1tc=C3=ADch, =C4=8D=C3=ADm=C5=BE eliminuje=
+me riziko prostoj=C5=AF.
+
+Mohu V=C3=A1m zdarma nab=C3=ADdnout technick=C3=BD audit podlah s komplex=
+n=C3=ADm rozborem podkladu.
+
+M=C5=AF=C5=BEeme pro v=C3=A1s mluvit o =C5=99e=C5=A1en=C3=ADch?
 
 
-
-
+Luk=C3=A1=C5=A1 Horv=C3=A1th
