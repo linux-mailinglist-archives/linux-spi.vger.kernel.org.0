@@ -2,30 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102766BE417
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 09:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB656BE419
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 09:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjCQIoJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Mar 2023 04:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S231651AbjCQIoL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Mar 2023 04:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjCQInx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 04:43:53 -0400
+        with ESMTP id S231655AbjCQIn4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 04:43:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62526905A
-        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 01:42:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA207B13C
+        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 01:42:49 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pd5fc-0004tL-Oc; Fri, 17 Mar 2023 09:42:40 +0100
+        id 1pd5fc-0004to-Rr; Fri, 17 Mar 2023 09:42:40 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pd5fb-004jZU-TX; Fri, 17 Mar 2023 09:42:39 +0100
+        id 1pd5fc-004jZY-8H; Fri, 17 Mar 2023 09:42:40 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pd5fb-005ZuI-6X; Fri, 17 Mar 2023 09:42:39 +0100
+        id 1pd5fb-005ZuL-EQ; Fri, 17 Mar 2023 09:42:39 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mark Brown <broonie@kernel.org>,
@@ -34,15 +34,15 @@ To:     Mark Brown <broonie@kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@pengutronix.de
-Subject: [PATCH 1/3] spi: atmel-quadspi: Don't leak clk enable count in pm resume
-Date:   Fri, 17 Mar 2023 09:42:30 +0100
-Message-Id: <20230317084232.142257-2-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 2/3] spi: atmel-quadspi: Free resources even if runtime resume failed in .remove()
+Date:   Fri, 17 Mar 2023 09:42:31 +0100
+Message-Id: <20230317084232.142257-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
 References: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=992; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=FFnOWZjupFGGLc/xMfIraPd8mMgiKbUHssyndztqfKg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkFCfp1VrKULqQRBRNVs37gyiSigy7MyCHRqxVA +XdGBJT9DGJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZBQn6QAKCRDB/BR4rcrs CVpQB/9lQWaWk1gE3UPzUT5ZhnMpKRrOVYQiaHgMcD+txbwK2+vwpGVhaqUIQcYK/Iq3CTaEifC TwLL9Lx6Qqx8EiHP9OPDDlrhsWHZzE9OyGzx6fqS+bBsWrFc4YcweKuGmM43WCcHMr64fFGVFy5 zGO49aZip2ujh39U39qw7j+emmGHpsQqUFUBwf9m+IatCoYPHRthWKnQDx4+7SW5kcBKXZqbBQ/ 5XTgR0drFmeFB4cyZk8I+PnWotn7IO+sdc9cNsiEfnWUca9bFcr5YFE9r6f511P8VWgrPJUbywE IxB6Zw7BDtC1FoxZcE/iXs0WrkqGQ7+YKAzNxOiTN1Ek0D3J
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2038; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=wcZEDK6jMK5sZr1RQTMLf3OvBQXFaDeXg787/wcigb4=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkFCfss1jfdAoMEQrEI0C4lHiBRK1/GFtyNKexE 3fBs7v1hA+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZBQn7AAKCRDB/BR4rcrs CQeRB/9pJSiQmrh79W/k7Ts8t5stJ6VTTAZHakpGzwFSCE1/ybXcB6u/CAaTB3DIT69w1w6uU01 8Bi0YvkvSKRRzGLmfGFHf8Q0XMOrjxN7OF/DqdQ5fnau2xsnUinvkiDSAn8tpesWFoQT3vbea83 2XnA4xscr/PRSl6FH2Ycf0HDV4baK1l2CpNqcOKsrQSsc9s3f1vy4y4R4I/u7j4rI6PbxK1IDSB PvkeNxuMkqpw4HlsKFPRyJP+whkwDY7pEjNnZUZXqATBPmOxt95djEPxoRobHxKEClAWWf+Blai 2XXPciX4lHUpqGJjiSRm4Gbq4V4OGpCJ1dTl3NcUDqUjpi31
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -57,35 +57,64 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pm resume call is supposed to enable two clocks. If the second enable
-fails the callback reports failure but doesn't undo the first enable.
+An early error exit in atmel_qspi_remove() doesn't prevent the device
+unbind. So this results in an spi controller with an unbound parent
+and unmapped register space (because devm_ioremap_resource() is undone).
+So using the remaining spi controller probably results in an oops.
 
-So call clk_disable() for the first clock when clk_enable() for the second
-one fails.
+Instead unregister the controller unconditionally and only skip hardware
+access and clk disable.
+
+Also add a warning about resume failing and return zero unconditionally.
+The latter has the only effect to suppress a less helpful error message by
+the spi core.
 
 Fixes: 4a2f83b7f780 ("spi: atmel-quadspi: add runtime pm support")
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/spi/atmel-quadspi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/atmel-quadspi.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index f4632cb07495..0c6f80ddea57 100644
+index 0c6f80ddea57..713a4d6700fd 100644
 --- a/drivers/spi/atmel-quadspi.c
 +++ b/drivers/spi/atmel-quadspi.c
-@@ -786,7 +786,11 @@ static int __maybe_unused atmel_qspi_runtime_resume(struct device *dev)
- 	if (ret)
- 		return ret;
+@@ -706,18 +706,28 @@ static int atmel_qspi_remove(struct platform_device *pdev)
+ 	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
+ 	int ret;
  
--	return clk_enable(aq->qspick);
-+	ret = clk_enable(aq->qspick);
-+	if (ret)
-+		clk_disable(aq->pclk);
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
+-
+ 	spi_unregister_controller(ctrl);
+-	atmel_qspi_write(QSPI_CR_QSPIDIS, aq, QSPI_CR);
 +
-+	return ret;
++	ret = pm_runtime_get_sync(&pdev->dev);
++	if (ret >= 0) {
++		atmel_qspi_write(QSPI_CR_QSPIDIS, aq, QSPI_CR);
++		clk_disable(aq->qspick);
++		clk_disable(aq->pclk);
++	} else {
++		/*
++		 * atmel_qspi_runtime_{suspend,resume} just disable and enable
++		 * the two clks respectively. So after resume failed these are
++		 * off, and we skip hardware access and disabling these clks again.
++		 */
++		dev_warn(&pdev->dev, "Failed to resume device on remove\n");
++	}
++
++	clk_unprepare(aq->qspick);
++	clk_unprepare(aq->pclk);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 
+-	clk_disable_unprepare(aq->qspick);
+-	clk_disable_unprepare(aq->pclk);
+ 	return 0;
  }
  
- static const struct dev_pm_ops __maybe_unused atmel_qspi_pm_ops = {
 -- 
 2.39.2
 
