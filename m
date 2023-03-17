@@ -2,67 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9A56BDAA5
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Mar 2023 22:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562986BE3BD
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 09:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjCPVNO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Mar 2023 17:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S229890AbjCQIfS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Mar 2023 04:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjCPVNO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Mar 2023 17:13:14 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id ECBA5C082F
-        for <linux-spi@vger.kernel.org>; Thu, 16 Mar 2023 14:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=LSCdXHqFoFJAuHDviISOIOwj
-        jChwdBzqWOgpVAltJdLy9w4uGtKrqD1SkGY0LhrKU49UriqK9bEGxqEjvNZ5UpkD
-        dDbVbHNgMAYTlnF46CneA3JbSYPASXxHS7Wg1X5CJFcCwrzfhUddKuCHhNZ+kaXa
-        pYHi/DBr+wW2aGnMEVboujSxF/zwSn6o0g7LijIdZOpWqAGpXsrBh62ujiXTCv0I
-        tATM//RtPf76R0Y+NmhxTwHAcyQCQpTVIyXnrWiurrbnEFbruSpP8ARrOy/hTT9G
-        +gPj2LWp6CCoOtHY5i8D92/3R+N4XJZFJLCx68MIUO+mu3s/bJMOCX/9dK329w==
-Received: (qmail 67537 invoked from network); 15 Mar 2023 02:20:08 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 15 Mar 2023 02:20:08 -0000
+        with ESMTP id S231168AbjCQIei (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 04:34:38 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38B1A1A954;
+        Fri, 17 Mar 2023 01:33:28 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxJYwFJRRkx0sNAA--.19123S3;
+        Fri, 17 Mar 2023 16:29:57 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxT+T_JBRkaXIDAA--.15924S2;
+        Fri, 17 Mar 2023 16:29:55 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v2 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Fri, 17 Mar 2023 16:29:48 +0800
+Message-Id: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 19:20:07 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE.!
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <49ee8a9919fb0d709a11a58148c8fcf8@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxT+T_JBRkaXIDAA--.15924S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWrZFy5KF43GrW8Kw1xGw1ftFb_yoW8JF13pF
+        ZxCa9xCF4UJF4xArs3JrW8Wryfu3yrXr9rJF43t39xZFyDZ34UXF1vqF10yr47AF4avFnF
+        vFyv9Fs3G3WUZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1VWlDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
+
+ .../bindings/spi/loongson,ls-spi.yaml         |  44 ++
+ MAINTAINERS                                   |   7 +
+ drivers/spi/Kconfig                           |  10 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-loongson.c                    | 459 ++++++++++++++++++
+ 5 files changed, 521 insertions(+)
 
 -- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
+2.20.1
 
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
