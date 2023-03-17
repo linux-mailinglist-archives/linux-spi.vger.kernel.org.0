@@ -2,146 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B736BE6D2
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 11:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697976BEBDE
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 15:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjCQKdh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Mar 2023 06:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S231304AbjCQOzw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Mar 2023 10:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCQKdg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 06:33:36 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC0A2CFD7
-        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 03:33:32 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by laurent.telenet-ops.be with bizsmtp
-        id ZNZM290071C8whw01NZMKx; Fri, 17 Mar 2023 11:33:31 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pd7O5-00CXwE-E0;
-        Fri, 17 Mar 2023 11:33:21 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pd7Oi-00FFZ4-Tm;
-        Fri, 17 Mar 2023 11:33:20 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH/RFC] treewide: Fix instantiation of devices in DT overlay
-Date:   Fri, 17 Mar 2023 11:33:18 +0100
-Message-Id: <328e557aaee9d3f5f1bcaf2b8ac2de0e04c4fbb8.1679049188.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        with ESMTP id S230196AbjCQOzv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 10:55:51 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB996150A;
+        Fri, 17 Mar 2023 07:55:22 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id q6so2398219iot.2;
+        Fri, 17 Mar 2023 07:55:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679064921;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rZSOUyuCSrUz5N/H+o+NJ3xKMTNoMLx1KYXhbS5FPY8=;
+        b=L2VIF4k6QktpGYUPEV0jouRq8b9pRbOgVn4Qd9IaRIDqiwTbdN4cc3bOluooiLmuwe
+         36XZ7sHBQTYIxIrs2IPm2AFTJeIcEgB9rONth/TnRnEWL/7BU/3ZmRzrE1q5gHYAx0ev
+         iajVeH3d+/efJx8Y6H8WdbLjf+LtPep955A054hmx4tPjuAuyfnuLM0Yd2MjqPMyCkdx
+         ETrjdyalqnagjhUx+1InYJXPDQUzm2RFPZ1vuPM26KApiw+Rbxhv4qiRFywy2c/Vmyq2
+         qJQAI41JVEUsxWwyL+wKRGL802XsXOKWvhLTK/6+u+2qdiwLom5vInv1drzEskjlyWi8
+         A8Zg==
+X-Gm-Message-State: AO0yUKWkj1I28nglR3Hn1q27IqIYqPj0usRFk9+Ch3+ChkRpltu7eaY9
+        1i/7TT+l86yXezR7weph6rtQK18u1g==
+X-Google-Smtp-Source: AK7set/sCF3qnbQifdlhrYVwSflG6YACrfvZ09Zk1ANk0OtJBbGnh0nPxN5jOUo8s9/w/mhsEXsHbg==
+X-Received: by 2002:a5e:db4b:0:b0:751:df6e:79ba with SMTP id r11-20020a5edb4b000000b00751df6e79bamr1615893iop.5.1679064921584;
+        Fri, 17 Mar 2023 07:55:21 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id g8-20020a6b7608000000b0074c7db1470dsm604027iom.20.2023.03.17.07.55.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 07:55:21 -0700 (PDT)
+Received: (nullmailer pid 2039508 invoked by uid 1000);
+        Fri, 17 Mar 2023 14:55:19 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+In-Reply-To: <20230317082950.12738-2-zhuyinbo@loongson.cn>
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-2-zhuyinbo@loongson.cn>
+Message-Id: <167906278354.1989456.6038971429020823802.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
+Date:   Fri, 17 Mar 2023 09:55:19 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When loading a DT overlay that creates a device, the device is not
-instantiated, unless the DT overlay is unloaded and reloaded again.
 
-Saravana explains:
-  Basically for all overlays (I hope the function is only used for
-  overlays) we assume all nodes are NOT devices until they actually
-  get added as a device. Don't review the code, it's not meant to be :)
+On Fri, 17 Mar 2023 16:29:49 +0800, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../bindings/spi/loongson,ls-spi.yaml         | 44 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> 
 
-Based on a hacky patch by Saravana Kannan, which covered only platform
-and spi devices.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-Link: https://lore.kernel.org/all/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Marked RFC as Saravana said this is an ugly hack.
-Still, this is a regression in v6.3-rc1 that should be fixed.
----
- drivers/bus/imx-weim.c    | 1 +
- drivers/i2c/i2c-core-of.c | 1 +
- drivers/of/dynamic.c      | 1 +
- drivers/of/platform.c     | 1 +
- drivers/spi/spi.c         | 1 +
- 5 files changed, 5 insertions(+)
+yamllint warnings/errors:
 
-diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-index 2a6b4f676458612e..71d8807170fa9f29 100644
---- a/drivers/bus/imx-weim.c
-+++ b/drivers/bus/imx-weim.c
-@@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
- 				 "Failed to setup timing for '%pOF'\n", rd->dn);
- 
- 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-+			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
- 				dev_err(&pdev->dev,
- 					"Failed to create child device '%pOF'\n",
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index bce6b796e04c2ca0..79a0d47010ba0b20 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
- 			return NOTIFY_OK;
- 		}
- 
-+		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		client = of_i2c_register_device(adap, rd->dn);
- 		if (IS_ERR(client)) {
- 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
-diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-index 07d93753b12f5f4d..e311d406b1705306 100644
---- a/drivers/of/dynamic.c
-+++ b/drivers/of/dynamic.c
-@@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
- 	np->sibling = np->parent->child;
- 	np->parent->child = np;
- 	of_node_clear_flag(np, OF_DETACHED);
-+	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
- }
- 
- /**
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *nb,
- 		if (of_node_check_flag(rd->dn, OF_POPULATED))
- 			return NOTIFY_OK;
- 
-+		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		/* pdev_parent may be NULL when no bus platform device */
- 		pdev_parent = of_find_device_by_node(rd->dn->parent);
- 		pdev = of_platform_device_create(rd->dn, NULL,
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 1a65f96fe2aff591..7bd053a32fad1a3c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -4480,6 +4480,7 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
- 			return NOTIFY_OK;
- 		}
- 
-+		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		spi = of_register_spi_device(ctlr, rd->dn);
- 		put_device(&ctlr->dev);
- 
--- 
-2.34.1
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230317082950.12738-2-zhuyinbo@loongson.cn
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
