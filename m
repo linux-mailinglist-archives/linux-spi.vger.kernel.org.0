@@ -2,57 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79DA6BEE1B
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 17:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD9D6BF010
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 18:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjCQQ0z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Mar 2023 12:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S230367AbjCQRpI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Mar 2023 13:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCQQ0x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 12:26:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A04DCF75;
-        Fri, 17 Mar 2023 09:26:51 -0700 (PDT)
+        with ESMTP id S231140AbjCQRow (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 13:44:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB950A5CF
+        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 10:44:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A57460C4F;
-        Fri, 17 Mar 2023 16:26:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E84C433EF;
-        Fri, 17 Mar 2023 16:26:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90CB1B82661
+        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 17:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B58C433D2;
+        Fri, 17 Mar 2023 17:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679070410;
-        bh=CwEEAx/G5OhiLd/eGbnRZjcYdZNmqggCPk6B/V0rcDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=klg2rxiLCzc3qstlsTguGQNYPWf0tgSuYPq4RGOI2/wbwMn6smqAMuCsaKg/jB8cJ
-         uDb5jlhlGivt6vz4/IDuL7phiMarYs1gW1b4P41lEwDCyDLmC3VCLuJqKRlsVL9UdP
-         QFIXR/2DSL8VICE8lQLcrHnqIhIOCMiKYeDbTFMEtHnyheOfkw8QGNdMTWI/+gYBGZ
-         0MLm9LZc01MvGRBxzSccP36734lX03bqZqmN4ELJmdk3ZLTbCCVvb+FXjuq/dt9p50
-         XLpbnUSO9o2g9Us8A5eTKjgaguPmKDF/kyMshKu3qbYx2iXJ4ZkWedX90CpY+K8Av4
-         4CfAYSeePbAJA==
-Date:   Fri, 17 Mar 2023 16:26:45 +0000
+        s=k20201202; t=1679075065;
+        bh=Ke60Wp7AjiuhY7XxwdAZTtvqsKUizAF9JWLIxQtx5Wk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=vCKP/ZB4kCkuLBtqwu+BenUjEHNdkKJycYRtxbTK0KTXP1DnIHkVwiiX4ji0EelGh
+         Vgc7L+StdhGdnBefgstc3f1azQEwUxi4/SVx0mgdlMw7iy1uIDvuzPtXUHpVM5InAg
+         H5IrozAhxSfvHuc0OzTOCAaCHnCPFGYb6VZSTW4Cs5pcAxkIYW8x9hv0Ixz8HRcoO3
+         GtUvHr4RUJPe7rO9aDq/AHGPTKD8nxe9BcwuWuzYVTz3ZLjjgCXmEceWP63nVBrYs+
+         du0pCidzNbsI81MadsOrvFNfbOi6TV1y8qP97oLtamVAyShfiJqYKTksR7iq+5FqDr
+         ZaQOLx7yExxkQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <68b6034f-8305-4854-a4c9-962be988ade7@sirena.org.uk>
-References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
- <20230317082950.12738-3-zhuyinbo@loongson.cn>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de
+In-Reply-To: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
+References: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 0/3] spi: atmel-quadspi: Convert to platform remove
+ callback returning void
+Message-Id: <167907506357.52032.17972055222889817145.b4-ty@kernel.org>
+Date:   Fri, 17 Mar 2023 17:44:23 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zrMJl7KvHhcf2o8H"
-Content-Disposition: inline
-In-Reply-To: <20230317082950.12738-3-zhuyinbo@loongson.cn>
-X-Cookie: Life is like an analogy.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,77 +57,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 17 Mar 2023 09:42:29 +0100, Uwe Kleine-König wrote:
+> this series converts the atmel-quadspi driver to use the .remove_new()
+> callback that doesn't return an int but void. The motivation is to not
+> give driver authors a reason to (wrongly) believe that returning an
+> error code was sensible error handling. In fact the spi core only emits
+> a warning message in this case and otherwise continues as if the return
+> value was zero. This usually yields resource leaks that sometimes can
+> lead to exceptions later on.
+> 
+> [...]
 
---zrMJl7KvHhcf2o8H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Mar 17, 2023 at 04:29:50PM +0800, Yinbo Zhu wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
-> +				     struct spi_device *spi, struct spi_transfer *t)
-> +{
+Thanks!
 
-...
+[1/3] spi: atmel-quadspi: Don't leak clk enable count in pm resume
+      commit: c18bbac353ffed50be134b0a2a059a2bd540c503
+[2/3] spi: atmel-quadspi: Free resources even if runtime resume failed in .remove()
+      commit: 9448bc1dee65f86c0fe64d9dea8b410af0586886
+[3/3] spi: atmel-quadspi: Convert to platform remove callback returning void
+      commit: 4d70dd0a25081bc4e6378d0da4a7c367389df707
 
-> +		loongson_spi->hz = hz;
-> +		loongson_spi->spcr = div_tmp & 3;
-> +		loongson_spi->sper = (div_tmp >> 2) & 3;
-> +		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-This is writing to general chip registers, apparently not per chip
-select ones.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> +static int loongson_spi_setup(struct spi_device *spi)
-> +{
-> +	struct loongson_spi *loongson_spi;
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> +	spin_lock(&loongson_spi->lock);
-> +	loongson_spi_update_state(loongson_spi, spi, NULL);
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-As IIRC I mentioned last time setup() might be called while other
-transfers are happening and therefore shouldn't affect parallel
-operations on other devices.
+Thanks,
+Mark
 
-> +static const struct of_device_id loongson_spi_id_table[] = {
-> +	{ .compatible = "loongson,ls2k-spi", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, loongson_spi_id_table);
-> +
-> +static struct platform_driver loongson_spi_driver = {
-> +	.probe = loongson_spi_platform_probe,
-> +	.driver	= {
-> +		.name	= "loongson-spi",
-> +		.owner	= THIS_MODULE,
-> +		.bus = &platform_bus_type,
-> +		.pm = &loongson_spi_dev_pm_ops,
-> +		.of_match_table = loongson_spi_id_table,
-> +	},
-> +};
-> +
-> +#ifdef CONFIG_PCI
-> +static int loongson_spi_pci_register(struct pci_dev *pdev,
-> +			const struct pci_device_id *ent)
-
-Again as I said last time the two buses should probably be separate
-modules.
-
-Otherwise this looks fine.
-
---zrMJl7KvHhcf2o8H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQUlMQACgkQJNaLcl1U
-h9DOXAf/VDU6yjRFyVKb5HgozUkSGmHX6XY1E0Ewx7g2+gB3FvCpIieLcR2Jaf1t
-cEfkvFNQcL3QMnpFOlhFm0AqU41bHOYATqmI9d8InkuLHlLCo0cnD0xlaWZR520J
-FyYRjIsTc9K78zBQ6gEApxdpLNl+SJMBm+idowd3IIr2mr64g3P5h7tTXQ12NCjD
-7y6hfQ0EKbwW2TXO5Vfho3o8N38fQjbRH8fPrLQyktkhXW9YdKd9uGBo0cYlyv/I
-Dm52x0Bkdg7XIp7RNsAVW0NPBGq+p9pjvBccNXNCpwOASf+tVm70t8eoQw5RfJwA
-prWG7YI8y2+mQ1msWDmT3N84BLTqkg==
-=SVU/
------END PGP SIGNATURE-----
-
---zrMJl7KvHhcf2o8H--
