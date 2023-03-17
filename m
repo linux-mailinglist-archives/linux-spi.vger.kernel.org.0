@@ -2,101 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD9D6BF010
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 18:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADB36BF068
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Mar 2023 19:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjCQRpI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Mar 2023 13:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S229654AbjCQSIX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Mar 2023 14:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCQRow (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 13:44:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB950A5CF
-        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 10:44:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90CB1B82661
-        for <linux-spi@vger.kernel.org>; Fri, 17 Mar 2023 17:44:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B58C433D2;
-        Fri, 17 Mar 2023 17:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679075065;
-        bh=Ke60Wp7AjiuhY7XxwdAZTtvqsKUizAF9JWLIxQtx5Wk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=vCKP/ZB4kCkuLBtqwu+BenUjEHNdkKJycYRtxbTK0KTXP1DnIHkVwiiX4ji0EelGh
-         Vgc7L+StdhGdnBefgstc3f1azQEwUxi4/SVx0mgdlMw7iy1uIDvuzPtXUHpVM5InAg
-         H5IrozAhxSfvHuc0OzTOCAaCHnCPFGYb6VZSTW4Cs5pcAxkIYW8x9hv0Ixz8HRcoO3
-         GtUvHr4RUJPe7rO9aDq/AHGPTKD8nxe9BcwuWuzYVTz3ZLjjgCXmEceWP63nVBrYs+
-         du0pCidzNbsI81MadsOrvFNfbOi6TV1y8qP97oLtamVAyShfiJqYKTksR7iq+5FqDr
-         ZaQOLx7yExxkQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de
-In-Reply-To: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
-References: <20230317084232.142257-1-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 0/3] spi: atmel-quadspi: Convert to platform remove
- callback returning void
-Message-Id: <167907506357.52032.17972055222889817145.b4-ty@kernel.org>
-Date:   Fri, 17 Mar 2023 17:44:23 +0000
+        with ESMTP id S229838AbjCQSIW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Mar 2023 14:08:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7991F489;
+        Fri, 17 Mar 2023 11:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679076499; x=1710612499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0ViB+/nw4P2c/irowIE20WocbpHS3PPfcedJTO4zYL4=;
+  b=oEAjXFsuw2d9jl1nZhRy5RIRcTcfWsWoAmk1qIULPy7EEfTRGkjB+GbE
+   mO6lKT4nE+dTV/CgEMvthy2J7pUSKIGd20i3TlfSqjRDdYr5/XqkAbDuh
+   iC1tHwn4elhO5Tb2I/j5ndsALD1EZWNd3Dsf/5w6C2SBJQztDgtqu5aTU
+   asgAdeMghBHDfZxtg84IaUF6JfKYnGR+ZBjEBDuKY81sOrFpqA0QhJabq
+   5S3YD0iHMnsr4DxhHNMWksJqf3i9QcNnSjuibmbif0c5mNot+7SYafhhv
+   gCMSRTEkvivjjWtEtYrH4BJZLvtaOAaNgfopHOStOmz14rhGfEyoOuYdM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="340684893"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="340684893"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 11:08:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="790827430"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="790827430"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2023 11:08:16 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdEUx-0009WC-2p;
+        Fri, 17 Mar 2023 18:08:15 +0000
+Date:   Sat, 18 Mar 2023 02:07:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <202303180159.1qAKqnp9-lkp@intel.com>
+References: <20230317082950.12738-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317082950.12738-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 17 Mar 2023 09:42:29 +0100, Uwe Kleine-König wrote:
-> this series converts the atmel-quadspi driver to use the .remove_new()
-> callback that doesn't return an int but void. The motivation is to not
-> give driver authors a reason to (wrongly) believe that returning an
-> error code was sensible error handling. In fact the spi core only emits
-> a warning message in this case and otherwise continues as if the return
-> value was zero. This usually yields resource leaks that sometimes can
-> lead to exceptions later on.
-> 
-> [...]
+Hi Yinbo,
 
-Applied to
+I love your patch! Yet something to improve:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc2 next-20230317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230317082950.12738-3-zhuyinbo%40loongson.cn
+patch subject: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi controller
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230318/202303180159.1qAKqnp9-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a532955fcee3d37eb4332cea2b868f74ace0bc72
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
+        git checkout a532955fcee3d37eb4332cea2b868f74ace0bc72
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-[1/3] spi: atmel-quadspi: Don't leak clk enable count in pm resume
-      commit: c18bbac353ffed50be134b0a2a059a2bd540c503
-[2/3] spi: atmel-quadspi: Free resources even if runtime resume failed in .remove()
-      commit: 9448bc1dee65f86c0fe64d9dea8b410af0586886
-[3/3] spi: atmel-quadspi: Convert to platform remove callback returning void
-      commit: 4d70dd0a25081bc4e6378d0da4a7c367389df707
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303180159.1qAKqnp9-lkp@intel.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>> ERROR: modpost: "__udivdi3" [drivers/spi/spi-loongson.ko] undefined!
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
