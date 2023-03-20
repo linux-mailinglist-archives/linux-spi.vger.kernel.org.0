@@ -2,149 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C64D6C1B51
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Mar 2023 17:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC62A6C209E
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Mar 2023 19:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjCTQYa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 20 Mar 2023 12:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S230358AbjCTS7Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Mar 2023 14:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbjCTQYN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Mar 2023 12:24:13 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C67366BB;
-        Mon, 20 Mar 2023 09:17:11 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id r5so13704896qtp.4;
-        Mon, 20 Mar 2023 09:17:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679329029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BU12f+vPMvEhFHISO9GFf1PVW/V1JjwDrJX6/nQgB0M=;
-        b=K1IbLXOnn+ydDKkHR0dQxvbYPinGO3CcobjW6HQJmwQOXWZXQCCm8TdBAMv2BU8mIp
-         Yh2GCLFx2VYQyE8JLcQMuUKklYQsnoGl+/HZOKNad1NXYBL0wTZYZ0+CdYVtzBjbSf/l
-         osueTVVEKWvPy0ILfW+Vx0W8clQ/bEJQrEeXeFNIyOWHBBUXCvKXEgQSF7ZcWoNShZcz
-         PTzEFNyVlmRKMw6U8YHTYWUHuT5qHjRNG/MBxupSK+QaOcWekEjprXMsq6sFmEs1ANuw
-         qA7AbOLLbTJYJ0TAQap1Vy+Y7pZUsHSmwB8K1hW9TD+Ve54bI8la0PFHJV0bV65uv2Si
-         cNHw==
-X-Gm-Message-State: AO0yUKVv3Ng89dTN8te9+ClQ0hIV5vo4OEFKnUPVOfgua3aWmC7DvgH4
-        mblraeeDE3sOAev4szyoSFywbmfSlpQPaA==
-X-Google-Smtp-Source: AK7set8qsrQymzOrUc8HrZbJ6rwg4yYKGU+XhyKYT9eD7tIm3ulgFbIJ9zaSfXKT3BZKAS6773uxHQ==
-X-Received: by 2002:a05:622a:1829:b0:3e2:ccf9:bfa0 with SMTP id t41-20020a05622a182900b003e2ccf9bfa0mr3816568qtc.49.1679329028966;
-        Mon, 20 Mar 2023 09:17:08 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id c9-20020ac853c9000000b003e37dac7eb5sm418013qtq.87.2023.03.20.09.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 09:17:08 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id e194so13773505ybf.1;
-        Mon, 20 Mar 2023 09:17:08 -0700 (PDT)
-X-Received: by 2002:a5b:d0f:0:b0:b3b:6576:b22b with SMTP id
- y15-20020a5b0d0f000000b00b3b6576b22bmr5929917ybp.12.1679329028181; Mon, 20
- Mar 2023 09:17:08 -0700 (PDT)
+        with ESMTP id S230397AbjCTS6z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Mar 2023 14:58:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60694367D8
+        for <linux-spi@vger.kernel.org>; Mon, 20 Mar 2023 11:50:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28005B8109D
+        for <linux-spi@vger.kernel.org>; Mon, 20 Mar 2023 18:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 612E8C433EF;
+        Mon, 20 Mar 2023 18:50:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679338250;
+        bh=o2EILG64CMbwIg1B7Eyv93qV2xgJAhf/DOchQYwZArc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=lj6ZpH7xtGstkLyJCaP4p50sM9MFDBpLPIaSiP9y+UkMvNM7Z+kiC8970ZW2Kffrk
+         oc5acigGWQcLUq8JmCZX2p4UB4SdgPoyFfXYrqK9+dFe/Ox7NpzwM2ehum4+J9b9Uu
+         X2LOmfqQJYWA7bUJhnLSy978Gmpzmjvw+pNgT227VwyPriY15WG5l1M4CqrxmmtAH3
+         PG6msPMVoyPrVLklG2ESzN/3sYQuROy0zUNUwg3C+/dhVoqYAo3PFP2SCoiAqqqH+Y
+         Mssh/Jx21XhOiEaEIaZPq36Ugo+OtKkkLFAYA91eeBfhwI1eSUb11wdj6KOPOoLrL8
+         eoylE+M2DLLfg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de
+In-Reply-To: <20230307211426.2331483-1-u.kleine-koenig@pengutronix.de>
+References: <20230307211426.2331483-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 0/2] spi: sprd: Convert to platform remove callback
+ returning void
+Message-Id: <167933824910.203761.16428038901346444875.b4-ty@kernel.org>
+Date:   Mon, 20 Mar 2023 18:50:49 +0000
 MIME-Version: 1.0
-References: <052af97ecbaa9ba6e0d406883dd3389fa397579a.1678891999.git.geert+renesas@glider.be>
- <20230320160521.GA1771933-robh@kernel.org>
-In-Reply-To: <20230320160521.GA1771933-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Mar 2023 17:16:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX9U+tPfeU1=K-PZd2O=jeFewvJNqarOyNM2ge+vSBa1g@mail.gmail.com>
-Message-ID: <CAMuHMdX9U+tPfeU1=K-PZd2O=jeFewvJNqarOyNM2ge+vSBa1g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: spi: renesas,sh-msiof: Miscellaneous improvements
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+On Tue, 07 Mar 2023 22:14:24 +0100, Uwe Kleine-König wrote:
+> An early error return from a remove callback is usally wrong. In the
+> case of the spi-sprd driver it's not that critical because the skipped
+> steps are mainly undoing the things that a successful runtime-resume
+> would have done.
+> 
+> Still it's cleaner to not exit early and not return an (mostly ignored)
+> error value. The second patch converts to .remove_new (which is the
+> motivation for this series).
+> 
+> [...]
 
-On Mon, Mar 20, 2023 at 5:07 PM Rob Herring <robh@kernel.org> wrote:
-> On Wed, Mar 15, 2023 at 03:54:07PM +0100, Geert Uytterhoeven wrote:
-> > Make "clocks" and "power-domains" required everywhere.
-> > Make "resets" required on R-Car Gen2 and newer (i.e. all but SH-Mobile).
->
-> Breaking the ABI is fine because ???
+Applied to
 
-This does not break the ABI, as all related DTS already have these properties.
-This just aligns the bindings with reality.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > Update the example to match reality:
-> >   - Use interrupt binding definitions instead of hardcoded numbers,
-> >   - Convert to new-style CPG/MSSR bindings,
-> >   - Add missing "power-domains" and "resets" properties.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> >  .../bindings/spi/renesas,sh-msiof.yaml        | 23 +++++++++++++++----
-> >  1 file changed, 19 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> > index 491a695a2deb3b83..00acbbb0f65dcf57 100644
-> > --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> > @@ -149,23 +149,38 @@ required:
-> >    - compatible
-> >    - reg
-> >    - interrupts
-> > +  - clocks
-> > +  - power-domains
-> >    - '#address-cells'
-> >    - '#size-cells'
-> >
-> > +if:
-> > +  not:
-> > +    properties:
-> > +      compatible:
-> > +        contains:
-> > +          const: renesas,sh-mobile-msiof
-> > +then:
-> > +  required:
-> > +    - resets
-> > +
-> >  unevaluatedProperties: false
-> >
-> >  examples:
-> >    - |
-> > -    #include <dt-bindings/clock/r8a7791-clock.h>
-> > -    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    #include <dt-bindings/clock/r8a7791-cpg-mssr.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/power/r8a7791-sysc.h>
-> >
-> >      msiof0: spi@e6e20000 {
-> >          compatible = "renesas,msiof-r8a7791", "renesas,rcar-gen2-msiof";
-> >          reg = <0xe6e20000 0x0064>;
-> > -        interrupts = <0 156 IRQ_TYPE_LEVEL_HIGH>;
-> > -        clocks = <&mstp0_clks R8A7791_CLK_MSIOF0>;
-> > +        interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks = <&cpg CPG_MOD 000>;
-> >          dmas = <&dmac0 0x51>, <&dmac0 0x52>;
-> >          dma-names = "tx", "rx";
-> > +        power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
-> > +        resets = <&cpg 0>;
-> >          #address-cells = <1>;
-> >          #size-cells = <0>;
-> >      };
+Thanks!
 
-Gr{oetje,eeting}s,
+[1/2] spi: sprd: Don't skip cleanup in remove's error path
+      commit: 5cb79889a0bab6832662ec5b8f7d1f0e6e7c25ed
+[2/2] spi: sprd: Convert to platform remove callback returning void
+      commit: 3b74dc8acd5c2e59d4a1988a87d64b08fba56d5f
 
-                        Geert
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
