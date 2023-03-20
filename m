@@ -2,118 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507996C021C
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Mar 2023 14:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468C56C0A4C
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Mar 2023 06:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCSNmk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Mar 2023 09:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S229561AbjCTF6Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Mar 2023 01:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCSNmj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Mar 2023 09:42:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9BC1EBED;
-        Sun, 19 Mar 2023 06:42:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05F63B80B93;
-        Sun, 19 Mar 2023 13:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23062C433D2;
-        Sun, 19 Mar 2023 13:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679233355;
-        bh=XW28SiAdE1y4C0WY0yU92It1pSLjH0atea5xcEjiF5A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9yWFTqLR2JGlBPFzFmDDRQcgN2yR1p/TpStQI6vefWn9mdWXLed/GGB/hV1JyZOL
-         pqTq+DP1B7p1bztMIinDLte9cZKtiXuq1ZLV8SKkxHhROrnZIDZqMtmiX4SEIRS3si
-         wuuaBUVfeWzOl1gvYVfRM082aYX0NT+sjRJLZfgLFX5MzB6FL/sMlA17IanM7mW6gu
-         huZQKNrCTuTtOJ5o3vMsBUEILe7rqBuRTwqmTsLtTfmA7kb3/OMFkyckEhr8p6KHxr
-         l34BhosglXUMcUSQb9MuvosUqtp/upweK8dt8parKWpuRhjFvteU63BPTdvBC8fncn
-         ZtndsjZod/AzA==
-Date:   Sun, 19 Mar 2023 15:42:32 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <20230319134232.wzjvk4ddwqrbexil@kernel.org>
-References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
- <20230302041804.24718-3-kyarlagadda@nvidia.com>
- <01959c869e01075705cd436afa822f2586d0509c.camel@kernel.org>
- <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229496AbjCTF6X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Mar 2023 01:58:23 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C02E19F02
+        for <linux-spi@vger.kernel.org>; Sun, 19 Mar 2023 22:58:22 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so11171835ybl.19
+        for <linux-spi@vger.kernel.org>; Sun, 19 Mar 2023 22:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679291901;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5UZlQUAmu7strlARsPQbQHPgHSDO20yOQ6kUECkItXc=;
+        b=ZGoucMXzkK8RqTMy7kBVUHeV2x3N35UO0fn9jRYc+Wjus9NaoUiSWkJaajLEQfHP3M
+         ju46UGN9iptwq1DJfcGaJnVRvdpuAANsUenZ5jhM+EzRz7v6kbz8UWrXS9vpB84gmRgn
+         7Pt2oHhruERAujOw5jkT+D2jD124DQVdCFLb3VxaMGYeIXMlU3NKl4eXZbKoadiEhl1g
+         840EERPWrEUBTmUt91m1oBAvMO1cpG15MZIV78pnQNzyMP0DEC7bKWgRTA+UIJ8Ypnn0
+         sPn8vV5VJMLc5bR9vdaRFKs5soo4RWPR0TnxJ7OSmGFfKbrSfWPOObbHGmLs7UeXvxsm
+         Bjow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679291901;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5UZlQUAmu7strlARsPQbQHPgHSDO20yOQ6kUECkItXc=;
+        b=b0WUH9BnnS+2Fq75vhvIxhwTBYy/G6wFuXdgNJrAFWqu5ezf6dKdAcuR3ehhLuZCOu
+         vdZpERNA0v9O5z/ezsK9BdOCqdnOVXXA2qt3IF7X8umI+FLq8O18XfSg+0qFz7YUzw2E
+         TIP056Yp9BppS9Svlq2iaPlQF2cJY+4T8rHePzLph1a6oC7XjWhSkTNWmt6pvejavx9L
+         FyClMPpVBtbecv8DadVG0hR57C2Izu64hLpXzo9EE8GvIUQT1nQ7U0FiqJInPKcJYC3Z
+         UKlwjZ8Na5+THg68iFY6zUIFaendZFA5gHj+TsN1I8uXkxz31oKJlN2J8m+cGRbfY1wi
+         qttQ==
+X-Gm-Message-State: AO0yUKVeYkNY9t7KdYMW4gknOZKoTghVzGNx+SSiLbXSdyxy1axvng+K
+        k/uR3CUWrM+z8IQvcyq5RW6cQYn8Uuk/ZQ==
+X-Google-Smtp-Source: AK7set+nCDJUhjO0aH6klS1AcaaKBfdu8k/5XOJdgDGap93IxiuCeVGu10fygFL9aE8M5FdViwz9Q7T2gaqGjA==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a5b:9d0:0:b0:b46:4a5e:365f with SMTP id
+ y16-20020a5b09d0000000b00b464a5e365fmr4714335ybq.8.1679291901466; Sun, 19 Mar
+ 2023 22:58:21 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 05:57:46 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230320055746.2070049-1-joychakr@google.com>
+Subject: [PATCH] spi: dw: Add 32 bpw support to DW DMA Controller
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 03:47:33PM +0000, Krishna Yarlagadda wrote:
-> 
-> > -----Original Message-----
-> > From: Jarkko Sakkinen <jarkko@kernel.org>
-> > Sent: 12 March 2023 03:19
-> > To: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
-> > broonie@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
-> > krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
-> > tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Cc: thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
-> > Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
-> > <ldewangan@nvidia.com>
-> > Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-> > 
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Thu, 2023-03-02 at 09:48 +0530, Krishna Yarlagadda wrote:
-> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16
-> > > len,
-> > > +                        u8 *in, const u8 *out)
-> > > +{
-> > > +       struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > > +       struct spi_controller *ctlr = phy->spi_device->controller;
-> > > +
-> > > +       /*
-> > > +        * TPM flow control over SPI requires full duplex support.
-> > > +        * Send entire message to a half duplex controller to handle
-> > > +        * wait polling in controller.
-> > > +        * Set TPM HW flow control flag..
-> > > +        */
-> > > +       if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > > +               return tpm_tis_spi_hw_flow_transfer(data, addr, len,
-> > > in,
-> > > +                                                   out);
-> > > +       else
-> > > +               return tpm_tis_spi_sw_flow_transfer(data, addr, len,
-> > > in,
-> > > +                                                   out);
-> > > +}
-> > > +
-> > 
-> > Based on the condition, better names would be
-> Though condition is based on half duplex, functions are implementing
-> HW or SW flow of the transfer.
+If DW Controller is capable of 32 bits per word support then SW or DMA
+controller has to write 32bit or 4byte data to the FIFO at a time.
 
-Both are hardwaw flows in the sense that you are controlling a piece of hardware.
+This Patch adds support for AxSize = 4 bytes configuration from dw dma
+driver if n_bytes i.e. number of bytes per write to fifo is 4.
 
-BR, Jarkko
+Signed-off-by: Joy Chakraborty <joychakr@google.com>
+---
+ drivers/spi/spi-dw-dma.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index ababb910b391..7d06ecfdebe1 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -212,6 +212,8 @@ static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+ 		return DMA_SLAVE_BUSWIDTH_1_BYTE;
+ 	else if (n_bytes == 2)
+ 		return DMA_SLAVE_BUSWIDTH_2_BYTES;
++	else if (n_bytes == 4)
++		return DMA_SLAVE_BUSWIDTH_4_BYTES;
+ 
+ 	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+ }
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
