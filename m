@@ -2,44 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E426C5409
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Mar 2023 19:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780186C540A
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Mar 2023 19:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjCVSsC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Mar 2023 14:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S231136AbjCVSsD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Mar 2023 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjCVSsB (ORCPT
+        with ESMTP id S230493AbjCVSsB (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Mar 2023 14:48:01 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D501369CC5;
-        Wed, 22 Mar 2023 11:47:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA8A69CC8
+        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 11:47:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 283EBCE1EA1;
-        Wed, 22 Mar 2023 18:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4EBC433EF;
-        Wed, 22 Mar 2023 18:47:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 080F5CE1EA5
+        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 18:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110E2C433D2;
+        Wed, 22 Mar 2023 18:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679510864;
-        bh=8gRlDYNu0P9XXUL+bHIrct6C6b7x/NDZwwEy5sp45L8=;
+        s=k20201202; t=1679510866;
+        bh=+2RZA89cKvOQHV5vU3irIkWRO2jJEN66Ly6duh6MRes=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XzhFDKL6qxoFFooQnLkjFCUb35RgtI9lVCKfSzzm1mDieqAj/zTP5vhlF6v3SQmY2
-         TJP/N4J7NfCVvi6MDijsqnaqZ4VLMU19cbKiOdVNn687cVAzIDooFlEaKR4ejHIzWJ
-         mKMHkymQmXWTYu/oApuL/nmvXvPTXmdNStdqIDuvlLQLaQZWpQwwOZPltLVTsoLgqn
-         Zv7Ti27Mu9yrRkCwARYUpoxYyIWaKQq5o1ZvtFvVztN6fuYz7CwqjtEBwnFaUJMzJi
-         GheVhFoKZCS4ST677RC7Dr+dICJcMB3a27YYe/voE3mAoGiUwtkhJfSWSTH4VkGjoQ
-         NSPtV9COTosDA==
+        b=aeyHvhi3v16GAU4ZexsGOcQznDRHdQgAM5HCGbYIO1SGwXOxy3LgJye+GX6GcuHj1
+         mxWBRxMTH+a73tV3ThZ0fuhPr52LIykXv3JksE2g5D0TGDsLIcbXpiytSa2mTEKWzO
+         AAxVQaJtR8DLEpZ5OQAgYvtCQ4950Wu4New9EH2FcUhLeUMaCNWSMJVJHXr+8UI1Lk
+         zL3pdPOziOlgfQUp9Iw02opd2AsunHTfCUiPnX29Bd171TJLcVpupeHHZAv2n5UN40
+         5s7cPzrUpPskyf3Rmq/jof/omU49XDYRTccBsF+N2FqURqd7Dd+ctewqo5S5QmTFJt
+         zRN3bkpZAD4XQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230322023101.24490-1-hayashi.kunihiko@socionext.com>
-References: <20230322023101.24490-1-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH] spi: f_ospi: Add missing spi_mem_default_supports_op()
- helper
-Message-Id: <167951086286.1093026.17196294862299360106.b4-ty@kernel.org>
-Date:   Wed, 22 Mar 2023 18:47:42 +0000
+To:     han.xu@nxp.com, haibo.chen@nxp.com
+Cc:     linux-spi@vger.kernel.org, yogeshgaur.83@gmail.com,
+        linux-imx@nxp.com
+In-Reply-To: <20230322090451.3179431-1-haibo.chen@nxp.com>
+References: <20230322090451.3179431-1-haibo.chen@nxp.com>
+Subject: Re: [PATCH 1/2] spi: spi-nxp-fspi: correct the comment for the DLL
+ config
+Message-Id: <167951086432.1093026.7301601571841455888.b4-ty@kernel.org>
+Date:   Wed, 22 Mar 2023 18:47:44 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -53,15 +54,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 22 Mar 2023 11:31:01 +0900, Kunihiko Hayashi wrote:
-> The .supports_op() callback function returns true by default after
-> performing driver-specific checks. Therefore the driver cannot apply
-> the buswidth in devicetree.
+On Wed, 22 Mar 2023 17:04:50 +0800, haibo.chen@nxp.com wrote:
+> Current DLL config is just to use the default setting, this means
+> enable the DLL override mode, and use 1 fixed delay cell in the
+> DLL delay chain, not means "reset" the DLL, so correct this to
+> avoid confuse.
 > 
-> Call spi_mem_default_supports_op() helper to handle the buswidth
-> in devicetree.
 > 
-> [...]
 
 Applied to
 
@@ -69,8 +68,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: f_ospi: Add missing spi_mem_default_supports_op() helper
-      commit: bc43c5ec1a97772269785d19f62d32c91ac5fc36
+[1/2] spi: spi-nxp-fspi: correct the comment for the DLL config
+      commit: 1ab09f1d070c4774175dab95e55d2b72c2a054ab
+[2/2] spi: spi-nxp-fspi: use DLL calibration when clock rate > 100MHz
+      commit: 99d822b3adc4f9af59cefdc6619cb3f64182efed
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
