@@ -2,62 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468DA6C4FBE
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Mar 2023 16:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564F66C4FD4
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Mar 2023 17:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCVPzX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Mar 2023 11:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S229484AbjCVQA2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Mar 2023 12:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCVPzV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Mar 2023 11:55:21 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428E95B43B
-        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 08:55:20 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so6575615wmq.4
-        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 08:55:20 -0700 (PDT)
+        with ESMTP id S229754AbjCVQA0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Mar 2023 12:00:26 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E76545A
+        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 09:00:24 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id h17so17607621wrt.8
+        for <linux-spi@vger.kernel.org>; Wed, 22 Mar 2023 09:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679500519;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+        d=linaro.org; s=google; t=1679500823;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zJTqUefxnpBvO7DIOSS6rnsCqCeH+NolRi/V2K9dxfM=;
-        b=NCdIIOqHzKpbcNsSqbp4T0Wbx9wgB5qslNsVyTS+nBnFKE6zMSOj+9hr19VTdzAoBN
-         RtGV0jlb29PXpNCILxAVWsF159DMzBZZOgdWk1LMJFUs2yNiR+Q9J6VitcqrUMhuotsM
-         1hz1KSf7VIa8OELwy7ZhfATew9lxeSaYmM0mKdpLokGKVUTDO5zADqClO6gGqmlYtGy6
-         PuFA2CgSujK4sqgFPI9EdFX3nXDg8l42rdXgk9dxY8Ryb+b53InDYL7NKLqM+LhW7fb8
-         20IMV2mcBND+7Af5GCKNQn8XVdDmbj8o0PZTcaO+NiV5fA+tazO5oHLYyFybQDjZMB8S
-         wa0w==
+        bh=b1A56twIdd4XdlBDQ/o8uz6vaFh0/U1CPyi1UN3+GrI=;
+        b=ziXK8E/wvSN6p/5FBJRC6CeiEKqO6RkykeFO/BFCiquAcE1xwEpmgdBsP0b9k9LkGe
+         MJLn8PdV/rIj6jeU7DkN9FICKLG5P7nSYucrtEw3UUo0iVyzjsuk0Xe4CNKMWfhlsTvv
+         alfKa4MrwfRxcdT+XVy8cIxUN6FBl1Z3elzCSi3EKqXlmVS+ZCB5OhSbUw7e0whuxGAv
+         4vBx8T7V4eEfNyiwZJ8/JvRv2FxCYPyy3nSZjcmw98qwImaZ1uEgfBaWvpvQZOPhrBi0
+         dFqvicKLRZg9sBRzzbW3lHrxmOciOjKjZ5Uqp2OJ/Vtj0e5L2em0MYotmU5QKoDBWSZe
+         ePIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679500519;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+        d=1e100.net; s=20210112; t=1679500823;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zJTqUefxnpBvO7DIOSS6rnsCqCeH+NolRi/V2K9dxfM=;
-        b=wPxMk9zHxs8nRKIhljirSyQQbU/QPDHkzTmjSy+wJStgxy7AB0hA1V4jv6B6zmbR72
-         UJmC9w/ZG8JdGOoqVXwlhe7a1Ac8eloAq0J2io5tEe6ABP1LyZyIHut/Iq0TxnCb4Aym
-         9fb047j/IoqD/t5oS0LC5tpPVl3tpaeATicBdryEdskIuS5DukILjCtFTvF/nARwB2T9
-         ufUDE9qK6LmB+M5F9uenx7BeOabaLvPYDCoyw0/Wt/tG6hBPOEA6JtyHOYdpYC/OUvJ7
-         vIiwqZ2WgIjq/q4vL/sL4DhXpxfw5/nfOHkIgQq+tiX2WxIpvJ5S7htPjUBQoW3/3jFL
-         oMxQ==
-X-Gm-Message-State: AO0yUKVBPOmzkNhzz1wYyW9eCwG8lV/6i7mhAQHeEx9OInRsIF051trN
-        3cd5ilcHnoEzPwSDoI2dyKJy+w==
-X-Google-Smtp-Source: AK7set/A6xCnkrsudKHQ0e0Y5/lirw38lluwjAT3qhc34uN8OF92RHjxAc1J1NYlLdOJYFUFgLjP0Q==
-X-Received: by 2002:a1c:f311:0:b0:3ed:2a8f:e6dd with SMTP id q17-20020a1cf311000000b003ed2a8fe6ddmr31355wmq.6.1679500518772;
-        Wed, 22 Mar 2023 08:55:18 -0700 (PDT)
+        bh=b1A56twIdd4XdlBDQ/o8uz6vaFh0/U1CPyi1UN3+GrI=;
+        b=PvkqTaAx+PJRjDVFXpWWk4ZJXLfgakLUjAp7cCS82qOJweOmHWXph2xpw+6picsyut
+         qz+Btyqfs0NBSwqmSwdAb7Q+MfxpHyCgpXb4j9lI/aYrsIa25Ujx27Y0LA8wyCRaOE8h
+         8fGx85z20NLMz1ox9HXLfRxlIYKVMz0rB4PO8GSVYifSS6V7IQLzW19eSELkItr2b0OI
+         rvFmEGxwEQLkWm80Hl7a8l0IUDJLX3z5f02WPFyrYLCJGEAA7e95ojbqnnV2B6T5Zzs6
+         l4uXY3KbGZEW8aqZkjfnZ+wCqfocEJPYNYyHjzFzDNtJSEMlsCokNh09/ludE/Mr3FJk
+         U1fw==
+X-Gm-Message-State: AAQBX9d2SujvwNX3pHoiZwRJ0ieMzTnsKi1Iqx+04eT9DNxN6oEnh/T1
+        YAMqgsCBoW8W6A4SCBsDLLTWrA==
+X-Google-Smtp-Source: AKy350bPd3r7zDh6GA3RkT4KF6T12j2TXmukQIC7PsSb5x/WiuAQyTCvWTHYGJRvcxGKZ+SHhO2Esw==
+X-Received: by 2002:adf:e70c:0:b0:2cf:efc7:19ad with SMTP id c12-20020adfe70c000000b002cfefc719admr210428wrm.53.1679500823327;
+        Wed, 22 Mar 2023 09:00:23 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:3606:a601:f273:994a? ([2a01:e0a:982:cbb0:3606:a601:f273:994a])
-        by smtp.gmail.com with ESMTPSA id m16-20020a7bcb90000000b003edf2dc7ca3sm9906939wmi.34.2023.03.22.08.55.17
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm11749524wmg.33.2023.03.22.09.00.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 08:55:18 -0700 (PDT)
-Message-ID: <f173b241-5efd-24a3-de06-647e33a62417@linaro.org>
-Date:   Wed, 22 Mar 2023 16:55:16 +0100
+        Wed, 22 Mar 2023 09:00:22 -0700 (PDT)
+Message-ID: <e3f5751a-9a24-3902-cf31-e621b4cb21ab@linaro.org>
+Date:   Wed, 22 Mar 2023 17:00:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add binding for meson-spifc-a1
+Subject: Re: [PATCH v1 2/2] spi: add support for Meson A1 SPI Flash Controller
+Content-Language: en-US
 To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -70,10 +71,9 @@ Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@sberdevices.ru
 References: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
- <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
-Content-Language: en-US
+ <20230322150458.783901-3-mmkurbanov@sberdevices.ru>
 Organization: Linaro Developer Services
-In-Reply-To: <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
+In-Reply-To: <20230322150458.783901-3-mmkurbanov@sberdevices.ru>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -89,66 +89,105 @@ X-Mailing-List: linux-spi@vger.kernel.org
 Hi,
 
 On 22/03/2023 16:04, Martin Kurbanov wrote:
-> Add YAML devicetree binding for Amlogic Meson A113L (A1 family)
-> SPIFC Driver.
+> This is a driver for the Amlogic Meson SPI flash controller support
+> on A113L SoC.
 > 
 > Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
 > ---
->   .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
->   1 file changed, 42 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+>   drivers/spi/Kconfig              |   7 +
+>   drivers/spi/Makefile             |   1 +
+>   drivers/spi/spi-meson-spifc-a1.c | 444 +++++++++++++++++++++++++++++++
+>   3 files changed, 452 insertions(+)
+>   create mode 100644 drivers/spi/spi-meson-spifc-a1.c
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 3b1c0878bb85..a12452bd1e0c 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -582,6 +582,13 @@ config SPI_MESON_SPIFC
+>   	  This enables master mode support for the SPIFC (SPI flash
+>   	  controller) available in Amlogic Meson SoCs.
+>   
+> +config SPI_MESON_SPIFC_A1
+> +	tristate "Amlogic Meson A113L SPIFC controller"
+
+The title should be "Amlogic Meson A1 SPIFC controller" for coherency.
+
+> +	depends on ARCH_MESON || COMPILE_TEST
+> +	help
+> +	  This enables master mode support for the SPIFC (SPI flash
+> +	  controller) available in Amlogic Meson A113L (A1 family) SoC.
+
+You should write the reverse: available in Amlogic Meson A1 Family (A113L SoC).
+
+> +
+>   config SPI_MICROCHIP_CORE
+>   	tristate "Microchip FPGA SPI controllers"
+>   	depends on SPI_MASTER
+> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> index be9ba40ef8d0..702053970967 100644
+> --- a/drivers/spi/Makefile
+> +++ b/drivers/spi/Makefile
+> @@ -72,6 +72,7 @@ obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
+>   obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
+>   obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
+>   obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
+> +obj-$(CONFIG_SPI_MESON_SPIFC_A1)	+= spi-meson-spifc-a1.o
+>   obj-$(CONFIG_SPI_MICROCHIP_CORE)	+= spi-microchip-core.o
+>   obj-$(CONFIG_SPI_MICROCHIP_CORE_QSPI)	+= spi-microchip-core-qspi.o
+>   obj-$(CONFIG_SPI_MPC512x_PSC)		+= spi-mpc512x-psc.o
+> diff --git a/drivers/spi/spi-meson-spifc-a1.c b/drivers/spi/spi-meson-spifc-a1.c
 > new file mode 100644
-> index 000000000000..5f84063b01f8
+> index 000000000000..213c8b692675
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/amlogic,meson-a1-spifc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/spi/spi-meson-spifc-a1.c
+> @@ -0,0 +1,444 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for Amlogic Meson A113L SPI flash controller (SPIFC)
+
+Same here
+
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + *
+> + * Author: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> + */
 > +
-> +title: Amlogic Meson A113L SPI Flash Controller
+> +#include <linux/clk.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/spi/spi-mem.h>
+> +#include <linux/types.h>
+> +
+> +#define A1_SPIFC_AHB_CTRL_REG		0x0
+> +#define A1_SPIFC_AHB_BUS_EN		BIT(31)
 
-I think it should be "A1 SPI Flash Controller" to be more coherent
+I find the "A1_SPIFC" hard to read, I think you should reverse
+it in all the file into :
+#define SPIFC_A1_...
+and
+static XXX meson_spifc_a1_request to be coherent with the legacy spifc
+driver and spicc driver.
 
+
+<snip>
+
+> +
+> +MODULE_AUTHOR("Martin Kurbanov <mmkurbanov@sberdevices.ru>");
+> +MODULE_DESCRIPTION("Amlogic Meson A113L SPIFC driver");
+
+Same here "Meson A1 SPIFC driver"
+
+> +MODULE_LICENSE("GPL");
+
+Thanks,
 Neil
-
-> +
-> +maintainers:
-> +  - Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson-a1-spifc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/amlogic,a1-clkc.h>
-> +    spi@fd000400 {
-> +          compatible = "amlogic,meson-a1-spifc";
-> +          reg = <0xfd000400 0x290>;
-> +          clocks = <&clkc_periphs CLKID_SPIFC>;
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +    };
 
