@@ -2,48 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539556C6FC7
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0ECB6C6FF1
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 19:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjCWR4p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 13:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S231273AbjCWSFe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 14:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCWR4n (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:56:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA20144B8
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:56:43 -0700 (PDT)
+        with ESMTP id S231263AbjCWSFd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 14:05:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A463DA270;
+        Thu, 23 Mar 2023 11:05:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABAE6B821CB
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 17:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50C03C433D2;
-        Thu, 23 Mar 2023 17:56:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679594200;
-        bh=ZyLjngDoOk+rTVWw1dxp/toWJHhulSRG2N+OB4Y0I6w=;
-        h=Subject:From:Date:To:From;
-        b=euZm3OadcI/vYCeH9vFE/lSdsaqnWcWeznzXf1bDtKiJa3gUl9vhEk5k61o73vXVI
-         eVUh7vHdGVdmM7zYjZ4Bbvjj4RSQrOvJxBApFWDl/ZHCZbndabhFtbNNICcjuaCyt0
-         tZ6C7BEd7e9iFLzTxOY4eJyHvqtJfbvF2RHpjOcaWFcO4VNWpDQuWhM8toe6CTXyTE
-         8pOqHWE6g9xLKkaok4I5BVIjWEzgdvmNkC+AwpFupSvArmA+sy7HvPQWLh6jlm6/ox
-         8BhX0K7awK9lFlWFn0S2ojpthwzEGgFxvdfIKqBYg8AVYmBVqxUs2ZcwTZa00/wYpS
-         XjsMa1sm7zodg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3283BE21ED4;
-        Thu, 23 Mar 2023 17:56:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2888E6284F;
+        Thu, 23 Mar 2023 18:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B43C433D2;
+        Thu, 23 Mar 2023 18:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679594730;
+        bh=0865JfiFypru3FJc8vbsQvn4GQFZBP1qlUEDcWCh/Yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OKs6VHVlxFd3kssyCa5WNZh9bqaD/EUq+z3FJehHT9Sk6YUwbBMf7LWnHIpcaAZ6B
+         XA92fwloEDTSnzwb0ry4iBWzHLPTitwI6Hoy/2hS+t9UPG8VHYM2HIURbcu/taKksj
+         KORCAzG7IAsoFSb4UOJyTAwGqQUjQA5WTda5zDaA=
+Date:   Thu, 23 Mar 2023 19:05:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
+Message-ID: <ZByU4tbhkhnF4kMw@kroah.com>
+References: <20230323172113.1231050-1-xiang.ye@intel.com>
+ <20230323172113.1231050-2-xiang.ye@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <167959420020.21143.11077827121275248178.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 23 Mar 2023 17:56:40 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323172113.1231050-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,16 +60,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v6] Add Intel LJCA device driver (2023-03-23T17:21:07)
-  Superseding: [v5] Add Intel LJCA device driver (2023-03-12T19:04:30):
-    [v5,1/5] usb: Add support for Intel LJCA device
-    [v5,2/5] gpio: Add support for Intel LJCA USB GPIO driver
-    [v5,3/5] i2c: Add support for Intel LJCA USB I2C driver
-    [v5,4/5] spi: Add support for Intel LJCA USB SPI driver
-    [v5,5/5] Documentation: Add ABI doc for attributes of LJCA device
+On Fri, Mar 24, 2023 at 01:21:08AM +0800, Ye Xiang wrote:
+> +config USB_LJCA
+> +	tristate "Intel La Jolla Cove Adapter support"
+> +	select AUXILIARY_BUS
+> +	depends on USB
+> +	help
+> +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
+> +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
+> +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
+> +	  functionality of the device.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called ljca.
 
+That's a very generic name for a USB driver, why not "usb_ljca"?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +struct ljca_dev {
+> +	struct usb_device *udev;
+
+You didn't remove this like you said you would :(
 
