@@ -2,180 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1451D6C6F26
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539556C6FC7
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjCWRcq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 13:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S229881AbjCWR4p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 13:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjCWRcR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:32:17 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200D13844A
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:41 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id dw14so8335180pfb.6
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=atxXW/bb/Kha81+083F6Kw6bAgYeqNPEO1ABZE0wVDw=;
-        b=P8BlZdRlVK88iY7jAdBGyiIJ69nn1tyzqQCBr6btUu6Fv2jM5HvV+pUX6AtfzmXfJR
-         9/wUGRhjF1pCUzZPbLTZggyLHW2Ipo0RGRG9L2EkH2oDSwFogiPxCfZ6stRuN1ZVYV4X
-         6i+o1Y7RiUw+mj+LhDs3s0a2wEGLmwjZCTI4c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=atxXW/bb/Kha81+083F6Kw6bAgYeqNPEO1ABZE0wVDw=;
-        b=SaAgqpEYvB9du2NV+xqerR4J6A/v7ivZ8heBUBMmh1Z2MuPoGL8eMrGdIbsQQJOkpo
-         e9bajh3OiEXF4b1Oqkykhrflg24Vs6ByuYlmXv5rnlbMDeIqupozTZcvrT38En8FNf4z
-         0TdZn+qT/tQA8s7DbjgImvSO5CYK0aI29jwqJ473EKIMnnDyxgTDnKR4maLMBjSGv4cn
-         jqrJgFu2B+GZcdy3zAb5qZyhcJwOvhCRNG1sny3/45K/9xdgR3Y6gwpL61UU5lmGNctI
-         C5YyfhWSPFThAkVi5IbRRhJaaDAcMdcL/FSw73cbmZffICMLboKIkjvLaJXfiBXAAj0J
-         0zkA==
-X-Gm-Message-State: AAQBX9cvFwhW265DaNhZA5yb4A5fdEJZeGVCjOnEjaUysRl9aW/4t/LZ
-        KhEnlkBTTBMYwKGV8zRmXpOZ6Q==
-X-Google-Smtp-Source: AKy350alGRILKGMzdTzgubUmEWdzm9e6AU+vGaekDr5N8UzorD/EQzHiibjnHJ+LjAsbS4cBpBYUfg==
-X-Received: by 2002:a62:5254:0:b0:625:febb:bc25 with SMTP id g81-20020a625254000000b00625febbbc25mr239719pfb.11.1679592699617;
-        Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 14/14] arm64: dts: qcom: sdm845: Fix cheza qspi pin config
-Date:   Thu, 23 Mar 2023 10:30:18 -0700
-Message-Id: <20230323102605.14.I82951106ab8170f973a4c1c7d9b034655bbe2f60@changeid>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
-References: <20230323173019.3706069-1-dianders@chromium.org>
+        with ESMTP id S229796AbjCWR4n (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:56:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA20144B8
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:56:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABAE6B821CB
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 17:56:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 50C03C433D2;
+        Thu, 23 Mar 2023 17:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679594200;
+        bh=ZyLjngDoOk+rTVWw1dxp/toWJHhulSRG2N+OB4Y0I6w=;
+        h=Subject:From:Date:To:From;
+        b=euZm3OadcI/vYCeH9vFE/lSdsaqnWcWeznzXf1bDtKiJa3gUl9vhEk5k61o73vXVI
+         eVUh7vHdGVdmM7zYjZ4Bbvjj4RSQrOvJxBApFWDl/ZHCZbndabhFtbNNICcjuaCyt0
+         tZ6C7BEd7e9iFLzTxOY4eJyHvqtJfbvF2RHpjOcaWFcO4VNWpDQuWhM8toe6CTXyTE
+         8pOqHWE6g9xLKkaok4I5BVIjWEzgdvmNkC+AwpFupSvArmA+sy7HvPQWLh6jlm6/ox
+         8BhX0K7awK9lFlWFn0S2ojpthwzEGgFxvdfIKqBYg8AVYmBVqxUs2ZcwTZa00/wYpS
+         XjsMa1sm7zodg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3283BE21ED4;
+        Thu, 23 Mar 2023 17:56:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167959420020.21143.11077827121275248178.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 23 Mar 2023 17:56:40 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Cheza's SPI flash hookups (qspi) are exactly the same as trogdor's.
-Apply the same solution that's described in the patch ("arm64: dts:
-qcom: sc7180: Fix trogdor qspi pin config")
+Latest series: [v6] Add Intel LJCA device driver (2023-03-23T17:21:07)
+  Superseding: [v5] Add Intel LJCA device driver (2023-03-12T19:04:30):
+    [v5,1/5] usb: Add support for Intel LJCA device
+    [v5,2/5] gpio: Add support for Intel LJCA USB GPIO driver
+    [v5,3/5] i2c: Add support for Intel LJCA USB I2C driver
+    [v5,4/5] spi: Add support for Intel LJCA USB SPI driver
+    [v5,5/5] Documentation: Add ABI doc for attributes of LJCA device
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-I think cheza is only very lightly used today (it was never sold, but
-there are various people still using the dev boards) and I'm not
-personally setup to test this. It's fairly straightforward but has
-only been compile-tested.
 
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi | 34 +++++++++++++++++-----
- arch/arm64/boot/dts/qcom/sdm845.dtsi       |  9 ++++--
- 2 files changed, 34 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index 588165ee74b3..64ad8d1ed433 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -319,8 +319,9 @@ venus_mem: memory@96000000 {
- 
- &qspi {
- 	status = "okay";
--	pinctrl-names = "default";
--	pinctrl-0 = <&qspi_clk &qspi_cs0 &qspi_data01>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data0>, <&qspi_data1>;
-+	pinctrl-1 = <&qspi_sleep>;
- 
- 	flash@0 {
- 		compatible = "jedec,spi-nor";
-@@ -995,16 +996,19 @@ &wifi {
- /* PINCTRL - additions to nodes defined in sdm845.dtsi */
- 
- &qspi_cs0 {
--	bias-disable;
-+	bias-disable;		/* External pullup */
- };
- 
- &qspi_clk {
--	bias-disable;
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
- };
- 
--&qspi_data01 {
--	/* High-Z when no transfers; nice to park the lines */
--	bias-pull-up;
-+&qspi_data0 {
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
-+};
-+
-+&qspi_data1 {
-+	bias-pull-down;
- };
- 
- &qup_i2c3_default {
-@@ -1233,6 +1237,22 @@ pen_rst_l: pen-rst-l-state {
- 		output-high;
- 	};
- 
-+	qspi_sleep: qspi-sleep-state {
-+		pins = "gpio90", "gpio91", "gpio92", "gpio95";
-+
-+		/*
-+		 * When we're not actively transferring we want pins as GPIOs
-+		 * with output disabled so that the quad SPI IP block stops
-+		 * driving them. We rely on the normal pulls configured in
-+		 * the active state and don't redefine them here. Also note
-+		 * that we don't need the reverse (output-enable) in the
-+		 * normal mode since the "output-enable" only matters for
-+		 * GPIO function.
-+		 */
-+		function = "gpio";
-+		output-disable;
-+	};
-+
- 	sdc2_clk: sdc2-clk-state {
- 		pins = "sdc2_clk";
- 		bias-disable;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index aafc7cc7edd8..dce2cb29347b 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2758,8 +2758,13 @@ qspi_cs1: qspi-cs1-state {
- 				function = "qspi_cs";
- 			};
- 
--			qspi_data01: qspi-data01-state {
--				pins = "gpio91", "gpio92";
-+			qspi_data0: qspi-data0-state {
-+				pins = "gpio91";
-+				function = "qspi_data";
-+			};
-+
-+			qspi_data1: qspi-data1-state {
-+				pins = "gpio92";
- 				function = "qspi_data";
- 			};
- 
 -- 
-2.40.0.348.gf938b09366-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
