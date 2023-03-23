@@ -2,271 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613316C6790
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 13:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503046C68BC
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 13:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjCWMEM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 08:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S231217AbjCWMq0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 08:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjCWMDz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 08:03:55 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D99AD39
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 05:02:22 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id e71so24493698ybc.0
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 05:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679572941;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xws43rog4pqkpgitzKHxHfHo5VMOIdj+RfJfT9wN6j8=;
-        b=Mhp314zlKBDNcfgkCX43261VrLBf0tItdWxSa7S/953LgAtxRZReKawc9AasAoJcA5
-         SdRoGlJ3lORTEi/kC1k1ThIxd02Hbg0XuXU7XUgrX8SdT1NMnMv4qGVYShrc9hyrKgkG
-         Cwk26EPfQbGzXnOCXXpKYgH/0ERcRwO9aMfTcfYjl7x4+znHBbMLLczgmO0G3b28zsy1
-         gQ4Da75Jyi6IVY2QFmeAIYYj4Qmmsswn4RUSvWyiAKds+0FBWVDVBFAhi7WvfyXPZ7Qc
-         6AjJ72280QJU66MpGdy2a/1CQI/ryI9udjXgrnvkdvWhGHRCbTXFgGYUMiY9M5ObHPDu
-         an7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679572941;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xws43rog4pqkpgitzKHxHfHo5VMOIdj+RfJfT9wN6j8=;
-        b=cT/0wJQDXdGuvnEZk5RWvlqFmazgJPz/oRP89m4xb6KD+Wg6X8Qk0/tQGKSRjZH4du
-         3rfKf5ekGFuSODa49CScBBW8wuQXqMQmzZRowpKMBlyGtVoroxB6xXg4RzPARYEeTl5d
-         I9U/qO+CcfMsrMVFWu5EYQhIs2CjrmeY92oTIwhlBFwSrg6A1CvdzJIc/x1D9L9M0jlQ
-         cGFlu5J56DkMET6yNZeXYQ7LdyCi4xA03ya21+djsJELGuh8d9MIKsbLCXSeSouLgatz
-         GvUDa3/PAWIZJHyznmpuYc68r51r8K+jWrXA/DtWQ0TuFCfoePkl+Lw4/pQhN2O1csWE
-         57dw==
-X-Gm-Message-State: AAQBX9evLuT239jvfJ8mbi0dFlHAXpWU5EQXUpmlOB9ohZfTnrYpSQif
-        AVfs38H542hjLJZPMqooFSHFs/AIqg51w8zmyH36ppEgfO2JxFEZroJC3ppl
-X-Google-Smtp-Source: AKy350YM9dGzBqBLUMPf5VWZR3UNKydlMnXmMd9fxz4BkVlwSvNuHVKDU6puW/aaeacVBBgrILw3i4wezHZVwH0KaiY=
-X-Received: by 2002:a05:6902:100e:b0:b74:ae90:8fd1 with SMTP id
- w14-20020a056902100e00b00b74ae908fd1mr1744234ybt.8.1679572941298; Thu, 23 Mar
- 2023 05:02:21 -0700 (PDT)
+        with ESMTP id S229904AbjCWMqX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 08:46:23 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF1AA274B2;
+        Thu, 23 Mar 2023 05:46:21 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Cxf80cShxks1IQAA--.24571S3;
+        Thu, 23 Mar 2023 20:46:20 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxlrwbShxkRlgKAA--.1929S3;
+        Thu, 23 Mar 2023 20:46:20 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-3-zhuyinbo@loongson.cn>
+ <68b6034f-8305-4854-a4c9-962be988ade7@sirena.org.uk>
+ <9b7aff76-eff4-3b82-d7af-a723fbf21a32@loongson.cn>
+ <9917d619-1104-4040-bb6f-c564fcf72806@sirena.org.uk>
+ <5c281b1a-b6a7-c62e-6247-5d82ebd5e0d6@loongson.cn>
+ <f7811b40-80a3-4985-b92d-1df3e28a0935@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <2337f45f-c513-1b10-ccfc-766363c5fd02@loongson.cn>
+Date:   Thu, 23 Mar 2023 20:46:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230321115843.2688472-1-joychakr@google.com> <20230321192727.2ts4oabwiktblis3@mobilestation>
-In-Reply-To: <20230321192727.2ts4oabwiktblis3@mobilestation>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Thu, 23 Mar 2023 17:32:09 +0530
-Message-ID: <CAOSNQF3gOSz0z4Vyoh3zNpwaSw5fgWSJxkeimB4QbvFzTzj20g@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: dw: Add 32 bpw support to DW DMA Controller
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f7811b40-80a3-4985-b92d-1df3e28a0935@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8AxlrwbShxkRlgKAA--.1929S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFWUKr47Kr4DGF4DtFyDAwb_yoW8XF4rpF
+        W0qw17WryDJr1Fyw4DKr4DWF90kr1fJw43AFWktF4DAryDXry2qr4jgrs29Fy3AF4xJF1Y
+        qry8WrWruF15ArUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Serge(y),
 
-On Wed, Mar 22, 2023 at 12:57=E2=80=AFAM Serge Semin <fancer.lancer@gmail.c=
-om> wrote:
->
-> On Tue, Mar 21, 2023 at 11:58:43AM +0000, Joy Chakraborty wrote:
-> > If DW Controller is capable of a maximum of 32 bits per word then SW or
-> > DMA controller has to write up to 32bit or 4byte data to the FIFO at a
-> > time.
-> >
->
-> > This Patch adds support for AxSize =3D 4 bytes configuration from dw dm=
-a
->
-> * sorry for referring to the newbie-doc, but please note:
-> https://elixir.bootlin.com/linux/v6.3-rc1/source/Documentation/process/su=
-bmitting-patches.rst#L77
-> and
-> https://elixir.bootlin.com/linux/v6.3-rc1/source/Documentation/process/su=
-bmitting-patches.rst#L94
->
+在 2023/3/21 下午8:08, Mark Brown 写道:
+> On Tue, Mar 21, 2023 at 10:54:32AM +0800, zhuyinbo wrote:
+>> 在 2023/3/20 下午8:52, Mark Brown 写道:
+>>> No, that doesn't help if setup() reconfigures the controller while it's
+>>> doing a transfer.  The issue is that the controller might be put into
+>>> the wrong mode or run at the wrong speed.
+>> sorry, I don't got that why cpu still can call setup's critical region when
+>> cpu call transfer_one to  transfer spi data.
+>> when I added a spin_lock for setup and transfer_one then setup and
+>> transfer_one's critical region cann't be called
+>> simultaneously as I know, because the their lock was same lock.
+> Think what happens if the two SPI devices have different configurations
+> - for example, a different SPI mode.  The register state won't be
+> corrupted but the devices will still end up seeing misconfigured SPI
+> transfers.
 
-Thank you for the point, I will rephrase the commit text.
+I think add following change and that issue what you said will can be 
+fixed,   in addition, the spin_lock
 
-> > driver if n_bytes i.e. number of bytes per write to fifo is 3 or 4.
-> > It also checks to see if the dma controller is capable of satisfying th=
-e
-> > width requirement to achieve a particular bits/word requirement per
-> > transfer.
-> >
-> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> > ---
-> >  drivers/spi/spi-dw-dma.c | 37 ++++++++++++++++++++++++++++++++-----
-> >  drivers/spi/spi-dw.h     |  1 +
-> >  2 files changed, 33 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-> > index ababb910b391..9ac3a1c25e2d 100644
-> > --- a/drivers/spi/spi-dw-dma.c
-> > +++ b/drivers/spi/spi-dw-dma.c
-> > @@ -23,6 +23,8 @@
-> >  #define DW_SPI_TX_BUSY               1
-> >  #define DW_SPI_TX_BURST_LEVEL        16
-> >
-> > +static inline enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_by=
-tes);
-> > +
-> >  static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
-> >  {
-> >       struct dw_dma_slave *s =3D param;
-> > @@ -89,6 +91,16 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *=
-dws)
-> >               dws->dma_sg_burst =3D 0;
-> >  }
-> >
-> > +static void dw_spi_dma_addr_widths_init(struct dw_spi *dws)
-> > +{
-> > +     struct dma_slave_caps tx =3D {0}, rx =3D {0};
-> > +
->
-> > +     dma_get_slave_caps(dws->txchan, &tx);
-> > +     dma_get_slave_caps(dws->rxchan, &rx);
->
-> Even though in this case any dma_get_slave_caps() failure will
-> effectively disable the DMA-based transfers, in general it would be
-> useful to have the dma_get_slave_caps() return value checked and halt
-> further DMA-init in case if it's not zero. In addition to that if the
-> Tx/Rx DMA device doesn't have the DMA_SLAVE capability or DEV2MEM and
-> MEM2DEV direction specified the DMA device won't be suitable for
-> SPI-ing. So further DMA-initialization are pointless in that case too.
-> It's just a general note not obligating or requesting anything since
-> the respective update should have been done in a separate patch
-> anyway.
->
+was also not needed.   Do you think so?
 
-I shall add the checks suggested and put 'dw_spi_dma_addr_widths_init'
-and 'dw_spi_dma_sg_burst_init' in one function.
-I'll break this up into 2 patches in V3.
+@@ -101,8 +101,10 @@ static int loongson_spi_setup(struct spi_device *spi)
+         if (spi->chip_select >= spi->master->num_chipselect)
+                 return -EINVAL;
 
-> > +
->
-> > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_widths;
->
-> Hm, in general the addr-width capabilities can mismatch. But it's very
-> much unlikely since both DMA channels normally belong to the same
-> controller. So I guess we can live with the suggested approach for now
-> but please add a comment above that line about the
-> assumption/limitation it implies.
->
++       loongson_spi->hz = 0;
++       loongson_spi->mode &= SPI_NO_CS;
++
+         spin_lock(&loongson_spi->lock);
+-       loongson_spi_update_state(loongson_spi, spi, NULL);
+         loongson_spi_set_cs(spi, 1);
 
-Even if the address width capabilities mismatch since in dma mode only
-full duplex is done, hence the subset of the capabilities which apply
-to both tx and rx should be applicable.
-I shall put the same as a comment
 
-> > +}
-> > +
-> >  static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws=
-)
-> >  {
-> >       struct dw_dma_slave dma_tx =3D { .dst_id =3D 1 }, *tx =3D &dma_tx=
-;
-> > @@ -128,6 +140,8 @@ static int dw_spi_dma_init_mfld(struct device *dev,=
- struct dw_spi *dws)
-> >
-> >       dw_spi_dma_sg_burst_init(dws);
-> >
-> > +     dw_spi_dma_addr_widths_init(dws);
-> > +
-> >       pci_dev_put(dma_dev);
-> >
-> >       return 0;
-> > @@ -167,6 +181,8 @@ static int dw_spi_dma_init_generic(struct device *d=
-ev, struct dw_spi *dws)
-> >
-> >       dw_spi_dma_sg_burst_init(dws);
-> >
-> > +     dw_spi_dma_addr_widths_init(dws);
-> > +
-> >       return 0;
-> >
-> >  free_rxchan:
-> > @@ -202,18 +218,29 @@ static bool dw_spi_can_dma(struct spi_controller =
-*master,
-> >                          struct spi_device *spi, struct spi_transfer *x=
-fer)
-> >  {
-> >       struct dw_spi *dws =3D spi_controller_get_devdata(master);
->
-> > +     enum dma_slave_buswidth dma_bus_width;
-> >
-> > -     return xfer->len > dws->fifo_len;
-> > +     if (xfer->len > dws->fifo_len) {
-> > +             dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
-> > +             if (dws->dma_addr_widths & BIT(dma_bus_width))
-> > +                     return true;
-> > +     }
-> < newline would have been nice, but...
-> > +     return false;
->
-> on the other hand a level of indentation could be decreased like this:
->
-> +       enum dma_slave_buswidth width;
-> +
-> +       if (xfer->len <=3D dws->fifo_len)
-> +               return false;
-> +
-> +       width =3D dw_spi_dma_convert_width(dws->n_bytes);
-> +
-> +       return !!(dws->dma_addr_widths & BIT(width));
->
-
-Sure, I will restructure this but any reason to use '!!' here ?
-
-> -Serge(y)
->
-> >  }
-> >
-> >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
-> >  {
-> > -     if (n_bytes =3D=3D 1)
-> > +     switch (n_bytes) {
-> > +     case 1:
-> >               return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > -     else if (n_bytes =3D=3D 2)
-> > +     case 2:
-> >               return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > -
-> > -     return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > +     case 3:
-> > +     case 4:
-> > +             return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > +     default:
-> > +             return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > +     }
-> >  }
-> >
-> >  static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 s=
-peed)
-> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> > index 9e8eb2b52d5c..3962e6dcf880 100644
-> > --- a/drivers/spi/spi-dw.h
-> > +++ b/drivers/spi/spi-dw.h
-> > @@ -190,6 +190,7 @@ struct dw_spi {
-> >       struct dma_chan         *rxchan;
-> >       u32                     rxburst;
-> >       u32                     dma_sg_burst;
-> > +     u32                     dma_addr_widths;
-> >       unsigned long           dma_chan_busy;
-> >       dma_addr_t              dma_addr; /* phy address of the Data regi=
-ster */
-> >       const struct dw_spi_dma_ops *dma_ops;
-> > --
-> > 2.40.0.rc1.284.g88254d51c5-goog
-> >
-
-I shall upload a V3 based on these comments.
-
-Thanks
-Joy
