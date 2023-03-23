@@ -2,61 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4B36C62C4
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 10:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06B56C6584
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 11:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjCWJHG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 23 Mar 2023 05:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S231653AbjCWKpt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 06:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbjCWJGl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 05:06:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9735EDD
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 02:05:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pfGsR-0000Sg-9T; Thu, 23 Mar 2023 10:04:55 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pfGsM-0066qa-Rq; Thu, 23 Mar 2023 10:04:50 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pfGsG-0001jK-IS; Thu, 23 Mar 2023 10:04:44 +0100
-Message-ID: <b5bf6c34b57fcfe1f6107e4c36e6198a78aaea79.camel@pengutronix.de>
-Subject: Re: [PATCH v12 14/15] mmc: sdhci-cadence: Support mmc hardware reset
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        with ESMTP id S231657AbjCWKp3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 06:45:29 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2BB38B61;
+        Thu, 23 Mar 2023 03:42:40 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id de37so1122024qkb.7;
+        Thu, 23 Mar 2023 03:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679568158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N1ukCKsDgFcPZFfnc9+1Y2+3qjOHKCSVpyoQBHH5dIk=;
+        b=PNLBOXAIEpdTB9+nVFw/kZ23WIhkGOIWW8FJzIbg3k/L7zUP3/kCBsgDpHJBrvYDoM
+         J1K8dMZOUQohJ8wCutBv6HvLEmsIXb6SP7v4nmSXaXOPSQnM8mmEic9WacVDV/ca5ZmD
+         Iw64nUdxlR0DHPpGyO63E7iZ52nVvTuEaCZWQEtaGmAfO/fzVuBMx4y0c6EskmhzlXrr
+         HEqQqN57t7omtH5xvDih+ooGHG1DV4awMJElYvVtC5goUF+zfGMR/aqihx2C83bVsWjl
+         K6XjKp6qZfhbd76Ahx9umRr5IjQiCEwqhcj3Q0E52/sBZblGGinckBMS9qjowO6zkNHA
+         psIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679568158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N1ukCKsDgFcPZFfnc9+1Y2+3qjOHKCSVpyoQBHH5dIk=;
+        b=MtQXl8uuxcxgEXXrFiCnModpINRqXsx5EKDgChsZDj0etqrDawFUvn3FBoOASQKYwx
+         7zDMCerxtBC5SE4WAOBESGIkfqv+tHbQG01DIy10YP0JQthJpiMpE0nDezg531TegSsb
+         ID1XUe2DTHpjhdKTVW0m3lzmD1OAyCkAsSCIBtxJYdzw6wFbEhAVZok0L8p644xO1I17
+         BGsLTwIKSI0dCvtIA5b0bZhF+CXUvpXq29uqeJf1+s3LJkr35AvXzaNafiTpNLytf1nY
+         dEj4uzHEpl4Jv7QZRL0mzfspxfKdJRPiXHGO3J+hLurmtLnOAWK9fWFulTKs41r+1AFB
+         AQ+g==
+X-Gm-Message-State: AO0yUKXJeCFXWWKKY4i5cBn0L1KDkCVmo9JUWj9d9kXydiXbNMZYshrb
+        zSFeWZ94Bwq1qYP3BnLqeV5H2TQnqWjwR5sY8rE=
+X-Google-Smtp-Source: AK7set/uZCTBlSBdj0bNaxo/NWlc3GzK+9sX4uUPNBStnSnEqu0bsF9ELXNisHDidQhcGE23OETguUN4F+LqRkXaiHY=
+X-Received: by 2002:a37:a9d0:0:b0:743:9b78:d97e with SMTP id
+ s199-20020a37a9d0000000b007439b78d97emr1439983qke.14.1679568158542; Thu, 23
+ Mar 2023 03:42:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230323000657.28664-1-blarson@amd.com> <20230323000657.28664-14-blarson@amd.com>
+In-Reply-To: <20230323000657.28664-14-blarson@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Mar 2023 12:42:02 +0200
+Message-ID: <CAHp75VfRr_O2=vr4-5dG0nUpkCXPHtxD2z7tP-ryMM8N+RNv_g@mail.gmail.com>
+Subject: Re: [PATCH v12 13/15] mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
         brendan.higgins@linux.dev, briannorris@chromium.org,
         brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
         davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
         krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
         lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Date:   Thu, 23 Mar 2023 10:04:44 +0100
-In-Reply-To: <20230323000657.28664-15-blarson@amd.com>
-References: <20230323000657.28664-1-blarson@amd.com>
-         <20230323000657.28664-15-blarson@amd.com>
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1+deb11u1 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,17 +81,55 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mi, 2023-03-22 at 17:06 -0700, Brad Larson wrote:
-> Add support for mmc hardware reset using a reset-controller
-> that would need to be enabled in the device tree with
-> a supporting driver.  The default is disabled for all
-> existing designs.
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+On Thu, Mar 23, 2023 at 2:10=E2=80=AFAM Brad Larson <blarson@amd.com> wrote=
+:
+>
+> Add support for AMD Pensando Elba SoC which explicitly
+> controls byte-lane enables on writes.
+>
+> Select MMC_SDHCI_IO_ACCESSORS for MMC_SDHCI_CADENCE which
+> allows Elba SoC sdhci_elba_ops to overwrite the SDHCI
+> IO memory accessors
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+> +/* Elba control register bits [6:3] are byte-lane enables */
+> +#define ELBA_BYTE_ENABLE_MASK(x)       ((x) << 3)
 
 
-regards
-Philipp
+> +static void elba_priv_writel(struct sdhci_cdns_priv *priv, u32 val,
+> +                            void __iomem *reg)
+> +{
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&priv->wrlock, flags);
+> +       writel(ELBA_BYTE_ENABLE_MASK(0xf), priv->ctl_addr);
+
+GENMASK(3, 0) ?
+
+> +       writel(val, reg);
+> +       spin_unlock_irqrestore(&priv->wrlock, flags);
+> +}
+
+...
+
+> +       byte_enables =3D GENMASK(1, 0) << (reg & 0x3);
+
+   unsigned u32 shift =3D reg & GENMASK(1, 0);
+
+   byte_enables =3D GENMASK(1, 0) << shift;
+
+?
+
+...
+
+> +       byte_enables =3D BIT(0) << (reg & 0x3);
+
+In a similar way?
+
+   unsigned u32 shift =3D reg & GENMASK(1, 0);
+
+   byte_enables =3D BIT(0) << shift;
+
+--=20
+With Best Regards,
+Andy Shevchenko
