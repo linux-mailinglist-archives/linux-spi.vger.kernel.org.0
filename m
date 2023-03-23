@@ -2,206 +2,271 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2C36C676E
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 13:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613316C6790
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 13:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjCWMAs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 08:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S231597AbjCWMEM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 08:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjCWMAc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 08:00:32 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040D836FD2;
-        Thu, 23 Mar 2023 04:59:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PS6PgHh8kMM6ThdUv+q/+h6ul/YVP9yHZMn4w0eXfnNn+m3A8GsxKO6gVig1i3Z/SsqCCmFk6xJNU2RjLapEi8u9i6Knh6seya2iiA9nMlt777rkcB9nhr5y5NIPPEmwLQJmk18RUkVjYFpBoC07xuqXPw5jQKu6owt6XsyOkp0xLism3i33LZfw+oZk4Q2yC943xBYjLcSHCwq3oyE9F2zXmjyCbNT8ZhbeQ9aGocYnKeyNg/l+1a074DIcvlkMLOEvisZSlMrgbpW0YdiTGqdvBjmybp6WSU/i+VDYHkTng0TIlNdB2YMOoPLGV2vuw1GdO3JgcH9ExUeCDT+hjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EZYbs8XzBc+zE7j1FhonOlFoL+2WoCjAN26XsFT3568=;
- b=MgzT5e7MBeYcz3zhr9+shxyEQJzOsQ+jMXxZLsbglJyZzIRUTxfV0+m4yBWEv//p9mDmZN6WnsK5Qbr50S0L7cYIYdPzqb0yeVzUDG93daO0TwdrH1fbINLmsMVfNzrxUb6mUDLIZ7hZpdAaWQVQz1yvug/9Zz64lVph2Vw9ANE1m4DP9kRNdcgP4s2KjTX4aJonqPGNFT1oKjmOnQUNu3QnguBoU5+K27iVo+AoXW/yBQ06tX+0Hv3zLQujt6jvgKsIzZhSokfhr3NM8+vFuwwNuHJIN/K+HbbyyNU/y8wRvHKg240VNAtmLQIz7YjW8qhnTpbgN0kD6OcVCqgDzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EZYbs8XzBc+zE7j1FhonOlFoL+2WoCjAN26XsFT3568=;
- b=Rzd+nmjj0Y5ev+br9qnx32lDIeT96MyfriTOQ88W3CWBN9TrRT8/cUwRgplEBxK0E75UX3dqJElc7wKVHhHmgnpH4tzBKs3a5fHlLDr/3Fek5zKbXLS8yTjTcSB4MCfOSra1xLAmdr4sgaCHvcr1SnxnxsIRzUhIhaPGH9xyG1YwzI5rF9OxBK9l/toMkGbq0OglcYd1Hvs1l1JeLYkaXaKlEU36k+NSke1aLc81uoXHZSs38I5UeBEBYWIhyx3BYxyW9Up3qNSghv3CLxNhmq9DU7Z/iSe6R7ym0hr9G/SwgTupMw6Ad8Xa8NR0yYFoniEPJjXGecq1eH3n/7IVEg==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- CH3PR12MB8583.namprd12.prod.outlook.com (2603:10b6:610:15f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 11:59:02 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
- 11:59:02 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: RE: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-Thread-Topic: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-Thread-Index: AQHZTL4LmmU2weVzlkGZavw5z7vfj672LROAgAXjllCABicqAIAGLCsQ
-Date:   Thu, 23 Mar 2023 11:59:01 +0000
-Message-ID: <DM4PR12MB57699E524BF3CAF642AE3E56C3879@DM4PR12MB5769.namprd12.prod.outlook.com>
-References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
- <20230302041804.24718-3-kyarlagadda@nvidia.com>
- <01959c869e01075705cd436afa822f2586d0509c.camel@kernel.org>
- <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
- <20230319134232.wzjvk4ddwqrbexil@kernel.org>
-In-Reply-To: <20230319134232.wzjvk4ddwqrbexil@kernel.org>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|CH3PR12MB8583:EE_
-x-ms-office365-filtering-correlation-id: e688547e-3951-42c9-0c24-08db2b95fe52
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TL7Mi1S+/qX+X/GKtK0XhUqYPdpE1A3yfpiAb/aaNBjcUd6S4QZETTyFOwBQ1TS9guwWswDoDLD4VUd0zYb2DmYhdC5BbqF90q3YFAQDv4Eipid6ZNnoopq7bJy7GtV73rttfw8WLhjOdTGmJv0uPtaTr/CNN5r4jU980b7dUzEaNE5OGx/npTRa7L5suIdpIiI6m3+4Ds5R8vYX49uza6SpOiDtch6gZmQPv4adphLwn2JRu1wGIboHJfwPn7O7pQEcVL2UsgrGQlj8fI/9ptepcov80UY1OCg0SHIhFk5lRCV6pU9s/cFw67W8WfCzd+BdnHXo+taRatOtu2gOyDY3I6k7SYAKByYXAptgFyeWZ2u2I2maYXkAlz5PIcXfRswq76H1qeAVxGMJNsgo8flKjt2TZOySFfLRxZdzU35ex3peiSobB5yyX2GcJ8hXEXMmjF5HcyGbFYy1MfqkLZGB0s5QD1BWEG9HdgeNRvb4mbKceCCDiF8jqjnDBWvJx1ltE6GyaU1i6GwIakr5EvGm1UwnacS1PW+NWQHP54aWAFYbhg8HjXS/z3ka2gmOuRLvdJEiUvkyHgJcjHPkr+gbf8TOKVmJjODqpSyGbfEhaqEblakb3vW78Gt6JinJF9c6h/qV8Xnz+9nhFS/MqNS4z3K6rQFVJHKhxIJqMbdT0VaXyIuHUo/D8VbjZPcSlxsWEjq+SZGP7HMKCpY3Qw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(39860400002)(346002)(376002)(136003)(451199018)(186003)(53546011)(26005)(6506007)(107886003)(83380400001)(55016003)(86362001)(38070700005)(33656002)(38100700002)(122000001)(9686003)(5660300002)(7416002)(52536014)(8936002)(6916009)(8676002)(64756008)(66476007)(4326008)(71200400001)(66556008)(66446008)(66946007)(76116006)(54906003)(41300700001)(478600001)(316002)(2906002)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XL63WvwD3mhlXucgEG25sc7T5/AfOYsupEQgr2Oywj/FyVxgGUPGaxHa/Fqo?=
- =?us-ascii?Q?qH//OLf92HUJ0dGatnH25tUZOYiM2mP0ZrH2/kndjDG8L/xkZEyuzyN8JtxH?=
- =?us-ascii?Q?47vXFoOS7vdGDwV9nDf3i+bF6JG4ckh0vrDJ6C/At8zCpTjaeb/UZwryEbQr?=
- =?us-ascii?Q?esTW3DRbDmlJM5hETM0WlaDcRzE5rsEEU5Ni56PBb5NrAE9WhWaMn7Iow+3i?=
- =?us-ascii?Q?siWl0q4L3QLhQPo5pioYO2OagCyaZ4KBXZKmhq/zFH2/u2pRG8awKqMIpA1P?=
- =?us-ascii?Q?eupNh0wFAdoempeGUiDrH9VITuZcch1LKid0i9BRjaKi003azcdxWExtlYJx?=
- =?us-ascii?Q?qQb90rzN4E++3qZdLOzKAvAGYlRhf8+QzifYoTsErfkxAbLQ6y7Npq4/BxJ2?=
- =?us-ascii?Q?DCnWAuWeZ3WfGolhyVCpTm69b721TL8kfD7pin7sM32QPyM8KIXbs47tjPOC?=
- =?us-ascii?Q?npTz/0SAtFJrcLYzEayU0+Jqmhz3s42UnW3UaTJF5IBBHCUZMIbOTWIzhZuD?=
- =?us-ascii?Q?UY9j8Qw5MPYqab8S0QyI+YtfKJFhrw/ewYHUConuZmA+IvxPzdQIRNB9IJZg?=
- =?us-ascii?Q?grFnL05N4MYUXA+r59ydQl9+9NiwKaUXp4H19HigofRdSu8cQ1p+wbU+7mI5?=
- =?us-ascii?Q?mvKcSz1aWXy+WjwABVtyswLITShhRC9z4FTVlVy5GqLLr2DuFkK2AuSoYuYD?=
- =?us-ascii?Q?2jcNPrWp4v9/D4w80zbo3dbLfVzKpiKMy8FKZvW+fPWy+/YTNpklxyiN6Kj2?=
- =?us-ascii?Q?q5wiM07hz/Ob1W/kfzdkFH+RUtxotnv5iOx4N5VPleVZYqZtz3mSf0a4/Ny0?=
- =?us-ascii?Q?K08enyZKQpKzNJ63g/bW7GOVxDUUo90+mZun2rOZBqzF6SZSCoP2O0+kdXTI?=
- =?us-ascii?Q?WKrV9LNka7c+RXAP4wSVNlZev87Idyi5QsebWrM2/WoylkUHY/F92CpVIMBI?=
- =?us-ascii?Q?dfgzhQkgBq5oTurx+X33dAJM27Dp2TTC3kd49/Ynp5HMSeJORkNxWQUjOJce?=
- =?us-ascii?Q?hO0cFkUEjYnmCvYEGKr5njMd/VdV0vqFYSTESx/cu0CI6gck1Mk/AYEGbezb?=
- =?us-ascii?Q?q97+ynj2UR0cj1nU3khx1B4RO6Lj0N+SqMi24AyEQggjG/8mBNjVoOFNydG2?=
- =?us-ascii?Q?YNRsqKxnHKwuI4+AuThTiaVZMbvxUznL1Dq4W7ZesLiA33i2wFv/kqPuAefx?=
- =?us-ascii?Q?CeHg7NH2Lqv9D7W/Z+nSYg556afaRSsOp0g7E+YkEv8l8CWHRcTMTAO8Ij+l?=
- =?us-ascii?Q?OXU8TYxywfNHeS1a4G99BElzkNXRRmSw2DzTdsns/S19UXE8tXd/VpdVUJzX?=
- =?us-ascii?Q?LT57wBwcdybGNiTqh5T30N1QAJA+lPyAlcJdIP0h/q+ha7RaCfp0LiKHq+Ey?=
- =?us-ascii?Q?F/bQs9SSeHyEk5MU82rOhCyrioNmeaz+JFUpg9qdMZUJX2Lw4BV86hPGlHhx?=
- =?us-ascii?Q?4FfBomHy/l5WDrt6W9/EsCuWr2bjNUT9k64KTN+nXxdsBnN211z5ffAcXEbL?=
- =?us-ascii?Q?/v/OUfShtEcxjpolqHS3oQnxXGOyv5Qb7DvF23lx0fKb3PUj40PT1BW1zlM9?=
- =?us-ascii?Q?q1FXXxg0C8s5Lshw0zxx12fX8RiEUEdUYth5b8c8?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231157AbjCWMDz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 08:03:55 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D99AD39
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 05:02:22 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id e71so24493698ybc.0
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 05:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679572941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xws43rog4pqkpgitzKHxHfHo5VMOIdj+RfJfT9wN6j8=;
+        b=Mhp314zlKBDNcfgkCX43261VrLBf0tItdWxSa7S/953LgAtxRZReKawc9AasAoJcA5
+         SdRoGlJ3lORTEi/kC1k1ThIxd02Hbg0XuXU7XUgrX8SdT1NMnMv4qGVYShrc9hyrKgkG
+         Cwk26EPfQbGzXnOCXXpKYgH/0ERcRwO9aMfTcfYjl7x4+znHBbMLLczgmO0G3b28zsy1
+         gQ4Da75Jyi6IVY2QFmeAIYYj4Qmmsswn4RUSvWyiAKds+0FBWVDVBFAhi7WvfyXPZ7Qc
+         6AjJ72280QJU66MpGdy2a/1CQI/ryI9udjXgrnvkdvWhGHRCbTXFgGYUMiY9M5ObHPDu
+         an7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679572941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xws43rog4pqkpgitzKHxHfHo5VMOIdj+RfJfT9wN6j8=;
+        b=cT/0wJQDXdGuvnEZk5RWvlqFmazgJPz/oRP89m4xb6KD+Wg6X8Qk0/tQGKSRjZH4du
+         3rfKf5ekGFuSODa49CScBBW8wuQXqMQmzZRowpKMBlyGtVoroxB6xXg4RzPARYEeTl5d
+         I9U/qO+CcfMsrMVFWu5EYQhIs2CjrmeY92oTIwhlBFwSrg6A1CvdzJIc/x1D9L9M0jlQ
+         cGFlu5J56DkMET6yNZeXYQ7LdyCi4xA03ya21+djsJELGuh8d9MIKsbLCXSeSouLgatz
+         GvUDa3/PAWIZJHyznmpuYc68r51r8K+jWrXA/DtWQ0TuFCfoePkl+Lw4/pQhN2O1csWE
+         57dw==
+X-Gm-Message-State: AAQBX9evLuT239jvfJ8mbi0dFlHAXpWU5EQXUpmlOB9ohZfTnrYpSQif
+        AVfs38H542hjLJZPMqooFSHFs/AIqg51w8zmyH36ppEgfO2JxFEZroJC3ppl
+X-Google-Smtp-Source: AKy350YM9dGzBqBLUMPf5VWZR3UNKydlMnXmMd9fxz4BkVlwSvNuHVKDU6puW/aaeacVBBgrILw3i4wezHZVwH0KaiY=
+X-Received: by 2002:a05:6902:100e:b0:b74:ae90:8fd1 with SMTP id
+ w14-20020a056902100e00b00b74ae908fd1mr1744234ybt.8.1679572941298; Thu, 23 Mar
+ 2023 05:02:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e688547e-3951-42c9-0c24-08db2b95fe52
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2023 11:59:01.9656
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ubhFJD44hiJwcaKXz11CYTcXCinuUJQcJ5uMuIrYu/1ynoAA3iMZ50HvS/mN7Jt/QyAWxwM3T83+IzXpwdeW4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8583
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230321115843.2688472-1-joychakr@google.com> <20230321192727.2ts4oabwiktblis3@mobilestation>
+In-Reply-To: <20230321192727.2ts4oabwiktblis3@mobilestation>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Thu, 23 Mar 2023 17:32:09 +0530
+Message-ID: <CAOSNQF3gOSz0z4Vyoh3zNpwaSw5fgWSJxkeimB4QbvFzTzj20g@mail.gmail.com>
+Subject: Re: [PATCH v2] spi: dw: Add 32 bpw support to DW DMA Controller
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> -----Original Message-----
-> From: Jarkko Sakkinen <jarkko@kernel.org>
-> Sent: 19 March 2023 19:13
-> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> Cc: robh+dt@kernel.org; broonie@kernel.org; peterhuewe@gmx.de;
-> jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.or=
-g;
-> linux-tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>; Sowjanya Komatineni
-> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Wed, Mar 15, 2023 at 03:47:33PM +0000, Krishna Yarlagadda wrote:
+Hi Serge(y),
+
+On Wed, Mar 22, 2023 at 12:57=E2=80=AFAM Serge Semin <fancer.lancer@gmail.c=
+om> wrote:
+>
+> On Tue, Mar 21, 2023 at 11:58:43AM +0000, Joy Chakraborty wrote:
+> > If DW Controller is capable of a maximum of 32 bits per word then SW or
+> > DMA controller has to write up to 32bit or 4byte data to the FIFO at a
+> > time.
 > >
-> > > -----Original Message-----
-> > > From: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Sent: 12 March 2023 03:19
-> > > To: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
-> > > broonie@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
-> > > krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
-> > > tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org
-> > > Cc: thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>;
-> > > Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
-> > > <ldewangan@nvidia.com>
-> > > Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
-> > >
-> > > External email: Use caution opening links or attachments
-> > >
-> > >
-> > > On Thu, 2023-03-02 at 09:48 +0530, Krishna Yarlagadda wrote:
-> > > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16
-> > > > len,
-> > > > +                        u8 *in, const u8 *out)
-> > > > +{
-> > > > +       struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> > > > +       struct spi_controller *ctlr =3D phy->spi_device->controller=
-;
-> > > > +
-> > > > +       /*
-> > > > +        * TPM flow control over SPI requires full duplex support.
-> > > > +        * Send entire message to a half duplex controller to handl=
+>
+> > This Patch adds support for AxSize =3D 4 bytes configuration from dw dm=
+a
+>
+> * sorry for referring to the newbie-doc, but please note:
+> https://elixir.bootlin.com/linux/v6.3-rc1/source/Documentation/process/su=
+bmitting-patches.rst#L77
+> and
+> https://elixir.bootlin.com/linux/v6.3-rc1/source/Documentation/process/su=
+bmitting-patches.rst#L94
+>
+
+Thank you for the point, I will rephrase the commit text.
+
+> > driver if n_bytes i.e. number of bytes per write to fifo is 3 or 4.
+> > It also checks to see if the dma controller is capable of satisfying th=
 e
-> > > > +        * wait polling in controller.
-> > > > +        * Set TPM HW flow control flag..
-> > > > +        */
-> > > > +       if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > > > +               return tpm_tis_spi_hw_flow_transfer(data, addr, len=
-,
-> > > > in,
-> > > > +                                                   out);
-> > > > +       else
-> > > > +               return tpm_tis_spi_sw_flow_transfer(data, addr, len=
-,
-> > > > in,
-> > > > +                                                   out);
-> > > > +}
-> > > > +
-> > >
-> > > Based on the condition, better names would be
-> > Though condition is based on half duplex, functions are implementing
-> > HW or SW flow of the transfer.
->=20
-> Both are hardwaw flows in the sense that you are controlling a piece of
-> hardware.
->=20
-> BR, Jarkko
-Yes. I will push new version with naming suggested.
-KY
+> > width requirement to achieve a particular bits/word requirement per
+> > transfer.
+> >
+> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > ---
+> >  drivers/spi/spi-dw-dma.c | 37 ++++++++++++++++++++++++++++++++-----
+> >  drivers/spi/spi-dw.h     |  1 +
+> >  2 files changed, 33 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> > index ababb910b391..9ac3a1c25e2d 100644
+> > --- a/drivers/spi/spi-dw-dma.c
+> > +++ b/drivers/spi/spi-dw-dma.c
+> > @@ -23,6 +23,8 @@
+> >  #define DW_SPI_TX_BUSY               1
+> >  #define DW_SPI_TX_BURST_LEVEL        16
+> >
+> > +static inline enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_by=
+tes);
+> > +
+> >  static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
+> >  {
+> >       struct dw_dma_slave *s =3D param;
+> > @@ -89,6 +91,16 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *=
+dws)
+> >               dws->dma_sg_burst =3D 0;
+> >  }
+> >
+> > +static void dw_spi_dma_addr_widths_init(struct dw_spi *dws)
+> > +{
+> > +     struct dma_slave_caps tx =3D {0}, rx =3D {0};
+> > +
+>
+> > +     dma_get_slave_caps(dws->txchan, &tx);
+> > +     dma_get_slave_caps(dws->rxchan, &rx);
+>
+> Even though in this case any dma_get_slave_caps() failure will
+> effectively disable the DMA-based transfers, in general it would be
+> useful to have the dma_get_slave_caps() return value checked and halt
+> further DMA-init in case if it's not zero. In addition to that if the
+> Tx/Rx DMA device doesn't have the DMA_SLAVE capability or DEV2MEM and
+> MEM2DEV direction specified the DMA device won't be suitable for
+> SPI-ing. So further DMA-initialization are pointless in that case too.
+> It's just a general note not obligating or requesting anything since
+> the respective update should have been done in a separate patch
+> anyway.
+>
+
+I shall add the checks suggested and put 'dw_spi_dma_addr_widths_init'
+and 'dw_spi_dma_sg_burst_init' in one function.
+I'll break this up into 2 patches in V3.
+
+> > +
+>
+> > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_widths;
+>
+> Hm, in general the addr-width capabilities can mismatch. But it's very
+> much unlikely since both DMA channels normally belong to the same
+> controller. So I guess we can live with the suggested approach for now
+> but please add a comment above that line about the
+> assumption/limitation it implies.
+>
+
+Even if the address width capabilities mismatch since in dma mode only
+full duplex is done, hence the subset of the capabilities which apply
+to both tx and rx should be applicable.
+I shall put the same as a comment
+
+> > +}
+> > +
+> >  static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws=
+)
+> >  {
+> >       struct dw_dma_slave dma_tx =3D { .dst_id =3D 1 }, *tx =3D &dma_tx=
+;
+> > @@ -128,6 +140,8 @@ static int dw_spi_dma_init_mfld(struct device *dev,=
+ struct dw_spi *dws)
+> >
+> >       dw_spi_dma_sg_burst_init(dws);
+> >
+> > +     dw_spi_dma_addr_widths_init(dws);
+> > +
+> >       pci_dev_put(dma_dev);
+> >
+> >       return 0;
+> > @@ -167,6 +181,8 @@ static int dw_spi_dma_init_generic(struct device *d=
+ev, struct dw_spi *dws)
+> >
+> >       dw_spi_dma_sg_burst_init(dws);
+> >
+> > +     dw_spi_dma_addr_widths_init(dws);
+> > +
+> >       return 0;
+> >
+> >  free_rxchan:
+> > @@ -202,18 +218,29 @@ static bool dw_spi_can_dma(struct spi_controller =
+*master,
+> >                          struct spi_device *spi, struct spi_transfer *x=
+fer)
+> >  {
+> >       struct dw_spi *dws =3D spi_controller_get_devdata(master);
+>
+> > +     enum dma_slave_buswidth dma_bus_width;
+> >
+> > -     return xfer->len > dws->fifo_len;
+> > +     if (xfer->len > dws->fifo_len) {
+> > +             dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
+> > +             if (dws->dma_addr_widths & BIT(dma_bus_width))
+> > +                     return true;
+> > +     }
+> < newline would have been nice, but...
+> > +     return false;
+>
+> on the other hand a level of indentation could be decreased like this:
+>
+> +       enum dma_slave_buswidth width;
+> +
+> +       if (xfer->len <=3D dws->fifo_len)
+> +               return false;
+> +
+> +       width =3D dw_spi_dma_convert_width(dws->n_bytes);
+> +
+> +       return !!(dws->dma_addr_widths & BIT(width));
+>
+
+Sure, I will restructure this but any reason to use '!!' here ?
+
+> -Serge(y)
+>
+> >  }
+> >
+> >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+> >  {
+> > -     if (n_bytes =3D=3D 1)
+> > +     switch (n_bytes) {
+> > +     case 1:
+> >               return DMA_SLAVE_BUSWIDTH_1_BYTE;
+> > -     else if (n_bytes =3D=3D 2)
+> > +     case 2:
+> >               return DMA_SLAVE_BUSWIDTH_2_BYTES;
+> > -
+> > -     return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > +     case 3:
+> > +     case 4:
+> > +             return DMA_SLAVE_BUSWIDTH_4_BYTES;
+> > +     default:
+> > +             return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > +     }
+> >  }
+> >
+> >  static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 s=
+peed)
+> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> > index 9e8eb2b52d5c..3962e6dcf880 100644
+> > --- a/drivers/spi/spi-dw.h
+> > +++ b/drivers/spi/spi-dw.h
+> > @@ -190,6 +190,7 @@ struct dw_spi {
+> >       struct dma_chan         *rxchan;
+> >       u32                     rxburst;
+> >       u32                     dma_sg_burst;
+> > +     u32                     dma_addr_widths;
+> >       unsigned long           dma_chan_busy;
+> >       dma_addr_t              dma_addr; /* phy address of the Data regi=
+ster */
+> >       const struct dw_spi_dma_ops *dma_ops;
+> > --
+> > 2.40.0.rc1.284.g88254d51c5-goog
+> >
+
+I shall upload a V3 based on these comments.
+
+Thanks
+Joy
