@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638996C6F1C
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF7F6C6F1F
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjCWRcd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 13:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S232598AbjCWRci (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 13:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbjCWRcD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:32:03 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740D360AD
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso4021036pjf.0
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:37 -0700 (PDT)
+        with ESMTP id S232480AbjCWRcJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:32:09 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529B238442
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id y35so11855236pgl.4
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592695;
+        d=chromium.org; s=google; t=1679592698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j6LXKCEb3/BINodw1aD0uX0Oh1YqBoNeM7/LB28/UeE=;
-        b=NK9khFXdbhd8AKbccKVwlYyqpaZSoBXNzGIi3sVGUjFITXPQheAzihAZfIYb9p+oxb
-         XUEpywwYq0mqN5UgRT4jN3CL+nDWq1ly1yWETTmghx9I7R6rh1PuH7RfMF66fg37AzoU
-         FDVkOPpzOxlYJBbqQ9zCj6qxz0ADFmmhi3w5o=
+        bh=wRxHjat8O8FYtA1vS1Ehqi9VaQ+n7ssLGElmobuUyNk=;
+        b=U+4DEso+L/0m/PFXzT7CZpH9N8N0qk37EIGBUM9bYOrsWMIBtlO2tOyJBPL29QQwV4
+         GJhQjcoCRMUsexIHCQ/f996IhXXdiUupT4oHps+65XZzI28Yo9q9VrTbsycdovu6fpKs
+         mujXI+2Hz+scgy06KyIdr+3MPES2iK719bDgk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592695;
+        d=1e100.net; s=20210112; t=1679592698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j6LXKCEb3/BINodw1aD0uX0Oh1YqBoNeM7/LB28/UeE=;
-        b=cIYKM+mdxuLwKS8BDhUpYWpdFykPtjCMtHwJbMURaKu0erkowOvhSuuRAtPpO7LGhF
-         vOoIAnDopFEcHAmSY6x2yZysw4PMbf7N0/Lk+PfQv12vv7SGwNq7PsQcUmGtgnwONyvc
-         K0Duu84u66y1JZ4iDEDlSDhygvQZL1vfuNHdnoTJWVvX72X3WlwMB1ECDXEz3xcl3tUp
-         Is+6oDLDwOjUO4rtFswV4EFiZK7dYgjnqomrWsEDRKy69+g99vCBfQOmQ8bltCKHCpG8
-         AVIVrDFqxiQZZP9koqpF4rVesDjIG4vTJgu9NDZFuVC1ImjspyACzkUFGmnDDI/XK11a
-         t/VA==
-X-Gm-Message-State: AO0yUKXx0tIxMRCNt538sRYeE3I9g84KlCEE+56AMfz+5JRPhktMVGQq
-        x/udclLuzn5+FXKJh/FDYB82gw==
-X-Google-Smtp-Source: AK7set8eHb9MWIbayLU4pYFk+mcrLE3Fp8YxxyVR5lvyiNfDfEC1S4tIYQcJryxp4TjSbPKIz4IrPA==
-X-Received: by 2002:a05:6a20:8b83:b0:da:5ab7:8ce9 with SMTP id m3-20020a056a208b8300b000da5ab78ce9mr271523pzh.22.1679592695237;
-        Thu, 23 Mar 2023 10:31:35 -0700 (PDT)
+        bh=wRxHjat8O8FYtA1vS1Ehqi9VaQ+n7ssLGElmobuUyNk=;
+        b=I1qrTs9kKbtmEvKJXXr+F3tjn2WSSsTWB5tsOwifi/531DKLOJKi+CIu9jjWRB1zaq
+         ocIGbk7fMtBGIG5wsK2MWYkAxdvFesq2W5zdIZfl1glFabi0n9zYHsRnEELHIjBdvbXD
+         5Uc1ZbQ5iceB/rXQC7FeFDDFWtaiUeb/Cs8zAUccyb91tcfKswlNnnbXhk24kTzvOQPg
+         xDokyogOb6HhGT2wWKVv3G0kUIKFGEI7M4TOqDVN8monTD7u25LYlUKF3FG0rBHOTs48
+         qfuHdnHnXx7QImqfLqzL/VsrqhvOuiReRdLLiAkqflcgol/g0+Wjld5FD7atkKz7pwoR
+         u+9A==
+X-Gm-Message-State: AAQBX9eVSJrRoDCJanqCTZFbHUL++AA2082COH2o+wL9yP06UUNysqTQ
+        eDkiFkTxRWxJj8b0mggFX5Qa9g==
+X-Google-Smtp-Source: AKy350Y9uI++VGMZHk8Z3V/GCLI2m4BsnZwP4JxPB7sf6iJ3SVpjUx00AyoX5UWoTsvS+s5PYYvTWw==
+X-Received: by 2002:a62:18c4:0:b0:619:53de:8880 with SMTP id 187-20020a6218c4000000b0061953de8880mr187692pfy.16.1679592697823;
+        Thu, 23 Mar 2023 10:31:37 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.33
+        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:34 -0700 (PDT)
+        Thu, 23 Mar 2023 10:31:36 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 12/14] arm64: dts: qcom: sc7180: Fix trogdor qspi pin config
-Date:   Thu, 23 Mar 2023 10:30:16 -0700
-Message-Id: <20230323102605.12.I6f03f86546e6ce9abb1d24fd9ece663c3a5b950c@changeid>
+Subject: [PATCH 13/14] arm64: dts: qcom: sc7280: Fix qspi pin config
+Date:   Thu, 23 Mar 2023 10:30:17 -0700
+Message-Id: <20230323102605.13.Ib44c3e417c414a4227db8def75ded37ad368212c@changeid>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
 References: <20230323173019.3706069-1-dianders@chromium.org>
@@ -77,143 +77,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In commit 7ec3e67307f8 ("arm64: dts: qcom: sc7180-trogdor: add initial
-trogdor and lazor dt") we specified the pull settings on the boot SPI
-(the qspi) data lines as pullups to "park" the lines. This seemed like
-the right thing to do, but I never really probed the lines to confirm.
+Similar to sc7180 (see the patch ("arm64: dts: qcom: sc7180: Fix
+trogdor qspi pin config")), we should adjust the qspi pin config for
+sc7280.
 
-Since that time, I've done A LOT of research, experiements and poking
-of the lines with a voltmeter.
+I won't re-describe all the research/arguments in the sc7180 patch
+here, but there are a few differences for sc7280 worth noting:
 
-A first batch of discoveries:
-- There is an external pullup on CS (clearly shown on schematics)
-- There are weak external pulldowns on CLK/MOSI (believed to be Cr50's
-  internal pulldowns)
-- There is no pull on MISO.
-- When qspi isn't actively transferring it still drives CS, CLK, and
-  MOSI. CS and MOSI are driven high and CLK is driven low. It does not
-  drive MISO and (if no internal pulls are enabled) the line floats.
+1. On herobrine the SPI flash (qspi) is wired up differently on the
+   board. Rather than Cr50 and the AP being wired directly together,
+   there's actually a mux that will _either_ connect the AP to the
+   flash or Cr50 to the flash. This means that the internal pulls on
+   Cr50 don't affect us and we should enable our own pulldowns.
 
-The above means that it's good to have some sort of pull on MISO, at
-the very least. The pullup that we had before was actually fine (and
-my voltmeter confirms that it actually affected the state of the pin)
-but a pulldown would work equally well (and would match MOSI and CLK
-better).
+2. On herobrine, EEs added an external pulldown on the MISO line. The
+   argument in the schematic said that we added it (but not one on
+   MOSI and CLK) because Cr50 already enabled pulldowns on MOSI and
+   CLK. ...though, as per #1, those Cr50 pulldowns would only affect
+   the line when the mux was swung to Cr50.
 
-The above also means that we could save a tiny bit of power (not
-measurable by my setup) by setting up a sleep state for these pins. If
-nothing else this prevents us from driving high against Cr50's
-internal pulldown on MOSI. However, Qualcomm has also asserted in the
-past that it burns a little extra power to drive a pin, especially
-since these are configured with a slightly higher drive strength
+The ironic result of #1 and #2 is that the external pulldowns on
+CLK/MISO/MOSI on herobrine are _exactly opposite_ of the ones on
+trogdor.
 
-Let's fix all this. Since the external pulls are different for the two
-data lines, we'll split them into separate configs. Then we'll change
-the MISO pin to a pulldown and add a sleep state.
+3. While I still don't have the actual exact schematics for all
+   variants of IDP/CRD that were produced, I have some reference
+   schematics that give me a belief of how the qspi is hooked up
+   there. From this, I'm fairly certain that all of the older variants
+   of IDP/CRD either have a pulldown on the CLK/MOSI/MISO lines (maybe
+   through a direct connect to Cr50) or have no pull (in other words,
+   they don't have a pullup). I'll go ahead and enable internal
+   pulldowns on all the lines since that won't hurt to double-pull if
+   there's an external pulldown and it's nice to have a pulldown if
+   there's nothing external. Note that this only affects _older_
+   CRDs. Newer revs are considered "herobrine" (see the hoglin/zoglin
+   device trees).
 
-On a slightly tangental (but not totally unrelated note), I also
-discovered some interesting things with these pins in suspend. First,
-I found that if we don't switch the pins to GPIO that the qspi
-peripheral continues to drive them in suspend. That'll be solved by
-what we're already doing above. Second, I found that something in the
-system suspend path (after Linux stops running) reconfigures these
-pins so that they don't have their normal pulls enabled but instead
-change to "keepers" (bias-bus-hold in DT speak). If a pin was floating
-before we entered suspend then it would stop floating. I found that I
-could manually pull a pin to a different level and then probe it and
-it would stay there. This is exactly keeper behavior. With the
-solution we have the switch to "keeper" doesn't matter too much but
-it's good to document.
-
-While talking about "keepers", it can also be noted that I found that
-the "keepers" on these pins were at least enough to win a fight
-against Cr50's internal pulls. That means it's best to make sure that
-the state of the pins are already correct before the mysterious
-transition to a keeper. Otherwise we'll burn (a small amount of) power
-in S3 via this fight. Luckily with the current solution we don't hit
-this case.
-
-NOTE: I've left "sc7180-idp" behavior totally alone in this patch. I
-didn't add a sleep state and I didn't change any pulls--I just adapted
-it to the fact that the data lines have separate configs. Qualcomm
-doesn't provide me with schematics for IDP and thus I don't actually
-know how the pulls are configured. Since this is just a development
-platform and worked well enough, it seems safer to leave it alone.
-
-Dependencies:
-- This patch has a hard dependency on ("pinctrl: qcom: Support
-  OUTPUT_ENABLE; deprecate INPUT_ENABLE"). Something in the boot code
-  seemed to have been confused and thought it needed to set the
-  "OUTPUT ENABLE" bit for these pins even though it was using them as
-  SPI. Thus if we don't honor the "output-disable" property we could
-  end up driving the SPI pins while in sleep mode.
-- In general, it's probably best not to backport this to a kernel that
-  doesn't have commit d21f4b7ffc22 ("pinctrl: qcom: Avoid glitching
-  lines when we first mux to output"). That landed a while ago, but
-  it's still good to be explicit in case someone was backporting. If
-  we don't have that then there might be a glitch when we first switch
-  over to GPIO before we disable the output.
-- This patch _doesn't_ really have any dependency on the qspi driver
-  patch that supports setting the pinctrl sleep state--they can go in
-  either order. If we define the sleep state and the driver never
-  selects it that's fine. If the driver tries to select a sleep state
-  that we don't define that's fine.
+4. I didn't find the same strange "auto-switch-to-keeper" at suspend
+   when probing on sc7280. Whatever pulls (or lack thereof) I left at
+   suspend time seemed to persist into suspend.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-v1 of this patch was ("arm64: dts: qcom: sc7180: Fix trogdor qspi pull
-direction") [1]. Since then, I've spent time running experiments where
-I tried lots of different combinations and then probed the GPIOs with
-a multimeter to figure out what's happening. As a result, it's now at
-the end of a somewhat larger series.
 
-I should note that I've removed the "Fixes" tag of this patch. While
-it still technically does "fix" the old behavior, the old behavior
-really wasn't terrible (a miniscule amount of extra power draw). It's
-probably not worth the risk that adding "Fixes" will cause it to get
-backported without the pinctrl support (see "Dependencies" in the
-patch description).
+ .../boot/dts/qcom/sc7280-chrome-common.dtsi   | 25 +++++++++++++++++--
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 14 +++++++----
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      | 13 ++++++----
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |  9 +++++--
+ 4 files changed, 47 insertions(+), 14 deletions(-)
 
-[1] https://lore.kernel.org/r/20230213165743.1.I6f03f86546e6ce9abb1d24fd9ece663c3a5b950c@changeid
-
- arch/arm64/boot/dts/qcom/sc7180-idp.dts      |  9 ++++--
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 34 ++++++++++++++++----
- arch/arm64/boot/dts/qcom/sc7180.dtsi         |  9 ++++--
- 3 files changed, 40 insertions(+), 12 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-idp.dts b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-index c3bdd3295c02..44c27b4eac45 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-@@ -354,7 +354,7 @@ &qfprom {
- &qspi {
- 	status = "okay";
- 	pinctrl-names = "default";
--	pinctrl-0 = <&qspi_clk &qspi_cs0 &qspi_data01>;
-+	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data0>, <&qspi_data1>;
- 
- 	flash@0 {
- 		compatible = "jedec,spi-nor";
-@@ -512,8 +512,11 @@ &qspi_cs0 {
- 	bias-disable;
- };
- 
--&qspi_data01 {
--	/* High-Z when no transfers; nice to park the lines */
-+&qspi_data0 {
-+	bias-pull-up;
-+};
-+
-+&qspi_data1 {
- 	bias-pull-up;
- };
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 39100b0c1140..ca6920de7ea8 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -424,8 +424,9 @@ &qfprom {
- 
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+index 16fb20369c01..f562e4d2b655 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+@@ -60,8 +60,9 @@ &pmk8350_pon {
+  */
  &qspi {
  	status = "okay";
 -	pinctrl-names = "default";
@@ -222,40 +140,18 @@ index 39100b0c1140..ca6920de7ea8 100644
 +	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data0>, <&qspi_data1>;
 +	pinctrl-1 = <&qspi_sleep>;
  
- 	flash@0 {
+ 	spi_flash: flash@0 {
  		compatible = "jedec,spi-nor";
-@@ -1046,17 +1047,20 @@ &pri_mi2s_mclk_active {
- };
- 
- &qspi_cs0 {
--	bias-disable;
-+	bias-disable;		/* External pullup */
- };
- 
- &qspi_clk {
- 	drive-strength = <8>;
--	bias-disable;
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
- };
- 
--&qspi_data01 {
--	/* High-Z when no transfers; nice to park the lines */
--	bias-pull-up;
-+&qspi_data0 {
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
-+};
-+
-+&qspi_data1 {
-+	bias-pull-down;
- };
- 
- &qup_i2c2_default {
-@@ -1336,6 +1340,22 @@ p_sensor_int_l: p-sensor-int-l-state {
- 		bias-disable;
+@@ -85,3 +86,23 @@ wifi-firmware {
+ 		iommus = <&apps_smmu 0x1c02 0x1>;
  	};
- 
+ };
++
++/* PINCTRL - chrome-common pinctrl */
++
++&tlmm {
 +	qspi_sleep: qspi-sleep-state {
-+		pins = "gpio63", "gpio64", "gpio65", "gpio68";
++		pins = "gpio12", "gpio13", "gpio14", "gpio15";
 +
 +		/*
 +		 * When we're not actively transferring we want pins as GPIOs
@@ -269,27 +165,85 @@ index 39100b0c1140..ca6920de7ea8 100644
 +		function = "gpio";
 +		output-disable;
 +	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+index b6137816f2f3..e651f633341f 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+@@ -692,18 +692,22 @@ &pcie1_clkreq_n {
+ };
+ 
+ &qspi_cs0 {
+-	bias-disable;
++	bias-disable;		/* External pullup */
+ 	drive-strength = <8>;
+ };
+ 
+ &qspi_clk {
+-	bias-disable;
++	bias-pull-down;		/* No external pulls */
+ 	drive-strength = <8>;
+ };
+ 
+-&qspi_data01 {
+-	/* High-Z when no transfers; nice to park the lines */
+-	bias-pull-up;
++&qspi_data0 {
++	bias-pull-down;		/* No external pulls */
++	drive-strength = <8>;
++};
 +
- 	qup_uart3_sleep: qup-uart3-sleep-state {
- 		cts-pins {
- 			/*
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index fe62ce516c4e..b2fcf0b58722 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -1535,8 +1535,13 @@ qspi_cs1: qspi-cs1-state {
++&qspi_data1 {
++	bias-disable;		/* External pulldown */
+ 	drive-strength = <8>;
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 8b5293e7fd2a..6aaa77abc00b 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -636,16 +636,19 @@ &pcie1_clkreq_n {
+ };
+ 
+ &qspi_cs0 {
+-	bias-disable;
++	bias-disable;		/* External pullup */
+ };
+ 
+ &qspi_clk {
+-	bias-disable;
++	bias-pull-down;		/* No external pulls or external pulldown */
+ };
+ 
+-&qspi_data01 {
+-	/* High-Z when no transfers; nice to park the lines */
+-	bias-pull-up;
++&qspi_data0 {
++	bias-pull-down;		/* No external pulls or external pulldown */
++};
++
++&qspi_data1 {
++	bias-pull-down;		/* No external pulls or external pulldown */
+ };
+ 
+ &qup_uart5_tx {
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 71e2e51c7c7f..b98994cc8616 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -4337,8 +4337,13 @@ qspi_cs1: qspi-cs1-state {
  				function = "qspi_cs";
  			};
  
 -			qspi_data01: qspi-data01-state {
--				pins = "gpio64", "gpio65";
+-				pins = "gpio12", "gpio13";
 +			qspi_data0: qspi-data0-state {
-+				pins = "gpio64";
++				pins = "gpio12";
 +				function = "qspi_data";
 +			};
 +
 +			qspi_data1: qspi-data1-state {
-+				pins = "gpio65";
++				pins = "gpio13";
  				function = "qspi_data";
  			};
  
