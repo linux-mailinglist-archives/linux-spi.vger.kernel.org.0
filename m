@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE026C6EE4
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E426C6EF4
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Mar 2023 18:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjCWRb0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Mar 2023 13:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S232384AbjCWRb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Mar 2023 13:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjCWRbX (ORCPT
+        with ESMTP id S232250AbjCWRbX (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Mar 2023 13:31:23 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F5C27D6A
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:14 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so2643193pjv.5
-        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:14 -0700 (PDT)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37E28E7A
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:17 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id bt19so89161pfb.3
+        for <linux-spi@vger.kernel.org>; Thu, 23 Mar 2023 10:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592673;
+        d=chromium.org; s=google; t=1679592677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q/zeFLtT5svFzGSOkobW0E5oP7EbYRFgi9o291n1fds=;
-        b=boK1pbwfD/kYb4hq6aRa2l1YdEoUbvsvhKq6ynUQNzmwi7Jv/PhGDBu5Bx1f6HvNmn
-         +khbFlnkQMzS1vnj/PR7JEto7gmj8WiTli3UEBDkSnzmGBO4IjkpU4y2asHr8V/a7iDS
-         94iajP4/4tBFsAcYJKwUUfFsYUkBQkDxkA1Io=
+        bh=6kiM2lrh2kvgdALZI8OIkWyLB50SqdxAm52tOpr2esY=;
+        b=HXiP72pym+YYw/orvrMjuH/G76artp0TTfq7fhSlUPoJldbPdKxo3MqETM7XoMrCX/
+         5MljJsHVpAL1rPPYKJFros7D3ckXNFp7LvANq7FzWMN8EXqeau3FUOkkmfu430yNwGtk
+         rNzLOsjj27FpxdgtXZE5PmSLTxs0yAK+PEzT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592673;
+        d=1e100.net; s=20210112; t=1679592677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q/zeFLtT5svFzGSOkobW0E5oP7EbYRFgi9o291n1fds=;
-        b=jskO2BpL9VFxVScYA556WhcvCYzsE+BvpOWBmSIF5n7p4gOZ6ty6RfbHCw99jYGIsb
-         G4K89hdHIdIBEnHvu3/yquqWjk6wk8CVP9BMkbIsDRiSn5PkOHcFVcsemUd/dGRIFbik
-         6MHNfo6qXjOqaLnrwrAk1AZqVPwMnpiC4sZy+e+eMbBH5z9KTpAmgQHBG5oTWfg0cshb
-         Xn5FRi5kaFuVJEsiFtXdJmA05OS4nan+XK4XswR6vewzRFYTaWPITaY2EIBoz7ok/sIG
-         iahwgz8Vcvn6kdejLVAGnkxwI3aOGF/M1WeSTdaVuuL8FFqWoyYnpPwzrpR9F6Yl3Q1N
-         xwPQ==
-X-Gm-Message-State: AO0yUKXpa7iQc+jn2wlkUOzOXo3SWe8HDUwzsnSfAjnaQZPHbUczDjFE
-        DJsHuzHroWlSk25Lywy0xFN2OQ==
-X-Google-Smtp-Source: AK7set8xZYhtJRYs2MfbgIfoHpLj82VbbGDiATnaAmjPI0WzHRRjr0Glpcmwp9jUtedg4qA792B6KQ==
-X-Received: by 2002:a05:6a20:4d92:b0:da:aaec:9455 with SMTP id gj18-20020a056a204d9200b000daaaec9455mr304246pzb.43.1679592673682;
-        Thu, 23 Mar 2023 10:31:13 -0700 (PDT)
+        bh=6kiM2lrh2kvgdALZI8OIkWyLB50SqdxAm52tOpr2esY=;
+        b=19EQj9Pa/ICrtROHHylSFZNdCotcFR5ptZyF5gwlpgXV7abydwyp8QunSaXV9IcdJ1
+         HBs2TN5dW1nKk72R9fsts7UX3RNBkRr+OjA9UWOT0dvZ7Kzysw55s6lZJ82hxB60S07c
+         I4ntrUzR/s6shyLU73aeDd4iXjqFwlbHabJQc8FrGdU74Va6XMSfybFXxhxg9cqT7n69
+         Tkh6yKCaR9kph/neZJo+w0nkUg1iwXnp6hD9WJmHIhqRRXnQtngv9c2IwEL793WVxQl9
+         g2U9D3b5bQbHHV2Wfs3rdz0W0pzQb/kwSy8jO9qOwEQZ5ZZAcOQaCo41uu8yFQRPVbMw
+         u0cw==
+X-Gm-Message-State: AAQBX9elvyR7R/i8FhwsdfgtesC/zDTmqiARXg2vEHKAb+TranhDHwxv
+        qymph7Pp3nBsr3V07Q9B/bnmfQ==
+X-Google-Smtp-Source: AKy350buG3y4PZg93OsVSfDc5+NHl/qYArOkaLVdvFImYeKdyz7hN2Fv645vPTrSh6BE5heW32nH9g==
+X-Received: by 2002:a62:8413:0:b0:624:d72e:e629 with SMTP id k19-20020a628413000000b00624d72ee629mr251075pfd.8.1679592676912;
+        Thu, 23 Mar 2023 10:31:16 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.12
+        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:13 -0700 (PDT)
+        Thu, 23 Mar 2023 10:31:15 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/14] arm64: dts: sdm845: Rename qspi data12 as data23
-Date:   Thu, 23 Mar 2023 10:30:07 -0700
-Message-Id: <20230323102605.3.I88528d037b7fda4e53a40f661be5ac61628691cd@changeid>
+Subject: [PATCH 04/14] arm64: dts: qcom: sc7180: Annotate l13a on trogdor to always-on
+Date:   Thu, 23 Mar 2023 10:30:08 -0700
+Message-Id: <20230323102605.4.I9f47a8a53eacff6229711a827993792ceeb36971@changeid>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
 References: <20230323173019.3706069-1-dianders@chromium.org>
@@ -77,31 +77,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There are 4 qspi data pins: data0, data1, data2, and data3. Currently
-we have a shared pin state for data0 and data1 (2 lane config) and a
-pin state for data2 and data3 (you'd enable both this and the 2 lane
-state for 4 lanes). The second state is obviously misnamed. Fix it.
+The l13a rail on trogdor devices has always been intended to be
+always-on on both S0 and S3. Different trogdor variants use l13a in
+slightly different ways, but the overall theme is that it's a 1.8V
+rail that the board uses for things that it wants powered in on S0 and
+S3. On many boards this includes the boot SPI (AKA qspi).
 
-Fixes: e1ce853932b7 ("arm64: dts: qcom: sdm845: Add qspi (quad SPI) node")
+For all intents and purposes this patch is actually a no-op since
+something else in the system seems to already be keeping the rail on
+all the time (confirmed via multimeter). That "something else" was
+postulated to be the modem but the rail is on / stays on even without
+the modem/wifi coming up so it's likely the boot config. In any case,
+making the fact that this is always-on explicit seems like a good
+idea.
+
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 479859bd8ab3..aafc7cc7edd8 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2763,7 +2763,7 @@ qspi_data01: qspi-data01-state {
- 				function = "qspi_data";
- 			};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index 423630c4d02c..1f2e1f701761 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -512,6 +512,8 @@ pp1800_l13a: ldo13 {
+ 			regulator-min-microvolt = <1800000>;
+ 			regulator-max-microvolt = <1800000>;
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++			regulator-always-on;
++			regulator-boot-on;
+ 		};
  
--			qspi_data12: qspi-data12-state {
-+			qspi_data23: qspi-data23-state {
- 				pins = "gpio93", "gpio94";
- 				function = "qspi_data";
- 			};
+ 		pp1800_prox:
 -- 
 2.40.0.348.gf938b09366-goog
 
