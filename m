@@ -2,220 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A626C9739
-	for <lists+linux-spi@lfdr.de>; Sun, 26 Mar 2023 19:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F283A6C98B0
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 01:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjCZRfm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 26 Mar 2023 13:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S229880AbjCZX3A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 26 Mar 2023 19:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjCZRfj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Mar 2023 13:35:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369BD76BD
-        for <linux-spi@vger.kernel.org>; Sun, 26 Mar 2023 10:35:33 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a4eba107so66232297b3.19
-        for <linux-spi@vger.kernel.org>; Sun, 26 Mar 2023 10:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679852132;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nn4CcHQY6f+/osyumFS4D5ECgTVcbf5phTsNY5AT6p0=;
-        b=k4kHzLdN8mTqnSbEjYsbLNlAdV6ivn1Z2rwI5i0IVaunclsP2emP9cVoURmNh6CwTz
-         GbqJFm8xvGbqNJDtvIxHnkOnKU5ruOnmB1jfFOpq8/+4F/vmT/lrTo/dy4dbS9P0/I79
-         BnP0XC2Q87IqI7OkENQ0VkwDIb/zoUbLHSAv7AciRDtcTO966x1rSI07FjUYNvIDONBt
-         UTj2xf/puFEbErf4/kSHXkzMoWEJqcjJW878TQ+KmeUoF5F1rGAnivk3Jl8S5WbEnMLb
-         NiRU35HyHvx1BN9cMqWsQxz+CMDHpMLPpR8rkdt54yEgv+NuKBR/2+ZQAAatxGjrjt2J
-         BT6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679852132;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nn4CcHQY6f+/osyumFS4D5ECgTVcbf5phTsNY5AT6p0=;
-        b=UmK6HP5SzF5ETZT0ihUBySa2O/jQ/HCswzlweAZi0IxFr2PES/UEv4vO4fIpZkwnkP
-         pwM2d3DM0XIl8rWYe7KjuF7OkLX8ue+drTtx+xLsKgxDi9Xy2jeT5pzcQmfYRwSunedf
-         sybp//dEINCY8Bcw2gJV+cwh2AGDD3UvL6icnkbu00jiILTF2PbgEkkgtkz4tVW1cHGo
-         aX6e6GSa+fuMGPn5JI1JKtIrRlW6fhCK6VWnH0tMbuUmznyVAuYmQmIAVSPoSHPmBowH
-         gWRzPXwcd2GjIO5KK1WmILDzx+/NEmbduJ67F/A1CekTkJdZ+lcbEsI7kJcYSW/LyzIM
-         /TdA==
-X-Gm-Message-State: AAQBX9d/UqzvWO3U10N+Rd7MZ/z3oeW3WzYD7Fl16z+ojE+nPk8j+gFW
-        yHG3Yea018ZDZ5v+yz1rjCnryjnwE3cAdg==
-X-Google-Smtp-Source: AKy350bIA6FTKaMx1Lr3Votg49I5qPynF31thJcEImjQCfaxTRC+Wx9FwvL2T2TDbzQAd6coUEPUffEYZnKb8Q==
-X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a05:6902:10c3:b0:b77:97d9:f096 with SMTP
- id w3-20020a05690210c300b00b7797d9f096mr5340906ybu.10.1679852132297; Sun, 26
- Mar 2023 10:35:32 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 17:35:11 +0000
-In-Reply-To: <20230326173511.710749-1-joychakr@google.com>
-Mime-Version: 1.0
-References: <20230326173511.710749-1-joychakr@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230326173511.710749-3-joychakr@google.com>
-Subject: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
-From:   Joy Chakraborty <joychakr@google.com>
-To:     Serge Semin <fancer.lancer@gmail.com>,
+        with ESMTP id S229619AbjCZX27 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Mar 2023 19:28:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6198049F0;
+        Sun, 26 Mar 2023 16:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679873338; x=1711409338;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZqzYgx1wmMTF/ya4EIk39hGV+DkzN55FNJE6pa1ltX8=;
+  b=elCUTxu9gscNzKHoJDw8370z+1KHDPbTY2qpeNbv5ehVdrNuNrrjNF9l
+   FfJ1Sv1Fylnt5/TN3LGVVwrNM512Tab57y/LdhQKkXQPV3Rxpadek7hp+
+   Fy9vxHMFIHfsai3XkIYebtAhbstpzQ2hwh/lPtRkhuI2JhE1yEH/VSRtO
+   rPPyx5xr7hx/6X+63aYSiyLWUX7rAtJgBvZdbD0v14ewWWcAxxlvMBRgF
+   e0RZtpogmM5DoRhOKQT69ysgmulK30m33fo+n+eui94lTBQWuJFvjEHtP
+   xnnCR5FCkxmvReQoRREUQZl+4U1FuDqUnuqw46VsxtvU4uFzsf7QNZHdX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="319798684"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="319798684"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 16:28:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857471050"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="857471050"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2023 16:28:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pgZnC-000HPD-1v;
+        Sun, 26 Mar 2023 23:28:54 +0000
+Date:   Mon, 27 Mar 2023 07:28:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com,
-        Joy Chakraborty <joychakr@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Cc:     oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com, Joy Chakraborty <joychakr@google.com>
+Subject: Re: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
+Message-ID: <202303270715.w9sMJhIh-lkp@intel.com>
+References: <20230326173511.710749-3-joychakr@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230326173511.710749-3-joychakr@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Check capabilities of DMA controller during init to make sure it is
-capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
-and store addr_width capabilities to check per transfer to make sure the
-bits/word requirement can be met for that transfer.
+Hi Joy,
 
-Signed-off-by: Joy Chakraborty <joychakr@google.com>
----
- drivers/spi/spi-dw-dma.c | 54 ++++++++++++++++++++++++++++++++--------
- drivers/spi/spi-dw.h     |  1 +
- 2 files changed, 44 insertions(+), 11 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index b3a88bb75907..5a642ec9c269 100644
---- a/drivers/spi/spi-dw-dma.c
-+++ b/drivers/spi/spi-dw-dma.c
-@@ -23,6 +23,8 @@
- #define DW_SPI_TX_BUSY		1
- #define DW_SPI_TX_BURST_LEVEL	16
- 
-+static inline enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
-+
- static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
- {
- 	struct dw_dma_slave *s = param;
-@@ -72,12 +74,15 @@ static void dw_spi_dma_maxburst_init(struct dw_spi *dws)
- 	dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
- }
- 
--static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
-+static int dw_spi_dma_caps_init(struct dw_spi *dws)
- {
-+	int ret;
- 	struct dma_slave_caps tx = {0}, rx = {0};
- 
--	dma_get_slave_caps(dws->txchan, &tx);
--	dma_get_slave_caps(dws->rxchan, &rx);
-+	ret = dma_get_slave_caps(dws->txchan, &tx);
-+	ret |= dma_get_slave_caps(dws->rxchan, &rx);
-+	if (ret)
-+		return ret;
- 
- 	if (tx.max_sg_burst > 0 && rx.max_sg_burst > 0)
- 		dws->dma_sg_burst = min(tx.max_sg_burst, rx.max_sg_burst);
-@@ -87,6 +92,18 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
- 		dws->dma_sg_burst = rx.max_sg_burst;
- 	else
- 		dws->dma_sg_burst = 0;
-+
-+	/*
-+	 * Assuming both channels belong to the same DMA controller hence the
-+	 * address width capabilities most likely would be the same.
-+	 */
-+	dws->dma_addr_widths = tx.dst_addr_widths & rx.src_addr_widths;
-+
-+	if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
-+	      rx.directions & BIT(DMA_DEV_TO_MEM)))
-+		return -ENXIO;
-+
-+	return 0;
- }
- 
- static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
-@@ -95,6 +112,7 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
- 	struct dw_dma_slave dma_rx = { .src_id = 0 }, *rx = &dma_rx;
- 	struct pci_dev *dma_dev;
- 	dma_cap_mask_t mask;
-+	int ret = -EBUSY;
- 
- 	/*
- 	 * Get pci device for DMA controller, currently it could only
-@@ -124,20 +142,24 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
- 
- 	init_completion(&dws->dma_completion);
- 
--	dw_spi_dma_maxburst_init(dws);
-+	ret = dw_spi_dma_caps_init(dws);
-+	if (ret)
-+		goto free_txchan;
- 
--	dw_spi_dma_sg_burst_init(dws);
-+	dw_spi_dma_maxburst_init(dws);
- 
- 	pci_dev_put(dma_dev);
- 
- 	return 0;
--
-+free_txchan:
-+	dma_release_channel(dws->txchan);
-+	dws->txchan = NULL;
- free_rxchan:
- 	dma_release_channel(dws->rxchan);
- 	dws->rxchan = NULL;
- err_exit:
- 	pci_dev_put(dma_dev);
--	return -EBUSY;
-+	return ret;
- }
- 
- static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
-@@ -163,12 +185,16 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
- 
- 	init_completion(&dws->dma_completion);
- 
--	dw_spi_dma_maxburst_init(dws);
-+	ret = dw_spi_dma_caps_init(dws);
-+	if (ret)
-+		goto free_txchan;
- 
--	dw_spi_dma_sg_burst_init(dws);
-+	dw_spi_dma_maxburst_init(dws);
- 
- 	return 0;
--
-+free_txchan:
-+	dma_release_channel(dws->txchan);
-+	dws->txchan = NULL;
- free_rxchan:
- 	dma_release_channel(dws->rxchan);
- 	dws->rxchan = NULL;
-@@ -202,8 +228,14 @@ static bool dw_spi_can_dma(struct spi_controller *master,
- 			   struct spi_device *spi, struct spi_transfer *xfer)
- {
- 	struct dw_spi *dws = spi_controller_get_devdata(master);
-+	enum dma_slave_buswidth dma_bus_width;
-+
-+	if (xfer->len <= dws->fifo_len)
-+		return false;
-+
-+	dma_bus_width = dw_spi_dma_convert_width(dws->n_bytes);
- 
--	return xfer->len > dws->fifo_len;
-+	return dws->dma_addr_widths & BIT(dma_bus_width);
- }
- 
- static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 9e8eb2b52d5c..3962e6dcf880 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -190,6 +190,7 @@ struct dw_spi {
- 	struct dma_chan		*rxchan;
- 	u32			rxburst;
- 	u32			dma_sg_burst;
-+	u32			dma_addr_widths;
- 	unsigned long		dma_chan_busy;
- 	dma_addr_t		dma_addr; /* phy address of the Data register */
- 	const struct dw_spi_dma_ops *dma_ops;
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.3-rc4 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joy-Chakraborty/spi-dw-Add-32-bpw-support-to-DW-DMA-Controller/20230327-013645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230326173511.710749-3-joychakr%40google.com
+patch subject: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
+config: arc-randconfig-s041-20230326 (https://download.01.org/0day-ci/archive/20230327/202303270715.w9sMJhIh-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/9962c1acd23cb0766a09948c1bee4f29950b8a96
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Joy-Chakraborty/spi-dw-Add-32-bpw-support-to-DW-DMA-Controller/20230327-013645
+        git checkout 9962c1acd23cb0766a09948c1bee4f29950b8a96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/spi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/spi/spi-dw-dma.c:241:56: sparse: sparse: marked inline, but without a definition
+
+vim +241 drivers/spi/spi-dw-dma.c
+
+f89a6d8f43ebe9 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  240  
+57784411728ff4 drivers/spi/spi-dw-dma.c Serge Semin     2020-05-29 @241  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+57784411728ff4 drivers/spi/spi-dw-dma.c Serge Semin     2020-05-29  242  {
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  243  	switch (n_bytes) {
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  244  	case 1:
+e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  245  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  246  	case 2:
+e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  247  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  248  	case 3:
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  249  	case 4:
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  250  		return DMA_SLAVE_BUSWIDTH_4_BYTES;
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  251  	default:
+e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  252  		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  253  	}
+80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  254  }
+e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  255  
+
 -- 
-2.40.0.348.gf938b09366-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
