@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6386C9BDE
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 09:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B4B6C9BE7
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 09:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjC0HVn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 03:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S232260AbjC0HWu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 03:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbjC0HVm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 03:21:42 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C282D48
-        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 00:21:41 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x3so31677337edb.10
-        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 00:21:41 -0700 (PDT)
+        with ESMTP id S231932AbjC0HWt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 03:22:49 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA2D49F6
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 00:22:48 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id t10so31660334edd.12
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 00:22:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679901700;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1679901767;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=X1kmkGGKOC2DOFLaKztfpmKO66ZiDM1oI9QitXcbWRY=;
-        b=YFgO8izI8KPgwRdaWTv8FOGsZzcWo90//KS4t/kb55TH6spdhFgTx5xt9e/AOiv4tz
-         16W2kjkVY5k0OLmHUKpVaPFLvft92e/wan6cAxh013iL2C6skGARWC7VRTL9Qiaxdgsh
-         KQpZ9+p1hNeUZekqlFSlA6O2kV0UnbQoLghslbMGP/0u4IW7r7woS8qBSTM4ZN5Qsxub
-         roxskJxzeRuIArMXEVhFFu82yt35RvYoftQPn1rt7vouPu8AiMenaomdBj62WrX4HyIs
-         NSHJ/sKoUZOamfoiNDndHewGC2RZ2tf7BfPf/Krb683LtntKYbIgygtNC1K1MfctO2Wc
-         Z2Lw==
+        bh=CFNarKRRJksS00saRO6cxhezfG372oWTTPfol9sWbtI=;
+        b=DmU9nnEK7bNf/dHFFm/RQKVsvo497gWyF+EyPJw/LoUyZkSQoD0EfLmkuDq7LvWRQ/
+         SBm3OmC7v+/8mmMRlg8kxatMTs99xVsiIkndFPKNafuVgtFLmKDff3VDbKVywayGPIFL
+         MEdULSg/WAmCXQxPqqeL8iao6Z16Nb5BAHIck7IjxB+F7lvfj0UkzyLR0h+ebLLtYsCP
+         m+GlHsFc5CN6ZfVrbJDhVAwjbd4lzB8WdUMuSba04Qfi2ICqA9YX5oX7L1wD2I3Wcv4N
+         2UJddfIsEOdsHIR9UblfBaXP6T5RjdCiEz8hW0CGpUpauGlkQdXkwUiPTZjP6it/k3Fh
+         IPSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679901700;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679901767;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1kmkGGKOC2DOFLaKztfpmKO66ZiDM1oI9QitXcbWRY=;
-        b=KdoT1T0VcM36kXr+LetNQ+vl61RC6gcAYNOOfZKsA1d+Dhb+5rlHpz25mPZR/C7L1R
-         8XdxJyKu62TZi/R+4Jl98+1LtrdrpAMN2W7QwvYDieIZMhIFGIy1JHQyj1bW4pGW0Kgo
-         oQWclAn5u4rdBXez/Sy1RtAa6drkOqulPrbjnVSa/k7NyjwTJ1NLD5Hcm/iPwiELVu23
-         mwQPs22VG75OVtEH3xh8MjSY7NuN8PCEckyO/qrv3a36PiCsm1Ar4TGeayoLdyquKHL8
-         3TACVeL0uudHNTTmFDWL0HHKFMND94rBLGXpTCncyT2C2yTjzF9dZSF4t/bHDNoFbaSm
-         4b9g==
-X-Gm-Message-State: AAQBX9fHRyHjOLc6FrEwEv1ofoTiOlAddibdzMjk1erPbd6CS54yR7sm
-        uxbXjTWVEVQpbpNIJrx0q+vvXQ==
-X-Google-Smtp-Source: AKy350ascTU0kWfHqxU5rF+es5aVwFq+4hfnvmCTwIWkquehDJ3j+Wo0cThfKkRpw+G2Nkm880TzFQ==
-X-Received: by 2002:a17:907:a68a:b0:93f:9b68:a0f4 with SMTP id vv10-20020a170907a68a00b0093f9b68a0f4mr6626314ejc.26.1679901699901;
-        Mon, 27 Mar 2023 00:21:39 -0700 (PDT)
+        bh=CFNarKRRJksS00saRO6cxhezfG372oWTTPfol9sWbtI=;
+        b=oseR1QBSmB/Ts8CtJZGc1/WkhI/RB9GaT21VsiPWdDTi0Zyos3EAPX7rtr9ckFUs+s
+         1m4TnVwWXYQNVd+Er+5LtYDeP7wbY7cclyj3u6LXiAUzm+ekixrY9VOv4+KPWKV0TewV
+         SL5c5NBCqiPFoe7NFOuUXp5b5BzMKGzqjq2wx9oJ7yKoAWZzWc9RXPk+1Q+K4zJ0XMbS
+         r0GwEdt3OQa/6HkXTzWSFUrrO0zzlpkkaDcEVE1DIXZXXwn41y2keEMVeCWPXhOx2UsQ
+         qib0irHTaX35O1pWZYg1qb+CTnF9W2iSelKiIEehlycKXnYBhQKYblX9jSaTs6VWW8QE
+         f1Uw==
+X-Gm-Message-State: AAQBX9cLKqmaGYOVMVcxZHFi52FKkAyZ4cfqaXQ3CWDmh/RMds8k/2cq
+        zoCD9ThP5jgNELX+edJ5MIYsiw==
+X-Google-Smtp-Source: AKy350bmGPQAtSCpEFubJRJcmrx33GQPnEKKpDAJnxWTGClLd6jkcPIc3e0gKQQNdIuvIRS213DbUg==
+X-Received: by 2002:a17:906:f143:b0:933:4c93:69ee with SMTP id gw3-20020a170906f14300b009334c9369eemr11864771ejb.45.1679901767018;
+        Mon, 27 Mar 2023 00:22:47 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:198e:c1a5:309b:d678? ([2a02:810d:15c0:828:198e:c1a5:309b:d678])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170906394500b0092fb818127dsm13853619eje.94.2023.03.27.00.21.38
+        by smtp.gmail.com with ESMTPSA id g12-20020a170906198c00b00930c7b642d0sm13732976ejd.166.2023.03.27.00.22.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 00:21:39 -0700 (PDT)
-Message-ID: <58ba3b6f-578f-0bdd-13cd-980eda28d2c7@linaro.org>
-Date:   Mon, 27 Mar 2023 09:21:38 +0200
+        Mon, 27 Mar 2023 00:22:46 -0700 (PDT)
+Message-ID: <510cf7ac-3f7f-49e2-b384-424c931b2750@linaro.org>
+Date:   Mon, 27 Mar 2023 09:22:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 06/14] dt-bindings: pinctrl: qcom: tlmm should use
- output-disable, not input-enable
+Subject: Re: [PATCH 07/14] dt-bindings: pinctrl: qcom: Add output-enable
+Content-Language: en-US
 To:     Douglas Anderson <dianders@chromium.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -69,10 +69,9 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 References: <20230323173019.3706069-1-dianders@chromium.org>
- <20230323102605.6.I291ce0ba2c6ea80b341659c4f75a567a76dd7ca6@changeid>
-Content-Language: en-US
+ <20230323102605.7.I7874c00092115c45377c2a06f7f133356956686e@changeid>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323102605.6.I291ce0ba2c6ea80b341659c4f75a567a76dd7ca6@changeid>
+In-Reply-To: <20230323102605.7.I7874c00092115c45377c2a06f7f133356956686e@changeid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -86,25 +85,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 23/03/2023 18:30, Douglas Anderson wrote:
-> As evidenced by the Qualcomm TLMM Linux driver, the TLMM IP block in
-> Qualcomm SoCs has a bit to enable/disable the output for a pin that's
-> configured as a GPIO but _not_ a bit to enable/disable an input
-> buffer. Current device trees that are specifying "input-enable" for
-> pins managed by TLMM are either doing so needlessly or are using it to
-> mean "output-disable".
+> In the patch ("dt-bindings: pinctrl: qcom: tlmm should use
+> output-disable, not input-enable") we allowed setting "output-disable"
+> for TLMM pinctrl states. Let's also add "output-enable".
 > 
-> Presumably the current convention of using "input-enable" to mean
-> "output-disable" stems from the fact that "output-disable" is a "new"
-> property from 2017. It was introduced in commit 425562429d4f
-> ("pinctrl: generic: Add output-enable property"). The "input-enable"
-> handling in Qualcomm drivers is from 2015 introduced in commit
-> 407f5e392f9c ("pinctrl: qcom: handle input-enable pinconf property").
+> At first blush this seems a needless thing to do. Specifically:
+> - In Linux (and presumably any other OSes using the same device trees)
+>   the GPIO/pinctrl driver knows to automatically enable the output
+>   when a GPIO is changed to an output. Thus in most cases specifying
+>   "output-enable" is superfluous and should be avoided.
+> - If we need to set a pin's default state we already have
+>   "output-high" and "output-low" and these properties already imply
+>   "output-enabled" (at least on the Linux Qualcomm TLMM driver).
 > 
-> Given that there's no other use for "input-enable" for TLMM, we can
-> still handle old device trees in code, but let's encourage people to
-> move to the proper / documented property by updating the bindings.
+> However, there is one instance where "output-enable" seems like it
+> could be useful: sleep states. It's not uncommon to want to configure
+> pins as inputs (with appropriate pulls) when the driver controlling
+> them is in a low power state. Then we want the pins back to outputs
+> when the driver wants things running normally. To accomplish this we'd
+> want to be able to use "output-enable". Then the "default" state could
+> have "output-enable" and the "sleep" state could have
+> "output-disable".
 > 
-
+> NOTE: in all instances I'm aware of, we'd only want to use
+> "output-enable" on pins that are configured as "gpio". The Qualcomm
+> documentation that I have access to says that "output-enable" only
+> does something useful when in GPIO mode.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
