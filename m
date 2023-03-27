@@ -2,96 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670916CAB9C
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 19:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1166CACB7
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 20:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjC0RMP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 13:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S231477AbjC0SIS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 14:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjC0RMP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 13:12:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5670D268B;
-        Mon, 27 Mar 2023 10:12:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 177D9B8109B;
-        Mon, 27 Mar 2023 17:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E84FC433EF;
-        Mon, 27 Mar 2023 17:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679937131;
-        bh=/fkXqbvEz458bP8DZWcuJn+D7WQRsmI1RDlpr7SMO2E=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D/fBxbp53rYnOv6c8w4Qvq4Ed+VnhALr+D8DwFDMuxGrjTV1sDK06wy9SPPfRa6NM
-         x3CSZB1cMD0h9PQxfMRrZP0ojOkXuihTH3hqGddD7+8oWVdDvl1iZvz8UfZDWZAklF
-         q5FcBB9eS+L54T/MyaJYmILY2Gb0klCClI3qKeABgyTZi9LZweUqDx+TZIdkcH6Mn+
-         /PvfnYORZVW0mfqX4g/GdGbNsctFUSzDJV3zIi4qMHsLudfK/hR8KnyRlBZoRwfRiv
-         F/GAC0vklwCCsnwASVe1EvqpjjWXsvhMbpbP3f9o7FVAHxu419A94RiILXcF0Jtgte
-         O35bW0r3AMzaA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
-References: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next 1/3] spi: omap2-mcspi: Use
- devm_platform_get_and_ioremap_resource()
-Message-Id: <167993713015.3172134.12238753210466816048.b4-ty@kernel.org>
-Date:   Mon, 27 Mar 2023 18:12:10 +0100
+        with ESMTP id S231737AbjC0SIO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 14:08:14 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058D2D69;
+        Mon, 27 Mar 2023 11:08:02 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RB12WI019001;
+        Mon, 27 Mar 2023 11:08:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=5/J+ExtaDQpQ8NP1wIMINsOViHcgzoeTRd//pn5Ikkg=;
+ b=KRixRFaBvdqmjDQzFpJ+38AyqCOUJGwYEgqWzhzCumpNJfIjAv5F+XHW9ut0fC7b2kBi
+ SMn7dzjex8rnJY+3T6mI9rIIbDDltMoogqVcnxOjXNFFB5XOaMM5I2vonG32OtlVWlr0
+ c++RFdnKj60ULbNT+gAREHPXQLdVdVrM5bksyd9NGSicJror/JTBiWQPIhir4w47MREH
+ 7cLKnX9JaMGJYa11BE3nHEbT5UDCk+s7B+QwsJgrB7xJlQ3GOa93kH3QOffnac3r/hho
+ zObxNtU125d+LYiqb1G5FpvRrslvGh82DCUAsk7T/r11liqVvGLiDfv7yqylmZFAuZlr dA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3phxas85t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:08:00 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 27 Mar
+ 2023 11:07:58 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 27 Mar 2023 11:07:58 -0700
+Received: from localhost.localdomain (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id C14793F7088;
+        Mon, 27 Mar 2023 11:07:58 -0700 (PDT)
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: [PATCH 0/2] spi: octeontx2: Add spi driver for OcteonTX2 SOC
+Date:   Mon, 27 Mar 2023 11:07:51 -0700
+Message-ID: <20230327180753.2279-1-pmalgujar@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 7UMLWC3my9ApyPfHIM3LvA0wrjrEOxPM
+X-Proofpoint-ORIG-GUID: 7UMLWC3my9ApyPfHIM3LvA0wrjrEOxPM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 27 Mar 2023 13:53:44 +0800, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> 
-> [...]
+Add driver for spi controller on Marvell OcteonTX2 SOC. This driver
+supports 1KB data buffer and 4-bit bus width.
+It also supports ACPI and reads tx(rx)-bus-width which is used to set
+the SPI mode - DUAL, QUAD, OCTAL.
 
-Applied to
+Piyush Malgujar (1):
+  spi: octeontx2: Add ACPI support
 
-   broonie/spi.git for-next
+Suneel Garapati (1):
+  spi: octeontx2: Add support for octeontx2 spi controller
 
-Thanks!
+ drivers/spi/Kconfig         |   8 +
+ drivers/spi/Makefile        |   1 +
+ drivers/spi/spi-octeontx2.c | 467 ++++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-octeontx2.h | 152 ++++++++++++
+ 4 files changed, 628 insertions(+)
+ create mode 100644 drivers/spi/spi-octeontx2.c
+ create mode 100644 drivers/spi/spi-octeontx2.h
 
-[1/3] spi: omap2-mcspi: Use devm_platform_get_and_ioremap_resource()
-      commit: 5e72620125dfa6b876ea3fe3ad25e4c11b70615a
-[2/3] spi: orion: Use devm_platform_get_and_ioremap_resource()
-      commit: 36b49126afa22b7f9fe3b16360ef2ab3da6bc376
-[3/3] spi: pic32: Use devm_platform_get_and_ioremap_resource()
-      commit: d10c878213b0bd2df18639f62af28e93a36d437d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.17.1
 
