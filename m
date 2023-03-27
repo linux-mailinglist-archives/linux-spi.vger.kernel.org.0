@@ -2,165 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D87D6CB11C
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 23:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9B06CB111
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 23:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjC0V7l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 17:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S229476AbjC0V4t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 17:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0V7j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 17:59:39 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413961FC4
-        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 14:59:37 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id m6so7982407qvq.0
-        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 14:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679954375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O9qH6rlTsm7Q+HG/U3Vbn83vlXYTPD/5LPZnsPMmWW8=;
-        b=ADUDvpn6aX24uOhncSVukQwLoLh3bI9G36ebIpJ7abS3QD/vHkGzaBqRVeEYJBO/U5
-         Vm+2iK5lmGBimuxjQM1fY6u2aEYPKSZdZduROAoEgUvCD/No3bicnvs3TsxEnOSIijK1
-         YP2GWNwAYCeTMvPR3ZRIwFtCdIO+nVKBnX2WE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679954375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O9qH6rlTsm7Q+HG/U3Vbn83vlXYTPD/5LPZnsPMmWW8=;
-        b=EYkNrKUoGK9dJZGq0Zcxtl65uga38MhQNtQutxytL51DtavqoXfB/84jEdf5w/wHfg
-         e+O6jqjoa0eon/C+urhwMDfKm5OTGkidC7e+QK39phulYixSpCwbosyS62RHuCb+Zh+V
-         VcP9NuCKRSlg+Ssq2Su2thjJWfjC6N1tYmGn0VmA/OrUo7fwD0x4ZiWNVlUm+93ZBi7O
-         ESN4MO0PGXPwPDLf5XDisZvC0hfA9ObdhgP8khHgciwVmbkQyUPJoUZ3iYjHIeTnGSyk
-         tN7BCUnsXZ7qUW54a9FwbIEVUooro3UAlLpnpKv+/f45wlLBk12SKaSTgGuiwRkaGfNN
-         Z5uQ==
-X-Gm-Message-State: AAQBX9drCKVOyhvEb0tWs3zTsPNA20r5VIw0p8o75zfyt2gsUo/+zX4F
-        CsBAmVKglhcWUQxJxgTGjwevb7ZtPFlhxIzDW6g=
-X-Google-Smtp-Source: AKy350b18wh+cafgFc5KZXCpj79u/Z0ytf+ZGyC1p0fcSkyIPZOa00jbifkmWaybz74XtZnYLwwy+g==
-X-Received: by 2002:ad4:5c82:0:b0:5c6:92e0:ba3 with SMTP id o2-20020ad45c82000000b005c692e00ba3mr27343919qvh.2.1679954375647;
-        Mon, 27 Mar 2023 14:59:35 -0700 (PDT)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
-        by smtp.gmail.com with ESMTPSA id d12-20020a0cea8c000000b005dd8b9345c3sm3275376qvp.91.2023.03.27.14.59.35
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 14:59:35 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id oe8so7851726qvb.6
-        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 14:59:35 -0700 (PDT)
-X-Received: by 2002:a05:6102:4711:b0:425:f1e7:fecf with SMTP id
- ei17-20020a056102471100b00425f1e7fecfmr6513084vsb.7.1679953876235; Mon, 27
- Mar 2023 14:51:16 -0700 (PDT)
+        with ESMTP id S229471AbjC0V4t (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 17:56:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742512E
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 14:56:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F373B819A6
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 21:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A77D7C4339B;
+        Mon, 27 Mar 2023 21:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679954205;
+        bh=ItN9iEj137PItTTzY3/G9Jxmb190UziwUs+2EcDZw3w=;
+        h=Subject:From:Date:To:From;
+        b=iQxF9T39BzangCplymc6ZpyXcuhRtFl4T5atzpl7G36PAtZWsm9TB3Q2Vhqm3D6rB
+         /l647gLD3kLROpUgQJNnfZ9URsZa25wX4avonKlDr4nphrgi9o23GuLhYxSFjslAVe
+         QGf3KwQC/O11mpkNHwVbHpzMWOnT/pfEEc5RZBPVakGJPSOu+gl3z9e9wP2BL5N0zT
+         4j6GHSzqhyCdDlFJ+xDU/ixNFNuCL87kKFiXPmtrqqVG8wa0EIQNvFMvqNzxQHp2MA
+         ubjQozTrd6oeHTsJxbu/bxqDCsDzrNZjfufhpe3KWtrPm7AvqHy3DePgKiO134nG7h
+         1vJteGDYohJYA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9370CC41612;
+        Mon, 27 Mar 2023 21:56:45 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230323173019.3706069-1-dianders@chromium.org> <CACRpkdaGpaiOVjEN6Ftq5=-yuAyD0xb7OcvtEsoqbTzias-xxw@mail.gmail.com>
-In-Reply-To: <CACRpkdaGpaiOVjEN6Ftq5=-yuAyD0xb7OcvtEsoqbTzias-xxw@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 27 Mar 2023 14:51:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-Message-ID: <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-Subject: Re: [PATCH 00/14] Control Quad SPI pinctrl better on Qualcomm Chromebooks
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rajesh Patil <rajpat@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <167995420559.17843.2976790831474893342.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 27 Mar 2023 21:56:45 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
-
-On Mon, Mar 27, 2023 at 2:45=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Thu, Mar 23, 2023 at 6:31=E2=80=AFPM Douglas Anderson <dianders@chromi=
-um.org> wrote:
->
-> > The main goal of this series is to do a better job of cI can apply ontr=
-oling the
-> > pins related to the "Quad SPI" IP block on Qualcomm Chromebooks. This
-> > is essentially 'v2' of my previous attempt in the patch ("arm64: dts:
-> > qcom: sc7180: Fix trogdor qspi pull direction") [1] but since it's
-> > spiraled out a bit and there are no patches that are exactly the same
-> > I've reset to v1.
-> >
-> > The early patches in this series are just no-op cleanup patches that
-> > can be applied. They're not terribly critical but since they are
-> > "Fixes" I've listed them first.
-> >
-> > The next patch in the series is a very simple and (hopefully)
-> > non-controversial SPI patch. It can be applied independently if
-> > anything else.
-> >
-> > Next, we have a bunch of pinctrl patches (including the device tree
-> > bindings related to them). I dunno what folks are going to think about
-> > these. If everyone hates them, we can drop them and just change the
-> > later patches in the series to use "input-enable" instead of
-> > "output-disable". It feels ugly to me, but it maybe less upheval.
-> >
-> > Next I removed the now-deprecated "input-enable" property from all
-> > Chromebooks. None of them were necessary.
-> >
-> > Finally, I did what I really wanted to do in the first place: attempt
-> > to cleanup the pinctrl states of the Quad SPI. These patches have a
-> > hard requirement on the pinctrl change.
->
-> This looks good to me (TM)
->
-> Do you have a merge plan?
-> I can queue the pinctrl patch into the pinctrl tree, and
-> the pinctrl binding patches.
->
-> Will you take the rest to the SPI and SoC tree?
->
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-My thoughts:
-
-1. Mark could land the SPI patch at any time, assuming he's OK with
-it. It can land totally independently.
-
-2. First 7 dts patches could land in the Qualcomm tree. There are no
-dependencies on these ones other than the commit message of some of
-the later dts patches talking about the pinctrl patches.
-
-...then...
+Latest series: [v2] add support for Meson A1 SPI Flash Controller (2023-03-27T21:13:49)
+  Superseding: [v1] add support for Meson A1 SPI Flash Controller (2023-03-22T15:04:57):
+    [v1,1/2] dt-bindings: spi: add binding for meson-spifc-a1
+    [v1,2/2] spi: add support for Meson A1 SPI Flash Controller
 
 
-Option A:
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-3. You land the pinctrl and binding patches in an immutable branch and
-merge into pinctrl.
-
-4. Bjorn merges the immutable branch into the Qulacomm tree and places
-the last 3 dts patches atop.
-
-
-Option B:
-
-3. You Ack the pinctrl patches and Bjorn lands them all, plus the last
-3 dts patches.
-
-
-Option C:
-
-3. You land the pinctrl patches, then we want a few months and land
-the last 3 dts patches.
