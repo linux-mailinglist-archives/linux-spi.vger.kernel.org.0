@@ -2,182 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2AF6C9DA0
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 10:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211AF6C9DE7
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 10:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbjC0IYf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 04:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S233252AbjC0Ibt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 04:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbjC0IYe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 04:24:34 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7556B2D53;
-        Mon, 27 Mar 2023 01:24:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Bxfdq9UiFkMEMSAA--.16549S3;
-        Mon, 27 Mar 2023 16:24:29 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxtry2UiFkvAYOAA--.7064S3;
-        Mon, 27 Mar 2023 16:24:24 +0800 (CST)
-Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230324063317.14664-3-zhuyinbo@loongson.cn>
- <202303241811.OXj9KxAr-lkp@intel.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <5f336b5f-3c6f-f215-d974-0460598f06ae@loongson.cn>
-Date:   Mon, 27 Mar 2023 16:24:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S233213AbjC0IbX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 04:31:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC0146B4;
+        Mon, 27 Mar 2023 01:28:10 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32R8Qt39030043;
+        Mon, 27 Mar 2023 03:26:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679905615;
+        bh=8yfDEjBLPfAKUoGrvIcicI0FVRLc+jf9sHpjdvWg9i4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fYkaOBEOkCvAz2Xq1PguQFX75riaFCEyjwDBZaPiH4O2zmdm4FJiAI6Ncv7NclUdl
+         Rjkz41cKTvPNRkq2iNB1Slp6VLfJ/eto527a2gV9Afv6W95OuOnF0CN0jOpvvMx+5Y
+         5nZp/eKl+v5mZ8fH878elwhjGPD2cPHKiVjgD/YU=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32R8QtnD014041
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Mar 2023 03:26:55 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 27
+ Mar 2023 03:26:55 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 27 Mar 2023 03:26:55 -0500
+Received: from [10.249.132.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32R8QqnU024899;
+        Mon, 27 Mar 2023 03:26:53 -0500
+Message-ID: <12626f35-6b7c-bb24-606a-00d0b8e7f375@ti.com>
+Date:   Mon, 27 Mar 2023 13:56:52 +0530
 MIME-Version: 1.0
-In-Reply-To: <202303241811.OXj9KxAr-lkp@intel.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH -next 1/3] spi: omap2-mcspi: Use
+ devm_platform_get_and_ioremap_resource()
+To:     Yang Li <yang.lee@linux.alibaba.com>, <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxtry2UiFkvAYOAA--.7064S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZw1xWFykCw17CF4xZFWrZrb_yoWrKFyUpa
-        y8CF45Crs5Xr4kCFs7GayUZF1YqrZ5J3srJFW7tr48C3yDA34jqF1jkry7XrZxCF1q9a48
-        Xr48uayvga4rCa7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0HqcUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 27/03/23 11:23, Yang Li wrote:
+> According to commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()"), convert
+> platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+For the series,
 
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-ÔÚ 2023/3/24 ÏÂÎç6:15, kernel test robot Ð´µÀ:
-> Hi Yinbo,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on broonie-spi/for-next]
-> [also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc3 next-20230324]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> patch link:    https://lore.kernel.org/r/20230324063317.14664-3-zhuyinbo%40loongson.cn
-> patch subject: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi controller
-> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303241811.OXj9KxAr-lkp@intel.com/config)
-> compiler: sparc64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/3742622c455d25c4a110d2caf2f5b2ceefe88f91
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230324-143432
->          git checkout 3742622c455d25c4a110d2caf2f5b2ceefe88f91
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303241811.OXj9KxAr-lkp@intel.com/
-> 
-> All error/warnings (new ones prefixed by >>):
-> 
->     drivers/spi/spi-loongson-core.c: In function 'loongson_spi_init_master':
->>> drivers/spi/spi-loongson-core.c:229:21: error: implicit declaration of function 'devm_ioremap'; did you mean 'of_ioremap'? [-Werror=implicit-function-declaration]
->       229 |         spi->base = devm_ioremap(dev, res->start, resource_size(res));
->           |                     ^~~~~~~~~~~~
->           |                     of_ioremap
->>> drivers/spi/spi-loongson-core.c:229:19: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->       229 |         spi->base = devm_ioremap(dev, res->start, resource_size(res));
->           |                   ^
->     cc1: some warnings being treated as errorThe devm_ioremap was declared in linux/io.h, and I think add include 
-<linux/io.h> in spi-loongson-core.c that compile issue will be fixed.
-> 
-> 
-> vim +229 drivers/spi/spi-loongson-core.c
-> 
->     201	
->     202	int loongson_spi_init_master(struct device *dev, struct resource *res)
->     203	{
->     204		struct spi_master *master;
->     205		struct loongson_spi *spi;
->     206		struct clk *clk;
->     207		int ret;
->     208	
->     209		master = spi_alloc_master(dev, sizeof(struct loongson_spi));
->     210		if (master == NULL) {
->     211			dev_dbg(dev, "master allocation failed\n");
->     212			return -ENOMEM;
->     213		}
->     214	
->     215		master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
->     216		master->setup = loongson_spi_setup;
->     217		master->prepare_message = loongson_spi_prepare_message;
->     218		master->transfer_one = loongson_spi_transfer_one;
->     219		master->unprepare_message = loongson_spi_unprepare_message;
->     220		master->set_cs = loongson_spi_set_cs;
->     221		master->num_chipselect = 4;
->     222		master->dev.of_node = of_node_get(dev->of_node);
->     223		dev_set_drvdata(dev, master);
->     224	
->     225		spi = spi_master_get_devdata(master);
->     226	
->     227		spi->master = master;
->     228	
->   > 229		spi->base = devm_ioremap(dev, res->start, resource_size(res));
->     230		if (spi->base == NULL) {
->     231			dev_err(dev, "cannot map io\n");
->     232			ret = -ENXIO;
->     233			goto free_master;
->     234		}
->     235	
->     236		clk = devm_clk_get(dev, NULL);
->     237		if (!IS_ERR(clk))
->     238			spi->clk_rate = clk_get_rate(clk);
->     239	
->     240		loongson_spi_reginit(spi);
->     241	
->     242		spi->mode = 0;
->     243		if (of_get_property(dev->of_node, "spi-nocs", NULL))
->     244			spi->mode |= SPI_NO_CS;
->     245	
->     246		ret = spi_register_master(master);
->     247		if (ret < 0)
->     248			goto free_master;
->     249	
->     250		return ret;
->     251	
->     252	free_master:
->     253		kfree(master);
->     254		spi_master_put(master);
->     255	
->     256		return ret;
->     257	}
->     258	EXPORT_SYMBOL_GPL(loongson_spi_init_master);
->     259	
-> 
+>  drivers/spi/spi-omap2-mcspi.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+> index d95f0ae033ca..8331e247bf5c 100644
+> --- a/drivers/spi/spi-omap2-mcspi.c
+> +++ b/drivers/spi/spi-omap2-mcspi.c
+> @@ -1477,8 +1477,7 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+>  		master->max_transfer_size = omap2_mcspi_max_xfer_size;
+>  	}
+>  
+> -	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	mcspi->base = devm_ioremap_resource(&pdev->dev, r);
+> +	mcspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+>  	if (IS_ERR(mcspi->base)) {
+>  		status = PTR_ERR(mcspi->base);
+>  		goto free_master;
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
