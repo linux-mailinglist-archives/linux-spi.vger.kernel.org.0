@@ -2,126 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F283A6C98B0
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 01:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403A66C99C3
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 04:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjCZX3A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 26 Mar 2023 19:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S232065AbjC0CxB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 26 Mar 2023 22:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCZX27 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Mar 2023 19:28:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6198049F0;
-        Sun, 26 Mar 2023 16:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679873338; x=1711409338;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZqzYgx1wmMTF/ya4EIk39hGV+DkzN55FNJE6pa1ltX8=;
-  b=elCUTxu9gscNzKHoJDw8370z+1KHDPbTY2qpeNbv5ehVdrNuNrrjNF9l
-   FfJ1Sv1Fylnt5/TN3LGVVwrNM512Tab57y/LdhQKkXQPV3Rxpadek7hp+
-   Fy9vxHMFIHfsai3XkIYebtAhbstpzQ2hwh/lPtRkhuI2JhE1yEH/VSRtO
-   rPPyx5xr7hx/6X+63aYSiyLWUX7rAtJgBvZdbD0v14ewWWcAxxlvMBRgF
-   e0RZtpogmM5DoRhOKQT69ysgmulK30m33fo+n+eui94lTBQWuJFvjEHtP
-   xnnCR5FCkxmvReQoRREUQZl+4U1FuDqUnuqw46VsxtvU4uFzsf7QNZHdX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="319798684"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="319798684"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 16:28:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857471050"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="857471050"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2023 16:28:55 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pgZnC-000HPD-1v;
-        Sun, 26 Mar 2023 23:28:54 +0000
-Date:   Mon, 27 Mar 2023 07:28:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joy Chakraborty <joychakr@google.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com, Joy Chakraborty <joychakr@google.com>
-Subject: Re: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
-Message-ID: <202303270715.w9sMJhIh-lkp@intel.com>
-References: <20230326173511.710749-3-joychakr@google.com>
+        with ESMTP id S231659AbjC0CxA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Mar 2023 22:53:00 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D294682;
+        Sun, 26 Mar 2023 19:52:59 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id v14-20020a4ae6ce000000b0053b91ae6552so1117780oot.8;
+        Sun, 26 Mar 2023 19:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679885578;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Bwxc+9Wm9XzKT3wRxyc/yPN0nekHNduBtYwd30w4es=;
+        b=Ri2bV1FoPdgTw8eh91inBnZJ+Qu05D62pZaR49BYSn4lGQZdHyxBDBpsYq82C2/KPM
+         8WYVkWpAifvRsKZGBQDFJIpNP/YWF1t9Dmlg2M7iNoBkM5F2xmhPunNECZSJ5jAitliU
+         R3QUSopKVqTCMQSg2DOiuk0C3/B8O6J7GTU0TnJGJQ9uTbLhWQ/zrPmNm9uxWFvJj5FO
+         Nh0TrOq/p67efHEAy3gwv5QTY6zGSG3keGsvcDBtmfCNbWyrgSws18VwQI8qdhZZwfNc
+         KvCcdnaTgdI5y5OgeX3osQfoSV+OYV2iO4iCUsmQDgSlqMAcTRIAmMgOuwlztr38X9fc
+         OV6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679885578;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Bwxc+9Wm9XzKT3wRxyc/yPN0nekHNduBtYwd30w4es=;
+        b=tNEqyjRySKR1Ky2jXhWorJT2zKkaB+FhrMXLRQFAviUHUlAp3Um4u7hu6TOGefcMAO
+         WSvhdd/pKY+Rky31397unU+3x6kP8fguHvlB/3mgG3KtSiC/0N/ozy1+KTen4ABg0Kga
+         TXBki17kO1iqabUuVFPs2fmcxjfxAoIkuxSAnDfoJ9hjRFRK5/VF757KY0VQs25RKqx5
+         aTEEihKtH5iUvx7uaHknQ1jN6WtniBf7j4XinjsioPPdTr+xcDF4Vl4YMfqYVX4wjCAE
+         z94GqHYgSDIBTl6bAnnbZa3Jjkqqey4LosrgDv0F0UNaJsJUYPgb5jr97Ej7Jq26nkLU
+         bsLA==
+X-Gm-Message-State: AO0yUKUuqcG3kE5aLqfpQ+hf2NzDmmXARiTSv7Z/iqzK8v4BRhjsUYu2
+        W6tv+y+cb7CHKIBFOGtYBpU=
+X-Google-Smtp-Source: AK7set/o369pQb1Fc6jFOL0nEK9V5MY2Ai6irQxBSn4gfxgxy+ywh0kdL4g7fxXrtddj+x6XtQYojQ==
+X-Received: by 2002:a4a:410f:0:b0:53b:4b21:2345 with SMTP id x15-20020a4a410f000000b0053b4b212345mr4762320ooa.2.1679885578198;
+        Sun, 26 Mar 2023 19:52:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:988b:7dda:764e:c744? ([2600:1700:2442:6db0:988b:7dda:764e:c744])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05680803cf00b003875e29808esm4217121oie.0.2023.03.26.19.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Mar 2023 19:52:57 -0700 (PDT)
+Message-ID: <25c6664b-6e9f-17d5-957c-054d99787a1a@gmail.com>
+Date:   Sun, 26 Mar 2023 21:52:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326173511.710749-3-joychakr@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Joy,
+On 3/24/23 04:30, Geert Uytterhoeven wrote:
+> When loading a DT overlay that creates a device, the device is not
+> instantiated, unless the DT overlay is unloaded and reloaded again.
+> 
+> Saravana explains:
+>   Basically for all overlays (I hope the function is only used for
+>   overlays) we assume all nodes are NOT devices until they actually
+>   get added as a device.
+> 
+> Based on a patch by Saravana Kannan, which covered only platform and spi
+> devices.
 
-Thank you for the patch! Perhaps something to improve:
+I have given this a quick look but want to look more deeply at overall
+context.  (That Geert found imx-weim, i2c, and spi is a good sign.)
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v6.3-rc4 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+At the top of my list for Monday 3/27.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joy-Chakraborty/spi-dw-Add-32-bpw-support-to-DW-DMA-Controller/20230327-013645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20230326173511.710749-3-joychakr%40google.com
-patch subject: [PATCH v3 2/2] spi: dw: Add dma controller capability checks
-config: arc-randconfig-s041-20230326 (https://download.01.org/0day-ci/archive/20230327/202303270715.w9sMJhIh-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/9962c1acd23cb0766a09948c1bee4f29950b8a96
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Joy-Chakraborty/spi-dw-Add-32-bpw-support-to-DW-DMA-Controller/20230327-013645
-        git checkout 9962c1acd23cb0766a09948c1bee4f29950b8a96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/spi/
+-Frank
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+> 
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+> v2:
+>   - Add Acked-by,
+>   - Drop RFC.
+> ---
+>  drivers/bus/imx-weim.c    | 1 +
+>  drivers/i2c/i2c-core-of.c | 1 +
+>  drivers/of/dynamic.c      | 1 +
+>  drivers/of/platform.c     | 1 +
+>  drivers/spi/spi.c         | 1 +
+>  5 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 36d42484142aede2..898e23a4231400fa 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>  				 "Failed to setup timing for '%pOF'\n", rd->dn);
+>  
+>  		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> +			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>  				dev_err(&pdev->dev,
+>  					"Failed to create child device '%pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index aa93467784c29c89..303f9003562eed3d 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>  			return NOTIFY_OK;
+>  		}
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		client = of_i2c_register_device(adap, rd->dn);
+>  		if (IS_ERR(client)) {
+>  			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 07d93753b12f5f4d..e311d406b1705306 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+>  	np->sibling = np->parent->child;
+>  	np->parent->child = np;
+>  	of_node_clear_flag(np, OF_DETACHED);
+> +	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>  }
+>  
+>  /**
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *nb,
+>  		if (of_node_check_flag(rd->dn, OF_POPULATED))
+>  			return NOTIFY_OK;
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		/* pdev_parent may be NULL when no bus platform device */
+>  		pdev_parent = of_find_device_by_node(rd->dn->parent);
+>  		pdev = of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 8e8af148b1dc371e..66ac67580d2a473b 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4527,6 +4527,7 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>  			return NOTIFY_OK;
+>  		}
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		spi = of_register_spi_device(ctlr, rd->dn);
+>  		put_device(&ctlr->dev);
+>  
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/spi/spi-dw-dma.c:241:56: sparse: sparse: marked inline, but without a definition
-
-vim +241 drivers/spi/spi-dw-dma.c
-
-f89a6d8f43ebe9 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  240  
-57784411728ff4 drivers/spi/spi-dw-dma.c Serge Semin     2020-05-29 @241  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
-57784411728ff4 drivers/spi/spi-dw-dma.c Serge Semin     2020-05-29  242  {
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  243  	switch (n_bytes) {
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  244  	case 1:
-e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  245  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  246  	case 2:
-e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  247  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  248  	case 3:
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  249  	case 4:
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  250  		return DMA_SLAVE_BUSWIDTH_4_BYTES;
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  251  	default:
-e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  252  		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  253  	}
-80de96dae70648 drivers/spi/spi-dw-dma.c Joy Chakraborty 2023-03-26  254  }
-e31abce778bc05 drivers/spi/spi-dw-mid.c Andy Shevchenko 2015-03-09  255  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
