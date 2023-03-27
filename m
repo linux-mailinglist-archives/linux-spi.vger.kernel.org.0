@@ -2,38 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AA06C9B32
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 07:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29D36C9B3C
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 08:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbjC0Fy2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 01:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        id S229829AbjC0GFX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 02:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjC0FyM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 01:54:12 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4DB524C;
-        Sun, 26 Mar 2023 22:53:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Veh3ZHc_1679896430;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Veh3ZHc_1679896430)
+        with ESMTP id S229498AbjC0GFX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 02:05:23 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F49420A;
+        Sun, 26 Mar 2023 23:05:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Veh7Qp9_1679897117;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Veh7Qp9_1679897117)
           by smtp.aliyun-inc.com;
-          Mon, 27 Mar 2023 13:53:51 +0800
+          Mon, 27 Mar 2023 14:05:17 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next 3/3] spi: pic32: Use devm_platform_get_and_ioremap_resource()
-Date:   Mon, 27 Mar 2023 13:53:46 +0800
-Message-Id: <20230327055346.76625-3-yang.lee@linux.alibaba.com>
+Cc:     orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 1/2] spi: sprd-adi: Use devm_platform_get_and_ioremap_resource()
+Date:   Mon, 27 Mar 2023 14:05:15 +0800
+Message-Id: <20230327060516.93509-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
-References: <20230327055346.76625-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,23 +47,23 @@ what this function does.
 
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/spi/spi-pic32.c | 3 +--
+ drivers/spi/spi-sprd-adi.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index 8a02073a354d..f2af5e653f3d 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -710,8 +710,7 @@ static int pic32_spi_hw_probe(struct platform_device *pdev,
- 	struct resource *mem;
- 	int ret;
+diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
+index 3b158124d79f..22e39c4c12c4 100644
+--- a/drivers/spi/spi-sprd-adi.c
++++ b/drivers/spi/spi-sprd-adi.c
+@@ -541,8 +541,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	dev_set_drvdata(&pdev->dev, ctlr);
+ 	sadi = spi_controller_get_devdata(ctlr);
  
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	pic32s->regs = devm_ioremap_resource(&pdev->dev, mem);
-+	pic32s->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
- 	if (IS_ERR(pic32s->regs))
- 		return PTR_ERR(pic32s->regs);
- 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	sadi->base = devm_ioremap_resource(&pdev->dev, res);
++	sadi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(sadi->base)) {
+ 		ret = PTR_ERR(sadi->base);
+ 		goto put_ctlr;
 -- 
 2.20.1.7.g153144c
 
