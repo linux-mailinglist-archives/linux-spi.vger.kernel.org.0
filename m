@@ -2,103 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44846C9E81
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 10:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187DB6C9EB1
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Mar 2023 10:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbjC0Isx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 04:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S233500AbjC0I4c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Mar 2023 04:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbjC0Isa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 04:48:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D366EBD;
-        Mon, 27 Mar 2023 01:45:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJDTrViFkukYSAA--.28393S3;
-        Mon, 27 Mar 2023 16:42:19 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPL7lViFkPQsOAA--.10208S3;
-        Mon, 27 Mar 2023 16:42:15 +0800 (CST)
-Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
- <20230324063317.14664-3-zhuyinbo@loongson.cn>
- <0fff1e01-678b-a26a-084b-9aa30a0deea5@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <2a24cce4-3211-3440-cc42-55499ded275e@loongson.cn>
-Date:   Mon, 27 Mar 2023 16:42:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S232907AbjC0I4B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 04:56:01 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4195BB3
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 01:52:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so32774168edb.6
+        for <linux-spi@vger.kernel.org>; Mon, 27 Mar 2023 01:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679907156;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UJ7r+Qhe7qVp4owbhfQXaIuIJ5xTZz7JXqNZYOcMpJs=;
+        b=tm0EY+Z6DUNfTIeAGVJtpQaBCRrpwJlu6fNVojTeVDEdcdqFD9ajWuqQ4cWjaoaWgS
+         CsNsU0e0dohKWB0m9rLsaTKKCDQFdfxNiNWKE8FfNgwkZKAIXuNAb101PMIg4DPxm6Lc
+         imN4moNM0tbI84wKr6pkZs16VsLJ997h3SVq0/J4+rIl+LotIEUC9viwTJ4bqXetVuDc
+         VCtbhKNfnnfkUCSl3T8EIHPCAxU1JEQDnYhAOsHk5sXKEGYVFTfbXEhbJIUypeua1ALZ
+         UtDEGA8dpjiCe9lw5IBaGaHUs8+KtvauU2IyJpOu9f72Q5oJg7sYDJhwdHLTCSg4ULqk
+         M6mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679907156;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UJ7r+Qhe7qVp4owbhfQXaIuIJ5xTZz7JXqNZYOcMpJs=;
+        b=xAmY00O1jJAko+J5iOMExdPryXGPlgEsJbEAynnEvEuxv5jLVRjDhQuYCI0LRqNw2I
+         1lOFaLazSpMzNRJJmXUKJdOcfcaX70oJY3UeDANBMmtSohekGmAdRLeVNMC0x9VTKgm4
+         YFlfZKV47ntn0Q71SN7etwieBfsaLCpyO3tX9dX0gjp/VEMvlO+AxOctDBRi1p0XlB2i
+         Ri2YEVTddFnMCp6U+7TCtl0aoMp/Ka/1x3tGU1ppgVL0tWiC2/e7ZTfwdTbC3bcl/sEf
+         f/LUarMsTWqZJmjL02EYvRRmSXWuX71dfW0hCay9VfMcoCZGMD97MFQHHRa2A1nLLgwH
+         qqZQ==
+X-Gm-Message-State: AAQBX9fKkg0AVMI4hRQkQoka/7MVqUYM95Onk4knqcGadZvdpgKgMOws
+        MnKS21j3U76V63ZP2caOxT8aFg==
+X-Google-Smtp-Source: AKy350Z5KnieCxxhcGNuzpjaGClZTmUGMeJhJnKpPEr13oKvvVkF1zVa3uUYd8NRh5/SM8SAEBGXkQ==
+X-Received: by 2002:a17:906:fa1b:b0:922:2ba3:2348 with SMTP id lo27-20020a170906fa1b00b009222ba32348mr12177607ejb.7.1679907156456;
+        Mon, 27 Mar 2023 01:52:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:198e:c1a5:309b:d678? ([2a02:810d:15c0:828:198e:c1a5:309b:d678])
+        by smtp.gmail.com with ESMTPSA id qq24-20020a17090720d800b008df7d2e122dsm13790482ejb.45.2023.03.27.01.52.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 01:52:36 -0700 (PDT)
+Message-ID: <87045dd7-7af1-7af2-83f3-aa15bf74e965@linaro.org>
+Date:   Mon, 27 Mar 2023 10:52:35 +0200
 MIME-Version: 1.0
-In-Reply-To: <0fff1e01-678b-a26a-084b-9aa30a0deea5@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: spi: add loongson spi
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, loongson-kernel@lists.loongnix.cn,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
+ <20230324063317.14664-2-zhuyinbo@loongson.cn>
+ <167966252219.1675112.1668738117284963309.robh@kernel.org>
+ <31026abc-bdb3-9d30-276f-82ff93e43d48@loongson.cn>
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <31026abc-bdb3-9d30-276f-82ff93e43d48@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxPL7lViFkPQsOAA--.10208S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWruw1kuw1xtF1xJF18CryUZFb_yoWkZrXEkr
-        4xuryxur1UJFsrJayYv34xZry2vFW8Ww10qF1DtFW5X39Iqry3Aw1DZryxW3W5Ar48ZFs8
-        Cr93Jw10kry5ujkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        17CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8pBT5UUUUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-在 2023/3/24 下午7:31, Krzysztof Kozlowski 写道:
-> On 24/03/2023 07:33, Yinbo Zhu wrote:
->> This bus driver supports the Loongson spi hardware controller in the
->> Loongson platforms and supports to use DTS and PCI framework to
->> register spi device resources.
+On 27/03/2023 10:39, zhuyinbo wrote:
+> 
+> 
+> 在 2023/3/24 下午9:07, Rob Herring 写道:
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   MAINTAINERS                     |   4 +
->>   drivers/spi/Kconfig             |  31 ++++
->>   drivers/spi/Makefile            |   3 +
->>   drivers/spi/spi-loongson-core.c | 302 ++++++++++++++++++++++++++++++++
->>   drivers/spi/spi-loongson-pci.c  |  89 ++++++++++
->>   drivers/spi/spi-loongson-plat.c |  66 +++++++
->>   drivers/spi/spi-loongson.h      |  41 +++++
->>   7 files changed, 536 insertions(+)
->>   create mode 100644 drivers/spi/spi-loongson-core.c
->>   create mode 100644 drivers/spi/spi-loongson-pci.c
->>   create mode 100644 drivers/spi/spi-loongson-plat.c
->>   create mode 100644 drivers/spi/spi-loongson.h
+>> On Fri, 24 Mar 2023 14:33:16 +0800, Yinbo Zhu wrote:
+>>> Add the Loongson platform spi binding with DT schema format using
+>>> json-schema.
+>>>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>> ---
+>>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>>>   MAINTAINERS                                   |  6 +++
+>>>   2 files changed, 49 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>
+>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> yamllint warnings/errors:
+>>
+>> dtschema/dtc warnings/errors:
+>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+>> FATAL ERROR: Unable to parse input tree
+>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+>> make[1]: *** Waiting for unfinished jobs....
+>> make: *** [Makefile:1512: dt_binding_check] Error 2
+> Hi Rob Herring,
 > 
-> Your patches still have build warnings. Are these false postives or you
-> forgot to build it? Anyway, please respond to the report.
-> 
-> Best regards,
-> Krzysztof
-thanks your reminder, I have already provided feedback about compile issue.
-> 
+> This error was still appears on 22 line, this line was 
+> LOONGSON2_BOOT_CLK not refer, it need depend on 
+> https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/ 
+> then compile will be successful. and I had added this depend on 
+> description in v2, v3 patch changelog, I was also send a email to remind 
+> your bot for the test my patch need dpend on other clock patch.
+
+... and did you read Rob's advice? For some reason you responded to
+automated bot's email, but not to actual email from Rob.
+
+Best regards,
+Krzysztof
 
