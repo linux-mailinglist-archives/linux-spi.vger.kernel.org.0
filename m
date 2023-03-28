@@ -2,60 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD956CC021
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 15:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844B36CC14C
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 15:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbjC1NGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 09:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S233262AbjC1Noe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 09:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjC1NGq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 09:06:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD8E1;
-        Tue, 28 Mar 2023 06:06:33 -0700 (PDT)
+        with ESMTP id S232546AbjC1NoM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 09:44:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CC6C168;
+        Tue, 28 Mar 2023 06:43:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7B5F7CE1B5B;
-        Tue, 28 Mar 2023 13:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F54C433D2;
-        Tue, 28 Mar 2023 13:06:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D9E8B81CF9;
+        Tue, 28 Mar 2023 13:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C1BC433D2;
+        Tue, 28 Mar 2023 13:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680008789;
-        bh=x4cblEk4sOAHylEWs5F6A2qdw79QFRP52N4WmGSIy8s=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=c+eZL4ETzBjnp+yIOByAeNjjF0YLvWNg2ViZc4LPi3i+3n9Jw2OI1bVcGRNbHJYEG
-         2xvgU5S66RLQxyxrex/zd71yU9bolvfhngXdtqHzvqy2dzmqgWT+glhjW+idG6RkuD
-         I0enkVVElhWUjGtjZo2NUAUStLUtjnsRxvcUp5kBzMLhoqJRQSSLlZnELAQq7/cJvu
-         Kh0Z1FMTc8Q+zpv963cofBMV/DS40oIe3o2tgKm0s9X+aaybBETxxoe4LCsALP/LJY
-         j6UIbu4B4qOucDw3Nyz4FQd2jENbb3Ou2KY0oT7ZVjDNKh/acyFiAZSqpSP01LkWt4
-         e431l5ITCNC6w==
+        s=k20201202; t=1680011035;
+        bh=KzYDwfsH+YX81gSdDwsXHqP3ZoSOdKrPj4OVMe0JLWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WxvlcsctzYdjsBHlZsV0eGLBm1jk/H/OwlR9XgvA/XAjNg3cC+7Ug0lLHSmdxCraH
+         r3q0XBUsepMwwl21+wlvotubYqthAfADE7y9Qb/6HqhXZvQW9qiLda32SUfYZRC7Zb
+         gJlCOOd66RnzajgNRCbm86XRIlBzMZ0qQ+9g2gQOoLIKP4Xc4X6FaD6RAMr0BwHqDr
+         Qaw5V5Gi94S0RAQ8UlI4V0QZRGtKsBNEdoLNwG37Ylaa8NWA0KWouaKRXgl+FH2GY+
+         2rd/6B1SQAhukf1ZLOdwBFj2+f9yoD2cSxZvuqW/sO2cz1NtbX7hjatmJXzNFctK81
+         9CYigjPxYadNg==
+Date:   Tue, 28 Mar 2023 14:43:50 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rajesh Patil <rajpat@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
-References: <20230323173019.3706069-1-dianders@chromium.org>
-Subject: Re: (subset) [PATCH 00/14] Control Quad SPI pinctrl better on
- Qualcomm Chromebooks
-Message-Id: <168000878531.3186355.13214896425216649908.b4-ty@kernel.org>
-Date:   Tue, 28 Mar 2023 14:06:25 +0100
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH SPI for-next] spi: microchip: pci1xxxx: Fix minor bugs in
+ spi-pci1xxxx driver
+Message-ID: <97c57e1b-9779-4e36-9eac-754fdcb9c504@sirena.org.uk>
+References: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2PS2/CgMOCO2Hp2O"
+Content-Disposition: inline
+In-Reply-To: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
+X-Cookie: Oh, wow!  Look at the moon!
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -65,41 +54,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 23 Mar 2023 10:30:04 -0700, Douglas Anderson wrote:
-> The main goal of this series is to do a better job of controling the
-> pins related to the "Quad SPI" IP block on Qualcomm Chromebooks. This
-> is essentially 'v2' of my previous attempt in the patch ("arm64: dts:
-> qcom: sc7180: Fix trogdor qspi pull direction") [1] but since it's
-> spiraled out a bit and there are no patches that are exactly the same
-> I've reset to v1.
-> 
-> [...]
 
-Applied to
+--2PS2/CgMOCO2Hp2O
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   broonie/spi.git for-next
+On Tue, Mar 28, 2023 at 11:12:12AM +0530, Tharun Kumar P wrote:
+> Following bugs are fixed in this patch:
+> 1. pci1xxxx_spi_resume API masks SPI interrupt bit which prohibits
+> firing of interrupt to the host at the end of the transaction after
+> suspend-resume. This patch unmasks this bit at resume.
+> 2. In=A0pci1xxxx_spi_transfer_one API, length of SPI transaction gets
+> cleared by unmasking length field. Set length of transaction after
+> unmasking length field.
+> 3. Remove support for disabling chip select as hardware does not support
+> the same.
 
-Thanks!
+As covered in submitting-patches.rst you should send one patch per
+change, this makes things much easier to review.
 
-[05/14] spi: spi-qcom-qspi: Support pinctrl sleep states
-        commit: 0098c52745112c4387942a37559ababeaf072f0c
+>  drivers/spi/spi-pci1xxxx.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+The subject says this is a patch for the microchip driver...
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>  	/* Set the DEV_SEL bits of the SPI_MST_CTL_REG */
+>  	regval =3D readl(par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -	if (enable) {
+> +	if (!enable) {
+>  		regval &=3D ~SPI_MST_CTL_DEVSEL_MASK;
+>  		regval |=3D (spi_get_chipselect(spi, 0) << 25);
+>  		writel(regval,
+>  		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -	} else {
+> -		regval &=3D ~(spi_get_chipselect(spi, 0) << 25);
+> -		writel(regval,
+> -		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+> -
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+I am unclear how chip select will ever be asserted with this change?
+Now the value is only written if we are disabling.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--2PS2/CgMOCO2Hp2O
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mark
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQi7xIACgkQJNaLcl1U
+h9Ch8gf+O/MluZL0YuDTHhZLLMwc6B5ISaKg7aLC6AxuIXjQ/I04oR+OhSexo/p7
+KvgYa4WouYJxeZim7h98p2qWUjMrTTfUltXnbifLd6L1N3g/l/S1jr6DPGaa2SwV
+KiFB5DO7cNuc6GVun1Sv2Q/15w39UbMwRUfqioeHluDn2Na1dCjab8t8G2AokU0B
+gzWGZ7mSU+aSf+kmNlDHImh6rsQJqDIkD39CxLppbcyTSIB3WBI2kyCY5LbUhxUE
+wdGKDtuVwyfHZHBY/EY+ejyb0mccWoxdshAlcyCN6gj5WVo8Y45B5eoZliBEc60b
+6epymPQxByl5AL6IX+XyDTxHg12TLA==
+=eYBI
+-----END PGP SIGNATURE-----
+
+--2PS2/CgMOCO2Hp2O--
