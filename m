@@ -2,114 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2F56CB4CC
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 05:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BD46CB635
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 07:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjC1DZa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Mar 2023 23:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S232202AbjC1Fmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 01:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjC1DZ1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Mar 2023 23:25:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D8752139;
-        Mon, 27 Mar 2023 20:25:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxMMwhXiJkEt0SAA--.28861S3;
-        Tue, 28 Mar 2023 11:25:21 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeUcXiJkD+0OAA--.46439S3;
-        Tue, 28 Mar 2023 11:25:19 +0800 (CST)
-Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
- <20230324063317.14664-3-zhuyinbo@loongson.cn>
- <0fff1e01-678b-a26a-084b-9aa30a0deea5@linaro.org>
- <2a24cce4-3211-3440-cc42-55499ded275e@loongson.cn>
- <0c43019f-01b6-c466-c7d4-c2b91116b7db@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <96c4b0e8-2b3b-1eb9-a922-807894fbc06d@loongson.cn>
-Date:   Tue, 28 Mar 2023 11:25:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229647AbjC1Fms (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 01:42:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F991BF9;
+        Mon, 27 Mar 2023 22:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679982168; x=1711518168;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WnTCVxeo4ixouY0+xIT6aOWTUOXdySrVSf9qY5DLHao=;
+  b=kSaUqUZ3exbJo0yQKYZIJxtJV5npx+wJkrnEb37Sd6ThsY3YoEF3hwfL
+   Kl1A0a0Yshuz8aXuxm+xSf6jtzZaWIThXRiTzJ2jXxOQWNdFzcV8d4otg
+   1tB/C/3DYcjFHK990E4h+AQFeI2jRkUmaEbt5pxvI9glYQaHX270W+xVJ
+   +I9pAFwdSfWx+J8MvFFFCEUvmEnALfITjIwNYxAtPSiHGQFeNwxpX0V4K
+   S9CGMwO4jdciWrPV2ZG/vMRDKjNYzMzReN/KqKYzFGe2xd53sVodimjU9
+   nJpBCke00pkgL4kwwxPqzr8Z96jcVkouwika4H117eeDAHYKlEoC+xHQl
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,296,1673938800"; 
+   d="scan'208";a="207012170"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 22:42:47 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 22:42:45 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 22:42:44 -0700
+From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <broonie@kernel.org>
+Subject: [PATCH SPI for-next] spi: microchip: pci1xxxx: Fix minor bugs in spi-pci1xxxx driver
+Date:   Tue, 28 Mar 2023 11:12:12 +0530
+Message-ID: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <0c43019f-01b6-c466-c7d4-c2b91116b7db@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxAeUcXiJkD+0OAA--.46439S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KryUAF4UZF4UGFW5Ar4rAFb_yoW8Xr45pa
-        18CF4YkFWUJr1Ikr1Sqas8CFyYvayfGrZ8G3srKw1rXr9Yv34ayF1UtFy5CrZxXF18WFyI
-        qF4jgr97Ga15XFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
-        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Following bugs are fixed in this patch:
+1. pci1xxxx_spi_resume API masks SPI interrupt bit which prohibits
+firing of interrupt to the host at the end of the transaction after
+suspend-resume. This patch unmasks this bit at resume.
+2. In pci1xxxx_spi_transfer_one API, length of SPI transaction gets
+cleared by unmasking length field. Set length of transaction after
+unmasking length field.
+3. Remove support for disabling chip select as hardware does not support
+the same.
 
+Fixes: 1cc0cbea7167 ("spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch")
+Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+---
+ drivers/spi/spi-pci1xxxx.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-在 2023/3/27 下午4:53, Krzysztof Kozlowski 写道:
-> On 27/03/2023 10:42, zhuyinbo wrote:
->>
->>
->> 在 2023/3/24 下午7:31, Krzysztof Kozlowski 写道:
->>> On 24/03/2023 07:33, Yinbo Zhu wrote:
->>>> This bus driver supports the Loongson spi hardware controller in the
->>>> Loongson platforms and supports to use DTS and PCI framework to
->>>> register spi device resources.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>>    MAINTAINERS                     |   4 +
->>>>    drivers/spi/Kconfig             |  31 ++++
->>>>    drivers/spi/Makefile            |   3 +
->>>>    drivers/spi/spi-loongson-core.c | 302 ++++++++++++++++++++++++++++++++
->>>>    drivers/spi/spi-loongson-pci.c  |  89 ++++++++++
->>>>    drivers/spi/spi-loongson-plat.c |  66 +++++++
->>>>    drivers/spi/spi-loongson.h      |  41 +++++
->>>>    7 files changed, 536 insertions(+)
->>>>    create mode 100644 drivers/spi/spi-loongson-core.c
->>>>    create mode 100644 drivers/spi/spi-loongson-pci.c
->>>>    create mode 100644 drivers/spi/spi-loongson-plat.c
->>>>    create mode 100644 drivers/spi/spi-loongson.h
->>>
->>> Your patches still have build warnings. Are these false postives or you
->>> forgot to build it? Anyway, please respond to the report.
->>>
->>> Best regards,
->>> Krzysztof
->> thanks your reminder, I have already provided feedback about compile issue.
-> 
-> Then please test your patches before sending...
-That's for sure, I tested it on LoongArch platform.
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
+index 1c5731641a04..9a044012aca7 100644
+--- a/drivers/spi/spi-pci1xxxx.c
++++ b/drivers/spi/spi-pci1xxxx.c
+@@ -58,7 +58,7 @@
+ #define VENDOR_ID_MCHP 0x1055
+ 
+ #define SPI_SUSPEND_CONFIG 0x101
+-#define SPI_RESUME_CONFIG 0x303
++#define SPI_RESUME_CONFIG 0x203
+ 
+ struct pci1xxxx_spi_internal {
+ 	u8 hw_inst;
+@@ -114,16 +114,11 @@ static void pci1xxxx_spi_set_cs(struct spi_device *spi, bool enable)
+ 
+ 	/* Set the DEV_SEL bits of the SPI_MST_CTL_REG */
+ 	regval = readl(par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+-	if (enable) {
++	if (!enable) {
+ 		regval &= ~SPI_MST_CTL_DEVSEL_MASK;
+ 		regval |= (spi_get_chipselect(spi, 0) << 25);
+ 		writel(regval,
+ 		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+-	} else {
+-		regval &= ~(spi_get_chipselect(spi, 0) << 25);
+-		writel(regval,
+-		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+-
+ 	}
+ }
+ 
+@@ -199,8 +194,9 @@ static int pci1xxxx_spi_transfer_one(struct spi_controller *spi_ctlr,
+ 			else
+ 				regval &= ~SPI_MST_CTL_MODE_SEL;
+ 
+-			regval |= ((clkdiv << 5) | SPI_FORCE_CE | (len << 8));
++			regval |= ((clkdiv << 5) | SPI_FORCE_CE);
+ 			regval &= ~SPI_MST_CTL_CMD_LEN_MASK;
++			regval |= (len << 8);
+ 			writel(regval, par->reg_base +
+ 			       SPI_MST_CTL_REG_OFFSET(p->hw_inst));
+ 			regval = readl(par->reg_base +
+-- 
+2.25.1
 
