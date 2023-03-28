@@ -2,55 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BD46CB635
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 07:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F0E6CB69C
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 08:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjC1Fmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 01:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S231927AbjC1GKl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 02:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjC1Fms (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 01:42:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F991BF9;
-        Mon, 27 Mar 2023 22:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679982168; x=1711518168;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WnTCVxeo4ixouY0+xIT6aOWTUOXdySrVSf9qY5DLHao=;
-  b=kSaUqUZ3exbJo0yQKYZIJxtJV5npx+wJkrnEb37Sd6ThsY3YoEF3hwfL
-   Kl1A0a0Yshuz8aXuxm+xSf6jtzZaWIThXRiTzJ2jXxOQWNdFzcV8d4otg
-   1tB/C/3DYcjFHK990E4h+AQFeI2jRkUmaEbt5pxvI9glYQaHX270W+xVJ
-   +I9pAFwdSfWx+J8MvFFFCEUvmEnALfITjIwNYxAtPSiHGQFeNwxpX0V4K
-   S9CGMwO4jdciWrPV2ZG/vMRDKjNYzMzReN/KqKYzFGe2xd53sVodimjU9
-   nJpBCke00pkgL4kwwxPqzr8Z96jcVkouwika4H117eeDAHYKlEoC+xHQl
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,296,1673938800"; 
-   d="scan'208";a="207012170"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Mar 2023 22:42:47 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 22:42:45 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 22:42:44 -0700
-From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <broonie@kernel.org>
-Subject: [PATCH SPI for-next] spi: microchip: pci1xxxx: Fix minor bugs in spi-pci1xxxx driver
-Date:   Tue, 28 Mar 2023 11:12:12 +0530
-Message-ID: <20230328054212.139312-1-tharunkumar.pasumarthi@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229436AbjC1GKk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 02:10:40 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44FE30C0;
+        Mon, 27 Mar 2023 23:10:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VerqHuJ_1679983832;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VerqHuJ_1679983832)
+          by smtp.aliyun-inc.com;
+          Tue, 28 Mar 2023 14:10:33 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     broonie@kernel.org
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 1/2] spi: tegra114: Use devm_platform_get_and_ioremap_resource()
+Date:   Tue, 28 Mar 2023 14:10:30 +0800
+Message-Id: <20230328061031.70140-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,64 +40,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Following bugs are fixed in this patch:
-1. pci1xxxx_spi_resume API masks SPI interrupt bit which prohibits
-firing of interrupt to the host at the end of the transaction after
-suspend-resume. This patch unmasks this bit at resume.
-2. In pci1xxxx_spi_transfer_one API, length of SPI transaction gets
-cleared by unmasking length field. Set length of transaction after
-unmasking length field.
-3. Remove support for disabling chip select as hardware does not support
-the same.
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Fixes: 1cc0cbea7167 ("spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch")
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/spi/spi-pci1xxxx.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/spi/spi-tegra114.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index 1c5731641a04..9a044012aca7 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -58,7 +58,7 @@
- #define VENDOR_ID_MCHP 0x1055
- 
- #define SPI_SUSPEND_CONFIG 0x101
--#define SPI_RESUME_CONFIG 0x303
-+#define SPI_RESUME_CONFIG 0x203
- 
- struct pci1xxxx_spi_internal {
- 	u8 hw_inst;
-@@ -114,16 +114,11 @@ static void pci1xxxx_spi_set_cs(struct spi_device *spi, bool enable)
- 
- 	/* Set the DEV_SEL bits of the SPI_MST_CTL_REG */
- 	regval = readl(par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
--	if (enable) {
-+	if (!enable) {
- 		regval &= ~SPI_MST_CTL_DEVSEL_MASK;
- 		regval |= (spi_get_chipselect(spi, 0) << 25);
- 		writel(regval,
- 		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
--	} else {
--		regval &= ~(spi_get_chipselect(spi, 0) << 25);
--		writel(regval,
--		       par->reg_base + SPI_MST_CTL_REG_OFFSET(p->hw_inst));
--
+diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
+index 9e7d762d0ee6..488df681eaef 100644
+--- a/drivers/spi/spi-tegra114.c
++++ b/drivers/spi/spi-tegra114.c
+@@ -1342,8 +1342,7 @@ static int tegra_spi_probe(struct platform_device *pdev)
+ 		goto exit_free_master;
  	}
- }
  
-@@ -199,8 +194,9 @@ static int pci1xxxx_spi_transfer_one(struct spi_controller *spi_ctlr,
- 			else
- 				regval &= ~SPI_MST_CTL_MODE_SEL;
- 
--			regval |= ((clkdiv << 5) | SPI_FORCE_CE | (len << 8));
-+			regval |= ((clkdiv << 5) | SPI_FORCE_CE);
- 			regval &= ~SPI_MST_CTL_CMD_LEN_MASK;
-+			regval |= (len << 8);
- 			writel(regval, par->reg_base +
- 			       SPI_MST_CTL_REG_OFFSET(p->hw_inst));
- 			regval = readl(par->reg_base +
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	tspi->base = devm_ioremap_resource(&pdev->dev, r);
++	tspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+ 	if (IS_ERR(tspi->base)) {
+ 		ret = PTR_ERR(tspi->base);
+ 		goto exit_free_master;
 -- 
-2.25.1
+2.20.1.7.g153144c
 
