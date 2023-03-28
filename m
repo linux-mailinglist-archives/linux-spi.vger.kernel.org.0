@@ -2,103 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B027C6CBB3D
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 11:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DC46CBD67
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 13:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjC1Jjp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 05:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S232276AbjC1LWg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 07:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjC1Jjo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 05:39:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3775BA5;
-        Tue, 28 Mar 2023 02:39:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88E206163C;
-        Tue, 28 Mar 2023 09:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE24C4339B;
-        Tue, 28 Mar 2023 09:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679996373;
-        bh=Wd9Ay6SO5CAcXIM2nKfNytXszwXbA4x1Yllp/z8nE64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HhDTMnACS8BU9XlDEHNeiGmsk2PXPK9tYvnPlubxps5rR6KJPQ9mr1nPpTspQwlSq
-         oITu2u1ZCBeqO4BSPhNMswLSeK0zYfZqAfGn5RRpUqZbnJukr33dYgufTUL9G4a6DF
-         PiDpKNWo2zE3fBsBh2ExB8rrK4pT2cIrVPDJQJaXMtiDPDf31xKJe+go5EItMzflQx
-         WX73XNznOsacVlfXDzipjaVX91Y1AS+agNIAqYaWJi5qpe5NfkAEmw2Par0042S+9O
-         H+HeVgrQw+YawW4rFgpDlrHqNtSu5AXOZrG/zU1iyYBjvK8+aQpbsemALDS/phicNT
-         gI/KCpt10LDug==
-Date:   Tue, 28 Mar 2023 11:39:29 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jannadurai@marvell.com,
-        cchavva@marvell.com, Suneel Garapati <sgarapati@marvell.com>
-Subject: Re: [PATCH 1/2] spi: octeontx2: Add support for octeontx2 spi
- controller
-Message-ID: <20230328093929.qkg2oseuibot3afl@intel.intel>
-References: <20230327180753.2279-1-pmalgujar@marvell.com>
- <20230327180753.2279-2-pmalgujar@marvell.com>
+        with ESMTP id S231374AbjC1LWe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 07:22:34 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 501567EF4;
+        Tue, 28 Mar 2023 04:22:22 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJAztzSJkNA8TAA--.28937S3;
+        Tue, 28 Mar 2023 19:22:21 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxOL3kzSJkalgPAA--.9160S2;
+        Tue, 28 Mar 2023 19:22:18 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v4 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Tue, 28 Mar 2023 19:22:08 +0800
+Message-Id: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327180753.2279-2-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxOL3kzSJkalgPAA--.9160S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoW5Gry3pF
+        43Cas8Kr4DJr4xArs3JayUuFyfZ3yrXr9rXFWaq398uryDZ34UZF4vgF4YvFsrAFnIvFyx
+        XFyvgrs5Ga4UZw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+        Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1tl1PUUUUU==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Suneel,
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-[...]
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
 
-> +static int tbi_clk_en = 1;
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-bool?
+ .../bindings/spi/loongson,ls-spi.yaml         |  43 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  31 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 304 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  89 +++++
+ drivers/spi/spi-loongson-plat.c               |  66 ++++
+ drivers/spi/spi-loongson.h                    |  41 +++
+ 8 files changed, 587 insertions(+)
 
-> +module_param(tbi_clk_en, uint, 0644);
-> +MODULE_PARM_DESC(tbi_clk_en,
-> +		 "Use Fixed Time Base 100MHz Reference Clock (0=Disable, 1=Enable [default])");
+-- 
+2.20.1
 
-can we avoid using module parameters? You can have these defined
-in device tree and you can also make sysfs interfaces, as well.
-
-> +static int cfg_mode_delay = 30;
-> +module_param(cfg_mode_delay, uint, 0644);
-> +MODULE_PARM_DESC(cfg_mode_delay,
-> +		 "Delay in micro-seconds for mode change in MPI CFG register (30 [default])");
-> +
-> +static void octeontx2_spi_wait_ready(struct octeontx2_spi *p)
-> +{
-> +	union mpix_sts mpi_sts;
-> +	unsigned int loops = 0;
-> +
-> +	mpi_sts.u64 = 0;
-> +	do {
-> +		if (loops++)
-> +			__delay(500);
-
-mmhhh... why have you chosen __delay() ?
-
-> +		mpi_sts.u64 = readq(p->register_base + OCTEONTX2_SPI_STS(p));
-> +	} while (mpi_sts.s.busy);
-
-[...]
-
-> +	if (mpi_cfg.u64 != p->last_cfg) {
-> +		p->last_cfg = mpi_cfg.u64;
-> +		writeq(mpi_cfg.u64, p->register_base + OCTEONTX2_SPI_CFG(p));
-> +		mpi_cfg.u64 = readq(p->register_base + OCTEONTX2_SPI_CFG(p));
-> +		udelay(cfg_mode_delay); /* allow CS change to settle */
-
-before "udelaying" anything that the user gives you, I would
-check what cfg_mode_delay is.
-
-Andi
