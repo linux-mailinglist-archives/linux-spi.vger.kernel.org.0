@@ -2,35 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F2C6CB6B3
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 08:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A0B6CB6F6
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 08:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjC1GPd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 02:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S232662AbjC1GVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 02:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjC1GPb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 02:15:31 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCABF2D5B;
-        Mon, 27 Mar 2023 23:15:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VerpCfk_1679984125;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VerpCfk_1679984125)
+        with ESMTP id S232647AbjC1GVO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 02:21:14 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FD944A7;
+        Mon, 27 Mar 2023 23:20:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VerqKNV_1679984320;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VerqKNV_1679984320)
           by smtp.aliyun-inc.com;
-          Tue, 28 Mar 2023 14:15:26 +0800
+          Tue, 28 Mar 2023 14:18:40 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     broonie@kernel.org
-Cc:     michal.simek@xilinx.com, linux-spi@vger.kernel.org,
+Cc:     alain.volmat@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] spi: xilinx: Use devm_platform_get_and_ioremap_resource()
-Date:   Tue, 28 Mar 2023 14:15:24 +0800
-Message-Id: <20230328061524.77529-1-yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] spi: stm32: Use devm_platform_get_and_ioremap_resource()
+Date:   Tue, 28 Mar 2023 14:18:39 +0800
+Message-Id: <20230328061839.82185-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
         USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,22 +49,22 @@ what this function does.
 
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/spi/spi-xilinx.c | 3 +--
+ drivers/spi/spi-stm32.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index 5dd3d1901412..8e6e3876aa9a 100644
---- a/drivers/spi/spi-xilinx.c
-+++ b/drivers/spi/spi-xilinx.c
-@@ -440,8 +440,7 @@ static int xilinx_spi_probe(struct platform_device *pdev)
- 	xspi->bitbang.txrx_bufs = xilinx_spi_txrx_bufs;
- 	init_completion(&xspi->done);
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 8e6532d8babc..d6598e4116bd 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -1780,8 +1780,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 		of_match_device(pdev->dev.driver->of_match_table,
+ 				&pdev->dev)->data;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	xspi->regs = devm_ioremap_resource(&pdev->dev, res);
-+	xspi->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(xspi->regs))
- 		return PTR_ERR(xspi->regs);
+-	spi->base = devm_ioremap_resource(&pdev->dev, res);
++	spi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(spi->base))
+ 		return PTR_ERR(spi->base);
  
 -- 
 2.20.1.7.g153144c
