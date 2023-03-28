@@ -2,110 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538AF6CBFEC
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 14:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD956CC021
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 15:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjC1M5O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 08:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S232663AbjC1NGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 09:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbjC1M5L (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 08:57:11 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA031BDD;
-        Tue, 28 Mar 2023 05:57:09 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17aceccdcf6so12547545fac.9;
-        Tue, 28 Mar 2023 05:57:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680008228;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Pfl8kj7s7apTQU6orQnyRp7gH+23K/F8LcW5+yhlLGQ=;
-        b=tOv99/FJu/ARb6Z8qH4qxx36QrfzBksQIlQGbaqs4PJ9cnz8SJ+3+FC4q7chzmdkeo
-         0qrEyfJrWq5MuvQpQx2xAibuJOQGyKUc/b99h3frAMR8XPKGz3PvDWHb3e9sEyzz5pd4
-         /rUJEgHtq10U0DY/GOyg6ZclBY5NGmeCX1Ztkilr1gXM8ik/Z/3/I8vzgNhr56lPLB5H
-         QerXMKbYvrj5bcGo6pFGvhHw+odQcZW3JNLsu4ewHTh+hohbgSvsDGQF/bUUZFq7AudF
-         V80GF9p47JIp0BLH1kka5np1cWVGdCVdLkI2B9UIl+akuqp8/9iOYuUTSjHmJHX7xDPB
-         dTJQ==
-X-Gm-Message-State: AAQBX9cP6YH0xbTLT6pP7qGcnGW5DtAcPuCgiD6oetWw4PYJ3ovdAKCm
-        TLHJciXdSr7IkivzlTi6sg==
-X-Google-Smtp-Source: AK7set/3tBXTrmBUNn8CXl7BAo/4Z9br++DcW8SsJpa1gY6tJFANfBnZ/VmKke2susiUONU44glLjQ==
-X-Received: by 2002:a05:6870:a454:b0:177:c8dc:501f with SMTP id n20-20020a056870a45400b00177c8dc501fmr11076779oal.29.1680008228470;
-        Tue, 28 Mar 2023 05:57:08 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v23-20020a056870709700b0017280f7d653sm10729715oae.35.2023.03.28.05.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:57:08 -0700 (PDT)
-Received: (nullmailer pid 3017887 invoked by uid 1000);
-        Tue, 28 Mar 2023 12:57:07 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        with ESMTP id S232625AbjC1NGq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 09:06:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD8E1;
+        Tue, 28 Mar 2023 06:06:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7B5F7CE1B5B;
+        Tue, 28 Mar 2023 13:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F54C433D2;
+        Tue, 28 Mar 2023 13:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680008789;
+        bh=x4cblEk4sOAHylEWs5F6A2qdw79QFRP52N4WmGSIy8s=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=c+eZL4ETzBjnp+yIOByAeNjjF0YLvWNg2ViZc4LPi3i+3n9Jw2OI1bVcGRNbHJYEG
+         2xvgU5S66RLQxyxrex/zd71yU9bolvfhngXdtqHzvqy2dzmqgWT+glhjW+idG6RkuD
+         I0enkVVElhWUjGtjZo2NUAUStLUtjnsRxvcUp5kBzMLhoqJRQSSLlZnELAQq7/cJvu
+         Kh0Z1FMTc8Q+zpv963cofBMV/DS40oIe3o2tgKm0s9X+aaybBETxxoe4LCsALP/LJY
+         j6UIbu4B4qOucDw3Nyz4FQd2jENbb3Ou2KY0oT7ZVjDNKh/acyFiAZSqpSP01LkWt4
+         e431l5ITCNC6w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20230328112210.23089-2-zhuyinbo@loongson.cn>
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328112210.23089-2-zhuyinbo@loongson.cn>
-Message-Id: <168000761529.3001360.2224316097077012976.robh@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
-Date:   Tue, 28 Mar 2023 07:57:07 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Rajesh Patil <rajpat@codeaurora.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
+References: <20230323173019.3706069-1-dianders@chromium.org>
+Subject: Re: (subset) [PATCH 00/14] Control Quad SPI pinctrl better on
+ Qualcomm Chromebooks
+Message-Id: <168000878531.3186355.13214896425216649908.b4-ty@kernel.org>
+Date:   Tue, 28 Mar 2023 14:06:25 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On Tue, 28 Mar 2023 19:22:09 +0800, Yinbo Zhu wrote:
-> Add the Loongson platform spi binding with DT schema format using
-> json-schema.
+On Thu, 23 Mar 2023 10:30:04 -0700, Douglas Anderson wrote:
+> The main goal of this series is to do a better job of controling the
+> pins related to the "Quad SPI" IP block on Qualcomm Chromebooks. This
+> is essentially 'v2' of my previous attempt in the patch ("arm64: dts:
+> qcom: sc7180: Fix trogdor qspi pull direction") [1] but since it's
+> spiraled out a bit and there are no patches that are exactly the same
+> I've reset to v1.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> 
+> [...]
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied to
 
-yamllint warnings/errors:
+   broonie/spi.git for-next
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
+Thanks!
 
-doc reference errors (make refcheckdocs):
+[05/14] spi: spi-qcom-qspi: Support pinctrl sleep states
+        commit: 0098c52745112c4387942a37559ababeaf072f0c
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328112210.23089-2-zhuyinbo@loongson.cn
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-pip3 install dtschema --upgrade
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Thanks,
+Mark
 
