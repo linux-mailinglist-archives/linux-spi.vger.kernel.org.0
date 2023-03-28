@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ACD6CB711
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 08:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3303C6CB721
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 08:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjC1GXN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 02:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S232115AbjC1G1J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 02:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjC1GW5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 02:22:57 -0400
+        with ESMTP id S232208AbjC1G0q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 02:26:46 -0400
 Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F273A85;
-        Mon, 27 Mar 2023 23:21:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Verz9vm_1679984479;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Verz9vm_1679984479)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044F41711;
+        Mon, 27 Mar 2023 23:26:04 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Ves-J4z_1679984761;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Ves-J4z_1679984761)
           by smtp.aliyun-inc.com;
-          Tue, 28 Mar 2023 14:21:20 +0800
+          Tue, 28 Mar 2023 14:26:01 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     broonie@kernel.org
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] spi: rockchip-sfc: Use devm_platform_get_and_ioremap_resource()
-Date:   Tue, 28 Mar 2023 14:21:18 +0800
-Message-Id: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] spi: imx: Use devm_platform_get_and_ioremap_resource()
+Date:   Tue, 28 Mar 2023 14:26:00 +0800
+Message-Id: <20230328062600.93160-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,23 +48,23 @@ what this function does.
 
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/spi/spi-rockchip-sfc.c | 3 +--
+ drivers/spi/spi-imx.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index 4fabd2e0439f..6830ecaa270b 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -576,8 +576,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 	sfc = spi_master_get_devdata(master);
- 	sfc->dev = dev;
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 1f2c7ad65ec8..9f8cee200e7c 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1753,8 +1753,7 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 
+ 	init_completion(&spi_imx->xfer_done);
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	sfc->regbase = devm_ioremap_resource(dev, res);
-+	sfc->regbase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(sfc->regbase))
- 		return PTR_ERR(sfc->regbase);
- 
+-	spi_imx->base = devm_ioremap_resource(&pdev->dev, res);
++	spi_imx->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(spi_imx->base)) {
+ 		ret = PTR_ERR(spi_imx->base);
+ 		goto out_controller_put;
 -- 
 2.20.1.7.g153144c
 
