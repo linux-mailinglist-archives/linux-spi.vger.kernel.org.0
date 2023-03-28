@@ -2,64 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2746CBDB8
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 13:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680A16CBDE2
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 13:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbjC1LbW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 07:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S232365AbjC1Lfn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 07:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjC1LbJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 07:31:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91CA97ABC;
-        Tue, 28 Mar 2023 04:30:49 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxEJXizyJkeRATAA--.29225S3;
-        Tue, 28 Mar 2023 19:30:42 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_77ezyJkYloPAA--.46008S3;
-        Tue, 28 Mar 2023 19:30:41 +0800 (CST)
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232666AbjC1Lfm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 07:35:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D435BBD;
+        Tue, 28 Mar 2023 04:35:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F48616E1;
+        Tue, 28 Mar 2023 11:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00DCC4339B;
+        Tue, 28 Mar 2023 11:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680003339;
+        bh=EVYhKptsbY/fUtII/R3Rxzc/AKD8pNXREsDk4jICzrY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PccUEc5q+Zf/8w83+CglGcqMIkR1K8jd23nJpwAanyYniq9CP+sCmTtGp0dMhHpJj
+         fLMh4a0ufTWGGJuZUuNh7GzvmxsyxSTby8X1j++jj2E6Knl7YsGdvMpOLXvj+mfD0P
+         nzXKnyXZk0URAq1k2vZPUDcpGXUSLm81pNPscgp4q8ToKI9uYcGEHn4CjhOG07o+9e
+         Pm1tjpL6aFutsePpCEUKj2b/iXNHiNh4kz9dcUJqhI7a3S52iwGkbB4m3WiZWHA3Ip
+         k3WmxsZ05doOEvZCp4DDpV8XUwsRlPF9bhlYuSsfn01s6G32m80cmGQsE83pj3vIkL
+         c8+BHiTlPeepw==
+Date:   Tue, 28 Mar 2023 13:35:36 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v4 0/2] spi: loongson: add bus driver for the loongson spi
+Message-ID: <20230328113536.ldxpvx3hibezcqtb@intel.intel>
 References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328112210.23089-2-zhuyinbo@loongson.cn>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <8a729488-43f1-de38-a69c-7ac9579cc6e6@loongson.cn>
-Date:   Tue, 28 Mar 2023 19:30:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20230328112210.23089-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx_77ezyJkYloPAA--.46008S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXw47KryrGFyfJw1Uur47XFb_yoW5Jw48pF
-        nrCFs3GF4xtF17A393Ka4xC3Z8X3s5G3ZFgFsrZr12kF98t3WxZa13Kr1UZFW7AF18XFW7
-        Zas29r4Yka1jqaUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jOyCJUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,87 +56,74 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch need depend on
-https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
-then the spi yaml file will build successful, if no this clock patch 
-that spi yaml will build fail, so please test it that base on above 
-clock patch.
-ÔÚ 2023/3/28 ÏÂÎç7:22, Yinbo Zhu Ð´µÀ:
-> Add the Loongson platform spi binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->   MAINTAINERS                                   |  6 +++
->   2 files changed, 49 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> new file mode 100644
-> index 000000000000..ee80049b1258
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson SPI controller
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls2k-spi
-> +      - loongson,ls7a-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-> +    spi0: spi@1fff0220{
-> +        compatible = "loongson,ls2k-spi";
-> +        reg = <0x1fff0220 0x10>;
-> +        clocks = <&clk LOONGSON2_BOOT_CLK>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 25a0981c74b6..9bc2158c735d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12157,6 +12157,12 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
->   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
->   
-> +LOONGSON SPI DRIVER
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-spi@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-> +
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->   M:	Sathya Prakash <sathya.prakash@broadcom.com>
->   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> 
+Hi Yinbo,
 
+before submitting the patches for review... can you please run
+checkpatch.pl on them?
+
+Thanks,
+Andi
+
+On Tue, Mar 28, 2023 at 07:22:08PM +0800, Yinbo Zhu wrote:
+> Loongson platform support spi hardware controller and this series patch
+> was to add spi driver and binding support.
+> 
+> Change in v2:
+> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+> 	 	   https://
+> 		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+> 		2. Remove the clock-names in spi yaml file.
+> 		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+> 		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+> 		   macro to limit some pci code.
+> 		5. Make the spi driver top code comment block that use C++ style.
+> 		6. Drop spi->max_speed_hz.
+> 		7. Add a spin_lock for loongson_spi_setup.
+> 		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+> 		9. Add spi_transfer_one and drop transfer and rework entire spi
+> 		   driver that include some necessary changes.
+> 		10. Use module_init replace subsys_initcall.
+> 		11. About PM interface that I don't find any issue so I don't add
+> 		    any changes.
+> Change in v3:
+> 		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+> 		   https://
+> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+> 		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+> 		3. Replace clock minItems with clock maxItems in yaml file.
+> 		4. Separate spi driver into platform module, pci module and core
+> 		   module.
+> 		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+> 		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+> 		   that reported by test robot.
+> 		6. Remove the spin lock.
+> 		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+> 		   the issue that multiple spi device transfer that maybe cause spi was
+> 		   be misconfigured.
+> Change in v4:
+> 		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+> 		   https://
+> 		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+> 		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+> 		   issue which devm_ioremap no declaration.
+> 		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+> 		   spi-loongson-core.c for fix the compile issue which
+> 		   loongson_spi_dev_pm_ops undefined.
+> 
+> Yinbo Zhu (2):
+>   dt-bindings: spi: add loongson spi
+>   spi: loongson: add bus driver for the loongson spi controller
+> 
+>  .../bindings/spi/loongson,ls-spi.yaml         |  43 +++
+>  MAINTAINERS                                   |  10 +
+>  drivers/spi/Kconfig                           |  31 ++
+>  drivers/spi/Makefile                          |   3 +
+>  drivers/spi/spi-loongson-core.c               | 304 ++++++++++++++++++
+>  drivers/spi/spi-loongson-pci.c                |  89 +++++
+>  drivers/spi/spi-loongson-plat.c               |  66 ++++
+>  drivers/spi/spi-loongson.h                    |  41 +++
+>  8 files changed, 587 insertions(+)
+> 
+> -- 
+> 2.20.1
+> 
