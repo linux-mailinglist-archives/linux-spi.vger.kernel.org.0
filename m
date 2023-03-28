@@ -2,148 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18FB6CBB2B
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 11:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B027C6CBB3D
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Mar 2023 11:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbjC1JhY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Mar 2023 05:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S231820AbjC1Jjp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Mar 2023 05:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbjC1JhL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 05:37:11 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5B56A78
-        for <linux-spi@vger.kernel.org>; Tue, 28 Mar 2023 02:36:43 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h17so11427090wrt.8
-        for <linux-spi@vger.kernel.org>; Tue, 28 Mar 2023 02:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679996202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XQV5jAujDsjlmJ7i4zzoeSJ8msTMIxUMBP2P8RrksF8=;
-        b=Mig5vyIslkZvEXRrGtnwNDJ79tHpngfDxYk99Sqqz63WsvDJV6ZCXlLQWmKNLfO8H8
-         2FFB/dIPxmrnuorZKOlXk168FTqEzjMfV2cYS/GntQADcvY2y50Su0U+3+zBlPzeQRoH
-         B3LwTgwGUSoekmwy9sWGdWUvU0QrIYCdAV3hAen5URjiP1YLl4lnrS8RpYe3TBR+xfkk
-         GjXj+EZJH6xAr1nNQDpgzzHa/3fhOBI55ZEsFA5MONcVQs1XA7IGDwbzJUtlBXeYf16B
-         BFHQcmXCO0zxSpGBxmsEK2vWjevflJAX/amSeJlJ4L047/GZgTuuPAnRuNRg13LcwONs
-         k4/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679996202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQV5jAujDsjlmJ7i4zzoeSJ8msTMIxUMBP2P8RrksF8=;
-        b=Ygy35kT33Bz+p3J+7HFulgVY0HWDFtqnQKTfBeI1pozUJyC8pSbvLABAj6dL3yzn4L
-         8Y7WQ0cDTqeNrOscjhNwmuQTnMrNApIbqE9M9jeohm5NlT7qfRz28iG1/KOo9fxkxfNA
-         giO1T1O0we1XoXdpIvBS3GrbLqPl8oohqZQAVj34xHFF9bdi/tQ4jXV27OkGZork687k
-         3UNlxc3WFQgGovlPMrcziU7fR8MFAqNyDXiPJqs0Iaf1t41r3v1kMdRIDHlRvUHxRDOg
-         LiojtHHHkBqP37rKf3SqVM+PbUDL0+JWzP6csMM2e0TgzsFx/YhMAVyMgS4WgrlcxvuW
-         KWtg==
-X-Gm-Message-State: AAQBX9dfkt2sdw0jcDtLR9dB3PU23zcoTjCjWzsvmev9+VZFnWFi/txz
-        NGNbTGUTBYLY3aXCQkRI8zR1Liec75xmltzsCdA=
-X-Google-Smtp-Source: AKy350a+LASx+WRjrECQYarn1n17idhSsDraP6ddv/ReLQYmMPK4bvDvhWHQ4zmmyRarSWf+n10QFg==
-X-Received: by 2002:adf:f78b:0:b0:2ce:aed4:7f22 with SMTP id q11-20020adff78b000000b002ceaed47f22mr12920141wrp.50.1679996202349;
-        Tue, 28 Mar 2023 02:36:42 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id n12-20020adfe34c000000b002da75c5e143sm14794062wrj.29.2023.03.28.02.36.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 02:36:42 -0700 (PDT)
-Message-ID: <4b8b629b-62f8-8e0d-5de2-9020a955f0e2@linaro.org>
-Date:   Tue, 28 Mar 2023 10:36:40 +0100
+        with ESMTP id S230468AbjC1Jjo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Mar 2023 05:39:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3775BA5;
+        Tue, 28 Mar 2023 02:39:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88E206163C;
+        Tue, 28 Mar 2023 09:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE24C4339B;
+        Tue, 28 Mar 2023 09:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679996373;
+        bh=Wd9Ay6SO5CAcXIM2nKfNytXszwXbA4x1Yllp/z8nE64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HhDTMnACS8BU9XlDEHNeiGmsk2PXPK9tYvnPlubxps5rR6KJPQ9mr1nPpTspQwlSq
+         oITu2u1ZCBeqO4BSPhNMswLSeK0zYfZqAfGn5RRpUqZbnJukr33dYgufTUL9G4a6DF
+         PiDpKNWo2zE3fBsBh2ExB8rrK4pT2cIrVPDJQJaXMtiDPDf31xKJe+go5EItMzflQx
+         WX73XNznOsacVlfXDzipjaVX91Y1AS+agNIAqYaWJi5qpe5NfkAEmw2Par0042S+9O
+         H+HeVgrQw+YawW4rFgpDlrHqNtSu5AXOZrG/zU1iyYBjvK8+aQpbsemALDS/phicNT
+         gI/KCpt10LDug==
+Date:   Tue, 28 Mar 2023 11:39:29 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jannadurai@marvell.com,
+        cchavva@marvell.com, Suneel Garapati <sgarapati@marvell.com>
+Subject: Re: [PATCH 1/2] spi: octeontx2: Add support for octeontx2 spi
+ controller
+Message-ID: <20230328093929.qkg2oseuibot3afl@intel.intel>
+References: <20230327180753.2279-1-pmalgujar@marvell.com>
+ <20230327180753.2279-2-pmalgujar@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/8] ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI
- NOR flash at its maximum frequency
-Content-Language: en-US
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mtd@lists.infradead.org
-References: <20221117105249.115649-1-tudor.ambarus@microchip.com>
- <20221117105249.115649-6-tudor.ambarus@microchip.com>
- <a6fe77b6-4ff4-3c91-0c67-a9da5a638e7b@microchip.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <a6fe77b6-4ff4-3c91-0c67-a9da5a638e7b@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327180753.2279-2-pmalgujar@marvell.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Suneel,
 
+[...]
 
-On 3/28/23 09:51, Nicolas Ferre wrote:
-> Hi Tudor,
+> +static int tbi_clk_en = 1;
 
-Hi!
+bool?
 
-> 
-> On 17/11/2022 at 11:52, Tudor Ambarus wrote:
->> sama5d27-wlsom1 populates an sst26vf064b SPI NOR flash. Its maximum
->> operating frequency for 2.7-3.6V is 104 MHz. As the flash is operated
->> at 3.3V, increase its maximum supported frequency to 104MHz. The
->> increasing of the spi-max-frequency value requires the setting of the
->> "CE# Not Active Hold Time", thus set the spi-cs-setup-ns to a value of 7.
->>
->> The sst26vf064b datasheet specifies just a minimum value for the
->> "CE# Not Active Hold Time" and it advertises it to 5 ns. There's no
->> maximum time specified. I determined experimentally that 5 ns for the
->> spi-cs-setup-ns is not enough when the flash is operated close to its
->> maximum frequency and tests showed that 7 ns is just fine, so set the
->> spi-cs-setup-ns dt property to 7.
->>
->> With the increase of frequency the reads are now faster with ~37%.
->>
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->> ---
->>   arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
->> b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
->> index 83bcf9fe0152..20caf40b4755 100644
->> --- a/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
->> +++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi
->> @@ -220,7 +220,8 @@ qspi1_flash: flash@0 {
->>           #size-cells = <1>;
->>           compatible = "jedec,spi-nor";
->>           reg = <0>;
->> -        spi-max-frequency = <80000000>;
->> +        spi-max-frequency = <104000000>;
->> +        spi-cs-setup-ns = /bits/ 16 <7>;
-> 
-> Following the different changes that happened to this property after
-> this post, am I right saying that this must now be changed to:
-> 
-> spi-cs-setup-delay-ns = <7>;
-> 
-> ?
-> 
+> +module_param(tbi_clk_en, uint, 0644);
+> +MODULE_PARM_DESC(tbi_clk_en,
+> +		 "Use Fixed Time Base 100MHz Reference Clock (0=Disable, 1=Enable [default])");
 
-Yes, that should do it. I'm amending the series right now. Can you do a
-little test on your side so that we make sure everything is in place?
-After the update, something like that should be run on any board (maybe
-wlsom1-ek?):
-#!/bin/sh
+can we avoid using module parameters? You can have these defined
+in device tree and you can also make sysfs interfaces, as well.
 
-dd if=/dev/urandom of=./qspi_test bs=1M count=6
-mtd_debug write /dev/mtd5 0 6291456 qspi_test
-mtd_debug erase /dev/mtd5 0 6291456
-mtd_debug read /dev/mtd5 0 6291456 qspi_read
-hexdump qspi_read
-mtd_debug write /dev/mtd5 0 6291456 qspi_test
-mtd_debug read /dev/mtd5 0 6291456 qspi_read
-sha1sum qspi_test qspi_read
+> +static int cfg_mode_delay = 30;
+> +module_param(cfg_mode_delay, uint, 0644);
+> +MODULE_PARM_DESC(cfg_mode_delay,
+> +		 "Delay in micro-seconds for mode change in MPI CFG register (30 [default])");
+> +
+> +static void octeontx2_spi_wait_ready(struct octeontx2_spi *p)
+> +{
+> +	union mpix_sts mpi_sts;
+> +	unsigned int loops = 0;
+> +
+> +	mpi_sts.u64 = 0;
+> +	do {
+> +		if (loops++)
+> +			__delay(500);
 
-brb,
-ta
+mmhhh... why have you chosen __delay() ?
+
+> +		mpi_sts.u64 = readq(p->register_base + OCTEONTX2_SPI_STS(p));
+> +	} while (mpi_sts.s.busy);
+
+[...]
+
+> +	if (mpi_cfg.u64 != p->last_cfg) {
+> +		p->last_cfg = mpi_cfg.u64;
+> +		writeq(mpi_cfg.u64, p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		mpi_cfg.u64 = readq(p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		udelay(cfg_mode_delay); /* allow CS change to settle */
+
+before "udelaying" anything that the user gives you, I would
+check what cfg_mode_delay is.
+
+Andi
