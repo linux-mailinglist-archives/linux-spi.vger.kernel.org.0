@@ -2,88 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE866CD2BA
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 09:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AECB6CD2D0
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 09:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjC2HNV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 03:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S229548AbjC2HSr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 03:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjC2HNU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 03:13:20 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84022127
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 00:13:18 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id e11so15040121lji.8
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 00:13:18 -0700 (PDT)
+        with ESMTP id S229671AbjC2HSq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 03:18:46 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2B13A86
+        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 00:18:31 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id r11so14573329wrr.12
+        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 00:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680073997;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tjz4YY6475MDr5O8cC77sTPGv7vBqMb5/BBOLn/SVfo=;
-        b=MRtmY6Sh0Urs9hIQEFX25PAVvlSXcMe+uCuWyT0FSHfRII2WE6jEemrt3H/G97TI8g
-         UaO0l6ZMoo4Dw0W8Bu2wDUhT68ebAGzQn5ud84/RJC26Q5aHkW443xy9ifd/mJ22N7Ex
-         vkRgCmSLtUp+BKq/Jo78BLRkrH2a77RS4aD/NOWUkBeAQ6RXWQTWqxIoJewmPI8+mjuo
-         B07ke0nHNqkz99Lw+Z5uVD2NkIxAH8CgjxW21q3pDMuXgofb9yox5n5IkvSHPTUvqdzO
-         T4ypTATDANkBPDFLxe0SzFMnsOOrl/ZEp0Ud0aiJGqas5o3aHapXgjglf5kpIn2/Ex+o
-         YI7A==
+        d=linaro.org; s=google; t=1680074310;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eajfSt8w9ufgtddPRPPD3ycsjjI6dYwIY70vn8OhuP8=;
+        b=JSFX3SUpSO5Pnvj3Bqsee5QeVRvC2/QwIyuCX8YXzGW5i6X0bCAvZLf1SupVEtz9UN
+         gWwlHf96GuuINcA1o7sN3ygP5HYuSo3uU0xg3t2cl3SYta1zrA83TbWB0hvtj5rRA9Sc
+         HV0juj5v3ecuAP/ce0rn4BjDpEVsBrLy1rMJqs8Cfy9vz8lAouIOy71e1tvEvb5a4ffr
+         tTrJzYV969vDjgvXcW8u0u8g863K1CSaP8NmoqUbU3UZi21B+uTtoOR8MMVjlMEkaLGV
+         tjpGeEu8vDUCA8qPVH1YKFk3tYIcTKnUbvoCO34usOfWxaFUV8fnmnDk3hvC+7EoS6xe
+         6Obw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680073997;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680074310;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tjz4YY6475MDr5O8cC77sTPGv7vBqMb5/BBOLn/SVfo=;
-        b=m84I6nIeXFtRrj/vFpUxHmeqejSRloyDtHPrv3d3b41pF2F9lYZMjBuJrAVZOg0wvR
-         Sx707r95pQWePXWmNP74ERi7tNnr/4GszdWdy9OS3WV2/2ul1lrQNhxK18p+8WmhgsJh
-         hqNXkct9fmjUE3k8HdLy3QHqaNePx8y9tBdv0xuIktb0DfyIo4Kd8YLfivSgszNyhWkE
-         /H6SSVehfPH4ygTkOX1RU8a/LeDtlV59WiI0Ow0PYrs3WVOhrFkcvIy+hsN/q046LbD5
-         hiVeuihYd6XAYUTd6YyXN5ycLERWpBOtvZQmGw7f4xQ8UWIMHI+arfeFbHCEliKnaAkZ
-         JEcQ==
-X-Gm-Message-State: AAQBX9fBk+3DGxSTL968MGCmd96tZN7UNvFJSMM+IoLXy1WB2VAkn6Mk
-        vIdGBW8PbgNxfTTvHsoez16Tog==
-X-Google-Smtp-Source: AKy350Z3U5ebYnTlRO47AoMVt8i3K/fuetG/Bfiu2U0Js/vspmuVMfQmnKLBM1VvfiYcYbjVFKhcKw==
-X-Received: by 2002:a2e:9d0c:0:b0:29e:4fa5:1708 with SMTP id t12-20020a2e9d0c000000b0029e4fa51708mr5731177lji.3.1680073996921;
-        Wed, 29 Mar 2023 00:13:16 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x26-20020a2e9dda000000b0029bd4365c95sm4697519ljj.87.2023.03.29.00.13.15
+        bh=eajfSt8w9ufgtddPRPPD3ycsjjI6dYwIY70vn8OhuP8=;
+        b=6mkFoh3I1lt6QI9hmnOH6aZBya7coPbVlspa2EsS3fZ5EvQmuya8+1oRWhtVuv24pV
+         OQQoxV2TGCQrayoJi5FGlMorfta//uBD2Dp2nWlNYVcDmP+V+TLX9IT6uRYIpAPZqKWZ
+         uHdlu+KDGJTBRuMOSrttOH+mRTAeHBWx05XsEApQjhquG5xPjq046NcB3WT4RIT7Ju2m
+         xtAYKBk5nWBVjxpNwl2xZF5LYe7hsVOVsOFkSqMfzPP0Aoa8sOrty3Jzq5uuuUjh/Goa
+         B7H85DY0u8n7BVE6e32x5z7DzXlU7s82LRKeVNTlpRhnlwnQolkTmj78tLYMa36RX/jf
+         h9rw==
+X-Gm-Message-State: AAQBX9ffk2AJbE2F3wFq0/HYnZ3oKD77uhyQXlnvIdOXg3QA25vzjNc9
+        6wZ1Y673JL/V8heaplImv+LhDQ==
+X-Google-Smtp-Source: AKy350bo70toYQ1jB282XzP5A8Q0DmRgF0RkhKapiG7TXsz1y7SEzDi3UbCgIf7qeNPJVgxKvgJFNg==
+X-Received: by 2002:adf:ce01:0:b0:2e2:730a:c7de with SMTP id p1-20020adfce01000000b002e2730ac7demr3550893wrn.24.1680074310088;
+        Wed, 29 Mar 2023 00:18:30 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.91])
+        by smtp.gmail.com with ESMTPSA id n12-20020a5d484c000000b002c59f18674asm29503250wrs.22.2023.03.29.00.18.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 00:13:16 -0700 (PDT)
-Message-ID: <6e1f4885-e8b9-8031-c25f-a9b18c187e56@linaro.org>
-Date:   Wed, 29 Mar 2023 09:13:15 +0200
+        Wed, 29 Mar 2023 00:18:29 -0700 (PDT)
+Message-ID: <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
+Date:   Wed, 29 Mar 2023 08:18:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 02/16] spi: mtk-pmif: Drop of_match_ptr for ID table
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andi Shyti <andi@etezian.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
- <20230310222857.315629-2-krzysztof.kozlowski@linaro.org>
- <7e58e5c86bd602932b762f9364209e31.sboyd@kernel.org>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
+ devm_platform_get_and_ioremap_resource()
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7e58e5c86bd602932b762f9364209e31.sboyd@kernel.org>
+To:     "Yang.Lee" <yang.lee@linux.alibaba.com>,
+        broonie <broonie@kernel.org>
+Cc:     heiko <heiko@sntech.de>, linux-spi <linux-spi@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rockchip <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
+ <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
+ <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -96,23 +80,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/03/2023 06:17, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2023-03-10 14:28:43)
->> The driver can match only via the DT table so the table should be always
->> used and the of_match_ptr does not have any sense (this also allows ACPI
->> matching via PRP0001, even though it is not relevant here).
->>
->>   drivers/spmi/spmi-mtk-pmif.c:517:34: error: ‘mtk_spmi_match_table’ defined but not used [-Werror=unused-const-variable=]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
+
+
+On 3/29/23 07:06, Yang.Lee wrote:
 > 
-> I'll fix the subject.
+> From:Tudor Ambarus <tudor.ambarus@linaro.org>
+> Send Time:2023年3月28日(星期二) 23:16
+>> If I were you I would make a single patch addressing all the drivers
+>> from SPI as this is a single logical change. You get extra points as you
+>> avoid polluting the log.
 > 
-> Applied to spmi-next
+> First of all, thank you for pointing out this.
+> Because the maintainer list of each SPI driver file is not identical, I am worried about causing trouble for too many people, so I split it into multiple patches based on this.
 
-Thanks. Apologies for the typo in the subject.
-
-Best regards,
-Krzysztof
-
+The change is trivial enough to don't bother at all. Here's an example:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4b23603a251d24022f2fa48ee67610eb245a4115
+> 
+>> No, you better use devm_platform_ioremap_resource() as res is not used
+>> afterwards. You'll get rid of the local variable too.
+> 
+> It's my bad, I will send a new version.
+> 
+> Regards,
+> Yang Li
+> 
