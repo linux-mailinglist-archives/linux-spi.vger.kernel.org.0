@@ -2,127 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A4C6CEFC4
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 18:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACB56CEFD6
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 18:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjC2QuP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 29 Mar 2023 12:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S230395AbjC2Qv1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 12:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2QuO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 12:50:14 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB384C2D;
-        Wed, 29 Mar 2023 09:50:13 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5416698e889so304343637b3.2;
-        Wed, 29 Mar 2023 09:50:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108612;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E7RQjEBQKcR2AtQw8SbDRBBSVG7qV4SWyEXRN37gXbg=;
-        b=ExhHtqPmqZG4oJR+RXlrAl4+TfvBWZLHllK5jTRoQrqWWEcDNsXqWqZxDPUnJN9oC0
-         /YZsbMujS4HvxQerdlUeFsVjKF5GcDGDD2qwgLGJ6DFynF6ImkEDLWGqqGkwlolwa7Mp
-         t/RetwYwjW66Pe4Pe+iJjnjr0rzStvbLd1YeuvuNoh8ulxy6bEYxjMsv6Xm9AwPr4kBF
-         sXCbAnzZ531TYe8fgnRvRwJcGkHsA6LqTPl+JgWHYQw0MyjnENJlFqksBA3ulOUq0JIA
-         NDD7xWkI3ZJI6u4zEWr2QP5AA5kppKrdXc6M6pwdRAzM+h7AKr0ahvqcCwc4L/24wFmw
-         GwtQ==
-X-Gm-Message-State: AAQBX9dgcR7SJkpFQCwKRxC0+X1n5RERf6WsT31lx0kzwyXy7qlEJ2CS
-        W36h9C77/fHex8v4ljZ17ReSOMen4/uVHw==
-X-Google-Smtp-Source: AKy350aTHpw80JcyaLQWzJvP9A9nFA8YQ9HUX27e0bcIBkk8upB8LSqfXGY9SijVdo3+I3kW+mpdOw==
-X-Received: by 2002:a81:9304:0:b0:53c:d480:f4b1 with SMTP id k4-20020a819304000000b0053cd480f4b1mr20948515ywg.6.1680108611906;
-        Wed, 29 Mar 2023 09:50:11 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id da12-20020a05690c0d8c00b00545a08184efsm3083614ywb.127.2023.03.29.09.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 09:50:11 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id i7so20194372ybt.0;
-        Wed, 29 Mar 2023 09:50:11 -0700 (PDT)
-X-Received: by 2002:a05:6902:722:b0:a09:314f:a3ef with SMTP id
- l2-20020a056902072200b00a09314fa3efmr12938566ybt.12.1680108611093; Wed, 29
- Mar 2023 09:50:11 -0700 (PDT)
+        with ESMTP id S229873AbjC2QvV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 12:51:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1325264;
+        Wed, 29 Mar 2023 09:51:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D81561DC7;
+        Wed, 29 Mar 2023 16:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9250EC433D2;
+        Wed, 29 Mar 2023 16:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680108660;
+        bh=gfR+Av/dK1tTf1rXGgKZU7TIYCGAdnShcte6WdNtArA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=pOGp8cWzppB2no8EGLqn3n9hF3bsKQ1HCdG3RlGcKmcJiPtalMqY1Y+TD7BucRgOQ
+         Ll6eM2U/LX/NxPeJVYw2aUahOGQA4fBfW84pukfz/LPUQY0buMdFAWMlvjNYWmph9T
+         faiDfYVksxh6xsD6pF7fe29QlEBmvR68xHb7NVpYRUqUz2l3FhZU8PTw8MrzSRT9fi
+         RH0oHqsSomDyuc7UOOnLrNCzDHUOJUlXpyyBNG9C+qc9xJ+l4NAlB+EXIhXWIaRGdR
+         rRZhF07ZUS44pL++/vHx4pku7soDzVSJnZAyuXAlboQi1ki6VAc9nYB7/GMV73Wz2+
+         6zlj7fDkrvW8w==
+From:   Mark Brown <broonie@kernel.org>
+To:     tudor.ambarus@linaro.org, Yang Li <yang.lee@linux.alibaba.com>
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230329062450.58924-1-yang.lee@linux.alibaba.com>
+References: <20230329062450.58924-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next v2] spi: rockchip-sfc: Use
+ devm_platform_ioremap_resource()
+Message-Id: <168010865827.3244769.13335044779439529619.b4-ty@kernel.org>
+Date:   Wed, 29 Mar 2023 17:50:58 +0100
 MIME-Version: 1.0
-References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
- <a2086a3f-e4c7-5bbf-a24c-522d6723a043@gmail.com>
-In-Reply-To: <a2086a3f-e4c7-5bbf-a24c-522d6723a043@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 29 Mar 2023 18:49:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXSn=OuRWcQ08buh7F7Rqbn_hNSB9hpSLQTAvX=EYtFVw@mail.gmail.com>
-Message-ID: <CAMuHMdXSn=OuRWcQ08buh7F7Rqbn_hNSB9hpSLQTAvX=EYtFVw@mail.gmail.com>
-Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Frank,
+On Wed, 29 Mar 2023 14:24:50 +0800, Yang Li wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_ioremap_resource(), as this is exactly what this
+> function does.
+> 
+> 
 
-On Wed, Mar 29, 2023 at 6:06 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> On 3/24/23 04:30, Geert Uytterhoeven wrote:
-> > When loading a DT overlay that creates a device, the device is not
-> > instantiated, unless the DT overlay is unloaded and reloaded again.
->
-> Can you elaborate on why this is?  What the relevant code paths are?
+Applied to
 
-Honestly, I don't know.
+   broonie/spi.git for-6.4
 
-From my local quotes collection:
+Thanks!
 
-   "There are two ways of constructing a software design.
-    One way is to make it so simple that there are obviously no deficiencies.
-    And the other way is to make it so complicated that there are no obvious
-    deficiencies."
-                                           -- C.A.R Hoare
+[1/1] spi: rockchip-sfc: Use devm_platform_ioremap_resource()
+      commit: 526c2966fca3337f01c513b1f0d85c839f8d8175
 
-The double hierarchies of DT and fw_devlink are just too complicated...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> > Saravana explains:
-> >   Basically for all overlays (I hope the function is only used for
-> >   overlays) we assume all nodes are NOT devices until they actually
-> >   get added as a device.
-> >
-> > Based on a patch by Saravana Kannan, which covered only platform and spi
-> > devices.
->
-> > Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
->
-> From a quick scan of the fixed commit, I don't see how that commit caused the problem.
-> Can you give a quick clue?  (The clue does not need to be added to the commit message,
-> but please at least put it below the "---" if there are additional versions of this
-> patch.)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I bisected the issue to that commit. Reverting the commit fixed the
-issue for me.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Gr{oetje,eeting}s,
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-                        Geert
+Thanks,
+Mark
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
