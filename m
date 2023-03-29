@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E923D6CD117
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 06:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8466CD124
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 06:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjC2EPJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 00:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S229530AbjC2ERt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 00:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjC2EPG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 00:15:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACBD35B5;
-        Tue, 28 Mar 2023 21:15:05 -0700 (PDT)
+        with ESMTP id S229477AbjC2ERs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 00:17:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C95193;
+        Tue, 28 Mar 2023 21:17:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D4F5B81EA9;
-        Wed, 29 Mar 2023 04:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8988C433EF;
-        Wed, 29 Mar 2023 04:15:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30CFACE1E9E;
+        Wed, 29 Mar 2023 04:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBF6C4339C;
+        Wed, 29 Mar 2023 04:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680063302;
-        bh=OeZwGhdh1OhMyiKBDhpSCIDowglcrCZD9EdOvHs4euc=;
+        s=k20201202; t=1680063464;
+        bh=eV+z6VEaC2dINI98VszrbaiHTFz32QNR/TbnF151vTQ=;
         h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=uSzeR7sCDnhf4k0KFCoVmxreYmsgU7LkeN3MdANZ3Z++Yrl4lZBXqmcOq0/1qGoYH
-         dnNJw5YysLkr92ae2gs7oc+qqCVBI7dZ03PvQfLpXFyPsZwuYs1JLL3SiOZ6GOeJhX
-         ZoO9kowVg5lYCoZTWxf/Y5eLVNILED0DxVSjJlDaWC7maen+Hzg9hvnqEZWg50Mx3H
-         6LNpwwB8CLkazqcf8BWE4jr+qMJvW/9GWd0ts91LOffixfAdwcx6V08sZbYShdgcr1
-         R4qxJh6W2zkAWr5qcMxYqWFHHNmzoJWO1NriwSQOA5If3XIuJZ75AWYdljD6Qu3Evd
-         NN9XT5jI8U1JQ==
-Message-ID: <7cf9452c60f2b1c764b01a15a4d5c2f0.sboyd@kernel.org>
+        b=n7hHoT9cl4BahD9JFvPKB/aQB761g/fnk9KOSQ4o/z3XCcbxVkzNXykCpetV4JMcb
+         lKbnfFksoTf1RSJUMCOfr73CEq3qqeAiYcfo+/nxbj1z1H99Kn6MJB013kAVtoMaBj
+         q6hkpyychUIseBiT9ydWEHjqWN30KUhmPOcUGU9u1tLQThnCFsu1tqpWJ/6c7AtJLc
+         rSsNaKKxTzgFVIJ+4mFqu4ZmcrtFT/tPtmpU+nLtI20acClSmzkvUYLh31TBOS+V5i
+         9wiq+TfU8CzOWNnOCGS9p47Niz4LN/UokOEmy2Ffp+sqFnmgypTEgIuBbYAbmZ1Dov
+         G8AoiXz4invKQ==
+Message-ID: <7e58e5c86bd602932b762f9364209e31.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -62,7 +62,7 @@ To:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-mediatek@lists.infradead.org,
         linux-rockchip@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-Date:   Tue, 28 Mar 2023 21:15:00 -0700
+Date:   Tue, 28 Mar 2023 21:17:41 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -72,8 +72,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
-
-The subject says 'spi' but it's actually 'spmi'.
 
 Quoting Krzysztof Kozlowski (2023-03-10 14:28:43)
 > The driver can match only via the DT table so the table should be always
@@ -86,4 +84,6 @@ le=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+I'll fix the subject.
+
+Applied to spmi-next
