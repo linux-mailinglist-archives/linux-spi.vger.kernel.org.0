@@ -2,108 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8C56CD535
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 10:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5016C6CD7A8
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 12:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjC2IvP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 04:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S229881AbjC2Kag (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 06:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjC2IvJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 04:51:09 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D8E1BF4
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 01:50:47 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5419d4c340aso280406277b3.11
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 01:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680079845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/cLIW46SmIRvY4RiouMRQ/RQJOiGzxyqmPyutTg+zA=;
-        b=QhOBzkThcCEEP2ZCg5zliykwCig0tej4mEtO5cAaTlCJE7r/I4bMQ4iBSSpjrhnae0
-         L2LF5rs7cU1RatgupQufqFqIBeFvIlZv+NuT+sHNQjGGOFQ+1hgE49sNPzLCJxCdOSUP
-         3GiHOBNJ4kNxbuv07uuvTShV166HoyO9x4tjK8dsgQhMHDuFGpYKNYzU6v85fOH0nA8N
-         BTRDzTAcMumMh174PCFF3cgm5M/IFBYKvPVZzaqtHkv13p8pYzObR23/QK9kSAbFoS1V
-         agkIoyxZgi5fPU94wcu6PdvvGt682AWB+XwG0s6houGBOcUHyk/TLJjCvaFXua8JDf+Q
-         vvdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680079845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B/cLIW46SmIRvY4RiouMRQ/RQJOiGzxyqmPyutTg+zA=;
-        b=Bc7wfw5gCxhybFvyIyqwmtDdRgVf0pyPjBmSC7vHBKdqZmjutnIadpVSbfJt23GPws
-         B/Roei3b/RUZYHPDKdgQiLQdFan63W2Y/h6i+Ut0DJmmsbIPStG8UDR2pPpi8qk/7otZ
-         JCIeFJgXH5iL1B8KJ8rjLwxCLh3TBGic+fM+6Z1wIfgiAfH8WWhULozXltM9osk7BHFR
-         OYTrkPiAya3n9EhrQM6KhhZrQYNa4bj80CNZv8lE7wXjCUVy2c9c6O0bw21eTP2FEX3t
-         RwDGIVEJIP8IIVBHkHL1fi+YOqxKXZrHUQScvSvMpY7h3qm/YJ6jRywhQWgy4Euuo6GH
-         etCA==
-X-Gm-Message-State: AAQBX9eNpNTKDdUl3PSsdzSWFpSRs1E9OjqLg8ui90aNEOZghYL2SxPe
-        rTJ43dx5SgGoqXRtr3U8A300Q2cL4O4vv6GdgfXY2g==
-X-Google-Smtp-Source: AKy350YTOjcMWaqS3odZ4BorOYs3mIxmhScLtgIMGEm9pyUKhYrReflkix3snorSrRrckz5gmqV7SwVJyJWO3XKBcJ8=
-X-Received: by 2002:a81:a709:0:b0:545:4133:fc40 with SMTP id
- e9-20020a81a709000000b005454133fc40mr8817132ywh.9.1680079845742; Wed, 29 Mar
- 2023 01:50:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323173019.3706069-1-dianders@chromium.org>
- <CACRpkdaGpaiOVjEN6Ftq5=-yuAyD0xb7OcvtEsoqbTzias-xxw@mail.gmail.com> <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-In-Reply-To: <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Mar 2023 10:50:34 +0200
-Message-ID: <CACRpkdaUZbyEfkcHsNuQ=KhyuiKpunZJgvrnq90kQK8Z2V4jtg@mail.gmail.com>
-Subject: Re: [PATCH 00/14] Control Quad SPI pinctrl better on Qualcomm Chromebooks
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
+        with ESMTP id S229456AbjC2Kaf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 06:30:35 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65C01BFC;
+        Wed, 29 Mar 2023 03:30:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxE4RIEyRkxbcTAA--.30276S3;
+        Wed, 29 Mar 2023 18:30:32 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuRDEyRkAFMQAA--.46922S3;
+        Wed, 29 Mar 2023 18:30:31 +0800 (CST)
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rajesh Patil <rajpat@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+ <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <006e2640-3321-3797-c5cc-726b8ee9d6d7@loongson.cn>
+Date:   Wed, 29 Mar 2023 18:30:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuRDEyRkAFMQAA--.46922S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrKr15CFWkAF1xKFyfWw4xtFb_yoW3Wwc_tF
+        40y34Duw18JFn7Jayvqr47Gr95K398J34UGaykJr17X34YvrWfCr95GrySkr1fXrW8GF4Y
+        9ryru3y0kr1a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UC_M3UUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:51=E2=80=AFPM Doug Anderson <dianders@chromium.o=
-rg> wrote:
 
-> 1. Mark could land the SPI patch at any time, assuming he's OK with
-> it. It can land totally independently.
 
-OK this happened.
+在 2023/3/29 下午4:06, Krzysztof Kozlowski 写道:
+> On 28/03/2023 13:22, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+> 
+> You decided not to use Rob's advice, thus this patch cannot be applied
+> now. Wait for the merge window to finish (so dependency is in mainline)
+> and send the patch then. Not earlier.
+> 
+> Best regards,
+> Krzysztof
+> I'm sorry, I didn't understand Rob's suggestion in fact. I'll ask Rob
+what I should do
+later. If it did really no good solution, I will postpone my patch until the
+dependent patch is merged into the mainline.
 
-> Option A:
->
-> 3. You land the pinctrl and binding patches in an immutable branch and
-> merge into pinctrl.
->
-> 4. Bjorn merges the immutable branch into the Qulacomm tree and places
-> the last 3 dts patches atop.
+Thanks.
 
-Looks most appetizing.
-
-I have applied patches 6,7,8 to this immutable branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
-g/?h=3Dib-qcom-quad-spi
-
-and I merged that into my "devel" branch for v6.4.
-
-Bjorn can grab the branch if he wants it.
-
-Yours,
-Linus Walleij
