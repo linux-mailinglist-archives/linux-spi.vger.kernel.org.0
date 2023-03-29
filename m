@@ -2,52 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACB56CEFD6
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 18:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476E86CF2A2
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 21:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjC2Qv1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 12:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        id S230001AbjC2TBX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 15:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjC2QvV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 12:51:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1325264;
-        Wed, 29 Mar 2023 09:51:01 -0700 (PDT)
+        with ESMTP id S229987AbjC2TBW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 15:01:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE8F4C2C;
+        Wed, 29 Mar 2023 12:01:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D81561DC7;
-        Wed, 29 Mar 2023 16:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9250EC433D2;
-        Wed, 29 Mar 2023 16:50:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8BE161DD6;
+        Wed, 29 Mar 2023 19:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83686C433D2;
+        Wed, 29 Mar 2023 19:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680108660;
-        bh=gfR+Av/dK1tTf1rXGgKZU7TIYCGAdnShcte6WdNtArA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pOGp8cWzppB2no8EGLqn3n9hF3bsKQ1HCdG3RlGcKmcJiPtalMqY1Y+TD7BucRgOQ
-         Ll6eM2U/LX/NxPeJVYw2aUahOGQA4fBfW84pukfz/LPUQY0buMdFAWMlvjNYWmph9T
-         faiDfYVksxh6xsD6pF7fe29QlEBmvR68xHb7NVpYRUqUz2l3FhZU8PTw8MrzSRT9fi
-         RH0oHqsSomDyuc7UOOnLrNCzDHUOJUlXpyyBNG9C+qc9xJ+l4NAlB+EXIhXWIaRGdR
-         rRZhF07ZUS44pL++/vHx4pku7soDzVSJnZAyuXAlboQi1ki6VAc9nYB7/GMV73Wz2+
-         6zlj7fDkrvW8w==
-From:   Mark Brown <broonie@kernel.org>
-To:     tudor.ambarus@linaro.org, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230329062450.58924-1-yang.lee@linux.alibaba.com>
-References: <20230329062450.58924-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next v2] spi: rockchip-sfc: Use
- devm_platform_ioremap_resource()
-Message-Id: <168010865827.3244769.13335044779439529619.b4-ty@kernel.org>
-Date:   Wed, 29 Mar 2023 17:50:58 +0100
+        s=k20201202; t=1680116474;
+        bh=1fcM3b9krHlsO5Snx/0pCVZjh+4M52SYgMLtCtPR/bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S6xDW15xix0ogYtL7mwp+uLPOEhBNRfsyhTiWC3wbvbbnSzAfXkLtFPpemg87HfWr
+         fU8z86NERRhUKbWMxHUGvGzaR+XQ3fGM0H3WNqPbeaH95WXPiRqY3ptNCS6tMDBGOi
+         BNM6EewLbzeCg3j2Qp6i6CCFLD6izWykzSoOs7QN6Jnd1s7s83f2b1Xii1iiACtCku
+         2FhVezAfD/fIRwFiPsUbv4ZqQmxh/Oo5XhAtApVlooVhjQHN9iyJn7AW7mtB+boZtP
+         IX1sqrQECL2EBrGaNN6CMEV3jPCNIE3xNDMOnAsoyRbuywYjRCYqniKEshxTwqeiWN
+         tSj3DQvfdiQyQ==
+Date:   Wed, 29 Mar 2023 21:01:10 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
+Message-ID: <ZCSK9lf9m7p0ikA7@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VcqNrUduYzya4aYk"
+Content-Disposition: inline
+In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,38 +79,51 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 29 Mar 2023 14:24:50 +0800, Yang Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource(), as this is exactly what this
-> function does.
-> 
-> 
 
-Applied to
+--VcqNrUduYzya4aYk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   broonie/spi.git for-6.4
+On Fri, Mar 24, 2023 at 10:30:39AM +0100, Geert Uytterhoeven wrote:
+> When loading a DT overlay that creates a device, the device is not
+> instantiated, unless the DT overlay is unloaded and reloaded again.
+>=20
+> Saravana explains:
+>   Basically for all overlays (I hope the function is only used for
+>   overlays) we assume all nodes are NOT devices until they actually
+>   get added as a device.
+>=20
+> Based on a patch by Saravana Kannan, which covered only platform and spi
+> devices.
+>=20
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYnkC=
+Z6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-Thanks!
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
-[1/1] spi: rockchip-sfc: Use devm_platform_ioremap_resource()
-      commit: 526c2966fca3337f01c513b1f0d85c839f8d8175
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--VcqNrUduYzya4aYk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkivYACgkQFA3kzBSg
+KbZTyg/+JmtqKwpf8rDuGRxTxPx0/p4sgTM+XIbYWkv0BEIR7cphrzWAX9CPNtqG
+TZNmOEdTXAw0/UQnY70eVFJoMV8j8WPoGANBEUesg3aSM46xZjhLgtb6LEGw2SeP
+J1EggS1DogDgwflj+WLRG4vbvoTId7n92HRWALypUrFM6hOD5SeG1wU3pgVjf4NN
+8LPn0HcQD1RfN0BMo3h5l2MASWxONBMnD7gUBpQyP5zdOKg3GxF6rWxfORSMqwQq
+Bq/Ov+yZ5IYwIzSnRgFmfT30GFfo4mqrvHee71TrPG1EnrofWlMx0fmaTxikvXFB
+mUvL/pN+LRhdjYeqDzDZG2nCFqb7R6tqaRTt/Ydvtxg4M7RQW+srtg2XyLpoueD3
+sJ5JFf8vmeH9S3rKInxbiO1JBD/dj3VWADve+D1a0luQ2gNqsDZxP4hwr56bxhSR
+q8tWKtuFixklWESZMKxxHeAt9Up2YlKdo+xpsJz8yL36Y7BlhWPc7M5Hz5qcqRcg
+GdRDqLCZrT9LaYHJB2WI6qhz7gtQ9rHQz2Oao4LsD1CVFTz/D9Ji900GfX53zyo1
+n7UCdK2M2zXgcTktkVz0rv1vSy3JFhCI6fm/zdSohaY/bP4k9SMITuTrC2RMW6Y4
+zr2euXaosZIYU6pMpP6/SVytm7BngxR27b4d118ZYeSwFEw8YHY=
+=u3R2
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+--VcqNrUduYzya4aYk--
