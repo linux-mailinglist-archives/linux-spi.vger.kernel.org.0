@@ -2,65 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5016C6CD7A8
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 12:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773736CD7BD
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 12:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjC2Kag (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 06:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S230001AbjC2Kdf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 06:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2Kaf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 06:30:35 -0400
+        with ESMTP id S230102AbjC2Kde (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 06:33:34 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65C01BFC;
-        Wed, 29 Mar 2023 03:30:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 923FC46B4;
+        Wed, 29 Mar 2023 03:32:58 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxE4RIEyRkxbcTAA--.30276S3;
-        Wed, 29 Mar 2023 18:30:32 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8Axrtq1EyRkD7gTAA--.18616S3;
+        Wed, 29 Mar 2023 18:32:21 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuRDEyRkAFMQAA--.46922S3;
-        Wed, 29 Mar 2023 18:30:31 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxD7+zEyRkU1MQAA--.47195S3;
+        Wed, 29 Mar 2023 18:32:20 +0800 (CST)
 Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, zhuyinbo@loongson.cn
 References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
  <20230328112210.23089-2-zhuyinbo@loongson.cn>
- <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+ <168000761529.3001360.2224316097077012976.robh@kernel.org>
+ <4ed4e0b6-63a8-a5b1-fed9-64a6d036459b@loongson.cn>
+ <3850df80-d3e9-00a8-df4a-fddd86706373@linaro.org>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <006e2640-3321-3797-c5cc-726b8ee9d6d7@loongson.cn>
-Date:   Wed, 29 Mar 2023 18:30:27 +0800
+Message-ID: <265b1bce-f6b4-7eba-e486-ebf4f3c7d421@loongson.cn>
+Date:   Wed, 29 Mar 2023 18:32:19 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+In-Reply-To: <3850df80-d3e9-00a8-df4a-fddd86706373@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxHuRDEyRkAFMQAA--.46922S3
+X-CM-TRANSID: AQAAf8DxD7+zEyRkU1MQAA--.47195S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrKr15CFWkAF1xKFyfWw4xtFb_yoW3Wwc_tF
-        40y34Duw18JFn7Jayvqr47Gr95K398J34UGaykJr17X34YvrWfCr95GrySkr1fXrW8GF4Y
-        9ryru3y0kr1a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UC_M3UUUUU=
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUPK1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4
+        v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY
+        67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2js
+        IE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxAqzxv262kKe7AKxVWUXVWUAwCF54CYxVCY1x02
+        62kKe7AKxVWUAVWUtwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+        jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07j04E_UUUUU=
 X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,26 +73,19 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-在 2023/3/29 下午4:06, Krzysztof Kozlowski 写道:
-> On 28/03/2023 13:22, Yinbo Zhu wrote:
->> Add the Loongson platform spi binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
+在 2023/3/29 下午4:05, Krzysztof Kozlowski 写道:
+> On 29/03/2023 03:12, zhuyinbo wrote:
+>> This patch need depend on
+>> https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+>> then the spi yaml file will build successful. That changelog had record it.
 > 
-> You decided not to use Rob's advice, thus this patch cannot be applied
-> now. Wait for the merge window to finish (so dependency is in mainline)
-> and send the patch then. Not earlier.
+> Thus it cannot be merged now. Do not resend it till dependency hits
+> mainline (since you decided not to go with Rob's advice).
 > 
 > Best regards,
 > Krzysztof
-> I'm sorry, I didn't understand Rob's suggestion in fact. I'll ask Rob
-what I should do
-later. If it did really no good solution, I will postpone my patch until the
-dependent patch is merged into the mainline.
+> 
+okay, I got it.
 
 Thanks.
 
