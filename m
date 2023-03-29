@@ -2,138 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31A06CD895
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 13:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F6C6CD8AE
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Mar 2023 13:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjC2Lhp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 07:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S229925AbjC2LoB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 07:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjC2Lho (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 07:37:44 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2A4226
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 04:37:41 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id t14so15738407ljd.5
-        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 04:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680089859;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/mPqUZsIheYp4PXF7QUo518QtsktPDNZj6+NdEGhwtc=;
-        b=NpB3I/3t6Lr2Ro2+EJkY6MoU+efyaKtpbJK9meLzt/PnkQ9vfc9GKCjdALUV2XM7tv
-         tBuhn04cg21GiS2DFH5U8oHTeO8uOGuXWiuqRf3OzFUrQoSUeZ06DcuQ+QlL2y4U+gl3
-         uOkXiLElUVfUv+FaFVKv7u/HJDLd7NlNz9PXqLSxs5cQq+Kzel/ytYNTzzDGfXD7+C1i
-         0s5vXwB8fS8D9pp80biD7hzYYp9Jx/CcXaIkTHu2k8l824Laa1blGq2f/Dw7X2jRgwA7
-         NwUfxVEEdJGnFvzA+Ho0dj78IjBb8xQQ3fYA8PHTsbd86od6K8oJtZkk0jlMzQJcVcHa
-         GXiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680089859;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mPqUZsIheYp4PXF7QUo518QtsktPDNZj6+NdEGhwtc=;
-        b=l4loAajNzCXmhhhqZuueXC/1CxPkUwpqf0T92mMOwenkjVW7U4tvfINmhtngzRehz8
-         jONONXR1Feur6i8cMhoDlFvHuWTVGVSRPtpe3P7kSriQHWdMr/L5PzN9i9yqRts/BOfn
-         e28KNgLV+Lcfk3H8Wo52xGC7JS+xTmZscFRe3fhZUDW2A1npJUKg6qt2E7Cpqi5V6tQt
-         u0qdN+5LlYh/E8g7EfCcl7SKuAfsLcGrBFtzccD8p/XnyLTv36MF6nOGmVYxmkwBRail
-         Yfvq8vQjeHLdjIJPUMvN6F0s6BLPYZADDZKGAIbqtHnGNiAuTfIj9PDd6HJhDd6XdrLD
-         UGng==
-X-Gm-Message-State: AAQBX9fF5O3rmXNBI1Mvk/2RgBHm8WtqIiw6xEDTTha690Q78+JswHqC
-        /qbTnynp4G1SWzhlKw8434T7vC+ONHE9dWS4B3WQRQ==
-X-Google-Smtp-Source: AKy350Y9MsLYN1pnTgHTW80ELhfO9f2kj3EVc9bx5pgZ5cHDPeoOaEuf4c+eqX8TZxSTOejxy/xHDw==
-X-Received: by 2002:a2e:a174:0:b0:299:aa88:8dd8 with SMTP id u20-20020a2ea174000000b00299aa888dd8mr6285200ljl.50.1680089859145;
-        Wed, 29 Mar 2023 04:37:39 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002a483f01d9csm1902273ljb.85.2023.03.29.04.37.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:37:38 -0700 (PDT)
-Message-ID: <f62c07d4-cda8-9873-8890-3411cd2f3b03@linaro.org>
-Date:   Wed, 29 Mar 2023 13:37:36 +0200
+        with ESMTP id S229922AbjC2LoA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 07:44:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14A844AC;
+        Wed, 29 Mar 2023 04:43:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E9C361CD5;
+        Wed, 29 Mar 2023 11:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C06C433D2;
+        Wed, 29 Mar 2023 11:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680090235;
+        bh=apVF3uvZGAkOtU19RE249GS5clB9mJ34H9YjFDzYdlA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sjwQ7OfskZMWFZuzPL9Va4EWkv2xBm83c5eniEw0G/WpRgGN6Z7GI9hgCnF8YmMaE
+         4JTqNBdCvva0b2gZb/iKVW3kS/Rw1KZOvc/Te5rxDbZFXNfuASOZ3/yVExxKUF91G9
+         fu/M9f3UzaIgC2aPkERf6lJTZRsW/LF/3dwKw6aojv5pTd+/XR01WHg+7IQ9S+bdvQ
+         aSIdIJXry7Pi9kx9mLCUHdo1l61HwUX1M9hH7oddu38AoRukQnQLGqnCuTOy0v7thk
+         P3hFWIvtQsklQth7PWdKW472l31GQXdduw/uguqqin2vP19N42Tgr+aNAXABauTMaC
+         TI8gfThyYwhAw==
+Date:   Wed, 29 Mar 2023 12:43:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jannadurai@marvell.com, cchavva@marvell.com,
+        Suneel Garapati <sgarapati@marvell.com>
+Subject: Re: [PATCH 1/2] spi: octeontx2: Add support for octeontx2 spi
+ controller
+Message-ID: <ZCQkeKEpgANkE/GD@sirena.org.uk>
+References: <20230327180753.2279-1-pmalgujar@marvell.com>
+ <20230327180753.2279-2-pmalgujar@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328112210.23089-2-zhuyinbo@loongson.cn>
- <168000761529.3001360.2224316097077012976.robh@kernel.org>
- <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6syUKnOpmLuBATAM"
+Content-Disposition: inline
+In-Reply-To: <20230327180753.2279-2-pmalgujar@marvell.com>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/03/2023 12:39, zhuyinbo wrote:
-> 
-> 
-> 在 2023/3/28 下午8:57, Rob Herring 写道:
->>
->> On Tue, 28 Mar 2023 19:22:09 +0800, Yinbo Zhu wrote:
->>> Add the Loongson platform spi binding with DT schema format using
->>> json-schema.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> ---
->>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->>>   MAINTAINERS                                   |  6 +++
->>>   2 files changed, 49 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
->> FATAL ERROR: Unable to parse input tree
->> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
->> make[1]: *** Waiting for unfinished jobs....
->> make: *** [Makefile:1512: dt_binding_check] Error 2
->>
->> doc reference errors (make refcheckdocs):
->>
->> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328112210.23089-2-zhuyinbo@loongson.cn
->>
->> The base for the series is generally the latest rc1. A different dependency
->> should be noted in *this* patch.
-> Hi Rob,
-> 
-> I'm sorry, actually, I don't know what the specific operation I should 
-> do when I received the check warning
-> from your bot. Does it means that I should add dependency note into this 
-> patch's changelog ? 
 
-Yes, this is explicitly mentioned in the sentence you quoted.
+--6syUKnOpmLuBATAM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> or something else, I really
-> don't know. Actually, I'm always bothered by these things that how to 
-> resolve the dependency issue for two
-> dependent patches that do not belong to the same series.
+On Mon, Mar 27, 2023 at 11:07:52AM -0700, Piyush Malgujar wrote:
 
-Another approach, as Rob suggested last time, would be to just get rid
-of the dependency and open-code the clock IDs...
+> +static int tbi_clk_en = 1;
+> +module_param(tbi_clk_en, uint, 0644);
+> +MODULE_PARM_DESC(tbi_clk_en,
+> +		 "Use Fixed Time Base 100MHz Reference Clock (0=Disable, 1=Enable [default])");
+> +
+> +static int cfg_mode_delay = 30;
+> +module_param(cfg_mode_delay, uint, 0644);
+> +MODULE_PARM_DESC(cfg_mode_delay,
+> +		 "Delay in micro-seconds for mode change in MPI CFG register (30 [default])");
 
-Best regards,
-Krzysztof
+These don't look like they should be configurable at runtime,
+either DT or (especially in the second case) just have the driver
+do the right thing.
 
+> +static void octeontx2_spi_wait_ready(struct octeontx2_spi *p)
+> +{
+> +	union mpix_sts mpi_sts;
+> +	unsigned int loops = 0;
+> +
+> +	mpi_sts.u64 = 0;
+> +	do {
+> +		if (loops++)
+> +			__delay(500);
+> +		mpi_sts.u64 = readq(p->register_base + OCTEONTX2_SPI_STS(p));
+> +	} while (mpi_sts.s.busy);
+
+Might want a cpu_relax() in there.
+
+> +	p->cs_enax |= (0xFull << 12);
+> +	mpi_cfg.u64 |= p->cs_enax;
+> +
+> +	if (mpi_cfg.u64 != p->last_cfg) {
+> +		p->last_cfg = mpi_cfg.u64;
+> +		writeq(mpi_cfg.u64, p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		mpi_cfg.u64 = readq(p->register_base + OCTEONTX2_SPI_CFG(p));
+> +		udelay(cfg_mode_delay); /* allow CS change to settle */
+> +	}
+
+It looks like the hardware has independent control of chip select
+so should just implement a set_cs() operation.  That seems to be
+the only thing stopping the driver using transfer_one() instead
+of transfer_one_message() so it should do that too and save more
+code.
+
+> +	p->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(p->clk)) {
+> +		p->clk = devm_clk_get(dev, "sclk");
+> +		p->sys_freq = 0;
+> +	} else {
+> +		ret = clk_prepare_enable(p->clk);
+> +		if (!ret)
+> +			p->sys_freq = clk_get_rate(p->clk);
+> +	}
+
+We don't need to enable sclk or care about errors?  That seems
+buggy.  The driver should just rely on the clock API here.
+
+> +	if (!p->sys_freq)
+> +		p->sys_freq = SYS_FREQ_DEFAULT;
+> +	if (tbi_clk_en)
+> +		p->sys_freq = TBI_FREQ;
+
+We never seem to do anything to actually configure this in the
+hardware.
+
+--6syUKnOpmLuBATAM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQkJHgACgkQJNaLcl1U
+h9CCpQf/ROa3ORsfAQSS4xHGQMm/s36AvI57fT4Pi/2kKWDu5hEC8pPThSR2QLGv
+hKQvq0OnMD9hKhJ3Ndvv/sjo1qqUWxM4n4rQqxWf8qym9BnUGWzHqYLQ+Rw8HYy7
+P50YLzd8tWnhDzn97C06r3ZmXUk6N0bDOHuip+wCQuhB8seh3UuBcIPoNE2llwuA
+Nqz+7JYFQtT3BLuSv8Ek8QDP7dFwqlmIhQMKaiW3ezWDBLNYPb1t3Ww2fbVlLBmJ
+VQbMUA4kyfkl/MvwbBAq8djVaSqxhswc6ZBQwCyArBvH2E3KGaqxY4n58CHH5/42
+rYSLmRr4UDv2bLDJYd/cjJuohmVTBg==
+=eDrQ
+-----END PGP SIGNATURE-----
+
+--6syUKnOpmLuBATAM--
