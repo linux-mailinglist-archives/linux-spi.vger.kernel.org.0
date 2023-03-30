@@ -2,91 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183EE6D0F8F
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 21:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B08A6D107A
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 23:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjC3T7s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Mar 2023 15:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S230003AbjC3VEH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Mar 2023 17:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjC3T7r (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Mar 2023 15:59:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1EA1040A;
-        Thu, 30 Mar 2023 12:59:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 868BEB829FE;
-        Thu, 30 Mar 2023 19:59:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C957EC433EF;
-        Thu, 30 Mar 2023 19:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680206383;
-        bh=Ttdl3uaRbHyE3Z47YHqPbAUk6baq2L8cMS2wkoS2Qzg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=u/jkZOw+WpZKhHQyDjzEvDISfnfBiAL/lO6HAy8mkQ9DOxPNQPZ4FDp5r+H+FoTYW
-         ar5kDO7B3tvlXbt/nwxfDFvjp0Rim94Rl+npYxh97gn4zL8dF8BfX+nkQ3f7d0ISNl
-         dLGb2I3UQwAxCKO/Mk25O4NovmjEVJ6aulM2NRYdqBSjyQ/4dm1ZhtuyValPWMgVIR
-         eyRtvqTIHo+f6khD9NVZmeKsKW+quckiBhlLq4iRhuSzwZP/ArxekI3LE9WPAX3aLz
-         s4tXk5Ay6v+TVzmUKFiSTpnAqIivLKWoW8zg64F0cA1+eBDn9MVfIkG1NLgMBPUvus
-         GPt8NdIGMVX/g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
-References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
- <20230306014239.80570-1-jaewon02.kim@samsung.com>
-Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
-Message-Id: <168020638158.3358213.6254321466680202636.b4-ty@kernel.org>
-Date:   Thu, 30 Mar 2023 20:59:41 +0100
+        with ESMTP id S229991AbjC3VEE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Mar 2023 17:04:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C4E1BD
+        for <linux-spi@vger.kernel.org>; Thu, 30 Mar 2023 14:04:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1phzQw-00028m-Oi; Thu, 30 Mar 2023 23:03:46 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1phzQu-007qTP-Ny; Thu, 30 Mar 2023 23:03:44 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1phzQt-009Hr6-DP; Thu, 30 Mar 2023 23:03:43 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 0/2] spi: qup: Convert to platform remove callback returning void
+Date:   Thu, 30 Mar 2023 23:03:39 +0200
+Message-Id: <20230330210341.2459548-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=532; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9zfLMYlWQxEw1cqggl3wyAkDczsHo73o5BKfzj9wRDo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkJfko7IX+rXRzuLJK9EVaXaTFJiP63fl+8etGl dGIxdzf10CJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCX5KAAKCRCPgPtYfRL+ TtlSCAC1LRfdhvag450TbLskpQmJQx6z1Kw4qdTu2LBMbm0+gQ9smWxi+tYncGMiaMVPKJbLIWX frZyP7QG240eC+O0ZKs+kI55rihJYCWgU3BQq+oQQ4xolBQP8WhF02lTxQFdYV1U67CW/RbS7qd IBkcdzREsy7SwtFEY/ZddSkxjs80tM1WkjRAWse8dN1QxRvw+4xMy4HujpwNACP4mbxze1cm3M+ l360ej0p9zoX8QUyxJvHCoBW9NetASbPc4549AHYcYL+lQXqTpk1MY46wKS3sikOZmj/NqicALq PTDoWkVICbER6shnmqSXhMZVQ23HD653XmddIdSjEFyVYX4d
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 06 Mar 2023 10:42:39 +0900, Jaewon Kim wrote:
-> This patch adds missing variable no_cs descriptions.
-> 
-> 
+Hello,
 
-Applied to
+after fixing the error handling in the .remove() callback of the qup
+driver, convert it to .remove_new() preparing to make platform driver's
+remove functions return void.
 
-   broonie/spi.git for-next
+Best regards
+Uwe
 
-Thanks!
+Uwe Kleine-König (2):
+  spi: qup: Don't skip cleanup in remove's error path
+  spi: qup: Convert to platform remove callback returning void
 
-[1/1] spi: s3c64xx: add no_cs description
-      commit: e3d53ded577328f2b26d361f2e62fc70e85ab6a3
+ drivers/spi/spi-qup.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.2
 
