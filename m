@@ -2,52 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4336B6CF684
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 00:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E46C6CF81C
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 02:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjC2WlT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 18:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
+        id S231331AbjC3AP3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Mar 2023 20:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjC2WlQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 18:41:16 -0400
+        with ESMTP id S229895AbjC3AP1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 20:15:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C438FB;
-        Wed, 29 Mar 2023 15:41:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A903C0;
+        Wed, 29 Mar 2023 17:15:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2CE661E56;
-        Wed, 29 Mar 2023 22:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5263C433EF;
-        Wed, 29 Mar 2023 22:41:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B16AD61E7C;
+        Thu, 30 Mar 2023 00:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3AAC4339B;
+        Thu, 30 Mar 2023 00:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680129670;
-        bh=CeEJnBYJl3ZDd3RPEBDgKL0tVDlu4feGB9+FfWt1zmk=;
+        s=k20201202; t=1680135326;
+        bh=SaIyAyIEWPkCOiTbcEAAhLZPQpGrVicNNzSuEc0r0CQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b5nfjI1fjRJhEVcJODS9wUAGVGev2TGBrZoJqeK+Rqszy0ayNWle4fH5rk6207rzn
-         IAG19TT/vJ8l+2gmpJP+fOWBKGO+3iWvSXKq5jQ1FniyF2U2e1+Y42tDtVvxsQSaIl
-         LiH7d8MNN5GzAOvJ14UTAJYSlz95znepPIt6f7QlnY9dSYy8TXqlzCclQ/hdFeCTVr
-         uFHP5W+TpFevYIy2/ymgoGcX7CK/Aw1NAP6A1PC7PSe1BJwlWDwY+dgHrm3lY8dtfu
-         qCiQmL1XOj6us6/CUkeJOCFzdTFyAlk5bymPZyjOBxJKAVlQPlcGHaWGuW1r2IZuzp
-         AfhJxYy4B1lmg==
-Date:   Thu, 30 Mar 2023 01:41:07 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V9 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <20230329224107.5y3anydp4fnmnehe@kernel.org>
-References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
- <20230325183409.7695-3-kyarlagadda@nvidia.com>
+        b=W5aAij/ePqjFcpoij5+qOeXhFYRUXzZzThXwXjkLGT0WGbKycfH+EqBxDxLFth0Mx
+         uq5l+kRLWvX31xJw4UXGMAnfv9RY5Ob9bj0pfDEguNQk3rxWLrukyYi39qtAW+/9VK
+         IwbbUdVPUdKO0pNnJwG35WhpZ7KWFxP8Gg/Tvety1vIpNBXtiFO8LORMMAMmmS2We3
+         aN5htjW3vCMMYYlQWRP3mrdCTvw0RkxdHkDjx3BcM7Hr9N9thBNyL5to3yrcktUkSZ
+         15yOMjgVOTSRmzy+RTE/00Tj8tNjKwEcp4oq4D6lDJoaeoxakm1qiCZT8lTnCSBWvk
+         b7YDGp4rP1OGQ==
+Date:   Thu, 30 Mar 2023 01:15:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     "Yang.Lee" <yang.lee@linux.alibaba.com>, heiko <heiko@sntech.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rockchip <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZCTUm7XRKwTotda8@sirena.org.uk>
+References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
+ <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
+ <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
+ <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="voc5FpAxHeBmyvcz"
 Content-Disposition: inline
-In-Reply-To: <20230325183409.7695-3-kyarlagadda@nvidia.com>
+In-Reply-To: <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
+X-Cookie: Single tasking: Just Say No.
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -57,156 +61,40 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 12:04:08AM +0530, Krishna Yarlagadda wrote:
-> TPM devices may insert wait state on last clock cycle of ADDR phase.
-> For SPI controllers that support full-duplex transfers, this can be
-> detected using software by reading the MISO line. For SPI controllers
-> that only support half-duplex transfers, such as the Tegra QSPI, it is
-> not possible to detect the wait signal from software. The QSPI
-> controller in Tegra234 and Tegra241 implement hardware detection of the
-> wait signal which can be enabled in the controller for TPM devices.
-> 
-> The current TPM TIS driver only supports software detection of the wait
-> signal. To support SPI controllers that use hardware to detect the wait
-> signal, add the function tpm_tis_spi_hw_flow_transfer() and move the
-> existing code for software based detection into a function called
-> tpm_tis_spi_sw_flow_transfer(). SPI controllers that only support
-> half-duplex transfers will always call tpm_tis_spi_hw_flow_transfer()
-> because they cannot support software based detection. The bit
-> SPI_TPM_HW_FLOW is set to indicate to the SPI controller that hardware
-> detection is required and it is the responsibility of the SPI controller
-> driver to determine if this is supported or not.
-> 
-> For hardware flow control, CMD-ADDR-DATA messages are combined into a
-> single message where as for software flow control exiting method of
-> CMD-ADDR in a message and DATA in another is followed.
-> 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
->  1 file changed, 89 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index a0963a3e92bd..db9afd0b83da 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
->  	return 0;
->  }
->  
-> -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> -			 u8 *in, const u8 *out)
-> +/*
-> + * Half duplex controller with support for TPM wait state detection like
-> + * Tegra QSPI need CMD, ADDR & DATA sent in single message to manage HW flow
-> + * control. Each phase sent in different transfer for controller to idenity
-> + * phase.
-> + */
-> +static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
-> +				     u16 len, u8 *in, const u8 *out)
-> +{
-> +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> +	struct spi_transfer spi_xfer[3];
-> +	struct spi_message m;
-> +	u8 transfer_len;
-> +	int ret;
-> +
-> +	while (len) {
-> +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> +
-> +		spi_message_init(&m);
-> +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> +		phy->iobuf[1] = 0xd4;
-> +		phy->iobuf[2] = addr >> 8;
-> +		phy->iobuf[3] = addr;
-> +
-> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> +
-> +		spi_xfer[0].tx_buf = phy->iobuf;
-> +		spi_xfer[0].len = 1;
-> +		spi_message_add_tail(&spi_xfer[0], &m);
-> +
-> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> +		spi_xfer[1].len = 3;
-> +		spi_message_add_tail(&spi_xfer[1], &m);
-> +
-> +		if (out) {
-> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> +			spi_xfer[2].rx_buf = NULL;
-> +			memcpy(&phy->iobuf[4], out, transfer_len);
-> +			out += transfer_len;
-> +		}
-> +
-> +		if (in) {
-> +			spi_xfer[2].tx_buf = NULL;
-> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> +		}
-> +
-> +		spi_xfer[2].len = transfer_len;
-> +		spi_message_add_tail(&spi_xfer[2], &m);
-> +
-> +		reinit_completion(&phy->ready);
-> +
-> +		ret = spi_sync_locked(phy->spi_device, &m);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (in) {
-> +			memcpy(in, &phy->iobuf[4], transfer_len);
-> +			in += transfer_len;
-> +		}
-> +
-> +		len -= transfer_len;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
-> +				     u16 len, u8 *in, const u8 *out)
->  {
->  	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
->  	int ret = 0;
-> @@ -140,6 +206,24 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
->  	return ret;
->  }
->  
-> +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> +			 u8 *in, const u8 *out)
-> +{
-> +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> +	struct spi_controller *ctlr = phy->spi_device->controller;
-> +
-> +	/*
-> +	 * TPM flow control over SPI requires full duplex support.
-> +	 * Send entire message to a half duplex controller to handle
-> +	 * wait polling in controller.
-> +	 * Set TPM HW flow control flag..
-> +	 */
-> +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> +		return tpm_tis_spi_transfer_half(data, addr, len, in, out);
-> +	else
-> +		return tpm_tis_spi_transfer_full(data, addr, len, in, out);
-> +}
-> +
->  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
->  				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
->  {
-> @@ -181,6 +265,9 @@ static int tpm_tis_spi_probe(struct spi_device *dev)
->  
->  	phy->flow_control = tpm_tis_spi_flow_control;
->  
-> +	if (dev->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> +		dev->mode |= SPI_TPM_HW_FLOW;
-> +
->  	/* If the SPI device has an IRQ then use that */
->  	if (dev->irq > 0)
->  		irq = dev->irq;
-> -- 
-> 2.17.1
-> 
 
+--voc5FpAxHeBmyvcz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Wed, Mar 29, 2023 at 08:18:27AM +0100, Tudor Ambarus wrote:
+> On 3/29/23 07:06, Yang.Lee wrote:
 
-BR, Jarkko
+> > Because=A0the=A0maintainer=A0list=A0of=A0each=A0SPI=A0driver=A0file=A0i=
+s=A0not=A0identical,=A0I=A0am=A0worried=A0about=A0causing=A0trouble=A0for=
+=A0too=A0many=A0people,=A0so=A0I=A0split=A0it=A0into=A0multiple=A0patches=
+=A0based=A0on=A0this.
+
+> The change is trivial enough to don't bother at all. Here's an example:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/?id=3D4b23603a251d24022f2fa48ee67610eb245a4115
+
+No, it's fine - it doesn't really get in the way and can be
+helpful to people doing backports.
+
+--voc5FpAxHeBmyvcz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQk1JoACgkQJNaLcl1U
+h9AkrQf/X5y8FOFpN9XpUUUQDvbu/UJFxu6wK5iAYMpdiS1tcPNdyOKXEOfOGbjz
+OFBNsc/UWQPllZqggDyemxNw7x2WAKcF6JWCV2uRn2ptzYrEr+zQMeO3k83I3Eam
+Ji35vaalvmXG92tSk70DOrJIGmC6yL5OMkSnZU2dWM+eIgiLxjJos/8sShx3zd5d
+ODoO2h1qsUetCkrz9uw9yGU6yWYuZRLkP9kJETwF5AVgjVhrDkt2CtJMKQC8nNzE
+LHkMmIRLAIQm6KIjivd4jGYdBOhw5TRWszIFdrNWLcUgAJEZ2YOadZFClwhhthT7
+GKogxOITZyeUdFT/a5sG2HDCMoapkA==
+=UTll
+-----END PGP SIGNATURE-----
+
+--voc5FpAxHeBmyvcz--
