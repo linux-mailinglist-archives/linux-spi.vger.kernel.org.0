@@ -2,134 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453CD6CF9A9
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 05:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A83D6CFBAF
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Mar 2023 08:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjC3Dqn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Mar 2023 23:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S229620AbjC3Ge7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Mar 2023 02:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC3Dqm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Mar 2023 23:46:42 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3C2F4C27;
-        Wed, 29 Mar 2023 20:46:38 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxEk4dBiVkhDMUAA--.19613S3;
-        Thu, 30 Mar 2023 11:46:37 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxur0aBiVkJ_UQAA--.13166S3;
-        Thu, 30 Mar 2023 11:46:34 +0800 (CST)
-Subject: Re: [PATCH v4 0/2] spi: loongson: add bus driver for the loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328113536.ldxpvx3hibezcqtb@intel.intel>
- <253f3bf2-a193-69da-79ef-c3771d677478@loongson.cn>
- <e9b1b899-9f19-0abd-8e20-fc486bf28b17@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <c881aa81-10c1-06f5-de9c-8948e9f6ebe8@loongson.cn>
-Date:   Thu, 30 Mar 2023 11:46:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <e9b1b899-9f19-0abd-8e20-fc486bf28b17@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxur0aBiVkJ_UQAA--.13166S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw13WFyrtF1DCFWkKw1xKrg_yoW8KrW5pF
-        nxJ3ZxJay3JF4DArs7twn8Jr1UW3yxJr4rJFW7JF18KF1qkF1UAry5Ar1rG34UXry5Ga47
-        WF4UZryxGr18WFDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0HqcUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229505AbjC3Ge6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Mar 2023 02:34:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDF65240
+        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 23:34:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 4-20020a251904000000b00b7f75c3cafdso2579977ybz.16
+        for <linux-spi@vger.kernel.org>; Wed, 29 Mar 2023 23:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680158097;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Vck4iSDUKZf+JCdPQEvQ4evRUmQTT/pnCnaPcb2eePY=;
+        b=K2ZxZT3WU7jTwiesqYy89B7hO2hIOzo/cyknJYK7ErdVGCnBDUUfG4QRbuA6Ew/UBq
+         66p3lUcFg9MUziJJhOzBEdwtoHWizDcBeH/DTYEaxot1TqPBH5+aL0CdsjBnbmvOUzPs
+         7Y8zHNNN2f4dVVw0lxHFF+QK50cvtKezv9EorSute8ILZpzulv6WjGh1c5lJ4XChhQIP
+         XpKniGWjZ9qlHSZBhlbnVPLbb7v6UfT683D2MMxQ2SIwaSNM2mdwMsfZqi01vQJ+DeI5
+         tlDdF0MA1Eu4Gjy5GikaRF1fBRHIZo5RvwSskPxUyy9peykfjmREizZyY1Yf8Jm50wAl
+         ORVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680158097;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vck4iSDUKZf+JCdPQEvQ4evRUmQTT/pnCnaPcb2eePY=;
+        b=unuo13VnIt7ENblPeC6+3yQLCS0fC9KbZar84E6FcuCTIxtAP2uY3bIeFnmXfF3Bk5
+         2nDXQgNQav1IY7FOE2+MxN8CXrCEzikzXtReOo4/vUmOCF3oSViTQr1tAr3DV9nlqZ0R
+         nzS7I7Vm65RcH5R0frMtOV9PWELwjrHa83Eza++4ao3MJ4oebVaEQMx5gsEI5CWrbsvF
+         NDB4OyZUeF928++1kHPo5IbidIFcKmIlAHRlbgjTlrz/dwks45tbJ2bfgTmRToJJVdO/
+         ZwyxTnSFAnpMb596is57NGJqWuuvCdctLH78NdVuzgJEEJO9XQhPpZdvOCAEyQKfoB11
+         mZ+w==
+X-Gm-Message-State: AAQBX9cZlNxFBfoAAdgg/PCd12UOqQ0m3GqKJhfaTKmdxy8TbS85nhTD
+        Oa1Za9GYj9vpcgpVkoB3mk6OtXMhkv8YZw==
+X-Google-Smtp-Source: AKy350Z0cQ23dfmrxicebK+KYirmR35YSZ+pTIA6iDuQB6Y3G/mNGad7wXSF0g8L67pFNpH8xcHoelQKSwTskg==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a81:ae23:0:b0:541:7237:6e6b with SMTP id
+ m35-20020a81ae23000000b0054172376e6bmr10436707ywh.0.1680158097247; Wed, 29
+ Mar 2023 23:34:57 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 06:34:48 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.423.gd6c402a77b-goog
+Message-ID: <20230330063450.2289058-1-joychakr@google.com>
+Subject: [PATCH v5 0/2] spi: dw: DW SPI DMA Driver updates
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This Patch series adds support for 32 bits per word trasfers using DMA
+and some defensive checks around dma controller capabilities.
+---
+V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
+---
+V1->V2 Changes : Add dma capability check to make sure address widths
+are supported.
+---
+V2->V3 Changes : Split changes , add DMA direction check and other
+cosmetic chnages.
+---
+V3->V4 Changes : Fix Sparce Warning
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+---
+V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+check before initalisation of further capabilities, remove zero
+initialisations, remove error OR'ing.
+---
 
+Joy Chakraborty (2):
+  spi: dw: Add 32 bpw support to DW DMA Controller
+  spi: dw: Add dma controller capability checks
 
-在 2023/3/29 下午4:07, Krzysztof Kozlowski 写道:
-> On 28/03/2023 13:53, zhuyinbo wrote:
->>
->>
->> 在 2023/3/28 下午7:35, Andi Shyti 写道:
->>> Hi Yinbo,
->>>
->>> before submitting the patches for review... can you please run
->>> checkpatch.pl on them?
->> yes, I had used checkpatch.pl to check and no any errors and warnings.
->>
->> user@user-pc:~/workspace/test/code/www.kernel.org/linux$
->> ./scripts/checkpatch.pl *.patch
->> -----------------------
->> 0000-cover-letter.patch
->> -----------------------
->> total: 0 errors, 0 warnings, 0 lines checked
->>
->> 0000-cover-letter.patch has no obvious style problems and is ready for
->> submission.
->> -------------------------------------------
->> 0001-dt-bindings-spi-add-loongson-spi.patch
->> -------------------------------------------
->> Traceback (most recent call last):
->>     File "scripts/spdxcheck.py", line 6, in <module>
->>       from ply import lex, yacc
->> ModuleNotFoundError: No module named 'ply'
->> total: 0 errors, 0 warnings, 55 lines checked
->>
->> 0001-dt-bindings-spi-add-loongson-spi.patch has no obvious style
->> problems and is ready for submission.
->> ---------------------------------------------------------------
->> 0002-spi-loongson-add-bus-driver-for-the-loongson-spi-con.patch
->> ---------------------------------------------------------------
->> Traceback (most recent call last):
->>     File "scripts/spdxcheck.py", line 6, in <module>
->>       from ply import lex, yacc
->> ModuleNotFoundError: No module named 'ply'
->> Traceback (most recent call last):
->>     File "scripts/spdxcheck.py", line 6, in <module>
->>       from ply import lex, yacc
->> ModuleNotFoundError: No module named 'ply'
->> Traceback (most recent call last):
->>     File "scripts/spdxcheck.py", line 6, in <module>
->>       from ply import lex, yacc
->> ModuleNotFoundError: No module named 'ply'
->> Traceback (most recent call last):
->>     File "scripts/spdxcheck.py", line 6, in <module>
->>       from ply import lex, yacc
->> ModuleNotFoundError: No module named 'ply'
-> 
-> You have errors here... Fix your setup for spdx check.
-I installed ply and gitpython package locally, and then there was no 
-spdxcheck and other error when use checkpatch.pl to check this series patch.
+ drivers/spi/spi-dw-dma.c | 70 ++++++++++++++++++++++++++++++++--------
+ drivers/spi/spi-dw.h     |  1 +
+ 2 files changed, 57 insertions(+), 14 deletions(-)
 
-Thanks.
-> 
-> Best regards,
-> Krzysztof
-> 
+-- 
+2.40.0.423.gd6c402a77b-goog
 
