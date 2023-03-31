@@ -2,113 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EB26D1DEB
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Mar 2023 12:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EB06D1E3E
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Mar 2023 12:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjCaKW0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 31 Mar 2023 06:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S231173AbjCaKlM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 31 Mar 2023 06:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCaKV3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 31 Mar 2023 06:21:29 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB077D8C;
-        Fri, 31 Mar 2023 03:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=Mo9vAtGSkTJ+jRRjzDL+LT7UGFqCHyfS46KX9CNNSXU=;
-        b=axN0TyBn3xNwrykt0EIwwUPufxgn09Ohxj3feLL+lxT7TISPmQ4DDxY6nqtmPyYK4KAWQO2d3wiVJ
-         JdJxGbrFH84p8mzVNzZWHfYx+aO2g/vdBqO/g/UNl2bCpJIUtj16ti8L/Ow0jDIYo6t0CRyHxxID5e
-         HQ99HWls3XNehhx3H7AoGXmUzsWMrv0f1AirWz/j/Eu0ZuxmDuLggjd+WlSODG8sk/NXOt7/9cf6F3
-         l9XwRf6srVZeHNm3oAislVCh8Q/Bfzs4j4g8jl9+43A55JmC2Vd26JlVaTVmq4qbMAPMuI2yHi1KOX
-         AEL2bS0Eoc7Nt/qevLkfT6jf/kR0eLQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000008,0.011710)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.095159), Hit: No, Details: v2.49.0; Id: 15.jk22d.1gsrir44n.1361u; mclb], total: 0(700)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([78.37.166.219])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Fri, 31 Mar 2023 13:19:03 +0300
-Date:   Fri, 31 Mar 2023 13:18:57 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+        with ESMTP id S231160AbjCaKlL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 31 Mar 2023 06:41:11 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FDFD8A49;
+        Fri, 31 Mar 2023 03:41:06 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxztrBuCZkBuoUAA--.20596S3;
+        Fri, 31 Mar 2023 18:41:05 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuXAuCZkGPwRAA--.50892S3;
+        Fri, 31 Mar 2023 18:41:05 +0800 (CST)
+Subject: Re: [PATCH v5 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] treewide: Fix probing of devices in DT overlays
-Message-ID: <20230331101857.wjfwkeiiww4geznk@x260>
-References: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230331032909.7720-1-zhuyinbo@loongson.cn>
+ <20230331032909.7720-2-zhuyinbo@loongson.cn>
+ <7d9e1d19-10e0-a627-bf1f-a42e7d936dcf@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <8881d54c-62e0-510b-e2d4-3f1b035f8084@loongson.cn>
+Date:   Fri, 31 Mar 2023 18:41:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+In-Reply-To: <7d9e1d19-10e0-a627-bf1f-a42e7d936dcf@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxMuXAuCZkGPwRAA--.50892S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrtr18AF43ury8Zw48XF43Wrg_yoW3Kwc_Ar
+        y2kw1jgwnxXF9xWwnFva97Gayqgw48A3W3XFWUAr1I934SyFs8XFy8Zw13Way5Aa13CF1a
+        vrs5Wa4jvF45ujkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:26:13PM +0200, Geert Uytterhoeven wrote:
-> When loading a DT overlay that creates a device, the device is not
-> probed, unless the DT overlay is unloaded and reloaded again.
-> 
-> After the recent refactoring to improve fw_devlink, it no longer depends
-> on the "compatible" property to identify which device tree nodes will
-> become struct devices.   fw_devlink now picks up dangling consumers
-> (consumers pointing to descendent device tree nodes of a device that
-> aren't converted to child devices) when a device is successfully bound
-> to a driver.  See __fw_devlink_pickup_dangling_consumers().
-> 
-> However, during DT overlay, a device's device tree node can have
-> sub-nodes added/removed without unbinding/rebinding the driver.  This
-> difference in behavior between the normal device instantiation and
-> probing flow vs. the DT overlay flow has a bunch of implications that
-> are pointed out elsewhere[1].  One of them is that the fw_devlink logic
-> to pick up dangling consumers is never exercised.
-> 
-> This patch solves the fw_devlink issue by marking all DT nodes added by
-> DT overlays with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become
-> device), and by clearing the flag when a struct device is actually
-> created for the DT node.  This way, fw_devlink knows not to have
-> consumers waiting on these newly added DT nodes, and to propagate the
-> dependency to an ancestor DT node that has the corresponding struct
-> device.
-> 
-> Based on a patch by Saravana Kannan, which covered only platform and spi
-> devices.
-> 
-> [1] https://lore.kernel.org/r/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com
-> 
-> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
-Here is my use-case: a bunch of FPGA-based devices, which are SPI
-slaves, WEIM childs and other platform devices, described in DTS with
-status = "disabled"; in run-time DT-overlay with status = "okay" for
-these devices is loaded via ConfigFS with help of out-of-tree patch.
 
-Although without this patch I had no issues probing overlay-enabled
-devices, it won't hurt either.
+在 2023/3/31 下午5:44, Krzysztof Kozlowski 写道:
+> On 31/03/2023 05:29, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+> 
+> 
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-spi
+>> +      - loongson,ls7a-spi
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
+> 
+> Why do you need the header? Wasn't the entire point to remove it?
+okay, I got it, I will remove this head file.
 
-Tested-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Thanks.
+> 
+>> +    spi0: spi@1fff0220{
+>> +        compatible = "loongson,ls2k-spi";
+>> +        reg = <0x1fff0220 0x10>;
+>> +        clocks = <&clk 17>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +    };
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
