@@ -2,103 +2,161 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AB66D12F4
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Mar 2023 01:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C1C6D14AD
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Mar 2023 03:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjC3XW5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Mar 2023 19:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S229893AbjCaBKD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Mar 2023 21:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjC3XWx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Mar 2023 19:22:53 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65FE113CA
-        for <linux-spi@vger.kernel.org>; Thu, 30 Mar 2023 16:22:52 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id s8so13684659pfk.5
-        for <linux-spi@vger.kernel.org>; Thu, 30 Mar 2023 16:22:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680218572; x=1682810572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jpMbxrrdDscwNjErz3IAiuqvaFdZEEwZOIQdRb6keUI=;
-        b=lIx1PRXCSLLMWs51ETL7VyXl264nJDY8mFGa2z56HJv63Cnn8TUjG9EpaYjioOkK1V
-         0QHRxfQpZmUy6lJu77npISc4i2aBnkPi2TwuiWXY9gNne6XzN0s1Ldv1U9NcC6IWBZAm
-         MqUrtHiFcijlnAHCJr0gU/Um+p2UHTlIarSBvjL0oLNMC/CNck38T/+O5UH2n3uC5DFP
-         9qjMt5ErQ0NPSWK5Ri/0iGbVCcdEMovyy2ayxO2cWyMDBodtIb76Td5VHiS9KaYTLc5w
-         +mw38aftmBYX4ekOGUrkncxFcBcp4ZXkhvDVjFkqV1NNfeWsQjJekptLn5ZiybmFUMkF
-         x6GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680218572; x=1682810572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jpMbxrrdDscwNjErz3IAiuqvaFdZEEwZOIQdRb6keUI=;
-        b=7jhxOW7EOAF0c6oIrDag4hChTeJBWVv+XdbYrDAVN5eQfjBmz0hXlFelG3htmV+Lri
-         qdEUZdporir4VeUUzl0RRRdSvhsl5PwVXSr9Vi2dvZWvIX3ubw7LQST13dwr/kdhvItd
-         n6VhpizdRl5XXE3UyjhCW9SbiBMt+MlsEgRej3g5RHpVnIqOni9lkB1837+nVyok7jFA
-         Ti1F3bDK43ZtPhryUl6Q56sPL2a5RtRvFfgUavnKC7Acc9ZU+aM8CB/jyMeV7y3dN5zI
-         V+nMCgJMZlj4T6qvAc/lm5DP9L63msJ5ZJRK7nYLtGsFvxMQVQNkCbxdQ8ZWrFfzpxKt
-         DXlg==
-X-Gm-Message-State: AAQBX9dOfVof7AcjaNWKWNG3q5FofmNaoStrxM/PThUdmwnngua+sxCR
-        PZNmsUzj/eDGTS/cfPaZlCQ=
-X-Google-Smtp-Source: AKy350aHhWXMC152wd8CdET6qBPC+OG4u4Ves4xuQcKXG2peKuHJl36nWI4jx2SX1PNLp3aqO6M1hg==
-X-Received: by 2002:aa7:982c:0:b0:627:e1a5:27b4 with SMTP id q12-20020aa7982c000000b00627e1a527b4mr24668962pfl.33.1680218571919;
-        Thu, 30 Mar 2023 16:22:51 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j15-20020aa7928f000000b0062a474cd46asm378650pfa.137.2023.03.30.16.22.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 16:22:51 -0700 (PDT)
-Message-ID: <355da7b2-3190-fbf1-697a-b7006c66540d@gmail.com>
-Date:   Thu, 30 Mar 2023 16:22:49 -0700
+        with ESMTP id S229485AbjCaBKC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Mar 2023 21:10:02 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7DFCC1C
+        for <linux-spi@vger.kernel.org>; Thu, 30 Mar 2023 18:10:00 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230331010957epoutp0198c0aa58a3dc2718f70de3189d8d1ebc~RW7u3lbUW0860808608epoutp01F
+        for <linux-spi@vger.kernel.org>; Fri, 31 Mar 2023 01:09:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230331010957epoutp0198c0aa58a3dc2718f70de3189d8d1ebc~RW7u3lbUW0860808608epoutp01F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680224997;
+        bh=EhThxdvWYRZnuiv50zXOOQDb0YMreQfdHDr+74zalFI=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=XVbmwE5QLfV69+IKWbn1xDA2j/ZohRLf8jJBK996wigwryX+oe1ic0v4be1AUYhRZ
+         TFehjquMO4N/7ocZfb0VnzhiWJ6hyycXH7wLJiYynrj0ZTuSvhEH/v9r1W0BegOhWg
+         cQOhlY/cuwY/TnlCUleqrqp5re/qIeQC6TaADSWE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230331010957epcas2p3fc31aadeaf65124deed2fea2aca44508~RW7uY2ibQ1566115661epcas2p3-;
+        Fri, 31 Mar 2023 01:09:57 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Pnhz85VxGz4x9QC; Fri, 31 Mar
+        2023 01:09:56 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        17.FD.08750.4E236246; Fri, 31 Mar 2023 10:09:56 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230331010956epcas2p3376fc6fabe95b30c41e548bd7d692611~RW7tcMVR71567715677epcas2p30;
+        Fri, 31 Mar 2023 01:09:56 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230331010956epsmtrp254e82ff04fa070228176dbab0a3a6ca7~RW7tbSKXc2178021780epsmtrp2e;
+        Fri, 31 Mar 2023 01:09:56 +0000 (GMT)
+X-AuditID: b6c32a47-777ff7000000222e-b1-642632e4314a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.8C.31821.4E236246; Fri, 31 Mar 2023 10:09:56 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230331010955epsmtip289e59e04ced47c6a56673460e51a8ec4~RW7tIriRG1312313123epsmtip2S;
+        Fri, 31 Mar 2023 01:09:55 +0000 (GMT)
+Message-ID: <886e1f40-79d3-3e5f-bc11-06ce4a04ccec@samsung.com>
+Date:   Fri, 31 Mar 2023 10:07:32 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] spi: bcm2835: Convert to platform remove callback
- returning void
+        Thunderbird/102.9.0
+Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-References: <20230330211022.2460233-1-u.kleine-koenig@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230330211022.2460233-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <420495f8-b894-1665-bbc3-f5cab0f95301@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmhe4TI7UUgzkzlCwezNvGZrH4x3Mm
+        i6kPn7BZ7H29ld1i0+NrrBaXd81hs5hxfh+TRePHm+wOHB7Xl3xi9ti0qpPN4861PWwem5fU
+        e/RtWcXo8XmTXABbVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2S
+        i0+ArltmDtA9SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwC8wK94sTc4tK8dL28
+        1BIrQwMDI1OgwoTsjH+7b7MV9HJUbN+xm72B8R1bFyMnh4SAicT8qa0sXYxcHEICOxgl9rx8
+        AOV8YpR4uquBEcL5zChx9ncHK0zLrYbrUIldjBJtf18yQzivGSXWLD7ADlLFK2An0XRjDlgH
+        i4CqxLv5q5gg4oISJ2c+YQGxRQWiJPpubwKrERawkNi27w2YzSwgLnHryXywehGBaImP91Yz
+        gSxgFjjHKHFj/nlmkASbgLbE9/WLgRo4ODiBlp16UAXRKy+x/e0csIMkBKZySGxrOAF1tovE
+        0b0zmSBsYYlXx7ewQ9hSEp/f7YWGRrZE+/Q/UPUVEhc3zIaKG0vMetbOCLKLWUBTYv0ufRBT
+        QkBZ4sgtFoi1fBIdh/+yQ4R5JTrahCAa1STuTz0HNURGYtKRlVAHeEic+t/FNoFRcRZSoMxC
+        8vwsJM/MQti7gJFlFaNYakFxbnpqsVGBMTyyk/NzNzGCk6qW+w7GGW8/6B1iZOJgPMQowcGs
+        JMJbaKyaIsSbklhZlVqUH19UmpNafIjRFBg1E5mlRJPzgWk9ryTe0MTSwMTMzNDcyNTAXEmc
+        V9r2ZLKQQHpiSWp2ampBahFMHxMHp1QD096/0Q+i29Zrxk+epn+X6dRyyW0rI19m2W4/rHTg
+        Z8TswO+Ml7ecWpV+bM+G/SdOTLoa5rC8X4ntiFKkCs+LL6sT38mrPvkzh2Xe3uRIvzxepc7V
+        5ntechfk8of6nhd9Pc9myn5jRn1eF+E1V+M8pjWGNv3k1nUIbnEq+7PeL8VAPX9nStnKO2/z
+        GVZr/DsWaKSsceWtyJ9+/2me8r5q0qsUbPufFL0XcUxNMtOTmWnMmp1fELJ14af2734z+bXl
+        np89dHZSufyc03NmvH508CZb1q/vM73/BeVPCWez7Lx0yUNyl2rv98nfr9wvKmF12n3NV126
+        xmaW0Z6NSU33q10+H2G/dr45d9L2n3NZfyqxFGckGmoxFxUnAgBxkmwrMwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJXveJkVqKweEJXBYP5m1js1j84zmT
+        xdSHT9gs9r7eym6x6fE1VovLu+awWcw4v4/JovHjTXYHDo/rSz4xe2xa1cnmcefaHjaPzUvq
+        Pfq2rGL0+LxJLoAtissmJTUnsyy1SN8ugSvj3+7bbAW9HBXbd+xmb2B8x9bFyMkhIWAicavh
+        OmMXIxeHkMAORokDC99DJWQklj/rg7KFJe63HGGFKHrJKHF96xl2kASvgJ1E0405rCA2i4Cq
+        xLv5q5gg4oISJ2c+YQGxRQWiJD4faAGrFxawkNi27w1YPbOAuMStJ/OB6jk4RASiJU7uDwaZ
+        zyxwjlHi6oSPTBDLfjFK7Gm8DdbAJqAt8X39YlaQBk6gxaceVEHMMZPo2trFCGHLS2x/O4d5
+        AqPQLCRnzEKybhaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOJC2t
+        HYx7Vn3QO8TIxMF4iFGCg1lJhLfQWDVFiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLp
+        iSWp2ampBalFMFkmDk6pBqZjc53Fp84ITywM0zSw55nzVLDrQuy7WSG825icQ+ULP71oD9ya
+        /CLspZrnvDXt76dH3Iuy/lKizMoz+2qzQ4eABNPHNaGiGto2T90133TyGEvFJ67rNNnuHuIn
+        k8ic2Sy1LUP5ycMvv/9fzBdd80al9nxLxSt3pdtmpY/VHVs3Fjznjf90P3qz1e15fCe3bdrR
+        abZvukBif4yUr0qkDqd94S6ON3O7Zp0yeWjiXsxk8UipvEvj1Obr64pe6MkWS07J2Pwr8KDH
+        2uwyVralt20yKiv1Z53SSY6JWe49Z2XYtEeK9j5X5EtkOLivdvj/PeDee03aeX2468LnGVfY
+        xS54snAoHpyW7X0sjnODEktxRqKhFnNRcSIANwZkKRMDAAA=
+X-CMS-MailID: 20230331010956epcas2p3376fc6fabe95b30c41e548bd7d692611
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a
+References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
+        <20230306014239.80570-1-jaewon02.kim@samsung.com>
+        <1b4f0367-a919-cd8a-17e1-a38998575e58@samsung.com>
+        <420495f8-b894-1665-bbc3-f5cab0f95301@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 3/30/23 14:10, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Convert this driver from always returning zero in the remove callback to
-> the void returning variant.
-> 
-> Now that bcm2835_spi_remove returns no error code any more,
-> bcm2835_spi_shutdown() does the same thing as bcm2835_spi_remove(). So
-> drop the shutdown function and use bcm2835_spi_remove() as .shutdown
-> callback.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Hi Krzysztof
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
 
+I always appreciate your kind guide.
+
+
+I used 'get_maintainers.pl' but the Mark was missing.
+
+Because the changes in this patch are only in 
+"include/linux/platform_data/".
+
+There was no touch in SPI driver. So, script did not outputting the SPI 
+Maintainer.
+
+
+Thanks
+
+Jaewon Kim
+
+On 23. 3. 30. 23:46, Krzysztof Kozlowski wrote:
+> On 30/03/2023 15:40, Jaewon Kim wrote:
+>> Hello Mark
+>>
+>>
+>> Could you apply this patch?
+>>
+>> I missed you in the mail recipient.
+>>
+>>
+>> https://protect2.fireeye.com/v1/url?k=62c6672d-034d7217-62c7ec62-74fe4860008a-45c729ef051007d6&q=1&e=03453742-6822-4fdc-9ee7-bdb6bdb0fe4f&u=https%3A%2F%2Flkml.org%2Flkml%2F2023%2F3%2F6%2F34
+>>
+>> https://protect2.fireeye.com/v1/url?k=41253bbb-20ae2e81-4124b0f4-74fe4860008a-f6ba8ee97b64390d&q=1&e=03453742-6822-4fdc-9ee7-bdb6bdb0fe4f&u=https%3A%2F%2Flkml.org%2Flkml%2F2023%2F3%2F6%2F232
+> I think you should resend. This time with entire output of
+> scripts/get_maintainers.pl
+>
+> Best regards,
+> Krzysztof
+>
+>
