@@ -2,104 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C74A6D3305
-	for <lists+linux-spi@lfdr.de>; Sat,  1 Apr 2023 20:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8DF6D36C8
+	for <lists+linux-spi@lfdr.de>; Sun,  2 Apr 2023 11:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjDASAm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 1 Apr 2023 14:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S230338AbjDBJ6l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 Apr 2023 05:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjDASAh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 Apr 2023 14:00:37 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A85265AB;
-        Sat,  1 Apr 2023 11:00:29 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4PplLX4mtSz9sVF;
-        Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1We6b6nlkxln; Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4PplLX3xB6z9sVB;
-        Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 75DFF8B841;
-        Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id bKU_w5W2O2fv; Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.134])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3635B8B837;
-        Sat,  1 Apr 2023 20:00:20 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 331I0BUU573368
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 1 Apr 2023 20:00:11 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 331I0B1j573363;
-        Sat, 1 Apr 2023 20:00:11 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Anton Vorontsov <cbouatmailru@gmail.com>,
-        Joakim Tjernlund <Joakim.Tjernlund@transmode.se>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] spi: fsl-spi: No need to check transfer length versus word size
-Date:   Sat,  1 Apr 2023 19:59:50 +0200
-Message-Id: <9ace69a8085e22fafd9159e99edd7bbfae2f9940.1680371809.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1b7d3e84b1128f42c1887dd2fb9cdf390f541bc1.1680371809.git.christophe.leroy@csgroup.eu>
-References: <1b7d3e84b1128f42c1887dd2fb9cdf390f541bc1.1680371809.git.christophe.leroy@csgroup.eu>
+        with ESMTP id S230218AbjDBJ6k (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Apr 2023 05:58:40 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16EE6194
+        for <linux-spi@vger.kernel.org>; Sun,  2 Apr 2023 02:58:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so106409265edo.2
+        for <linux-spi@vger.kernel.org>; Sun, 02 Apr 2023 02:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680429517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kkmwX+s78lg6bo26NOgVKCiXJuV292J/9j0MsWg/NjI=;
+        b=Xq7VeP7EawkPfRn13Vu4OKwYHMMpPlC32bXNrfjrPFzriBbLHTE7CDSSKVIwcP6Amp
+         H/DeMJn4HvSksP6CZPLahNmPhkiKP46XCBROcPk/LnIfjNCvDaH6n6V93AkiteV/gQes
+         ObdaKAVSj9A+ciq0b5C6N0/sA2b1myIAPaAwE6dSC3eON3mGK9suERhCZRHdNyUlGc0p
+         IzJPmqiAfLQYMDY6cOxC4gnsJVrYk4255Z020cyDTK//Jn9MGvn8Z+zFBdeSmi9kG/6r
+         l2ul0y3lj99QyFd2wXfUWhfhYNVSzG1GqLZd4bXoGgSG8cAB9gS5WI+PTnRXecmhNQjM
+         fFNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680429517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kkmwX+s78lg6bo26NOgVKCiXJuV292J/9j0MsWg/NjI=;
+        b=CLcXRvsdBQnZ3ubFIdPSwaac7/EfvwRAxMWxHcfy02BUBIUKO0MZanE9mdixlzddRH
+         E30dV/p86cvFt+OyzIHVIS0q7QC9Y+4QZCdvzZOYcqINUpc4voM+2MIhYMqZK1AhXrKa
+         gVxvhyPMt02iZ7rvLjA8PgMPK3dvYhIfKkbs1qCoLLziS3EJhqAhtEvANoWkJEpjOtCe
+         geVf4f3wiLn5lt4peKWPw/s1gdRYIXJIBHAJF/K60j30b8ol87J5CAgSSJXMXw4S7DJy
+         U6z6UBqQUWkVTxZd9tMG4TEv0DjwBIc8/9djlYxeB84UM6r8LVrATY/qKSSu7ptyrJMI
+         6UFg==
+X-Gm-Message-State: AAQBX9csi+Z2H0ltirNKNVpt4YMYyQjCVjBQrHJBoR4y8O4yd4+Lzvvh
+        Zrh4j/6j3mUPmjiJOrZv4cextg==
+X-Google-Smtp-Source: AKy350aF4niBs3Rwa4U5LDWCVMrb5c3v0bW6W6qU1x6Oic5ekNrAlkVcWuWnypJaWrIOuFZ2PQWuPw==
+X-Received: by 2002:a17:907:8c83:b0:8b1:7ae9:647 with SMTP id td3-20020a1709078c8300b008b17ae90647mr33178204ejc.76.1680429516842;
+        Sun, 02 Apr 2023 02:58:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7f7f:6a30:7a20:94d5? ([2a02:810d:15c0:828:7f7f:6a30:7a20:94d5])
+        by smtp.gmail.com with ESMTPSA id kt5-20020a170906aac500b0093a768b3dddsm3050356ejb.216.2023.04.02.02.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 02:58:36 -0700 (PDT)
+Message-ID: <c0199067-4dab-651b-bf88-8cc5c035f79e@linaro.org>
+Date:   Sun, 2 Apr 2023 11:58:35 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680371987; l=984; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=hDCmrEe6o7BVI++8Bmh+Jjuo/S+dkFP/T6OxyOCQ3ig=; b=3xbEppuBrUE5lXt+oR5zif9k15I3E7RJyyz48IY/jL7gV6/I6v0zdT1x/v2//U734hYpVKGAB XvQLcQmeygQBkeQG8BvzK0/kBL4qg3tIf+S4PWAmOqnIaK9/N9iCaK9
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: spi: add loongson spi
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230401095652.17364-1-zhuyinbo@loongson.cn>
+ <20230401095652.17364-2-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230401095652.17364-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The verification is already do in the SPI core by function
-__spi_validate(), not it to check it again in fsl_spi_bufs().
+On 01/04/2023 11:56, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../bindings/spi/loongson,ls-spi.yaml         | 42 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> new file mode 100644
+> index 000000000000..ef113296529b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson SPI controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-spi
+> +      - loongson,ls7a-spi
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/spi/spi-fsl-spi.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+You don't use this compatible?
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index d011beddee29..9938b058c9e2 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -263,18 +263,10 @@ static int fsl_spi_bufs(struct spi_device *spi, struct spi_transfer *t,
- 	if (t->bits_per_word)
- 		bits_per_word = t->bits_per_word;
- 
--	if (bits_per_word > 8) {
--		/* invalid length? */
--		if (len & 1)
--			return -EINVAL;
-+	if (bits_per_word > 8)
- 		len /= 2;
--	}
--	if (bits_per_word > 16) {
--		/* invalid length? */
--		if (len & 1)
--			return -EINVAL;
-+	if (bits_per_word > 16)
- 		len /= 2;
--	}
- 
- 	mpc8xxx_spi->tx = t->tx_buf;
- 	mpc8xxx_spi->rx = t->rx_buf;
--- 
-2.39.2
+
+Best regards,
+Krzysztof
 
