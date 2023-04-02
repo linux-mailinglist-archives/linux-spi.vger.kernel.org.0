@@ -2,256 +2,186 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8966D36D1
-	for <lists+linux-spi@lfdr.de>; Sun,  2 Apr 2023 12:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1DC6D37B4
+	for <lists+linux-spi@lfdr.de>; Sun,  2 Apr 2023 13:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjDBKEF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 2 Apr 2023 06:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S230264AbjDBLoJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 Apr 2023 07:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjDBKEE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Apr 2023 06:04:04 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF74C7
-        for <linux-spi@vger.kernel.org>; Sun,  2 Apr 2023 03:04:03 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w9so106371134edc.3
-        for <linux-spi@vger.kernel.org>; Sun, 02 Apr 2023 03:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680429842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rWWy4/C/MQgzPNUE4XEgKsI2Wpmjz+E0b50/BZkhNms=;
-        b=zHfMH1RqOgycPSQTA7+6D3Fz+l9Qn/YMk8q5q0EmI2US6wbZZ4i7Q/+cacvqPL3GKW
-         1wQCaYv6ZapFjulMoPRBonzpFwCnLMc/WykELnBqXARckdOwOexryIbiNZMZO+6Q/32L
-         RcC1QyQ3eNb3mweLXEJoXBFYkIK6Ala2COTplA1m0UB+JRTBallbGDPshUlTJaId6tua
-         NKoUYqvvw5MXAsDOIXxWQ1W8HC5OKccsPMr1Xm4IYdCWWyyIYGc94nWrICRhqCTOTXl9
-         /9xYG/nj7odPI05+QBe/VcfWNbdhBPCacQ6PUemuIA6Rhg0gBwlSevam5oL6wYcEMjKC
-         ZtmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680429842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWWy4/C/MQgzPNUE4XEgKsI2Wpmjz+E0b50/BZkhNms=;
-        b=DJCRD/+8egaX/VfEPaH83/4B2LBLAU+1+v8G+Oh9TEt6jMbkwVCQ19XkBwXamNg9k2
-         QrodRZJmjOgSFGQn+CV4rp6A3q6DkHpRdj6NM/ew3/BMAROAVvdU/Eb1/oa2qr6lgz7y
-         r1+E/EoiZKtJsydTj7oHJ86D6fyci9ZuLoeATXS0cyQzFIjM4s0VgFJgC5KrM7OlAu6E
-         sihNPqfbbNuOQvh9lm0PjsQDLhPDP13SWtJnEOtVWEpYdg4w3M0PBn/pIbNHDlUtzU5s
-         EcKFutQGVygM/HEOUfuSRyorYjYLVpTQLkk8IJo3harbSKoS+gosyM02RuX7IYWt+uQf
-         4bmg==
-X-Gm-Message-State: AAQBX9dzaauN9/+saDaCvyYt4Bdum/nLFHiZoKMuBW0FzBb5XnY60Zhz
-        bq38njEe46wpJwse3eekId/2+Q==
-X-Google-Smtp-Source: AKy350Z6ozQ06SwDgcfVTIcnq2kml/s8Zkv04sjL3OVXwXRjTz5RHdXAIaCfn+dtxdMEcd1GVqU9Yw==
-X-Received: by 2002:a17:906:3a43:b0:932:aa80:406 with SMTP id a3-20020a1709063a4300b00932aa800406mr36073258ejf.32.1680429841864;
-        Sun, 02 Apr 2023 03:04:01 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7f7f:6a30:7a20:94d5? ([2a02:810d:15c0:828:7f7f:6a30:7a20:94d5])
-        by smtp.gmail.com with ESMTPSA id z95-20020a509e68000000b004c10b4f9ebesm3109562ede.15.2023.04.02.03.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Apr 2023 03:04:01 -0700 (PDT)
-Message-ID: <9fcb66fa-aadc-8660-bd4a-452c4811ced9@linaro.org>
-Date:   Sun, 2 Apr 2023 12:04:00 +0200
+        with ESMTP id S229719AbjDBLoI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Apr 2023 07:44:08 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9321F773
+        for <linux-spi@vger.kernel.org>; Sun,  2 Apr 2023 04:44:06 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id iw7tpzqjOuZFDiw7upFXdu; Sun, 02 Apr 2023 13:44:05 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 02 Apr 2023 13:44:05 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <a4927787-4fcc-27c5-c838-760e0b07a334@wanadoo.fr>
+Date:   Sun, 2 Apr 2023 13:44:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 Subject: Re: [PATCH v6 2/2] spi: loongson: add bus driver for the loongson spi
  controller
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
+Content-Language: fr
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, liupeibao@loongson.cn,
+        loongson-kernel@lists.loongnix.cn, lvjianmin@loongson.cn,
+        robh+dt@kernel.org, wanghongliang@loongson.cn
 References: <20230401095652.17364-1-zhuyinbo@loongson.cn>
  <20230401095652.17364-3-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 In-Reply-To: <20230401095652.17364-3-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/04/2023 11:56, Yinbo Zhu wrote:
+Le 01/04/2023 à 11:56, Yinbo Zhu a écrit :
 > This bus driver supports the Loongson spi hardware controller in the
 > Loongson platforms and supports to use DTS and PCI framework to
 > register spi device resources.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
 > ---
 
+[...]
 
-...
-
-> +
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +
-> +#include "spi-loongson.h"
-> +
-> +static inline void loongson_spi_write_reg(struct loongson_spi *spi, unsigned char reg,
-> +					  unsigned char data)
+> +int loongson_spi_init_master(struct device *dev, struct resource *res)
 > +{
-> +	writeb(data, spi->base + reg);
-
-This wrapper does not simplify anything.
-
-> +}
-> +
-> +static inline char loongson_spi_read_reg(struct loongson_spi *spi, unsigned char reg)
-> +{
-> +	return readb(spi->base + reg);
-
-Neither this one.
-
-> +}
-> +
-> +static void loongson_spi_set_cs(struct spi_device *spi, bool val)
-> +{
-> +	int cs;
-> +	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
-> +
-
-(...)
-
-> +
-> +static int __init loongson_spi_pci_init(void)
-> +{
+> +	struct spi_master *master;
+> +	struct loongson_spi *spi;
+> +	struct clk *clk;
 > +	int ret;
 > +
-> +	ret = pci_register_driver(&loongson_spi_pci_driver);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit loongson_spi_pci_exit(void)
-> +{
-> +	pci_unregister_driver(&loongson_spi_pci_driver);
-> +}
-> +
-> +module_init(loongson_spi_pci_init);
-> +module_exit(loongson_spi_pci_exit);
+> +	master = spi_alloc_master(dev, sizeof(struct loongson_spi));
 
-module_xxx_driver?
+devm_spi_alloc_master()?
+(to simplify code and be consistent with devm_ function below)
 
+> +	if (master == NULL) {
+> +		dev_dbg(dev, "master allocation failed\n");
+> +		return -ENOMEM;
+> +	}
 > +
-> +MODULE_DESCRIPTION("Loongson spi pci driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/spi/spi-loongson-plat.c b/drivers/spi/spi-loongson-plat.c
+> +	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+> +	master->setup = loongson_spi_setup;
+> +	master->prepare_message = loongson_spi_prepare_message;
+> +	master->transfer_one = loongson_spi_transfer_one;
+> +	master->unprepare_message = loongson_spi_unprepare_message;
+> +	master->set_cs = loongson_spi_set_cs;
+> +	master->num_chipselect = 4;
+> +	master->dev.of_node = of_node_get(dev->of_node);
+> +	dev_set_drvdata(dev, master);
+> +
+> +	spi = spi_master_get_devdata(master);
+> +
+> +	spi->master = master;
+> +
+> +	spi->base = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (spi->base == NULL) {
+> +		dev_err(dev, "cannot map io\n");
+> +		ret = -ENXIO;
+> +		goto free_master;
+> +	}
+> +
+> +	clk = devm_clk_get(dev, NULL);
+> +	if (!IS_ERR(clk))
+> +		spi->clk_rate = clk_get_rate(clk);
+> +
+> +	loongson_spi_reginit(spi);
+> +
+> +	spi->mode = 0;
+> +	if (of_get_property(dev->of_node, "spi-nocs", NULL))
+> +		spi->mode |= SPI_NO_CS;
+> +
+> +	ret = spi_register_master(master);
+> +	if (ret < 0)
+> +		goto free_master;
+> +
+> +	return ret;
+> +
+> +free_master:
+> +	kfree(master);
+> +	spi_master_put(master);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
+
+[...]
+
+> diff --git a/drivers/spi/spi-loongson-pci.c b/drivers/spi/spi-loongson-pci.c
 > new file mode 100644
-> index 000000000000..8f4aa70168f3
+> index 000000000000..b811de769ecb
 > --- /dev/null
-> +++ b/drivers/spi/spi-loongson-plat.c
-> @@ -0,0 +1,66 @@
+> +++ b/drivers/spi/spi-loongson-pci.c
+> @@ -0,0 +1,89 @@
 > +// SPDX-License-Identifier: GPL-2.0+
-> +// Platform driver for Loongson SPI Support
+> +// PCI interface driver for Loongson SPI Support
 > +// Copyright (C) 2023 Loongson Technology Corporation Limited
 > +
-> +#include <linux/platform_device.h>
-> +#include <linux/of.h>
+> +#include <linux/pci.h>
 > +
 > +#include "spi-loongson.h"
 > +
-> +static int loongson_spi_platform_probe(struct platform_device *pdev)
+> +static int loongson_spi_pci_register(struct pci_dev *pdev,
+> +			const struct pci_device_id *ent)
 > +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
 > +	int ret;
+> +	unsigned char v8;
+> +	struct resource res[2];
+> +	struct device *dev = &pdev->dev;
 > +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (res == NULL) {
-> +		dev_err(dev, "cannot get io resource memory\n");
-> +		return -ENOENT;
+> +	ret = pci_enable_device(pdev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "cannot enable pci device\n");
+> +		goto err_out;
+> +	}
+> +
+> +	ret = pci_request_region(pdev, 0, "loongson-spi io");
+> +	if (ret < 0) {
+> +		dev_err(dev, "cannot request region 0.\n");
+> +		goto err_out;
+> +	}
+> +
+> +	res[0].start = pci_resource_start(pdev, 0);
+> +	res[0].end = pci_resource_end(pdev, 0);
+> +	ret = pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &v8);
+> +
+> +	if (ret == PCIBIOS_SUCCESSFUL) {
+> +		res[1].start = v8;
+> +		res[1].end = v8;
 > +	}
 > +
 > +	ret = loongson_spi_init_master(dev, res);
 > +	if (ret)
 > +		dev_err(dev, "failed to initialize master\n");
 > +
+> +err_out:
 > +	return ret;
 > +}
 > +
-> +static const struct of_device_id loongson_spi_id_table[] = {
-> +	{ .compatible = "loongson,ls2k-spi", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, loongson_spi_id_table);
-> +
-> +static struct platform_driver loongson_spi_plat_driver = {
-> +	.probe = loongson_spi_platform_probe,
-> +	.driver	= {
-> +		.name	= "loongson-spi",
-> +		.owner	= THIS_MODULE,
-
-Really? We get rid of it years ago. I bet you did not run coccicheck,
-smatch, sparse...
-
-> +		.bus = &platform_bus_type,
-> +		.pm = &loongson_spi_dev_pm_ops,
-> +		.of_match_table = loongson_spi_id_table,
-> +	},
-> +};
-> +
-> +static int __init loongson_spi_plat_init(void)
+> +static void loongson_spi_pci_unregister(struct pci_dev *pdev)
 > +{
-> +	int ret;
-> +
-> +	ret = platform_driver_register(&loongson_spi_plat_driver);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
+> +	pci_release_region(pdev, 0);
+
+pci_disable_device()?
+
 > +}
-> +
-> +static void __exit loongson_spi_plat_exit(void)
-> +{
-> +	platform_driver_unregister(&loongson_spi_plat_driver);
-> +}
-> +
-> +module_init(loongson_spi_plat_init);
-> +module_exit(loongson_spi_plat_exit);
 
-module_platform_driver.
-
-> +
-> +MODULE_DESCRIPTION("Loongson spi platform driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/spi/spi-loongson.h b/drivers/spi/spi-loongson.h
-> new file mode 100644
-> index 000000000000..44818340188d
-> --- /dev/null
-> +++ b/drivers/spi/spi-loongson.h
-> @@ -0,0 +1,41 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/* Header File for Loongson SPI Driver. */
-> +/* Copyright (C) 2023 Loongson Technology Corporation Limited */
-> +
-> +#ifndef __LINUX_SPI_LOONGSON_H
-> +#define __LINUX_SPI_LOONGSON_H
-> +
-> +#define	LOONGSON_SPI_SPCR_REG	0x00
-
-There is just one space after #define.
-
-
-Best regards,
-Krzysztof
+CJ
 
