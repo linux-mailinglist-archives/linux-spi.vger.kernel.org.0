@@ -2,101 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DBB6D3C4C
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 06:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042CA6D3E2B
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 09:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjDCEJ1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Apr 2023 00:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S231433AbjDCHhy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Apr 2023 03:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjDCEJ0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 00:09:26 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C601D83F7
-        for <linux-spi@vger.kernel.org>; Sun,  2 Apr 2023 21:09:24 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5416698e889so528654397b3.2
-        for <linux-spi@vger.kernel.org>; Sun, 02 Apr 2023 21:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680494964;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
-        b=kUeJ2lwf7zRBsYvmzFyuhvCEE7VnpCUYH76GnherL1ruTmM1Q+L5tsiaPdC/GPoqsV
-         htWO6WAJiLZ8g8ZFLB8GefKVE3XzbSa6vOy9Z3lcXegrB6UvIFAKz9/wBfd4mrXlfRrB
-         hDN/hdPEgV4KST6mXOybEp8IObsyB6LY92r0a/qXB1ZGp2/9tDNf2DyvFFdS5U+djt23
-         O8L3WPpxorS17h6DSYn5Itwh2DbSxUWfUYDRF0IAWAZBfMrPKF0ldhBSdk7xmuWk5/IU
-         +z55dONWjivicjeZO+Vu9ijlURBjxHM7awcwYi+c5zKLk2s8LSujyoMdAla/zFmSDweD
-         GI4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680494964;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
-        b=1lSFojiOStDcapmBwtz9MNB10oq9euhoYKUNlACSf7KBe/inDPFsw8kbD4E2RZgwQT
-         nNQeBYol+7XXJmwieR17EeGnD1LYI06c8Qy9lFO2iSoiBEh5YKmN4PU0bT4GLR5Chmcm
-         oIm/atvyQPNcgr8QsuX4zoMu4cVTUTmDipzmdgn053ltzSf+jvPgaScydCR2K6v8LvtP
-         p7T6G28Yi9pwzFGUAKFcTlJGenTozM0L4oKIQlUR/CY/oJIKzEFOP/llp50Lr2BuLeWX
-         RAbQFYGSqWbzEuaIJ654EEshiXS8RXkl5fbbDRwWjlzi4/aojGOIGNzIKO+1hp7g49Ds
-         /yiQ==
-X-Gm-Message-State: AAQBX9exH/ukk6UBG+Oo03xezFdILi+J6PkMXUpKIjwCb6Ew8bhcqJO5
-        c660z2xVvoh2VJlsZwO8eOOgi33fTUaz2iyqO46aFQ==
-X-Google-Smtp-Source: AKy350b9JFkPWrokQWdHW/mPTI0m5GQey0wVu1tdgM2llpJ1XCUx9QOk9xLJdiiSpZr/zZH11ZwiyYXKVXSHDk5itwo=
-X-Received: by 2002:a81:ac46:0:b0:544:6828:3c09 with SMTP id
- z6-20020a81ac46000000b0054468283c09mr17689756ywj.0.1680494963814; Sun, 02 Apr
- 2023 21:09:23 -0700 (PDT)
+        with ESMTP id S229698AbjDCHhx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 03:37:53 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 442DA903C;
+        Mon,  3 Apr 2023 00:37:51 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Axu5dOgipkRPUVAA--.33911S3;
+        Mon, 03 Apr 2023 15:37:50 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx671MgipkokkUAA--.17573S3;
+        Mon, 03 Apr 2023 15:37:49 +0800 (CST)
+Subject: Re: [PATCH v6 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230401095652.17364-1-zhuyinbo@loongson.cn>
+ <20230401095652.17364-2-zhuyinbo@loongson.cn>
+ <c0199067-4dab-651b-bf88-8cc5c035f79e@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <71e1b994-6b8d-8e00-4e4a-2f7b4af1fdf7@loongson.cn>
+Date:   Mon, 3 Apr 2023 15:37:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-From:   Rohit Ner <rohitner@google.com>
-Date:   Mon, 3 Apr 2023 09:39:10 +0530
-Message-ID: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
-Subject: [PATCH] spi: spi-loopback-test: Add module param for iteration length
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <manugautam@google.com>,
-        Joy Chakraborty <joychakr@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <c0199067-4dab-651b-bf88-8cc5c035f79e@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx671MgipkokkUAA--.17573S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar1UXr1rKry3JFyrKF1Dtrb_yoW8XF4rpF
+        1xCFs3KF4jqF17C393Ka48Gw43Ar95A3W7JF47t347CF98Ka4YqF47Kr1DZw43CF18WFW7
+        ZFW0gr45KF4UJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SPI test framework is designed to run each test case for
-a list of lengths.
-Introduce a module parameter to limit the iterations
-to a single value among the list of lengths.
 
-Signed-off-by: Rohit Ner <rohitner@google.com>
 
-diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index 313106eb8d40..675a73cf1579 100644
---- a/drivers/spi/spi-loopback-test.c
-+++ b/drivers/spi/spi-loopback-test.c
-@@ -53,6 +53,12 @@ module_param(no_cs, int, 0);
- MODULE_PARM_DESC(no_cs,
-                 "if set Chip Select (CS) will not be used");
+在 2023/4/2 下午5:58, Krzysztof Kozlowski 写道:
+> On 01/04/2023 11:56, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../bindings/spi/loongson,ls-spi.yaml         | 42 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 48 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>> new file mode 100644
+>> index 000000000000..ef113296529b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson SPI controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-spi
+>> +      - loongson,ls7a-spi
+> 
+> You don't use this compatible?
+The 7a spi was pci device and I added this by mistake and I will remove
+  "loongson,ls7a-spi" and change yaml name as loongson,ls2k-spi.yaml.
 
-+/* run tests only for a specific length */
-+static int run_only_iter_len = -1;
-+module_param(run_only_iter_len, int, 0);
-+MODULE_PARM_DESC(run_only_iter_len,
-+                "only run tests for a length of this number in
-iterate_len list");
-+
- /* run only a specific test */
- static int run_only_test = -1;
- module_param(run_only_test, int, 0);
-@@ -1033,6 +1039,8 @@ int spi_test_run_test(struct spi_device *spi,
-const struct spi_test *test,
+Thanks.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-        for (idx_len = 0; idx_len < SPI_TEST_MAX_ITERATE &&
-             (len = test->iterate_len[idx_len]) != -1; idx_len++) {
-+               if ((run_only_iter_len > -1) && len != run_only_iter_len)
-+                       continue;
-                FOR_EACH_ALIGNMENT(tx_align) {
-                        FOR_EACH_ALIGNMENT(rx_align) {
-                                /* and run the iteration */
