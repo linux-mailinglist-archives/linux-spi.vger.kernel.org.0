@@ -2,86 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320156D4335
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 13:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC186D5081
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 20:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjDCLQk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Apr 2023 07:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S233201AbjDCScp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Apr 2023 14:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjDCLQk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 07:16:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D4C525C;
-        Mon,  3 Apr 2023 04:16:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CF8F61924;
-        Mon,  3 Apr 2023 11:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7E1C433D2;
-        Mon,  3 Apr 2023 11:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680520584;
-        bh=x4yaxHMcHRn3ghPQdmYuP41Cj25k3+MY0shbgMk6PV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pFxpCL7Wwpc+lJfLLKOZDvowzwQmPYvEK3OomWoKk89YJl9l6C3WStCB7Rptly3A9
-         R4pgSgi12+RnuHAgqR9Y2GqV0uI4BeWuFqm03S8n57GvvJnnLt+8Q7YM4CHlYYaED7
-         zY79I4WB+s+uawJMQBp9Xf377+lySxxb6mQnTr1e4HMH1BEDmOJM6JJRwus3e7ecMy
-         AaE+rgaCtjCSnKpa6MEJ9cJgbcUVYNWc9ZhFhDcU56imiENu3ger/7No580+6obZub
-         GVb8Bv9scEDWHDSr2XrxgIJ1/mRPwYLGaZzNaAvTa8SEWJQm5y7QW4ZMgccJYCkVbf
-         dkA+VSl8k1x5A==
-Date:   Mon, 3 Apr 2023 12:16:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rohit Ner <rohitner@google.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <manugautam@google.com>,
-        Joy Chakraborty <joychakr@google.com>
-Subject: Re: [PATCH] spi: spi-loopback-test: Add module param for iteration
- length
-Message-ID: <7e40de58-1a43-4d70-955b-6dd5b87b8cd4@sirena.org.uk>
-References: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
+        with ESMTP id S233161AbjDCScg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 14:32:36 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD2F2D4C;
+        Mon,  3 Apr 2023 11:32:33 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9EFA35FD33;
+        Mon,  3 Apr 2023 21:32:31 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680546751;
+        bh=skrvDahl5pDvwUwgatlspWiBA9wa5+vS0uE3UumKX9A=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=cqI6aPrNn5mtnhaVCbAtirVNzjeBzR1SEKqrbWHxEFvqNdiy5uS2bl+mGyCMo1kpC
+         qbic7dxZuXwZvNtjHjr7xmZAUB1qWUesntKZoLItRDdwnsx8qyGc6JQnEzxrRXX8ye
+         VJsYZWa6yQSM/eg+SuIgdfOESl0RFqLAJhcVVlfS3czuZp/rK51VZOwy9oi8fMOuvW
+         AnjaCxGZECwoCgwAkevP0F+K6F+Cc+ZoEOi5pdxOpMyUwF1ckHsop5lafBMhOPPCkQ
+         kng+5hNd3d/IJ7GR/VDPXokSM4AlD75/wqXsaZJb9QGfDMYOfKiPLBkHsxLXaUpNej
+         OUCtHv7kdPsag==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon,  3 Apr 2023 21:32:30 +0300 (MSK)
+From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Subject: [PATCH v3 0/2] add support for Amlogic A1 SPI Flash Controller
+Date:   Mon, 3 Apr 2023 21:32:15 +0300
+Message-ID: <20230403183217.13280-1-mmkurbanov@sberdevices.ru>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vu4cYD21rSTalHOB"
-Content-Disposition: inline
-In-Reply-To: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
-X-Cookie: Do not fold, spindle or mutilate.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/03 14:17:00 #21028104
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This patchset introduces DT bindings and driver for the Amlogic A1 SPI
+flash controller (A113L SoC).
 
---Vu4cYD21rSTalHOB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The existing spi-meson-spifc driver is incompatible with the A1 SPIFC
+at all.
 
-On Mon, Apr 03, 2023 at 09:39:10AM +0530, Rohit Ner wrote:
-> SPI test framework is designed to run each test case for
-> a list of lengths.
-> Introduce a module parameter to limit the iterations
-> to a single value among the list of lengths.
+The implementation has been tested on the Amlogic A113L SoC based device
+connected with ESMT F50L1G41LB spinand flash.
 
-This doesn't apply against current code, please check and resend.
+This patchset has dependencies on the A1 clock series which is still
+under review [1].
 
---Vu4cYD21rSTalHOB
-Content-Type: application/pgp-signature; name="signature.asc"
+Changelog:
+  v3 since v2 at [2]:
+    - Drop the 'meson' name as Neil suggested
+    - Make cosmetic changes
 
------BEGIN PGP SIGNATURE-----
+  v2 since v1 at [3]:
+    - Make cosmetic changes
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQqtYIACgkQJNaLcl1U
-h9CQnwf/RILMwoR69Cp0S59rbEmkChS39T51gGTmM+6bEFv4EtPAHIsgyWtx3I4p
-2/jomvuxP3YRym8p8AIuiyeAKTLycJDQ5iYi97SyzKOf3MPBiH2aXlfGubYCo4dy
-lZ4Y5lq/PNhyTXy1W3dyJtwscIuiZdnXErjSKAY0xM48ff2YgSpuJPCtmF4++Os2
-KGOgJn0XBfzet0WPh5+g3dHgbeN3nKr8kIHphM0IjtsWvYxFCcK0tjKet0UVyuAT
-bLd/o/ug+4FJRCQfSroAA6Wl/qwzJZXhTmOTmuFVCWQXpqvxvZr3IZwiAS58CHFA
-6811+ItgzMKOZQsIsJItwUu2EL52uA==
-=TUvf
------END PGP SIGNATURE-----
+Links:
+  [1] https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
+  [2] https://lore.kernel.org/all/20230327211351.686831-1-mmkurbanov@sberdevices.ru/
+  [2] https://lore.kernel.org/all/20230322150458.783901-1-mmkurbanov@sberdevices.ru/
 
---Vu4cYD21rSTalHOB--
+Martin Kurbanov (2):
+  dt-bindings: spi: add Amlogic A1 SPI controller
+  spi: add support for Amlogic A1 SPI Flash Controller
+
+ .../bindings/spi/amlogic,a1-spifc.yaml        |  41 ++
+ drivers/spi/Kconfig                           |   7 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-amlogic-spifc-a1.c            | 456 ++++++++++++++++++
+ 4 files changed, 505 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,a1-spifc.yaml
+ create mode 100644 drivers/spi/spi-amlogic-spifc-a1.c
+
+--
+2.37.2
+
