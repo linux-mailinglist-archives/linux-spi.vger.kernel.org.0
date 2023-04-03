@@ -2,65 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042CA6D3E2B
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 09:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5136D3E54
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 09:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjDCHhy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Apr 2023 03:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S229446AbjDCHpB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Apr 2023 03:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjDCHhx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 03:37:53 -0400
+        with ESMTP id S229670AbjDCHpB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 03:45:01 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 442DA903C;
-        Mon,  3 Apr 2023 00:37:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDCA91FF5;
+        Mon,  3 Apr 2023 00:44:58 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Axu5dOgipkRPUVAA--.33911S3;
-        Mon, 03 Apr 2023 15:37:50 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxJPz5gypk_fUVAA--.33829S3;
+        Mon, 03 Apr 2023 15:44:57 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx671MgipkokkUAA--.17573S3;
-        Mon, 03 Apr 2023 15:37:49 +0800 (CST)
-Subject: Re: [PATCH v6 1/2] dt-bindings: spi: add loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxeb34gypkvkoUAA--.16286S3;
+        Mon, 03 Apr 2023 15:44:56 +0800 (CST)
+Subject: Re: [PATCH v6 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, liupeibao@loongson.cn,
+        loongson-kernel@lists.loongnix.cn, lvjianmin@loongson.cn,
+        robh+dt@kernel.org, wanghongliang@loongson.cn, zhuyinbo@loongson.cn
 References: <20230401095652.17364-1-zhuyinbo@loongson.cn>
- <20230401095652.17364-2-zhuyinbo@loongson.cn>
- <c0199067-4dab-651b-bf88-8cc5c035f79e@linaro.org>
+ <20230401095652.17364-3-zhuyinbo@loongson.cn>
+ <a4927787-4fcc-27c5-c838-760e0b07a334@wanadoo.fr>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <71e1b994-6b8d-8e00-4e4a-2f7b4af1fdf7@loongson.cn>
-Date:   Mon, 3 Apr 2023 15:37:48 +0800
+Message-ID: <ee83b5d5-2f8c-dc62-bd31-91580704eee1@loongson.cn>
+Date:   Mon, 3 Apr 2023 15:44:56 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <c0199067-4dab-651b-bf88-8cc5c035f79e@linaro.org>
+In-Reply-To: <a4927787-4fcc-27c5-c838-760e0b07a334@wanadoo.fr>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx671MgipkokkUAA--.17573S3
+X-CM-TRANSID: AQAAf8Cxeb34gypkvkoUAA--.16286S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar1UXr1rKry3JFyrKF1Dtrb_yoW8XF4rpF
-        1xCFs3KF4jqF17C393Ka48Gw43Ar95A3W7JF47t347CF98Ka4YqF47Kr1DZw43CF18WFW7
-        ZFW0gr45KF4UJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWxur4UWF48WFWktr48tF4xWFg_yoWrZF15pa
+        n5JFW5GrWfJrn3Jr1UJr4UXFy5Zryrta4DJr4IqF1UGFZFyr10gr1UWrn29r13AF48Ar1U
+        Zr1jgrsruF13JaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
         F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
-        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07j19a9UUUUU=
 X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,52 +70,145 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-在 2023/4/2 下午5:58, Krzysztof Kozlowski 写道:
-> On 01/04/2023 11:56, Yinbo Zhu wrote:
->> Add the Loongson platform spi binding with DT schema format using
->> json-schema.
+在 2023/4/2 下午7:44, Christophe JAILLET 写道:
+> Le 01/04/2023 à 11:56, Yinbo Zhu a écrit :
+>> This bus driver supports the Loongson spi hardware controller in the
+>> Loongson platforms and supports to use DTS and PCI framework to
+>> register spi device resources.
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Signed-off-by: Yinbo Zhu 
+>> <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
 >> ---
->>   .../bindings/spi/loongson,ls-spi.yaml         | 42 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 48 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->> new file mode 100644
->> index 000000000000..ef113296529b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson SPI controller
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +allOf:
->> +  - $ref: /schemas/spi/spi-controller.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - loongson,ls2k-spi
->> +      - loongson,ls7a-spi
 > 
-> You don't use this compatible?
-The 7a spi was pci device and I added this by mistake and I will remove
-  "loongson,ls7a-spi" and change yaml name as loongson,ls2k-spi.yaml.
+> [...]
+> 
+>> +int loongson_spi_init_master(struct device *dev, struct resource *res)
+>> +{
+>> +    struct spi_master *master;
+>> +    struct loongson_spi *spi;
+>> +    struct clk *clk;
+>> +    int ret;
+>> +
+>> +    master = spi_alloc_master(dev, sizeof(struct loongson_spi));
+> 
+> devm_spi_alloc_master()?
+> (to simplify code and be consistent with devm_ function below)
+okay, I got it, I will use it.
+> 
+>> +    if (master == NULL) {
+>> +        dev_dbg(dev, "master allocation failed\n");
+>> +        return -ENOMEM;
+>> +    }
+>> +
+>> +    master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+>> +    master->setup = loongson_spi_setup;
+>> +    master->prepare_message = loongson_spi_prepare_message;
+>> +    master->transfer_one = loongson_spi_transfer_one;
+>> +    master->unprepare_message = loongson_spi_unprepare_message;
+>> +    master->set_cs = loongson_spi_set_cs;
+>> +    master->num_chipselect = 4;
+>> +    master->dev.of_node = of_node_get(dev->of_node);
+>> +    dev_set_drvdata(dev, master);
+>> +
+>> +    spi = spi_master_get_devdata(master);
+>> +
+>> +    spi->master = master;
+>> +
+>> +    spi->base = devm_ioremap(dev, res->start, resource_size(res));
+>> +    if (spi->base == NULL) {
+>> +        dev_err(dev, "cannot map io\n");
+>> +        ret = -ENXIO;
+>> +        goto free_master;
+>> +    }
+>> +
+>> +    clk = devm_clk_get(dev, NULL);
+>> +    if (!IS_ERR(clk))
+>> +        spi->clk_rate = clk_get_rate(clk);
+>> +
+>> +    loongson_spi_reginit(spi);
+>> +
+>> +    spi->mode = 0;
+>> +    if (of_get_property(dev->of_node, "spi-nocs", NULL))
+>> +        spi->mode |= SPI_NO_CS;
+>> +
+>> +    ret = spi_register_master(master);
+>> +    if (ret < 0)
+>> +        goto free_master;
+>> +
+>> +    return ret;
+>> +
+>> +free_master:
+>> +    kfree(master);
+>> +    spi_master_put(master);
+>> +
+>> +    return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
+> 
+> [...]
+> 
+>> diff --git a/drivers/spi/spi-loongson-pci.c 
+>> b/drivers/spi/spi-loongson-pci.c
+>> new file mode 100644
+>> index 000000000000..b811de769ecb
+>> --- /dev/null
+>> +++ b/drivers/spi/spi-loongson-pci.c
+>> @@ -0,0 +1,89 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +// PCI interface driver for Loongson SPI Support
+>> +// Copyright (C) 2023 Loongson Technology Corporation Limited
+>> +
+>> +#include <linux/pci.h>
+>> +
+>> +#include "spi-loongson.h"
+>> +
+>> +static int loongson_spi_pci_register(struct pci_dev *pdev,
+>> +            const struct pci_device_id *ent)
+>> +{
+>> +    int ret;
+>> +    unsigned char v8;
+>> +    struct resource res[2];
+>> +    struct device *dev = &pdev->dev;
+>> +
+>> +    ret = pci_enable_device(pdev);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "cannot enable pci device\n");
+>> +        goto err_out;
+>> +    }
+>> +
+>> +    ret = pci_request_region(pdev, 0, "loongson-spi io");
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "cannot request region 0.\n");
+>> +        goto err_out;
+>> +    }
+>> +
+>> +    res[0].start = pci_resource_start(pdev, 0);
+>> +    res[0].end = pci_resource_end(pdev, 0);
+>> +    ret = pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &v8);
+>> +
+>> +    if (ret == PCIBIOS_SUCCESSFUL) {
+>> +        res[1].start = v8;
+>> +        res[1].end = v8;
+>> +    }
+>> +
+>> +    ret = loongson_spi_init_master(dev, res);
+>> +    if (ret)
+>> +        dev_err(dev, "failed to initialize master\n");
+>> +
+>> +err_out:
+>> +    return ret;
+>> +}
+>> +
+>> +static void loongson_spi_pci_unregister(struct pci_dev *pdev)
+>> +{
+>> +    pci_release_region(pdev, 0);
+> 
+> pci_disable_device()?
+okay, I will add pci_disable_device() here.
 
 Thanks.
 > 
+>> +}
 > 
-> Best regards,
-> Krzysztof
-> 
+> CJ
 
