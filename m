@@ -2,104 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447C16D38D4
-	for <lists+linux-spi@lfdr.de>; Sun,  2 Apr 2023 17:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DBB6D3C4C
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Apr 2023 06:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjDBPl6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 2 Apr 2023 11:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S230057AbjDCEJ1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Apr 2023 00:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjDBPl5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Apr 2023 11:41:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10A9D30B;
-        Sun,  2 Apr 2023 08:41:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6707B80EB9;
-        Sun,  2 Apr 2023 15:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470D0C433EF;
-        Sun,  2 Apr 2023 15:41:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680450104;
-        bh=X8FfzYHrAuUKE3zJ6qzT9QqKCngtcx0tl2Nj4mn67Lo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bb34a33KLaz9DXa3ewP7QXMwl+2z2fuAcHWK28Dm3ehJEFLVod+RL2F46G4QIHDP4
-         WBwZ+fOPLzVPAjM4ThJrW5ekbo2iNlzQyrKL346y+OrxRitgYbuwCyPdfZmlokkIno
-         9R7CRAtM/layBYNhmnu9TTOnUK1epCLlkl/HQZQWrpSL+dUWdR2zueuQofaauU2QC6
-         Q8x8mzQB4WXbqn420KJEZJJoCCVO4QA4qZo2m7zulaNPOaaD6kYmJm7QI6ppRC7lLo
-         M79C2C1ZBWGkK7B9j0ZXi8FDpogKKBhgz7vEy0l6+anjm982tJnbajIdfIrebvxDy0
-         yeJlSETqROVMw==
-Date:   Sun, 2 Apr 2023 16:41:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v6 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <ZCmiNSxMWmdolMub@sirena.org.uk>
-References: <20230401095652.17364-1-zhuyinbo@loongson.cn>
- <20230401095652.17364-3-zhuyinbo@loongson.cn>
- <9fcb66fa-aadc-8660-bd4a-452c4811ced9@linaro.org>
+        with ESMTP id S230522AbjDCEJ0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Apr 2023 00:09:26 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C601D83F7
+        for <linux-spi@vger.kernel.org>; Sun,  2 Apr 2023 21:09:24 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5416698e889so528654397b3.2
+        for <linux-spi@vger.kernel.org>; Sun, 02 Apr 2023 21:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680494964;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
+        b=kUeJ2lwf7zRBsYvmzFyuhvCEE7VnpCUYH76GnherL1ruTmM1Q+L5tsiaPdC/GPoqsV
+         htWO6WAJiLZ8g8ZFLB8GefKVE3XzbSa6vOy9Z3lcXegrB6UvIFAKz9/wBfd4mrXlfRrB
+         hDN/hdPEgV4KST6mXOybEp8IObsyB6LY92r0a/qXB1ZGp2/9tDNf2DyvFFdS5U+djt23
+         O8L3WPpxorS17h6DSYn5Itwh2DbSxUWfUYDRF0IAWAZBfMrPKF0ldhBSdk7xmuWk5/IU
+         +z55dONWjivicjeZO+Vu9ijlURBjxHM7awcwYi+c5zKLk2s8LSujyoMdAla/zFmSDweD
+         GI4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680494964;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvFnphnDJhIRgXZm0virLekdKTOQfW5+pHsWaTGGeTM=;
+        b=1lSFojiOStDcapmBwtz9MNB10oq9euhoYKUNlACSf7KBe/inDPFsw8kbD4E2RZgwQT
+         nNQeBYol+7XXJmwieR17EeGnD1LYI06c8Qy9lFO2iSoiBEh5YKmN4PU0bT4GLR5Chmcm
+         oIm/atvyQPNcgr8QsuX4zoMu4cVTUTmDipzmdgn053ltzSf+jvPgaScydCR2K6v8LvtP
+         p7T6G28Yi9pwzFGUAKFcTlJGenTozM0L4oKIQlUR/CY/oJIKzEFOP/llp50Lr2BuLeWX
+         RAbQFYGSqWbzEuaIJ654EEshiXS8RXkl5fbbDRwWjlzi4/aojGOIGNzIKO+1hp7g49Ds
+         /yiQ==
+X-Gm-Message-State: AAQBX9exH/ukk6UBG+Oo03xezFdILi+J6PkMXUpKIjwCb6Ew8bhcqJO5
+        c660z2xVvoh2VJlsZwO8eOOgi33fTUaz2iyqO46aFQ==
+X-Google-Smtp-Source: AKy350b9JFkPWrokQWdHW/mPTI0m5GQey0wVu1tdgM2llpJ1XCUx9QOk9xLJdiiSpZr/zZH11ZwiyYXKVXSHDk5itwo=
+X-Received: by 2002:a81:ac46:0:b0:544:6828:3c09 with SMTP id
+ z6-20020a81ac46000000b0054468283c09mr17689756ywj.0.1680494963814; Sun, 02 Apr
+ 2023 21:09:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gvXndZYD6JZZKYZ4"
-Content-Disposition: inline
-In-Reply-To: <9fcb66fa-aadc-8660-bd4a-452c4811ced9@linaro.org>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rohit Ner <rohitner@google.com>
+Date:   Mon, 3 Apr 2023 09:39:10 +0530
+Message-ID: <CAGt9f=TBi3qcbhUPymFGjCFeNNZZ0KQoXSUOT5uA6Dn8PMmnWw@mail.gmail.com>
+Subject: [PATCH] spi: spi-loopback-test: Add module param for iteration length
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <manugautam@google.com>,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+SPI test framework is designed to run each test case for
+a list of lengths.
+Introduce a module parameter to limit the iterations
+to a single value among the list of lengths.
 
---gvXndZYD6JZZKYZ4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Rohit Ner <rohitner@google.com>
 
-On Sun, Apr 02, 2023 at 12:04:00PM +0200, Krzysztof Kozlowski wrote:
-> On 01/04/2023 11:56, Yinbo Zhu wrote:
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 313106eb8d40..675a73cf1579 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -53,6 +53,12 @@ module_param(no_cs, int, 0);
+ MODULE_PARM_DESC(no_cs,
+                 "if set Chip Select (CS) will not be used");
 
-> > +static inline void loongson_spi_write_reg(struct loongson_spi *spi, unsigned char reg,
-> > +					  unsigned char data)
-> > +{
-> > +	writeb(data, spi->base + reg);
++/* run tests only for a specific length */
++static int run_only_iter_len = -1;
++module_param(run_only_iter_len, int, 0);
++MODULE_PARM_DESC(run_only_iter_len,
++                "only run tests for a length of this number in
+iterate_len list");
++
+ /* run only a specific test */
+ static int run_only_test = -1;
+ module_param(run_only_test, int, 0);
+@@ -1033,6 +1039,8 @@ int spi_test_run_test(struct spi_device *spi,
+const struct spi_test *test,
 
-> This wrapper does not simplify anything.
-
-This is an *extremely* standard wrapper which adds the base and
-register to work out the address to write to without having to
-duplicate it for every caller.  There is absolutely nothing wrong
-with it, or the read equivalent - they are useful and helpful.
-
-> > +#define	LOONGSON_SPI_SPCR_REG	0x00
-
-> There is just one space after #define.
-
-It's using a tab which is again not the end of the world.
-
---gvXndZYD6JZZKYZ4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQpojQACgkQJNaLcl1U
-h9DtrwgAhNjHfhiDX2uDjuOLGg9Uls8GWn70l02hs8RXoyyz11Z+s7ZZPrpIPsVb
-ztuyKMKes405NVC/wWM8H5bM4HRaMXu4+AxHNDvU+5btyoHEaFdNS4ykKviNFl2Q
-MKPtOp05bMZO+mjVJlxdTKN0dvWyCvbsfqoDUB+24BzrGftUnL+XrepL2nYt31AW
-Ju3aKRNNuM5lUQVoDw3JMyYHw67H/hXjFMfTR+rZV2MfBEPU+2VMAdZdclew8IGz
-RcnBiP+3ybiVEBonFNEoK+zJU9Mhsm/1pvejIRGk2MpeE0tnGSWQlE4f3t2/keek
-6Q6w+ZshfhM+BCukFyNsi7Hv7mn3fg==
-=6S/o
------END PGP SIGNATURE-----
-
---gvXndZYD6JZZKYZ4--
+        for (idx_len = 0; idx_len < SPI_TEST_MAX_ITERATE &&
+             (len = test->iterate_len[idx_len]) != -1; idx_len++) {
++               if ((run_only_iter_len > -1) && len != run_only_iter_len)
++                       continue;
+                FOR_EACH_ALIGNMENT(tx_align) {
+                        FOR_EACH_ALIGNMENT(rx_align) {
+                                /* and run the iteration */
