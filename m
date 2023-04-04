@@ -2,55 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F168B6D6725
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 17:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277F56D67B2
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 17:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbjDDPVS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Apr 2023 11:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S235857AbjDDPlt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Apr 2023 11:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbjDDPVN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 11:21:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB2F4680;
-        Tue,  4 Apr 2023 08:21:09 -0700 (PDT)
+        with ESMTP id S235869AbjDDPlm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 11:41:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE16D5FC3;
+        Tue,  4 Apr 2023 08:41:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F723634F4;
-        Tue,  4 Apr 2023 15:21:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4742EC4339B;
-        Tue,  4 Apr 2023 15:21:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE41B63623;
+        Tue,  4 Apr 2023 15:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 707B6C4339C;
+        Tue,  4 Apr 2023 15:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680621668;
-        bh=8m23xWXw2v6aPr62DgfVWXPOFPt6TQkXIqgxZD0dGl8=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=EOtZ/Pvga+vndUcRqQiCWjdrbBg7rdx2fJ8wCaUZ6FnvH8V5zk7f6NrrUnLqTWA6d
-         d0/MXWBECqonggDyrkcDyrzdxkCgsxhq67oWRH5N4r332w4KeKMxbFbbHM0ssAJZWT
-         g52B4i4T1fbFa4EBXjCbSvvJVFps5TCHmN5G+MlJtM+d+m5AV4PGe9rktGJKmI2mmA
-         H+NDpZQnS0TQNJb6IPb9w7p1+pcVSpGcL8YudDxor6jGWo8/0thqXLfup8qEp7NyQv
-         AINn3ZPg8s877v7VBdBh5+RDQpIbJ794hgyhZM7cvHtbyQg64LVjbV/UwL+yJH8wxZ
-         h+sUiuPRgi/LQ==
+        s=k20201202; t=1680622873;
+        bh=n//VaCjNu9218CXZ/dYzy2wxaSAVAeL37OTLjJJEbxc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=DRoMcTBeRTsey8ioIY1DcWRZ9t9gipJUYhGz8ndyHBoGJ/mJ++fVTYGwcHfeyczqa
+         bq37zHQHBBg5Jmrn6ae15OELVN86ovlya+GzY4lLWMyCx6aijhq6+y8ZZljyXx7O8l
+         mUit6HjQxFpQrsQP/R0k0lSHhTdkrk+hnp59J0/j7gbE6R/A3K1Tk+CEn+XoBa4PX2
+         8NN0lsV141Kp5KuaHgt1PvAGCbJzdXneAum9/wh3SbchCEvBBRIEwwbso7QmHvzhcQ
+         xzy+zuC382LHkoJwnyT9EwSns+Zplkba/jajMVYdgl+kt77st4l3FBcPtbeElPhm1t
+         pWRJ2IOt4cxjQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-In-Reply-To: <20230318222132.3373-1-kgroeneveld@lenbrook.com>
-References: <20230318222132.3373-1-kgroeneveld@lenbrook.com>
-Subject: Re: [PATCH] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
-Message-Id: <168062166496.53383.6928239606358306120.b4-ty@kernel.org>
-Date:   Tue, 04 Apr 2023 16:21:04 +0100
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+In-Reply-To: <20230330210341.2459548-1-u.kleine-koenig@pengutronix.de>
+References: <20230330210341.2459548-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 0/2] spi: qup: Convert to platform remove callback
+ returning void
+Message-Id: <168062287113.55756.14239306718114556460.b4-ty@kernel.org>
+Date:   Tue, 04 Apr 2023 16:41:11 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,13 +57,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 18 Mar 2023 18:21:32 -0400, Kevin Groeneveld wrote:
-> When using gpio based chip select the cs value can go outside the range
-> 0 – 3. The various MX51_ECSPI_* macros did not take this into consideration
-> resulting in possible corruption of the configuration.
+On Thu, 30 Mar 2023 23:03:39 +0200, Uwe Kleine-König wrote:
+> after fixing the error handling in the .remove() callback of the qup
+> driver, convert it to .remove_new() preparing to make platform driver's
+> remove functions return void.
 > 
-> For example for any cs value over 3 the SCLKPHA bits would not be set and
-> other values in the register possibly corrupted.
+> Best regards
+> Uwe
 > 
 > [...]
 
@@ -74,8 +73,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
-      commit: 87c614175bbf28d3fd076dc2d166bac759e41427
+[1/2] spi: qup: Don't skip cleanup in remove's error path
+      commit: 61f49171a43ab1f80c73c5c88c508770c461e0f2
+[2/2] spi: qup.c: Convert to platform remove callback returning void
+      commit: dea8e70f68f4105279bbc6de4d68d89fb07665c2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
