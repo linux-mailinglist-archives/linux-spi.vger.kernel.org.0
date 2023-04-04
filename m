@@ -2,98 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277F56D67B2
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 17:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687716D6A34
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 19:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbjDDPlt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Apr 2023 11:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S235705AbjDDRQ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Apr 2023 13:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235869AbjDDPlm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 11:41:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE16D5FC3;
-        Tue,  4 Apr 2023 08:41:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE41B63623;
-        Tue,  4 Apr 2023 15:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 707B6C4339C;
-        Tue,  4 Apr 2023 15:41:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680622873;
-        bh=n//VaCjNu9218CXZ/dYzy2wxaSAVAeL37OTLjJJEbxc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=DRoMcTBeRTsey8ioIY1DcWRZ9t9gipJUYhGz8ndyHBoGJ/mJ++fVTYGwcHfeyczqa
-         bq37zHQHBBg5Jmrn6ae15OELVN86ovlya+GzY4lLWMyCx6aijhq6+y8ZZljyXx7O8l
-         mUit6HjQxFpQrsQP/R0k0lSHhTdkrk+hnp59J0/j7gbE6R/A3K1Tk+CEn+XoBa4PX2
-         8NN0lsV141Kp5KuaHgt1PvAGCbJzdXneAum9/wh3SbchCEvBBRIEwwbso7QmHvzhcQ
-         xzy+zuC382LHkoJwnyT9EwSns+Zplkba/jajMVYdgl+kt77st4l3FBcPtbeElPhm1t
-         pWRJ2IOt4cxjQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de
-In-Reply-To: <20230330210341.2459548-1-u.kleine-koenig@pengutronix.de>
-References: <20230330210341.2459548-1-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 0/2] spi: qup: Convert to platform remove callback
- returning void
-Message-Id: <168062287113.55756.14239306718114556460.b4-ty@kernel.org>
-Date:   Tue, 04 Apr 2023 16:41:11 +0100
+        with ESMTP id S235710AbjDDRQy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 13:16:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7993610FA;
+        Tue,  4 Apr 2023 10:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680628612; x=1712164612;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y/b1MRTx2c39EaWfOqjznrO4Us/4HnZFtVn5WYJHB70=;
+  b=HNqSvIToo75+ARIY16fcx3Phkaf7Drg31MvDPS9CSWKEQ/6V4oCZRXzI
+   Me0/yPQv3Eq9zEJaqKBc+TWTqe0fr03Nm8iMr9569G7UQkT8HO87Y23JR
+   5JJqP3i3v8rLZ4t9CP+Z3hmWc1cLYlI8f7r4xIfoQb7/lFdz2N/b+/OPo
+   n2GL1vd2R7tAtYDQD22eCzS+nRUTdLyqdYeuGRpTu+m2A7PLPBmv2Bz2k
+   9dEen0UTaq0/ojxVrnJXXzmyavrW65glBUykfsh4g+nzGNEi0s8GfXMsO
+   C0QGdGmIIcbPrQQI+qt3pwobeuzOVX4IRieFm2oxQOO4j3PoILSTwgfxB
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,318,1673938800"; 
+   d="scan'208";a="145482256"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Apr 2023 10:16:51 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 4 Apr 2023 10:16:44 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Tue, 4 Apr 2023 10:16:43 -0700
+From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <broonie@kernel.org>
+Subject: [PATCH SPI for-next 0/3] spi: mchp-pci1xxxx: Fix minor bugs in spi-pci1xxxx driver
+Date:   Tue, 4 Apr 2023 22:46:10 +0530
+Message-ID: <20230404171613.1336093-1-tharunkumar.pasumarthi@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-00303
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 30 Mar 2023 23:03:39 +0200, Uwe Kleine-König wrote:
-> after fixing the error handling in the .remove() callback of the qup
-> driver, convert it to .remove_new() preparing to make platform driver's
-> remove functions return void.
-> 
-> Best regards
-> Uwe
-> 
-> [...]
+This patch series fixes the following bugs in spi-pci1xxxx driver:
+1. Length of SPI transactions is improper
+2. SPI transactions fail after suspend and resume
+3. Incorrect implementation of pci1xxxx_spi_set_cs API
 
-Applied to
+Tharun Kumar P (3):
+  spi: mchp-pci1xxxx: Fix length of SPI transactions not set properly in
+    driver
+  spi: mchp-pci1xxxx: Fix SPI transactions not working after suspend and
+    resume
+  spi: mchp-pci1xxxx: Fix improper implementation of disabling chip
+    select lines
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+ drivers/spi/spi-pci1xxxx.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-Thanks!
-
-[1/2] spi: qup: Don't skip cleanup in remove's error path
-      commit: 61f49171a43ab1f80c73c5c88c508770c461e0f2
-[2/2] spi: qup.c: Convert to platform remove callback returning void
-      commit: dea8e70f68f4105279bbc6de4d68d89fb07665c2
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.25.1
 
