@@ -2,69 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3F06D60E4
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 14:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E356D6110
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 14:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbjDDMhv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Apr 2023 08:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S235068AbjDDMmP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Apr 2023 08:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbjDDMhu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 08:37:50 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31D0359B;
-        Tue,  4 Apr 2023 05:37:19 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id a30-20020a9d3e1e000000b006a13f728172so14066380otd.3;
-        Tue, 04 Apr 2023 05:37:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611795;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Sthxn0yskywFNWI3VDHICrGnydzqyAt4ukEZpI9YRVY=;
-        b=KpfoIzbqHVSVJxhVS4pwgl95fMdy9prVbjOV4wA1UWgSQbJmbFhsxcT5OpW8btIsoP
-         GgibDvJK4SUYywD7xp0EJDBAaATL74C9C63lG396OwnEi+ZyX2SiG15GW5klWpAPi7o0
-         NIMnhawMDj+LBxIsqBgh3ZHFRdkPqH9WV/CPaVSIKF7RXCHQPq8pxtQbhvfyF1LGZPOe
-         Za8hXIEWur/98jkJ0aK7n+dF09LQzKF+XYD+8j6PVI1zeqGb+Eofg1bXFumA5UYTPna2
-         dDUL60mg55zGf/vYHP+oVQnPLroyfcp1fga3rxMzmkxBZrUqBCwZBQ7GTomngH0oIZpL
-         fm6w==
-X-Gm-Message-State: AAQBX9fcWqN5+1NGtK9es/o9y4jRO9C4xvI17CoOelQfOLMUE0783kxA
-        0ik+trtMSBtz0fH0sG1LDQ==
-X-Google-Smtp-Source: AKy350a5od+yOGJ7fZfrNyJ9aNS0aN5CJ1AISlHhrlsBmEBs0Sf83Osabm/c1DsiOgDcvaitM92Wdg==
-X-Received: by 2002:a05:6830:1447:b0:6a1:150e:f777 with SMTP id w7-20020a056830144700b006a1150ef777mr1476576otp.35.1680611795221;
-        Tue, 04 Apr 2023 05:36:35 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056830139000b006a1394ea9f3sm5402579otq.30.2023.04.04.05.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:36:34 -0700 (PDT)
-Received: (nullmailer pid 3710631 invoked by uid 1000);
-        Tue, 04 Apr 2023 12:36:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S235072AbjDDMly (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 08:41:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7EF170C;
+        Tue,  4 Apr 2023 05:41:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE1B76186D;
+        Tue,  4 Apr 2023 12:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BC6C433D2;
+        Tue,  4 Apr 2023 12:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680612069;
+        bh=rw4qIC7uCyYCBqc1et6NhrlK94J+qMpfhpHt/7eZvDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mGY/G4T/xZC6RSK4Z6NIfVwbo9GAvd0aSRgemY1jwU3aZq5E2bKUF74v+ieI0uLNk
+         vwiIh06ul9gL+YBT8JI4l/8CrpngEPoDc9MmWWwb77S0e/2LXF2mDg+Do7XvqcRK2L
+         fMEFkq68o61uTZ8gJtAYq8JJEh0GzO1GvMf20tynmifyd7MC2sXkGizzp6/ZRXR7PX
+         n3JK8dnFNEeQoyclwv6f0n0hAAjy00a8Tsj3PNz4s/vq3xU1ARHPAijeJzpTuLMgWj
+         LM4BPyApgLNvPuVNPAvyr+a1/ensZnR1zpjRAEAsmMV/gduTQ2jN0Gaz9aWZqZHW/x
+         f15LBQuDJM/Yw==
+Date:   Tue, 4 Apr 2023 13:41:03 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andi Shyti <andi@etezian.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20230404060011.108561-3-jaewon02.kim@samsung.com>
+        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: Re: [PATCH 1/3] spi: s3c64xx: support spi polling mode using
+ devicetree
+Message-ID: <c564b03a-970c-49b8-b5b6-ba1bff767f79@sirena.org.uk>
 References: <20230404060011.108561-1-jaewon02.kim@samsung.com>
- <CGME20230404061409epcas2p36402f7a84406ba9d831dcff0ddd994e9@epcas2p3.samsung.com>
- <20230404060011.108561-3-jaewon02.kim@samsung.com>
-Message-Id: <168061169110.3708482.17770599727715267512.robh@kernel.org>
-Subject: Re: [PATCH 2/3] spi: dt-bindings: samsung: add samsung,spi-polling
- property
-Date:   Tue, 04 Apr 2023 07:36:32 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+ <CGME20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9@epcas2p1.samsung.com>
+ <20230404060011.108561-2-jaewon02.kim@samsung.com>
+ <a4a9d1d1-c5cd-460e-96e0-6db8048518c6@sirena.org.uk>
+ <4b652b3c-20e1-1d87-1ee3-3aab43507100@samsung.com>
+ <aca77fe7-5fed-4ba1-ab28-8b66281224d2@sirena.org.uk>
+ <c227cbce-8b2d-41d7-122c-f271f8396349@samsung.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZAwT+g2SqJn0iERz"
+Content-Disposition: inline
+In-Reply-To: <c227cbce-8b2d-41d7-122c-f271f8396349@samsung.com>
+X-Cookie: Being ugly isn't illegal.  Yet.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,55 +67,48 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On Tue, 04 Apr 2023 15:00:10 +0900, Jaewon Kim wrote:
-> This patch adds "samsung,spi-polling" property.
-> It is method to check data trans by polling when DMA is not used.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> ---
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+--ZAwT+g2SqJn0iERz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Tue, Apr 04, 2023 at 09:22:25PM +0900, Jaewon Kim wrote:
+> On 23. 4. 4. 20:41, Mark Brown wrote:
 
-yamllint warnings/errors:
+> > There's no value in describing the DMA the guest shouldn't use then
+> > providing an additional property telling the guest not to pay attention
+> > to the DMA when we could simply not do the first step.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/samsung,spi.yaml: properties:samsung,spi-polling: 'oneOf' conditional failed, one must be fixed:
-	Additional properties are not allowed ('default' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/samsung,spi.yaml: properties:samsung,spi-polling: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	Additional properties are not allowed ('default', 'type' were unexpected)
-		hint: A vendor string property with exact values has an implicit type
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/samsung,spi.yaml: properties:samsung,spi-polling: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-./Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/spi/samsung,spi.yaml
+> Is it correct in your opinion to change to polling mode if there is no=20
+> DMA describing in DeviceTree?
 
-doc reference errors (make refcheckdocs):
+Yes, exactly.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230404060011.108561-3-jaewon02.kim@samsung.com
+> Currently, if there is no DMA, the probe failed in s3c64xx driver.
+> So I added the "samsung,spi-polling" property not to check DMA.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> If your opinion is to switch to Polling mode if there is no DMA, I will=
+=20
+> fix it in the next version.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Great, that sounds like a better solution.  If there is a description of
+DMA but it can't be fetched then an error should be right, but if
+there's just no DMA described then switching to polling mode seems
+better.
 
-pip3 install dtschema --upgrade
+--ZAwT+g2SqJn0iERz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsGt4ACgkQJNaLcl1U
+h9A0xwf+LXon+Ytjh6xYW1t9VB+LJ9cWsO3ZSg+HdYsbw6+eUUlH4tKe72l5tOEN
+6VREtMU8nBpV+hzQ3hCYj1DicaNSEFE3CSsGpjcnBVbSN+9wxppR1A+M9QOIvBhv
+HY1gTtlCuYfjO0/eK6BJDaQxmVJNizYG2br00ZC/7sfSMj443Hw7FOsPP7fhVju3
+v41flAorHWvztLR7GQgVhomTps/euPjTAeghcEstxuzI7uwg3HwbAF17ZRWOmfU/
+dHfo+gqJETqnr0G7y6z+f52Qk398YxotyAZgijb9K6ELZtoCXpOdgbC2kPwmod6+
+VKmKZ/jVNE9H317FFVCkcbiVrFFtZw==
+=0Sj3
+-----END PGP SIGNATURE-----
+
+--ZAwT+g2SqJn0iERz--
