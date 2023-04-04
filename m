@@ -2,83 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A6D6D6539
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 16:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB0F6D671E
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 17:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbjDDOZW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Apr 2023 10:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S235622AbjDDPVB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Apr 2023 11:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbjDDOZV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 10:25:21 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1C2116;
-        Tue,  4 Apr 2023 07:25:20 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id a30-20020a9d3e1e000000b006a13f728172so14229913otd.3;
-        Tue, 04 Apr 2023 07:25:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680618319;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hfFv+QOf1yDHw8Nr+wigwgw08UuoqTsGPijrLxx6WDQ=;
-        b=SKsi+MNLZMxIoGQNjiIkabXi2Z1orsjhn6Gm4o4So+dnIGLzfmquASjNh9ktDCjjhH
-         6NbI5+3S5EO95pKI/miNY2ZVuA25mCVpwhpASVMqz811ipcOlWejLZEgHnGEGEQB4VGD
-         20IBIuUPWDWIxhi3APaBLAoqi9xRXGQLlUhe1SS+zcnLPZC1SVmuV71eBbReX97cdFxZ
-         4pf7Fb0mAC427NcUUBlNMD15uhiUcIt8sAjOTzH/gs2nwFHoFwcF2XoXU194Ks+X+7qn
-         C2gMem9glaJJB75u66oLip8T6d4XULFGZye32IlH/sQ150n1niWOmuXj8V9nD2JL4glm
-         WBAg==
-X-Gm-Message-State: AAQBX9cIbnQqa17Re9op0qkZqh/YzYaWCByBGTj0AutB+S1uNsQtGDOl
-        xlJ6ZQ6h2EYbhzKroVUcZQ==
-X-Google-Smtp-Source: AKy350aGHvbr3/R6CmlMOZBHR4mblqLK7dsQewgjjTGJyRnzwdMXECZyKR21UEsg0xIjmKvgIOySZg==
-X-Received: by 2002:a05:6830:e8a:b0:6a1:796e:c380 with SMTP id dp10-20020a0568300e8a00b006a1796ec380mr1283573otb.6.1680618319614;
-        Tue, 04 Apr 2023 07:25:19 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056830008f00b006a036b9794asm5563444oto.37.2023.04.04.07.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 07:25:19 -0700 (PDT)
-Received: (nullmailer pid 3833292 invoked by uid 1000);
-        Tue, 04 Apr 2023 14:25:18 -0000
-Date:   Tue, 4 Apr 2023 09:25:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Cc:     linux-amlogic@lists.infradead.org, Mark Brown <broonie@kernel.org>,
-        devicetree@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@sberdevices.ru
-Subject: Re: [PATCH v3 1/2] dt-bindings: spi: add Amlogic A1 SPI controller
-Message-ID: <168061831774.3833234.8717892160543675087.robh@kernel.org>
-References: <20230403183217.13280-1-mmkurbanov@sberdevices.ru>
- <20230403183217.13280-2-mmkurbanov@sberdevices.ru>
+        with ESMTP id S235000AbjDDPVA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 11:21:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD28E468F;
+        Tue,  4 Apr 2023 08:20:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A6EE635CE;
+        Tue,  4 Apr 2023 15:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BA6C433EF;
+        Tue,  4 Apr 2023 15:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680621658;
+        bh=zz/zwaxro2lTFYeVOZkWlnueS/5qGSV7aFGRshKv8Jo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LiiiMMbxvfh/dSd9Hf47+Bh9ti8InYkdpMEPKm8uj3V7mzD7ZnJ9UUB/7OZSIYGz5
+         ze+uSB3Jc3PY+az8ROpQyOvNh3LJ+dNNDFQDmrppsqWpVav3PYRnSolKSk9Gab6aQp
+         vmo7Yx8mDpTJ0rfwPz5n4na/0pXESRgka0ubCgtZrr/kQCiYUfHVUFfj/Q1n2e2Q4U
+         /3VoOvlV7Dpp7Tad1r2o42Whh8gJrrL+42QEOPUV/cwq7BcHBfd1Zb9fqjMLuGX3AA
+         kZcX2rW+NiLGklBgTnm3uPYkD89yt8d3BCUW9wpZOAqiHshY/glY5bpVIHAEl1LCv7
+         8361xETIzkRvw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230328061031.70140-1-yang.lee@linux.alibaba.com>
+References: <20230328061031.70140-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next 1/2] spi: tegra114: Use
+ devm_platform_get_and_ioremap_resource()
+Message-Id: <168062165623.53383.15473905152295240848.b4-ty@kernel.org>
+Date:   Tue, 04 Apr 2023 16:20:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403183217.13280-2-mmkurbanov@sberdevices.ru>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On Mon, 03 Apr 2023 21:32:16 +0300, Martin Kurbanov wrote:
-> Add YAML devicetree Amlogic A1 (A113L SoC) SPIFC.
+On Tue, 28 Mar 2023 14:10:30 +0800, Yang Li wrote:
+> According to commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()"), convert
+> platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
-> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> ---
->  .../bindings/spi/amlogic,a1-spifc.yaml        | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,a1-spifc.yaml
 > 
+> [...]
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/2] spi: tegra114: Use devm_platform_get_and_ioremap_resource()
+      commit: 05c79f71e357a566de887efa55672c8a36569f60
+[2/2] spi: tegra210-quad: Use devm_platform_get_and_ioremap_resource()
+      commit: 69d286c5293a35cbf2de3efe3cf4a47bdd264b92
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
