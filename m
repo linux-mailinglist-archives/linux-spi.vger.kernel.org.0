@@ -2,61 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FDD6D62F2
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 15:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6D6D6539
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Apr 2023 16:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbjDDNdq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Apr 2023 09:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S235581AbjDDOZW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Apr 2023 10:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbjDDNdm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 09:33:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECB1710;
-        Tue,  4 Apr 2023 06:33:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 760C8632ED;
-        Tue,  4 Apr 2023 13:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACFAC433D2;
-        Tue,  4 Apr 2023 13:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680615192;
-        bh=mNbOU7xuGoBEYIuAeOXwalRr9mQiImjiyHioFrwCpbY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PYad8Y09zS90YAGfHjTQhF8eKoJ0nHdxAH3WsOrzCCyE0reSxAqiChIAxmT6Qa7kB
-         D5Hj0M42gAqibHziun3b7XW5k6nQFMosRsp6ZVPWTC7QSLMuyAZB2wu0deFLUyqRBD
-         NOrlJPP8ZYYu6n9dfkMDI6trZzD8GzTeJ8GVYe+zqZl8tnmU0MYUuXFwWHF+TqJPno
-         Q5ASqbtdl5EM8d+xHCxLjGxf9njmPQLNbTCcF35sx+VBNANzezQltrP/Yh5BT0wl27
-         v4y8r19N+ll9xxR6fACn9kR70+Pgm3n690sOC0iHTw/VXytC5zsAIxwl5tduShLyks
-         145M24X0DJCaA==
-Date:   Tue, 4 Apr 2023 14:33:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH 3/3] spi: s3c64xx: support interrupt based pio mode
-Message-ID: <49b335e6-78a7-4f80-a844-bacef804849e@sirena.org.uk>
-References: <20230404060011.108561-1-jaewon02.kim@samsung.com>
- <CGME20230404061409epcas2p2b12a9cac014907e3930795cb67cb6040@epcas2p2.samsung.com>
- <20230404060011.108561-4-jaewon02.kim@samsung.com>
- <61a67466-3467-4f71-bc27-d660e37c08ac@sirena.org.uk>
- <e01900f0-e5ac-d2f9-9e1b-c5cc35d21713@samsung.com>
+        with ESMTP id S235290AbjDDOZV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Apr 2023 10:25:21 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1C2116;
+        Tue,  4 Apr 2023 07:25:20 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id a30-20020a9d3e1e000000b006a13f728172so14229913otd.3;
+        Tue, 04 Apr 2023 07:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680618319;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hfFv+QOf1yDHw8Nr+wigwgw08UuoqTsGPijrLxx6WDQ=;
+        b=SKsi+MNLZMxIoGQNjiIkabXi2Z1orsjhn6Gm4o4So+dnIGLzfmquASjNh9ktDCjjhH
+         6NbI5+3S5EO95pKI/miNY2ZVuA25mCVpwhpASVMqz811ipcOlWejLZEgHnGEGEQB4VGD
+         20IBIuUPWDWIxhi3APaBLAoqi9xRXGQLlUhe1SS+zcnLPZC1SVmuV71eBbReX97cdFxZ
+         4pf7Fb0mAC427NcUUBlNMD15uhiUcIt8sAjOTzH/gs2nwFHoFwcF2XoXU194Ks+X+7qn
+         C2gMem9glaJJB75u66oLip8T6d4XULFGZye32IlH/sQ150n1niWOmuXj8V9nD2JL4glm
+         WBAg==
+X-Gm-Message-State: AAQBX9cIbnQqa17Re9op0qkZqh/YzYaWCByBGTj0AutB+S1uNsQtGDOl
+        xlJ6ZQ6h2EYbhzKroVUcZQ==
+X-Google-Smtp-Source: AKy350aGHvbr3/R6CmlMOZBHR4mblqLK7dsQewgjjTGJyRnzwdMXECZyKR21UEsg0xIjmKvgIOySZg==
+X-Received: by 2002:a05:6830:e8a:b0:6a1:796e:c380 with SMTP id dp10-20020a0568300e8a00b006a1796ec380mr1283573otb.6.1680618319614;
+        Tue, 04 Apr 2023 07:25:19 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056830008f00b006a036b9794asm5563444oto.37.2023.04.04.07.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:25:19 -0700 (PDT)
+Received: (nullmailer pid 3833292 invoked by uid 1000);
+        Tue, 04 Apr 2023 14:25:18 -0000
+Date:   Tue, 4 Apr 2023 09:25:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     linux-amlogic@lists.infradead.org, Mark Brown <broonie@kernel.org>,
+        devicetree@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v3 1/2] dt-bindings: spi: add Amlogic A1 SPI controller
+Message-ID: <168061831774.3833234.8717892160543675087.robh@kernel.org>
+References: <20230403183217.13280-1-mmkurbanov@sberdevices.ru>
+ <20230403183217.13280-2-mmkurbanov@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8I2SOfqEj79ZOI8K"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e01900f0-e5ac-d2f9-9e1b-c5cc35d21713@samsung.com>
-X-Cookie: Being ugly isn't illegal.  Yet.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403183217.13280-2-mmkurbanov@sberdevices.ru>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,47 +70,15 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---8I2SOfqEj79ZOI8K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 03 Apr 2023 21:32:16 +0300, Martin Kurbanov wrote:
+> Add YAML devicetree Amlogic A1 (A113L SoC) SPIFC.
+> 
+> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> ---
+>  .../bindings/spi/amlogic,a1-spifc.yaml        | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,a1-spifc.yaml
+> 
 
-On Tue, Apr 04, 2023 at 10:15:05PM +0900, Jaewon Kim wrote:
-> On 23. 4. 4. 21:58, Mark Brown wrote:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> > Is there some lower limit where it's still worth using polling, for
-> > example for just one or two bytes like a register address?  Taking an
-> > interrupt isn't free...
-
-> I did not considers lower limit.
-> According to your review, interrupt seems to be called too often.
-> However, It can't prevent the CPU utilization going to 100% during spi=20
-> transmission.
-
-It's not so much that the interrupt could be called too often as that
-the time taken to take the interrupt (including all the overhead the CPU
-has) might be large compared to what busy waiting would take if the
-transfer is very small.  If the FIFO is deep enough and the transfer is
-long enough to use that then you start to see a win from interrupts.
-
-> We will give more consideration and deliver a better solution to the=20
-> next patch version.
-
-Great.
-
---8I2SOfqEj79ZOI8K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsJxEACgkQJNaLcl1U
-h9Bicwf+IGoOzSXyZBgGXE8HPLU++uPBbikKvcSeB0Q/xa38kvp7mbL/FPKQv6Ih
-r1ci/kFUzUZZEHxjZfJOe7uVaV2bZMCo1UZphoP22Zb+zH6yomfVlDZT65Lo0NeL
-eW3D1MEa+ZbJObdsFYBzMMni1PENOTNQIhhqXJdWjBvt+4gGd3j71oDO33RChyw2
-0jqVlVnLHDtXM1YLFS8pod3jlNJv1M1UtqdJ8IzFWSenjVBMIfpRm+OIYNsMS2bu
-MrEyykoqB9OJVuIlb27pCv9I4z+9yznCSw2WvCAYB8pVSuXxdlA7DIv2DiHUUFKy
-iLrdAfhscaa/x+nc1bVr7MAL++68Kw==
-=OzOm
------END PGP SIGNATURE-----
-
---8I2SOfqEj79ZOI8K--
