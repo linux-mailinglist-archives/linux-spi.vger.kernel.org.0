@@ -2,69 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5C76D7F73
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Apr 2023 16:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7EC6D88E2
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Apr 2023 22:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbjDEO2w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Apr 2023 10:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S234455AbjDEUnp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Apr 2023 16:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbjDEO2v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Apr 2023 10:28:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1924B65B0;
-        Wed,  5 Apr 2023 07:28:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4642A63E44;
-        Wed,  5 Apr 2023 14:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF11C433D2;
-        Wed,  5 Apr 2023 14:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680704868;
-        bh=Pzi6zJxJr8ZUgmTZZZ6XD+HYvxPprYklmZaH/0dEtMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ImRaG3GVvpmqJNe1S1e8k+pepVfUqu3UM9plmOCyikVY8gYB6aJzgjb8sMQg3A2r/
-         KMGDHqlNG+R53It2QnpunzBxNsOlSY/fdAq/bI+9XomAP2dHQNJFEDd6pwf1/lmg7/
-         1oMVTm0Pm+FKilQuUhP7LZQOK+SJOZyfSG4aNFlwJSfYYcZUF50/kFu4e1YoUMr8Jp
-         s3fGRSMkHOmOc6X+IRGhODnKcRLyUN/TZS/SGidTHDH0N3Jqh7CQF2rB6obnqte0Mp
-         nF1ZUTO5v9xP01Un2nOGctkdwjH+SzH2fONJeCWj+3pyxFHGCI5P9B8dNbhjdK/2UD
-         BXWwm5RfeCfrw==
-Date:   Wed, 5 Apr 2023 22:27:37 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
+        with ESMTP id S233117AbjDEUnd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Apr 2023 16:43:33 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8707EDC;
+        Wed,  5 Apr 2023 13:43:14 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17683b570b8so39945290fac.13;
+        Wed, 05 Apr 2023 13:43:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680727374;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fo4KOndYHjMmbpfxHkmhUzVyW73zzbklAEkQD0vmqLg=;
+        b=qjrl45j14NUyHUdQMEp+Q7CuzKUhRpTPaBLBEf5dyxg24AkwrgTs97Sw8xTV00byrf
+         NBg1TEhd4vIhXojhxeOSQOso+oiRx7xUOfxjIYw6TyU7Vo1DR5zD/AJ3KjISSRzaRKTq
+         dAHmcK81LuKjiIjtEcFjkjWFAGjT/bfxRbOUC8yzc1B8AyRkh2tyY1ZJ5QrAFRfGUXtu
+         Qxh9HTksn/LZ69Aw5qQE8g84l6wUZvGZNK6MAp0aK+mBkKlPI+zuuMv/S8epi10wV3dl
+         /QiOnAZFoUw7wvVU8OiQtTGDxEbyYdogIvrIqpJxcFaXSAan4eD26G1t8MzY89wvxb2f
+         Un1Q==
+X-Gm-Message-State: AAQBX9fQBhtP6IwAIaG7GLfvFJJn1n9KkFE8mY+EPFp9VPUxXXyPvpAX
+        0fhBDQPRPJHTA8n0js6twQ==
+X-Google-Smtp-Source: AKy350YB2Ilkp1Aoa2VvCKvBjmWi9tDKQH08fmFxNM2UVw2G8NAZ3PpJIJOjMXSbsNNwBzdVZHrk4g==
+X-Received: by 2002:a05:6870:6023:b0:177:81bb:1b28 with SMTP id t35-20020a056870602300b0017781bb1b28mr4091960oaa.9.1680727373749;
+        Wed, 05 Apr 2023 13:42:53 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zj27-20020a0568716c9b00b001723a2e84b6sm6361842oab.6.2023.04.05.13.42.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 13:42:53 -0700 (PDT)
+Received: (nullmailer pid 449449 invoked by uid 1000);
+        Wed, 05 Apr 2023 20:42:52 -0000
+Date:   Wed, 5 Apr 2023 15:42:52 -0500
+From:   Rob Herring <robh@kernel.org>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+Cc:     Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
         Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
 Subject: Re: [PATCH v3] treewide: Fix probing of devices in DT overlays
-Message-ID: <20230405142737.GH11367@dragon>
+Message-ID: <168072737082.449372.6122824582508382689.robh@kernel.org>
 References: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:26:13PM +0200, Geert Uytterhoeven wrote:
+
+On Thu, 30 Mar 2023 15:26:13 +0200, Geert Uytterhoeven wrote:
 > When loading a DT overlay that creates a device, the device is not
 > probed, unless the DT overlay is unloaded and reloaded again.
 > 
@@ -112,11 +122,12 @@ On Thu, Mar 30, 2023 at 03:26:13PM +0200, Geert Uytterhoeven wrote:
 >   - Drop RFC.
 > ---
 >  drivers/bus/imx-weim.c    | 6 ++++++
-
-Acked-by: Shawn Guo <shawnguo@kernel.org>
-
 >  drivers/i2c/i2c-core-of.c | 5 +++++
 >  drivers/of/dynamic.c      | 1 +
 >  drivers/of/platform.c     | 5 +++++
 >  drivers/spi/spi.c         | 5 +++++
 >  5 files changed, 22 insertions(+)
+> 
+
+Applied, thanks!
+
