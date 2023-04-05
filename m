@@ -2,171 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE436D7BD7
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Apr 2023 13:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B55886D7DF0
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Apr 2023 15:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237929AbjDELpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Apr 2023 07:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S238346AbjDENnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Apr 2023 09:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbjDELpm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Apr 2023 07:45:42 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F994203
-        for <linux-spi@vger.kernel.org>; Wed,  5 Apr 2023 04:45:22 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230405114448epoutp046e6bbe0a3d32c4bcb48e375e43a4b6fa~TB0c_mi9r2206422064epoutp04Y
-        for <linux-spi@vger.kernel.org>; Wed,  5 Apr 2023 11:44:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230405114448epoutp046e6bbe0a3d32c4bcb48e375e43a4b6fa~TB0c_mi9r2206422064epoutp04Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680695088;
-        bh=rVfuadgpm2r+fbODJBwW7FHg9iGMIKszhoNLes3w9/k=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=FA3CfjNuiS/4p0NaMWX8nDkK02qQZsd53jXmnWoskvT9M2wac9xwWn9Q3cJ/6Clh+
-         7a9zYg9b4x/1zKkCNqZlsahuWDxDKWehGi1YyppF0tNugU21Hm4MX6k1pAtOp547ZK
-         Z/cgRWMX2ZKpGZaBMYS079RsreUwSzcMS4zw5sCg=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230405114447epcas2p437f613334472a210992fd02a52044d07~TB0cNqgjI1493614936epcas2p4L;
-        Wed,  5 Apr 2023 11:44:47 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Ps2qM12Npz4x9Pt; Wed,  5 Apr
-        2023 11:44:47 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5A.36.08750.F2F5D246; Wed,  5 Apr 2023 20:44:47 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230405114446epcas2p407c9cec3d428fd5108df91645a1088dc~TB0a3BlRE1493614936epcas2p4K;
-        Wed,  5 Apr 2023 11:44:46 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230405114446epsmtrp10124bd5287285a01281511652f9c15c1~TB0a2RhRK2604326043epsmtrp1c;
-        Wed,  5 Apr 2023 11:44:46 +0000 (GMT)
-X-AuditID: b6c32a47-9f5fe7000000222e-59-642d5f2fdbc5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7C.D7.18071.E2F5D246; Wed,  5 Apr 2023 20:44:46 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230405114445epsmtip1c6f71047a0f6d677803115fad54d4f5b~TB0alHfz_1454714547epsmtip1T;
-        Wed,  5 Apr 2023 11:44:45 +0000 (GMT)
-Message-ID: <d5627bf6-8cae-f260-f18e-6259a40237c3@samsung.com>
-Date:   Wed, 5 Apr 2023 20:42:22 +0900
+        with ESMTP id S238135AbjDENnh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Apr 2023 09:43:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF42C4EDB;
+        Wed,  5 Apr 2023 06:43:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7402E63934;
+        Wed,  5 Apr 2023 13:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355C9C433EF;
+        Wed,  5 Apr 2023 13:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680702215;
+        bh=a6D1/C9xh0GVKI3TzCX4vOSGQru+VCh8pQIGVOBsrfg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=hzwpA2I5Sv0agBnsSI/SK73o88aZlgsD+l0NbVcRTynODk6QFFX/CbneA9p6J0W2c
+         9gof54tk+0YlyoAJR29ec4fsH/vbaqMFDNqmoZccld+1dQsLFw1juq99qvSFCxdVIn
+         GnZSn16yXjoqpygmdjX2nzZ7uV9asKl7sCwHysRScnOBuGpILFKb50yr+1EW+6m6sO
+         MEvJtYBHCbtOZ0Q8QPNHj8ig++80SodDFIVd1F4d9APa7hpH7DO0JdR9LgRpxHYvxL
+         St3js+Dxv3R5fZuEJtJPFEdjp+bc86v8gJpRdOl2KdGhP/tQYm1XsUCIeYQlRaBRqF
+         KHipfroK712wA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20230404171613.1336093-1-tharunkumar.pasumarthi@microchip.com>
+References: <20230404171613.1336093-1-tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH SPI for-next 0/3] spi: mchp-pci1xxxx: Fix minor bugs in
+ spi-pci1xxxx driver
+Message-Id: <168070221494.64941.1088443931679332208.b4-ty@kernel.org>
+Date:   Wed, 05 Apr 2023 14:43:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.9.0
-Subject: Re: [PATCH 1/3] spi: s3c64xx: support spi polling mode using
- devicetree
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chanho Park <chanho61.park@samsung.com>
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <c1163417-16ea-63ee-5b8d-47cdff8069b1@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPJsWRmVeSWpSXmKPExsWy7bCmua5+vG6KwdIJLBYP5m1js1j84zmT
-        xdSHT9gsLu/Xtph/5Byrxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMlu0br3CLsDt8f1JZ+Y
-        PTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pm
-        YKhraGlhrqSQl5ibaqvk4hOg65aZA3SdkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUg
-        JafAvECvODG3uDQvXS8vtcTK0MDAyBSoMCE748j1D4wF67kqJq5+w9jAuI+ji5GDQ0LARGLz
-        lcQuRi4OIYEdjBKzL51mg3A+MUrsnnGeEcL5xiixePI9pi5GTrCOSZ/fQiX2MkqcvbeCHcJ5
-        zShxd9pzFpAqXgE7ifa2a4wgNouAisTbn3OZIOKCEidnPgGrERWIkui7vYkVxBYWCJJYefA+
-        mM0sIC5x68l8JpChIgJHGSW273zLCuIwC5xnlLj8+T9YN5uAtsT39YvBOjiBtr298o4Rolte
-        YvvbOcwgDRICazkkzrd+YIM43EWib/JmqCeEJV4d38IOYUtJvOxvg7KzJdqn/2GFsCskLm6Y
-        DdVrLDHrWTsjKMiYBTQl1u/Sh4SessSRWywQa/kkOg7/ZYcI80p0tAlBNKpJ3J96DmqIjMSk
-        IyuhDvCQOPpzG9MERsVZSMEyC8n7s5A8Mwth7wJGllWMYqkFxbnpqcVGBcbw2E7Oz93ECE65
-        Wu47GGe8/aB3iJGJg/EQowQHs5IIr2qXVooQb0piZVVqUX58UWlOavEhRlNg5ExklhJNzgcm
-        /bySeEMTSwMTMzNDcyNTA3MlcV5p25PJQgLpiSWp2ampBalFMH1MHJxSDUy17sv0U5dv+D9r
-        fqX76/QlV2T0L/1vDJi8wYyt6LRprJ8zm3DNnyK+pqedrYdPMqzYd5g7PDJRavv+lxN50vce
-        j5RfrJe0yXmm88qb5158juuevznxzOQDJfk8mYWr3d8/nxZRdFeqROyc5JRd29hmFR/MapW/
-        +77gqbMEZ/Hd2TFfNlbO3KOn7Hel7H/qqU/dz5Zye72/I3ZubUxNv+7DvRcOLLrwY5v93uhZ
-        r86WZfyYubY5Y9FJvcYJ9mZ/CkKXL+y7mpF/qST1AsNa9R9XSr4dZNdkUvaUrlunNk3knUSZ
-        7ObNQnc4Fj/5kH315qfFixfXr8qcyhF/tf8m08TTC5ITV+neYjV4z+riPWPqYSWW4oxEQy3m
-        ouJEAMYDeDhCBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnK5evG6KwZynrBYP5m1js1j84zmT
-        xdSHT9gsLu/Xtph/5Byrxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMlu0br3CLsDt8f1JZ+Y
-        PTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJVx5PoHxoL1XBUTV79h
-        bGDcx9HFyMkhIWAiMenzW8YuRi4OIYHdjBI7v/UxQSRkJJY/62ODsIUl7rccYYUoeskosW7W
-        W3aQBK+AnUR72zVGEJtFQEXi7c+5TBBxQYmTM5+wgNiiAlESnw+0gNULCwRJrDx4nxXEZhYQ
-        l7j1ZD5YvYjAUUaJ5UdqQRYwC5xllDh+bALUtt+MEtN3zQTrZhPQlvi+fjFYNyfQ5rdX3jFC
-        TDKT6NraBWXLS2x/O4d5AqPQLCSHzEKycBaSlllIWhYwsqxilEwtKM5Nzy02LDDMSy3XK07M
-        LS7NS9dLzs/dxAiONC3NHYzbV33QO8TIxMF4iFGCg1lJhFe1SytFiDclsbIqtSg/vqg0J7X4
-        EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqY+E8mw7SqW/KxqpXOPWQXW2C5gXVge
-        revNsYd5z+RTvwvOJk3JPHO68uJj7bd/lM8eODh/7mUtX+c+v7zg8hVi5d8YzzRurtUJlv9S
-        9MvcTSDoQbm47YPLBZs/c6ecmHNnQdA9v3/yhTMWhcRoGdfyrFCo+HKCU3v+z8tvPs5t6avl
-        m3rUV0tL2O79+Zv+RdsZZO9wqe/idLr84JzzUeNUprrlzXvWnak53jDlyf40lUdmiwKTFfS8
-        Cg1vdG/ivffS+WzE3IIyjg3LcqZmvRWdoaNUxtFVv3D9s6L1DlnZW+M1JJiepCu3Ku+9zpS9
-        VHbV7fiHqcf/mD3czFP0JfkHg27p9PlbFwhwRObekFNiKc5INNRiLipOBABc8m3NIwMAAA==
-X-CMS-MailID: 20230405114446epcas2p407c9cec3d428fd5108df91645a1088dc
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9
-References: <20230404060011.108561-1-jaewon02.kim@samsung.com>
-        <CGME20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9@epcas2p1.samsung.com>
-        <20230404060011.108561-2-jaewon02.kim@samsung.com>
-        <c1163417-16ea-63ee-5b8d-47cdff8069b1@linaro.org>
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 04 Apr 2023 22:46:10 +0530, Tharun Kumar P wrote:
+> This patch series fixes the following bugs in spi-pci1xxxx driver:
+> 1. Length of SPI transactions is improper
+> 2. SPI transactions fail after suspend and resume
+> 3. Incorrect implementation of pci1xxxx_spi_set_cs API
+> 
+> Tharun Kumar P (3):
+>   spi: mchp-pci1xxxx: Fix length of SPI transactions not set properly in
+>     driver
+>   spi: mchp-pci1xxxx: Fix SPI transactions not working after suspend and
+>     resume
+>   spi: mchp-pci1xxxx: Fix improper implementation of disabling chip
+>     select lines
+> 
+> [...]
 
-On 23. 4. 5. 14:42, Krzysztof Kozlowski wrote:
-> On 04/04/2023 08:00, Jaewon Kim wrote:
->> This patch adds new 'samsung,spi-polling' property to support polling mode.
-> Do not use "This commit/patch", but imperative mood. See:
-> https://protect2.fireeye.com/v1/url?k=3cb451b1-5d3f4488-3cb5dafe-000babffae10-4326e9d41dfad262&q=1&e=1125b69d-6d9e-4c91-a8fd-3470cd2278e4&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.17.1%2Fsource%2FDocumentation%2Fprocess%2Fsubmitting-patches.rst%23L95
->
-> Also, binding should be before its usage.
+Applied to
 
-thanks.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I will refer to it in next version.
+Thanks!
 
->> In some environments, polling mode is required even if DMA is supported.
-> Why? What are these environments? You need to explain all this in commit
-> msg.
->
+[1/3] spi: mchp-pci1xxxx: Fix length of SPI transactions not set properly in driver
+      commit: 35c8c5e503a82e0a4bf251d32096211eba8c2be6
+[2/3] spi: mchp-pci1xxxx: Fix SPI transactions not working after suspend and resume
+      commit: 4266d21669de62cf3fb6774f7d404c1eb95a5ab3
+[3/3] spi: mchp-pci1xxxx: Fix improper implementation of disabling chip select lines
+      commit: 45d2af82e0e6f662d0d0db20993b35cb1d8da646
 
-We are providing a VM environment in which several Guest OSs are running.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-There are cases where DMA exist only in HostOS and not exist in GuestOS.
-In this case, SPI in GuestOS runs with polling mode.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I thought it was correct that the polling mode was supported optional, 
-not quirk.
-I have plan to change the polling mode if there is no 'dmas' property.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-How about your opinion?
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-
->> Changed it to support not only with quick but also optinally with
-> typo: optionally
->
->> devicetree.
->>
-> Best regards,
-> Krzysztof
->
->
-
-Thanks
-
-Jaewon Kim
+Thanks,
+Mark
 
