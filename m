@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD156DDEB6
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 17:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E8A6DDEF5
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 17:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDKPBZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Apr 2023 11:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S229596AbjDKPIN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Apr 2023 11:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDKPBB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 11:01:01 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909C05263
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 08:00:57 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id u13so8565001ybu.5
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 08:00:57 -0700 (PDT)
+        with ESMTP id S229555AbjDKPIM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 11:08:12 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9834EF4
+        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 08:07:46 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54c12009c30so270598347b3.9
+        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 08:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681225257;
+        d=google.com; s=20210112; t=1681225665;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=agiD0fVmkG5x9YhF7RbgP1I7SfY10cQp3Rf/E83Dm34=;
-        b=PuX0NfFzdI/T3eO+DH6Z+CbWLQSuXDpaGljvewscJBJoDlQWKD83rrTY8bM9AzwvoB
-         GFyden3bkcmYSPX22mPj0l/bCXSzO+w9BXl0uzZvprwAflw4eWOESx9Cv5UitApXmSdo
-         aRnj4O0ELL2bt+YS005AE0e1/Yk5X4TNXmmf0bel+gAAqNj0mu/Whynhsz/keksPC0+O
-         jhDLEbiLSpEAAzAsiio/AS/4YI65fHMhMnr44MYK5znl6WWL+kBt3lFgKXJYqdSN5yyc
-         lER47SEPfWPROGlUNHFCbdLUeUfIMGLaERjlITrtUQt4WskAriYLq5W9DNsG/04SQyGe
-         H8EA==
+        bh=9PSuQdFw67OdfJka21SpX+ck/dMbcmU+4LZ8fmiBHQY=;
+        b=f60hJyL0f50g0ycAuZcH5/F0BREXbNOfNXKc3bOf4hufb3VBWanzUEgIkp0mimVyf1
+         TLAoNGyqU9ezk8CtSOf9AesYomBYuxfI6V+0fjiOPuewCgjyg3xDBPhix/iB0Z/umb3k
+         cGNelsXYX5ejumj92gc4hHB172XyYdPyHVASkKFV14+b27sz4fWRwbnFV/1SfmimdXkO
+         dLP7W/mRmgdFOreswUAmCT6n8+uFRbAUgBMt/1QpDEm3zJ4+dDWXGs6onsddziPTRHJC
+         rdI8XFxmiuXOPZzuMw5kkW4EpwbvLSs3ROhH1zOLCZbSx769c08uM0fHVxyXGIxZQEnD
+         Ff8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681225257;
+        d=1e100.net; s=20210112; t=1681225665;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=agiD0fVmkG5x9YhF7RbgP1I7SfY10cQp3Rf/E83Dm34=;
-        b=GDL/8D+PzLkyHoNrEcTWl4ZVzQ30VlSJbbGL2Zkc5Qx6XutxxW31c/c25HpsFzNODw
-         JMhYcLZULqOHiagV+Gc2ZmiHiz8yPyToSpNxvWYsrpHTWj10Rqmt0t8sNvLQBVBV24v7
-         z/NkaqVUS7BOgyA6NEw+IYPRavRI8TM+SIfvwRvpmzUvr+RjOcwFJLCiLzaZPJ+Mziri
-         CGQy+ERL8Q8zPC5bMX1rNybhhhhHHSOkBBSHaiRwy9IkmfTPcI5l0fdWK8EL2GIz4Oq5
-         rGMxTCYcoG3gewuf3oqh6Gd8KYD9Qqy7ngFtA2gkcEQ+R5BATYfCuzDviwCzeL+OURMt
-         3+gA==
-X-Gm-Message-State: AAQBX9dXaJcaMAAVf8cLC8gbBro6x2hsXHV9yaPsHq9eS9gLIJlbnoXe
-        Q2z9n/nNNEIASox6JtuOEdA9elHXKenAkw8adOb0Gw==
-X-Google-Smtp-Source: AKy350b89tn9QD1vHapm2mUaRbz71A1zQ3NqZprWtp1YvRsh4G5XGprwo6ZFbJC7m2+WpCjKVjQGLISyLt+CVb+uHog=
-X-Received: by 2002:a25:da44:0:b0:b8e:ce15:cb6c with SMTP id
- n65-20020a25da44000000b00b8ece15cb6cmr7496637ybf.8.1681225253347; Tue, 11 Apr
- 2023 08:00:53 -0700 (PDT)
+        bh=9PSuQdFw67OdfJka21SpX+ck/dMbcmU+4LZ8fmiBHQY=;
+        b=zTdYm+76SSFEjoBj6I6mwIzyjZiaRA4LLBXhuQ5LkjDVv3n3rCNgyDIaDbG210obMD
+         2lB8vrRJKiU+9GGQUAKM0Z82U6cigjvoh65i68YQNgZOD/qjboctOAimRnjmxDlYJ22d
+         4JqN6FxQYrrez+Tb092vJOH4DoIHYap0rOb1Ln4lHH9t3xgKgIJqB2w+JcruQV1FREJO
+         SFPGsBOa1ZZ+hQPd+VHF2UN1XzIbC90r4EVt9PprUHHvYkVcHbrwM4kf+Sx0Ye1CRoQy
+         IU8/FMUzWB4RxkQ97HM/U685bjvERHWwsjzHAQsCvC5Pnw4pexBGg+rfTYzxcjYbqX1A
+         SV4w==
+X-Gm-Message-State: AAQBX9dPnwQ8C3mzr+IoZ6wFUhtLYaitgKdAFW+gwmolHlwnoYdSQLPa
+        qtZgWq3IoGp7mvBC+oHFi/G8rQ0J4oqGNisUkPqTJg==
+X-Google-Smtp-Source: AKy350Y6K0kJlfIed6W39qBzz38TW3EONSttk7PSDtQjhPb1wAjOu/SDALBFlpcxs4YTfJERKF0xgSDJ/ZFPi2060MM=
+X-Received: by 2002:a81:ad5e:0:b0:541:8c77:93b1 with SMTP id
+ l30-20020a81ad5e000000b005418c7793b1mr7886674ywk.8.1681225664692; Tue, 11 Apr
+ 2023 08:07:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-3-joychakr@google.com>
- <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
-In-Reply-To: <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
+ <ZDVQGu/gBPTNbQPU@smile.fi.intel.com> <CAOSNQF0R7p7kW04w0nKF2egv1+8NrMhSXpggunYhjQnA+v-qMQ@mail.gmail.com>
+In-Reply-To: <CAOSNQF0R7p7kW04w0nKF2egv1+8NrMhSXpggunYhjQnA+v-qMQ@mail.gmail.com>
 From:   Joy Chakraborty <joychakr@google.com>
-Date:   Tue, 11 Apr 2023 20:30:41 +0530
-Message-ID: <CAOSNQF0R7p7kW04w0nKF2egv1+8NrMhSXpggunYhjQnA+v-qMQ@mail.gmail.com>
+Date:   Tue, 11 Apr 2023 20:37:33 +0530
+Message-ID: <CAOSNQF2zg5ymTfZWWbFLAgvKdcxRcggAjGt+Zy+qUzrR5=MERw@mail.gmail.com>
 Subject: Re: [PATCH v5 2/2] spi: dw: Add dma controller capability checks
 To:     Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -72,127 +72,144 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Andy,
+Sorry I think the emails crossed.
 
-On Tue, Apr 11, 2023 at 5:48=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Thu, Mar 30, 2023 at 06:34:50AM +0000, Joy Chakraborty wrote:
-> > Check capabilities of DMA controller during init to make sure it is
-> > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
-> > and store addr_width capabilities to check per transfer to make sure th=
-e
-> > bits/word requirement can be met for that transfer.
->
-> ...
->
-> > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
->
-> Can we avoid forward declarations please?
-
-We can, but for that I would have to move this api somewhere else in
-the file is that acceptable?
-
->
-> ...
->
-> > +     if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
-> > +           rx.directions & BIT(DMA_DEV_TO_MEM)))
-> > +             return -ENXIO;
->
-> What about simplex transfers where we only care about sending or receivin=
-g data
-> and using dummy data for the other channel? Doesn't this make a regressio=
-n for
-> that types of transfers? (Or, if we don't support such, this should be ex=
-plained
-> in the commit message at least.)
->
-
-Yes we can have simplex transfers for TX only, but for RX only there
-is dummy data added by the SPI core as the dw-core driver adds
-"SPI_CONTROLLER_MUST_TX".
-
-But transfers aside, as per the current driver design the dw dma
-driver needs both valid tx and rx channels to exist and be functional
-as per implementation of api "dw_spi_dma_init_generic" :
-...
-dws->rxchan =3D dma_request_chan(dev, "rx");
-if (IS_ERR(dws->rxchan)) {
-ret =3D PTR_ERR(dws->rxchan);
-dws->rxchan =3D NULL;
-goto err_exit;
-}
-
-dws->txchan =3D dma_request_chan(dev, "tx");
-if (IS_ERR(dws->txchan)) {
-ret =3D PTR_ERR(dws->txchan);
-dws->txchan =3D NULL;
-goto free_rxchan;
-}
-...
-
-Hence in terms of capability check we should check for directional
-capability of both TX and RX is what I understand.
-Please let me know if you think otherwise.
-
-> ...
->
-> > +     /*
-> > +      * Assuming both channels belong to the same DMA controller hence=
- the
-> > +      * address width capabilities most likely would be the same.
-> > +      */
-> > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_widths;
->
-> I don't think so this is correct.
->
-> Theoretically it's possible to have simplex transfers on which the one of
-> the channel is simply ignored / not used. See above.
->
-
-Yes, it is possible to have tx only transfers which would still be
-possible to do with this implementation. What we have assumed here is
-since the tx and rx channel both are a requirement for the dw dma
-driver to be functional it would most likely have the same address
-width capability.
-
-But we can make this more elaborate by checking it for both tx and rx
-separately.
-Something like this
-...
- dws->tx_dma_addr_widths =3D tx.dst_addr_widths;
- dws->rx_dma_addr_widths =3D rx.src_addr_widths;
-...
-...
-static bool dw_spi_can_dma(struct spi_controller *master,
-struct spi_device *spi, struct spi_transfer *xfer)
-{
-struct dw_spi *dws =3D spi_controller_get_devdata(master);
-enum dma_slave_buswidth dma_bus_width;
-
-if (xfer->len <=3D dws->fifo_len)
-return false;
-
-dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
-
-if (xfer->rx_buf && !(dws->rx_dma_addr_widths & BIT(dma_bus_width)))
-return false;
-
-return dws->tx_dma_addr_widths & BIT(dma_bus_width);
-}
-...
-
-@Serge Semin Please share your thoughts on the same.
-
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-
-I shall break this into 2 patches as per Serge(y)'s recommendation and
-make changes as per replies.
+So as per the discussion, are these the possible changes:
+1> Move "dw_spi_dma_convert_width" to avoid forward declaration .
+2> Update the commit text to include more explanation.
+3> Divide this into 2 patches?
 
 Thanks
 Joy
+
+Joy
+
+On Tue, Apr 11, 2023 at 8:30=E2=80=AFPM Joy Chakraborty <joychakr@google.co=
+m> wrote:
+>
+> Hello Andy,
+>
+> On Tue, Apr 11, 2023 at 5:48=E2=80=AFPM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 06:34:50AM +0000, Joy Chakraborty wrote:
+> > > Check capabilities of DMA controller during init to make sure it is
+> > > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+> > > and store addr_width capabilities to check per transfer to make sure =
+the
+> > > bits/word requirement can be met for that transfer.
+> >
+> > ...
+> >
+> > > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
+> >
+> > Can we avoid forward declarations please?
+>
+> We can, but for that I would have to move this api somewhere else in
+> the file is that acceptable?
+>
+> >
+> > ...
+> >
+> > > +     if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
+> > > +           rx.directions & BIT(DMA_DEV_TO_MEM)))
+> > > +             return -ENXIO;
+> >
+> > What about simplex transfers where we only care about sending or receiv=
+ing data
+> > and using dummy data for the other channel? Doesn't this make a regress=
+ion for
+> > that types of transfers? (Or, if we don't support such, this should be =
+explained
+> > in the commit message at least.)
+> >
+>
+> Yes we can have simplex transfers for TX only, but for RX only there
+> is dummy data added by the SPI core as the dw-core driver adds
+> "SPI_CONTROLLER_MUST_TX".
+>
+> But transfers aside, as per the current driver design the dw dma
+> driver needs both valid tx and rx channels to exist and be functional
+> as per implementation of api "dw_spi_dma_init_generic" :
+> ...
+> dws->rxchan =3D dma_request_chan(dev, "rx");
+> if (IS_ERR(dws->rxchan)) {
+> ret =3D PTR_ERR(dws->rxchan);
+> dws->rxchan =3D NULL;
+> goto err_exit;
+> }
+>
+> dws->txchan =3D dma_request_chan(dev, "tx");
+> if (IS_ERR(dws->txchan)) {
+> ret =3D PTR_ERR(dws->txchan);
+> dws->txchan =3D NULL;
+> goto free_rxchan;
+> }
+> ...
+>
+> Hence in terms of capability check we should check for directional
+> capability of both TX and RX is what I understand.
+> Please let me know if you think otherwise.
+>
+> > ...
+> >
+> > > +     /*
+> > > +      * Assuming both channels belong to the same DMA controller hen=
+ce the
+> > > +      * address width capabilities most likely would be the same.
+> > > +      */
+> > > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_width=
+s;
+> >
+> > I don't think so this is correct.
+> >
+> > Theoretically it's possible to have simplex transfers on which the one =
+of
+> > the channel is simply ignored / not used. See above.
+> >
+>
+> Yes, it is possible to have tx only transfers which would still be
+> possible to do with this implementation. What we have assumed here is
+> since the tx and rx channel both are a requirement for the dw dma
+> driver to be functional it would most likely have the same address
+> width capability.
+>
+> But we can make this more elaborate by checking it for both tx and rx
+> separately.
+> Something like this
+> ...
+>  dws->tx_dma_addr_widths =3D tx.dst_addr_widths;
+>  dws->rx_dma_addr_widths =3D rx.src_addr_widths;
+> ...
+> ...
+> static bool dw_spi_can_dma(struct spi_controller *master,
+> struct spi_device *spi, struct spi_transfer *xfer)
+> {
+> struct dw_spi *dws =3D spi_controller_get_devdata(master);
+> enum dma_slave_buswidth dma_bus_width;
+>
+> if (xfer->len <=3D dws->fifo_len)
+> return false;
+>
+> dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
+>
+> if (xfer->rx_buf && !(dws->rx_dma_addr_widths & BIT(dma_bus_width)))
+> return false;
+>
+> return dws->tx_dma_addr_widths & BIT(dma_bus_width);
+> }
+> ...
+>
+> @Serge Semin Please share your thoughts on the same.
+>
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+> >
+> >
+>
+> I shall break this into 2 patches as per Serge(y)'s recommendation and
+> make changes as per replies.
+>
+> Thanks
+> Joy
