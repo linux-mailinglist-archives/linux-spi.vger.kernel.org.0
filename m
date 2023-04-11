@@ -2,69 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C146DDDF9
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 16:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5286DDE33
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 16:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDKObS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Apr 2023 10:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S230291AbjDKOib (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Apr 2023 10:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjDKObF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 10:31:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC655593
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 07:30:36 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id q5so11164336ybk.7
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 07:30:36 -0700 (PDT)
+        with ESMTP id S229801AbjDKOiL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 10:38:11 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80738448E;
+        Tue, 11 Apr 2023 07:38:03 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id h12so5752456lfj.8;
+        Tue, 11 Apr 2023 07:38:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681223435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhZDKAKLAWGqCJBxTZUcUQG85cdkTJ5f9dPKGGpJSYU=;
-        b=impGA6PnoheZ3/kNSdj48madwyqtSp8uwFpVqXaHo4fJYxur1yrek3rD0q43T4Ylmb
-         +Zy/RLj4cE79Jx23sy64iCtVvzaqZBglEH6XxBrKzT344sUgGtMemT3C5tVXzFOgcgPm
-         8pGWq29bArxe1i9ka94yUiAdJgU8LwKY9dHATG4ekhxY2axPudXqSuBw/EE2tkwcdgTx
-         DjG9l5rDYfeRoG8BlO6wtCZpL+j4GDTNNwTBwuMhh8P+lyyH90+0u9pkXml6lOQvI2Iv
-         zENVQVgIEfD6LbqI4LZNKjTykwAFY24oASOWFcnMUwL8JhDABE9G8iNJ0upmIX5uVSMX
-         GEkw==
+        d=gmail.com; s=20210112; t=1681223881; x=1683815881;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6HfxwgTBgQXWC6fG+aiC6jOWHTPMJBQRX3DVcb99zZo=;
+        b=i7pz3ot8hLcJhgDkQjOjtEL+XNljQTYUxvVad/zSVIzphX3Mi7AuYMpDd3Ud1Jwuph
+         1ppkuxwFfT0rqm4iIT1MpHRI35IgZw6tGEGrQkf+wPHOyqQs4rsNEb6hzIpP1yXJf+ki
+         buLMyVfbyJjs2f1lW4f2JP8pEHcNISDpCk/X8ECycwTcRST8asczc39pYomv3b7Uast/
+         64NMZc40Lin7VCqNRQGFGeZO9B2cR5XXB2r53Zwl3zQgP9N2Nyza4hr+uCyjDgZAqNZU
+         ovO3LsNvn5Q23kuC3JlpEQeBZg0qK7etFzGzKdplRLoIws4icx9EYOKbWxUxCWk1So82
+         Ru2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681223435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhZDKAKLAWGqCJBxTZUcUQG85cdkTJ5f9dPKGGpJSYU=;
-        b=CTE2mz9zYaOUmdQHDZpRoLZMhCzqYyyPTYJzh4djC5da8c3vHdUJnbn4bv5r9p04FJ
-         cooMWcWoJ+rdFFxJEse8pdYx75nsS0FKL+GcBgtfRS066QE0SEeNEDqeCZ9D1qqP4R+m
-         zr30UXwv8i5nJlUlSjxCZJRlMIg7fj2ACjAfNeVZBFeQvmB8+XtsMVXOV7yZg/lfLm0w
-         ySqpKQgyfJMmvQiy3CIpP5ZZeAVQf4e08PjVZK9GyQaLFmEcuOFh85GffkeyCBS5yk+3
-         Wf8ncgExP0a2yxG4zUxPgxunatPdW9IXRkxLolz1t+3PyfIAFcIYw/8We0woCIrKPBXs
-         iYmg==
-X-Gm-Message-State: AAQBX9d1lFSJSUO5Q9hQ4o5t1WZ81p169mYToscgtvI1EYam09rAOs8E
-        HlqN2wJreMNJVVqzVrGw4SdEf3rYm2pmaZ7erb+91g==
-X-Google-Smtp-Source: AKy350aSUHNDMEBQHFG51I1T55aiT6TeeXEf5g5emI6PyKSBf+xqjNfWYf2DETRlgxuADXZLz5MoJiKdsU4AV2xlJQA=
-X-Received: by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with SMTP id
- bu9-20020a056902090900b00a273eccffe7mr11984613ybb.3.1681223435308; Tue, 11
- Apr 2023 07:30:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com> <20230411141115.vrfd6sud66u6xeog@mobilestation>
-In-Reply-To: <20230411141115.vrfd6sud66u6xeog@mobilestation>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Tue, 11 Apr 2023 20:00:23 +0530
-Message-ID: <CAOSNQF3MM6BLi=xs6VJFn9gWHU_00M--akcpsA=Jm=6U=3LZnQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        d=1e100.net; s=20210112; t=1681223881; x=1683815881;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6HfxwgTBgQXWC6fG+aiC6jOWHTPMJBQRX3DVcb99zZo=;
+        b=DM0AGuNgKFD5hxHxBzhAQO5HUDxJrGIUUqF0iYKLE40dtwZUCn9X/V/jg+3ck3wEMA
+         Bx4MmHu7xOz+LKYx7InoLqjHMXeua7qHrOlpYRLKIubr0sqav+dKGfgYAS0olxWgmJlI
+         9jAfkS1PxUK8AQREtJi12X3eW87PDtEze6dQbhggFcjkWNPzjz3pYZtvMvs0mZH9Bq1R
+         DFR5qEsDTB89WM6XefsCnq1B1j8kv5tWYl8ErC2Ozu6HvxU113pryyaZxwnq02xQYCEk
+         mxYwuhx59o8RliDV9jOiagvfc9kqMKSV/JDW98lgMbaoQrEvt6wFCNrr9kUdl/jBATcB
+         wLGw==
+X-Gm-Message-State: AAQBX9dR/jiJdIs2oWAtNr+kuectBwE0S1s/ljCcZsFfORx43cQkGNL8
+        Ckd0tcz/HwsAs71isjoJ36c=
+X-Google-Smtp-Source: AKy350a5Uh/F6sTGc4L+Fe7bAKFsCd9WDVCeqHJFjZHNcaIt+kgMf2vTS5okEmNmOw/i4rzBUmxI0A==
+X-Received: by 2002:ac2:4883:0:b0:4ec:5607:9055 with SMTP id x3-20020ac24883000000b004ec56079055mr3976585lfc.31.1681223881090;
+        Tue, 11 Apr 2023 07:38:01 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id l29-20020ac24a9d000000b004eae73a0530sm2593770lfp.39.2023.04.11.07.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 07:38:00 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 17:37:58 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Joy Chakraborty <joychakr@google.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, manugautam@google.com,
         rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Subject: Re: [PATCH v5 2/2] spi: dw: Add dma controller capability checks
+Message-ID: <20230411143758.2rpaxux6esiln26q@mobilestation>
+References: <20230330063450.2289058-1-joychakr@google.com>
+ <20230330063450.2289058-3-joychakr@google.com>
+ <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,89 +74,76 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Andy,
-
-On Tue, Apr 11, 2023 at 7:41=E2=80=AFPM Serge Semin <fancer.lancer@gmail.co=
-m> wrote:
->
-> On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote:
-> > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
-> >
-> > First of all the Subject is wrong. You are not touching DMA controller.
-> > Needs to be rephrased.
-
-Sure, will rephrase this to "SPI DMA Driver" instead of controller.
-
-> >
-> > > Add Support for AxSize =3D 4 bytes configuration from dw dma driver i=
-f
-> >
-> > SPI DMA driver
-> >
-> > (or something like this, note capital letters for acronyms).
-> >
-> > > n_bytes i.e. number of bytes per write to fifo is 3 or 4.
-> > >
-> > > Number of bytes written to fifo per write is depended on the bits/wor=
-d
-> > > configuration being used which the DW core driver translates to n_byt=
-es.
-> >
-> > ...
-> >
-> > >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
-> > >  {
-> > > -   if (n_bytes =3D=3D 1)
-> > > +   switch (n_bytes) {
-> > > +   case 1:
-> > >             return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > -   else if (n_bytes =3D=3D 2)
-> > > +   case 2:
-> > >             return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > -
-> > > -   return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> >
-> > > +   case 3:
-> >
-> > I'm not sure about this.
->
-> This actually makes sense seeing the function argument can have values
-> 1, 2, _3_ and 4:
-> dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-> transfer->bits_per_word =3D __F__(master->bits_per_word_mask =3D SPI_BPW_=
-RANGE_MASK(4, 32));
+On Tue, Apr 11, 2023 at 03:18:34PM +0300, Andy Shevchenko wrote:
+> On Thu, Mar 30, 2023 at 06:34:50AM +0000, Joy Chakraborty wrote:
+> > Check capabilities of DMA controller during init to make sure it is
+> > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+> > and store addr_width capabilities to check per transfer to make sure the
+> > bits/word requirement can be met for that transfer.
+> 
 > ...
-> dw_spi_dma_convert_width(dws->n_bytes)
->
-> The spi_transfer.bits_per_word field value depends on the
-> SPI peripheral device communication protocol requirements which may
-> imply the 3-bytes word xfers (even though it's indeed unluckily).
->
-> This semantic will also match to what we currently have in the
-> IRQ-based SPI-transfer implementation (see dw_writer() and
-> dw_reader()).
->
-> -Serge(y)
->
+> 
+> > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
+> 
+> Can we avoid forward declarations please?
+> 
+> ...
+> 
+> > +	if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
+> > +	      rx.directions & BIT(DMA_DEV_TO_MEM)))
+> > +		return -ENXIO;
+> 
 
-Will keep this as is to be similar to dw_writer() / dw_reader() as
-explained by Serge(y).
+> What about simplex transfers where we only care about sending or receiving data
+> and using dummy data for the other channel? Doesn't this make a regression for
+> that types of transfers? (Or, if we don't support such, this should be explained
+> in the commit message at least.)
 
-> >
-> > > +   case 4:
-> > > +           return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > +   default:
-> > > +           return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > +   }
-> > >  }
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-> >
-> >
+I don't think the code above is that much relevant for the half-duplex
+transfers. The DW APB SSI-DMA driver requires both Tx and Rx channels
+being specified thus supporting the Full-duplex transfers at least in
+case of the TxRx and Rx-only SPI-transfers (the later case relies on
+having the dummy buffers supplied by the SPI-core). Thus the channels
+must support the corresponding DMA-directions.
 
-I shall create another patch series with the same.
+Indeed the Tx-only DMA-based SPI-transfers implementation in the
+driver implies not using the Rx DMA-channel, but even in that case the
+Rx-channel still needs to be specified otherwise the DW APB SSI-DMA
+setup methods will halt with error returned. So unless there are cases
+with dummy Rx DMA-channels (which I very much doubt there is) I don't
+see the suggested update causing a regression. Am I missing something?
 
-Thanks
-Joy
+> 
+> ...
+> 
+> > +	/*
+> > +	 * Assuming both channels belong to the same DMA controller hence the
+> > +	 * address width capabilities most likely would be the same.
+> > +	 */
+> > +	dws->dma_addr_widths = tx.dst_addr_widths & rx.src_addr_widths;
+> 
+
+> I don't think so this is correct.
+> 
+> Theoretically it's possible to have simplex transfers on which the one of
+> the channel is simply ignored / not used. See above.
+
+Please see my explanation above. To cut it short even in case of the
+half-duplex SPI-xfers both channels need to be specified with the
+respective capabilities. It's implied by the DW APB SSI-DMA setup
+methods design (see dw_spi_dma_init_mfld() and
+dw_spi_dma_init_generic()).
+
+So until the DW APB SSI-DMA driver is re-developed to supporting true
+Tx-only and Rx-only transfers with no requirement one of the channels
+being specified I don't see any problem with the code above. Do you
+still think otherwise?
+
+-Serge(y)
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
