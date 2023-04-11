@@ -2,796 +2,519 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1B96DD642
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 11:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560296DD67B
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 11:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjDKJIr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Apr 2023 05:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
+        id S229477AbjDKJVX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Apr 2023 05:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjDKJIX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 05:08:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2060.outbound.protection.outlook.com [40.107.243.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304A49D3;
-        Tue, 11 Apr 2023 02:07:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E+Uez9GmcV54WjwthFNjZPBBr+EK0xSHxqnbvdVWQdNdmI9cPvdWKUQYUZ0qG9Mv06+tP+0fyv/DSuOmfDSsEw7TNSjld2p1haA511tMdTja7qh2+pewy3t8jDSCndvqsi7EoQb66TtglObqBaNAmtKE9hDCpHlBk73o2I8GxMTWj0Zkly587Ona2VLXiZbkxAbkAiosk5BGqqV6kEFMgx968AN/vOdHTR6WD4AptF/PBJsf+CNaodzaGr2ZB/oMcmKdDbs1wp6meRdrYOp7qBDQoUTcQPSIQxESFZ+EAEFiqvdEeGLYrRf/qDbQQbqloWCyoQWQHGNv4mqB0f/Lxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VvGZoNpRn1zHrEEQ2xlw/9jzAp810G/5Mud6wNI40Ag=;
- b=ZlQ9+Q5NR3b7+wEgw7RVCevAk6loJJretcmN2NK4cBrQU6e/LRo7w11+IyOYbppQ5E53/LueWiKKQNoUBJneb320YchMgmN6pY6mYIQiLn6GnkWc2zKyPWqo7AHz12NKPdv1OOOYBFi2xzhDQtsL4e8AqyLallkySFV5LQAEKNwjhS4hu1Xi2RoWQbwTxK2vZqyRmSjrwW4W7ZHy/66AYPcnRsxwl4D9aVZXVIVA3RMFsORX8y0ERGDGj2yDZPwTaF3bVeeDXqynGtXpjAB6muEk3cmOXCblAa92e+s4+pXcg/dVTJI1eoYrcpqnFp/z5PA3Wp0WJniAQpP6/dvxGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VvGZoNpRn1zHrEEQ2xlw/9jzAp810G/5Mud6wNI40Ag=;
- b=xKZUO39PKddZLa6LD/z23dEftSUr7Bdlj8E21D40vZmJ9Txi/HP5h5DeZapw/oLyLqUDEruJMkoIVsgIYLJRUxbAZdjpb/O8rOJ0eOrzCCl9XaBnaeV3GOOrWdc8qoLVUb0kW8jPxdaj6hbyKSn6zMjrm60AIhezzgXpWxlYqMQ=
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com (2603:10b6:408:25::33)
- by SA0PR12MB4477.namprd12.prod.outlook.com (2603:10b6:806:92::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
- 2023 09:07:07 +0000
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::f8dd:9a7d:7ac3:6d8c]) by BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::f8dd:9a7d:7ac3:6d8c%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
- 09:07:07 +0000
-From:   "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "tudor.ambarus@linaro.org" <tudor.ambarus@linaro.org>,
-        "pratyush@kernel.org" <pratyush@kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>
-CC:     "git (AMD-Xilinx)" <git@amd.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-        "vitalyr@opensource.cirrus.com" <vitalyr@opensource.cirrus.com>
-Subject: RE: [PATCH V7 1/7] spi: Add stacked and parallel memories support in
- SPI core
-Thread-Topic: [PATCH V7 1/7] spi: Add stacked and parallel memories support in
- SPI core
-Thread-Index: AQHZaFSfyRky5k4nrE+wjtXgiGyqUK8eSwSAgAeIDzA=
-Date:   Tue, 11 Apr 2023 09:07:07 +0000
-Message-ID: <BN7PR12MB2802CF25D5ADA9C8F00FCA0DDC9A9@BN7PR12MB2802.namprd12.prod.outlook.com>
-References: <20230406065336.10980-1-amit.kumar-mahapatra@amd.com>
- <20230406065336.10980-2-amit.kumar-mahapatra@amd.com>
- <007c01d9688d$d770c670$86525350$@opensource.cirrus.com>
-In-Reply-To: <007c01d9688d$d770c670$86525350$@opensource.cirrus.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN7PR12MB2802:EE_|SA0PR12MB4477:EE_
-x-ms-office365-filtering-correlation-id: 54dcd42b-de3e-43c4-1f0d-08db3a6c2012
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nhE1VBnpf5DZUVeU+eXjohl91vkhv37Nl7M2HBBb6/O3XPb1uYS8zhicJS0VPA3lSfwR2CohErwaok26pwLbnjxn0YivSadz5M42+hoPTXppD6HJC6TcNu0fp7PoxH2eWjC+4tVR+7M0En0LynC4Otr7IOu6lb7tIyQeHcJ3aTXrjlONnfirE9Q1CnF40NclVeB38T5J86qI1pvC1JvxcEojmgMVzIh5PQ5GZM9PuMwJi47i25HV8edr+K/EO3QKtseK2HTM0LC3Ku7RZvYfQyH0ZZV7bEHbWSisiEZbbm9lH1NS0e04geGba5Q7xO+3lE6U5gZL4WtrDRUHnvYdZZmhGcQxIOTaK2O/XNdoGmcCdqjsiiF6YYPQikujVk1ZnRCFW0BZnjqLWUzpJmkNe9nykQgZ8yUyCM5Rzv3PJZxJYTPfPPRTNPgJeaypimdk91oVuv2P4zV5EWjLOGYtBV2aSAWkVHZvSUjo0FwYeMsjNrkKhSBMRAQLdlfzSpXGwcmNfcqeiMKrim9UJGtABgYfGQwNEoM9/k4QEEfUJIwEnSIYvOrqVVZkfdvh9MbkcVF3PyEniP3j+Vz+pzLSTERED2BGFP2F4RdQHkueW5Ni/ZZ4SxFUcCtU2YlzM3fY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR12MB2802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(366004)(39860400002)(136003)(451199021)(71200400001)(7696005)(478600001)(316002)(110136005)(53546011)(9686003)(26005)(6506007)(186003)(54906003)(2906002)(30864003)(5660300002)(4326008)(66946007)(76116006)(66446008)(41300700001)(8676002)(66476007)(7416002)(64756008)(52536014)(8936002)(66556008)(38100700002)(122000001)(86362001)(83380400001)(55016003)(33656002)(38070700005)(579004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Z5yY1skahxI+QkNgcr3sNI6/3D9AHpIw0Lc6tNt1SABsK68bYL6SqJtuYUbz?=
- =?us-ascii?Q?Zev/cUx6Kyg9SeYLTTYnFKKnU0OeEHXYSb8eHM/3HyZ696+MIDxhp3gSgzPQ?=
- =?us-ascii?Q?DLHB2n+tMrVCdB+qpw19yJ5fG0bWdFyjOBLVkaaodPEGKPDNgt9IjzLDW6in?=
- =?us-ascii?Q?B8IDK0d5ebB+47POJR5JOS/gdf8RGtN8fxnLUfUfmpX3zW00GZ5YUzCdP4JB?=
- =?us-ascii?Q?iDN7zvK/50fX0PRKqwBOM2sfFJwqDd99kl9Ys/1f27SGAJoRWUdVy0ItZMQd?=
- =?us-ascii?Q?kOUToh7YJ4TQextTDEXOkkFIyOHu2KOWHuAtUBHLkp5TL5KV0eDRjD6FKyZE?=
- =?us-ascii?Q?/dkgfXnIb+lyIN+OV8PLyx6oIIPG1T6i4mvdSSMeiDZ354FuwhQgKG3v27i3?=
- =?us-ascii?Q?IFkUrZJ0pZgfP2OfE7lIjSU3ReyQPjAW3gA1yJt8iDDBeg8s3XdOMCoCDcaY?=
- =?us-ascii?Q?5ynBpCYHsPJUESAjl7wAKxAQp2aP8s/ks6F96nsVldTvYBvUne8m4ceBI+yd?=
- =?us-ascii?Q?8Zv+HzVQLvKYnUO8c3LBf5g2ytkON3lIgmfMGmd4TPNAeE/YVGkI+pD3XD/Q?=
- =?us-ascii?Q?gUWvMTAyvxzmyGjtKO6PIm16kIAGiaqj6esPnTVitwG+LlpuwP8S42fcw8DR?=
- =?us-ascii?Q?tmEmF5nXc+VFv0ittMN+yHBgrPNrFL6xezP+Ql0iZjvCksWkoU9bo3YbE4II?=
- =?us-ascii?Q?7bOwADQzDruoIMJIzVHybkYSBI6rD8PojTLCGfKWj0U+XQBxll5s/cUyOBSz?=
- =?us-ascii?Q?/ADh20/mQSynpE7TalQprzAJUL+dw9wDQ0n5WPjU4kjk2nnP96tZLeBEFQyq?=
- =?us-ascii?Q?ZEBcVsmw6aVe/6KqHF9RosONrp/JXhhOiT4VM0Ie1ikW4DimHevSquZ46mph?=
- =?us-ascii?Q?Qv+5bVxzMEKlY3KdQO9kXwgl0JNKbtKTkEo9KFazcrL9IABTgQ2Sp7fDA7Fa?=
- =?us-ascii?Q?nUx7VWSaAvBtiKNqEaftUcAtyOGr+ZK//s28B96QE6k5WkoLHPsRK5/XlE76?=
- =?us-ascii?Q?Mwf+HvvIwmsdFnBz6pt93kFwl8EkKABjxNvNApnUo/kQppj9pUgFa0M2T8AP?=
- =?us-ascii?Q?Eh3J8DI2Jhv9Kxj05FZs+8XnMAw4v64zZbu0e6fxkOuyPYhKj9VqaaMLnnZG?=
- =?us-ascii?Q?jQ1ZM4fVIEiVxwGVLzxX1nWDD0RjRQUK2TzNuJYkkSMrD3V/VKhyQ97j6+xi?=
- =?us-ascii?Q?svH/1jzsU0kJzIl8BOULpO4SmFuyqOx0crhrYAAskkEMn12n8UMHa8kus/Jw?=
- =?us-ascii?Q?S2AbKMBOntBXjlXVxD/g0yBsNxj7BnmdDMfhIEL3ibu/o38JaF437wBmWaQX?=
- =?us-ascii?Q?r2JW1RlI5zZT5aY1CJTBQNTA6GQk9u63IV8tpQ++tNTDMTYuk+HjxQFDywpJ?=
- =?us-ascii?Q?SrrlNqc/z+0BBYrXkVFg8CtYotnXGEksR8Gfzd+JOmrqmoodYWkTFqzeQPpK?=
- =?us-ascii?Q?87OG8XG3CkquxF28p1NcsxQh56XNT3lDNoMFxmsuDWDywhB+aPdWNWr2cXe5?=
- =?us-ascii?Q?C+LyeR4tWHgI78eDV8PRu0ZstoW49QFT2k5V1HmgjKYKc/AD3if9V640ngzq?=
- =?us-ascii?Q?uHsk7OyIxqqzGzreU4M=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229452AbjDKJVW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 05:21:22 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946B11FC1;
+        Tue, 11 Apr 2023 02:21:20 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id u4so10766477qkp.11;
+        Tue, 11 Apr 2023 02:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681204879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=22gDPxW19cMTzdI2UhZhZwmtD5x1mNyQ4dBwOLlhZII=;
+        b=HKAWQACd1BNdP9u4q1d9uEtrMUPhJuCx/jDIszfAwS87wK3UHR2MWEgOlgHm3Cu8oi
+         o9ZUbfyM/dfLOJiFbz5as8miyRY99sryRpOUigRlnHUnvhxZ2h2JqBw0VJr+k/FABAvX
+         VPnHPYz+Owo+2XzfkW1klN6YOGdOXpQQLPn3pkuBeifJqlCXd6xAopXkxggwtCGg8B2o
+         RMA1VskLCWd+M8k9AkkqUwz3Oyfdax7kFPNdubEq+xJxMX1fHiPgjyM+4ilMolx1fQr5
+         FDvU0wu/jdXCxj2ho/0yw9YhIA/py/1KRXlRdTXA8h2/YbvD5lDhmyehVXm6Zg86lNU8
+         Cbiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681204879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=22gDPxW19cMTzdI2UhZhZwmtD5x1mNyQ4dBwOLlhZII=;
+        b=j5S5J6upRqLnvmvQPjLhmiHBHL5pYQ4f/KmiPO36b1dzV8GUaiNJvzXohF+LMAPH9U
+         ikRVukWOw3k5pGNSjCOnmDwta6Lr5H4j8JLqUygTC1RQ7K/DjQ4I1BjxElAG+aCqx8D4
+         GvTUUl9myx0eIFKRq+AfN8RoQ06CMennBuaLr+AFhO0cOaRfvo+h6TRrQ8RRcovFAP81
+         oEh3NltJQQnNK+w1YXVTj1ftRdiXw2j2JzEHqhB1bDuDVAXixH45vpy7w+RJ7fRZP2uX
+         vrwi06EzN7M4325phyxWcvshwc374TmUvBjqGzJCn3d7A9mCmlUtbBecWH7RY0+LZrs1
+         Q3zA==
+X-Gm-Message-State: AAQBX9et+WSyiTGhdnqlKm9JQ2MW2uf1QRxLqZU6Iw0Xh8rtGXztG1eh
+        e+0ohEZhAJ1HU9aNtGwdxZklk5y7LIHar420DFs=
+X-Google-Smtp-Source: AKy350ai4GhRDj+9tWUfu907SY8Mp4Y+3HcbuSVSCBzAmG2vHJwTCZ9mRm8qy/TdKub90t5rC0KW0Zhf6a2sDPeYbmM=
+X-Received: by 2002:a05:620a:290f:b0:742:412d:1dc6 with SMTP id
+ m15-20020a05620a290f00b00742412d1dc6mr3955959qkp.14.1681204879411; Tue, 11
+ Apr 2023 02:21:19 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR12MB2802.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54dcd42b-de3e-43c4-1f0d-08db3a6c2012
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 09:07:07.1829
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WsoBtZ1VnOyBwhDBygi1w0sgq5dsUhDILceYQuX+I4Py6heWOALJdrox4E5hocNx07LrHflIU24tHnMT2MnP3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4477
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230410184526.15990-1-blarson@amd.com> <20230410184526.15990-16-blarson@amd.com>
+In-Reply-To: <20230410184526.15990-16-blarson@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Apr 2023 12:20:43 +0300
+Message-ID: <CAHp75VewhdOwqkuwHKT9e120Zgfhnp5x-sgaayWJPC4kZ=VxZw@mail.gmail.com>
+Subject: Re: [PATCH v13 15/15] soc: amd: Add support for AMD Pensando SoC Controller
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Stefan,
+On Mon, Apr 10, 2023 at 9:48=E2=80=AFPM Brad Larson <blarson@amd.com> wrote=
+:
+>
+> The Pensando SoC controller is a SPI connected companion device
+> that is present in all Pensando SoC board designs.  The essential
+> board management registers are accessed on chip select 0 with
+> board mgmt IO support accessed using additional chip selects.
 
-> -----Original Message-----
-> From: Stefan Binding <sbinding@opensource.cirrus.com>
-> Sent: Thursday, April 6, 2023 7:14 PM
-> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>;
-> broonie@kernel.org; tudor.ambarus@linaro.org; pratyush@kernel.org;
-> michael@walle.cc; miquel.raynal@bootlin.com; richard@nod.at;
-> vigneshr@ti.com
-> Cc: git (AMD-Xilinx) <git@amd.com>; linux-spi@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-mtd@lists.infradead.org;
-> nicolas.ferre@microchip.com; alexandre.belloni@bootlin.com;
-> claudiu.beznea@microchip.com; Simek, Michal <michal.simek@amd.com>;
-> linux-arm-kernel@lists.infradead.org; amitrkcian2002@gmail.com;
-> patches@opensource.cirrus.com; vitalyr@opensource.cirrus.com
-> Subject: RE: [PATCH V7 1/7] spi: Add stacked and parallel memories suppor=
-t
-> in SPI core
->=20
-> Hi,
->=20
-> > -----Original Message-----
-> > From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> > Sent: Thursday, April 6, 2023 7:54 AM
-> > To: broonie@kernel.org; tudor.ambarus@linaro.org; pratyush@kernel.org;
-> > michael@walle.cc; miquel.raynal@bootlin.com; richard@nod.at;
-> > vigneshr@ti.com
-> > Cc: git@amd.com; sbinding@opensource.cirrus.com; linux-
-> > spi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > mtd@lists.infradead.org; nicolas.ferre@microchip.com;
-> > alexandre.belloni@bootlin.com; claudiu.beznea@microchip.com;
-> > michal.simek@amd.com; linux-arm-kernel@lists.infradead.org;
-> > amitrkcian2002@gmail.com; Amit Kumar Mahapatra <amit.kumar-
-> > mahapatra@amd.com>
-> > Subject: [PATCH V7 1/7] spi: Add stacked and parallel memories
-> support
-> > in SPI core
-> >
-> > For supporting multiple CS the SPI device need to be aware of all
-> the CS
-> > values. So, the "chip_select" member in the spi_device structure is
-> now
-> > an
-> > array that holds all the CS values.
-> >
-> > spi_device structure now has a "cs_index_mask" member. This acts as
-> an
-> > index to the chip_select array. If nth bit of spi->cs_index_mask is
-> set
-> > then the driver would assert spi->chip_select[n].
-> >
-> > In parallel mode all the chip selects are asserted/de-asserted
-> > simultaneously and each byte of data is stored in both devices, the
-> even
-> > bits in one, the odd bits in the other. The split is automatically
-> handled
-> > by the GQSPI controller. The GQSPI controller supports a maximum of
-> > two flashes connected in parallel mode. A SPI_CONTROLLER_MULTI_CS flag
-> > bit is added in the spi controntroller flags, through ctlr->flags the
-> > spi
-> core
-> > will make sure that the controller is capable of handling multiple
-> chip
-> > selects at once.
-> >
-> > For supporting multiple CS via GPIO the cs_gpiod member of the
-> > spi_device structure is now an array that holds the gpio descriptor
-> > for each chipselect.
-> >
-> > Multi CS support using GPIO is not tested due to unavailability of
-> > necessary hardware setup.
-> >
-> > Multi CS configuration with one native CS and one GPIO CS is not
-> > supported as this configuration could not be tested due to
-> > unavailability of necessary hardware setup.
->=20
-> I've tested this chain on a released laptop (HP EliteBook 840 G9) which u=
-ses
-> SPI to interface to 2 amps, one amp uses a native CS and the other uses a
-> GPIO CS, and I noticed that when using this chain, the second amp no long=
-er
-> works.
+...
 
-Thank you for testing this patch series on GPIO CS setup. As I don't have a=
-=20
-GPIO CS setup, is it possible for you debug the failure and share more=20
-details/logs where the problem is?
+> +#include <linux/cdev.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/spi/spi.h>
 
-Regards,
-Amit
++ Blank line?
 
->=20
-> Thanks,
-> Stefan Binding
->=20
-> >
-> > Signed-off-by: Amit Kumar Mahapatra <amit.kumar-
-> mahapatra@amd.com>
-> > ---
-> >  drivers/spi/spi.c       | 226
-> ++++++++++++++++++++++++++++------------
-> >  include/linux/spi/spi.h |  32 ++++--
-> >  2 files changed, 183 insertions(+), 75 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
-> > 9036d7a50674..04d7322170c4 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -612,10 +612,24 @@ static int spi_dev_check(struct device *dev,
-> > void *data)  {
-> >  	struct spi_device *spi =3D to_spi_device(dev);
-> >  	struct spi_device *new_spi =3D data;
-> > +	int idx, nw_idx;
-> >
-> > -	if (spi->controller =3D=3D new_spi->controller &&
-> > -	    spi_get_chipselect(spi, 0) =3D=3D spi_get_chipselect(new_spi,
-> 0))
-> > -		return -EBUSY;
-> > +	if (spi->controller =3D=3D new_spi->controller) {
-> > +		for (idx =3D 0; idx < SPI_CS_CNT_MAX; idx++) {
-> > +			for (nw_idx =3D 0; nw_idx < SPI_CS_CNT_MAX;
-> > nw_idx++) {
-> > +				if ((idx !=3D 0 &&
-> !spi_get_chipselect(spi,
-> > idx)) ||
-> > +				    (nw_idx !=3D 0 &&
-> > !spi_get_chipselect(spi, nw_idx))) {
-> > +					continue;
-> > +				} else if (spi_get_chipselect(spi,
-> idx) =3D=3D
-> > +				    spi_get_chipselect(new_spi,
-> nw_idx))
-> > {
-> > +					dev_err(dev,
-> > +						"chipselect %d already
-> > in use\n",
-> > +
-> > 	spi_get_chipselect(new_spi, nw_idx));
-> > +					return -EBUSY;
-> > +				}
-> > +			}
-> > +		}
-> > +	}
-> >  	return 0;
-> >  }
-> >
-> > @@ -629,7 +643,7 @@ static int __spi_add_device(struct spi_device
-> > *spi)
-> >  {
-> >  	struct spi_controller *ctlr =3D spi->controller;
-> >  	struct device *dev =3D ctlr->dev.parent;
-> > -	int status;
-> > +	int status, idx;
-> >
-> >  	/*
-> >  	 * We need to make sure there's no other device with this @@ -638,8
-> > +652,6 @@ static int __spi_add_device(struct spi_device
-> > *spi)
-> >  	 */
-> >  	status =3D bus_for_each_dev(&spi_bus_type, NULL, spi,
-> spi_dev_check);
-> >  	if (status) {
-> > -		dev_err(dev, "chipselect %d already in use\n",
-> > -				spi_get_chipselect(spi, 0));
-> >  		return status;
-> >  	}
-> >
-> > @@ -649,8 +661,10 @@ static int __spi_add_device(struct spi_device
-> > *spi)
-> >  		return -ENODEV;
-> >  	}
-> >
-> > -	if (ctlr->cs_gpiods)
-> > -		spi_set_csgpiod(spi, 0, ctlr-
-> > >cs_gpiods[spi_get_chipselect(spi, 0)]);
-> > +	if (ctlr->cs_gpiods) {
-> > +		for (idx =3D 0; idx < SPI_CS_CNT_MAX; idx++)
-> > +			spi_set_csgpiod(spi, idx, ctlr-
-> > >cs_gpiods[spi_get_chipselect(spi, idx)]);
-> > +	}
-> >
-> >  	/*
-> >  	 * Drivers may modify this initial i/o setup, but will @@ -690,13
-> > +704,15 @@ int spi_add_device(struct spi_device *spi)  {
-> >  	struct spi_controller *ctlr =3D spi->controller;
-> >  	struct device *dev =3D ctlr->dev.parent;
-> > -	int status;
-> > +	int status, idx;
-> >
-> > -	/* Chipselects are numbered 0..max; validate. */
-> > -	if (spi_get_chipselect(spi, 0) >=3D ctlr->num_chipselect) {
-> > -		dev_err(dev, "cs%d >=3D max %d\n",
-> > spi_get_chipselect(spi, 0),
-> > -			ctlr->num_chipselect);
-> > -		return -EINVAL;
-> > +	for (idx =3D 0; idx < SPI_CS_CNT_MAX; idx++) {
-> > +		/* Chipselects are numbered 0..max; validate. */
-> > +		if (spi_get_chipselect(spi, idx) >=3D
-> ctlr->num_chipselect) {
-> > +			dev_err(dev, "cs%d >=3D max %d\n",
-> > spi_get_chipselect(spi, idx),
-> > +				ctlr->num_chipselect);
-> > +			return -EINVAL;
-> > +		}
-> >  	}
-> >
-> >  	/* Set the bus ID string */
-> > @@ -713,12 +729,15 @@ static int spi_add_device_locked(struct
-> > spi_device *spi)  {
-> >  	struct spi_controller *ctlr =3D spi->controller;
-> >  	struct device *dev =3D ctlr->dev.parent;
-> > +	int idx;
-> >
-> > -	/* Chipselects are numbered 0..max; validate. */
-> > -	if (spi_get_chipselect(spi, 0) >=3D ctlr->num_chipselect) {
-> > -		dev_err(dev, "cs%d >=3D max %d\n",
-> > spi_get_chipselect(spi, 0),
-> > -			ctlr->num_chipselect);
-> > -		return -EINVAL;
-> > +	for (idx =3D 0; idx < SPI_CS_CNT_MAX; idx++) {
-> > +		/* Chipselects are numbered 0..max; validate. */
-> > +		if (spi_get_chipselect(spi, idx) >=3D
-> ctlr->num_chipselect) {
-> > +			dev_err(dev, "cs%d >=3D max %d\n",
-> > spi_get_chipselect(spi, idx),
-> > +				ctlr->num_chipselect);
-> > +			return -EINVAL;
-> > +		}
-> >  	}
-> >
-> >  	/* Set the bus ID string */
-> > @@ -966,58 +985,118 @@ static void spi_res_release(struct
-> > spi_controller *ctlr, struct spi_message *mes  static void
-> > spi_set_cs(struct spi_device *spi, bool enable, bool
-> force)
-> >  {
-> >  	bool activate =3D enable;
-> > +	u32 cs_num =3D __ffs(spi->cs_index_mask);
-> > +	int idx;
-> >
-> >  	/*
-> > -	 * Avoid calling into the driver (or doing delays) if the chip
-> select
-> > -	 * isn't actually changing from the last time this was called.
-> > +	 * In parallel mode all the chip selects are
-> asserted/de-asserted
-> > +	 * at once
-> >  	 */
-> > -	if (!force && ((enable && spi->controller->last_cs =3D=3D
-> > spi_get_chipselect(spi, 0)) ||
-> > -		       (!enable && spi->controller->last_cs !=3D
-> > spi_get_chipselect(spi, 0))) &&
-> > -	    (spi->controller->last_cs_mode_high =3D=3D (spi->mode &
-> > SPI_CS_HIGH)))
-> > -		return;
-> > -
-> > -	trace_spi_set_cs(spi, activate);
-> > -
-> > -	spi->controller->last_cs =3D enable ? spi_get_chipselect(spi, 0)
-> : -1;
-> > -	spi->controller->last_cs_mode_high =3D spi->mode &
-> > SPI_CS_HIGH;
-> > -
-> > -	if ((spi_get_csgpiod(spi, 0) ||
-> !spi->controller->set_cs_timing)
-> > && !activate)
-> > -		spi_delay_exec(&spi->cs_hold, NULL);
-> > -
-> > -	if (spi->mode & SPI_CS_HIGH)
-> > -		enable =3D !enable;
-> > +	if ((spi->cs_index_mask & SPI_PARALLEL_CS_MASK) =3D=3D
-> > SPI_PARALLEL_CS_MASK) {
-> > +		spi->controller->last_cs_mode_high =3D spi->mode &
-> > SPI_CS_HIGH;
-> > +
-> > +		if ((spi_get_csgpiod(spi, 0) || !spi->controller-
-> > >set_cs_timing) && !activate)
-> > +			spi_delay_exec(&spi->cs_hold, NULL);
-> > +
-> > +		if (spi->mode & SPI_CS_HIGH)
-> > +			enable =3D !enable;
-> > +
-> > +		if (spi_get_csgpiod(spi, 0) && spi_get_csgpiod(spi,
-> 1)) {
-> > +			if (!(spi->mode & SPI_NO_CS)) {
-> > +				/*
-> > +				 * Historically ACPI has no means of
-> the
-> > GPIO polarity and
-> > +				 * thus the SPISerialBus() resource
-> > defines it on the per-chip
-> > +				 * basis. In order to avoid a chain of
-> > negations, the GPIO
-> > +				 * polarity is considered being Active
-> > High. Even for the cases
-> > +				 * when _DSD() is involved (in the
-> > updated versions of ACPI)
-> > +				 * the GPIO CS polarity must be
-> defined
-> > Active High to avoid
-> > +				 * ambiguity. That's why we use
-> enable,
-> > that takes SPI_CS_HIGH
-> > +				 * into account.
-> > +				 */
-> > +				if (has_acpi_companion(&spi->dev)) {
-> > +					for (idx =3D 0; idx <
-> > SPI_CS_CNT_MAX; idx++)
-> > +
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, idx),
-> > +
-> > !enable);
-> > +				} else {
-> > +					for (idx =3D 0; idx <
-> > SPI_CS_CNT_MAX; idx++)
-> > +						/* Polarity handled by
-> > GPIO library */
-> > +
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, idx),
-> > +
-> > activate);
-> > +				}
-> > +			}
-> > +			/* Some SPI masters need both GPIO CS &
-> > slave_select */
-> > +			if ((spi->controller->flags &
-> > SPI_MASTER_GPIO_SS) &&
-> > +			    spi->controller->set_cs)
-> > +				spi->controller->set_cs(spi, !enable);
-> > +		} else if (spi->controller->set_cs) {
-> > +			spi->controller->set_cs(spi, !enable);
-> > +		}
-> >
-> > -	if (spi_get_csgpiod(spi, 0)) {
-> > -		if (!(spi->mode & SPI_NO_CS)) {
-> > -			/*
-> > -			 * Historically ACPI has no means of the GPIO
-> > polarity and
-> > -			 * thus the SPISerialBus() resource defines it
-> on
-> > the per-chip
-> > -			 * basis. In order to avoid a chain of
-> negations,
-> > the GPIO
-> > -			 * polarity is considered being Active High.
-> Even
-> > for the cases
-> > -			 * when _DSD() is involved (in the updated
-> > versions of ACPI)
-> > -			 * the GPIO CS polarity must be defined Active
-> > High to avoid
-> > -			 * ambiguity. That's why we use enable, that
-> > takes SPI_CS_HIGH
-> > -			 * into account.
-> > -			 */
-> > -			if (has_acpi_companion(&spi->dev))
-> > -
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, 0), !enable);
-> > +		if (spi_get_csgpiod(spi, 0) || spi_get_csgpiod(spi, 1)
-> ||
-> > +		    !spi->controller->set_cs_timing) {
-> > +			if (activate)
-> > +				spi_delay_exec(&spi->cs_setup, NULL);
-> >  			else
-> > -				/* Polarity handled by GPIO library */
-> > -
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, 0), activate);
-> > +				spi_delay_exec(&spi->cs_inactive,
-> > NULL);
-> >  		}
-> > -		/* Some SPI masters need both GPIO CS & slave_select
-> > */
-> > -		if ((spi->controller->flags & SPI_MASTER_GPIO_SS) &&
-> > -		    spi->controller->set_cs)
-> > +	} else {
-> > +		/*
-> > +		 * Avoid calling into the driver (or doing delays) if
-> the
-> > chip select
-> > +		 * isn't actually changing from the last time this was
-> > called.
-> > +		 */
-> > +		if (!force && ((enable && spi->controller->last_cs =3D=3D
-> > +				spi_get_chipselect(spi, cs_num)) ||
-> > +				(!enable && spi->controller->last_cs
-> !=3D
-> > +				 spi_get_chipselect(spi, cs_num))) &&
-> > +		    (spi->controller->last_cs_mode_high =3D=3D
-> > +		     (spi->mode & SPI_CS_HIGH)))
-> > +			return;
-> > +
-> > +		trace_spi_set_cs(spi, activate);
-> > +
-> > +		spi->controller->last_cs =3D enable ?
-> > spi_get_chipselect(spi, cs_num) : -1;
-> > +		spi->controller->last_cs_mode_high =3D spi->mode &
-> > SPI_CS_HIGH;
-> > +
-> > +		if ((spi_get_csgpiod(spi, cs_num) || !spi->controller-
-> > >set_cs_timing) && !activate)
-> > +			spi_delay_exec(&spi->cs_hold, NULL);
-> > +
-> > +		if (spi->mode & SPI_CS_HIGH)
-> > +			enable =3D !enable;
-> > +
-> > +		if (spi_get_csgpiod(spi, cs_num)) {
-> > +			if (!(spi->mode & SPI_NO_CS)) {
-> > +				/*
-> > +				 * Historically ACPI has no means of
-> the
-> > GPIO polarity and
-> > +				 * thus the SPISerialBus() resource
-> > defines it on the per-chip
-> > +				 * basis. In order to avoid a chain of
-> > negations, the GPIO
-> > +				 * polarity is considered being Active
-> > High. Even for the cases
-> > +				 * when _DSD() is involved (in the
-> > updated versions of ACPI)
-> > +				 * the GPIO CS polarity must be
-> defined
-> > Active High to avoid
-> > +				 * ambiguity. That's why we use
-> enable,
-> > that takes SPI_CS_HIGH
-> > +				 * into account.
-> > +				 */
-> > +				if (has_acpi_companion(&spi->dev))
-> > +
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, cs_num),
-> > +
-> > !enable);
-> > +				else
-> > +					/* Polarity handled by GPIO
-> > library */
-> > +
-> > 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, cs_num),
-> > +
-> > activate);
-> > +			}
-> > +			/* Some SPI masters need both GPIO CS &
-> > slave_select */
-> > +			if ((spi->controller->flags &
-> > SPI_MASTER_GPIO_SS) &&
-> > +			    spi->controller->set_cs)
-> > +				spi->controller->set_cs(spi, !enable);
-> > +		} else if (spi->controller->set_cs) {
-> >  			spi->controller->set_cs(spi, !enable);
-> > -	} else if (spi->controller->set_cs) {
-> > -		spi->controller->set_cs(spi, !enable);
-> > -	}
-> > +		}
-> >
-> > -	if (spi_get_csgpiod(spi, 0) ||
-> !spi->controller->set_cs_timing) {
-> > -		if (activate)
-> > -			spi_delay_exec(&spi->cs_setup, NULL);
-> > -		else
-> > -			spi_delay_exec(&spi->cs_inactive, NULL);
-> > +		if (spi_get_csgpiod(spi, cs_num) || !spi->controller-
-> > >set_cs_timing) {
-> > +			if (activate)
-> > +				spi_delay_exec(&spi->cs_setup, NULL);
-> > +			else
-> > +				spi_delay_exec(&spi->cs_inactive,
-> > NULL);
-> > +		}
-> >  	}
-> >  }
-> >
-> > @@ -2246,8 +2325,8 @@ static void of_spi_parse_dt_cs_delay(struct
-> > device_node *nc,  static int of_spi_parse_dt(struct spi_controller
-> > *ctlr, struct
-> spi_device
-> > *spi,
-> >  			   struct device_node *nc)
-> >  {
-> > -	u32 value;
-> > -	int rc;
-> > +	u32 value, cs[SPI_CS_CNT_MAX] =3D {0};
-> > +	int rc, idx;
-> >
-> >  	/* Mode (clock phase/polarity/etc.) */
-> >  	if (of_property_read_bool(nc, "spi-cpha")) @@ -2320,13 +2399,21
-> @@
-> > static int of_spi_parse_dt(struct spi_controller *ctlr, struct
-> > spi_device *spi,
-> >  	}
-> >
-> >  	/* Device address */
-> > -	rc =3D of_property_read_u32(nc, "reg", &value);
-> > -	if (rc) {
-> > +	rc =3D of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,
-> > +						 SPI_CS_CNT_MAX);
-> > +	if (rc < 0 || rc > ctlr->num_chipselect) {
-> >  		dev_err(&ctlr->dev, "%pOF has no valid 'reg' property
-> (%d)\n",
-> >  			nc, rc);
-> >  		return rc;
-> > +	} else if ((of_property_read_bool(nc, "parallel-memories")) &&
-> > +		   (!(ctlr->flags & SPI_CONTROLLER_MULTI_CS))) {
-> > +		dev_err(&ctlr->dev, "SPI controller doesn't support
-> multi
-> > CS\n");
-> > +		return -EINVAL;
-> >  	}
-> > -	spi_set_chipselect(spi, 0, value);
-> > +	for (idx =3D 0; idx < rc; idx++)
-> > +		spi_set_chipselect(spi, idx, cs[idx]);
-> > +	/* By default set the spi->cs_index_mask as 1 */
-> > +	spi->cs_index_mask =3D 0x01;
-> >
-> >  	/* Device speed */
-> >  	if (!of_property_read_u32(nc, "spi-max-frequency", &value)) @@
-> > -3907,7 +3994,8 @@ static int __spi_validate(struct spi_device *spi,
-> > struct spi_message *message)
-> >  	 * cs_change is set for each transfer.
-> >  	 */
-> >  	if ((spi->mode & SPI_CS_WORD) && (!(ctlr->mode_bits &
-> > SPI_CS_WORD) ||
-> > -					  spi_get_csgpiod(spi, 0))) {
-> > +					  spi_get_csgpiod(spi, 0) ||
-> > +					  spi_get_csgpiod(spi, 1))) {
-> >  		size_t maxsize;
-> >  		int ret;
-> >
-> > diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h index
-> > 873ced6ae4ca..6453b246e0af 100644
-> > --- a/include/linux/spi/spi.h
-> > +++ b/include/linux/spi/spi.h
-> > @@ -19,6 +19,11 @@
-> >  #include <linux/acpi.h>
-> >  #include <linux/u64_stats_sync.h>
-> >
-> > +/* Max no. of CS supported per spi device */ #define SPI_CS_CNT_MAX 2
-> > +
-> > +/* chip select mask */
-> > +#define SPI_PARALLEL_CS_MASK	(BIT(0) | BIT(1))
-> >  struct dma_chan;
-> >  struct software_node;
-> >  struct ptp_system_timestamp;
-> > @@ -166,6 +171,7 @@ extern void
-> > spi_transfer_cs_change_delay_exec(struct spi_message *msg,
-> >   *	deasserted. If @cs_change_delay is used from @spi_transfer,
-> > then the
-> >   *	two delays will be added up.
-> >   * @pcpu_statistics: statistics for the spi_device
-> > + * @cs_index_mask: Bit mask of the active chipselect(s) in the
-> > chipselect array
-> >   *
-> >   * A @spi_device is used to interchange data between an SPI slave
-> >   * (usually a discrete chip) and CPU memory.
-> > @@ -181,7 +187,7 @@ struct spi_device {
-> >  	struct spi_controller	*controller;
-> >  	struct spi_controller	*master;	/* Compatibility layer
-> */
-> >  	u32			max_speed_hz;
-> > -	u8			chip_select;
-> > +	u8			chip_select[SPI_CS_CNT_MAX];
-> >  	u8			bits_per_word;
-> >  	bool			rt;
-> >  #define SPI_NO_TX	BIT(31)		/* No transmit wire */
-> > @@ -202,7 +208,7 @@ struct spi_device {
-> >  	void			*controller_data;
-> >  	char			modalias[SPI_NAME_SIZE];
-> >  	const char		*driver_override;
-> > -	struct gpio_desc	*cs_gpiod;	/* Chip select gpio
-> desc
-> > */
-> > +	struct gpio_desc	*cs_gpiod[SPI_CS_CNT_MAX];	/*
-> Chip
-> > select gpio desc */
-> >  	struct spi_delay	word_delay; /* Inter-word delay */
-> >  	/* CS delays */
-> >  	struct spi_delay	cs_setup;
-> > @@ -212,6 +218,13 @@ struct spi_device {
-> >  	/* The statistics */
-> >  	struct spi_statistics __percpu	*pcpu_statistics;
-> >
-> > +	/* Bit mask of the chipselect(s) that the driver need to use
-> from
-> > +	 * the chipselect array.When the controller is capable to
-> handle
-> > +	 * multiple chip selects & memories are connected in parallel
-> > +	 * then more than one bit need to be set in cs_index_mask.
-> > +	 */
-> > +	u32			cs_index_mask : SPI_CS_CNT_MAX;
-> > +
-> >  	/*
-> >  	 * likely need more hooks for more protocol options affecting how
-> >  	 * the controller talks to each chip, like:
-> > @@ -268,22 +281,22 @@ static inline void *spi_get_drvdata(const struct
-> > spi_device *spi)
-> >
-> >  static inline u8 spi_get_chipselect(const struct spi_device *spi,
-> u8 idx)
-> >  {
-> > -	return spi->chip_select;
-> > +	return spi->chip_select[idx];
-> >  }
-> >
-> >  static inline void spi_set_chipselect(struct spi_device *spi, u8
-> idx, u8
-> > chipselect)
-> >  {
-> > -	spi->chip_select =3D chipselect;
-> > +	spi->chip_select[idx] =3D chipselect;
-> >  }
-> >
-> >  static inline struct gpio_desc *spi_get_csgpiod(const struct
-> spi_device
-> > *spi, u8 idx)
-> >  {
-> > -	return spi->cs_gpiod;
-> > +	return spi->cs_gpiod[idx];
-> >  }
-> >
-> >  static inline void spi_set_csgpiod(struct spi_device *spi, u8 idx,
-> struct
-> > gpio_desc *csgpiod)
-> >  {
-> > -	spi->cs_gpiod =3D csgpiod;
-> > +	spi->cs_gpiod[idx] =3D csgpiod;
-> >  }
-> >
-> >  /**
-> > @@ -388,6 +401,8 @@ extern struct spi_device
-> > *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-> >   * @bus_lock_spinlock: spinlock for SPI bus locking
-> >   * @bus_lock_mutex: mutex for exclusion of multiple callers
-> >   * @bus_lock_flag: indicates that the SPI bus is locked for
-> exclusive use
-> > + * @multi_cs_cap: indicates that the SPI Controller can
-> assert/de-assert
-> > + *	more than one chip select at once.
-> >   * @setup: updates the device mode and clocking records used by a
-> >   *	device's SPI controller; protocol code may call this.  This
-> >   *	must fail if an unrecognized or unsupported mode is requested.
-> > @@ -554,6 +569,11 @@ struct spi_controller {
-> >  #define SPI_CONTROLLER_MUST_TX		BIT(4)	/* Requires tx
-> > */
-> >
-> >  #define SPI_MASTER_GPIO_SS		BIT(5)	/* GPIO CS must
-> select
-> > slave */
-> > +	/*
-> > +	 * The spi-controller has multi chip select capability and can
-> > +	 * assert/de-assert more than one chip select at once.
-> > +	 */
-> > +#define SPI_CONTROLLER_MULTI_CS		BIT(6)
-> >
-> >  	/* Flag indicating if the allocation of this struct is devres-
-> > managed */
-> >  	bool			devm_allocated;
-> > --
-> > 2.17.1
->=20
+> +#include <linux/amd-pensando-ctrl.h>
 
+...
+
+> +struct penctrl_device {
+> +       struct spi_device *spi;
+> +       struct reset_controller_dev rcdev;
+
+Try to swap them and check if the code will be smaller (it depends on
+how often one or another member is being used),
+
+> +};
+
+...
+
+> +static long
+> +penctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> +{
+> +       void __user *in_arg =3D (void __user *)arg;
+> +       struct penctrl_device *penctrl;
+> +       u8 tx_buf[PENCTRL_MAX_MSG_LEN];
+> +       u8 rx_buf[PENCTRL_MAX_MSG_LEN];
+> +       struct spi_transfer t[2] =3D {};
+> +       struct penctrl_spi_xfer *msg;
+> +       struct spi_device *spi;
+> +       unsigned int num_msgs;
+> +       struct spi_message m;
+> +       u32 size;
+> +       int ret;
+> +
+> +       /* Check for a valid command */
+> +       if (_IOC_TYPE(cmd) !=3D PENCTRL_IOC_MAGIC)
+> +               return -ENOTTY;
+> +
+> +       if (_IOC_NR(cmd) > PENCTRL_IOC_MAXNR)
+> +               return -ENOTTY;
+> +
+> +       if (_IOC_DIR(cmd) & _IOC_READ)
+> +               ret =3D !access_ok(in_arg, _IOC_SIZE(cmd));
+> +       else if (_IOC_DIR(cmd) & _IOC_WRITE)
+> +               ret =3D !access_ok(in_arg, _IOC_SIZE(cmd));
+
+> +
+
+Unneeded blank line.
+
+> +       if (ret)
+> +               return -EFAULT;
+
+But it seems you can actually rewrite above in less lines:
+
+       if ((_IOC_DIR(cmd) & _IOC_READ) && !access_ok(in_arg, _IOC_SIZE(cmd)=
+))
+         return -EFAULT;
+
+       if ((_IOC_DIR(cmd) & _IOC_WRITE) && !access_ok(in_arg, _IOC_SIZE(cmd=
+)))
+         return -EFAULT;
+
+> +       /* Get a reference to the SPI device */
+> +       penctrl =3D filp->private_data;
+> +       if (!penctrl)
+> +               return -ESHUTDOWN;
+> +
+> +       spi =3D spi_dev_get(penctrl->spi);
+> +       if (!spi)
+> +               return -ESHUTDOWN;
+> +
+> +       /* Verify and prepare SPI message */
+> +       size =3D _IOC_SIZE(cmd);
+> +       num_msgs =3D size / sizeof(struct penctrl_spi_xfer);
+> +       if (size =3D=3D 0 || size % sizeof(struct penctrl_spi_xfer)) {
+> +               ret =3D -EINVAL;
+> +               goto done;
+> +       }
+> +       msg =3D memdup_user((struct penctrl_spi_xfer *)arg, size);
+
+> +       if (!msg) {
+> +               ret =3D PTR_ERR(msg);
+
+This is strange.
+
+> +               goto done;
+> +       }
+> +       if (msg->len > PENCTRL_MAX_MSG_LEN) {
+> +               ret =3D -EINVAL;
+> +               goto done;
+> +       }
+> +
+> +       t[0].tx_buf =3D tx_buf;
+> +       t[0].len =3D msg->len;
+> +       if (copy_from_user(tx_buf, (void __user *)msg->tx_buf, msg->len))=
+ {
+> +               ret =3D -EFAULT;
+> +               goto done;
+> +       }
+> +       if (num_msgs > 1) {
+> +               msg++;
+> +               if (msg->len > PENCTRL_MAX_MSG_LEN) {
+> +                       ret =3D -EINVAL;
+> +                       goto done;
+> +               }
+> +               t[1].rx_buf =3D rx_buf;
+> +               t[1].len =3D msg->len;
+> +       }
+> +       spi_message_init_with_transfers(&m, t, num_msgs);
+
+It seems there is no validation for the messages 3+.
+
+> +       /* Perform the transfer */
+> +       mutex_lock(&spi_lock);
+> +       ret =3D spi_sync(spi, &m);
+> +       mutex_unlock(&spi_lock);
+> +
+> +       if (ret || (num_msgs =3D=3D 1))
+> +               goto done;
+> +
+> +       if (copy_to_user((void __user *)msg->rx_buf, rx_buf, msg->len))
+> +               ret =3D -EFAULT;
+
+> +done:
+
+out_unlock: ?
+
+> +       spi_dev_put(spi);
+> +       return ret;
+> +}
+> +
+> +static int penctrl_open(struct inode *inode, struct file *filp)
+> +{
+> +       struct spi_device *spi;
+> +       u8 current_cs;
+
+> +       if (!penctrl)
+> +               return -ENODEV;
+
+Is it possible?
+
+> +       filp->private_data =3D penctrl;
+> +       current_cs =3D iminor(inode);
+> +       spi =3D penctrl->spi;
+> +       spi->chip_select =3D current_cs;
+
+> +       spi->cs_gpiod =3D spi->controller->cs_gpiods[current_cs];
+
+Hmm... Why do you need this one? Isn't it a job of SPI core?
+
+> +       spi_setup(spi);
+> +       return stream_open(inode, filp);
+> +}
+
+> +static int penctrl_regs_read(struct penctrl_device *penctrl, u32 reg, u3=
+2 *val)
+> +{
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       struct spi_transfer t[2] =3D {};
+> +       struct spi_message m;
+> +       u8 txbuf[3];
+> +       u8 rxbuf[1];
+> +       int ret;
+> +
+> +       txbuf[0] =3D PENCTRL_SPI_CMD_REGRD;
+> +       txbuf[1] =3D reg;
+> +       txbuf[2] =3D 0;
+> +       t[0].tx_buf =3D txbuf;
+> +       t[0].len =3D 3;
+
+sizeof(txbuf) ?
+
+> +       rxbuf[0] =3D 0;
+> +       t[1].rx_buf =3D rxbuf;
+> +       t[1].len =3D 1;
+
+sizeof(rxbuf) ?
+
+> +       spi_message_init_with_transfers(&m, t, ARRAY_SIZE(t));
+> +       ret =3D spi_sync(spi, &m);
+> +       if (ret =3D=3D 0)
+> +               *val =3D rxbuf[0];
+> +
+> +       return ret;
+> +}
+> +
+> +static int penctrl_regs_write(struct penctrl_device *penctrl, u32 reg, u=
+32 val)
+> +{
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       struct spi_transfer t;
+> +       struct spi_message m;
+> +       u8 txbuf[4];
+> +
+> +       txbuf[0] =3D PENCTRL_SPI_CMD_REGWR;
+> +       txbuf[1] =3D reg;
+> +       txbuf[2] =3D val;
+> +       txbuf[3] =3D 0;
+> +
+> +       t.tx_buf =3D txbuf;
+> +       t.len =3D 4;
+
+sizeof(txbuf) ?
+
+> +       spi_message_init_with_transfers(&m, &t, 1);
+> +       return spi_sync(spi, &m);
+> +}
+> +
+> +static int penctrl_reset_assert(struct reset_controller_dev *rcdev,
+> +                               unsigned long id)
+> +{
+> +       struct penctrl_device *penctrl =3D
+> +               container_of(rcdev, struct penctrl_device, rcdev);
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       unsigned int val;
+> +       int ret;
+> +
+> +       mutex_lock(&spi_lock);
+> +       spi->chip_select =3D 0;
+> +       spi->cs_gpiod =3D spi->controller->cs_gpiods[0];
+> +       spi_setup(spi);
+> +       ret =3D penctrl_regs_read(penctrl, PENCTRL_REG_CTRL0, &val);
+> +       if (ret) {
+> +               dev_err(&spi->dev, "error reading ctrl0 reg\n");
+> +               goto done;
+> +       }
+> +
+> +       val |=3D BIT(6);
+> +       ret =3D penctrl_regs_write(penctrl, PENCTRL_REG_CTRL0, val);
+> +       if (ret)
+> +               dev_err(&spi->dev, "error writing ctrl0 reg\n");
+
+> +done:
+
+out_unlock: ?
+
+> +       mutex_unlock(&spi_lock);
+> +       return ret;
+> +}
+> +
+> +static int penctrl_reset_deassert(struct reset_controller_dev *rcdev,
+> +                                 unsigned long id)
+> +{
+> +       struct penctrl_device *penctrl =3D
+> +               container_of(rcdev, struct penctrl_device, rcdev);
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       unsigned int val;
+> +       int ret;
+> +
+> +       mutex_lock(&spi_lock);
+> +       spi->chip_select =3D 0;
+> +       spi->cs_gpiod =3D spi->controller->cs_gpiods[0];
+> +       spi_setup(spi);
+> +       ret =3D penctrl_regs_read(penctrl, PENCTRL_REG_CTRL0, &val);
+> +       if (ret) {
+> +               dev_err(&spi->dev, "error reading ctrl0 reg\n");
+> +               goto done;
+> +       }
+> +
+> +       val &=3D ~BIT(6);
+> +       ret =3D penctrl_regs_write(penctrl, PENCTRL_REG_CTRL0, val);
+> +       if (ret)
+> +               dev_err(&spi->dev, "error writing ctrl0 reg\n");
+
+> +done:
+
+out_unlock: ?
+
+> +       mutex_unlock(&spi_lock);
+> +       return ret;
+> +}
+
+> +static int penctrl_spi_probe(struct spi_device *spi)
+> +{
+> +       struct device *dev;
+> +       struct cdev *cdev;
+> +       u32 num_cs;
+> +       int ret;
+> +       u32 cs;
+> +
+> +       ret =3D device_property_read_u32(spi->dev.parent, "num-cs", &num_=
+cs);
+> +       if (ret)
+> +               return dev_err_probe(&spi->dev, ret,
+> +                                    "number of chip-selects not defined\=
+n");
+> +
+> +       ret =3D alloc_chrdev_region(&penctrl_devt, 0, num_cs, "penctrl");
+> +       if (ret)
+> +               return dev_err_probe(&spi->dev, ret,
+> +                                    "failed to alloc chrdev region\n");
+> +
+> +       penctrl_class =3D class_create(THIS_MODULE, "penctrl");
+> +       if (IS_ERR(penctrl_class)) {
+> +               ret =3D dev_err_probe(&spi->dev, PTR_ERR(penctrl_class),
+> +                                   "failed to create class\n");
+> +               goto unregister_chrdev;
+> +       }
+> +
+> +       cdev =3D cdev_alloc();
+> +       if (!cdev) {
+> +               ret =3D dev_err_probe(&spi->dev, -ENOMEM,
+> +                                   "allocation of cdev failed\n");
+> +               goto destroy_class;
+> +       }
+> +       cdev->owner =3D THIS_MODULE;
+> +       cdev_init(cdev, &penctrl_fops);
+> +
+> +       ret =3D cdev_add(cdev, penctrl_devt, num_cs);
+> +       if (ret) {
+> +               ret =3D dev_err_probe(&spi->dev, ret,
+> +                                   "register of cdev failed\n");
+> +               goto free_cdev;
+> +       }
+> +
+> +       /* Allocate driver data */
+> +       penctrl =3D kzalloc(sizeof(*penctrl), GFP_KERNEL);
+> +       if (!penctrl) {
+> +               ret =3D -ENOMEM;
+> +               goto free_cdev;
+> +       }
+> +       penctrl->spi =3D spi;
+> +       mutex_init(&spi_lock);
+> +
+> +       /* Create a device for each chip select */
+> +       for (cs =3D 0; cs < num_cs; cs++) {
+> +               dev =3D device_create(penctrl_class,
+> +                                   &spi->dev,
+> +                                   MKDEV(MAJOR(penctrl_devt), cs),
+> +                                   penctrl,
+> +                                   "penctrl0.%d",
+> +                                   cs);
+> +               if (IS_ERR(dev)) {
+> +                       ret =3D dev_err_probe(&spi->dev, PTR_ERR(dev),
+> +                                           "error creating device\n");
+> +                       goto destroy_device;
+> +               }
+> +               dev_dbg(&spi->dev, "created device major %u, minor %d\n",
+> +                       MAJOR(penctrl_devt), cs);
+> +       }
+> +
+> +       /* Register emmc hardware reset */
+> +       penctrl->rcdev.nr_resets =3D 1;
+> +       penctrl->rcdev.owner =3D THIS_MODULE;
+> +       penctrl->rcdev.dev =3D &spi->dev;
+> +       penctrl->rcdev.ops =3D &penctrl_reset_ops;
+
+> +       penctrl->rcdev.of_node =3D spi->dev.of_node;
+
+Either redundant or wrong. Shouldn't you first have the firmware node
+to be set for spi->dev?
+
+> +       device_set_node(&spi->dev, dev_fwnode(dev));
+> +
+> +       ret =3D reset_controller_register(&penctrl->rcdev);
+> +       if (ret)
+> +               return dev_err_probe(&spi->dev, ret,
+> +                                    "failed to register reset controller=
+\n");
+> +       return 0;
+> +
+> +destroy_device:
+> +       for (cs =3D 0; cs < num_cs; cs++)
+> +               device_destroy(penctrl_class, MKDEV(MAJOR(penctrl_devt), =
+cs));
+> +       kfree(penctrl);
+> +free_cdev:
+> +       cdev_del(cdev);
+> +destroy_class:
+> +       class_destroy(penctrl_class);
+> +unregister_chrdev:
+> +       unregister_chrdev(MAJOR(penctrl_devt), "penctrl");
+> +
+> +       return ret;
+> +}
+
+...
+
+> +++ b/include/uapi/linux/amd-pensando-ctrl.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Userspace interface for /dev/penctrl
+> + *
+> + * This file can be used by applications that need to communicate
+> + * with the AMD Pensando SoC controller device via the ioctl interface.
+> + */
+> +#ifndef _UAPI_LINUX_AMD_PENSANDO_CTRL_H
+> +#define _UAPI_LINUX_AMD_PENSANDO_CTRL_H
+
+> +#include <linux/ioctl.h>
+
+Not used header.
+
+> +#include <linux/types.h>
+> +
+> +#define PENCTRL_SPI_CMD_REGRD  0x0b
+> +#define PENCTRL_SPI_CMD_REGWR  0x02
+> +#define PENCTRL_IOC_MAGIC      'k'
+> +#define PENCTRL_IOC_MAXNR      0
+> +#define PENCTRL_MAX_MSG_LEN    16
+> +#define PENCTRL_MAX_REG                0xff
+> +#define PENCTRL_REG_CTRL0      0x10
+> +
+> +struct penctrl_spi_xfer {
+> +       __u64 tx_buf;
+> +       __u64 rx_buf;
+> +       __u32 len;
+> +       __u32 speed_hz;
+> +       __u64 compat;
+> +};
+> +
+> +#endif /* _UAPI_LINUX_AMD_PENSANDO_CTRL_H */
+
+--=20
+With Best Regards,
+Andy Shevchenko
