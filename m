@@ -2,264 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C806DF030
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 11:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBEA6DF2A8
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 13:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjDLJWJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Apr 2023 05:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S229643AbjDLLLb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Apr 2023 07:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjDLJWE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 05:22:04 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381D87EEC
-        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 02:21:59 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id y186so11030916yby.13
-        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 02:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681291318; x=1683883318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1g+fhfMngaALibGUWCctwB0WiYqHqohZftgGAue66AI=;
-        b=nOhaf5UNffjZr/akNln8P9je6Hd9lC0eRqvBuF9AdWcbgvpaLufSt84OSns+tksP1F
-         KuxU49ztCG01BmGQBTS7DwSaAtQUjLcrsnxkuqWTBUosQQkv2871iorKIJN/LadO48pZ
-         JTvFcoeSdHzYJOcxHNtHdo4Js4dzr7scTemPp5HJdcYK/YU/ZYcWssxz3568IlCTY1hV
-         TqrBpnooIVe1bg6JUuKiyzk9XXTj4sXBvnVk2JTk8hlETaV0t05E4JQpYNaZRmOlNHiv
-         t0JEhlNM/2OVU3r95XaI1VHaiwz+eJVizmwymUn77bB0uHMNpPtnTBTMzdfEn1xO5roc
-         Jywg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681291318; x=1683883318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1g+fhfMngaALibGUWCctwB0WiYqHqohZftgGAue66AI=;
-        b=dUr6Pdrh0okeudHyBHcjVluLHXhO7LQBUddD2OmTbkyHtohmQJT3S3ZgUmD6MENKUI
-         QyEQWvLzq2Pvdpu2mu7StdxUEN2Qoxs6RDLSdn44w03EKQNMQEEunwK52oGUX/JY0rLS
-         TvFCNLli4LDki84aMdIxi9Uf8QBDl0aLlWNhFRuUkgZP3JrENvWyZYTwAj6kXUAVKfSH
-         1HtJpwQFo2AuQKxUwfC0Fat8aZsU0nxyAlbIGmxUCfV2rLlV7nweUc+ET088s+wu5HSO
-         9JgJgHSSlABjn8UGTncRCnsZ4iGtYORaDdLf1YWIAxYnzWoi7WjBsOgTbMqHBZcg5oi6
-         ok5A==
-X-Gm-Message-State: AAQBX9fCSTZOT8LiwaakG+5JOl/oFmGJCdeb0wJ/dNeNAaSUnzAZexgY
-        06LoSl0fz58l3rN3nnpKj2gngInyaAqGLA/VWhQW3XGSoz1uOWsJaq61nw==
-X-Google-Smtp-Source: AKy350ZKZSWlQcBxkVRDAOSVAaO3hVp2L2DwvAnh+I/KFhcThH6010TeT1FMd69ZipeS5KZGg3XYLVJYGSL/wpsLWho=
-X-Received: by 2002:a25:3354:0:b0:b8e:f726:d198 with SMTP id
- z81-20020a253354000000b00b8ef726d198mr4787205ybz.8.1681291318159; Wed, 12 Apr
- 2023 02:21:58 -0700 (PDT)
+        with ESMTP id S229562AbjDLLL3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 07:11:29 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on0623.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe02::623])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62976A6;
+        Wed, 12 Apr 2023 04:10:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PdJ+vbLrEEBrLXxthELgHPV2+ZeQd58qnaumPEX1Dgy/rASTcA8dTsoF5X9g/1sQ4lYcRnQe5gEcltjq7//lUQX8EEN5Fexu8VNxOrVHJ/0EKvVkAH8oaqyxBq9pJgbRBeKuKlSqZsrX+gqUyYBuEykUW+qAMWvbt3DtEkMcAVDTfB0bFm/OoBUmaMH/NHNGg5gbbvXAfxBl5HJupfUwByLYGVWdTTARLGEIEoLyFDrFpr1G719m7D+FKag7784y1XIAKDnOijSn8sUaRd/23BjlSIj3f+3IGxWFhLsYm452OOeUmRD0XKb/lJYarNrmSCGKhFJSmLWw8aih5l1Kdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+C+NV54CbbVCVLZKW4R862Yi8i2+aZZo4I2UxQH985Y=;
+ b=hDFc77s2PDHOLzxEoblEw3spJjtZzGdkevYDmKtRO46N1eF6mjsKnGUHQXqEcx0hvsXAvpb76GU1R4FOICdDT4w0ClsLo5cSRGQ9Z8/hyVPVceXxp0XSBYA9/HllsWUEsj87er/OigX+yYdTQxc5nQLg5wthFH79a+N3NBJlKcsfQrXmpEzp0lLM+bCBaOFTwjsM5/3CO3FUeTNnTAqUokkihUmCxnB0EBF9BLE6RXF+neTbU4xj82YoIS5PnoAttzdhVOm85FXzoO7Cgyovv+IFiXR0vOsqLpDH2rfpUiOzXWyEVueGEAO6+ad4APZpNaQ23mkR6SRJdWgeHFOm8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+C+NV54CbbVCVLZKW4R862Yi8i2+aZZo4I2UxQH985Y=;
+ b=PNQsSaGQ548Xru/e8MEMXxBniEqnfzANZZq8leKd6Qv2wDQEQTrDBkYvmLiQWnyOk3swq/5SZBiBgC1baVUcOyWi5VgNYpLugyQgocWwfptcxRyqJ/Oupu5VnQUtjq/SVHlEd/451r2j55Cr6RJHHA1hZILIkX7fQGjSeGDOdKYH8NkG6K/P7yV3AZ/hOs3yjno5E+pl/R+f6Q07K4291u32cq2CsJHOBdBX1czH9H7/w++cOjmcC+tHwxBnCyjwt8Kfxwe2kA+JGTJnZ0NwQ5Feh+BAEu7NngsDUDROQUiWvhLDoIamhOEhaBj2jGQVaUMJ82iwDFsI6YW2+l/IQg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB8PR04MB7097.eurprd04.prod.outlook.com (2603:10a6:10:12a::11)
+ by VI1PR04MB7069.eurprd04.prod.outlook.com (2603:10a6:800:127::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
+ 2023 11:10:38 +0000
+Received: from DB8PR04MB7097.eurprd04.prod.outlook.com
+ ([fe80::ad2b:14a0:1f4f:b497]) by DB8PR04MB7097.eurprd04.prod.outlook.com
+ ([fe80::ad2b:14a0:1f4f:b497%4]) with mapi id 15.20.6298.030; Wed, 12 Apr 2023
+ 11:10:37 +0000
+Message-ID: <abf246fd-472a-c5fe-1f7a-a6850c614dfe@suse.com>
+Date:   Wed, 12 Apr 2023 13:10:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v7 3/6] Documentation: Add ABI doc for attributes of LJCA
+ device
+To:     "Ye, Xiang" <xiang.ye@intel.com>, Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+References: <20230325154711.2419569-1-xiang.ye@intel.com>
+ <20230325154711.2419569-4-xiang.ye@intel.com>
+ <b1eb8356-4519-4c95-b3ee-afc142b8d17f@suse.com>
+ <ZDPoku+k+S65cmeQ@ye-NUC7i7DNHE>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <ZDPoku+k+S65cmeQ@ye-NUC7i7DNHE>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0097.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::15) To DB8PR04MB7097.eurprd04.prod.outlook.com
+ (2603:10a6:10:12a::11)
 MIME-Version: 1.0
-References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com> <20230411141115.vrfd6sud66u6xeog@mobilestation>
- <ZDVyyoN71cB7dvWW@smile.fi.intel.com> <20230411150916.24vagjzbhshaujse@mobilestation>
- <ZDV6FKd/TupHEPMf@smile.fi.intel.com> <CAOSNQF3JQKVgvp5M17SzeyF5LB85_ZvkRpp3PZkCYcGcqm8V2g@mail.gmail.com>
- <ZDWJJaYauhOl0Iue@smile.fi.intel.com> <CAOSNQF2dxwbCa7_MrN-qd5mrK9jfpaakeExuMBwctXbsQGmiJQ@mail.gmail.com>
-In-Reply-To: <CAOSNQF2dxwbCa7_MrN-qd5mrK9jfpaakeExuMBwctXbsQGmiJQ@mail.gmail.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Wed, 12 Apr 2023 14:51:44 +0530
-Message-ID: <CAOSNQF3uie_Jk9xmEu9w6LvZvigkGEu+k5at8+a6chxMLehQHQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7097:EE_|VI1PR04MB7069:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1334f6de-f577-4c23-ee6f-08db3b468b0f
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ttWYO363lkXBIEK7T+j+G4qq/Oksu+yotoeTM1ord6fXxhma6R9LZqmp9ffG2US1vG7RUTjuioSAKqEvcUR+IMr3UVp8fxVZ1TWmxXno6aAft9bCnOEWwQaiySVRBy/+oBAoHmo+QYpEXc2oDNOKGy4EVA6cDCTGXX1e77wqSjNCDTs/cTBdOVMzryNMGNoRCJJRW865gvH2rXTZJT2Nu9bCgZMHroImz2AEIc1+QPO45ivib8pYPemCC89E9HZve3HK0a1SiG9yTCsdslv11PSzTGaaM8XGjLL2II19enatP2GPGKkArhTHgJTrMkwOiBO/IbVMgXS5H+tCkTCh2sZJ0lW/8utnAbvBBZpTrsDk34dWYSQtmDpyMebeTKS9FZxCJJwRqSZhCZH5UUVSnYZJtYElcyBlzLxNXnpHLfn9rd7g3MPKl2eWUN/CVZxz2ZrLCdG9n97tShb4bRVdR4Os586r9JHYcqAE4mzY8pzP5wTuQB3MzvoBQM2w5KHha/kBmZSWMRtX8Ofdc6kE1BC4giRds6M4BTQ997hjNhxCczZgSonwi72XpgUcFtmqUXQ9/66kvPOTHCjTiWI72+q32sVjy80QOYCLmWnaSY7rodDyWZz/xNz04fb4sJcQXOPkqHKWcyvC0R0wpiFFrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7097.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(396003)(39850400004)(136003)(366004)(451199021)(2616005)(478600001)(6486002)(6666004)(54906003)(186003)(53546011)(110136005)(6506007)(6512007)(2906002)(4744005)(7416002)(36756003)(5660300002)(38100700002)(4326008)(41300700001)(66946007)(66556008)(66476007)(316002)(31696002)(8936002)(8676002)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDBjSGNRL1lsMkhHcVZYcGVENzVhNW84cWp1WXl1eG1IZUh0a3E3OXVwKzBU?=
+ =?utf-8?B?OGhFUjNpWkpmRFdrNjNnN0NES3BuTENEU0owelpPdE85NVdEZ3FnVXZUa2th?=
+ =?utf-8?B?TEdwMWc4dFVrWmRkSVk5TXMyaFByL0R2a3VsVDhNMnhHeFVjeUdGUEI1VkdD?=
+ =?utf-8?B?YzBBMzl1d3lKLzdhRWh1aUZUV0dCbE5hQ0lvNWtFZEd4UENYNDlsa3NCaEdq?=
+ =?utf-8?B?eDRUOVFFeHdnMGpwcXdyY1lQVDFDNkJTYlBlWlFsZFpFRGxXM3NodGprL0Z0?=
+ =?utf-8?B?UStwVkxrbDhjQ013eWFRUk05eDR0c2piR05NQlpSWU5mSXFIME9tYWJPa3hj?=
+ =?utf-8?B?ODh2UnNuSHJjUXpvMVMyTlNUdEx5TnNwa243WUNFTVBUcDRJLzh1Nms2Rjdm?=
+ =?utf-8?B?TzMzbk16TDBsblBXRUYraDRGYmR1REhjeVA3S2FDN2FEeEFQU3VtaWgyeHh3?=
+ =?utf-8?B?QzZISG92WEp6K2hHYXdkSldWVk5GeWR6TkVTaHdsWklLUDJtbjQ3cGkxakJo?=
+ =?utf-8?B?NkNpMEs1ZTRBbGs2VHQ1K1BzTDQ3QTYwTlErLzJVOUsrRWN3bGl0enpLWVBp?=
+ =?utf-8?B?V1RpS3dKbFp3RE1nb3dQbkVaU0xZYjlpOUlpQ0dUV1BnWDh6dXVRTnlINmFw?=
+ =?utf-8?B?cGxOQU52YVJZMy9yOXpJTXlCSjRScHE3QVd3dXlOTGlCYWRnK1lpY0hTMHRK?=
+ =?utf-8?B?cndvV1ZxaVBYZCtGZU9lckxZdjFkWGR2ZE44R3ZuQ21QR3dVUW1CTEZhMTlw?=
+ =?utf-8?B?Vm1QcUlGQ2kycXVZR3JwdGxyMlUyenpnWTZhNUI3QnF3RXFmQ2R0bUVIT0NK?=
+ =?utf-8?B?bGE2M1ZYRG9TMzZZTzIvWDBJMHhpZ2s5ZVBzZ1pORzQwK1A1a2hvRTRPdXNM?=
+ =?utf-8?B?TDYrcDRIMUM4QXJuQWNGVnlEcEwybW9uMlhXdkZERTlJK3RMVDVVL3kyU2tt?=
+ =?utf-8?B?VUxkUFl3M3BYYkpnSmZFci9JQklhdUtrM3dmUEZNcmFsRURmcVloellGTEZH?=
+ =?utf-8?B?MkgrM2VjODlyZ0FMaVNKNDQ3ajNnQTVOYXlONGtqNE5xbWUyVTJsVldnWUFS?=
+ =?utf-8?B?WkZUZFpvQ3FjZXoxTFNYcW8ycVlnWjVoaHZXYjNreklHQkNsQkxTVzAyc3Qx?=
+ =?utf-8?B?Mi9lSTgxSE1ScGx1V1htaEVlblFQSVlvcGF6YUdzRUZabU9DY0ppcEIrQjUv?=
+ =?utf-8?B?QkI4TzRqQ3lwc0xjbzRQSFlTRWREeTVNQnNCMnJIWDVVOHVqSTlLRkR6dEU2?=
+ =?utf-8?B?SzhIUjdFVzRuOGN4K3FtQStJa1FPOG4wTGZuemRjZ1RpWXZkc1ZmRlFWYW5I?=
+ =?utf-8?B?K2ZKMFN1ZHYrNzgwOVIweEJLM1lFQjdFcVhhSWkrVWtCbGpWMEY1N3VRU0ZU?=
+ =?utf-8?B?YVZuUThaMVFuaGcwVzBSalU4d2lpenlTc21PSWZKbC91bmRmUzgwK2ZNS1E5?=
+ =?utf-8?B?ak43Y0ZsNXpGeklBRDZodGhpS3JycSsxOGxucE1nVGFoODBFYVhTL3R6Z2Vr?=
+ =?utf-8?B?aXR0MFZVbWh3RGpwTkJtWFVMMFV0ai9lTTU3SGtMNkdiT09WRlFmb0x3Vnpw?=
+ =?utf-8?B?Z1RlWEMvY2tyd3djazFYRzd4WDdUZXpzb2drK2duNGhkVWx3ek5xTTB3b1lK?=
+ =?utf-8?B?N3I3OHNCaWVGRW9hOFFnWG8wRDY3YWViQlAxTjB1bmkvK050V1FpdUF1VEhP?=
+ =?utf-8?B?bkFFRW5LUEFTVUNTTGVpenR0M0ZZd1UzMi9KcFhuR09Oc0hVWENPTkVxc0x2?=
+ =?utf-8?B?WXpUNmRxVWluZVBwb2grNXk5SmVtNFVja0NlRHp2ekc1NXlhM0FPNUFZWW1n?=
+ =?utf-8?B?VXByTnp1ZlpReE1yZHZ6UGxqdUpEK2VrRC90MlBqcWJiQWhKUWZhUnB2ZXh5?=
+ =?utf-8?B?dkdRemsyQk91eTZ4bHZIVXVlTXdxaUJmK2xMSm9iRHYzRFYzdUJ3UjFvZG9M?=
+ =?utf-8?B?WDl3ekl0aitHSWVWY3hGMEhLeGZZTE85M3YzZzRIM09YWGFPYjJzZkpIM0dR?=
+ =?utf-8?B?MTQ2TWQ0VEhQR0VleWpSdFpwZTBiVEpJZ2kvZlRqU2J1NE8zWVVhOUw1d2JR?=
+ =?utf-8?B?Q3VTWEJVNVZ1UWMxS0pNZ3RhZUNXUmlabEprV25lQXFXWktxUFNvRnBkU1hi?=
+ =?utf-8?B?YXFUQ3RPLzBXMzlzVS9OSS9SOUxvaDdRTEtXa0ZwL1BMcjdNdEdnRm81bVlO?=
+ =?utf-8?Q?4MmbNarVk4GJMRenXilbzZM4P0bxj3hGbSYrT1sxFWmh?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1334f6de-f577-4c23-ee6f-08db3b468b0f
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7097.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 11:10:37.5794
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UEOrp7GzgpeLk1Ehmtz20CHIc+r5d/BHivElxmB57ERd/9AKHouA4E3MOTMhexCTbO7TYGJxiYBkMcSG21dXfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7069
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 1:11=E2=80=AFAM Joy Chakraborty <joychakr@google.co=
-m> wrote:
->
-> On Tue, Apr 11, 2023 at 9:52=E2=80=AFPM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> >
-> > On Tue, Apr 11, 2023 at 08:48:52PM +0530, Joy Chakraborty wrote:
-> > > On Tue, Apr 11, 2023 at 8:47=E2=80=AFPM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Tue, Apr 11, 2023 at 06:09:16PM +0300, Serge Semin wrote:
-> > > > > On Tue, Apr 11, 2023 at 05:46:34PM +0300, Andy Shevchenko wrote:
-> > > > > > On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote:
-> > > > > > > On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wro=
-te:
-> > > > > > > > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty w=
-rote:
-> >
-> > ...
-> >
-> > > > > > > > > -     if (n_bytes =3D=3D 1)
-> > > > > > > > > +     switch (n_bytes) {
-> > > > > > > > > +     case 1:
-> > > > > > > > >               return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > > > > > > > -     else if (n_bytes =3D=3D 2)
-> > > > > > > > > +     case 2:
-> > > > > > > > >               return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > > > > > > > -
-> > > > > > > > > -     return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > > > > >
-> > > > > > > > > +     case 3:
-> > > > > > > >
-> > > > > > > > I'm not sure about this.
-> > > > > > >
-> > > > > > > This actually makes sense seeing the function argument can ha=
-ve values
-> > > > > > > 1, 2, _3_ and 4:
-> > > > > > > dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BITS_P=
-ER_BYTE);
-> > > > > > > transfer->bits_per_word =3D __F__(master->bits_per_word_mask =
-=3D SPI_BPW_RANGE_MASK(4, 32));
-> > > > > > > ...
-> > > > > > > dw_spi_dma_convert_width(dws->n_bytes)
-> > > > > > >
-> > > > > > > The spi_transfer.bits_per_word field value depends on the
-> > > > > > > SPI peripheral device communication protocol requirements whi=
-ch may
-> > > > > > > imply the 3-bytes word xfers (even though it's indeed unlucki=
-ly).
-> > > > > > >
-> > > > > > > This semantic will also match to what we currently have in th=
-e
-> > > > > > > IRQ-based SPI-transfer implementation (see dw_writer() and
-> > > > > > > dw_reader()).
-> > > > >
-> > > > > > Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for tha=
-t. Why we don't
-> > > > > > use it?
-> > > > >
-> > > > > We could but there are two more-or-less firm reasons not to do
-> > > > > that:
-> > > > > 1. There aren't that much DMA-engines with the
-> > > > > DMA_SLAVE_BUSWIDTH_3_BYTES capability meanwhile the DW APB SSI ju=
-st
-> > > > > ignores the upper bits if CTRLR0.DFS is less than the value actua=
-l
-> > > > > written to the DR registers. Note DW DMAC engine isn't one of suc=
-h
-> > > > > controllers. So if we get to meet a peripheral SPI-device with 3-=
-bytes
-> > > > > word protocol transfers and the DMA-engine doesn't support it the
-> > > > > DMA-based transfers may fail (depending on the DMA-engine driver
-> > > > > implementation).
-> > > > > 2. The DW APB SSIs (3.x and 4.x) can be synthesized with the APB =
-Data
-> > > > > Bus Width of 8, 16 and 32. So no matter whether DMA-engine suppor=
-ts
-> > > > > the 3-bytes bus width the system bus most likely will either conv=
-ert
-> > > > > the transfers to the proper sized bus-transactions or fail.
-> > > > >
-> > > > > So taking all of the above into account not using the
-> > > > > DMA_SLAVE_BUSWIDTH_3_BYTES macro here seems better than using it =
-with
-> > > > > a risk to fail some of the platform setups especially seeing the =
-DW
-> > > > > APB SSI ignores the upper bits anyway.
-> > > >
-> > > > But this is not about SPI host hardware, it's about the consumers.
-> > > > They should know about supported sizes. Either we add the correspon=
-ding support
-> > > > to the driver or remove 3 case as I suggested. I don't think it's c=
-orrect to
-> > > > use 3 as 4.
-> > >
-> > > Another thing to add is that as per spi.h even if bits per word is a
-> > > not a power of 2 the buffer should be formatted in memory as a power
-> > > of 2
-> > > ...
-> > >  * @bits_per_word: Data transfers involve one or more words; word siz=
-es
-> > >  * like eight or 12 bits are common.  In-memory wordsizes are
-> > >  * powers of two bytes (e.g. 20 bit samples use 32 bits).
-> > >  * This may be changed by the device's driver, or left at the
-> > >  * default (0) indicating protocol words are eight bit bytes.
-> > >  * The spi_transfer.bits_per_word can override this for each transfer=
-.
-> > > ...
-> > > Hence for n_bytes =3D 3 or 24 bits/per word we expect the client SW t=
-o
-> > > format it to 4 byte buffers hence the transaction generated should
-> > > also be of size 4 from the DMA.
-> >
-> > You didn't get my point. The consumer wants to know if the 3 bytes is s=
-upported
-> > or not, that's should be part of the DMA related thing, right?
-> >
-> > It's incorrectly to say 4 for 3 if the backend DMA controller behaves d=
-ifferently
-> > on this. How do you know that (any) DMA controller integrated with this=
- hardware
-> > has no side effects for this change.
-> >
-> > So, I don't think the case 3 is correct in this patch.
->
-> I see, I am of the opposite opinion in this case.
->
-> Other then Serge(y)'s points,
-> I was trying to say that irrespective of what the underlying DMA
-> controller supports we should use DMA_SLAVE_BUSWIDTH_4_BYTES when
-> n_bytes =3D 3 from SPI perspective as we get n_bytes from bits per word
-> passed by the client / spi framework " dws->n_bytes =3D
-> DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE) ".
-> Based on the spi header what I perceive is that for bits/word between
-> 17 and 32 the data has to be stored in 32bit words in memory as per
-> the example in the header " (e.g. 20 bit samples use 32 bits) ".
->
-> Hence, taking an example to transfer 6 bytes (say 0xAA 0xBB 0xCC 0xDD
-> 0xEE 0xFF) with bits per word as 24 (n_bytes =3D 3) i.e. a total of 2
-> words I expect the buffer to look as follows which is coming from the
-> client:
-> _ _____address|__________0________4________8________C
->     SD:00000000|>00CCBBAA 00FFEEDD 00000000 00000000
-> Hence to transfer this successfully the DMA controller would need to
-> copy 4 bytes per word .
->
-> Please correct me if my understanding of this is incorrect.
+On 10.04.23 12:44, Ye, Xiang wrote:
 
-On the other hand I do see that in the fifo driver dw_writer() /
-dw_reader() increments the pointer with 3 incase n_bytes =3D 3 even
-though it copies 4 bytes.
-...
-   if (dws->n_bytes =3D=3D 1)
-      txw =3D *(u8 *)(dws->tx);
-   else if (dws->n_bytes =3D=3D 2)
-      txw =3D *(u16 *)(dws->tx);
-   else
-      txw =3D *(u32 *)(dws->tx);
+Hi,
 
-dws->tx +=3D dws->n_bytes;
-...
-This will not behave as using DMA_SLAVE_BUSWIDTH_4_BYTES in the DMA so
-maybe I am not correct in interpretting the spi.h header file.
-Can CPU's in general access u32 from unaligned odd addresses ?
+>> do we really want each driver to have its own attribute for that?
+>> It seems to me that that should be unified.
+> Three ABI entries are added in this patch: ljca_version, ljca_trace_level,
+> and ljca_enable_dfu. The first two items are specified for LJCA device and
+> I think they can be kept in sysfs-bus-usb-devices-ljca.
+> 
+> But for ljca_enable_dfu, I didn't see a unified DFU entry in sys-bus-usb.
+> I am not sure whether other USB devices have similar DFU mode or not.
+> 
+> Any suggestions?
 
-From Serge(y)'s comment regarding this, the APB interface writing data
-to the FIFO register definitely cannot handle
-DMA_SLAVE_BUSWIDTH_3_BYTES since it handles a power of 2 only.
-Hence we can possibly remove "case 3:" completely and also mask out
-DMA_SLAVE_BUSWIDTH_3_BYTES from dma_addr_width capabilities so that
-can_dma api does not allow n_bytes =3D 3 to use DMA.
+What exactly does this attribute do?
+Is it in addition to the normal DFU_DETACH + reset sequence, is it
+needed for DFU_DETACH to work, does it enable the
+DFU class interface descriptor?
 
-Would that be correct ?
+A point of DFU is rather that the capability should be announced
+via descriptors. The answer would depend on what exactly this
+attribute does.
 
->
-> >
-> > > > > > > > > +     case 4:
-> > > > > > > > > +             return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > > > > > > > +     default:
-> > > > > > > > > +             return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > > > > > > +     }
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-> >
-> >
-> Thanks
-> Joy
+	Regards
+		Oliver
