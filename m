@@ -2,225 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A496DE50E
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Apr 2023 21:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0826C6DEAC1
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 06:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjDKTlj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Apr 2023 15:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S229521AbjDLEwF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Apr 2023 00:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDKTlj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Apr 2023 15:41:39 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3C826BE
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 12:41:37 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id d204so1036551ybh.6
-        for <linux-spi@vger.kernel.org>; Tue, 11 Apr 2023 12:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681242097;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I0/nKGfHRXrrmiQ4m9sfooa+yv8qI/GDqXMogqLNUhU=;
-        b=uasZ0TzAUF47dFaCNSEUylbZBL0w4E9FiQRLljItM/yetIkaHKkDVwzOJ0hT++4aMa
-         4mxFHfNtwpFJ4lZ0NPndPHrUkEDITdIxkX+LK61VoLUUyg+aimSZy1ngjVOVo/PFLkAu
-         jHEjp+tZDIbo+Oq6m2a/Pfv2c8GLTbaDvZXnPPfsN4/5t1pYH2FlcBjU7Upo9RiMcTZI
-         ncJ6T8eYNl6Gt/W8+LKA+8X7SxmYOLK9odrFlln6a/44oDgVxqvnvkMqE3pHNVmKAM1s
-         fESeKjSF3uAse8JwEaiNdqg7GpeY3gklIzY/f+KrFdP7A1fDAMtncV0w1P8Lioh4a6ok
-         tDlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681242097;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I0/nKGfHRXrrmiQ4m9sfooa+yv8qI/GDqXMogqLNUhU=;
-        b=b0JT3mPHCGrw3p5j4zg5/0GblyU/B++tRrhyAuKx87TI/USKI0uCIYN1qmcZhuyf2E
-         nli+fK9MRAFA/S8yrSPJdbCRnnGgb6bS3BGoiX3pJLtvQ0JqcNEJe3sZdvcLTGze4DW6
-         VxMwm+Jla/m7swqb1EZiXOjbOu8/nQWJbXUmAEpsyntAbyWdfMMMq/k8x4JXqVCFjKXN
-         t7hZ9zMfN6texZ8HfYXPipPADGl3NQW6tyCEdDn23U8laS6uID8IJsvT+E2IJpmVOxuJ
-         pFNVfiFqKSKEiFNByxmNm5h0KDtydiWbqAKq+dhreBTtoGFytTYy48LWtn75ivAOTnb6
-         AKXw==
-X-Gm-Message-State: AAQBX9cKVT/77YhcwmApSPqBi9DJqdq9QBDEaPBKrhd4LwPLzDGlBx7g
-        4+sfHis1KKeC8wANy//2lusN2ZDB/AEZyO53FXdJww==
-X-Google-Smtp-Source: AKy350ZCxLrwLdbIRMaiN+D+H/Z4jUhovrtlxvEbFVwv6ZHSQ/CF2XFz7SZG2BHt7UN8YukL82Q95FFwLFmziVlPU14=
-X-Received: by 2002:a25:3354:0:b0:b8e:f726:d198 with SMTP id
- z81-20020a253354000000b00b8ef726d198mr3848780ybz.8.1681242096534; Tue, 11 Apr
- 2023 12:41:36 -0700 (PDT)
+        with ESMTP id S229485AbjDLEwE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 00:52:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17DA3C31;
+        Tue, 11 Apr 2023 21:52:01 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxMMzwODZkjvQaAA--.41767S3;
+        Wed, 12 Apr 2023 12:52:00 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxjb7qODZk+RogAA--.60030S2;
+        Wed, 12 Apr 2023 12:51:58 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v7 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Wed, 12 Apr 2023 12:51:50 +0800
+Message-Id: <20230412045152.4694-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com> <20230411141115.vrfd6sud66u6xeog@mobilestation>
- <ZDVyyoN71cB7dvWW@smile.fi.intel.com> <20230411150916.24vagjzbhshaujse@mobilestation>
- <ZDV6FKd/TupHEPMf@smile.fi.intel.com> <CAOSNQF3JQKVgvp5M17SzeyF5LB85_ZvkRpp3PZkCYcGcqm8V2g@mail.gmail.com>
- <ZDWJJaYauhOl0Iue@smile.fi.intel.com>
-In-Reply-To: <ZDWJJaYauhOl0Iue@smile.fi.intel.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Wed, 12 Apr 2023 01:11:23 +0530
-Message-ID: <CAOSNQF2dxwbCa7_MrN-qd5mrK9jfpaakeExuMBwctXbsQGmiJQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxjb7qODZk+RogAA--.60030S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoW5urWUpF
+        W5Cas8Kr4DtF4xArs3Jay7uFyrZ3yrXrZrXay3twsruryDZ34UZr1vqF15ZrZrAFsIvFyx
+        XFyvgrs5Ga4UZwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1VWlDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 9:52=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Tue, Apr 11, 2023 at 08:48:52PM +0530, Joy Chakraborty wrote:
-> > On Tue, Apr 11, 2023 at 8:47=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@intel.com> wrote:
-> > > On Tue, Apr 11, 2023 at 06:09:16PM +0300, Serge Semin wrote:
-> > > > On Tue, Apr 11, 2023 at 05:46:34PM +0300, Andy Shevchenko wrote:
-> > > > > On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote:
-> > > > > > On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote=
-:
-> > > > > > > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wro=
-te:
->
-> ...
->
-> > > > > > > > -     if (n_bytes =3D=3D 1)
-> > > > > > > > +     switch (n_bytes) {
-> > > > > > > > +     case 1:
-> > > > > > > >               return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > > > > > > -     else if (n_bytes =3D=3D 2)
-> > > > > > > > +     case 2:
-> > > > > > > >               return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > > > > > > -
-> > > > > > > > -     return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > > > >
-> > > > > > > > +     case 3:
-> > > > > > >
-> > > > > > > I'm not sure about this.
-> > > > > >
-> > > > > > This actually makes sense seeing the function argument can have=
- values
-> > > > > > 1, 2, _3_ and 4:
-> > > > > > dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BITS_PER=
-_BYTE);
-> > > > > > transfer->bits_per_word =3D __F__(master->bits_per_word_mask =
-=3D SPI_BPW_RANGE_MASK(4, 32));
-> > > > > > ...
-> > > > > > dw_spi_dma_convert_width(dws->n_bytes)
-> > > > > >
-> > > > > > The spi_transfer.bits_per_word field value depends on the
-> > > > > > SPI peripheral device communication protocol requirements which=
- may
-> > > > > > imply the 3-bytes word xfers (even though it's indeed unluckily=
-).
-> > > > > >
-> > > > > > This semantic will also match to what we currently have in the
-> > > > > > IRQ-based SPI-transfer implementation (see dw_writer() and
-> > > > > > dw_reader()).
-> > > >
-> > > > > Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for that.=
- Why we don't
-> > > > > use it?
-> > > >
-> > > > We could but there are two more-or-less firm reasons not to do
-> > > > that:
-> > > > 1. There aren't that much DMA-engines with the
-> > > > DMA_SLAVE_BUSWIDTH_3_BYTES capability meanwhile the DW APB SSI just
-> > > > ignores the upper bits if CTRLR0.DFS is less than the value actual
-> > > > written to the DR registers. Note DW DMAC engine isn't one of such
-> > > > controllers. So if we get to meet a peripheral SPI-device with 3-by=
-tes
-> > > > word protocol transfers and the DMA-engine doesn't support it the
-> > > > DMA-based transfers may fail (depending on the DMA-engine driver
-> > > > implementation).
-> > > > 2. The DW APB SSIs (3.x and 4.x) can be synthesized with the APB Da=
-ta
-> > > > Bus Width of 8, 16 and 32. So no matter whether DMA-engine supports
-> > > > the 3-bytes bus width the system bus most likely will either conver=
-t
-> > > > the transfers to the proper sized bus-transactions or fail.
-> > > >
-> > > > So taking all of the above into account not using the
-> > > > DMA_SLAVE_BUSWIDTH_3_BYTES macro here seems better than using it wi=
-th
-> > > > a risk to fail some of the platform setups especially seeing the DW
-> > > > APB SSI ignores the upper bits anyway.
-> > >
-> > > But this is not about SPI host hardware, it's about the consumers.
-> > > They should know about supported sizes. Either we add the correspondi=
-ng support
-> > > to the driver or remove 3 case as I suggested. I don't think it's cor=
-rect to
-> > > use 3 as 4.
-> >
-> > Another thing to add is that as per spi.h even if bits per word is a
-> > not a power of 2 the buffer should be formatted in memory as a power
-> > of 2
-> > ...
-> >  * @bits_per_word: Data transfers involve one or more words; word sizes
-> >  * like eight or 12 bits are common.  In-memory wordsizes are
-> >  * powers of two bytes (e.g. 20 bit samples use 32 bits).
-> >  * This may be changed by the device's driver, or left at the
-> >  * default (0) indicating protocol words are eight bit bytes.
-> >  * The spi_transfer.bits_per_word can override this for each transfer.
-> > ...
-> > Hence for n_bytes =3D 3 or 24 bits/per word we expect the client SW to
-> > format it to 4 byte buffers hence the transaction generated should
-> > also be of size 4 from the DMA.
->
-> You didn't get my point. The consumer wants to know if the 3 bytes is sup=
-ported
-> or not, that's should be part of the DMA related thing, right?
->
-> It's incorrectly to say 4 for 3 if the backend DMA controller behaves dif=
-ferently
-> on this. How do you know that (any) DMA controller integrated with this h=
-ardware
-> has no side effects for this change.
->
-> So, I don't think the case 3 is correct in this patch.
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-I see, I am of the opposite opinion in this case.
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
 
-Other then Serge(y)'s points,
-I was trying to say that irrespective of what the underlying DMA
-controller supports we should use DMA_SLAVE_BUSWIDTH_4_BYTES when
-n_bytes =3D 3 from SPI perspective as we get n_bytes from bits per word
-passed by the client / spi framework " dws->n_bytes =3D
-DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE) ".
-Based on the spi header what I perceive is that for bits/word between
-17 and 32 the data has to be stored in 32bit words in memory as per
-the example in the header " (e.g. 20 bit samples use 32 bits) ".
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-Hence, taking an example to transfer 6 bytes (say 0xAA 0xBB 0xCC 0xDD
-0xEE 0xFF) with bits per word as 24 (n_bytes =3D 3) i.e. a total of 2
-words I expect the buffer to look as follows which is coming from the
-client:
-_ _____address|__________0________4________8________C
-    SD:00000000|>00CCBBAA 00FFEEDD 00000000 00000000
-Hence to transfer this successfully the DMA controller would need to
-copy 4 bytes per word .
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  41 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  31 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 292 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  72 +++++
+ drivers/spi/spi-loongson-plat.c               |  47 +++
+ drivers/spi/spi-loongson.h                    |  41 +++
+ 8 files changed, 537 insertions(+)
 
-Please correct me if my understanding of this is incorrect.
+-- 
+2.20.1
 
->
-> > > > > > > > +     case 4:
-> > > > > > > > +             return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > > > > > > +     default:
-> > > > > > > > +             return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > > > > > +     }
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-Thanks
-Joy
