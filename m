@@ -2,118 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2790A6DFCB4
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 19:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E9C6DFF89
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 22:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjDLR2G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Apr 2023 13:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S229901AbjDLUUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Apr 2023 16:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjDLR2C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 13:28:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8DC30EE;
-        Wed, 12 Apr 2023 10:28:00 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CGj4x7029053;
-        Wed, 12 Apr 2023 17:27:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wGPH4wkOFbxr/rHutk4WUEXFrqfABAb1H+DTcel3+KM=;
- b=dKqxx6ahDP+Bjrg3nvC6lLcepPM4MeawEpr8y9UB9C2eishk1YFSAoY/W5nDapSN1OKH
- uQpMxRONkmrjUEG9MtdFdbS6FxSDr2lqXhtqDPJ4dDeoVxMGxTV8sU2hX2lRwAM7NUAi
- n1k/AZWw61MvtEdTnxs1Efp0sh8iKlAhIsWiGYdmP14P5jBvaoQLatWuWONfqahNW4NI
- E74T+22WdfymNR4F92o/UTlQrD55fiuPbc6wC3I6uNO+h6HVDO+ZNdd0WNfuFcPmPFb9
- zOr0n02X+Kgq4dgdSFMfqAGseohAGNwACo53HInZchttUOYinwzhWFr96THPa4Q8OJfg hQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqenseer-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 17:27:57 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CHRvp6014816
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 17:27:57 GMT
-Received: from [10.216.35.198] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 10:27:52 -0700
-Message-ID: <0eb8dbab-c76b-771f-5a99-3e548ec55731@quicinc.com>
-Date:   Wed, 12 Apr 2023 22:57:48 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
-Content-Language: en-CA
+        with ESMTP id S229598AbjDLUUW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 16:20:22 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4DC55BD
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:21 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id kc13-20020a17090333cd00b001a6751016d4so1115872plb.23
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681330821;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ujCaDLBItu3AornBPOFx08s7+tbJaJQvcSS7Yz2BLk0=;
+        b=h2Ev0qfgWsZaYCrVdXb7HjYx6ZyzltjaGlGafduz487+2WybmGS2YgCc8B8YedEnt5
+         7BAe/Uj2X9sVi7FVIdYR66Ch0kys6yacFY7HuOgvsKrW5BpADv0tMVJtAbimnKQwo55X
+         0rNAe7zl1/lD8X3u2a/v8LASLkZeMSzDK6fpPlmScAbkJBio+WTjHQb08ZL2gqk4kkGg
+         asbyVAHfA3cV+3WPpmgsA1gI27CSWOc/FvavlgIxEyhO1AlFeYNfn5EQSRlzOaAHqkOn
+         FLJH5nXKpnmn0yveOyv3mRP9ShrSbdTd4y3hH4PzZ5pSIl/AwcEvtL/OnrblpJByVPRW
+         W7Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681330821;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ujCaDLBItu3AornBPOFx08s7+tbJaJQvcSS7Yz2BLk0=;
+        b=BA7ZXIT+kmWRNf8UEVjc9UMqt41EwemSqbM5R9HUatd64Ma5HxTrwP8bLNPh+jNvSP
+         B4sFH37pt3bEui4E5OinH6tIY6KvI3GgSHcvu15rc27z737Bu6cYYyTnMrGrX12jdfDh
+         wIJsvLnJT1AHJhbvQ068FmvAnNT0mB1u0qnzNsQgiDWy6Tt1K8Jg4KQiyL5C6aGzh8HF
+         t+69fTTHhVIG6A4PbG+JTje/pqPbXt4gHDqZN6iKL5h83ljR/Fnrn0olx2AyW2STfR7z
+         FG1VrHgYgbLw8ekfkRDXyW0tPi954SL+K5M6gqF+UkZh5MM1PVkvzT6hayYsKkc2pZgG
+         uLzA==
+X-Gm-Message-State: AAQBX9eoneCClR+cv2ioqFpj10U+pskVcnSBtj5NfAuI2xyU1UUPnaqT
+        wCQzJ3yNiOU/OH8uSnGgyFjJxUDrp0Y/nA==
+X-Google-Smtp-Source: AKy350Ym3aS97Tdn26Xki7p+EyaZA4V7sdiCrk9Vj2Gu98VLd7hbWoIjqChCTvUuFe34A/vWCiwi2f5Yqzslig==
+X-Received: from rohitner.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:413])
+ (user=rohitner job=sendgmr) by 2002:a17:90a:de13:b0:23d:4ab8:b1a3 with SMTP
+ id m19-20020a17090ade1300b0023d4ab8b1a3mr4937214pjv.1.1681330820969; Wed, 12
+ Apr 2023 13:20:20 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 13:20:08 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230412202009.3750955-1-rohitner@google.com>
+Subject: [PATCH v2 0/1] SPI loopback testing framework updates
+From:   Rohit Ner <rohitner@google.com>
 To:     Mark Brown <broonie@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <quic_msavaliy@quicinc.com>, <dianders@chromium.org>,
-        <mka@chromium.org>, <swboyd@chromium.org>,
-        <quic_vtanuku@quicinc.com>
-References: <1680631400-28865-1-git-send-email-quic_vnivarth@quicinc.com>
- <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
- <d784dab7-a1a6-4db7-aa13-e39e9904f342@sirena.org.uk>
- <0b182a36-0254-6720-4a35-f9e617c12797@quicinc.com>
- <92690348-21c3-45de-bdb1-d0977b859702@sirena.org.uk>
- <92f61ba4-a847-1ce3-f0c8-e9c0f0fafa0b@quicinc.com>
- <af2db163-9ab2-4efc-af55-933d2cc4c747@sirena.org.uk>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <af2db163-9ab2-4efc-af55-933d2cc4c747@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z5EfOODdVR1csUCQPV7k1vnp2OcQaS6Q
-X-Proofpoint-ORIG-GUID: Z5EfOODdVR1csUCQPV7k1vnp2OcQaS6Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_08,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120150
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, joychakr@google.com,
+        Rohit Ner <rohitner@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+---
+V1 Changes : Add module param for iteration length
+---
+V1->V2 Changes : Fix patch format
+---
 
-On 4/12/2023 9:42 PM, Mark Brown wrote:
-> On Wed, Apr 12, 2023 at 08:59:06PM +0530, Vijaya Krishna Nivarthi wrote:
->> On 4/6/2023 8:58 PM, Mark Brown wrote:
->>>>>> +	if (ctrl->xfer.dir == QSPI_READ)
->>>>>> +		byte_ptr = (uint8_t *)xfer->rx_buf;
->>>>>> +	else
->>>>>> +		byte_ptr = (uint8_t *)xfer->tx_buf;
->>>>> If we need to cast to or from void * there's some sort of problem.
->>>> the tx_buf is a const void*
->>>> in v2 I will cast for tx_buf only?
->>> Or just keep byte_ptr as const - we're not modifying it are we?
->> We are modifying it, hence did cast for tx_buf only
-> If it's being modified won't that upset the callers that thought it was
-> const and didn't expect the data to change?
 
-I believe callers wouldn't be upset.
+Rohit Ner (1):
+  spi: spi-loopback-test: Add module param for iteration length
 
-The byte_ptr is being modified (incremented)
+ drivers/spi/spi-loopback-test.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-It is initialised to tx_buf (a const*) and keeps getting incremented to 
-parse data.
-
-No data change.
-
-That should be ok?
+-- 
+2.40.0.577.gac1e443424-goog
 
