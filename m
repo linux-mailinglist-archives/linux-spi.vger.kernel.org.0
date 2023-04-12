@@ -2,54 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E9C6DFF89
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 22:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2056DFF8B
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Apr 2023 22:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjDLUUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Apr 2023 16:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S229762AbjDLUUd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Apr 2023 16:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDLUUW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 16:20:22 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4DC55BD
-        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:21 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id kc13-20020a17090333cd00b001a6751016d4so1115872plb.23
-        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:21 -0700 (PDT)
+        with ESMTP id S230029AbjDLUUc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 16:20:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000BA59F2
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:30 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id u188-20020a2560c5000000b00b8f15f2111dso8035120ybb.4
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 13:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681330821;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ujCaDLBItu3AornBPOFx08s7+tbJaJQvcSS7Yz2BLk0=;
-        b=h2Ev0qfgWsZaYCrVdXb7HjYx6ZyzltjaGlGafduz487+2WybmGS2YgCc8B8YedEnt5
-         7BAe/Uj2X9sVi7FVIdYR66Ch0kys6yacFY7HuOgvsKrW5BpADv0tMVJtAbimnKQwo55X
-         0rNAe7zl1/lD8X3u2a/v8LASLkZeMSzDK6fpPlmScAbkJBio+WTjHQb08ZL2gqk4kkGg
-         asbyVAHfA3cV+3WPpmgsA1gI27CSWOc/FvavlgIxEyhO1AlFeYNfn5EQSRlzOaAHqkOn
-         FLJH5nXKpnmn0yveOyv3mRP9ShrSbdTd4y3hH4PzZ5pSIl/AwcEvtL/OnrblpJByVPRW
-         W7Dw==
+        d=google.com; s=20221208; t=1681330830;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9ZxJh3TAe5K3gzUNy1jfSfsgplGS4KJVghK4pqaL44=;
+        b=RqkXxES0OfNwPYeIL/5G35UUzVo7uQxrnlPEEdikcqpHvn47El4pqOr8wYq89tVYpi
+         HLr5cEJ4JWQ/jdmfCM1YLMqTvSOQEdrI0K4uTEPItrANTfRQE6q78sTohPcxUfDxnoId
+         GKILHRa3UsQE7QIiLjy4676jyAbppyl2apcFdIrdT81Z/GSUrMUojJAk/Mt1Efkqv12C
+         LPSsNJi7gAahp0cgj6peliWo6ySRByBOpX6bsVdkpPfFNoztlWanLgJgl6nQu7EcgYix
+         chFoSfKibQihVpxlLXIXEwFdvvwXm8FGIbFg35F607LmD80apOHuKs82vYA1iA7OSUxc
+         VO4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681330821;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ujCaDLBItu3AornBPOFx08s7+tbJaJQvcSS7Yz2BLk0=;
-        b=BA7ZXIT+kmWRNf8UEVjc9UMqt41EwemSqbM5R9HUatd64Ma5HxTrwP8bLNPh+jNvSP
-         B4sFH37pt3bEui4E5OinH6tIY6KvI3GgSHcvu15rc27z737Bu6cYYyTnMrGrX12jdfDh
-         wIJsvLnJT1AHJhbvQ068FmvAnNT0mB1u0qnzNsQgiDWy6Tt1K8Jg4KQiyL5C6aGzh8HF
-         t+69fTTHhVIG6A4PbG+JTje/pqPbXt4gHDqZN6iKL5h83ljR/Fnrn0olx2AyW2STfR7z
-         FG1VrHgYgbLw8ekfkRDXyW0tPi954SL+K5M6gqF+UkZh5MM1PVkvzT6hayYsKkc2pZgG
-         uLzA==
-X-Gm-Message-State: AAQBX9eoneCClR+cv2ioqFpj10U+pskVcnSBtj5NfAuI2xyU1UUPnaqT
-        wCQzJ3yNiOU/OH8uSnGgyFjJxUDrp0Y/nA==
-X-Google-Smtp-Source: AKy350Ym3aS97Tdn26Xki7p+EyaZA4V7sdiCrk9Vj2Gu98VLd7hbWoIjqChCTvUuFe34A/vWCiwi2f5Yqzslig==
+        d=1e100.net; s=20221208; t=1681330830;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9ZxJh3TAe5K3gzUNy1jfSfsgplGS4KJVghK4pqaL44=;
+        b=YcH7Dl4wByMPBzX6xJDbC2zwIN1JA2LrUoAdZPNiT8HHD7SEXCnx9Tt34FTHNKSmk0
+         epk/mzcEnRAz5AlQSto3U6VlacIDGHJedhtN8TzZbxlsv4hnxQAtxG/YikYGPECoMZrm
+         XqJM1jTKwVdnhZvg4+QFP1DHuUWnQOM83+dYYAvrMCmjrcmqrkUS9BBBbcewuSmV/qZf
+         P9vyyWEykCltvbaFL8HrkGIl6tpkFWzxkFyLA56m8rW9RtirqUMFOmGoeNfyIH8F/dNG
+         DMZIyjy255ie67NDWG2RL7BavfuEiiZJDq1jdDt1Vx/a68qGzJTMiBrSS3P6AJ3pC9Kz
+         uVFA==
+X-Gm-Message-State: AAQBX9d+r00KwKLyUeJ3q7PIm1bOemhG8gUvb/FW7C7uGp4/5vlPjkVe
+        nS4X71ObR+/hpy0W1awjFYwcb9yc4II9TQ==
+X-Google-Smtp-Source: AKy350YQOCReGiGW58DM+oddgfzjHmmemt6sUL2CI3v1hQw0K6lwaYBsWidBXZzu5MdRQSQMY/CmhofzLYKttg==
 X-Received: from rohitner.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:413])
- (user=rohitner job=sendgmr) by 2002:a17:90a:de13:b0:23d:4ab8:b1a3 with SMTP
- id m19-20020a17090ade1300b0023d4ab8b1a3mr4937214pjv.1.1681330820969; Wed, 12
- Apr 2023 13:20:20 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 13:20:08 -0700
+ (user=rohitner job=sendgmr) by 2002:a81:a74a:0:b0:54c:7a1:ef50 with SMTP id
+ e71-20020a81a74a000000b0054c07a1ef50mr9024881ywh.6.1681330830221; Wed, 12 Apr
+ 2023 13:20:30 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 13:20:09 -0700
+In-Reply-To: <20230412202009.3750955-1-rohitner@google.com>
 Mime-Version: 1.0
+References: <20230412202009.3750955-1-rohitner@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230412202009.3750955-1-rohitner@google.com>
-Subject: [PATCH v2 0/1] SPI loopback testing framework updates
+Message-ID: <20230412202009.3750955-2-rohitner@google.com>
+Subject: [PATCH v2 1/1] spi: spi-loopback-test: Add module param for iteration length
 From:   Rohit Ner <rohitner@google.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -66,19 +68,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
----
-V1 Changes : Add module param for iteration length
----
-V1->V2 Changes : Fix patch format
----
+SPI test framework is designed to run each test case for
+a list of lengths.
+Introduce a module parameter to limit the iterations
+to a single value among the list of lengths.
 
-
-Rohit Ner (1):
-  spi: spi-loopback-test: Add module param for iteration length
-
+Signed-off-by: Rohit Ner <rohitner@google.com>
+---
  drivers/spi/spi-loopback-test.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 313106eb8d40..675a73cf1579 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -53,6 +53,12 @@ module_param(no_cs, int, 0);
+ MODULE_PARM_DESC(no_cs,
+ 		 "if set Chip Select (CS) will not be used");
+ 
++/* run tests only for a specific length */
++static int run_only_iter_len = -1;
++module_param(run_only_iter_len, int, 0);
++MODULE_PARM_DESC(run_only_iter_len,
++		 "only run tests for a length of this number in iterate_len list");
++
+ /* run only a specific test */
+ static int run_only_test = -1;
+ module_param(run_only_test, int, 0);
+@@ -1033,6 +1039,8 @@ int spi_test_run_test(struct spi_device *spi, const struct spi_test *test,
+ 
+ 	for (idx_len = 0; idx_len < SPI_TEST_MAX_ITERATE &&
+ 	     (len = test->iterate_len[idx_len]) != -1; idx_len++) {
++		if ((run_only_iter_len > -1) && len != run_only_iter_len)
++			continue;
+ 		FOR_EACH_ALIGNMENT(tx_align) {
+ 			FOR_EACH_ALIGNMENT(rx_align) {
+ 				/* and run the iteration */
 -- 
 2.40.0.577.gac1e443424-goog
 
