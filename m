@@ -2,164 +2,291 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FCA6E0360
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Apr 2023 02:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5436E05CA
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Apr 2023 06:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDMAv6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Apr 2023 20:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S229564AbjDMEJd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Apr 2023 00:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDMAv5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Apr 2023 20:51:57 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04655768D;
-        Wed, 12 Apr 2023 17:51:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJjmLT4C4c/996swhLDsPKF73MuVXzYDA5TAL58djn/kGYsCLWj/aeNfVS10imqulnuyP0E7pSWZALokI/fopLPkZlmeBxiSYqHfFh9tLrhWgqF+ygTrl7oTKnPuEmb3B+LgQ//X8ZHwsSFJ4iEXoWEAJq3Ja/zX8N7Qh4gr7Swijl9d1YsAzsC0mLWEMc6SIZQPCMpWt/4yHlZfvRX5DlezlTeIbqrDQV4xGsF6HCwf0GKhFHi9mmvarqx/CbqKVdXuNsA9iUyrLRW257HUqC0w/HNA0CjgZgEUUVvkazIFk38gppUhvraZxVrIgDOki2/kBFqlnhWrI89uSyF/dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8MLusmjcGjP+39M7KJ7m84BNI+8wxd1cRnzSmqWvnhg=;
- b=Kxf4Z+wF+QKroYnybeOk+HECFCvCFMZQwAlPKWTGSybTED0jQrBt5JR1wnJmBag1D+MDfSwUE/adEm/LLKwhovLDTjBFqvbljA7xCUH4D+o59S+MUrb//00rdtoumcBDmuz6gIFpAcku6K7ZV6RShakv/1C/T7+D56g1Q4GWZPO3Kt1R0HTQFIf3O+7fyBy/4QxtFbwoSVfZjFKTRj/tbdENd64U0R/Ntpyh1iHanYqK1pgAOVtkJa8miUTdGaV/rU+/pQTL8E8SNwIizilMITBqaEawrkAVku3WoWn7vKr21QS7uJQ/IWrk169e6d3pvmgZhnpKzx6y3qAOz5M5Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MLusmjcGjP+39M7KJ7m84BNI+8wxd1cRnzSmqWvnhg=;
- b=f1cVRKGcDuG/RCuZ1UA8+sBmH2L6q9sBldc2eAsvhvN8y+fvoBBm6K8pC0/O0AI1Qu61JE2/52kHbpfZzcrDrodvikWz2NBt7kcxlpGfzkxvNnITiGedDoRrNpt/rr7UTmiimWD1nVEuozojjEuMfgUJHUOevBnZatC31wTY8gI=
-Received: from BN0PR04CA0142.namprd04.prod.outlook.com (2603:10b6:408:ed::27)
- by DM4PR12MB6661.namprd12.prod.outlook.com (2603:10b6:8:bb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Thu, 13 Apr
- 2023 00:51:51 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ed:cafe::33) by BN0PR04CA0142.outlook.office365.com
- (2603:10b6:408:ed::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
- Transport; Thu, 13 Apr 2023 00:51:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.31 via Frontend Transport; Thu, 13 Apr 2023 00:51:50 +0000
-Received: from platform-dev1.pensando.io (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 12 Apr 2023 19:51:47 -0500
-From:   Brad Larson <blarson@amd.com>
-To:     <robh@kernel.org>
-CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
-        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
-        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
-        <brijeshkumar.singh@amd.com>, <broonie@kernel.org>,
-        <catalin.marinas@arm.com>, <davidgow@google.com>,
-        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
-        <gerg@linux-m68k.org>, <gsomlo@gmail.com>, <krzk@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
-        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
-        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
-        <rdunlap@infradead.org>, <samuel@sholland.org>,
-        <skhan@linuxfoundation.org>, <suravee.suthikulpanit@amd.com>,
-        <thomas.lendacky@amd.com>, <tonyhuang.sunplus@gmail.com>,
-        <ulf.hansson@linaro.org>, <vaishnav.a@ti.com>, <will@kernel.org>,
-        <yamada.masahiro@socionext.com>
-Subject: Re: [PATCH v13 08/15] arm64: dts: Add AMD Pensando Elba SoC support
-Date:   Wed, 12 Apr 2023 17:51:41 -0700
-Message-ID: <20230413005141.24632-1-blarson@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230411135518.GA2952600-robh@kernel.org>
-References: <20230411135518.GA2952600-robh@kernel.org>
+        with ESMTP id S229736AbjDMEIs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Apr 2023 00:08:48 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38B57687
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 21:07:49 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id q5so16878459ybk.7
+        for <linux-spi@vger.kernel.org>; Wed, 12 Apr 2023 21:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681358869; x=1683950869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WOBwWrLFn3ZdjGR7GJPORLer17mWOJTBmbGgr0b3ytE=;
+        b=K/PGhsFN9Ipz0NUKAqNFtG2UnNzrPkBVnyz2f4is6eGSYHhTBFfqqC9/wK/oGyWESM
+         4Ier181lBI6rbUrSPlb1YliDEAWw4vHFmfB5UQrskATxgfyzh6/vBCjojWtnalOPshRK
+         BB/lOxEWZfkYTExLo2c+nztplRXs0j9fNCmVsrw7SjZMWuJhVkQVXJUs4wyzfWniAai6
+         xMuugoQau+PrJQTHfUzKRL1qFsDUNEWvaog4A7MxUn7t+HezyeMEBrcCkCfR+QXYau8F
+         JlRlrW8boz/r3VxHfkX/yZtYUoFgpBICnM5yj+snIx+zk9g4ibc4tJ0i2pGgIe9xEPlL
+         z+JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681358869; x=1683950869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WOBwWrLFn3ZdjGR7GJPORLer17mWOJTBmbGgr0b3ytE=;
+        b=iSP0HzSuprOrvDf0At4I61ilr7fBCHElWwdacrR6CpRmXq/7kbE2lu/kR8qd6yIrzI
+         qEeoPk3y1aIs+1vIzuQgRZQEw+IXh3QwRASN9k/Oet8QwulhRUuR2QCZFVLTzTmVXcw1
+         dls3cBxC1m+w59PkiS+EHNUNDOguj6aElp7zzr9wshCCP0Cb1iSMeeDSq/nTJEgymPfb
+         Ee6NxGzALs4C4wI0FH8mj/KsEUDdhmEB3/pXY9fXT5E1BbQLkqA1u5jLBqvLyJ6W4szo
+         CAfAYDIQa2e3x5CZWBn2QrDMQ3DEgjPimGLB4opwh7W3AHyOQ1fIZHnSu7IdQgpAy/fU
+         FsHw==
+X-Gm-Message-State: AAQBX9eafM1tSJAXUlR2G5Yc3Vf983YcHkVPoveVI85Xjc4n18nEAP4Z
+        3ZfL6enW68+Z4bx1rSc5aSpQ6IfUMuvzRtLMYxNa2Q==
+X-Google-Smtp-Source: AKy350a7XpW8ILyth8Pj3l7qkWf4XbIWJMfT0RGrVaV5tlzX0k/n0fOMlk+CNbzM/RrYN9188OHk0zfIXxtcZm82LBQ=
+X-Received: by 2002:a25:d70a:0:b0:b77:ae4b:1b27 with SMTP id
+ o10-20020a25d70a000000b00b77ae4b1b27mr451912ybg.8.1681358868879; Wed, 12 Apr
+ 2023 21:07:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|DM4PR12MB6661:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38a00faa-67d1-4710-38b0-08db3bb9447b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aUtr4RKa16428CXi34Gxrs+UUBSXBc6rUFTdJKXGFs3GuurKi5+YJ3jqjgNolVIaFlLLNLLjWdWusm9fEdypN0D6JpQsk2xNC920yagdus6hTNdT4l9KKFQA8dz+eGaxuSRnQkPVyobAFoj/8RC7xtftS/zC/2PsWrDW8E4JxZ8OEdKHMVN9p4vPtkKWz3lpRw357Q8WV9pAFl1pTru4lE0my1dFFLFtpZIazXIiHyPxqfeL1nLtD1WtQM4I/QbB/2HOJ+ElKLOjYXn5kNZ5kc9lPcpowW+LJnGCqFrt+lBRFqqLKiSnveJQIdn9n7uUkIyUZbzv1TtmGKIHi7QOW5iIDgFgK+7LXtq5xo/Wou3x79uce4RlBTWu2T/EFPavg/wT2JeSS9xPMBJMnP45pQpjdQDLIMTNMVCE9icP1HpGvpKl3vjIQ0pXdyod6JHZkXsHRRBfw+9mHeWBM6QBaip345hRGfWAjgTH2n7nVKkgmGhHIjJPalkE6tOHpEOaD2H/kaEHFYZog1fanmVfFdTSHRq0UIKixuuZHlNbDcnpKKCfFp0QPYd3zmRtNplwRY7fV0r63SPe4RgUX09Df2b1hw5Psk7j459YdLj7+3mpyC1f2Ml4d2+2NqJVWlOFCtiE+JGCu/G9PL+2LFCK8E328/mnGv2WxCJGjGqr5QADuAvYYTqgtb/xi94+j/68hFhGnZEYo9a9OlhA6UMUUSTPRqtdoEez16AIKydcZZA=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(6916009)(316002)(81166007)(26005)(82740400003)(186003)(53546011)(1076003)(6666004)(83380400001)(36860700001)(2616005)(47076005)(426003)(336012)(16526019)(8936002)(82310400005)(7416002)(5660300002)(7406005)(36756003)(2906002)(41300700001)(8676002)(40460700003)(356005)(478600001)(40480700001)(54906003)(70586007)(4326008)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 00:51:50.6503
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38a00faa-67d1-4710-38b0-08db3bb9447b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6661
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230330063450.2289058-2-joychakr@google.com> <ZDVO/fpOZm+lGVZE@smile.fi.intel.com>
+ <20230411141115.vrfd6sud66u6xeog@mobilestation> <ZDVyyoN71cB7dvWW@smile.fi.intel.com>
+ <20230411150916.24vagjzbhshaujse@mobilestation> <ZDV6FKd/TupHEPMf@smile.fi.intel.com>
+ <CAOSNQF3JQKVgvp5M17SzeyF5LB85_ZvkRpp3PZkCYcGcqm8V2g@mail.gmail.com>
+ <ZDWJJaYauhOl0Iue@smile.fi.intel.com> <CAOSNQF2dxwbCa7_MrN-qd5mrK9jfpaakeExuMBwctXbsQGmiJQ@mail.gmail.com>
+ <CAOSNQF3uie_Jk9xmEu9w6LvZvigkGEu+k5at8+a6chxMLehQHQ@mail.gmail.com> <ZDaxJbFylAU68W3V@smile.fi.intel.com>
+In-Reply-To: <ZDaxJbFylAU68W3V@smile.fi.intel.com>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Thu, 13 Apr 2023 09:37:35 +0530
+Message-ID: <CAOSNQF0iVtMnX2H6fGZHG3XD+OYWgrWMmVMiPH6Y3V1NY3WsXg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
-
-On Tue, Apr 11, 2023 at 08:55:18, Rob Herring wrote:
-> On Mon, Apr 10, 2023 at 11:45:19AM -0700, Brad Larson wrote:
->> Add AMD Pensando common and Elba SoC specific device nodes
->> 
->> Signed-off-by: Brad Larson <blarson@amd.com>
->> ---
->> 
->> v11 changes:
->> - Delete reset-names
->> - Fix spi0 compatible to be specific 'amd,pensando-elba-ctrl'
->> 
->> v9 changes:
->> - Single node for spi0 system-controller and squash
->>   the reset-controller child into parent
+On Wed, Apr 12, 2023 at 6:55=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
 >
-> Have you run this thru 'make dtbs_check'? I see at least one issue that 
-> should report.
+> On Wed, Apr 12, 2023 at 02:51:44PM +0530, Joy Chakraborty wrote:
+> > On Wed, Apr 12, 2023 at 1:11=E2=80=AFAM Joy Chakraborty <joychakr@googl=
+e.com> wrote:
+> > > On Tue, Apr 11, 2023 at 9:52=E2=80=AFPM Andy Shevchenko
+> > > <andriy.shevchenko@intel.com> wrote:
+> > > > On Tue, Apr 11, 2023 at 08:48:52PM +0530, Joy Chakraborty wrote:
+> > > > > On Tue, Apr 11, 2023 at 8:47=E2=80=AFPM Andy Shevchenko
+> > > > > <andriy.shevchenko@intel.com> wrote:
+> > > > > > On Tue, Apr 11, 2023 at 06:09:16PM +0300, Serge Semin wrote:
+> > > > > > > On Tue, Apr 11, 2023 at 05:46:34PM +0300, Andy Shevchenko wro=
+te:
+> > > > > > > > On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote=
+:
+> > > > > > > > > On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko=
+ wrote:
+> > > > > > > > > > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakrabor=
+ty wrote:
+>
+> ...
+>
+> > > > > > > > > > > -     if (n_bytes =3D=3D 1)
+> > > > > > > > > > > +     switch (n_bytes) {
+> > > > > > > > > > > +     case 1:
+> > > > > > > > > > >               return DMA_SLAVE_BUSWIDTH_1_BYTE;
+> > > > > > > > > > > -     else if (n_bytes =3D=3D 2)
+> > > > > > > > > > > +     case 2:
+> > > > > > > > > > >               return DMA_SLAVE_BUSWIDTH_2_BYTES;
+> > > > > > > > > > > -
+> > > > > > > > > > > -     return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > > > > > > > > >
+> > > > > > > > > > > +     case 3:
+> > > > > > > > > >
+> > > > > > > > > > I'm not sure about this.
+> > > > > > > > >
+> > > > > > > > > This actually makes sense seeing the function argument ca=
+n have values
+> > > > > > > > > 1, 2, _3_ and 4:
+> > > > > > > > > dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BI=
+TS_PER_BYTE);
+> > > > > > > > > transfer->bits_per_word =3D __F__(master->bits_per_word_m=
+ask =3D SPI_BPW_RANGE_MASK(4, 32));
+> > > > > > > > > ...
+> > > > > > > > > dw_spi_dma_convert_width(dws->n_bytes)
+> > > > > > > > >
+> > > > > > > > > The spi_transfer.bits_per_word field value depends on the
+> > > > > > > > > SPI peripheral device communication protocol requirements=
+ which may
+> > > > > > > > > imply the 3-bytes word xfers (even though it's indeed unl=
+uckily).
+> > > > > > > > >
+> > > > > > > > > This semantic will also match to what we currently have i=
+n the
+> > > > > > > > > IRQ-based SPI-transfer implementation (see dw_writer() an=
+d
+> > > > > > > > > dw_reader()).
+> > > > > > >
+> > > > > > > > Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for=
+ that. Why we don't
+> > > > > > > > use it?
+> > > > > > >
+> > > > > > > We could but there are two more-or-less firm reasons not to d=
+o
+> > > > > > > that:
+> > > > > > > 1. There aren't that much DMA-engines with the
+> > > > > > > DMA_SLAVE_BUSWIDTH_3_BYTES capability meanwhile the DW APB SS=
+I just
+> > > > > > > ignores the upper bits if CTRLR0.DFS is less than the value a=
+ctual
+> > > > > > > written to the DR registers. Note DW DMAC engine isn't one of=
+ such
+> > > > > > > controllers. So if we get to meet a peripheral SPI-device wit=
+h 3-bytes
+> > > > > > > word protocol transfers and the DMA-engine doesn't support it=
+ the
+> > > > > > > DMA-based transfers may fail (depending on the DMA-engine dri=
+ver
+> > > > > > > implementation).
+> > > > > > > 2. The DW APB SSIs (3.x and 4.x) can be synthesized with the =
+APB Data
+> > > > > > > Bus Width of 8, 16 and 32. So no matter whether DMA-engine su=
+pports
+> > > > > > > the 3-bytes bus width the system bus most likely will either =
+convert
+> > > > > > > the transfers to the proper sized bus-transactions or fail.
+> > > > > > >
+> > > > > > > So taking all of the above into account not using the
+> > > > > > > DMA_SLAVE_BUSWIDTH_3_BYTES macro here seems better than using=
+ it with
+> > > > > > > a risk to fail some of the platform setups especially seeing =
+the DW
+> > > > > > > APB SSI ignores the upper bits anyway.
+> > > > > >
+> > > > > > But this is not about SPI host hardware, it's about the consume=
+rs.
+> > > > > > They should know about supported sizes. Either we add the corre=
+sponding support
+> > > > > > to the driver or remove 3 case as I suggested. I don't think it=
+'s correct to
+> > > > > > use 3 as 4.
+> > > > >
+> > > > > Another thing to add is that as per spi.h even if bits per word i=
+s a
+> > > > > not a power of 2 the buffer should be formatted in memory as a po=
+wer
+> > > > > of 2
+> > > > > ...
+> > > > >  * @bits_per_word: Data transfers involve one or more words; word=
+ sizes
+> > > > >  * like eight or 12 bits are common.  In-memory wordsizes are
+> > > > >  * powers of two bytes (e.g. 20 bit samples use 32 bits).
+> > > > >  * This may be changed by the device's driver, or left at the
+> > > > >  * default (0) indicating protocol words are eight bit bytes.
+> > > > >  * The spi_transfer.bits_per_word can override this for each tran=
+sfer.
+> > > > > ...
+> > > > > Hence for n_bytes =3D 3 or 24 bits/per word we expect the client =
+SW to
+> > > > > format it to 4 byte buffers hence the transaction generated shoul=
+d
+> > > > > also be of size 4 from the DMA.
+> > > >
+> > > > You didn't get my point. The consumer wants to know if the 3 bytes =
+is supported
+> > > > or not, that's should be part of the DMA related thing, right?
+> > > >
+> > > > It's incorrectly to say 4 for 3 if the backend DMA controller behav=
+es differently
+> > > > on this. How do you know that (any) DMA controller integrated with =
+this hardware
+> > > > has no side effects for this change.
+> > > >
+> > > > So, I don't think the case 3 is correct in this patch.
+> > >
+> > > I see, I am of the opposite opinion in this case.
+> > >
+> > > Other then Serge(y)'s points,
+> > > I was trying to say that irrespective of what the underlying DMA
+> > > controller supports we should use DMA_SLAVE_BUSWIDTH_4_BYTES when
+> > > n_bytes =3D 3 from SPI perspective as we get n_bytes from bits per wo=
+rd
+> > > passed by the client / spi framework " dws->n_bytes =3D
+> > > DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE) ".
+> > > Based on the spi header what I perceive is that for bits/word between
+> > > 17 and 32 the data has to be stored in 32bit words in memory as per
+> > > the example in the header " (e.g. 20 bit samples use 32 bits) ".
+> > >
+> > > Hence, taking an example to transfer 6 bytes (say 0xAA 0xBB 0xCC 0xDD
+> > > 0xEE 0xFF) with bits per word as 24 (n_bytes =3D 3) i.e. a total of 2
+> > > words I expect the buffer to look as follows which is coming from the
+> > > client:
+> > > _ _____address|__________0________4________8________C
+> > >     SD:00000000|>00CCBBAA 00FFEEDD 00000000 00000000
+> > > Hence to transfer this successfully the DMA controller would need to
+> > > copy 4 bytes per word .
+> > >
+> > > Please correct me if my understanding of this is incorrect.
+>
+> Thank you for finding the answer for me by yourself!
+>
+> > On the other hand I do see that in the fifo driver dw_writer() /
+> > dw_reader() increments the pointer with 3 incase n_bytes =3D 3 even
+> > though it copies 4 bytes.
+> > ...
+> >    if (dws->n_bytes =3D=3D 1)
+> >       txw =3D *(u8 *)(dws->tx);
+> >    else if (dws->n_bytes =3D=3D 2)
+> >       txw =3D *(u16 *)(dws->tx);
+> >    else
+> >       txw =3D *(u32 *)(dws->tx);
+> >
+> > dws->tx +=3D dws->n_bytes;
+> > ...
+> > This will not behave as using DMA_SLAVE_BUSWIDTH_4_BYTES in the DMA so
+> > maybe I am not correct in interpretting the spi.h header file.
+> > Can CPU's in general access u32 from unaligned odd addresses ?
+>
+> Generally speaking the above code must check number of bytes for being 4.
+>
+> > From Serge(y)'s comment regarding this, the APB interface writing data
+> > to the FIFO register definitely cannot handle
+> > DMA_SLAVE_BUSWIDTH_3_BYTES since it handles a power of 2 only.
+> > Hence we can possibly remove "case 3:" completely and also mask out
+> > DMA_SLAVE_BUSWIDTH_3_BYTES from dma_addr_width capabilities so that
+> > can_dma api does not allow n_bytes =3D 3 to use DMA.
+> >
+> > Would that be correct ?
+>
+> We have to fix the above and the DIV_ROUND_UP(transfer->bits_per_word,
+> BITS_PER_BYTE) one to be something like
+>
+> roundup_pow_of_two(round_up(..., BITS_PER_BYTE))
+>
 
-Yes and no warnings or errors with these checks 
+Hello Serge(y),
 
-make ARCH=arm64 dtbs_check
-make DT_CHECKER_FLAGS=-m dt_binding_check 
+Are we okay in removing n_bytes=3D3 support from the dma driver switch case=
+ ?
+This will also lead to can_dma returning false for n_bytes=3D3 which
+will essentially make it fall back to fifo mode.
 
-but I did find a couple relevant packages have been updated
-
-dtschema Version: 2023.1  ==> 2023.4
-yamllint Version: 1.26.3  ==> 1.30.0
-
-and then running again I get below 
-
-$ make ARCH=arm64 dtbs_check 
-...
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache0: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache1: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache2: 'cache-unified' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-level' is a required property
-/home/brad/linux.v13/arch/arm64/boot/dts/amd/elba-asic.dtb: l2-cache3: 'cache-unified' is a required property
-
-I'll fix this in the next spin.
-
-Regards,
-Brad
+> > > > > > > > > > > +     case 4:
+> > > > > > > > > > > +             return DMA_SLAVE_BUSWIDTH_4_BYTES;
+> > > > > > > > > > > +     default:
+> > > > > > > > > > > +             return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > > > > > > > > > > +     }
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
