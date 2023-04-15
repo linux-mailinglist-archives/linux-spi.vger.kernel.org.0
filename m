@@ -2,68 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774DA6E2E30
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Apr 2023 03:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054636E2E4C
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Apr 2023 03:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjDOBZw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Apr 2023 21:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S229636AbjDOBmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Apr 2023 21:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDOBZv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Apr 2023 21:25:51 -0400
+        with ESMTP id S229450AbjDOBms (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Apr 2023 21:42:48 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEBF63A8E;
-        Fri, 14 Apr 2023 18:25:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771273A9A;
+        Fri, 14 Apr 2023 18:42:46 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxTNoc_Tlkz7UcAA--.33343S3;
-        Sat, 15 Apr 2023 09:25:48 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxJMQVATpkLbccAA--.33271S3;
+        Sat, 15 Apr 2023 09:42:45 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeUW_TlkQfklAA--.14224S3;
-        Sat, 15 Apr 2023 09:25:46 +0800 (CST)
-Subject: Re: [PATCH v7 1/2] dt-bindings: spi: add loongson spi
-To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuQSATpkzf4lAA--.12122S3;
+        Sat, 15 Apr 2023 09:42:45 +0800 (CST)
+Subject: Re: [PATCH v7 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, zhuyinbo@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230412045152.4694-2-zhuyinbo@loongson.cn>
- <202304141851.mUss7Eyn-lkp@intel.com>
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
+ <20230412045152.4694-3-zhuyinbo@loongson.cn>
+ <f0989d13-4520-461f-8715-3595e11f988e@sirena.org.uk>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <d6d21a3e-0d97-222a-f195-f1804067c37f@loongson.cn>
-Date:   Sat, 15 Apr 2023 09:25:43 +0800
+Message-ID: <7bea4fc0-9c9b-d4fa-b996-4271a1cb8ad7@loongson.cn>
+Date:   Sat, 15 Apr 2023 09:42:42 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <202304141851.mUss7Eyn-lkp@intel.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <f0989d13-4520-461f-8715-3595e11f988e@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxAeUW_TlkQfklAA--.14224S3
+X-CM-TRANSID: AQAAf8BxHuQSATpkzf4lAA--.12122S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Cw1kuryfZw48GF1kKw1xXwb_yoW8Cryrpa
-        1ru3Z8Gr15Xr18Ka98K3Zrua1jgrZ8Xr13WayUuryUZa9Fva4kXrs2krW3ZrnFgF1qgFyx
-        JFZ3urZYg3WkJa7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bD8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8I
-        j28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r
-        126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jeksgUUUUU=
+X-Coremail-Antispam: 1Uk129KBjvdXoWrCw4DGw1kZrykAw4kGFW8tFb_yoWxWFX_ur
+        4qkr95GFWUCrW3Gw1DG34DJa4DXFWkJa429FZ7W340q34UtrWUXr48AayxKF9rAr17AF13
+        urs5K3yrArWfZjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        z7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
+        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
+        v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY
+        64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7
+        Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
+        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2oGQDUUUU
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,37 +71,24 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-ÔÚ 2023/4/14 ÏÂÎç6:57, kernel test robot Ð´µÀ:
-> Hi Yinbo,
+åœ¨ 2023/4/15 ä¸Šåˆ2:32, Mark Brown å†™é“:
+> On Wed, Apr 12, 2023 at 12:51:52PM +0800, Yinbo Zhu wrote:
 > 
-> kernel test robot noticed the following build warnings:
+>> +static int __maybe_unused loongson_spi_suspend(struct device *dev)
+>> +{
+>> +	struct loongson_spi *loongson_spi;
+>> +	struct spi_master *master;
+>> +
+>> +	master = dev_get_drvdata(dev);
+>> +	loongson_spi = spi_master_get_devdata(master);
+>> +
+>> +	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
 > 
-> [auto build test WARNING on broonie-spi/for-next]
-> [also build test WARNING on robh/for-next krzk-dt/for-next linus/master v6.3-rc6 next-20230413]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230412-125222
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> patch link:    https://lore.kernel.org/r/20230412045152.4694-2-zhuyinbo%40loongson.cn
-> patch subject: [PATCH v7 1/2] dt-bindings: spi: add loongson spi
-> reproduce:
->          # https://github.com/intel-lab-lkp/linux/commit/e230989729f1d1e10c49d1903a5c76a5b8b81f95
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230412-125222
->          git checkout e230989729f1d1e10c49d1903a5c76a5b8b81f95
->          make menuconfig
->          # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
->          make htmldocs
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304141851.mUss7Eyn-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-I will rename this path to fixup this warning.
+> This is missing a call to spi_controller_suspend(), and similarly resume
+> is missing a call to spi_controller_resume().  Otherwise this looks
+> good.
+okay, I will add it.
+
+Thanks.
 > 
 
