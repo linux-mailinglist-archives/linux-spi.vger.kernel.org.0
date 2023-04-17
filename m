@@ -2,62 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EDA6E439C
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 11:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4FA6E4581
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 12:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjDQJXt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Apr 2023 05:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S230115AbjDQKqI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Apr 2023 06:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjDQJXr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 05:23:47 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA2E40C6;
-        Mon, 17 Apr 2023 02:23:15 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H9Ml1J078289;
-        Mon, 17 Apr 2023 04:22:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681723367;
-        bh=OGcyv+39qOeLfSjnaYs1mH1iJS08CvMxBWpH03NhFJY=;
-        h=From:To:CC:Subject:Date;
-        b=vK1jv3dlJGcyWjetaVBZ981eTXnW1kjPMx1DMFNzx8G8a6QPqURkA933kYJBqIMN6
-         iMfw96Caa+u08Iz4GoFHJMOCWnbj9azsFVeyu0w039cdA2ucbaTHyTr3x/EMRZwXEB
-         S83XPedv3sItwtkSRKapVhV3H1NN35q0tMz3OZlE=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H9MkJi023474
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Apr 2023 04:22:46 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
- Apr 2023 04:22:46 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 17 Apr 2023 04:22:46 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H9Mjjj068402;
-        Mon, 17 Apr 2023 04:22:46 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
-        Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: defconfig: Enable UBIFS
-Date:   Mon, 17 Apr 2023 14:52:43 +0530
-Message-ID: <20230417092243.967871-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229967AbjDQKqG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 06:46:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFED49DD;
+        Mon, 17 Apr 2023 03:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681728309; x=1713264309;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q0LVjKHHmuRFdXP0gH1A8hWP0FnpGL5CdzUawYKr0oI=;
+  b=Lj9NEl1/XaADKEMIENvl+tUwF2XAJKszIlIsMZHyZ/VtsfR7HvQewVjx
+   gWMcK7CrgK1vdjMUyZIlco0Hcv+P2VoPcK/L1ZPKT7iDKPGrR+uNS+bow
+   WSaUNLIxkJIFi3iS9IukI0pCHkSqiQVBjcChfJdQrXE0alR3T23MbWsVv
+   sfBW7T2Wf3J/Ee/a+Srx+6QpZy16ImE/9CTk74/AnNXjmpF613lNpT4fj
+   jBGdrRfkmFwnd7W99pJgqGhEXKF8tswwBDcxkx3nOEhQcYezcJT0J7YV4
+   C5amkMeLNV14DRYV+dVmpigkZAHppNMG9LruzGav6o7uDvhl5bxgVbdjR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="342352606"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="342352606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 03:43:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="759909509"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="759909509"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Apr 2023 03:43:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1poMKQ-0012vq-0a;
+        Mon, 17 Apr 2023 13:43:22 +0300
+Date:   Mon, 17 Apr 2023 13:43:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Subject: Re: [PATCH v6 2/5] spi: dw: Move "dw_spi_can_dma" function
+Message-ID: <ZD0iycNg4i6sYO48@smile.fi.intel.com>
+References: <20230414120520.360291-1-joychakr@google.com>
+ <20230414120520.360291-3-joychakr@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414120520.360291-3-joychakr@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,26 +68,30 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-UBIFS is a file system for flash devices which works on top of UBI.
+On Fri, Apr 14, 2023 at 12:05:17PM +0000, Joy Chakraborty wrote:
+> Move "dw_spi_can_dma" function implementation below
+> "dw_spi_dma_convert_width" function for handing compile dependency in
+> future patches.
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+We refer to the functions like func().
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 4f59fa575b47..a632d2a1db93 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -267,6 +267,8 @@ CONFIG_MTD_NAND_BRCMNAND=m
- CONFIG_MTD_NAND_FSL_IFC=y
- CONFIG_MTD_NAND_QCOM=y
- CONFIG_MTD_SPI_NOR=y
-+CONFIG_MTD_UBI=m
-+CONFIG_UBIFS_FS=m
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_NBD=m
- CONFIG_VIRTIO_BLK=y
+...
+
+> +static bool dw_spi_can_dma(struct spi_controller *master,
+> +			   struct spi_device *spi, struct spi_transfer *xfer)
+> +{
+> +	struct dw_spi *dws = spi_controller_get_devdata(master);
+> +
+> +	return xfer->len > dws->fifo_len;
+> +}
+
+> +
+> +
+
+Single blank line is enough.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
