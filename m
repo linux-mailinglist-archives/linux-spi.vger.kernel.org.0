@@ -2,52 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D6D6E434F
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 11:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9316F6E4350
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 11:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjDQJKr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Apr 2023 05:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S230350AbjDQJKu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Apr 2023 05:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjDQJKq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 05:10:46 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABD010D1
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 02:10:44 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H9Ab2N045408;
-        Mon, 17 Apr 2023 04:10:37 -0500
+        with ESMTP id S230181AbjDQJKt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 05:10:49 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B64184
+        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 02:10:48 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H9Aeeo074935;
+        Mon, 17 Apr 2023 04:10:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681722637;
-        bh=HvfshV2DaF4y/7Pn92rbhH1Jy3vWXTr4qUArdBBWy9g=;
-        h=From:To:CC:Subject:Date;
-        b=t/CcLTpshcqNO2tgWFexz72wpDMvDF6O9wTaIMcLRSoYiuSLS3gR45LyxIXvGC5gU
-         T/dT/nchp+caJiWagLqvoGDUgzY5rfRgTEeRfiyvOnS65tesXcPxLwk2lq29Nxxphm
-         289zRg05JLuXR75c6zTSNrR7nxNs8EhNYTxasdCw=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H9Aaq3014555
+        s=ti-com-17Q1; t=1681722640;
+        bh=djsfRLtJu+oPMbnsgsWcD0rMfU9D4nVXsTjgpcSvFLk=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ArqxgP/dStID3aR0LcMffpiac4Vdo+UkWv5MJndxIYM4zTiW+KOtwm4awpRgLj+gm
+         GE76uSAyI5KgryZ7H36ukQWkT9YJvPe9miwj1PY/50mU/eAS66uBlAiHulLVg22+eD
+         cUzvkdYqvOuUxFxbBHL+sBLDgZ22B3fgvw9msnYU=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H9AeLI005866
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Apr 2023 04:10:37 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 17 Apr 2023 04:10:40 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
- Apr 2023 04:10:36 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 04:10:40 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 17 Apr 2023 04:10:36 -0500
+ Frontend Transport; Mon, 17 Apr 2023 04:10:40 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H9AZWG027016;
-        Mon, 17 Apr 2023 04:10:36 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H9Adj2102013;
+        Mon, 17 Apr 2023 04:10:39 -0500
 From:   Dhruva Gole <d-gole@ti.com>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
         Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: [PATCH 0/2] Fix PM Hooks in the Cadence Quad SPI Driver
-Date:   Mon, 17 Apr 2023 14:40:25 +0530
-Message-ID: <20230417091027.966146-1-d-gole@ti.com>
+Subject: [PATCH 1/2] spi: cadence-quadspi: use macro SIMPLE_DEV_PM_OPS
+Date:   Mon, 17 Apr 2023 14:40:26 +0530
+Message-ID: <20230417091027.966146-2-d-gole@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230417091027.966146-1-d-gole@ti.com>
+References: <20230417091027.966146-1-d-gole@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,22 +64,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This series adds fixes to the Suspend and Resume Hooks of the CQSPI Driver.
-Earlier, the ltp-ddt test "OSPI_S_FUNC_DD_RW_ERASESIZE_UBIFS" failed
-post system suspend resume. It is now passing as shown in [0].
+Using this macro makes the code more readable.
+It also inits the members of dev_pm_ops in the following manner
+without us explicitly needing to:
 
-Tested on top of linux-next (next-20230414) on an AM625-SK-EVM. For logs,
-please refer [0].
+.suspend = cqspi_suspend, \
+.resume = cqspi_resume, \
+.freeze = suspend_fn, \
+.thaw = resume_fn, \
+.poweroff = suspend_fn, \
+.restore = resume_fn,
 
-[0] https://gist.github.com/DhruvaG2000/29b15f9c8a1e632c6819a986e5f28ab2
+Fixes: 140623410536 ("mtd: spi-nor: Add driver for Cadence Quad SPI Flash Controller")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Dhruva Gole (2):
-  spi: cadence-quadspi: use macro SIMPLE_DEV_PM_OPS
-  spi: cadence-quadspi: fix suspend-resume implementations
-
- drivers/spi/spi-cadence-quadspi.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 79ab7e309644..d47e954fe809 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1829,10 +1829,7 @@ static int cqspi_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static const struct dev_pm_ops cqspi__dev_pm_ops = {
+-	.suspend = cqspi_suspend,
+-	.resume = cqspi_resume,
+-};
++static SIMPLE_DEV_PM_OPS(cqspi__dev_pm_ops, cqspi_suspend, cqspi_resume);
+ 
+ #define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
+ #else
 -- 
 2.25.1
 
