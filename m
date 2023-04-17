@@ -2,109 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C8A6E4740
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 14:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD6E6E4748
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 14:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjDQMMS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Apr 2023 08:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S229971AbjDQMNK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Apr 2023 08:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjDQMMP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 08:12:15 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608787D84
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 05:11:52 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id n193so2991822ybf.12
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 05:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681733504; x=1684325504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5TewJ1RrFHFrg7FTQB5xmBV0f+ig0UTnQJKvATVOD0E=;
-        b=rsLcVCd9c/lWXu+hqwU7xr78XK7eJjKhocggDxrsnlpFfDL/HVByDq3FRzT2Wi4U0v
-         /TzNSif4wL1kd8nip3b1rTP3eOrRQaw1MgGUd6BfNANOwoD/XOrEBI6CFI/P0WJwUV07
-         NFfoVbGY9G7LUs4mibE09Myap/NeV82aIU544JGsl3Brq8tG5PBemFPamoRyLosDe+IH
-         0B/pbOrmzm86NgFMbUzgWMs/aBOZYhExkVDjGx7ufXzqpNanLdiNgQMIQpjT6t9LQeq1
-         nKDvIIqi/qA97aZgfEJDcrMPEuTIrTsDCpFgwTSW3G/73ey5u8asPxF7VkFAdcErtnT3
-         IGlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681733504; x=1684325504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TewJ1RrFHFrg7FTQB5xmBV0f+ig0UTnQJKvATVOD0E=;
-        b=FrS/7T+S7xscVJS8kd3A5iKHsLBeZOxfokWVNxLFo/Yl6pNIB8tXpFGsX7L6A8pcD8
-         jDejOlMvlbAHHr+8sVRUJA2BhYDMo2KTP8tzO36RCvkaFty3w+6YMeZ4K7xZlkIH0W3H
-         FtmolJWTUrN75GKcTRT/CYFmuzrfEJkx+Ewo21OyFRBLpKJsAJOSCnfij62CgSpO9rUI
-         3OFXdDFjF7/k/a0/PX8ttSyCCOtvAb67SugCx3TllyGJt4g0tcIOlrAuMV3PUM0o3Y0I
-         pHZFz6FMEmtRwyAwB2pz4J9kg745cWCTVSi63wwWpvBH+IaQJUcCQnTbyARvj5BltWRL
-         xnNA==
-X-Gm-Message-State: AAQBX9cdJWXK7MWTTKlaL6a6o0ob+0D/sQ+jRxpEjnlNrAgzPCTFeswE
-        +PT+NaACBI7vgPPwFqHB+iE741mIAc+mdKzbnGUfgg==
-X-Google-Smtp-Source: AKy350YQmqxxlG21q6qsKKF+2V3NVv5YB/5z35qB85vLgRO0iR0vL3tnW5Om/gBzYxnToHYTtt1owMW3C++tpBSN5qo=
-X-Received: by 2002:a25:e082:0:b0:b92:3917:d925 with SMTP id
- x124-20020a25e082000000b00b923917d925mr3003107ybg.8.1681733503853; Mon, 17
- Apr 2023 05:11:43 -0700 (PDT)
+        with ESMTP id S229824AbjDQMNK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 08:13:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9669023;
+        Mon, 17 Apr 2023 05:12:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74EFB62328;
+        Mon, 17 Apr 2023 12:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5E2C433EF;
+        Mon, 17 Apr 2023 12:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681733553;
+        bh=eNV1zUDagB32PHHEZMYchgD0JkU4lTO2tcK5xBVvozg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kXEY4kbPp7jM8iD80BIvQUEzp1K3o9bxJ/sjeCCR8O+WbTZHKyKfDx7YrsmJBqCL/
+         e9IcxsnDn/2RCF7NLY+/W0EsgtEcxitc3hbiIn6fWwsz4NlYDdspsPfj+fqF/tXupX
+         YCGt7FN5YecLdvEtSTg8YB1K/CnWcaSzE1ZKCWcb0sNMry3W4axgh8WIT97vC2xk6c
+         m0nH3pjwCvRHR/61jXMnEPmjUm5Z+h6ja/oYIrWsbw12SWRLL5VnoncQDl5Mz8Cb68
+         fAjciGRQ1RkY2qWaGXCNINiOKPVt2XOvl07iR0GDjeffA34iskLTsAzMusK2tkW6zX
+         Tce9NkxxNN5vA==
+Date:   Mon, 17 Apr 2023 13:12:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
+        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
+Subject: Re: [PATCH v3 3/3] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <30a752c9-3ea0-43d3-959a-da2e8b526cb4@sirena.org.uk>
+References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1681481153-24036-4-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=VKY-0vX271G+EQQ5kC3gTqpPPyTGE0xHWPBncVUhZufQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230414120520.360291-1-joychakr@google.com> <20230414120520.360291-3-joychakr@google.com>
- <ZD0iycNg4i6sYO48@smile.fi.intel.com>
-In-Reply-To: <ZD0iycNg4i6sYO48@smile.fi.intel.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Mon, 17 Apr 2023 17:41:32 +0530
-Message-ID: <CAOSNQF33jw8uKuxsjjGmmLG6vG9vbky6FCN6Ts5-KZ88YLxmQw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] spi: dw: Move "dw_spi_can_dma" function
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QerR8LcbkWiaBCb1"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VKY-0vX271G+EQQ5kC3gTqpPPyTGE0xHWPBncVUhZufQ@mail.gmail.com>
+X-Cookie: Two heads are more numerous than one.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 4:13=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Fri, Apr 14, 2023 at 12:05:17PM +0000, Joy Chakraborty wrote:
-> > Move "dw_spi_can_dma" function implementation below
-> > "dw_spi_dma_convert_width" function for handing compile dependency in
-> > future patches.
->
-> We refer to the functions like func().
->
-> ...
->
-> > +static bool dw_spi_can_dma(struct spi_controller *master,
-> > +                        struct spi_device *spi, struct spi_transfer *x=
-fer)
-> > +{
-> > +     struct dw_spi *dws =3D spi_controller_get_devdata(master);
-> > +
-> > +     return xfer->len > dws->fifo_len;
-> > +}
->
-> > +
-> > +
->
-> Single blank line is enough.
 
-Sure,I will make these changes and send V7.
-Will wait for some time to see if Serge(y) has any other comments on
-the patch series.
+--QerR8LcbkWiaBCb1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+On Fri, Apr 14, 2023 at 03:05:58PM -0700, Doug Anderson wrote:
+
+> Having alignment requirements like this doesn't seem like it should be
+> that unusual, though, and that's why it feels like the logic belongs
+> in the SPI core. In fact, it seems like this is _supposed_ to be
+> handled in the SPI core, but it isn't? In "spi.h" I see
+> "dma_alignment" that claims to be exactly what you need. As far as I
+> can tell, though, the core doesn't use this? ...so I'm kinda confused.
+> As far as I can tell this doesn't do anything and thus anyone setting
+> it today is broken?
+
+SPI consumers should only be providing dmaable buffers.
+
+--QerR8LcbkWiaBCb1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9N6gACgkQJNaLcl1U
+h9A0RAf/Q/Bi/4JeWGxUTZ0r2ETK1oo6ycZJpBYut1iRufKN7g8gHo0D+I7u4ShX
+PbOSybrq4CnyaGqfmtBnuBBBS/4VX9Ryu8mj5XTkLKyUbamhzjUZj48SauEkufN8
+bUkhQ5VZtCrIOd+aWVUIBX5L+VyAmjXddaHINuWUHXIYy5w5/Z/23ES7iUqsjUe+
+LIDO3zSxDkssalpPAsbCjcoYDBs+oRmIUUNvbwS5FlaTsl3yIq9r75YXHd/lUHXf
+EuW/RGag45g7zSGN02g15P0wvajWATasTYWuEnWxNMV76YOiRbmtZ8vedV1bsGPP
+O4J9kUULTNCnTdo6M5NRqqWfIXdCvQ==
+=/PHR
+-----END PGP SIGNATURE-----
+
+--QerR8LcbkWiaBCb1--
