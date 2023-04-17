@@ -2,78 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B2D6E2FCD
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Apr 2023 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F246E3D50
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 04:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjDOIxc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 15 Apr 2023 04:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S229657AbjDQCGp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 16 Apr 2023 22:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjDOIxb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 15 Apr 2023 04:53:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E15026A6
-        for <linux-spi@vger.kernel.org>; Sat, 15 Apr 2023 01:53:30 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ud9so51274932ejc.7
-        for <linux-spi@vger.kernel.org>; Sat, 15 Apr 2023 01:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681548809; x=1684140809;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fOyFQ2wFGtSd8qaPjXT+9Ch8QWN9JK4V7LI6iLKCdxk=;
-        b=KkL4AGpMgpNBq83/uaElao2EPAjn0pkvMThOd8qWzeji4frQNXEIOAzf2Udim43+eZ
-         YBNVcGInTyrCgxWf7mmxEdfUTOPqTXDxBfHRjKQ005wWWC3bqaEK6heJYR67Ftuw0GDw
-         TQitN2A9iA/cGk8jdJ4yAYeREuQk0HN7QMFytVtAcCAOFe3by/QyW6n7oomKTF97laqq
-         yvx2LEza1inDiaSbdIRyeULiC715JlZK3XkIcQz7NR4a2+2GDqmw64LDy/i00rM1mQFr
-         UzuNBC+3pS3iD9dtR1YiJ7FvSIWk3GkkVIwapICUtvm0K8k2V3LSctQKv/ExTEgyInMh
-         Sz9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681548809; x=1684140809;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOyFQ2wFGtSd8qaPjXT+9Ch8QWN9JK4V7LI6iLKCdxk=;
-        b=IW3RyN/KyMCd2PbLrZSc7TIexQWW8bWjkybxKyN3ExFLnyEIlAsK5NQSosh1y2d9I+
-         yQ6a/auGsJlPqf99i6EMTBH44czDXcjtFM2PJ1x5+GtnvN/NGUVyrJw+HiTydsrlYJx8
-         yjF3pOWTZ4TC4x56r3l1rdDZvRsznlZFZ5b/sFtHh2g/xWUasERq5PnMWprxol9qBZx8
-         7X/san+3piMyarq107f/v+MJc8+TfqhlFpxnVoMON1hIl2nM4+IV/ZuYGXUPJZTiJnE8
-         1vy90HwvMYRp11EbAdpi+M+kXesVDgdIhPJDCUyQoX+1iGVRbvV+hStzBc8spqIevoIw
-         u6nw==
-X-Gm-Message-State: AAQBX9euggj/6MY1qEAhJVX/nm1h/yW8iFP1danMEJ3jURp5NrNYNpCM
-        3h1isXq8o04k2+lvVrQNWTGg6w==
-X-Google-Smtp-Source: AKy350ZVKdn9XyFdxnaJQ81W2jGronzMUZ8Zykc6G0YKNLnZ8O0zBY9XHC+PhWEvrcKlpNB6yYKxiA==
-X-Received: by 2002:a17:906:6a94:b0:94c:a08c:3be2 with SMTP id p20-20020a1709066a9400b0094ca08c3be2mr1364721ejr.63.1681548808988;
-        Sat, 15 Apr 2023 01:53:28 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a3bf:4ed:6c53:2a36? ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b0094f2d38896esm193732ejc.65.2023.04.15.01.53.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Apr 2023 01:53:28 -0700 (PDT)
-Message-ID: <cf45c33c-0604-0a37-3546-68ccc518c6de@linaro.org>
-Date:   Sat, 15 Apr 2023 10:53:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/3] spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
+        with ESMTP id S229647AbjDQCGo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Apr 2023 22:06:44 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB148213C
+        for <linux-spi@vger.kernel.org>; Sun, 16 Apr 2023 19:06:42 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7F0792C046D;
+        Mon, 17 Apr 2023 14:06:39 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1681697199;
+        bh=CTVTacEO1VjVFCXn4U7PXUGyX8f/5RYczQkksR4LeIY=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=JK1+evqS5d+FjSp5rsJxtOwQzQS3EmOy/4mM+8BYzcQbIFXplt3R3o7l6Khzgq/hK
+         wZeTrEKynL7A+QMrX6uaew4ZPv0mjoQ84q6LjFyOHsM7+/mAWeOfUe2ecCzXoAI444
+         heht06hWMc87EU/PdDyJaKrWvmJ9jcwiTa3IT++etyoh2a949xjx6ei8Uh3bcKe4In
+         g+Dlb0vqNb3o13dF2CfKhW1CCaMkN84WMKbd+S136ffk08jbxaJtGRaDUb8VU5MQaI
+         e2L7D8CtgsS7unhi2DPkr2KZ8K8jBIpNRH/WCYnYlvhtW3yUYhhUwhDVmf4FeQeH+a
+         5juWktfSYpNqw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B643ca9af0001>; Mon, 17 Apr 2023 14:06:39 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 17 Apr 2023 14:06:39 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Mon, 17 Apr 2023 14:06:39 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Lachezar Temelkov <lachezar.temelkov@gmail.com>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: SPI Device tree question from blog
+Thread-Topic: SPI Device tree question from blog
+Thread-Index: AQHZcMTCkCNg4HrSFUao9N/kdqwUSq8t98gA
+Date:   Mon, 17 Apr 2023 02:06:39 +0000
+Message-ID: <8ad49426-51f0-11db-f44c-aa6cd27a3947@alliedtelesis.co.nz>
+References: <CAGdCHaYK09FDu0-TBDv92y8dy+X=7+rsRiMF5PEothi-Zp7uqA@mail.gmail.com>
+In-Reply-To: <CAGdCHaYK09FDu0-TBDv92y8dy+X=7+rsRiMF5PEothi-Zp7uqA@mail.gmail.com>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com
-References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
- <1681481153-24036-2-git-send-email-quic_vnivarth@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1681481153-24036-2-git-send-email-quic_vnivarth@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E9AA80F28BBE644D800DD834F7D160CC@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=VwQbUJbxAAAA:8 a=D_PGH6MP_eeqzWSGoLUA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,14 +71,40 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 14/04/2023 16:05, Vijaya Krishna Nivarthi wrote:
-> Add iommus binding for DMA mode support
-> 
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+KGFkZGluZyBsaW51eC1zcGkrbGttbCkNCg0KSGkgTGFjaCwNCg0KT24gMTcvMDQvMjMgMTI6MzYs
+IExhY2hlemFyIFRlbWVsa292IHdyb3RlOg0KPiBIaSBDaHJpcywNCj4NCj4gTXkgbmFtZSBpcyBM
+YWNoIFRlbWVsa292IGFuZCBJIHNhdyB5b3VyIGRldmljZSB0cmVlIGltcGxlbWVudGF0aW9uIGhl
+cmU6DQo+DQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0
+L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
+cy9zcGkvc3BpLW11eC55YW1sDQoobm90ZSBjaGFuZ2VkIFVSTCB0byBwb2ludCB0byB0aGUgY2Fu
+b25pY2FsIHVwc3RyZWFtLCBjb250ZW50IGlzIHRoZSBzYW1lKQ0KPiBTaW5jZSBteSBaeW56IFo3
+MDAwIFNvQyBkb2VzIG5vdCBoYXZlIGVub3VnaCBTUEksIEkgYW0gdXNpbmcgb25lIFNQSSANCj4g
+aG9zdCBhbmQgbXVsdGlwbGV4aW5nIHRoZSBzbGF2ZSBzZWxlY3QgcGlucyBhcyB5b3UgZG8gaW4g
+dGhlIGxpbmsgYWJvdmUuDQo+DQo+IEhvd2V2ZXIsIGluIG15IGFwcGxpY2F0aW9uLCBvbmUgbWFz
+dGVywqAgYm9hcmQgd2l0aCBaeW5xIFo3MDAwIHNlbmRzIA0KPiBzcGlfY2xrLCBzcGlfbW9zaSBh
+bmQgc3BpX21pc28gKCBhbG9uZyB3aXRoIHNsYXZlIHNlbGVjdHMpIHRvIDggb3RoZXIgDQo+IElP
+IGJvYXJkcywgc28gSSBtdXggdGhlIHNwaV9jbGssIG1vc2kgYW5kIG1pc28gYXMgd2VsbC4NCj4N
+Cj4gU28sIG4gdGhlIGVuZCzCoCBJIGhhdmUgMiBtdWx0aXBsZXhlcnMoIHRoYXQgacKgY29udHJv
+bMKgZnJvbSBvbmUgOCBiaXQgDQo+IGdwaW8pICwgMSBtdXjCoCBjb250cm9scyB0aGUgc2xhdmUg
+c2VsZWN0KCBhcyBpbiB0aGUgdXJsIGFib3ZlKSBhbmQgDQo+IGFub3RoZXIgbXV4IGNvbnRyb2xs
+aW5nIHdoaWNoIElPIGJvYXJkIHRoZSBzcGlfY2xrLCBtb3NpIGFuZCBtaXNvIHdpbGwgZ28uDQo+
+DQo+IFRoaXMgaXMgZG9uZSBzbyB0aGF0IGFuIEVNSSggZWxlY3Ryb21hZ25ldGljIGludGVyZmVy
+ZW5jZSkgYW5kIA0KPiByYWRpYXRpb24gZG9lcyBub3Qgb2NjdXItIGUuZywgaXQgcHJldmVudHMg
+dGhlIHNwaSBfY2xvY2sgc2lnbmFscyB0byANCj4gc2ltdWx0YW5lb3VzbHkgZ28gdG8gOCBkaWZm
+ZXJlbnQgYm9hcmRzLSAxMiIgYXBwYXJ0LiBBbHNvIGl0wqBoZWxwcyANCj4gd2l0aCBzaWduYWwg
+aW50ZWdyaXR5Lg0KPg0KPiBDb3VsZCB5b3UgcGxlYXNlwqAgdGVsbCBtZSAoIGEgZHRzIHNuaXBw
+ZXQgbWF5YmUpLCBob3cgdGhlIGRldmljZSB0cmVlIA0KPiB3b3VsZCBsb29rIGxpa2Ugd2l0aCAy
+IG11eGVzLiBIb3cgY2FuIGkgY29tYmluZSB0aGVtDQo+DQo+IC0gbXV4IDE6IDQgYml0cyAtIGNo
+b29zZXPCoCAxNiBzbGF2ZSBzZWxlY3RzDQo+IC0gbXV4IDIgOjMgYml0cyAtIGNob29zZXMgOCBJ
+TyBib2FyZHMNCj4NCj4gSSByZWFsbHkgYXBwcmVjaWF0ZSB5b3VyIGlucHV0LA0KPg0KSSBkZXZl
+bG9wZWQgdGhlIHNwaS1tdXggc3VwcG9ydCB3aXRoIGJvYXJkcyB0aGF0IGNvbm5lY3RlZCBqdXN0
+IHRoZSBDUyANCnZpYSBhIG11eCwgdGhlIG90aGVyIGxpbmVzIHdlcmUgd2lyZWQgdG9nZXRoZXIu
+IFNvIGl0J3Mgbm90IHJlYWxseSANCnNvbWV0aGluZyB0aGF0IEkgY29uc2lkZXJlZC4NCg0KVGhl
+IGNvbXBsaWNhdGlvbiBmb3IgeW91IGlzIGluIHRoZSBtdXggaXRzZWxmLiBUaGUgc3BpLW11eCBj
+b2RlIHNob3VsZCANCndvcmsgZmluZSBwcm92aWRlZCB0aGVyZSBpcyBhIG11eCBkcml2ZXIgdGhh
+dCBkb2VzIHdoYXQgeW91IG5lZWQuIEkgDQpkb24ndCB0aGluayB0aGUgZXhpc3RpbmcgZ3Bpby1t
+dXggZHJpdmVyIHdpbGwgaGFuZGxlIGhhdmluZyAxIHN0YXRlIA0KbWFwcGVkIHRvID4xIGdwaW8g
+c28geW91J2QgcHJvYmFibHkgbmVlZCB0byBjcmVhdGUgeW91ciBvd24gbXV4IGRyaXZlciANCnRo
+YXQgZGVhbHMgd2l0aCB0aGF0LiBZb3UgbWlnaHQgYmUgYWJsZSB0byBkbyBzb21lIGtpbmQgb2Yg
+bXVsdGktbGV2ZWwgDQptdXggYnV0IHRoYXQgcHJvYmFibHkgd29uJ3QgcGxheSBuaWNlIHdpdGgg
+dGhlIENTIGxpbmVzLg0KDQo=
