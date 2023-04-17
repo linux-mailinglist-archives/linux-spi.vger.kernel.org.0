@@ -2,49 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A406E50F4
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 21:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59C56E58B9
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 07:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjDQTan (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Apr 2023 15:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S230120AbjDRFn6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Apr 2023 01:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjDQTa2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 15:30:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0564E5BB3
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 12:30:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A8B56207E
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 19:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D683AC433D2;
-        Mon, 17 Apr 2023 19:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681759820;
-        bh=64Wu29QwU7/+/sn5QKNc4kGBxA6Xy63S8fxNOxeNSU8=;
-        h=Subject:From:Date:To:From;
-        b=VOUrna1bLAwBcO80Lz+63mUA2La/nBodiz7tmlW0v0oGQROu/2ghaqWziAKxPsxRi
-         FVC+GgYdh3uUe6T3TEtw2F9K0Q3e8TkO2HuyE4Y+LiAnk2ueUz/bUuatAeQ3hL9s0Q
-         QpLZQJfB7MpLw6pMXP+bp0NqDRowVnAtknLPBowljAv9LKYlyP+g8GjWOaiSJYWb93
-         GHow23+y5LM2WTzEcyd4FYElu7SItFR9QHYxqGKtxwml3QPIcula2472xeUm63+QcR
-         RmL0D3wDCLtthHCCOZkZAKbAKcb3UWM4YhdJFJyaXkRT6sI4ehGI24SCZpzLFhG6cH
-         i+4DV4OJj4ddA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B462BE330A0;
-        Mon, 17 Apr 2023 19:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229454AbjDRFn5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 01:43:57 -0400
+X-Greylist: delayed 11861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 22:43:56 PDT
+Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604F423B;
+        Mon, 17 Apr 2023 22:43:56 -0700 (PDT)
+Received: from mail.peterfykh.hu (localhost [127.0.0.1])
+        by mail.peterfykh.hu (Postfix) with ESMTP id 84E041177;
+        Tue, 18 Apr 2023 01:57:45 +0200 (CEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168175982068.402.375873709163214612.git-patchwork-summary@kernel.org>
-Date:   Mon, 17 Apr 2023 19:30:20 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 18 Apr 2023 01:57:45 +0200
+From:   MK <sebeszet@peterfykh.hu>
+To:     undisclosed-recipients:;
+Subject: Hello sunshine, how are you?
+Reply-To: marion.K08@bahnhof.se
+Mail-Reply-To: marion.K08@bahnhof.se
+Message-ID: <73f25765f6b58f5dbcf3a26ec7364a17@peterfykh.hu>
+X-Sender: sebeszet@peterfykh.hu
+User-Agent: Roundcube Webmail/1.2.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1681775879; bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=uC7WHjqTrFAg10SLXW8+MXT+Qur7exwfyWB2mmR6YGDcxtzadBldDX1N3UpRP30aojbveWRGeFTlU2peS9vUANH7zbFMs4qoDnNMBQzuzQsfWh5lww1DY8W5QfGUmuBFMeNVgffcdOjeQAMphdEqLaKEZ7SaH5Ij5Ylepqp/rYo=
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,24 +42,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+I am sorry to bother you and intrude your privacy. I am single,
+  lonely and in need of a caring, loving and romantic companion.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+I am a secret admirer and would like to explore the opportunity to
+learn more about each other. I know it is strange to contact you
+this way and I hope you can forgive me. I am a shy person and
+this is the only way I know I could get your attention. I just want
+to know what you think and my intention is not to offend you.
+I hope we can be friends if that is what you want, although I wish
+to be more than just a friend. I know you have a few questions to
+ask and I hope I can satisfy some of your curiosity with a few
+answers.
 
-Series: Support AMD Pensando Elba SoC
-  Submitter: Brad Larson <blarson@amd.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=738525
-  Lore link: https://lore.kernel.org/r/20230410184526.15990-1-blarson@amd.com
-    Patches: [v13,01/15] dt-bindings: arm: add AMD Pensando boards
-             [v13,04/15] dt-bindings: spi: dw: Add AMD Pensando Elba SoC SPI Controller
-             [v13,10/15] spi: dw: Add support for AMD Pensando Elba SoC
+I believe in the saying that 'to the world you are just one person,
+but to someone special you are the world'. All I want is love,
+romantic care and attention from a special companion which I am
+hoping would be you.
+
+I hope this message will be the beginning of a long term
+communication between us, simply send a reply to this message, it
+will make me happy.
 
 
-Total patches: 3
+Hugs and kisses,
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Marion.
