@@ -2,59 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F266E4E62
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AAD6E4EF1
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Apr 2023 19:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjDQQjM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Apr 2023 12:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S230120AbjDQRPt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Apr 2023 13:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDQQjK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 12:39:10 -0400
+        with ESMTP id S229602AbjDQRPr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Apr 2023 13:15:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563C56E8E;
-        Mon, 17 Apr 2023 09:39:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F68A47;
+        Mon, 17 Apr 2023 10:15:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B1261182;
-        Mon, 17 Apr 2023 16:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF05C433EF;
-        Mon, 17 Apr 2023 16:39:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2452562155;
+        Mon, 17 Apr 2023 17:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73900C433EF;
+        Mon, 17 Apr 2023 17:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681749548;
-        bh=JCqP49Xpz85bHJtVkhJeBIQ8R7VedWXznxPSZaz5a90=;
+        s=k20201202; t=1681751745;
+        bh=Ar210rKGPKuILnpDS5s4+q18d5eqdiuCqZZ4JpgYU5I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gSIGsY6qXIZBY2NmJowvUhPOroGWnVYrnpjj4HZdKj0Loy/wX1y/xPyPuwYFUvvn+
-         co7RimQUmLGRtnUpjGKsE5ICf4LznyfxJdKLNrJhKG9zduhhxqq8la7D/XX438acy/
-         vayM/0atTfF7YHY/j1icwAFcAIrXbORhu/5XOrdnoKT6HXkg9shZkPnSZ0A9VuYHUw
-         7xwk6ljyzDwt62NfX80+9EJZNRSnRyazJ3g8BauDFFtcO339AIHkNCgYgkfimoFrKo
-         ABvdpia6wEBBeoawryExFPwqHBhlqku09RoYg8jBmycH2TzqjUolgLQfVyl6YZlu5N
-         AGVCKbHVg077g==
-Date:   Mon, 17 Apr 2023 17:39:01 +0100
+        b=sjvO5jGW4dVyzB0xA/L0PtCpjzZ4O1of1Ka3VQoA6VX1B8GeGfFnopG3X55eItuX6
+         7eyhv7BKvfpPCAzsaX9ASRGuhu1shbAUPGXDyYlcHdAlUYgxswYGdFn/egOt59xCJi
+         XBdkH/w2BotEGmA5gcbLQxwpTwZ+nePLkHgtlccFWjNBBea2Cah5P+9UdEpwWmwTBR
+         9SEeBEZ0FkDK7KxRZ7zhOdSyZTo0hr4sqkWSxaNKOHKoVWgtCr8+AKDL6m7xTtwSRV
+         9PwRW+jZxIuaUCSpyGaD/rO8ktKOX0k4PK6dXgy5drcPtG75EmAu+OC6uy7Mmw7HqY
+         aJWgJt1c1IWJg==
+Date:   Mon, 17 Apr 2023 18:15:34 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com
-Subject: Re: [PATCH v3 3/3] spi: spi-qcom-qspi: Add DMA mode support
-Message-ID: <85225dd4-7ecd-4ce9-8447-184f749022fe@sirena.org.uk>
-References: <1681481153-24036-1-git-send-email-quic_vnivarth@quicinc.com>
- <1681481153-24036-4-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=VKY-0vX271G+EQQ5kC3gTqpPPyTGE0xHWPBncVUhZufQ@mail.gmail.com>
- <30a752c9-3ea0-43d3-959a-da2e8b526cb4@sirena.org.uk>
- <CAD=FV=VCbcUnf42tK-HV8j=71BXXytxku_0rGjKyhyR3WG4SUw@mail.gmail.com>
- <46249e7e-ac2c-00d3-b3b0-7b15848e7b7c@quicinc.com>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v13 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
+Message-ID: <9c7aec03-265f-414e-9a3f-9511f40cbbc0@sirena.org.uk>
+References: <20230410184526.15990-1-blarson@amd.com>
+ <20230410184526.15990-4-blarson@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8OVq0bfjkI9I0UjH"
+        protocol="application/pgp-signature"; boundary="Y3QWPZq3ZHOCu8GE"
 Content-Disposition: inline
-In-Reply-To: <46249e7e-ac2c-00d3-b3b0-7b15848e7b7c@quicinc.com>
-X-Cookie: Two heads are more numerous than one.
+In-Reply-To: <20230410184526.15990-4-blarson@amd.com>
+X-Cookie: You can't push on a string.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,50 +71,29 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---8OVq0bfjkI9I0UjH
+--Y3QWPZq3ZHOCu8GE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Apr 17, 2023 at 09:27:16PM +0530, Vijaya Krishna Nivarthi wrote:
+On Mon, Apr 10, 2023 at 11:45:14AM -0700, Brad Larson wrote:
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
 
-> However, Like Doug pointed, dma_alignment is not being used by core.
+This does not apply against current code, please check and resend.
 
-The core will use kmalloc() for any new buffers it allocates, this is
-guaranteed to satisfy DMA constraints.
-
-> Is it up to the SPI consumers to read this and ensure they are providing
-> dmaable buffers of required alignment?
-
-If they're doing anything fun for allocation.  Or they can just use
-kmalloc() themselves.
-
-> The dma_addresses coming from core are aligned for larger sized buffers but
-> for small ones like 1 and 3 bytes they are not aligned.
-
-In theory even buffers that small should be DMA safe, in practice that
-rarely matters since it's vanishingly rare that it's sensible to DMA
-such tiny buffers rather than PIOing them so drivers will tend to never
-actually try to do so and I'd expect bugs.  It is likely worth checking
-that DMA makes sense for this hardware.
-
-> I have not checked the spi-nor driver, but is it the consumer driver's job
-> to ensure required alignment in all cases?
-
-Yes.
-
---8OVq0bfjkI9I0UjH
+--Y3QWPZq3ZHOCu8GE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9diQACgkQJNaLcl1U
-h9AnLwf/SFrq8jwQOq601LZUGWq/RZOBA8bDTO1wfWl54flsCjecwLtsvd9kSxAu
-RnvPBbH8WYfqFWPPqrNhFXCLnLQUAopOnN2jv1l4qU+JXtAaWh64c/6tzoDFIlH6
-zrYIjh7HhLcxd72py5K9AXJwYFI+VtKCq08obGiUICl9PwZbOxJZnehf7wFnJhKM
-J93W7fU9FohfKY35qWab854R+xgi5b53NJN5GkuvG+t43QOV1ERFYT26GyHdjKtI
-UEiqahdm+2iw6i0xxqIeurkjasM63IXU+K/F4Te+rGPda7wwXQpzTUt3muhnXx2f
-5Ls7OU3Ht8KLYxk8ckc6BUuI5f8fBg==
-=m+st
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9frYACgkQJNaLcl1U
+h9B3jQf+LoKtFdxP8+ZXFtvgBvCs44/hkaDUu6Qz2NRI+d4wgLknS/P0fkqNa5fb
++PJIu76z/h9YjljFPaAdIue6USY+0g4kZZTfXjb24QmTtrPPqDzsE1bFXIKGC9iJ
+ABTT8U+DwIaagK+1fl/37rer8Bi/RsYY5fH+UesiXMyfHNE8QWdDiJ7urGQTfJG/
+h76thHZ3gTS298ZURH0cQcNv99loPpYl+Fnh2GX55hnZ7dGVPHpg+nFL4Xwd3ebB
+AYRp8z9zv6ary86tDU2IKdtlHZtUjYXuUOp5BkYOgec7MdxOY9k9CbT/b8wj+O3S
+fclEugSoM9qmO77Y88oIULqIb+aTBw==
+=97Ia
 -----END PGP SIGNATURE-----
 
---8OVq0bfjkI9I0UjH--
+--Y3QWPZq3ZHOCu8GE--
