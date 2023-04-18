@@ -2,121 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DA36E5C23
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 10:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22B16E5FB6
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 13:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjDRIfS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Apr 2023 04:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S229931AbjDRLV7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Apr 2023 07:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjDRIfR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 04:35:17 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5225276
-        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 01:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681806910; x=1713342910;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EpL+GTwf+VU6IHgsMttB337kq77ZB+0+82oQfGvU02g=;
-  b=kbrA8RvQG/JA1s3W/grVUwuhuD71IM0uJyq8gKjtH3Zvg3Be6rW92FUT
-   XK/IFfW/TaRr+SXw8ll9fYap/BCtciu3Zv0U/JmItj/YkKDCppUE6h24h
-   lzbvpH8xbSZhSqLa2ga6MOKz/j/L5mopn8mtctXqhng5lTcuq3XNQp25L
-   5lBvJesjL1dmZOBgacm4UajVjtM0Z4zvuoE+EMZ9yvlX1szKinoWprdJY
-   mjvOmPcVV2CHBri0CGXEyGeF/F8D/qEYbMCTN6pcH/m2E+kiLcMaJysu+
-   GE05G7GzFIm6LYfZxndI7F/SEAc0JzUbZidqFl+Zy+i+S25CiC3HQvsVG
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,206,1677538800"; 
-   d="scan'208";a="30389895"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 18 Apr 2023 10:35:08 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 18 Apr 2023 10:35:08 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 18 Apr 2023 10:35:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681806908; x=1713342908;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EpL+GTwf+VU6IHgsMttB337kq77ZB+0+82oQfGvU02g=;
-  b=n83rkcTz5dNgFTtRrNFVaIMyoNm3nsRTzPUBmUXlWJRgjNtTYIuN+Cy2
-   7lMaGmDwNbL4bNLyKy0KN9jBtURmJi9jRC06gOPeSN6hc+zifI3PqnZNj
-   9nKtp8SZnH/aX36nHpc4FMhJK6/ENOoAo4lMQx3lmQE1J7oJpoS+hrc21
-   nz1+H/qiOkmU8rkngydyczPeifRQWDUWSjcjyyNWnk9SQaKRr19Y26U1U
-   vet3erbE/M/U8bFqpXbdMIVf4EfNgPrgJQrHqneJeZ8AyToW5bDSXmTBT
-   DWBQPZ5WQ9kLAY82r6CEuXIwRDKdeavrO4fn2SL29Jzc9U+fjhbq36ZS2
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,206,1677538800"; 
-   d="scan'208";a="30389894"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 18 Apr 2023 10:35:08 +0200
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4BB87280056;
-        Tue, 18 Apr 2023 10:35:08 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 1/1] spi: spi-imx: Use dev_err_probe for failed DMA channel requests
-Date:   Tue, 18 Apr 2023 10:35:05 +0200
-Message-Id: <20230418083505.466198-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229564AbjDRLV6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 07:21:58 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D77993D8;
+        Tue, 18 Apr 2023 04:21:35 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxJDQ3fT5kvWkeAA--.48215S3;
+        Tue, 18 Apr 2023 19:21:27 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC743fT5klNssAA--.53316S3;
+        Tue, 18 Apr 2023 19:21:27 +0800 (CST)
+Subject: Re: [PATCH v7 0/2] spi: loongson: add bus driver for the loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
+References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
+ <bafedfaf-9ffe-b0ad-d51d-d4b820da3a80@linaro.org>
+ <81229100-a546-74b3-d626-09d042688746@loongson.cn>
+ <87e1294f-405f-9be2-9b47-52cd29f7fd1a@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <1e080e82-f20d-f3df-2eb0-f4104bfa616e@loongson.cn>
+Date:   Tue, 18 Apr 2023 19:21:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <87e1294f-405f-9be2-9b47-52cd29f7fd1a@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxC743fT5klNssAA--.53316S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7JFWkAFWUuF43WrW5JF4xJFb_yoWkurg_Kr
+        y8A3s7Wr1Uurs8Jw4vqF1I9ws8tr1Du34YkrW0gw4UC34fXFy5Ar4DCw1SqasxW3s3KFn0
+        kw4qgFyI9w4YvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74
+        AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URHq7UUUUU=
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If dma_request_chan() fails, no error is shown nor any information is
-shown in /sys/kernel/debug/devices_deferred if -EPROBE_DEFER is returned.
-Use dev_err_probe to fix both problems.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-With this patch applied /sys/kernel/debug/devices_deferred actually
-shows these lines on my platform:
-30820000.spi    spi_imx: can't get the TX DMA channel!
-30830000.spi    spi_imx: can't get the TX DMA channel!
 
- drivers/spi/spi-imx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+在 2023/4/18 下午3:06, Krzysztof Kozlowski 写道:
+> On 18/04/2023 04:53, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/4/15 上午4:43, Krzysztof Kozlowski 写道:
+>>> On 12/04/2023 06:51, Yinbo Zhu wrote:
+>>>> Loongson platform support spi hardware controller and this series patch
+>>>> was to add spi driver and binding support.
+>>>>
+>>>> Change in v2:
+>>>> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+>>>> 	 	   https://
+>>>
+>>> Can you stop Ccing fake address "loongson-kernel@lists.loongnix.cn"? It
+>>> does not exist. Remove it from all submissions.Recently, There was some issue with the company's email server, causing
+>> this mail list "loongson-kernel@lists.loongnix.cn" to only accept
+>> internal emails and not accpet external emails. The company's IT is
+>> working to fix this issue. and Ccing this mail list is an internal
+>> requirement.  I will not send emails to this mail list until this email
+>> sever issue is resolved.
+> 
+> You can always Bcc it, if you have such requirement. However your
+> internal requirements should not cause my removing all the time multiple
+> bounces...
+> 
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 34e5f81ec431e..b23325a3bb667 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1318,7 +1318,7 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
- 	controller->dma_tx = dma_request_chan(dev, "tx");
- 	if (IS_ERR(controller->dma_tx)) {
- 		ret = PTR_ERR(controller->dma_tx);
--		dev_dbg(dev, "can't get the TX DMA channel, error %d!\n", ret);
-+		dev_err_probe(dev, ret, "can't get the TX DMA channel!\n");
- 		controller->dma_tx = NULL;
- 		goto err;
- 	}
-@@ -1327,7 +1327,7 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
- 	controller->dma_rx = dma_request_chan(dev, "rx");
- 	if (IS_ERR(controller->dma_rx)) {
- 		ret = PTR_ERR(controller->dma_rx);
--		dev_dbg(dev, "can't get the RX DMA channel, error %d\n", ret);
-+		dev_err_probe(dev, ret, "can't get the RX DMA channel!\n");
- 		controller->dma_rx = NULL;
- 		goto err;
- 	}
--- 
-2.34.1
+okay, I got it.
+
+Thanks.
+> Best regards,
+> Krzysztof
+> 
 
