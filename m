@@ -2,67 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22B16E5FB6
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 13:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD27E6E64E1
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 14:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjDRLV7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Apr 2023 07:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S232238AbjDRMxX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Apr 2023 08:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRLV6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 07:21:58 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D77993D8;
-        Tue, 18 Apr 2023 04:21:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxJDQ3fT5kvWkeAA--.48215S3;
-        Tue, 18 Apr 2023 19:21:27 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC743fT5klNssAA--.53316S3;
-        Tue, 18 Apr 2023 19:21:27 +0800 (CST)
-Subject: Re: [PATCH v7 0/2] spi: loongson: add bus driver for the loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
- <bafedfaf-9ffe-b0ad-d51d-d4b820da3a80@linaro.org>
- <81229100-a546-74b3-d626-09d042688746@loongson.cn>
- <87e1294f-405f-9be2-9b47-52cd29f7fd1a@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <1e080e82-f20d-f3df-2eb0-f4104bfa616e@loongson.cn>
-Date:   Tue, 18 Apr 2023 19:21:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S232236AbjDRMxU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 08:53:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15F516F8D
+        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 05:53:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9095663440
+        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 12:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FE8C433A0;
+        Tue, 18 Apr 2023 12:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681822381;
+        bh=zRxpqzn78YA54iQsLrcw0c4B56S5uPHBZyUSwYzLdo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ffbrdyx1+wvLlXGCDskYu4cbR51kEf1PlZtrhQOPWxS+Xnrmn5RD8bT9uCKozML5k
+         Tjif4ZeewMBUTM93Me31yCrgnusOIMytzRV1m1tyX+zLBx60+DF8pHVrV8hFh4KKTj
+         xDYXb+pOklTQlp0KL2aVr2eEvaktBM+VS6GXq+uZKAQ4mMR49Pg2y3vVPlbo6geYi4
+         D8oU2ShuOcDpw2LxzKtl94NqrAr57Mg2aUubim6W09Unaxw6AUsnB/grD2YaCMlo4y
+         zY/YUGBJvOnl5YM/peFbnk7QMtLPe5p3lYZ+RJzZ8JttMYrjS6iDVlwy3F7CMAZFHr
+         1MTgHDdujx9LA==
+Date:   Tue, 18 Apr 2023 13:52:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: cadence-quadspi: use macro SIMPLE_DEV_PM_OPS
+Message-ID: <e65683c1-9f1b-4cfb-8e14-087ef7d69595@sirena.org.uk>
+References: <20230417091027.966146-1-d-gole@ti.com>
+ <20230417091027.966146-2-d-gole@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <87e1294f-405f-9be2-9b47-52cd29f7fd1a@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxC743fT5klNssAA--.53316S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7JFWkAFWUuF43WrW5JF4xJFb_yoWkurg_Kr
-        y8A3s7Wr1Uurs8Jw4vqF1I9ws8tr1Du34YkrW0gw4UC34fXFy5Ar4DCw1SqasxW3s3KFn0
-        kw4qgFyI9w4YvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l
-        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74
-        AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URHq7UUUUU=
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Jpn4zXoXVD9eoGmq"
+Content-Disposition: inline
+In-Reply-To: <20230417091027.966146-2-d-gole@ti.com>
+X-Cookie: Just to have it is enough.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +58,37 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--Jpn4zXoXVD9eoGmq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-在 2023/4/18 下午3:06, Krzysztof Kozlowski 写道:
-> On 18/04/2023 04:53, zhuyinbo wrote:
->>
->>
->> 在 2023/4/15 上午4:43, Krzysztof Kozlowski 写道:
->>> On 12/04/2023 06:51, Yinbo Zhu wrote:
->>>> Loongson platform support spi hardware controller and this series patch
->>>> was to add spi driver and binding support.
->>>>
->>>> Change in v2:
->>>> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
->>>> 	 	   https://
->>>
->>> Can you stop Ccing fake address "loongson-kernel@lists.loongnix.cn"? It
->>> does not exist. Remove it from all submissions.Recently, There was some issue with the company's email server, causing
->> this mail list "loongson-kernel@lists.loongnix.cn" to only accept
->> internal emails and not accpet external emails. The company's IT is
->> working to fix this issue. and Ccing this mail list is an internal
->> requirement.  I will not send emails to this mail list until this email
->> sever issue is resolved.
-> 
-> You can always Bcc it, if you have such requirement. However your
-> internal requirements should not cause my removing all the time multiple
-> bounces...
-> 
+On Mon, Apr 17, 2023 at 02:40:26PM +0530, Dhruva Gole wrote:
 
-okay, I got it.
+> -static const struct dev_pm_ops cqspi__dev_pm_ops =3D {
+> -	.suspend =3D cqspi_suspend,
+> -	.resume =3D cqspi_resume,
+> -};
+> +static SIMPLE_DEV_PM_OPS(cqspi__dev_pm_ops, cqspi_suspend, cqspi_resume);
+> =20
+>  #define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
+>  #else
 
-Thanks.
-> Best regards,
-> Krzysztof
-> 
+These days you should use DEFINE_SIMPLE_DEV_PM_OPS() instead.
 
+--Jpn4zXoXVD9eoGmq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ+kqcACgkQJNaLcl1U
+h9Aevwf/SNTlC+wg2l0qkwwYLIIVG/rC5ec/cRZWZ7tjPOvKoMaWsodeHPiyMeJG
+rp7GvNh62DFGykGlchj48AVQkIu8YXrwjdIaK6cnlXtGZ6EQIwIYgCB3HzKP94GG
+GwAl4b5lHou2sG/6rpv1UvN+vJ9fenBPix25bQmUdzsfn4YlLa6U+lPW0Y8mKyJ5
+vilN7cyBeLwsOC1VsbZeUnNEJwZL0hzpLQwIYbnZuWHKlUIRarfZH9MYve9aSlVP
+Qy4k0Yi1J723o+hGb5q808ddp2MNfMVjzv+YQZ3QLcfKmwk2h8b5PzC3fvqq+Ia+
+2c2jdrJZL5Fm6E+QOMiOvMdAUuyL8g==
+=/8O6
+-----END PGP SIGNATURE-----
+
+--Jpn4zXoXVD9eoGmq--
