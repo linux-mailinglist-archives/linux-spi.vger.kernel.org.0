@@ -2,66 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A2B6E58CF
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 07:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD4B6E5A0D
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Apr 2023 09:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjDRF4k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Apr 2023 01:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S230477AbjDRHGM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Apr 2023 03:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDRF4k (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 01:56:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C5240F0
-        for <linux-spi@vger.kernel.org>; Mon, 17 Apr 2023 22:56:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 803B7629E2
-        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 05:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7A7FC433EF;
-        Tue, 18 Apr 2023 05:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681797397;
-        bh=HEzb+4P4t0fL+1W13gLjKbMvUhhXQQUFEEqDs/bqJvI=;
-        h=Subject:From:Date:To:From;
-        b=djcL2W1J7EofZK1az0JnQHoxUulV7pJ3BcDj8XgKJ5/RXzmpujgzUsVkSGIVcKNyk
-         LwFspUK2jzkrq1yaQ61Exsoanc4sEYUoBb0FXdHJ9reqPBbveUVnhiubSsgDCqXO5z
-         mn1wR0kRwXec/Q34NX7vEmINef3seQeawUYvz3NQzpzslGPnB75lsZjEsJ7f6FPkY9
-         iPpgya03XbzaEiXNEqq/qcj+5w9p0AoeMhrQphibFwm3CbSEsvCazFNT4ZvElKAzkm
-         H0Q6YEQ/o0xK0GEILa+rwVJMzvIVVdt9fGK51L8UQOgxofOL1futn4spz9K2J/Zdrk
-         HvLU2GG6lecdg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B38E4C4167B;
-        Tue, 18 Apr 2023 05:56:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229706AbjDRHGL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Apr 2023 03:06:11 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B427B1713
+        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 00:06:09 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id vc20so15639293ejc.10
+        for <linux-spi@vger.kernel.org>; Tue, 18 Apr 2023 00:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681801568; x=1684393568;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+D0q7Iw7kC4pQirExIbqNpaV2BkoBjtS/zbYfLGPKpQ=;
+        b=YdWTY+b0JbdcvJIGLULiw+E7eFmc1jo0Nn70OT6NSrKdMTAHyYfCf/wFe0Fwp/rmm/
+         VAfdeo6R6DIwH304NoKi7fhwMa811yqvgMrsaGRTs4CiFtNWD3p4M4cyDDbagS53VOIw
+         seZjWqJgoYmk7wg5DwBf5UaA3TJI5+JU4pJKp2UvXjm/oiprq5xnh4SOe9B66cuEy+dX
+         wKVRUqPBSZzF0pvRHBnNpXGjXB4uKh9TS6UWlaiQkiGZrxjDRDTqo4LOMwyV75NJsnAR
+         ny+b2ORESe8ZLq7shOVBar5aYRmQo1cCPdLIE22deKstm4pgHnWKWrgvFOMrbt0/t3DB
+         NgMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681801568; x=1684393568;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+D0q7Iw7kC4pQirExIbqNpaV2BkoBjtS/zbYfLGPKpQ=;
+        b=ho1pO6wzBjYiAm0FbOI/OWrdWm65VQ0Sr1yrP39DRqjjYEvCaWk3mrOxaFXt8DkL9q
+         KR2IsbcXWTsI31Veq2dYC4ouD+KxqvBRKfL6vlxJ2CqM7Cbh2/R4s0QSg487Qsia61dJ
+         FdKK0rYoo9/k09v4w124cubZiuVRYV0EJ6T39D6I0nxS95xM/tC/46JEs0nLjlzqMDvX
+         FaMCUSiXQP8FNHLBqdrjTZKG8RSEj8AS8Mmgoe8qIo7YQbjOmnR4QyTkpzgHZk8zyPMY
+         suMnJbtb7PuR4zSiCf9LBHlWLgDllTmIoUrG96/bsa9JwsErX500nupqz0jS7J+f/z0v
+         pdKA==
+X-Gm-Message-State: AAQBX9fzMhvL1ync1c8Psrw4Y57si6hW58TR0cDLHG7B1maVAFgcODoR
+        tu2939rZVNrbiNnGiy/ckIdY0nBFt/OMCsNZ09AB9A==
+X-Google-Smtp-Source: AKy350ZykbtrClI90pXvKbaBsf8ftpAs9c5AJprtnAIpnsiTE6BzqUvNDXdiBJgcCsMS1ypazOHKMw==
+X-Received: by 2002:a17:906:3e5b:b0:94f:31ee:ba36 with SMTP id t27-20020a1709063e5b00b0094f31eeba36mr7743948eji.37.1681801568168;
+        Tue, 18 Apr 2023 00:06:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id zy24-20020a17090734d800b0094f44bdf7acsm3644832ejb.57.2023.04.18.00.06.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 00:06:07 -0700 (PDT)
+Message-ID: <87e1294f-405f-9be2-9b47-52cd29f7fd1a@linaro.org>
+Date:   Tue, 18 Apr 2023 09:06:06 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 0/2] spi: loongson: add bus driver for the loongson spi
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20230412045152.4694-1-zhuyinbo@loongson.cn>
+ <bafedfaf-9ffe-b0ad-d51d-d4b820da3a80@linaro.org>
+ <81229100-a546-74b3-d626-09d042688746@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <81229100-a546-74b3-d626-09d042688746@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168179739767.7639.7401417322411965188.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 18 Apr 2023 05:56:37 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v7] spi: dw: DW SPI DMA Driver updates (2023-04-18T05:28:57)
-  Superseding: [v6] spi: dw: DW SPI DMA Driver updates (2023-04-14T12:05:15):
-    [v6,1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
-    [v6,2/5] spi: dw: Move "dw_spi_can_dma" function
-    [v6,3/5] spi: dw: Add DMA directional capability check
-    [v6,4/5] spi: dw: Add DMA address widths capability check
-    [v6,5/5] spi: dw: Round of n_bytes to power of 2
+On 18/04/2023 04:53, zhuyinbo wrote:
+> 
+> 
+> 在 2023/4/15 上午4:43, Krzysztof Kozlowski 写道:
+>> On 12/04/2023 06:51, Yinbo Zhu wrote:
+>>> Loongson platform support spi hardware controller and this series patch
+>>> was to add spi driver and binding support.
+>>>
+>>> Change in v2:
+>>> 		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+>>> 	 	   https://
+>>
+>> Can you stop Ccing fake address "loongson-kernel@lists.loongnix.cn"? It
+>> does not exist. Remove it from all submissions.Recently, There was some issue with the company's email server, causing
+> this mail list "loongson-kernel@lists.loongnix.cn" to only accept
+> internal emails and not accpet external emails. The company's IT is
+> working to fix this issue. and Ccing this mail list is an internal
+> requirement.  I will not send emails to this mail list until this email
+> sever issue is resolved.
 
+You can always Bcc it, if you have such requirement. However your
+internal requirements should not cause my removing all the time multiple
+bounces...
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Best regards,
+Krzysztof
 
