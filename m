@@ -2,142 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFE96E74E1
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2446E74F4
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjDSIVM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 04:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S231881AbjDSIZB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 04:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjDSIVL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:21:11 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D692527A
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:21:10 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kt6so41335867ejb.0
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681892469; x=1684484469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RqPKWPiQ8+y3+LyUWsBFNDNPzOI/PBWOQwZkMXBI3Es=;
-        b=CJ5scG94dQsUIHi9sqRUZJKMVOsTwn1NecluOHiKAbgJykZvznbFd0zpBhnVJY4UcT
-         Ove0nf3k7Jiu1jl+r96JzEg/I9WyKDXz7zeIJK4XQchNvByhRm6gW6mkyKWnremO03dx
-         aLwkBAtdxAU3cPxEMEf/tSToAi5FodUFrx9RKcRhzoc0bvYazsHc9GuXfqqARvM2mNxO
-         sjoGP3EkOA3de7t7Z954LOoRWf6P5ZgRUu+2RCyqW4QRoNWl3XeB2juJVF1pW55jQ6/n
-         MrdKSQSJ8QKOMYAH0cv5pS2K1AHLcIBlsFoiIbKZhTaUTvgjQkC5AKQuSljgyE+C2pqf
-         d29Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681892469; x=1684484469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RqPKWPiQ8+y3+LyUWsBFNDNPzOI/PBWOQwZkMXBI3Es=;
-        b=Jtk1jq2paWyXJJRvY4YQo3Tl3AK28b6HAFSDyz+H5wcHqM2w5W9Xkm8ZlFajtkdImR
-         wpjsYWjmeC8yo8aZ58GtTsxOSy/PaGn66oNTTDjFfc2Km87M2YykVtiwNJ2s3TzaUOwR
-         DJZvywSRHu6pXGxAyxSNzO1nz4vmPVM83jFm2lcHvgh0aOYpZQCvJNmNhFBClmjDUGLM
-         uLaF6egU+JZsE0w4IqGIJ49rD4fb1u+qXI1l+LtjIsXWuwrc4frOkawPuCby6oyTgNfX
-         wFdVbPQ2N8v9CVTt916nMFlVpbT1VKpkuuOZn2T4UaLEC9DULtQ6o5YU+JCAzoWxeKgP
-         iFPQ==
-X-Gm-Message-State: AAQBX9fI7dBMbLYOL4NH19iNJ9a5RwV2pygX4ec5RT6Dfew4dgXfgWo2
-        07u/N46MwlRJMq+02tMcpZyhqOla5OUgjaT8ZtgngQ==
-X-Google-Smtp-Source: AKy350ZBV0waGDxi1JEvFsVajSenAMWdYIAAtiJEIOQ38Iq0E2LTPpkv9e81HyNBnJkmHg0Q0nqrKw==
-X-Received: by 2002:a17:906:3e5b:b0:94f:31ee:ba36 with SMTP id t27-20020a1709063e5b00b0094f31eeba36mr11551763eji.37.1681892468650;
-        Wed, 19 Apr 2023 01:21:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id hv14-20020a17090760ce00b0095251a3d66fsm2022814ejc.119.2023.04.19.01.21.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:21:08 -0700 (PDT)
-Message-ID: <88e74f8f-feee-159a-3048-736a5ffc13cd@linaro.org>
-Date:   Wed, 19 Apr 2023 10:21:07 +0200
+        with ESMTP id S231735AbjDSIZA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:25:00 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993F710DA
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=3Q8+vJIKMTdavrsl59FUFFHh5cq
+        sq8VNH5KnBH0GnBk=; b=kLN1O+SapUu0/jhctblaP79oW6cVwvfoiOW+1ixkZv3
+        hZoQPY0ZXw89uf+xB8w0Dp64sijYyBREj8KyjBnAelyk4grUq9zlM5jNzSdQqfSV
+        FbMDLbI41+ya24TGPFUVeyHjjXjtF+PQlMRtFRwcc65UIoc86LAvTGX1X0dhsSCU
+        =
+Received: (qmail 3619070 invoked from network); 19 Apr 2023 10:24:54 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Apr 2023 10:24:54 +0200
+X-UD-Smtp-Session: l3s3148p1@MW+WKKz56KkujnsI
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] spi: sh-msiof: Enforce fixed DTDL for R-Car H3
+Date:   Wed, 19 Apr 2023 10:24:32 +0200
+Message-Id: <20230419082432.33808-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 4/4] spi: s3c64xx: support interrupt based pio mode
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
- <CGME20230419062755epcas2p43a1127f4bb28cf1cf3f42e5d3cc597cd@epcas2p4.samsung.com>
- <20230419060639.38853-5-jaewon02.kim@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419060639.38853-5-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/04/2023 08:06, Jaewon Kim wrote:
-> Interrupt based pio mode is supported to reduce CPU load.
-> If transfer size is larger than 32 byte, it is processed using interrupt.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> ---
->  drivers/spi/spi-s3c64xx.c | 82 ++++++++++++++++++++++++++++++++-------
->  1 file changed, 67 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index cf3060b2639b..ce1afb9a4ed4 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -58,6 +58,8 @@
->  #define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
->  #define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
->  #define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
-> +#define S3C64XX_SPI_MODE_RX_RDY_LVL		GENMASK(16, 11)
-> +#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT	11
->  #define S3C64XX_SPI_MODE_SELF_LOOPBACK		(1<<3)
->  #define S3C64XX_SPI_MODE_RXDMA_ON		(1<<2)
->  #define S3C64XX_SPI_MODE_TXDMA_ON		(1<<1)
-> @@ -114,6 +116,8 @@
->  
->  #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
->  
-> +#define S3C64XX_SPI_POLLING_SIZE	32
-> +
->  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
->  #define is_polling(x)	(x->cntrlr_info->polling)
->  
-> @@ -552,10 +556,11 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
->  }
->  
->  static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
-> -				struct spi_transfer *xfer)
-> +				struct spi_transfer *xfer, int use_irq)
->  {
->  	void __iomem *regs = sdd->regs;
->  	unsigned long val;
-> +	unsigned long time;
->  	u32 status;
->  	int loops;
->  	u32 cpy_len;
-> @@ -563,17 +568,24 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->  	int ms;
->  	u32 tx_time;
->  
-> -	/* sleep during signal transfer time */
-> -	status = readl(regs + S3C64XX_SPI_STATUS);
-> -	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
-> -		tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
-> -		usleep_range(tx_time / 2, tx_time);
-> -	}
+Documentation says only DTDL of 200 is allowed for this SoC.
 
-You just added this code. Adding and immediately removing it, suggests
-this should be one patch.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
 
+Changes since v1:
+* fixed a whitespace issue
+* added tags
 
-Best regards,
-Krzysztof
+ drivers/spi/spi-sh-msiof.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index 9bca3d076f05..51ceaa485724 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -30,12 +30,15 @@
+ 
+ #include <asm/unaligned.h>
+ 
++#define SH_MSIOF_FLAG_FIXED_DTDL_200	BIT(0)
++
+ struct sh_msiof_chipdata {
+ 	u32 bits_per_word_mask;
+ 	u16 tx_fifo_size;
+ 	u16 rx_fifo_size;
+ 	u16 ctlr_flags;
+ 	u16 min_div_pow;
++	u32 flags;
+ };
+ 
+ struct sh_msiof_spi_priv {
+@@ -1073,6 +1076,16 @@ static const struct sh_msiof_chipdata rcar_gen3_data = {
+ 	.min_div_pow = 1,
+ };
+ 
++static const struct sh_msiof_chipdata rcar_r8a7795_data = {
++	.bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
++			      SPI_BPW_MASK(24) | SPI_BPW_MASK(32),
++	.tx_fifo_size = 64,
++	.rx_fifo_size = 64,
++	.ctlr_flags = SPI_CONTROLLER_MUST_TX,
++	.min_div_pow = 1,
++	.flags = SH_MSIOF_FLAG_FIXED_DTDL_200,
++};
++
+ static const struct of_device_id sh_msiof_match[] = {
+ 	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
+ 	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
+@@ -1083,6 +1096,7 @@ static const struct of_device_id sh_msiof_match[] = {
+ 	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
+ 	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
+ 	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
++	{ .compatible = "renesas,msiof-r8a7795",   .data = &rcar_r8a7795_data },
+ 	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
+ 	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
+ 	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen3_data },
+@@ -1280,6 +1294,9 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
++	if (chipdata->flags & SH_MSIOF_FLAG_FIXED_DTDL_200)
++		info->dtdl = 200;
++
+ 	if (info->mode == MSIOF_SPI_SLAVE)
+ 		ctlr = spi_alloc_slave(&pdev->dev,
+ 				       sizeof(struct sh_msiof_spi_priv));
+-- 
+2.30.2
 
