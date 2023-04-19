@@ -2,74 +2,188 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49EE6E82DF
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 22:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DEB6E82FD
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 23:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjDSUwQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 16:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S230386AbjDSVDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 17:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjDSUwP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 16:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D6610E0;
-        Wed, 19 Apr 2023 13:52:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7996361645;
-        Wed, 19 Apr 2023 20:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF4EAC4339C;
-        Wed, 19 Apr 2023 20:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681937533;
-        bh=ghLbHflzXj/u4XJNYfRRuJxPoDqTYJuQzfp2TQJ8o5M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cktAz7jfBuYypASxTCCn5TwrpSjCCHG0czn6TVxDMGv4cqX+xUJP//57QnxrJbxVp
-         yhxNzOx7vIK8H8im/pE3j8EUTgzM5+zI6iv4D0Qo6b+kkeG4jdZ3W6kPc8gAhDHaRP
-         C9L/zXRAlBJFatpzkkdXOZh99a/TxSpna7eJ0Ikarv+1q1aNa1CnX/OoWGsY9LkMOV
-         lgWf52Xa2R//E3WkJWRQWC5+XET+dlQzPeiGWbwFl/D5d9uby5MWeul/OMdu05Y6Py
-         q1H0T0P1BWTFqurVKvBc8M48FaHxWCc+JDI+9lWU3fgFHCVQ3RP8UZdi5vvJZzSzvc
-         U+syMV0h8f4gw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9CF4E50D61;
-        Wed, 19 Apr 2023 20:52:13 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.3-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230419202458.ECA19C433AE@smtp.kernel.org>
-References: <20230419202458.ECA19C433AE@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230419202458.ECA19C433AE@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.3-rc7
-X-PR-Tracked-Commit-Id: 359f5b0d4e26b7a7bcc574d6148b31a17cefe47d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 23990b1affd2dc8f5e59048d4d4bef05f6e1c544
-Message-Id: <168193753375.29762.12208293672165658133.pr-tracker-bot@kernel.org>
-Date:   Wed, 19 Apr 2023 20:52:13 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229621AbjDSVDw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 17:03:52 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8845BAE
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 14:03:50 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54fe82d8bf5so18514977b3.3
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 14:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681938230; x=1684530230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nQiggG3o2RYfkSueu3n51t9vPaOXp7k+C+N1iEzYTEk=;
+        b=DDIqZEKcT4jRp6nDbXkScFkNmbm5AgSEIJZPPSGj1A+qNr77ePB+hefmGWnPS7PF0q
+         /CG3WEVzHEUAYzVf8iL8BjlEmyurmWswnKK4KqxahVsjSMB7Z35E2GnOODyQw+f6upQN
+         UNiWfKG8jOlM2oo6GLBS+a3hpglneBdNYKbKbpbzHujA5DjTy00EvDMgGd/BHh8bHk0l
+         j/S5wiFZw4KkZXzfss6FgcDzc512CjtUL/eemQVQw6NnhBTC7Ak7FYkv27SK/EeOLw4U
+         /xPWiY4CHnDv6JlPSBqGdlk6DuSKsLoIQlEEv4SKUoRsjYy0/SJBfgUNv6yAMAm9mLx7
+         AXFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681938230; x=1684530230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nQiggG3o2RYfkSueu3n51t9vPaOXp7k+C+N1iEzYTEk=;
+        b=B+agE/bBHIxq6GjsIe8M3pj2n+QTXWk4A3AhjVw8mYn9SXmtAZoB8akNWNMP00zdCr
+         bdsOaYzk0UXi1QVkhIqL219/iM4LyoW0wOaTpv7wJONiMvRQvcYbh6Kx94jwr8X45DO/
+         I7fx3uFU8rBFoRGTB9OugGmaT1UFurfvNE4OgJ45luFS8K5vRteKAdgF9AErMeGRJdXH
+         vmWglSl0ZEt3iwPeearI6FgLNKzcbtd7EDaUX7uO65F//HRSf6AYkQsadWGUUOxwfuED
+         FGyiWP3sv7296mfKphkW5WR+LNKIFZxMpksxNMgoUVVtvULpuH0DVB/DBgY3z6n+FJ89
+         hxPw==
+X-Gm-Message-State: AAQBX9fqqHvXBbRdYA7jK0pga+gzjvndsmBOwmKu68gukcvF41z+6T73
+        PB5AhsWsX6IbRcU8agaGJmNzQNMT4e5FH3VyV9W3mA==
+X-Google-Smtp-Source: AKy350ZqAwMZuGujmctNj5/4RDX2TlF72A4V6FVYK1MnZdscKftu5mlDwi3GWrsOP9qhOGlaoZJPJ5ndRNMNYzm04PM=
+X-Received: by 2002:a81:5b04:0:b0:552:b5db:45c4 with SMTP id
+ p4-20020a815b04000000b00552b5db45c4mr4852907ywb.15.1681938229498; Wed, 19 Apr
+ 2023 14:03:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
+ <ZD5JC7BdN1usn6Kd@smile.fi.intel.com> <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
+ <ZD/VO1cuBYGCP4O2@smile.fi.intel.com> <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
+ <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
+In-Reply-To: <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Thu, 20 Apr 2023 02:33:37 +0530
+Message-ID: <CAOSNQF1vFh=8NGyrQ5NAuefK=_0TTt3CECZ0Q9cfaGdpE2G5qw@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Wed, 19 Apr 2023 21:24:47 +0100:
+On Wed, Apr 19, 2023 at 11:05=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
+>
+> On Wed, Apr 19, 2023 at 06:18:04PM +0530, Joy Chakraborty wrote:
+> > On Wed, Apr 19, 2023 at 5:19=E2=80=AFPM Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> > > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
+> > > > On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
+> > > > <andriy.shevchenko@intel.com> wrote:
+> > > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
+>
+> ...
+>
+> > > > > > +     /*
+> > > > > > +      * Assuming both channels belong to the same DMA controll=
+er hence the
+> > > > > > +      * address width capabilities most likely would be the sa=
+me.
+> > > > > > +      */
+> > > > >
+> > > > > I had a small comment on this In v6 thread.
+> > > >
+> > > > Sure,
+> > > >
+> > > > Your comment in V6 thread:
+> > > > "
+> > > > I would add something to explain the side of these address width, l=
+ike
+> > > >
+> > > >          * Assuming both channels belong to the same DMA controller=
+ hence
+> > > >          * the peripheral side address width capabilities most like=
+ly would
+> > > >          * be the same.
+> > > > "
+> > > >
+> > > > I do not think the address width capabilities are dependent on the
+> > > > side of generation like memory or peripheral.
+> > >
+> > > Yes, they are independent. Memory could do with 4 bytes, while periph=
+eral with
+> > > 1 byte and so on.
+> > >
+> > > > From what I understand,
+> > > > address width capabilities are solely dependent on the transaction
+> > > > generation capability of the DMA controller towards the system bus.
+> > >
+> > > What do you mean by a SB in the above? Memory? Peripheral?
+> >
+> > By system bus I mean anything that is connecting the Memory, DMA and
+> > the peripheral.
+> > Something like :
+> >
+> >           +-----------+          +-------------------+
+> >           |               |           |                        |
+> >           |   DMA    |           | PERIPHERAL |
+> >           |               |           |                         |
+> >           +----^-+---+          +-----+--^---------+
+> >         *** -->| |                         |    |
+> >                   | |                         |    |
+> > <------------+-v--------------------v---+------------->
+> >                     SYSTEM BUS
+> > <---------------------+--^----------------------------->
+> >                             |   |
+> >                             |   |
+> >                      +----v--+-----+
+> >                      |                   |
+> >                      |  MEMORY |
+> >                      |                   |
+> >                      +--------------+
+> > *** : Address width capabilities should be the capability of the DMA
+> > to generate transactions to the system bus on the marked interface
+> > irrespective of whether it is destined for Peripheral or memory is
+> > what I understand.
+>
+> That's misunderstanding. You used only one possible HW design, there may =
+be
+> more. For example we have Synopsys DesignWare DMA that has a lot of param=
+eters
+> to configure bus mastering. One of such a case, where it makes a lot of s=
+ense,
+> is DesignWare SATA with the above mentioned DMA controller where it has t=
+wo
+> masters and they are connected towards memory and towards peripheral "bus=
+es".
+> They have _different_ configurations.
+>
+> So, generally speaking what you are saying is not true.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.3-rc7
+Got it, thank you for the clarification.
+I misunderstood what you meant, that peripheral access can be from a
+different path.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/23990b1affd2dc8f5e59048d4d4bef05f6e1c544
+I shall add to the comment as you suggested and send another patch.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>
+> > > > What we intend to highlight here is the assumption that both tx and=
+ rx
+> > > > channel would belong to the same DMA controller hence the transacti=
+on
+> > > > generation capabilities would be the same both for read and write
+> > > > (e.g. if the DMA controller is able to generate 32 bit sized reads
+> > > > then it should also be able to generate 32 bit sized writes).
+> > > > With this assumption we are doing a bitwise and of both tx and rx c=
+apabilities.
+> > > >
+> > > > Please let me know if you think otherwise.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
