@@ -2,59 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995696E7487
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 09:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330CE6E7495
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjDSH7m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 03:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S230377AbjDSID2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 04:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbjDSH7l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 03:59:41 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AE44C3D
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 00:59:39 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so27226925a12.1
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 00:59:39 -0700 (PDT)
+        with ESMTP id S231966AbjDSIDY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:03:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B4630F8
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:03:23 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94e53ef6815so436924666b.1
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681891177; x=1684483177;
+        d=linaro.org; s=google; t=1681891401; x=1684483401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2QDSFk1bWw84sERed1okCfC1U1gkUcGVMuz8bB1DTOE=;
-        b=ri1qD4pNuoEqenaRtPy+mtzIvFSYEmqdGT3CQkTzBC+gBrKe4RlYKWhxTp5/3qG9d/
-         GwkE8L0UiXu4pVqIooATkKl0p4ep81U1F3kjG9dUV+JHdAQie/aVD4bRTuDwuHtU2MLS
-         URJvHGEq9iRNjHwuBMf/NmKmEPOSsV8CB9D2cD9vtt3WLeYixPnJuaVocjC88OmoD7xD
-         HRFINRe+6Npzvs3kwSBhGQD9XhrmBkhgIVAFxp0a8xLidE3e527hijgaJtRFzbkqwb91
-         P4j3p1jWm4RSjNKB/YrMP8L4oprGyHeMhj/zaZcjoZxe3JiMYv0hGWwRjDRh4szra11/
-         4ONA==
+        bh=EI1YComog4rA7OF+HOwhO9/TQv8utz9ZLP9QGa/GLwE=;
+        b=r/ucemiZJuDiA5vpi5XomiHMtv/lGO0GnkLNm4C53kw4jG6ytb+TGNdHO9XTDoGOUs
+         VvYJ1X1JtgzaYGi9XgFWXkQ3A+ApT7soIbcGRKyYgdohgGSHg+FXQBGVi2lYvtHABEpB
+         clVNwJi+jbDlFxKf3VLEKLlopi/ANA0Fmv3NF92L4LYORYz9mZzAnTOX8y3TzutoC5sj
+         Fn8rziK56HOhgMn2XwKJHaiF212rbqN0QSH90ElfqeUrQE3rHGbkZkj3it0VXmJLrWWu
+         PX1nELYa8XnMgJIhn+12WFmJ6KBycvtQdJhhwnNq+jL2ndof1UUT6jt92itNAsVCJQmy
+         bJPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681891177; x=1684483177;
+        d=1e100.net; s=20221208; t=1681891401; x=1684483401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2QDSFk1bWw84sERed1okCfC1U1gkUcGVMuz8bB1DTOE=;
-        b=NhAs4021dwULOeUW/mUI4UFkgIhfnwGPlecOLtgV+tzADHm0Jc6JmVFC6ngHk4vk8F
-         hrCEHr0rP2BmTRrB+DWBYXPzWdFHmkwXKwXGJl6EvqeiMKNLf2gtIhzcLP4YmMHAjJbh
-         iv5Z6Z4Uah270N/8Qaab5UrdsZpa+0sAIVp33dL78tlGnCDbtlUptovBy7XdH4ybpvxr
-         icXcaWy6Qke0snb9h8IfjMId2JKKb1c5dmmGCnGyr3YL84NmFJ4fe0wXFUge0XU9VtvR
-         M9RG8H26HsMx1yzmAgUr7yVhFJQZ/cytjGa518vwthfaL7lH7JoodED6GFlqtesdPzzg
-         zOKQ==
-X-Gm-Message-State: AAQBX9daXhTQvFXJbzVLe5KJ2NoMxY6OCEfFTnLLjDpEbrp7ehpvo6cR
-        1rcKDrQmIr0ttrcxEQV01sMIQA==
-X-Google-Smtp-Source: AKy350bCvHDzh0UHjTTOlBryMDQj0HoSj2qsUlEWGW1bmvg2ZgvGWYCNVj2CW35qxXc8yZEbof1nxQ==
-X-Received: by 2002:a05:6402:2694:b0:506:b94f:3d8f with SMTP id w20-20020a056402269400b00506b94f3d8fmr1950820edd.5.1681891177517;
-        Wed, 19 Apr 2023 00:59:37 -0700 (PDT)
+        bh=EI1YComog4rA7OF+HOwhO9/TQv8utz9ZLP9QGa/GLwE=;
+        b=Lerwd48pGSSAaGxOkBDUTNsGf2MgKM5QpZEJzyzwQIgtHHyfSHNzW0yq03yrRYk3zQ
+         lZK9Oip+lpcNI1K04FO/NCM1eGGfL3dWGA0rdnUpPOrpcWS8K3zN9MjtY7JYVVHgBeG0
+         J2fiX/JbpJSY6V1aZpV/fIloIbjJMUqu5TP6wgisln1ok4IzaZTNc5Y3fD7m/E4CLA2L
+         p6dESxmOko1erJSZfPPyaH/+9tFQNCB3a88HsRn6URapo+vchBHQK63nFSRBAbc1FQcE
+         QgQPxrFJFHFFIHCaNdJitB0qFioYw9E+OwM4YbVSRnQ6gNNTzFIPqG/Ax0DrclHJgsVh
+         /zTA==
+X-Gm-Message-State: AAQBX9fJ8UXza4E4SCVYQBxt+Qs7QnSEn6qPwSKK9m1SU3qcGGPxjkxo
+        m5I5yzpiG8E5tZMgM2MtriViEA==
+X-Google-Smtp-Source: AKy350Z89TV9b5CQ5dMks6JPzzIhSrjODtafrwNBlmUmpvdcv/16ARInRyjVls8RymMBKO3tlwL4KQ==
+X-Received: by 2002:aa7:c3c8:0:b0:506:85b4:b14b with SMTP id l8-20020aa7c3c8000000b0050685b4b14bmr4800801edr.29.1681891401444;
+        Wed, 19 Apr 2023 01:03:21 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id b10-20020aa7c6ca000000b00506a5606343sm3736335eds.14.2023.04.19.00.59.36
+        by smtp.gmail.com with ESMTPSA id l12-20020a056402344c00b00504803f4071sm7861606edc.44.2023.04.19.01.03.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 00:59:37 -0700 (PDT)
-Message-ID: <c49881dc-f283-6981-3e03-02fb02b5ce54@linaro.org>
-Date:   Wed, 19 Apr 2023 09:59:36 +0200
+        Wed, 19 Apr 2023 01:03:21 -0700 (PDT)
+Message-ID: <41ebe41f-d773-7cc3-dcad-8574c858645e@linaro.org>
+Date:   Wed, 19 Apr 2023 10:03:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/4] Improves polling mode of s3c64xx driver
+Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
+ DMA
 Content-Language: en-US
 To:     Jaewon Kim <jaewon02.kim@samsung.com>,
         Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
@@ -62,10 +63,11 @@ To:     Jaewon Kim <jaewon02.kim@samsung.com>,
 Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Chanho Park <chanho61.park@samsung.com>
-References: <CGME20230419062755epcas2p4c3c7c1e0d58e964f6e884f75ae120d91@epcas2p4.samsung.com>
- <20230419060639.38853-1-jaewon02.kim@samsung.com>
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+ <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
+ <20230419060639.38853-2-jaewon02.kim@samsung.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+In-Reply-To: <20230419060639.38853-2-jaewon02.kim@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,19 +81,54 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 19/04/2023 08:06, Jaewon Kim wrote:
-> 1.
-> s3cx64xx driver was supporting polling mode using quirk for SOC without DMA.
-> However, in order to use PIO mode as an optional rather than a quirk, when DMA
-> is not described, spi operates with pio mode rather than probe fail.
-> 
-> 2.
-> Fixed the problem of high CPU usage in PIO mode.
-> 
-> 3. 
-> If the transfer data size is larger than 32-bit, IRQ base PIO mode used.
-> 
+> Polling mode supported with qurik if there was no DMA in the SOC.
 
-What changed in the patches? You need to provide changelog.
+typo: quirk
+You missed verb in your first part of sentence. I don't understand it.
+
+> However, there are cased where we cannot or do not want to use DMA.
+> To support this case, if DMA is not set, it is switched to polling mode.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c                 | 8 ++++++--
+>  include/linux/platform_data/spi-s3c64xx.h | 1 +
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 71d324ec9a70..273aa02322d9 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/platform_data/spi-s3c64xx.h>
+>  
+>  #define MAX_SPI_PORTS		12
+> -#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
+>  #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
+>  #define AUTOSUSPEND_TIMEOUT	2000
+>  
+> @@ -116,7 +115,7 @@
+>  #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+>  
+>  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
+> +#define is_polling(x)	(x->cntrlr_info->polling)
+>  
+>  #define RXBUSY    (1<<2)
+>  #define TXBUSY    (1<<3)
+> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+>  		sci->num_cs = temp;
+>  	}
+>  
+> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
+> +		dev_warn(dev, "cannot find DMA, changed to PIO mode\n");
+
+You said it is desired option, so should not be a warning. I would make
+it debug at most.
+
+> +		sci->polling = 1;
+
+
 
 Best regards,
 Krzysztof
