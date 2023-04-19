@@ -2,126 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AD56E786E
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 13:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2D46E78F2
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbjDSLTj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 07:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S232999AbjDSLtY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 07:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjDSLT2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 07:19:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B4E13FB4;
-        Wed, 19 Apr 2023 04:19:03 -0700 (PDT)
+        with ESMTP id S232971AbjDSLtW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 07:49:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27AA1444E;
+        Wed, 19 Apr 2023 04:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681903143; x=1713439143;
+  t=1681904960; x=1713440960;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZDAIH7VGC2PTDjC+WiK47ThxiMhVDJh+ytsPf9d9/CQ=;
-  b=nMcDlZwJ7QOXxc85FUAFJBVEjkcEU5QXKYAHDwuQ3kpnbAP+SF5P7jBq
-   lbYMX87Yg6dZy4SoWwTi1x8YDuvRJtqSbXy5zFIrwbAxYhE+wjZe1+jsX
-   8cPl994VMOf4dp+ZQXa2DavU+fHFvD/GFAnHA2NeFGSssLfhY93j5pvIa
-   m3fyZ3DFaVXUeYAjsvVsW2U5PNk4329clQPPALUch4fNTGjxaHxb+3ZeC
-   jVN/zAv57Zxl4feaxeSk6c864gXwnlbKhNw/8/FDP/lIDmdrQ/cQIQmX3
-   qyVqBGngIgj21wOny8Nkvmof0PV/uOR24hLsG95fcdXj9h23q3opTWszS
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=OPP1C8YuxtnIbCY/sROjfAtEavPCY5tUqK299duqJqE=;
+  b=SQuir+vFW9qkrKIv7fkKH7aB7MXoQvhAJCA1lOJJlcb6Z2rv87NI1Sl8
+   mqLM4oHYD+dBbtmExQljT2pAwTUbxqhfsMEnz4LczKW1fMrToUV/3s0WV
+   suXyMINBQMX6ZNlQhAIA/IgGxkUzicIZ21drys23gLg21H5+V3wFL8n3q
+   H6DDulmOksYkFlOnXStPb+55jjtzRufXm2ugz4UI7w+Z58sWgRqC+UaSS
+   Uk1y9lHaMyLpaJpD/pyrzqk25VNYebr8xEkom1zDsow1hXZ2DtTGwb78P
+   M7Y+oUrKZla1QVfdt0s2CnoL5A2Uk9cleZs7CYSNldicCOrtkK3XErFpQ
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="410648626"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325039172"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="410648626"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:15:51 -0700
+   d="scan'208";a="325039172"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:49:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="937634870"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="802901361"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="937634870"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 04:15:49 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pp5mu-000eq7-0e;
-        Wed, 19 Apr 2023 11:15:48 +0000
-Date:   Wed, 19 Apr 2023 19:15:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Dhruva Gole <d-gole@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] spi: cadence-quadspi: use macro
- DEFINE_SIMPLE_DEV_PM_OPS
-Message-ID: <202304191900.2fARFQW9-lkp@intel.com>
-References: <20230419084817.481136-1-d-gole@ti.com>
+   d="scan'208";a="802901361"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Apr 2023 04:49:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pp6JH-002DML-16;
+        Wed, 19 Apr 2023 14:49:15 +0300
+Date:   Wed, 19 Apr 2023 14:49:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
+Message-ID: <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
+References: <20230418052902.1336866-1-joychakr@google.com>
+ <20230418052902.1336866-5-joychakr@google.com>
+ <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
+ <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230419084817.481136-1-d-gole@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Dhruva,
+On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
+> On Tue, Apr 18, 2023 at 1:08 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on next-20230418]
-[also build test ERROR on linus/master v6.3-rc7]
-[cannot apply to broonie-spi/for-next v6.3-rc7 v6.3-rc6 v6.3-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > +     /*
+> > > +      * Assuming both channels belong to the same DMA controller hence the
+> > > +      * address width capabilities most likely would be the same.
+> > > +      */
+> >
+> > I had a small comment on this In v6 thread.
+> 
+> Sure,
+> 
+> Your comment in V6 thread:
+> "
+> I would add something to explain the side of these address width, like
+> 
+>          * Assuming both channels belong to the same DMA controller hence
+>          * the peripheral side address width capabilities most likely would
+>          * be the same.
+> "
+> 
+> I do not think the address width capabilities are dependent on the
+> side of generation like memory or peripheral.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dhruva-Gole/spi-cadence-quadspi-use-macro-DEFINE_SIMPLE_DEV_PM_OPS/20230419-165052
-patch link:    https://lore.kernel.org/r/20230419084817.481136-1-d-gole%40ti.com
-patch subject: [PATCH V2] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230419/202304191900.2fARFQW9-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/83ce1615dd395c8034756cc6aa97b38c16c0b07d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dhruva-Gole/spi-cadence-quadspi-use-macro-DEFINE_SIMPLE_DEV_PM_OPS/20230419-165052
-        git checkout 83ce1615dd395c8034756cc6aa97b38c16c0b07d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+Yes, they are independent. Memory could do with 4 bytes, while peripheral with
+1 byte and so on.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304191900.2fARFQW9-lkp@intel.com/
+> From what I understand,
+> address width capabilities are solely dependent on the transaction
+> generation capability of the DMA controller towards the system bus.
 
-All errors (new ones prefixed by >>):
+What do you mean by a SB in the above? Memory? Peripheral?
 
->> drivers/spi/spi-cadence-quadspi.c:1918:24: error: 'cqspi_dev_pm_ops' undeclared here (not in a function); did you mean 'cqspi_mem_ops'?
-    1918 |                 .pm = &cqspi_dev_pm_ops,
-         |                        ^~~~~~~~~~~~~~~~
-         |                        cqspi_mem_ops
-
-
-vim +1918 drivers/spi/spi-cadence-quadspi.c
-
-  1912	
-  1913	static struct platform_driver cqspi_platform_driver = {
-  1914		.probe = cqspi_probe,
-  1915		.remove_new = cqspi_remove,
-  1916		.driver = {
-  1917			.name = CQSPI_NAME,
-> 1918			.pm = &cqspi_dev_pm_ops,
-  1919			.of_match_table = cqspi_dt_ids,
-  1920		},
-  1921	};
-  1922	
+> What we intend to highlight here is the assumption that both tx and rx
+> channel would belong to the same DMA controller hence the transaction
+> generation capabilities would be the same both for read and write
+> (e.g. if the DMA controller is able to generate 32 bit sized reads
+> then it should also be able to generate 32 bit sized writes).
+> With this assumption we are doing a bitwise and of both tx and rx capabilities.
+> 
+> Please let me know if you think otherwise.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+With Best Regards,
+Andy Shevchenko
+
+
