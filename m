@@ -2,163 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B746E8077
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 19:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A2F6E82A1
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 22:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDSRfN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 13:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S231508AbjDSUZo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 16:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDSRfM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 13:35:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268A6A6E;
-        Wed, 19 Apr 2023 10:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681925711; x=1713461711;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4qXm5eWpcBEMDu4cseUDl5qOFRKxr2ED5XonItnH7PA=;
-  b=oCDaDlKTEN/8FUQjfUg1Zqw8UKbZkDprPZyrUiIWy8zE0Zuh4zKDIENL
-   u84UdS5xmiiSC+WwH+68n/7XTM9R920gBLcPkdB2Ls3V3x2aBGsjI05uY
-   sAM74zSvmNkkwf5WArV4VRZeWpiqFYqfQOE/bAxi62XND6RUsjUpy6PfJ
-   A0ox9j8WVUDYViqUV3oFMqkFOG90z0YiWdXC54z3dqAMCDjRHNRmv0Rnb
-   1Q3nSZLtMNUdci90IpmZTvd1ZDHUXivDBrzQ6kOVgowRYSyQUtRRmrZ0G
-   2CIBrINQvt0DYsZsDMewFRnUDVoWBBrb8L2UVapD1cl33BTj9hfTYTRqK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="342993840"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="342993840"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 10:35:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937755813"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="937755813"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 10:35:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1ppBhz-002KRH-2A;
-        Wed, 19 Apr 2023 20:35:07 +0300
-Date:   Wed, 19 Apr 2023 20:35:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
-Message-ID: <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
-References: <20230418052902.1336866-1-joychakr@google.com>
- <20230418052902.1336866-5-joychakr@google.com>
- <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
- <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
- <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
- <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229637AbjDSUZB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 16:25:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70321718;
+        Wed, 19 Apr 2023 13:25:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F356426C;
+        Wed, 19 Apr 2023 20:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA19C433AE;
+        Wed, 19 Apr 2023 20:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681935899;
+        bh=8P4CPN9OqFnaiBi4G6pIKfKJWl0J8d1dnTf3yGFKnTQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tT5KwaHi2wzE10RuzKch5ikIFRKtw7donx2ZaglNaf9hsH94eCzGlHuwqzKTYRXkL
+         hm7IOHmikOHvkqDwxiVsroQvPw4rotX3YJs72I+7GLUgtv1U086UCJ1ah38BtrbVAc
+         sXDfZMILf2zjS0KM64t00BL6Pl5x3m44x4RXS7/Cq6OP3f7BbEihiutZQq6TOxVYPE
+         swdBBI/AawTnRylNfXzWK8B8MbZ6qr4dMPTb7VK3Qk+dSP/HzmdhZ/xArsMWydTlHs
+         m9J0NGs25IpdPQij6JgKY8FqLuhB1EeeatL+s5MBzf+PduDfhN1P5vS40MJr6lnY2l
+         al/9YgBZwBZSg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.3-rc7
+Date:   Wed, 19 Apr 2023 21:24:47 +0100
+Message-Id: <20230419202458.ECA19C433AE@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 06:18:04PM +0530, Joy Chakraborty wrote:
-> On Wed, Apr 19, 2023 at 5:19 PM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
-> > > On Tue, Apr 18, 2023 at 1:08 PM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 
-...
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
 
-> > > > > +     /*
-> > > > > +      * Assuming both channels belong to the same DMA controller hence the
-> > > > > +      * address width capabilities most likely would be the same.
-> > > > > +      */
-> > > >
-> > > > I had a small comment on this In v6 thread.
-> > >
-> > > Sure,
-> > >
-> > > Your comment in V6 thread:
-> > > "
-> > > I would add something to explain the side of these address width, like
-> > >
-> > >          * Assuming both channels belong to the same DMA controller hence
-> > >          * the peripheral side address width capabilities most likely would
-> > >          * be the same.
-> > > "
-> > >
-> > > I do not think the address width capabilities are dependent on the
-> > > side of generation like memory or peripheral.
-> >
-> > Yes, they are independent. Memory could do with 4 bytes, while peripheral with
-> > 1 byte and so on.
-> >
-> > > From what I understand,
-> > > address width capabilities are solely dependent on the transaction
-> > > generation capability of the DMA controller towards the system bus.
-> >
-> > What do you mean by a SB in the above? Memory? Peripheral?
-> 
-> By system bus I mean anything that is connecting the Memory, DMA and
-> the peripheral.
-> Something like :
-> 
->           +-----------+          +-------------------+
->           |               |           |                        |
->           |   DMA    |           | PERIPHERAL |
->           |               |           |                         |
->           +----^-+---+          +-----+--^---------+
->         *** -->| |                         |    |
->                   | |                         |    |
-> <------------+-v--------------------v---+------------->
->                     SYSTEM BUS
-> <---------------------+--^----------------------------->
->                             |   |
->                             |   |
->                      +----v--+-----+
->                      |                   |
->                      |  MEMORY |
->                      |                   |
->                      +--------------+
-> *** : Address width capabilities should be the capability of the DMA
-> to generate transactions to the system bus on the marked interface
-> irrespective of whether it is destined for Peripheral or memory is
-> what I understand.
+are available in the Git repository at:
 
-That's misunderstanding. You used only one possible HW design, there may be
-more. For example we have Synopsys DesignWare DMA that has a lot of parameters
-to configure bus mastering. One of such a case, where it makes a lot of sense,
-is DesignWare SATA with the above mentioned DMA controller where it has two
-masters and they are connected towards memory and towards peripheral "buses".
-They have _different_ configurations.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.3-rc7
 
-So, generally speaking what you are saying is not true.
+for you to fetch changes up to 359f5b0d4e26b7a7bcc574d6148b31a17cefe47d:
 
-> > > What we intend to highlight here is the assumption that both tx and rx
-> > > channel would belong to the same DMA controller hence the transaction
-> > > generation capabilities would be the same both for read and write
-> > > (e.g. if the DMA controller is able to generate 32 bit sized reads
-> > > then it should also be able to generate 32 bit sized writes).
-> > > With this assumption we are doing a bitwise and of both tx and rx capabilities.
-> > >
-> > > Please let me know if you think otherwise.
+  spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe() (2023-04-19 13:42:59 +0100)
 
--- 
-With Best Regards,
-Andy Shevchenko
+----------------------------------------------------------------
+spi: One small fix for v6.3
 
+A small fix in the error handling for the rockchip driver, ensuring we
+don't leak clock enables if we fail to request the interrupt for the
+device.
 
+----------------------------------------------------------------
+Li Lanzhe (1):
+      spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe()
+
+ drivers/spi/spi-rockchip-sfc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
