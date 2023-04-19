@@ -2,114 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD5D6E75A6
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E4B6E75C0
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjDSItN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 04:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S231891AbjDSI4k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 04:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjDSItL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:49:11 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3356A67;
-        Wed, 19 Apr 2023 01:48:39 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J8mQJf027445;
-        Wed, 19 Apr 2023 03:48:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681894106;
-        bh=XbEtFK+H4/7qsl0ppFWnJWa8nE2+A+lGhJsRSLRMsZI=;
-        h=From:To:CC:Subject:Date;
-        b=X05IcQo6rJxC5jzIkoyxF7Wn06nh6hBy4LmgeHEcSJirXvHEpHNT4lt5eYBYaYRT1
-         D8o2fH8ZeTO1s/P9C3EvcIK2Km4M2GQaJfNJ8Hlv9KNb2duHNQzeERYrktso6cJ/fX
-         wYxUmTaW88w1YDhmDWpVcbDOfIjw7PqKZIH7oOWY=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J8mQDl005205
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 03:48:26 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 03:48:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 03:48:25 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J8mOuo068330;
-        Wed, 19 Apr 2023 03:48:25 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
-        Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
-Date:   Wed, 19 Apr 2023 14:18:17 +0530
-Message-ID: <20230419084817.481136-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231621AbjDSI4j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:56:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D584220
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97895630B2
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 08:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ECCE8C4339B;
+        Wed, 19 Apr 2023 08:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681894598;
+        bh=BWGFOFk+C5sxQCn3gcctULTtjkO5MTqzaKNmy86BlE8=;
+        h=Subject:From:Date:To:From;
+        b=V5xIcT1dQIdTjEtWRQq/vBpryilEAdlX8wqBi31LsfocedGEvnaIZVKGmJiOHiWLN
+         OB6ntw0fe2qbaTOlaqseFF/5AyFg5q+NGH+grGdwkw3mxD8LnyhtOXrDt4vXhtPS3o
+         d3buQEL9jR7n/hf/8yFuOmCl/n3MBOhvrp46cQfsyqzN/xYKdSv7nSEwFaQy2/kURj
+         bC/+a9GpuhFr/S2s9WBNuJITBCbhc3ba3fNeN3apd/hnk6iqPzBmX3XV7977hj1XEB
+         ojJ9mZBxnmtjXxxhQa5p4/7ty2HH0pp82GKb3lMeJCyprfvoBvAzdD+yLd/YYWdTKL
+         J5jthJLCrd2Ag==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8C9FE3309C;
+        Wed, 19 Apr 2023 08:56:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168189459781.21888.17317658585933280299.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 19 Apr 2023 08:56:37 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Using this macro makes the code more readable.
-It also inits the members of dev_pm_ops in the following manner
-without us explicitly needing to:
+Latest series: [v2] spi: sh-msiof: Enforce fixed DTDL for R-Car H3 (2023-04-19T08:24:32)
+  Superseding: [v1] spi: sh-msiof: Enforce fixed DTDL for R-Car H3 (2023-01-24T07:47:06):
+    spi: sh-msiof: Enforce fixed DTDL for R-Car H3
 
-.suspend = cqspi_suspend, \
-.resume = cqspi_resume, \
-.freeze = cqspi_suspend, \
-.thaw = cqspi_resume, \
-.poweroff = cqspi_suspend, \
-.restore = cqspi_resume
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
-
-Address comments from previously posted patch:
-https://patchwork.kernel.org/project/spi-devel-general/patch/20230417091027.966146-2-d-gole@ti.com/
-
- drivers/spi/spi-cadence-quadspi.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 79ab7e309644..922026bb9380 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1829,12 +1829,7 @@ static int cqspi_resume(struct device *dev)
- 	return 0;
- }
- 
--static const struct dev_pm_ops cqspi__dev_pm_ops = {
--	.suspend = cqspi_suspend,
--	.resume = cqspi_resume,
--};
--
--#define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
-+static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
- #else
- #define CQSPI_DEV_PM_OPS	NULL
- #endif
-@@ -1912,7 +1907,7 @@ static struct platform_driver cqspi_platform_driver = {
- 	.remove_new = cqspi_remove,
- 	.driver = {
- 		.name = CQSPI_NAME,
--		.pm = CQSPI_DEV_PM_OPS,
-+		.pm = &cqspi_dev_pm_ops,
- 		.of_match_table = cqspi_dt_ids,
- 	},
- };
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
