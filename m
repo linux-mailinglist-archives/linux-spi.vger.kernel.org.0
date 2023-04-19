@@ -2,62 +2,173 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E4B6E75C0
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4006E7693
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 11:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjDSI4k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 04:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S231319AbjDSJno (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 05:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjDSI4j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:56:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D584220
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:56:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97895630B2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 08:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ECCE8C4339B;
-        Wed, 19 Apr 2023 08:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681894598;
-        bh=BWGFOFk+C5sxQCn3gcctULTtjkO5MTqzaKNmy86BlE8=;
-        h=Subject:From:Date:To:From;
-        b=V5xIcT1dQIdTjEtWRQq/vBpryilEAdlX8wqBi31LsfocedGEvnaIZVKGmJiOHiWLN
-         OB6ntw0fe2qbaTOlaqseFF/5AyFg5q+NGH+grGdwkw3mxD8LnyhtOXrDt4vXhtPS3o
-         d3buQEL9jR7n/hf/8yFuOmCl/n3MBOhvrp46cQfsyqzN/xYKdSv7nSEwFaQy2/kURj
-         bC/+a9GpuhFr/S2s9WBNuJITBCbhc3ba3fNeN3apd/hnk6iqPzBmX3XV7977hj1XEB
-         ojJ9mZBxnmtjXxxhQa5p4/7ty2HH0pp82GKb3lMeJCyprfvoBvAzdD+yLd/YYWdTKL
-         J5jthJLCrd2Ag==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8C9FE3309C;
-        Wed, 19 Apr 2023 08:56:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231574AbjDSJnh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 05:43:37 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A99D8
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 02:43:34 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230419094332epoutp02376eeeba8859c01ac59e3778b44fdc64~XTMkEtX-Y1825418254epoutp02g
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 09:43:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230419094332epoutp02376eeeba8859c01ac59e3778b44fdc64~XTMkEtX-Y1825418254epoutp02g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1681897412;
+        bh=0kO6mZexP7v1yQRKLBpRg3Wv/Zx4ilaho2niMqHkyn4=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=nQTx83TEan1H8heT4hoGGngeXVvavomFqMKXmhplfP06BIIpUPTFNHt6kZUTVvAoc
+         ZB2R7YZhY3SzmN5TiPJU7vtjAnoBjVLfAvdtvxbMnnSA7Y70y386FAaZKia6l9BBnh
+         5JBH9ejl1J1Fc98YleHpx2uvKYECmRjjetYLoKWU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230419094331epcas2p1b73f3a8e6fcbf21380cdd49a91ff8505~XTMjiHUGl0080400804epcas2p1V;
+        Wed, 19 Apr 2023 09:43:31 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q1bSz1Rdhz4x9Pr; Wed, 19 Apr
+        2023 09:43:31 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3B.4E.09650.3C7BF346; Wed, 19 Apr 2023 18:43:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230419094330epcas2p495358693c341dc79d18d7d392c435207~XTMis7jSg3121831218epcas2p4p;
+        Wed, 19 Apr 2023 09:43:30 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230419094330epsmtrp1362e24c6829feee4b8ce638438ccaa4b~XTMir8c970910709107epsmtrp13;
+        Wed, 19 Apr 2023 09:43:30 +0000 (GMT)
+X-AuditID: b6c32a48-023fa700000025b2-eb-643fb7c3505b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E5.EE.08279.2C7BF346; Wed, 19 Apr 2023 18:43:30 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230419094330epsmtip10d93a423f325a85b94af2a0671bceed6~XTMieK3Ts1321013210epsmtip1w;
+        Wed, 19 Apr 2023 09:43:30 +0000 (GMT)
+Message-ID: <9d2e2bda-4213-35d0-55d7-827bad9b13a1@samsung.com>
+Date:   Wed, 19 Apr 2023 18:41:05 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168189459781.21888.17317658585933280299.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 19 Apr 2023 08:56:37 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/4] spi: s3c64xx: add sleep during transfer
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <b91c6cfb-4fd2-1189-72fd-92b40d1b4743@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmme7h7fYpBvP+cFg8mLeNzWLxj+dM
+        FlMfPmGzuLxf22Lv663sFpseX2O1uLxrDpvFjPP7mCwaP95kd+D0uL7kE7PHplWdbB53ru1h
+        89i8pN6jb8sqRo/Pm+QC2KKybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPIS
+        c1NtlVx8AnTdMnOAblJSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX
+        5qXr5aWWWBkaGBiZAhUmZGcsvm9Z8Iy7Ytk+1QbGtZxdjJwcEgImEhc+HmfqYuTiEBLYwShx
+        p/c/lPOJUeL8k+2MEM43Rok169+zwbR0rV7NDpHYyyjxcVoDVNVrRok3K/pYQKp4BewkOg7+
+        AbNZBFQlWh6vYoOIC0qcnPkELC4qEC2xeN8UMFtYwFli362l7CA2s4C4xK0n88HuEBFYzCjR
+        9/gTG4jDLLCRUWJz01SwKjYBbYnv6xezgticQNuWzLnGBtEtL7H97RxmkAYJgYUcEj8Oz2KB
+        ONxF4svSPqgnhCVeHd/CDmFLSbzsb4OysyXap/9hhbArJC5umA1Vbywx61k70J8cQAs0Jdbv
+        0gcxJQSUJY7cYoFYyyfRcfgvO0SYV6KjTQiiUU3i/tRzUENkJCYdWckEYXtI/J81j2UCo+Is
+        pGCZheT9WUiemYWwdwEjyypGsdSC4tz01GKjAhN4ZCfn525iBCdXLY8djLPfftA7xMjEwXiI
+        UYKDWUmE94yrVYoQb0piZVVqUX58UWlOavEhRlNg5ExklhJNzgem97ySeEMTSwMTMzNDcyNT
+        A3Mlcd6PHcopQgLpiSWp2ampBalFMH1MHJxSDUz7b69pXvGe/dPh07n9sjpXPyZvkfBtLiq5
+        k7bAOuvmqvDTQTZxdeKT3W2jtT4ErV69OFwwxZh9veUWOYZ4jYvfGT203Xef+uCo+uuFx0+1
+        hymKDbLdPc/72Mvvvf/K/rvuGS+vzRkdbsfc8zEz7+gsFw5xtQp9Jn6hxW7+M8Zd7488+jdN
+        dY1J/NXlTu09XS2PQmJ38Dmnx4UUvQsu1H/4eeJq+2+cfKdiUp9sOyau+LXtcm67yk3ndU/Z
+        5nRF6fgFbpZd7Mia3N+4Ifqr+nmXguJLrifLvZbNDeHXrPu2afXdus3su2s33YgIn8JjyyzT
+        J7ZzhW73hWM+Qn7L1nM/NBW3q1ZYvcuz2/5dvRJLcUaioRZzUXEiAOqLIiA3BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJTvfQdvsUg7efFSwezNvGZrH4x3Mm
+        i6kPn7BZXN6vbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj06pONo871/aw
+        eWxeUu/Rt2UVo8fnTXIBbFFcNimpOZllqUX6dglcGYvvWxY8465Ytk+1gXEtZxcjJ4eEgIlE
+        1+rV7F2MXBxCArsZJfr6H7JAJGQklj/rY4OwhSXutxxhhSh6ySgx4+YlZpAEr4CdRMfBP2AN
+        LAKqEi2PV7FBxAUlTs58AhYXFYiWuLH8GxOILSzgLLHv1lJ2EJtZQFzi1pP5TCBDRQQWM0p0
+        XHoLdgazwEZGiZXX1zNDrPvJKPH5xGWwUWwC2hLf1y9mBbE5gVYvmXONDWKUmUTX1i5GCFte
+        YvvbOcwTGIVmIblkFpKNs5C0zELSsoCRZRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4m
+        RnBMaWnuYNy+6oPeIUYmDsZDjBIczEoivGdcrVKEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817o
+        OhkvJJCeWJKanZpakFoEk2Xi4JRqYDp9+OdF4aXv6jYa9KU+jgowYYtZYV68WCsx4tn3BJFD
+        TX9iTXVcPWXPTa32ufTqofL/cmH/vXv8Hu695Hl81wrflM1PghyDs/Z8nrNzb9492+Urcx9I
+        LXM7HrmrrPOIyoysHWGha5pfnAwU28e5vKV4a+OVSzMCs4+8lK53tDTqlDupusWoMd6PXTBY
+        VrFPjHmS2h75rjtvnvm/Klrevz1PcmKBuNFxqRt9PuqztRbK1Kv3xm4/ve38+3VyQjVc+xfd
+        l1tdJH6yf+XRDtZHF5v2aSWF/Uh52fm97Fn3vE/1PwOMLV7+cfENObGs/eaJU5WJ31SrjpSn
+        u5+oq42bMu8i5xLOuo6d8Q5rs3dnyCuxFGckGmoxFxUnAgDT3qPwGAMAAA==
+X-CMS-MailID: 20230419094330epcas2p495358693c341dc79d18d7d392c435207
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+        <CGME20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596@epcas2p1.samsung.com>
+        <20230419060639.38853-4-jaewon02.kim@samsung.com>
+        <b91c6cfb-4fd2-1189-72fd-92b40d1b4743@linaro.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: sh-msiof: Enforce fixed DTDL for R-Car H3 (2023-04-19T08:24:32)
-  Superseding: [v1] spi: sh-msiof: Enforce fixed DTDL for R-Car H3 (2023-01-24T07:47:06):
-    spi: sh-msiof: Enforce fixed DTDL for R-Car H3
+
+On 23. 4. 19. 17:19, Krzysztof Kozlowski wrote:
+> On 19/04/2023 08:06, Jaewon Kim wrote:
+>> In polling mode, the status register is constantly read to check transfer
+>> completion. It cause excessive CPU usage.
+>> So, it calculates the SPI transfer time and made it sleep.
+>>
+>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>> ---
+>>   drivers/spi/spi-s3c64xx.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> index 886722fb40ea..cf3060b2639b 100644
+>> --- a/drivers/spi/spi-s3c64xx.c
+>> +++ b/drivers/spi/spi-s3c64xx.c
+>> @@ -561,6 +561,14 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>   	u32 cpy_len;
+>>   	u8 *buf;
+>>   	int ms;
+>> +	u32 tx_time;
+>> +
+>> +	/* sleep during signal transfer time */
+>> +	status = readl(regs + S3C64XX_SPI_STATUS);
+>> +	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
+>> +		tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+>> +		usleep_range(tx_time / 2, tx_time);
+>> +	}
+> Did you actually check the delays introduced by it? Is it worth?
+
+Yes, I already test it.
+
+Throughput was the same, CPU utilization decreased to 30~40% from 100%.
+
+Tested board is ExynosAutov9 SADK.
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>>   
+>>   	/* millisecs to xfer 'len' bytes @ 'cur_speed' */
+>>   	ms = xfer->len * 8 * 1000 / sdd->cur_speed;
+> You have now some code duplication so this could be combined.
+>
+> Best regards,
+> Krzysztof
+>
+>
+Thanks
+
+Jaewon Kim
 
