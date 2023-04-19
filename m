@@ -2,178 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3106E785C
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 13:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AD56E786E
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 13:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjDSLRw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 07:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S232995AbjDSLTj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 07:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbjDSLRu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 07:17:50 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8167C14F46
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 04:17:25 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230419111554epoutp03913eb4abd3492a7367e8a87b5ae3e373~XUdOSYQ3u1427814278epoutp03Z
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 11:15:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230419111554epoutp03913eb4abd3492a7367e8a87b5ae3e373~XUdOSYQ3u1427814278epoutp03Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681902955;
-        bh=yaloNG5EirXhW5Hu5Qw6THKFTACwagq13j1G743WQ+0=;
-        h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
-        b=hDcloUDcjEF2GNJXNktmSwNLnMb6nh8vhhyrWYlQ8oT3uQGBXyqrbyBCSkPp2w4b2
-         UIT99qSHEys3LdfBNv7IP09Df7+/j7zm1MJ/dV00MvXTDbDD2vcW2slcJ85ZWc14ye
-         pt6RVGRRc4izTKNp5vKBxR/Afq5R9vypn3RY4D/U=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230419111554epcas2p21b8a661f77e9db1d6fef0a3617c42d1f~XUdNnaE811393013930epcas2p21;
-        Wed, 19 Apr 2023 11:15:54 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Q1dWY6ljxz4x9Q1; Wed, 19 Apr
-        2023 11:15:53 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        36.77.09938.96DCF346; Wed, 19 Apr 2023 20:15:53 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230419111553epcas2p34439437568e4ab428e9464f41889eb33~XUdMz0ss02936829368epcas2p3d;
-        Wed, 19 Apr 2023 11:15:53 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230419111553epsmtrp134875555abe7eeebf81de1d54e9cd651~XUdMzJlL63115831158epsmtrp1X;
-        Wed, 19 Apr 2023 11:15:53 +0000 (GMT)
-X-AuditID: b6c32a47-ca5fd700000026d2-7d-643fcd695001
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A2.C5.08279.96DCF346; Wed, 19 Apr 2023 20:15:53 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419111553epsmtip1eafc761df29a0f7540b6ae4a01dd22d0~XUdMh6wFx0303903039epsmtip13;
-        Wed, 19 Apr 2023 11:15:53 +0000 (GMT)
-Message-ID: <abbf5608-dbe7-af39-e555-d76ffe65dea4@samsung.com>
-Date:   Wed, 19 Apr 2023 20:13:28 +0900
+        with ESMTP id S232498AbjDSLT2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 07:19:28 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B4E13FB4;
+        Wed, 19 Apr 2023 04:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681903143; x=1713439143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZDAIH7VGC2PTDjC+WiK47ThxiMhVDJh+ytsPf9d9/CQ=;
+  b=nMcDlZwJ7QOXxc85FUAFJBVEjkcEU5QXKYAHDwuQ3kpnbAP+SF5P7jBq
+   lbYMX87Yg6dZy4SoWwTi1x8YDuvRJtqSbXy5zFIrwbAxYhE+wjZe1+jsX
+   8cPl994VMOf4dp+ZQXa2DavU+fHFvD/GFAnHA2NeFGSssLfhY93j5pvIa
+   m3fyZ3DFaVXUeYAjsvVsW2U5PNk4329clQPPALUch4fNTGjxaHxb+3ZeC
+   jVN/zAv57Zxl4feaxeSk6c864gXwnlbKhNw/8/FDP/lIDmdrQ/cQIQmX3
+   qyVqBGngIgj21wOny8Nkvmof0PV/uOR24hLsG95fcdXj9h23q3opTWszS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="410648626"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="410648626"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:15:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="937634870"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="937634870"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 04:15:49 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp5mu-000eq7-0e;
+        Wed, 19 Apr 2023 11:15:48 +0000
+Date:   Wed, 19 Apr 2023 19:15:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Dhruva Gole <d-gole@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] spi: cadence-quadspi: use macro
+ DEFINE_SIMPLE_DEV_PM_OPS
+Message-ID: <202304191900.2fARFQW9-lkp@intel.com>
+References: <20230419084817.481136-1-d-gole@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-Subject: Re: [PATCH v2 2/4] spi: s3c64xx: add cpu_relax in polling loop
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Language: en-US
-In-Reply-To: <36f37a18-0022-0368-bf7c-ebdd724b1558@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmqW7mWfsUgwWtJhYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
-        3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWl
-        eel6eaklVoYGBkamQIUJ2RkLX91mL/jLXXFj/iHWBsaznF2MnBwSAiYSL149Z+ti5OIQEtjB
-        KLF+zQlWCOcTo0TTn31MEM43RomeW6dYYFq2nnnJApHYyyixZeUWRgjnNaPEnlkn2LsYOTh4
-        BewkLixgBmlgEVCVuDp/PTuIzSsgKHFy5hOwQaIC0RKL900Bs9kEtCW+r1/MCmILC7hL7Lj6
-        D2ymiMBiRom+x5/ADmQW2MgosblpKtgkZgFxiVtP5jOB2JxAyzrWXGGCiMtLbH87hxmkQUJg
-        KYfE9KdrGCHudpG4sPopG4QtLPHq+BZ2CFtK4mV/G5SdLdE+/Q8rhF0hcXHDbKh6Y4lZz9oZ
-        QT5jFtCUWL9LH8SUEFCWOHKLBWItn0TH4b/sEGFeiY42IYhGNYn7U89BDZGRmHRkJROE7SFx
-        ZOYutgmMirOQgmUWksdmIXlmFsLeBYwsqxjFUguKc9NTi40KjOGxnZyfu4kRnF613Hcwznj7
-        Qe8QIxMH4yFGCQ5mJRHeM65WKUK8KYmVValF+fFFpTmpxYcYTYGRM5FZSjQ5H5jg80riDU0s
-        DUzMzAzNjUwNzJXEeaVtTyYLCaQnlqRmp6YWpBbB9DFxcEo1MCU+FZ2pce9McuOBsMQvL+y0
-        y0TiD76eoftjU/9MS/6AQq8+58vNgmG7vloeLQps33fZ6ePRJblTeGepTHeOeCvvsHbB5DiB
-        N9lr3HKnp7i2n2Atkpiy5VDBwlVbsittuG5M28q44Bfb69YPOvrHig7Znfr9hn3tEeWP5mvn
-        7TBmZk5RfdG6v6LXM3YNY56u3N05SmF8Ub4xCU1r150RP/W76/d3DpuQv7+utfMtWsVye0Fq
-        qPbrd/UcKv8lLhR8+xPiLiPRVbPsQOGzJPX1rnGWlimq+4SiZ3HpvpU9l3LgZv42/baCN+tf
-        Luiwv1F7edkrhq1sazJXh5splre9S9vxq2aVGNurssehU5gyNiixFGckGmoxFxUnAgCRebcX
-        OAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJTjfzrH2Kwc1N/BYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujIWvbrMX/OWuuDH/EGsD41nOLkZODgkB
-        E4mtZ16ydDFycQgJ7GaU+NU6gQUiISOx/FkfG4QtLHG/5QgrRNFLRon/B78CFXFw8ArYSVxY
-        wAxSwyKgKnF1/np2EJtXQFDi5MwnYHNEBaIlbiz/xgRiswloS3xfv5gVxBYWcJfYcfUfI8hM
-        EYHFjBIdl96ygzjMAhsZJVZeXw82VUjgJ6PEpslSIDazgLjErSfzwSZxAi3uWHOFCSJuJtG1
-        tYsRwpaX2P52DvMERqFZSA6ZhaR9FpKWWUhaFjCyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L
-        10vOz93ECI4pLc0djNtXfdA7xMjEwXiIUYKDWUmE193GLkWINyWxsiq1KD++qDQntfgQozQH
-        i5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGJlvPZZfns54M2qPw+1X19ZcevRUc0qKTBOwN
-        pvSf3PPMcl4ZC4Ppultf/+43slPNuv3i/ry1i4TT9PwLnDWzpe7fPC1xqWFG9LIjL08FP0zZ
-        Y6FxY+FK84w3/8ydMtv8Z0aILRNz8tOZmPboSe/vzkd72EuMizsuSkx3Y647nPeoL2Tq9SMr
-        3fOrrNO8D157syR38stX8tObs1qW7uzKFalfscPn/Vm/JzKVLB3/zhkf2F5+YMbL25lWzYfr
-        li1RSbFfJqSqZCn+7VmIXf02dj++efmabd5H0yR5xRfkij5RFT6yVyWeL+zK12eZlpsZfnSw
-        zpCfeet5VAPj9eq55xequH0L1ZpRf9xns9GpCCWW4oxEQy3mouJEADgrUgIYAwAA
-X-CMS-MailID: 20230419111553epcas2p34439437568e4ab428e9464f41889eb33
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419062755epcas2p43a646bbae5f01e3120331407ad873318
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
-        <CGME20230419062755epcas2p43a646bbae5f01e3120331407ad873318@epcas2p4.samsung.com>
-        <20230419060639.38853-3-jaewon02.kim@samsung.com>
-        <36f37a18-0022-0368-bf7c-ebdd724b1558@linaro.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419084817.481136-1-d-gole@ti.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Dhruva,
 
-On 23. 4. 19. 17:14, Krzysztof Kozlowski wrote:
-> On 19/04/2023 08:06, Jaewon Kim wrote:
->> Adds cpu_relax() to prevent long busy-wait.
-> How cpu_relax prevents long waiting?
+kernel test robot noticed the following build errors:
 
-As I know, cpu_relax() can be converted to yield. This can prevent 
-excessive use of the CPU in busy-loop.
+[auto build test ERROR on next-20230418]
+[also build test ERROR on linus/master v6.3-rc7]
+[cannot apply to broonie-spi/for-next v6.3-rc7 v6.3-rc6 v6.3-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'll replace poor sentence like below in v3.
+url:    https://github.com/intel-lab-lkp/linux/commits/Dhruva-Gole/spi-cadence-quadspi-use-macro-DEFINE_SIMPLE_DEV_PM_OPS/20230419-165052
+patch link:    https://lore.kernel.org/r/20230419084817.481136-1-d-gole%40ti.com
+patch subject: [PATCH V2] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230419/202304191900.2fARFQW9-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/83ce1615dd395c8034756cc6aa97b38c16c0b07d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dhruva-Gole/spi-cadence-quadspi-use-macro-DEFINE_SIMPLE_DEV_PM_OPS/20230419-165052
+        git checkout 83ce1615dd395c8034756cc6aa97b38c16c0b07d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
 
-("Adds cpu_relax() to allow CPU relaxation in busy-loop")
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191900.2fARFQW9-lkp@intel.com/
 
->> There is busy-wait loop to check data transfer completion in polling mode.
->>
->> Signed-off-by: Jaewon Kim<jaewon02.kim@samsung.com>
->> ---
->>   drivers/spi/spi-s3c64xx.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->> index 273aa02322d9..886722fb40ea 100644
->> --- a/drivers/spi/spi-s3c64xx.c
->> +++ b/drivers/spi/spi-s3c64xx.c
->> @@ -568,6 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->>   
->>   	val = msecs_to_loops(ms);
->>   	do {
->> +		cpu_relax();
-> Shouldn't this be just readl_poll_timeout()? Or the syntax would be too
-> complicated?
+All errors (new ones prefixed by >>):
 
-I think we can replace this while() loop to readl_poll_timeout().
-
-However, we should use 0 value as 'delay_us' parameter. Because delay 
-can affect throughput.
-
-
-My purpose is add relax to this busy-loop.
-
-we cannot give relax if we change to readl_poll_timeout().
+>> drivers/spi/spi-cadence-quadspi.c:1918:24: error: 'cqspi_dev_pm_ops' undeclared here (not in a function); did you mean 'cqspi_mem_ops'?
+    1918 |                 .pm = &cqspi_dev_pm_ops,
+         |                        ^~~~~~~~~~~~~~~~
+         |                        cqspi_mem_ops
 
 
->>   		status = readl(regs + S3C64XX_SPI_STATUS);
->>   	} while (RX_FIFO_LVL(status, sdd) < xfer->len && --val);
->>   
-> Best regards,
-> Krzysztof
->
->
-Thanks
+vim +1918 drivers/spi/spi-cadence-quadspi.c
 
-Jaewon Kim
+  1912	
+  1913	static struct platform_driver cqspi_platform_driver = {
+  1914		.probe = cqspi_probe,
+  1915		.remove_new = cqspi_remove,
+  1916		.driver = {
+  1917			.name = CQSPI_NAME,
+> 1918			.pm = &cqspi_dev_pm_ops,
+  1919			.of_match_table = cqspi_dt_ids,
+  1920		},
+  1921	};
+  1922	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
