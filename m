@@ -2,188 +2,151 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DEB6E82FD
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 23:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56B66E8515
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 00:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjDSVDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 17:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S233631AbjDSWkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 18:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDSVDw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 17:03:52 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8845BAE
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 14:03:50 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54fe82d8bf5so18514977b3.3
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 14:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681938230; x=1684530230;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQiggG3o2RYfkSueu3n51t9vPaOXp7k+C+N1iEzYTEk=;
-        b=DDIqZEKcT4jRp6nDbXkScFkNmbm5AgSEIJZPPSGj1A+qNr77ePB+hefmGWnPS7PF0q
-         /CG3WEVzHEUAYzVf8iL8BjlEmyurmWswnKK4KqxahVsjSMB7Z35E2GnOODyQw+f6upQN
-         UNiWfKG8jOlM2oo6GLBS+a3hpglneBdNYKbKbpbzHujA5DjTy00EvDMgGd/BHh8bHk0l
-         j/S5wiFZw4KkZXzfss6FgcDzc512CjtUL/eemQVQw6NnhBTC7Ak7FYkv27SK/EeOLw4U
-         /xPWiY4CHnDv6JlPSBqGdlk6DuSKsLoIQlEEv4SKUoRsjYy0/SJBfgUNv6yAMAm9mLx7
-         AXFg==
+        with ESMTP id S233641AbjDSWkl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 18:40:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891B410E3
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 15:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681943881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oV6dPbj6v5bxxtQ0bf2vQ9h1B33hpQZo734sVJEIFy0=;
+        b=MS+2QKlY12XgdTGOXnyWBWmXgN2fV0NbKB//hr/Rco03MNliMpwVPlHSNnBKF/sUx0q1/9
+        sdGVCYaAh1yT2RxjBHJflXQtB58h9CJbOwfaomv8Vvw3FqcE8vyBdVMdcTQJrDehdlW8eN
+        XX50/YKZ7XAqKXgbGsbc9OEbsC+FN8U=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-486-Kr9-mK_EPDq8Org0qAEbeQ-1; Wed, 19 Apr 2023 18:34:35 -0400
+X-MC-Unique: Kr9-mK_EPDq8Org0qAEbeQ-1
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1a6a0962beaso2388015ad.1
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 15:34:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681938230; x=1684530230;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQiggG3o2RYfkSueu3n51t9vPaOXp7k+C+N1iEzYTEk=;
-        b=B+agE/bBHIxq6GjsIe8M3pj2n+QTXWk4A3AhjVw8mYn9SXmtAZoB8akNWNMP00zdCr
-         bdsOaYzk0UXi1QVkhIqL219/iM4LyoW0wOaTpv7wJONiMvRQvcYbh6Kx94jwr8X45DO/
-         I7fx3uFU8rBFoRGTB9OugGmaT1UFurfvNE4OgJ45luFS8K5vRteKAdgF9AErMeGRJdXH
-         vmWglSl0ZEt3iwPeearI6FgLNKzcbtd7EDaUX7uO65F//HRSf6AYkQsadWGUUOxwfuED
-         FGyiWP3sv7296mfKphkW5WR+LNKIFZxMpksxNMgoUVVtvULpuH0DVB/DBgY3z6n+FJ89
-         hxPw==
-X-Gm-Message-State: AAQBX9fqqHvXBbRdYA7jK0pga+gzjvndsmBOwmKu68gukcvF41z+6T73
-        PB5AhsWsX6IbRcU8agaGJmNzQNMT4e5FH3VyV9W3mA==
-X-Google-Smtp-Source: AKy350ZqAwMZuGujmctNj5/4RDX2TlF72A4V6FVYK1MnZdscKftu5mlDwi3GWrsOP9qhOGlaoZJPJ5ndRNMNYzm04PM=
-X-Received: by 2002:a81:5b04:0:b0:552:b5db:45c4 with SMTP id
- p4-20020a815b04000000b00552b5db45c4mr4852907ywb.15.1681938229498; Wed, 19 Apr
- 2023 14:03:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681943674; x=1684535674;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oV6dPbj6v5bxxtQ0bf2vQ9h1B33hpQZo734sVJEIFy0=;
+        b=QAgHsd0pFVO+1gojEi9s8bCmzywUohoEHbgwTH6wV942z+QFosmFyvZQzbJO6fZrJP
+         ZRYEqOd0P/ZP9/xV2n2XI17ge5Y/y2EUH5pVjAJu9WzQYIcdxoIak4j8NxxESiMbY/H9
+         u8z+GX6fdFJBKpHZHWsCBXzSJui8XJMplHqat2WBSeWzqYfOuTrutWmRM9LrUuEmmh3J
+         MXdPGoWxt1RC/FUGOBPs/XXrkCxZ/F8CJdA73KqwKPP0CqQZOphtiZueXOWgDrUyymvY
+         vOnKKJDzZB8PAGJFJrwB+hK6MFp/dHtZGJMpd11NpbTI/fa/DfjKLy3KDAyjo45M3sJ5
+         e/kg==
+X-Gm-Message-State: AAQBX9cljN/fzFCx8uCEkgbKBBh/EPGkhMHWyetViSl3fKL0Fpw81CQO
+        7MheSjpmk6AR0fZAKwDE12DQuHF0v4PxD2X5cl/CTKu3XhhcG+Wx+LrBaRs480v4dO3HZIAyOnf
+        Kbz7ytuZ27i44jvrnlCM2
+X-Received: by 2002:a17:902:e80a:b0:1a2:9051:f09e with SMTP id u10-20020a170902e80a00b001a29051f09emr7910425plg.21.1681943674327;
+        Wed, 19 Apr 2023 15:34:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YRcOJA9m4//sCD7nyS42bqaIK5+K28VX9KwVstfAjYABbGiPZuMs419sXFFAlB2owlcVEoOw==
+X-Received: by 2002:a17:902:e80a:b0:1a2:9051:f09e with SMTP id u10-20020a170902e80a00b001a29051f09emr7910402plg.21.1681943673995;
+        Wed, 19 Apr 2023 15:34:33 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id je13-20020a170903264d00b001a1b808c1d8sm11889776plb.245.2023.04.19.15.34.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 15:34:33 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 15:34:31 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
+        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com
+Subject: Re: [Patch V8 1/3] spi: Add TPM HW flow flag
+Message-ID: <ipj7gegcsrrha6xy5otn5afauskg7e6gv3aj4f52ee2fzuosmb@mr6nr6gsebtw>
+References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
+ <20230302041804.24718-2-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
- <ZD5JC7BdN1usn6Kd@smile.fi.intel.com> <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
- <ZD/VO1cuBYGCP4O2@smile.fi.intel.com> <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
- <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
-In-Reply-To: <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Thu, 20 Apr 2023 02:33:37 +0530
-Message-ID: <CAOSNQF1vFh=8NGyrQ5NAuefK=_0TTt3CECZ0Q9cfaGdpE2G5qw@mail.gmail.com>
-Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230302041804.24718-2-kyarlagadda@nvidia.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:05=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Wed, Apr 19, 2023 at 06:18:04PM +0530, Joy Chakraborty wrote:
-> > On Wed, Apr 19, 2023 at 5:19=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@intel.com> wrote:
-> > > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
-> > > > On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
-> > > > <andriy.shevchenko@intel.com> wrote:
-> > > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
->
-> ...
->
-> > > > > > +     /*
-> > > > > > +      * Assuming both channels belong to the same DMA controll=
-er hence the
-> > > > > > +      * address width capabilities most likely would be the sa=
-me.
-> > > > > > +      */
-> > > > >
-> > > > > I had a small comment on this In v6 thread.
-> > > >
-> > > > Sure,
-> > > >
-> > > > Your comment in V6 thread:
-> > > > "
-> > > > I would add something to explain the side of these address width, l=
-ike
-> > > >
-> > > >          * Assuming both channels belong to the same DMA controller=
- hence
-> > > >          * the peripheral side address width capabilities most like=
-ly would
-> > > >          * be the same.
-> > > > "
-> > > >
-> > > > I do not think the address width capabilities are dependent on the
-> > > > side of generation like memory or peripheral.
-> > >
-> > > Yes, they are independent. Memory could do with 4 bytes, while periph=
-eral with
-> > > 1 byte and so on.
-> > >
-> > > > From what I understand,
-> > > > address width capabilities are solely dependent on the transaction
-> > > > generation capability of the DMA controller towards the system bus.
-> > >
-> > > What do you mean by a SB in the above? Memory? Peripheral?
-> >
-> > By system bus I mean anything that is connecting the Memory, DMA and
-> > the peripheral.
-> > Something like :
-> >
-> >           +-----------+          +-------------------+
-> >           |               |           |                        |
-> >           |   DMA    |           | PERIPHERAL |
-> >           |               |           |                         |
-> >           +----^-+---+          +-----+--^---------+
-> >         *** -->| |                         |    |
-> >                   | |                         |    |
-> > <------------+-v--------------------v---+------------->
-> >                     SYSTEM BUS
-> > <---------------------+--^----------------------------->
-> >                             |   |
-> >                             |   |
-> >                      +----v--+-----+
-> >                      |                   |
-> >                      |  MEMORY |
-> >                      |                   |
-> >                      +--------------+
-> > *** : Address width capabilities should be the capability of the DMA
-> > to generate transactions to the system bus on the marked interface
-> > irrespective of whether it is destined for Peripheral or memory is
-> > what I understand.
->
-> That's misunderstanding. You used only one possible HW design, there may =
-be
-> more. For example we have Synopsys DesignWare DMA that has a lot of param=
-eters
-> to configure bus mastering. One of such a case, where it makes a lot of s=
-ense,
-> is DesignWare SATA with the above mentioned DMA controller where it has t=
-wo
-> masters and they are connected towards memory and towards peripheral "bus=
-es".
-> They have _different_ configurations.
->
-> So, generally speaking what you are saying is not true.
+On Thu, Mar 02, 2023 at 09:48:02AM +0530, Krishna Yarlagadda wrote:
+> TPM specification [1] defines flow control over SPI. Client device can
+> insert a wait state on MISO when address is transmitted by controller
+> on MOSI. Detecting the wait state in software is only possible for
+> full duplex controllers. For controllers that support only half-
+> duplex, the wait state detection needs to be implemented in hardware.
+> 
+> Add a flag SPI_TPM_HW_FLOW for TPM device to set when software flow
+> control is not possible and hardware flow control is expected from
+> SPI controller.
+> 
+> Reference:
+> [1] https://trustedcomputinggroup.org/resource/pc-client-work-group-
+> pc-client-specific-tpm-interface-specification-tis/
+> 
 
-Got it, thank you for the clarification.
-I misunderstood what you meant, that peripheral access can be from a
-different path.
+Minor thing, but should this reference the newer specification [1]?
 
-I shall add to the comment as you suggested and send another patch.
+[1] https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
 
->
-> > > > What we intend to highlight here is the assumption that both tx and=
- rx
-> > > > channel would belong to the same DMA controller hence the transacti=
-on
-> > > > generation capabilities would be the same both for read and write
-> > > > (e.g. if the DMA controller is able to generate 32 bit sized reads
-> > > > then it should also be able to generate 32 bit sized writes).
-> > > > With this assumption we are doing a bitwise and of both tx and rx c=
-apabilities.
-> > > >
-> > > > Please let me know if you think otherwise.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+
+Regards,
+Jerry
+
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  include/linux/spi/spi.h | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 4fa26b9a3572..b9e49ed42955 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -184,8 +184,18 @@ struct spi_device {
+>  	u8			chip_select;
+>  	u8			bits_per_word;
+>  	bool			rt;
+> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
+> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
+> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
+> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
+> +	/*
+> +	 * TPM specification defines flow control over SPI. Client device
+> +	 * can insert a wait state on MISO when address is transmitted by
+> +	 * controller on MOSI. Detecting the wait state in software is only
+> +	 * possible for full duplex controllers. For controllers that support
+> +	 * only half-duplex, the wait state detection needs to be implemented
+> +	 * in hardware. TPM devices would set this flag when hardware flow
+> +	 * control is expected from SPI controller.
+> +	 */
+> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM HW flow control */
+>  	/*
+>  	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
+>  	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
+> @@ -195,7 +205,7 @@ struct spi_device {
+>  	 * These bits must not overlap. A static assert check should make sure of that.
+>  	 * If adding extra bits, make sure to decrease the bit index below as well.
+>  	 */
+> -#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
+> +#define SPI_MODE_KERNEL_MASK	(~(BIT(29) - 1))
+>  	u32			mode;
+>  	int			irq;
+>  	void			*controller_state;
+> -- 
+> 2.17.1
+> 
+
