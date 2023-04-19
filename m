@@ -2,107 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD556E7564
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD5D6E75A6
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbjDSIgn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 04:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S232447AbjDSItN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 04:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjDSIgl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:36:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C91972A4
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:36:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id b16so4320064ejz.3
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893396; x=1684485396;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=edUAJMsfug4ERHT62YNJ2g3PSl5FoBF2DLnU/gsW8yw=;
-        b=x+6lq8VA6Wh3N4QZXH/MAaqL4b8LGhILplBuW0D9MUaJMldCLatHlIh33DUgHIMXIm
-         EgJwWiISpSiT3XUnBPOEdG8qBeY+RfFrJ20AprkWP6zjbxclOBALbWDb8Y/x4lfPqxCs
-         SdsoBjsbXkFL+bZr3jIMtti/fPOIGENhd2Od068KCL7mqJCTjmcc1CMYuLB+XuEa1vts
-         5Z/yFH9uFWDyaf4R+jhj3wCIk9TY49R3RRu/PT8SAmhohZwz/OYio+Qx7rvmu7Ke2/qP
-         ScDxSWer+RxI54geRxExP/+siXUaAdkyVsJf03Zb9W1gIBGu3YghwGl/Eu5KuMqAnVV1
-         L7bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893396; x=1684485396;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=edUAJMsfug4ERHT62YNJ2g3PSl5FoBF2DLnU/gsW8yw=;
-        b=SMUCp7FwoDikIhimDX16ucxx+QU6jrvla/OfbLzfEyvPW4afzts0zDJkDckCh2tECI
-         ekNNyc8YQWKVhGVabkawkVXBXCHDVXIhRpoEGevJf5q8iRkhP0kBVEeNmYtDjkuJfdjI
-         IsNOHEMgfeLhuvvpYoU5BGP5OG/Pb63/uJ38z1ovOTzrXfvELdriOGSX+HFCntNu+fkQ
-         teUBY9bvjBCNJQJoBbXc7gcCqkzoiHH9wr66utXt+T2jc89lpdbzh+zEw09Bcn6F5ioQ
-         PiKzh78zjzsE3q5nTKUybkPA9CvOangKQ1rKY9067yQaD/tXLm1cosBWGJcJeZdSBShQ
-         zlWQ==
-X-Gm-Message-State: AAQBX9cFhPltsxPQh0ueb5Uzt8gyycW1FJJoJTs/vQEZMKIl2TktWJ7w
-        SXbTrBfwZYAgYRr2t8PRtEoWGw==
-X-Google-Smtp-Source: AKy350Zjdh/Ctd+CjJNcauM9g46sPlL9BLUYK2qJYJ5AxUNa/z27E/WeOP+dvPY7hvDJx8fS0txvIg==
-X-Received: by 2002:a17:906:4c4a:b0:94e:4735:92f8 with SMTP id d10-20020a1709064c4a00b0094e473592f8mr12841404ejw.27.1681893395938;
-        Wed, 19 Apr 2023 01:36:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id kt2-20020a170906aac200b0094f6458157csm4562796ejb.223.2023.04.19.01.36.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:36:35 -0700 (PDT)
-Message-ID: <503a69d7-1adf-2a5a-b29d-8d873570e61b@linaro.org>
-Date:   Wed, 19 Apr 2023 10:36:34 +0200
+        with ESMTP id S231844AbjDSItL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:49:11 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3356A67;
+        Wed, 19 Apr 2023 01:48:39 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J8mQJf027445;
+        Wed, 19 Apr 2023 03:48:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681894106;
+        bh=XbEtFK+H4/7qsl0ppFWnJWa8nE2+A+lGhJsRSLRMsZI=;
+        h=From:To:CC:Subject:Date;
+        b=X05IcQo6rJxC5jzIkoyxF7Wn06nh6hBy4LmgeHEcSJirXvHEpHNT4lt5eYBYaYRT1
+         D8o2fH8ZeTO1s/P9C3EvcIK2Km4M2GQaJfNJ8Hlv9KNb2duHNQzeERYrktso6cJ/fX
+         wYxUmTaW88w1YDhmDWpVcbDOfIjw7PqKZIH7oOWY=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J8mQDl005205
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Apr 2023 03:48:26 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
+ Apr 2023 03:48:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 19 Apr 2023 03:48:25 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J8mOuo068330;
+        Wed, 19 Apr 2023 03:48:25 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
+        Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
+Date:   Wed, 19 Apr 2023 14:18:17 +0530
+Message-ID: <20230419084817.481136-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
- DMA
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
- <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
- <20230419060639.38853-2-jaewon02.kim@samsung.com>
- <41ebe41f-d773-7cc3-dcad-8574c858645e@linaro.org>
- <e29c3c88-e487-75da-662b-6720a1ef1dc6@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e29c3c88-e487-75da-662b-6720a1ef1dc6@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/04/2023 10:31, Jaewon Kim wrote:
-> 
-> On 23. 4. 19. 17:03, Krzysztof Kozlowski wrote:
->> On 19/04/2023 08:06, Jaewon Kim wrote:
->>> Polling mode supported with qurik if there was no DMA in the SOC.
->> typo: quirk
->> You missed verb in your first part of sentence. I don't understand it.
-> 
-> Sorry, I change this sentence like below.
-> 
-> Polling mode supported as a quirk for SOCs without DMA.
+Using this macro makes the code more readable.
+It also inits the members of dev_pm_ops in the following manner
+without us explicitly needing to:
 
-I would say still verb is missing as supported in past tense does not
-make sense.
+.suspend = cqspi_suspend, \
+.resume = cqspi_resume, \
+.freeze = cqspi_suspend, \
+.thaw = cqspi_resume, \
+.poweroff = cqspi_suspend, \
+.restore = cqspi_resume
 
-See:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
 
-> 
+Address comments from previously posted patch:
+https://patchwork.kernel.org/project/spi-devel-general/patch/20230417091027.966146-2-d-gole@ti.com/
 
+ drivers/spi/spi-cadence-quadspi.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 79ab7e309644..922026bb9380 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1829,12 +1829,7 @@ static int cqspi_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static const struct dev_pm_ops cqspi__dev_pm_ops = {
+-	.suspend = cqspi_suspend,
+-	.resume = cqspi_resume,
+-};
+-
+-#define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
++static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
+ #else
+ #define CQSPI_DEV_PM_OPS	NULL
+ #endif
+@@ -1912,7 +1907,7 @@ static struct platform_driver cqspi_platform_driver = {
+ 	.remove_new = cqspi_remove,
+ 	.driver = {
+ 		.name = CQSPI_NAME,
+-		.pm = CQSPI_DEV_PM_OPS,
++		.pm = &cqspi_dev_pm_ops,
+ 		.of_match_table = cqspi_dt_ids,
+ 	},
+ };
+-- 
+2.25.1
 
