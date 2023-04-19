@@ -2,41 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2446E74F4
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154706E751C
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Apr 2023 10:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjDSIZB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 04:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S231888AbjDSI3d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Apr 2023 04:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbjDSIZA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:25:00 -0400
+        with ESMTP id S232587AbjDSI3Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 04:29:25 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993F710DA
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:24:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8627118EC
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 01:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=3Q8+vJIKMTdavrsl59FUFFHh5cq
-        sq8VNH5KnBH0GnBk=; b=kLN1O+SapUu0/jhctblaP79oW6cVwvfoiOW+1ixkZv3
-        hZoQPY0ZXw89uf+xB8w0Dp64sijYyBREj8KyjBnAelyk4grUq9zlM5jNzSdQqfSV
-        FbMDLbI41+ya24TGPFUVeyHjjXjtF+PQlMRtFRwcc65UIoc86LAvTGX1X0dhsSCU
-        =
-Received: (qmail 3619070 invoked from network); 19 Apr 2023 10:24:54 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Apr 2023 10:24:54 +0200
-X-UD-Smtp-Session: l3s3148p1@MW+WKKz56KkujnsI
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=cngb2C84g9BKZ0ZKG0g55bhS90ZJ
+        kthu/ET5iXKNzS0=; b=JJnTkShpAJhojzEnWOTzzh3hgFjKb4NfN7iSUxv/4Aqi
+        ezk2yj7IciJYZuuzujnGg10HXwIiSkFdBrU7JB1qUT7n56LoseD6SgwwzsYVD703
+        gqKcsvpQ35eS2ZtApTVk127Hr5cM2Sp3QSOMmSfKoBXNsv9t1yI07eKsnPu+HFM=
+Received: (qmail 3620324 invoked from network); 19 Apr 2023 10:29:12 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Apr 2023 10:29:12 +0200
+X-UD-Smtp-Session: l3s3148p1@zO74N6z53O0ujnsI
+Date:   Wed, 19 Apr 2023 10:29:12 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-spi@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] spi: sh-msiof: Enforce fixed DTDL for R-Car H3
-Date:   Wed, 19 Apr 2023 10:24:32 +0200
-Message-Id: <20230419082432.33808-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH v2] spi: sh-msiof: Enforce fixed DTDL for R-Car H3
+Message-ID: <ZD+mWDg0WTu3nvey@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+References: <20230419082432.33808-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xmgsPSiGktTgQqHG"
+Content-Disposition: inline
+In-Reply-To: <20230419082432.33808-1-wsa+renesas@sang-engineering.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -48,75 +54,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Documentation says only DTDL of 200 is allowed for this SoC.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
+--xmgsPSiGktTgQqHG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes since v1:
-* fixed a whitespace issue
-* added tags
+On Wed, Apr 19, 2023 at 10:24:32AM +0200, Wolfram Sang wrote:
+> Documentation says only DTDL of 200 is allowed for this SoC.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
- drivers/spi/spi-sh-msiof.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Not super-sure which Fixes-tag, maybe this one?
 
-diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 9bca3d076f05..51ceaa485724 100644
---- a/drivers/spi/spi-sh-msiof.c
-+++ b/drivers/spi/spi-sh-msiof.c
-@@ -30,12 +30,15 @@
- 
- #include <asm/unaligned.h>
- 
-+#define SH_MSIOF_FLAG_FIXED_DTDL_200	BIT(0)
-+
- struct sh_msiof_chipdata {
- 	u32 bits_per_word_mask;
- 	u16 tx_fifo_size;
- 	u16 rx_fifo_size;
- 	u16 ctlr_flags;
- 	u16 min_div_pow;
-+	u32 flags;
- };
- 
- struct sh_msiof_spi_priv {
-@@ -1073,6 +1076,16 @@ static const struct sh_msiof_chipdata rcar_gen3_data = {
- 	.min_div_pow = 1,
- };
- 
-+static const struct sh_msiof_chipdata rcar_r8a7795_data = {
-+	.bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
-+			      SPI_BPW_MASK(24) | SPI_BPW_MASK(32),
-+	.tx_fifo_size = 64,
-+	.rx_fifo_size = 64,
-+	.ctlr_flags = SPI_CONTROLLER_MUST_TX,
-+	.min_div_pow = 1,
-+	.flags = SH_MSIOF_FLAG_FIXED_DTDL_200,
-+};
-+
- static const struct of_device_id sh_msiof_match[] = {
- 	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
- 	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
-@@ -1083,6 +1096,7 @@ static const struct of_device_id sh_msiof_match[] = {
- 	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
- 	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
- 	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
-+	{ .compatible = "renesas,msiof-r8a7795",   .data = &rcar_r8a7795_data },
- 	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
- 	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
- 	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen3_data },
-@@ -1280,6 +1294,9 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
- 		return -ENXIO;
- 	}
- 
-+	if (chipdata->flags & SH_MSIOF_FLAG_FIXED_DTDL_200)
-+		info->dtdl = 200;
-+
- 	if (info->mode == MSIOF_SPI_SLAVE)
- 		ctlr = spi_alloc_slave(&pdev->dev,
- 				       sizeof(struct sh_msiof_spi_priv));
--- 
-2.30.2
+Fixes: 4286db8456f4 ("spi: sh-msiof: Add R-Car Gen 2 and 3 fallback binding=
+s")
 
+
+--xmgsPSiGktTgQqHG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ/plcACgkQFA3kzBSg
+KbY0Ag/+JP3t/H48HVbpYsDOJ5Q1DSSffnyswkWjN1aZMwaaFmyQhTZYQ70+pdM3
+7D7OxxrYpvzQR/Fs9oMiPfwHsUvA86FRLcTe6QON2cexh3b/GuYGfToOzHjVTk20
+/u39O+whP0GHV4Uj2SqKTeG/jLHWhvXb+/GKTYtxp8Cil6JjRbQaQa3lgBkp+woM
+OcIaLAgbbyCzk6ZZqDMDXj1nAxiHnv7K4J7Y89BSIAPPIF8aXtaXxcOGQsoSd3cQ
+EymVe2SiX32GToXVUjPgwavKTRPqKFuk/YbhFzLj/QFtAbUuUIJBChgPuWnShzK2
+d1awNVdsqw3jSQvx9ZZ78rDKqj1+CjhjnEeKI8fZO1l7muOsXZlwHd3DAVw/iqN4
+Fxjub1HqQDq4ZhDWE1IdS67SGYNfV1EEzPDMYZEu8QxT/WvbEFHv5TfvB9JKQJ33
+jJe3rjzCMJi2mSTpNR1nBgEf9QPimtm2QUqEVSoT+Yuy4Xo4UlUQFT67U9v8O5MX
+92HSXEaVThrMVx/vFjMGeN7QB0LGTtDfJyBdG2qpOqLxUKa4Rl7823Hu3Fp67dma
+unRqJgzSRNcmU911b/g5bGPlrot/lC0AafEvW9ZMaGQ+UL2S2t7VJfHs5j24Fmof
+mgxgBnT1pQHazYEa1kErbzIo7QGavQtXhwXAKRD7A61rhfNPlTw=
+=XLVC
+-----END PGP SIGNATURE-----
+
+--xmgsPSiGktTgQqHG--
