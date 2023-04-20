@@ -2,64 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9D66E9AAD
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 19:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D216E9A92
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 19:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjDTR0O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Apr 2023 13:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S231416AbjDTRVA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Apr 2023 13:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjDTR0N (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 13:26:13 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4EF3AA6
-        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:26:12 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-5422bb4603bso375701eaf.1
-        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:26:12 -0700 (PDT)
+        with ESMTP id S230440AbjDTRU7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 13:20:59 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A73F3580
+        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:20:54 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id j15so2675049ybl.10
+        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682011571; x=1684603571;
+        d=chromium.org; s=google; t=1682011253; x=1684603253;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=npIvl3QgC8NcszelNQAZW8/zRVotzvOXnUNhHUMiAZ8=;
-        b=IhDnBqZQY8cR4abRY8OAlrGsC1yzIdWd5846V5sc1ZwbEdcA8jgpocudwoihI1qbNG
-         k9jbA3glNctnLWTcNWHvVJCxiwkh79I+tqpCYME/SzJy55bjEiQbJN9ODFMY54v2Qci9
-         jLplJlAVaBlMSIGaz2NetPKe6HCkQvCE+ynOw=
+        bh=ASlcFMe+UBtl/yEkw/ihBI+w8rG6+336g8ZGmASVmQA=;
+        b=LhESfJk7yZ83e23Lvbrp0jhDyz2vtI5OJhKxXpg3QawcdfBTm2Dsru0A6uZSNuAulC
+         4Zcn5nWdO6TxN7KnxrMAIeQRlN4EThenYxHdvBK/mCsfF3gxyJw67nUl/dygpBSXpKt3
+         Gr+kJkt8me1yBQGUWkXe045msiihJba+ez4sE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682011571; x=1684603571;
+        d=1e100.net; s=20221208; t=1682011253; x=1684603253;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=npIvl3QgC8NcszelNQAZW8/zRVotzvOXnUNhHUMiAZ8=;
-        b=bW0IESndPiXtm52cFm2nZSmz1tcNebgUL1ZH3RTWyIB7+Jk2BKMlY6WY3n/PNpsVpf
-         DPzFidoBYpoN3/xmTI0gMXCt73HOXn03pXLmvsJu2YnQ6GObfa7+6yXUxo3d1aaAhb2R
-         fhER1fNnqPnuSra/t9v+ti1ueNLj540ZdT6IezdEet1fbuy0PW6AJrH4Ns7tRa3XxPUr
-         cu0lQ+N0Gkl526nJwGUAsYrzM1r+Y3qwC9b3MGnmqBfDzjKb/WqE9Dkv27IbX54hSLOY
-         mdVtnajbTNzalWVLhq6X145sgP9jjNjNILJVjZ8el8IZreeoKW/I+eO4Uz62So9Kf77f
-         ePig==
-X-Gm-Message-State: AAQBX9c+gE7X7lnJ414JqYzT69ihvSYLSR3RHemAZP8INnuvw4dz67Xw
-        9V1ziH0/9uY1CR3M7rLqUfJzfUZi1fcPOHu5qDA=
-X-Google-Smtp-Source: AKy350ZZuL+mXe5ZB45a6yroXR7c6qd/y+V4aAlc4Dg3LFfa4cPdiAWhi14tv0DNvyDRv4p+Xtmcew==
-X-Received: by 2002:aca:1901:0:b0:38d:f794:258 with SMTP id l1-20020aca1901000000b0038df7940258mr1078631oii.33.1682011571115;
-        Thu, 20 Apr 2023 10:26:11 -0700 (PDT)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com. [209.85.167.171])
-        by smtp.gmail.com with ESMTPSA id z184-20020a4a49c1000000b00545b549c2f1sm832228ooa.22.2023.04.20.10.26.10
+        bh=ASlcFMe+UBtl/yEkw/ihBI+w8rG6+336g8ZGmASVmQA=;
+        b=Gsz9b8AQtjkDD8XKhlEiz1KvJGBCm+ZSnAF4lQP8zxWWerAgDQ+rJTw0YYsjvV7Nq1
+         brcnIaZ4fZ0xlt9R2XMuDEBZjDowCvtP/Nm9C5qZokb6q21VA4DGm9j58tSvYjV/Y0pk
+         TvDul09xcchIctMLFKsPd1Y8/oTaykW6luJMwHVLjePM8NA4Itlfc7tGs6Zu1WrU7ADZ
+         +vZdb070L6dqSDo+IE8Acx9jqi5lF89jDTnyTdfumR4/gT6UUqCi23D41xPqEX3TBzr0
+         suX00acogn409SHpWuEkz17znK8XgHc6/xNz/kA0nb9ScgX2HZn/7qpVZV+3jm7MxSpZ
+         p5ow==
+X-Gm-Message-State: AAQBX9dqKnOyqXDk6FndujWuV1VCMiNXShKVSzk4h/j7dcNrf3BpnU31
+        KX4puhXQoWsywHdpq5NsepWx9JqB9JlVDqyWvKk=
+X-Google-Smtp-Source: AKy350aagrWH62woOynYVEt72rclMNcsJYbISsBUAJSCJaYcFnN3LFHsPKyk36ME434WVE3GF6Z1fQ==
+X-Received: by 2002:a25:abcb:0:b0:b8f:4a52:15db with SMTP id v69-20020a25abcb000000b00b8f4a5215dbmr2164153ybi.60.1682011253450;
+        Thu, 20 Apr 2023 10:20:53 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id o132-20020a25d78a000000b00b8f2d726471sm417597ybg.3.2023.04.20.10.20.51
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 10:26:10 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-38e12d973bfso699899b6e.0
-        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:26:10 -0700 (PDT)
-X-Received: by 2002:a25:cacc:0:b0:b98:6352:be17 with SMTP id
- a195-20020a25cacc000000b00b986352be17mr882764ybg.0.1682011227804; Thu, 20 Apr
- 2023 10:20:27 -0700 (PDT)
+        Thu, 20 Apr 2023 10:20:51 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id m14so2767894ybk.4
+        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 10:20:51 -0700 (PDT)
+X-Received: by 2002:a25:c807:0:b0:b95:2315:a2c4 with SMTP id
+ y7-20020a25c807000000b00b952315a2c4mr1169128ybf.0.1682011250803; Thu, 20 Apr
+ 2023 10:20:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1681996394-13099-1-git-send-email-quic_vnivarth@quicinc.com> <1681996394-13099-3-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1681996394-13099-3-git-send-email-quic_vnivarth@quicinc.com>
+References: <1681996394-13099-1-git-send-email-quic_vnivarth@quicinc.com> <1681996394-13099-4-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1681996394-13099-4-git-send-email-quic_vnivarth@quicinc.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 20 Apr 2023 10:20:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WyVRxRc7WuW1vhFXWDG81cAu7g5WiC9sggGoEuQOA4Cw@mail.gmail.com>
-Message-ID: <CAD=FV=WyVRxRc7WuW1vhFXWDG81cAu7g5WiC9sggGoEuQOA4Cw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
+Date:   Thu, 20 Apr 2023 10:20:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XxbLsaxJc7YKH+beaPFTxq7x_jS_oQQ+KHXXQ=LgX3ag@mail.gmail.com>
+Message-ID: <CAD=FV=XxbLsaxJc7YKH+beaPFTxq7x_jS_oQQ+KHXXQ=LgX3ag@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
 To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         broonie@kernel.org, robh+dt@kernel.org,
@@ -89,7 +89,10 @@ On Thu, Apr 20, 2023 at 6:13=E2=80=AFAM Vijaya Krishna Nivarthi
 >
 > Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
+> v2 -> v3:
+> - modified commit message
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 1 +
 >  1 file changed, 1 insertion(+)
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
