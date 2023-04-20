@@ -2,138 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5274E6E89A9
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 07:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73456E89C6
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 07:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjDTFoU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Apr 2023 01:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S230102AbjDTFwu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Apr 2023 01:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDTFoT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 01:44:19 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795053A87;
-        Wed, 19 Apr 2023 22:44:15 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33K5hYZf080236;
-        Thu, 20 Apr 2023 00:43:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681969414;
-        bh=6ajKYqWHNECSE5BjMGUN6lrTrtrHPa2R5TCfI4K0qPU=;
-        h=From:To:CC:Subject:Date;
-        b=oNRngS72p8IQecGlyKWkX8xFXfp8vcSJ1TwqfBpTNkT2TNB5/ybLu4sx4uaAlFrQT
-         PwrblHa32uTD/5M+aU1x0vfbqGUMeKlVm7GtQmSLbhY48L95SG2buSbSngYLj54ZbC
-         htxtewAIBPGXcAQuX8nocZ5C3/b0gPZfRQeERhbo=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33K5hY9b011203
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Apr 2023 00:43:34 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
- Apr 2023 00:43:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 20 Apr 2023 00:43:34 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33K5hWhL013841;
-        Thu, 20 Apr 2023 00:43:33 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
-        Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH V3] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
-Date:   Thu, 20 Apr 2023 11:12:57 +0530
-Message-ID: <20230420054257.925092-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229712AbjDTFwt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 01:52:49 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C783C2A
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 22:52:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54ee12aa4b5so15132747b3.4
+        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 22:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681969967; x=1684561967;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iXfqf/s6wp49MzEwFPmcAfC7YjXY3gto73Qxf5qzVro=;
+        b=cqve1P3Ahn/GSvJK6t9IllTKZkwqUuyZJls+LqYhkOnlYr9snTo/+ut+nNUOZXEEYd
+         ZlWNhu3oRoZrLYNdn3320ZRB+Uo3XXiudmgt4AzyRippiVsy5tv1XHx4G9H0gX8wkIyw
+         9LCT24e/0uzH+dU4wlMCxcrQwX6c+szqS2qqt6eE8UOflUC/zfbriabDWt7YsxhNgRLV
+         h9QaWNtE09dPTVkyi6O6ecWHxRJgTN/wXmoCOwmg2LpDbXqk8cMKO2Xy28NCUX+B/tyn
+         TFJW5kdpdtmU8G/zlR0zbuDIQiCyN4zCIhaCP3vcZWWhjDVBzHBY5VrkiAPbmhNvcN5m
+         ykUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681969967; x=1684561967;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iXfqf/s6wp49MzEwFPmcAfC7YjXY3gto73Qxf5qzVro=;
+        b=Y6Q/mTlq9a+ee8PPW7MSX3Ew4zy1GL9TyuT9LDJfrZ44F1ziz0TVlwcUKR7N9oDIhb
+         7JkRm6hL8G3LpEOf5INISGXD8HV8PudfNPUf0a5rUmC8hD66JdVA2VbcUQoJ1gsHEqSi
+         DFk2nd4mVjJIQdkvxejD9JULI2H0qUU5hFNFysUaCxGtPk5BKj6O+cUbFI3/hGAEFe5G
+         217KTGdPqm+juzUNTLkRsjuXIUf2teRC/sFzNdbV3JZSsI67sPE/sWilFhciMLkIbIf9
+         a0WLg6g4P9PtRoieLyYQdMHAhfUmqUVjxEdqkBHA1x+9/9Y2lB0oEo9N0P8H35NMr+5v
+         zO5w==
+X-Gm-Message-State: AAQBX9eJs4RerGfhiWQff5pi2P4LhRI1dXdaldlbU4zQSKAMzngiFX7h
+        Riv1fI9q1mgoBvNbDwzTiFvam4l7dGbPHg==
+X-Google-Smtp-Source: AKy350YSSdGSkaHwcN43xWtFjsCfaBRJd8JJo8idndsiueTbZPrVVKyO8JUrjzapZuJZdBeTJNwcwFq3Kv/gLw==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a25:d653:0:b0:b95:ecc5:5796 with SMTP id
+ n80-20020a25d653000000b00b95ecc55796mr208873ybg.12.1681969967117; Wed, 19 Apr
+ 2023 22:52:47 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 05:51:26 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230420055131.2048959-1-joychakr@google.com>
+Subject: [PATCH v8 0/5] spi: dw: DW SPI DMA Driver updates
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Using this macro makes the code more readable.
-It also inits the members of dev_pm_ops in the following manner
-without us explicitly needing to:
-
-.suspend = cqspi_suspend, \
-.resume = cqspi_resume, \
-.freeze = cqspi_suspend, \
-.thaw = cqspi_resume, \
-.poweroff = cqspi_suspend, \
-.restore = cqspi_resume
-
-Also get rid of conditional compilation based on CONFIG_PM_SLEEP because
-it introduces build issues with certain configs when CQSPI_DEV_PM_OPS is
-just NULL.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304191900.2fARFQW9-lkp@intel.com/
-Fixes: 140623410536 ("mtd: spi-nor: Add driver for Cadence Quad SPI Flash Controller")
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
+This Patch series adds support for 32 bits per word trasfers using DMA
+and some defensive checks around dma controller capabilities.
+---
+V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
+---
+V1->V2 Changes : Add dma capability check to make sure address widths
+are supported.
+---
+V2->V3 Changes : Split changes , add DMA direction check and other
+cosmetic chnages.
+---
+V3->V4 Changes : Fix Sparce Warning
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+---
+V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+check before initalisation of further capabilities, remove zero
+initialisations, remove error OR'ing.
+---
+V5->V6 Changes :
+	-Remove case of n_bytes=3 using 4_bytes buswidth
+	-Avoid forward decaration
+	-Break capability check patch into 2
+	-round n_bytes to power of 2 ( Bug Fix)
+	-Add more explanation in commit text.
+---
+V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+func()
 ---
 
-Previously sent here:
-https://lore.kernel.org/all/20230419084817.481136-1-d-gole@ti.com/
+Joy Chakraborty (5):
+  spi: dw: Add 32 bpw support to SPI DW DMA driver
+  spi: dw: Move dw_spi_can_dma()
+  spi: dw: Add DMA directional capability check
+  spi: dw: Add DMA address widths capability check
+  spi: dw: Round of n_bytes to power of 2
 
-Base: next-20230419
+ drivers/spi/spi-dw-core.c |  2 +-
+ drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+ drivers/spi/spi-dw.h      |  1 +
+ 3 files changed, 60 insertions(+), 19 deletions(-)
 
-Changelog:
-* Fix build errors reported by kernel test bot.
-
- drivers/spi/spi-cadence-quadspi.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 53829eb5eca0..6ddb2dfc0f00 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1820,7 +1820,6 @@ static void cqspi_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int cqspi_suspend(struct device *dev)
- {
- 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
-@@ -1850,15 +1849,7 @@ static int cqspi_resume(struct device *dev)
- 	return spi_master_resume(master);
- }
- 
--static const struct dev_pm_ops cqspi__dev_pm_ops = {
--	.suspend = cqspi_suspend,
--	.resume = cqspi_resume,
--};
--
--#define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
--#else
--#define CQSPI_DEV_PM_OPS	NULL
--#endif
-+static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
- 
- static const struct cqspi_driver_platdata cdns_qspi = {
- 	.quirks = CQSPI_DISABLE_DAC_MODE,
-@@ -1933,7 +1924,7 @@ static struct platform_driver cqspi_platform_driver = {
- 	.remove_new = cqspi_remove,
- 	.driver = {
- 		.name = CQSPI_NAME,
--		.pm = CQSPI_DEV_PM_OPS,
-+		.pm = &cqspi_dev_pm_ops,
- 		.of_match_table = cqspi_dt_ids,
- 	},
- };
 -- 
-2.25.1
+2.40.0.634.g4ca3ef3211-goog
 
