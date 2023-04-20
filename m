@@ -2,267 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB986E8874
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 05:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5274E6E89A9
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Apr 2023 07:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbjDTDMz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Apr 2023 23:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S231797AbjDTFoU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Apr 2023 01:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbjDTDMo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Apr 2023 23:12:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58E3E57
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 20:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681960318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=UzlpK56KozcxWUUR2VWbvemwuxkAcB4A5hqCA2PpI1Bsfv4Mjg344YOqjN4stmrqvKoVsq
-        PHlVHUgOkiZdJXdF8d+wbQeep+78LVaIo8p2LLxqiIkRhAP/GNXtYVLLa/irVKOKBjWCaU
-        dbnFddmUOBSsbR0q6C5EwEDsz/DeIa8=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-ZXyGpm8FP_-ng4b-XmaycQ-1; Wed, 19 Apr 2023 23:11:57 -0400
-X-MC-Unique: ZXyGpm8FP_-ng4b-XmaycQ-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1a681ad22c8so3740395ad.2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Apr 2023 20:11:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681960316; x=1684552316;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=lpsgDDZPz6ncepSKGWGGWuFHpca/eYc1UzfTSlXuIaopKRgXbc8STz0oP8fBDjucuy
-         tNMv1Faws1xqBpkyZzfgGSg7sGgY+ZqCXE3X0v0Zg76tVPM6QbjOzmoai1TPgHpMIedf
-         r+rcXaO1e+LMrc7jIMzWzoDOVzNoPmHFWwfJi0SamTaGn8DrItzlQaNPy6aaSQ3vt7K/
-         Fv807l9gxIeitaF+ABzHY1LzfEQ7NvxZ6a+Gguo6oNyMqiJW7ayZG5LJVXseXw6mVw1D
-         QbRK2J+6a7NmwISsNKkwFWRTowiHGvc6s9bs3p9cZ/29DNBigf3yXScxRt0RUb5nMNSb
-         1aMw==
-X-Gm-Message-State: AAQBX9cRTmOLBz1v07OXRoYzaezxfUoqRrxtYhrszE01mHOGctiD+AD3
-        t+0Pul8XULmxU0d4SqDOOJJbEtCPBzCMnhD9kJb2J3VdN6/3YIMqPBv0gqWgpp8MYBC2vSNoSpo
-        6Z6d/ljelQvrR0NyvSqA/
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76469pla.7.1681960316375;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ax8FFXo3OHHtKHTICA0kOA/Q49kpcfJ7vYva+HjvLXcSzVkRLCzrjx53STrgpygHaJ1jeLfg==
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76444pla.7.1681960316010;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709027d8d00b001a647709860sm153930plm.157.2023.04.19.20.11.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:11:55 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 20:11:54 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V9 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <enfduqgdgrdpfw73suydlbmu3mopk545vwrpoat2chkop375np@o3fxh5k7wc76>
-References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
- <20230325183409.7695-3-kyarlagadda@nvidia.com>
- <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
+        with ESMTP id S230102AbjDTFoT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 01:44:19 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795053A87;
+        Wed, 19 Apr 2023 22:44:15 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33K5hYZf080236;
+        Thu, 20 Apr 2023 00:43:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681969414;
+        bh=6ajKYqWHNECSE5BjMGUN6lrTrtrHPa2R5TCfI4K0qPU=;
+        h=From:To:CC:Subject:Date;
+        b=oNRngS72p8IQecGlyKWkX8xFXfp8vcSJ1TwqfBpTNkT2TNB5/ybLu4sx4uaAlFrQT
+         PwrblHa32uTD/5M+aU1x0vfbqGUMeKlVm7GtQmSLbhY48L95SG2buSbSngYLj54ZbC
+         htxtewAIBPGXcAQuX8nocZ5C3/b0gPZfRQeERhbo=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33K5hY9b011203
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Apr 2023 00:43:34 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
+ Apr 2023 00:43:34 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 20 Apr 2023 00:43:34 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33K5hWhL013841;
+        Thu, 20 Apr 2023 00:43:33 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Dhruva Gole <d-gole@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>,
+        Vignesh <vigneshr@ti.com>, Apurva Nandan <a-nandan@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH V3] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
+Date:   Thu, 20 Apr 2023 11:12:57 +0530
+Message-ID: <20230420054257.925092-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:32:40PM -0700, Jerry Snitselaar wrote:
-> On Sun, Mar 26, 2023 at 12:04:08AM +0530, Krishna Yarlagadda wrote:
-> > TPM devices may insert wait state on last clock cycle of ADDR phase.
-> > For SPI controllers that support full-duplex transfers, this can be
-> > detected using software by reading the MISO line. For SPI controllers
-> > that only support half-duplex transfers, such as the Tegra QSPI, it is
-> > not possible to detect the wait signal from software. The QSPI
-> > controller in Tegra234 and Tegra241 implement hardware detection of the
-> > wait signal which can be enabled in the controller for TPM devices.
-> > 
-> > The current TPM TIS driver only supports software detection of the wait
-> > signal. To support SPI controllers that use hardware to detect the wait
-> > signal, add the function tpm_tis_spi_hw_flow_transfer() and move the
-> > existing code for software based detection into a function called
-> > tpm_tis_spi_sw_flow_transfer(). SPI controllers that only support
-> > half-duplex transfers will always call tpm_tis_spi_hw_flow_transfer()
-> > because they cannot support software based detection. The bit
-> > SPI_TPM_HW_FLOW is set to indicate to the SPI controller that hardware
-> > detection is required and it is the responsibility of the SPI controller
-> > driver to determine if this is supported or not.
-> > 
-> > For hardware flow control, CMD-ADDR-DATA messages are combined into a
-> > single message where as for software flow control exiting method of
-> > CMD-ADDR in a message and DATA in another is followed.
-> > 
-> > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
-> >  1 file changed, 89 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> > index a0963a3e92bd..db9afd0b83da 100644
-> > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
-> >  	return 0;
-> >  }
-> >  
-> > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > -			 u8 *in, const u8 *out)
-> > +/*
-> > + * Half duplex controller with support for TPM wait state detection like
-> > + * Tegra QSPI need CMD, ADDR & DATA sent in single message to manage HW flow
-> > + * control. Each phase sent in different transfer for controller to idenity
-> > + * phase.
-> > + */
-> > +static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_transfer spi_xfer[3];
-> > +	struct spi_message m;
-> > +	u8 transfer_len;
-> > +	int ret;
-> > +
-> > +	while (len) {
-> > +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> > +
-> > +		spi_message_init(&m);
-> > +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> > +		phy->iobuf[1] = 0xd4;
-> > +		phy->iobuf[2] = addr >> 8;
-> > +		phy->iobuf[3] = addr;
-> 
-> I haven't looked at much TPM code in the past couple of years, but
-> perhaps some defines instead of magic numbers here? 0x80 is the rw bit,
-> and 0xd4 the transaction offset?
-> 
-> > +
-> > +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> > +
-> > +		spi_xfer[0].tx_buf = phy->iobuf;
-> > +		spi_xfer[0].len = 1;
-> > +		spi_message_add_tail(&spi_xfer[0], &m);
-> > +
-> > +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> > +		spi_xfer[1].len = 3;
-> > +		spi_message_add_tail(&spi_xfer[1], &m);
-> > +
-> > +		if (out) {
-> > +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> > +			spi_xfer[2].rx_buf = NULL;
-> > +			memcpy(&phy->iobuf[4], out, transfer_len);
-> > +			out += transfer_len;
-> > +		}
-> > +
-> > +		if (in) {
-> > +			spi_xfer[2].tx_buf = NULL;
-> > +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> > +		}
-> > +
-> > +		spi_xfer[2].len = transfer_len;
-> > +		spi_message_add_tail(&spi_xfer[2], &m);
-> > +
-> > +		reinit_completion(&phy->ready);
-> > +
-> > +		ret = spi_sync_locked(phy->spi_device, &m);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		if (in) {
-> > +			memcpy(in, &phy->iobuf[4], transfer_len);
-> > +			in += transfer_len;
-> > +		}
-> > +
-> > +		len -= transfer_len;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> 
-> Does tpm_tis_spi_transfer_half not need to lock the bus?  The doc comments for spi_sync_locked
-> state:
-> 
->  This call should be used by drivers that require exclusive access to the
->  SPI bus. It has to be preceded by a spi_bus_lock call. The SPI bus must
->  be released by a spi_bus_unlock call when the exclusive access is over.
-> 
-> If that isn't the case should it be using spi_sync instead of spi_sync_locked?
-> 
-> Regards,
-> Jerry
+Using this macro makes the code more readable.
+It also inits the members of dev_pm_ops in the following manner
+without us explicitly needing to:
 
-b4 mbox -c to the rescue. I found the earlier discussion with Mark about
-the lock, so I guess the question is just should this call spi_sync
-instead of spi_sync_locked then?
+.suspend = cqspi_suspend, \
+.resume = cqspi_resume, \
+.freeze = cqspi_suspend, \
+.thaw = cqspi_resume, \
+.poweroff = cqspi_suspend, \
+.restore = cqspi_resume
 
-The magic numbers is a minor nit, and can probably be cleaned up
-separately since the full duplex code was already doing the same
-thing. The only other nit is just the older tcg spec being referenced
-in patch 1.
+Also get rid of conditional compilation based on CONFIG_PM_SLEEP because
+it introduces build issues with certain configs when CQSPI_DEV_PM_OPS is
+just NULL.
 
-Regards,
-Jerry
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304191900.2fARFQW9-lkp@intel.com/
+Fixes: 140623410536 ("mtd: spi-nor: Add driver for Cadence Quad SPI Flash Controller")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
 
-> 
-> > +
-> > +static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> >  {
-> >  	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> >  	int ret = 0;
-> > @@ -140,6 +206,24 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> >  	return ret;
-> >  }
-> >  
-> > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > +			 u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_controller *ctlr = phy->spi_device->controller;
-> > +
-> > +	/*
-> > +	 * TPM flow control over SPI requires full duplex support.
-> > +	 * Send entire message to a half duplex controller to handle
-> > +	 * wait polling in controller.
-> > +	 * Set TPM HW flow control flag..
-> > +	 */
-> > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		return tpm_tis_spi_transfer_half(data, addr, len, in, out);
-> > +	else
-> > +		return tpm_tis_spi_transfer_full(data, addr, len, in, out);
-> > +}
-> > +
-> >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
-> >  				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
-> >  {
-> > @@ -181,6 +265,9 @@ static int tpm_tis_spi_probe(struct spi_device *dev)
-> >  
-> >  	phy->flow_control = tpm_tis_spi_flow_control;
-> >  
-> > +	if (dev->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		dev->mode |= SPI_TPM_HW_FLOW;
-> > +
-> >  	/* If the SPI device has an IRQ then use that */
-> >  	if (dev->irq > 0)
-> >  		irq = dev->irq;
-> > -- 
-> > 2.17.1
-> > 
-> 
+Previously sent here:
+https://lore.kernel.org/all/20230419084817.481136-1-d-gole@ti.com/
+
+Base: next-20230419
+
+Changelog:
+* Fix build errors reported by kernel test bot.
+
+ drivers/spi/spi-cadence-quadspi.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 53829eb5eca0..6ddb2dfc0f00 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1820,7 +1820,6 @@ static void cqspi_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int cqspi_suspend(struct device *dev)
+ {
+ 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
+@@ -1850,15 +1849,7 @@ static int cqspi_resume(struct device *dev)
+ 	return spi_master_resume(master);
+ }
+ 
+-static const struct dev_pm_ops cqspi__dev_pm_ops = {
+-	.suspend = cqspi_suspend,
+-	.resume = cqspi_resume,
+-};
+-
+-#define CQSPI_DEV_PM_OPS	(&cqspi__dev_pm_ops)
+-#else
+-#define CQSPI_DEV_PM_OPS	NULL
+-#endif
++static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
+ 
+ static const struct cqspi_driver_platdata cdns_qspi = {
+ 	.quirks = CQSPI_DISABLE_DAC_MODE,
+@@ -1933,7 +1924,7 @@ static struct platform_driver cqspi_platform_driver = {
+ 	.remove_new = cqspi_remove,
+ 	.driver = {
+ 		.name = CQSPI_NAME,
+-		.pm = CQSPI_DEV_PM_OPS,
++		.pm = &cqspi_dev_pm_ops,
+ 		.of_match_table = cqspi_dt_ids,
+ 	},
+ };
+-- 
+2.25.1
 
