@@ -2,55 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867666EAEAE
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 18:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0496EAF58
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 18:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjDUQGs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Apr 2023 12:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S232589AbjDUQjh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Apr 2023 12:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbjDUQGp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 12:06:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28EC146D3;
-        Fri, 21 Apr 2023 09:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED5B612AB;
-        Fri, 21 Apr 2023 16:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C53C433EF;
-        Fri, 21 Apr 2023 16:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682093203;
-        bh=Ycs5/wDsSkeoMdncpw3AYUuAjBNxE0d1fYTJRvpcH2w=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=g3/qOxduXopxn52YNmjrQq+LCK82iTgPzLyNo0Q2Yl3Eq4rrA5BwznTiXCVICFr18
-         u5T4ioNyjzmGcqZkfmpvPDTIn0YTTcD7Wav5PiPrTrnpAG2uSuD3Ji+wtzlNbFgGMs
-         xGZ4/8VBoRi4jLfQtTQmsly3PaOYOS2GgVHThqme3Fx5vGI4OirysZCD0CsJFphRTR
-         hn2Fwf0ZFx1zUBajYXQqxPW34mcelD2dwrpi0wo42gP/Uk8B/3vAdHFjC02DVGrgp6
-         GPGmCUaMtFoP01rBJRrRsCwek04cNG5xLnxOyz5WK1PItgMrBMQ1VyoK6JsMCyb+mc
-         46Vl9u844XB0Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
-In-Reply-To: <20230420121615.967487-1-d-gole@ti.com>
-References: <20230420121615.967487-1-d-gole@ti.com>
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Message-Id: <168209320180.108697.6146441595079629834.b4-ty@kernel.org>
-Date:   Fri, 21 Apr 2023 17:06:41 +0100
+        with ESMTP id S232340AbjDUQjg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 12:39:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B586CE6
+        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 09:39:34 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-LzxJYqU5Ow-hxxu1l_t_zA-1; Fri, 21 Apr 2023 17:39:32 +0100
+X-MC-Unique: LzxJYqU5Ow-hxxu1l_t_zA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 21 Apr
+ 2023 17:39:30 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 21 Apr 2023 17:39:30 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joy Chakraborty' <joychakr@google.com>,
+        Serge Semin <fancer.lancer@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "manugautam@google.com" <manugautam@google.com>,
+        "rohitner@google.com" <rohitner@google.com>
+Subject: RE: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
+Thread-Topic: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
+Thread-Index: AQHZdDLD1iEgTrZDeE+sBNd9TfRPX6818oJA
+Date:   Fri, 21 Apr 2023 16:39:30 +0000
+Message-ID: <969a083998224016947f5e77218f4587@AcuMS.aculab.com>
+References: <20230420055131.2048959-1-joychakr@google.com>
+ <20230420055131.2048959-6-joychakr@google.com>
+ <20230421085354.34dwrgr3enlxqhtc@mobilestation>
+ <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
+In-Reply-To: <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00e42
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,42 +63,20 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 20 Apr 2023 17:46:15 +0530, Dhruva Gole wrote:
-> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
-> it may introduce build issues with certain configs where it maybe disabled
-> This is because if above config is not enabled the suspend-resume
-> functions are never part of the code but the bcm63xx_spi_pm_ops struct
-> still inits them to non-existent suspend-resume functions.
-> 
-> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
-> 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: bcm63xx: remove PM_SLEEP based conditional compilation
-      commit: 25f0617109496e1aff49594fbae5644286447a0f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+RnJvbTogSm95IENoYWtyYWJvcnR5DQo+IFNlbnQ6IDIxIEFwcmlsIDIwMjMgMTA6MjINCi4uLg0K
+PiBTdXJlLCBJIGNhbiBtYWtlIHRoZSBmb2xsb3dpbmcgY2hhbmdlIGluIHRoZSBmb3JtYXR0aW5n
+IGFuZCBzZW5kIHRoZQ0KPiBwYXRjaCBzZXJpZXM6DQo+ICAgICAgICAgIGR3cy0+bl9ieXRlcyA9
+DQo+ICAgICAgICAgICAgICAgICAgcm91bmR1cF9wb3dfb2ZfdHdvKERJVl9ST1VORF9VUCh0cmFu
+c2Zlci0+Yml0c19wZXJfd29yZCwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIEJJVFNfUEVSX0JZVEUpKTsNCg0KV29uJ3QgY2hlY2twYXRjaCBibGVh
+dCBhYm91dCB0aGF0Pw0KDQpJcyBpdCBldmVyIGFjdHVhbGx5IHZhbGlkIGZvciB0aGUgY2FsbGVy
+IHRvIHByb3ZpZGUgYQ0KdmFsdWUgdGhhdCBpc24ndCA4LCAxNiBvciAzMiA/DQoNCkknbSBzdXJl
+IGl0IGxvb2tlZCBhcyB0aG91Z2ggc29tZSBvdGhlciBsZW5ndGhzL2NvdW50cw0Kd2hlcmUgbGlr
+ZWx5IHRvIGdvIGJhZGx5IHdyb25nLg0KDQpJIGtub3cgdGhlcmUgYXJlIHRpbWVzIHdoZW4gaXQg
+aXMgdXNlZnVsIHRvIGJpdC1iYW5nICdvZGQnDQpudW1iZXJzIG9mIGJpdHMgLSBsaWtlIGNvbW1h
+bmQrYWRkcmVzcytkZWxheSBmb3IgZmFzdCByZWFkcw0KYnV0IHRoYXQgaXMgYSBzdWItMzJiaXQg
+dHJhbnNmZXIgc28gKGF0IGxlYXN0IHNvbWV3aGVyZSkNCmlzIDEgd29yZCBidXQgbm90IGFsbCB0
+aGUgYml0cy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
+bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
+cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
