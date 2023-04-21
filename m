@@ -2,180 +2,195 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F2E6EA137
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 03:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC6C6EA21A
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 05:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbjDUBsS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Apr 2023 21:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S234020AbjDUDCA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Apr 2023 23:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbjDUBsR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 21:48:17 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38D44C1F
-        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 18:48:13 -0700 (PDT)
+        with ESMTP id S234113AbjDUDBh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Apr 2023 23:01:37 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FA87D93
+        for <linux-spi@vger.kernel.org>; Thu, 20 Apr 2023 20:01:16 -0700 (PDT)
 Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230421014811epoutp02eed9847137e29d23de6d9c90ac3d1f23~X0AHK5FJ82049220492epoutp02d
-        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 01:48:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230421014811epoutp02eed9847137e29d23de6d9c90ac3d1f23~X0AHK5FJ82049220492epoutp02d
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230421025541epoutp04d4253f3546e027d7c8eb691582c031ae~X07CqZCCE0703607036epoutp04J
+        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 02:55:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230421025541epoutp04d4253f3546e027d7c8eb691582c031ae~X07CqZCCE0703607036epoutp04J
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682041692;
-        bh=1OOFri94d52LXG4EPLKy/KBumjQNxs+eAWlUBgJRS9M=;
+        s=mail20170921; t=1682045741;
+        bh=gmRmW4hTEG/NaSgyx94GE0NJvkJijzgJH6axIRgmOlM=;
         h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=AXKDJlINJ93aLG5ZdxhIRQke2DqbmjD2OEECsSGfmWenC33gcbKnqUt5Nq6bykxqH
-         0oCNkwkMEhSFmyYyuJ2VpBg1fM7mXyV+VqxsyAXOgyT9vclXkXZhdQn6w0aLGlCJrk
-         9tuV4FqOHWnG69a8+I3ERZTiW00r5aQ8w9avTb9c=
+        b=YlslFHEjyzlaVJ6bu2FOMvEEF5xs3iIur75jc1/cvcGr4i3GUMFvOS59FPFcr6xa2
+         BLqmAPsFp76Jj2EGpnlXWksXBexj/EhkA2Bn14HtL2SQFa0hJqw2r0aHj2gUP8LPP6
+         iYw2kahZ8WvKynmsMc5bfP1U+SPEuI/s7nhXV5vw=
 Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230421014811epcas2p4066b33d63886b6820c0e3137738bd8fe~X0AGou-je0308503085epcas2p4-;
-        Fri, 21 Apr 2023 01:48:11 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q2cqb0TPHz4x9Q3; Fri, 21 Apr
-        2023 01:48:11 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        68.71.09961.A5BE1446; Fri, 21 Apr 2023 10:48:10 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230421025540epcas2p18f11ea2a332301a0a8818fc0820ac76d~X07CFVOcd1901919019epcas2p1P;
+        Fri, 21 Apr 2023 02:55:40 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q2fKS4Zydz4x9Q1; Fri, 21 Apr
+        2023 02:55:40 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        58.CC.09938.C2BF1446; Fri, 21 Apr 2023 11:55:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230421014810epcas2p1712c2740eac5eaa34006237858dfd8e5~X0AF8NWBO0538305383epcas2p1-;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
+        20230421025539epcas2p1dfab9151ae85e99f06b26a6a6f16f059~X07BMf-9Z2676626766epcas2p1s;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230421014810epsmtrp1b1fe22dbfaaea3338813eb5a9fee3d52~X0AF7Y34h1216812168epsmtrp1v;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
-X-AuditID: b6c32a45-bb5ff700000026e9-fd-6441eb5a9116
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230421025539epsmtrp276dcd1d3eee3658e845b590971fb62bd~X07BLt9Lf1763617636epsmtrp2n;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
+X-AuditID: b6c32a47-ca5fd700000026d2-51-6441fb2c119d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C0.EA.08609.A5BE1446; Fri, 21 Apr 2023 10:48:10 +0900 (KST)
+        F3.A1.08609.B2BF1446; Fri, 21 Apr 2023 11:55:39 +0900 (KST)
 Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230421014810epsmtip175cfaddfaea55304c37787c52014b006~X0AFpyRCk2749627496epsmtip1L;
-        Fri, 21 Apr 2023 01:48:10 +0000 (GMT)
-Message-ID: <87c2a0e1-fb3a-7b0a-c87a-ac792357ef26@samsung.com>
-Date:   Fri, 21 Apr 2023 10:45:45 +0900
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230421025539epsmtip23e461584995611f94637289c3e523786~X07A6hlsh1284112841epsmtip29;
+        Fri, 21 Apr 2023 02:55:39 +0000 (GMT)
+Message-ID: <874bb3d7-9b71-2ab0-9f0c-7f4066db50a4@samsung.com>
+Date:   Fri, 21 Apr 2023 11:53:15 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
         Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/4] spi: s3c64xx: add cpu_relax in polling loop
+Subject: Re: [PATCH v2 3/4] spi: s3c64xx: add sleep during transfer
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Chanho Park <chanho61.park@samsung.com>
 From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <01d22e48-40f0-b1dd-aa00-cf484c4364ee@linaro.org>
+In-Reply-To: <20230419155617.gobedupbdmdaj4kz@intel.intel>
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmmW7Ua8cUg78nrS0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj06pONo871/aw
-        eWxeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
-        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL
-        89L18lJLrAwNDIxMgQoTsjNuv13HWrCOr+Js2w7WBsZz3F2MnBwSAiYSp7ZfZO9i5OIQEtjB
-        KHFq5wlmCOcTo8TJGbsYIZzPjBJTd7YxwbT8eTyTDSKxi1Fiya6jUFWvGSW2v7/NAlLFK2An
-        cfnHZUYQm0VAVeLXu92sEHFBiZMzn4DViApESyzeNwXMFhZwl9hx9R9YPbOAuMStJ/OZQIaK
-        CCxmlOh7/AlsHbPARkaJzU1T2UGq2AS0Jb6vXww2lRNo281385ghuuUltr+dA/aFhMBcDolr
-        y2YzQhzuInH9YAM7hC0s8er4FihbSuJlfxuUnS3RPv0PK4RdIXFxw2w2CNtYYtazdqA5HEAL
-        NCXW79IHMSUElCWO3GKBWMsn0XH4LztEmFeio00IolFN4v7Uc1BDZCQmHVkJDUUPiSMzd7FN
-        YFSchRQss5C8PwvJM7MQ9i5gZFnFKJZaUJybnlpsVGAIj+7k/NxNjOAEq+W6g3Hy2w96hxiZ
-        OBgPMUpwMCuJ8J5xtUoR4k1JrKxKLcqPLyrNSS0+xGgKjJyJzFKiyfnAFJ9XEm9oYmlgYmZm
-        aG5kamCuJM4rbXsyWUggPbEkNTs1tSC1CKaPiYNTqoEpcqHzr40379dtTu8Mn7j0ziP7zS5X
-        lpoEMTtunrVeYLXTmdrSTZU6e9z9qk592DMrqe703suFHzY8+VV56/kzXTWtlQejr7RZ+Llf
-        PaxU0save313TORicTnhNYZ5bF6eGStzMxot3qxeaFIp5/tte4RQYPcM5tcrLhtnWP5Z+Prg
-        ijM2knJTqx7c3H60PO/iVLNm7nlHSu+dmfFKoOT7Bxl+3tcpbLfPC7QprlWVW3VVkzFrx7Fo
-        7YfRscVRVXf+XHF5VD6VaSdPutfueuPpSta6HQ/jqoSb5rvH8u3tPvHAqP6EoM0PM4OpHXvZ
-        Cwz9VZnnzr1yOawya9LHY69i4/bohInaVYnb7T2/se2/EktxRqKhFnNRcSIAKEYrQTkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnkeLIzCtJLcpLzFFi42LZdlhJTjfqtWOKwd27chYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujNtv17EWrOOrONu2g7WB8Rx3FyMnh4SA
-        icSfxzPZuhi5OIQEdjBKPJ/VwgSRkJFY/qyPDcIWlrjfcoQVouglo8T0r1NYQRK8AnYSl39c
-        ZgSxWQRUJX692w0VF5Q4OfMJC4gtKhAtcWP5N7ChwgLuEjuu/gOrZxYQl7j1ZD4TyFARgcWM
-        Eh2X3rKDOMwCGxklVl5fzwyx7hGTxONJN8HGsgloS3xfvxjM5gRaffPdPGaIUWYSXVu7oMbK
-        S2x/O4d5AqPQLCSXzEKycRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/d
-        xAiOKy2tHYx7Vn3QO8TIxMF4iFGCg1lJhPeMq1WKEG9KYmVValF+fFFpTmrxIUZpDhYlcd4L
-        XSfjhQTSE0tSs1NTC1KLYLJMHJxSDUxJRytPni+bzTX7aVLOnt3qAp9nPjE/xDxpfaZlyo/+
-        6Z7XDvqdemP9mlnba3Gyou+mvTFbUz3LTycVpHxSeKR+fFLUlNDiNJsF0tvPL8/gsloh1Tq1
-        da/R2WfMYXZCeQcucCy49j42wSu0RcH+umqjbXmIEYcvlwff/2w+uSXvJWT6nm/e+3nFqsiz
-        S4r6p0ouC1+qwzbhkd3y7jIFnrKZu3ddaDDiaHsiyHlHN+1C0ul45+Dsh8yvyrjrToauPLNL
-        ffL5FAujKsFdd3Itj2aIyD13OZLxTCTg9TFrkarQK9FzuzIt69kmT5u/4kfzdp+XcZsveage
-        u5ptzrI53bn1cXBhV4Kae7hFR8KSCiWW4oxEQy3mouJEALwSynwaAwAA
-X-CMS-MailID: 20230421014810epcas2p1712c2740eac5eaa34006237858dfd8e5
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmua7Ob8cUg5MTlCwezNvGZnH/awej
+        xeIfz5kspj58wmZxeb+2xd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMnuwOVxfcknZo9NqzrZ
+        PO5c28PmsXlJvUffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpa
+        mCsp5CXmptoqufgE6Lpl5gAdpqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/Q
+        K07MLS7NS9fLSy2xMjQwMDIFKkzIzlj6bjVbwVT+inUrtRsYP3J3MXJySAiYSCx/9I61i5GL
+        Q0hgB6NE84k2ZgjnE6PE2+cH2CCcz4wS3w5+YYNpOXGzhwkisYtRYnVbPwtIQkjgNaNE4zNn
+        EJtXwE7i2e9NjCA2i4CqxJVXH1kg4oISJ2c+AbNFBaIlFu+bAmYLCzhL7Lu1lB3EZhYQl7j1
+        ZD4TiC0ioCbxevEnsGXMApeYJA7MagArYhPQlvi+fjEriM0pYCVx5f0rZohmeYntb+eA/SAh
+        sJRDYu3k10BncwA5LhLH3gtCfCAs8er4FnYIW0ri87u9UJ9lS7RP/8MKYVdIXNwwGypuLDHr
+        WTsjyBhmAU2J9bv0ISYqSxy5xQKxlU+i4/Bfdogwr0RHmxBEo5rE/annoIbISEw6spIJwvaQ
+        +D9rHssERsVZSIEyC8nzs5D8Mgth7wJGllWMYqkFxbnpqcVGBcbwqE7Oz93ECE6xWu47GGe8
+        /aB3iJGJg/EQowQHs5II7xlXqxQh3pTEyqrUovz4otKc1OJDjKbAqJnILCWanA9M8nkl8YYm
+        lgYmZmaG5kamBuZK4rzStieThQTSE0tSs1NTC1KLYPqYODilGpgOqc2eeO7Fjhdvc+YwVEk/
+        PFFx4fNqS6WDLGH7bocudG1+eGHKXGGZWMfSOUez+jh3fplWxzBr6v1kxtJl5376T/tYJ9xz
+        5txigxs/UiJPvThYvCFswuYK2wKlkJhlSzys3Ry2GR+ZW9Xy8bJU0fTb/x1V/+yed/zbwrZP
+        rKumcwp7VmxUXhXB2eQgtrMpJW7OcrdXp49ein51+AfQZ/9PXU1a+XTvP7Y9lUJPn+Ta1Mp/
+        0vA+N3falWsqOXd9pxUf/BHDoutnt2Py9q13mFM6J5yZveWV5LaSlOll6d4CadoHja5lcgTJ
+        TVdufTZxFfv/iR3arZPK6jot2ldfnnHKweB7gemXp48CS5mfvDn7QImlOCPRUIu5qDgRADQe
+        +ao6BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkkeLIzCtJLcpLzFFi42LZdlhJXlf7t2OKwfw/RhYP5m1js7j/tYPR
+        YvGP50wWUx8+YbO4vF/bYu/rrewWmx5fY7W4vGsOm8WM8/uYLBo/3mR34PK4vuQTs8emVZ1s
+        Hneu7WHz2Lyk3qNvyypGj8+b5ALYorhsUlJzMstSi/TtErgylr5bzVYwlb9i3UrtBsaP3F2M
+        nBwSAiYSJ272MHUxcnEICexglLjXPosNIiEjsfxZH5QtLHG/5QgriC0k8JJRYs0GfRCbV8BO
+        4tnvTYwgNouAqsSVVx9ZIOKCEidnPgGzRQWiJW4s/8YEYgsLOEvsu7WUHcRmFhCXuPVkPlhc
+        REBN4vXiT2BHMAtcYpKYPmkbK8RF95gkHs86DLaZTUBb4vv6xWA2p4CVxJX3r5ghJplJdG3t
+        YoSw5SW2v53DPIFRaBaSQ2YhWTgLScssJC0LGFlWMUqmFhTnpucWGxYY5aWW6xUn5haX5qXr
+        JefnbmIEx5aW1g7GPas+6B1iZOJgPMQowcGsJMJ7xtUqRYg3JbGyKrUoP76oNCe1+BCjNAeL
+        kjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamHQ95HXKuxZr0VF1x6iuK2rD40oVp9/7vtrCW
+        Pfnvvb537HXjzV/neRu+VGqfUKcc3nbuzi3+NPaJb5c2qleGpa+O8s+YZ5b9+9mEyvlhOlzB
+        ClFJlw+dMt6wpa10z5TAvjP2E5mbT3zaVFwup/Z7Y+B2d7cF+y+unGYct5dBhOXp3DX3AiQD
+        vspEHPWX+PXBYWqyZcjah6ys87/L+Ps5bWG4ffRUnp5i4b7cgKMnf11KPVt1qO9DS0LNuSr7
+        tJzddqJZkSv0bz0Lm7m8h4+16UXpo7VBp/ecq2temrqy8O4lrsVVPccX8di9nlpvtser/OKy
+        fT01d1hUHCf86vm09sLM59MKuRbLaoibqVt/VWIpzkg01GIuKk4EAOsnqI0cAwAA
+X-CMS-MailID: 20230421025539epcas2p1dfab9151ae85e99f06b26a6a6f16f059
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419062755epcas2p43a646bbae5f01e3120331407ad873318
+X-CMS-RootMailID: 20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596
 References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
-        <CGME20230419062755epcas2p43a646bbae5f01e3120331407ad873318@epcas2p4.samsung.com>
-        <20230419060639.38853-3-jaewon02.kim@samsung.com>
-        <36f37a18-0022-0368-bf7c-ebdd724b1558@linaro.org>
-        <abbf5608-dbe7-af39-e555-d76ffe65dea4@samsung.com>
-        <01d22e48-40f0-b1dd-aa00-cf484c4364ee@linaro.org>
+        <CGME20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596@epcas2p1.samsung.com>
+        <20230419060639.38853-4-jaewon02.kim@samsung.com>
+        <b91c6cfb-4fd2-1189-72fd-92b40d1b4743@linaro.org>
+        <9d2e2bda-4213-35d0-55d7-827bad9b13a1@samsung.com>
+        <20230419155617.gobedupbdmdaj4kz@intel.intel>
 X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Andi,
 
-On 23. 4. 21. 00:39, Krzysztof Kozlowski wrote:
-> On 19/04/2023 13:13, Jaewon Kim wrote:
->> On 23. 4. 19. 17:14, Krzysztof Kozlowski wrote:
->>> On 19/04/2023 08:06, Jaewon Kim wrote:
->>>> Adds cpu_relax() to prevent long busy-wait.
->>> How cpu_relax prevents long waiting?
->> As I know, cpu_relax() can be converted to yield. This can prevent
->> excessive use of the CPU in busy-loop.
-> That's ok, you just wrote that it will prevent long waiting, so I assume
-> it will shorten the wait time.
+
+On 23. 4. 20. 00:56, Andi Shyti wrote:
+> Hi Jaewon,
 >
->> I'll replace poor sentence like below in v3.
->>
->> ("Adds cpu_relax() to allow CPU relaxation in busy-loop")
->>
->>>> There is busy-wait loop to check data transfer completion in polling mode.
+>>>> In polling mode, the status register is constantly read to check transfer
+>>>> completion. It cause excessive CPU usage.
+>>>> So, it calculates the SPI transfer time and made it sleep.
 >>>>
->>>> Signed-off-by: Jaewon Kim<jaewon02.kim@samsung.com>
+>>>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 >>>> ---
->>>>    drivers/spi/spi-s3c64xx.c | 1 +
->>>>    1 file changed, 1 insertion(+)
+>>>>    drivers/spi/spi-s3c64xx.c | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
 >>>>
 >>>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->>>> index 273aa02322d9..886722fb40ea 100644
+>>>> index 886722fb40ea..cf3060b2639b 100644
 >>>> --- a/drivers/spi/spi-s3c64xx.c
 >>>> +++ b/drivers/spi/spi-s3c64xx.c
->>>> @@ -568,6 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>>> @@ -561,6 +561,14 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>>>    	u32 cpy_len;
+>>>>    	u8 *buf;
+>>>>    	int ms;
+>>>> +	u32 tx_time;
+>>>> +
+>>>> +	/* sleep during signal transfer time */
+>>>> +	status = readl(regs + S3C64XX_SPI_STATUS);
+>>>> +	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
+>>>> +		tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+>>>> +		usleep_range(tx_time / 2, tx_time);
+>>>> +	}
+>>> Did you actually check the delays introduced by it? Is it worth?
+>> Yes, I already test it.
+>>
+>> Throughput was the same, CPU utilization decreased to 30~40% from 100%.
+>>
+>> Tested board is ExynosAutov9 SADK.
+>>
+>>
 >>>>    
->>>>    	val = msecs_to_loops(ms);
->>>>    	do {
->>>> +		cpu_relax();
->>> Shouldn't this be just readl_poll_timeout()? Or the syntax would be too
->>> complicated?
->> I think we can replace this while() loop to readl_poll_timeout().
->>
->> However, we should use 0 value as 'delay_us' parameter. Because delay
->> can affect throughput.
->>
->>
->> My purpose is add relax to this busy-loop.
->>
->> we cannot give relax if we change to readl_poll_timeout().
-> readl_poll_timeout() will know to do the best. You do not need to add
-> cpu_relax there.
-Okay, I will change it to readl_poll_timeout()
+>>>>    	/* millisecs to xfer 'len' bytes @ 'cur_speed' */
+>>>>    	ms = xfer->len * 8 * 1000 / sdd->cur_speed;
+>>> You have now some code duplication so this could be combined.
+> you could put the 'if' under the 'ms = ...' and just use ms
+> without declaring any tx_time.
 >
-> Best regards,
-> Krzysztof
->
->
+> Andi
+
+
+The unit of 'tx_time' is 'us'.
+
+
+tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+
+ms = xfer->len * 8 * 1000 / sdd->cur_speed;
+
+
+I add tx_time to minimize existing code modifications.
+
+If we are not using tx_time, we need to change ms to us and change the 
+related code.
+
 
 Thanks
 
 Jaewon Kim
+
 
