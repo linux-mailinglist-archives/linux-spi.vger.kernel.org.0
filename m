@@ -2,158 +2,186 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868316EB11E
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 19:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF106EB184
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 20:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjDURtJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Apr 2023 13:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S232753AbjDUSWA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Apr 2023 14:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbjDURsx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 13:48:53 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9320D10F6
-        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 10:48:29 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b8bf343833dso1051804276.1
-        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 10:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682099309; x=1684691309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DWqX2mo3dFEdJ7DitrYIS25Aemq6au0F4tIDpdUOsJw=;
-        b=bfP6ECRJHhdI5t6m6waV6Qm4WcJC8DFhQCADYZFuc4ex288Vh8DWOzWAHUcjV1zhj+
-         oAy+Tv7CtzOmdM+/cz2ddJoxmDwNAD1p2+RdAnmYh1zr2l5ATaM8N8pdDsjOggdF1RM+
-         Z6v1SEuUrRPjusoKU0CtdgGIU8Qsuq0/awodvEN8pwdb0Kkk28brobkOOFtdq4gmPfSB
-         lUWU51pzGRcvJEGmESaUaZ+SGaO5QHXeqEMwv+bBcwHSmQ66XF0I6o90axp1UVCrV6HU
-         k8rgL9Lkds1KyFm8/Pmjk1wcXsGr7JXsV8XhBCrN0dIctyzqx8quROaQXrfAN4wqaKL9
-         rdZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682099309; x=1684691309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DWqX2mo3dFEdJ7DitrYIS25Aemq6au0F4tIDpdUOsJw=;
-        b=e3GIlsoJiLD2qptvR23Zx+JCyjr9O/lH8ePR0hWdQA4vCUBtJMMgAeTVR2J1fN1uc6
-         cf91RQFBGtyXwENY6FcCQSRTZv9qzbPvbiurQmVy93uHbbK/f8M8m17mGD2GcbPka/ue
-         n6mNgi5A0jiQcyDLRdGsnn4fRDDvk+YIQMXmzDo86OUp4+KCa14bRHMI0JoJf+JrAEUT
-         5nAK/f7t1k8hRJjbWvm0Un1cFM7XCtVE5KIgI8ONns4EqCCmSMjBKVmk/26P9Wo7GKV1
-         CLkZaUm8zrWk3jn+lFRzW3AqreH2cwJ89WKV39QNgFg2nEvtStiYLvcJEgNQYe/Cjfx5
-         Ynng==
-X-Gm-Message-State: AAQBX9e6ANFDttWXFAZRMIXa5LfgAu1DvtrFuStVNkYpCnzw8e28lDLq
-        +lhq51tK6D8d/QLSYPOdtGcsKAr1GgfdTJ1YzPP9zQ==
-X-Google-Smtp-Source: AKy350YkzVZKiayDZ4WmYVl9MOA0tVyi7CUMntD/rBvh18BIGAz1wcdLk9SMlfMn9GtwBc7uql6PxkcK5qJpUim6SRQ=
-X-Received: by 2002:a0d:cc0d:0:b0:54e:e136:9f6b with SMTP id
- o13-20020a0dcc0d000000b0054ee1369f6bmr2554780ywd.46.1682099308692; Fri, 21
- Apr 2023 10:48:28 -0700 (PDT)
+        with ESMTP id S232539AbjDUSV6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 14:21:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D6BE5C;
+        Fri, 21 Apr 2023 11:21:42 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LCa2Dr005223;
+        Fri, 21 Apr 2023 18:21:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=37tA0l1YNQLXsPEqE/4DyjH1r7IBsB8kl1wUoh8uJJQ=;
+ b=JzaY1cXhcnoNDlfXo30TVUjhKfqTvwOe1mWJoF32zzhUDq1uEI3VqLhoM6Ex2FgksM1X
+ vf6FEbr6XlESPnxEsj8xsQjPUzeW0Gg4u5Ed5qjlMK7RqrhngxziYHrbIg6YOpMPkTdR
+ 3h0eG/aw1CYckUmcPPYCpFUFlIggeRI1CImgN1Qx5rvUJOEsM9g+YUUCEiDMeP2mTdoR
+ +V/lrmJ45uEVY4zVAQnWMX21cc1suqU0nLExSmzhXeTUIDGtU0AV62fYJgFNacg+f2iA
+ AZH1NlgKvHMiqEXDRJ94w+zQvAqPTZTQujEOnyokcLV/iuTCWA9hFNVGxcTHGZOAhYyv iw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3tmqrsyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 18:21:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LILcVs009145
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 18:21:38 GMT
+Received: from [10.216.24.183] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 21 Apr
+ 2023 11:21:33 -0700
+Message-ID: <166aa490-f217-7dd8-0152-1d216deb2805@quicinc.com>
+Date:   Fri, 21 Apr 2023 23:51:29 +0530
 MIME-Version: 1.0
-References: <20230420055131.2048959-1-joychakr@google.com> <20230420055131.2048959-6-joychakr@google.com>
- <20230421085354.34dwrgr3enlxqhtc@mobilestation> <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
- <969a083998224016947f5e77218f4587@AcuMS.aculab.com> <20230421164838.52euobr5ohfyxxti@mobilestation>
- <CAOSNQF14TcJCU3BBvkL7PuokNXAczTyU=0mOisujBCYNNc2rZA@mail.gmail.com> <20230421171552.qvunrlxxpqusd5h3@mobilestation>
-In-Reply-To: <20230421171552.qvunrlxxpqusd5h3@mobilestation>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Fri, 21 Apr 2023 23:18:16 +0530
-Message-ID: <CAOSNQF2g9tNmgd62fne6qZaOXyDjux4D0oZy1DHbGDNh1DwmFw@mail.gmail.com>
-Subject: Re: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "manugautam@google.com" <manugautam@google.com>,
-        "rohitner@google.com" <rohitner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 5/5] spi: spi-qcom-qspi: Add DMA mode support
+Content-Language: en-CA
+To:     Doug Anderson <dianders@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_msavaliy@quicinc.com>, <mka@chromium.org>,
+        <swboyd@chromium.org>, <quic_vtanuku@quicinc.com>
+References: <1681996394-13099-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1681996394-13099-6-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=VU9Zdk2wz=90cjmuBWxaVz9w+UxzrTtW_ny-jrwVLV3w@mail.gmail.com>
+ <7a6fe89b-5898-08d3-6c44-2cfc9d8fae7a@quicinc.com>
+ <CAD=FV=U_7t4H9nXy6Ku49qLqbhZ02K-_XQv_Ssgkp26s3LyDMw@mail.gmail.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <CAD=FV=U_7t4H9nXy6Ku49qLqbhZ02K-_XQv_Ssgkp26s3LyDMw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: glNRSooCcwcj_PFhT-WrJZs5nlmUag7Q
+X-Proofpoint-ORIG-GUID: glNRSooCcwcj_PFhT-WrJZs5nlmUag7Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=778 spamscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304210161
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:45=E2=80=AFPM Serge Semin <fancer.lancer@gmail.c=
-om> wrote:
->
-> On Fri, Apr 21, 2023 at 10:40:44PM +0530, Joy Chakraborty wrote:
-> > On Fri, Apr 21, 2023 at 10:18=E2=80=AFPM Serge Semin <fancer.lancer@gma=
-il.com> wrote:
-> > >
-> > > On Fri, Apr 21, 2023 at 04:39:30PM +0000, David Laight wrote:
-> > > > From: Joy Chakraborty
-> > > > > Sent: 21 April 2023 10:22
-> > > > ...
-> > > > > Sure, I can make the following change in the formatting and send =
-the
-> > > > > patch series:
-> > > > >          dws->n_bytes =3D
-> > > > >                  roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_p=
-er_word,
-> > > > >                                                  BITS_PER_BYTE));
-> > > >
-> > >
-> > > > Won't checkpatch bleat about that?
-> > >
-> > > Why would it?
-> >
-> > I ran checkpatch on this and it seems to be fine with minor spacing cha=
-nges.
->
-> What spacing do you mean? No problem with the change as is:
-> [fancer@mobilestation] kernel $ git show HEAD | grep -A1 -B2 roundup_pow_=
-of_two
-> -       dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_B=
-YTE);
-> +       dws->n_bytes =3D
-> +               roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_word,
-> +                                               BITS_PER_BYTE));
-> [fancer@mobilestation] kernel $ ./scripts/checkpatch.pl --git HEAD
-> total: 0 errors, 0 warnings, 10 lines checked
->
-> Commit e18b699257db ("spi: dw: Round of n_bytes to power of 2") has no ob=
-vious style problems and is ready for submission.
->
-> -Serge(y)
->
+Hi,
 
-Sorry for my error, it looks like my email client does not show it correctl=
-y.
-What I was going to upload in V9 is the same as you mentioned.
 
-Thanks
-Joy
-> >
-> > >
-> > > >
-> > > > Is it ever actually valid for the caller to provide a
-> > > > value that isn't 8, 16 or 32 ?
-> > >
-> > > Judging by this
-> > > https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/spi/spi.c#L3=
-630
-> > > it is. SPI-controller also supports word lengths within the
-> > > pre-synthesized range. So it's up to the SPI-peripherals and their
-> > > protocols what word length to select.
-> > >
-> > > -Serge(y)
-> > >
-> > > >
-> > > > I'm sure it looked as though some other lengths/counts
-> > > > where likely to go badly wrong.
-> > > >
-> > > > I know there are times when it is useful to bit-bang 'odd'
-> > > > numbers of bits - like command+address+delay for fast reads
-> > > > but that is a sub-32bit transfer so (at least somewhere)
-> > > > is 1 word but not all the bits.
-> > > >
-> > > >       David
-> > > >
-> > > > -
-> > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keyne=
-s, MK1 1PT, UK
-> > > > Registration No: 1397386 (Wales)
+On 4/21/2023 11:05 PM, Doug Anderson wrote:
+> Hi,
+>
+> On Fri, Apr 21, 2023 at 9:58 AM Vijaya Krishna Nivarthi
+> <quic_vnivarth@quicinc.com> wrote:
+>> Hi,
+>>
+>> Thanks a lot for the review and inputs...
+>>
+>>
+>> On 4/20/2023 10:49 PM, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Thu, Apr 20, 2023 at 6:13 AM Vijaya Krishna Nivarthi
+>>> <quic_vnivarth@quicinc.com> wrote:
+>>>> @@ -137,11 +155,29 @@ enum qspi_clocks {
+>>>>           QSPI_NUM_CLKS
+>>>>    };
+>>>>
+>>>> +enum qspi_xfer_mode {
+>>>> +       QSPI_FIFO,
+>>>> +       QSPI_DMA
+>>>> +};
+>>>> +
+>>>> +/*
+>>>> + * Number of entries in sgt returned from spi framework that-
+>>>> + * will be supported. Can be modified as required.
+>>>> + * In practice, given max_dma_len is 64KB, the number of
+>>>> + * entries is not expected to exceed 1.
+>>>> + */
+>>>> +#define QSPI_MAX_SG 5
+>>> I actually wonder if this would be more nicely done just using a
+>>> linked list, which naturally mirrors how SGs work anyway. You'd add
+>>> "struct list_head" to the end of "struct qspi_cmd_desc" and just store
+>>> a pointer to the head in "struct qcom_qspi".
+>>>
+>>> For freeing, you can always get back the "virtual" address because
+>>> it's just the address of each node. You can always get back the
+>>> physical address because it's stored in "data_address".
+>>>
+>> Please note that in "struct qspi_cmd_desc"
+>>
+>> data_address - dma_address of data buffer returned by spi framework
+>>
+>> next_descriptor - dma_address of the next descriptor in chain
+>>
+>>
+>> If we were to have a linked list of descriptors that we can parse and
+>> free, it would require 2 more fields
+>>
+>> this_descriptor_dma - dma address of the current descriptor
+> Isn't that exactly the same value as "data_address"? Sure,
+> "data_address" is a u32 and the DMA address is 64-bits, but elsewhere
+> in the code you already rely on the fact that the upper bits of the
+> DMA address are 0 when you do:
+
+
+No; data_address is the dma_address mapped to the xfer buffer.
+
+This is provided by spi framework and retrieved from sgl.
+
+"this_descriptor" would be the dma_address of the current cmd_descriptor.
+
+this is returned from dma_pool_alloc()
+
+this would be required for freeing.
+
+
+> virt_cmd_desc->data_address = dma_ptr
+>
+>
+>> next_descriptor_virt - virtual address of the next descriptor in chain
+> Right, this would be the value of the next node in the linked list,
+> right? So basically by adding a list_node_t you can find it easily.
+>
+>
+>>>> +static int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, dma_addr_t dma_ptr,
+>>>> +                       uint32_t n_bytes)
+>>>> +{
+>>>> +       struct qspi_cmd_desc *virt_cmd_desc, *prev;
+>>>> +       dma_addr_t dma_cmd_desc;
+>>>> +
+>>>> +       /* allocate for dma cmd descriptor */
+>>>> +       virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
+>>>> +               GFP_KERNEL, &dma_cmd_desc);
+>>> Remove unnecessary cast; "void *" assigns fine w/out a cast.
+>>>
+>>> Add "| GFP_ZERO" and then get rid of the need to clear the "reserved"
+>>> and "next_descriptor" stuff below.
+>>>
+>> I needed __GFP_ZERO to prevent a compile error, used same.
+> Ah, sorry. Sounds good.
+>
+> -Doug
