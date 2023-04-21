@@ -2,128 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2A56EB04F
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 19:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34B06EB05B
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Apr 2023 19:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjDURLQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Apr 2023 13:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S233273AbjDURNX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Apr 2023 13:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDURLP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 13:11:15 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A327E167F8
-        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 10:10:57 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b97ec4bbc5aso1011892276.3
-        for <linux-spi@vger.kernel.org>; Fri, 21 Apr 2023 10:10:57 -0700 (PDT)
+        with ESMTP id S229641AbjDURNX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Apr 2023 13:13:23 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A968E79;
+        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b733fd00bso2099273b3a.0;
+        Fri, 21 Apr 2023 10:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682097056; x=1684689056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sshayw4Xz5HwmxPgOrsGArckGApAws6Ivrag6BUTgjE=;
-        b=njJK7avwkadDD1fO/nydVQsJ4ikCfYB6Va4SuEvgEJ1S8H4i6YEOB2VWGPXR2HXacH
-         GTJufN29U3ZugcyeoPdkZO2pFXQSfD3VLktIBzYYO1lhhxvVciRZAgoaKYAmW6Kf9YlJ
-         m3BBH6xcsnDQxmxcWBBS8gtOD/JdejbAfLI55TKKJQX2qP2cvx36985Kfv+FDEDeZ5+0
-         rWcTvEm8LhJkYIsa0jl49LNZQJkPfTWVIDamPmaak8S5x7YY/8tYi1/83ljge43gFpiS
-         SYXXmeCO7bdKxlZY2v8M6OqgyqqCdfPfTuKWvfpozIhwX79FU1ciZpr977cblvieAznG
-         1O7A==
+        d=gmail.com; s=20221208; t=1682097201; x=1684689201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
+        b=FjEVhsbuInMEEPWXdLhRhcGP7c0Mf3zoia/8MpkI3FFi8bXXeWe4n6ptt+1a4zdrg5
+         FNqYWJH1xCmVEZhstLN2AY9j/okpz1gYfJeSgdtNavogVsNgAQ5R8ZrEmOeH9LRu9LZ8
+         FkvW9GQk6BZqdH44lftdYbIwBPC3Z4QCmMjJg12Yt7CJ2UvD21aHSDyI6cqr0NPtz2Od
+         xglJwazptN44LPeHcJJjTDu2mrW5MEeUfV5ul8U1vlx9SIjIlN0N5LeTPodvIpPNG7HS
+         NY6kGx+cCheUAowDO9nGtRHddThNXORJLc8DkvNUmRM7XeJCoOhtQsFLA2muTX8IIU0T
+         IFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682097056; x=1684689056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sshayw4Xz5HwmxPgOrsGArckGApAws6Ivrag6BUTgjE=;
-        b=gGzeBGHwJKCtP4W5g7LwFxmrVaVJ2iZj74JHztlgr4i+WUq1CZ6AKE/S4iiKDUnGrF
-         RaSJGw7i/1Q5UhMhoAlMgzi+n6HRYFcTwnP12VBxbP1jmv455P7+CSUwVWbQAB9ugx/P
-         X+5pi5k7ylcgoLIMjQgxxlSk1MWRXvEH7DBOb/THKlVFuSloTmgK0HbVAbNAIM1z0aA8
-         iJRcRA0q0XVnnZOhdYdFghoC8fAMIZ/iqW57g14PCVby9JRkz4ETgoeBBOPgw0cb1zd8
-         8WYwoiBjYV9O733/CHY9jRv7yciMRuWJcVSChy5VAHJtjO/ZBaHhKHdF++9Bu17jnqJ2
-         NWzA==
-X-Gm-Message-State: AAQBX9d/gGTF1OIpT6sqj5iF2A5AJEamNnVm4SpEo8FO//r6HKvzTjnS
-        yXHNuJk9Wwu4DLuZK9/qZR0xMFZGIKeCNKYNcdBv2Q==
-X-Google-Smtp-Source: AKy350ZJfC07gVkKyUPQkz8gTiB7EjTgI9J5qlrNOAksIGBX7HMXhs/Foz2IvWulIOMvz17u6R70pPDknMuVoPCYDMk=
-X-Received: by 2002:a0d:e888:0:b0:54f:91d:71e9 with SMTP id
- r130-20020a0de888000000b0054f091d71e9mr2889765ywe.14.1682097056525; Fri, 21
- Apr 2023 10:10:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682097201; x=1684689201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wtv/plYjg6t5+KIhqn4HLpoeS3qH6YTzNA/OWZvr4S0=;
+        b=H2KVl4tz8/8w2stM+fbx9KxKAqSMNrfSyfmmTtjh6Nj0FsegR/+1rKQayTecX1GVsy
+         NouaPcaaL7rEJEecTQUmK3JVGSvNUd0HE8+Q8Zc262dF7ZiacGpDTJA8mciskbV7dF8O
+         dJABDmin8b62Y8bytgy/0av3tsi01xDdT7FYY/t8SYLHVUNs8oefH6kUHHSi5x5SV6Bf
+         WDKbRJ5LHUgpJY0p11Tdlc5aUGNn2TxR61vlTJekNb2bEUkxDKnVrHanNqsSxRQJ32q3
+         0SmoonUPe6zwlREpV30+wsrRn+jvg00mg0eNy1Z/bBgi70bJmUaFWq+G5+BQFv/bVg1j
+         kkgA==
+X-Gm-Message-State: AAQBX9f3l5NnFYFoaMvRc+KgKS064OA5ps126k/v3T8d6SImXzqRfVdO
+        jCzKiagrx50MuuU/IP/+Obc=
+X-Google-Smtp-Source: AKy350aW0P/FC8UFKP2uDVDZSV2ognzE+Ons42k3+QvxKksi2a70BP+43x0RqhleMO7/CgeLtZL1Fw==
+X-Received: by 2002:a17:90a:9708:b0:22c:59c3:8694 with SMTP id x8-20020a17090a970800b0022c59c38694mr5906384pjo.44.1682097201450;
+        Fri, 21 Apr 2023 10:13:21 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y18-20020a17090aa41200b00244991b3f7asm5549150pjp.1.2023.04.21.10.13.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 10:13:20 -0700 (PDT)
+Message-ID: <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
+Date:   Fri, 21 Apr 2023 10:13:12 -0700
 MIME-Version: 1.0
-References: <20230420055131.2048959-1-joychakr@google.com> <20230420055131.2048959-6-joychakr@google.com>
- <20230421085354.34dwrgr3enlxqhtc@mobilestation> <CAOSNQF1aK2EdgeUbNN4Bpp8hjPHTzBwt-q6+-Wb24VSsUOtSqA@mail.gmail.com>
- <969a083998224016947f5e77218f4587@AcuMS.aculab.com> <20230421164838.52euobr5ohfyxxti@mobilestation>
-In-Reply-To: <20230421164838.52euobr5ohfyxxti@mobilestation>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Fri, 21 Apr 2023 22:40:44 +0530
-Message-ID: <CAOSNQF14TcJCU3BBvkL7PuokNXAczTyU=0mOisujBCYNNc2rZA@mail.gmail.com>
-Subject: Re: [PATCH v8 5/5] spi: dw: Round of n_bytes to power of 2
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "manugautam@google.com" <manugautam@google.com>,
-        "rohitner@google.com" <rohitner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
+ compilation
+Content-Language: en-US
+To:     Dhruva Gole <d-gole@ti.com>, Mark Brown <broonie@kernel.org>
+Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+References: <20230420121615.967487-1-d-gole@ti.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230420121615.967487-1-d-gole@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 10:18=E2=80=AFPM Serge Semin <fancer.lancer@gmail.c=
-om> wrote:
->
-> On Fri, Apr 21, 2023 at 04:39:30PM +0000, David Laight wrote:
-> > From: Joy Chakraborty
-> > > Sent: 21 April 2023 10:22
-> > ...
-> > > Sure, I can make the following change in the formatting and send the
-> > > patch series:
-> > >          dws->n_bytes =3D
-> > >                  roundup_pow_of_two(DIV_ROUND_UP(transfer->bits_per_w=
-ord,
-> > >                                                  BITS_PER_BYTE));
-> >
->
-> > Won't checkpatch bleat about that?
->
-> Why would it?
+On 4/20/23 05:16, Dhruva Gole wrote:
+> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
+> it may introduce build issues with certain configs where it maybe disabled
+> This is because if above config is not enabled the suspend-resume
+> functions are never part of the code but the bcm63xx_spi_pm_ops struct
+> still inits them to non-existent suspend-resume functions.
+> 
+> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
+> 
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>   drivers/spi/spi-bcm63xx.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+> index 96633a0051b1..99395932074c 100644
+> --- a/drivers/spi/spi-bcm63xx.c
+> +++ b/drivers/spi/spi-bcm63xx.c
+> @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
+>   	clk_disable_unprepare(bs->clk);
+>   }
+>   
+> -#ifdef CONFIG_PM_SLEEP
+>   static int bcm63xx_spi_suspend(struct device *dev)
 
-I ran checkpatch on this and it seems to be fine with minor spacing changes=
-.
+Don't we need a __maybe_unused here?
+-- 
+Florian
 
->
-> >
-> > Is it ever actually valid for the caller to provide a
-> > value that isn't 8, 16 or 32 ?
->
-> Judging by this
-> https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/spi/spi.c#L3630
-> it is. SPI-controller also supports word lengths within the
-> pre-synthesized range. So it's up to the SPI-peripherals and their
-> protocols what word length to select.
->
-> -Serge(y)
->
-> >
-> > I'm sure it looked as though some other lengths/counts
-> > where likely to go badly wrong.
-> >
-> > I know there are times when it is useful to bit-bang 'odd'
-> > numbers of bits - like command+address+delay for fast reads
-> > but that is a sub-32bit transfer so (at least somewhere)
-> > is 1 word but not all the bits.
-> >
-> >       David
-> >
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, M=
-K1 1PT, UK
-> > Registration No: 1397386 (Wales)
