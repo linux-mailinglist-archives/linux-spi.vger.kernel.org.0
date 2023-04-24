@@ -2,71 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6514B6ECA4A
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 12:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF886ECB5C
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjDXK2m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 06:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S231625AbjDXLb5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 07:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjDXK2S (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 06:28:18 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCE94EDB;
-        Mon, 24 Apr 2023 03:26:21 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAQAYP102616;
-        Mon, 24 Apr 2023 05:26:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682331970;
-        bh=d+YTj+kYAOw9gOaSfCjVLld1MKVE0O7Qk46YIombHhc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=ZIl9xhTefuioFN3E4SSDNOluX8IzBtBCA6wasrmzsWul0gGQ/rxwK4ZLPpT3dpzmq
-         8mNJKl19fOLLdqEZ8ZRTaS1+uGO64/xelAgckQI5EHDlrm2YXYOYfmpSkB2HGVUeLB
-         NMQ9l3fCLmI9FIjzUrTvN/d4dTOtahYEnqTra4wI=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAQA0T008858
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 05:26:10 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 05:26:09 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 05:26:09 -0500
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAQ6ve040882;
-        Mon, 24 Apr 2023 05:26:07 -0500
-Message-ID: <3a28e15a-ba67-3dfa-6445-bd21e523980b@ti.com>
-Date:   Mon, 24 Apr 2023 15:56:06 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Content-Language: en-US
-To:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
-References: <20230420121615.967487-1-d-gole@ti.com>
- <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
- <CAOiHx==7TV3879ADbiWGbHT0NysNck4FUQXkXEocjkD2BzEoRA@mail.gmail.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <CAOiHx==7TV3879ADbiWGbHT0NysNck4FUQXkXEocjkD2BzEoRA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S229547AbjDXLbx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:31:53 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD502D70;
+        Mon, 24 Apr 2023 04:31:50 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C099C5C018B;
+        Mon, 24 Apr 2023 07:31:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 24 Apr 2023 07:31:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682335909; x=1682422309; bh=Y9
+        FYoJaNOjxIXKXj5iVt3HG1MU0gziVJXHg42DuXBOg=; b=O1tJf0aYUL1Asq2G9I
+        v/WenhP5rGZyZB1SAL0Lr08oQeAEEUQrAp0socR3vEd9UgGnvByhJ755hJxV1qKU
+        E9ZSACMVc6ctw5IOj3YSxNtJjppCrcMnuo3EHDjmd3kHM8VJtKdkgvKL4DFoHOqz
+        +W+8IuX2hg35wSKwedvXKJ3PURDaQkrWjJM/7PMwj2nQ3bK1GDbl6lv178HZ/NA8
+        KDsO9MYDBoMlPNBh8aEl4RrLKv4OLsavscqSSR/heANCq8T/WVE0cVUSnj8QfSJQ
+        4u/teN+GVPZosLly+e7aCJHZfWx6MH3m9aFx+6kQZQbTUHFFn+RPDQoPPYxBW1gQ
+        IJSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682335909; x=1682422309; bh=Y9FYoJaNOjxIX
+        KXj5iVt3HG1MU0gziVJXHg42DuXBOg=; b=iBdH6uvO/L8/zyujyEmeuLQ7lvT2x
+        GYZygrbZo05oxTN/Md/oDE0e8WW8qA02cbgVhsfFcZOI0ds8e+FbCtiiaOJvFiRx
+        +0cW8fxBsOTCzFHhmKeMdRGumvrSujG5VcT8IFLwY3h8/nMbzymQnlGomWQOWzQx
+        /oBTRzPHT38WBG1dSwXH+qEHrQrBjZbDngRgGtk3lDrZjamKW1iCCAmPUjNH4bVF
+        47At9lDjEDsPYhnN2768xyf3oBtpO2z2m/rKqeUCbiN4YmtGLmGGX3q1bMmxrG9I
+        36sN74EogbvFLVEbiiG9I3iKHbm4hY5BQztKKlqVi2e7UnWmYlN05agjA==
+X-ME-Sender: <xms:o2hGZE7zjv519ykLdrbAQGTLb_LGqm8C9gu0iv5LW_l5ijia9biY7A>
+    <xme:o2hGZF7IUwkhhPb4KXqxJ6jrGKB4g1CI7PypRKEHNaKZ-yKjsy2DgJ29sYcy-8ANi
+    L7P0836qypU8DsWz5I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddggeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:o2hGZDccuXBCL3RAIdybA7rao9itrSh_uY8pqy72IR4RYUm3PNP66w>
+    <xmx:o2hGZJLZwUfDzeDL8noN8lkkCw-LNtlf4Vp39AIRXYTSMF4PksJThw>
+    <xmx:o2hGZIKT3iHKm9UvV7uZTvPOYuO2PbPXKewmqiqnd7-usVCISuMq0A>
+    <xmx:pWhGZAVObyMQbbUUBpdedORBxIIpPoWc5gLC07zOHsQjH_IqgL-nMw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2684DB60086; Mon, 24 Apr 2023 07:31:47 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
+In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+Date:   Mon, 24 Apr 2023 13:31:25 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nikita Shubin" <nikita.shubin@maquefel.me>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "Linus Walleij" <linusw@kernel.org>,
+        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Chuanhong Guo" <gch981213@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Damien Le Moal" <dlemoal@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Jean Delvare" <jdelvare@suse.de>, "Joel Stanley" <joel@jms.id.au>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Liang Yang" <liang.yang@amlogic.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Lukasz Majewski" <lukma@denx.de>, "Lv Ruyi" <lv.ruyi@zte.com.cn>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Qin Jian" <qinjian@cqplus1.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Sergey Shtylyov" <s.shtylyov@omp.ru>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Sumanth Korikkar" <sumanthk@linux.ibm.com>,
+        "Sven Peter" <sven@svenpeter.dev>, "Takashi Iwai" <tiwai@suse.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Vasily Gorbik" <gor@linux.ibm.com>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        "Walker Chen" <walker.chen@starfivetech.com>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        soc@kernel.org
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,69 +153,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Jonas,
+On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
+>
+> Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+>
+> Thank you Linus and Arnd for your support, review and comments, sorry 
+> if i missed something -
+> these series are quite big for me.
+>
+> Big thanks to Alexander Sverdlin for his testing, support, review, 
+> fixes and patches.
 
-On 24/04/23 13:50, Jonas Gorski wrote:
-> On Fri, 21 Apr 2023 at 19:17, Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> On 4/20/23 05:16, Dhruva Gole wrote:
->>> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
->>> it may introduce build issues with certain configs where it maybe disabled
->>> This is because if above config is not enabled the suspend-resume
->>> functions are never part of the code but the bcm63xx_spi_pm_ops struct
->>> still inits them to non-existent suspend-resume functions.
->>>
->>> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
->>>
->>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
->>> ---
->>>    drivers/spi/spi-bcm63xx.c | 2 --
->>>    1 file changed, 2 deletions(-)
->>>
->>> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
->>> index 96633a0051b1..99395932074c 100644
->>> --- a/drivers/spi/spi-bcm63xx.c
->>> +++ b/drivers/spi/spi-bcm63xx.c
->>> @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
->>>        clk_disable_unprepare(bs->clk);
->>>    }
->>>
->>> -#ifdef CONFIG_PM_SLEEP
->>>    static int bcm63xx_spi_suspend(struct device *dev)
->>
->> Don't we need a __maybe_unused here?
-> 
-> Actually the premise of this patch is wrong, and should rather be reverted.
-> 
-> The bcm63xx_spi_pm_ops struct is initialized with
-> SET_SYSTEM_SLEEP_PM_OPS(), which is defined as
-> 
-> #ifdef CONFIG_PM_SLEEP
-> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-> #else
-> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-> #endif
-> 
+Thanks a lot for your continued work. I can't merge any of this at
+the moment since the upstream merge window just opened, but I'm
+happy to take this all through the soc tree for 6.5, provided we
+get the sufficient Acks from the subsystem maintainers. Merging
+it through each individual tree would take a lot longer, so I
+hope we can avoid that.
 
-Thanks for pointing this out, I must have missed this.
-Anyway, I have sent another patch to migrate to using
-DEFINE_SIMPLE_DEV_PM_OPS as per Mark's suggestion [0]. There I think it
-would be necessary to remove the CONFIG_PM_SLEEP checks in the driver.
-So no need to revert this patch.
-
-
-> so for !CONFIG_PM_SLEEP it won't initialize the struct at all (or
-> reference non-existing functions), and therefore there will be no
-> build issues.
-> 
-> Regards,
-> Jonas
-
-
-[0] 
-https://lore.kernel.org/all/e65683c1-9f1b-4cfb-8e14-087ef7d69595@sirena.org.uk/
-
--- 
-Thanks and Regards,
-Dhruva Gole
+      Arnd
