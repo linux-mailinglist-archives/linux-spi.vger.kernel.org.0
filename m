@@ -2,49 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CE96EC996
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 11:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813C16ECA49
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 12:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjDXJ5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 05:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
+        id S231750AbjDXK23 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 06:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjDXJ46 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 05:56:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDA01FC0
-        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 02:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8032461F83
-        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 09:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF81AC433EF;
-        Mon, 24 Apr 2023 09:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682330210;
-        bh=VaeaFb5KsXO7005cWteagbGJlK8Itb4PvkSpIVD0kgo=;
-        h=Subject:From:Date:To:From;
-        b=Xp2PLJbpzlm9aBDArDGgyNu6xDrEbrFQeZ44yOM8hzSj5AhT3KxnBsHkbdouZExg/
-         xPFoqisM4rdHa0C1lp+8WyVIwQsjvFN8uUdryVkOlrpwxkfBc0OTLgB4qcdFcpMd+P
-         Ow3+lEfKq6KCky5RI01b4AaX0jIIVcomFZ6PNfjvsQRxI0ooV1iYyW9YOhQV3/h6Ow
-         6f1U0/hgucqRHvVqBd9JZZkmBr7E3hNf9M2S/BAnWtWN/7q6Olodnn/5/R9aWMJGcD
-         qFT3oW71qGZxUiY4cDcPSNHrwWxPeQCi/NX4tszqJynAsxVK3+L17fKGin5eVjQtYf
-         /1h4nEbEqxo0g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C60EFE5FFC9;
-        Mon, 24 Apr 2023 09:56:50 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231770AbjDXK2E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 06:28:04 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7AC59FF
+        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 03:26:13 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAPpUM029107;
+        Mon, 24 Apr 2023 05:25:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682331951;
+        bh=Cb+/JcSw+bD6FbluacUYXpN/XT18TEBmAiwqOoMD4fc=;
+        h=From:To:CC:Subject:Date;
+        b=yMHBekZrpGO9yf+meAvJw8M+QL1GjBqVihJjHJEMN0glkj9MsLgwQziHgCX4etByP
+         zLH4FHPLRn6ixOLYY+xSVI4Mkkgi8Mp3kDcd/aUjDMc18nAYMevbeSd7fR2LjWK+6m
+         v+cTaW7cqpW0d29MwObufR7eyU2tioOlF+tAHxZg=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAPpBG008649
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Apr 2023 05:25:51 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
+ Apr 2023 05:25:51 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 24 Apr 2023 05:25:51 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAPov9071282;
+        Mon, 24 Apr 2023 05:25:50 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Dhruva Gole <d-gole@ti.com>, Jonas Gorski <jonas.gorski@gmail.com>,
+        <linux-spi@vger.kernel.org>
+Subject: [PATCH] spi: bcm63xx: use macro DEFINE_SIMPLE_DEV_PM_OPS
+Date:   Mon, 24 Apr 2023 15:55:46 +0530
+Message-ID: <20230424102546.1604484-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168233021080.9519.3623636846041607996.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 24 Apr 2023 09:56:50 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,16 +61,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] spi: Add DMA mode support to spi-qcom-qspi (2023-04-24T09:32:37)
-  Superseding: [v4] spi: Add DMA mode support to spi-qcom-qspi (2023-04-20T13:13:09):
-    [v4,1/5] spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
-    [v4,2/5] arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
-    [v4,3/5] arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
-    [v4,4/5] arm64: dts: qcom: sdm845: Add stream-id of qspi to iommus
-    [v4,5/5] spi: spi-qcom-qspi: Add DMA mode support
+Using this macro makes the code more readable.
+It also inits the members of dev_pm_ops in the following manner
+without us explicitly needing to:
 
+.suspend = bcm63xx_spi_suspend, \
+.resume = bcm63xx_spi_resume, \
+.freeze = bcm63xx_spi_suspend, \
+.thaw = bcm63xx_spi_resume, \
+.poweroff = bcm63xx_spi_suspend, \
+.restore = bcm63xx_spi_resume
 
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+ drivers/spi/spi-bcm63xx.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+index 99395932074c..9aecb77c3d89 100644
+--- a/drivers/spi/spi-bcm63xx.c
++++ b/drivers/spi/spi-bcm63xx.c
+@@ -644,9 +644,7 @@ static int bcm63xx_spi_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static const struct dev_pm_ops bcm63xx_spi_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(bcm63xx_spi_suspend, bcm63xx_spi_resume)
+-};
++static DEFINE_SIMPLE_DEV_PM_OPS(bcm63xx_spi_pm_ops, bcm63xx_spi_suspend, bcm63xx_spi_resume);
+ 
+ static struct platform_driver bcm63xx_spi_driver = {
+ 	.driver = {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.25.1
 
