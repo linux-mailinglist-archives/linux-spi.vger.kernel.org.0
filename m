@@ -2,99 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23DD6ECB69
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BCA6ECB83
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjDXLfB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 07:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S229659AbjDXLqV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 07:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjDXLe7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:34:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DF23AA4;
-        Mon, 24 Apr 2023 04:34:58 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f6c285d92so780180666b.3;
-        Mon, 24 Apr 2023 04:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682336096; x=1684928096;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EbSU9RjDYInaXljiYUfVeOZN1Ljlxfq5r8fOJ91jdBw=;
-        b=FAMZ5KCdUlBonqbrUjdWglJ0XsUYCZcNASthRpFCH4Egt4u129lxmnRajJKmfeico3
-         /f0nD9PDvu7xgJ6iFp9vljjQz6V+scC8as9bDFjRXNp02exuT2S0GA2gH3Uwzm/Ht+Ke
-         hIrLSsAGC0P5u9FYMaYeq0LrZU+Nt7oDS5QvzDvfLqjXk8+bo7BWff59N8FV+VyeqrOP
-         0HUbQbyzHZYcv3PqV/VFFbrn9/ArqAkqbPo7U/aWtrDvAervQ5j+wCfVAIUhFze1FlUG
-         kzQomLZTzR0/swn63eOetP1p03d4cUfHrDl80sBSaKg/vRmzWNlRoee2AqIoa9vhFJ67
-         TYog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682336096; x=1684928096;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EbSU9RjDYInaXljiYUfVeOZN1Ljlxfq5r8fOJ91jdBw=;
-        b=iBV4/VyaHacIjVS/EYX4yAIm0JNXrTGeLmfW9f4fb3ShPvH8wQF6kFyVGnOjk/w/pF
-         7V1h60saNRNNyTm1XkuzLqpKwlCK18mIoP4Lsz9SSZzGZF1PCckPOlEEvwnWIDgyARjv
-         o3gvsXmePzDvjPrp4u5x1UKfChgzBzW64mLacdJEX7S4MzPaPu19FxeB/bgGBDBkZJsm
-         pP4L7NBK+0MP43rf82s7Q4TTl9PgFSZOeBglRtiT69Oi023s6/zlLK9ieW+pZ0KxlwfA
-         m551ax+eUNIjICRXHBq7O9E/SGVhGdWBjDOxJVNdttjVmqGKBgIcEHy8bslpJSYU4N2p
-         N0uw==
-X-Gm-Message-State: AAQBX9ettDS4IM0W3eR7dztSaFj5ItxxwyXAP9dimXXDLIArr285hz4j
-        N1JspKOeiKVlZVojpDA4ZmDsQCltsjv9Sw==
-X-Google-Smtp-Source: AKy350aHbDnDfjszhYFxHUof03CGll4kNyiiJk9KlQWmsBNW8HJCve+Hnr0Tp9bBXJu9DwSugPZ2+g==
-X-Received: by 2002:a17:906:9b4b:b0:94e:1069:151d with SMTP id ep11-20020a1709069b4b00b0094e1069151dmr8435439ejc.10.1682336096332;
-        Mon, 24 Apr 2023 04:34:56 -0700 (PDT)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id sg9-20020a170907a40900b00959aba150c3sm878730ejc.50.2023.04.24.04.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 04:34:56 -0700 (PDT)
-Message-ID: <9e5e9b7dc5da40bca285d45618e0f7c15572e6c4.camel@gmail.com>
-Subject: Re: [PATCH 17/43] spi: ep93xx: add DT support for Cirrus EP93xx
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 24 Apr 2023 13:34:55 +0200
-In-Reply-To: <20230424123522.18302-18-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-18-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        with ESMTP id S229625AbjDXLqV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:46:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479153A93
+        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 04:46:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F436133D
+        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 11:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4C7C433EF;
+        Mon, 24 Apr 2023 11:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682336779;
+        bh=GxOTEZ4mrEoi+hKdxhOMZ9S7w/cm0pC791wpQL9b93s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YPkWm39uLKarHdhU+rHY+G8eqVpU1GTFfVKc5CCBnEuJqwNqQ+Su6cTugiZHZBEQy
+         aXVSdSninNrgefpqKcIxdb0tZX59rJRV5UngszKUt+YHfkkYztcvbw9JUQiAKpIidS
+         gz0LRy8Y+A7HqOkD4xuMnjktIqNrRTeUtTrx/Ty9pk8F0IBICGb9f61H2nxrDvBlH4
+         1jAAlK/jbmgjdkXYInZhvEySTukFdF5yx29at1bPxBV6aIlA41X23trqLU3zZdHOYd
+         BND3zG3g7kZ+p6D5lTYkwyqqjPcfe7FwpVDjrzlLtlFBS71Khd/OZ2uTBqn03Me/KP
+         vmSrcapvnwGTg==
+Date:   Mon, 24 Apr 2023 12:46:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev, linux-spi@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Evgeny Boger <boger@wirenboard.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH] drivers: spi: sunxi: Enable irq after the initialization
+ is done
+Message-ID: <2fe1f98b-9126-4245-bce9-d8fbb3da9ba8@sirena.org.uk>
+References: <20230423023056.27929-1-qianfanguijin@163.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HoSjYou460whfHPF"
+Content-Disposition: inline
+In-Reply-To: <20230423023056.27929-1-qianfanguijin@163.com>
+X-Cookie: A rolling disk gathers no MOS.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 2023-04-24 at 15:34 +0300, Nikita Shubin wrote:
-> - find register range from the device tree
-> - provide clock access via of
-> - use_dma as a DT node
+
+--HoSjYou460whfHPF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Apr 23, 2023 at 10:30:56AM +0800, qianfanguijin@163.com wrote:
+
 >=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-
-> ---
+> The kernel error messages is as follows:
 >=20
-> Notes:
-> =C2=A0=C2=A0=C2=A0 Arnd Bergmann:
-> =C2=A0=C2=A0=C2=A0 - wildcards ep93xx to something meaningful, i.e. ep930=
-1
-> =C2=A0=C2=A0=C2=A0 - drop wrappers
->=20
-> =C2=A0drivers/spi/spi-ep93xx.c | 31 ++++++++++++++++++++++++++++++-
-> =C2=A01 file changed, 30 insertions(+), 1 deletion(-)
+> [    1.362449] sun6i-spi 1c06000.spi: Failed to request RX DMA channel
+> [    1.369654] 8<--- cut here ---
+> [    1.372716] Unable to handle kernel paging request at virtual address =
+fffffffc
+> [    1.379928] pgd =3D (ptrval)
+> [    1.382632] [fffffffc] *pgd=3D6bef6861, *pte=3D00000000, *ppte=3D00000=
+000
+> [    1.388907] Internal error: Oops: 37 [#1] SMP ARM
+> ...
+> [    1.784024] [<c0159c54>] (swake_up_locked.part.0) from [<c0159d9c>] (c=
+omplete+0x30/0x40)
 
---=20
-Alexander Sverdlin.
+Please think hard before including complete backtraces in upstream
+reports, they are very large and contain almost no useful information
+relative to their size so often obscure the relevant content in your
+message. If part of the backtrace is usefully illustrative (it often is
+for search engines if nothing else) then it's usually better to pull out
+the relevant sections.
 
+>  	ret =3D devm_request_irq(&pdev->dev, irq, sun4i_spi_handler,
+> -			       0, "sun4i-spi", sspi);
+> +			       IRQF_NO_AUTOEN, "sun4i-spi", sspi);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Cannot request IRQ\n");
+>  		goto err_free_master;
+> @@ -506,6 +506,8 @@ static int sun4i_spi_probe(struct platform_device *pd=
+ev)
+>  		goto err_pm_disable;
+>  	}
+> =20
+> +	enable_irq(irq);
+> +
+
+The usual approach would be to move the requesting of the interrupt
+later.  Why do this instead?
+
+--HoSjYou460whfHPF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbAUACgkQJNaLcl1U
+h9CJJwf/VNOgCjbqjYTgMaVHVc2C9gviY6zsIwlQZG4/72QxhCpqIxro55eug/cD
+ShKf4fwVT1lgR2AXw1mMvYZAYSiZI5fFFwn39P4ix3R3delx0Z9TdrFw7ifL6Qnz
+LjR4kKJWm3JUfyOIKK8GGoCXQhTAF8ht8MQq9PbZ9n+cYDYkEeshVSyOWJN8ru6Y
+FKkrJXTAXiLBnauW1bdk5+NIUWzi7XiUiilVctoS4gtwZekQgHNqZ52YEV2qGYCG
+7WUtEsKLOH8URWqy689WESKYUowXHsovZak/Rx/pVDGRS6lFhl/dirKY2aczM/AI
+5A0ZPzBflw+KhdlY6hcHrI+UcsbHeQ==
+=UKfX
+-----END PGP SIGNATURE-----
+
+--HoSjYou460whfHPF--
