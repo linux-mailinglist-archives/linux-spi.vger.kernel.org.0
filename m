@@ -2,58 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6186ECBA0
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7537C6ECBC2
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 14:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjDXL4e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 07:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S230319AbjDXMEA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 08:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjDXL4e (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:56:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D933AAF;
-        Mon, 24 Apr 2023 04:56:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C89E6620FF;
-        Mon, 24 Apr 2023 11:56:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5254C4339B;
-        Mon, 24 Apr 2023 11:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682337392;
-        bh=2C+OmzOkcznEoV0Ab0AckqNk9Q2kaZkT1tHfjXPMA7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rmj3vrsAy4XpmbqzGsIOemgihSFmdGMqVwtGm0G20F4oHnE2SwRPNy/zVpwi+Ca4+
-         /9Q/O6NMbSbr57o57AycmbIoSOh3yDQwMYpI4x42M3ek8azC22WlVJ7p/kJNvsDNYa
-         fBj1NEm72s4qRWjrcYB+DLz1lXQjXsO7CERO++qZbBXbM9bR18nFlLDTYKP4AgbelF
-         f7Kn2pPKKcRme76hG6lhJfHqTU5mG0Q/nF3QLl52mcHQ0+ArqGDuS4nxaVFcp/efoH
-         qrVlVPgus9arWviW+GM/MO0hsxjnalzberPq8FoJ5WxllLgZ4/bghDxa3+oOfSOdMF
-         vvdFdzkxTiMUg==
-Date:   Mon, 24 Apr 2023 12:56:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, jsnitsel@redhat.com,
-        robh+dt@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+        with ESMTP id S231360AbjDXMD7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 08:03:59 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0463010EA;
+        Mon, 24 Apr 2023 05:03:54 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:4140:2ad:3e:4b54] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33OC3g4w013596-33OC3g4x013596
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 24 Apr 2023 20:03:43 +0800
+Message-ID: <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+Date:   Mon, 24 Apr 2023 20:03:42 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1Ut5sBOpq6GKRQNb"
-Content-Disposition: inline
-In-Reply-To: <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
-X-Cookie: A rolling disk gathers no MOS.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+To:     Mark Brown <broonie@kernel.org>, Li Ningke <lnk_01@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +45,49 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---1Ut5sBOpq6GKRQNb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 2023/4/24 19:48, Mark Brown wrote:
+> On Sun, Apr 23, 2023 at 03:24:46AM +0000, Li Ningke wrote:
+>> Smatch complains that
+>> drivers/spi/spi-davinci.c:915 davinci_spi_probe() warn:
+>> platform_get_irq() does not return zero
+>>
+>> There is no need to check whether the return value is zero as
+>> `platform_get_irq()` only returns non-zero IRQ number on success
+>> or negative error number on failure, removing them to solve this
+>> problem.
+> Is that check valid?  0 was a valid interrupt for some architectures...
 
-On Sun, Apr 23, 2023 at 06:08:16PM +0300, Jarkko Sakkinen wrote:
+We just follow the comments of platform_get_irq().
 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+/**
+  * platform_get_irq - get an IRQ for a device
+  * @dev: platform device
+  * @num: IRQ number index
+  *
+  * Gets an IRQ for a platform device and prints an error message if 
+finding the
+  * IRQ fails. Device drivers should check the return value for errors 
+so as to
+  * not pass a negative integer value to the request_irq() APIs.
+  *
+  * For example::
+  *
+  *              int irq = platform_get_irq(pdev, 0);
+  *              if (irq < 0)
+  *                      return irq;
+  *
+  * Return: non-zero IRQ number on success, negative error number on 
+failure.
+  */
+int platform_get_irq(struct platform_device *dev, unsigned int num)
+{
+         int ret;
 
-> Should I pick these patches?
+         ret = platform_get_irq_optional(dev, num);
+         if (ret < 0)
+                 return dev_err_probe(&dev->dev, ret,
+                                      "IRQ index %u not found\n", num);
 
-I've queued the spi side already.
+         return ret;
+}
 
---1Ut5sBOpq6GKRQNb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbmgACgkQJNaLcl1U
-h9DIJwf/ZUTnNktC/cLRDi3Pv+zIKz9BhX8xNlVL5nLvl6pV67Wo2+Ohc/lJOu81
-6jtwTJG6cquuwoF0U/NKNRTWGJCVHJmfFQ5//TzNuRoqMQgLWn6GkD46q+HxEj7u
-dGzALk6zUrQ1UteWXxDY27JNZ5ValePOGRMuk/JJzJgSbr7CdiSbZMvoO1wHrber
-vPrB2fWtdIMmnPNqV/kPcUqWWQc9FMFsbmJ2OslKDoOs6XWRyY4E+2mOqPVugnki
-4NwsJFRcHuxV0CT47SHkWnKHdBOWi1qW8yI0kRya07sSoA/G7m9rby7tgcCSjEN5
-Un1LDG1dcmeIFFANKffFyN/Vx0VEsQ==
-=g4Dn
------END PGP SIGNATURE-----
-
---1Ut5sBOpq6GKRQNb--
