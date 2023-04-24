@@ -2,96 +2,141 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813C16ECA49
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 12:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6514B6ECA4A
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 12:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjDXK23 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 06:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S231725AbjDXK2m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 06:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjDXK2E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 06:28:04 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7AC59FF
-        for <linux-spi@vger.kernel.org>; Mon, 24 Apr 2023 03:26:13 -0700 (PDT)
+        with ESMTP id S231753AbjDXK2S (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 06:28:18 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCE94EDB;
+        Mon, 24 Apr 2023 03:26:21 -0700 (PDT)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAPpUM029107;
-        Mon, 24 Apr 2023 05:25:51 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAQAYP102616;
+        Mon, 24 Apr 2023 05:26:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682331951;
-        bh=Cb+/JcSw+bD6FbluacUYXpN/XT18TEBmAiwqOoMD4fc=;
-        h=From:To:CC:Subject:Date;
-        b=yMHBekZrpGO9yf+meAvJw8M+QL1GjBqVihJjHJEMN0glkj9MsLgwQziHgCX4etByP
-         zLH4FHPLRn6ixOLYY+xSVI4Mkkgi8Mp3kDcd/aUjDMc18nAYMevbeSd7fR2LjWK+6m
-         v+cTaW7cqpW0d29MwObufR7eyU2tioOlF+tAHxZg=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAPpBG008649
+        s=ti-com-17Q1; t=1682331970;
+        bh=d+YTj+kYAOw9gOaSfCjVLld1MKVE0O7Qk46YIombHhc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ZIl9xhTefuioFN3E4SSDNOluX8IzBtBCA6wasrmzsWul0gGQ/rxwK4ZLPpT3dpzmq
+         8mNJKl19fOLLdqEZ8ZRTaS1+uGO64/xelAgckQI5EHDlrm2YXYOYfmpSkB2HGVUeLB
+         NMQ9l3fCLmI9FIjzUrTvN/d4dTOtahYEnqTra4wI=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAQA0T008858
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 05:25:51 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 24 Apr 2023 05:26:10 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 05:25:51 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 05:26:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 05:25:51 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAPov9071282;
-        Mon, 24 Apr 2023 05:25:50 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Dhruva Gole <d-gole@ti.com>, Jonas Gorski <jonas.gorski@gmail.com>,
-        <linux-spi@vger.kernel.org>
-Subject: [PATCH] spi: bcm63xx: use macro DEFINE_SIMPLE_DEV_PM_OPS
-Date:   Mon, 24 Apr 2023 15:55:46 +0530
-Message-ID: <20230424102546.1604484-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
+ Frontend Transport; Mon, 24 Apr 2023 05:26:09 -0500
+Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAQ6ve040882;
+        Mon, 24 Apr 2023 05:26:07 -0500
+Message-ID: <3a28e15a-ba67-3dfa-6445-bd21e523980b@ti.com>
+Date:   Mon, 24 Apr 2023 15:56:06 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
+ compilation
+Content-Language: en-US
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+References: <20230420121615.967487-1-d-gole@ti.com>
+ <24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com>
+ <CAOiHx==7TV3879ADbiWGbHT0NysNck4FUQXkXEocjkD2BzEoRA@mail.gmail.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <CAOiHx==7TV3879ADbiWGbHT0NysNck4FUQXkXEocjkD2BzEoRA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Using this macro makes the code more readable.
-It also inits the members of dev_pm_ops in the following manner
-without us explicitly needing to:
+Hi Jonas,
 
-.suspend = bcm63xx_spi_suspend, \
-.resume = bcm63xx_spi_resume, \
-.freeze = bcm63xx_spi_suspend, \
-.thaw = bcm63xx_spi_resume, \
-.poweroff = bcm63xx_spi_suspend, \
-.restore = bcm63xx_spi_resume
+On 24/04/23 13:50, Jonas Gorski wrote:
+> On Fri, 21 Apr 2023 at 19:17, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> On 4/20/23 05:16, Dhruva Gole wrote:
+>>> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
+>>> it may introduce build issues with certain configs where it maybe disabled
+>>> This is because if above config is not enabled the suspend-resume
+>>> functions are never part of the code but the bcm63xx_spi_pm_ops struct
+>>> still inits them to non-existent suspend-resume functions.
+>>>
+>>> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
+>>>
+>>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+>>> ---
+>>>    drivers/spi/spi-bcm63xx.c | 2 --
+>>>    1 file changed, 2 deletions(-)
+>>>
+>>> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+>>> index 96633a0051b1..99395932074c 100644
+>>> --- a/drivers/spi/spi-bcm63xx.c
+>>> +++ b/drivers/spi/spi-bcm63xx.c
+>>> @@ -617,7 +617,6 @@ static void bcm63xx_spi_remove(struct platform_device *pdev)
+>>>        clk_disable_unprepare(bs->clk);
+>>>    }
+>>>
+>>> -#ifdef CONFIG_PM_SLEEP
+>>>    static int bcm63xx_spi_suspend(struct device *dev)
+>>
+>> Don't we need a __maybe_unused here?
+> 
+> Actually the premise of this patch is wrong, and should rather be reverted.
+> 
+> The bcm63xx_spi_pm_ops struct is initialized with
+> SET_SYSTEM_SLEEP_PM_OPS(), which is defined as
+> 
+> #ifdef CONFIG_PM_SLEEP
+> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> #else
+> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> #endif
+> 
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
- drivers/spi/spi-bcm63xx.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks for pointing this out, I must have missed this.
+Anyway, I have sent another patch to migrate to using
+DEFINE_SIMPLE_DEV_PM_OPS as per Mark's suggestion [0]. There I think it
+would be necessary to remove the CONFIG_PM_SLEEP checks in the driver.
+So no need to revert this patch.
 
-diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-index 99395932074c..9aecb77c3d89 100644
---- a/drivers/spi/spi-bcm63xx.c
-+++ b/drivers/spi/spi-bcm63xx.c
-@@ -644,9 +644,7 @@ static int bcm63xx_spi_resume(struct device *dev)
- 	return 0;
- }
- 
--static const struct dev_pm_ops bcm63xx_spi_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(bcm63xx_spi_suspend, bcm63xx_spi_resume)
--};
-+static DEFINE_SIMPLE_DEV_PM_OPS(bcm63xx_spi_pm_ops, bcm63xx_spi_suspend, bcm63xx_spi_resume);
- 
- static struct platform_driver bcm63xx_spi_driver = {
- 	.driver = {
+
+> so for !CONFIG_PM_SLEEP it won't initialize the struct at all (or
+> reference non-existing functions), and therefore there will be no
+> build issues.
+> 
+> Regards,
+> Jonas
+
+
+[0] 
+https://lore.kernel.org/all/e65683c1-9f1b-4cfb-8e14-087ef7d69595@sirena.org.uk/
+
 -- 
-2.25.1
-
+Thanks and Regards,
+Dhruva Gole
