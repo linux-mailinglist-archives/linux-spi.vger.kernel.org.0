@@ -2,81 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD3F6ED160
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 17:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2010A6ED1C2
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 17:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjDXPbv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 11:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S230500AbjDXPwd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 11:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDXPbu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 11:31:50 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BD47A9B;
-        Mon, 24 Apr 2023 08:31:38 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so34333373a12.1;
-        Mon, 24 Apr 2023 08:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682350297; x=1684942297;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1y6VlpLoyeFDIUhuCEpLwrAfvADTwZBo+tgcsp58GCM=;
-        b=YJwxUq/J9GCdLIL2jCK2dcru87AfR9ie2HyWphb4MArimcUfNEEzuurkCCtAns2I9x
-         +cKbCX3bPNjM+o7eyaDZd4G0YZYZgqI9BgVVjjObwV9rkB/rGtCIk7Gw8GoKqGdMX46D
-         kON81OiQ5KUYPhZZlYXFjPjd2z3CVQ0TD3kQjMG71oosSHBSJV4NbNy0PSoJj23rAdQY
-         QGmeCH2L1hh9+Q/iNevD1hlPc1YthJWB7mbDizRYmlKkCRRbnQlHEE3roOaYdUstheuY
-         XHa/hXyP6okeltFgieCKi1BhzeLcSpzu4kluT7oUFkO9HWXDKdRSkqbAkQy6mpAlq1pS
-         TxQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682350297; x=1684942297;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1y6VlpLoyeFDIUhuCEpLwrAfvADTwZBo+tgcsp58GCM=;
-        b=lr17HvzpZOYZ4FZnbU/Q+O8TOLJazNDNy5fYXz/rb/+6/SH1OS3ZKvtyF5cMA9D+el
-         duRY3g5CVLuzaHO36mIbo1EipOqiNq8xrSV3CTM0bYGzYKMq2oAg2tlvsHJvgJQATlSd
-         2USFAAMIcckTZjhSzUWuaEaOlWqSLibxxaL6cK4o7TGiJzFTowXt/zNuYoJiBDrD4uMk
-         0UEeQsIfTAspcs6Un4jaKj2EghE4wFwzKmv2glzEus+tEs9DD6W64zjCrX2MLoSs0nUQ
-         mU0sJs8E4hTmVl1Q+7r/pMlYgR84Bv8JPOJeGE4XwGMHsmNzdje0ffKBTgdZ2tiQIv/i
-         un+w==
-X-Gm-Message-State: AAQBX9eN6wxZiOfd8KyBhfUtFR9/Y+kP6MnNtvyUjsUFUOOgClf6Citx
-        IRd3Lso3/tKGugm9saBs/G0=
-X-Google-Smtp-Source: AKy350ZJ7YUu8TOixGb73t39jePcGdOuSu946lu2XRcNjnJzhh//CbEJQJbRFD756DxcHWAlOD+SFA==
-X-Received: by 2002:aa7:cd11:0:b0:4ad:738b:6706 with SMTP id b17-20020aa7cd11000000b004ad738b6706mr13752469edw.2.1682350297188;
-        Mon, 24 Apr 2023 08:31:37 -0700 (PDT)
-Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709062f0a00b0094f62181917sm5597129eji.138.2023.04.24.08.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 08:31:36 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 17:31:34 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <ZEag1lAonYcmNFXk@orome>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
- <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
- <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+        with ESMTP id S230355AbjDXPwc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 11:52:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B6C4220;
+        Mon, 24 Apr 2023 08:52:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB34062668;
+        Mon, 24 Apr 2023 15:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2473C433EF;
+        Mon, 24 Apr 2023 15:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682351550;
+        bh=tIkBRGVMTb7SoSEWbdlVZsCl/C1uMyGUVJU2BuewQ28=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XWhZdZ8J34FPm27UazvVbPEWQuXEnnP1brfPwSoaHZtlzt11rJmsXa5YTO9vplouy
+         xVSUL41KIoFF/Idogzw6XtdQtHBU+78yvDWie8vWvSJmsGut7EnAe+02b0MDDBKifP
+         YU/aToiV35EvUoktgdsbySdPIgxYI6U/nRT2k5pR8fBIcdJ2BQZnKvSuZC0OudsKkE
+         hiLiLmHJhZkAd8rv0eL9NuUXmJr7DXPdaSsV1bYOxvjL1IytBd4kVqV3SCrd1ITjUz
+         QwQMPbaiJv4y3ykWaso3+oe8W1MjT6ECPtGTNF2k/QFMBp0B/LJHHc9ANCIjXj69Mz
+         Kw40TOOh7u/Ng==
+Date:   Mon, 24 Apr 2023 16:52:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Li Ningke <lnk_01@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+Message-ID: <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+ <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HoxvrgZmmApzwDPp"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tBkIGv79VjVWVg47"
 Content-Disposition: inline
-In-Reply-To: <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+X-Cookie: A rolling disk gathers no MOS.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,48 +59,43 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---HoxvrgZmmApzwDPp
-Content-Type: text/plain; charset=us-ascii
+--tBkIGv79VjVWVg47
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 24, 2023 at 04:18:45PM +0100, Mark Brown wrote:
-> On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
->=20
-> > Would it make sense for you to pick up patch 2/3 as well? As far as I
-> > can tell there's a build dependency on patch 1/3 because of the newly
-> > added SPI_TPM_HW_FLOW symbol.
->=20
-> I'll include it in my pull request for spi this time round so it should
-> end up in -rc1, my thinking was that I was happy with the SPI bits and
-> if it was in -rc1 then the TPM bits could be handled without cross tree
-> issues when the review was sorted (which it is now but wasn't at the
-> time).  If the SPI side doesn't make -rc1 for some reason I can pick up
-> the TPM bit as well, and/or do a signed tag.
+On Mon, Apr 24, 2023 at 08:03:42PM +0800, Dongliang Mu wrote:
+> On 2023/4/24 19:48, Mark Brown wrote:
 
-Sounds good.
+> > Is that check valid?  0 was a valid interrupt for some architectures...
 
-Thanks,
-Thierry
+> We just follow the comments of platform_get_irq().
 
---HoxvrgZmmApzwDPp
+> =A0* Gets an IRQ for a platform device and prints an error message if fin=
+ding
+> the
+> =A0* IRQ fails. Device drivers should check the return value for errors s=
+o as
+> to
+> =A0* not pass a negative integer value to the request_irq() APIs.
+
+I'm not sure that's universally true yet, though there were some moves
+to try to get us there.  arm, where this driver is used, was one of the
+platforms with 0 as a valid interrupt.
+
+--tBkIGv79VjVWVg47
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRGoNYACgkQ3SOs138+
-s6Hhng//fM8OK3GgVRYeyJIuvFsW9EXaRU/OWm+n4eMdT3wGXOGeJAk4AYdptYJo
-z2dDOlNAlUsKjP6ZVHfLOAH8cdZH/gGSaWRot0hv85KWlDr5pJUKZ65rsBiIPkbd
-EocantA23aFpg837JDnKj1btRUKPWAXTgbAigRuQRbIDB0ZreYCDikk/YZR5vqze
-h4YyeccRq+Uj1OpGzNmQ8YGWHbgRIJs653OlbYmsHiLeyinLNz7bmg3wohSiwR/0
-l1h8O/aL4ZQNbTiQ02mYApcL9N+5PEyIBXj2HC/G+VPFqcRlSzOtBAvRixdnCsVe
-M+/XexW7FkpalITyto2lH9DVauGaKpNI6bfwY5wBcfPT7Li0RsWmDIQe4bKyWpBJ
-U6mQaBI8+rMDCrv6dajKphd7Ml9uO+eefpIYBRcWHeqg6263HaiKXUMf75rtlWAo
-MJ4zCQ/NmFaVTyNf+U+8MhLHAWbh1Cb8jNPEheY7gY9CKvJrC6c5EerH2fJ8q1bU
-mwlDYHqYSXXAXN2MJDC1E21HHe2dA9Guq4i9wE7bSDRw0byP0L7vz3/0nzP6hXn/
-JcIMhda+b8GcYFhzEpgaJWSqC5UJdV19qjluntRLw/9kf5DW5ZO+ErdYsoAnWKs6
-ZCezjFvPdDgGQ6Rhb2GFVUE01xtalPb6qYmHv34+oLMRTyWORCU=
-=0QL7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGpbgACgkQJNaLcl1U
+h9BKrgf+MzmPQXRI03PbIw/AXJvnq1pmzIhIqF5rxj/MER/k5heQHCXrGVbDSFe0
+28ryYegDEM4MUaL3wvTwyNljKdYnovTPzPCxJDXw3lHkDaK8nL9FwC8feNDdvdXH
+EmX3xl2huufP+3Gv7ssOcc+QgF3DOd9tPOzQqbm6SvsxnLvTQ/pBWqxeC93R1A5Q
+p4PAMpfCUBOQNJ3Qk2DrHCJqZRmLnRUbsh5+8NtC0d6jWsIw3+DCWaEi8JzCT0jc
+bvXyR1be46iPOe4MHNPKuW8DMeZN7r2y/u1Si5id9Euz9l8Lk/KLn32CNCdPaQ6U
+bBiRLF7fGgKwJmsyckpcqeN9adQXWw==
+=Z5Cj
 -----END PGP SIGNATURE-----
 
---HoxvrgZmmApzwDPp--
+--tBkIGv79VjVWVg47--
