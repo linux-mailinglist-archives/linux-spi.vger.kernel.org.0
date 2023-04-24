@@ -2,49 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB7D6ECB9C
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6186ECBA0
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Apr 2023 13:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjDXLy5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Apr 2023 07:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S231657AbjDXL4e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Apr 2023 07:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjDXLyz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:54:55 -0400
+        with ESMTP id S231502AbjDXL4e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Apr 2023 07:56:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70383E45;
-        Mon, 24 Apr 2023 04:54:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D933AAF;
+        Mon, 24 Apr 2023 04:56:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10B9461268;
-        Mon, 24 Apr 2023 11:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDFCC433EF;
-        Mon, 24 Apr 2023 11:54:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C89E6620FF;
+        Mon, 24 Apr 2023 11:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5254C4339B;
+        Mon, 24 Apr 2023 11:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682337293;
-        bh=CaWpXAtgfx+CPGyFGx7gzw+vOneOZlGJoqFS0co6xVE=;
+        s=k20201202; t=1682337392;
+        bh=2C+OmzOkcznEoV0Ab0AckqNk9Q2kaZkT1tHfjXPMA7I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KmEi/Dl5NeCDYA7IyZm16uyN8QDpyk5zJjIrZ3CFzKCPJ7vjOVUq8Nt/hvfo+cyDX
-         ahLh6R/xe7y587kiNnJKp43xM+aGxleP7xlZ8y9mln871FxMh52eEuDJ1BUe9DXwyg
-         VcI45VMw/XpJUvUzgXKYEj2X048uNSNo3iQ/lH8h5BWeyJbFC47q6mYn238OWXdXaB
-         zpopPwKOX3nQpp6fhPsbCjmKo/CSV92zKQ4CfEi67Rlp/9UhPcSE4NCBJICj/vCnMn
-         gi9WewF97o9MmUpw3WDHU0xrRDmdclrcPpQomEYBt0zpAfnfgtGuPzQ+CJlDZfn6lh
-         N0fMUBF9kUJ7A==
-Date:   Mon, 24 Apr 2023 12:54:48 +0100
+        b=Rmj3vrsAy4XpmbqzGsIOemgihSFmdGMqVwtGm0G20F4oHnE2SwRPNy/zVpwi+Ca4+
+         /9Q/O6NMbSbr57o57AycmbIoSOh3yDQwMYpI4x42M3ek8azC22WlVJ7p/kJNvsDNYa
+         fBj1NEm72s4qRWjrcYB+DLz1lXQjXsO7CERO++qZbBXbM9bR18nFlLDTYKP4AgbelF
+         f7Kn2pPKKcRme76hG6lhJfHqTU5mG0Q/nF3QLl52mcHQ0+ArqGDuS4nxaVFcp/efoH
+         qrVlVPgus9arWviW+GM/MO0hsxjnalzberPq8FoJ5WxllLgZ4/bghDxa3+oOfSOdMF
+         vvdFdzkxTiMUg==
+Date:   Mon, 24 Apr 2023 12:56:25 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Yingsha Xu <ysxu@hust.edu.cn>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: remove return value check of debugfs_create_dir()
-Message-ID: <eb3c6aa6-6820-4e94-8eb0-5abd3b627fcc@sirena.org.uk>
-References: <20230423061155.2540-1-ysxu@hust.edu.cn>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, jsnitsel@redhat.com,
+        robh+dt@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+ <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vvx6pjyUAG9u5a+8"
+        protocol="application/pgp-signature"; boundary="1Ut5sBOpq6GKRQNb"
 Content-Disposition: inline
-In-Reply-To: <20230423061155.2540-1-ysxu@hust.edu.cn>
+In-Reply-To: <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
 X-Cookie: A rolling disk gathers no MOS.
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -57,37 +62,31 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---vvx6pjyUAG9u5a+8
+--1Ut5sBOpq6GKRQNb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 23, 2023 at 02:11:54PM +0800, Yingsha Xu wrote:
-> Smatch complains that:
-> dw_spi_debugfs_init() warn: 'dws->debugfs' is an error pointer
->  or valid
->=20
-> Debugfs checks are generally not supposed to be checked for errors
-> and it is not necessary here.
->=20
-> Just delete the dead code.
+On Sun, Apr 23, 2023 at 06:08:16PM +0300, Jarkko Sakkinen wrote:
 
-This is very much a question of taste with a range of use cases
-available.
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
---vvx6pjyUAG9u5a+8
+> Should I pick these patches?
+
+I've queued the spi side already.
+
+--1Ut5sBOpq6GKRQNb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbggACgkQJNaLcl1U
-h9B6Ugf/b159bWCAqJBwfw5277rkoMI9WDLRnmgIo3Vxh3dP0+K8N9LdFjsSsKiD
-HxQbnaIFTfMq/t9lzF0scd4xu/hGS/S/4QiljaA7xki1ZRVQ1/RPxU1GJb+eJd5c
-vMrP2ldgqWKTU4k6SEnzUx4UgyQJvPwx9doFyq1hGdfbClJl8I3gw6SROP/bIt1I
-3lXhpNMr2OHofwiWSwsa7La2SHrnvb29sl+me0xyw3hpg5YF5KEVc7EIDyvfCOPb
-N/PV8QHCz9gGdiFp9qTTD+19FAHVe7iLbqkQ9luKWh0yFMMZpVKdSQbq6XjO96Ac
-Pc46PT48sZnKk3Ciiy6JLytfTonFIw==
-=dz1r
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGbmgACgkQJNaLcl1U
+h9DIJwf/ZUTnNktC/cLRDi3Pv+zIKz9BhX8xNlVL5nLvl6pV67Wo2+Ohc/lJOu81
+6jtwTJG6cquuwoF0U/NKNRTWGJCVHJmfFQ5//TzNuRoqMQgLWn6GkD46q+HxEj7u
+dGzALk6zUrQ1UteWXxDY27JNZ5ValePOGRMuk/JJzJgSbr7CdiSbZMvoO1wHrber
+vPrB2fWtdIMmnPNqV/kPcUqWWQc9FMFsbmJ2OslKDoOs6XWRyY4E+2mOqPVugnki
+4NwsJFRcHuxV0CT47SHkWnKHdBOWi1qW8yI0kRya07sSoA/G7m9rby7tgcCSjEN5
+Un1LDG1dcmeIFFANKffFyN/Vx0VEsQ==
+=g4Dn
 -----END PGP SIGNATURE-----
 
---vvx6pjyUAG9u5a+8--
+--1Ut5sBOpq6GKRQNb--
