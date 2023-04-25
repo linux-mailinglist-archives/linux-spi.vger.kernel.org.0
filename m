@@ -2,138 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E4E6EE6E9
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 19:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4016EE73B
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 20:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbjDYRh3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Apr 2023 13:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S234237AbjDYSAb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Apr 2023 14:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjDYRh2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 13:37:28 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3C283DD;
-        Tue, 25 Apr 2023 10:37:27 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a682eee3baso47041425ad.0;
-        Tue, 25 Apr 2023 10:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682444247; x=1685036247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQZUCTV1bqj16FZRqMQAA8ihwGjYbD4+orDlxw0PK4Y=;
-        b=VH4Gj5f75R17u/+c6nr2Et/lXHwed/pElsiPKWm7CfTvOBHMN8NGSBfMGR/xRkTpzg
-         wqmfDkHpBDSuejIXNTU7yqHnOKmD4G6p3fWY6qizuRPRuJmGUqGn8I7hDHBET5XBHrX5
-         kl9+CzSjYm6nQyWiHXZEZG1kMYQ+46sXz7Zt/FOTItr6G8axM6HGzCkiMG8KQq/YW3M8
-         ZNxosJOf2P6M5qIWsAFApazRPX2X+ZxUx6mtx1SQOzhtUJuaRtosqo42W9+tr82yp8/d
-         0OsU/FNJVusbuQ4QnQrn+MMmwFYqgepSt60t2ifEYoRC2h+mZDX0wbRKj0PP0hxKMznV
-         qkuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682444247; x=1685036247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sQZUCTV1bqj16FZRqMQAA8ihwGjYbD4+orDlxw0PK4Y=;
-        b=KLHVDkqEUggOHxssOGIBmm0Fl6F7FGfHyarGC9dFvw/1bYnM8g6tIgXQ9+zVGUm/4Y
-         Br/Jr46aKlg02MpG3/q9J0XB50MUDkO4jL+CXeSh+Y4GRR/4kCbtzivJatwktE+fsIa5
-         Z/roota3UHB32W7E+E0mua2uJ2cMJWM/Jy0Rjza3xrGy1OsjcM5v+95G8BV5J7NVTl0X
-         bkixSKK7Fgm+m3d18wFcUVeVwFHyRPrQeH52YVtDlXZTnQb870V75I7ZZOmiBzR8n4C3
-         qBfTpTuhxeQTU4Uzzjz+yPaJotdNV7a5LzdRFixGjEn6dsETa3Gg8VUiPU+HMBIYawyD
-         DxGA==
-X-Gm-Message-State: AC+VfDzty5hJWnYwfXxxMpKEVVrQ2zzVpEu12Gsuq5mUiW/wEgx1Ke53
-        fKR6+EHgB9StmxFTLyYF7Yc=
-X-Google-Smtp-Source: ACHHUZ65kgxaVuAyyTocC0mIyIPcGyFreWVSSoPUwwGjmgqhnWXn0TukyTlplZfKWjqTgBNlp3DnLA==
-X-Received: by 2002:a17:90a:1088:b0:24b:d883:906c with SMTP id c8-20020a17090a108800b0024bd883906cmr3644208pja.8.1682444246982;
-        Tue, 25 Apr 2023 10:37:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090a6b0e00b0024752ff8061sm8258985pjj.12.2023.04.25.10.37.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 10:37:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
-Date:   Tue, 25 Apr 2023 10:37:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Content-Language: en-US
-To:     "Gole, Dhruva" <d-gole@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        with ESMTP id S231569AbjDYSAa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 14:00:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47651720;
+        Tue, 25 Apr 2023 11:00:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4931563085;
+        Tue, 25 Apr 2023 18:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A05C433D2;
+        Tue, 25 Apr 2023 18:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682445628;
+        bh=x80D28o18e/C/P9T+DcQ5fd7ID5U6WPNI6OKMlgG70o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dm7bd7ynWhuvuKSBn3hLmfewfDOtWDlhTv80eQDM5mXWUoFh2EgB4r269ms8cWHyD
+         QmhdgsJ1lqGjyTr1ayGBPSKrbU3++r/NYZ0qaF1s4RByQ0ZvDSf70oUFAdP4W8PEpZ
+         y0magV7PPFOubxWv4JvK+YG8jFkAnk/kjsAgNqDQk+5GGFKnN0v7b4MSrHMn3SbuOc
+         FBsBBXakREPxRlcPHJtgxyC19vTdS6qCk68YjK8wKrDz9/uZzXEKuICFq5xX2S2HBh
+         JOkCdWjbfqLmIp1Gyo2wN+x8CzWpDswAoiLWIqV63qyvd0RSAi/IhAWx3by5edhZjL
+         bX+3uZoSGrbjg==
+Date:   Tue, 25 Apr 2023 19:00:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Gole, Dhruva" <d-gole@ti.com>,
         Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
         Apurva Nandan <a-nandan@ti.com>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Grant Likely <grant.likely@secretlab.ca>,
         Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
+ compilation
+Message-ID: <e67e0804-78a8-4326-92ca-6214825f0ceb@sirena.org.uk>
 References: <20230420121615.967487-1-d-gole@ti.com>
  <8edb48ee-55a3-4cc2-9c81-514ec867b35c@roeck-us.net>
  <602392dc-de1f-90bf-3deb-cb5cee81e41c@ti.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <602392dc-de1f-90bf-3deb-cb5cee81e41c@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sKtAIKhfZi5laQLY"
+Content-Disposition: inline
+In-Reply-To: <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
+X-Cookie: The meek don't want it.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 4/25/23 10:18, Gole, Dhruva wrote:
-> Hi,
-> 
-> On 4/25/2023 8:38 PM, Guenter Roeck wrote:
->> On Thu, Apr 20, 2023 at 05:46:15PM +0530, Dhruva Gole wrote:
->>> Get rid of conditional compilation based on CONFIG_PM_SLEEP because
->>> it may introduce build issues with certain configs where it maybe disabled
->>> This is because if above config is not enabled the suspend-resume
->>> functions are never part of the code but the bcm63xx_spi_pm_ops struct
->>> still inits them to non-existent suspend-resume functions.
->>>
->>> Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
->>>
->>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
->> This patch results in:
->>
->> drivers/spi/spi-bcm63xx.c:632:12: error: 'bcm63xx_spi_resume' defined but not used [-Werror=unused-function]
->>    632 | static int bcm63xx_spi_resume(struct device *dev)
->>        |            ^~~~~~~~~~~~~~~~~~
->> drivers/spi/spi-bcm63xx.c:620:12: error: 'bcm63xx_spi_suspend' defined but not used [-Werror=unused-function]
->>    620 | static int bcm63xx_spi_suspend(struct device *dev)
->>
->> on architectures with no PM support (alpha, csky, m68k, openrisc, parisc,
->> riscv, s390).
-> 
-> Thanks for pointing this out.
-> 
-> I could send a patch to address this as pointed here [0]
-> 
-> by adding a __maybe_unused.
-> 
-> However, do you think my other patch [1] could address this issue without the need for above?
-> 
 
-Personally I would go for [0] as the least invasive solution, but I really
-have no idea, sorry. I just hope that your (broken) patch doesn't make it
-as-is into the upstream kernel.
+--sKtAIKhfZi5laQLY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Guenter
+On Tue, Apr 25, 2023 at 10:37:24AM -0700, Guenter Roeck wrote:
 
-> I think it would because DEFINE_SIMPLE_DEV_PM_OPS doesn't seem to be under any conditional CONFIG_PM.
-> 
-> However, I may have missed something, please do let me know what's the best way to fix.
-> 
-> [0] https://lore.kernel.org/all/24ec3728-9720-ae6a-9ff5-3e2e13a96f76@gmail.com/
-> 
-> [1] https://lore.kernel.org/all/20230424102546.1604484-1-d-gole@ti.com/
-> 
->>
->> Guenter
-> 
+> Personally I would go for [0] as the least invasive solution, but I really
+> have no idea, sorry. I just hope that your (broken) patch doesn't make it
+> as-is into the upstream kernel.
 
+I've applied the SIMPLE_DEV_PM_OPS patch which seems to fix the issue
+for riscv.
+
+--sKtAIKhfZi5laQLY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRIFTMACgkQJNaLcl1U
+h9A8gAf+ILotP0s7fUSCAalc6Ml3HPKN8u5NbT2dXOipDAa7Jl1L9J6UBjac/tEK
+0Bf+0aAqXymtgPThoGWQ6LRBy2yoRUuGpyKBqEH4WaiwJU6F5r6bhETZbrH6/EG9
+UhC+v0OU6yZrQ6XVo0sD4D81+MCAO95xkfPMCwR9GrLwXLWcsPSnVGqht9j1EgmK
++Oxrcu5yByYxYTPpcMRAOZ9OMBD7khDf8O9HDwAZiErLNZrMWviS5uj0/4gy8ZgU
+3rHq+WBteVJ2hwgiGMO9lA4Lhu5LD+/50wyimINkxkwmAGVIjwmHKbpVVVoO+yzm
+DvUpy6c0NM+lOgRAaGWPon+eCUF3mQ==
+=qDn6
+-----END PGP SIGNATURE-----
+
+--sKtAIKhfZi5laQLY--
