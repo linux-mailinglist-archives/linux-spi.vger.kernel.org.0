@@ -2,190 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FE06EE2F5
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 15:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9AE6EE361
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 15:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbjDYN1x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Apr 2023 09:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S234254AbjDYNpf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Apr 2023 09:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjDYN1t (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 09:27:49 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00329C173;
-        Tue, 25 Apr 2023 06:27:47 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id ECAAA32008FA;
-        Tue, 25 Apr 2023 09:27:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 25 Apr 2023 09:27:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682429262; x=1682515662; bh=sh
-        lQTGWa7vUbJrf98fLKqQIz8VMZW6pYwyh6rr26DkQ=; b=LLq6zsCSRbDjBVqeoa
-        QdSyGzdFeRzi+y8dRC7yvod5SVHeKyFTIeuyfiTgHRDX9Awr81yDjU9y4QtxKrfo
-        cU1BJzuMeChVwfos+ZupiLK5693eur3Az9zQP0C6tP5leOBtsxoSVBo5BxcsGO7K
-        YnDEO3vBsGpNOdsMCfFNRkVF1sblVBXFoUUDMH3el3HzkP7EtTn6FoyExVTN+aTO
-        gqS5bRJpJLk/Y1ln6yHL7bGq9WDFROd44pG/rbGw6QlYGqAnZ/JWZp/0ZoV7Bn0L
-        vq7IJdZ4IHu4w03AFjEKqpLuEgPWaeUW+I/AyBGdPEay4Ph5wh032/s2qj/I9Wro
-        /8xQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682429262; x=1682515662; bh=shlQTGWa7vUbJ
-        rf98fLKqQIz8VMZW6pYwyh6rr26DkQ=; b=Av/a0k3pjb1ufd4JifUVwkqmaE0xY
-        9CkoNy8ApgC/U0IKdRsJdeBSuhyHHZrHbLb2V34XnstlRhf8x06eo7Woi2Pmpwix
-        1FUDyWuVR25j7bcLCv0SZIqeCbOOzHJd6HjbetiNBz6VUkZQgqJbWjJlxJ8A/BpO
-        A212C1UV+wtke3Pc75MEe/ogcXY+s5a0ytb+7OOOZZFU2L6ynRwsUVp4XQ/s7+RJ
-        Fwj/Kr4OJOlir/HJ5H/UNNH9HZpNxgAqrg5KWHIyAHdoqAHF43/uajOj57iT4Jzl
-        X+HHwFW4rZzPdkC8YzfFnXBiw01B+vpVScnizIK5eGDgzxuBRbcgXd1yw==
-X-ME-Sender: <xms:S9VHZJl5ArBpbY5tqUCy32a43H-Jc6lVaBY-LZKcl_pJhl7n-s0_dQ>
-    <xme:S9VHZE1YTzlO84yHG36gWwGILapdSpSLopmyoWHKeOt_YpUc5zk_N5KDZkZzbByYb
-    B4T9orgHH0-6nfJ018>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:S9VHZPoeetQZs_3oaiKa85eO_ubUpz9vMKuiDxO2Xe7ZONIHAb3MkQ>
-    <xmx:S9VHZJk4L8-_hWSmPZAyBlv3pTZdFCFlZLIRfX2VBqLar6yCxaJTpA>
-    <xmx:S9VHZH1TRLt9JCYwgLou_9qePysK818dBIHcDHDLr1LJlHSsbq0KeA>
-    <xmx:TtVHZJsalndLD945CG4tBnqVxTIfpWnAMZDxIRKJWPLVcF1t9S-MXg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 91FC6B60086; Tue, 25 Apr 2023 09:27:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <c3db2294-4fef-46be-a62a-11fc38884918@app.fastmail.com>
-In-Reply-To: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
- <20230424152933.48b2ede1@kernel.org>
- <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-Date:   Tue, 25 Apr 2023 14:27:26 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Jakub Kicinski" <kuba@kernel.org>
-Cc:     "Nikita Shubin" <nikita.shubin@maquefel.me>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Linus Walleij" <linusw@kernel.org>,
-        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Brian Norris" <briannorris@chromium.org>,
-        "Chuanhong Guo" <gch981213@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Damien Le Moal" <dlemoal@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        "Jean Delvare" <jdelvare@suse.de>, "Joel Stanley" <joel@jms.id.au>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        "Liang Yang" <liang.yang@amlogic.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Lukasz Majewski" <lukma@denx.de>, "Lv Ruyi" <lv.ruyi@zte.com.cn>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Qin Jian" <qinjian@cqplus1.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Sergey Shtylyov" <s.shtylyov@omp.ru>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Sumanth Korikkar" <sumanthk@linux.ibm.com>,
-        "Sven Peter" <sven@svenpeter.dev>, "Takashi Iwai" <tiwai@suse.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Vasily Gorbik" <gor@linux.ibm.com>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        "Walker Chen" <walker.chen@starfivetech.com>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        soc@kernel.org
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234248AbjDYNpe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 09:45:34 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBAC146CB
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9505214c47fso1077608866b.1
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1682430331; x=1685022331;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvGrNptYZRi7xQ7+JJCpqEOje87cPoMWG8Zptna2m4A=;
+        b=EeB6xq/YH3AkAtURNR67x52RNeUgiCTEZRLPAYRxr+VY0h7Y9U6VLW8HybsEUzDA63
+         4h9ufPDC2R41r0CbWzGx+LZ7zNkFkFitOaXRQ6hRiAxjZLjBbKH2ELP5NNP5LGLDID0+
+         PjyrKifRV/6HStMYUN+ssbswKR8s1+YyFhhb0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682430331; x=1685022331;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vvGrNptYZRi7xQ7+JJCpqEOje87cPoMWG8Zptna2m4A=;
+        b=NArDFG/QWfEd3UrSQjMIMDDOw/9pUCsbmBAKYizPBFjFkdNaLx3eGue2TlYKjYaSUT
+         G5LMXo+zZl3YOHlLA1GffLpVijPJ4EOryhJ/Qj47wYvzJHqFqOXTPqSv8bKNQ641fT3E
+         iZV2xHPXczi/asbGuqrUcF0bX+UNanP0eVHTDRxhDbxm7alf1eNNxC6E343XB4cwTzty
+         obDfxVt74zf9xEokl1/QTHALslVVjeX/08m/J1hE1wWWBJ/611y2Q2adWuBfO845Trgh
+         SMrjTVAtiOq4NSSbWb8G5tb3smmVWeca3RE4hSr4LIGOj8KHsGGvGjejxeI+7mwVZn5g
+         H/Dg==
+X-Gm-Message-State: AAQBX9e0NNpqbaarr0fkEWmXLrG6gGLGQS9AhzxkuSlUXK6XfqKmWw1b
+        SmG/m/XJVdN3PMX4aVNJHacGSQ==
+X-Google-Smtp-Source: AKy350Ze96qfhykAyDc+5d3Rn5tKWwOIXWgOW7uoHjWHqUSYwA+lCrAyVmKAB2qo+RdC+u8ZAsE5dQ==
+X-Received: by 2002:a17:906:9bea:b0:94e:e082:15b9 with SMTP id de42-20020a1709069bea00b0094ee08215b9mr12207814ejc.77.1682430331219;
+        Tue, 25 Apr 2023 06:45:31 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 06:45:30 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
+Date:   Tue, 25 Apr 2023 15:45:24 +0200
+Message-Id: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 25, 2023, at 10:20, Krzysztof Kozlowski wrote:
-> On 25/04/2023 00:29, Jakub Kicinski wrote:
->> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
->>> Thanks a lot for your continued work. I can't merge any of this at
->>> the moment since the upstream merge window just opened, but I'm
->>> happy to take this all through the soc tree for 6.5, provided we
->>> get the sufficient Acks from the subsystem maintainers. Merging
->>> it through each individual tree would take a lot longer, so I
->>> hope we can avoid that.
->> 
->> Is there a dependency between the patches?
->
-> I didn't get entire patchset and cover letter does not mention
-> dependencies, but usually there shouldn't be such. Maybe for the next
-> versions this should be split per subsystem?
+The current spi-imx driver completely fails when used with more than
+four (gpio) chip-selects, since the chip select number is used
+unconditionally as shift amount when updating the control and
+configuration registers, so the code ends up modifying random bits
+outside the intended fields.
 
-Clearly the last patch that removes the board files depends on
-all the previous patches, but I assume that the other ones
-are all independent.
+This fixes it by making use of the unused_native_cs variable filled in
+by the spi core, and use that as the "channel number" for all gpiod
+chip selects.
 
-We don't do complete conversions from boardfiles to DT that often
-any more, but in the past we tended to do this through a cross-
-subsystem branch in the soc tree, which helps do it more quickly
-and is less work for Nikita. In this case, I would make it a
-separate top-level branch in the soc tree.
+In the presumably common case where all chip selects are gpios, this
+means we end up using channel 0 exclusively, so the optimization where
+the config register is left alone if it is unchanged (see
+184434fcd617) might become less effective, if the workload consists of
+different slaves with differing spi modes being accessed one after the
+other. It would be nice if one could make use of the unused native
+chip selects in a round-robin manner, but for that the core would have
+to tell us not just unused_native_cs, but the whole ~native_cs_mask
+from spi_get_gpio_descs(). Maybe a simpler fix, if there is anything
+to fix, is to make the new mx51_ecspi_channel() do
 
-If anyone strongly feels that the patches should go through
-the subsystem trees here, we'll take the longer path and
-do the changes separately, with the boardfile removal
-coming a release later.
+	if (!spi->cs_gpiod || spi->controller->num_chipselect <= 4)
 
-     Arnd
+
+Rasmus Villemoes (3):
+  spi: spi-imx: use "controller" variable consistently in
+    spi_imx_probe()
+  spi: spi-imx: set max_native_cs for imx51/imx53/imx6 variants
+  spi: spi-imx: fix use of more than four chipselects
+
+ drivers/spi/spi-imx.c | 56 +++++++++++++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 21 deletions(-)
+
+-- 
+2.37.2
+
