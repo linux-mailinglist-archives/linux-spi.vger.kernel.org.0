@@ -2,165 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346A56EDF0E
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 11:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D926EE10A
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 13:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjDYJU6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Apr 2023 05:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S233898AbjDYLZX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Apr 2023 07:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjDYJU4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 05:20:56 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E9D4C3C
-        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-958bb7731a9so558863366b.0
-        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+        with ESMTP id S233652AbjDYLZW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 07:25:22 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31389D9
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 04:25:21 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-246f856d751so4017482a91.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 04:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682414449; x=1685006449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
-        b=wOvkX2oC5ZHyFMdylx8IkrryNZeg23DU/Ch9AChLKbcB/sx0DFV8Yb/H7vUSsHm/ay
-         6vKeAhZHqi4KvKzBL9RsojhjUK4oU8lb+V+mupjRsr3d4Ozv9ezhvySx+DHEhqR+hjMA
-         gaiJOqLYT51c8eBo6o+cG8x82KOH/6WDLxVffZqZup0JrvMaRV4XDFiPQxHmTy81GMpM
-         QIfjcv/pPcyMi1TiLUVU+h31xU2FfOzqmTSR6PnZ45uP7vvaFC3j0EA3bBbvXBOdzaR3
-         fHRbyuMSy1Dp046zUXSSm/0Gjosdxp/aEC/NPYM4X7lNjpFDITb7o57bkR9W209v9XtR
-         w4rg==
+        d=gmail.com; s=20221208; t=1682421920; x=1685013920;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/Vr12IEC/K3fVBhhnqHdCJDMm6lpcTmnhRovMNyCYA=;
+        b=VMDf5CXoaQusaf1PH7Z0qmscJJijP7wEOM+ObNlmZAq47amMoMso6vf3BaVHEL3d/H
+         sKaEdrINDklF3VR2W0wVU3ndqp2OUkEzJ5+vcGBo/PhlteXM0GLdG40IluVhYT+en5g1
+         F3SRPbJHml727drNjwAv6ckNnTl4mG+IaamuVIobj92cHc8vZN5MXyny4pdGFaSJrUq0
+         Fa19e4YkmKYQBFU/LixxM228JYxBTLlqODq0pB1E13PHdEz3vxvffUKomz+H+p8yowST
+         Edw3H3Sp/RXwexzwS6fR1uSgEr54gjce+yQAZ2vpOUAaKTJ5o2ZrtfpigdzVmkCQ/BCL
+         gNdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682414449; x=1685006449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
-        b=ZH0OrBQwF0er9cWgyaB5NoEr3ppHiubUvubyrRkqkT6Ic4Cx2c9jJ2gp7C1sj23Cof
-         Qrcxba/js9FKuLUeaISaZmib1wjSyLXmw0X8mKmeoItboHs0B0GvLKFCz6SEATwEGT7n
-         YVi2y/3wGUYZ83UULtVgPtenO585oPTcqHX4o96qPhyVqsZK2M2izFbfYCJtL+E4KRxL
-         720QRy8i9C//TqqQMhC28DqjlM+QbzPj14GPwLnJR9+EqandPqX9VXILSb3/OCf3Pkqb
-         nE8WeE3XrrK6jJcUOJxqcqpNzYP71x8dtxL9qWEaNjt0h6NQSwlAJwhLNwmxORvWk8SE
-         DnQQ==
-X-Gm-Message-State: AAQBX9f1OR1j6whAwbD96LWpBuun4wZ3BAaz2W4A3ZDmPqH5naWchsSN
-        FfPBIr3uml2cMuSB3W/sxEUcJg==
-X-Google-Smtp-Source: AKy350YuXymrw7So4UOjZjef+iEPyi/CshywTQ5AjTJZJr/4WaSMcccmVMSSXrgcRBO0CsBCTlwDVg==
-X-Received: by 2002:a17:907:b9d9:b0:94f:1a23:2f1c with SMTP id xa25-20020a170907b9d900b0094f1a232f1cmr14815686ejc.50.1682414449568;
-        Tue, 25 Apr 2023 02:20:49 -0700 (PDT)
-Received: from [192.168.9.102] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b0094f23480619sm6620286ejx.172.2023.04.25.02.20.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 02:20:48 -0700 (PDT)
-Message-ID: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-Date:   Tue, 25 Apr 2023 11:20:46 +0200
+        d=1e100.net; s=20221208; t=1682421920; x=1685013920;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q/Vr12IEC/K3fVBhhnqHdCJDMm6lpcTmnhRovMNyCYA=;
+        b=My8NQRDdquzY/i4ixoOBav/OJBTqEu5hAPgfJCifQauSHr84UpusjeLyZzS/R9gzrR
+         L3Lvmou8X1WzrG5SpTIATTHJb0zX0yy5jIsl6ZNmIziTqfxw0441MoMc0CNI2UpdaGFJ
+         wB5wOw8bczDPnDa/5BSA5Y2cz09J/UDTnFEiW3H2/D335SsGjDWxBNYETZlmMtctNOjO
+         Yfs4mari9zsJ9CzRr5LA/6w2PN886lUumPDXPBgNAk4vva5iYECjt7urV8fLu080yphH
+         aloOQPIubtBlpiwwfagYropSRRLNrPPTeRTHOCjeXElByGiXo0x3COrGyc/hPW6ob/aW
+         JSbw==
+X-Gm-Message-State: AAQBX9cfcYRlBYIrAQrxtpOYiQO2qddmpID4Rb3XgevdUhjSFDOG4G35
+        Kkt2e2t/jTo8JxdVumtqodIVZ+lPVoAsWTUDPJQ=
+X-Google-Smtp-Source: AKy350ZFhgh8QVc7wHBGxiDlkewad6MLUptOGN16urzymoONO8elpx7oODVn14rxwZZpxwwT6rNuqaflFONPYd3scjc=
+X-Received: by 2002:a17:90a:b001:b0:23f:6958:e931 with SMTP id
+ x1-20020a17090ab00100b0023f6958e931mr17300819pjq.46.1682421920649; Tue, 25
+ Apr 2023 04:25:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Brian Norris <briannorris@chromium.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        soc@kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
- <20230424152933.48b2ede1@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230424152933.48b2ede1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230424102546.1604484-1-d-gole@ti.com>
+In-Reply-To: <20230424102546.1604484-1-d-gole@ti.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Tue, 25 Apr 2023 13:25:09 +0200
+Message-ID: <CAOiHx==anPTqXNJNG7zap1XP2zKUp5SbaVJdyUsUvvitKRUHZw@mail.gmail.com>
+Subject: Re: [PATCH] spi: bcm63xx: use macro DEFINE_SIMPLE_DEV_PM_OPS
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 25/04/2023 00:29, Jakub Kicinski wrote:
-> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
->> Thanks a lot for your continued work. I can't merge any of this at
->> the moment since the upstream merge window just opened, but I'm
->> happy to take this all through the soc tree for 6.5, provided we
->> get the sufficient Acks from the subsystem maintainers. Merging
->> it through each individual tree would take a lot longer, so I
->> hope we can avoid that.
-> 
-> Is there a dependency between the patches?
+On Mon, 24 Apr 2023 at 12:25, Dhruva Gole <d-gole@ti.com> wrote:
+>
+> Using this macro makes the code more readable.
+> It also inits the members of dev_pm_ops in the following manner
+> without us explicitly needing to:
+>
+> .suspend = bcm63xx_spi_suspend, \
+> .resume = bcm63xx_spi_resume, \
+> .freeze = bcm63xx_spi_suspend, \
+> .thaw = bcm63xx_spi_resume, \
+> .poweroff = bcm63xx_spi_suspend, \
+> .restore = bcm63xx_spi_resume
+>
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
 
-I didn't get entire patchset and cover letter does not mention
-dependencies, but usually there shouldn't be such. Maybe for the next
-versions this should be split per subsystem?
+I think this should have an appropriate Fixes tag as it will fix a
+build warning when building with !CONFIG_PM after applying the
+previous patch.
 
-Best regards,
-Krzysztof
-
+Regards
+Jonas
