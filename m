@@ -2,70 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FEB6EE367
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 15:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDF36EE36D
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 15:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbjDYNpu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Apr 2023 09:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S234131AbjDYNqa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Apr 2023 09:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjDYNpl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 09:45:41 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532413FB3
-        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:45:37 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-506767f97f8so10006495a12.1
-        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:45:37 -0700 (PDT)
+        with ESMTP id S234215AbjDYNq2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 09:46:28 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561EB1547F
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-956eacbe651so1025329366b.3
+        for <linux-spi@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682430336; x=1685022336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Al0zqUJCRs8AI5Sc47A1KMBnQC63vKqupk6DIofDhiM=;
-        b=ITM1rBhaC1OkA8L7qspcDJ8xbkZrOsaT0dCfP5BjuAZtPW6BBgMTvTknoRUzcp9oGq
-         tRqmd/cXl4V2QIGzwRFD4JMcMxoOdclL3ggk62TG+Qpvg2hU/UqbKiEhRvzwvrY82/G/
-         ekhBg3pKTFerlph1uFfJZDo9PptMNJ6QMRbtQ=
+        d=linaro.org; s=google; t=1682430359; x=1685022359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
+        b=IbCqrE+0qE1Vta7QCUFthlILPfO9eniXf6400K6oMk+lpgOsl9KXaDA1uRvGgcqVwh
+         PAGGWi8fUGEkeNspx6ZhnsvdwhU+aStjzOGNzaXq4c7EJhKTH686w69OBcNaxQQBKdID
+         rUjiI1iHNLFRwmrUxEb71IxGS/hVwHwC5Vs/QrPdDI45DojY0g/reV7S8kIKYNG4Z9is
+         y41dzqRhtgn2fatnzf91nHfGrooO8kF2iGw9+cD48LdFOloX9hMmuUKLPketS4Qdv6xK
+         lvY6LO2me1uYUzYF62v05ZWnQuXsz6Puy21MoGLtSX+jgC0DsBeAnM50weEs9mjoT+g0
+         W/Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430336; x=1685022336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Al0zqUJCRs8AI5Sc47A1KMBnQC63vKqupk6DIofDhiM=;
-        b=YJIN/f+UDcm4lbdYJlyDDMWbEYtJQT24S5In5xh/6IyjGPxtkKaie66FEhy05qk0mj
-         BHT8qqrm9rY9a304hcIFVv9eRDgnPptPgt3jBYJ6dNN4mvGL6XBpr0kvJwbi89+81iCU
-         c2ykFRDmzBEHE25r1BeIPQlE0YDnoUzHYoATcknn/3on4hPmPXCUnMl7NYzs9cfc4Pwv
-         Oy6Fp2pg4tXDNWcVU9nS1bwsGlocheVtsujT6bDRaFr8NBOquQOiD7qnrFEybfMyBVvp
-         q5Qc2CHN1ADjPM0KGrNebyy9VuhPKdv23vOc0GnJ2UWEAe9g6wjeEcKqP3KuuzwcpJh2
-         WAWA==
-X-Gm-Message-State: AAQBX9cxPW07UebTGs2TUwMAC/O+yEbVT9vtILY5a6CKFsapvUhuHvLD
-        XtdvzVUOnOGNBkNhJKD2jZ2IHA==
-X-Google-Smtp-Source: AKy350aKN7c3TBlSHw8bGq2LBpYoNswxL+Q4j51QbggX6/tE0dIImeRVxwOgA/3I0vsBbihspOdvSg==
-X-Received: by 2002:a17:906:8a44:b0:94f:553:6fd6 with SMTP id gx4-20020a1709068a4400b0094f05536fd6mr13433197ejc.24.1682430335987;
-        Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] spi: spi-imx: fix use of more than four chipselects
-Date:   Tue, 25 Apr 2023 15:45:27 +0200
-Message-Id: <20230425134527.483607-4-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
+        d=1e100.net; s=20221208; t=1682430359; x=1685022359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
+        b=IWHPabV8dPrFyq+wkhIscxJgIKRqXKuDDq8YksMNdPlRXCZ9CNHqxlCcdIaR/uS8IN
+         WVfKrGuFZUmSiccRLYY8G6X33yjdlEnHXo2LM9MQpdzcfQyXz+7hzDMk2NR3/EugnWR0
+         9jqERQgRuB0GmwmlVyCrBMtd0h1UtZ3gCnOn7zljMD7rQSbZNe/jOqu9iTFUYNyQWg4u
+         dDYxnZsYdpKwq3JXJZRpC2zC9IKOjs5W4iJKe6oV8r/F6uv2qDwhWfbwBrDoiHUkOJU5
+         +UxATEsBij7bYyt4LzwK9IOxC7BiF5bxb3lX3rP49FyJQZqbl5xYHZ5e1WJY5Duo9YPX
+         P7pg==
+X-Gm-Message-State: AAQBX9dz4yibmF8i32EplW45fTYpekflVLr+DtuZBUeD7o0INnYz6BSb
+        dwtDmqKMWdI+RI/xdqUnCtmS5A==
+X-Google-Smtp-Source: AKy350Y5d56yR3yCA+n72WOYxsRIheFXOTdTuxBeiaMFVX4jeFXOmiuq4zZPQKXKHZXpv/m9cuIXJQ==
+X-Received: by 2002:a17:906:470a:b0:94e:6294:9d23 with SMTP id y10-20020a170906470a00b0094e62949d23mr13534582ejq.26.1682430359582;
+        Tue, 25 Apr 2023 06:45:59 -0700 (PDT)
+Received: from [172.23.2.104] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id my34-20020a1709065a6200b0094f6f45b2c1sm6827559ejc.156.2023.04.25.06.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 06:45:58 -0700 (PDT)
+Message-ID: <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
+Date:   Tue, 25 Apr 2023 14:45:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
+ SPI_TRANS_CFG
+Content-Language: en-US
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com
+References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,131 +78,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Currently, the spi->chip_select is used unconditionally in code such as
 
-	/* set chip select to use */
-	ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
+On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
+> The CS_TOGGLE bit when set is supposed to instruct FW to
+> toggle CS line between words. The driver with intent of
+> disabling this behaviour has been unsetting BIT(0). This has
+> not caused any trouble so far because the original BIT(1)
+> is untouched and BIT(0) likely wasn't being used.
+>
+> Correct this to prevent a potential future bug.
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
 
-and
+Has this always been the case, or did the switch to BIT(1)
+only occur on some recent platforms?
 
-	if (spi->mode & SPI_CPHA)
-		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-	else
-		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
+Konrad
 
-with these macros being
-
-	#define MX51_ECSPI_CTRL_CS(cs)          ((cs) << 18)
-	#define MX51_ECSPI_CONFIG_SCLKPHA(cs)   (1 << ((cs) +  0))
-
-However, the CHANNEL_SELECT field in the control register is only two
-bits wide, so when spi->chip_select >= 4, we end up writing garbage
-into the BURST_LENGTH field. Similarly, there are only four bits in
-the SCLK_PHA field, so the code above ends up actually modifying bits
-in the SCLK_POL (or higher) field.
-
-The scrambling of the BURST_LENGTH field itself is probably benign,
-since that is explicitly completely initialized later, in
-->prepare_transfer.
-
-But, since we effectively write (spi->chip_select & 3) into the
-CHANNEL_SELECT field, that value is what the IP block then uses to
-determine which bits of the configuration register control phase,
-polarity etc., and those bits are not properly initialized, so
-communication with the spi device completely fails.
-
-Fix this by using the ->unused_native_cs value as channel number for
-any spi device which uses a gpio as chip select.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/spi/spi-imx.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index e8f7afbd9847..569a5132f324 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -504,6 +504,13 @@ static void mx51_ecspi_disable(struct spi_imx_data *spi_imx)
- 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
- }
- 
-+static int mx51_ecspi_channel(const struct spi_device *spi)
-+{
-+	if (!spi->cs_gpiod)
-+		return spi->chip_select;
-+	return spi->controller->unused_native_cs;
-+}
-+
- static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 				      struct spi_message *msg)
- {
-@@ -514,6 +521,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	u32 testreg, delay;
- 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
- 	u32 current_cfg = cfg;
-+	int channel = mx51_ecspi_channel(spi);
- 
- 	/* set Master or Slave mode */
- 	if (spi_imx->slave_mode)
-@@ -528,7 +536,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 		ctrl |= MX51_ECSPI_CTRL_DRCTL(spi_imx->spi_drctl);
- 
- 	/* set chip select to use */
--	ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
-+	ctrl |= MX51_ECSPI_CTRL_CS(channel);
- 
- 	/*
- 	 * The ctrl register must be written first, with the EN bit set other
-@@ -549,22 +557,22 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	 * BURST_LENGTH + 1 bits are received
- 	 */
- 	if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
--		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
- 	else
--		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
- 
- 	if (spi->mode & SPI_CPOL) {
--		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(channel);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(channel);
- 	} else {
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(channel);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(channel);
- 	}
- 
- 	if (spi->mode & SPI_CS_HIGH)
--		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SSBPOL(channel);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(channel);
- 
- 	if (cfg == current_cfg)
- 		return 0;
-@@ -609,14 +617,15 @@ static void mx51_configure_cpha(struct spi_imx_data *spi_imx,
- 	bool cpha = (spi->mode & SPI_CPHA);
- 	bool flip_cpha = (spi->mode & SPI_RX_CPHA_FLIP) && spi_imx->rx_only;
- 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
-+	int channel = mx51_ecspi_channel(spi);
- 
- 	/* Flip cpha logical value iff flip_cpha */
- 	cpha ^= flip_cpha;
- 
- 	if (cpha)
--		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(channel);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(channel);
- 
- 	writel(cfg, spi_imx->base + MX51_ECSPI_CONFIG);
- }
--- 
-2.37.2
-
+>   drivers/spi/spi-geni-qcom.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index ba7be50..8a7d1c2 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -35,7 +35,7 @@
+>   #define CS_DEMUX_OUTPUT_SEL	GENMASK(3, 0)
+>   
+>   #define SE_SPI_TRANS_CFG	0x25c
+> -#define CS_TOGGLE		BIT(0)
+> +#define CS_TOGGLE		BIT(1)
+>   
+>   #define SE_SPI_WORD_LEN		0x268
+>   #define WORD_LEN_MSK		GENMASK(9, 0)
