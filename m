@@ -2,109 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE646EEF33
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 09:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9606EEF6B
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 09:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbjDZHUP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Apr 2023 03:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
+        id S239733AbjDZHkA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Apr 2023 03:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239763AbjDZHUM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 03:20:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9584495
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 00:19:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1240542066b.0
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 00:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682493571; x=1685085571;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AliyzMG7uX1K8DdktVWAS4ms6p/n8xzZ41dyvI1w1Gg=;
-        b=WQj18P7N7/NjxvIrFAlFz2NSMyxiSKL2w+5Au2OAGGYs5hp85t92aNk8J9FgQzrCHA
-         mKE/QnIyEp5qlwGivavj9volTnAUmS+BtnGY6TD5FbJMgTKCCdQPHvl29OsG4iemlxYx
-         LvdVVSWi5SiS0+n3qkp9l3TXWnWo4LSDQ2fW4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682493571; x=1685085571;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AliyzMG7uX1K8DdktVWAS4ms6p/n8xzZ41dyvI1w1Gg=;
-        b=LHjLT4cjpuEtj8ibYxvBy4xPp2DgyhXzqdQg0P1wi1c1B8oiCWR7ge/AcrbFaMFKim
-         A7RQPJiFcgqpk+9w8zpOUuZ5AofHbYApgDtkHVBdhv2GGozQjYZwWdpBpWWL6vz+tGoe
-         8QddMDuBzjFno0LRUEGH51hsPmTDSE3uj9i8tA53mB/jLMAcg4iYwELZBe/ZkEW08jCH
-         4+h0db1DqHJPklVgUVlVENmdge5/RHTjWLUwGE/Oh8AhAQKLZRrXmIlGFnq6mZfwR04z
-         jBgMbKpnjLRtsZMNdt9CiFj7fsGC1/PpU92/VRk7fPXNHk8DINe9Wp8Gm+5X+vG7I7eV
-         nqxw==
-X-Gm-Message-State: AAQBX9cDx/6z3ORRQBBTLtXid9EC8/qOReGu4R3URF43rN8izjsty7bg
-        jcdU586OqUHBvETsPrU9BqG5Bw==
-X-Google-Smtp-Source: AKy350axTsWxmLXczY1iG9nRIOTfr9oK5am+DCYWJT070/QHMp9uc514OPQus0ywr5pdvaDeSkD5lw==
-X-Received: by 2002:a17:906:dce:b0:94f:4a87:7a77 with SMTP id p14-20020a1709060dce00b0094f4a877a77mr16535586eji.36.1682493571610;
-        Wed, 26 Apr 2023 00:19:31 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id gn2-20020a1709070d0200b009545230e682sm7562305ejc.91.2023.04.26.00.19.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 00:19:31 -0700 (PDT)
-Message-ID: <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
-Date:   Wed, 26 Apr 2023 09:19:29 +0200
+        with ESMTP id S239381AbjDZHj7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 03:39:59 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2130FE;
+        Wed, 26 Apr 2023 00:39:55 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33Q7daHT055981;
+        Wed, 26 Apr 2023 02:39:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682494776;
+        bh=7LqVdOnzZtTQ3wyb6XvMcLktKP+1tC9WdQjlamBaQlU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qUJhUH9S+HHrl9WS64aXRQcfwCj3end0mvK/GI1XKZTb8t0/EmV2prek6M1kqbTUp
+         AWJTHFTiZAxzvDy9tt0+da/GP0TvjoGflG87BCChXTlz6hMG3iwQpjj3r0NThIvazh
+         n743DtDnN/q4kiNml3V3kKhSnQa4ktMjDNowvV5I=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33Q7daPm107381
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 02:39:36 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
+ Apr 2023 02:39:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 26 Apr 2023 02:39:35 -0500
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33Q7dWNI022730;
+        Wed, 26 Apr 2023 02:39:33 -0500
+Message-ID: <044a723e-b81e-f6f2-8bf7-3680a10abc86@ti.com>
+Date:   Wed, 26 Apr 2023 13:09:32 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Content-Language: en-US, da
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
+Subject: RE: [PATCH v2 4/4] spi: cadence-quadspi: use STIG mode for small
+ reads
+Content-Language: en-US
+To:     Yoshitaka Ikeda <ikeda@nskint.co.jp>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Takahiro.Kuwano@infineon.com" <Takahiro.Kuwano@infineon.com>,
+        Pratyush Yadav <ptyadav@amazon.de>,
+        Mark Brown <broonie@kernel.org>
+References: <20230125081023.1573712-1-d-gole@ti.com>
+ <20230125081023.1573712-5-d-gole@ti.com>
+ <OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 25/04/2023 15.45, Rasmus Villemoes wrote:
-> The current spi-imx driver completely fails when used with more than
-> four (gpio) chip-selects, since the chip select number is used
-> unconditionally as shift amount when updating the control and
-> configuration registers, so the code ends up modifying random bits
-> outside the intended fields.
+Hi Yoshitaka,
+
+On 26/04/23 08:04, Yoshitaka Ikeda wrote:
+> Hi Dhruva,
 > 
-> This fixes it by making use of the unused_native_cs variable filled in
-> by the spi core, and use that as the "channel number" for all gpiod
-> chip selects.
+> An error occurred in the following environments where this patch was applied, and the flash could not be accessed.
+> However, after reverting to this patch, it is possible to access it.
+> 
+> - Environment
+>    - OS : Linux 6.3
+>    - SoC : Cyclone V
 
-So I obviously hadn't seen
-https://lore.kernel.org/lkml/20230318222132.3373-1-kgroeneveld@lenbrook.com/T/#u
-when I sent this.
+Please can you send me the register fields information for the
+CQSPI controller used in this device?
+I wanted to verify if atall there were any mismatch between the
+controller I have tested with vs your SOC's controller.
 
-I did consider that approach, but rejected it because it wouldn't work
-with mixing native and gpio chip selects. Say, somebody uses SS0
-natively, but then also have four additional gpios. Then chipselect 4
-would end up activating both the SS0 pin as well as the gpio, selecting
-both devices.
+>    - Flash : MT25QL512A
+> 
+> - Error at startup
+>    - Kernel log
+> [ 0.980290] spi-nor spi0.0: found mt25ql512a, expected n25q512a
+> [ 1.485140] cadence-qspi ff705000.flash: Flash command execution timed out.
+> [ 1.490792] spi-nor spi0.0: operation failed with -110
+> [ 1.494654] spi-nor spi0.0: mt25ql512a (65536 Kbytes)
+> 
+> - Error at access
+>    - Access command and log
+> # hexdump -Cv /dev/mtdblock0
+> hexdump: /dev/mtdblock0: Input/output error
+> 
+>    - Kernel log
+> [ 2124.201193] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2124.201229] spi-nor spi0.0: operation failed with -110
+> [ 2124.201256] I/O error, dev mtdblock0, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 4 prio class 2
+> [ 2124.711241] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2124.711276] spi-nor spi0.0: operation failed with -110
+> [ 2124.711302] I/O error, dev mtdblock0, sector 8 op 0x0:(READ) flags 0x80700 phys_seg 3 prio class 2
+> [ 2125.221193] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2125.221230] spi-nor spi0.0: operation failed with -110
+> [ 2125.221256] I/O error, dev mtdblock0, sector 16 op 0x0:(READ) flags 0x80700 phys_seg 2 prio class 2
+> [ 2125.731237] cadence-qspi ff705000.flash:. QSPI is still busy after 500ms timeout.
+> [ 2125.731270] spi-nor spi0.0: operation failed with -110
+> [ 2125.731296] I/O error, dev mtdblock0, sector 24 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+> [ 2126.241190] cadence-qspi ff705000.flash:. QSPI is still busy after 500ms timeout.
+> [ 2126.241224] spi-nor spi0.0: operation failed with -110
+> [ 2126.241251] I/O error, dev mtdblock0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+> [ 2126.241274] Buffer I/O error on dev mtdblock0, logical block 0, async page read
+> 
+> 
+> regards,
+> Yoshitaka Ikeda
+> 
+> 
+> [..snip..]
 
-I don't know if that's really a realistic scenario. But at least I think
-the driver should then somehow have a way to indicate to the core that
-one should either use native or gpio chip selects, but not a mix.
+It maybe that STIG mode may have some different way of configuring/using
+on your SoC.
 
-Thoughts?
+However at this point it's only a guess and I will wait till I have the
+exact information on the controller specs being used in this device
+along with the register descriptions.
 
-Rasmus
-
+-- 
+Thanks and Regards,
+Dhruva Gole
