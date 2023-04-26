@@ -2,58 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D6D6EF4A3
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 14:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6F56EF52F
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 15:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240530AbjDZMsV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Apr 2023 08:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S241101AbjDZNLN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Apr 2023 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240303AbjDZMsU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 08:48:20 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BAC170D
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 05:47:52 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8c51ba511so66427011fa.1
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 05:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682513266; x=1685105266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6G7IUulzTfhtoVZrIH1tOX79wjetImDDZbSdg5ac+R0=;
-        b=cidVwgUgb+SB0lEhEwIVg8U6ogmocpHfzpZS63CzXPqZhH3jHl/HRSLf6lxXrF47hI
-         SJVj598VfLVyKERyW+le9TRY6jCG22CgUyC9gV12JkBBLXxv6c0jHirlJUprWhiJ102G
-         9JAgedzUZR955eUUerbCSqfWxZI18Xc+vr8Vc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682513266; x=1685105266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6G7IUulzTfhtoVZrIH1tOX79wjetImDDZbSdg5ac+R0=;
-        b=Cp7csSKYlteT6NB+vh9yENVkU2WHEd0YM5UlHYcAbbGQyv41FejzJQ8RigSPGZJMlw
-         NEwGYVuwkMrGP8oQBnz8VSy0tMtCCjilqMbytpPpfV6cw0flNWG/ieMWMQ23pNlOpICP
-         pit06Blqd1L5NuCX+oxgIwisPPyITw1AzvJz74kJHScmaoQuNTryqH8+6kaGbMUVryd+
-         Bx5KTiVQYMGUbg6Yg7MehbjZKU61C0rV3Ehe1WIP7F1pvp1NMM8yGAP3C5ULddtku9f/
-         ilQ5r0vEnQcMLCttMir6mblz8bMsUWezl6mDJgsJox/H5z4GnB4mv+PBQt4HBbKE9qK7
-         UdWQ==
-X-Gm-Message-State: AAQBX9epZTSZjzH1JRf1VTnUPImCpyXv34FQRaft3ES8z9uvjVlxivd5
-        pdrI/shgl8lsDGFrlol3gci/Xw==
-X-Google-Smtp-Source: AKy350afV3cJCybPB05LFwljBBHKqqHXBvLD4iZe7owm2yLG2g0nSvChOWgMiUIS88PCZTqioY43kQ==
-X-Received: by 2002:a2e:97cc:0:b0:2a8:d021:4121 with SMTP id m12-20020a2e97cc000000b002a8d0214121mr4180598ljj.26.1682513266081;
-        Wed, 26 Apr 2023 05:47:46 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id a28-20020a2eb17c000000b0029c96178425sm2540381ljm.19.2023.04.26.05.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 05:47:45 -0700 (PDT)
-Message-ID: <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
-Date:   Wed, 26 Apr 2023 14:47:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Content-Language: en-US, da
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S241099AbjDZNLK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 09:11:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADA444A1;
+        Wed, 26 Apr 2023 06:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AA1263693;
+        Wed, 26 Apr 2023 13:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18171C433EF;
+        Wed, 26 Apr 2023 13:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682514663;
+        bh=0Xy4nfIjtJp9Ml67azA3/rEsuiUldnZOda9YJckRL0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=olqP/0CYbO6RV1mZZfd5wgF1ZG6oXWzG1GxOL6fpgX0kb4iqze2KThTDN/1k7iaio
+         KxcG4Fyx58Z/secfCtV/MtLsBlooInaFl00h1CsH/c5ZBG6kwIvh6zJpkMUAkR25Gw
+         Sjwe/KbiexTvbpaGdWD3HvIeCe09QGOgZ6Q/iToUAVHQ1IyPjnEnz1vHIVwMJsiACy
+         4nKL7Y9KPzK6g/y3g+ESWdUsCAn7JE+zQF6Nlq8u+r9SbzR7+TrOg30mLtznEmuCVR
+         7v6pu3MRv/5eX23b1VPV/E0a8qscrWtDFRhx3IIqwsvXcCV49LaCpqjLKHNjNPzL1d
+         e4jC/7XDJCQHQ==
+Date:   Wed, 26 Apr 2023 14:10:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -63,70 +43,85 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         linux-kernel@vger.kernel.org,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
+Message-ID: <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
 References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
  <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
  <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rBlslG3Mk26QI9iP"
+Content-Disposition: inline
+In-Reply-To: <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
+X-Cookie: Drilling for oil is boring.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 26/04/2023 14.25, Mark Brown wrote:
-> On Wed, Apr 26, 2023 at 09:19:29AM +0200, Rasmus Villemoes wrote:
-> 
->> I did consider that approach, but rejected it because it wouldn't work
->> with mixing native and gpio chip selects. Say, somebody uses SS0
->> natively, but then also have four additional gpios. Then chipselect 4
->> would end up activating both the SS0 pin as well as the gpio, selecting
->> both devices.
-> 
->> I don't know if that's really a realistic scenario. But at least I think
->> the driver should then somehow have a way to indicate to the core that
->> one should either use native or gpio chip selects, but not a mix.
-> 
-> I'm not sure this is sensible, it'll be a fairly rare situation and we
-> don't want to preclude using the built in chip select functionality for
-> some of the chip selects.  In a situation like this we only need to have
-> a single chip select to be managed as a GPIO rather than all of them,
-> which I'd expect to end up handled in the DT by not allocating that chip
-> select number.
 
-Sorry, I don't understand what you're saying. What exactly is not
-sensible? And what is "a situation like this"?
+--rBlslG3Mk26QI9iP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I described a problem with what is now 87c614175bbf in linux-next: If
-one has five spi devices, the first four of which use the four native
-chip selects, there is no way to use a gpio for the fifth, because
-whichever "channel" you choose in the CHANNEL_SELECT field will cause
-the ecspi IP block to drive some SSx pin low, while the spi core is also
-driving the gpio low, so two different devices would be selected.
+On Wed, Apr 26, 2023 at 02:47:44PM +0200, Rasmus Villemoes wrote:
+> On 26/04/2023 14.25, Mark Brown wrote:
 
-It's not exactly a regression, because any chip_select >= 4 never
-actually worked, but what I'm saying is that 87c614175bbf also isn't a
-complete fix if one wants to support mixing native and gpio chip
-selects. For that, one really needs the unused_native_cs to be used for
-all gpio chip selects; in particular, one needs some unused native cs to
-exist. IOW, what my series tries to do.
+> > I'm not sure this is sensible, it'll be a fairly rare situation and we
+> > don't want to preclude using the built in chip select functionality for
+> > some of the chip selects.  In a situation like this we only need to have
+> > a single chip select to be managed as a GPIO rather than all of them,
+> > which I'd expect to end up handled in the DT by not allocating that chip
+> > select number.
 
-[OK, now that I re-read what I wrote, I didn't exactly describe "four
-native CS, one gpio", but "one native CS, four gpios". That scenario
-_could_ of course work with my series, but with 87c614175bbf just
-masking the chip-select number, we do get the problem that two devices
-would be selected at the same time. And I don't think expecting the DT
-author to know to use regs 1, 2, 3, 5 for those four gpio chip selects
-is reasonable; nor do I think it would actually work, since the missing
-gpio phandle at index 4 in cs-gpios would be treated by the spi core as
-a "that device, if any, uses native chip select 4", and that
-would/should fail.]
+> Sorry, I don't understand what you're saying. What exactly is not
+> sensible? And what is "a situation like this"?
 
-Rasmus
+Building hardware which uses all the native chip selects and also GPIO
+ones and then describing it in DT as using native chip selects.
 
+> I described a problem with what is now 87c614175bbf in linux-next: If
+> one has five spi devices, the first four of which use the four native
+> chip selects, there is no way to use a gpio for the fifth, because
+> whichever "channel" you choose in the CHANNEL_SELECT field will cause
+> the ecspi IP block to drive some SSx pin low, while the spi core is also
+> driving the gpio low, so two different devices would be selected.
+
+Sure, and therefore I'd not expect anyone to actually describe the
+hardware like that but to instead describe the hardware as using three
+or fewer of the native chip selects with the remaining chip selects
+described as GPIOs.  If the device requires that a native chip select be
+controlled the hardware simply won't work without at least one native
+chip select being unallocated.
+
+> It's not exactly a regression, because any chip_select >= 4 never
+> actually worked, but what I'm saying is that 87c614175bbf also isn't a
+> complete fix if one wants to support mixing native and gpio chip
+> selects. For that, one really needs the unused_native_cs to be used for
+> all gpio chip selects; in particular, one needs some unused native cs to
+> exist. IOW, what my series tries to do.
+
+No, we only need one unused chip select to be available.
+
+--rBlslG3Mk26QI9iP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJIuEACgkQJNaLcl1U
+h9BgiAgAgkYHH4s+VEMVE8lt5FDgOcuKDX8OAJoS7brgBVg5qntDfktjQXgiDifW
+oNV/buBUQEELmDjDo0dDe85fl9KIPh49UWm0Y5JolLPrLHKelP7u4LxV5UmaeDqE
+AngjdjlIhyTDA0Zlm6dodSpypMBoIdAePBWccNFNGH2qvAeFyuz0wtlz3BJnqifK
+Jvrncz1yMFu/AtBXlKCnQ3Tm2O6Mb+e7W2wm9DMdhiWESUNHeCCly2MCtxoYGOts
+oWAqc1OvwoQiPMGxzA/amDkv4/JTHw4PbM1/mEQUPS1h+ftYjbw+o4JfO0TezTut
+URvN7vCEPokYufiNl/IW0dsvbZ3/NQ==
+=5+FJ
+-----END PGP SIGNATURE-----
+
+--rBlslG3Mk26QI9iP--
