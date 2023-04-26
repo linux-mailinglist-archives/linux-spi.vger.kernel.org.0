@@ -2,128 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23C06EF572
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBC66EF60F
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 16:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240439AbjDZNXc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Apr 2023 09:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S240902AbjDZONi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Apr 2023 10:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240738AbjDZNXa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 09:23:30 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EB15FFA
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 06:23:24 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-959a3e2dd27so713073766b.3
-        for <linux-spi@vger.kernel.org>; Wed, 26 Apr 2023 06:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682515403; x=1685107403;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+Pe5pCZek4eB9zZ8kO7fYvIftijJw+lDBogjs05z64=;
-        b=KKDUAd4ySBQk6nBep/Pq4UE6p8xqAauak5B57qszursKK6MKQxo95UauYRaSGQPOf7
-         LLYeopK4pOPdPyuVSRCuwQU9sWxzP9nO4vnbcjhN8OpVyJcL/NNCRq2Lt/iAa5AKlDTq
-         vxrQDMYnrF1D55LfLnAtmJS8YPIqMKzkV+63A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682515403; x=1685107403;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+Pe5pCZek4eB9zZ8kO7fYvIftijJw+lDBogjs05z64=;
-        b=AgydfHzsV+oTfdh/aVfRar87W6PMOS6QRJFzwaubTH0RA9T0y8W6SHW8IJxyWzTjqB
-         JaaKvrDG0xixw7kBkyjKXhUX8DUz84Y0XV63NIaPPeVYRdrr3323MfNg16F8FYCpKRvg
-         bJ7zGFKEUuAnK5KLUP5pHiy+E7SCwwJdptLR8cRmh3JA35z6+KUWdw3Lb8CynE70ZvZS
-         JrduONP1+npmjZuZXRNLDMhU26bqswDHhXN7XeRmUFXIsAjDxKbTOWLTvaA5bS2adgEW
-         txqCr9ksQ5xohQTve3jOnVMQJJBS2KDSfvZTTpnrvI7tHIVXY2ZrgllD2OGFxPzKBhEe
-         mApQ==
-X-Gm-Message-State: AAQBX9eJh89tQlfu8aTNkVckZqg+nfeY+kfPLHRVOgO2WQkbJ1A8Tpbs
-        uDjF+/nAKp3r8FekBG3ww1l1LQ==
-X-Google-Smtp-Source: AKy350amP6RDFH92vm4ua4+WHulGtoC0G6R7LjK8P5MtrJ+ZkUCv+MYHWxU0WU7FW5TeNnOAWqduJA==
-X-Received: by 2002:a17:906:3b0e:b0:94f:3bf7:dacf with SMTP id g14-20020a1709063b0e00b0094f3bf7dacfmr18036135ejf.71.1682515402781;
-        Wed, 26 Apr 2023 06:23:22 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170906805000b00953285b937asm8175033ejw.189.2023.04.26.06.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 06:23:22 -0700 (PDT)
-Message-ID: <a56c2cec-b10c-ec73-2179-6b92251a7419@rasmusvillemoes.dk>
-Date:   Wed, 26 Apr 2023 15:23:20 +0200
+        with ESMTP id S240789AbjDZONh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Apr 2023 10:13:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7716A70;
+        Wed, 26 Apr 2023 07:13:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E5C60FFA;
+        Wed, 26 Apr 2023 14:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1876C4339B;
+        Wed, 26 Apr 2023 14:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682518416;
+        bh=FGzEvw9TbVU4T3e26lHuswObY6PfV6RZ4w7PVZz4AXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f4Sckc1gV0y+6gByaTDKrw3r1jyCDAO5rEijIAFivAFWrEsgtcXgkUsqZT2U8W0zk
+         t93z4Zk0jrT1K/0VaUkkBwrfgbx0y9TakXUMTQ6f3mv8AWCayCR3TVAQer80Wvyays
+         rTP+oXkU9hwPXEqkCCTiWOy5LzU5JXSYuGaOv5LnxQuw4Zqy2BhayBPu4a8D5dEwhG
+         onrMoG371i1qUYlWcO74Qp2AeenrQPuN/YtTmlLc4aJS1Z59rFyqfyx8BY2HUILKDY
+         JEQ/+l78mw8JzA9oUwUYHQKOrgp7ZAjVsywR7x18nNNtnlvJkmOp3tSDGPT0A0ofn9
+         B7dit+o6WdUZw==
+Date:   Wed, 26 Apr 2023 15:13:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Li Ningke <lnk_01@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+Message-ID: <dbcc6739-e741-495f-85f9-bac104647194@sirena.org.uk>
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+ <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+ <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+ <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Content-Language: en-US, da
-To:     Mark Brown <broonie@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
- <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
- <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
- <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Od8kKp2gYUL6gufg"
+Content-Disposition: inline
+In-Reply-To: <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
+X-Cookie: Drilling for oil is boring.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 26/04/2023 15.10, Mark Brown wrote:
-> On Wed, Apr 26, 2023 at 02:47:44PM +0200, Rasmus Villemoes wrote:
->> On 26/04/2023 14.25, Mark Brown wrote:
 
->> I described a problem with what is now 87c614175bbf in linux-next: If
->> one has five spi devices, the first four of which use the four native
->> chip selects, there is no way to use a gpio for the fifth, because
->> whichever "channel" you choose in the CHANNEL_SELECT field will cause
->> the ecspi IP block to drive some SSx pin low, while the spi core is also
->> driving the gpio low, so two different devices would be selected.
-> 
-> Sure, and therefore I'd not expect anyone to actually describe the
-> hardware like that but to instead describe the hardware as using three
-> or fewer of the native chip selects with the remaining chip selects
-> described as GPIOs.  If the device requires that a native chip select be
-> controlled the hardware simply won't work without at least one native
-> chip select being unallocated.
+--Od8kKp2gYUL6gufg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Exactly. But the current state (as of next-20230425) of the spi-imx
-driver also doesn't work if one describes the hardware using between 1
-and 3 native chip selects and the rest as gpios, because the naive
-masking of ->chip_select could easily hit one of those native ones.
+On Wed, Apr 26, 2023 at 09:50:26AM +0800, Dongliang Mu wrote:
 
->> It's not exactly a regression, because any chip_select >= 4 never
->> actually worked, but what I'm saying is that 87c614175bbf also isn't a
->> complete fix if one wants to support mixing native and gpio chip
->> selects. For that, one really needs the unused_native_cs to be used for
->> all gpio chip selects; in particular, one needs some unused native cs to
->> exist. IOW, what my series tries to do.
-> 
-> No, we only need one unused chip select to be available.
+> Second, from code review of platform_get_irq / platform_get_irq_optional, it
+> would warn IRQ 0 as an invalid IRQ number.
 
-Which is exactly what I'm saying, so I think we're in agreement.
+> out:
+> 	if (WARN(!ret, "0 is an invalid IRQ number\n"))
+> 		return -EINVAL;
+> 	return ret;
 
-I.e., something like this 3-patch series is needed to actually support
-mixing native and gpio chip selects (having the core verify that there
-is an unused chip select available, and provide that in the
-->unused_native_cs field in the spi_controller). I don't think there's
-any textual conflict with 87c614175bbf, and the masking done by
-87c614175bbf doesn't hurt, but also becomes irrelevant if this series is
-applied, since we'd never pass any value > 3 to those macros.
+Like I say I'm not sure that's actually accurate for all architectures
+yet.
 
-Rasmus
+--Od8kKp2gYUL6gufg
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJMYoACgkQJNaLcl1U
+h9C2lAf9GVQt82EKlECp9WbwEG+hwJjul3gLVids2AwP3aiURs70c1x2jUFqHvdf
+zlZkjjNOK4TEwy4TiUjws5Ep5rnAv1bUQ46rn9wZN1njGpCrAcSxKBLPBug4XlbJ
+FZcvjrI0mcgX7ZsPNm8Phyggy585Vys2eipru31AnNooURTZDeWf8cZikcofb/n3
+7E6hdhrKyfbvKHwX3D7P/HVcd/appSvwBYAUVS7qxMqowdlkh+3un1Ei+VWMDHcK
+HV8vvO6dfNrMJiVODYR45X61cgtEbAhUeZQ9nae8qExhTyJwWs/XWRWrlgQf4U99
+RteubIvOsSglFeh2vJsvkg58IM4MXQ==
+=bX6c
+-----END PGP SIGNATURE-----
+
+--Od8kKp2gYUL6gufg--
