@@ -2,61 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4016EE73B
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Apr 2023 20:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670246EEC10
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Apr 2023 03:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbjDYSAb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Apr 2023 14:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S239160AbjDZBv3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Apr 2023 21:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjDYSAa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 14:00:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47651720;
-        Tue, 25 Apr 2023 11:00:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4931563085;
-        Tue, 25 Apr 2023 18:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A05C433D2;
-        Tue, 25 Apr 2023 18:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682445628;
-        bh=x80D28o18e/C/P9T+DcQ5fd7ID5U6WPNI6OKMlgG70o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dm7bd7ynWhuvuKSBn3hLmfewfDOtWDlhTv80eQDM5mXWUoFh2EgB4r269ms8cWHyD
-         QmhdgsJ1lqGjyTr1ayGBPSKrbU3++r/NYZ0qaF1s4RByQ0ZvDSf70oUFAdP4W8PEpZ
-         y0magV7PPFOubxWv4JvK+YG8jFkAnk/kjsAgNqDQk+5GGFKnN0v7b4MSrHMn3SbuOc
-         FBsBBXakREPxRlcPHJtgxyC19vTdS6qCk68YjK8wKrDz9/uZzXEKuICFq5xX2S2HBh
-         JOkCdWjbfqLmIp1Gyo2wN+x8CzWpDswAoiLWIqV63qyvd0RSAi/IhAWx3by5edhZjL
-         bX+3uZoSGrbjg==
-Date:   Tue, 25 Apr 2023 19:00:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Gole, Dhruva" <d-gole@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
-Subject: Re: [PATCH] spi: bcm63xx: remove PM_SLEEP based conditional
- compilation
-Message-ID: <e67e0804-78a8-4326-92ca-6214825f0ceb@sirena.org.uk>
-References: <20230420121615.967487-1-d-gole@ti.com>
- <8edb48ee-55a3-4cc2-9c81-514ec867b35c@roeck-us.net>
- <602392dc-de1f-90bf-3deb-cb5cee81e41c@ti.com>
- <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
+        with ESMTP id S239205AbjDZBvW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Apr 2023 21:51:22 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D5193D5;
+        Tue, 25 Apr 2023 18:51:16 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:cc18:37eb:8a69:2648] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33Q1oQ02003919-33Q1oQ03003919
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Wed, 26 Apr 2023 09:50:26 +0800
+Message-ID: <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
+Date:   Wed, 26 Apr 2023 09:50:26 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sKtAIKhfZi5laQLY"
-Content-Disposition: inline
-In-Reply-To: <ed33a2ee-9c94-818f-b4c0-bc0257207a2f@roeck-us.net>
-X-Cookie: The meek don't want it.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Li Ningke <lnk_01@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+ <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+ <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +48,33 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---sKtAIKhfZi5laQLY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 2023/4/24 23:52, Mark Brown wrote:
+> On Mon, Apr 24, 2023 at 08:03:42PM +0800, Dongliang Mu wrote:
+>> On 2023/4/24 19:48, Mark Brown wrote:
+>>> Is that check valid?  0 was a valid interrupt for some architectures...
+>> We just follow the comments of platform_get_irq().
+>>   * Gets an IRQ for a platform device and prints an error message if finding
+>> the
+>>   * IRQ fails. Device drivers should check the return value for errors so as
+>> to
+>>   * not pass a negative integer value to the request_irq() APIs.
+> I'm not sure that's universally true yet, though there were some moves
+> to try to get us there.  arm, where this driver is used, was one of the
+> platforms with 0 as a valid interrupt.
 
-On Tue, Apr 25, 2023 at 10:37:24AM -0700, Guenter Roeck wrote:
+Hi Brown,
 
-> Personally I would go for [0] as the least invasive solution, but I really
-> have no idea, sorry. I just hope that your (broken) patch doesn't make it
-> as-is into the upstream kernel.
+First, we're sorry about the fact that our internal robot(beta) made a 
+mistake and sent our testing message to LKML. We have fixed the 
+incorrect logic.
 
-I've applied the SIMPLE_DEV_PM_OPS patch which seems to fix the issue
-for riscv.
+Second, from code review of platform_get_irq / 
+platform_get_irq_optional, it would warn IRQ 0 as an invalid IRQ number.
 
---sKtAIKhfZi5laQLY
-Content-Type: application/pgp-signature; name="signature.asc"
+out:
+	if (WARN(!ret, "0 is an invalid IRQ number\n"))
+		return -EINVAL;
+	return ret;
 
------BEGIN PGP SIGNATURE-----
+Dongliang Mu
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRIFTMACgkQJNaLcl1U
-h9A8gAf+ILotP0s7fUSCAalc6Ml3HPKN8u5NbT2dXOipDAa7Jl1L9J6UBjac/tEK
-0Bf+0aAqXymtgPThoGWQ6LRBy2yoRUuGpyKBqEH4WaiwJU6F5r6bhETZbrH6/EG9
-UhC+v0OU6yZrQ6XVo0sD4D81+MCAO95xkfPMCwR9GrLwXLWcsPSnVGqht9j1EgmK
-+Oxrcu5yByYxYTPpcMRAOZ9OMBD7khDf8O9HDwAZiErLNZrMWviS5uj0/4gy8ZgU
-3rHq+WBteVJ2hwgiGMO9lA4Lhu5LD+/50wyimINkxkwmAGVIjwmHKbpVVVoO+yzm
-DvUpy6c0NM+lOgRAaGWPon+eCUF3mQ==
-=qDn6
------END PGP SIGNATURE-----
-
---sKtAIKhfZi5laQLY--
