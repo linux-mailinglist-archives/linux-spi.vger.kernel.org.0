@@ -2,93 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD1C6F296B
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Apr 2023 17:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073446F297C
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Apr 2023 18:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjD3Pt2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 30 Apr 2023 11:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S230451AbjD3QVn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 30 Apr 2023 12:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjD3Pt1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Apr 2023 11:49:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B063426AD;
-        Sun, 30 Apr 2023 08:49:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 479DC60B8C;
-        Sun, 30 Apr 2023 15:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705BCC433EF;
-        Sun, 30 Apr 2023 15:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682869765;
-        bh=fssL6K9L1eM0E/LLQqcmp3NyLznFDzcjdbCLTFdkCmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q3jBVYwmYMl2fh7E2KoGY/sDLSejGJX2QbHCZskUw+ga4POKLItmqSGnS2u0CL1Xz
-         9C9mctU/dwwPg+WSsuPYkFKbYskIgui6iG+Yuxp0BG0JaQ52MV3q/HpFDFTKLbPEJe
-         Ggvc50C+GZce0yn+ynzLWPaaF4EEpHY0gUFvLeTwi/0W+4JFId3+uYKLZwU72jhkRO
-         Sy+oT7lND2UpeUUHljFRYuNyPOfbWzTCMcCRCz5iVxFIXtM7QppLq4YKqjTbdcfjQB
-         fYVEraoTyL0QPgHdqMQQwMoNIaeb0INoPDW/pM1Xi64RTYpl56Y+BtrUsvN4eeqq99
-         dUVJg6zw8DPUg==
-Date:   Mon, 1 May 2023 00:49:18 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+        with ESMTP id S230013AbjD3QVm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Apr 2023 12:21:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349082693
+        for <linux-spi@vger.kernel.org>; Sun, 30 Apr 2023 09:21:40 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id t9nspEGk8GGqgt9nspRtpg; Sun, 30 Apr 2023 18:21:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682871698;
+        bh=DeAGfZvHN94lPiUZiy7bZbEf4KghIhOEFbkJpiyOKIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZJ3ZqHX6UGnsh+HN03vKMp5SOZj+PTWdSOjNmMMGyzCpKtCUWIRncuZTPFek5wv1R
+         r8aAxKlRG5rgJ01aVc9/LxTE38riT3NxJSLUzKwVqwili4sBZh0NxWB/oyMxSM5ro1
+         CXa8BAlDh/+AhQAgN/PkBGKKHnzwAPlSFYFfjFl/bNgeDcbZbc8DsWqPh5o27QZGo5
+         uCi1mQ3FMe0tasUn9sNFeaaIhBESANdi7Q/Oe5bVIb6U87H93wdVwxSMFVVzB/TOSY
+         Zfq6UdZWvSjDjXmKmLjqV/rrSS5sU3rYodJay6dsz4qgH1ggiIL96oyudoLk9EBLMP
+         OCMUQTOt0W0OQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 30 Apr 2023 18:21:37 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <10a2d725-7721-f0af-3e2e-de5816730e5d@wanadoo.fr>
+Date:   Sun, 30 Apr 2023 18:21:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: Use non-atomic xxx_bit() functions
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: Use non-atomic xxx_bit() functions
-Message-ID: <ZE6N/oZ5DFI6td/0@finisterre.sirena.org.uk>
 References: <6b8f405145d3d57a8026dc61ca3f1ae70d690990.1682847325.git.christophe.jaillet@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ZSxT2A7+0+tsUta"
-Content-Disposition: inline
-In-Reply-To: <6b8f405145d3d57a8026dc61ca3f1ae70d690990.1682847325.git.christophe.jaillet@wanadoo.fr>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <ZE6N/oZ5DFI6td/0@finisterre.sirena.org.uk>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ZE6N/oZ5DFI6td/0@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Le 30/04/2023 à 17:49, Mark Brown a écrit :
+> On Sun, Apr 30, 2023 at 11:35:35AM +0200, Christophe JAILLET wrote:
+> 
+>> Accesses to 'minors' are guarded by the 'device_list_lock' mutex. So, it is
+>> safe to use the non-atomic version of (set|clear)_bit() in the
+>> corresponding sections.
+> 
+> Is it a problem to use the atomic version?
 
---7ZSxT2A7+0+tsUta
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Not at all. It just wastes a few cycles (in a place where it doesn't 
+matter).
 
-On Sun, Apr 30, 2023 at 11:35:35AM +0200, Christophe JAILLET wrote:
+I spotted it while looking for some other patterns, so I sent a patch 
+for it.
 
-> Accesses to 'minors' are guarded by the 'device_list_lock' mutex. So, it is
-> safe to use the non-atomic version of (set|clear)_bit() in the
-> corresponding sections.
+> 
+>>   	if (status == 0) {
+>> -		set_bit(minor, minors);
+>> +		__set_bit(minor, minors);
+>>   		list_add(&spidev->device_entry, &device_list);
+> 
+> The __ usually means something is the more complicated and less
+> preferred API.
 
-Is it a problem to use the atomic version?
+Ok, let keep things as-is and simple then.
+Performance doesn't matter here, anyway.
 
->  	if (status == 0) {
-> -		set_bit(minor, minors);
-> +		__set_bit(minor, minors);
->  		list_add(&spidev->device_entry, &device_list);
-
-The __ usually means something is the more complicated and less
-preferred API.
-
---7ZSxT2A7+0+tsUta
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmROjf0ACgkQJNaLcl1U
-h9DBzQf/bUuWkfyEyDhqrOe9e4urnTossTUEGSccL6sXpAaa71GZYx3LFAWimrgt
-nT1nrLOOoiV7RiAQKWx5PIY7ArZGBqh/ODSyBEW9yerWLqrDS6HMKKizLt2+cIIT
-6AoqPArHsEpwTF6VfBhvHE8YvZxvSh7cs+Xf6gJQXdS8EI4JDzVJ4A9vjeINeRW7
-Zrby+DSa5Hi9GnW0NAScITsmcKi4zEVstXJ9Dam+NONm6rdmtJRrmBq3+F4hsVOe
-2xeJsr9zYAALx/DHp8sSvBFS9QqPUZy4gxz/MCob/E2RwADS0Vt1p0UFaCoNvXjM
-mNx2tDhsF2MprMi4+SRBi6iCLyRx2w==
-=ShGm
------END PGP SIGNATURE-----
-
---7ZSxT2A7+0+tsUta--
+CJ
