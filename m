@@ -2,134 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE126F34F2
-	for <lists+linux-spi@lfdr.de>; Mon,  1 May 2023 19:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4706F35D7
+	for <lists+linux-spi@lfdr.de>; Mon,  1 May 2023 20:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjEARQu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 May 2023 13:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S229871AbjEASdd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 May 2023 14:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbjEAROb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 13:14:31 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D5198D;
-        Mon,  1 May 2023 10:14:14 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so3715800e87.3;
-        Mon, 01 May 2023 10:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682961252; x=1685553252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
-        b=YiLzq1KA2rEOiCTNiyZSaN+QghM+/sIHvuTYQCjSbiyThCa88Rroc2XwCwn30FReLS
-         eYXff/D8sQcdMUNPVgZWSb1tdbGkyuGJefxQKaCneDn2hYOcP2ILonXjxEqJzTGGBfJF
-         9BYH/uOm/8MwyRqaL5DoyfTAmSJZMXTcSpQTHg7bWSahC2rBOqAIHtdICMgxH0MtG+kO
-         ca1KK9cxDo7aMhkJW3sjX/PgRwF4E7GS7o03lySErKNbMkg0mxuRDaOXE8yFwWKV8kbU
-         1XInk4TCtqaqzK2F7FzEsHBaIwLSeMRqrM1sokiM0zIuqmhIRPNFEYq9Z7yODO+Tkumm
-         5jPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682961252; x=1685553252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
-        b=lOhgLdphZqQwWlH+J3CH4ZBdPjaJJ0aIQpuKeC1R7pe+yEQqL2U+QwTG8VssvoxgwK
-         wPriDB8JDsVWnkKIpvOk7bigScP46zxwilNj8kWNevcXz/RfndKn269YTujWOqRIn3JS
-         EkuAwfoI26/x9pVvsRJDD2va7I2eKVTYojXEk0cWzIhq0zfCVMCrNEJU8gKUT5gLW887
-         FM8VyCIuqbyjIhFksO4CvP+vt/FNwzWGokA8Y9Gf93tuF6RrJjAVKhy3jjzAJOiH8FSo
-         ngDa42QCSjWZRPbmdytGR2t22RX8amlcgXQX51Mjko/ry4H0us5MsuuThzbsrOjN873R
-         mOlw==
-X-Gm-Message-State: AC+VfDzQFEMLdIthZBKmMeZuMPqj7SfK9rMZ7YyiXT+C8tVIi2YUsL52
-        j8ifR7jc+tjhimMFTO7dnSnPu6zKGwk=
-X-Google-Smtp-Source: ACHHUZ5XOhiYeDAdYs1Yeg4saEaZXRFid5O8OPd2mXzhya6+hjQszORs7zQF+KFLzXIjkxYYpryk4w==
-X-Received: by 2002:a19:c50f:0:b0:4e8:4abf:f19d with SMTP id w15-20020a19c50f000000b004e84abff19dmr3815224lfe.15.1682961252211;
-        Mon, 01 May 2023 10:14:12 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id v7-20020a197407000000b004f00af55561sm2396154lfe.174.2023.05.01.10.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 10:14:11 -0700 (PDT)
-Date:   Mon, 1 May 2023 20:14:09 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Joy Chakraborty <joychakr@google.com>,
+        with ESMTP id S229664AbjEASdd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 14:33:33 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDA1E4B;
+        Mon,  1 May 2023 11:33:31 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ptYKz-00077z-1m;
+        Mon, 01 May 2023 20:33:25 +0200
+Date:   Mon, 1 May 2023 19:33:14 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
-Subject: Re: [PATCH v9 0/5] spi: dw: DW SPI DMA Driver updates
-Message-ID: <20230501171409.syub4ro3kb3r6ho2@mobilestation>
-References: <20230427123314.1997152-1-joychakr@google.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Leilk Liu <leilk.liu@mediatek.com>
+Subject: [PATCH] spi: mt65xx: make sure operations completed before unloading
+Message-ID: <ZFAF6pJxMu1z6k4w@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230427123314.1997152-1-joychakr@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-@Mark, @Andy
+When unloading the spi-mt65xx kernel module during an ongoing spi-mem
+operation the kernel will Oops shortly after unloading the module.
+This is because wait_for_completion_timeout was still running and
+returning into the no longer loaded module:
 
-On Thu, Apr 27, 2023 at 12:33:09PM +0000, Joy Chakraborty wrote:
-> This Patch series adds support for 32 bits per word trasfers using DMA
-> and some defensive checks around dma controller capabilities.
+Internal error: Oops: 0000000096000005 [#1] SMP
+Modules linked in: [many, but spi-mt65xx is no longer there]
+CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
+Hardware name: Bananapi BPI-R3 (DT)
+pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __lock_acquire+0x18c/0x20e8
+lr : __lock_acquire+0x9b8/0x20e8
+sp : ffffffc009ec3400
+x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
+x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
+x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
+x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
+x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
+x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
+x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
+x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
+x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
+x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
+Call trace:
+ __lock_acquire+0x18c/0x20e8
+ lock_acquire+0x100/0x2a4
+ _raw_spin_lock_irq+0x58/0x74
+ __wait_for_common+0xe0/0x1b4
+ wait_for_completion_timeout+0x1c/0x24
+ 0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
+ spi_mem_exec_op+0x390/0x3ec
+ spi_mem_no_dirmap_read+0x6c/0x88
+ spi_mem_dirmap_read+0xcc/0x12c
+ spinand_read_page+0xf8/0x1dc
+ spinand_mtd_read+0x1b4/0x2fc
+ mtd_read_oob_std+0x58/0x7c
+ mtd_read_oob+0x8c/0x148
+ mtd_read+0x50/0x6c
+ ...
 
-I've done with reviewing and testing the series. My tags are already
-added to the patch logs. @Andy do you still have any comments about
-the updated patchset? If none, @Mark please merge it in if you are ok
-with the changes.
+Prevent this by completing in mtk_spi_remove if needed.
 
--Serge(y)
+Fixes: 9f763fd20da7 ("spi: mediatek: add spi memory support for ipm design")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
 
-> ---
-> V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
-> ---
-> V1->V2 Changes : Add dma capability check to make sure address widths
-> are supported.
-> ---
-> V2->V3 Changes : Split changes , add DMA direction check and other
-> cosmetic chnages.
-> ---
-> V3->V4 Changes : Fix Sparce Warning
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
-> ---
-> V4->V5 Changes : Preserve reverse xmas Tree order, move direction
-> check before initalisation of further capabilities, remove zero
-> initialisations, remove error OR'ing.
-> ---
-> V5->V6 Changes :
-> 	-Remove case of n_bytes=3 using 4_bytes buswidth
-> 	-Avoid forward decaration
-> 	-Break capability check patch into 2
-> 	-round n_bytes to power of 2 ( Bug Fix)
-> 	-Add more explanation in commit text.
-> ---
-> V6->V7 Changes : Remove extra spaces, refer to functions in commit as
-> func()
-> ---
-> V7->V8 Changes : Minor commment updates in patch 4/5
-> ---
-> V8->V9 Changes : Minor formatting changes in patch 5/5
-> ---
-> 
-> Joy Chakraborty (5):
->   spi: dw: Add 32 bpw support to SPI DW DMA driver
->   spi: dw: Move dw_spi_can_dma()
->   spi: dw: Add DMA directional capability check
->   spi: dw: Add DMA address widths capability check
->   spi: dw: Round of n_bytes to power of 2
-> 
->  drivers/spi/spi-dw-core.c |  5 ++-
->  drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
->  drivers/spi/spi-dw.h      |  1 +
->  3 files changed, 63 insertions(+), 19 deletions(-)
-> 
-> -- 
-> 2.40.1.495.gc816e09b53d-goog
-> 
+A short grep revealed that many if not most other SPI drivers may need
+the same fix. However, I can impossibly test all of them, so let's
+start with this one.
+
+ drivers/spi/spi-mt65xx.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 21c321f437667..d7432e2219d85 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -1275,6 +1275,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 	int ret;
+ 
++	if (mdata->use_spimem && !completion_done(&mdata->spimem_done))
++		complete(&mdata->spimem_done);
++
+ 	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.40.1
+
