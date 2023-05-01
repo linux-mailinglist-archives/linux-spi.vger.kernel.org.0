@@ -2,158 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6953E6F311E
-	for <lists+linux-spi@lfdr.de>; Mon,  1 May 2023 14:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE126F34F2
+	for <lists+linux-spi@lfdr.de>; Mon,  1 May 2023 19:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjEAMo5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 May 2023 08:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S232256AbjEARQu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 May 2023 13:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjEAMo4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 08:44:56 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB0A213E
-        for <linux-spi@vger.kernel.org>; Mon,  1 May 2023 05:44:23 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2aa39ce5d26so24185131fa.1
-        for <linux-spi@vger.kernel.org>; Mon, 01 May 2023 05:44:23 -0700 (PDT)
+        with ESMTP id S233730AbjEAROb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 13:14:31 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D5198D;
+        Mon,  1 May 2023 10:14:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so3715800e87.3;
+        Mon, 01 May 2023 10:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682945060; x=1685537060;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=suaeyMT2wIT4/8yocWcP6im75ZqkU8QMeE1d2rFD3ic=;
-        b=c7pk9kGVF3zIlacvFcyQJ0UA0BXjcIiKmJgKlYJnFQkUYqgPhV/CYNlQlngDttIdZt
-         6ntmumKh7/opzHAj/f9mF7gKp34ahP4r1PamDyEMu5aGVWJvwk5pQH9+kvFsR69wgQsG
-         rnIYCNT5OefbPSmhrVn1DMfMSKPakIl/Lp5J7FT1/8q4LtcnYY+EDOMvBt+vdWX9t+kp
-         OxOFAVPgUOLMjrVRnSP9nVt1jzvfRQfOrhBVxVKWh3xNm8POfsaRcKdX05s2ILOLqVnJ
-         Uyn1OvVHefwaI+5Vbhjw7mqinQlAGi45kYwfIF+1YUFq/PiGMOgTw0QjZj0mz/gRv+cE
-         buSQ==
+        d=gmail.com; s=20221208; t=1682961252; x=1685553252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
+        b=YiLzq1KA2rEOiCTNiyZSaN+QghM+/sIHvuTYQCjSbiyThCa88Rroc2XwCwn30FReLS
+         eYXff/D8sQcdMUNPVgZWSb1tdbGkyuGJefxQKaCneDn2hYOcP2ILonXjxEqJzTGGBfJF
+         9BYH/uOm/8MwyRqaL5DoyfTAmSJZMXTcSpQTHg7bWSahC2rBOqAIHtdICMgxH0MtG+kO
+         ca1KK9cxDo7aMhkJW3sjX/PgRwF4E7GS7o03lySErKNbMkg0mxuRDaOXE8yFwWKV8kbU
+         1XInk4TCtqaqzK2F7FzEsHBaIwLSeMRqrM1sokiM0zIuqmhIRPNFEYq9Z7yODO+Tkumm
+         5jPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682945060; x=1685537060;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=suaeyMT2wIT4/8yocWcP6im75ZqkU8QMeE1d2rFD3ic=;
-        b=CUOzHxzAnc+NCn9EHfwcuRsDtYI87sjDVQvNcbpWWDlUV+kzY1/KX2chkjBjL8gVvH
-         7otD7+vlouiDgE1kM76x54Aj5fAEUcmQ+e+3QLigo1eICdC+68dw+1k3zj+n6b3bTUNb
-         NYH920TmP5rohKwawpQbqLHBCIur6qgklnshwRDej/ErzxWaggSj9Mp676UJVFxcRfPz
-         XNOd3R3/oJt9cY/88NUiuEAkhuzevtjsLclXu5LcCPbcexm6FB7RbQC2SpDbzrDFhjQc
-         ClseU7chxQFm9lSLPACs4W4GQNtNOvp2fcWVjNHLgi2mEMUkcULvwdBMZiY0E39tnwnY
-         OGuQ==
-X-Gm-Message-State: AC+VfDyn3Aa3HZvhwu9ITynPBHOpCmfmZJ44hybr1MaucoJ60FLP+DoV
-        f31uns6wJUYk9AsQX5YvzBmNWg==
-X-Google-Smtp-Source: ACHHUZ6yE30OtfPljX7Jl1MgoIhUtuFIHGsWWjI3F9JJzNvLWmq5NvR3XZhR6aS9nr4SLcLCbwqZGg==
-X-Received: by 2002:a2e:918b:0:b0:2a8:a651:8098 with SMTP id f11-20020a2e918b000000b002a8a6518098mr3613054ljg.38.1682945059809;
-        Mon, 01 May 2023 05:44:19 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id n1-20020a2e8781000000b002a7e9e4e9dcsm4631177lji.114.2023.05.01.05.44.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 05:44:19 -0700 (PDT)
-Message-ID: <4c5e485a-e6ed-f5ec-f1af-3aad2efbb30a@linaro.org>
-Date:   Mon, 1 May 2023 14:44:18 +0200
+        d=1e100.net; s=20221208; t=1682961252; x=1685553252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
+        b=lOhgLdphZqQwWlH+J3CH4ZBdPjaJJ0aIQpuKeC1R7pe+yEQqL2U+QwTG8VssvoxgwK
+         wPriDB8JDsVWnkKIpvOk7bigScP46zxwilNj8kWNevcXz/RfndKn269YTujWOqRIn3JS
+         EkuAwfoI26/x9pVvsRJDD2va7I2eKVTYojXEk0cWzIhq0zfCVMCrNEJU8gKUT5gLW887
+         FM8VyCIuqbyjIhFksO4CvP+vt/FNwzWGokA8Y9Gf93tuF6RrJjAVKhy3jjzAJOiH8FSo
+         ngDa42QCSjWZRPbmdytGR2t22RX8amlcgXQX51Mjko/ry4H0us5MsuuThzbsrOjN873R
+         mOlw==
+X-Gm-Message-State: AC+VfDzQFEMLdIthZBKmMeZuMPqj7SfK9rMZ7YyiXT+C8tVIi2YUsL52
+        j8ifR7jc+tjhimMFTO7dnSnPu6zKGwk=
+X-Google-Smtp-Source: ACHHUZ5XOhiYeDAdYs1Yeg4saEaZXRFid5O8OPd2mXzhya6+hjQszORs7zQF+KFLzXIjkxYYpryk4w==
+X-Received: by 2002:a19:c50f:0:b0:4e8:4abf:f19d with SMTP id w15-20020a19c50f000000b004e84abff19dmr3815224lfe.15.1682961252211;
+        Mon, 01 May 2023 10:14:12 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id v7-20020a197407000000b004f00af55561sm2396154lfe.174.2023.05.01.10.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 10:14:11 -0700 (PDT)
+Date:   Mon, 1 May 2023 20:14:09 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Joy Chakraborty <joychakr@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v9 0/5] spi: dw: DW SPI DMA Driver updates
+Message-ID: <20230501171409.syub4ro3kb3r6ho2@mobilestation>
+References: <20230427123314.1997152-1-joychakr@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
- SPI_TRANS_CFG
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com
-References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
- <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
- <1b1b095e-8fcb-37d5-7542-48a6b55f35a1@quicinc.com>
- <d23d3757-da6f-69d7-bca9-581c489f81e6@linaro.org>
-In-Reply-To: <d23d3757-da6f-69d7-bca9-581c489f81e6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427123314.1997152-1-joychakr@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+@Mark, @Andy
 
+On Thu, Apr 27, 2023 at 12:33:09PM +0000, Joy Chakraborty wrote:
+> This Patch series adds support for 32 bits per word trasfers using DMA
+> and some defensive checks around dma controller capabilities.
 
-On 1.05.2023 14:43, Konrad Dybcio wrote:
-> 
-> 
-> On 1.05.2023 10:05, Vijaya Krishna Nivarthi wrote:
->> On 4/25/2023 7:15 PM, Konrad Dybcio wrote:
->>>
->>> On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
->>>> The CS_TOGGLE bit when set is supposed to instruct FW to
->>>> toggle CS line between words. The driver with intent of
->>>> disabling this behaviour has been unsetting BIT(0). This has
->>>> not caused any trouble so far because the original BIT(1)
->>>> is untouched and BIT(0) likely wasn't being used.
->>>>
->>>> Correct this to prevent a potential future bug.
->>>>
->>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->>>> ---
->>>
->>> Has this always been the case, or did the switch to BIT(1)
->>> only occur on some recent platforms?
->>
->>
->> Thank you very much for the review..
->>
->> This has always been the case.
->>
->> With intent of disabling CS_TOGGLE, currently, the driver is unsetting BIT(0), though it should have been BIT(1).
->>
->> Yet no problem was encountered because
->>
->> a) BIT(0) seems to be an unused bit
->>
->> b) BIT(1) is probably already unset because its untouched
->>
->> Further more, as Doug pointed we are mostly using GPIO for CS.
->>
->>
->> Testing with the change has not caused any regressions.
-> Okay, with no deeper knowledge of the topic best I can give you is:
-> 
-> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> 
-Also, missing:
+I've done with reviewing and testing the series. My tags are already
+added to the patch logs. @Andy do you still have any comments about
+the updated patchset? If none, @Mark please merge it in if you are ok
+with the changes.
 
-Fixes: 561de45f72bd ("spi: spi-geni-qcom: Add SPI driver support for GENI based QUP")
+-Serge(y)
 
-Konrad
-> Konrad
->>
->>
->> Thank you,
->>
->> Vijay/
->>
->>
->>
->>>
->>> Konrad
->>>
->>>>   drivers/spi/spi-geni-qcom.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
->>>> index ba7be50..8a7d1c2 100644
->>>> --- a/drivers/spi/spi-geni-qcom.c
->>>> +++ b/drivers/spi/spi-geni-qcom.c
->>>> @@ -35,7 +35,7 @@
->>>>   #define CS_DEMUX_OUTPUT_SEL    GENMASK(3, 0)
->>>>     #define SE_SPI_TRANS_CFG    0x25c
->>>> -#define CS_TOGGLE        BIT(0)
->>>> +#define CS_TOGGLE        BIT(1)
->>>>     #define SE_SPI_WORD_LEN        0x268
->>>>   #define WORD_LEN_MSK        GENMASK(9, 0)
+> ---
+> V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
+> ---
+> V1->V2 Changes : Add dma capability check to make sure address widths
+> are supported.
+> ---
+> V2->V3 Changes : Split changes , add DMA direction check and other
+> cosmetic chnages.
+> ---
+> V3->V4 Changes : Fix Sparce Warning
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+> ---
+> V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+> check before initalisation of further capabilities, remove zero
+> initialisations, remove error OR'ing.
+> ---
+> V5->V6 Changes :
+> 	-Remove case of n_bytes=3 using 4_bytes buswidth
+> 	-Avoid forward decaration
+> 	-Break capability check patch into 2
+> 	-round n_bytes to power of 2 ( Bug Fix)
+> 	-Add more explanation in commit text.
+> ---
+> V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+> func()
+> ---
+> V7->V8 Changes : Minor commment updates in patch 4/5
+> ---
+> V8->V9 Changes : Minor formatting changes in patch 5/5
+> ---
+> 
+> Joy Chakraborty (5):
+>   spi: dw: Add 32 bpw support to SPI DW DMA driver
+>   spi: dw: Move dw_spi_can_dma()
+>   spi: dw: Add DMA directional capability check
+>   spi: dw: Add DMA address widths capability check
+>   spi: dw: Round of n_bytes to power of 2
+> 
+>  drivers/spi/spi-dw-core.c |  5 ++-
+>  drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+>  drivers/spi/spi-dw.h      |  1 +
+>  3 files changed, 63 insertions(+), 19 deletions(-)
+> 
+> -- 
+> 2.40.1.495.gc816e09b53d-goog
+> 
