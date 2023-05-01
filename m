@@ -2,114 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4706F35D7
-	for <lists+linux-spi@lfdr.de>; Mon,  1 May 2023 20:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304746F3B1C
+	for <lists+linux-spi@lfdr.de>; Tue,  2 May 2023 01:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjEASdd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 May 2023 14:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S229871AbjEAX6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 May 2023 19:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjEASdd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 14:33:33 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDA1E4B;
-        Mon,  1 May 2023 11:33:31 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1ptYKz-00077z-1m;
-        Mon, 01 May 2023 20:33:25 +0200
-Date:   Mon, 1 May 2023 19:33:14 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Leilk Liu <leilk.liu@mediatek.com>
-Subject: [PATCH] spi: mt65xx: make sure operations completed before unloading
-Message-ID: <ZFAF6pJxMu1z6k4w@makrotopia.org>
+        with ESMTP id S229861AbjEAX6j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 May 2023 19:58:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA451FEE;
+        Mon,  1 May 2023 16:58:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E9E61516;
+        Mon,  1 May 2023 23:58:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B200C433EF;
+        Mon,  1 May 2023 23:58:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682985517;
+        bh=e0u9aucvc9SvcADXuJZwmwIjMBpsHUxk0ihHfAuXSOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=blvVEd9iOPU7KtBcxpUSR7ih0WluBS6gEZUPgeveBmgWwJKOYkK4xNHvtOBoUkA/U
+         Sd14335qJ/xxVyz3YCKNsZTJQXdjQy/UjfTNj89UyhmB/tsP/ETTMQKEulUBeS0sCk
+         /hvbmuVxwjL1dFzW0AZPIKganJUW0ebEeNVqmPfD9oLA3Gz4CrTj+vtK/7h9IM+ymL
+         eDdn60LBWfXVpP8UeVDw5Ocz7vvb9w4Z5PZLjhM6CXisAYPqMFMwlau8ZsjQt2ezie
+         nWYOvGQ+06LzoZs7ARwDqqaOKOLXPwWyH++BQc+8UeEpDypeY0utTHB406XhsRagXZ
+         H9XgviUCwdB1g==
+Date:   Tue, 2 May 2023 08:58:33 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Joy Chakraborty <joychakr@google.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v9 0/5] spi: dw: DW SPI DMA Driver updates
+Message-ID: <ZFBSKd1Z5nUg60s8@finisterre.sirena.org.uk>
+References: <20230427123314.1997152-1-joychakr@google.com>
+ <20230501171409.syub4ro3kb3r6ho2@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="isplOYeQgWbnqOfJ"
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230501171409.syub4ro3kb3r6ho2@mobilestation>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When unloading the spi-mt65xx kernel module during an ongoing spi-mem
-operation the kernel will Oops shortly after unloading the module.
-This is because wait_for_completion_timeout was still running and
-returning into the no longer loaded module:
 
-Internal error: Oops: 0000000096000005 [#1] SMP
-Modules linked in: [many, but spi-mt65xx is no longer there]
-CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
-Hardware name: Bananapi BPI-R3 (DT)
-pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __lock_acquire+0x18c/0x20e8
-lr : __lock_acquire+0x9b8/0x20e8
-sp : ffffffc009ec3400
-x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
-x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
-x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
-x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
-x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
-x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
-x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
-x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
-x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
-x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
-Call trace:
- __lock_acquire+0x18c/0x20e8
- lock_acquire+0x100/0x2a4
- _raw_spin_lock_irq+0x58/0x74
- __wait_for_common+0xe0/0x1b4
- wait_for_completion_timeout+0x1c/0x24
- 0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
- spi_mem_exec_op+0x390/0x3ec
- spi_mem_no_dirmap_read+0x6c/0x88
- spi_mem_dirmap_read+0xcc/0x12c
- spinand_read_page+0xf8/0x1dc
- spinand_mtd_read+0x1b4/0x2fc
- mtd_read_oob_std+0x58/0x7c
- mtd_read_oob+0x8c/0x148
- mtd_read+0x50/0x6c
- ...
+--isplOYeQgWbnqOfJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Prevent this by completing in mtk_spi_remove if needed.
+On Mon, May 01, 2023 at 08:14:09PM +0300, Serge Semin wrote:
+> @Mark, @Andy
 
-Fixes: 9f763fd20da7 ("spi: mediatek: add spi memory support for ipm design")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
+Just as a note please don't add random characters to the start of the
+name, for whatever reason it really annoys me.
 
-A short grep revealed that many if not most other SPI drivers may need
-the same fix. However, I can impossibly test all of them, so let's
-start with this one.
+> I've done with reviewing and testing the series. My tags are already
+> added to the patch logs. @Andy do you still have any comments about
+> the updated patchset? If none, @Mark please merge it in if you are ok
+> with the changes.
 
- drivers/spi/spi-mt65xx.c | 3 +++
- 1 file changed, 3 insertions(+)
+We're still in the merge window right now.
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 21c321f437667..d7432e2219d85 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -1275,6 +1275,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 	int ret;
- 
-+	if (mdata->use_spimem && !completion_done(&mdata->spimem_done))
-+		complete(&mdata->spimem_done);
-+
- 	ret = pm_runtime_resume_and_get(&pdev->dev);
- 	if (ret < 0)
- 		return ret;
--- 
-2.40.1
+--isplOYeQgWbnqOfJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRQUikACgkQJNaLcl1U
+h9DMFAf/Qmm1wMq4k2HE1ORG589Uzn3A4T0GtjOaKpSI6O49fcN2iYmrI3whE3rp
+GQm0MUXv38TeDEkCQju+pTzckV4H+TjH5LmSjnILj+geOGmEfdthW1/p51Df7yTh
+1wGd7VMDB2qzH5zHVLyGuze8Sf8u8shUHOdpUhnec35+RcqchRoiKSAJG6xuflnE
+zX6xSn52jJwd/1+I9Ux7mImzvbM5cuEe/Jfe63rLWpjXvndzIluKxis/3hYd3YxQ
+rtXOkdK5DsfZUlHGNlqeqXzEQVS6iCiAC7eMNdj2YrYzGWHeuJPZy3FvlKREBlJ7
+SJSnRePFD5weair9qD5PrMb0g0b9gg==
+=W4Ak
+-----END PGP SIGNATURE-----
+
+--isplOYeQgWbnqOfJ--
