@@ -2,92 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E66F705A
-	for <lists+linux-spi@lfdr.de>; Thu,  4 May 2023 19:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D136F7080
+	for <lists+linux-spi@lfdr.de>; Thu,  4 May 2023 19:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjEDRBw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 May 2023 13:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S229861AbjEDRK3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 May 2023 13:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjEDRBv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 May 2023 13:01:51 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7283A95
-        for <linux-spi@vger.kernel.org>; Thu,  4 May 2023 10:01:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f6c285d92so129148366b.3
-        for <linux-spi@vger.kernel.org>; Thu, 04 May 2023 10:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683219709; x=1685811709;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AfsYi2ajE7KBB+3cu+gy9TJnH8eupsyTucE+Ap7OLfE=;
-        b=MSCT7Z3CZOlyP5WXEUSAnCxuI1NG877g68kGf51CG5q8jxXg+ivoFrJ4frg5PE5m4G
-         WzdxPVTK9oMR0gudg80O1YGwsAbG5b5LQvbrafooIFlF8ZB1fQnU0+iYUnHi9V6iZH38
-         mDNE2Ub8BddqDDUDzNm84H9ivBfHpcWESTLbyiDbAIwU2ihrtNdwYJ1ecydV1PRhGl8z
-         IETG/dydu01P16aijauq9IARk7efRUD0HkY0Tl+F3dVnXFPjDR1mwTP3sgkkUHski6qq
-         23oqUq798pfJwYsjYcRqT4JK18ZZ8MZocD6C0poXMCdYYdHU5QjcLlhU5Hf0QPb7zNdF
-         wZWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219709; x=1685811709;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfsYi2ajE7KBB+3cu+gy9TJnH8eupsyTucE+Ap7OLfE=;
-        b=i9O9nGmaNQr5eIfChQLDlI11F9UZcb6dVeQiIlp7XbYQWGLhJpPAxjeZalELoYuHmt
-         1CUSdq2/20C3vCU6VOGXg4WbeobN36r7FHFEZ2tVnEn8ZgGKVjDts16Qs/TXzYKFR+Lx
-         Nr6MyDR2pA58CFR7pp3Imy5SDeLB70udFm5ZlAyxebFz0AXounWtyI5XApER6XudzMjV
-         73o3lcizUPTlMEhGZl/J7c/7LnNltV4wTRTzpdrL7qLmlBbxWO2mF2Jy4NeowV8atrp4
-         hMaqFblrv6OIaBIzmbwmNyKeHjvJ3KbstDBPOvHtWia6lH1k1EJ4SdFumylg7fAIUI8K
-         ZaqA==
-X-Gm-Message-State: AC+VfDwQnw0VMo+TuEwxAmE8ppGN5LjXee9cwLW0urHjj8NfnFpuiWlu
-        W3wPEdcUMXtsxEZqct2KpywFtQ==
-X-Google-Smtp-Source: ACHHUZ6YYh1nZpUG5otxrpWFVvmW85S+krxdrcrlKhVFZeG92EX7ruAI/eRnwOpJa5nj0EceB0neqQ==
-X-Received: by 2002:a17:907:94cf:b0:965:bf30:9a21 with SMTP id dn15-20020a17090794cf00b00965bf309a21mr1617983ejc.7.1683219708620;
-        Thu, 04 May 2023 10:01:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bdb9:99c4:33a5:6114? ([2a02:810d:15c0:828:bdb9:99c4:33a5:6114])
-        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b009572db67bf2sm17220234ejc.89.2023.05.04.10.01.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 10:01:47 -0700 (PDT)
-Message-ID: <417d7d9e-5d9a-e0cf-11b3-f191f4a9c9f2@linaro.org>
-Date:   Thu, 4 May 2023 19:01:46 +0200
+        with ESMTP id S229761AbjEDRKX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 May 2023 13:10:23 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA54B46A3;
+        Thu,  4 May 2023 10:10:18 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344GYtMP016288;
+        Thu, 4 May 2023 19:10:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=rkbvLyVT3Mb/rSSlFLY4A805v2Hk2Yhfbj8z298Ej7M=;
+ b=BSdj86tRf6c/laZrSlGXBL3fYo19jKVP2cAxj8qbQ63UZu2NCz8DnuhxngaNn9CWlCh6
+ anfKkr3HY3kWzAmzD8//aLI0sCLRt/SaQX7cKWho/TPXSApiZeFsNs72EI/G+yJwr9ZF
+ lgOBn15eIgjKs08ydxGOQ/mqOOGaxhS39iwmf1pwhqQ+FyI7MLW/a4MBuGIpNXfU6bRx
+ UxJEYuuxjYs8vmzW/OuPs1fXrsupmM6xU3mwRDGqZbZrzN12/TeMXTVGjOpy6pPjf7S8
+ mvYWjRED/zdlnouyq3Rue0t1epNrM6fry8VxGHcaaxIAc2y2EKzwr6UMj/Md1zG8xUGJ 2Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qc6uwcjhh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 19:10:02 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E7AE910002A;
+        Thu,  4 May 2023 19:10:01 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C77DC227F0C;
+        Thu,  4 May 2023 19:10:01 +0200 (CEST)
+Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 4 May
+ 2023 19:10:00 +0200
+Message-ID: <9100bb4f-d12b-79f6-659c-0005294886fa@foss.st.com>
+Date:   Thu, 4 May 2023 19:09:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] dt-bindings: spi: zynqmp-qspi: Add power-domains and
- iommus properties
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/7] dt-bindings: spi: stm32: add address-cells and
+ size-cells into yaml
+To:     Rob Herring <robh@kernel.org>
+CC:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230428121524.2125832-1-valentin.caron@foss.st.com>
+ <20230428121524.2125832-2-valentin.caron@foss.st.com>
+ <20230428214157.GA322525-robh@kernel.org>
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-References: <2afed7285061abbb5d9ad3b1e795b737dcff9693.1683102032.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2afed7285061abbb5d9ad3b1e795b737dcff9693.1683102032.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Valentin CARON <valentin.caron@foss.st.com>
+In-Reply-To: <20230428214157.GA322525-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 03/05/2023 10:20, Michal Simek wrote:
-> ZynqMP QSPI IP core has own power domain and also iommu ID that's why
-> describe optional power-domains and iommus properties.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
+Hi Rob,
 
+On 4/28/23 23:41, Rob Herring wrote:
+> On Fri, Apr 28, 2023 at 02:15:18PM +0200, Valentin Caron wrote:
+>> Theses properties need to be described to satisfy dtbs_check.
+> No, they are defined in spi-controller.yaml, so they should not be
+> needed here.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yes, you're right, I cannot remember why I need to add theses properties.
 
-Best regards,
-Krzysztof
+Thank you,
+Valentin
 
+>> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+>> ---
+>>   Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+>> index 9ca1a843c820..c599eb359d56 100644
+>> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+>> @@ -29,6 +29,9 @@ allOf:
+>>           st,spi-midi-ns: false
+>>   
+>>   properties:
+>> +  "#address-cells": true
+>> +  "#size-cells": true
+>> +
+>>     compatible:
+>>       enum:
+>>         - st,stm32f4-spi
+>> -- 
+>> 2.25.1
+>>
