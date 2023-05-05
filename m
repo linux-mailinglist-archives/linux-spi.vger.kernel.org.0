@@ -2,168 +2,201 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2100C6F8033
-	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 11:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF45D6F804D
+	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 11:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbjEEJkt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 May 2023 05:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S231836AbjEEJrZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 May 2023 05:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjEEJkr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 05:40:47 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716B1150E6;
-        Fri,  5 May 2023 02:40:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bk4s6cFaWc9YvbSUEdG4138s+N5GwmX6sWen0QiEn+snwU2xhWSxYXQLCg1oNsKfb6cLHtmLtPzxHBeTKOmD6NEyaEwbDFuRCVbUdhC03viHWST/n5CpvFgvIPcr/KKLGZXXLSv1RgKPohiERcYGA1NjdFdzgHOxjndE0uW7hk+mwlw5SmwXyMTvia+abifnlmIp/tHLzvykg0woDDlhptMBmVGP9ZgYz4ejCkhPRwhy7DGS7tm/04jJGQcpQgUtezKZqm7bjLWuvquAuxG0ksi8Y+b0Pir+JBca8w+O6u9lQJCv6za5OMOcIn2eJMVQwwvR41Erb1ITi6ITpGEdhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lt25NvgWp3FD1IVBnAuWu3Fzety83C//AqUachGXh7I=;
- b=f7Ex5Us/mV+vP4qOLUyRSyHQBUcSc8o7RCeIXTKbU4CW17vqB6e0JrZtrcfhUxyS84LNc/Jyjjm3asQoTH9uC4DJDLcs+oMLV673DpYj6e1xECKVecYbng6x0TSdh83mPM1HhEDAGgPLGJzYswaZGL2/9bWFdVZ8dfDWAxpTlbBUxyE2KNGbEdFWmbIvh0loX5j2pC1wZfjohWS+zkXhrhxZk5n4JHO4I3DMJ3hs+iWDsN6svVC0UgySVaw6fYnBrBdsX83c0zeuANf/Yqjtn17Oe0A44cHrd+z8bivzaRtT8ssKtWZfAyg3wMpKp8Jo3jQxYLCyk1seEeHOvuioBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lt25NvgWp3FD1IVBnAuWu3Fzety83C//AqUachGXh7I=;
- b=rI+NoSFzDI67ovEVJbQuDCDErFcOo/vSBhPBr5cjCBIhrXCEe2O7RxynP5iZ7Nx0wzQoiL22QijuFV3dydDFPq2rBtYJq6aQvUe57hRB+vm5PEVD4nf7qT9D1WhRqoYo4g8ZFovUWMVc9DE8JCA+b1XMXwB7KlhJjDRPnyNtHfY=
-Received: from DB7PR04MB5098.eurprd04.prod.outlook.com (2603:10a6:10:1c::18)
- by AS8PR04MB8850.eurprd04.prod.outlook.com (2603:10a6:20b:42d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 09:40:43 +0000
-Received: from DB7PR04MB5098.eurprd04.prod.outlook.com
- ([fe80::6418:d0b1:6971:5da0]) by DB7PR04MB5098.eurprd04.prod.outlook.com
- ([fe80::6418:d0b1:6971:5da0%5]) with mapi id 15.20.6363.022; Fri, 5 May 2023
- 09:40:43 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     Dhruva Gole <d-gole@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Thread-Topic: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Thread-Index: AQHZfxvY0j+jfq9kLEK49Xg9td4Vpa9LZj4AgAADadA=
-Date:   Fri, 5 May 2023 09:40:43 +0000
-Message-ID: <DB7PR04MB5098E2E44D74474BF98F8620F3729@DB7PR04MB5098.eurprd04.prod.outlook.com>
-References: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
- <0608e366-1b0e-d387-569a-9ed123bc4d69@ti.com>
-In-Reply-To: <0608e366-1b0e-d387-569a-9ed123bc4d69@ti.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB7PR04MB5098:EE_|AS8PR04MB8850:EE_
-x-ms-office365-filtering-correlation-id: acc8cd80-531f-412b-841a-08db4d4ccbcb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v3G82Y5cThuClIb1gwRIigOeb7mowdj1WF6Qb3OV0VmC3B8FmwP2MKCIdJ+cT4ZBzrxEJoLfHpqqWx3tNZNQMKqdmcEq8W8z6F6Wdls2hwbQ12uz6CWGxxe8lRNmkkdhCga2bIqanw/w49oIMzn3WKyUS6WTTEq9UiIi5pYMCsJPHe9KTwX+bSJu3uS8PW5GXTIlLM0KLMfRxLQoHb5sIeiFU0n8aEdW6/cU0g0F07BmXlodOGBnnum+2ym4ebp9CjldAjAAnSLlomo2soPj0gqPTkx5ZRHDnYcKAECAg756wj+lh2Xl8NFPi1QgxgQ6iJg7jyzV/aTpyd3+XEDzYNvk1s3Y+JptToWzxdScz8CuXXsAZ+c2dpbMGUAdUdNFIcRWgEsQ8yNAKl5KU7HboCwI0Jdxu2THQisGIa7Bd3R08OQt6OegdmgRtDQl6RghOxYGzcGIY55cADHc3fzT+zSGj5I8l2OVZPYMoc/F2+aqQUHgYcqS2aMzHr7bzsMMUUU6tOPywNUFvHkp9U+4uumb0HEEtlFEutMC1vfFUSu6GbkV4RI4n6sKhFy8jYXvFLYYM9PUxusi4MHBd6azdawxLUC174qm+0JTUIFt8SmeyhMAEZn360k7Q37qpy5O
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5098.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(451199021)(7696005)(4326008)(76116006)(66946007)(66556008)(66446008)(66476007)(64756008)(71200400001)(478600001)(316002)(54906003)(110136005)(33656002)(86362001)(83380400001)(9686003)(53546011)(6506007)(8936002)(5660300002)(52536014)(8676002)(2906002)(41300700001)(55016003)(38100700002)(38070700005)(186003)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L3NmNlhWUVg3MlJjUnZSQmQ2ajM0VE9TK2lqSDRiR3I0aFN3alMvUnh3Y24w?=
- =?utf-8?B?VDZ6OU42aGk5OXB1Y2VQVGJKaVNuSGFUL202a2dvTnpxR3E4RUVkSnFLUnFq?=
- =?utf-8?B?V1RFUjh6NFRVbnRlZ000bDE4azZPU1pqMGZPWWwzd1F3dUpCREVWVnBURlZG?=
- =?utf-8?B?ejhtV2NJWGxramIvbnFWbjFpZHdZVDhzQXFUZUhwK0NDaVVmc2VNem1BK09h?=
- =?utf-8?B?aDg0L2tXRWZUNEVoSGYwSVl1RVA3SkxFckpEN0dERDE2ejAyYURRWkRlcStp?=
- =?utf-8?B?dTVtbFBEb0ZTSFNwZ04xYlpPTzZQSVJEUFR1aGxTeEoxenpCTFZlVDE0VmRO?=
- =?utf-8?B?dkpKTkU5K1oyTFhzTEVuLzdDUVBMNHdyYU82YzVwYkIvSjBjd2F0VU1yS3hI?=
- =?utf-8?B?aEdReWdvYnNuL2J0V1RBWm9sSVhYczNQSENUbkdBamRNU2dTU3NrbVdDM2ll?=
- =?utf-8?B?aGFsSUtneGNKRDdZMkt6a28wc2pvOEIzaUFaSFZrSWR0VkF4Y241N3VFTW9J?=
- =?utf-8?B?N2VEd1lWT2Z4cXpTMzB6Um9UZzM5UlYvbGkreEoza1lwc2pRNkdkbnJFcm0w?=
- =?utf-8?B?QlBsOFpXeVlIb2lKN1pJZzZ4Ni9jN1hrajAwUm1xOHM4R2REZ3BaWis1cnpC?=
- =?utf-8?B?TVBteVhNU2MyRmFHZEpTUnVab1o3VW1pbkZSVDdPSWJvaUxFbmt1Wm5yakEr?=
- =?utf-8?B?UDdTcTR0a2xrQUNobmVOYjFoUndJWnh5RkFLVTRkaUI1QVFtc3VWQXpCWCt3?=
- =?utf-8?B?QnQ0ZVJTaFhGcUlXMGxpRVkrZTl4eURrYkkwQS9RUkJERVBEeG9NREFEcUFM?=
- =?utf-8?B?a0Z0eXh2TTBDT3BoUzcveUpHbjYwNVRWd244TjJXUU43SHIwU1RQSWQ0SWxt?=
- =?utf-8?B?S2Vrc2hjL3pUb2Z4Q3BwNlgyZzRueHZ4c3k4RXdtYmpwNStKdGJsbXl4dFg2?=
- =?utf-8?B?RGN0TlJSZ3hYZzBKcnpkMytUVEI3UFBRL25QQTZmZFFSSnN6eVZ4UnpCaEc5?=
- =?utf-8?B?MjM2RE9ab0gvRmE0NXhSZ0QxbkkvWkJFR0J3ZjUwYkI3aExjVThYOFRyT2V2?=
- =?utf-8?B?cnNhU1I2Z294eHpQNnpYMHgzVDk4OTBVV0lxYk5ld1JINitnVE12TlFNUGly?=
- =?utf-8?B?Q0RHZVFsRXlsNmhsUWp3R2ZJeEVHM0pVbjcxRWYraWR5MDRYYnJ1TC9oSFVY?=
- =?utf-8?B?SXIzNHdWT3NWc3RNb1hudWt4QWJhMFQ5Z0NpRjhleG03WWtTelVuV1YxRWVr?=
- =?utf-8?B?U0JnKzlTdHlhd1VuYWtKSHRrSys0d1hHUy83UW5kVzNyR1FrMHRLY3pVUVdJ?=
- =?utf-8?B?dzFiWlo5SkRBMXFYaGx2SXNLd0VKckwwUGFjVXpVNXlscS9xUWZETGo0d0Y1?=
- =?utf-8?B?TSt0bkdxNXplbGoxVG8yd0JGRkorMnlIY2hGdW1hRlJaQVF1cyt1QlZ2dEE2?=
- =?utf-8?B?OHBtYmFKSTdmWncxSWVUMkl3NUFkbkh3eDFOa1N0MzZnOGlzMm4wbnEycU9t?=
- =?utf-8?B?L0VIM04xbW5OWGxnSWdGWGEwRFRaSVROMHlLTVNlaU5rcSsyQUVrcUJFUWVD?=
- =?utf-8?B?WmdSbkVPRUZqekFRMlpUN0ZnajgrRnljaCtWMWMrWmdvRG10Z3VTTjh3TS90?=
- =?utf-8?B?TDJKYWJEekhDc1I3NVlVNFFhVHRzV0xQbWlaa0MvZDhEV1kya21kSUYzQkIw?=
- =?utf-8?B?SUR1ZkMvODZXaDc4eEdKYnRCMlhlT0h1RmpzclBUSWczU0R3MjhMU0p1UUJJ?=
- =?utf-8?B?SW0xaVJNU0VZOGhIY2J4SmhYbUk1YVdLalJLTUVvdWR0QlF1QTFjaWVmQktp?=
- =?utf-8?B?YU8xWUlNc0NnYzFQMzFLTTNFQXlMdS9pTDVtenZZazhmSXpKYWxWeU91bTI1?=
- =?utf-8?B?aElQei9oYXp3YmxpalRLczFEZ0N5OTY5OS9tZGxaYWlnZmtSNEZxTWVkOTdW?=
- =?utf-8?B?ZVBlSWNJeUZLZGh6VE9oZExzRHhzYmRiQk9QUXhtSE1VYnNRN2twRngxU1Q0?=
- =?utf-8?B?TGQ4ZnB0NlBsb25iUVlwU0tUZWhodVdWbFNLcU9BSGliRFZsUjB5bmFEM1k4?=
- =?utf-8?B?UnZvS0xmUzByMEYvbjVIdDcvSExlK1daUEJ6dz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231774AbjEEJrX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 05:47:23 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A24191D1
+        for <linux-spi@vger.kernel.org>; Fri,  5 May 2023 02:47:21 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so2923821a12.1
+        for <linux-spi@vger.kernel.org>; Fri, 05 May 2023 02:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683280040; x=1685872040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3YIVNcQdeZiL3e0O4p6IYO2o8zE6ITS/Zjz/otoIFpA=;
+        b=Iqijz+WAZAHtO8uFIvMpu/yycYGpQx+/LpXE9Axcv65dAK4e1uQyPg/LQURKrVpV5Q
+         /jufmtJZYot++2wbF9B/cJSSUKvnm2LylqPOS9p4bNP2aoUp7PIgNP0WH+pb+Yp3gPXF
+         CqPa07bDfGrdfuG+OlH5axVBI9Eb/7Mo6NHKcw429IFhoPnzVJ0jfgOqdm856Web5UOe
+         zDOrus4Wjj45fkQy+Xv38TLJBBsuwkhp3EVJIQD8PGLcThIbQa2334tlweMfMXBM/ayB
+         VwuwMyjM1zIAzG+lgu0seXRbkqRY/ZHEt8apMngYB3JMSlS94pofzX7TjWmcbVPuKjEn
+         0hGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683280040; x=1685872040;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3YIVNcQdeZiL3e0O4p6IYO2o8zE6ITS/Zjz/otoIFpA=;
+        b=O+SsXfeqv2NUprfKSw64RZqcsyNzct4xJk6LaCOLkbiLhhszwfRCpeNY/INQr8XQox
+         n0xBu6lcxPzQC3uGM71nrzuJria42y6QOuEaUaQ9QVTHbvGIjqwh+9o0PKLB1ZRezAKn
+         M/RWkvr9UMSbmtPLAHkhfZSzWvdIYaqokBkEzivLSysDsYMEtSbXifEiiT50YueK1f1U
+         /kW8O0HW2DrvVtEB3rkZSPsVSc+X9omMIS2/eSGubifTbJqFBqucWKYbZLIFN1u4n2eZ
+         FnLChejm/D9yUwHQQj5sYbKMYtL6Osvc4efmA27r8jcMOAVxVSJNuUvBbVnrgvpB1Zo8
+         4AKQ==
+X-Gm-Message-State: AC+VfDwCVZUb4g+aGba1EMmlu75iv9dvYiVZf+3E2uugeYPpSvOYHfsu
+        ngonwOJTQ7OtUApd9oVs9tZYig==
+X-Google-Smtp-Source: ACHHUZ4nixPNDI7H6BBgyh+5/PxYHS2TDRnhCNQLtbEUh6LobLma18kxhzjldRDZdV8OqSSIZPAcwg==
+X-Received: by 2002:a17:907:360c:b0:961:800b:3f1e with SMTP id bk12-20020a170907360c00b00961800b3f1emr616756ejc.73.1683280040379;
+        Fri, 05 May 2023 02:47:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id v1-20020a170906292100b00953381ea1b7sm721680ejd.90.2023.05.05.02.47.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 02:47:20 -0700 (PDT)
+Message-ID: <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
+Date:   Fri, 5 May 2023 11:47:19 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5098.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acc8cd80-531f-412b-841a-08db4d4ccbcb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2023 09:40:43.4799
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6/sNtLpGNWaJQYjTUjGjnDHdHDYmVZemfXx8oc9QVgXYU0dAZMdwvM6T7103y4HgGnPlmvnXFDFcPzrM7PNtEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8850
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
+ <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
+ <20230502062813.112434-4-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230502062813.112434-4-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkgRGhydXZhLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IERocnV2
-YSBHb2xlIDxkLWdvbGVAdGkuY29tPg0KPiBTZW50OiAyMDIz5bm0NeaciDXml6UgMTc6MTYNCj4g
-VG86IENsYXJrIFdhbmcgPHhpYW9uaW5nLndhbmdAbnhwLmNvbT47IGJyb29uaWVAa2VybmVsLm9y
-Zw0KPiBDYzogbGludXgtc3BpQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBzcGk6IGxwc3BpOiBkaXNhYmxlIGxwc3Bp
-IG1vZHVsZSBpcnEgaW4gRE1BIG1vZGUNCj4gDQo+IA0KPiANCj4gT24gMDUvMDUvMjMgMTI6MDUs
-IENsYXJrIFdhbmcgd3JvdGU6DQo+ID4gV2hlbiBhbGwgYml0cyBvZiBJRVIgYXJlIHNldCB0byAw
-LCB3ZSBzdGlsbCBjYW4gb2JzZXJ2ZSB0aGUgbHBzcGkgaXJxDQo+ID4gZXZlbnRzIHdoZW4gdXNp
-bmcgRE1BIG1vZGUgdG8gdHJhbnNmZXIgZGF0YS4NCj4gPg0KPiA+IFNvIGRpc2FibGUgaXJxIHRv
-IGF2b2lkIHRoZSB0b28gbXVjaCBpcnEgZXZlbnRzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTog
-Q2xhcmsgV2FuZyA8eGlhb25pbmcud2FuZ0BueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVy
-cy9zcGkvc3BpLWZzbC1scHNwaS5jIHwgNyArKysrKystDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwg
-NiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9zcGkvc3BpLWZzbC1scHNwaS5jIGIvZHJpdmVycy9zcGkvc3BpLWZzbC1scHNwaS5jDQo+
-ID4gaW5kZXggZjIzNDFhYjk5NTU2Li40YjcwMDM4Y2ViNmIgMTAwNjQ0DQo+ID4gLS0tIGEvZHJp
-dmVycy9zcGkvc3BpLWZzbC1scHNwaS5jDQo+ID4gKysrIGIvZHJpdmVycy9zcGkvc3BpLWZzbC1s
-cHNwaS5jDQo+ID4gQEAgLTkxMCw5ICs5MTAsMTQgQEAgc3RhdGljIGludCBmc2xfbHBzcGlfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZQ0KPiAqcGRldikNCj4gPiAgIAlyZXQgPSBmc2xfbHBz
-cGlfZG1hX2luaXQoJnBkZXYtPmRldiwgZnNsX2xwc3BpLCBjb250cm9sbGVyKTsNCj4gPiAgIAlp
-ZiAocmV0ID09IC1FUFJPQkVfREVGRVIpDQo+ID4gICAJCWdvdG8gb3V0X3BtX2dldDsNCj4gPiAt
-DQo+IA0KPiBBbnkgcmVhc29uIHRvIGRlbGV0ZSB0aGlzIGxpbmU/DQoNCkJvdGggb2YgdGhlIGlm
-IHN0YXRlbWVudHMgYXJlIHVzZWQgdG8gZGV0ZXJtaW5lIHRoZSByZXR1cm4gdmFsdWUgb2YgZnNs
-X2xwc3BpX2RtYV9pbml0KCksIHNvIEkgcmVtb3ZlIHRoaXMgbGluZS4NCg0KPiANCj4gPiAgIAlp
-ZiAocmV0IDwgMCkNCj4gPiAgIAkJZGV2X2VycigmcGRldi0+ZGV2LCAiZG1hIHNldHVwIGVycm9y
-ICVkLCB1c2UgcGlvXG4iLCByZXQpOw0KPiA+ICsJZWxzZQ0KPiA+ICsJCS8qDQo+ID4gKwkJICog
-ZGlzYWJsZSBMUFNQSSBtb2R1bGUgSVJRIHdoZW4gZW5hYmxlIERNQSBtb2RlIHN1Y2Nlc3NmdWxs
-eSwNCj4gPiArCQkgKiB0byBwcmV2ZW50IHRoZSB1bmV4cGVjdGVkIExQU1BJIG1vZHVsZSBJUlEg
-ZXZlbnRzLg0KPiA+ICsJCSAqLw0KPiA+ICsJCWRpc2FibGVfaXJxKGlycSk7DQo+IA0KPiBKdXN0
-IHdvbmRlcmluZywgaGF2ZSB5b3UgYWN0dWFsbHkgc2VlbiBhbnkgdW5leHBlY3RlZCBMUFNQSSBt
-b2R1bGUgSVJRDQo+IGV2ZW50cz8gSWYgdGhpcyB3YXMgY2F1c2luZyBpc3N1ZXMgZWFybGllciB0
-aGVuIG1heWJlIGFkZCBhIGZpeGVzIHRhZz8NCg0KWWVzLCBJIGhhdmUgb2JzZXJ2ZWQgdGhpcyBp
-c3N1ZS4gDQpUaGUgcmVhc29uIGZvciB0aGlzIHByb2JsZW0gaXMgdGhhdCBzb21lIG9sZGVyIHBs
-YXRmb3JtcyBhcmUgZGVzaWduZWQgdG8gY29tYmluZSBMUFNQSSBpbnRlcnJ1cHQgYW5kIExQU1BJ
-IERNQSBjaGFubmVsIGludGVycnVwdCBpbnRvIG9uZSBzaGFyZWQgaW50ZXJydXB0IG51bWJlciBi
-ZWNhdXNlIHRoZSBJUlEgaW50ZXJydXB0IG51bWJlciBpcyBub3QgZW5vdWdoLg0KV2hlbiB0aGUg
-cHJvYmxlbSBvY2N1cnMsIHdlIGNhbiBvYnNlcnZlIHRoYXQgaWYgdGhlIGludGVycnVwdCBjb21l
-cyB0b28gbWFueSB0aW1lcyBhbmQgdG9vIHF1aWNrbHksIGl0IHdpbGwgdHJpZ2dlciB0aGUgSVJR
-IGluIHRoZSBMUFNQSSBkcml2ZXIgd2hpbGUgRE1BIGlzIHN0aWxsIHByb2Nlc3NpbmcgdGhlIHBy
-ZXZpb3VzIERNQSByZXF1ZXN0KHRocm91Z2ggdGhlIHNoYXJlZCBkbWEgY2hhbm5lbCBpbnRlcnJ1
-cHQpLCByZXN1bHRpbmcgaW4gZGF0YSBtZXNzaW5nLg0KDQpCZXN0IFJlZ2FyZHMsDQpDbGFyayBX
-YW5nDQo+IA0KPiA+DQo+ID4gICAJcmV0ID0gZGV2bV9zcGlfcmVnaXN0ZXJfY29udHJvbGxlcigm
-cGRldi0+ZGV2LCBjb250cm9sbGVyKTsNCj4gPiAgIAlpZiAocmV0IDwgMCkgew0KPiANCj4gLS0N
-Cj4gVGhhbmtzIGFuZCBSZWdhcmRzLA0KPiBEaHJ1dmEgR29sZQ0K
+On 02/05/2023 08:28, Jaewon Kim wrote:
+> Support interrupt based pio mode to optimize cpu usage.
+> When transmitting data size is larget than 32 bytes, operates with
+> interrupt based pio mode.
+> 
+> By using the FIFORDY INT, an interrupt can be triggered when
+> the desired size of data has been received. Using this, we can support
+> interrupt based pio mode.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 66 ++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 58 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 2a8304678df9..323c6da9730b 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -58,6 +58,8 @@
+>  #define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
+>  #define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
+>  #define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
+> +#define S3C64XX_SPI_MODE_RX_RDY_LVL		GENMASK(16, 11)
+> +#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT	11
+>  #define S3C64XX_SPI_MODE_SELF_LOOPBACK		(1<<3)
+>  #define S3C64XX_SPI_MODE_RXDMA_ON		(1<<2)
+>  #define S3C64XX_SPI_MODE_TXDMA_ON		(1<<1)
+> @@ -114,6 +116,8 @@
+>  
+>  #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+>  
+> +#define S3C64XX_SPI_POLLING_SIZE	32
+> +
+>  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+>  #define is_polling(x)	(x->cntrlr_info->polling)
+>  
+> @@ -552,7 +556,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
+>  }
+>  
+>  static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+> -				struct spi_transfer *xfer)
+> +				struct spi_transfer *xfer, bool use_irq)
+>  {
+>  	void __iomem *regs = sdd->regs;
+>  	unsigned long val;
+> @@ -573,6 +577,12 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>  	if (RX_FIFO_LVL(status, sdd) < xfer->len)
+>  		usleep_range(time_us / 2, time_us);
+>  
+> +	if (use_irq) {
+> +		val = msecs_to_jiffies(ms);
+> +		if (!wait_for_completion_timeout(&sdd->xfer_completion, val))
+> +			return -EIO;
+> +	}
+> +
+>  	val = msecs_to_loops(ms);
+>  	do {
+>  		status = readl(regs + S3C64XX_SPI_STATUS);
+> @@ -735,10 +745,13 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+>  	void *rx_buf = NULL;
+>  	int target_len = 0, origin_len = 0;
+>  	int use_dma = 0;
+> +	bool use_irq = false;
+>  	int status;
+>  	u32 speed;
+>  	u8 bpw;
+>  	unsigned long flags;
+> +	u32 rdy_lv;
+> +	u32 val;
+>  
+>  	reinit_completion(&sdd->xfer_completion);
+>  
+> @@ -759,17 +772,46 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+>  	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
+>  		use_dma = 1;
+>  
+> -	} else if (xfer->len > fifo_len) {
+> +	} else if (xfer->len >= fifo_len) {
+
+I don't fully understand this. If len equals to fifo_len, everything
+would fit into FIFO so no need for all this?
+
+>  		tx_buf = xfer->tx_buf;
+>  		rx_buf = xfer->rx_buf;
+>  		origin_len = xfer->len;
+> -
+>  		target_len = xfer->len;
+> -		if (xfer->len > fifo_len)
+> -			xfer->len = fifo_len;
+> +		xfer->len = fifo_len - 1;
+>  	}
+>  
+>  	do {
+> +		/* transfer size is greater than 32, change to IRQ mode */
+> +		if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
+> +			use_irq = true;
+> +
+> +		if (use_irq) {
+> +			reinit_completion(&sdd->xfer_completion);
+> +
+> +			rdy_lv = xfer->len;
+
+Style is:
+
+/*
+ *
+
+> +			/* Setup RDY_FIFO trigger Level
+> +			 * RDY_LVL =
+> +			 * fifo_lvl up to 64 byte -> N bytes
+> +			 *               128 byte -> RDY_LVL * 2 bytes
+> +			 *               256 byte -> RDY_LVL * 4 bytes
+
+I don't understand it. Based on this equation for 256 bytes,
+RDY_LVL = RDY_LVL * 4?
+Didn't you mean xfer->len?
+
+
+Best regards,
+Krzysztof
+
