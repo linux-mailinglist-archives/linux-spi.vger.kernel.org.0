@@ -2,109 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F61E6F7FB0
-	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 11:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9756F8039
+	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 11:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjEEJQW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 May 2023 05:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S231812AbjEEJlT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 May 2023 05:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjEEJQV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 05:16:21 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763E518922;
-        Fri,  5 May 2023 02:16:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3459GCfD087717;
-        Fri, 5 May 2023 04:16:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683278172;
-        bh=913PCdaWN+n0Ch38NTPAuWeCeU4rsJc5zjk3K+t6OUc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=AXHfs82LNZa25KqD2es95FIUCOdRQY72GNlHe0qA6j2PhUSDbwwT4NKZ3rqt/gLt/
-         T+xOyjV2h8n5Wdvj6XqMv/C4cD7at1gJV7Y9qyP+uSC9g1JBC0GeO5rz7jgzUdRZkh
-         JvoWD0BdXYZvO19akhRRZgvMqTA5ZhcEQi04M/TM=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3459GCIF088672
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 5 May 2023 04:16:12 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- May 2023 04:16:12 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 May 2023 04:16:12 -0500
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3459GA8A078651;
-        Fri, 5 May 2023 04:16:11 -0500
-Message-ID: <0608e366-1b0e-d387-569a-9ed123bc4d69@ti.com>
-Date:   Fri, 5 May 2023 14:46:10 +0530
+        with ESMTP id S231267AbjEEJlR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 05:41:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA46150E6;
+        Fri,  5 May 2023 02:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683279676; x=1714815676;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D7UA2lx+EkPLMAJoV5cMenjK7P7GwwqdLMhdFNpcpUw=;
+  b=AtQnPgrEWRcRAzpEoTkDxVmh2sAaZffQ3RfB4yCuzYwID/q5MEM/vL20
+   aneKNgg2WVYBLl2nvWclG6u3pO/N3JEkdjxb/c0qV2F+CkSNoBGfwboZh
+   DOsHmb3RoViiuO5ty9dnpRicRYsOYYKBObnWngpF/KZoKDkhrI1dHUM9I
+   bLaDj+93ClLC3Ne3NWIyL+JfCGHBfAJwY6asPw+nv8a0RCkjenhN3jq17
+   fChNTxB9CKNF9G9FJTs10QP7ldNo/BCdoE6DDECLn2JhyVmXTDWv9DKXX
+   0Fl5Q1HQCF7v1e62Mx0LGKZzRlTG7K4dMb9PJMoOUmjTREosREWk2grN9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="328794858"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="328794858"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 02:41:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="943777751"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="943777751"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 05 May 2023 02:41:11 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1purw6-0000TB-1W;
+        Fri, 05 May 2023 09:41:10 +0000
+Date:   Fri, 5 May 2023 17:40:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fbdev@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
+Message-ID: <202305051726.wOn3I3W1-lkp@intel.com>
+References: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Content-Language: en-US
-To:     Clark Wang <xiaoning.wang@nxp.com>, <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Linus,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 348551ddaf311c76b01cdcbaf61b6fef06a49144]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
+base:   348551ddaf311c76b01cdcbaf61b6fef06a49144
+patch link:    https://lore.kernel.org/r/20230430-nokia770-regression-v2-1-984ed3ca5444%40linaro.org
+patch subject: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20230505/202305051726.wOn3I3W1-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/9708c9277cc820e52916ddf795926d3254bb5eed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
+        git checkout 9708c9277cc820e52916ddf795926d3254bb5eed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/input/touchscreen/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305051726.wOn3I3W1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/ads7846.c:1406:35: error: 'ads7846_dt_ids' undeclared here (not in a function); did you mean 'ads7846_cmds'?
+    1406 |                 .of_match_table = ads7846_dt_ids,
+         |                                   ^~~~~~~~~~~~~~
+         |                                   ads7846_cmds
 
 
-On 05/05/23 12:05, Clark Wang wrote:
-> When all bits of IER are set to 0, we still can observe the lpspi irq events
-> when using DMA mode to transfer data.
-> 
-> So disable irq to avoid the too much irq events.
-> 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
->   drivers/spi/spi-fsl-lpspi.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-> index f2341ab99556..4b70038ceb6b 100644
-> --- a/drivers/spi/spi-fsl-lpspi.c
-> +++ b/drivers/spi/spi-fsl-lpspi.c
-> @@ -910,9 +910,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
->   	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
->   	if (ret == -EPROBE_DEFER)
->   		goto out_pm_get;
-> -
+vim +1406 drivers/input/touchscreen/ads7846.c
 
-Any reason to delete this line?
-
->   	if (ret < 0)
->   		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-> +	else
-> +		/*
-> +		 * disable LPSPI module IRQ when enable DMA mode successfully,
-> +		 * to prevent the unexpected LPSPI module IRQ events.
-> +		 */
-> +		disable_irq(irq);
-
-Just wondering, have you actually seen any unexpected LPSPI module IRQ
-events? If this was causing issues earlier then maybe add a fixes tag?
-
->   
->   	ret = devm_spi_register_controller(&pdev->dev, controller);
->   	if (ret < 0) {
+  1401	
+  1402	static struct spi_driver ads7846_driver = {
+  1403		.driver = {
+  1404			.name	= "ads7846",
+  1405			.pm	= pm_sleep_ptr(&ads7846_pm),
+> 1406			.of_match_table = ads7846_dt_ids,
+  1407		},
+  1408		.probe		= ads7846_probe,
+  1409		.remove		= ads7846_remove,
+  1410	};
+  1411	
 
 -- 
-Thanks and Regards,
-Dhruva Gole
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
