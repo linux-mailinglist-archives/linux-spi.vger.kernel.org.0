@@ -2,76 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF45D6F804D
-	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 11:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AC36F809A
+	for <lists+linux-spi@lfdr.de>; Fri,  5 May 2023 12:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjEEJrZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 May 2023 05:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S231667AbjEEKMV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 May 2023 06:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjEEJrX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 05:47:23 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A24191D1
-        for <linux-spi@vger.kernel.org>; Fri,  5 May 2023 02:47:21 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so2923821a12.1
-        for <linux-spi@vger.kernel.org>; Fri, 05 May 2023 02:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683280040; x=1685872040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3YIVNcQdeZiL3e0O4p6IYO2o8zE6ITS/Zjz/otoIFpA=;
-        b=Iqijz+WAZAHtO8uFIvMpu/yycYGpQx+/LpXE9Axcv65dAK4e1uQyPg/LQURKrVpV5Q
-         /jufmtJZYot++2wbF9B/cJSSUKvnm2LylqPOS9p4bNP2aoUp7PIgNP0WH+pb+Yp3gPXF
-         CqPa07bDfGrdfuG+OlH5axVBI9Eb/7Mo6NHKcw429IFhoPnzVJ0jfgOqdm856Web5UOe
-         zDOrus4Wjj45fkQy+Xv38TLJBBsuwkhp3EVJIQD8PGLcThIbQa2334tlweMfMXBM/ayB
-         VwuwMyjM1zIAzG+lgu0seXRbkqRY/ZHEt8apMngYB3JMSlS94pofzX7TjWmcbVPuKjEn
-         0hGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683280040; x=1685872040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YIVNcQdeZiL3e0O4p6IYO2o8zE6ITS/Zjz/otoIFpA=;
-        b=O+SsXfeqv2NUprfKSw64RZqcsyNzct4xJk6LaCOLkbiLhhszwfRCpeNY/INQr8XQox
-         n0xBu6lcxPzQC3uGM71nrzuJria42y6QOuEaUaQ9QVTHbvGIjqwh+9o0PKLB1ZRezAKn
-         M/RWkvr9UMSbmtPLAHkhfZSzWvdIYaqokBkEzivLSysDsYMEtSbXifEiiT50YueK1f1U
-         /kW8O0HW2DrvVtEB3rkZSPsVSc+X9omMIS2/eSGubifTbJqFBqucWKYbZLIFN1u4n2eZ
-         FnLChejm/D9yUwHQQj5sYbKMYtL6Osvc4efmA27r8jcMOAVxVSJNuUvBbVnrgvpB1Zo8
-         4AKQ==
-X-Gm-Message-State: AC+VfDwCVZUb4g+aGba1EMmlu75iv9dvYiVZf+3E2uugeYPpSvOYHfsu
-        ngonwOJTQ7OtUApd9oVs9tZYig==
-X-Google-Smtp-Source: ACHHUZ4nixPNDI7H6BBgyh+5/PxYHS2TDRnhCNQLtbEUh6LobLma18kxhzjldRDZdV8OqSSIZPAcwg==
-X-Received: by 2002:a17:907:360c:b0:961:800b:3f1e with SMTP id bk12-20020a170907360c00b00961800b3f1emr616756ejc.73.1683280040379;
-        Fri, 05 May 2023 02:47:20 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id v1-20020a170906292100b00953381ea1b7sm721680ejd.90.2023.05.05.02.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 02:47:20 -0700 (PDT)
-Message-ID: <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
-Date:   Fri, 5 May 2023 11:47:19 +0200
+        with ESMTP id S229553AbjEEKMU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 May 2023 06:12:20 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA65C1161C;
+        Fri,  5 May 2023 03:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683281538; x=1714817538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Tsbdo5pjmj5u3W5R6dLVr9eBlkJdAaspJjhiqP2evg=;
+  b=eOLfWjXSh627nBf1E6IAhz9Pb3UNhbn+q+1TTjGXNmqgpohhsFjE3Kxv
+   k0ar04MinNneBOQErzvrqOTx9O4y7zEEInUDT/DDz8Va1v+CAhGH8RbZx
+   HW7mGXwitOktnl0+Iibpa0rFezXIO6Xt3PM3QcccSSKD4igyjWwEv/rjJ
+   rS3akkb5nscW2YhwuQCAL6THbHi6g3KZW7GKAdT7QLK3Zauuz0X0ni03H
+   MzqQWePvNiKpidbp/Cih7tGhB8sd6Yp6ePM3KUaUKkXAfYZzPhHmO7L6i
+   LZCYgHsaE+pneog5wEfoFpMrxjco7nDqXG0hHCumpWR9mz6HuB2MRkRzN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412404974"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="412404974"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 03:12:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="697503684"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="697503684"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 05 May 2023 03:12:12 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pusQ7-0000Ut-2G;
+        Fri, 05 May 2023 10:12:11 +0000
+Date:   Fri, 5 May 2023 18:11:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-fbdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
+Message-ID: <202305051758.yjd7CtkI-lkp@intel.com>
+References: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
- <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
- <20230502062813.112434-4-jaewon02.kim@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230502062813.112434-4-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,124 +82,104 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 02/05/2023 08:28, Jaewon Kim wrote:
-> Support interrupt based pio mode to optimize cpu usage.
-> When transmitting data size is larget than 32 bytes, operates with
-> interrupt based pio mode.
-> 
-> By using the FIFORDY INT, an interrupt can be triggered when
-> the desired size of data has been received. Using this, we can support
-> interrupt based pio mode.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> ---
->  drivers/spi/spi-s3c64xx.c | 66 ++++++++++++++++++++++++++++++++++-----
->  1 file changed, 58 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 2a8304678df9..323c6da9730b 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -58,6 +58,8 @@
->  #define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
->  #define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
->  #define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
-> +#define S3C64XX_SPI_MODE_RX_RDY_LVL		GENMASK(16, 11)
-> +#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT	11
->  #define S3C64XX_SPI_MODE_SELF_LOOPBACK		(1<<3)
->  #define S3C64XX_SPI_MODE_RXDMA_ON		(1<<2)
->  #define S3C64XX_SPI_MODE_TXDMA_ON		(1<<1)
-> @@ -114,6 +116,8 @@
->  
->  #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
->  
-> +#define S3C64XX_SPI_POLLING_SIZE	32
-> +
->  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
->  #define is_polling(x)	(x->cntrlr_info->polling)
->  
-> @@ -552,7 +556,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
->  }
->  
->  static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
-> -				struct spi_transfer *xfer)
-> +				struct spi_transfer *xfer, bool use_irq)
->  {
->  	void __iomem *regs = sdd->regs;
->  	unsigned long val;
-> @@ -573,6 +577,12 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->  	if (RX_FIFO_LVL(status, sdd) < xfer->len)
->  		usleep_range(time_us / 2, time_us);
->  
-> +	if (use_irq) {
-> +		val = msecs_to_jiffies(ms);
-> +		if (!wait_for_completion_timeout(&sdd->xfer_completion, val))
-> +			return -EIO;
-> +	}
-> +
->  	val = msecs_to_loops(ms);
->  	do {
->  		status = readl(regs + S3C64XX_SPI_STATUS);
-> @@ -735,10 +745,13 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
->  	void *rx_buf = NULL;
->  	int target_len = 0, origin_len = 0;
->  	int use_dma = 0;
-> +	bool use_irq = false;
->  	int status;
->  	u32 speed;
->  	u8 bpw;
->  	unsigned long flags;
-> +	u32 rdy_lv;
-> +	u32 val;
->  
->  	reinit_completion(&sdd->xfer_completion);
->  
-> @@ -759,17 +772,46 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
->  	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
->  		use_dma = 1;
->  
-> -	} else if (xfer->len > fifo_len) {
-> +	} else if (xfer->len >= fifo_len) {
+Hi Linus,
 
-I don't fully understand this. If len equals to fifo_len, everything
-would fit into FIFO so no need for all this?
+kernel test robot noticed the following build errors:
 
->  		tx_buf = xfer->tx_buf;
->  		rx_buf = xfer->rx_buf;
->  		origin_len = xfer->len;
-> -
->  		target_len = xfer->len;
-> -		if (xfer->len > fifo_len)
-> -			xfer->len = fifo_len;
-> +		xfer->len = fifo_len - 1;
->  	}
->  
->  	do {
-> +		/* transfer size is greater than 32, change to IRQ mode */
-> +		if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
-> +			use_irq = true;
-> +
-> +		if (use_irq) {
-> +			reinit_completion(&sdd->xfer_completion);
-> +
-> +			rdy_lv = xfer->len;
+[auto build test ERROR on 348551ddaf311c76b01cdcbaf61b6fef06a49144]
 
-Style is:
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
+base:   348551ddaf311c76b01cdcbaf61b6fef06a49144
+patch link:    https://lore.kernel.org/r/20230430-nokia770-regression-v2-1-984ed3ca5444%40linaro.org
+patch subject: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
+config: hexagon-randconfig-r041-20230501 (https://download.01.org/0day-ci/archive/20230505/202305051758.yjd7CtkI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9708c9277cc820e52916ddf795926d3254bb5eed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
+        git checkout 9708c9277cc820e52916ddf795926d3254bb5eed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
 
-/*
- *
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305051758.yjd7CtkI-lkp@intel.com/
 
-> +			/* Setup RDY_FIFO trigger Level
-> +			 * RDY_LVL =
-> +			 * fifo_lvl up to 64 byte -> N bytes
-> +			 *               128 byte -> RDY_LVL * 2 bytes
-> +			 *               256 byte -> RDY_LVL * 4 bytes
+All errors (new ones prefixed by >>):
 
-I don't understand it. Based on this equation for 256 bytes,
-RDY_LVL = RDY_LVL * 4?
-Didn't you mean xfer->len?
+   In file included from drivers/input/touchscreen/ads7846.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/input/touchscreen/ads7846.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/input/touchscreen/ads7846.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/input/touchscreen/ads7846.c:1406:21: error: use of undeclared identifier 'ads7846_dt_ids'
+                   .of_match_table = ads7846_dt_ids,
+                                     ^
+   6 warnings and 1 error generated.
 
 
-Best regards,
-Krzysztof
+vim +/ads7846_dt_ids +1406 drivers/input/touchscreen/ads7846.c
 
+  1401	
+  1402	static struct spi_driver ads7846_driver = {
+  1403		.driver = {
+  1404			.name	= "ads7846",
+  1405			.pm	= pm_sleep_ptr(&ads7846_pm),
+> 1406			.of_match_table = ads7846_dt_ids,
+  1407		},
+  1408		.probe		= ads7846_probe,
+  1409		.remove		= ads7846_remove,
+  1410	};
+  1411	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
