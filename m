@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2786F9452
-	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 23:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B594D6F946E
+	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 00:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjEFV7h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 17:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S230118AbjEFWAt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 18:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjEFV7f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 17:59:35 -0400
+        with ESMTP id S230106AbjEFWAM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 18:00:12 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65A0322F67;
-        Sat,  6 May 2023 14:59:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BF3C2ABE2;
+        Sat,  6 May 2023 15:00:00 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82AB91FB;
-        Sat,  6 May 2023 15:00:13 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1ABA1FB;
+        Sat,  6 May 2023 15:00:44 -0700 (PDT)
 Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FF7B3F5A1;
-        Sat,  6 May 2023 14:59:25 -0700 (PDT)
-Date:   Sat, 6 May 2023 22:59:11 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 822373F5A1;
+        Sat,  6 May 2023 14:59:57 -0700 (PDT)
+Date:   Sat, 6 May 2023 22:59:42 +0100
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Maksim Kiselev <bigunclemax@gmail.com>
 Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
@@ -38,12 +38,12 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/6] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner D1/R528/T113s SPI
-Message-ID: <20230506225911.7ac3198e@slackpad.lan>
-In-Reply-To: <20230506073018.1411583-6-bigunclemax@gmail.com>
+Subject: Re: [PATCH v2 6/6] riscv: dts: allwinner: d1: Add SPI0 controller
+ node
+Message-ID: <20230506225942.017a968f@slackpad.lan>
+In-Reply-To: <20230506073018.1411583-7-bigunclemax@gmail.com>
 References: <20230506073018.1411583-1-bigunclemax@gmail.com>
-        <20230506073018.1411583-6-bigunclemax@gmail.com>
+        <20230506073018.1411583-7-bigunclemax@gmail.com>
 Organization: Arm Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
@@ -58,38 +58,73 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat,  6 May 2023 10:30:13 +0300
+On Sat,  6 May 2023 10:30:14 +0300
 Maksim Kiselev <bigunclemax@gmail.com> wrote:
 
-> Allwinner D1/R528/T113s SPI has the same as R329 controllers
+Hi,
+
+> Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
+> an optional SPI flash that connects to the SPI0 controller.
 > 
-> Add compatible string for this controller
-
-Please fold this into patch 1/6, and adjust accordingly to cover all
-the combinations.
-
-Cheers,
-Andre
-
+> This controller is the same for R329/D1/R528/T113s SoCs and
+> should be supported by the sun50i-r329-spi driver.
+> 
+> So let's add its DT node.
 > 
 > Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
 > ---
->  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml      | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index 2c1b8da35339..164bd6af9299 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -30,6 +30,10 @@ properties:
->                - allwinner,sun50i-h616-spi
->                - allwinner,suniv-f1c100s-spi
->            - const: allwinner,sun8i-h3-spi
-> +      - items:
-> +          - enum:
-> +              - allwinner,sun20i-d1-spi
-> +          - const: allwinner,sun50i-r329-spi
+> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> index 922e8e0e2c09..a52999240a8e 100644
+> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> @@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
+>  				function = "emac";
+>  			};
 >  
->    reg:
->      maxItems: 1
+> +			/omit-if-no-ref/
+> +			spi0_pins: spi0-pins {
+> +				pins = "PC2", "PC3", "PC4", "PC5";
+> +				function = "spi0";
+> +			};
+> +
+>  			/omit-if-no-ref/
+>  			uart1_pg6_pins: uart1-pg6-pins {
+>  				pins = "PG6", "PG7";
+> @@ -447,6 +453,21 @@ mmc2: mmc@4022000 {
+>  			#size-cells = <0>;
+>  		};
+>  
+> +		spi0: spi@4025000 {
+> +			compatible = "allwinner,sun20i-d1-spi",
+> +				     "allwinner,sun50i-r329-spi";
+> +			reg = <0x04025000 0x300>;
+
+The manual (and the other DTs) use 4K, so please use that here as well.
+
+> +			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
+> +			clock-names = "ahb", "mod";
+> +			dmas = <&dma 22>, <&dma 22>;
+> +			dma-names = "rx", "tx";
+> +			resets = <&ccu RST_BUS_SPI0>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+
+I think we should add the second SPI controller here as well, using
+that DBI fallback compatible string.
+Above looks correct when compared to the manual.
+
+Thanks,
+Andre
+
+
+> +
+>  		usb_otg: usb@4100000 {
+>  			compatible = "allwinner,sun20i-d1-musb",
+>  				     "allwinner,sun8i-a33-musb";
 
