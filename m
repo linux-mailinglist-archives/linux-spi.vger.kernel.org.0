@@ -2,57 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA316F9030
-	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 09:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951016F913F
+	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 12:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjEFHd7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 03:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S231738AbjEFKpt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 06:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbjEFHd0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 03:33:26 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E89008;
-        Sat,  6 May 2023 00:32:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-307664010fdso2164155f8f.0;
-        Sat, 06 May 2023 00:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683358373; x=1685950373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
-        b=SxlItSYNZ/2N62zQ8HfucNmvZcoo/BQ4uyVe4rxcCiyML65I125OynPbPBNPH3zYiL
-         yPg6jxtKxtCPSdyVoOkztDZ6/RMNvOlkAnO1EREyP9+eXaoqHxfsetThSDFthHdWeddJ
-         l+14hEIcR9ZJtg3tZQ+QFVU75bRNgHcNwSUCH5EvYzUbTNodGUQkLh3Ai/bUzhN/WG15
-         uL23qvhTXUo+Iq5qNsZG2H/70+M9qBOi6XH3v4A9TsebybJJiezSTnqM2WqLRqCC8opk
-         wId8FaN/uvkZ7k8Lq//3xBclUyATUr0Mc/VPhlvR/1YcMw6ryBp8342rOZQ8VTdymWGv
-         22dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683358373; x=1685950373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
-        b=EducXnx5PhOPYrtnHyi30YBIi5LQ2zUTRlUCc7UwYOrnfrE4WiAKHm220ZL+DG8phc
-         yGha+szFl5DidgVyqZipCyIdDYS+b9ZS8vBJkji8W7jekxPYu2eR7rZkOkBHR00zlQUp
-         VJ6I8MU9C5LvUZiYomlWxLQ5D/l5ABkDkBMCwo1AQ9sIK4zWiJNPuYZsqlKfTWwEKDR3
-         pJefHQpKIGQwOtjYimTMJbKSnzf8c0Pdf0TMp7ItkuSvVk16tu/o1c2JgIiGIpWqNHNs
-         6X3Y5FTGVXdyXCSdj8zmGXEvepG74dVDl+IzgneKhtysEt2NWzUobjTMae3cXjtU4Yc4
-         sJEg==
-X-Gm-Message-State: AC+VfDycWmB3jedBdWy6OPxKpCUvHeSu4dbEaDYusU1WPAV/YVTIUyQc
-        L/S5rhl2wasVJXDPEBgvhmg=
-X-Google-Smtp-Source: ACHHUZ4CkzM5IntmGzc8H9/kN5AIgGpbIpiHnLmq347VIXPzfjwWlxjDpZCmmsWECMktlC6y4X8xEw==
-X-Received: by 2002:adf:f552:0:b0:306:772:5c2e with SMTP id j18-20020adff552000000b0030607725c2emr2669948wrp.70.1683358372892;
-        Sat, 06 May 2023 00:32:52 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 00:32:52 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
+        with ESMTP id S231286AbjEFKps (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 06:45:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1663C3B;
+        Sat,  6 May 2023 03:45:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 541656179A;
+        Sat,  6 May 2023 10:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F0DC433D2;
+        Sat,  6 May 2023 10:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683369945;
+        bh=mdAeXvDvAsh4oPGhPgeDNTs48DKzuWnkMpws6AcGyeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eGlRVoqEN1sSxivM1kUzgH5wR3j2dq3vSSXS1YcaQMh8lsuR40Zch7rxHIT1izzPa
+         VxFMPZ1JVUXB35MCW7DFvTHjEFADBeOS+y7bnRDcyGhgy9o0lFi3wvzCTghCxxr6RO
+         9QW1NTulQe4GSNXW1DJm71do0fOwnOLF2cq8tYdJucvh3ovnhtvR3rHCzXTOhPFcdU
+         MrUSyIVBnn94efl0E5OL2i4EcjuzkIBlGmP/L90Ue4lJS/sZKS2BehNe1GnJgycIch
+         JVl7fOXIYhrLh9MOdB6vx+pELbLdbgmDMEWK3zJ0eEPwJ4fTdhGX+jSrvS1CR3TW9w
+         qmQbcB3i/j30Q==
+Date:   Sat, 6 May 2023 11:45:38 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,80 +47,93 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
         Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 6/6] riscv: dts: allwinner: d1: Add SPI0 controller node
-Date:   Sat,  6 May 2023 10:30:14 +0300
-Message-Id: <20230506073018.1411583-7-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230506073018.1411583-1-bigunclemax@gmail.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+Message-ID: <20230506-mobility-judge-11bf5e258c2e@spud>
 References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+ <20230506073018.1411583-2-bigunclemax@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Eic5fH4KMQjsoFCn"
+Content-Disposition: inline
+In-Reply-To: <20230506073018.1411583-2-bigunclemax@gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
-an optional SPI flash that connects to the SPI0 controller.
 
-This controller is the same for R329/D1/R528/T113s SoCs and
-should be supported by the sun50i-r329-spi driver.
+--Eic5fH4KMQjsoFCn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So let's add its DT node.
+Hey Maksim,
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
----
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+On Sat, May 06, 2023 at 10:30:09AM +0300, Maksim Kiselev wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
+>=20
+> Allwinner R329 SPI has two controllers, and the second one has helper
+> functions for MIPI-DBI Type C.
+>=20
+> Add compatible strings for these controllers
+>=20
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-sp=
+i.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> index de36c6a34a0f..2c1b8da35339 100644
+> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> @@ -21,6 +21,8 @@ properties:
+>      oneOf:
+>        - const: allwinner,sun6i-a31-spi
+>        - const: allwinner,sun8i-h3-spi
+> +      - const: allwinner,sun50i-r329-spi
+> +      - const: allwinner,sun50i-r329-spi-dbi
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..a52999240a8e 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
- 				function = "emac";
- 			};
- 
-+			/omit-if-no-ref/
-+			spi0_pins: spi0-pins {
-+				pins = "PC2", "PC3", "PC4", "PC5";
-+				function = "spi0";
-+			};
-+
- 			/omit-if-no-ref/
- 			uart1_pg6_pins: uart1-pg6-pins {
- 				pins = "PG6", "PG7";
-@@ -447,6 +453,21 @@ mmc2: mmc@4022000 {
- 			#size-cells = <0>;
- 		};
- 
-+		spi0: spi@4025000 {
-+			compatible = "allwinner,sun20i-d1-spi",
-+				     "allwinner,sun50i-r329-spi";
-+			reg = <0x04025000 0x300>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-+			clock-names = "ahb", "mod";
-+			dmas = <&dma 22>, <&dma 22>;
-+			dma-names = "rx", "tx";
-+			resets = <&ccu RST_BUS_SPI0>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
- 		usb_otg: usb@4100000 {
- 			compatible = "allwinner,sun20i-d1-musb",
- 				     "allwinner,sun8i-a33-musb";
--- 
-2.39.2
+=46rom the driver patch:
+"Add basical support for these controllers. As we're not going to
+support the DBI functionality now, just implement the two kinds of
+controllers as the same."
 
+Should this not be set up as a fallback compatible, per Samuel's
+suggestion here:
+https://lore.kernel.org/lkml/9ae7d1ee-4e2d-f3c1-f55f-e96b0e449b63@sholland.=
+org/
+
+Thanks,
+Conor.
+
+>        - items:
+>            - enum:
+>                - allwinner,sun8i-r40-spi
+> --=20
+> 2.39.2
+>=20
+
+--Eic5fH4KMQjsoFCn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFYv0gAKCRB4tDGHoIJi
+0kNKAQCc6YXuweRIlRrDgRAXOJnIG0uN5R2tL/fxIzNV8q9KxQD9GRVzBGOPGztP
+hupgvwOSJKKM5Q0DMouV7dpmWU5aZwk=
+=btCb
+-----END PGP SIGNATURE-----
+
+--Eic5fH4KMQjsoFCn--
