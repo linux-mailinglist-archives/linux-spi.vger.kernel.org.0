@@ -2,60 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC426F9228
-	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 14:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A5C6F9446
+	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 23:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjEFM7w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 08:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S229527AbjEFV6d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 17:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbjEFM7v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 08:59:51 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3EC18DE6;
-        Sat,  6 May 2023 05:59:49 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bd87539c2so4432127a12.0;
-        Sat, 06 May 2023 05:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683377988; x=1685969988;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R63ySz+V7ttCFAv2NgG95z4OLLtMXFqMOA23r5CKM3s=;
-        b=ZaTXIxnXuWngC2EDRE6syeFBaz/BSK6g+5+DWgtqjX0vVyDFUC5V7KXPWESgkmlQBl
-         RaQH4e7ri0z5JE2HfG73a6c/CA5xV8xT3vpeZdFNyw/DCPWG5CbN8+Ra9NYec90sa2VP
-         Jp/t+mr1Vlu/Q9LqjOZ2a3YfI6BRSngcc2ZoP2+WsYcrINAM77LmvNF81as/t1n8A3fb
-         AoirCUNp4ehe6D3KE7ZoHf2t2OW+w8SwrYW/5mfe8GpZMemC5fI28VKXiUWSCIyBaraO
-         fkIJDpc4okhQwYIK/gHpm5G+SD5IY1gBnUiN3ecr1JANwwWPZHqB0KmxzvczMG9UTPFj
-         gzCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683377988; x=1685969988;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R63ySz+V7ttCFAv2NgG95z4OLLtMXFqMOA23r5CKM3s=;
-        b=HJ5ho5tMfETYOurPU+oTBBGFCg0mTH22/MIGMcMRv7Tn6zF/qusiCgPkvKOOozhE2P
-         aX7f2fGs3dvlr9Wr6fRX+/Il5sd8NPTyUCadoozftVnRL1HZCWaDKeJSe6+sTPqOU44y
-         NhI64Rav37xEorDDLOOa9cE4U/OCfCkYjaWjHtITi18zKXd448Cl+9UvXWwP2FqoESFm
-         kc9cX3DsEVZNkZhqfzRCf3je1GBVn45SvdbKwTjr4DDcTQicXRL9qNS2g1+VHaATMLFB
-         evbKkAs/JriqOzBsz8LcaXMcjyle/EvaUnHvpglppBk6uRPlwpE1Zj9wVCSmSOpABiND
-         pFPQ==
-X-Gm-Message-State: AC+VfDzWS2jeApAyv0jShNBXcZVbycmgjwCUUsp8D4dk3W4roV5MhIjK
-        2T/nySg3DIK41g7HOE+GctFcyekQcClQjEZ58q0=
-X-Google-Smtp-Source: ACHHUZ6DkTuVM4bTLPk7/b7rUBOl2lOEsBgignS7yOAg+Qy4rPo7Ev+AnOErulzJoivJRsJSH9JfWH2dEpM0tr2qvAc=
-X-Received: by 2002:a17:907:168d:b0:949:55fd:34fa with SMTP id
- hc13-20020a170907168d00b0094955fd34famr3968057ejc.39.1683377988143; Sat, 06
- May 2023 05:59:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230506073018.1411583-1-bigunclemax@gmail.com>
- <20230506073018.1411583-2-bigunclemax@gmail.com> <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
-In-Reply-To: <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sat, 6 May 2023 16:59:36 +0400
-Message-ID: <CALHCpMhp07DwL+cUZN8rwa1N_PHQ1KstOB+Gw_mCWFzm5rSVrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner R329 SPI
+        with ESMTP id S229441AbjEFV6c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 17:58:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13D0F191E6;
+        Sat,  6 May 2023 14:58:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC8FC1FB;
+        Sat,  6 May 2023 14:59:14 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 364DF3F5A1;
+        Sat,  6 May 2023 14:58:27 -0700 (PDT)
+Date:   Sat, 6 May 2023 22:58:11 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
         Icenowy Zheng <icenowy@aosc.io>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -73,33 +41,104 @@ Cc:     Andre Przywara <andre.przywara@arm.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+Message-ID: <20230506225811.4e928e46@slackpad.lan>
+In-Reply-To: <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+        <20230506073018.1411583-2-bigunclemax@gmail.com>
+        <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> Should this not be set up as a fallback compatible, per Samuel's
-> suggestion here:
+On Sat, 6 May 2023 12:53:07 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Ok, I'll do it in the next version.
+Hi Maksim,
 
+> On 06/05/2023 09:30, Maksim Kiselev wrote:
+> > From: Icenowy Zheng <icenowy@aosc.io>
+> > 
+> > Allwinner R329 SPI has two controllers, and the second one has helper
+> > functions for MIPI-DBI Type C.  
+> 
 > I wonder what is the difference of DBI compatible. You refer to "helper
 > functions", which sounds like driver... do you mean some parts of SPI
 > controller?
 
-According to the D1 datasheet the SPI_DBI controller uses the same
-registers layout as the regular SPI0 controller.
-But also it has an additional DBI mode functionality. Support for this
-mode is not yet implemented.
-So there is no difference between 'sun50i-r329-spi' and
-'sun50i-r329-spi-dbi' controllers types in the SPI driver.
+So I checked the manuals, all of the D1, T113-s and R329 are the same
+in this respect:
+- There are two SPI controllers, the "first" one is what this series
+  fully supports.
+- The second SPI controller has some additional registers and two
+  extra bits in the control register to drive the DBI extension, but is
+  otherwise compatible to the first one:
 
-Maybe we should drop 'sun50i-r329-spi-dbi' compatible struct from here
-https://lore.kernel.org/lkml/20230506073018.1411583-5-bigunclemax@gmail.com/
-for a while the DBI mode functionality will not be implemented?
+So I'd suggest to introduce the following compatible string
+combinations to the binding *now*. We don't support the DBI bits (yet),
+but this would be the correct hardware description:
+
+For the R329:
+spi0: spi@4025000 {
+	compatible = "allwinner,sun50i-r329-spi";
+	....
+spi1: spi@4026000 {
+	compatible = "allwinner,sun50i-r329-spi-dbi",
+		     "allwinner,sun50i-r329-spi";
+For the D1/T113s:
+spi0: spi@4025000 {
+	compatible = "allwinner,sun20i-d1-spi",
+		     "allwinner,sun50i-r329-spi";
+	....
+spi1: spi@4026000 {
+	compatible = "allwinner,sun20i-d1-spi-dbi",
+		     "allwinner,sun50i-r329-spi-dbi",
+		     "allwinner,sun50i-r329-spi";
+
+I leave that as an exercise to the reader to convert that into the
+minimal set of DT schema lines ;-)
+I would suggest to add both the D1/T113s and the R329 bindings in this
+one patch, to reduce the churn. I guess if you do this, you could even
+drop Icenowy's authorship on this patch, since it has not much to do
+with the original version anymore.
+
+Cheers,
+Andre
+
+
+> > Add compatible strings for these controllers
+> > 
+> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+>
+> > ---
+> >  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > index de36c6a34a0f..2c1b8da35339 100644
+> > --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > @@ -21,6 +21,8 @@ properties:
+> >      oneOf:
+> >        - const: allwinner,sun6i-a31-spi
+> >        - const: allwinner,sun8i-h3-spi
+> > +      - const: 
+> > +      - const: allwinner,sun50i-r329-spi-dbi  
+> 
+> As Conor pointed out, nothing improved here.
+> 
+> Best regards,
+> Krzysztof
+> 
+
