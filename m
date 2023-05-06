@@ -2,41 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B1F6F9148
-	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 12:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A96D6F9151
+	for <lists+linux-spi@lfdr.de>; Sat,  6 May 2023 12:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjEFKto (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 06:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S231996AbjEFKxN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 06:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFKtn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 06:49:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C68E3A85;
-        Sat,  6 May 2023 03:49:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DEDF61A0A;
-        Sat,  6 May 2023 10:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E23DC433EF;
-        Sat,  6 May 2023 10:49:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683370181;
-        bh=OlQOxYKW4SXZYcXypb34XxCl3+X160znYrTJbr+qWUM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MLl1/gdKFqK8ElwObuC+WmydhWi4GpDT7ht6fPKxoC6hAUDlfnZwMPHHpmiEKs0fx
-         qsR6Wu5FitpadgxOoLkKSwVGXv7vEPiGm/tYXDQx2+cap8x77SaAZQFnmC5kJqUTrk
-         54Br4GZfN6uo1v7JlHDWpBYqWbFBVpUqJtVWQKQRJAoLZDmQtkaP7AJa8bZFFQybge
-         lBgOTEj82f2x0u2Ib0GpPib75XdT58vynnHnbbUY9Mt8SP3/lb050p+UvpQY/tf/kX
-         NcPAyrhuNBcH0XoxXkAcS+/yLhROBcJgr+MFxaKMvBJ2w9uecCttj0VXZMLK/xnfGO
-         y5lvhkTp5vC5Q==
-Date:   Sat, 6 May 2023 11:49:35 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Mark Brown <broonie@kernel.org>,
+        with ESMTP id S229872AbjEFKxM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 06:53:12 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A6C559B
+        for <linux-spi@vger.kernel.org>; Sat,  6 May 2023 03:53:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9659c5b14d8so440037766b.3
+        for <linux-spi@vger.kernel.org>; Sat, 06 May 2023 03:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683370389; x=1685962389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+UErNxwinHQ3Gbr526y3MMdqkGlpH1N4yA85BQu/jQ=;
+        b=ZnnPcnv8ZBylQRbOhTSgc7oOzcDTDJvIepvAiTQC79+MygS56SCqReDEyF0mvUhgHU
+         EAjNO5d0xcDcvPJabqJsnAvQaB4wF4QVBi/aoMWpjjFAalyT0lHrai5RZ/TN6WliMMso
+         QseBxIY0eDXDKpjBxfWhXaCbikTrNjNX5O13OFwA91j+X0fvUMozhhUNwauaZyGmrm/R
+         RF9YD7HZZ8Va24bLly+sx7TTMY2iILIkmn4YRe4mRCXesg2TvuetmkZbiSNw5YUD8CQi
+         w0uE57IQnBinE+2+RppNVO/9dqxOYxDYLvBaa2u4MkEliXG8mo0JBb3Fc68/O9RiT5ZV
+         yvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683370389; x=1685962389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+UErNxwinHQ3Gbr526y3MMdqkGlpH1N4yA85BQu/jQ=;
+        b=HY6mQmz+JHh2Cas5CDAKusiVMdUpl6R+8Kap9UeNhOyMJsrOme7S+EdXuLMjjZhE0a
+         s2IieeL8CdRcZsXKIjA9AfuMUOCocqC1B650557OfU5IgjB/zlppE0w5Ic00g4BpCsq4
+         4oEMZkku4q3Yj5h6bg/NfoTQp99CXSQe4f0pdnb3kiwdCIDmByPlxCjdIVETF/hEu3y9
+         B1tUQh9tD3Wjwaog1evZuW/8cikSMs6JmkD3p4ml6+lNNnvbD5332OYnS7MzYtS7UrkQ
+         y+qHgSZh8xVCZKsIsAxku3WTZVFxzfrxorgf0db2ziCedVPzMpFKAMh+P1/8aZzHGcP3
+         6uEA==
+X-Gm-Message-State: AC+VfDxl3dQBGPZ1Oy1a2x60VvedRJRjSpTsuA3C6DLjgI3xiQFz3kcK
+        /aloUKgyYtvSTDpO+4LafbZB1w==
+X-Google-Smtp-Source: ACHHUZ6i+Y7zVINwjFBxl6CnKYAnCnn/zV1ojQVX9NQ093UjfJjxB0nkCiJ8/BQ6zNwikObpGIENCw==
+X-Received: by 2002:a17:907:60c9:b0:965:c42d:ac71 with SMTP id hv9-20020a17090760c900b00965c42dac71mr4128109ejc.51.1683370389513;
+        Sat, 06 May 2023 03:53:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:efe5:7c03:a10a:7a40? ([2a02:810d:15c0:828:efe5:7c03:a10a:7a40])
+        by smtp.gmail.com with ESMTPSA id ig2-20020a1709072e0200b00959b810efcbsm2142263ejc.36.2023.05.06.03.53.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 03:53:08 -0700 (PDT)
+Message-ID: <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+Date:   Sat, 6 May 2023 12:53:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+Content-Language: en-US
+To:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -47,82 +70,58 @@ Cc:     Andre Przywara <andre.przywara@arm.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
         Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/6] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner D1/R528/T113s SPI
-Message-ID: <20230506-unfixable-lavish-eb7907a1a887@spud>
 References: <20230506073018.1411583-1-bigunclemax@gmail.com>
- <20230506073018.1411583-6-bigunclemax@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5lAUstyTyaabrUyb"
-Content-Disposition: inline
-In-Reply-To: <20230506073018.1411583-6-bigunclemax@gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230506073018.1411583-2-bigunclemax@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230506073018.1411583-2-bigunclemax@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 06/05/2023 09:30, Maksim Kiselev wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
+> 
+> Allwinner R329 SPI has two controllers, and the second one has helper
+> functions for MIPI-DBI Type C.
 
---5lAUstyTyaabrUyb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I wonder what is the difference of DBI compatible. You refer to "helper
+functions", which sounds like driver... do you mean some parts of SPI
+controller?
 
-On Sat, May 06, 2023 at 10:30:13AM +0300, Maksim Kiselev wrote:
-> Allwinner D1/R528/T113s SPI has the same as R329 controllers
->=20
-> Add compatible string for this controller
->=20
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+> 
+> Add compatible strings for these controllers
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 > ---
->  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml      | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-sp=
-i.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index 2c1b8da35339..164bd6af9299 100644
+>  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> index de36c6a34a0f..2c1b8da35339 100644
 > --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
 > +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -30,6 +30,10 @@ properties:
->                - allwinner,sun50i-h616-spi
->                - allwinner,suniv-f1c100s-spi
->            - const: allwinner,sun8i-h3-spi
-> +      - items:
-> +          - enum:
-> +              - allwinner,sun20i-d1-spi
+> @@ -21,6 +21,8 @@ properties:
+>      oneOf:
+>        - const: allwinner,sun6i-a31-spi
+>        - const: allwinner,sun8i-h3-spi
+> +      - const: allwinner,sun50i-r329-spi
+> +      - const: allwinner,sun50i-r329-spi-dbi
 
-Yah, this one is more like it. The "allwinner,sun50i-r329-spi-dbi" one
-should be done in the way too.
+As Conor pointed out, nothing improved here.
 
-Cheers,
-Conor.
+Best regards,
+Krzysztof
 
-> +          - const: allwinner,sun50i-r329-spi
-> =20
->    reg:
->      maxItems: 1
-> --=20
-> 2.39.2
->=20
-
---5lAUstyTyaabrUyb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFYwvwAKCRB4tDGHoIJi
-0kJmAQDqt8aTRyBU1JudXMxWI7MO+3HuHjTKN+FXiHOxoEwPRAEA9d6bTe/01zz2
-D1porgB5E8jZK3nBcEWbGNZ04hDmaQk=
-=RXB8
------END PGP SIGNATURE-----
-
---5lAUstyTyaabrUyb--
