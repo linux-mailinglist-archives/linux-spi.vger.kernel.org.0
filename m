@@ -2,87 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B40E6F9931
-	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 17:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A336F998B
+	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 17:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjEGPKB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 7 May 2023 11:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S229781AbjEGP4o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 7 May 2023 11:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEGPKA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 May 2023 11:10:00 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0CB9;
-        Sun,  7 May 2023 08:09:59 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-956ff2399c9so675277866b.3;
-        Sun, 07 May 2023 08:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683472198; x=1686064198;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6k7of+oD7aUsR3ZuT5Ha6yGbmcWNRVYGMihlsEz0Xhg=;
-        b=cN8WCKzL3z0UDeYh32zhcfq6BPnbBq/473XGNaamAepsq0ySGTjyRZYn8xTBDG2mrx
-         QYm9QwRYg8Z85CR6gGPTGK4GULfL8f+pKD68yRYQdXIAGUV3LBBHTnfMYJ8nYBT4jzVU
-         Kn9p81vKiVi6kP10iYxs+NageUXik6ESyKb5ARp1JRLGmPNGA49Sd+KTCRZvAdso4I/f
-         mKl6RD5w6Af+0s1ur//68pdNLm94Ol78n13MZ6N1Get+dRZGYcgDpqnGSWYnldDkRTnh
-         fZkeXR5FGvujWH1pM8KZkj3kxKQWmSeIJMIfQgHkiDteGeqvZO31cZlUcdMTWKnGAx+i
-         F5oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683472198; x=1686064198;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6k7of+oD7aUsR3ZuT5Ha6yGbmcWNRVYGMihlsEz0Xhg=;
-        b=aGv4dL/ZDZkP0x+TcdafnycY/L0Tvkg46Na9CISz1n/a2yWV/n04zOsTeMlEzSpQAR
-         +dmoOOhW1ukQnGhCAF7C7dEJ4zMrtRe8YAWp2m985rmRe8zFZQxKW4ADQVnMRxcZ30rX
-         7IEo5rOO7Liss6+Gx7SkYirvYVFy/eBbYivlOs/mQWTX5Ra7K0zsHca58DyFykUpG0lH
-         t7x9Pjy9Cj5xPq0MOIjs72bh9+Vdk7yefNXAaRCCsho0EkXSePH6xsGVF77bmIS+eIIQ
-         Fokl24OAGrXTS9j2oxJCy4dT4ZwMadN1lbh2MGXK64VcilfpLMYLbZAfs8eXsvv8D6t7
-         TIgw==
-X-Gm-Message-State: AC+VfDwreMo/Yq1Wkwxuz168Kvu5y7PwJgChHslg46gIoPW37KgjJAw1
-        W/Smq3OKvIwKbC1gp1LktKRX5W9uXwArinixDEE=
-X-Google-Smtp-Source: ACHHUZ6+VFC93AW7h4sZdYiyaPqZUGGXGfe8vKSCHC7hQOOltYg0zJcH53vc/h7kUSkTyJjHMOz1gnBQknP7XOjm+v4=
-X-Received: by 2002:a17:906:7955:b0:94f:9f76:c74f with SMTP id
- l21-20020a170906795500b0094f9f76c74fmr7323137ejo.52.1683472197958; Sun, 07
- May 2023 08:09:57 -0700 (PDT)
+        with ESMTP id S229757AbjEGP4n (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 May 2023 11:56:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADAA11610
+        for <linux-spi@vger.kernel.org>; Sun,  7 May 2023 08:56:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D7A360A4C
+        for <linux-spi@vger.kernel.org>; Sun,  7 May 2023 15:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F0EFC433EF;
+        Sun,  7 May 2023 15:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683475001;
+        bh=hZnWWv85Da7XHZxjaFK3Qsi7hr3nmnl/09LeQLmceuo=;
+        h=Subject:From:Date:To:From;
+        b=S+NPlZeDyvM/rnh0vyeqqWbb9wGii8RxiiHfY/WN4+GimQn0qJO5BGuqd5k42eiWc
+         DdIXsygxFJEslPMN+Yz351+2ev6G+sTuPGS2UKNOFs4sbxZi6WMGTlilyDCebdmoWT
+         36S4AzrpP41LDUR5SMHUuupsSd/Uoy4oyl6gKg/epsCX+VxmqsqJzhqlQET1USy6D5
+         REKfnZXHQk2B6tt6rtMrbJyy3v2K7L9HH0KWomJ6H1i1Otx+WDyvkagItbJ/1kjgW8
+         BcTblkYUDBSZkM/YZKINn/gWb7ObxA7zlCjrXoyyhUyZdndc7/WVgnji5+W1UOhC18
+         4VmRCILZiLy4Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53CC9E5FFCC;
+        Sun,  7 May 2023 15:56:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230506232616.1792109-1-bigunclemax@gmail.com>
- <20230506232616.1792109-4-bigunclemax@gmail.com> <20230507105150.31643b87@slackpad.lan>
-In-Reply-To: <20230507105150.31643b87@slackpad.lan>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sun, 7 May 2023 18:09:45 +0300
-Message-ID: <CALHCpMgxsLzRF0FfazMXYiWK1fV99dbxYNDvoj+a0S-RvZP9Hg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] spi: sun6i: add quirk for in-controller clock divider
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168347500133.19886.7645793795471663587.git-patchwork-housekeeping@kernel.org>
+Date:   Sun, 07 May 2023 15:56:41 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> This case assumes that the SDM bit is zero already. I think just
-> masking both bits off above, right after the read, is the easiest, then
-> you can also lose the else branch below entirely.
+Latest series: [v4] Allwinner R329/D1/R528/T113s SPI support (2023-05-07T15:03:32)
+  Superseding: [v3] Allwinner R329/D1/R528/T113s SPI support (2023-05-06T23:26:03):
+    [v3,1/5] dt-bindings: spi: sun6i: add DT bindings for Allwinner R329/D1/R528/T113s SPI
+    [v3,2/5] spi: sun6i: change OF match data to a struct
+    [v3,3/5] spi: sun6i: add quirk for in-controller clock divider
+    [v3,4/5] spi: sun6i: add support for R329/D1/R528/T113s SPI controllers
+    [v3,5/5] riscv: dts: allwinner: d1: Add SPI controllers node
 
-Thanks for this remark. I fixed it in the next revision.
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
