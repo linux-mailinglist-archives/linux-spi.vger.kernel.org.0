@@ -2,46 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87886F951C
-	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 01:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2E46F9541
+	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 02:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjEFX4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 19:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S230418AbjEGAbO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 20:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEFX4l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 19:56:41 -0400
+        with ESMTP id S230431AbjEGAbG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 20:31:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182951328E
-        for <linux-spi@vger.kernel.org>; Sat,  6 May 2023 16:56:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4781A1D1;
+        Sat,  6 May 2023 17:30:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0EE160CF7
-        for <linux-spi@vger.kernel.org>; Sat,  6 May 2023 23:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 018EEC433EF;
-        Sat,  6 May 2023 23:56:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CF3609AD;
+        Sun,  7 May 2023 00:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E87C4339B;
+        Sun,  7 May 2023 00:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683417399;
-        bh=XtHJjcKS1Qn4HIRXFInavyUMYystqA372bxrBQvrTFk=;
-        h=Subject:From:Date:To:From;
-        b=uF/Ds7Vj3IYPRpWoC5B9NosFkmgystWQktiuRrP9PH9NPpQJXkv7uNUNum6GOkrXA
-         +GDwr/ZMwiAiMaGuYH+HVCnTfx+CDh5irXrzxgjElzTduB7z/FurdlWJN5pDU0IDzf
-         z5FAOPr2l0szf3DDy6IPsSpl1cjEKIyUj5+P8p8xhJ0LgfF+IMi0/UdpJlG917RmzS
-         6Ew0ARYuMPo0zZJlQHL1nXQdm0+wG9ZNWrwd2U1nGuve6QE4KcLNBjCKGyW6nuPLCu
-         FwOumtu1YAfLdAwiW7ByvDSVhtMS3TxYj/OywHJAI3VJIcquaia5exWEpDD/RD0vwJ
-         jnjGcKIywQBKQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D91A9C395C8;
-        Sat,  6 May 2023 23:56:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1683419450;
+        bh=DJugA/gi0HDfnlA98AYwhyAVdhZMFQgHuFck+8tKJ40=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nJz09BxwyyMcSOt6IPt4EtRvzkgtne7LUEPZrNP4PO2GZMPAxQZNUOrIkwbPAacon
+         7bCCMx4HGnADm28PYqFPphDp1tlmlrydy6fKXrflRuNp/mxQ246SbtG6qaGcYhgtYg
+         gWaREvCiiPiizCWf9xs5oH2zJURP45y3gPdV6VEZW7KPiiNMnzoCDeRWbz9G08T284
+         qtrrCKFCsidQmbNnmp3z0Lz5CrH63GsGwdFHOUCkyK6HPC1sOxWEnWl2bXJCLqY3yn
+         Jo5HLiaDUuavWVthA8ubfKLMEInng5/x7YzrmwkB1p0JIxv5PR5K/y7y0/mKatYtiX
+         nDXUjuLInsqWg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 09/24] spi: intel-pci: Add support for Meteor Lake-S SPI serial flash
+Date:   Sat,  6 May 2023 20:30:05 -0400
+Message-Id: <20230507003022.4070535-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230507003022.4070535-1-sashal@kernel.org>
+References: <20230507003022.4070535-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168341739888.14262.16523251709040188816.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 06 May 2023 23:56:38 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,17 +56,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Allwinner R329/D1/R528/T113s SPI support (2023-05-06T23:26:03)
-  Superseding: [v2] Allwinner R329/D1/R528/T113s SPI support (2023-05-06T07:30:08):
-    [v2,1/6] dt-bindings: spi: sun6i: add DT bindings for Allwinner R329 SPI
-    [v2,2/6] spi: sun6i: change OF match data to a struct
-    [v2,3/6] spi: sun6i: add quirk for in-controller clock divider
-    [v2,4/6] spi: sun6i: add support for R329 SPI controllers
-    [v2,5/6] dt-bindings: spi: sun6i: add DT bindings for Allwinner D1/R528/T113s SPI
-    [v2,6/6] riscv: dts: allwinner: d1: Add SPI0 controller node
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
+[ Upstream commit c2912d42e86e494935722669e4d9eade69649072 ]
 
+Intel Meteor Lake-S has the same SPI serial flash controller as Meteor
+Lake-P. Add Meteor Lake-S PCI ID to the driver list of supported
+devices.
+
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Link: https://lore.kernel.org/r/20230331052812.39983-1-mika.westerberg@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-intel-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index 4d69e320d0185..a7381e774b953 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -83,6 +83,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0xa2a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0xae23), (unsigned long)&cnl_info },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(pci, intel_spi_pci_ids);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.39.2
 
