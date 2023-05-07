@@ -2,47 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2E46F9541
-	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 02:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576F36F9547
+	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 02:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjEGAbO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 20:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        id S230409AbjEGAb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 20:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjEGAbG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 20:31:06 -0400
+        with ESMTP id S230431AbjEGAbV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 20:31:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4781A1D1;
-        Sat,  6 May 2023 17:30:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB61A105;
+        Sat,  6 May 2023 17:31:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CF3609AD;
-        Sun,  7 May 2023 00:30:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E87C4339B;
-        Sun,  7 May 2023 00:30:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F2A61378;
+        Sun,  7 May 2023 00:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F90FC433A4;
+        Sun,  7 May 2023 00:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419450;
-        bh=DJugA/gi0HDfnlA98AYwhyAVdhZMFQgHuFck+8tKJ40=;
+        s=k20201202; t=1683419458;
+        bh=nFzYe1ZFmcKtA76E4tjTrkRVurLuHPfcmozlM5lGDGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJz09BxwyyMcSOt6IPt4EtRvzkgtne7LUEPZrNP4PO2GZMPAxQZNUOrIkwbPAacon
-         7bCCMx4HGnADm28PYqFPphDp1tlmlrydy6fKXrflRuNp/mxQ246SbtG6qaGcYhgtYg
-         gWaREvCiiPiizCWf9xs5oH2zJURP45y3gPdV6VEZW7KPiiNMnzoCDeRWbz9G08T284
-         qtrrCKFCsidQmbNnmp3z0Lz5CrH63GsGwdFHOUCkyK6HPC1sOxWEnWl2bXJCLqY3yn
-         Jo5HLiaDUuavWVthA8ubfKLMEInng5/x7YzrmwkB1p0JIxv5PR5K/y7y0/mKatYtiX
-         nDXUjuLInsqWg==
+        b=Ue8RdGM93cJgNb8BC0ytcKuTAXLLR7pb0l+P/RS9EmMu4kf2UoLPkCh8FQRZNstyZ
+         R8c+PJiwCornwatG0K83p4OGwVl6RogmcHe5HTAuE4qeAMKplsPDArtsg09TTzDSkS
+         v+KNoxJd+6FWSiLZo66BKgTWahxXIxOOEzlITcdwm1/sTqTw4salxvnMh8Sw2eGjXj
+         nIZYSudQotBC059xwYYp8FEA2FkIlu4JXo5CJe+clvjy7inDXjG/s3gZpae5i6WpTd
+         QY2AYxGEOY5HSOlyE/3yt3JoFBYHtc/7LoQy2TPHUIVflKYICN0AIKvfzb/4oxtQFv
+         DOU6/dixguh8g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 09/24] spi: intel-pci: Add support for Meteor Lake-S SPI serial flash
-Date:   Sat,  6 May 2023 20:30:05 -0400
-Message-Id: <20230507003022.4070535-9-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, shawnguo@kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 13/24] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
+Date:   Sat,  6 May 2023 20:30:09 -0400
+Message-Id: <20230507003022.4070535-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003022.4070535-1-sashal@kernel.org>
 References: <20230507003022.4070535-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -56,34 +58,75 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
 
-[ Upstream commit c2912d42e86e494935722669e4d9eade69649072 ]
+[ Upstream commit 87c614175bbf28d3fd076dc2d166bac759e41427 ]
 
-Intel Meteor Lake-S has the same SPI serial flash controller as Meteor
-Lake-P. Add Meteor Lake-S PCI ID to the driver list of supported
-devices.
+When using gpio based chip select the cs value can go outside the range
+0 – 3. The various MX51_ECSPI_* macros did not take this into consideration
+resulting in possible corruption of the configuration.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Link: https://lore.kernel.org/r/20230331052812.39983-1-mika.westerberg@linux.intel.com
+For example for any cs value over 3 the SCLKPHA bits would not be set and
+other values in the register possibly corrupted.
+
+One way to fix this is to just mask the cs bits to 2 bits. This still
+allows all 4 native chip selects to work as well as gpio chip selects
+(which can use any of the 4 chip select configurations).
+
+Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Link: https://lore.kernel.org/r/20230318222132.3373-1-kgroeneveld@lenbrook.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-intel-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi-imx.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 4d69e320d0185..a7381e774b953 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -83,6 +83,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0xa2a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0xae23), (unsigned long)&cnl_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(pci, intel_spi_pci_ids);
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index e4ccd0c329d06..c61c7ac4c70c4 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -252,6 +252,18 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ 	return true;
+ }
+ 
++/*
++ * Note the number of natively supported chip selects for MX51 is 4. Some
++ * devices may have less actual SS pins but the register map supports 4. When
++ * using gpio chip selects the cs values passed into the macros below can go
++ * outside the range 0 - 3. We therefore need to limit the cs value to avoid
++ * corrupting bits outside the allocated locations.
++ *
++ * The simplest way to do this is to just mask the cs bits to 2 bits. This
++ * still allows all 4 native chip selects to work as well as gpio chip selects
++ * (which can use any of the 4 chip select configurations).
++ */
++
+ #define MX51_ECSPI_CTRL		0x08
+ #define MX51_ECSPI_CTRL_ENABLE		(1 <<  0)
+ #define MX51_ECSPI_CTRL_XCH		(1 <<  2)
+@@ -260,16 +272,16 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ #define MX51_ECSPI_CTRL_DRCTL(drctl)	((drctl) << 16)
+ #define MX51_ECSPI_CTRL_POSTDIV_OFFSET	8
+ #define MX51_ECSPI_CTRL_PREDIV_OFFSET	12
+-#define MX51_ECSPI_CTRL_CS(cs)		((cs) << 18)
++#define MX51_ECSPI_CTRL_CS(cs)		((cs & 3) << 18)
+ #define MX51_ECSPI_CTRL_BL_OFFSET	20
+ #define MX51_ECSPI_CTRL_BL_MASK		(0xfff << 20)
+ 
+ #define MX51_ECSPI_CONFIG	0x0c
+-#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs) +  0))
+-#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs) +  4))
+-#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs) +  8))
+-#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs) + 12))
+-#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs) + 20))
++#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs & 3) +  0))
++#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
++#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
++#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
++#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
+ 
+ #define MX51_ECSPI_INT		0x10
+ #define MX51_ECSPI_INT_TEEN		(1 <<  0)
 -- 
 2.39.2
 
