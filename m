@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576F36F9547
-	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 02:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987C86F9578
+	for <lists+linux-spi@lfdr.de>; Sun,  7 May 2023 02:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjEGAb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 6 May 2023 20:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S231489AbjEGAeS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 6 May 2023 20:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjEGAbV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 20:31:21 -0400
+        with ESMTP id S231491AbjEGAdy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 6 May 2023 20:33:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB61A105;
-        Sat,  6 May 2023 17:31:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C51A4AD;
+        Sat,  6 May 2023 17:33:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F2A61378;
-        Sun,  7 May 2023 00:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F90FC433A4;
-        Sun,  7 May 2023 00:30:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DC576147A;
+        Sun,  7 May 2023 00:33:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16433C4339B;
+        Sun,  7 May 2023 00:33:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419458;
+        s=k20201202; t=1683419592;
         bh=nFzYe1ZFmcKtA76E4tjTrkRVurLuHPfcmozlM5lGDGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ue8RdGM93cJgNb8BC0ytcKuTAXLLR7pb0l+P/RS9EmMu4kf2UoLPkCh8FQRZNstyZ
-         R8c+PJiwCornwatG0K83p4OGwVl6RogmcHe5HTAuE4qeAMKplsPDArtsg09TTzDSkS
-         v+KNoxJd+6FWSiLZo66BKgTWahxXIxOOEzlITcdwm1/sTqTw4salxvnMh8Sw2eGjXj
-         nIZYSudQotBC059xwYYp8FEA2FkIlu4JXo5CJe+clvjy7inDXjG/s3gZpae5i6WpTd
-         QY2AYxGEOY5HSOlyE/3yt3JoFBYHtc/7LoQy2TPHUIVflKYICN0AIKvfzb/4oxtQFv
-         DOU6/dixguh8g==
+        b=Wd2Z2o4rZrgJJQh64rN/B2DDPJ1SQeYCCTR/0XB0dqXgct3+9XtGXYlaraiq5Nje0
+         PpHIXOgnO2d5TD6E1lQceVygzeQwpDBobWOb36UlGLw5OsyLQMMwAmMAD4zjc2yBUu
+         eumrNMF1AMxFMzgS5QyDKanweAv2Yck1A1bPEcy4X9+U3Ia+QSDUHMHHSuq0jxKogs
+         BSwICl/EBZ5EBijeLpLzPicnVlY6yMbLiI2XYq7Zov32efi4cGTOLm+EEFfxej7RCz
+         aT2YH9jpnM8+rAZSQxLQFJZjyzZd1flHhiJfbOEYICLway4MlT2j9E2UFTj+PNz3jh
+         4iMhD+HqWWAfg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, shawnguo@kernel.org,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 13/24] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
-Date:   Sat,  6 May 2023 20:30:09 -0400
-Message-Id: <20230507003022.4070535-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.2 10/20] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
+Date:   Sat,  6 May 2023 20:32:25 -0400
+Message-Id: <20230507003237.4074305-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507003022.4070535-1-sashal@kernel.org>
-References: <20230507003022.4070535-1-sashal@kernel.org>
+In-Reply-To: <20230507003237.4074305-1-sashal@kernel.org>
+References: <20230507003237.4074305-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
