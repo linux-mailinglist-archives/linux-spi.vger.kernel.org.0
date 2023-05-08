@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC1F6FB992
-	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 23:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464546FB9A4
+	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 23:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbjEHVZU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 May 2023 17:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S233888AbjEHV2Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 May 2023 17:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbjEHVZS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 17:25:18 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4BA2D53;
-        Mon,  8 May 2023 14:24:59 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643b60855c8so2886029b3a.2;
-        Mon, 08 May 2023 14:24:59 -0700 (PDT)
+        with ESMTP id S232838AbjEHV2W (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 17:28:22 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536461BC9;
+        Mon,  8 May 2023 14:28:08 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-51452556acdso3269664a12.2;
+        Mon, 08 May 2023 14:28:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683581099; x=1686173099;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lY7XNuYMi6d2HpAXFIV2eIcbCwEXTGxuVFXmla1j3I0=;
-        b=ldNC1OSRN/AiwY6BBBbtAdCSbMbXQnIYQR4qsbC4raWEeRgeENnMRyFj20zl6m6WFL
-         Q6KoS616XvezA0CqW46e0Uf91lNFkKzVnmwaje2Xx+hnQi7x1fesRbLXVe1/62T280Tc
-         sDNRIrVPzNkaQzyFwh5aikHQSV0+4+e9iFMDlURjhfyMlfSwz/jRaW+gCMpLu54FNZjV
-         QpPe5Oz9noUeKtmAnQwynUBQsUf4AEcllT/v+uN9OpbX9vg2d7fOVF5bcnsfmrHi3UoK
-         ZGjOQ027L7W1gSJP3C8+Zy+hTcT84BnPbB2sF6y4GidtBDmcoDg2kCx/mZOzINb0v3ot
-         fQlw==
+        d=gmail.com; s=20221208; t=1683581287; x=1686173287;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CBp9p/uYaxi06hfRt45Jfs/gvw/XMrWCbWQr51fRckI=;
+        b=G+jtUkmJEGKtOIVlB1RLnusjVD7s5WH8jEykBI3T+p3wREB6Hz7cddVts23Rk9aenL
+         XoXxoQOKK5CspEKZ9YgTwXtSX8Ggara9foZC11GZhmPDCJzrWCRYWXSwyubdOXzVSHWM
+         ftnwFgcGAeyMrP1VA51kR5vUlAxFvsbXBQ+ogyCGSfzGTAyTHlc3a85ujRd0nP/Akg+g
+         hUDc8bgPWakGrLPBIdziZpqnPp2aPO6qHtY5LskY1H9Ufzo/7if59XlgnH2qU8lGU7E2
+         1OSxXrsAUX80sO1KkU8iUVZVxcGQJLG/dBQs3GODDg1tYGRPXThJN5QAfwPxUStfyJZ+
+         euxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581099; x=1686173099;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lY7XNuYMi6d2HpAXFIV2eIcbCwEXTGxuVFXmla1j3I0=;
-        b=OV+Wov1h+KTwjzj9Ho2E2HRDOLk3pKVKjzU46x2UntNf3w3D3nF4Ez9I61JMmDtgo8
-         tCwmyFIafDCKhryqB2+GUkw0LQ4a5VAbIYL23eKJAsgHu61avk1yHpGo+UCL6mQRqW/h
-         p20qmWOS2JSGlE8O0nKqdqfDDxksgm0eOztD0jyHH0+Mc4c8Mx2tgUkW/uJiOtJFrQtb
-         cz0+X1oLdKIbQm3gzSgKQmQUoX+bzkeFwKouCtowVw5MkdC5vqUhszxMKkzEbbaewxV4
-         Tgkl9rcp64eJWzw60dyMxE7dC8lTeFUmx9nrI0sM7v3909NHBd5CwJEhOqdllUuSDXvq
-         aKKg==
-X-Gm-Message-State: AC+VfDwJWMKMacmzsEClCNgh9B1zR/e+Jiscd8NBxnqO2E4XU4FGxZGn
-        vbp0v2F6ZAkTYWLswOF+6rI=
-X-Google-Smtp-Source: ACHHUZ7+bYJ7TcN4WYYGelZV6DAfXOpZUn5DOVtNMVxidcDjp5pAkqw6xFDgud9wDkc0Wljg420qMg==
-X-Received: by 2002:a05:6a00:ad0:b0:63b:8a91:e641 with SMTP id c16-20020a056a000ad000b0063b8a91e641mr14966335pfl.11.1683581099188;
-        Mon, 08 May 2023 14:24:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683581287; x=1686173287;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBp9p/uYaxi06hfRt45Jfs/gvw/XMrWCbWQr51fRckI=;
+        b=XCV4yPKsTkjV48tAZ6fI6GviEc2eDSzv+vZpX3e8+Hx+GYZrAdT81eQ6iH3PUlxBLM
+         1YoVSLp8eMFzg0704oxhM212kXZK00N44pK+6XheLb9AbUaWVfR9Jzau3IQPNy+FB1HC
+         SBQtunBpOAH8J7CYblPoOcZLxtqx8/ZuKiVr9SE7OoDKiM4FWYuvImh/n/hmPmtqh2/a
+         Q2KJCzwYieV+up2RO2J/f74BBNZvAkwhhqK5js0e56LSqSAXKUI4JpKSPm/uCRjwUr7n
+         Fqo44hKsKyqjp+nY03nyJHV7b7Q18zhFG212ZPKtodx02QHu3kMHktgEyWgmBbKivOBL
+         IMGA==
+X-Gm-Message-State: AC+VfDz7XZPFc5h6FgH4GTvAo4zzKvA2hkCYvhg6vMURVWWuLKPu3FxJ
+        LOwqoq2XsMzJ9msajfihzJA=
+X-Google-Smtp-Source: ACHHUZ4SKZcFOEk4rh3wU8Xlt4Wg/5LelB0TU7HIWEOKGANquhYmCFYPj5iGkqtKuBTaj8e5e9UbBQ==
+X-Received: by 2002:a17:90a:b401:b0:23b:2c51:6e7 with SMTP id f1-20020a17090ab40100b0023b2c5106e7mr12079044pjr.21.1683581287314;
+        Mon, 08 May 2023 14:28:07 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:4d1:db5a:dbba:cd34])
-        by smtp.gmail.com with ESMTPSA id p8-20020a62ab08000000b0064394c2a1d0sm354851pff.209.2023.05.08.14.24.56
+        by smtp.gmail.com with ESMTPSA id g24-20020a17090a579800b0024dee5cbe29sm14992974pji.27.2023.05.08.14.28.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 14:24:58 -0700 (PDT)
-Date:   Mon, 8 May 2023 14:24:54 -0700
+        Mon, 08 May 2023 14:28:05 -0700 (PDT)
+Date:   Mon, 8 May 2023 14:28:01 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
@@ -69,14 +70,17 @@ Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
-Message-ID: <ZFloppofNNcrQtgv@google.com>
-References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
- <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
+Subject: Re: [PATCH v3 1/3] Input: ads7846 - Convert to use software nodes
+Message-ID: <ZFlpYff6I5V6JiH1@google.com>
+References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
+ <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org>
+ <ZFVGMiuRT+e2eVXw@google.com>
+ <CACRpkdZUXOTOK9CObdXuHQx4PMD3ykMKco8X5ijchkZ8cEmQvA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdZUXOTOK9CObdXuHQx4PMD3ykMKco8X5ijchkZ8cEmQvA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -87,86 +91,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 08, 2023 at 11:20:06PM +0200, Linus Walleij wrote:
-> The Nokia 770 is using GPIOs from the global numberspace on the
-> CBUS node to pass down to the LCD controller. This regresses when we
-> let the OMAP GPIO driver use dynamic GPIO base.
+On Mon, May 08, 2023 at 11:23:44PM +0200, Linus Walleij wrote:
+> On Fri, May 5, 2023 at 8:08 PM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
 > 
-> The Nokia 770 now has dynamic allocation of IRQ numbers, so this
-> needs to be fixed for it to work.
+> > > -     return !gpio_get_value(ts->gpio_pendown);
+> > > +     return !gpiod_get_value(ts->gpio_pendown);
+> >
+> > This needs to be
+> >
+> >         return !gpiod_get_value_raw(ts->gpio_pendown);
 > 
-> As this is the only user of LCD MIPID we can easily augment the
-> driver to use a GPIO descriptor instead and resolve the issue.
-> 
-> The platform data .shutdown() callback wasn't even used in the
-> code, but we encode a shutdown asserting RESET in the remove()
-> callback for completeness sake.
-> 
-> The CBUS also has the ADS7846 touchscreen attached.
-> 
-> Populate the devices on the Nokia 770 CBUS I2C using software
-> nodes instead of platform data quirks. This includes the LCD
-> and the ADS7846 touchscreen so the conversion just brings the LCD
-> along with it as software nodes is an all-or-nothing design
-> pattern.
-> 
-> The ADS7846 has some limited support for using GPIO descriptors,
-> let's convert it over completely to using device properties and then
-> fix all remaining boardfile users to provide all platform data using
-> software nodes.
-> 
-> Dump the of includes and of_match_ptr() in the ADS7846 driver as part
-> of the job.
-> 
-> Since we have to move ADS7846 over to obtaining the GPIOs it is
-> using exclusively from descriptors, we provide descriptor tables
-> for the two remaining in-kernel boardfiles using ADS7846:
-> 
-> - PXA Spitz
-> - MIPS Alchemy DB1000 development board
-> 
-> It was too hard for me to include software node conversion of
-> these two remaining users at this time: the spitz is using a
-> hscync callback in the platform data that would require further
-> GPIO descriptor conversion of the Spitz, and moving the hsync
-> callback down into the driver: it will just become too big of
-> a job, but it can be done separately.
-> 
-> The MIPS Alchemy DB1000 is simply something I cannot test, so take
-> the easier approach of just providing some GPIO descriptors in
-> this case as I don't want the patch to grow too intrusive.
-> 
-> As we see that several device trees have incorrect polarity flags
-> and just expect to bypass the gpiolib polarity handling, fix up
-> all device trees too, in a separate patch.
-> 
-> Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v3->v4:
-> - Fix all board file polarity flags to be active low, because
->   this pendown signal is active low.
-> - Fix all erroneous device trees too.
-> - Drop some unnecessary commas.
-> ChangeLog v2->v3:
-> - Drop leftover OF ifdefs no longer needed and causing compile
->   errors.
-> ---
->  arch/arm/mach-omap1/board-nokia770.c    |  98 +++++++++++++++++----------
->  arch/arm/mach-pxa/spitz.c               |  11 +++-
->  arch/mips/alchemy/devboards/db1000.c    |  11 +++-
->  drivers/input/touchscreen/ads7846.c     | 113 ++++++++++++--------------------
+> There is no such function. The gpio descriptor runpath simply assumes that
+> device trees can be trusted.
 
-For input:
+Sorry, this was supposed to be gpiod_get_raw_value():
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib.c#L2854
 
-In general:
+> 
+> > I looked at various DTSes we have and they use a mix of active high and
+> > active low annotations, so we have to go with the "raw" variant for now,
+> > and then update to normal one once we update bad DTSes.
+> 
+> I just sighed and fixed all the device trees :D
 
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Yeah, we we can land the DT fixes ahead of the driver change that would
+be great. Otherwise we need a temporary application of
+gpiod_get_raw_value().
 
-Thanks.
+> 
+> Yours,
+> Linus Walleij
 
 -- 
 Dmitry
