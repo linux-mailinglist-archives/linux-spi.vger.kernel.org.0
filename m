@@ -2,25 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9A06FB391
-	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 17:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4226FB904
+	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 22:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbjEHPRe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 May 2023 11:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S233464AbjEHUze (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 May 2023 16:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbjEHPRd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 11:17:33 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC633A93
-        for <linux-spi@vger.kernel.org>; Mon,  8 May 2023 08:17:31 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 71d38cae-edb3-11ed-b3cf-005056bd6ce9;
-        Mon, 08 May 2023 18:17:29 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Mon, 8 May 2023 18:17:28 +0300
-To:     Linus Walleij <linus.walleij@linaro.org>
+        with ESMTP id S233409AbjEHUzd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 16:55:33 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FFB86AD
+        for <linux-spi@vger.kernel.org>; Mon,  8 May 2023 13:55:00 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55c939fb24dso45975217b3.2
+        for <linux-spi@vger.kernel.org>; Mon, 08 May 2023 13:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683579297; x=1686171297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ebgkfCiodiKcun60kKBUwZij72grfP4UOmjlc+G6i8I=;
+        b=k0YYa/u76d7Ieqtnsvy/Saa1HPB4iaH1dWzUdUuvpcLGfYYlTzbXgK21e8GZZqfZ7i
+         YE+F+MB9zyXtiARKsPNIiY9f3Yvt1HVWAVLTf6t6yhR5GOODuvZu3luqlcRMbLYDDKCC
+         QpsnZEqepGgE18Mu6mcHcKTrkO/b+Iy6POYKLn7fB3mza3FUb79uQ3OyDUmYLPLGyrU9
+         yFfOpdYmElLihnmMJxGsSFbxtufg1vlUdp39zLnUMxZA1zevF+Nwgewq67DDlHNDL6rq
+         W1tR4tE5bhj81NA+/5pweLJQAC6rL4aL5pDyC8sWhOEqEyQUW98xARAg6p4xXnZCWIp9
+         mDsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683579297; x=1686171297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ebgkfCiodiKcun60kKBUwZij72grfP4UOmjlc+G6i8I=;
+        b=HjDTSgJEHWkj0PR2JBUz6Z6POwnVDbHpjwOqS0z2fGnRlXEwkGq4FRHMU4/pp++mqj
+         IucCEQ8r9lV8ny6JEXiZDKuyVAQkqpl2kVVRrwh2hiedRAW2W9dXViJf8aOQwtcbwkZt
+         svOW7Z4BRoSzcVXK2hXyYeHUiLO4pZhtFTgSkVcP8s/uX5uSmdq9tDwySNR2mtGTS5eV
+         LRXAJTrtwisu6AEURFMPBxAAXT4dUgJB2N8d26zhL+909mnvS1SMvO1wFnrDHAi5nm/B
+         BOlV6SQh4tf+cLor3fbGlW62huIeNjEKuxGg7y7JkzJmgzuvv7bApKSD8MRMvsdRhrR/
+         OuoA==
+X-Gm-Message-State: AC+VfDzJ7fwMe06QcWnz89biKs1g7aAnykDdvzBV8VPVgbPbPIKaA2tU
+        X/vh4mF2MoRM7iX39YaVhbq6pHAhormqL9Em2eprkA==
+X-Google-Smtp-Source: ACHHUZ61Co9c2vfFGtG+tpLFRQ4UHj1QYb0g4ygOt03JqCB/lCRGyKCa19BWVLj8Nu27zbXZko10yxza9yB0luPTCMc=
+X-Received: by 2002:a25:54b:0:b0:b99:f279:10dc with SMTP id
+ 72-20020a25054b000000b00b99f27910dcmr12394809ybf.28.1683579297026; Mon, 08
+ May 2023 13:54:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
+ <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org> <ZFkSMBhw5UaWdpsM@surfacebook>
+In-Reply-To: <ZFkSMBhw5UaWdpsM@surfacebook>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 8 May 2023 22:54:45 +0200
+Message-ID: <CACRpkda8zbR3CnRp5w=NvRder1rYTs+DYZN0QyhneDwR1E_qUA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] Input: ads7846 - Convert to use software nodes
+To:     andy.shevchenko@gmail.com
 Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Tony Lindgren <tony@atomide.com>,
@@ -40,58 +74,33 @@ Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] ARM: omap1: Fix up the Nokia 770 board device IRQs
-Message-ID: <ZFkSiM9GRfN5n7n4@surfacebook>
-References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
- <20230430-nokia770-regression-v3-3-a6d0a89ffa8b@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v3-3-a6d0a89ffa8b@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fri, May 05, 2023 at 01:16:57PM +0200, Linus Walleij kirjoitti:
-> The platform devices on the Nokia 770 is using some
-> board-specific IRQs that get statically assigned to platform
-> devices in the boardfile.
-> 
-> This does not work with dynamic IRQ chip bases.
-> 
-> Utilize the NULL device to define some board-specific
-> GPIO lookups and use these to immediately look up the
-> same GPIOs, convert to IRQ numbers and pass as resources
-> to the devices. This is ugly but should work.
+On Mon, May 8, 2023 at 5:16=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+> Fri, May 05, 2023 at 01:16:55PM +0200, Linus Walleij kirjoitti:
 
-...
+> > The Nokia 770 is using GPIOs from the global numberspace on the
+> > CBUS node to pass down to the LCD controller. This regresses when we
+> > let the OMAP GPIO driver use dynamic GPIO base.
+(...)
 
-> +static struct gpiod_lookup_table nokia770_irq_gpio_table = {
-> +	.dev_id = NULL,
-> +	.table = {
-> +		/* GPIO used by SPI device 1 */
-> +		GPIO_LOOKUP("gpio-0-15", 15, "ads7846_irq",
-> +			    GPIO_ACTIVE_HIGH),
-> +		/* GPIO used for retu IRQ */
-> +		GPIO_LOOKUP("gpio-48-63", 15, "retu_irq",
-> +			    GPIO_ACTIVE_HIGH),
-> +		/* GPIO used for tahvo IRQ */
-> +		GPIO_LOOKUP("gpio-32-47", 8, "tahvo_irq",
-> +			    GPIO_ACTIVE_HIGH),
+> >  #include <linux/gpio.h>
+>
+> Do we need it after this patch?
 
-Missing terminator.
+Yes, but it is finally removed in patch 3/3!
 
-> +	},
-> +};
+Fixed the rest, thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Yours,
+Linus Walleij
