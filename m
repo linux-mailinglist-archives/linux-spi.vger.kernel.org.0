@@ -2,60 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4226FB904
-	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 22:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C256FB956
+	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 23:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjEHUze (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 May 2023 16:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S233741AbjEHVUZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 May 2023 17:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbjEHUzd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 16:55:33 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FFB86AD
-        for <linux-spi@vger.kernel.org>; Mon,  8 May 2023 13:55:00 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55c939fb24dso45975217b3.2
-        for <linux-spi@vger.kernel.org>; Mon, 08 May 2023 13:55:00 -0700 (PDT)
+        with ESMTP id S233718AbjEHVUX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 17:20:23 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707B15262
+        for <linux-spi@vger.kernel.org>; Mon,  8 May 2023 14:20:18 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f122ff663eso5696618e87.2
+        for <linux-spi@vger.kernel.org>; Mon, 08 May 2023 14:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683579297; x=1686171297;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ebgkfCiodiKcun60kKBUwZij72grfP4UOmjlc+G6i8I=;
-        b=k0YYa/u76d7Ieqtnsvy/Saa1HPB4iaH1dWzUdUuvpcLGfYYlTzbXgK21e8GZZqfZ7i
-         YE+F+MB9zyXtiARKsPNIiY9f3Yvt1HVWAVLTf6t6yhR5GOODuvZu3luqlcRMbLYDDKCC
-         QpsnZEqepGgE18Mu6mcHcKTrkO/b+Iy6POYKLn7fB3mza3FUb79uQ3OyDUmYLPLGyrU9
-         yFfOpdYmElLihnmMJxGsSFbxtufg1vlUdp39zLnUMxZA1zevF+Nwgewq67DDlHNDL6rq
-         W1tR4tE5bhj81NA+/5pweLJQAC6rL4aL5pDyC8sWhOEqEyQUW98xARAg6p4xXnZCWIp9
-         mDsQ==
+        d=linaro.org; s=google; t=1683580817; x=1686172817;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGmMY4cFYvub/clQpB9xxbh8ZPTyTBA5bKwsVjExFt8=;
+        b=hnDIGupHnzHEc4dn/xiFRx2xgE0PKkJ2mto8ff+Kf8c6LDZ58V3IYyWjMNUwp2Hm+W
+         DRKUFeRCHtdkcSruq4m7qJStKaSAlicxluxyTXJgvO9mLLCAkTlsnpgQZ4ftjzex5qJG
+         cqCkuY7qP4Ifn+d6+p0uFdza2LUY5cHBUGFYC0gjgS6WUz1LlhbhFSkUfTSgZ/1aC27P
+         +nJQrbzs0vXwF9HrYfTcolEb9FnMHclNWNauzeCYOSOa8+G9U8o5wXcWDxyxhIqcaBUP
+         kl2g4S/o5B8f5w9oa/ijh2CbkxzP1JzPxwj7jAqkapA2qsqFFQt+8rczVzeguZILpoVY
+         BjXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683579297; x=1686171297;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ebgkfCiodiKcun60kKBUwZij72grfP4UOmjlc+G6i8I=;
-        b=HjDTSgJEHWkj0PR2JBUz6Z6POwnVDbHpjwOqS0z2fGnRlXEwkGq4FRHMU4/pp++mqj
-         IucCEQ8r9lV8ny6JEXiZDKuyVAQkqpl2kVVRrwh2hiedRAW2W9dXViJf8aOQwtcbwkZt
-         svOW7Z4BRoSzcVXK2hXyYeHUiLO4pZhtFTgSkVcP8s/uX5uSmdq9tDwySNR2mtGTS5eV
-         LRXAJTrtwisu6AEURFMPBxAAXT4dUgJB2N8d26zhL+909mnvS1SMvO1wFnrDHAi5nm/B
-         BOlV6SQh4tf+cLor3fbGlW62huIeNjEKuxGg7y7JkzJmgzuvv7bApKSD8MRMvsdRhrR/
-         OuoA==
-X-Gm-Message-State: AC+VfDzJ7fwMe06QcWnz89biKs1g7aAnykDdvzBV8VPVgbPbPIKaA2tU
-        X/vh4mF2MoRM7iX39YaVhbq6pHAhormqL9Em2eprkA==
-X-Google-Smtp-Source: ACHHUZ61Co9c2vfFGtG+tpLFRQ4UHj1QYb0g4ygOt03JqCB/lCRGyKCa19BWVLj8Nu27zbXZko10yxza9yB0luPTCMc=
-X-Received: by 2002:a25:54b:0:b0:b99:f279:10dc with SMTP id
- 72-20020a25054b000000b00b99f27910dcmr12394809ybf.28.1683579297026; Mon, 08
- May 2023 13:54:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
- <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org> <ZFkSMBhw5UaWdpsM@surfacebook>
-In-Reply-To: <ZFkSMBhw5UaWdpsM@surfacebook>
+        d=1e100.net; s=20221208; t=1683580817; x=1686172817;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IGmMY4cFYvub/clQpB9xxbh8ZPTyTBA5bKwsVjExFt8=;
+        b=L0+kpl34mhgZpcqV80geCT1O9n3cK3s9X8iZCRBHgrO8ge7gqBM+HFY84oeH2kEONP
+         nOvQUjR9dx9gH+Abklegz2VtMEY3udpaddObaOJV7KSZZUdyvnpr5tEaBfRQegJHfvAO
+         HHpL6x5oVCfFjkrwXXGtRkZ/Q+JkNWeAZepI6Y2POQUs0+oUh4jbPmlmiazWycmW6j89
+         W1db2aydCOg1hcye22l0L/3PDAhv5eDPS1Zbwidbmrp9YgMRs+VUqbHPD6/CifL16l7N
+         sNTII4YvcdC5olvspNcaxaHJ+30Ru/jdG243lP8po2j0H+KtFFtXWjahD+CAAiNAdsbv
+         HmEg==
+X-Gm-Message-State: AC+VfDwG++bYVjgFAc72TZCaLAhWojARaN0fKKMnLKwxFIwM/Ww4yeJ+
+        ED+YIWRE7tanpJu0CFXTreC0Vg==
+X-Google-Smtp-Source: ACHHUZ5hMWUD2Rfk872Q5ABdWR0891gFHqp5vXyAmMCR5GLf9FGIiM4VlXZjdQViiPMYCvUsZc100A==
+X-Received: by 2002:ac2:442a:0:b0:4f1:4a22:b2c5 with SMTP id w10-20020ac2442a000000b004f14a22b2c5mr109178lfl.55.1683580816653;
+        Mon, 08 May 2023 14:20:16 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id 4-20020ac24844000000b004edc3bd7fa1sm102164lfy.201.2023.05.08.14.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 14:20:16 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 8 May 2023 22:54:45 +0200
-Message-ID: <CACRpkda8zbR3CnRp5w=NvRder1rYTs+DYZN0QyhneDwR1E_qUA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] Input: ads7846 - Convert to use software nodes
-To:     andy.shevchenko@gmail.com
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+Subject: [PATCH v4 0/4] Fix up Nokia 770 regression
+Date:   Mon, 08 May 2023 23:20:05 +0200
+Message-Id: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIVnWWQC/42NQQ7CIBBFr2JYi0GgtrjyHsbF0E5booIZGqJpe
+ nehO2NiXP4/89+bWURyGNlxMzPC5KILPge93bB2BD8gd13OTAqphFaC+3B1UNeCEw6EsfxzaSs
+ QtTY1toblpYWI3BL4dizbO8QJqRwehL17rrrzJefRxSnQa7WnfWl/i9KeC25yqVEdrDD6dHMeK
+ OwCDawAk/wDIguk0dipFiqtvyHqD4jKEDh0AhrT99DYD8iyLG9wrP+4WgEAAA==
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Tony Lindgren <tony@atomide.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -68,14 +72,13 @@ Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Andreas Kemnade <andreas@kemnade.info>,
         Helge Deller <deller@gmx.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-mmc@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -86,21 +89,70 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 8, 2023 at 5:16=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
-> Fri, May 05, 2023 at 01:16:55PM +0200, Linus Walleij kirjoitti:
+A recent change to use dynamic GPIO base allocation in the
+OMAP GPIO driver caused a regression in some OMAP1 boards.
+This series fixes up the Nokia 770 board from 2005:
+https://en.wikipedia.org/wiki/Nokia_770_Internet_Tablet
 
-> > The Nokia 770 is using GPIOs from the global numberspace on the
-> > CBUS node to pass down to the LCD controller. This regresses when we
-> > let the OMAP GPIO driver use dynamic GPIO base.
-(...)
+I don't know how urgent the fix is, you decide. For me,
+it is fair if fringe systems get fixed in due time, as
+they are hardly anyones main development laptop.
 
-> >  #include <linux/gpio.h>
->
-> Do we need it after this patch?
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Changes in v4:
+- Fix up the polarity issues identified by Dmitry.
+- Fix all erronous device trees as well.
+- Link to v3: https://lore.kernel.org/r/20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org
 
-Yes, but it is finally removed in patch 3/3!
+Changes in v3:
+- Fix a compile error in the ADS7846 driver by dropping some
+  leftover OF ifdeffery.
+- Link to v2: https://lore.kernel.org/r/20230430-nokia770-regression-v2-0-984ed3ca5444@linaro.org
 
-Fixed the rest, thanks!
+Changes in v2:
+- Thoroughly rewrote the approach taken for the ADS7846 touchscreen
+  following Dmitry's ambition to go a step further and take a swnode
+  approach to this conversion: I'm fine with that, the patch just
+  get a bit bigger.
+- Picked up Ulf's ACK on the MMC patch.
+- Link to v1: https://lore.kernel.org/r/20230430-nokia770-regression-v1-0-97704e36b094@linaro.org
 
-Yours,
-Linus Walleij
+---
+Linus Walleij (4):
+      Input: ads7846 - Convert to use software nodes
+      ARM/mmc: Convert old mmci-omap to GPIO descriptors
+      ARM: omap1: Fix up the Nokia 770 board device IRQs
+      ARM: dts: Fix erroneous ADS touchscreen polarities
+
+ arch/arm/boot/dts/am57xx-cl-som-am57x.dts          |   2 +-
+ arch/arm/boot/dts/at91sam9261ek.dts                |   2 +-
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts            |   2 +-
+ arch/arm/boot/dts/imx7d-sdb.dts                    |   2 +-
+ arch/arm/boot/dts/omap3-cm-t3x.dtsi                |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi |   2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi            |   2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi    |   2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi    |   2 +-
+ arch/arm/boot/dts/omap3-pandora-common.dtsi        |   2 +-
+ arch/arm/boot/dts/omap5-cm-t54.dts                 |   2 +-
+ arch/arm/mach-omap1/board-nokia770.c               | 198 +++++++++++++--------
+ arch/arm/mach-omap1/board-sx1-mmc.c                |   1 -
+ arch/arm/mach-omap2/board-n8x0.c                   |  85 +++------
+ arch/arm/mach-pxa/spitz.c                          |  11 +-
+ arch/mips/alchemy/devboards/db1000.c               |  11 +-
+ drivers/input/touchscreen/ads7846.c                | 113 +++++-------
+ drivers/mmc/host/omap.c                            |  46 ++++-
+ drivers/video/fbdev/omap/lcd_mipid.c               |  10 ++
+ include/linux/platform_data/lcd-mipid.h            |   2 -
+ include/linux/platform_data/mmc-omap.h             |   2 -
+ include/linux/spi/ads7846.h                        |   2 -
+ 22 files changed, 273 insertions(+), 230 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230430-nokia770-regression-2b5a07497ec9
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
+
