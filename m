@@ -2,97 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075346FA398
-	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 11:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743D06FB12B
+	for <lists+linux-spi@lfdr.de>; Mon,  8 May 2023 15:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjEHJro convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 8 May 2023 05:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S233002AbjEHNRS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 May 2023 09:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbjEHJrm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 05:47:42 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C7813875
-        for <linux-spi@vger.kernel.org>; Mon,  8 May 2023 02:47:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-133-aC6YXYG9OjSIkw3kXPonVg-1; Mon, 08 May 2023 10:47:38 +0100
-X-MC-Unique: aC6YXYG9OjSIkw3kXPonVg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 8 May
- 2023 10:47:37 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 8 May 2023 10:47:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Maksim Kiselev' <bigunclemax@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>
-CC:     Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Cristian Ciocaltea" <cristian.ciocaltea@collabora.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Maxime Ripard <mripard@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH v3 2/5] spi: sun6i: change OF match data to a struct
-Thread-Topic: [PATCH v3 2/5] spi: sun6i: change OF match data to a struct
-Thread-Index: AQHZgHJVw1wL+axJhkKYU1TQITl02K9QIrDQ
-Date:   Mon, 8 May 2023 09:47:36 +0000
-Message-ID: <702d085b3b814759a344886364c518f8@AcuMS.aculab.com>
-References: <20230506232616.1792109-1-bigunclemax@gmail.com>
- <20230506232616.1792109-3-bigunclemax@gmail.com>
-In-Reply-To: <20230506232616.1792109-3-bigunclemax@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S232748AbjEHNRQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 09:17:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC3B31550;
+        Mon,  8 May 2023 06:16:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA59060C25;
+        Mon,  8 May 2023 13:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9609C433EF;
+        Mon,  8 May 2023 13:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683551813;
+        bh=R4utE4p7M/FGOlEKuEcHVCRfypcxabbL4ucFlAuJ6Ng=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fKd2gOTa4jrv8aDPg/0HEhGJrpoWpGEFWblwpG8gXAom3JGZ/4lmK98r91J4L4qzN
+         fy+JT5x7fN+FYJWvmyS+pWgx0paN9NIu2pweN2GpnT0Po1cIEo7gJO6RWEZKL5oTgx
+         AGyrzenZOdtJS6o6SsvRZMnNjARtb7btrigm7kLiFSEk7m8vR1LdUahGseWcGbQymp
+         hhOhILpaio7f58g+DSB2+M6qQ1ljfGyUiZmmk7gwY/gVH5i/sRHiCm4VcDOW/B360w
+         o2Kl20sHepbK/5SPCuyIYxo7RaRtYBY56vTSOl7Qw3K6k/bCNten47ls6awxzy9HLs
+         6/lJk9njWQTjQ==
+Date:   Mon, 8 May 2023 22:16:50 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v9 4/5] spi: dw: Add DMA address widths capability check
+Message-ID: <ZFj2QraXvNqBRwqM@finisterre.sirena.org.uk>
+References: <20230427123314.1997152-1-joychakr@google.com>
+ <20230427123314.1997152-5-joychakr@google.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="srztywi96yxDAX5Z"
+Content-Disposition: inline
+In-Reply-To: <20230427123314.1997152-5-joychakr@google.com>
+X-Cookie: You're using a keyboard!  How quaint!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Maksim Kiselev
-> Sent: 07 May 2023 00:26
-> 
-> As we're adding more properties to the OF match data, convert it to a
-> struct now.
-> 
-...
-> -	sspi->fifo_depth = (unsigned long)of_device_get_match_data(&pdev->dev);
-> +	sspi->cfg = of_device_get_match_data(&pdev->dev);
 
-Is it worth doing a structure copy at this point?
-The 'cfg' data is short and constant and it would make
-the code that uses it smaller and faster.
+--srztywi96yxDAX5Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	David
+On Thu, Apr 27, 2023 at 12:33:13PM +0000, Joy Chakraborty wrote:
+> Store address width capabilities of DMA controller during init and check
+> the same per transfer to make sure the bits/word requirement can be met.
+>=20
+> Current DW DMA driver requires both tx and rx channel to be configured
+> and functional hence a subset of both tx and rx channel address width
+> capability is checked with the width requirement(n_bytes) for a
+> transfer.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+This breaks an x86 allmodconfig build:
 
+/build/stage/linux/drivers/spi/spi-dw-dma.c: In function =E2=80=98dw_spi_dm=
+a_caps_init=E2=80=99:
+/build/stage/linux/drivers/spi/spi-dw-dma.c:100:1: error: control reaches e=
+nd of non-void function [-Werror=3Dreturn-type]
+  100 | }
+      | ^
+cc1: some warnings being treated as errors
+
+--srztywi96yxDAX5Z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRY9j8ACgkQJNaLcl1U
+h9CmgAf/Y1S/7Ur9OhwH8FO3pfxB5IWmD7SfXUW738hjNQGzCWtM7wCPUI0lOpL9
+5QDQR/HDwjHuJfsM+6dZPr/CIqAT8PQKe3DU9tDzcfIbZX2UOGcpO/HJkCDdI4y5
+F0uJRNPIZpgjhb/MVa0pBT59Jbud5UDzfXpiSm3lij0LuKDUpW2gxlJ5N+cbDKdP
+genA3UeLi9szDRIAxfytoA/8lwYqi42uUiaFGlGAYzoLKrql/TyvuGov3EzJLVuk
+cjLHSfcuqEUeW87VMGX6GtMqVRpIPwSB5QJBx+OgoAvKQ4gm4z7CWzPjro+tEuFI
+nVOhaIn08Iz+WQWRbfHiLpYfCfUJVg==
+=xyvi
+-----END PGP SIGNATURE-----
+
+--srztywi96yxDAX5Z--
