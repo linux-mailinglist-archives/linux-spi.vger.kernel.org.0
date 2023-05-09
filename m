@@ -2,117 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17826FBE49
-	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 06:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2F56FC19C
+	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 10:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjEIEjY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 May 2023 00:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S234410AbjEIIWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 May 2023 04:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbjEIEjS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 00:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE767688;
-        Mon,  8 May 2023 21:39:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A5C62DFB;
-        Tue,  9 May 2023 04:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADADC433EF;
-        Tue,  9 May 2023 04:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683607157;
-        bh=XhiuFaCJ6NwdwKam/Cyef7P/+G3d7UCQ6LK4Q3XNOfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCT8dSEOvZ+0E+qJsK2en3YBzm3oFErN2H4XkAsssS2KA/dEuyyVbCI100mdvBrC6
-         3irKQRyTq7FY2WNCB3nwhPWsrQ2fXIn9NKCBFAe3OCAPan1uPqrELyzOQB9I7HPLQF
-         ME1CSxMkV6GZ2mdGMpvCKSlWEf7LC3bjHwENE0Ee8zyCv2oDUvWrrBSIQ58xrHu8fa
-         rGTOrXf6VfP147tIvFo2KVSdz4c3spSfK3szkPmnll4noubg6EbMnqpSmzU2bK1U89
-         DYtq0y6HRrQ5giFj3XDkkXJIIa6DM1IBKyjX86l1TO78I0kiS3lAeVm0g6IeA2J/Dh
-         OU7vETfYR7Svw==
-Date:   Tue, 9 May 2023 13:39:02 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     andy.shevchenko@gmail.com
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
- <20230426071045.20753-3-zhuyinbo@loongson.cn>
- <ZFkPZhF8QqScXAmH@surfacebook>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PvPFwm68AkT2apH1"
-Content-Disposition: inline
-In-Reply-To: <ZFkPZhF8QqScXAmH@surfacebook>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233043AbjEIIWx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 04:22:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CFA10D4
+        for <linux-spi@vger.kernel.org>; Tue,  9 May 2023 01:22:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a6f15287eso1280861276.1
+        for <linux-spi@vger.kernel.org>; Tue, 09 May 2023 01:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683620571; x=1686212571;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EYZzu5uKAv2K3CUFKdV+PnrKtAXzT9zaDvfq92PiXpQ=;
+        b=6VaIk8BU1+iBlJ+77HD/FYD7NedD7l/shwrtU1U5jS0VwZtEU7QE4T7XXUhZI17OZ8
+         U9JSKU+iOohlvTCS1rn5lBDusZWAPfZkhuoM0UjliXqV/4rqDDaP0aaIMAuf9HDYrwjk
+         iB+oxn+z0CTNn27ICs/OOF5Dy5jX+UFGdzSSPMXhlhD5MMBvgPj3uJW/9BeAgOM3mpvK
+         HMSxpMuZr0s8KnPlBMQh/eRFhbl0WJweyW3Cb20JKkjSf21qlLA1fxe68Gh5tROIvZod
+         HB6Amj6ZBwvjC0m9pe7kU4aIzOibxxk1R6wnnKfdf2+l6N1KYXPGRthT1w9IvEjtj9V8
+         f4qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683620571; x=1686212571;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EYZzu5uKAv2K3CUFKdV+PnrKtAXzT9zaDvfq92PiXpQ=;
+        b=KkmbBC9P3sAOj6+r4RFb7g6QI2CHu00LaXTiH016CBIhiYj5JXD0+gydlcDvTKaniv
+         XjKsdNAR04xWrjm98y3LfR3GSlPNj5JDixWvFn9stH5GA9T0A5F9kiPlIWBX/XWHrxVa
+         pkFVf+0rsgeZpK2GFho+Q7WbV/asuT2N5jzfsbNsp0DJ08Lqfwcxw5xXBZ36h8cqVgyU
+         SjRKmQH0+BsQ08iGLZw03n1zevvN9zOigsJKIkAkuaDVnEmhR4473dNkKEevJwQOFw9K
+         M5mzuLsc08fSeg2LoyAQZXHqy6MqXD5YlujKiZFhHLwdq/CjqsEAbZGTiMk6sPfnCnDg
+         qP6A==
+X-Gm-Message-State: AC+VfDx5dypL8URtA5g1Wm+vNn6qnZuOE+ss52Rl7GF9UE3TcDE2C4vW
+        UDiqcE5PiDC1aiGCIUgA75+Pwy+jGoSfJw==
+X-Google-Smtp-Source: ACHHUZ7ePLuqu3tSKvz5oaQ3PDOHFNO4qCTQswBuuJslNkpOXenDmWSbdTpJWIfI7Qau9StIT4VQYh3yTh0l1g==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a25:c016:0:b0:ba1:ac14:7e1d with SMTP id
+ c22-20020a25c016000000b00ba1ac147e1dmr8789084ybf.3.1683620570885; Tue, 09 May
+ 2023 01:22:50 -0700 (PDT)
+Date:   Tue,  9 May 2023 08:22:39 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230509082244.1069623-1-joychakr@google.com>
+Subject: [PATCH v10 0/5] spi: dw: DW SPI DMA Driver updates
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This Patch series adds support for 32 bits per word trasfers using DMA
+and some defensive checks around dma controller capabilities.
+---
+V1 Changes : Add support for AxSize=3D4 bytes to support 32bits/word.
+---
+V1->V2 Changes : Add dma capability check to make sure address widths
+are supported.
+---
+V2->V3 Changes : Split changes , add DMA direction check and other
+cosmetic chnages.
+---
+V3->V4 Changes : Fix Sparce Warning
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@int=
+el.com/
+---
+V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+check before initalisation of further capabilities, remove zero
+initialisations, remove error OR'ing.
+---
+V5->V6 Changes :
+	-Remove case of n_bytes=3D3 using 4_bytes buswidth
+	-Avoid forward decaration
+	-Break capability check patch into 2
+	-round n_bytes to power of 2 ( Bug Fix)
+	-Add more explanation in commit text.
+---
+V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+func()
+---
+V7->V8 Changes : Minor commment updates in patch 4/5
+---
+V8->V9 Changes : Minor formatting changes in patch 5/5
+---
+V9->V10 Changes : Moving "return 0" at the end of dw_spi_dma_caps_init() fr=
+om patch
+[4/5] to patch [3/5] to solve :
+spi-dw-dma.c: In function =E2=80=98dw_spi_dma_caps_init=E2=80=99:
+spi-dw-dma.c:100:1: control reaches end of non-void function [-Werror=3Dret=
+urn-type]
+---
 
---PvPFwm68AkT2apH1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Joy Chakraborty (5):
+  spi: dw: Add 32 bpw support to SPI DW DMA driver
+  spi: dw: Move dw_spi_can_dma()
+  spi: dw: Add DMA directional capability check
+  spi: dw: Add DMA address widths capability check
+  spi: dw: Round of n_bytes to power of 2
 
-On Mon, May 08, 2023 at 06:04:06PM +0300, andy.shevchenko@gmail.com wrote:
-> Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
+ drivers/spi/spi-dw-core.c |  5 ++-
+ drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+ drivers/spi/spi-dw.h      |  1 +
+ 3 files changed, 63 insertions(+), 19 deletions(-)
 
-> > +		loongson_spi_write_reg(loongson_spi,
-> > +				       LOONGSON_SPI_SFCS_REG,
-> > +				       (val ? (0x11 << spi->chip_select) :
-> > +				       (0x1 << spi->chip_select)) | cs);
+--=20
+2.40.1.521.gf1e218fcd8-goog
 
-> Too many parentheses.
-
-The code is absolutely fine, there is nothing wrong with adding explicit
-parentheses even where not strictly needed if it helps to make things
-clear (which is obviously always a problem wiht ternery operator use).
-
-Please, stop this sort of nitpicking.  It is at times actively unhelpful.
-
-> > +		bit = fls(div) - 1;
-> > +		if ((1<<bit) == div)
-> > +			bit--;
-> > +		div_tmp = rdiv[bit];
-
-> I believe this can be optimized.
-
-This isn't constructive feedback, if there is a concrete optimisation
-you want to suggest please just suggest it.
-
-> > +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
-
-> Please, use _NS variant.
-
-It really does not matter, the chances of any collisions is pretty much
-zero.
-
---PvPFwm68AkT2apH1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRZzmEACgkQJNaLcl1U
-h9AJXwf/bcA5vAd/CeUpexx9xVC7N3Q3Um30fxyeECrqf+W5wNVVem1NNz0HDn+n
-vPaQ/8HhN/Gdu+A6tLZ1pzepHE1+E+E5kcMgYJHNNY7EPFs49BXvHSqN7IyCxOCm
-sUegi8DfHJMK00T1w5AnRK/mY0TeKwBz0kHP8R1qTCtjZVn6rqAgrSLQoQ8t9RGF
-Znln4s59Bwt2AdavPgQ3503/vwMkMIZQGW9FPoaf2KWD17MNAUVUkH9eD81b0WIF
-6Uibp0Mk898jyQDW4UwqyfM66xdb9k17aRFeFzbRJfWL0jeXHdbUWJsMwrOB5QJ6
-jeGknTmherSiz61uL4rkk7VW1Ia2Kw==
-=s4B1
------END PGP SIGNATURE-----
-
---PvPFwm68AkT2apH1--
