@@ -2,66 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC176FBC71
-	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 03:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17826FBE49
+	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 06:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjEIB02 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 May 2023 21:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S230113AbjEIEjY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 May 2023 00:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjEIB01 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 May 2023 21:26:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E1BF422E;
-        Mon,  8 May 2023 18:26:25 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxvOpAoVlkJs4GAA--.11043S3;
-        Tue, 09 May 2023 09:26:24 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFLU9oVlkO_9RAA--.16520S3;
-        Tue, 09 May 2023 09:26:23 +0800 (CST)
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232643AbjEIEjS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 00:39:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE767688;
+        Mon,  8 May 2023 21:39:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A5C62DFB;
+        Tue,  9 May 2023 04:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADADC433EF;
+        Tue,  9 May 2023 04:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683607157;
+        bh=XhiuFaCJ6NwdwKam/Cyef7P/+G3d7UCQ6LK4Q3XNOfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aCT8dSEOvZ+0E+qJsK2en3YBzm3oFErN2H4XkAsssS2KA/dEuyyVbCI100mdvBrC6
+         3irKQRyTq7FY2WNCB3nwhPWsrQ2fXIn9NKCBFAe3OCAPan1uPqrELyzOQB9I7HPLQF
+         ME1CSxMkV6GZ2mdGMpvCKSlWEf7LC3bjHwENE0Ee8zyCv2oDUvWrrBSIQ58xrHu8fa
+         rGTOrXf6VfP147tIvFo2KVSdz4c3spSfK3szkPmnll4noubg6EbMnqpSmzU2bK1U89
+         DYtq0y6HRrQ5giFj3XDkkXJIIa6DM1IBKyjX86l1TO78I0kiS3lAeVm0g6IeA2J/Dh
+         OU7vETfYR7Svw==
+Date:   Tue, 9 May 2023 13:39:02 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     andy.shevchenko@gmail.com
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
         wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
 References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
  <20230426071045.20753-3-zhuyinbo@loongson.cn>
- <ZFj3BEHCDc/XLBZB@finisterre.sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <795a34c3-bf84-9f43-adc9-edab4d91394b@loongson.cn>
-Date:   Tue, 9 May 2023 09:26:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <ZFkPZhF8QqScXAmH@surfacebook>
 MIME-Version: 1.0
-In-Reply-To: <ZFj3BEHCDc/XLBZB@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxFLU9oVlkO_9RAA--.16520S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7ZF18Ary5ZF4rXr1rXr1UJrb_yoW8Xr1fpa
-        yYkrZxCw48JrWkGwnay393Ca1Y9393J3y5J3yxK3W7CFWDKa48Xw1DXFy5uwsrJF1jvFyY
-        g348ua1DWF15ZF7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1tl1PUUUUU==
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PvPFwm68AkT2apH1"
+Content-Disposition: inline
+In-Reply-To: <ZFkPZhF8QqScXAmH@surfacebook>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +63,56 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--PvPFwm68AkT2apH1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-在 2023/5/8 下午9:20, Mark Brown 写道:
-> On Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu wrote:
->> This bus driver supports the Loongson spi hardware controller in the
->> Loongson platforms and supports to use DTS and PCI framework to
->> register spi device resources.
-> 
-> This breaks an x86 allmodconfig build:
-> 
-> /build/stage/linux/drivers/spi/spi-loongson-core.c: In function ‘loongson_spi_init_master’:
-> /build/stage/linux/drivers/spi/spi-loongson-core.c:222:31: error: implicit declaration of function ‘of_node_get’ [-Werror=implicit-function-declaration]
->    222 |         master->dev.of_node = of_node_get(dev->of_node);
->        |                               ^~~~~~~~~~~
-> /build/stage/linux/drivers/spi/spi-loongson-core.c:222:29: error: assignment to ‘struct device_node *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
->    222 |         master->dev.of_node = of_node_get(dev->of_node);
->        |                             ^
-> /build/stage/linux/drivers/spi/spi-loongson-core.c:242:13: error: implicit declaration of function ‘of_get_property’ [-Werror=implicit-function-declaration]
->    242 |         if (of_get_property(dev->of_node, "spi-nocs", NULL))
->        |             ^~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+On Mon, May 08, 2023 at 06:04:06PM +0300, andy.shevchenko@gmail.com wrote:
+> Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
 
+> > +		loongson_spi_write_reg(loongson_spi,
+> > +				       LOONGSON_SPI_SFCS_REG,
+> > +				       (val ? (0x11 << spi->chip_select) :
+> > +				       (0x1 << spi->chip_select)) | cs);
 
-These errors was due to the function of_node_get and of_get_property
-loss a declaration and I will add "#include <linux/of.h>" in
-spi-loongson-core.c to fix it.
+> Too many parentheses.
 
-Thanks.
-> 
+The code is absolutely fine, there is nothing wrong with adding explicit
+parentheses even where not strictly needed if it helps to make things
+clear (which is obviously always a problem wiht ternery operator use).
 
+Please, stop this sort of nitpicking.  It is at times actively unhelpful.
+
+> > +		bit = fls(div) - 1;
+> > +		if ((1<<bit) == div)
+> > +			bit--;
+> > +		div_tmp = rdiv[bit];
+
+> I believe this can be optimized.
+
+This isn't constructive feedback, if there is a concrete optimisation
+you want to suggest please just suggest it.
+
+> > +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
+
+> Please, use _NS variant.
+
+It really does not matter, the chances of any collisions is pretty much
+zero.
+
+--PvPFwm68AkT2apH1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRZzmEACgkQJNaLcl1U
+h9AJXwf/bcA5vAd/CeUpexx9xVC7N3Q3Um30fxyeECrqf+W5wNVVem1NNz0HDn+n
+vPaQ/8HhN/Gdu+A6tLZ1pzepHE1+E+E5kcMgYJHNNY7EPFs49BXvHSqN7IyCxOCm
+sUegi8DfHJMK00T1w5AnRK/mY0TeKwBz0kHP8R1qTCtjZVn6rqAgrSLQoQ8t9RGF
+Znln4s59Bwt2AdavPgQ3503/vwMkMIZQGW9FPoaf2KWD17MNAUVUkH9eD81b0WIF
+6Uibp0Mk898jyQDW4UwqyfM66xdb9k17aRFeFzbRJfWL0jeXHdbUWJsMwrOB5QJ6
+jeGknTmherSiz61uL4rkk7VW1Ia2Kw==
+=s4B1
+-----END PGP SIGNATURE-----
+
+--PvPFwm68AkT2apH1--
