@@ -2,115 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76D96FC35D
-	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 12:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FDD6FC423
+	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 12:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234483AbjEIKBv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 May 2023 06:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S235180AbjEIKoh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 May 2023 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbjEIKBu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 06:01:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D7E2123;
-        Tue,  9 May 2023 03:01:49 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3497fSvT021933;
-        Tue, 9 May 2023 10:01:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=ttHqVUtYxGm2GfLDGfwf/4RVm6rJoKZE1mkkB2ydqig=;
- b=EzekHIz7qw2FbDBDmabdU1gF5gn6+uU6qeDCe7jPBcy1MpvGrrYb96sYHiU5uwZ02TwB
- rH2kq1dKWoot0qn3oyw7SIwVFXUEtMvRWAR19mD6sKv98DF1ZBby3YDBztnsr5KiRXoc
- BgJ4DQD/7cDUgyp4jDpvrBPOj1mndZEyr4WvRjebT4nBDYd/PUlLnZW96S0Vh2WacqzA
- UKu9MQA0JZ69OgOHAgLzE2pQg4fFlrSJu14xWW4A1xLe0HJ7/YjC1MqXXvuF+00KSu4L
- Qby83jOlQSkEhBinLKi5ppxPpCFfsRrlWUixa2UCNtElQwrO+VvZjgO3blKjTherRzHr AA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7859b5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 10:01:45 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 349A1fCF012853;
-        Tue, 9 May 2023 10:01:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qdy5bg8bm-1;
-        Tue, 09 May 2023 10:01:41 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 349A1eHH012848;
-        Tue, 9 May 2023 10:01:40 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 349A1eKZ012845;
-        Tue, 09 May 2023 10:01:40 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id EC4734A00; Tue,  9 May 2023 15:31:39 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, quic_vnivarth@quicinc.com,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
-Subject: [PATCH] spi: spi-geni-qcom: Select FIFO mode for chip select
-Date:   Tue,  9 May 2023 15:31:36 +0530
-Message-Id: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kC3pOJCSCrGUdeNrfWl7FsaGGE_tnSC9
-X-Proofpoint-GUID: kC3pOJCSCrGUdeNrfWl7FsaGGE_tnSC9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=529
- lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090078
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235013AbjEIKog (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 06:44:36 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772A4ECB;
+        Tue,  9 May 2023 03:44:35 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349AiQuM038472;
+        Tue, 9 May 2023 05:44:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683629066;
+        bh=brW6qq64lo8T90mzL6db2C3UWARKcso94AHe4Od7SYU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=kUA542d0WyewJLXuYsrpbk3UEV2/je3szNM+2FUU7z1fTZG/onQY3alEXvPaRCFej
+         26iGHrhzEBQbQ7k5B8vjz5tt2i2HjUk9QU9MrJGOhhIi1b2Oo27YKSQBxX0U9AFjw+
+         ZkM0qiUj+8jIX1TCHDf2r1SJSscqYQar4cpGpQy4=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349AiQeH074218
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 05:44:26 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 05:44:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 05:44:25 -0500
+Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349AiMBW029553;
+        Tue, 9 May 2023 05:44:23 -0500
+Message-ID: <8aae9af7-22ea-4b2b-563c-0f01e361775c@ti.com>
+Date:   Tue, 9 May 2023 16:14:22 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: defconfig: Enable UBIFS
+Content-Language: en-US
+To:     Dhruva Gole <d-gole@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Vaishnav Achath <vaishnav.a@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230417092243.967871-1-d-gole@ti.com>
+ <a25ce95e-126e-7a1a-1bb0-2a3d73ea4aee@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <a25ce95e-126e-7a1a-1bb0-2a3d73ea4aee@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Spi geni driver switches between FIFO and DMA modes based on xfer length.
-FIFO mode relies on M_CMD_DONE_EN interrupt for completion while DMA mode
-relies on XX_DMA_DONE.
-During dynamic switching, if FIFO mode is chosen, FIFO related interrupts
-are enabled and DMA related interrupts are disabled. And viceversa.
-Chip select shares M_CMD_DONE_EN interrupt with FIFO to check completion.
-Now, if a chip select operation is preceded by a DMA xfer, M_CMD_DONE_EN
-interrupt would have been disabled and hence it will never receive one
-resulting in timeout.
 
-For chip select, in addition to setting the xfer mode to FIFO,
-select_mode() to FIFO so that required interrupts are enabled.
 
-Fixes: e5f0dfa78ac7 ("spi: spi-geni-qcom: Add support for SE DMA mode")
-Suggested-by: Praveen Talari <quic_ptalari@quicinc.com>
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
- drivers/spi/spi-geni-qcom.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 08/05/23 13:13, Dhruva Gole wrote:
+> Hi,
+> 
+> On 17/04/23 14:52, Dhruva Gole wrote:
+>> UBIFS is a file system for flash devices which works on top of UBI.
+>>
+>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+>> ---
+>>   arch/arm64/configs/defconfig | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index 4f59fa575b47..a632d2a1db93 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -267,6 +267,8 @@ CONFIG_MTD_NAND_BRCMNAND=m
+>>   CONFIG_MTD_NAND_FSL_IFC=y
+>>   CONFIG_MTD_NAND_QCOM=y
+>>   CONFIG_MTD_SPI_NOR=y
+>> +CONFIG_MTD_UBI=m
+>> +CONFIG_UBIFS_FS=m
+> 
+> Gentle ping on this patch, can we please pull this in since nobody has
+> raised any objections since over 3 weeks?
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 8a7d1c2..e423efc 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -294,6 +294,8 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
- 	mas->cs_flag = set_flag;
- 	/* set xfer_mode to FIFO to complete cs_done in isr */
- 	mas->cur_xfer_mode = GENI_SE_FIFO;
-+	geni_se_select_mode(se, mas->cur_xfer_mode);
-+
- 	reinit_completion(&mas->cs_done);
- 	if (set_flag)
- 		geni_se_setup_m_cmd(se, SPI_CS_ASSERT, 0);
+I am planning to queuing this via TI arch tree, if there no objections.
+
+Unfortunately, your patch landed post v6.4-rc1 PRs were sent out. And
+thus will only be part of v6.5 cycle. Note that v6.4-rc1 was tagged last
+Monday, so you may have to wait a while for folks to catch up
+
+> 
+>>   CONFIG_BLK_DEV_LOOP=y
+>>   CONFIG_BLK_DEV_NBD=m
+>>   CONFIG_VIRTIO_BLK=y
+> 
+
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-
+Regards
+Vignesh
