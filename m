@@ -2,49 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39206FC228
-	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 10:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76D96FC35D
+	for <lists+linux-spi@lfdr.de>; Tue,  9 May 2023 12:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjEII4o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 May 2023 04:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S234483AbjEIKBv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 May 2023 06:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjEII4m (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 04:56:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E27E10CB
-        for <linux-spi@vger.kernel.org>; Tue,  9 May 2023 01:56:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B89263240
-        for <linux-spi@vger.kernel.org>; Tue,  9 May 2023 08:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61CC6C433D2;
-        Tue,  9 May 2023 08:56:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683622600;
-        bh=lJF8H815c/ZPgCA7MJpFgg1qzn0SAqT+JgennCyqgYA=;
-        h=Subject:From:Date:To:From;
-        b=GU3lgHezL/sK098fVMRp92AtfWEwCZ2tdQrPMysSB4JLgwXTmZZNJDuwbazmuQbqA
-         1Q6zlvUKcVbkfoCN4OVc+YIWoLnR9dsXcGM7YtodEQSchqdpk7IJViOgl1Qv/EM+zZ
-         RDc/H/k4LipMMFfeOAA1hAch4fWQdBEVLFZLun6VAxDflMl1pmxUAKADW3XMlDI/IS
-         2jnrEaVFdShrV0BlXu2rIg9FHbhm0qOO96dJB2J3xgAF8IzG7r9g0HCotWsUPY5Qw3
-         jpuwe4i1sO/j0pFyNqFQHuobQTIhsXPddkNSBKrE4sO8O/FBCYfbsOZI0TapL9WbgV
-         uP1cKtPzYl3AA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43DBDE26D20;
-        Tue,  9 May 2023 08:56:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168362260018.9935.2743566622654114049.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 09 May 2023 08:56:40 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S232299AbjEIKBu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 May 2023 06:01:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D7E2123;
+        Tue,  9 May 2023 03:01:49 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3497fSvT021933;
+        Tue, 9 May 2023 10:01:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=ttHqVUtYxGm2GfLDGfwf/4RVm6rJoKZE1mkkB2ydqig=;
+ b=EzekHIz7qw2FbDBDmabdU1gF5gn6+uU6qeDCe7jPBcy1MpvGrrYb96sYHiU5uwZ02TwB
+ rH2kq1dKWoot0qn3oyw7SIwVFXUEtMvRWAR19mD6sKv98DF1ZBby3YDBztnsr5KiRXoc
+ BgJ4DQD/7cDUgyp4jDpvrBPOj1mndZEyr4WvRjebT4nBDYd/PUlLnZW96S0Vh2WacqzA
+ UKu9MQA0JZ69OgOHAgLzE2pQg4fFlrSJu14xWW4A1xLe0HJ7/YjC1MqXXvuF+00KSu4L
+ Qby83jOlQSkEhBinLKi5ppxPpCFfsRrlWUixa2UCNtElQwrO+VvZjgO3blKjTherRzHr AA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7859b5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 10:01:45 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 349A1fCF012853;
+        Tue, 9 May 2023 10:01:41 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qdy5bg8bm-1;
+        Tue, 09 May 2023 10:01:41 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 349A1eHH012848;
+        Tue, 9 May 2023 10:01:40 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 349A1eKZ012845;
+        Tue, 09 May 2023 10:01:40 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id EC4734A00; Tue,  9 May 2023 15:31:39 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, quic_vnivarth@quicinc.com,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
+Subject: [PATCH] spi: spi-geni-qcom: Select FIFO mode for chip select
+Date:   Tue,  9 May 2023 15:31:36 +0530
+Message-Id: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: kC3pOJCSCrGUdeNrfWl7FsaGGE_tnSC9
+X-Proofpoint-GUID: kC3pOJCSCrGUdeNrfWl7FsaGGE_tnSC9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_06,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=529
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090078
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,16 +78,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v10] spi: dw: DW SPI DMA Driver updates (2023-05-09T08:22:39)
-  Superseding: [v9] spi: dw: DW SPI DMA Driver updates (2023-04-27T12:33:09):
-    [v9,1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
-    [v9,2/5] spi: dw: Move dw_spi_can_dma()
-    [v9,3/5] spi: dw: Add DMA directional capability check
-    [v9,4/5] spi: dw: Add DMA address widths capability check
-    [v9,5/5] spi: dw: Round of n_bytes to power of 2
+Spi geni driver switches between FIFO and DMA modes based on xfer length.
+FIFO mode relies on M_CMD_DONE_EN interrupt for completion while DMA mode
+relies on XX_DMA_DONE.
+During dynamic switching, if FIFO mode is chosen, FIFO related interrupts
+are enabled and DMA related interrupts are disabled. And viceversa.
+Chip select shares M_CMD_DONE_EN interrupt with FIFO to check completion.
+Now, if a chip select operation is preceded by a DMA xfer, M_CMD_DONE_EN
+interrupt would have been disabled and hence it will never receive one
+resulting in timeout.
 
+For chip select, in addition to setting the xfer mode to FIFO,
+select_mode() to FIFO so that required interrupts are enabled.
 
+Fixes: e5f0dfa78ac7 ("spi: spi-geni-qcom: Add support for SE DMA mode")
+Suggested-by: Praveen Talari <quic_ptalari@quicinc.com>
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/spi/spi-geni-qcom.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 8a7d1c2..e423efc 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -294,6 +294,8 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
+ 	mas->cs_flag = set_flag;
+ 	/* set xfer_mode to FIFO to complete cs_done in isr */
+ 	mas->cur_xfer_mode = GENI_SE_FIFO;
++	geni_se_select_mode(se, mas->cur_xfer_mode);
++
+ 	reinit_completion(&mas->cs_done);
+ 	if (set_flag)
+ 		geni_se_setup_m_cmd(se, SPI_CS_ASSERT, 0);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
