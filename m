@@ -2,62 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EB86FD4F3
-	for <lists+linux-spi@lfdr.de>; Wed, 10 May 2023 06:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882476FD77B
+	for <lists+linux-spi@lfdr.de>; Wed, 10 May 2023 08:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjEJEIE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 May 2023 00:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S236159AbjEJGyv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 May 2023 02:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbjEJEH4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 May 2023 00:07:56 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBA426B9
-        for <linux-spi@vger.kernel.org>; Tue,  9 May 2023 21:07:53 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230510040749epoutp04fd5ddb68e630a1dce21044177a6ba2c9~drKcTc7741741617416epoutp04V
-        for <linux-spi@vger.kernel.org>; Wed, 10 May 2023 04:07:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230510040749epoutp04fd5ddb68e630a1dce21044177a6ba2c9~drKcTc7741741617416epoutp04V
+        with ESMTP id S236194AbjEJGys (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 May 2023 02:54:48 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24AA35A9
+        for <linux-spi@vger.kernel.org>; Tue,  9 May 2023 23:54:45 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230510065441euoutp021d58838e3bfac2db7c2dfbe89159cc03~dtcI_8LMk1512515125euoutp02n
+        for <linux-spi@vger.kernel.org>; Wed, 10 May 2023 06:54:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230510065441euoutp021d58838e3bfac2db7c2dfbe89159cc03~dtcI_8LMk1512515125euoutp02n
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683691669;
-        bh=UumBYReH9u2V3iGM9ig8NQZ/6q2oZ2kA9hAqWn1Mpl4=;
+        s=mail20170921; t=1683701681;
+        bh=xKdPwawbbqU4sJJ4YM4Rx2nLckvXs1dXFCnw2RaOun4=;
         h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=NZjF4kpPQW1+ywBYjrtqdRLHrMq2QZMPsvy3xuk0Ulo2IHE86XMyy3Fq2UN4CKdp3
-         KHCiogqICS+Tli4GDx5PaU97x0n8PqC8g+/60AQq84rk1/x++GlLy+6r26TtagEhUG
-         40aTLkbjG5drEPCSSbBXMjETpBPZ8UVs/ZNPhItU=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230510040748epcas2p18c8f826989ade5337058ad3a98356202~drKbwzH0k3235132351epcas2p1U;
-        Wed, 10 May 2023 04:07:48 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4QGM1v6Q0Qz4x9Py; Wed, 10 May
-        2023 04:07:47 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.3C.22936.3981B546; Wed, 10 May 2023 13:07:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230510040747epcas2p3de1b7fdbc5b4d63ee0c28545670d9ddd~drKanTGaO2542125421epcas2p34;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230510040747epsmtrp27152583174a4570a35bcc6ed0b5811b0~drKamjkeL2960929609epsmtrp2O;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-X-AuditID: b6c32a48-6d3fa70000005998-f7-645b1893fd66
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C8.A0.28392.3981B546; Wed, 10 May 2023 13:07:47 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230510040747epsmtip1d411c89f18fe471c1e30bf645ae34f6f~drKaVzS7u1624316243epsmtip1R;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-Message-ID: <0ef75bd7-e7e6-a806-2c3f-35c7312c391d@samsung.com>
-Date:   Wed, 10 May 2023 13:05:21 +0900
+        b=glALu9YAMpr873wDjck7FCcGCx9Y0mQAKnpHwVec9t8bqxS/LumhsP6MF5ucMgjs0
+         FlMFGHcY2iKj5caxG9mpObK00LUTGqy8CBXafdtV3s5vCaRKPnRjqneStRqraM+ojw
+         gtwOXxaDAJV1pY2erProfxHY1ccNMicUxlY9y530=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230510065441eucas1p2da73c8b85506ae018a1a5a085faee1e8~dtcItfGUM0474904749eucas1p2J;
+        Wed, 10 May 2023 06:54:41 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 99.CF.37758.1BF3B546; Wed, 10
+        May 2023 07:54:41 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230510065440eucas1p1aeeae7688990edbe3b530e13db3975f3~dtcITbAUq2670126701eucas1p1B;
+        Wed, 10 May 2023 06:54:40 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230510065440eusmtrp2c8375a5007c457f469a108ebf24d6e46~dtcISKRj92634526345eusmtrp2V;
+        Wed, 10 May 2023 06:54:40 +0000 (GMT)
+X-AuditID: cbfec7f5-815ff7000002937e-5e-645b3fb14d4a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 13.A2.14344.0BF3B546; Wed, 10
+        May 2023 07:54:40 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230510065440eusmtip2d0be5715dc39e8537537f82147fe4ba8~dtcHpRIeh1278912789eusmtip2J;
+        Wed, 10 May 2023 06:54:40 +0000 (GMT)
+Message-ID: <7883a9d4-76d0-d259-095b-babae63ffc77@samsung.com>
+Date:   Wed, 10 May 2023 08:54:39 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.1
 Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
         Alim Akhtar <alim.akhtar@samsung.com>
@@ -65,60 +63,58 @@ Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Chanho Park <chanho61.park@samsung.com>,
         =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Content-Language: en-US
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <d8fa2d7b-6604-1fad-6b0b-19d7e551a1d2@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <0ef75bd7-e7e6-a806-2c3f-35c7312c391d@samsung.com>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmqe5kiegUgykfDC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i5uHVjBabHp8jdXi8q45bBYzzu9jsmj8eJPdYu2Ru+wO3B7Xl3xi
-        9ti0qpPN4861PWwem5fUe/RtWcXo8XmTXABbVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZ
-        gaGuoaWFuZJCXmJuqq2Si0+ArltmDtB1SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSC
-        lJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTsjN3z3zMV/BevODQnr4HxnnAXIyeHhICJxK+3
-        C1hBbCGBHYwSk46UdTFyAdmfGCUOrj7BBpH4zCixd54fTMPSw+eZIOK7GCWWXfKAaHjNKLH0
-        YyMzSIJXwE5i0eO/jCA2i4CqxPV7f9gh4oISJ2c+YQGxRQWiJRbvmwJmCwt4SfzZ3QQ2VETg
-        AqPE8wYzEJtZ4B2jRMcSKQhbXOLWk/lgNWwC2hLf1y8Gu5pTwF7iwc1b7BA18hLNW2czgxwk
-        IbCFQ2LxryPMEFe7SFxZf4IFwhaWeHV8CzuELSXx+d1eNgg7W6J9+h9WCLtC4uKG2VBxY4lZ
-        z9qBnuEAWqApsX6XPogpIaAsceQWC8RaPomOw3/ZIcK8Eh1tQhCNahL3p56DGiIDDNqVTBAl
-        HhJT9pVOYFSchRQms5D8OAvJL7MQ1i5gZFnFKJZaUJybnlpsVGACj+fk/NxNjOA0q+Wxg3H2
-        2w96hxiZOBgPMUpwMCuJ8HqHRqUI8aYkVlalFuXHF5XmpBYfYjQFxsxEZinR5Hxgos8riTc0
-        sTQwMTMzNDcyNTBXEuf92KGcIiSQnliSmp2aWpBaBNPHxMEp1cAUpt9bsqoumm/bxWb/PweW
-        lW5TLc1NY/DQXJTps31D2tazTb+zZxaWHLsrzbhc9x/r/VdO5z/eXSZgee/ptIZlO3u3PN64
-        Q2fy/KKwkG3GD01W5srudml1WpokVFClvjf7S1QFw/7k7yE1gqsvpt9SeKHqs/DakZ7HnZ+5
-        /2f4qy61DPpV1yyul7Frn/ybjsvijulHCm/cEMlfl7DugdLJ1YySsjFrdCdPifaz3ByaGRjh
-        9kn5wYozMareNzali7w7elZnbm3eNcb+p1vsDLw+pV100a5nnqyTxcD6evXDY00nN9/ZUn52
-        TYbZnnOT/hT9YHlnaL1cIsQm9Ez59vq9H6Z7qm9zy2Tb9Knut1KgEktxRqKhFnNRcSIAF5bj
-        gDwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnO5kiegUgz8nRC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i5uHVjBabHp8jdXi8q45bBYzzu9jsmj8eJPdYu2Ru+wO3B7Xl3xi
-        9ti0qpPN4861PWwem5fUe/RtWcXo8XmTXABbFJdNSmpOZllqkb5dAlfG7vnvmQr+i1ccmpPX
-        wHhPuIuRk0NCwERi6eHzTF2MXBxCAjsYJZq7nrFAJGQklj/rY4OwhSXutxxhhSh6ySix7fFL
-        ZpAEr4CdxKLHfxlBbBYBVYnr9/6wQ8QFJU7OfAI2SFQgWuLG8m9MILawgJfEn91NYNtEBC4x
-        SpzZeAfMYRZ4xyhxa90yNogVfxglXv99BtbCLCAucevJfDCbTUBb4vv6xawgNqeAvcSDm7fY
-        IWrMJLq2djFC2PISzVtnM09gFJqF5JJZSEbNQtIyC0nLAkaWVYySqQXFuem5xYYFRnmp5XrF
-        ibnFpXnpesn5uZsYwZGmpbWDcc+qD3qHGJk4GA8xSnAwK4nweodGpQjxpiRWVqUW5ccXleak
-        Fh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAdObzwZjQadGf3+rLPM30kPuov+1o
-        p9Uv2ZK3ZhUVobvZv7F+23hHpejF4cLHOSyP0q6xXqtc9eF5+8eDL76IybP2H+Ob0dMm8j1+
-        jeV7ked6Eqlsr/b9rWjnFd160mVCDWN/i8/BnCUfE6YrSP8ULP9+pX2xGPefpDCpvWGz9/2L
-        3nFKbWmI+6kL+nsvv33PvTvWdK/0olqdswqqZVfFJrD/tHrydtaH4jvpHO8+HOH/qpYypV/c
-        +9u8X6senP1+Opat97C2bXbVQ8ujL98+lfnuvWkOh33Dv2vqtvOfiXBJXD+RUpzubWwSfvmS
-        kfHkjOuLGdLetT+V+XFoG/PvHqebnrHz88QWLOPZ3Xxs5lMlluKMREMt5qLiRACLl5ZjIwMA
-        AA==
-X-CMS-MailID: 20230510040747epcas2p3de1b7fdbc5b4d63ee0c28545670d9ddd
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCKsWRmVeSWpSXmKPExsWy7djPc7ob7aNTDC5947F4MG8bm8XiH8+Z
+        LKY+fMJmcXm/tsWOhiOsFntfb2W3uHloBaPFpsfXWC0u75rDZjHj/D4mi8aPN9kduD2uL/nE
+        7LFpVSebx51re9g8Ni+p9+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6Mp7f7mQoOS1c0L9vK
+        1sB4XayLkZNDQsBE4si0N+xdjFwcQgIrGCVuzW1kA0kICXxhlPg10xQi8ZlRYv3fPkaYjpMX
+        H7FBJJYzSnye28AK4XxklHjcOgfI4eDgFbCTeLTVCqSBRUBVYkHzRVYQm1dAUOLkzCcsILao
+        QKrEqs0XmUFsYQEviT+7m5hAbGYBcYlbT+YzgcwUETjFKPFp4UaoxDtGiY4lUiA2m4ChRNfb
+        LrBTOQXsJVZvWQxVIy/RvHU2M8Sl/zkkbs+PgbBdJNbMOgP1gbDEq+Nb2CFsGYn/OyGWSQi0
+        M0os+H0fypnAKNHw/BZUh7XEnXO/2EA+YxbQlFi/Sx8i7ChxcdJzJpCwhACfxI23ghA38ElM
+        2jadGSLMK9HRJgRRrSYx6/g6uLUHL1xinsCoNAspWGYheX8Wkm9mIexdwMiyilE8tbQ4Nz21
+        2DgvtVyvODG3uDQvXS85P3cTIzBhnf53/OsOxhWvPuodYmTiYDzEKMHBrCTC6x0alSLEm5JY
+        WZValB9fVJqTWnyIUZqDRUmcV9v2ZLKQQHpiSWp2ampBahFMlomDU6qBSeHUbOZXs7WZdpev
+        WC/08WD26hdXDnZ9mLVDcgqHhW7wUf1dJh0Pz9kvyFuobxrX9+3Kf05mrrz7LCqG05Le5B74
+        l/3D+39Bq3P35Eu9HW7fPtu1eLP6TbsrdV1m1bdQ2w1mIjoxuTzFMS38b61t1xpUWe75fSHz
+        755d7yafyproEZ3Ydrrg/I3WmUXzt8TsiZU4mBsi8lTsdfaPD9KT9/kZtFYGW6R9+HP18WXG
+        289mushNyjmbZ1QRnfFYmXV92cRfBzd+UNlcvYArMa3z9sJv8wROyL88YXtHPL2+Um7pWZlv
+        Unau21q8f6WFXhIV3x8pct2lK/fJLA2vnLv1cmFz5mh+TtxpfeBchtn0S0osxRmJhlrMRcWJ
+        ALKqYSTHAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBIsWRmVeSWpSXmKPExsVy+t/xe7ob7KNTDB4+0bF4MG8bm8XiH8+Z
+        LKY+fMJmcXm/tsWOhiOsFntfb2W3uHloBaPFpsfXWC0u75rDZjHj/D4mi8aPN9kduD2uL/nE
+        7LFpVSebx51re9g8Ni+p9+jbsorR4/MmuQC2KD2bovzSklSFjPziElulaEMLIz1DSws9IxNL
+        PUNj81grI1MlfTublNSczLLUIn27BL2Mp7f7mQoOS1c0L9vK1sB4XayLkZNDQsBE4uTFR2xd
+        jFwcQgJLGSVu/VrOCpGQkTg5rQHKFpb4c60Lqug9o8SDWR+AHA4OXgE7iUdbrUBqWARUJRY0
+        XwSr5xUQlDg58wkLiC0qkCpxcukNMFtYwEviz+4mJhCbWUBc4taT+UwgM0UEzjBKfP0/kR3E
+        YRZ4B3TFumVsIFVCAhuZJDYdSQax2QQMJbredoHFOQXsJVZvWQw1yUyia2sXI4QtL9G8dTbz
+        BEahWUgOmYVk4SwkLbOQtCxgZFnFKJJaWpybnltspFecmFtcmpeul5yfu4kRGKXbjv3csoNx
+        5auPeocYmTgYDzFKcDArifB6h0alCPGmJFZWpRblxxeV5qQWH2I0BYbGRGYp0eR8YJrIK4k3
+        NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpg0p++av3zdaaKDfyxu5/d
+        L838GC1ad5Hl8rxJDHpGU4J19X8onl4k279ZyOpM9D7Gfuds7lOND2wkvaJa7n2N1jYSWLGn
+        3Cmya97RjVktXOHpbubWO5PkznYeDhAIM9u3cOHu2CutEvzuDgwMxtnq0x/P+7TgDP+b9Z9n
+        hsVxa9qHzktP0Al0K9P3W5USwyPTy7B6msAUUbe+iFdLN++50ndflmtBJ2/CIs/OHyE+xbk7
+        XlhZdFWbH/8fp7Q/8M6d/xo/Iu3deBnv93KuOBLLmOrF9aBS6O+L2y/EA64v/aYbUhF6qVAu
+        a2Nix0LHiVEGVUHzbOqU9L33iHlW2D0+13/8ZpN6hf6LkDtFwkosxRmJhlrMRcWJAI8YRMpb
+        AwAA
+X-CMS-MailID: 20230510065440eucas1p1aeeae7688990edbe3b530e13db3975f3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
+X-RootMTR: 20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f
+X-EPHeader: CA
+CMS-TYPE: 201P
 X-CMS-RootMailID: 20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f
 References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
         <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
         <20230502062813.112434-4-jaewon02.kim@samsung.com>
         <d8fa2d7b-6604-1fad-6b0b-19d7e551a1d2@samsung.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        <0ef75bd7-e7e6-a806-2c3f-35c7312c391d@samsung.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,87 +122,97 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Marek
 
-
-On 23. 5. 9. 22:03, Marek Szyprowski wrote:
-> On 02.05.2023 08:28, Jaewon Kim wrote:
->> Support interrupt based pio mode to optimize cpu usage.
->> When transmitting data size is larget than 32 bytes, operates with
->> interrupt based pio mode.
+On 10.05.2023 06:05, Jaewon Kim wrote:
+> Hello Marek
+>
+>
+> On 23. 5. 9. 22:03, Marek Szyprowski wrote:
+>> On 02.05.2023 08:28, Jaewon Kim wrote:
+>>> Support interrupt based pio mode to optimize cpu usage.
+>>> When transmitting data size is larget than 32 bytes, operates with
+>>> interrupt based pio mode.
+>>>
+>>> By using the FIFORDY INT, an interrupt can be triggered when
+>>> the desired size of data has been received. Using this, we can support
+>>> interrupt based pio mode.
+>>>
+>>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>> This patch landed recently in linux-next as commit 1ee806718d5e ("spi:
+>> s3c64xx: support interrupt based pio mode"). Unfortunately it breaks
+>> ethernet chip operation on Exynos3250 based Artik5 Development board. I
+>> see the flood of the following messages:
 >>
->> By using the FIFORDY INT, an interrupt can be triggered when
->> the desired size of data has been received. Using this, we can support
->> interrupt based pio mode.
+>> [   36.097739] ax88796c spi0.0: I/O Error: rx-1 tx-0 rx-f tx-p len-496
+>> dma-1 res-(-5)
+>> [   36.100877] ax88796c spi0.0: RX residue: 248
+>> [   36.101383] ax88796c spi0.0: SPI transfer failed: -5
+>> [   36.101939] spi_master spi0: failed to transfer one message from queue
+>> [   36.102439] ax88796c spi0.0: axspi_read_rxq() failed: ret = -5
+>> [   36.107830] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
+>> [   36.148875] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
+>> dma-0 res-(-5)
+>> [   36.149517] ax88796c spi0.0: SPI transfer failed: -5
+>> [   36.150053] spi_master spi0: failed to transfer one message from queue
+>> [   36.150562] ax88796c spi0.0: axspi_read_reg() failed: ret = -5
+>> [   36.152175] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
+>> [   36.191651] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
+>> dma-0 res-(-5)
+>> [   36.192268] ax88796c spi0.0: SPI transfer failed: -5
 >>
->> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> This patch landed recently in linux-next as commit 1ee806718d5e ("spi:
-> s3c64xx: support interrupt based pio mode"). Unfortunately it breaks
-> ethernet chip operation on Exynos3250 based Artik5 Development board. I
-> see the flood of the following messages:
+>> ...
+>>
+>> I didn't analyze the details, but imho it looks like some kind of
+>> mishandling of the corner case or switching between PIO and DMA mode. I
+>> will check the details later.
+>>
+>>
+>> Best regards
 >
-> [   36.097739] ax88796c spi0.0: I/O Error: rx-1 tx-0 rx-f tx-p len-496
-> dma-1 res-(-5)
-> [   36.100877] ax88796c spi0.0: RX residue: 248
-> [   36.101383] ax88796c spi0.0: SPI transfer failed: -5
-> [   36.101939] spi_master spi0: failed to transfer one message from queue
-> [   36.102439] ax88796c spi0.0: axspi_read_rxq() failed: ret = -5
-> [   36.107830] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
-> [   36.148875] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
-> dma-0 res-(-5)
-> [   36.149517] ax88796c spi0.0: SPI transfer failed: -5
-> [   36.150053] spi_master spi0: failed to transfer one message from queue
-> [   36.150562] ax88796c spi0.0: axspi_read_reg() failed: ret = -5
-> [   36.152175] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
-> [   36.191651] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
-> dma-0 res-(-5)
-> [   36.192268] ax88796c spi0.0: SPI transfer failed: -5
+> Thanks for testing the various cases.
 >
-> ...
->
-> I didn't analyze the details, but imho it looks like some kind of
-> mishandling of the corner case or switching between PIO and DMA mode. I
-> will check the details later.
+> The problem occurred when DMA mode and IRQ mode were enabled at the same
+> time.
 >
 >
-> Best regards
+> In the above case, BUS_WIDTH register invaded.
+>
+> Because, target length 496 were written to RX_RDY_LVL, but it exceeded
+> 6-bits.
+>
+> Could you test with below code??? If the problem is solved, I will send
+> a fix patch as soon as possible.
 
+Thanks for quick response. Indeed, the proposed patch fixed the issue!
 
-Thanks for testing the various cases.
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-The problem occurred when DMA mode and IRQ mode were enabled at the same 
-time.
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
+> -----------------------------
+>
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 238db29fc93b..a72e11e965c3 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -782,7 +782,7 @@ static int s3c64xx_spi_transfer_one(struct
+> spi_master *master,
+>
+>           do {
+>                   /* transfer size is greater than 32, change to IRQ mode */
+> -               if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
+> +               if (!use_dma && (xfer->len > S3C64XX_SPI_POLLING_SIZE))
 
-In the above case, BUS_WIDTH register invaded.
+Parentheses around 'xfer->len > S3C64XX_SPI_POLLING_SIZE' are not needed.
 
-Because, target length 496 were written to RX_RDY_LVL, but it exceeded 
-6-bits.
-
-Could you test with below code??? If the problem is solved, I will send 
-a fix patch as soon as possible.
-
------------------------------
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 238db29fc93b..a72e11e965c3 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -782,7 +782,7 @@ static int s3c64xx_spi_transfer_one(struct 
-spi_master *master,
-
-         do {
-                 /* transfer size is greater than 32, change to IRQ mode */
--               if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
-+               if (!use_dma && (xfer->len > S3C64XX_SPI_POLLING_SIZE))
-                         use_irq = true;
-
-                 if (use_irq) {
-
------------------------------
-
-
+>                           use_irq = true;
+>
+>                   if (use_irq) {
+>
+> -----------------------------
+>
 Best regards
-
-Jaewon Kim
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
