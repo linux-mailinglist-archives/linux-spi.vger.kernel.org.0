@@ -2,67 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4026FD7C5
-	for <lists+linux-spi@lfdr.de>; Wed, 10 May 2023 09:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2427B6FD8EB
+	for <lists+linux-spi@lfdr.de>; Wed, 10 May 2023 10:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbjEJHEB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 May 2023 03:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S235798AbjEJILl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 May 2023 04:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjEJHEA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 May 2023 03:04:00 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAFE8F;
-        Wed, 10 May 2023 00:03:58 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-7577ef2fa31so985015585a.0;
-        Wed, 10 May 2023 00:03:58 -0700 (PDT)
+        with ESMTP id S235524AbjEJILj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 May 2023 04:11:39 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E222122;
+        Wed, 10 May 2023 01:11:34 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f435658d23so9695595e9.3;
+        Wed, 10 May 2023 01:11:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683702237; x=1686294237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D+HCy3L2OnT5uHyCBmjF1m1zbqDCsY+LQg7JElf9toM=;
-        b=kVYndPf5sb08mccQU66KR3JCC+q0Wdd4ROZcbwPKP6FR3dGSWvS+wZM27gbuKva/4i
-         8ansQJVEPiS8/7temIWSXq9mdwMiaJeuJ0ZRHu2y5R6SL7FeDvozo03VTxGVNbGNMh7A
-         LwSt8f6Bq96H8PNNp1qo735wQiBvIXK7WgOx6r3XDRA6/361NHbaoy5f82kvB0tOi91z
-         iZRO654VRFHoCd3QeExHTeaL6mjESrpLoVgOSM4Ya7TvtZJH/mdLz+V15eqfeq5PXSR+
-         DBuL1e1zzDie6JHFUv2zbHdx/e5aG8vDPkfBJIJHbBpx/rM7t+/1TYaz+swH+PyMd28J
-         1d1A==
+        d=gmail.com; s=20221208; t=1683706293; x=1686298293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kaQpRP2PJulxYaO5bFooRdj1QYIO1irnm40lBiyMQfA=;
+        b=sGsXHOCDB1/G09BwgMcl3P9fyGYxgKy3Lg32VYzLCmWTMGjuN0Og+jZ0pYkjWmJ+5g
+         Zne7CNel0vAodrw5NQr0bOgH68uTNzlfPNUgOZih9LMJX34lTXhuUPDGfgqtgSPuZorD
+         V5zDRnIsfctWawQ3dOXE/g5ejxcI6zl/SJ4lDMuFRKal66KSfKiuSpbsz5O/jm8G2AiT
+         W0IKm5IiAosack2KCtEDLu4JqSlUXwA83mrxWFPMLAczYSXHSov4urgeJwcOT57yeSpM
+         K1N5nEUZrTC25G/ngzvFsXq5BWuj820aa+EmvpGlp//SWdi2RunF+IErZPV9Y51Z5ml0
+         7Ceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683702237; x=1686294237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D+HCy3L2OnT5uHyCBmjF1m1zbqDCsY+LQg7JElf9toM=;
-        b=TnJjQ1KVFFZ0XDvvYcDl7MrYekGwY/nAothYwLlwVPKqcytxsLfDt/grCh5pOBWOoU
-         kwOu1CEGWe87yh6ya6qQK3hK3SsDA8y4XiKefDglW2E9PeNLX5TkvTccFKqSOc19BKLL
-         M7PS84yhjEiUkLByllntPQ0qS1fC1XC9BxnaFUHU4F8RfOliM/U2VFcuDw10g63dOiOY
-         rhCYTNwOBU+0QmixG2eJi1rSb0U+9iuW9nIdKAltElyYrqDe+dRzpitOPQAulHEQcWj7
-         brxwf3P5aSOHvMBYpXhA6qRQNpVLbRdonFHQhP7nW7SbprQogs4PjUE6HVbP5+IMftr8
-         gyIA==
-X-Gm-Message-State: AC+VfDx2opuOdnXzIcOrSosxsi2m6BMSvmXM8OQ87Q4nnC7ihTiO4jns
-        VvExURTJqfCOjKu3CRSKbW7OJTLARCjx6bO7tog=
-X-Google-Smtp-Source: ACHHUZ5Gj2ySOz0kMiZ6YZ+cJ3qh4WUDHZ4Brzpcqyv6S+0CxD50qj9STQcRmWDOHapDR7NxP0hHWt1vmcwQEnbbrZI=
-X-Received: by 2002:a05:6214:491:b0:616:7977:2460 with SMTP id
- pt17-20020a056214049100b0061679772460mr26683509qvb.24.1683702237418; Wed, 10
- May 2023 00:03:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn> <20230426071045.20753-3-zhuyinbo@loongson.cn>
- <ZFkPZhF8QqScXAmH@surfacebook> <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
-In-Reply-To: <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 10 May 2023 10:03:21 +0300
-Message-ID: <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1683706293; x=1686298293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kaQpRP2PJulxYaO5bFooRdj1QYIO1irnm40lBiyMQfA=;
+        b=SvDMl6mqqlE2for7dseuPfPFulDKEQZmI9SKFCLO6Xo5B+lA9dR+cO3vbvokDsaKyq
+         /NoyLQp3zEwbEZWTAp20LnfUZggFJTK2rkVIm6soJWOrJi/eVIpfehNy7kBv0rqzv7/G
+         G9X0QmW1YUwRfaA7UDZ8NKuzvBK4p79rYdVs7Lk8giF4sJJ+xgm/lQHqSgDhjsMCPU1B
+         Vomw78qWndQzoZa4K+zErCIMi+n67zDJh4wNaHTxeF+UVJqERbALPh/2at9yk2TB/RtX
+         CuPOjwA7wnXFuusjsmldG86O2VXHHwlHm5l59paepkFkZmf9E6v5v5/fzwPdJ8oEystg
+         Ep3w==
+X-Gm-Message-State: AC+VfDygYhi+LSvLKMP1KqWpa4q4F7HbUDGKtTvj9rVwVGp+X3ioOP2y
+        Ku5QONn+sHxnRi+HBCQjidQ=
+X-Google-Smtp-Source: ACHHUZ6nA8An0kWETX3sBghZaBOHEHWZkW9kJemfajv/KifLNkZtMoHeOoheAEpkUZYo+RyRDOmVEQ==
+X-Received: by 2002:a7b:c356:0:b0:3f0:3c2:3fa4 with SMTP id l22-20020a7bc356000000b003f003c23fa4mr11776779wmj.12.1683706292779;
+        Wed, 10 May 2023 01:11:32 -0700 (PDT)
+Received: from localhost.localdomain ([176.221.215.212])
+        by smtp.gmail.com with ESMTPSA id f16-20020a5d4dd0000000b003062ad45243sm16496375wru.14.2023.05.10.01.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 01:11:32 -0700 (PDT)
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Maksim Kiselev <bigunclemax@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 0/5] Allwinner R329/D1/R528/T113s SPI support
+Date:   Wed, 10 May 2023 11:11:07 +0300
+Message-Id: <20230510081121.3463710-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,111 +83,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 9, 2023 at 7:39=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
-e:
-> On Mon, May 08, 2023 at 06:04:06PM +0300, andy.shevchenko@gmail.com wrote=
-:
-> > Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
+v5:
+  - fixed DT bindings (Allowed three-string compatibility)
 
-...
+v4:
+  - fixed SPI sample mode configuration
+  - sorted DT bindings list
 
-> > > +           loongson_spi_write_reg(loongson_spi,
-> > > +                                  LOONGSON_SPI_SFCS_REG,
-> > > +                                  (val ? (0x11 << spi->chip_select) =
-:
-> > > +                                  (0x1 << spi->chip_select)) | cs);
->
-> > Too many parentheses.
->
-> The code is absolutely fine, there is nothing wrong with adding explicit
-> parentheses even where not strictly needed if it helps to make things
-> clear (which is obviously always a problem wiht ternery operator use).
+v3:
+  - fixed effective_speed_hz setup and added SPI sample mode configuration
+  - merged DT bindings for R329 and D1 SPI controllers
+  - added SPI_DBI node to sunxi-d1s-t113.dtsi
 
-> Please, stop this sort of nitpicking.  It is at times actively unhelpful.
+v2:
+  - added DT bindings and node for D1/T113s
 
-Okay, sorry for the noise.
+Icenowy Zheng (1):
+  spi: sun6i: change OF match data to a struct
 
-...
+Icenowy Zheng (1):
+  spi: sun6i: change OF match data to a struct
 
-> > > +           bit =3D fls(div) - 1;
-> > > +           if ((1<<bit) =3D=3D div)
-> > > +                   bit--;
-> > > +           div_tmp =3D rdiv[bit];
->
-> > I believe this can be optimized.
->
-> This isn't constructive feedback, if there is a concrete optimisation
-> you want to suggest please just suggest it.
+Maksim Kiselev (4):
+  dt-bindings: spi: sun6i: add DT bindings for Allwinner
+    R329/D1/R528/T113s SPI
+  spi: sun6i: add quirk for in-controller clock divider
+  spi: sun6i: add support for R329/D1/R528/T113s SPI controllers
+  riscv: dts: allwinner: d1: Add SPI controllers node
 
-It goes together with the other questions in this function. But if you
-think about some code proposal, here we are:
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  10 ++
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  37 +++++
+ drivers/spi/spi-sun6i.c                       | 131 ++++++++++++------
+ 3 files changed, 138 insertions(+), 40 deletions(-)
 
-_original_
+-- 
+2.39.2
 
-       const char rdiv[12] =3D {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
-
-               div =3D DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
-               if (div < 2)
-                       div =3D 2;
-               if (div > 4096)
-                       div =3D 4096;
-
-               bit =3D fls(div) - 1;
-               if ((1<<bit) =3D=3D div)
-                       bit--;
-               div_tmp =3D rdiv[bit];
-
-               loongson_spi->spcr =3D div_tmp & 3;
-               loongson_spi->sper =3D (div_tmp >> 2) & 3;
-
-_proposed_
-
-       const char rdiv[12] =3D {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
-
-// as far as I understood the above table
-00 00  [0]  <=3D 2
-00 01  [1]  <=3D 4
-01 00  [2]  <=3D 8
-00 10  [3]  <=3D 16
-00 11  [4]  <=3D 32
-01 01  [5]  <=3D 64
-01 10  [6]  <=3D 128
-01 11  [7]  <=3D 256
-10 00  [8]  <=3D 512
-10 01  [9]  <=3D 1024
-10 10  [10]  <=3D 2048
-10 11  [11]  <=3D 4096
-
-               div =3D
-clamp_val(DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz), 2, 4096);
-               div_tmp =3D rdiv[fls(div - 1)];
-
-               loongson_spi->spcr =3D (div_tmp & GENMASK(1, 0)) >> 0;
-               loongson_spi->sper =3D (div_tmp & GENMASK(3, 2)) >> 2;
-
-But TBH I would expect the author to think about it more.
-
-Also the check can be modified to have less indented code:
-
-       if (hz && loongson_spi->hz =3D=3D hz)
-          return 0;
-
-       if (!((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK))
-          return 0;
-
-...
-
-
-> > > +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
->
-> > Please, use _NS variant.
->
-> It really does not matter, the chances of any collisions is pretty much
-> zero.
-
-The point is in preventing us from using those symbols outside of the scope=
-.
-
---
-With Best Regards,
-Andy Shevchenko
