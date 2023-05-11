@@ -2,56 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9586FEB48
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 07:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F9C6FEB66
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 07:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjEKFkL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 01:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S229456AbjEKFu1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 01:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEKFkL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 01:40:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DCEAD;
-        Wed, 10 May 2023 22:40:10 -0700 (PDT)
+        with ESMTP id S236856AbjEKFuV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 01:50:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8965440E2
+        for <linux-spi@vger.kernel.org>; Wed, 10 May 2023 22:50:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC86564AB0;
-        Thu, 11 May 2023 05:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43465C433D2;
-        Thu, 11 May 2023 05:40:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2549560B87
+        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 05:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8699DC433EF;
+        Thu, 11 May 2023 05:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683783609;
-        bh=cnwaPvJcu6guyEf9NqX8F6+9/TD4en/lP/amfTvDi7Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=NsG5+VEq1Ng8NWZ3+pL7QO6FiKYwu+Lm/FUeXe58wNkj+kw9jkru3dh+hbcauYoeq
-         jdkkei/F7Agv5OJNPSmGHKdQP2/Woffbs7/7Hou2XIQUa/vnEsZL9nLAo9Qt5HHkL0
-         6fJ4SRtUVkI1lmDytETSO7SR/uk39KIsJMdOpjLoDYsQewrnG3YSzItp3zPu4wz7Fd
-         6nybldN50tGpFJdpIIqOfNfp0rfUsZgpzcSKmBtuMldihY8o/hK0n4YRrnGIeLEMwH
-         XejDdKMiHrT7jUESc2R/rI7gPp/WNk05MW/e0gieJwi6cvtQbzFcbQwQDXyINLc615
-         ZYZ7P7QH+2kjQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230510113942.89994-1-jaewon02.kim@samsung.com>
-References: <CGME20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb@epcas2p2.samsung.com>
- <20230510113942.89994-1-jaewon02.kim@samsung.com>
-Subject: Re: [PATCH] spi: s3c64xx: Disable IRQ mode when using DMA
-Message-Id: <168378360579.326766.7361923325048622391.b4-ty@kernel.org>
-Date:   Thu, 11 May 2023 14:40:05 +0900
-MIME-Version: 1.0
+        s=k20201202; t=1683784219;
+        bh=gIjVdW9Jto5mEFSxJMBK5krP55W/5HD47/+dXnjFA4I=;
+        h=Subject:From:Date:To:From;
+        b=mFlIZNAHOnNtXeg9x3G6q18op1SxwSWiDiEnvuMiZd7PyWdSNBPEQxSDfW2kkcmwc
+         1yfpU6VbkmZe4eKgP7DXwwxkt/1wwRbztwUq8TOvwXKheuaWCwo018lkDqABGge9qj
+         bPmbOVKyslBBqR6jpOICTksZXBs4zfQjpSgVupjdTDGiESFA9j+czWnj2XrCq9byov
+         pFvGXatZ7VX/zxPAYXPqe9mpaQkahz7287Xhez3ECjlN2dikcViVJfrMu/yPMKKHHV
+         dKpIjKrFAu+x05lJ46S4bmZICxR6qzNZkGwkKPxjWTGaN30pYb09rPzFGiWjSVw3eC
+         h9Pjzck7aK0PQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68A65E450BA;
+        Thu, 11 May 2023 05:50:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168378421937.19145.4434025639606349970.git-patchwork-summary@kernel.org>
+Date:   Thu, 11 May 2023 05:50:19 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,39 +52,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 10 May 2023 20:39:42 +0900, Jaewon Kim wrote:
-> Fixing the problem of enabling DMA mode and IRQ mode at the same time.
-> In this case, a value of more than 6bits is written to RDY_LVL, it can
-> cause an invasion of other registers, potentially leading to SPI
-> transfer failure.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: s3c64xx: Disable IRQ mode when using DMA
+  Submitter: Jaewon Kim <jaewon02.kim@samsung.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=746413
+  Lore link: https://lore.kernel.org/r/20230510113942.89994-1-jaewon02.kim@samsung.com
 
-Thanks!
 
-[1/1] spi: s3c64xx: Disable IRQ mode when using DMA
-      commit: 26cd10a0b9761bffd4669a429f8a33cbccef5bbd
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
