@@ -2,67 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B086FF9AE
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 20:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2246FFB4D
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 22:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238918AbjEKS4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 14:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S239160AbjEKU3h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 16:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238502AbjEKS4t (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 14:56:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6430C5
-        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 11:56:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1387863D78
-        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 18:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 785E6C433EF;
-        Thu, 11 May 2023 18:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683831407;
-        bh=Ddtp0+hSoM/KfhKjiFIPxGgbeZSjosgLV9g9iL77V4o=;
-        h=Subject:From:Date:To:From;
-        b=Lszc1yiI2/rpkxfFrqD5Y/Bw4ter+05SSy0Huymzp3QSlZLUOvlz/L8C2FPgwyrYA
-         FlhKn1zoZukOnBwk90SfltUvsOl1+Sdh+DjANPqlgbvoi2P213MYTZwNZ0v6y24uUc
-         IWkwLYAEVVKOkRCXDrXedPZWv48/yyjJfo1kxDtTlrwmhsQPpxpyctIGa4NCERvD8D
-         B5bwH/RVhnAHDkZJ5vccQv0NTJ27kab3ldK1nVgDGV1iTif0Q8TwIgPBKxlb5rE383
-         tP9TtX71MO5bm3Uukfa7P5rkENoVkfHU+OeO1bs3YqVpUbNNMK4/TKsisyu3R+nhDi
-         O4yUBXmgNIc9Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58900E26D4C;
-        Thu, 11 May 2023 18:56:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238918AbjEKU3g (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 16:29:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA3B49DB;
+        Thu, 11 May 2023 13:29:35 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a69e101070so17786595ad.1;
+        Thu, 11 May 2023 13:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683836975; x=1686428975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cIq+csdZEem8CM7fcgH+5/GZeWFKK87200SdyT17Gx0=;
+        b=a1rVpvl/Pn1WWSGMfSMkv2Hxawdf9hhhC1VBT4W0Wmfssa+RjlcSH40UzxVVWmsrT1
+         lBn6e6k4dacM/AxVcp4zm19aar1NjFJdGo7i4u6YmlUswm9opOVShy8A83p+VkxOuI82
+         vqhbTgm83HDxusvCAP4BztOBQfU7+MX0SeoqshAFXkiIiFlqPl3XjFe7QFNhqR6ihnr8
+         Z3NGiRtvIajZHyikPyWgB95PTJLWoGhiwPDCL5K1ncbP8bfu1/ry29cvK6suibd5MvN3
+         RqeK/TAHJkzTdBZX5p3YBhktKyX3NA7ArHzAg2EQBKMZIPyniISKryUjeC42k11Ryz3I
+         4yFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683836975; x=1686428975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cIq+csdZEem8CM7fcgH+5/GZeWFKK87200SdyT17Gx0=;
+        b=Q+uLN7kel4MNJBd6PZYQAayE3JaavQIHXMIu7C6CBk5EbkiUe37WNu3tw7lE4YVgto
+         Cl8qkvgpf+x/6xup1ifIx4qpP+B02+va8Q1IbXE3VD5Gt1FJP84sbYN9bZAdNijJuk7Q
+         XXp6pGCFZL46wuXT3VUPrekKWeiNV7q+bTZq6utF/Z47gnY0ulPWvTvVFKiH5e5UCqCD
+         Y1l8W/XfiPx0ZgJgYhD7UsLtsNLbz6BraiL4GXaBe+siGMjY9BEoot4O4Sck9V0E8gOM
+         hMdMDLVkWspRowTo3miJLYNMpX8s30BXvb/Xr4FpBeMY2+aM+k1gsIggpYjL1rLrqdeb
+         DZdA==
+X-Gm-Message-State: AC+VfDxilFUnwTe2f35oIw2ZeL3BZQbqEFMMit+VNScUWQ24SnXKRNEn
+        Pvm7uZV5rpqHHRhGWBzMgZRBf8LonbJtG8vdRh0=
+X-Google-Smtp-Source: ACHHUZ7A30kuohXj6o1p5sDSupKTAGuECnl44YgqupI0Fs/UFelDMXdh5M6ZyFb4PBhk1DaShccX5HaGpS1QlDlSLvA=
+X-Received: by 2002:a17:902:d4c4:b0:1ac:40f7:8b5a with SMTP id
+ o4-20020a170902d4c400b001ac40f78b5amr26750525plg.3.1683836975198; Thu, 11 May
+ 2023 13:29:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168383140735.26235.13087231582850850333.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 11 May 2023 18:56:47 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+In-Reply-To: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 11 May 2023 17:29:23 -0300
+Message-ID: <CAOMZO5B_a-oauJFsO8aXwSxu-3_=YiYbsHi-B=2MykkJ08fNtA@mail.gmail.com>
+Subject: Re: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+To:     Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     bstruempfel@ultratronik.de, Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Schrempf Frieder <frieder.schrempf@kontron.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v8] Add Intel LJCA device driver (2023-05-11T17:58:38)
-  Superseding: [v7] Add Intel LJCA device driver (2023-03-25T15:47:05):
-    [v7,1/6] usb: Add support for Intel LJCA device
-    [v7,2/6] usb: ljca: Add transport interfaces for sub-module drivers
-    [v7,3/6] Documentation: Add ABI doc for attributes of LJCA device
-    [v7,4/6] gpio: Add support for Intel LJCA USB GPIO driver
-    [v7,5/6] i2c: Add support for Intel LJCA USB I2C driver
-    [v7,6/6] spi: Add support for Intel LJCA USB SPI driver
+Hi Boerge,
 
+On Thu, May 11, 2023 at 10:58=E2=80=AFAM Boerge Struempfel
+<boerge.struempfel@gmail.com> wrote:
+>
+> By default, the imx spi controller uses a high mosi line, whenever it is
+> idle. This may not be desired in all use cases. For example neopixel
+> leds can get confused and flicker due to misinterpreting the idle state.
+> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+> can be overwritten on a per device basis.
+...
+> +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
+> +               spi->mode |=3D SPI_MOSI_IDLE_LOW;
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yes, this is useful.
 
+As this is a new property,  please send a patch that adds it to:
+Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+
+Thanks
