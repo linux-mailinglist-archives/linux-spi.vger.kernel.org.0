@@ -2,160 +2,345 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95166FF37C
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 15:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746836FF77E
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 18:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbjEKN6t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 09:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S238664AbjEKQgu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 12:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238041AbjEKN6s (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 09:58:48 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4201BF4;
-        Thu, 11 May 2023 06:58:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so79612044a12.1;
-        Thu, 11 May 2023 06:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683813526; x=1686405526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
-        b=Y7AqvUuLXbmjeEGage7I+9M2J2MQst3psCrciGGTiGFZOpwCvvh+wGd5x7eNIQugRU
-         2c4Hka8ERtwqxm0zK8AJqlzKhrV3Xwlji8aNv1zyXjDMoZN+lBz9V/UdyYFNnLMOBQS4
-         y+d2TouKBAFExIjLazpq4aAeFoHMnLZMJp+GlmEMXn0ZbYTRlkukAs2WFL6az4Bt/iDE
-         qVwVKXuXl66OwQY1tWPQkblznUHMFJOjcSjllblG683WoomCpQyt2wRdNK31G3/6IeBc
-         CBZCLMaalvZrU/3h1DNZGslHt+2C4T2wK3iEDSPZTIOAQYKW3UlHdbV1cj6YdNOfYXS1
-         No3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683813526; x=1686405526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
-        b=T8AW13f1NH4pYETHe2i+Om+84db42zbAxm3R/xx/nI1QoMYLlPh/eUPC4fceceHJJm
-         h7Bn0jPmR9a2wJALnLNL4HsB2Z09ILl76g+Xt8rRqyxPrbEL5VApBIXIfFBIVgBfv2gr
-         aXIZBVHcGHInuaUSHuEMe0ZlYa/Nxv0xOJ9sYjiv6eSa1gZir8UOTVX/jA9g7jOzhQkf
-         +ck8HKU3JjXt0Yg5/5ydkkXEoc6KIEX1LlZQtrfIqN+WZVcbqMSrYG6CVPXX3Smxs2sg
-         Aiao4bXnwxqgcCqGHac64z6EBtNFx7RothkroYUBYNutqGW1fJm3iVFHCKDJNdOOBYUt
-         fx7Q==
-X-Gm-Message-State: AC+VfDytK0aUSuNtU5wtCuRQ/SITvVy06s9X0B3PyUNwT4EDVcXLzM/F
-        dDhw/hv26n/nVbIcnMB+ZQ8=
-X-Google-Smtp-Source: ACHHUZ6W/hrepCZO8dtSF4PWtMXMh5m0iaLmX86DlYJ3hPfenOSBlDCLLqnXhALJMjKCox8mjf1rZQ==
-X-Received: by 2002:a17:907:d0e:b0:94a:57d1:5539 with SMTP id gn14-20020a1709070d0e00b0094a57d15539mr19781061ejc.5.1683813525596;
-        Thu, 11 May 2023 06:58:45 -0700 (PDT)
-Received: from wslxew193.ultratronik.de (mail.ultratronik.de. [82.100.224.114])
-        by smtp.gmail.com with ESMTPSA id de39-20020a1709069be700b00969e9fef151sm3627994ejc.97.2023.05.11.06.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 06:58:45 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
-Date:   Thu, 11 May 2023 15:56:32 +0200
-Message-Id: <20230511135632.78344-1-bstruempfel@ultratronik.de>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S238548AbjEKQgt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 12:36:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CC4E51;
+        Thu, 11 May 2023 09:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683823007; x=1715359007;
+  h=date:from:to:cc:subject:message-id;
+  bh=1WV/c8SxWyG5aYSongitVJNQQRVrDjLl2vUb+WM4Y0Y=;
+  b=h57ZhMQLkSNq4rlfQnWUdVQpmGyxd5wGax9+1Vsa3LmJfB5bZ1vUEiGn
+   ZFnRtpCqEd6QxBJ/XZESBfVHeV0eDsvEDWGwqsnIQUhFJlYo0aHsZY7AX
+   pWKaRXTap5DH/BMFoWZd0BaUK2UwxFIUgz6YWyBCqlPKwTu51x7aYOvAf
+   aWB2jztVyEfKvlHUIQOkFPRJKjbK9rJmWlPvZhX82ej4ZpegIcA4Q4WVs
+   lVz7B9mxnqaA95BiqTY7t/HFRaFLvZF+8zaCaNOL+BXGCJFSu1stLWnQr
+   4V9sR/wwToCbnNBBU6m6m9sv+59z7aS9rlGSGkAqx6Z1rNp12Cv8UOI4v
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="352788015"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="352788015"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 09:34:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="844034196"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="844034196"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 May 2023 09:34:56 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1px9Fn-00047j-2k;
+        Thu, 11 May 2023 16:34:55 +0000
+Date:   Fri, 12 May 2023 00:33:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-ext4@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
+ aabe491169befbe5481144acf575a0260939764a
+Message-ID: <20230511163350.VcdPx%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-By default, the imx spi controller uses a high mosi line, whenever it is
-idle. This may not be desired in all use cases. For example neopixel
-leds can get confused and flicker due to misinterpreting the idle state.
-Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-can be overwritten on a per device basis.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: aabe491169befbe5481144acf575a0260939764a  Add linux-next specific files for 20230511
 
-Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
----
- drivers/spi/spi-imx.c        | 9 ++++++++-
- drivers/spi/spi.c            | 2 ++
- include/uapi/linux/spi/spi.h | 3 ++-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+Warning reports:
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 34e5f81ec431e..6acab2b4ffaa5 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
- #define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
- #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
- #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
-+#define MX51_ECSPI_CONFIG_DATACTL(cs)	(1 << ((cs & 3) + 16))
- #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
- 
- #define MX51_ECSPI_INT		0x10
-@@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
- 	}
- 
-+	if (spi->mode & SPI_MOSI_IDLE_LOW)
-+		cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
-+	else
-+		cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
-+
- 	if (spi->mode & SPI_CS_HIGH)
- 		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
- 	else
-@@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	spi_imx->controller->prepare_message = spi_imx_prepare_message;
- 	spi_imx->controller->unprepare_message = spi_imx_unprepare_message;
- 	spi_imx->controller->slave_abort = spi_imx_slave_abort;
--	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
-+	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
-+					 SPI_MOSI_IDLE_LOW;
- 
- 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
- 	    is_imx53_ecspi(spi_imx))
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9291b2a0e8871..3ad538b317a84 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 		spi->mode |= SPI_LSB_FIRST;
- 	if (of_property_read_bool(nc, "spi-cs-high"))
- 		spi->mode |= SPI_CS_HIGH;
-+	if (of_property_read_bool(nc, "spi-mosi-idle-low"))
-+		spi->mode |= SPI_MOSI_IDLE_LOW;
- 
- 	/* Device DUAL/QUAD mode */
- 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
-diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
-index 9d5f580597039..ca56e477d1619 100644
---- a/include/uapi/linux/spi/spi.h
-+++ b/include/uapi/linux/spi/spi.h
-@@ -28,6 +28,7 @@
- #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
- #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
- #define	SPI_RX_CPHA_FLIP	_BITUL(16)	/* flip CPHA on Rx only xfer */
-+#define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
- 
- /*
-  * All the bits defined above should be covered by SPI_MODE_USER_MASK.
-@@ -37,6 +38,6 @@
-  * These bits must not overlap. A static assert check should make sure of that.
-  * If adding extra bits, make sure to increase the bit index below as well.
-  */
--#define SPI_MODE_USER_MASK	(_BITUL(17) - 1)
-+#define SPI_MODE_USER_MASK	(_BITUL(18) - 1)
- 
- #endif /* _UAPI_SPI_H */
+https://lore.kernel.org/oe-kbuild-all/202304140707.CoH337Ux-lkp@intel.com
+
+Warning: (recently discovered and may have been fixed)
+
+drivers/base/regmap/regcache-maple.c:113:23: warning: 'lower_index' is used uninitialized [-Wuninitialized]
+drivers/base/regmap/regcache-maple.c:113:36: warning: 'lower_last' is used uninitialized [-Wuninitialized]
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6395:21: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:499:13: warning: variable 'j' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:48:38: warning: unused variable 'golden_settings_gc_9_4_3' [-Wunused-const-variable]
+
+Unverified Warning (likely false positive, please contact us if interested):
+
+drivers/gpu/drm/i915/display/intel_psr.c:2999:0-23: WARNING: i915_edp_psr_debug_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+fs/ext4/super.c:4724 ext4_check_feature_compatibility() warn: bitwise AND condition is false here
+fs/ext4/verity.c:316 ext4_get_verity_descriptor_location() error: uninitialized symbol 'desc_size_disk'.
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- alpha-randconfig-m031-20230511
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- alpha-randconfig-s032-20230509
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-base-regmap-regcache-maple.c:warning:lower_index-is-used-uninitialized
+|   |-- drivers-base-regmap-regcache-maple.c:warning:lower_last-is-used-uninitialized
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- arc-randconfig-r043-20230511
+|   |-- drivers-base-regmap-regcache-maple.c:warning:lower_index-is-used-uninitialized
+|   |-- drivers-base-regmap-regcache-maple.c:warning:lower_last-is-used-uninitialized
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- csky-randconfig-r021-20230511
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- csky-randconfig-r023-20230511
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- loongarch-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- loongarch-defconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- mips-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- mips-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- parisc-randconfig-m041-20230509
+|   |-- fs-ext4-super.c-ext4_check_feature_compatibility()-warn:bitwise-AND-condition-is-false-here
+|   `-- fs-ext4-verity.c-ext4_get_verity_descriptor_location()-error:uninitialized-symbol-desc_size_disk-.
+|-- parisc-randconfig-r001-20230511
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- parisc-randconfig-r022-20230509
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- powerpc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- powerpc-buildonly-randconfig-r005-20230511
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- powerpc-randconfig-r022-20230511
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- powerpc-randconfig-s042-20230509
+|   `-- drivers-spi-spi-fsl-cpm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-usertype-got-restricted-__le16
+|-- riscv-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- s390-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- s390-randconfig-r026-20230511
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- s390-randconfig-r033-20230509
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- s390-randconfig-r044-20230511
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- sparc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- sparc64-randconfig-r032-20230509
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+|-- x86_64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:warning:variable-count-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gfx.c:warning:variable-j-set-but-not-used
+`-- x86_64-randconfig-c002
+    `-- drivers-gpu-drm-i915-display-intel_psr.c:WARNING:i915_edp_psr_debug_fops-should-be-defined-with-DEFINE_DEBUGFS_ATTRIBUTE
+clang_recent_errors
+|-- arm-randconfig-r001-20230509
+|   `-- drivers-gpu-drm-amd-amdgpu-gfx_v9_4_3.c:warning:unused-variable-golden_settings_gc_9_4_3
+`-- riscv-randconfig-r042-20230509
+    `-- drivers-gpu-drm-amd-amdgpu-gfx_v9_4_3.c:warning:unused-variable-golden_settings_gc_9_4_3
+
+elapsed time: 739m
+
+configs tested: 151
+configs skipped: 10
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r006-20230510   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r001-20230511   gcc  
+arc          buildonly-randconfig-r002-20230510   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r014-20230509   gcc  
+arc                  randconfig-r043-20230509   gcc  
+arc                  randconfig-r043-20230511   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                       imx_v4_v5_defconfig   clang
+arm                  randconfig-r001-20230509   clang
+arm                  randconfig-r002-20230509   clang
+arm                  randconfig-r005-20230511   gcc  
+arm                  randconfig-r024-20230509   gcc  
+arm                  randconfig-r046-20230509   gcc  
+arm                  randconfig-r046-20230511   clang
+arm                         s3c6400_defconfig   gcc  
+arm                       spear13xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r003-20230510   gcc  
+csky         buildonly-randconfig-r006-20230511   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r021-20230511   gcc  
+csky                 randconfig-r023-20230511   gcc  
+hexagon      buildonly-randconfig-r003-20230511   clang
+hexagon      buildonly-randconfig-r004-20230510   clang
+hexagon      buildonly-randconfig-r004-20230511   clang
+hexagon              randconfig-r005-20230509   clang
+hexagon              randconfig-r011-20230511   clang
+hexagon              randconfig-r015-20230511   clang
+hexagon              randconfig-r031-20230509   clang
+hexagon              randconfig-r041-20230509   clang
+hexagon              randconfig-r041-20230511   clang
+hexagon              randconfig-r045-20230509   clang
+hexagon              randconfig-r045-20230511   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r001-20230510   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230509   gcc  
+loongarch            randconfig-r014-20230511   gcc  
+loongarch            randconfig-r034-20230511   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5249evb_defconfig   gcc  
+m68k                 randconfig-r012-20230511   gcc  
+m68k                 randconfig-r021-20230509   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                         bigsur_defconfig   gcc  
+mips                     cu1000-neo_defconfig   clang
+mips                           jazz_defconfig   gcc  
+mips                 randconfig-r006-20230511   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r025-20230511   gcc  
+nios2                randconfig-r026-20230509   gcc  
+nios2                randconfig-r036-20230509   gcc  
+openrisc                         alldefconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc             randconfig-r033-20230511   gcc  
+openrisc             randconfig-r035-20230511   gcc  
+openrisc             randconfig-r036-20230511   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230511   gcc  
+parisc               randconfig-r003-20230511   gcc  
+parisc               randconfig-r022-20230509   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r005-20230511   gcc  
+powerpc                       eiger_defconfig   gcc  
+powerpc                    ge_imp3a_defconfig   clang
+powerpc                       holly_defconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc              randconfig-r022-20230511   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                    nommu_virt_defconfig   clang
+riscv                randconfig-r034-20230509   gcc  
+riscv                randconfig-r042-20230509   clang
+riscv                randconfig-r042-20230511   gcc  
+riscv                          rv32_defconfig   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r013-20230511   gcc  
+s390                 randconfig-r026-20230511   gcc  
+s390                 randconfig-r033-20230509   gcc  
+s390                 randconfig-r044-20230509   clang
+s390                 randconfig-r044-20230511   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r002-20230511   gcc  
+sh                   randconfig-r004-20230509   gcc  
+sh                   randconfig-r024-20230511   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                           se7705_defconfig   gcc  
+sh                           se7750_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230509   gcc  
+sparc                randconfig-r015-20230509   gcc  
+sparc                randconfig-r016-20230509   gcc  
+sparc64              randconfig-r006-20230509   gcc  
+sparc64              randconfig-r016-20230511   gcc  
+sparc64              randconfig-r032-20230509   gcc  
+sparc64              randconfig-r032-20230511   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r005-20230510   gcc  
+xtensa                              defconfig   gcc  
+xtensa               randconfig-r035-20230509   gcc  
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
