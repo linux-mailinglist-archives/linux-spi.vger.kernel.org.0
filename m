@@ -2,51 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7054E6FEB78
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 08:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A77B6FEB91
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 08:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbjEKGBI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 02:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S236642AbjEKGKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 02:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjEKGBH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 02:01:07 -0400
+        with ESMTP id S231562AbjEKGKY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 02:10:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081E4272A;
-        Wed, 10 May 2023 23:01:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57633C00
+        for <linux-spi@vger.kernel.org>; Wed, 10 May 2023 23:10:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97485635B9;
-        Thu, 11 May 2023 06:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5733BC433EF;
-        Thu, 11 May 2023 06:01:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2B3615D4
+        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 06:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96035C433D2;
+        Thu, 11 May 2023 06:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683784866;
-        bh=DRAyWIVBVl/Vja8Y6YNCq8vTtf3RsA1/UCfLfuH/Fkw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Y9PY77s7aH3WeiI0xSgZfJX5Ilh3vZj3S8whWKLJCvf+e8lYVAMIyjS4syhdgraIE
-         u1l1uj7I8p9Hxm/8Q/xkRIXf8Ngic8Ub1478fwReF7MYvqJJwscPtbaKAsOcZVLPYh
-         oN/2t5DVGC6qc5nLfR2W2eZSzWZku0WD2CrXTWgMpgOSleSvlOrOM+nkgQ4nXfSEdk
-         41+Lu1TZq0VNVewY/2q19P4o/wdYQ+t/+XQzeGSAVg+xMVlCqgsDRX6P2cO6a1IPVk
-         zCSqrpRIkaf6yd2s+wZ7Mr+w9Idxv97q+sYwAcvEMM5eR17DBI5CWUj58Omr2prFoF
-         8VxLupA9MmRiw==
-From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
-In-Reply-To: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Select FIFO mode for chip select
-Message-Id: <168378486157.333092.4222573391811617519.b4-ty@kernel.org>
-Date:   Thu, 11 May 2023 15:01:01 +0900
-MIME-Version: 1.0
+        s=k20201202; t=1683785422;
+        bh=wfS8JvJn8V4CZFNzSJwNslIs15MzH3X/jc+DWwU8VFU=;
+        h=Subject:From:Date:To:From;
+        b=JgkQwBvDY8AVqj8NWaO1/HpNnxzuY/xphA5AqjUUS6sXuKpoLHjQT9PAa+YSulWMp
+         4nr8fLBtIHKzAlUZ8lo4G74nzBwQv+1se21UHiPq4p9c/qD5Gj7D+L11fWXJEk//U7
+         k3Hq5avkdhqvLYHu+iSeFBsqANn7DuC62FR9I/m0F14+gFjCAAuyo0c0ygzw+ORpF7
+         qICzSbpGdnMzUQUBugmUAmEz40qbGq5qjJ5F8C1Q5fl/Zji5AxRhEghHvqWTRf4bQN
+         wXqgE57TSowN4q0ESM0DfyDAW/q6d+tAsN73kI1JgSOfu7IQfJuYFCcY2fpsV7MGcU
+         A6ILPwGaDcLuA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71BB6E450BA;
+        Thu, 11 May 2023 06:10:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168378542238.29329.18421015953290013021.git-patchwork-summary@kernel.org>
+Date:   Thu, 11 May 2023 06:10:22 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,44 +52,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 09 May 2023 15:31:36 +0530, Vijaya Krishna Nivarthi wrote:
-> Spi geni driver switches between FIFO and DMA modes based on xfer length.
-> FIFO mode relies on M_CMD_DONE_EN interrupt for completion while DMA mode
-> relies on XX_DMA_DONE.
-> During dynamic switching, if FIFO mode is chosen, FIFO related interrupts
-> are enabled and DMA related interrupts are disabled. And viceversa.
-> Chip select shares M_CMD_DONE_EN interrupt with FIFO to check completion.
-> Now, if a chip select operation is preceded by a DMA xfer, M_CMD_DONE_EN
-> interrupt would have been disabled and hence it will never receive one
-> resulting in timeout.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-geni-qcom: Select FIFO mode for chip select
+  Submitter: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=746067
+  Lore link: https://lore.kernel.org/r/1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com
 
-Thanks!
 
-[1/1] spi: spi-geni-qcom: Select FIFO mode for chip select
-      commit: 4c329f5da7cfa366bacfda1328a025dd38951317
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
