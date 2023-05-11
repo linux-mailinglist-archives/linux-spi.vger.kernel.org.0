@@ -2,231 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6C86FF341
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 15:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95166FF37C
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 15:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238333AbjEKNm6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 09:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S238043AbjEKN6t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 09:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238334AbjEKNmj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 09:42:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1712D2D7;
-        Thu, 11 May 2023 06:42:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEDC6113E;
-        Thu, 11 May 2023 06:43:03 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B86013F5A1;
-        Thu, 11 May 2023 06:42:16 -0700 (PDT)
-Date:   Thu, 11 May 2023 14:42:14 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 3/5] spi: sun6i: add quirk for in-controller clock
- divider
-Message-ID: <20230511144214.0731b371@donnerap.cambridge.arm.com>
-In-Reply-To: <20230510081121.3463710-4-bigunclemax@gmail.com>
-References: <20230510081121.3463710-1-bigunclemax@gmail.com>
-        <20230510081121.3463710-4-bigunclemax@gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        with ESMTP id S238041AbjEKN6s (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 09:58:48 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4201BF4;
+        Thu, 11 May 2023 06:58:47 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so79612044a12.1;
+        Thu, 11 May 2023 06:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683813526; x=1686405526;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
+        b=Y7AqvUuLXbmjeEGage7I+9M2J2MQst3psCrciGGTiGFZOpwCvvh+wGd5x7eNIQugRU
+         2c4Hka8ERtwqxm0zK8AJqlzKhrV3Xwlji8aNv1zyXjDMoZN+lBz9V/UdyYFNnLMOBQS4
+         y+d2TouKBAFExIjLazpq4aAeFoHMnLZMJp+GlmEMXn0ZbYTRlkukAs2WFL6az4Bt/iDE
+         qVwVKXuXl66OwQY1tWPQkblznUHMFJOjcSjllblG683WoomCpQyt2wRdNK31G3/6IeBc
+         CBZCLMaalvZrU/3h1DNZGslHt+2C4T2wK3iEDSPZTIOAQYKW3UlHdbV1cj6YdNOfYXS1
+         No3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683813526; x=1686405526;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
+        b=T8AW13f1NH4pYETHe2i+Om+84db42zbAxm3R/xx/nI1QoMYLlPh/eUPC4fceceHJJm
+         h7Bn0jPmR9a2wJALnLNL4HsB2Z09ILl76g+Xt8rRqyxPrbEL5VApBIXIfFBIVgBfv2gr
+         aXIZBVHcGHInuaUSHuEMe0ZlYa/Nxv0xOJ9sYjiv6eSa1gZir8UOTVX/jA9g7jOzhQkf
+         +ck8HKU3JjXt0Yg5/5ydkkXEoc6KIEX1LlZQtrfIqN+WZVcbqMSrYG6CVPXX3Smxs2sg
+         Aiao4bXnwxqgcCqGHac64z6EBtNFx7RothkroYUBYNutqGW1fJm3iVFHCKDJNdOOBYUt
+         fx7Q==
+X-Gm-Message-State: AC+VfDytK0aUSuNtU5wtCuRQ/SITvVy06s9X0B3PyUNwT4EDVcXLzM/F
+        dDhw/hv26n/nVbIcnMB+ZQ8=
+X-Google-Smtp-Source: ACHHUZ6W/hrepCZO8dtSF4PWtMXMh5m0iaLmX86DlYJ3hPfenOSBlDCLLqnXhALJMjKCox8mjf1rZQ==
+X-Received: by 2002:a17:907:d0e:b0:94a:57d1:5539 with SMTP id gn14-20020a1709070d0e00b0094a57d15539mr19781061ejc.5.1683813525596;
+        Thu, 11 May 2023 06:58:45 -0700 (PDT)
+Received: from wslxew193.ultratronik.de (mail.ultratronik.de. [82.100.224.114])
+        by smtp.gmail.com with ESMTPSA id de39-20020a1709069be700b00969e9fef151sm3627994ejc.97.2023.05.11.06.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 06:58:45 -0700 (PDT)
+From:   Boerge Struempfel <boerge.struempfel@gmail.com>
+X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
+Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+Date:   Thu, 11 May 2023 15:56:32 +0200
+Message-Id: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 10 May 2023 11:11:10 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
+By default, the imx spi controller uses a high mosi line, whenever it is
+idle. This may not be desired in all use cases. For example neopixel
+leds can get confused and flicker due to misinterpreting the idle state.
+Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+can be overwritten on a per device basis.
 
-> Previously SPI controllers in Allwinner SoCs has a clock divider inside.
-> However now the clock divider is removed and to set the transfer clock
-> rate it's only needed to set the SPI module clock to the target value
-> and configure a proper work mode.
-> 
-> According to the datasheet there are three work modes:
-> 
-> | SPI Sample Mode         | SDM(bit13) | SDC(bit11) | Run Clock |
-> |-------------------------|------------|------------|-----------|
-> | normal sample           |      1     |      0     | <= 24 MHz |
-> | delay half cycle sample |      0     |      0     | <= 40 MHz |
-> | delay one cycle sample  |      0     |      1     | >= 80 MHz |
-> 
-> Add a quirk for this kind of SPI controllers.
-> 
-> Co-developed-by: Icenowy Zheng <icenowy@aosc.io>
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
+---
+ drivers/spi/spi-imx.c        | 9 ++++++++-
+ drivers/spi/spi.c            | 2 ++
+ include/uapi/linux/spi/spi.h | 3 ++-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-Looks good now.
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-> ---
->  drivers/spi/spi-sun6i.c | 91 +++++++++++++++++++++++++++--------------
->  1 file changed, 61 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-> index 01a01cd86db5..e4efab310469 100644
-> --- a/drivers/spi/spi-sun6i.c
-> +++ b/drivers/spi/spi-sun6i.c
-> @@ -42,7 +42,9 @@
->  #define SUN6I_TFR_CTL_CS_MANUAL			BIT(6)
->  #define SUN6I_TFR_CTL_CS_LEVEL			BIT(7)
->  #define SUN6I_TFR_CTL_DHB			BIT(8)
-> +#define SUN6I_TFR_CTL_SDC			BIT(11)
->  #define SUN6I_TFR_CTL_FBS			BIT(12)
-> +#define SUN6I_TFR_CTL_SDM			BIT(13)
->  #define SUN6I_TFR_CTL_XCH			BIT(31)
->  
->  #define SUN6I_INT_CTL_REG		0x10
-> @@ -87,6 +89,7 @@
->  
->  struct sun6i_spi_cfg {
->  	unsigned long		fifo_depth;
-> +	bool			has_clk_ctl;
->  };
->  
->  struct sun6i_spi {
-> @@ -260,7 +263,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
->  				  struct spi_transfer *tfr)
->  {
->  	struct sun6i_spi *sspi = spi_master_get_devdata(master);
-> -	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
-> +	unsigned int div, div_cdr1, div_cdr2, timeout;
->  	unsigned int start, end, tx_time;
->  	unsigned int trig_level;
->  	unsigned int tx_len = 0, rx_len = 0;
-> @@ -350,39 +353,65 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
->  
->  	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
->  
-> -	/* Ensure that we have a parent clock fast enough */
-> -	mclk_rate = clk_get_rate(sspi->mclk);
-> -	if (mclk_rate < (2 * tfr->speed_hz)) {
-> -		clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
-> -		mclk_rate = clk_get_rate(sspi->mclk);
-> -	}
-> +	if (sspi->cfg->has_clk_ctl) {
-> +		unsigned int mclk_rate = clk_get_rate(sspi->mclk);
->  
-> -	/*
-> -	 * Setup clock divider.
-> -	 *
-> -	 * We have two choices there. Either we can use the clock
-> -	 * divide rate 1, which is calculated thanks to this formula:
-> -	 * SPI_CLK = MOD_CLK / (2 ^ cdr)
-> -	 * Or we can use CDR2, which is calculated with the formula:
-> -	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
-> -	 * Wether we use the former or the latter is set through the
-> -	 * DRS bit.
-> -	 *
-> -	 * First try CDR2, and if we can't reach the expected
-> -	 * frequency, fall back to CDR1.
-> -	 */
-> -	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
-> -	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
-> -	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
-> -		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
-> -		tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
-> +		/* Ensure that we have a parent clock fast enough */
-> +		if (mclk_rate < (2 * tfr->speed_hz)) {
-> +			clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
-> +			mclk_rate = clk_get_rate(sspi->mclk);
-> +		}
-> +
-> +		/*
-> +		 * Setup clock divider.
-> +		 *
-> +		 * We have two choices there. Either we can use the clock
-> +		 * divide rate 1, which is calculated thanks to this formula:
-> +		 * SPI_CLK = MOD_CLK / (2 ^ cdr)
-> +		 * Or we can use CDR2, which is calculated with the formula:
-> +		 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
-> +		 * Wether we use the former or the latter is set through the
-> +		 * DRS bit.
-> +		 *
-> +		 * First try CDR2, and if we can't reach the expected
-> +		 * frequency, fall back to CDR1.
-> +		 */
-> +		div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
-> +		div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
-> +		if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
-> +			reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
-> +			tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
-> +		} else {
-> +			div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
-> +			reg = SUN6I_CLK_CTL_CDR1(div);
-> +			tfr->effective_speed_hz = mclk_rate / (1 << div);
-> +		}
-> +
-> +		sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
->  	} else {
-> -		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
-> -		reg = SUN6I_CLK_CTL_CDR1(div);
-> -		tfr->effective_speed_hz = mclk_rate / (1 << div);
-> +		clk_set_rate(sspi->mclk, tfr->speed_hz);
-> +		tfr->effective_speed_hz = clk_get_rate(sspi->mclk);
-> +
-> +		/*
-> +		 * Configure work mode.
-> +		 *
-> +		 * There are three work modes depending on the controller clock
-> +		 * frequency:
-> +		 * - normal sample mode           : CLK <= 24MHz SDM=1 SDC=0
-> +		 * - delay half-cycle sample mode : CLK <= 40MHz SDM=0 SDC=0
-> +		 * - delay one-cycle sample mode  : CLK >= 80MHz SDM=0 SDC=1
-> +		 */
-> +		reg = sun6i_spi_read(sspi, SUN6I_TFR_CTL_REG);
-> +		reg &= ~(SUN6I_TFR_CTL_SDM | SUN6I_TFR_CTL_SDC);
-> +
-> +		if (tfr->effective_speed_hz <= 24000000)
-> +			reg |= SUN6I_TFR_CTL_SDM;
-> +		else if (tfr->effective_speed_hz >= 80000000)
-> +			reg |= SUN6I_TFR_CTL_SDC;
-> +
-> +		sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
->  	}
->  
-> -	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
->  	/* Finally enable the bus - doing so before might raise SCK to HIGH */
->  	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
->  	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
-> @@ -701,10 +730,12 @@ static void sun6i_spi_remove(struct platform_device *pdev)
->  
->  static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
->  	.fifo_depth	= SUN6I_FIFO_DEPTH,
-> +	.has_clk_ctl	= true,
->  };
->  
->  static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
->  	.fifo_depth	= SUN8I_FIFO_DEPTH,
-> +	.has_clk_ctl	= true,
->  };
->  
->  static const struct of_device_id sun6i_spi_match[] = {
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 34e5f81ec431e..6acab2b4ffaa5 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ #define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
+ #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
+ #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
++#define MX51_ECSPI_CONFIG_DATACTL(cs)	(1 << ((cs & 3) + 16))
+ #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
+ 
+ #define MX51_ECSPI_INT		0x10
+@@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
+ 	}
+ 
++	if (spi->mode & SPI_MOSI_IDLE_LOW)
++		cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
++	else
++		cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
++
+ 	if (spi->mode & SPI_CS_HIGH)
+ 		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
+ 	else
+@@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	spi_imx->controller->prepare_message = spi_imx_prepare_message;
+ 	spi_imx->controller->unprepare_message = spi_imx_unprepare_message;
+ 	spi_imx->controller->slave_abort = spi_imx_slave_abort;
+-	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
++	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
++					 SPI_MOSI_IDLE_LOW;
+ 
+ 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
+ 	    is_imx53_ecspi(spi_imx))
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 9291b2a0e8871..3ad538b317a84 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 		spi->mode |= SPI_LSB_FIRST;
+ 	if (of_property_read_bool(nc, "spi-cs-high"))
+ 		spi->mode |= SPI_CS_HIGH;
++	if (of_property_read_bool(nc, "spi-mosi-idle-low"))
++		spi->mode |= SPI_MOSI_IDLE_LOW;
+ 
+ 	/* Device DUAL/QUAD mode */
+ 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
+diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
+index 9d5f580597039..ca56e477d1619 100644
+--- a/include/uapi/linux/spi/spi.h
++++ b/include/uapi/linux/spi/spi.h
+@@ -28,6 +28,7 @@
+ #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
+ #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
+ #define	SPI_RX_CPHA_FLIP	_BITUL(16)	/* flip CPHA on Rx only xfer */
++#define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
+ 
+ /*
+  * All the bits defined above should be covered by SPI_MODE_USER_MASK.
+@@ -37,6 +38,6 @@
+  * These bits must not overlap. A static assert check should make sure of that.
+  * If adding extra bits, make sure to increase the bit index below as well.
+  */
+-#define SPI_MODE_USER_MASK	(_BITUL(17) - 1)
++#define SPI_MODE_USER_MASK	(_BITUL(18) - 1)
+ 
+ #endif /* _UAPI_SPI_H */
+-- 
+2.25.1
 
