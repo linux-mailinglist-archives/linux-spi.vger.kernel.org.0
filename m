@@ -2,529 +2,220 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E6C6FECB9
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 09:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94F26FECD7
+	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 09:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjEKHZP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 03:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S232059AbjEKHbw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 03:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236758AbjEKHZM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 03:25:12 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 518A2729E;
-        Thu, 11 May 2023 00:24:57 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxPuu9llxkuKoHAA--.12843S3;
-        Thu, 11 May 2023 15:18:21 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx87S7llxk_2dVAA--.20859S3;
-        Thu, 11 May 2023 15:18:19 +0800 (CST)
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     andy.shevchenko@gmail.com
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
- <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <049c871d-c658-24c1-91e6-701098f5fc28@loongson.cn>
-Date:   Thu, 11 May 2023 15:18:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229871AbjEKHbu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 03:31:50 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2045.outbound.protection.outlook.com [40.107.101.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F1F26A5;
+        Thu, 11 May 2023 00:31:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iFKnR0ffBywxe+uhTOUOxqNL47/f2/BFmYzK9nr12p2WR5ue/sEKIJs2ZKhC7HkwixHJJFWHGSDVcpcnAKYxKF5JXWIvyhBZDQAc2YSrV+pAc57o6Gq+6MCz4YnbqznmCDeVI0QOGtrkce5DMhZOE6M/tUcelSoK86Z29hJzfqug+Gd3m36IPdcdPYMX4XIm0nYcgxZqiICe0PzkzQvJ16JtcR0E6yFxn14p4ribdvX6YkPbIYpDbc5mvtRLFvx0r0Eqs1GwvVMnN1jjgsEeBvNis7tqNbq3xYSdDGqC0ONTJxeEPCidjanxMv6u8qVYZ7rt3jFEm9x+VpB2JLKP4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nHoOlSgK/As9ZUzdyYrrxA/TP6EbbBw5yk+wH8BLd2A=;
+ b=MBJUV57FXZksmuljgaYCpKrcHe9xDmoquiSES1A+kQM0jgHj/XFFb76ZyM+ANc2GhOFxAUeCWPv1zF3Zqx1bUrdrtqy9zS7adqhFdrfkTcV4uCQPtiBFVY2kvTB4sDMbw7N13DoGyhrYhVXhPlliqZKiEeE1DgAE8B32rhaYY4uICLVCwXjqTe/wosvN8F92lkOxkVpKo07l6oEoHfvX7TOZMe/p3xWoSXfP8jLMra78cYEGz+HBCNwE8jb49JXq+VDjSHBXAmgrcI0u1PrGjeYDYVgP28Iviyn1bfC0hOc2UkUBIMkv5Vr07YId/azdzpbtC4IrR6DMd+Un0C9Msg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nHoOlSgK/As9ZUzdyYrrxA/TP6EbbBw5yk+wH8BLd2A=;
+ b=DBmx3tICba7QTH7tf1lhKJfoKLFeo5ETky9jtpgfbAG8LqhMJwNqxMKJxvCviKJ6iVR8PstaVYRtNIx1/1hyMJg5IbS+MXnY/WdaR+/zCU67zzdRX/aeDbNqr9hblUziDsTqQ0VIHcoVNN3gIrdsuaryFt36FvZHmsdjNyHocJM=
+Received: from MW4PR04CA0069.namprd04.prod.outlook.com (2603:10b6:303:6b::14)
+ by DM4PR12MB5165.namprd12.prod.outlook.com (2603:10b6:5:394::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Thu, 11 May
+ 2023 07:31:42 +0000
+Received: from CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::a9) by MW4PR04CA0069.outlook.office365.com
+ (2603:10b6:303:6b::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20 via Frontend
+ Transport; Thu, 11 May 2023 07:31:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT111.mail.protection.outlook.com (10.13.174.61) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6387.21 via Frontend Transport; Thu, 11 May 2023 07:31:42 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 11 May
+ 2023 02:31:41 -0500
+Received: from xhdakumarma40u.xilinx.com (10.180.168.240) by
+ SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34
+ via Frontend Transport; Thu, 11 May 2023 02:31:36 -0500
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+To:     <broonie@kernel.org>, <tudor.ambarus@linaro.org>,
+        <pratyush@kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <michael@walle.cc>
+CC:     <sbinding@opensource.cirrus.com>, <git@amd.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <michal.simek@amd.com>, <linux-arm-kernel@lists.infradead.org>,
+        <amitrkcian2002@gmail.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Subject: [PATCH V8 0/7] spi: Add support for stacked/parallel memories
+Date:   Thu, 11 May 2023 13:01:27 +0530
+Message-ID: <20230511073134.41180-1-amit.kumar-mahapatra@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <ZFkPZhF8QqScXAmH@surfacebook>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx87S7llxk_2dVAA--.20859S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3tr4ruFW5CFyrKFWxJr1kXwb_yoWDWryxpF
-        WkAa1UKFWxJr1xWrnFqF1kWF4jvry3J3WDta13XFWjkFyDZrn7G34UGF4fC393ZFW5ZFyx
-        ZFy8Xw4kCan8JaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
-        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT111:EE_|DM4PR12MB5165:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f3af0f1-981f-4400-0a43-08db51f1c463
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q7LT+rz3DEqOwPQMncQ0jjZwpfdQil++X5aoJNhWmQ/RuPQBEanDeSKy3TQNDJEUQYpM/XDi0ljLteQdUPI8rExtYh8o4ylLPzr1m83c3f7JBNiktNgyH9ptAXCfmYZphI/6RPyLlLw1w/Uea48ivjtC0kvbNf81Uh/T6P9DsZKX4XUCKCbwk8s7S2h2LV++hmMyi3szJ6tzCQ0AI8vYb0rS8PNDgYPZ6dva3nYbQqWC5wK0tv/NR6kZVCaBCVcEoiyHyYzOqOq3JzjeRVWWkiJwz9QA2/QxqbedIZ4ZkpBTC44JCu/3PD6+sezPIl6WdDn6hOgJHmtfPY0Ef39gPP5StlNvWAVcrfAR5yQ9gnWSw+Pg0z21npXSQT1NEti4b06KrzKnyw2FhIcIzhQBYh8fyhNVavYMQbfbLFhwIU/CRyrUvaHOSeYnVHshS2zuIaWPYvSYyUO5RE3wFjQ23wzrrb9yXeb4/NZpRMEelrPGzC8CkQWJfpwawwTz0leEeRK7wazPGgA9hKFbMhcJDxEJT3ktOjGAIGcf8TVanEwZOlXXF6EAFbdh+v0m1U9A0TsuD/63fBuPPlu68Ld/9cnelxuNa0AqtKD20wZc64xSvtq2mU0/HS9QHCjzfSUozTrRH4bUpW7zwQlJboeWLxTxiTzWTmSwcHoVtnIw5ofmmjl5dN6x4ZrJK0XtQxuNsf3DQ1NjHKFiylI+EIMl0DMpQujZxXfivQwDr1bZ/a/8KolYQ8Ad49M/XHRglw0ubXsMTDyEjcypp32EPfUW9SHiERgF09+Ec8ASz3qF23g=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(81166007)(2616005)(36860700001)(336012)(47076005)(83380400001)(426003)(966005)(70586007)(1076003)(70206006)(26005)(478600001)(36756003)(110136005)(40480700001)(54906003)(6666004)(186003)(86362001)(2906002)(7416002)(5660300002)(40460700003)(4326008)(82740400003)(356005)(316002)(41300700001)(8676002)(8936002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 07:31:42.5287
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f3af0f1-981f-4400-0a43-08db51f1c463
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5165
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This patch is in the continuation to the discussions which happened on
+'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+adding dt-binding support for stacked/parallel memories.
 
+This patch series updated the spi-nor, spi core and the AMD-Xilinx GQSPI 
+driver to add stacked and parallel memories support.
 
-ÔÚ 2023/5/8 ÏÂÎç11:04, andy.shevchenko@gmail.com Ð´µÀ:
-> Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
->> This bus driver supports the Loongson spi hardware controller in the
->> Loongson platforms and supports to use DTS and PCI framework to
->> register spi device resources.
-> 
-> SPI
+The first nine patches
+https://lore.kernel.org/all/20230119185342.2093323-1-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-2-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-3-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-4-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-5-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-6-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-7-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-8-amit.kumar-mahapatra@amd.com/
+https://lore.kernel.org/all/20230310173217.3429788-9-amit.kumar-mahapatra@amd.com/
+of the previous series got applied to
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+But the rest of the patches in the series did not get applied as failure 
+was reported for spi driver with GPIO CS, so send the remaining patches 
+in the series after rebasing it on top of for-next branch and fixing the 
+issue.
 
-okay I got it.
-> 
-> ...
-> 
->> +config SPI_LOONGSON_CORE
->> +	tristate "Loongson SPI Controller Core Driver Support"
-> 
-> Does it need to be visible to the user?
+CS GPIO is not tested on our hardware, but it has been tested by @Stefan
+https://lore.kernel.org/all/3f148a0c-8885-0425-28f4-2a53937a388f@opensource.cirrus.com/
+Stefan, could you please provide your Tested-by tag for 1/7 patch.
 
-okay, I will set it invisible.
-> 
->> +	depends on LOONGARCH || COMPILE_TEST
->> +	help
->> +	  This core driver supports the Loongson spi hardware controller in
->> +	  the Loongson platforms.
->> +	  Say Y or M here if you want to use the SPI controller on
->> +	  Loongson platform.
-> 
-> ...
-> 
->> +config SPI_LOONGSON_PLATFORM
->> +	tristate "Loongson SPI Controller Platform Driver Support"
->> +	select SPI_LOONGSON_CORE
->> +	depends on OF && (LOONGARCH || COMPILE_TEST)
-> 
-> Is it really dependent to OF? Why?
+---
+BRANCH: for-next
 
-Yes, because this driver need depend on device tree.
-> 
->> +	help
->> +	  This bus driver supports the Loongson spi hardware controller in
->> +	  the Loongson platforms and supports to use DTS framework to
->> +	  register spi device resources.
->> +	  Say Y or M here if you want to use the SPI controller on
->> +	  Loongson platform.
-> 
-> ...
-> 
->> +#include <linux/init.h>
->> +#include <linux/module.h>
->> +#include <linux/kernel.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/spi/spi.h>
->> +#include <linux/clk.h>
->> +#include <linux/io.h>
-> 
-> Ordered?
+Changes in v8:
+- Updated __spi_add_device() and spi_set_cs() to fix spi driver failure
+  with GPIO CS.
+- Rebased the patch series on top of latest for-next branch and fixed 
+  merge conflicts.
+- Updated cover letter description to add information regarding GPIO CS
+  testing and request Stefan to provide his Tested-by tag for 1/7 patch. 
+- Updated 1/7 patch description.
 
-okay, I got it.
-> 
-> ...
-> 
->> +	if (loongson_spi->mode & SPI_NO_CS)
->> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG, 0);
-> 
-> Missing {}
+Changes in v7:
+- Updated spi_dev_check() to avoid failures for spi driver GPIO CS and
+  moved the error message from __spi_add_device() to spi_dev_check().
+- Resolved code indentation issue in spi_set_cs().
+- In spi_set_cs() call spi_delay_exec( ) once if the controller supports 
+  multi cs with both the CS backed by GPIO.
+- Updated __spi_validate()to add checks for both the GPIO CS.
+- Replaced cs_index_mask bit mask with SPI_CS_CNT_MAX.
+- Updated struct spi_controller to represent multi CS capability of the
+  spi controller through a flag bit SPI_CONTROLLER_MULTI_CS instead of 
+  a boolen structure member "multi_cs_cap".
+- Updated 1/7 patch description .
 
-okay, I got it.
-> 
->> +	else {
->> +		cs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG)
->> +					   & ~(0x11 << spi->chip_select);
->> +		loongson_spi_write_reg(loongson_spi,
->> +				       LOONGSON_SPI_SFCS_REG,
->> +				       (val ? (0x11 << spi->chip_select) :
->> +				       (0x1 << spi->chip_select)) | cs);
-> 
-> Too many parentheses.
-> 
->> +	}
-> 
-> ...
-> 
->> +	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
-> 
-> Oh, why?!
+Changes in v6:
+- Rebased on top of latest v6.3-rc1 and fixed merge conflicts in
+  spi-mpc512x-psc.c, sfdp.c, spansion.c files and removed spi-omap-100k.c.
+- Updated spi_dev_check( ) to reject new devices if any one of the
+  chipselect is used by another device.
 
-As you understand in another mail, you are right!
+Changes in v5:
+- Rebased the patches on top of v6.3-rc1 and fixed the merge conflicts.
+- Fixed compilation warnings in spi-sh-msiof.c with shmobile_defconfig
 
-00 00  [0]  <= 2
-00 01  [1]  <= 4
-01 00  [2]  <= 8
-00 10  [3]  <= 16
-00 11  [4]  <= 32
-01 01  [5]  <= 64
-01 10  [6]  <= 128
-01 11  [7]  <= 256
-10 00  [8]  <= 512
-10 01  [9]  <= 1024
-10 10  [10]  <= 2048
-10 11  [11]  <= 4096
-> 
-> ...
-> 
->> +	if ((hz && loongson_spi->hz != hz) ||
->> +	    ((spi->mode ^ loongson_spi->mode) & (SPI_CPOL | SPI_CPHA))) {
->> +		div = DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
-> 
->> +		if (div < 2)
->> +			div = 2;
->> +		if (div > 4096)
->> +			div = 4096;
-> 
-> NIH clamp_val()
+Changes in v4:
+- Fixed build error in spi-pl022.c file - reported by Mark.
+- Fixed build error in spi-sn-f-ospi.c file.
+- Added Reviewed-by: Serge Semin <fancer.lancer@gmail.com> tag.
+- Added two more patches to replace spi->chip_select with API calls in
+  mpc832x_rdb.c & cs35l41_hda_spi.c files.
 
-okay, I will use it.
-> 
->> +		bit = fls(div) - 1;
->> +		if ((1<<bit) == div)
->> +			bit--;
->> +		div_tmp = rdiv[bit];
-> 
-> I believe this can be optimized.
+Changes in v3:
+- Rebased the patches on top of
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+- Added a patch to convert spi_nor_otp_region_len(nor) &
+  spi_nor_otp_n_regions(nor) macros into inline functions
+- Added Reviewed-by & Acked-by tags
 
-okay, I will apply your optimization advice in another mail for my
-patch.
-> 
->> +		dev_dbg(&spi->dev, "clk_rate = %llu hz = %d div_tmp = %d bit = %d\n",
->> +			loongson_spi->clk_rate, hz, div_tmp, bit);
->> +
->> +		loongson_spi->hz = hz;
->> +		loongson_spi->spcr = div_tmp & 3;
->> +		loongson_spi->sper = (div_tmp >> 2) & 3;
->> +		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
->> +		val &= ~0xc;
-> 
-> GENMASK()
-okay, I got it.
-> 
->> +		if (spi->mode & SPI_CPOL)
->> +			val |= 8;
-> 
-> BIT()
-okay, I got it.
-> 
->> +		if (spi->mode & SPI_CPHA)
->> +			val |= 4;
-> 
->> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, (val & ~3) |
->> +				       loongson_spi->spcr);
->> +		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
->> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, (val & ~3) |
->> +				       loongson_spi->sper);
->> +		loongson_spi->mode &= SPI_NO_CS;
->> +		loongson_spi->mode |= spi->mode;
->> +	}
-> 
-> ...
-> 
->> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
->> +			time_after(timeout, jiffies))
->> +			cpu_relax();
-> 
-> iopoll.h has a suitable macro for this.
-okay, I will use read_poll_timeout or similar api in iopoll.h for this.
-> 
-> ...
-> 
->> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
->> +			time_after(timeout, jiffies))
->> +			cpu_relax();
-> 
-> Ditto.
-okay, I got it.
-> 
-> ...
-> 
->> +	master = devm_spi_alloc_master(dev, sizeof(struct loongson_spi));
->> +	if (master == NULL) {
-> 
->> +		dev_info(dev, "master allocation failed\n");
-> 
-> We do not issue a message for ENOMEM
+Changes in v2:
+- Rebased the patches on top of v6.2-rc1
+- Created separate patch to add get & set APIs for spi->chip_select &
+  spi->cs_gpiod, and replaced all spi->chip_select and spi->cs_gpiod
+  references with the API calls.
+- Created separate patch to add get & set APIs for nor->params.
+---
+Amit Kumar Mahapatra (7):
+  spi: Add stacked and parallel memories support in SPI core
+  mtd: spi-nor: Convert macros with inline functions
+  mtd: spi-nor: Add APIs to set/get nor->params
+  mtd: spi-nor: Add stacked memories support in spi-nor
+  spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
+  mtd: spi-nor: Add parallel memories support in spi-nor
+  spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
 
-I will remove the dmesg.
-> 
->> +		return -ENOMEM;
->> +	}
-> 
-> ...
-> 
->> +	master->dev.of_node = of_node_get(dev->of_node);
-> 
-> device_set_node()
+ drivers/mtd/spi-nor/atmel.c      |  17 +-
+ drivers/mtd/spi-nor/core.c       | 702 +++++++++++++++++++++++++------
+ drivers/mtd/spi-nor/core.h       |   8 +
+ drivers/mtd/spi-nor/debugfs.c    |   4 +-
+ drivers/mtd/spi-nor/gigadevice.c |   4 +-
+ drivers/mtd/spi-nor/issi.c       |  11 +-
+ drivers/mtd/spi-nor/macronix.c   |  10 +-
+ drivers/mtd/spi-nor/micron-st.c  |  35 +-
+ drivers/mtd/spi-nor/otp.c        |  48 ++-
+ drivers/mtd/spi-nor/sfdp.c       |  33 +-
+ drivers/mtd/spi-nor/spansion.c   |  80 ++--
+ drivers/mtd/spi-nor/sst.c        |   7 +-
+ drivers/mtd/spi-nor/swp.c        |  22 +-
+ drivers/mtd/spi-nor/winbond.c    |   2 +-
+ drivers/mtd/spi-nor/xilinx.c     |  18 +-
+ drivers/spi/spi-zynqmp-gqspi.c   |  58 ++-
+ drivers/spi/spi.c                | 231 +++++++---
+ include/linux/mtd/spi-nor.h      |  18 +-
+ include/linux/spi/spi.h          |  32 +-
+ 19 files changed, 1044 insertions(+), 296 deletions(-)
 
-okay, I got it.
-> 
-> ...
-> 
->> +	spi->base = devm_ioremap(dev, res->start, resource_size(res));
-> 
-> Why not devm_ioremap_resource()?
-
-I will use devm_platform_ioremap_resource as your low text advice and
-there will be no needed for devm_ioremap_resource.
-> 
-> 
->> +	if (spi->base == NULL) {
->> +		dev_err(dev, "cannot map io\n");
->> +		return -ENXIO;
-> 
-> 	return dev_err_probe();
-okay, I got it.
-> 
->> +	}
-> 
-> ...
-> 
->> +	clk = devm_clk_get(dev, NULL);
-> 
-> Can we hav
-> 
->> +	if (!IS_ERR(clk))
-> 
-> Use _optional variant above instead of this.
-> Do not forget about deferred probe.
-
-I will use devm_clk_get_optional and dev_err_probe to replace above.
-> 
->> +		spi->clk_rate = clk_get_rate(clk);
-> 
-> ...
-> 
->> +	if (of_get_property(dev->of_node, "spi-nocs", NULL))
->> +		spi->mode |= SPI_NO_CS;
-> 
-> Don't we have something in the SPI core to handle this in a generic way?
-
-The 2k500 has two type spi controller. one type was different other 
-loongson-2 common spi. and other loongson-2 SoCs was only a common type
-spi.
-
-loongson-2 common type spi cs:
-bit0: spi:csn_en0
-bit4: spi_csn0
-bit1: spi_csn_en1
-bit5: spi_csn1
-bit2: spi_csn_en2
-bit6: spi_csn2
-bit3: spi_csn_en3
-bit7: spi_csn3
-
-loongson-2 special type spi one cs:
-bit0: spi_csn
-bit1: spi_csn_en
-
-The difference between the special type spi and common type spi not only
-cs number but has register definition struct. The spi core seems unable
-to use generic way to cover it.
-
-and I found it has still has some issues that current code is compatible 
-special type spi, so I will drop special type spi support and leave only
-support for common type spi.  Support special type spi as needed in the
-future.
-> 
-> ...
-> 
-> 
->> +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
-> 
-> Please, use _NS variant.
-> 
-> ...
-> 
->> +MODULE_DESCRIPTION("Loongson spi core driver");
-> 
-> SPI
-
-okay, I got it.
-> 
-> ...
-> 
->> +	struct resource res[2];
->> +	struct device *dev = &pdev->dev;
->> +
->> +	ret = pci_enable_device(pdev);
-> 
-> pcim_enable_device()
-
-okay,  I got it.
-> 
->> +	if (ret < 0) {
->> +		dev_err(dev, "cannot enable pci device\n");
->> +		goto err_out;
-> 
-> 	return dev_err_probe();
-
-okay, I got it.
-> 
->> +	}
->> +
->> +	ret = pci_request_region(pdev, 0, "loongson-spi io");
->> +	if (ret < 0) {
->> +		dev_err(dev, "cannot request region 0.\n");
->> +		goto err_out;
->> +	}
->> +
->> +	res[0].start = pci_resource_start(pdev, 0);
->> +	res[0].end = pci_resource_end(pdev, 0);
-> 
-> What's wrong with pcim_iomap_regions()?
-No wrong, I don't notice it and I will use pcim_iomap_regions.
-> 
-> ...
-> 
->> +	ret = pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &v8);
-> 
-> What?!
-> 
-> What's wrong with pci_alloc_irq_vectors()?
-
-If the interupt is needed that I will use pci_alloc_irq_vectors.
-currently, the driver is not using irq and I may  disacard
-the parsing of interrupts.
-> 
->> +
->> +	if (ret == PCIBIOS_SUCCESSFUL) {
->> +		res[1].start = v8;
->> +		res[1].end = v8;
->> +	}
->> +
->> +	ret = loongson_spi_init_master(dev, res);
-> 
-> Why not passing the remapped address and IRQ number instead?
-
-okay I got it.
-> 
->> +	if (ret)
->> +		dev_err(dev, "failed to initialize master\n");
-> 
-> 	return dev_err_probe();
-> 
->> +
->> +err_out:
-> 
-> Completely useless. Return in-line.
-
-I will remove the "err_out".
-> 
->> +	return ret;
->> +}
-> 
-> ...
-> 
->> +static struct pci_device_id loongson_spi_devices[] = {
->> +	{PCI_DEVICE(0x14, 0x7a0b)},
->> +	{PCI_DEVICE(0x14, 0x7a1b)},
-> 
-> Can you define vendor ID in pci_ids.h?
-
-okay, I will add it into pci_ids.h.
-> 
-> 
->> +	{0, 0, 0, 0, 0, 0, 0}
-> 
-> What is this? Why {} is not working for you?
-I will remove that.
-> 
->> +};
-> 
->> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +	if (res == NULL) {
-> 
-> Why not using devm_platform_ioremap_resource()?
-okay, I will use it.
-> 
->> +		dev_err(dev, "cannot get io resource memory\n");
->> +		return -ENOENT;
-> 
-> 	return dev_err_probe();
-okay, I got it.
-> 
->> +	}
->> +
->> +	ret = loongson_spi_init_master(dev, res);
->> +	if (ret)
->> +		dev_err(dev, "failed to initialize master\n");
-> 
-> Ditto.
-okay, I got it.
-> 
-> ...
-> 
->> +static const struct of_device_id loongson_spi_id_table[] = {
->> +	{ .compatible = "loongson,ls2k-spi", },
-> 
-> Inned comma is redundant.
-okay, I got it.
-> 
->> +	{ }
->> +};
-> 
-> ...
-> 
->> +#ifndef __LINUX_SPI_LOONGSON_H
->> +#define __LINUX_SPI_LOONGSON_H
-> 
-> Missing bits.h
-> Missing types.h
-> Missing declaration for msecs_to_jiffies()
-> Missing forward declarations for struct spi_master and struct device.
-> MIssing declaration for dev_pm_ops.
-
-okay, I will add it.
-> 
-> 
->> +#define	LOONGSON_SPI_SPCR_REG	0x00
->> +#define	LOONGSON_SPI_SPSR_REG	0x01
->> +#define	LOONGSON_SPI_FIFO_REG	0x02
->> +#define	LOONGSON_SPI_SPER_REG	0x03
->> +#define	LOONGSON_SPI_PARA_REG	0x04
->> +#define	LOONGSON_SPI_SFCS_REG	0x05
->> +#define	LOONGSON_SPI_TIMI_REG	0x06
->> +
->> +/* Bits definition for Loongson SPI register */
->> +#define	LOONGSON_SPI_PARA_MEM_EN	BIT(0)
->> +#define	LOONGSON_SPI_SPSR_SPIF	BIT(7)
->> +#define	LOONGSON_SPI_SPSR_WCOL	BIT(6)
->> +#define	LOONGSON_SPI_SPCR_SPE	BIT(6)
->> +
->> +#define SPI_COMPLETION_TIMEOUT	msecs_to_jiffies(2000)
->> +
->> +struct loongson_spi {
->> +	struct	spi_master	*master;
->> +	void __iomem		*base;
->> +	int			cs_active;
->> +	unsigned int		hz;
->> +	unsigned char		spcr;
->> +	unsigned char		sper;
->> +	unsigned char		spsr;
->> +	unsigned char		para;
->> +	unsigned char		sfcs;
->> +	unsigned char		timi;
->> +	unsigned int		mode;
->> +	u64			clk_rate;
->> +};
->> +
->> +extern int loongson_spi_init_master(struct device *dev, struct resource *res);
-> 
-> No extern for the function declarations.
-
-okay, I got it.
-> 
->> +extern const struct dev_pm_ops loongson_spi_dev_pm_ops;
-> 
->> +#endif /* __LINUX_SPI_LOONGSON_H */
-> 
+-- 
+2.17.1
 
