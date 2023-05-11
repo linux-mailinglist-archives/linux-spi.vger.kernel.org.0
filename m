@@ -2,102 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DE66FFBAD
-	for <lists+linux-spi@lfdr.de>; Thu, 11 May 2023 23:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0011D6FFCFE
+	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 01:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239247AbjEKVH5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 May 2023 17:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S239247AbjEKXOL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 May 2023 19:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbjEKVH4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 17:07:56 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C25170D
-        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 14:07:51 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba2362d4ea9so5843777276.3
-        for <linux-spi@vger.kernel.org>; Thu, 11 May 2023 14:07:51 -0700 (PDT)
+        with ESMTP id S239198AbjEKXOK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 May 2023 19:14:10 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842F81701;
+        Thu, 11 May 2023 16:14:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96598a7c5e0so1485982666b.3;
+        Thu, 11 May 2023 16:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683839270; x=1686431270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683846848; x=1686438848;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iMJSAuzmDEOyslGFpKNIuHv7WTx2jYS+xwESl4OR1aU=;
-        b=JrlILs/FJvcqjFimI5g8pLCwZ7MlikV+mp66z3cACXcbS1BbgdeUUlwPgpDYjOZ9N5
-         JEcC+QlYiJQB7bxuXZuug+8mQXYNE4D4eFkybnQ3pnEjFqw7zgqwVrvCGajgde2f4Mcq
-         GOUKw/vsgB0PLN2AoH0WRkZ4lkkCU1Ylf+McKd01DUUSqGOMKozMV1idVjXpuW+69+by
-         Kj65G4SKjtiP3DpPGJ+2mlrLS4FvsYr2x+HtVwQJjLnt6d5ua/w7ZXP2ofUBRz1ZgXiN
-         /CJPKvt6C3OTXYCaEW5EEqq6exRx+7x7Iohej2pGkTN+QRIalksSCq65PFEhO/EYZB0v
-         3aig==
+        bh=4chri+9NDBileuiNOtrqtunzQXZVRGXLU7j96g86rzY=;
+        b=d8UpxTzzydldBvOZamYpsRdriAdw5/BCFjSqSOTX0kBpXOuIeIKQ+VQvROeWCJBCJT
+         7FtmNk59AMgusqzp4ot0al8Oi9N42W0y+9j8NFAt7iDHmsQaoiQplkUWFk3CiDGY513B
+         31BL8ytP7CozzqHNUlE83+e4U4SlBci50JPf3EtMWorfkv6i6DQz4Rz+eQfQO8iSc4le
+         CcukH97S7jt0L7/R/AVL0ieEeZpgvnN8KcOfGAHhuDtis9oSmTLDSDxnp30EU/LtBzcm
+         3F1yh3s00blFs6cpMQPMrVNc5vYty2bfuljWNLNaePmY3C4R4inZymUbHMmL0dXVjJ09
+         7dhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683839270; x=1686431270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683846848; x=1686438848;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iMJSAuzmDEOyslGFpKNIuHv7WTx2jYS+xwESl4OR1aU=;
-        b=VNsCzBY7ESq1MZCfl2OympaZ1QtO2Aee/04vuJBXJqoyb/vfaU7Z67n9q+6VWcBKse
-         3U/LFxLyflo3p/UewoopKYkVrobw+cDrYmuaDIkk0e7+UHkyTeaMnDhLN03vlJQMYkgn
-         Rf1KgCPBUhGB3WE++CO0fSG7Abcq77hxLkYrIdhOzX6ouWvOF1yc0J35W+Hc4uz8sYQP
-         kSDhqr3fjjLoP8dJtTP/LDQ+UySAdbCObEa7hlODTnBgEpVjy6VJpP6ekHii8uT+lzZv
-         ahomra2T2dalEzfyv09q2cOI+2NPISRRP7LHMcRoOQKH940z7jkbqm1iB6a4nroETANs
-         3nlg==
-X-Gm-Message-State: AC+VfDwVLM4HTE9/I1W/sYDBRr6DTL7tS8YYWd3LOFDYYZHPSO1+V5NG
-        LPUf6r9yBZggn3qvDgcPSkV65BYqmTFlpQhVsEjDCQ==
-X-Google-Smtp-Source: ACHHUZ5OKCRCzCdvnNSAXPYO3cSOrmnSrMrAUBIkganKJVWu8iiA56tmWT0d2y016WQRBVytrjHjwYEzMXjqLbOa8l0=
-X-Received: by 2002:a25:aa0c:0:b0:b9d:b5f0:3b33 with SMTP id
- s12-20020a25aa0c000000b00b9db5f03b33mr20809376ybi.58.1683839270282; Thu, 11
- May 2023 14:07:50 -0700 (PDT)
+        bh=4chri+9NDBileuiNOtrqtunzQXZVRGXLU7j96g86rzY=;
+        b=Eq4EXfCn2fZvLaGInRzIcFb2UTenGuSc4m0jxXVQHJrUPYQWjCuQ5991Wzu/lIe6iO
+         0TT7doOC3xF1BjWb7lvWNDKImAR+xyOj2Sc0EC+CWn26Gb5oR1CTkRbBTQYDTOgs015x
+         kZM8OTvAIkIZK127sG7n2Y0/Nv3Orbk5eJTuFZav1b3RyZAujG4tQXQy7CDFfOMzE8u9
+         mUSus5dZqIHu5n/LbeLsFOGyyyH/2SIrxo7AtYhSHcaD4oFwV9NsYZimvQ2reOKJ93WR
+         Ayl1iwWaz5tv24E/IxjkoIt8mGGEpekJFW55O5ytHTQXoOVvkjjdR0AdGISyoLx5vDiV
+         c8ZA==
+X-Gm-Message-State: AC+VfDyRWekLxr4CJmBQPOIrS15cM1SWDYXaboADVLF3xbBVIHMz8mN2
+        /L7P9ZM/uG9C3bqLhBbkkk0=
+X-Google-Smtp-Source: ACHHUZ54KfPnWz3TIklWlv4IMSPr2ZsEbaMoy1ootcOWpZmc+OscglQy9bsR2m/MJ5fmBdzBhUdsXg==
+X-Received: by 2002:a17:906:4fd1:b0:959:8575:2635 with SMTP id i17-20020a1709064fd100b0095985752635mr23744556ejw.17.1683846847771;
+        Thu, 11 May 2023 16:14:07 -0700 (PDT)
+Received: from wslxew193.fritz.box (p200300c7874f2f0049cdad3080524d03.dip0.t-ipconnect.de. [2003:c7:874f:2f00:49cd:ad30:8052:4d03])
+        by smtp.gmail.com with ESMTPSA id hx8-20020a170906846800b00965e839f56bsm4543023ejc.182.2023.05.11.16.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 16:14:07 -0700 (PDT)
+From:   Boerge Struempfel <boerge.struempfel@gmail.com>
+X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
+Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
+        andy.shevchenko@gmail.com, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/4] spi: Add option to keep the MOSI line low, when it is idle
+Date:   Fri, 12 May 2023 01:13:13 +0200
+Message-Id: <20230511231317.158214-1-bstruempfel@ultratronik.de>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
 MIME-Version: 1.0
-References: <20230511175844.185070-1-xiang.ye@intel.com> <20230511175844.185070-5-xiang.ye@intel.com>
-In-Reply-To: <20230511175844.185070-5-xiang.ye@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 23:07:38 +0200
-Message-ID: <CACRpkdZvn_cX=GNO2VYC6YfJif-cXST=avT2yoMpYVq5C87bMA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] gpio: Add support for Intel LJCA USB GPIO driver
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 11, 2023 at 8:01=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
-:
+Some spi controller like the imx spi controller switch the mosi line to
+high, whenever they are idle. This may not be desired in all use cases.
+For example neopixel leds can get confused and flicker due to
+misinterpreting the idle state. Therefore, we introduce a new spi-mode
+bit, with which the idle behaviour can be overwritten on a per device
+basis.
 
-> Implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with
-> LJCA GPIO module with specific protocol through interfaces exported
-> by LJCA USB driver.
->
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+Changes from V1:
+  - Added patch, introducing the new devicetree binding flag
+  - Split the generic spi part of the patch from the imx-spi specific
+    part
+  - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+    in the imx-spi.c modebits.
+  - Added the SPI_MOSI_IDLE_LOW bit to spidev
 
-Overall this looks very nice.
+Boerge Struempfel (4):
+  spi: dt-bindings: Introduce spi-mosi-idle-low flag
+  spi: add SPI_MOSI_IDLE_LOW mode bit
+  spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
+  spi: spidev: add SPI_MOSI_IDLE_LOW mode bit
 
-> +static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 c=
-onfig)
+ .../devicetree/bindings/spi/spi-peripheral-props.yaml    | 6 ++++++
+ drivers/spi/spi-imx.c                                    | 9 ++++++++-
+ drivers/spi/spi.c                                        | 2 ++
+ drivers/spi/spidev.c                                     | 2 +-
+ include/uapi/linux/spi/spi.h                             | 3 ++-
+ 5 files changed, 19 insertions(+), 3 deletions(-)
 
-All other functions are prefixed ljca_* except this one, so I think you
-should do that on this one too.
+-- 
+2.25.1
 
-With that fixes:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
