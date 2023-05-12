@@ -2,110 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A5B700C7A
-	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 18:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07B3700C96
+	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 18:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241886AbjELQCp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 May 2023 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S241713AbjELQHw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 May 2023 12:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241611AbjELQCn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 12:02:43 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8C626BF;
-        Fri, 12 May 2023 09:02:42 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CF338N001679;
-        Fri, 12 May 2023 11:02:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=sxTNfTIyW/nEcDvx6yT+yObQ3uEy7YzQuDGF0VMrRAs=;
- b=JStZksNPNYMIMqczfGRO7suA6nUHCLyVAvjikIsNtGK3qRIujoBL8uvkontvfzxZWr74
- 5FtZ/M4ek4dcfvpD47Vk7jy9nW0nrdwIOoYAfhL1Objhv64VvCLr4vGRGJ2rBaWkHfqC
- eo74uPqtgAHuO2RXdtv+R9Pf+f4twQDMIxKaAKmYablqQakylypjArbdj2iY70hpL4fJ
- 6Pe0FNXVf0EtynUX4t2kU8JGKDT23dgjD6JZ8DFF5ybHqz8gwDFBHrgVvJ+/6IgGnVUC
- h+l8XA1yw9KrIEeD2sRjY4+f2j5QlwilDcmzZSRdkvErhTGCBLuwYhr0GdEWl/kNa0ZL 6A== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7nb5pe5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 11:02:27 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 12 May
- 2023 11:02:24 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 11:02:24 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4000D11A8;
-        Fri, 12 May 2023 16:02:24 +0000 (UTC)
-Date:   Fri, 12 May 2023 16:02:24 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-CC:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        with ESMTP id S241558AbjELQHv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 12:07:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3329C1;
+        Fri, 12 May 2023 09:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5760765810;
+        Fri, 12 May 2023 16:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B350C433EF;
+        Fri, 12 May 2023 16:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683907668;
+        bh=zpz8OX0VPpiGcXNtoV42xviRspIxNwCgeyADi3JvR0o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rRk7jg2qW5Ys9y+hs5Tln3kA3AVLDfAhn1ztp+E2807rxStB/Gt/aP0TY2LmI6rjq
+         go8RbJXBdTlMtb1qIHKi2jrKvfbgt+KA/6p+JbNEVp9rdI18vKioF+cKAL326+Yocu
+         QJ82FOUmK2odfvfnJ3W48cGWM+YWIG9a0bBlF5lPgjX4eiEBTqkRnfL/ZPzLWuiPGg
+         83AjeSmzGYzP4VzJlSP+Dji9w958ZFly9yBJnxXLXPhH4AHWXEFN+IwaRMJa/jULiP
+         mlHPYG9OtBksrzZoMR9DUbQOp900rhfQNDjRaeRuelRFGF3qUJkDZVPJFa50mkx+Cp
+         C9nu9UvohKDEw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pxVJ4-00Ec7Q-9s;
+        Fri, 12 May 2023 17:07:46 +0100
+Date:   Fri, 12 May 2023 17:07:45 +0100
+Message-ID: <86mt29mt2m.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
+        <tglx@linutronix.de>, <linus.walleij@linaro.org>,
         <vkoul@kernel.org>, <lgirdwood@gmail.com>,
         <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
         <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
-Message-ID: <20230512160224.GK68926@ediswmail.ad.cirrus.com>
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+In-Reply-To: <20230512153933.GH68926@ediswmail.ad.cirrus.com>
 References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-2-ckeepax@opensource.cirrus.com>
- <0471f085-14bf-c159-9b92-62983af6c19a@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0471f085-14bf-c159-9b92-62983af6c19a@linux.intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: 4w6vreW3yXhaxD8tHcn7X6KMWwrZKHrP
-X-Proofpoint-GUID: 4w6vreW3yXhaxD8tHcn7X6KMWwrZKHrP
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+        <86o7mpmvqq.wl-maz@kernel.org>
+        <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ckeepax@opensource.cirrus.com, broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 12, 2023 at 08:45:51AM -0500, Pierre-Louis Bossart wrote:
-> > @@ -1711,6 +1739,9 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
-> >  				struct device *dev = &slave->dev;
-> >  				struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
-> >  
-> > +				if (slave->prop.use_domain_irq && slave->irq)
-> > +					handle_nested_irq(slave->irq);
-> > +
+On Fri, 12 May 2023 16:39:33 +0100,
+Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
 > 
-> I am a bit lost here, I can understand that alerts would be handled by a
-> dedicated handler, but here the code continues and will call the
-> existing interrupt_callback.
+> On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
+> > On Fri, 12 May 2023 13:28:35 +0100,
+> > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > 
+> > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> > > for portable applications. It provides a high dynamic range, stereo
+> > > DAC for headphone output, two integrated Class D amplifiers for
+> > > loudspeakers, and two ADCs for wired headset microphone input or
+> > > stereo line input. PDM inputs are provided for digital microphones.
+> > > 
+> > > The IRQ chip provides IRQ functionality both to other parts of the
+> > > cs42l43 device and to external devices that wish to use its IRQs.
+> > 
+> > Sorry, but this isn't much of an interrupt controller driver. A modern
+> > interrupt controller driver is firmware-driven (DT or ACPI, pick your
+> > poison), uses irq domains, and uses the irqchip API.
+> > 
 > 
-> Is this intentional? I wonder if there's a risk with two entities
-> dealing with the same event and programming the same registers.
-> Shouldn't there be some sort of 'either or' rule?
+> Apologies but I really need a little help clarifying the issues
+> here. I am totally happy to fix things up but might need a couple
+> pointers.
 > 
+> 1) uses the irqchip API / uses irq domains
+> 
+> The driver does use both the irqchip API and domains, what
+> part of the IRQ API are we not using that we should be?
+> 
+> The driver registers an irq domain using
+> irq_domain_create_linear.  It requests its parent IRQ using
+> request_threaded_irq. It passes IRQs onto the devices requesting
+> IRQs from it using handle_nested_irq and irq_find_mapping.
+> 
+> Is the objection here that regmap is making these calls for us,
+> rather than them being hard coded into this driver?
 
-I guess there is a risk of them "handling" the IRQ twice,
-although it is hard to see why you would write the driver that
-way. Also since they are sequencial the second would I guess
-just see that no IRQs are pending.
+That's one of the reasons. Look at the existing irqchip drivers: they
+have nothing in common with yours. The regmap irqchip abstraction may
+be convenient for what you are doing, but the result isn't really an
+irqchip driver. It is something that is a small bit of a larger device
+and not an interrupt controller driver on its own. The irqchip
+subsystem is there for "first class" interrupt controllers.
 
-The intention for calling both is that it facilitates using
-the same IRQ handler for I2C and SoundWire. At least on the
-Cirrus devices there are a bunch of chip specific registers
-that need treated exactly the same on I2C and SoundWire, but
-then a couple of extra registers that need handled in the
-SoundWire case. This way the handling of those can be kept
-completely in the SoundWire part of the code and not ifdef-ed
-into the main IRQ path.
+> 
+> 2) driver is firmware-driven (DT or ACPI, pick your poison)
+> 
+> The irq chip has representation in firmware, in fact we have
+> tested this on both ACPI and DT. Other devices can request
+> IRQs from it through firmware, same as they can for any other
+> IRQ chip.
 
-Thanks,
-Charles
+That's not what I'm talking about.
+
+> Is the objection here the table mapping the register fields that
+> are provided as an IRQ on the device?
+
+I'm referring to this sort of construct:
+
++	CS42L43_IRQ_REG(HP_STARTUP_DONE,			MSM),
++	CS42L43_IRQ_REG(HP_SHUTDOWN_DONE,			MSM),
++	CS42L43_IRQ_REG(HSDET_DONE,				MSM),
++	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_DB,			MSM),
++	CS42L43_IRQ_REG(TIPSENSE_PLUG_DB,			MSM),
++	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_DB,			MSM),
++	CS42L43_IRQ_REG(RINGSENSE_PLUG_DB,			MSM),
++	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_PDET,			MSM),
++	CS42L43_IRQ_REG(TIPSENSE_PLUG_PDET,			MSM),
++	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_PDET,			MSM),
++	CS42L43_IRQ_REG(RINGSENSE_PLUG_PDET,			MSM),
+
+Why isn't this described in firmware tables? Why doesn't it need to be
+carried as part of the driver? Is "CLASS_D_AMP" something an interrupt
+controller driver should care about?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
