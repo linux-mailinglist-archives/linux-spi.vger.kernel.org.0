@@ -2,24 +2,24 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A419B700F23
-	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 21:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B10700F3C
+	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 21:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbjELTDO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 May 2023 15:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S238850AbjELTTU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 May 2023 15:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbjELTDN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 15:03:13 -0400
+        with ESMTP id S238509AbjELTTT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 15:19:19 -0400
 Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6B62D68
-        for <linux-spi@vger.kernel.org>; Fri, 12 May 2023 12:03:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E36376BF
+        for <linux-spi@vger.kernel.org>; Fri, 12 May 2023 12:19:17 -0700 (PDT)
 Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
         by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id a2075948-f0f7-11ed-a9de-005056bdf889;
-        Fri, 12 May 2023 22:03:09 +0300 (EEST)
+        id e1e3206d-f0f9-11ed-a9de-005056bdf889;
+        Fri, 12 May 2023 22:19:15 +0300 (EEST)
 From:   andy.shevchenko@gmail.com
-Date:   Fri, 12 May 2023 22:03:08 +0300
+Date:   Fri, 12 May 2023 22:19:14 +0300
 To:     Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -30,14 +30,14 @@ Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
         patches@opensource.cirrus.com, devicetree@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] spi: cs42l43: Add SPI controller support
-Message-ID: <ZF6NbHVD4ay2S83R@surfacebook>
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+Message-ID: <ZF6RMqElYZVMpWRt@surfacebook>
 References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-10-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230512122838.243002-10-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
 X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
         FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
@@ -48,9 +48,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fri, May 12, 2023 at 01:28:37PM +0100, Charles Keepax kirjoitti:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> 
+Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
 > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
 > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
 > for portable applications. It provides a high dynamic range, stereo
@@ -58,115 +56,258 @@ Fri, May 12, 2023 at 01:28:37PM +0100, Charles Keepax kirjoitti:
 > loudspeakers, and two ADCs for wired headset microphone input or
 > stereo line input. PDM inputs are provided for digital microphones.
 > 
-> The SPI component incorporates a SPI controller interface for
-> communication with other peripheral components.
+> Add a basic pinctrl driver which supports driver strength for the
+> various pins, gpios, and pinmux for the 2 multi-function pins.
 
 ...
 
-> +#define CS42L43_SPI_ROOT_HZ		40000000
+> +#include <linux/pinctrl/consumer.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/pinctrl/pinmux.h>
+> +#include <linux/pinctrl/pinconf.h>
+> +#include <linux/pinctrl/pinconf-generic.h>
 
-HZ_PER_MHZ?
+Can you order them and split into a separate group that goes...
 
-...
-
-> +		const u8 *block = min_t(const u8 *, buf + CS42L43_FIFO_SIZE, end);
-
-Wouldn't min() work?
-
-...
-
-> +		for (; buf < block - (sizeof(u32) - 1); buf += sizeof(u32))
-> +			regmap_write(regmap, CS42L43_TX_DATA, *(const u32 *)buf);
-
-This casting might be potentially wrong taking alignment into consideration.
-Perhaps you need get_unaligned(). Also here the return value isn't checked,
-while in the read it is.
-
-...
-
-> +		const u8 *block = min_t(const u8 *, buf + CS42L43_FIFO_SIZE, end);
-
-min() ?
-
-...
-
-> +		for (; buf < block - (sizeof(u32) - 1); buf += sizeof(u32)) {
-> +			ret = regmap_read(regmap, CS42L43_RX_DATA, (u32 *)buf);
-
-put_unaligned() ?
-
-> +			if (ret)
-> +				return ret;
-> +		}
-
-...
-
-> +static int cs42l43_prepare_transfer_hardware(struct spi_controller *ctlr)
-> +{
-> +	struct cs42l43_spi *priv = spi_controller_get_devdata(ctlr);
-> +	int ret;
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
 > +
-> +	ret = regmap_write(priv->regmap, CS42L43_BLOCK_EN2, CS42L43_SPI_MSTR_EN_MASK);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Failed to enable SPI controller: %d\n", ret);
 
-> +		return ret;
-> +	}
-> +
-> +	return 0;
+...here?
 
-	return ret; ?
+> +#include "../pinctrl-utils.h"
+
+...
+
+> +struct cs42l43_pin {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	bool shutters_locked;
+
+> +	struct gpio_chip gpio_chip;
+
+If you move this to be the first member you might save a few bytes of code.
+
+> +	struct pinctrl_gpio_range range;
+
+Is it really needed here?
+
+> +};
+
+...
+
+> +#define CS42L43_PIN(_number, _name, _reg, _field) { \
+> +	.number = _number, .name = _name, \
+> +	.drv_data = &((struct cs42l43_pin_data){ \
+> +		.reg = CS42L43_##_reg, \
+> +		.shift = CS42L43_##_field##_DRV_SHIFT, \
+> +		.mask = CS42L43_##_field##_DRV_MASK, \
+> +	}), \
+
+Do you need this to be GCC extention for the value evaluation?
+I mean the compound literal, IIRC, can be used directly as
+
+	.foo = &(struct foo){ ... },
+
+Am I mistaken?
 
 > +}
-> +
-> +static int cs42l43_unprepare_transfer_hardware(struct spi_controller *ctlr)
+
+...
+
+> +#define CS42L43_PINGROUP(_name) \
+
+Use PINCTRL_PINGROUP() instead of open coded.
+
+> +(struct pingroup){				\
+> +	.name = #_name, \
+> +	.pins = cs42l43_pin_##_name##_pins, \
+> +	.npins = ARRAY_SIZE(cs42l43_pin_##_name##_pins) \
+> +}
+
+...
+
+> +enum cs42l43_pin_funcs {
+> +	CS42L43_FUNC_GPIO,
+> +	CS42L43_FUNC_SPDIF,
+> +	CS42L43_FUNC_IRQ,
+> +	CS42L43_FUNC_MIC_SHT,
+> +	CS42L43_FUNC_SPK_SHT,
+
+> +	CS42L43_FUNC_MAX,
+
+No comma for the terminator entry
+
+> +};
+
+...
+
+> +static const char * const cs42l43_pin_funcs[] = {
+> +	"gpio", "spdif", "irq", "mic-shutter", "spk-shutter"
+
+I would keep trailing comma.
+
+> +};
+
+...
+
+> +struct cs42l43_pin_func_group {
+> +	const char * const *groups;
+> +	unsigned int ngroups;
+> +};
+
+We have struct pinfunction.
+
+> +static const struct cs42l43_pin_func_group cs42l43_pin_func_groups[] = {
+> +	{ cs42l43_pin_gpio_groups,	ARRAY_SIZE(cs42l43_pin_gpio_groups) },
+> +	{ cs42l43_pin_spdif_groups,	ARRAY_SIZE(cs42l43_pin_spdif_groups) },
+> +	{ cs42l43_pin_irq_groups,	ARRAY_SIZE(cs42l43_pin_irq_groups) },
+> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
+> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
+
+We have PINCTRL_PINFUNCTION().
+
+> +};
+
+...
+
+> +static int cs42l43_pin_get_func_count(struct pinctrl_dev *pctldev)
 > +{
-> +	struct cs42l43_spi *priv = spi_controller_get_devdata(ctlr);
+> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_funcs) != CS42L43_FUNC_MAX);
+> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_func_groups) != CS42L43_FUNC_MAX);
+
+Use static_assert() in the global scope instead.
+
+> +
+> +	return ARRAY_SIZE(cs42l43_pin_funcs);
+> +}
+
+...
+
+> +	default:
+> +		reg = CS42L43_GPIO_FN_SEL;
+> +		mask = BIT(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
+> +		val = (func_idx == CS42L43_FUNC_GPIO) <<
+> +				(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
+
+This would be better as ternary.
+
+> +		break;
+> +	}
+
+...
+
+> +	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
+> +		offset + 1, input ? "input" : "output");
+
+How ' + 1' part won't be confusing?
+
+...
+
+> +static inline int cs42l43_pin_get_db(struct cs42l43_pin *priv, unsigned int pin)
+> +{
+> +	unsigned int val;
 > +	int ret;
 > +
-> +	ret = regmap_write(priv->regmap, CS42L43_BLOCK_EN2, 0);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Failed to disable SPI controller: %d\n", ret);
-> +		return ret;
-> +	}
+> +	if (pin >= CS42L43_NUM_GPIOS)
+> +		return -ENOTSUPP;
 > +
-> +	return 0;
+> +	ret = regmap_read(priv->regmap, CS42L43_GPIO_CTRL2, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val & (CS42L43_GPIO1_DEGLITCH_BYP_MASK << pin))
+> +		return 0;
 
-Ditto.
+> +	else
+
+Redundant.
+
+> +		return 85; // Debounce is roughly 85uS
+
+	// Debounce is roughly 85uS
+	return 85;
 
 > +}
+
+...
+
+> +	dev_dbg(priv->dev, "Set debounce %s for %s\n",
+> +		us ? "on" : "off", cs42l43_pin_pins[pin].name);
+
+str_on_off()
+
+...
+
+> +		++configs;
+> +		--num_configs;
+
+Why preincrements?
 
 ...
 
 > +	if (is_of_node(dev_fwnode(cs42l43->dev))) {
-> +		priv->ctlr->dev.fwnode =
-> +			fwnode_get_named_child_node(dev_fwnode(cs42l43->dev), "spi");
-> +		priv->ctlr->dev.of_node = to_of_node(dev_fwnode(&priv->ctlr->dev));
+> +		device_set_node(priv->dev,
+> +				fwnode_get_named_child_node(dev_fwnode(cs42l43->dev),
+> +							    "pinctrl"));
 > +	} else {
-> +		priv->ctlr->dev.fwnode = dev_fwnode(priv->dev);
+> +		device_set_node(priv->dev, dev_fwnode(cs42l43->dev));
 > +	}
 
-Can you use device_set_node() once you have an fwnode that needs to be passed?
+This can be called once after if.
 
 ...
 
-> +	priv->ctlr->mode_bits = SPI_3WIRE | SPI_CPHA | SPI_CPOL;
+> +	pctldev = devm_pinctrl_register(priv->dev, &cs42l43_pin_desc, priv);
+> +	if (IS_ERR(pctldev)) {
+> +		ret = PTR_ERR(pctldev);
+> +		dev_err(priv->dev, "Failed to register pinctrl: %d\n", ret);
 
-SPI_MODE_X_MASK
+		ret = dev_err_probe();
+
+Same for other similar cases.
+
+> +		goto err_pm;
+> +	}
+
+> +	if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
+> +		ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
+> +					     0, 0, CS42L43_NUM_GPIOS);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
+> +			goto err_pm;
+> +		}
+> +	}
+
+Besides the fact that we have a callback for this, why GPIO library can't
+handle this for you already?
 
 ...
 
-> +static struct platform_driver cs42l43_spi_driver = {
+> +static int cs42l43_pin_remove(struct platform_device *pdev)
+> +{
+> +	pm_runtime_disable(&pdev->dev);
+
+This is simply wrong order because it's a mix of non-devm_*() followed by
+devm_*() calls in the probe.
+
+> +	return 0;
+> +}
+
+...
+
+> +static struct platform_driver cs42l43_pin_driver = {
 > +	.driver = {
-> +		.name	= "cs42l43-spi",
+> +		.name	= "cs42l43-pinctrl",
 > +	},
 
 > +
 
-Unneeded blank line.
+Redundant blank line.
 
-> +	.probe		= cs42l43_spi_probe,
-> +	.remove		= cs42l43_spi_remove,
+> +	.probe		= cs42l43_pin_probe,
+> +	.remove		= cs42l43_pin_remove,
 > +};
 
 -- 
