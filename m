@@ -2,71 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CF7700415
-	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 11:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B137005F4
+	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 12:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240501AbjELJlu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 May 2023 05:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S239781AbjELKsV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 May 2023 06:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240537AbjELJl1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 05:41:27 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4214C106D3;
-        Fri, 12 May 2023 02:41:06 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7576deacbd6so379275185a.3;
-        Fri, 12 May 2023 02:41:06 -0700 (PDT)
+        with ESMTP id S240057AbjELKsU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 06:48:20 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B532D9
+        for <linux-spi@vger.kernel.org>; Fri, 12 May 2023 03:47:53 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55ffc3d2b63so94522977b3.2
+        for <linux-spi@vger.kernel.org>; Fri, 12 May 2023 03:47:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683884464; x=1686476464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WgvI1wBQwWPAHGVgPMl1t4Eh+AyHOlrQwlKzTs1KGuU=;
-        b=lqoAOFDFj2u5/n0ai2w3ScJeW4r/DBqFUliw7qxLsjG0PFIFzNU1BwY0io0X0OF3q0
-         bo9Z4hx2DFNuUG4n691BU+R8M1cClttiFXnPIJMM2Ruh5qx1Yjx8BDSPhFoUlnMEIds5
-         pZCETnymGjt4NQT499rNSrwqoIp9pqjbC9CHcjIzbjE9an+jA2KM1DHyRVhmzwN8th0m
-         ipgH4SKJwNLaPYgke4IgbekzxC6zxyweeOwc1Ignd7xlw8QDPC+sYQwyzWhPlgZ3884I
-         rFCJl312cuhfpRYIltuJoAmxAZV7CDL+lFUKvZ0yHh091cegtOdPCPGZoT0a1FG4NeSa
-         MP+A==
+        d=google.com; s=20221208; t=1683888472; x=1686480472;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hTpJTY/rULQPSOZNXcS/148DUgQ2+YfFfUxNW3uGcc=;
+        b=NKZ9DJMSbrzKFRruLJXZDhVxtbnaHEbduW36u8MmXgWhDLEoWSdxfbM8/vhFZBPQpU
+         RLo9qi7IR5o1WzDfJZzlHc4T+BwdqSJnd7Ue+J6qh1mPx1eSHZjjzCaO+8SqGqgt89qT
+         YZd79CSqZyH/7f2gYFkNLQEdTz9dsqPFARBGL8DWIApcA0yY09cf68VS59ozhAIUFOyZ
+         sRIBcO0yIvrBLS1KacnxsYnmkXRbOTHr742w/WlSCLQFUGskhP3MBYcm/nc0nnn+9K3T
+         3I9m8WoXSDYEXiq8f0j4M76MYxavR8XfB1gmZvtUpCVZXOacOIDeDNPKfDR/T2BZdPWQ
+         D/5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683884464; x=1686476464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WgvI1wBQwWPAHGVgPMl1t4Eh+AyHOlrQwlKzTs1KGuU=;
-        b=RnEjOCqNbVuTrAmpeuw/8g5d8615ewIFLmv1/wxOiFu7kwbrSPnkeOztDwU3dLPCZZ
-         PMtJpuC2Penz9OfWEhnp2cejKHoiS/ZI1QaYz3NlOtRrA2fBT3rBVe4bd8XSeKsT1he/
-         gvThYa1W2ZsKX9CImm95McsP+Ti7l0ZnRHBzqd37hZiZL1bcD6WVqQDcLfgXKYfJCBuE
-         gtzJXfSZm1vNHI9kavG5BVppfXrvqMaHFuiRqmXBhwfPOV0Frwmd4cR/edqYiWd7AQWF
-         Tfb5T21BZNFhG+xZVnYIboL0xWxioZyCfScSgpcSbt6gJNobEu9QiSPFJhcHk8cNS9ur
-         SVnA==
-X-Gm-Message-State: AC+VfDyy3KAlNBB+9yYCxovXcuVvVCn47z5tm3qsqyVYBEnJ5IHSoBTk
-        bqAtdWB0Bd5hXDW76gybUqPKJJ6jubCIhw7L0HGpRepCu5QHeA==
-X-Google-Smtp-Source: ACHHUZ5TSfhEDu1ZptfN3JyfXg4mv/nwO25G2/wAajLx3nsF0Zk2TzQP3B29yebA2rMPXVnZK7OXK4IZGaGce7/fHJo=
-X-Received: by 2002:a05:6214:628:b0:621:42c8:9bdd with SMTP id
- a8-20020a056214062800b0062142c89bddmr17598245qvx.29.1683884464669; Fri, 12
- May 2023 02:41:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn> <20230426071045.20753-3-zhuyinbo@loongson.cn>
- <ZFkPZhF8QqScXAmH@surfacebook> <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
- <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com> <f03977b9-884c-93a1-d1cf-81e6fcf51dfc@loongson.cn>
-In-Reply-To: <f03977b9-884c-93a1-d1cf-81e6fcf51dfc@loongson.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 12 May 2023 12:40:28 +0300
-Message-ID: <CAHp75VeUiR_V0P6QhhqKGcoJKHviCC8wJZf+3KVBtWj+4q-=ig@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi controller
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
+        d=1e100.net; s=20221208; t=1683888472; x=1686480472;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2hTpJTY/rULQPSOZNXcS/148DUgQ2+YfFfUxNW3uGcc=;
+        b=cPv9ujja1FixteqWDMc3rAiJh3eA0s/Z7vTtX0adYSVhXGA7bh1jEF9LpvO6ETmjbA
+         +QO2LmuYdxQ8odl8PW67KhW2LwtPvxqVvIyJcaI49ifvnppYCdwDcIsgHJs/iwPHflsu
+         hJ8lu8bAlaJlihRaJY3qJNVt1ZrmCEy/o4Am7xceoiBjBUcszBeCDiKXw2S3BBXDorOM
+         6euvPf16drPJqxMO/kvcVTqD3qqkBhWIXNAiEvHyjSMjeNcDoNjj+Ycvpubi+EZmRRyW
+         R1isReT19UFT5mdISPWiMhzbKf0VvJncAQNdmkNKsU3WOSA87pELvFmTpspDrDKx2z3U
+         ZLog==
+X-Gm-Message-State: AC+VfDzaxFLo3dI3Q5EIwadIZVeCPRS4LVKv+uwYkX2Flaa1ygI4SHCU
+        kDpiaHR70mN1y3oSegIUwjP3RakFRRj4kQ==
+X-Google-Smtp-Source: ACHHUZ7KDuRZ0EiEc4tcmzANzVpo0BfydgpvG+XpD1Q8xiN1zT5M8pMk2mhtN7qHL6fKFwZgD9c0F0bWaBkSLQ==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a81:430b:0:b0:55d:9a6d:8ce5 with SMTP id
+ q11-20020a81430b000000b0055d9a6d8ce5mr14862719ywa.1.1683888472089; Fri, 12
+ May 2023 03:47:52 -0700 (PDT)
+Date:   Fri, 12 May 2023 10:47:42 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230512104746.1797865-1-joychakr@google.com>
+Subject: [PATCH v11 0/3] spi: dw: DW SPI DMA Driver updates
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, Joy Chakraborty <joychakr@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +67,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:12=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> wr=
-ote:
-> =E5=9C=A8 2023/5/10 =E4=B8=8B=E5=8D=883:03, Andy Shevchenko =E5=86=99=E9=
-=81=93:
+This Patch series adds support for 32 bits per word trasfers using DMA
+and some defensive checks around dma controller capabilities.
+---
+V1 Changes : Add support for AxSize=3D4 bytes to support 32bits/word.
+---
+V1->V2 Changes : Add dma capability check to make sure address widths
+are supported.
+---
+V2->V3 Changes : Split changes , add DMA direction check and other
+cosmetic chnages.
+---
+V3->V4 Changes : Fix Sparce Warning
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@int=
+el.com/
+---
+V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+check before initalisation of further capabilities, remove zero
+initialisations, remove error OR'ing.
+---
+V5->V6 Changes :
+        -Remove case of n_bytes=3D3 using 4_bytes buswidth
+        -Avoid forward decaration
+        -Break capability check patch into 2
+        -round n_bytes to power of 2 ( Bug Fix)
+        -Add more explanation in commit text.
+---
+V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+func()
+---
+V7->V8 Changes : Minor commment updates in patch 4/5
+---
+V8->V9 Changes : Minor formatting changes in patch 5/5
+---
+V9->V10 Changes : Moving "return 0" at the end of dw_spi_dma_caps_init() fr=
+om patch
+[4/5] to patch [3/5] to solve :
+spi-dw-dma.c: In function =E2=80=98dw_spi_dma_caps_init=E2=80=99:
+spi-dw-dma.c:100:1: control reaches end of non-void function [-Werror=3Dret=
+urn-type]
+---
+V10->V11 : Resend patches [3/5] to [5/5] on top of :
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+---
 
-...
+Joy Chakraborty (3):
+  spi: dw: Add DMA directional capability check
+  spi: dw: Add DMA address widths capability check
+  spi: dw: Round of n_bytes to power of 2
 
-> so, I think it is better
-> to confiure clk and mode separately.
-
-Agree, but at the same time you can split the conditional bodies to
-the separate functions. In this case the indentation of each of them
-can be decreased.
-
-...
-
-> > Also the check can be modified to have less indented code:
-> >
-> >         if (hz && loongson_spi->hz =3D=3D hz)
-> >            return 0;
-> >
-> >         if (!((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK))
-> >            return 0;
->
-> The setting register about clk and mode was the same SPCR register, so
-> only the clk and mode don't need to be updated in the same, then return
-> 0, so the code seems to be as follows. But setting clk and mode
-> separately doesn't require follows judgement.
->
->          if ((hz && loongson_spi->hz =3D=3D hz) &&
->              !((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK))
->                  return 0;
-
-Correct, sorry for the mistake I made.
+ drivers/spi/spi-dw-core.c |  5 +++-
+ drivers/spi/spi-dw-dma.c  | 56 ++++++++++++++++++++++++++++++++-------
+ drivers/spi/spi-dw.h      |  1 +
+ 3 files changed, 51 insertions(+), 11 deletions(-)
 
 --=20
-With Best Regards,
-Andy Shevchenko
+2.40.1.606.ga4b1b128d6-goog
+
