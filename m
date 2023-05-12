@@ -2,157 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07B3700C96
-	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 18:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37190700CB7
+	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 18:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241713AbjELQHw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 May 2023 12:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S237806AbjELQQI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 May 2023 12:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241558AbjELQHv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 12:07:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3329C1;
-        Fri, 12 May 2023 09:07:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5760765810;
-        Fri, 12 May 2023 16:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B350C433EF;
-        Fri, 12 May 2023 16:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683907668;
-        bh=zpz8OX0VPpiGcXNtoV42xviRspIxNwCgeyADi3JvR0o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rRk7jg2qW5Ys9y+hs5Tln3kA3AVLDfAhn1ztp+E2807rxStB/Gt/aP0TY2LmI6rjq
-         go8RbJXBdTlMtb1qIHKi2jrKvfbgt+KA/6p+JbNEVp9rdI18vKioF+cKAL326+Yocu
-         QJ82FOUmK2odfvfnJ3W48cGWM+YWIG9a0bBlF5lPgjX4eiEBTqkRnfL/ZPzLWuiPGg
-         83AjeSmzGYzP4VzJlSP+Dji9w958ZFly9yBJnxXLXPhH4AHWXEFN+IwaRMJa/jULiP
-         mlHPYG9OtBksrzZoMR9DUbQOp900rhfQNDjRaeRuelRFGF3qUJkDZVPJFa50mkx+Cp
-         C9nu9UvohKDEw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pxVJ4-00Ec7Q-9s;
-        Fri, 12 May 2023 17:07:46 +0100
-Date:   Fri, 12 May 2023 17:07:45 +0100
-Message-ID: <86mt29mt2m.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        with ESMTP id S232578AbjELQQG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 12:16:06 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6F92683;
+        Fri, 12 May 2023 09:16:02 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C6Nh0X025791;
+        Fri, 12 May 2023 11:15:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=ectvF2yfB5aP03Mre+dyD2CVdNXHXzI/gwQc+s7VZHo=;
+ b=M60DIvjb0O76RqJ4hF0r8dai/lOM1XbIryRUEux/gCZxD3/0/2Et/Q+S3Luuv8Sdm1i5
+ iCcE7IHWR2gDMfQGVR0Ncu19x/YkLcC5wqn9Zsx1eDwaEOnnO1o8e4hs22I8JnosPa3Y
+ RxLd0KkqI0c4H7WMtPN4IjgJRFDNsIBnM751ZTOJGMiRSaaeLp1tCOx66LwF4WWVZon1
+ mcfqLvpl7V1x4e8DkJLOXYwRpzVDqbrm4X2VmATFRHITJ6aK78WIPFodRURDPcovLR5f
+ MFbMXYiR/by8gkPHKGL0UA7crPz+kZoFLA24Z1I4ui9q41fTwYY/xbjnuCoz+RTUz83V EQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7s46qef-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 11:15:47 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 12 May
+ 2023 11:15:45 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 12 May 2023 11:15:45 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 537A045;
+        Fri, 12 May 2023 16:15:45 +0000 (UTC)
+Date:   Fri, 12 May 2023 16:15:45 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <tglx@linutronix.de>, <linus.walleij@linaro.org>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
         <vkoul@kernel.org>, <lgirdwood@gmail.com>,
         <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
         <pierre-louis.bossart@linux.intel.com>,
         <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-In-Reply-To: <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+Subject: Re: [PATCH 05/10] dt-bindings: mfd: cirrus,cs42l43: Add initial DT
+ binding
+Message-ID: <20230512161545.GL68926@ediswmail.ad.cirrus.com>
 References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
-        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
-        <86o7mpmvqq.wl-maz@kernel.org>
-        <20230512153933.GH68926@ediswmail.ad.cirrus.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ckeepax@opensource.cirrus.com, broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
+ <25c92476-7bca-90c4-9130-cb765495a783@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <25c92476-7bca-90c4-9130-cb765495a783@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: DeAJb7R437xO5rXNDxVczi3uqEnckv76
+X-Proofpoint-GUID: DeAJb7R437xO5rXNDxVczi3uqEnckv76
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 12 May 2023 16:39:33 +0100,
-Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+On Fri, May 12, 2023 at 05:23:22PM +0200, Krzysztof Kozlowski wrote:
+> On 12/05/2023 14:28, Charles Keepax wrote:
+> > +$id: http://devicetree.org/schemas/mfd/cirrus,cs42l43.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Cirrus Logic CS42L43 Audio CODEC
 > 
-> On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
-> > On Fri, 12 May 2023 13:28:35 +0100,
-> > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > 
-> > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > > for portable applications. It provides a high dynamic range, stereo
-> > > DAC for headphone output, two integrated Class D amplifiers for
-> > > loudspeakers, and two ADCs for wired headset microphone input or
-> > > stereo line input. PDM inputs are provided for digital microphones.
-> > > 
-> > > The IRQ chip provides IRQ functionality both to other parts of the
-> > > cs42l43 device and to external devices that wish to use its IRQs.
-> > 
-> > Sorry, but this isn't much of an interrupt controller driver. A modern
-> > interrupt controller driver is firmware-driven (DT or ACPI, pick your
-> > poison), uses irq domains, and uses the irqchip API.
-> > 
+> That's audio codec, so it should be in sound, not MFD.
 > 
-> Apologies but I really need a little help clarifying the issues
-> here. I am totally happy to fix things up but might need a couple
-> pointers.
+
+Is this true even despite the device being implemented as an MFD?
+I am happy to move it, and will do so unless I hear otherwise.
+
+> > +  - VDD_P-supply
+> > +  - VDD_A-supply
+> > +  - VDD_D-supply
+> > +  - VDD_IO-supply
+> > +  - VDD_CP-supply
 > 
-> 1) uses the irqchip API / uses irq domains
+> lowercase, no underscores in all property names.
+
+I guess we can rename all the regulators to lower case.
+
+> > +additionalProperties: false
 > 
-> The driver does use both the irqchip API and domains, what
-> part of the IRQ API are we not using that we should be?
+> This order is quite unexpected... please do not invent your own layout.
+> Use example-schema as your starting point. I suspect there will be many
+> things to fix, so limited review follows (not complete).
 > 
-> The driver registers an irq domain using
-> irq_domain_create_linear.  It requests its parent IRQ using
-> request_threaded_irq. It passes IRQs onto the devices requesting
-> IRQs from it using handle_nested_irq and irq_find_mapping.
 > 
-> Is the objection here that regmap is making these calls for us,
-> rather than them being hard coded into this driver?
+> Missing ref to dai-common
 
-That's one of the reasons. Look at the existing irqchip drivers: they
-have nothing in common with yours. The regmap irqchip abstraction may
-be convenient for what you are doing, but the result isn't really an
-irqchip driver. It is something that is a small bit of a larger device
-and not an interrupt controller driver on its own. The irqchip
-subsystem is there for "first class" interrupt controllers.
+Apologies for that I was a little hesitant about this but this
+order did make the binding document much more readable, the
+intentation got really hard to follow in the traditional order. I
+guess since I have things working now I can put it back, again I
+will do so unless I hear otherwise.
 
+> > +  pinctrl:
+> > +    type: object
 > 
-> 2) driver is firmware-driven (DT or ACPI, pick your poison)
+> additionalProperties: false
 > 
-> The irq chip has representation in firmware, in fact we have
-> tested this on both ACPI and DT. Other devices can request
-> IRQs from it through firmware, same as they can for any other
-> IRQ chip.
 
-That's not what I'm talking about.
+Can do.
 
-> Is the objection here the table mapping the register fields that
-> are provided as an IRQ on the device?
+> > +
+> > +    allOf:
+> > +      - $ref: "../pinctrl/pinctrl.yaml#"
+> 
+> No quotes, absolute path, so /schemas/pinctrl/....
+> 
 
-I'm referring to this sort of construct:
+Can do.
 
-+	CS42L43_IRQ_REG(HP_STARTUP_DONE,			MSM),
-+	CS42L43_IRQ_REG(HP_SHUTDOWN_DONE,			MSM),
-+	CS42L43_IRQ_REG(HSDET_DONE,				MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_PLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_PLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_PLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_PLUG_PDET,			MSM),
+> > +
+> > +    properties:
+> > +      pin-settings:
+> 
+> What's this node about? pinctrl/pinctrl/pins? One level too much.
+> 
 
-Why isn't this described in firmware tables? Why doesn't it need to be
-carried as part of the driver? Is "CLASS_D_AMP" something an interrupt
-controller driver should care about?
+codec/pinctrl/pins
 
-	M.
+The device is a codec, so the main node should be called codec,
+then it has a subnode called pinctrl to satisfy the pinctrl DT
+binding.
 
--- 
-Without deviation from the norm, progress is not possible.
+> > +examples:
+> > +  - |
+> > +    i2c@e0004000 {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +        reg = <0xe0004000 0x1000>;
+> 
+> Drop, just i2c
+> 
+
+Can do.
+
+> > +
+> > +        cs42l43: codec@1a {
+> > +            compatible = "cirrus,cs42l43";
+> > +            reg = <0x1a>;
+> > +
+> > +            VDD_P-supply = <&vdd5v0>;
+> > +            VDD_D-supply = <&vdd1v8>;
+> > +            VDD_A-supply = <&vdd1v8>;
+> > +            VDD_IO-supply = <&vdd1v8>;
+> > +            VDD_CP-supply = <&vdd1v8>;
+> > +            VDD_AMP-supply = <&vdd5v0>;
+> > +
+> > +            reset-gpios = <&gpio 0>;
+> 
+> Use proper defines for flags.
+
+Can do.
+
+Thanks,
+Charles
