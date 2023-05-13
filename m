@@ -2,45 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B10700F3C
-	for <lists+linux-spi@lfdr.de>; Fri, 12 May 2023 21:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B8E701494
+	for <lists+linux-spi@lfdr.de>; Sat, 13 May 2023 08:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbjELTTU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 May 2023 15:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S231890AbjEMGQP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 13 May 2023 02:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238509AbjELTTT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 May 2023 15:19:19 -0400
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E36376BF
-        for <linux-spi@vger.kernel.org>; Fri, 12 May 2023 12:19:17 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id e1e3206d-f0f9-11ed-a9de-005056bdf889;
-        Fri, 12 May 2023 22:19:15 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 12 May 2023 22:19:14 +0300
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
-Message-ID: <ZF6RMqElYZVMpWRt@surfacebook>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
+        with ESMTP id S229463AbjEMGQO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 May 2023 02:16:14 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A6B1BD3;
+        Fri, 12 May 2023 23:16:10 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxyOkoK19khmkIAA--.14525S3;
+        Sat, 13 May 2023 14:16:08 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxi7YnK19kOG1ZAA--.26362S3;
+        Sat, 13 May 2023 14:16:07 +0800 (CST)
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
+ <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
+ <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com>
+ <f03977b9-884c-93a1-d1cf-81e6fcf51dfc@loongson.cn>
+ <CAHp75VeUiR_V0P6QhhqKGcoJKHviCC8wJZf+3KVBtWj+4q-=ig@mail.gmail.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <c965a906-952c-2592-dad6-9d4eb3dffa66@loongson.cn>
+Date:   Sat, 13 May 2023 14:16:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CAHp75VeUiR_V0P6QhhqKGcoJKHviCC8wJZf+3KVBtWj+4q-=ig@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxi7YnK19kOG1ZAA--.26362S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUv01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4
+        v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY
+        67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2js
+        IE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1VW
+        lDUUUUU==
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,270 +71,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
-> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> for portable applications. It provides a high dynamic range, stereo
-> DAC for headphone output, two integrated Class D amplifiers for
-> loudspeakers, and two ADCs for wired headset microphone input or
-> stereo line input. PDM inputs are provided for digital microphones.
+
+
+在 2023/5/12 下午5:40, Andy Shevchenko 写道:
+> On Fri, May 12, 2023 at 11:12 AM zhuyinbo <zhuyinbo@loongson.cn> wrote:
+>> 在 2023/5/10 下午3:03, Andy Shevchenko 写道:
 > 
-> Add a basic pinctrl driver which supports driver strength for the
-> various pins, gpios, and pinmux for the 2 multi-function pins.
-
-...
-
-> +#include <linux/pinctrl/consumer.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-
-Can you order them and split into a separate group that goes...
-
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +
-
-...here?
-
-> +#include "../pinctrl-utils.h"
-
-...
-
-> +struct cs42l43_pin {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	bool shutters_locked;
-
-> +	struct gpio_chip gpio_chip;
-
-If you move this to be the first member you might save a few bytes of code.
-
-> +	struct pinctrl_gpio_range range;
-
-Is it really needed here?
-
-> +};
-
-...
-
-> +#define CS42L43_PIN(_number, _name, _reg, _field) { \
-> +	.number = _number, .name = _name, \
-> +	.drv_data = &((struct cs42l43_pin_data){ \
-> +		.reg = CS42L43_##_reg, \
-> +		.shift = CS42L43_##_field##_DRV_SHIFT, \
-> +		.mask = CS42L43_##_field##_DRV_MASK, \
-> +	}), \
-
-Do you need this to be GCC extention for the value evaluation?
-I mean the compound literal, IIRC, can be used directly as
-
-	.foo = &(struct foo){ ... },
-
-Am I mistaken?
-
-> +}
-
-...
-
-> +#define CS42L43_PINGROUP(_name) \
-
-Use PINCTRL_PINGROUP() instead of open coded.
-
-> +(struct pingroup){				\
-> +	.name = #_name, \
-> +	.pins = cs42l43_pin_##_name##_pins, \
-> +	.npins = ARRAY_SIZE(cs42l43_pin_##_name##_pins) \
-> +}
-
-...
-
-> +enum cs42l43_pin_funcs {
-> +	CS42L43_FUNC_GPIO,
-> +	CS42L43_FUNC_SPDIF,
-> +	CS42L43_FUNC_IRQ,
-> +	CS42L43_FUNC_MIC_SHT,
-> +	CS42L43_FUNC_SPK_SHT,
-
-> +	CS42L43_FUNC_MAX,
-
-No comma for the terminator entry
-
-> +};
-
-...
-
-> +static const char * const cs42l43_pin_funcs[] = {
-> +	"gpio", "spdif", "irq", "mic-shutter", "spk-shutter"
-
-I would keep trailing comma.
-
-> +};
-
-...
-
-> +struct cs42l43_pin_func_group {
-> +	const char * const *groups;
-> +	unsigned int ngroups;
-> +};
-
-We have struct pinfunction.
-
-> +static const struct cs42l43_pin_func_group cs42l43_pin_func_groups[] = {
-> +	{ cs42l43_pin_gpio_groups,	ARRAY_SIZE(cs42l43_pin_gpio_groups) },
-> +	{ cs42l43_pin_spdif_groups,	ARRAY_SIZE(cs42l43_pin_spdif_groups) },
-> +	{ cs42l43_pin_irq_groups,	ARRAY_SIZE(cs42l43_pin_irq_groups) },
-> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
-> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
-
-We have PINCTRL_PINFUNCTION().
-
-> +};
-
-...
-
-> +static int cs42l43_pin_get_func_count(struct pinctrl_dev *pctldev)
-> +{
-> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_funcs) != CS42L43_FUNC_MAX);
-> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_func_groups) != CS42L43_FUNC_MAX);
-
-Use static_assert() in the global scope instead.
-
-> +
-> +	return ARRAY_SIZE(cs42l43_pin_funcs);
-> +}
-
-...
-
-> +	default:
-> +		reg = CS42L43_GPIO_FN_SEL;
-> +		mask = BIT(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
-> +		val = (func_idx == CS42L43_FUNC_GPIO) <<
-> +				(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
-
-This would be better as ternary.
-
-> +		break;
-> +	}
-
-...
-
-> +	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
-> +		offset + 1, input ? "input" : "output");
-
-How ' + 1' part won't be confusing?
-
-...
-
-> +static inline int cs42l43_pin_get_db(struct cs42l43_pin *priv, unsigned int pin)
-> +{
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	if (pin >= CS42L43_NUM_GPIOS)
-> +		return -ENOTSUPP;
-> +
-> +	ret = regmap_read(priv->regmap, CS42L43_GPIO_CTRL2, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val & (CS42L43_GPIO1_DEGLITCH_BYP_MASK << pin))
-> +		return 0;
-
-> +	else
-
-Redundant.
-
-> +		return 85; // Debounce is roughly 85uS
-
-	// Debounce is roughly 85uS
-	return 85;
-
-> +}
-
-...
-
-> +	dev_dbg(priv->dev, "Set debounce %s for %s\n",
-> +		us ? "on" : "off", cs42l43_pin_pins[pin].name);
-
-str_on_off()
-
-...
-
-> +		++configs;
-> +		--num_configs;
-
-Why preincrements?
-
-...
-
-> +	if (is_of_node(dev_fwnode(cs42l43->dev))) {
-> +		device_set_node(priv->dev,
-> +				fwnode_get_named_child_node(dev_fwnode(cs42l43->dev),
-> +							    "pinctrl"));
-> +	} else {
-> +		device_set_node(priv->dev, dev_fwnode(cs42l43->dev));
-> +	}
-
-This can be called once after if.
-
-...
-
-> +	pctldev = devm_pinctrl_register(priv->dev, &cs42l43_pin_desc, priv);
-> +	if (IS_ERR(pctldev)) {
-> +		ret = PTR_ERR(pctldev);
-> +		dev_err(priv->dev, "Failed to register pinctrl: %d\n", ret);
-
-		ret = dev_err_probe();
-
-Same for other similar cases.
-
-> +		goto err_pm;
-> +	}
-
-> +	if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
-> +		ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
-> +					     0, 0, CS42L43_NUM_GPIOS);
-> +		if (ret) {
-> +			dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
-> +			goto err_pm;
-> +		}
-> +	}
-
-Besides the fact that we have a callback for this, why GPIO library can't
-handle this for you already?
-
-...
-
-> +static int cs42l43_pin_remove(struct platform_device *pdev)
-> +{
-> +	pm_runtime_disable(&pdev->dev);
-
-This is simply wrong order because it's a mix of non-devm_*() followed by
-devm_*() calls in the probe.
-
-> +	return 0;
-> +}
-
-...
-
-> +static struct platform_driver cs42l43_pin_driver = {
-> +	.driver = {
-> +		.name	= "cs42l43-pinctrl",
-> +	},
-
-> +
-
-Redundant blank line.
-
-> +	.probe		= cs42l43_pin_probe,
-> +	.remove		= cs42l43_pin_remove,
-> +};
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> ...
+> 
+>> so, I think it is better
+>> to confiure clk and mode separately.
+> 
+> Agree, but at the same time you can split the conditional bodies to
+> the separate functions. In this case the indentation of each of them
+> can be decreased.
+
+
+okay, I got it.
+
+Thanks.
+> 
 
