@@ -2,77 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE6A701555
-	for <lists+linux-spi@lfdr.de>; Sat, 13 May 2023 10:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC85701692
+	for <lists+linux-spi@lfdr.de>; Sat, 13 May 2023 14:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbjEMIv4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 13 May 2023 04:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S230149AbjEMM1X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 13 May 2023 08:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjEMIv4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 May 2023 04:51:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3E449C0;
-        Sat, 13 May 2023 01:51:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B081361C33;
-        Sat, 13 May 2023 08:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B68C4339B;
-        Sat, 13 May 2023 08:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683967913;
-        bh=IH5vicqvrPOYUBi1HJ5D3GZ4J4lLH8IlZCxqQG06Cgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OtaOoZQfWI10UcINkOrUvS2E384DY5KyHtCiK/03pKKUnj8MNGO0sxlnlcYueb9pW
-         gcPHxioaRXBmdWh/iIKC7RovIbtoS73jLPkr8I2SXBk14RCOGbITfKHHdzRB/o6tiz
-         bW+8ebY+wGcS/1C33BGGlOXnpxHojp9vzcbzXmBk=
-Date:   Sat, 13 May 2023 17:50:13 +0900
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v8 0/6] Add Intel LJCA device driver
-Message-ID: <2023051318-anchovy-sincere-65e3@gregkh>
-References: <20230511175844.185070-1-xiang.ye@intel.com>
+        with ESMTP id S229910AbjEMM1W (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 May 2023 08:27:22 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1932D62;
+        Sat, 13 May 2023 05:27:21 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-643aad3bc41so10233447b3a.0;
+        Sat, 13 May 2023 05:27:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683980841; x=1686572841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnz6Khl7XgNC5OnSNF8E9zgjZK2OQEXJEFFxrxG8RJM=;
+        b=EFfnMpZvwqbFGqH1Cz1hwMi7+JzjU+hedGkJkWFuegnNgh7fdKzpCtOGATyuJOYaEm
+         SyiRFPPasVd6qheTRyu3tHQWtFb5/yF/QwTfILq/KzT/qWrIs64RSiE/2oSf/PHX1y1t
+         /W6jwW+5Yhl7v7Ukjk9NfcQ0ugfOc63/wNQsjtZqh8+PYblMxJ3WyDFowLF38dHxz7WZ
+         vKuUtHmp/t77/1yopMKGCtCu//342Qp8k2JASsxWFgGeW1mXGdUdVfrfn9dM7leVzwNl
+         o1iB/nWC43ToRePOifM/pJaP6MJZx670RADTIvDaUtxlHwJdqLFiBQS5t6HhUY06zI59
+         Nuiw==
+X-Gm-Message-State: AC+VfDzS0cLAP3b+LW17WQuvlGRMyiC5Ay6Cz7v7v02sjbmd2trdTum2
+        hS2KJq5QZXQPRj23yghVnreRjMfe55Whvu7B
+X-Google-Smtp-Source: ACHHUZ5nCz5VXXON1tGJRriKDy5oC05xvZoPW2YUTwRBowC4tXDXqvFcchJAICWbyB6sMbusB4V+bQ==
+X-Received: by 2002:a05:6a20:160e:b0:101:b3f6:d67e with SMTP id l14-20020a056a20160e00b00101b3f6d67emr19853546pzj.27.1683980840610;
+        Sat, 13 May 2023 05:27:20 -0700 (PDT)
+Received: from dev-linux.lan (cpe-70-95-21-110.san.res.rr.com. [70.95.21.110])
+        by smtp.gmail.com with ESMTPSA id q2-20020a17090a2dc200b0024e11f7a002sm21951196pjm.15.2023.05.13.05.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 05:27:20 -0700 (PDT)
+From:   Sukrut Bellary <sukrut.bellary@linux.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Sukrut Bellary <sukrut.bellary@linux.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi:pic32: Fix missing error code 'ret' in the failure path
+Date:   Sat, 13 May 2023 05:26:53 -0700
+Message-Id: <20230513122653.45226-1-sukrut.bellary@linux.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511175844.185070-1-xiang.ye@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 12, 2023 at 01:58:38AM +0800, Ye Xiang wrote:
-> Add driver for Intel La Jolla Cove Adapter (LJCA) device.
-> This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
-> drivers to support this device: a USB driver, a GPIO chip
-> driver, a I2C controller driver and a SPI controller driver.
+smatch warning -
+drivers/spi/spi-pic32.c:634 pic32_spi_dma_prep() warn: missing error code 'ret'
 
-I am sorry, but you have not followed the required Intel-specific
-requirements for submitting code like this.  Please work with the Linux
-Intel developer group to resolve this issue and do it properly for your
-next patch submission as I can not take this one for this obvious
-reason.
+Currently in case of pic32_spi_dma_config() failure, SUCCESS is returned.
+Capture and return the error code in the failure path.
 
-thanks,
+This is based on static analysis only. Compilation tested.
 
-greg k-h
+Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
+---
+ drivers/spi/spi-pic32.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
+index f2af5e653f3d..2b1b1eea9c64 100644
+--- a/drivers/spi/spi-pic32.c
++++ b/drivers/spi/spi-pic32.c
+@@ -630,7 +630,8 @@ static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
+ 		goto out_err;
+ 	}
+ 
+-	if (pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE))
++	ret = pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE);
++	if (ret)
+ 		goto out_err;
+ 
+ 	/* DMA chnls allocated and prepared */
+-- 
+2.34.1
+
