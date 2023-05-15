@@ -2,123 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0AA7018F8
-	for <lists+linux-spi@lfdr.de>; Sat, 13 May 2023 20:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B157020CC
+	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 02:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjEMSIW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 13 May 2023 14:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S229964AbjEOAeh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 14 May 2023 20:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjEMSIQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 May 2023 14:08:16 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5940DC
-        for <linux-spi@vger.kernel.org>; Sat, 13 May 2023 11:08:08 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96b0235c10bso15836666b.3
-        for <linux-spi@vger.kernel.org>; Sat, 13 May 2023 11:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684001287; x=1686593287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz3pC3oD+mRQD2yh5jV0jp+d2wnh2+HWJqx/JQaPzB0=;
-        b=EVBWjh+d6IhLcfQHvnPqNtgl2kB1ZPchXw0HXjFU2qSUtuwNy0q6Sp0YZggQOXxfjz
-         oEcw/2Tl/2G+fh5jken5DOv1L2V0oQGBznQKAHYXr5FEYY+2rEcvHxbvLt9IC6T7d2pm
-         j+JUVuj+iQUbkEXes1F1CBctgEWYrWPuR7xLWrMjBF263X4+bzOn/pWNhcqVAypZKXAx
-         ikR1LxkTi5RNV8l0ufwPRld9j5r5vXg8+d6nfVq3ozPse6EdauUgXDDiXX8GGkzWphAd
-         OXs/uwKHfMDIkh+2EG5f+tVdc5Zs9rGtQ8K5jD4iljzDntk+BUytG4wJjg7lSp4gpCJp
-         o9CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684001287; x=1686593287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pz3pC3oD+mRQD2yh5jV0jp+d2wnh2+HWJqx/JQaPzB0=;
-        b=Q33xNUUP9NFviLqIu9cFl1LbH+nse6KLK6dO3jTjds8U4g7AfKKk2F2WAAXx/eVoNz
-         pIxVrvM90SJpJqOLc0GZBp91/1qa9khroB4Yno1oxpRBF30iDlh/xJ/FrUXw2sylweOk
-         Ly9sWbR+NJNNP93dWKGl9HRKee2HoZYQ0OM2ApoRgiaLgla4hFpwpd9ewZ1tPJ4pDrb1
-         JWyfga9RiVuu02cg2BTQWuhsq4LRyqKhJAFtWaXxbJG4JaiZrMAoh7D8XiCICJAJ1TD/
-         qkH5Mx2iKNSl1yKzoB3tXssQ8ZTZm0vpjbpZclK3c3DfGzznxQoDwB/xBg9VWnKxkSqE
-         C8sA==
-X-Gm-Message-State: AC+VfDyBD0t9NrSEHZZRcPuGuFkcvvHxsikWvU60ucQOHtyw8IAFmpzk
-        4kO1B97gVrgL4DbSpefpHZQ9Pw==
-X-Google-Smtp-Source: ACHHUZ7ZC5ghgGrfBuRI4KprxyOU5k85ez2jlpAKSpf+r5Q8qvL256LVhRrTCK365P5OAJhDuRHo/g==
-X-Received: by 2002:a17:907:9405:b0:957:12a6:a00f with SMTP id dk5-20020a170907940500b0095712a6a00fmr25591950ejc.21.1684001286843;
-        Sat, 13 May 2023 11:08:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ba68:e5c9:694e:c6e4? ([2a02:810d:15c0:828:ba68:e5c9:694e:c6e4])
-        by smtp.gmail.com with ESMTPSA id ib10-20020a1709072c6a00b009531d9efcc4sm7023439ejc.133.2023.05.13.11.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 11:08:06 -0700 (PDT)
-Message-ID: <db2dcafb-db14-96ab-87cc-88408f3bab4b@linaro.org>
-Date:   Sat, 13 May 2023 20:08:05 +0200
+        with ESMTP id S229800AbjEOAeg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 May 2023 20:34:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC4110CA;
+        Sun, 14 May 2023 17:34:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C68B1611FE;
+        Mon, 15 May 2023 00:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2348C433EF;
+        Mon, 15 May 2023 00:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684110874;
+        bh=hZX3lsPty37NkozQs0xkxwcNAftmAAsvZvG63ar1tIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tuMQ48xUx7MMO850z8B3/cCEiLYwhg2q8ds2b/lxdcNBqP2JHA8a/Igij0hhBolnc
+         8vlgzxmahgWWF9eYjRbvkHkZpSNJle7oxokov+AZW61dnBqThYqgcB5Wo7sHb8Ui6K
+         uTqAGBo70MojaUEIMom1PbH8MJoAsABdkCZDqUmI05REkz03fznjdZADFzjCSEbLW5
+         uZ56rZu9MzhKRmORGcSV+0ngSHYvEPerS7iD1MJhZW5BB5+rihUUtP/Vlb66hm7q2u
+         swrR3w2XNiGl58pMnqSJwMWmySE6CFwPfqZgWk20IXUGgDRYkKIRyMiyDr1+IHCRsW
+         fu4ji2xx8U9kg==
+Date:   Mon, 15 May 2023 09:34:26 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?B=F6rge_Str=FCmpfel?= <boerge.struempfel@gmail.com>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] spi: dt-bindings: Introduce spi-mosi-idle-low flag
+Message-ID: <ZGF+Ei5sn4ci41LU@finisterre.sirena.org.uk>
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+ <20230511231317.158214-1-bstruempfel@ultratronik.de>
+ <20230511231317.158214-2-bstruempfel@ultratronik.de>
+ <ZF2y1YNkSbXzRm4V@finisterre.sirena.org.uk>
+ <CAEktqcthEG=AWTk9VcVkwexH6xV_xHw1hqxkkPkD=d1NqPKqSg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 05/10] dt-bindings: mfd: cirrus,cs42l43: Add initial DT
- binding
-Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
- <5969fe82-69cd-34d6-edd1-d16ea741d9cb@linaro.org>
- <20230512161803.GM68926@ediswmail.ad.cirrus.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512161803.GM68926@ediswmail.ad.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jG3+yPPt0iwCjHtr"
+Content-Disposition: inline
+In-Reply-To: <CAEktqcthEG=AWTk9VcVkwexH6xV_xHw1hqxkkPkD=d1NqPKqSg@mail.gmail.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/05/2023 18:18, Charles Keepax wrote:
-> On Fri, May 12, 2023 at 05:25:52PM +0200, Krzysztof Kozlowski wrote:
->> On 12/05/2023 14:28, Charles Keepax wrote:
->>> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
->>> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
->>> for portable applications. It provides a high dynamic range, stereo
->>> DAC for headphone output, two integrated Class D amplifiers for
->>
->> ...
->>
->>> +
->>> +  interrupt-controller: true
->>> +
->>> +  '#interrupt-cells':
->>> +    const: 2
->>
->> Hm, are you sure? Who is the consumer/user of this interrupt controller?
->>
-> 
-> Anyone who wants the device has GPIOs that can signal IRQs. Some
-> of the other IRQs could be more generally useful, such as some of
-> the jack detection ones.
 
+--jG3+yPPt0iwCjHtr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-OK, makes sense, but it is a bit odd then to have:
-codec {
-  which is GPIO and interrupt controller, but not pin controller
-  pinctrl {
-    pin controller, which is not GPIO and not interrupt controller
-  }
-}
-Maybe all the GPIO/pin/related interrupt properties should be moved to
-pinctrl node?
+On Fri, May 12, 2023 at 08:54:19AM +0200, B=F6rge Str=FCmpfel wrote:
+> Am Fr., 12. Mai 2023 um 05:30 Uhr schrieb Mark Brown <broonie@kernel.org>:
 
-Best regards,
-Krzysztof
+> > If this is always required for a given device (which I'd expect to be
+> > the case) why configure it through DT?  I know we've got some legacy
+> > stuff like that but not all legacy DT choices were good and no need to
+> > continue the pattern.
 
+> Yes this will always be the case for specific spi-device, spi-controller
+> combinations. Just to make sure, that I understand your suggestion
+> correctly: You propose to check from the specific spi-device-driver, if
+> the spi-controller supports this particular mode-bit, and then set it if
+> it does and thereby loose the need for the DT entry completely?
+
+Yes, we shouldn't need DT here.  Though the device should just be
+setting this unconditionally if it's always required.
+
+--jG3+yPPt0iwCjHtr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRhfhEACgkQJNaLcl1U
+h9CUQwf9GOgkGMy4AAK5Y1LcKpaX1j7DIItEjuPWsM9sjmduKp921EvFyALp/hqU
+UdQ3emjnx3i2kaV+9GxNuIB3auUEu2xE2guAzd2tRbLbDOaK/4k8G3blLSghOBYu
+CQy7EGP8JKKM658ru88SQMTC2A7IXS5HNh0s1WwakmaynDYkIk0bO0dqz8zwR23P
+BoYJQgr9Z6TQwoivQ9/M5pO3cH/FIEw1gY8ajxdbsUXwRd75qJCL+rLjNbC654cb
+kryggjSO7KUNPUpUdQM/H9p2W7v1zl4iJcvr8P3/b9k7qwwluFSFJHyUnOZ3Ecd8
+gOIvDmrDs66z0vPIcd8Mb5X73Dr0mg==
+=QIKm
+-----END PGP SIGNATURE-----
+
+--jG3+yPPt0iwCjHtr--
