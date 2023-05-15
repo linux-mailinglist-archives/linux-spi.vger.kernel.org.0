@@ -2,46 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB235702B25
-	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 13:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F642702B6E
+	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 13:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbjEOLKo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 May 2023 07:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S240413AbjEOL0W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 May 2023 07:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241295AbjEOLKj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 07:10:39 -0400
+        with ESMTP id S241250AbjEOL0U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 07:26:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9B719B2
-        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 04:10:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8FC1736;
+        Mon, 15 May 2023 04:26:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10680622A6
-        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 11:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 777E1C433EF;
-        Mon, 15 May 2023 11:10:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B522C622BE;
+        Mon, 15 May 2023 11:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9818CC433D2;
+        Mon, 15 May 2023 11:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684149022;
-        bh=0JfoUgHUQzKUPO/ZiMpIdMyV3y/fSUeJpsTUFdPlt4Q=;
-        h=Subject:From:Date:To:From;
-        b=oxlBmqa7RWEG4mVyFoWQGQHFBB6OUurEvS2j6JS+S4vQCJVO4BNx1lL4kQgELRFFd
-         km1YtyUoBz2Tq7+11NqFqvgoRpqB9bwc4gERr9VXSakPwK7XMwB6pE1ErFQV4eRA48
-         //dtby7C4t14sPCHe9d2CQaXjKqiFL16OFe5Ud7Fr7yXyzoJAK91dMGN31ktvXJ+/M
-         hlmZLV2V67wAMJZN4q4ggl8vNbVDndEvpgz9SdRzOwvVxvSKXjMZJ33l5HndQD3hqv
-         NbxKWxc9zKbf14Q335RmzYwL3E1Comd2rxY26eHLX4SYH0/jQmzQX5eWfSwVTWs8TQ
-         x0Gc2ltEfpBNQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57909E5421B;
-        Mon, 15 May 2023 11:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1684149961;
+        bh=MBqNZwSUWIVyUFPu5xzrWq+IS+ipisPvB7leUbn8x7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KFbji4AXA3hGRsqTwofLDZiiIfOsCOOHJjiwkI4H4/iGfs82EgkS5b1Xg0tLaoqh/
+         tJ3DPhdMHBOVrCpMIZdlKFsIAa3H18C9ex5U3yjpI6X83AIpfcyksAvxVywqgfkpoW
+         sVVLV0/2LJ5LaVTgNFNS6P+BrBxDDkogc2PQdFDVzskUrXiXZWJVGFGjU36gn8sAPZ
+         t6feA4rv/otyZkO6Cim+P7ICaZ2Myn68JP356IAppwnzC+OuvMgyGYAQrGzLrvmCRv
+         qE0XMb5fBJz9q9qUd785/TUka+DUI4OPC1H6/LMzHlne0JMH0BQC4YeL5q6bP8g4PM
+         lr8KyMx0+2NpQ==
+Date:   Mon, 15 May 2023 12:25:54 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+Message-ID: <20230515112554.GA10825@google.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+ <86o7mpmvqq.wl-maz@kernel.org>
+ <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+ <86mt29mt2m.wl-maz@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168414902230.21885.18441664160497604812.git-patchwork-summary@kernel.org>
-Date:   Mon, 15 May 2023 11:10:22 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <86mt29mt2m.wl-maz@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,30 +65,57 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Fri, 12 May 2023, Marc Zyngier wrote:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+> On Fri, 12 May 2023 16:39:33 +0100,
+> Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > 
+> > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
+> > > On Fri, 12 May 2023 13:28:35 +0100,
+> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > > 
+> > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> > > > for portable applications. It provides a high dynamic range, stereo
+> > > > DAC for headphone output, two integrated Class D amplifiers for
+> > > > loudspeakers, and two ADCs for wired headset microphone input or
+> > > > stereo line input. PDM inputs are provided for digital microphones.
+> > > > 
+> > > > The IRQ chip provides IRQ functionality both to other parts of the
+> > > > cs42l43 device and to external devices that wish to use its IRQs.
+> > > 
+> > > Sorry, but this isn't much of an interrupt controller driver. A modern
+> > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
+> > > poison), uses irq domains, and uses the irqchip API.
+> > > 
+> > 
+> > Apologies but I really need a little help clarifying the issues
+> > here. I am totally happy to fix things up but might need a couple
+> > pointers.
+> > 
+> > 1) uses the irqchip API / uses irq domains
+> > 
+> > The driver does use both the irqchip API and domains, what
+> > part of the IRQ API are we not using that we should be?
+> > 
+> > The driver registers an irq domain using
+> > irq_domain_create_linear.  It requests its parent IRQ using
+> > request_threaded_irq. It passes IRQs onto the devices requesting
+> > IRQs from it using handle_nested_irq and irq_find_mapping.
+> > 
+> > Is the objection here that regmap is making these calls for us,
+> > rather than them being hard coded into this driver?
+> 
+> That's one of the reasons. Look at the existing irqchip drivers: they
+> have nothing in common with yours. The regmap irqchip abstraction may
+> be convenient for what you are doing, but the result isn't really an
+> irqchip driver. It is something that is a small bit of a larger device
+> and not an interrupt controller driver on its own. The irqchip
+> subsystem is there for "first class" interrupt controllers.
 
-Series: [1/2] spi: spi-cadence: Avoid read of RX FIFO before its ready
-  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=746194
-  Lore link: https://lore.kernel.org/r/20230509164153.3907694-1-ckeepax@opensource.cirrus.com
-    Patches: [1/2] spi: spi-cadence: Avoid read of RX FIFO before its ready
-             [2/2] spi: spi-cadence: Only overlap FIFO transactions in slave mode
-
-Patch: spi: MAINTAINERS: drop Krzysztof Kozlowski from Samsung SPI
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=747282
-  Lore link: https://lore.kernel.org/r/20230513173646.4306-1-krzysztof.kozlowski@linaro.org
-
-
-Total patches: 3
+I'm not aware of another subsystem that deals with !IRQChip level IRQ
+controllers.  Where do simple or "second class" interrupt controllers
+go?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Lee Jones [李琼斯]
