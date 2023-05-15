@@ -2,62 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F642702B6E
-	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 13:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F23702C2E
+	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 14:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbjEOL0W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 May 2023 07:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S240712AbjEOMDP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 May 2023 08:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241250AbjEOL0U (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 07:26:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8FC1736;
-        Mon, 15 May 2023 04:26:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B522C622BE;
-        Mon, 15 May 2023 11:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9818CC433D2;
-        Mon, 15 May 2023 11:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684149961;
-        bh=MBqNZwSUWIVyUFPu5xzrWq+IS+ipisPvB7leUbn8x7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KFbji4AXA3hGRsqTwofLDZiiIfOsCOOHJjiwkI4H4/iGfs82EgkS5b1Xg0tLaoqh/
-         tJ3DPhdMHBOVrCpMIZdlKFsIAa3H18C9ex5U3yjpI6X83AIpfcyksAvxVywqgfkpoW
-         sVVLV0/2LJ5LaVTgNFNS6P+BrBxDDkogc2PQdFDVzskUrXiXZWJVGFGjU36gn8sAPZ
-         t6feA4rv/otyZkO6Cim+P7ICaZ2Myn68JP356IAppwnzC+OuvMgyGYAQrGzLrvmCRv
-         qE0XMb5fBJz9q9qUd785/TUka+DUI4OPC1H6/LMzHlne0JMH0BQC4YeL5q6bP8g4PM
-         lr8KyMx0+2NpQ==
-Date:   Mon, 15 May 2023 12:25:54 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-Message-ID: <20230515112554.GA10825@google.com>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
- <86o7mpmvqq.wl-maz@kernel.org>
- <20230512153933.GH68926@ediswmail.ad.cirrus.com>
- <86mt29mt2m.wl-maz@kernel.org>
+        with ESMTP id S241262AbjEOMDC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 08:03:02 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 603F03C22;
+        Mon, 15 May 2023 05:01:20 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Bx7eoNH2Jk980IAA--.15319S3;
+        Mon, 15 May 2023 20:01:17 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx4zgNH2JkywNgAA--.34962S3;
+        Mon, 15 May 2023 20:01:17 +0800 (CST)
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     andy.shevchenko@gmail.com
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
+ <049c871d-c658-24c1-91e6-701098f5fc28@loongson.cn>
+ <16913b76-0256-492a-ec90-d367f2b52cc3@loongson.cn>
+ <ZGH4SPsu40Mt-Z8f@surfacebook>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <109a8453-2172-a2ee-8672-8efb489e3dd9@loongson.cn>
+Date:   Mon, 15 May 2023 20:01:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <ZGH4SPsu40Mt-Z8f@surfacebook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <86mt29mt2m.wl-maz@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf8Cx4zgNH2JkywNgAA--.34962S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7CrWfWFy5Cw1UXF47JF43KFg_yoW8Cr1fpF
+        n7Aa17uryrtrn5Kr17tryv9FZIyFWkJ390q3s3Jas3ZF90yFy2kr47ZFZF9w1Iqrs7Jry2
+        v3WfuFZ2va98XFDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bTkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8I
+        j28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2
+        WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
+        bVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI4
+        8JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AK
+        xVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+        AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+        42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
+        xhVjvjDU0xZFpf9x07jbVyxUUUUU=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,57 +72,64 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 12 May 2023, Marc Zyngier wrote:
 
-> On Fri, 12 May 2023 16:39:33 +0100,
-> Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > 
-> > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
-> > > On Fri, 12 May 2023 13:28:35 +0100,
-> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > > 
-> > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > > > for portable applications. It provides a high dynamic range, stereo
-> > > > DAC for headphone output, two integrated Class D amplifiers for
-> > > > loudspeakers, and two ADCs for wired headset microphone input or
-> > > > stereo line input. PDM inputs are provided for digital microphones.
-> > > > 
-> > > > The IRQ chip provides IRQ functionality both to other parts of the
-> > > > cs42l43 device and to external devices that wish to use its IRQs.
-> > > 
-> > > Sorry, but this isn't much of an interrupt controller driver. A modern
-> > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
-> > > poison), uses irq domains, and uses the irqchip API.
-> > > 
-> > 
-> > Apologies but I really need a little help clarifying the issues
-> > here. I am totally happy to fix things up but might need a couple
-> > pointers.
-> > 
-> > 1) uses the irqchip API / uses irq domains
-> > 
-> > The driver does use both the irqchip API and domains, what
-> > part of the IRQ API are we not using that we should be?
-> > 
-> > The driver registers an irq domain using
-> > irq_domain_create_linear.  It requests its parent IRQ using
-> > request_threaded_irq. It passes IRQs onto the devices requesting
-> > IRQs from it using handle_nested_irq and irq_find_mapping.
-> > 
-> > Is the objection here that regmap is making these calls for us,
-> > rather than them being hard coded into this driver?
+
+在 2023/5/15 下午5:15, andy.shevchenko@gmail.com 写道:
+> Mon, May 15, 2023 at 04:14:00PM +0800, zhuyinbo kirjoitti:
+>> 在 2023/5/11 下午3:18, zhuyinbo 写道:
+>>> 在 2023/5/8 下午11:04, andy.shevchenko@gmail.com 写道:
 > 
-> That's one of the reasons. Look at the existing irqchip drivers: they
-> have nothing in common with yours. The regmap irqchip abstraction may
-> be convenient for what you are doing, but the result isn't really an
-> irqchip driver. It is something that is a small bit of a larger device
-> and not an interrupt controller driver on its own. The irqchip
-> subsystem is there for "first class" interrupt controllers.
+> ...
+> 
+>>>>> +config SPI_LOONGSON_CORE
+>>>>> +    tristate "Loongson SPI Controller Core Driver Support"
+>>>>
+>>>> Does it need to be visible to the user?
+>>
+>> I try to set it invisible that by removing the SPI_LOONGSON_CORE Kconfig
+>> or removing "tristate "Loongson SPI Controller Core Driver Support" that
+>> will cause spi-core driver doesn't be compiled or compiled fail issue,
+>> so I will still set it visible to the user.
+> 
+> Making a symbol selectable only can be achieved by removing the description
+> (near to tristate directive), have you tried that?
 
-I'm not aware of another subsystem that deals with !IRQChip level IRQ
-controllers.  Where do simple or "second class" interrupt controllers
-go?
+Is it like this ?
 
--- 
-Lee Jones [李琼斯]
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -517,7 +517,7 @@ config SPI_LM70_LLP
+           a parallel port.
+
+  config SPI_LOONGSON_CORE
+-       tristate "Loongson SPI Controller Core Driver Support"
++       tristate
+         depends on LOONGARCH || COMPILE_TEST
+
+
+Thanks.
+> 
+> ...
+> 
+>>>>> +    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>>>> +    if (res == NULL) {
+>>>>
+>>>> Why not using devm_platform_ioremap_resource()?
+>>> okay, I will use it.
+>>>>
+>>>>> +        dev_err(dev, "cannot get io resource memory\n");
+>>>>> +        return -ENOENT;
+>>>>
+>>>>      return dev_err_probe();
+>>
+>> It seems that there is no need to print memory log when use
+>> devm_platform_ioremap_resource because this function had contained
+>> the this memory log print thus I will return PTR_ERR(reg_base).
+>>
+>>          reg_base = devm_platform_ioremap_resource(pdev, 0);
+>>          if (IS_ERR(reg_base))
+>>                  return PTR_ERR(reg_base);
+> 
+> Good catch! Sure, go with this.
+> 
+
