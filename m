@@ -2,66 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E00C702E39
-	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 15:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351C9702ED7
+	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 15:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241913AbjEONgA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 May 2023 09:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S238185AbjEONzB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 May 2023 09:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241648AbjEONf7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 09:35:59 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A8619A6;
-        Mon, 15 May 2023 06:35:58 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f22908a082so11617415e87.1;
-        Mon, 15 May 2023 06:35:58 -0700 (PDT)
+        with ESMTP id S237999AbjEONy7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 09:54:59 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612FE6E;
+        Mon, 15 May 2023 06:54:58 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75773a7bd66so970121685a.1;
+        Mon, 15 May 2023 06:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684157756; x=1686749756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vQCCyMXdzQtQ4wEmAdLT3od28AFpa/gXxFf5yRoLH9M=;
-        b=iNdOWmWupwp49Ma2zWvlKHqbkl/nMO4PlU+SbQYapxsH7oFBjl5uWYxVjXGzwAb4ZV
-         9MuHWHZa6Ujnf+Mo1evVDhTJ17AUYTaEAOPOIkrMmAw4IeNPdqeNYl45F792/QlYcwvW
-         v6NpG9PO/MuzrPYAXusQ1JS5empHkBCDsv2lL30m2hb1j69D7/a+b/0KEQFREv2Q1Php
-         3q6mmRoeBqpNPfriPA2pT1//X8cuAYOE4UqT+H9wI5o+zxiOij0KR/xRsGmHQhkmM0fM
-         8IwUPCG8z2cDr5U/uO1OlzzJPo0VvwnMUO4UiPG9lr1lMnPCysuSuv979Gb80pv4GIrC
-         fp8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684157756; x=1686749756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684158897; x=1686750897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vQCCyMXdzQtQ4wEmAdLT3od28AFpa/gXxFf5yRoLH9M=;
-        b=L/w7BSq8KxQCjflFJYBxKRecKSkLsLLBcCXx7A80jHELW5xxxRzAKOdF51TJU/ZTCB
-         RVPZnx3aKzB1NcNe+fWuv6BLuI6zvkH3nvcIcV3tpEGNUIh4coOTP1SHpu/YKW68lnFZ
-         L7sgrln1oZGWxWMWq+sptPDur81mPJYTvaKrZp0uTyg/3neHK/bfk0anqoHFeemrWQW+
-         tbL+OTPqf9STbatQ+FMWukOQCMaRiyzxgikHRBdLmosuSnl4Eyp7TTDfeaZMQeW3zdaK
-         D/vayYjo8ym0HYWb+aZ+DeWlzKH+Jqk5o1oTy0TJ+02xLmX6AuZyWcDEq3n4qt1BXu0+
-         nHXg==
-X-Gm-Message-State: AC+VfDyWgYeb84VMB4PrF7SgRD1xzmr8Gk/wZYVSKj2uAukJl1TJPzls
-        x7xtRS2AUlbmNhzfI+b0nYE=
-X-Google-Smtp-Source: ACHHUZ6nWiNoW9czsM9ur3iCv+EYo4rPnggXC33kVq4oFCIvd7N/3JsstGkMYTQDZXOWwR0LFtW3wQ==
-X-Received: by 2002:ac2:5399:0:b0:4f3:7c24:1029 with SMTP id g25-20020ac25399000000b004f37c241029mr1844212lfh.60.1684157756212;
-        Mon, 15 May 2023 06:35:56 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id o24-20020ac24358000000b004eefdd8b37fsm2615699lfl.194.2023.05.15.06.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:35:55 -0700 (PDT)
-Date:   Mon, 15 May 2023 16:35:53 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     broonie@kernel.org, blarson@amd.com, git@amd.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitrkcian2002@gmail.com
-Subject: Re: [PATCH] spi: dw: Replace spi->chip_select references with
- function calls
-Message-ID: <20230515133553.46mownenmclcauec@mobilestation>
-References: <20230515130343.63770-1-amit.kumar-mahapatra@amd.com>
+        bh=+7iUEE3IomJ+ikRUsoHtPetHJ4Aka31Yyf22ym5Ly0M=;
+        b=UGBa+D7/Sl3g/ecSCiKAFQhaNSJ3tLTHTCTI9pwNSJl/uGjZEXhvlThxGlWYaS1F7p
+         3r7HnGis2uWxfysF4gNENYYMy/ugHI8XJPEzONQ7bjb9uBINsDU5CjIaw41SXUzhKX9o
+         ek5ZQYHvVYYtMhK8iuB21dDsnd8fDcIdzNaR7l0J0fJsrwOX9jY8QnMEco1CuZZop3qu
+         +F3SuAk0LSFrRN+LwTf/LiNfvtQKLnSfo2Zr+k9njw9RueE3aYhyChOytFu+isl7vgUj
+         Q7Nd5/+e10mPFbnDFrnsF4bLKpkk8CdaxJbwMYZdtGqNtaL8DDj6Ry/JtkKGFqTd8Vqu
+         oMOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684158897; x=1686750897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+7iUEE3IomJ+ikRUsoHtPetHJ4Aka31Yyf22ym5Ly0M=;
+        b=D2DQx8ZzvRCS+JexcYg18g1/GLBLka+tBIEgiSChWmp1ixUVAuUJJHigz6HdLAa7l5
+         h0z24/wQTUeIjTDLdKsNH1F8/1xIFdPPiqYNBk9/D3vEO0bXZVdic0Fn0ZJrOb1UrBLC
+         dbkPplUttvQgdL+5yFZAmEfI2o69Rq6myrHTqzX1NkVCEpzmz+Xoh8yQwFLKI8mMWIU0
+         LHJN/2tDOOGXmqfrn0Rjo/OFM3k+H/g+K7/fi6mYd413szIn1SHhGamdgmSIlJaGcVVe
+         7Cj4QpDoBq5V56R4ht/LLeNifcLRhdC5lgtXCAup4LLhfWAB2rvTM6NKdC13GVgVxUdz
+         b/yQ==
+X-Gm-Message-State: AC+VfDxYV4a229kNELb2jvMp+e9/laLPPPfP3p29BOlfZ3ltpho9FTD0
+        NXovb+nyWO+BMikfOr65zLyrmn+shz5SLVemYuke2BvXVhA=
+X-Google-Smtp-Source: ACHHUZ56WsJaI7Cbkjo81KnAqvlpaNUjs70qdGndrszxo6sIjHdABUI7K4yxOBWQlAA1vW7wWpM+HEPfCjBzBcYpzlQ=
+X-Received: by 2002:a05:6214:509c:b0:5e0:7ecb:8ffa with SMTP id
+ kk28-20020a056214509c00b005e07ecb8ffamr48753692qvb.1.1684158897598; Mon, 15
+ May 2023 06:54:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515130343.63770-1-amit.kumar-mahapatra@amd.com>
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn> <20230426071045.20753-3-zhuyinbo@loongson.cn>
+ <ZFkPZhF8QqScXAmH@surfacebook> <049c871d-c658-24c1-91e6-701098f5fc28@loongson.cn>
+ <16913b76-0256-492a-ec90-d367f2b52cc3@loongson.cn> <ZGH4SPsu40Mt-Z8f@surfacebook>
+ <109a8453-2172-a2ee-8672-8efb489e3dd9@loongson.cn>
+In-Reply-To: <109a8453-2172-a2ee-8672-8efb489e3dd9@loongson.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 15 May 2023 16:54:21 +0300
+Message-ID: <CAHp75VemyP8-yBS494zQLiQqnH+SPPjxVsrn1J-Rbj9=SqRm1g@mail.gmail.com>
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi controller
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,54 +75,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:33:43PM +0530, Amit Kumar Mahapatra wrote:
-> New set/get APIs for accessing spi->chip_select were introduced by
-> 'commit 9e264f3f85a5 ("spi: Replace all spi->chip_select and spi->cs_gpiod
-> references with function call")', but the 'commit 2c8606040a80 ("spi: dw:
-> Add support for AMD Pensando Elba SoC")' uses the old interface by directly
-> accessing spi->chip_select. So, replace all spi->chip_select references
-> in the driver with new get/set APIs.
+On Mon, May 15, 2023 at 3:01=E2=80=AFPM zhuyinbo <zhuyinbo@loongson.cn> wro=
+te:
+> =E5=9C=A8 2023/5/15 =E4=B8=8B=E5=8D=885:15, andy.shevchenko@gmail.com =E5=
+=86=99=E9=81=93:
+> > Mon, May 15, 2023 at 04:14:00PM +0800, zhuyinbo kirjoitti:
+> >> =E5=9C=A8 2023/5/11 =E4=B8=8B=E5=8D=883:18, zhuyinbo =E5=86=99=E9=81=
+=93:
+> >>> =E5=9C=A8 2023/5/8 =E4=B8=8B=E5=8D=8811:04, andy.shevchenko@gmail.com=
+ =E5=86=99=E9=81=93:
 
-Indeed. I've absolutely missed that part. Thanks for the patch.
+...
 
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+> >>>>> +config SPI_LOONGSON_CORE
+> >>>>> +    tristate "Loongson SPI Controller Core Driver Support"
+> >>>>
+> >>>> Does it need to be visible to the user?
+> >>
+> >> I try to set it invisible that by removing the SPI_LOONGSON_CORE Kconf=
+ig
+> >> or removing "tristate "Loongson SPI Controller Core Driver Support" th=
+at
+> >> will cause spi-core driver doesn't be compiled or compiled fail issue,
+> >> so I will still set it visible to the user.
+> >
+> > Making a symbol selectable only can be achieved by removing the descrip=
+tion
+> > (near to tristate directive), have you tried that?
+>
+> Is it like this ?
 
--Serge(y)
+Yes.
 
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> BRANCH: for-next
-> ---
->  drivers/spi/spi-dw-mmio.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index 5e6faa98aa85..5f2aee69c1c1 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -264,17 +264,17 @@ static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
->  	struct regmap *syscon = dwsmmio->priv;
->  	u8 cs;
->  
-> -	cs = spi->chip_select;
-> +	cs = spi_get_chipselect(spi, 0);
->  	if (cs < 2)
-> -		dw_spi_elba_override_cs(syscon, spi->chip_select, enable);
-> +		dw_spi_elba_override_cs(syscon, spi_get_chipselect(spi, 0), enable);
->  
->  	/*
->  	 * The DW SPI controller needs a native CS bit selected to start
->  	 * the serial engine.
->  	 */
-> -	spi->chip_select = 0;
-> +	spi_set_chipselect(spi, 0, 0);
->  	dw_spi_set_cs(spi, enable);
-> -	spi->chip_select = cs;
-> +	spi_get_chipselect(spi, cs);
->  }
->  
->  static int dw_spi_elba_init(struct platform_device *pdev,
-> -- 
-> 2.17.1
-> 
+--=20
+With Best Regards,
+Andy Shevchenko
