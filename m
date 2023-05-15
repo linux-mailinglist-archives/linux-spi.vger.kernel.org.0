@@ -2,94 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38827031D2
-	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 17:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEE4703266
+	for <lists+linux-spi@lfdr.de>; Mon, 15 May 2023 18:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242254AbjEOPuJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 May 2023 11:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S242618AbjEOQLb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 May 2023 12:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242173AbjEOPuI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 11:50:08 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8231FCF
-        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 08:50:07 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-44fd3c2300dso4612300e0c.1
-        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 08:50:07 -0700 (PDT)
+        with ESMTP id S242566AbjEOQL0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 May 2023 12:11:26 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27223A82
+        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 09:11:03 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7577ef2fa31so2729737085a.0
+        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 09:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684165807; x=1686757807;
+        d=chromium.org; s=google; t=1684167060; x=1686759060;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3uXwd7SkGWJ9529scZ7Lnjm/OI4iOYOHZ1+uN+qCB8o=;
-        b=BRGFiqvAymUeQVN0HIUkI4cDilaqFL8JwVUAQXqbK5Dly5MRpbNeE7wHPNesGhl/U/
-         UkkSAd0XKWTvdQtQ51iivKux1NvkipJUH1KT04Z+ThOCC68XGuV7tESffJ0ivIFshk9l
-         4fQ2BWkzqjoouDQVT9TDALhOI87Iur3/D5/Ye1uHcdpYEt/KJHtM47uR0YSXd+8VfWA5
-         oytyCyiIxZUovqSW/xvm5wrZvUbHmuEQj6o+TMsnjIEhtYoaHB5aY2QLVZY+12iGOn+a
-         plPO6KKj8WGl5MRLEP10QEdjhSgJoQW8brQ8SPTt/NO42WmVLpisrq+5yPq6+ONeJhcX
-         MXaA==
+        bh=OHHGh5czrg9Hn8ruae6+tSUOYEqC66Bkk4Dqa3XiSlo=;
+        b=m0PHCsR2wUvPmVHi/pqxU7Y5Tbzs6sLgY+9mJCOyGXKsSk9dzqC6vMU+VBffF6ql3o
+         v/avUmXENBS5axoNLXgnJluwyafElfrJLkzWH4P3MLseF+9UD1vafGaTo5Of7HEABaBJ
+         lc58PYrddvBcYY3VNa6LFl0raCBmx62l3/5lI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684165807; x=1686757807;
+        d=1e100.net; s=20221208; t=1684167060; x=1686759060;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3uXwd7SkGWJ9529scZ7Lnjm/OI4iOYOHZ1+uN+qCB8o=;
-        b=cZzog6EBV6cszNm0w1vgTNhhQ354X08fFrIC9DFGNj6KTa0Z+bmNKoVpEROVkk3BJ6
-         uwaAb+hQ9vONrjDf1oznXeaab08xMGgIkH4jBJE9hZR2tD29pxVCvaGZlD+JIlG+PGH0
-         pqQIVVqVwH+Q9vUPUTP62I9Tyfz1c5QCIR6XiXKUhHBoF6/syyNxMlwCRqC7sPLlzQpn
-         GuQIRsbtOAGYICFlumiW9h9emGT0jalrxDSlCn9O7Y55SKjUlwh8TCtQr+j56hDofvJG
-         1RVYbfgvfHFUWUaPyIsy7eTs8OXKrdHz6pGaiNK85Hr3RIAijZPoqWMHZpipygXImKUx
-         bsKw==
-X-Gm-Message-State: AC+VfDzO57DtIuCXZt3y//6dAWSTiqb9xcH6iGn+jFFDvXrWmDNGX+hx
-        ZOF+dMkgn6iHD9/XvnYFARzACTIlGu6KKNCLKam/jA==
-X-Google-Smtp-Source: ACHHUZ6aSG8aekPziwzEAgEVCJVbKN3TbOZcZmLa2Iu2jZW0AOUW4z09Kk/htLolRL0j1BYZPl7edgyr1z9rTkFtOGM=
-X-Received: by 2002:a1f:5343:0:b0:440:3b4e:9a31 with SMTP id
- h64-20020a1f5343000000b004403b4e9a31mr12233542vkb.2.1684165805899; Mon, 15
- May 2023 08:50:05 -0700 (PDT)
+        bh=OHHGh5czrg9Hn8ruae6+tSUOYEqC66Bkk4Dqa3XiSlo=;
+        b=BYKBcpUc+YnIuVl5+9SoCGXDlF5md4iDN5Virye5rNFZ36SGShjBjxxeFi6+9uXSXt
+         wgnENxMJ4IyfIjNSTx+j36LUH2wao2L7QCY3ZxF06iyRg6+YvMDof+CiDxGigS8FZ8k7
+         W9Z8lV6mD1FLf17sSTKpGdRDOt3gIX5O0j/xxOa9Bo+MxINWRgqfEbkks2YI+ZF+f0UP
+         bV6fv8sz1MyBMey8COS0KZYoftae7dK5hsq6MnzblmBVAbKFZRT/2w235w7IWLJT8nph
+         olYuECSV+94SFPJoYQO0Zd38hv4BWMtqU/ghBOQQKB69uY6FMEO4scvkvMdtP9Ub3bxR
+         RCFw==
+X-Gm-Message-State: AC+VfDzzHl+iMEYrJMticf5FfIHXCthZvJvp+C2yhWp9n2Wk8B3EfPL6
+        pu2NAPrakrzJreCUBlZXgo+F1/w7jqPE0pfJc0g=
+X-Google-Smtp-Source: ACHHUZ7d1WOJDvhVNu5caNvFtjxRuizIjZfKSEbSH5pjXfbujGCA9DXtgUHAo3BCot5dA1+dVX6znQ==
+X-Received: by 2002:a05:622a:c9:b0:3f3:87d8:c6f4 with SMTP id p9-20020a05622a00c900b003f387d8c6f4mr47131653qtw.7.1684167059860;
+        Mon, 15 May 2023 09:10:59 -0700 (PDT)
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
+        by smtp.gmail.com with ESMTPSA id d8-20020a37c408000000b0074abed56793sm50232qki.20.2023.05.15.09.10.57
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:10:57 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-3f51ea3a062so253481cf.1
+        for <linux-spi@vger.kernel.org>; Mon, 15 May 2023 09:10:57 -0700 (PDT)
+X-Received: by 2002:a05:622a:1a96:b0:3bf:e4e0:26a0 with SMTP id
+ s22-20020a05622a1a9600b003bfe4e026a0mr1191894qtc.14.1684167056984; Mon, 15
+ May 2023 09:10:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511175844.185070-1-xiang.ye@intel.com> <20230511175844.185070-5-xiang.ye@intel.com>
-In-Reply-To: <20230511175844.185070-5-xiang.ye@intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 15 May 2023 17:49:55 +0200
-Message-ID: <CAMRc=MeLyqLsgCbxA1jnz8r4kRoS6AvvOyUffuHg3ojVMTF-3A@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] gpio: Add support for Intel LJCA USB GPIO driver
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+References: <1683911265-3395-1-git-send-email-quic_vnivarth@quicinc.com> <1683911265-3395-2-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1683911265-3395-2-git-send-email-quic_vnivarth@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 15 May 2023 09:10:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VY31FCpj7HP+erKBA3SCGGgUxO=msTaVDjsGYB1eKmiA@mail.gmail.com>
+Message-ID: <CAD=FV=VY31FCpj7HP+erKBA3SCGGgUxO=msTaVDjsGYB1eKmiA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] soc: qcom: geni-se: Add interfaces
+ geni_se_tx_init_dma() and geni_se_rx_init_dma()
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 11, 2023 at 8:01=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
-:
+Hi,
+
+On Fri, May 12, 2023 at 10:07=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
 >
-> Implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with
-> LJCA GPIO module with specific protocol through interfaces exported
-> by LJCA USB driver.
+> The geni_se_xx_dma_prep() interfaces necessarily do DMA mapping before
+> initiating DMA transfers. This is not suitable for spi where framework
+> is expected to handle map/unmap.
 >
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+> Expose new interfaces geni_se_xx_init_dma() which do only DMA transfer.
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 > ---
+>  drivers/soc/qcom/qcom-geni-se.c  | 67 +++++++++++++++++++++++++++++-----=
+------
+>  include/linux/soc/qcom/geni-se.h |  4 +++
+>  2 files changed, 53 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni=
+-se.c
+> index 795a2e1..adfcd6e 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -682,6 +682,30 @@ EXPORT_SYMBOL(geni_se_clk_freq_match);
+>  #define GENI_SE_DMA_EOT_EN BIT(1)
+>  #define GENI_SE_DMA_AHB_ERR_EN BIT(2)
+>  #define GENI_SE_DMA_EOT_BUF BIT(0)
+> +
+> +/**
+> + * geni_se_tx_init_dma() - Initiate TX DMA transfer on the serial engine
+> + * @se:                        Pointer to the concerned serial engine.
+> + * @iova:              Pointer to store the mapped DMA address.
 
-With Linus' comment addressed, you can add:
+We're not returning the "iova" from this function, so it shouldn't say
+"Pointer to store".
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+> + * @len:               Length of the TX buffer.
+> + *
+> + * This function is used to initiate DMA TX transfer.
+> + */
+> +void geni_se_tx_init_dma(struct geni_se *se, dma_addr_t *iova, size_t le=
+n)
+
+There is no reason to pass iova as a pointer, right? Change it to just
+"dma_addr_t"
+
+
+Same comments on the RX side of things.
+
+
+-Doug
