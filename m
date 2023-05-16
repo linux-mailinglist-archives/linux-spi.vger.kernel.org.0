@@ -2,124 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4763704D68
-	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 14:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEB5704EE7
+	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 15:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjEPMHb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 May 2023 08:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S233479AbjEPNMi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 May 2023 09:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233049AbjEPMHa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 08:07:30 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D802101;
-        Tue, 16 May 2023 05:07:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BOQCClsCURwVa878O5c2JBYaIY2kM0tqbYCC2Jl1AdAX4xBT/rpYNkfbXDZMhQNlyewbnLnAus1cl2hQ++ZBqYSeVoaOGa11rid4a9McU/BcyGRztY28CkRKmVpnBjVJGSPllTizUGB10d1buSnRxEAmHL0PjSzPCCAgPxc3uCBkjLtzOK0hqSUfOflfdV3ig9Iswr1oW6Kk9gPZY/PsHjFIpv3aPeks6lr0Du9J7gb4WJDzaaKZEt6qvnuAXTAHY58FGohCIHUvqLPpOrYkq1XkEv/FzUh0zkOu074xXQGWVzrPngY5KXx9aoB3DUyChGlfafcybSWlf7B6WmDyng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oC2OYVg8bKCUWkXOtyEmi2QXSKFtUPxOr+55lWBjn3o=;
- b=I9DwgoEQNcfduVvwCo6HLSTBM+3+QkZjSvT9HySWrySgTFWvSqSV/MCgzv+lnnaMmb8Ls+fnUw7SdCrDFzvUYTwf4T7ZELGF+fTdRA9RZ6Y6Qwx5hSLM+gV0atXKMerg1vWds4TGDJaT+oL9FoP8+h8KmgAPHEQweQJt1ORkWB6EzJgvIjuj4oinnPcKFLakMxETNIMuvd5nu91BcxI71rF3mSijOPRmkCXDHFhzpgMcNG3zqwd0jbgR7SV89Qso+nO+FRlGIkLrSQyB/IXaVOZWJM5/M87pIK+qXsDglGjLdV2jHCCVGcelNC4K4Xx2P/VC5MDhMTj6GsPmxnQMag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oC2OYVg8bKCUWkXOtyEmi2QXSKFtUPxOr+55lWBjn3o=;
- b=Fb7swHNgMaR86RqQF/uRwZPHBN4YoGy65CsRaZxQPYrjkLiEL+rWe0BYeSTfthPy37X2qLsEEoxGK8i1fH9a+zj0VQZbTxIUYHkXgVPU9wM2eJoLFRi+dCWNXxrIdaJfCT5rvz7dEggc05upPLG74SeZOAJ7iTB8aUA5z3PAQ8o=
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com (2603:10b6:408:25::33)
- by SJ2PR12MB8157.namprd12.prod.outlook.com (2603:10b6:a03:4fa::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
- 2023 12:07:23 +0000
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::4db:e158:60d:21e4]) by BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::4db:e158:60d:21e4%6]) with mapi id 15.20.6387.033; Tue, 16 May 2023
- 12:07:23 +0000
-From:   "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [PATCH 3/3] spi: spi-imx: fix use of more than four chipselects
-Thread-Topic: [PATCH 3/3] spi: spi-imx: fix use of more than four chipselects
-Thread-Index: AQHZd3xKn1eSnAuz0ESi22CczVsXFK9c7cLQ
-Date:   Tue, 16 May 2023 12:07:22 +0000
-Message-ID: <BN7PR12MB280270590FF8B7DF27E07760DC799@BN7PR12MB2802.namprd12.prod.outlook.com>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <20230425134527.483607-4-linux@rasmusvillemoes.dk>
-In-Reply-To: <20230425134527.483607-4-linux@rasmusvillemoes.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN7PR12MB2802:EE_|SJ2PR12MB8157:EE_
-x-ms-office365-filtering-correlation-id: 0b014b1e-2fa8-449a-a4ba-08db56061b41
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0O5b0waMC1WwPsx32iiOnpvLHlEpxWD9juMKqgJGEjPO9I9FRnKR6E4Cko0tRKa69K0gACH+MZ5Wqf0efPFlUgfIQMzrex+TDM3IyMtjZmCLu+b0lXl9i0EP7/O1fWlOROYGk7jY4e1vYGR/e+AslMGIgRkBdwMFavL6/5NOdYEdOQifoBPg27E/W0M8YQSNTgqU03W/LHYLXP0Hc/Y2LWQuPQaM+cITZCttkEdfqsP4fmaf1Otwx12J50qfYe7o3FgdikLGO8Erz4fCRFBVtW1x2T+K0AJIjk4BIYICpvgao/YEZxOA3agEzmlbY08jnDbemO6n9Pr9GpP4wHl4sCFmyCTaHZ7zLvqyzmTWwgi70RxJV9n+xsUcs+jp9cEOQCuZg1T6AYYxhtBsjik++s+5muPDZd3gkFCV5/kl9bS7AkEOjywRNtn0C+iI5/3/6mg08GqZnzy7uP+LAW9ABpyLpHJBcxn4gQwkiLWqad6PKWDfAehkYHHWcNXj3Psall6Z9oh6/3Zcjm0rg1AJEYIR29ZcAZsZG5fR7EzF2meaw+BA16igZ805DF7l7mZLW6cl7NQQZiAvgDMvLSmbaKtPXFNBsn+w3ABGp+NGiUs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR12MB2802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199021)(6506007)(966005)(7696005)(478600001)(110136005)(54906003)(9686003)(53546011)(26005)(186003)(71200400001)(2906002)(4326008)(316002)(76116006)(66946007)(52536014)(8936002)(7416002)(66446008)(66476007)(66556008)(8676002)(41300700001)(5660300002)(55016003)(64756008)(122000001)(38100700002)(86362001)(38070700005)(33656002)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Nk97Z9wPfXyV0xWfrEjjNHaFFxNXArvETsMD7KSkYrzGBMW6fugM0cANgiMB?=
- =?us-ascii?Q?zPbmc8ypzj0eHvhV29E5N60KXRX4K+PnakOzVb8jxbmWJdnuK2lM5Ne1Qbly?=
- =?us-ascii?Q?xhA7jPo/YXfHsWdRsaNBjN+7oITFqhunfppvASxQQsHgPPyztD82tiSyL7x1?=
- =?us-ascii?Q?kER+vNAq86P7hz71jz/mTYvSNp2S4OPkBQ7jlZxyc/+k4KH5QYEk3KOeo610?=
- =?us-ascii?Q?xRHciFy6wf7KNk8fbshi1uExUn0lenUrIqlNCsB7NMYaUEYyShTSYwEo0mKw?=
- =?us-ascii?Q?LuzI+YrrGjgezecoplzmOCuHrxG4Jpf/WUujq88aCnCMDxDmF0CLYC6GvM+g?=
- =?us-ascii?Q?+YSSMVEKl1VD7H26lPEtS6iIfj91B5ujYnj3BausTZ3YH8wrKnzCMq+d7bKW?=
- =?us-ascii?Q?VLZ6CDGO9rZY/yla5xKNO0Vl7Y1F9mLG8Ouon1i66vEJJ1eVeDvRKw82cX/J?=
- =?us-ascii?Q?R1RzD1KPupnUKPEcGzLIuIhazbCym41eGqy5POYaTUzXs+Elt70nE6e70Cni?=
- =?us-ascii?Q?pAT7Pmegx26eEYaUFwcyEjqEWtIVk48zPbLlB5D/ByxD1GqtSgjGQKA0HQN0?=
- =?us-ascii?Q?my5vgspKI2ww36xB5N94O9ayTGk8AvDRoRiS74AbFwkO9lZABm8RqpoR85Zj?=
- =?us-ascii?Q?6v71X4pVarf8oYtVNjCq20f+jVI0SxRKLwFuNiNeQ7ULBL3Hk+IORNMM48KL?=
- =?us-ascii?Q?WpU2B4WK1+aJ8bE5gsiBks8Ow9ytZLltkNH7JJaDUY0CPnOnhywQQ4n86R9U?=
- =?us-ascii?Q?sSUtjP1QfhOl9u76PMa8ihrspwv4eZNRdCLoIPURt3GMxk9+cD2b96rIeQHH?=
- =?us-ascii?Q?YbI5dBCbmRXUAT4HOFnKdaYUwFmgXUELy4w2GAqDonMNTIpvvV3S2IdWWRgN?=
- =?us-ascii?Q?7cktW0QMlU1WrLXXQFxMtBvXOkY/FR37r8q/3Ll9J6zWfhWD5kIs+F77VJak?=
- =?us-ascii?Q?i4gv/K/PdO7t+npHslOtdjGHew9/3rS5f2jNLBJXHA781ci7L6NSJAOCJEGo?=
- =?us-ascii?Q?8uHZuawJ1uz/PkE/MHFcAQuJXk8tb+3H/gH4x/LuaNz2K7DoerP0zRz7x216?=
- =?us-ascii?Q?uokBlY4uo+0kVOE/0r+dqEUkg9JCFuH5852hEu6xthFTJ1Ys0bcWrjrJJRQr?=
- =?us-ascii?Q?/B9jqm8eLMT8/2TE8yi2L5NIeAZodPBdKCnNv41VE6CccQjeKTbThGlczQXW?=
- =?us-ascii?Q?a23z6koiGr3t6G8VB0uv/LYn2YxIhGJ5bzfYys0f4spsH+VYqH1YWvEFg2bO?=
- =?us-ascii?Q?ymJi/xi0eRyHFasKwNU2DUFJvOvUQQZlIwlyE3kZi+h4eNnREVfxf43jJKAG?=
- =?us-ascii?Q?qf1q+S+s8GPt2wem/VL1MOSPDn/VOKshck2/91dwJTfcvIyTv4SvqDBN5AMB?=
- =?us-ascii?Q?ynApEkhZO1Ps1IS1VZR11H7Zr9/MNKr324YSgGIgaHssG+Pl/iqnNLgSw+n5?=
- =?us-ascii?Q?cwN1cINGz+2Oi6ZM9CtmYzd+YCHzllOy4OLQvyAmKgfpVRQLVq1bLDsqNfPl?=
- =?us-ascii?Q?WzqHsd4cKEZQI6Ta7zYz3sneEMN5h8uMbiGBnug8Mu/018intLbiM0yBlbyc?=
- =?us-ascii?Q?1UcSCbPXlv0xyt3zZfE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S233424AbjEPNMg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 09:12:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9AFF188;
+        Tue, 16 May 2023 06:12:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxzOo+gWNkVCkJAA--.15794S3;
+        Tue, 16 May 2023 21:12:30 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrA5gWNkXF5jAA--.40062S2;
+        Tue, 16 May 2023 21:12:29 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v10 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Tue, 16 May 2023 21:12:22 +0800
+Message-Id: <20230516131224.25481-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR12MB2802.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b014b1e-2fa8-449a-a4ba-08db56061b41
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 12:07:22.9700
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xtb84jI0rTDXFkzmnEEnx9maIgBIx1AELI4aSNoZHvBgIBTPFBvTvdcpDHNNJce5ryfgotKPelhsPd7uquErsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8157
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxkrA5gWNkXF5jAA--.40062S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoWrtw43pF
+        W5Cas8Kr48AF4xArs3Aay7uFyFv3y5J39rXay3t39ruryDZ34UZryktF1rZr9xAFsIy3Z2
+        qFy0grs5Ga4UZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x07Uio7NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,170 +61,111 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-> -----Original Message-----
-> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Sent: Tuesday, April 25, 2023 7:15 PM
-> To: Mark Brown <broonie@kernel.org>; Shawn Guo <shawnguo@kernel.org>;
-> Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP Linux
-> Team <linux-imx@nxp.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>; Rasmus Villemoes
-> <linux@rasmusvillemoes.dk>; linux-spi@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH 3/3] spi: spi-imx: fix use of more than four chipselects
->=20
-> CAUTION: This message has originated from an External Source. Please use
-> proper judgment and caution when opening attachments, clicking links, or
-> responding to this email.
->=20
->=20
-> Currently, the spi->chip_select is used unconditionally in code such as
->=20
->         /* set chip select to use */
->         ctrl |=3D MX51_ECSPI_CTRL_CS(spi->chip_select);
->=20
-> and
->=20
->         if (spi->mode & SPI_CPHA)
->                 cfg |=3D MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
->         else
->                 cfg &=3D ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
->=20
-> with these macros being
->=20
->         #define MX51_ECSPI_CTRL_CS(cs)          ((cs) << 18)
->         #define MX51_ECSPI_CONFIG_SCLKPHA(cs)   (1 << ((cs) +  0))
->=20
-> However, the CHANNEL_SELECT field in the control register is only two bit=
-s
-> wide, so when spi->chip_select >=3D 4, we end up writing garbage into the
-> BURST_LENGTH field. Similarly, there are only four bits in the SCLK_PHA f=
-ield,
-> so the code above ends up actually modifying bits in the SCLK_POL (or hig=
-her)
-> field.
->=20
-> The scrambling of the BURST_LENGTH field itself is probably benign, since
-> that is explicitly completely initialized later, in
-> ->prepare_transfer.
->=20
-> But, since we effectively write (spi->chip_select & 3) into the
-> CHANNEL_SELECT field, that value is what the IP block then uses to determ=
-ine
-> which bits of the configuration register control phase, polarity etc., an=
-d those
-> bits are not properly initialized, so communication with the spi device
-> completely fails.
->=20
-> Fix this by using the ->unused_native_cs value as channel number for any =
-spi
-> device which uses a gpio as chip select.
->=20
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
->  drivers/spi/spi-imx.c | 31 ++++++++++++++++++++-----------
->  1 file changed, 20 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
-> e8f7afbd9847..569a5132f324 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -504,6 +504,13 @@ static void mx51_ecspi_disable(struct spi_imx_data
-> *spi_imx)
->         writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);  }
->=20
-> +static int mx51_ecspi_channel(const struct spi_device *spi) {
-> +       if (!spi->cs_gpiod)
-> +               return spi->chip_select;
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
+Change in v8:
+		1. Add reviewed-by information for spi bindings patch.
+		2. Fixup the uncorrect spi yaml file path in MAINTAINERS file.
+		3. Add spi_master_suspend and spi_master_resume in spi pm function.
+Change in v9:
+		1. Make spi_master_suspend go first in pm suspend.
+Change in v10:
+		1. Fix the compile issue about of_node_get and of_get_property no
+		   declaration.
+		2. set config SPI_LOONGSON_CORE invisible.
+		3. Captial "spi" in commit log and Kconfig file.
+		4. Write header files in alphabetical order.
+		5. Use clamp_val, GENMASK() and BIT() in spi clock setting.
+		6. Optimize clock and mode setting code.
+		7. Use readb_poll_timeout in loongson_spi_write_read_8bit.
+		8. Remove some useless dmesg print.
+		9. Use device_set_node replace of_node_get.
+		10. Use dev_err_probe in code.
+		11. Use devm_clk_get_optional replace devm_clk_get.
+		12. Remove SPI_NO_CS for drop 2k500 non common type spi.
+		13. Use pcim_enable_device() and pcim_iomap_regions() in spi pci
+		    driver.
+		14. Passing the remapped address in loongson_spi_init_master.
+		15. Remove the useless goto flag "err_out".
+		16. Use pci vendor id in pci_ids.h.
+		17. Use devm_platform_ioremap_resource in spi platform driver.
+		18. Remove the useless item in pci_device_id.
+		19. Remove the inned comma in of_device_id.
+		20. Add some headfile in spi_loongson.h.
+		21. Remove the useless extern for loongson_spi_init_master in
+		    spi_loongson.h.
 
-New set/get APIs for accessing spi->chip_select and spi->cs_gpiod were intr=
-oduced by
-https://github.com/torvalds/linux/commit/303feb3cc06ac0665d0ee9c1414941200e=
-60e8a3
-please use these APIs instead of accessing spi->chip_select & spi->cs_gpiod=
- directly.
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-Regards,
-Amit
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  41 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  26 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 279 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  61 ++++
+ drivers/spi/spi-loongson-plat.c               |  46 +++
+ drivers/spi/spi-loongson.h                    |  47 +++
+ 8 files changed, 513 insertions(+)
 
-> +       return spi->controller->unused_native_cs;
-> +}
-> +
->  static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
->                                       struct spi_message *msg)  { @@ -514=
-,6 +521,7 @@
-> static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
->         u32 testreg, delay;
->         u32 cfg =3D readl(spi_imx->base + MX51_ECSPI_CONFIG);
->         u32 current_cfg =3D cfg;
-> +       int channel =3D mx51_ecspi_channel(spi);
->=20
->         /* set Master or Slave mode */
->         if (spi_imx->slave_mode)
-> @@ -528,7 +536,7 @@ static int mx51_ecspi_prepare_message(struct
-> spi_imx_data *spi_imx,
->                 ctrl |=3D MX51_ECSPI_CTRL_DRCTL(spi_imx->spi_drctl);
->=20
->         /* set chip select to use */
-> -       ctrl |=3D MX51_ECSPI_CTRL_CS(spi->chip_select);
-> +       ctrl |=3D MX51_ECSPI_CTRL_CS(channel);
->=20
->         /*
->          * The ctrl register must be written first, with the EN bit set o=
-ther @@ -
-> 549,22 +557,22 @@ static int mx51_ecspi_prepare_message(struct
-> spi_imx_data *spi_imx,
->          * BURST_LENGTH + 1 bits are received
->          */
->         if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
-> -               cfg &=3D ~MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-> +               cfg &=3D ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
->         else
-> -               cfg |=3D MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-> +               cfg |=3D MX51_ECSPI_CONFIG_SBBCTRL(channel);
->=20
->         if (spi->mode & SPI_CPOL) {
-> -               cfg |=3D MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
-> -               cfg |=3D MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-> +               cfg |=3D MX51_ECSPI_CONFIG_SCLKPOL(channel);
-> +               cfg |=3D MX51_ECSPI_CONFIG_SCLKCTL(channel);
->         } else {
-> -               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
-> -               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-> +               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKPOL(channel);
-> +               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKCTL(channel);
->         }
->=20
->         if (spi->mode & SPI_CS_HIGH)
-> -               cfg |=3D MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-> +               cfg |=3D MX51_ECSPI_CONFIG_SSBPOL(channel);
->         else
-> -               cfg &=3D ~MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-> +               cfg &=3D ~MX51_ECSPI_CONFIG_SSBPOL(channel);
->=20
->         if (cfg =3D=3D current_cfg)
->                 return 0;
-> @@ -609,14 +617,15 @@ static void mx51_configure_cpha(struct
-> spi_imx_data *spi_imx,
->         bool cpha =3D (spi->mode & SPI_CPHA);
->         bool flip_cpha =3D (spi->mode & SPI_RX_CPHA_FLIP) && spi_imx->rx_=
-only;
->         u32 cfg =3D readl(spi_imx->base + MX51_ECSPI_CONFIG);
-> +       int channel =3D mx51_ecspi_channel(spi);
->=20
->         /* Flip cpha logical value iff flip_cpha */
->         cpha ^=3D flip_cpha;
->=20
->         if (cpha)
-> -               cfg |=3D MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-> +               cfg |=3D MX51_ECSPI_CONFIG_SCLKPHA(channel);
->         else
-> -               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-> +               cfg &=3D ~MX51_ECSPI_CONFIG_SCLKPHA(channel);
->=20
->         writel(cfg, spi_imx->base + MX51_ECSPI_CONFIG);  }
-> --
-> 2.37.2
+-- 
+2.20.1
 
