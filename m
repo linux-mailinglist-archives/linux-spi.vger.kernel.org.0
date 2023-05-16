@@ -2,38 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92190704A24
-	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 12:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2944F704A73
+	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 12:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbjEPKKF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 May 2023 06:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S232154AbjEPKYl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 May 2023 06:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjEPKJ7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 06:09:59 -0400
+        with ESMTP id S232097AbjEPKYY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 06:24:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D12719;
-        Tue, 16 May 2023 03:09:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F693AB5;
+        Tue, 16 May 2023 03:23:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F16C16374A;
-        Tue, 16 May 2023 10:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DF8C4339E;
-        Tue, 16 May 2023 10:09:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF2436376E;
+        Tue, 16 May 2023 10:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162E0C433D2;
+        Tue, 16 May 2023 10:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684231784;
-        bh=UzWc5Lwm75FxyK+w8YmzHI/DvA777osEnR4l5zmjBh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OaXk2JUlwNc9953eKu4k6Tz88/RHcSQ8rAN8NQIWm6MZ7UtyQPb+nTSAEsZhCXBVf
-         +XANWEmW4zXYMNZvFxACRsTpj47X29nqAcf9nIfyqGzYR3tsiiwqtLonq1fVvXFLwY
-         EaqnQpFCrX5dV0ZfIPMxoNV5xeYCcHKO5+xnaYQnjMmLtEiCoDYZMRML44IgvRNpXN
-         8ji3D//H6icA/jIND8ED/ofji+rWgN/sytWNwUR3Q0pRQi+0zQTOsE51S3fyJwOn8f
-         EcpwXoYvQBP9mBGIYa2llUd5CdqZ3WeOFo/1knvE6ImJ46qrJ7FHALZW92M/3m+xfW
-         a0TNvvur6xjTQ==
-Date:   Tue, 16 May 2023 11:09:36 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
+        s=k20201202; t=1684232628;
+        bh=UtT+cu3FXiZJ1Mr9HS235vPUOkZGm2Gs6P2exNmcd6c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aPbQcE8EkNLk39cKWelvpiORI+He4fat2OkVvsFm2co5WYNhH7vMSSNpjzrogqKOO
+         ZRAt+Wc9A2Nfgz9eXQ2mAkmCZIDZM/nlu0vf+41i6wVoYEI/q97FQB3iC2PU9Icxt/
+         ZSVIxcVNg74VX+z6zz8J94cLnW3vHqrOiWRgOwybM237OId/OAcYKTiB6qyQ1bElCN
+         S9nClummfY+xSX6sRhC3iarAus7ejGdYSXgMKzmxfhVKckq73WdxB71Qio+kyuAPKR
+         o4ZY9dU7S/BvSwz89F4vYr3h28+DCCQrGvbbO33Bjchp65k3b9TZRNoLBj3ZSP95xw
+         u12b/S09rOwrw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyrqL-00FUuf-N5;
+        Tue, 16 May 2023 11:23:45 +0100
+Date:   Tue, 16 May 2023 11:23:45 +0100
+Message-ID: <86a5y4mv66.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lee Jones <lee@kernel.org>
 Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
@@ -44,19 +51,24 @@ Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
         linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-Message-ID: <20230516100936.GF10825@google.com>
+In-Reply-To: <20230516100936.GF10825@google.com>
 References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
- <86o7mpmvqq.wl-maz@kernel.org>
- <20230512153933.GH68926@ediswmail.ad.cirrus.com>
- <86mt29mt2m.wl-maz@kernel.org>
- <20230515112554.GA10825@google.com>
- <86h6scmzf7.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86h6scmzf7.wl-maz@kernel.org>
+        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+        <86o7mpmvqq.wl-maz@kernel.org>
+        <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+        <86mt29mt2m.wl-maz@kernel.org>
+        <20230515112554.GA10825@google.com>
+        <86h6scmzf7.wl-maz@kernel.org>
+        <20230516100936.GF10825@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lee@kernel.org, ckeepax@opensource.cirrus.com, broonie@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,77 +79,19 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 16 May 2023, Marc Zyngier wrote:
-
-> On Mon, 15 May 2023 12:25:54 +0100,
-> Lee Jones <lee@kernel.org> wrote:
-> > 
-> > On Fri, 12 May 2023, Marc Zyngier wrote:
-> > 
-> > > On Fri, 12 May 2023 16:39:33 +0100,
-> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > > 
-> > > > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
-> > > > > On Fri, 12 May 2023 13:28:35 +0100,
-> > > > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > > > > 
-> > > > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > > > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > > > > > for portable applications. It provides a high dynamic range, stereo
-> > > > > > DAC for headphone output, two integrated Class D amplifiers for
-> > > > > > loudspeakers, and two ADCs for wired headset microphone input or
-> > > > > > stereo line input. PDM inputs are provided for digital microphones.
-> > > > > > 
-> > > > > > The IRQ chip provides IRQ functionality both to other parts of the
-> > > > > > cs42l43 device and to external devices that wish to use its IRQs.
-> > > > > 
-> > > > > Sorry, but this isn't much of an interrupt controller driver. A modern
-> > > > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
-> > > > > poison), uses irq domains, and uses the irqchip API.
-> > > > > 
-> > > > 
-> > > > Apologies but I really need a little help clarifying the issues
-> > > > here. I am totally happy to fix things up but might need a couple
-> > > > pointers.
-> > > > 
-> > > > 1) uses the irqchip API / uses irq domains
-> > > > 
-> > > > The driver does use both the irqchip API and domains, what
-> > > > part of the IRQ API are we not using that we should be?
-> > > > 
-> > > > The driver registers an irq domain using
-> > > > irq_domain_create_linear.  It requests its parent IRQ using
-> > > > request_threaded_irq. It passes IRQs onto the devices requesting
-> > > > IRQs from it using handle_nested_irq and irq_find_mapping.
-> > > > 
-> > > > Is the objection here that regmap is making these calls for us,
-> > > > rather than them being hard coded into this driver?
-> > > 
-> > > That's one of the reasons. Look at the existing irqchip drivers: they
-> > > have nothing in common with yours. The regmap irqchip abstraction may
-> > > be convenient for what you are doing, but the result isn't really an
-> > > irqchip driver. It is something that is a small bit of a larger device
-> > > and not an interrupt controller driver on its own. The irqchip
-> > > subsystem is there for "first class" interrupt controllers.
-> > 
-> > I'm not aware of another subsystem that deals with !IRQChip level IRQ
-> > controllers.  Where do simple or "second class" interrupt controllers
-> > go?
+On Tue, 16 May 2023 11:09:36 +0100,
+Lee Jones <lee@kernel.org> wrote:
 > 
-> This isn't an interrupt controller. This is internal signalling, local
-> to a single component that has been artificially broken into discrete
-> bits, including an interrupt controller. The only *real* interrupts
-> here are the GPIOs.
+> On Tue, 16 May 2023, Marc Zyngier wrote:
 > 
-> I'm happy to see an interrupt controller for the GPIOs. But the rest
-> is just internal muck that doesn't really belong here. Where should it
+> > I'm happy to see an interrupt controller for the GPIOs. But the rest
+> > is just internal muck that doesn't really belong here. Where should it
+> 
+> You should have been a poet! =;-)
 
-You should have been a poet! =;-)
+Who says I'm not?
 
-> go? Together with the rest of the stuff that manages the block as a
-> whole. Which looks like the MFD subsystem to me.
-
-Very well.  Let's see this "muck" in a patch please!
+	M.
 
 -- 
-Lee Jones [李琼斯]
+Without deviation from the norm, progress is not possible.
