@@ -2,131 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C4F705229
-	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 17:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F7A7056AA
+	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 21:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbjEPPcy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 May 2023 11:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S229607AbjEPTEa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 May 2023 15:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjEPPcp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 11:32:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35046199
-        for <linux-spi@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so25988074a12.3
-        for <linux-spi@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
+        with ESMTP id S229518AbjEPTE2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 15:04:28 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1DD9EDC;
+        Tue, 16 May 2023 12:04:22 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-7576deacbd6so627639685a.3;
+        Tue, 16 May 2023 12:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684251161; x=1686843161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
-        b=xDEJo0SLmGVlDXhX/NOriVq2mlAqG47xuhR/5aeirsLGvc7tkTl9nINt7oJZhqwU6o
-         koJhGF/IIzflE+YEoTP50NrniSiBi0YiQRxPW6iLxHejXOiDzRaDMgTVxhbW3e3EL5Dh
-         nuUQkhfOcADYBv3spwgyGfSZLOlDBU5J9PVGl3aATwbkjucWdrAxzPZuYLZBn9iDJm3S
-         A4/nurYAYt32tYoLTewVmH9oXggLmJ74/ynZ9y3ksrgZnbZQn4MOm6osU8cZ8D/XK7VR
-         hAvXQejna4ki7fOPorsJxh03h+xg2xP5CaH1XM+RGR4AjYLWCKw6LgH0+fhVeMYnrItR
-         LOvg==
+        d=gmail.com; s=20221208; t=1684263862; x=1686855862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZX3aJGWh9j6fi4Zbxck+TdbVfuJLOzsnRuRtmwi0h5g=;
+        b=YCIgNOuRxAGICG9PO3E4TWClRO4dC2m/394gwLQCEMGSCGSS4Fnoeaw3K+gtklgHAg
+         MdrbkFj/7njcvYzyOUWGHe1FncyZ8sq1k7sX/eLBXRPeYSVFEHNLNt/Xma/Q0PYH5neW
+         gPimepduH6uaEniGwLeolbNIZGqj2ov/0L0Mzq0xwUsDQ1q0lhiFZSlUDE96O3qJMO+Z
+         g0sDwu5o68R0llVAr/YZibnTjl/qi8g6CnDNRA4M9d0t3wBJjSAP2Fk+7atKWiG4eokF
+         s1yhRCh9YfhruWLp2AoNq/KkzLaNtN0cbBTCR6CCgIVoCEelGe7WhJ8eaGpCkVKE6di4
+         fjJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684251161; x=1686843161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
-        b=KFa7pMw+t+egSZEMVl8rfsdfdtDSO7v/XpM36t1NZt6rcqzhCklCFMVFPaCCzRh8eZ
-         YHfKRj0RtSwn2+JIg9uRuJwCM6B8o7/g3rMHRFqHm7UhRoTWxTdbA5+h7RPauxcPZFDt
-         kJNcMLOEQONrHNAWpnMfdJ4WTa44DYxs4Kvj6v5fv8rrjA88c4MC2qMrooe51F07c7Kj
-         OeZB2SavEG3GuwDIvJ9kEG9fnMBqwQ+Xh+ZrmldGdPooVK8y1642dOzv8BmdUXK4747t
-         IFT7qEDeJb0o0RP0EAWIu+Onxh3SZIqXup04uCa6E+KmZeDbHGnv++QtsF+MiOsMr+lb
-         hXzw==
-X-Gm-Message-State: AC+VfDwCElyuan0o9MgzaHULEEDFOAtdVm+1SH1EtxdRwHHknxs63Ezo
-        uOLPtbuQt7VGOMXf8ZLCe19YqA==
-X-Google-Smtp-Source: ACHHUZ7x0LFHxkX8C01IljtyBknQMJkvvH2qc+W3wIiGMrH81XlGSgasoeiOPj4uhkFFeOaCs2aTJg==
-X-Received: by 2002:a50:ed99:0:b0:50b:c41b:25d with SMTP id h25-20020a50ed99000000b0050bc41b025dmr27405434edr.7.1684251161319;
-        Tue, 16 May 2023 08:32:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0050d89daaa70sm8389780edr.2.2023.05.16.08.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 08:32:40 -0700 (PDT)
-Message-ID: <5b818f32-33c4-3f89-ce02-eb803d34ea48@linaro.org>
-Date:   Tue, 16 May 2023 17:32:38 +0200
+        d=1e100.net; s=20221208; t=1684263862; x=1686855862;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZX3aJGWh9j6fi4Zbxck+TdbVfuJLOzsnRuRtmwi0h5g=;
+        b=d7gxWN9gSWNzZngevixOudlrKYfd2I9WFAmdQnyGBxzZw2cBZyyV9Y29irT1F3+CIh
+         auxuOnmsgDpIuPcLNqhCEdiMksMJ+ayjvjFmvFZK4bKQ9XWu4t/bsbSVOUFstl0dpIld
+         7Rs32rEA9G8kuwhfXlUG3OIM/bTXFvxRe+5gwEnQQhOebJnxKf2bVTsYeoZ+/qqS/mwz
+         XTwlAeVWIq0bjqq9vlnYUrwqYTyODoKtnXIstPD1QAPVhQB6Xg4gkXla8OE9xXYIwRY0
+         DKClHdrVn79zQClakgQvYrjaHBh7ZFXZdAyAc9HMMtYtDaC+ehEGPnM3D5wnW4X279cj
+         B1PA==
+X-Gm-Message-State: AC+VfDzs899MM9ZWpCAhty9PGeu2i8Xs9dQ/dTM93BlJT21xrjLdM3bg
+        YVcgfRoV8LA9nx+nA2bfjjwXheRCaU0yn8mDWVY=
+X-Google-Smtp-Source: ACHHUZ7o8SFUdFq9oKXTGUhKpKM024MomgycM5cRyraXgXMUY8hYYFWGvp2kmKAoXAMuXsr50mnQ+x3iKUkHuJVog/Q=
+X-Received: by 2002:ad4:5dc9:0:b0:623:557d:91a9 with SMTP id
+ m9-20020ad45dc9000000b00623557d91a9mr17484711qvh.31.1684263861900; Tue, 16
+ May 2023 12:04:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, piyush.mehta@amd.com,
-        nava.kishore.manne@amd.com, sai.krishna.potthuri@amd.com,
-        shubhrajyoti.datta@amd.com, vishal.sagar@amd.com,
-        kalyani.akula@amd.com, bharat.kumar.gogada@amd.com,
-        linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com> <ZF6RMqElYZVMpWRt@surfacebook>
+ <20230515101350.GS68926@ediswmail.ad.cirrus.com>
+In-Reply-To: <20230515101350.GS68926@ediswmail.ad.cirrus.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 16 May 2023 22:03:45 +0300
+Message-ID: <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 16/05/2023 15:51, Michal Simek wrote:
-> @xilinx.com is still working but better to switch to new amd.com after
-> AMD/Xilinx acquisition.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
+On Mon, May 15, 2023 at 1:13=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+> On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com wrote=
+:
+> > Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
 
+...
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > +   dev_dbg(priv->dev, "Setting gpio%d to %s\n",
+> > > +           offset + 1, input ? "input" : "output");
+> >
+> > How ' + 1' part won't be confusing?
+>
+> Kinda an un-avoidable confusion somewhere, the GPIOs in the datasheet are
+> numbered from one. So this makes the debug print match the
+> datasheet name for the pin, which is used in the pinctrl strings
+> as well.
 
-Best regards,
-Krzysztof
+The problem here is that the entire Linux pin control and GPIO cores
+in their debug/info/error messages will use offset + 0. With the above
+invention it will well make users confused a lot. I think you need a
+Linus W blessing for this.
 
+...
+
+> > > +   if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-range=
+s")) {
+> > > +           ret =3D gpiochip_add_pin_range(&priv->gpio_chip, priv->gp=
+io_chip.label,
+> > > +                                        0, 0, CS42L43_NUM_GPIOS);
+> > > +           if (ret) {
+> > > +                   dev_err(priv->dev, "Failed to add GPIO pin range:=
+ %d\n", ret);
+> > > +                   goto err_pm;
+> > > +           }
+> > > +   }
+> >
+> > Besides the fact that we have a callback for this, why GPIO library can=
+'t
+> > handle this for you already?
+>
+> Apologies but I am not quite sure I follow you, in the device
+> tree case this will be handled by the GPIO library. But for ACPI
+> this information does not exist so has to be called manually, the
+> library does not necessarily know which values to call with,
+> although admittedly our case is trivial but not all are.
+
+Why can't the firmware provide this information? _DSD() is a part of
+ACPI v5.1 IIRC.
+
+Although it might require moving some code from gpiolib-of.c to
+gpiolib.c with replacing OF APIs with agnostic ones.
+
+...
+
+> > > +static int cs42l43_pin_remove(struct platform_device *pdev)
+> > > +{
+> > > +   pm_runtime_disable(&pdev->dev);
+> >
+> > This is simply wrong order because it's a mix of non-devm_*() followed =
+by
+> > devm_*() calls in the probe.
+> >
+>
+> I had missed there are now devm_pm_runtime calls, I will switch
+> to that. But I would like to understand the wrong order, remove
+> will be called before the devm bits are destroyed and it seems
+> reasonable to disable the pm_runtime before destroying the
+> pinctrl device. What exactly would run in the wrong order here?
+
+At the ->remove() stage after this call an IRQ can be fired (or on SMP
+systems any other APIs can be called), for example. So, would it be a
+problem to service it with PM disabled?
+
+But in any case the shuffling ordering like this is prone to subtle
+bugs. I prefer to have strict ordering if there is nothing preventing
+from doing that way.
+
+--=20
+With Best Regards,
+Andy Shevchenko
