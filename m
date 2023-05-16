@@ -2,63 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC76B705004
-	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 15:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5F2705098
+	for <lists+linux-spi@lfdr.de>; Tue, 16 May 2023 16:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjEPN4p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 May 2023 09:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S233651AbjEPOZs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 May 2023 10:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjEPN4o (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 09:56:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9A7D2
-        for <linux-spi@vger.kernel.org>; Tue, 16 May 2023 06:56:43 -0700 (PDT)
+        with ESMTP id S233193AbjEPOZn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 May 2023 10:25:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A823772BD;
+        Tue, 16 May 2023 07:25:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3832D6168D
-        for <linux-spi@vger.kernel.org>; Tue, 16 May 2023 13:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A1224C433EF;
-        Tue, 16 May 2023 13:56:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A7D63AB8;
+        Tue, 16 May 2023 14:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3223DC4339B;
+        Tue, 16 May 2023 14:25:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684245402;
-        bh=IEqA+scX8aXb8J76qiSA/57BIRDXk9s1/8OXx0bVbeY=;
-        h=Subject:From:Date:To:From;
-        b=H8SYoEVWjcKZtY8anhT9AEiUO+zgz1ZSFC0wslkFTO9U6ZRYiFa/r1OfzIGoAXdhz
-         9K/A3TbmI04wrxUM5J4l9zKhCoAIzXthCe2NT27Xysdkspjmek/wgax7OPEPTYPuZ4
-         6SqJRAYxT80K+dCCwgBB8W8oR9EIux1DrR7+jp3XOC1z7ekjkbyDK2+7Q8BFLDeHXD
-         wDO+iNgqBMDCkIn6O6CPARJ56Kr7O94+aOQGunJ0rmmxKEgLo6HJNa9l8rV0gDm0sO
-         S4yJmJSKjQ2Ge+lApWy3cqD39TKRicICXTX2Fuhe2jVHZXBZT7Z5KPaRkBUPU4uTQH
-         Sgu/hJ56x4noQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D2FEE5421E;
-        Tue, 16 May 2023 13:56:42 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1684247138;
+        bh=56JVyKy+1Eo3iWQR1rFM2KRacIvVANlyt7QmXSsxXog=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sw7ItSmQIbLslllD7oBOkdF9j/FlOj5dsXDqMdAVYTGXVePqgKGiqHLCWvHm2ORRr
+         6kGi23wPgbqtWH++GyKPDbfnOGJYRSItd42GnFFL9NiTCxbS5MlCYoaE7cja5CINAl
+         MBeAVXmYMLL0CaHOeAmMhwc3cfLmYm36VluT5zcF9NizSc+259zobJFUL5N3gEno4X
+         9u5F6216HG+frqCDI12sd/qoLpfPnHwDmm/KK8Xl+b3WsdT+JxGuGo+K5vAgHOJtRQ
+         LNksR965SsJyjo9psN0LiFLlQFkAsgnNiK5I91CtB8U03VZ1stI7eAzP3ggkislL7X
+         wgwUE3IVrbIFA==
+Date:   Tue, 16 May 2023 23:25:33 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <ZGOSXZs3H0wNxoOn@finisterre.sirena.org.uk>
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168424540242.28634.247267478825903434.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 16 May 2023 13:56:42 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fdGB4dh9xyA/RRNs"
+Content-Disposition: inline
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v10] spi: loongson: add bus driver for the loongson spi (2023-05-16T13:12:24)
-  Superseding: [v9] spi: loongson: add bus driver for the loongson spi (2023-04-26T07:10:45):
-    [v9,1/2] dt-bindings: spi: add loongson spi
-    [v9,2/2] spi: loongson: add bus driver for the loongson spi controller
 
+--fdGB4dh9xyA/RRNs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
 
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--fdGB4dh9xyA/RRNs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjkl0ACgkQJNaLcl1U
+h9DxbAf+IuWAJWHJfAChVJ2LTNEpiPn0Mmuqlf3KjNCljNWlid6xXrK7PpDqYv57
+CudgrzknJ/lP9snwYZ91h2fY4sOq/WBLUY1lZlxH6sracfVVk3TkIUW5UKZXevF3
+PkB6wC87xozR2QVCGSUGz99xymbPuCE6GOiQ5fY9/vXNvXtKHCtQiUKukggj8Iaz
+jSMJB2YZutlpAIumPt4YIDaAbEQtw0Qq56CDc0/A3m9creP1/088rm2okN2cPGI5
+8Ubhinc4INz/rXmxXOo6HULZ9ym6Bq4Lc0uE9fpFVnY2dXIVou+bRC7ilmxrPMmU
+xecoraefCIfYW/zmw3mnSGKzXaf30A==
+=tMxy
+-----END PGP SIGNATURE-----
+
+--fdGB4dh9xyA/RRNs--
