@@ -2,102 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2968E70658E
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 12:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC22E706650
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 13:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjEQKqi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 06:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S230086AbjEQLO3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 17 May 2023 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjEQKqh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 06:46:37 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08CE97;
-        Wed, 17 May 2023 03:46:36 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6Ye5k010531;
-        Wed, 17 May 2023 05:46:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=sRGJh5o2DA79DjdFheuNkuTMul+lTmOesNItZcaV51g=;
- b=UA1PgTpweGDIuz7gZTZM689wRyow0OwRHwYG79ojqcV3NyTleB07o+Psoy/CyQFqXStu
- 1lsKRrxgp20KJ3mcRpV3FG0hZfcvIcqy7hDEiflmQfaR4aYVgDMRf/0o1tFDm5HGRZUR
- 6JoOSnTAMABzdxSEyFsSNqv9b2vigI+YLF21iwLbbFnnf4iEhnsuu4Lt/NJlBIdz3Iev
- UHehSDcGhQzZ4ent2J7AXCs/YfkWfGeWiU3sslKECe2359Pe+WWvPWte8OWq35riGKVM
- sS8l9BKPTspdL3NQbrBkReiZkjsDWQ70vMKjphcu3K2XO/tnv6QSzxPULuG226fAiSre gA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y15g6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 05:46:31 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
- 2023 05:46:29 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 05:46:29 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B01C511CA;
-        Wed, 17 May 2023 10:46:29 +0000 (UTC)
-Date:   Wed, 17 May 2023 10:46:29 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     "Goud, Srinivas" <srinivas.goud@amd.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
-Subject: Re: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its
- ready
-Message-ID: <20230517104629.GW68926@ediswmail.ad.cirrus.com>
-References: <20230509164153.3907694-1-ckeepax@opensource.cirrus.com>
- <PH8PR12MB6675F6CC30254C5EED898FD5E1789@PH8PR12MB6675.namprd12.prod.outlook.com>
- <20230515125458.GT68926@ediswmail.ad.cirrus.com>
- <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
+        with ESMTP id S229569AbjEQLO2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 07:14:28 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A1F197;
+        Wed, 17 May 2023 04:14:27 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ba8253f635cso807896276.0;
+        Wed, 17 May 2023 04:14:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684322066; x=1686914066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oVBIz6rSwiHp26lFXXNQ629YWWG9GU5r7sKV57I7n4Q=;
+        b=AzGuKNthPYcqqKMl44MvO5s74gdNod1LPP3ckziOGqeQz+puSxGOGLidahOI6ZmU0g
+         DHIqRTKmFsQ8nOA9X9kl7EvcNng+vtq8xQ22TUirwfOAiYh7W/LC/TFCrL4K8we6PZ5v
+         gEjWs18lOL7pkIqhX+gbI1pu43kIgScKftFvVtJ5zkXOzykSiUmucPMtIIFZawiClNnK
+         8eng/ZEYamAjiNpmqoBcJ89HrfjqmdxzVpLhqS6E5weDkLlZbE2/Rj59anmQBNtXbsSP
+         Y5xHLYAPRzGhgC1rYHZVImG/PBx6c0s6LAKhy35h9JEzdr3QmqHiUHlo1n5X0apM1Pds
+         hufw==
+X-Gm-Message-State: AC+VfDyOd5jyengiJkA5yXgcaXPCcGVW2aY4JpJ0aolO4tjGlhn0uCuX
+        WG6anPO5btdoWfQB4JL20gdo7kDMvaaPyA==
+X-Google-Smtp-Source: ACHHUZ4RuvOCRc0A5+n0i/h8HuUD8evNweuEFJ3zZDqGmnRFAmQzoBBOlfj9D6X7mBd5gbc+OgnOkw==
+X-Received: by 2002:a25:ae05:0:b0:ba8:7da5:da46 with SMTP id a5-20020a25ae05000000b00ba87da5da46mr190924ybj.40.1684322066583;
+        Wed, 17 May 2023 04:14:26 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id k13-20020a258c0d000000b00ba012dbdf0asm482494ybl.3.2023.05.17.04.14.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 04:14:26 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-ba8253f635cso807881276.0;
+        Wed, 17 May 2023 04:14:26 -0700 (PDT)
+X-Received: by 2002:a25:558:0:b0:ba8:27ff:b2b5 with SMTP id
+ 85-20020a250558000000b00ba827ffb2b5mr4015501ybf.26.1684322066059; Wed, 17 May
+ 2023 04:14:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
-X-Proofpoint-ORIG-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230515181606.65953-1-blarson@amd.com> <20230515181606.65953-9-blarson@amd.com>
+ <BN7PR12MB2802CE1DBDB6ED8413AECD53DC799@BN7PR12MB2802.namprd12.prod.outlook.com>
+ <168e9039-feb0-0f4c-8aee-96a3bae7faca@amd.com>
+In-Reply-To: <168e9039-feb0-0f4c-8aee-96a3bae7faca@amd.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 17 May 2023 13:14:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVLOTn7HfoWR7mGrKXvZxiciGseOBYbV7bYqUuGJcr=yg@mail.gmail.com>
+Message-ID: <CAMuHMdVLOTn7HfoWR7mGrKXvZxiciGseOBYbV7bYqUuGJcr=yg@mail.gmail.com>
+Subject: Re: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC Controller
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
+        "Larson, Bradley" <Bradley.Larson@amd.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alcooperx@gmail.com" <alcooperx@gmail.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+        "briannorris@chromium.org" <briannorris@chromium.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "gsomlo@gmail.com" <gsomlo@gmail.com>,
+        "gerg@linux-m68k.org" <gerg@linux-m68k.org>,
+        "hal.feng@starfivetech.com" <hal.feng@starfivetech.com>,
+        "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>,
+        "j.neuschaefer@gmx.net" <j.neuschaefer@gmx.net>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "kernel@esmil.dk" <kernel@esmil.dk>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "samuel@sholland.org" <samuel@sholland.org>,
+        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "Suthikulpanit, Suravee" <Suravee.Suthikulpanit@amd.com>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "tonyhuang.sunplus@gmail.com" <tonyhuang.sunplus@gmail.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "vaishnav.a@ti.com" <vaishnav.a@ti.com>,
+        "walker.chen@starfivetech.com" <walker.chen@starfivetech.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "zhuyinbo@loongson.cn" <zhuyinbo@loongson.cn>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:24:10AM +0000, Goud, Srinivas wrote:
-> >On Mon, May 15, 2023 at 12:04:38PM +0000, Goud, Srinivas wrote:
-> >> Cadence SPI configured in Slave mode,  when threshold is half of FIFO
-> >> depth cdns_spi_read_rx_fifo() function continuously in read mode, due to
-> >this we see incorrect data received on the Master side as Slave is failed to
-> >update the TX FIFO on time.
-> >
-> >Apologies I am having a little trouble following this are you saying this part of
-> >the patch cases issues for you running in slave mode?
-> Yes, we see issue with this patch when we run in Slave mode.
-> 
-> When any master is in continuous read mode (anything > FIFO depth), 
-> with updated logic cdns_spi_read_rx_fifo() function in cdns_spi_irq
-> continuously in read loop to read complete half FIFO data.
-> due to this Slave failed to write the TX FIFO on time and result in
-> incorrect data in Master receive. 
-> Whereas in my previous patch, data read and write happening byte wise,
-> by which we are making sure data availability in TXFIFO on time.
+Hi Michal,
 
-That is a very tight system if reading 64 sequential memory locations
-is the timing difference between success and failure, Linux is
-not a real-time OS.
+On Tue, May 16, 2023 at 9:42 AM Michal Simek <michal.simek@amd.com> wrote:
+> Also in DT patches I have seen that you didn't switch to 2023 year yet.
 
-But I don't really mind moving back to a byte-wise operation. Although
-we need to avoid the issues introduced by the first attempt at that. I
-will have a look at doing a patch to put the byte-wise back in.
+If no substantial changes were made in 2023, there is no need nor
+desire to update the copyright year.
 
-Thanks,
-Charles
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
