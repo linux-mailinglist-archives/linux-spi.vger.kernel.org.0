@@ -2,66 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419EF706B3C
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 16:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5AE706B75
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 16:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjEQOfo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 10:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S229572AbjEQOoD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 10:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjEQOfo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 10:35:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D366D72B4;
-        Wed, 17 May 2023 07:35:41 -0700 (PDT)
+        with ESMTP id S230378AbjEQOoD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 10:44:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555A81708;
+        Wed, 17 May 2023 07:43:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D2060CF4;
-        Wed, 17 May 2023 14:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6597AC433EF;
-        Wed, 17 May 2023 14:35:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E47E363A6A;
+        Wed, 17 May 2023 14:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFFBC4339B;
+        Wed, 17 May 2023 14:43:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684334140;
-        bh=5Mw0eRB8Cw4nL5cm0Wg8etkyvQ8Ovplue6eotuaj9IU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZWBfg8m4uUbnpMPo4wg+0hUfYznPygvRsl2eKkTCHhLGZVYEjz5syTm9xpWfW5vmF
-         vwIrAnHTJlUPj8LBqsXl67LNqBrpisxKQuujUSMwU1xGWaKj8rNyS7D8vDkP1n4LSU
-         fyHkOUoHU3WGv0KMfi7bicHBIfq7fK8ksh7cIUUMPHOX0nN4ZBbCoJ6pIkUzyWb3oN
-         HCOhC98G8JkwodX+OmKeDUPeiwo9uoV7M3rfVRgvqkTbM9hgmRNxWM8yXAuWaNdMlG
-         wEISrYz89wdwCI+AR2sxT3fZDRE0YRxhIGR52IR2OqpSQGHx/97a73p2PFML0pekB9
-         +YtXj7hPVEdrQ==
-Date:   Wed, 17 May 2023 23:35:38 +0900
+        s=k20201202; t=1684334638;
+        bh=8xiYbOqEXUtDGMUV7q9ZaOPlQZ52ZChNwFZR+2AGYMs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=JIhdHEH7BdQnG0Fi3V12uwO4Ei4+8ssxzTfDQi2B88PNSeXQh8pqhzzpjjxkI5OKM
+         hcPXc2Oi89naBtWB3P0OK4v+OnUmFE8yXEdpiSinkLxcdhCKie4vAUglQmcTwULaJ+
+         YhsYbuZLBJBcFm7n5gmZmMuJ92TUOIYFUBAJ3pWTREofsv6JIAHbvOBldiSd9G8RVK
+         mJVYwPyzodpKyAzcpBkodt19XQ2Q3XGBk0nVt/QX0b1BtVqGEMfRMJMGPB0Q2pjxOZ
+         yfiSeb3DUlOPJVIXJZKPboTIVo7fqVV+6vr8IVrWxSU/ynq0+XdHa8dSm6ce4OusWf
+         LQFi2FHiK2qjw==
 From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?B=F6rge_Str=FCmpfel?= <boerge.struempfel@gmail.com>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] spi: dt-bindings: Introduce spi-mosi-idle-low flag
-Message-ID: <ZGTmOtl8oqMdMmtY@finisterre.sirena.org.uk>
-References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
- <20230511231317.158214-1-bstruempfel@ultratronik.de>
- <20230511231317.158214-2-bstruempfel@ultratronik.de>
- <ZF2y1YNkSbXzRm4V@finisterre.sirena.org.uk>
- <CAEktqcthEG=AWTk9VcVkwexH6xV_xHw1hqxkkPkD=d1NqPKqSg@mail.gmail.com>
- <ZGF+Ei5sn4ci41LU@finisterre.sirena.org.uk>
- <CAEktqcsYDn8Gncf8Mk-7dCX+qA=ZTAu_JFTNi-KL0UjPnmG=pw@mail.gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, Brad Larson <blarson@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        catalin.marinas@arm.com, conor+dt@kernel.org, davidgow@google.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, hal.feng@starfivetech.com,
+        hasegawa-hitomi@fujitsu.com, j.neuschaefer@gmx.net, joel@jms.id.au,
+        kernel@esmil.dk, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, p.zabel@pengutronix.de,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
+        zhuyinbo@loongson.cn, devicetree@vger.kernel.org
+In-Reply-To: <20230515181606.65953-1-blarson@amd.com>
+References: <20230515181606.65953-1-blarson@amd.com>
+Subject: Re: (subset) [PATCH v14 0/8] Support AMD Pensando Elba SoC
+Message-Id: <168433462851.451768.13871519819070116651.b4-ty@kernel.org>
+Date:   Wed, 17 May 2023 23:43:48 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dstuhimKoUBADMGE"
-Content-Disposition: inline
-In-Reply-To: <CAEktqcsYDn8Gncf8Mk-7dCX+qA=ZTAu_JFTNi-KL0UjPnmG=pw@mail.gmail.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,37 +68,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 15 May 2023 11:15:58 -0700, Brad Larson wrote:
+> This series enables support for AMD Pensando Elba SoC based platforms.
+> 
+> The Elba SoC has the following features:
+> - Sixteen ARM64 A72 cores
+> - Dual DDR 4/5 memory controllers
+> - 32 lanes of PCIe Gen3/4 to the Host
+> - Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+>   also a single 1GE management port.
+> - Storage/crypto offloads and 144 programmable P4 cores.
+> - QSPI and EMMC for SoC storage
+> - Two SPI interfaces for peripheral management
+> - I2C bus for platform management
+> 
+> [...]
 
---dstuhimKoUBADMGE
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, May 17, 2023 at 10:26:07AM +0200, B=F6rge Str=FCmpfel wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> However I am not so sure about setting it unconditionally, since this
-> is dependent on the spi-controller. Not all spi-controller show this
-> behavior, that they use a high mosi line in idle mode and have the
-> ability to change this. As far as I know, another common behavior
-> is that the mosi just keeps the last state which it transmitted. In this
-> case, devices like Neopixel would still work without this mode bit.
+Thanks!
 
-The behaviour the device needs is that the device have a low MOSI, how
-that is achieved is immaterial.
+[2/8] dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
+      commit: f2156989bf3014c67707d73ccd202b2ada09080b
+[7/8] spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
+      commit: f5c2f9f9584353bc816d76a65c97dd03dc61678c
 
---dstuhimKoUBADMGE
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRk5jkACgkQJNaLcl1U
-h9B0JAf7B7L591jcDcvBFF7fvBcFXjGQtyd+NmNvja6Nu61UGoKmeZ/aCB1r3Cev
-PFL9wxkeSwhnHNXIiR84o8arggMvri5woViO0TqEuXSWSt162KQXgB/VT2dY5/xi
-Rcqs8kromRORRaFuQPTnaQlAmDzP9bvwRb7DHVul+UQpr8iLQ3rdw+FrGh9W8cMv
-p/1Gngv+xU/mMUsuaZUbPBt3n+bqWEmNRKjDWO9VKWq2SeegR8YuRKyUCaczblRn
-ysFfgujGZwMz8JU4XQVaW/DBnfUq10qZBZlCDUKs5WKBog78CaB+9NU0JTMn7LLw
-cMsxL9Ct7kI2EtXQxnuvA2/QecIgqA==
-=hgLr
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---dstuhimKoUBADMGE--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
