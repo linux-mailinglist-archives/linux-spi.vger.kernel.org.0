@@ -2,51 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE918707308
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 22:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18996707338
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 22:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjEQUaX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 16:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229642AbjEQUkH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 16:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjEQUaV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 16:30:21 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8982835AD;
-        Wed, 17 May 2023 13:30:18 -0700 (PDT)
+        with ESMTP id S229483AbjEQUkG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 16:40:06 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F69C868F;
+        Wed, 17 May 2023 13:40:00 -0700 (PDT)
 Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QM4VF60zwzyWs;
-        Wed, 17 May 2023 23:30:13 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1684355415;
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QM4jR4GXgz49Q6Y;
+        Wed, 17 May 2023 23:39:55 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1684355997;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hTkUMKFrciCQ4jvTUoCLaFdooSw1ob2FrpRn38lXzSc=;
-        b=zFSqMzYpKIoO2u9ou920IiHgMUT6AJ4zTnOheAdfxrpUGH7C7Ms1V2Rl5w1p9jZwSR06an
-        uklHtEjV39RsP+eSV3D3EhNHvJC9RzGOO9UppS7bmngSQvnv0wTIl6qEKYNPcClXqztNt0
-        0TrdBA4L8eovau8osgSuF/OJ6O6RiNs=
+        bh=CHmtUTsdEeyQlJNUwT8f4VfIP2gwGUZiFKPvncr8V5M=;
+        b=bG9xV3tPMfBIfq5kp9iKZhHOjIpGM7UcGmuOB83c1LqpdjI2BTgzj27wuAhTkv2QmJThxg
+        ywAdX8WT8eSjpWcpBVj+3B7xsYYbJpc6dAdPFjWXNqDQvjQ3rFV5EdJnK/vV3whueRZr/j
+        9Gx5jkgJHrLV0zGRY/UNURAqAV3hlybz6hnNAOfsNwtfH0sQA65g+Lvv4fU61bb+65vkeI
+        EiMa/p9U4dIDY6c4rcSQt7d1KBsmEEKKQEhrr3BFeDDkLy6VCuvWlIqIwbMAFpHMnF6yyU
+        d42dJMDkL8l6svOCEb1S1XE1nFYKOR81b9IQlYH4QNkqXJx9bo1+zts3I/zu0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1684355415;
+        s=lahtoruutu; t=1684355997;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hTkUMKFrciCQ4jvTUoCLaFdooSw1ob2FrpRn38lXzSc=;
-        b=MseZBiMF3JsOdjPfUiXfvsFdWJHKy/+NCnhp7jv/O/Thws6O18OalODIcnGze7eMrJGvQW
-        cYy6b6gSYvMe+12PRjfTg27fJj7tSTzmqGiAc+mu6NIhoeujqB4j2pu7lD8lVALb7Dqk/e
-        G612Mn780vfcocyGetTmDEo9mNt0FwE=
+        bh=CHmtUTsdEeyQlJNUwT8f4VfIP2gwGUZiFKPvncr8V5M=;
+        b=VlCa2vZN9twTTh9Xgi491+M4OEheQFTvCepFDMDfgdwLkoVo9cj7Ap0+mjM29T8qR5hYJB
+        m0Wyzm0f/khU51UgeSAqxuJYi+Pf34flwu8EYNWXFsxZi0MI2+MLOQrI3/mH81s3yms3ge
+        XH9+UcgieyJW1Kc2VkzCVZGnuyvGnXS1J4LRHkoYhTtOnUxpzFad2mqBagSSrFZWFl86WY
+        dmohh/FLN/F8HPtpizqIpVb/dXQ3CNM6sT9bZfeTlcdakZY2hm0S5rU5PKq95xcCDum0xe
+        ERb5wRLrwLuD1+NqOFvCseB+XyGPDIjlsNeIMJbOYvicCQJ81GIC27Mrru+H1A==
 ARC-Authentication-Results: i=1;
         ORIGINATING;
         auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684355415; a=rsa-sha256; cv=none;
-        b=N0eWTuiTSlWvCqqFgNs3lGYhdcQDcTkJNp7aeODqoJNFSAu0lYRvEVO5WlYNrdEDzS1nNs
-        gLvJdu8WXbtSegTRz74AKm4FlJs5LLTLz2FVTGvvCBkEWJ7s29ekpkRe98AiEye6aRXSSt
-        Y1l1Z+SjdvgjCuX3c4rUCRsnZ9C68Wo=
-Date:   Wed, 17 May 2023 23:30:11 +0300
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684355997; a=rsa-sha256;
+        cv=none;
+        b=HaYYMZ9P5odR5iaJoG8NTnvDreyJEzg/RU0jQzI/ylJ/hX/ru1v+Lb0gntRUQaVTBN0qSA
+        LF5x9kUMxo3piQsgRbz9Or8Knc80OhZ7xXl1o6EP5CnvLqEBj2IUbmCMttVn01/BCfBZjY
+        EpD/DuF8z+uRij9Axb2EObhnCQlJ/ijwFGRlrNC2uLahb0/wcHh7B2vBTqQfOru7j8gel+
+        gy+0d/CjzyduBtdwCZl0nmPyFNMHrAtMAZsLwaZrNsUTGDfcsXCJUEAAbIscM/4fN2Wk6t
+        1JCFy6YwbwbnhLZRbIqWhqeL85rRJ4+F/mrNzrX561jjXD/X6Kflf4AwO95Sew==
+Date:   Wed, 17 May 2023 23:39:53 +0300
 From:   Aaro Koskinen <aaro.koskinen@iki.fi>
 To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
@@ -67,14 +74,14 @@ Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] ARM/mmc: Convert old mmci-omap to GPIO descriptors
-Message-ID: <20230517203011.GH271152@darkstar.musicnaut.iki.fi>
+Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
+Message-ID: <20230517203953.GI271152@darkstar.musicnaut.iki.fi>
 References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
- <20230430-nokia770-regression-v4-2-9b6dc5536b17@linaro.org>
+ <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v4-2-9b6dc5536b17@linaro.org>
+In-Reply-To: <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -87,13 +94,22 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi,
 
-This one has some issue as mmci-omap is unable to find the GPIOs on 770.
+On Mon, May 08, 2023 at 11:20:06PM +0200, Linus Walleij wrote:
+> The CBUS also has the ADS7846 touchscreen attached.
 
-On Mon, May 08, 2023 at 11:20:07PM +0200, Linus Walleij wrote:
-> +static struct gpiod_lookup_table nokia770_mmc_gpio_table = {
-> +	.dev_id = "mmci-omap",
+Not sure what this comment means. CBUS is for Retu/Tahvo, and touchscreen
+is SPI.
 
-Changing this to "mmci-omap.1" helped, not sure if that is a correct way.
-Most likely N800 and N810 are broken as well.
+When tested w/gpio-descriptors-omap branch, the touchscreen probe fails:
+
+[    2.378540] SPI driver ads7846 has no spi_device_id for ti,tsc2046
+[    2.391906] SPI driver ads7846 has no spi_device_id for ti,ads7843
+[    2.405029] SPI driver ads7846 has no spi_device_id for ti,ads7845
+[    2.418151] SPI driver ads7846 has no spi_device_id for ti,ads7873
+[    2.432556] ads7846 spi2.0: Unknown device model
+[    2.443817] ads7846: probe of spi2.0 failed with error -22
+
+I don't know if that's caused by any the patches in the branch or some
+other regression. With v6.2 it probes OK.
 
 A.
