@@ -2,300 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8F07067DB
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 14:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0414A706A64
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 16:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjEQMSd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 08:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229961AbjEQOAf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 10:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjEQMSa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 08:18:30 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D0D10E9;
-        Wed, 17 May 2023 05:18:28 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H96BKK004915;
-        Wed, 17 May 2023 12:18:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=oswx2ao4b3AQUsjnWwDiWv7aEa9i/KBQbHTHNVI549Q=;
- b=e31QfEvsQXbT+NTzbnzZlGpaQgvMLEIjvNJ9/7zzgFk5V2i5QpCncmnmWU6O+TEGabso
- bUaCNqPk7lHdQiWGFzmaE6vqR7hxnO7Vt0iC7QzsivBPkXHhA+kfIIbK9Ip/niUXkGgx
- GBRA7WB3qQOzN5nX/FT0Cq4dqVXAgRcLFwDL1cnqyF7Lw5HQwWjsknZSEFie0doy+6l5
- rJB6EDQL2/sI0CJLWtYnJz7PfvjHV4LobPJAqbbJEcSWs4nrzgR9VzpZsPdYgM9XhCWM
- zCjkGRVTA+tX2LraC32UL6xq5MZ2PbaOfpj5BRXwPY7ZpmRIAUSEQSsHHk+RGl7LzTeu Xw== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmt5grp0f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 12:18:23 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34HCIKvD022285;
-        Wed, 17 May 2023 12:18:20 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qj3mk69qy-1;
-        Wed, 17 May 2023 12:18:20 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HCIKR7022280;
-        Wed, 17 May 2023 12:18:20 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34HCIK7C022278;
-        Wed, 17 May 2023 12:18:20 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id A058F4B3C; Wed, 17 May 2023 17:48:19 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, quic_vnivarth@quicinc.com,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
-Subject: [PATCH v2 2/2] spi: spi-geni-qcom: Do not do DMA map/unmap inside driver, use framework instead
-Date:   Wed, 17 May 2023 17:48:14 +0530
-Message-Id: <1684325894-30252-3-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6o7R5AL3Pto5arS5fMJ8zCSERloDVCOr
-X-Proofpoint-ORIG-GUID: 6o7R5AL3Pto5arS5fMJ8zCSERloDVCOr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=619
- suspectscore=0 bulkscore=0 impostorscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170100
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230082AbjEQOAf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 10:00:35 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2B67292;
+        Wed, 17 May 2023 07:00:28 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-61b5a653df7so6681576d6.0;
+        Wed, 17 May 2023 07:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684332028; x=1686924028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kF/bfVMkR2h3+gHlTD2VrM3fzaZfhgR5R+8jewhi4kQ=;
+        b=f79+NO3WafffxprPEUX+MpIWRo6r4PqFlcXxubPrc5PoTBP656Fn9Mcm7a2mwB5G7C
+         w5UPPUw1EMxkhtW6Zv4TXzVfEg5MZrMiduqd66tOriGLtyCimkn9S3lGxNBnKtYQM3+G
+         +pwFiCW5l91dJjXzmS0TzXb2KtnyyCo685VDetUFEshUciT7yPMPbB68DIrs3wtHC3VG
+         3wG3jdPdkaBHkOdGh7NDRnIsj4vwiuqnHYsMfDz++4ij673rakRNl8aEW4I9PSMiTuUD
+         5l/IqeFpNgqz7FYStFzg/tpoDw+DOHF0/ExUT2Fn/t9nV0oF9qRRSmsogt3yNtf+S7/o
+         M0+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684332028; x=1686924028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kF/bfVMkR2h3+gHlTD2VrM3fzaZfhgR5R+8jewhi4kQ=;
+        b=IXG0KDX8L0bP3EriR/dl3WK+Ic5teW3Oa3NKgGS9aZiAshGnxb07Xi5FKooTDUxSfP
+         SDppVS3lr5HGo4+x6dkWup4qkCw3UZ8wcDXg4Zxg4XDmo4wnV5S1HTRlaWuFwGpvSujp
+         9OuGZGPaGOMqtEPgeQS3INX6wHDvUfuWgvKndLtvk5qSRZIGCUdoPzs5lkxcnm+oFb39
+         pePcLHgozGpIzHJvemld7unYbnBAW34qUk6bY3RbhqNfdrfPv9925gxNV3WnNFcGM/3I
+         dGQVOq6ITFNDSGljR2oeZc8qw/WYRY0JJbtPSbJeByLLDCkIT2y2LX0c4ujOaRirM3Wt
+         8y+A==
+X-Gm-Message-State: AC+VfDzw4mYw3m7vcMRFvA8X80Rcv1nVi73sK5GZAMXyZ7p3g3JnuZd6
+        EPOjiBQlsCOfY7+heniyj8uLUNmevs//Y0WAmiU=
+X-Google-Smtp-Source: ACHHUZ5dgDWb+fDdj9ateE9Q5/4olnyjZM5M0pe72NMZbgcEFxb1cJTJVSxAul4O+5JAir2aZNO7h0ejLa3/duMEZP8=
+X-Received: by 2002:a05:6214:d03:b0:623:46d8:535 with SMTP id
+ 3-20020a0562140d0300b0062346d80535mr24128643qvh.34.1684332026063; Wed, 17 May
+ 2023 07:00:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com> <ZF6RMqElYZVMpWRt@surfacebook>
+ <20230515101350.GS68926@ediswmail.ad.cirrus.com> <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
+ <20230517101301.GV68926@ediswmail.ad.cirrus.com>
+In-Reply-To: <20230517101301.GV68926@ediswmail.ad.cirrus.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 17 May 2023 16:59:50 +0300
+Message-ID: <CAHp75VchpbiYcd2yaP1WTjX17P0hg3qON5JGAXu08aDVw6Ydkw@mail.gmail.com>
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The spi geni driver in SE DMA mode, unlike GSI DMA, is not making use of
-DMA mapping functionality available in the framework.
-The driver does mapping internally which makes dma buffer fields available
-in spi_transfer struct superfluous while requiring additional members in
-spi_geni_master struct.
+On Wed, May 17, 2023 at 1:13=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+> On Tue, May 16, 2023 at 10:03:45PM +0300, Andy Shevchenko wrote:
+> > On Mon, May 15, 2023 at 1:13=E2=80=AFPM Charles Keepax
+> > <ckeepax@opensource.cirrus.com> wrote:
+> > > On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com w=
+rote:
+> > > > Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
+> > > > > +   if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-r=
+anges")) {
+> > > > > +           ret =3D gpiochip_add_pin_range(&priv->gpio_chip, priv=
+->gpio_chip.label,
+> > > > > +                                        0, 0, CS42L43_NUM_GPIOS)=
+;
+> > > > > +           if (ret) {
+> > > > > +                   dev_err(priv->dev, "Failed to add GPIO pin ra=
+nge: %d\n", ret);
+> > > > > +                   goto err_pm;
+> > > > > +           }
+> > > > > +   }
+> > > >
+> > > > Besides the fact that we have a callback for this, why GPIO library=
+ can't
+> > > > handle this for you already?
+> > >
+> > > Apologies but I am not quite sure I follow you, in the device
+> > > tree case this will be handled by the GPIO library. But for ACPI
+> > > this information does not exist so has to be called manually, the
+> > > library does not necessarily know which values to call with,
+> > > although admittedly our case is trivial but not all are.
+> >
+> > Why can't the firmware provide this information? _DSD() is a part of
+> > ACPI v5.1 IIRC.
+>
+> I am very very far from confident we can guarantee that will be
+> present in the ACPI. The ACPI is typically made for and by the
+> Windows side.
 
-Conform to the design by having framework handle map/unmap and do only
-DMA transfer in the driver; this also simplifies code a bit.
+Why? You may insist firmware vendors / OEMs to use that as a
+requirement to the platforms that would like to use your chip. The
+_DSD() is part of the specification, I don't see how the above can be
+an argument.
 
-Fixes: e5f0dfa78ac7 ("spi: spi-geni-qcom: Add support for SE DMA mode")
-Suggested-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
-v1 -> v2:
-- pass dma address to new geni interfaces instead of pointer
-- set max_dma_len as per HPG
-- remove expendable local variables
----
- drivers/spi/spi-geni-qcom.c | 103 +++++++++++++++++++++-----------------------
- 1 file changed, 50 insertions(+), 53 deletions(-)
+The times when ACPI =3D=3D Windows are quite behind.
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index e423efc..206cc04 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -97,8 +97,6 @@ struct spi_geni_master {
- 	struct dma_chan *tx;
- 	struct dma_chan *rx;
- 	int cur_xfer_mode;
--	dma_addr_t tx_se_dma;
--	dma_addr_t rx_se_dma;
- };
- 
- static int get_spi_clk_cfg(unsigned int speed_hz,
-@@ -174,7 +172,7 @@ static void handle_se_timeout(struct spi_master *spi,
- unmap_if_dma:
- 	if (mas->cur_xfer_mode == GENI_SE_DMA) {
- 		if (xfer) {
--			if (xfer->tx_buf && mas->tx_se_dma) {
-+			if (xfer->tx_buf) {
- 				spin_lock_irq(&mas->lock);
- 				reinit_completion(&mas->tx_reset_done);
- 				writel(1, se->base + SE_DMA_TX_FSM_RST);
-@@ -182,9 +180,8 @@ static void handle_se_timeout(struct spi_master *spi,
- 				time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
- 				if (!time_left)
- 					dev_err(mas->dev, "DMA TX RESET failed\n");
--				geni_se_tx_dma_unprep(se, mas->tx_se_dma, xfer->len);
- 			}
--			if (xfer->rx_buf && mas->rx_se_dma) {
-+			if (xfer->rx_buf) {
- 				spin_lock_irq(&mas->lock);
- 				reinit_completion(&mas->rx_reset_done);
- 				writel(1, se->base + SE_DMA_RX_FSM_RST);
-@@ -192,7 +189,6 @@ static void handle_se_timeout(struct spi_master *spi,
- 				time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
- 				if (!time_left)
- 					dev_err(mas->dev, "DMA RX RESET failed\n");
--				geni_se_rx_dma_unprep(se, mas->rx_se_dma, xfer->len);
- 			}
- 		} else {
- 			/*
-@@ -523,17 +519,36 @@ static int setup_gsi_xfer(struct spi_transfer *xfer, struct spi_geni_master *mas
- 	return 1;
- }
- 
-+static u32 get_xfer_len_in_words(struct spi_transfer *xfer,
-+				struct spi_geni_master *mas)
-+{
-+	u32 len;
-+
-+	if (!(mas->cur_bits_per_word % MIN_WORD_LEN))
-+		len = xfer->len * BITS_PER_BYTE / mas->cur_bits_per_word;
-+	else
-+		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
-+	len &= TRANS_LEN_MSK;
-+
-+	return len;
-+}
-+
- static bool geni_can_dma(struct spi_controller *ctlr,
- 			 struct spi_device *slv, struct spi_transfer *xfer)
- {
- 	struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
-+	u32 len, fifo_size;
- 
--	/*
--	 * Return true if transfer needs to be mapped prior to
--	 * calling transfer_one which is the case only for GPI_DMA.
--	 * For SE_DMA mode, map/unmap is done in geni_se_*x_dma_prep.
--	 */
--	return mas->cur_xfer_mode == GENI_GPI_DMA;
-+	if (mas->cur_xfer_mode == GENI_GPI_DMA)
-+		return true;
-+
-+	len = get_xfer_len_in_words(xfer, mas);
-+	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
-+
-+	if (len > fifo_size)
-+		return true;
-+	else
-+		return false;
- }
- 
- static int spi_geni_prepare_message(struct spi_master *spi,
-@@ -772,7 +787,7 @@ static int setup_se_xfer(struct spi_transfer *xfer,
- 				u16 mode, struct spi_master *spi)
- {
- 	u32 m_cmd = 0;
--	u32 len, fifo_size;
-+	u32 len;
- 	struct geni_se *se = &mas->se;
- 	int ret;
- 
-@@ -804,11 +819,7 @@ static int setup_se_xfer(struct spi_transfer *xfer,
- 	mas->tx_rem_bytes = 0;
- 	mas->rx_rem_bytes = 0;
- 
--	if (!(mas->cur_bits_per_word % MIN_WORD_LEN))
--		len = xfer->len * BITS_PER_BYTE / mas->cur_bits_per_word;
--	else
--		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
--	len &= TRANS_LEN_MSK;
-+	len = get_xfer_len_in_words(xfer, mas);
- 
- 	mas->cur_xfer = xfer;
- 	if (xfer->tx_buf) {
-@@ -823,9 +834,20 @@ static int setup_se_xfer(struct spi_transfer *xfer,
- 		mas->rx_rem_bytes = xfer->len;
- 	}
- 
--	/* Select transfer mode based on transfer length */
--	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
--	mas->cur_xfer_mode = (len <= fifo_size) ? GENI_SE_FIFO : GENI_SE_DMA;
-+	/*
-+	 * Select DMA mode if sgt are present; and with only 1 entry
-+	 * This is not a serious limitation because the xfer buffers are
-+	 * expected to fit into in 1 entry almost always, and if any
-+	 * doesn't for any reason we fall back to FIFO mode anyway
-+	 */
-+	if (!xfer->tx_sg.nents && !xfer->rx_sg.nents)
-+		mas->cur_xfer_mode = GENI_SE_FIFO;
-+	else if (xfer->tx_sg.nents > 1 || xfer->rx_sg.nents > 1) {
-+		dev_warn_once(mas->dev, "Doing FIFO, cannot handle tx_nents-%d, rx_nents-%d\n",
-+			xfer->tx_sg.nents, xfer->rx_sg.nents);
-+		mas->cur_xfer_mode = GENI_SE_FIFO;
-+	} else
-+		mas->cur_xfer_mode = GENI_SE_DMA;
- 	geni_se_select_mode(se, mas->cur_xfer_mode);
- 
- 	/*
-@@ -836,35 +858,17 @@ static int setup_se_xfer(struct spi_transfer *xfer,
- 	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
- 
- 	if (mas->cur_xfer_mode == GENI_SE_DMA) {
--		if (m_cmd & SPI_RX_ONLY) {
--			ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
--				xfer->len, &mas->rx_se_dma);
--			if (ret) {
--				dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
--				mas->rx_se_dma = 0;
--				goto unlock_and_return;
--			}
--		}
--		if (m_cmd & SPI_TX_ONLY) {
--			ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
--				xfer->len, &mas->tx_se_dma);
--			if (ret) {
--				dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
--				mas->tx_se_dma = 0;
--				if (m_cmd & SPI_RX_ONLY) {
--					/* Unmap rx buffer if duplex transfer */
--					geni_se_rx_dma_unprep(se, mas->rx_se_dma, xfer->len);
--					mas->rx_se_dma = 0;
--				}
--				goto unlock_and_return;
--			}
--		}
-+		if (m_cmd & SPI_RX_ONLY)
-+			geni_se_rx_init_dma(se, sg_dma_address(xfer->rx_sg.sgl),
-+				sg_dma_len(xfer->rx_sg.sgl));
-+		if (m_cmd & SPI_TX_ONLY)
-+			geni_se_tx_init_dma(se, sg_dma_address(xfer->tx_sg.sgl),
-+				sg_dma_len(xfer->tx_sg.sgl));
- 	} else if (m_cmd & SPI_TX_ONLY) {
- 		if (geni_spi_handle_tx(mas))
- 			writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
- 	}
- 
--unlock_and_return:
- 	spin_unlock_irq(&mas->lock);
- 	return ret;
- }
-@@ -965,14 +969,6 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
- 		if (dma_rx_status & RX_RESET_DONE)
- 			complete(&mas->rx_reset_done);
- 		if (!mas->tx_rem_bytes && !mas->rx_rem_bytes && xfer) {
--			if (xfer->tx_buf && mas->tx_se_dma) {
--				geni_se_tx_dma_unprep(se, mas->tx_se_dma, xfer->len);
--				mas->tx_se_dma = 0;
--			}
--			if (xfer->rx_buf && mas->rx_se_dma) {
--				geni_se_rx_dma_unprep(se, mas->rx_se_dma, xfer->len);
--				mas->rx_se_dma = 0;
--			}
- 			spi_finalize_current_transfer(spi);
- 			mas->cur_xfer = NULL;
- 		}
-@@ -1057,6 +1053,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	spi->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
- 	spi->num_chipselect = 4;
- 	spi->max_speed_hz = 50000000;
-+	spi->max_dma_len = 0xffff0; /* 24 bits for tx/rx dma length */
- 	spi->prepare_message = spi_geni_prepare_message;
- 	spi->transfer_one = spi_geni_transfer_one;
- 	spi->can_dma = geni_can_dma;
--- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+> > Although it might require moving some code from gpiolib-of.c to
+> > gpiolib.c with replacing OF APIs with agnostic ones.
+>
+> I really think if we want to start doing things that way on ACPI
+> platforms someone with a little more clout than us needs to start
+> doing it first. If Intel or someone was doing it that way it
+> might give us a little more levelage to push it as being the
+> "correct" way to do it.
 
+So, we have the meta-acpi [1] project which contains dozens of
+examples on how ACPI DSD is being used for real devices, besides some
+documentation in the Linux kernel.
+
+> I will switch to the callback, but really don't think we can rely
+> on this being in DSD yet.
+
+Why not?
+
+...
+
+> > > I had missed there are now devm_pm_runtime calls,
+
+Btw, even if there is no such API one can always call
+devm_add_action() / devm_add_action_or_reset() to open code such a
+call.
+
+> > > I will switch
+> > > to that. But I would like to understand the wrong order, remove
+> > > will be called before the devm bits are destroyed and it seems
+> > > reasonable to disable the pm_runtime before destroying the
+> > > pinctrl device. What exactly would run in the wrong order here?
+> >
+> > At the ->remove() stage after this call an IRQ can be fired (or on SMP
+> > systems any other APIs can be called), for example. So, would it be a
+> > problem to service it with PM disabled?
+> >
+> > But in any case the shuffling ordering like this is prone to subtle
+> > bugs. I prefer to have strict ordering if there is nothing preventing
+> > from doing that way.
+>
+> Yeah happy enough to use devm_ here, just didn't know it existed
+> and wanted to better understand your concerns as I was having
+> difficulty seeing the issue.
+
+Ah, you are welcome!
+
+...
+
+[1]: https://github.com/westeri/meta-acpi/tree/master/recipes-bsp/acpi-tabl=
+es/samples
+(mostly under edison/ folder)
+
+--=20
+With Best Regards,
+Andy Shevchenko
