@@ -2,56 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6736C707576
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 00:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B05F707596
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 00:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjEQWa6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 18:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S229586AbjEQWny (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 18:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEQWav (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 18:30:51 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E101259EE;
-        Wed, 17 May 2023 15:30:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-965f7bdab6bso254687166b.3;
-        Wed, 17 May 2023 15:30:46 -0700 (PDT)
+        with ESMTP id S229484AbjEQWny (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 18:43:54 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C86B40CD;
+        Wed, 17 May 2023 15:43:53 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-51f64817809so203135a12.1;
+        Wed, 17 May 2023 15:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684362645; x=1686954645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684363433; x=1686955433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=RbGlBFWRA3xf6AobWogZ/o62Go80hrmxmKteFSu4DIYEpr5gmlsdQwulT80Y4ly1c7
-         bJrbVGnkXLqeWIfdiqkKsQbuVEKFx5z6t3orih7R8AvI/NU1NvZwm0/cnGSgOXdT1Ka1
-         CzyvWwrJTzs0nInvcjfrI3yWfr1DP9VvOnxn2WW+KAz/JTV+D5C6o6wmrNXayqkSyC74
-         MHPgKgGLtL6mBh4NDdpxjhJ86IJpOMM4zyw7J/O81pL9dvooWwQJh+oD/oHf1EMqPu25
-         ldw5jQoxMJpErAynLkV1xoWyUUgNAbtWdh7+JNueStrPbqB2ZV/WIYkf1+w9IiZeTkdw
-         YOGg==
+        bh=LieYOKCJXnWqNjni2ZgzrOlh3FdkTjA6itbHDewDbsg=;
+        b=DthQcgs7xqOphPki8LXGhEqd9v3/PJKocQknnJWvLKfiJREajOAV/4qhyTS/gqSink
+         y1UfBRmMHGayhCzRBtWLRxfY0qdUr2fZNIrCmV2XbpIXx2GMmXEsrgT9qlv+JjbYgEBA
+         wRXSlFOvdxwc3Rb4psoQYuDBMxyysP6/EiuwDsmNKQYjGWsg35xOXCqk9UHNPD6fYpCV
+         Ud9Cx3KJFoUc0Np4bknK7o4rdHyG3EPmwlNiaT7wKRza0PXd50ezM+Be2PgFldxJPZZT
+         PAG6xoGgTaE2I+P1WNtPxskD3uylO7l1awrJX5ZT9ssXIcBo/ETuVQwzCxqwvCkI0sdO
+         F8Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684362645; x=1686954645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684363433; x=1686955433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=dsOTRib2PirQP/+Y5VIOwwV6VpykGHjaii9CZFIWMhsLFaWCza8gBuTkO0uycFeJtw
-         twrdTN9TbBgv4CGhJTI0gyKb8mpUENIbDktQwgZozFa5aJ9KgU0RuFO0XPRmqoeRLYQD
-         STX6mV2IB/ENLZJrcI71OO8nVT59/nI+iFBAhDCH+ziQtJDE4RcnS4NwAws1uwu2sGsA
-         0kxwYy1fDGkQT5CoeCN4MqM3CkqKouGziZxEI60W3Phi/IS9toTQ3bOty086t9r7Pw+x
-         kCVSKwFQLT37ZmMGjnDJKr3aXr1PZ25AMFJYCqWmv16+IUDiUw0lsGWW8W1qanaq/WVy
-         FNFA==
-X-Gm-Message-State: AC+VfDwccRfuW86O+H119W4/Q1TCDN879ZVq1MFWdiC+yNuuYC2ZsDDZ
-        vicacVlWw/zstNnqLt47aBg=
-X-Google-Smtp-Source: ACHHUZ5gQ9+esOzZAXGxhnfjprvTP/lv23I4k0RHwccRhvuqGQGV0LNYQUFXARjh7qch2FWKIbCixw==
-X-Received: by 2002:a17:906:ee84:b0:959:a9a1:589e with SMTP id wt4-20020a170906ee8400b00959a9a1589emr35427005ejb.76.1684362645340;
-        Wed, 17 May 2023 15:30:45 -0700 (PDT)
-Received: from wslxew193.fritz.box (p200300c78700c900633510ddc4028dcd.dip0.t-ipconnect.de. [2003:c7:8700:c900:6335:10dd:c402:8dcd])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709064b0e00b0095807ab4b57sm109327eju.178.2023.05.17.15.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 15:30:44 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        andy.shevchenko@gmail.com, festevam@gmail.com,
+        bh=LieYOKCJXnWqNjni2ZgzrOlh3FdkTjA6itbHDewDbsg=;
+        b=cQTXdoxv3wVoPdJhuGgOTcQFVkhOPCyQYcxszFEJanYKnOXuctB86ZLCHO3ZKFuwFE
+         IUuVeBnvXMB8Rc8Be0XDenj+AYvghtrk52GoC+xculDiH8EGxOUi7HQDTwTIuNUpXyb9
+         eFNhxoN4q38hzWWGwj21btUViOTXZLgSWi9BriukzTPrtI31EZnRdoDeDX1nbdQiBlAe
+         +0MYhO98dkyxVLKRE7hKSisLDID5cFldZner9bmMaiuN/ESCkQlh1EGOKYrZeCmsGsZ9
+         5yumk8LQU3QRLwo1FOqwvFXVQQP7jqtQllXOjo+4yWhffhMXzKuYP/D55fzIAH5EXKWV
+         nXhQ==
+X-Gm-Message-State: AC+VfDxFcAnP6vdHFYeVaxD75fIxTth6mhrKobBN/UzhNL61DFdJxflv
+        lO5BuOYEMHKM5MYCUYkPnQ/oNd+Vi/MtCCyBa8k=
+X-Google-Smtp-Source: ACHHUZ72iAtOsfRpS39tC7fKeXg00DkEi5PM5JbSOZ3BiQGjYSY+qngEvBlTl62EH8YIQgK/PkiLT3m+JvcgsooMp+0=
+X-Received: by 2002:a17:902:ec84:b0:1ac:881b:494 with SMTP id
+ x4-20020a170902ec8400b001ac881b0494mr5511269plg.0.1684363432701; Wed, 17 May
+ 2023 15:43:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
+In-Reply-To: <20230517223007.178432-1-boerge.struempfel@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 17 May 2023 19:43:41 -0300
+Message-ID: <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+To:     Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
         amit.kumar-mahapatra@amd.com, broonie@kernel.org,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -59,46 +62,72 @@ Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] spi: spidev: add SPI_MOSI_IDLE_LOW mode bit
-Date:   Thu, 18 May 2023 00:30:07 +0200
-Message-Id: <20230517223007.178432-3-boerge.struempfel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517223007.178432-1-boerge.struempfel@gmail.com>
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Allow userspace to set SPI_MOSI_IDLE_LOW mode bit using the
-SPI_IOC_WR_MODE32 ioctl.
+On Wed, May 17, 2023 at 7:30=E2=80=AFPM Boerge Struempfel
+<boerge.struempfel@gmail.com> wrote:
+>
+> Some spi controller switch the mosi line to high, whenever they are
+> idle. This may not be desired in all use cases. For example neopixel
+> leds can get confused and flicker due to misinterpreting the idle state.
+> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+> can be overwritten on a per device basis.
+>
+> Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+>
+>
+> Link for versions:
+>   v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-bst=
+ruempfel@ultratronik.de/
+>   v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.str=
+uempfel@gmail.com/T/#t
+>
+> Changes from V3:
+>   - Added missing paranthesis which caused builderrors
+>
+> Changes from V2:
+>   - Removed the device-tree binding since this should not be managed by
+>     the DT but by the device itself.
+>   - Replaced all occurences of spi->chip_select with the corresponding
+>     macro spi_get_chipselect(spi,0)
+>
+> Changes from V1:
+>   - Added patch, introducing the new devicetree binding flag
+>   - Split the generic spi part of the patch from the imx-spi specific
+>     part
+>   - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+>     in the imx-spi.c modebits.
+>   - Added the SPI_MOSI_IDLE_LOW bit to spidev
 
-Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
----
- drivers/spi/spidev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The change log should be placed below the --- line.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 39d94c850839..e50da54468ec 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -64,7 +64,7 @@ static_assert(N_SPI_MINORS > 0 && N_SPI_MINORS <= 256);
- 				| SPI_NO_CS | SPI_READY | SPI_TX_DUAL \
- 				| SPI_TX_QUAD | SPI_TX_OCTAL | SPI_RX_DUAL \
- 				| SPI_RX_QUAD | SPI_RX_OCTAL \
--				| SPI_RX_CPHA_FLIP)
-+				| SPI_RX_CPHA_FLIP | SPI_MOSI_IDLE_LOW)
- 
- struct spidev_data {
- 	dev_t			devt;
--- 
-2.25.1
+> ---
+>  include/uapi/linux/spi/spi.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
+> index 9d5f58059703..ca56e477d161 100644
+> --- a/include/uapi/linux/spi/spi.h
+> +++ b/include/uapi/linux/spi/spi.h
+> @@ -28,6 +28,7 @@
+>  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8=
+ wires */
+>  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance=
+ turnaround */
+>  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on R=
+x only xfer */
+> +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low wh=
+en idle */
 
+Should tools/spi/spidev_test.c be changed to include this new
+mosi-idle-low option?
