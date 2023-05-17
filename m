@@ -2,198 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CBE7062F2
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 10:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBB47064ED
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 12:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjEQIdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 04:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S229871AbjEQKNY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 06:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjEQIcr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 04:32:47 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EA81BF8;
-        Wed, 17 May 2023 01:32:04 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so11482877b3a.0;
-        Wed, 17 May 2023 01:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684312324; x=1686904324;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
-        b=M2qSdXX5XEjDy8173X1BQyXgfZWxgjnuDh7lfxjiN34F/rl1WyhGxThNwxIdFPtsgi
-         nhPYtEGotdFU9fABOYPGOTeViZPn+sN1y3rteMpv+9zSSQzw7owwr6XhSuDET29KJnOq
-         SzUYzqxXFajwPr4esZUy4N9FcQbLvXlr8ylsB7lxL7RoGg0D2Cm87JzFrSJX7jS0UwPA
-         dlcw9V+VDEpkWCQUUgj1K9sIRZYsY+jmgYL6aB5i38iX2uRMu4QukHiJrUUteaShveAp
-         ySYsz0PO1XP1ZSXkjtYxT0oH9gJHHhxkE8wyRfluXoTQIChsYGEjGNXB+UuKiLjqVtn/
-         1m2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312324; x=1686904324;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
-        b=Ld2ylL4LQkHm7qOz6DjR3UH8wwWYdlEe8cHQPFfHGUBw5EtJMW0qYYAWnNT7rDgF8g
-         s/ScyggPaDwpub0/lXoy8viD+V2DhKPrF2IZ2DOemD2elza7uuL0LOAI4XHc5JjLDdYb
-         ffB4ugOm2oR+F3FGwquCHA1WlzkcBIa1a/4eNlWhkssgqIWJ1Nvz96R0gKop2IWrTdbj
-         nmGu7huy48BegEvVZwUeoC+EMsfHVY/26KDqHgdyPeZtASGaS/TiNaQjLfId6PFOUR8y
-         QIFknrEIARI0I6/qaVLIfvDVFUMne/lXPBm+ss5SeJfS0C5MFvE3xZ3rVgWYLOchls9H
-         fMbQ==
-X-Gm-Message-State: AC+VfDxIVn/riSJTTICaWyCZ8MS6kXyVQOFO9KXpMQCqOuyTxdE2u3Q8
-        j31JTkiB0LvcZkVESLSR5FsyuZ4GYcW5T8m6GvU=
-X-Google-Smtp-Source: ACHHUZ4iyaYrxVZMxySGUTOPYWhxpLgFfi9ixRGluwwJJKuYvKkERWG25wDH/5UXmoUZ6NvcPCTfdzogMeS4zYeWaPw=
-X-Received: by 2002:a17:90a:1181:b0:24e:3413:c7ff with SMTP id
- e1-20020a17090a118100b0024e3413c7ffmr1926164pja.7.1684312324177; Wed, 17 May
- 2023 01:32:04 -0700 (PDT)
+        with ESMTP id S229545AbjEQKNW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 06:13:22 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699E7E4D;
+        Wed, 17 May 2023 03:13:21 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6sFqA004446;
+        Wed, 17 May 2023 05:13:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=PODMain02222019;
+ bh=Xpb1EWBMfi+Jisb8QnCvI2wmKB3bYLxwbNbSZLNIp3M=;
+ b=P9lZtHUZVwbkmZDE5vVygaoxtsyGAnba+uL/acfYiQBVvTk4+IkqJ2tg01ycyBQHocRU
+ 6dZNsVaypvtbrKVudMv67oGzLxMwzWzP/2hdsNmMwAPwHdbcpZt6W4L8ZB92tMG65hza
+ NCp/K2MblSmvnAMKfKZFuUCb0PS3vzQLufVxQiK0XSJQ6EZbDow3UrhIFL5nMlV3DetT
+ q2D+xV+2SxcVEIjPTkpriFZ12whLcPQ41yiUzGL+KDest4tL6DOAZFpRnX8wkyfICsWR
+ 4LXUZ+17daG1kJZhWiYt6PgJPMWmW9ZlUoGIpqrQ0wKYbKey+jBKw8DL42xXhFpweczb OA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qj6ymwq4r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 05:13:02 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
+ 2023 05:13:01 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 05:13:01 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3234311CA;
+        Wed, 17 May 2023 10:13:01 +0000 (UTC)
+Date:   Wed, 17 May 2023 10:13:01 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+Message-ID: <20230517101301.GV68926@ediswmail.ad.cirrus.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
+ <ZF6RMqElYZVMpWRt@surfacebook>
+ <20230515101350.GS68926@ediswmail.ad.cirrus.com>
+ <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230511135632.78344-1-bstruempfel@ultratronik.de> <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
-In-Reply-To: <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Wed, 17 May 2023 10:31:53 +0200
-Message-ID: <CAEktqcsFUT=2236bj37xAbcFO750UxQrbPvi+jczZmS-hNJSdA@mail.gmail.com>
-Subject: Re: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
-To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-Cc:     "bstruempfel@ultratronik.de" <bstruempfel@ultratronik.de>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: E83zWdV2Sk2QsBLUBUii7rBv6xNydwdo
+X-Proofpoint-ORIG-GUID: E83zWdV2Sk2QsBLUBUii7rBv6xNydwdo
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am Mo., 15. Mai 2023 um 08:37 Uhr schrieb Mahapatra, Amit Kumar
-<amit.kumar-mahapatra@amd.com>:
->
-> Hello,
->
-> > -----Original Message-----
-> > From: Boerge Struempfel <boerge.struempfel@gmail.com>
-> > Sent: Thursday, May 11, 2023 7:27 PM
-> > Cc: boerge.struempfel@gmail.com; bstruempfel@ultratronik.de; Mark
-> > Brown <broonie@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
-> > Linux Team <linux-imx@nxp.com>; linux-spi@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+On Tue, May 16, 2023 at 10:03:45PM +0300, Andy Shevchenko wrote:
+> On Mon, May 15, 2023 at 1:13 PM Charles Keepax
+> <ckeepax@opensource.cirrus.com> wrote:
+> > On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com wrote:
+> > > Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
+> > > > +   if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
+> > > > +           ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
+> > > > +                                        0, 0, CS42L43_NUM_GPIOS);
+> > > > +           if (ret) {
+> > > > +                   dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
+> > > > +                   goto err_pm;
+> > > > +           }
+> > > > +   }
+> > >
+> > > Besides the fact that we have a callback for this, why GPIO library can't
+> > > handle this for you already?
 > >
-> > CAUTION: This message has originated from an External Source. Please use
-> > proper judgment and caution when opening attachments, clicking links, or
-> > responding to this email.
+> > Apologies but I am not quite sure I follow you, in the device
+> > tree case this will be handled by the GPIO library. But for ACPI
+> > this information does not exist so has to be called manually, the
+> > library does not necessarily know which values to call with,
+> > although admittedly our case is trivial but not all are.
+> 
+> Why can't the firmware provide this information? _DSD() is a part of
+> ACPI v5.1 IIRC.
+> 
+
+I am very very far from confident we can guarantee that will be
+present in the ACPI. The ACPI is typically made for and by the
+Windows side.
+
+> Although it might require moving some code from gpiolib-of.c to
+> gpiolib.c with replacing OF APIs with agnostic ones.
+> 
+
+I really think if we want to start doing things that way on ACPI
+platforms someone with a little more clout than us needs to start
+doing it first. If Intel or someone was doing it that way it
+might give us a little more levelage to push it as being the
+"correct" way to do it.
+
+I will switch to the callback, but really don't think we can rely
+on this being in DSD yet.
+
+> 
+> > > > +static int cs42l43_pin_remove(struct platform_device *pdev)
+> > > > +{
+> > > > +   pm_runtime_disable(&pdev->dev);
+> > >
+> > > This is simply wrong order because it's a mix of non-devm_*() followed by
+> > > devm_*() calls in the probe.
+> > >
 > >
-> >
-> > By default, the imx spi controller uses a high mosi line, whenever it is idle.
-> > This may not be desired in all use cases. For example neopixel leds can get
-> > confused and flicker due to misinterpreting the idle state.
-> > Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-> > can be overwritten on a per device basis.
-> >
-> > Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
-> > ---
-> >  drivers/spi/spi-imx.c        | 9 ++++++++-
-> >  drivers/spi/spi.c            | 2 ++
-> >  include/uapi/linux/spi/spi.h | 3 ++-
-> >  3 files changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
-> > 34e5f81ec431e..6acab2b4ffaa5 100644
-> > --- a/drivers/spi/spi-imx.c
-> > +++ b/drivers/spi/spi-imx.c
-> > @@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller
-> > *controller, struct spi_device  #define MX51_ECSPI_CONFIG_SCLKPOL(cs)  (1
-> > << ((cs & 3) +  4))  #define MX51_ECSPI_CONFIG_SBBCTRL(cs)  (1 << ((cs & 3) +
-> > 8))
-> >  #define MX51_ECSPI_CONFIG_SSBPOL(cs)   (1 << ((cs & 3) + 12))
-> > +#define MX51_ECSPI_CONFIG_DATACTL(cs)  (1 << ((cs & 3) + 16))
-> >  #define MX51_ECSPI_CONFIG_SCLKCTL(cs)  (1 << ((cs & 3) + 20))
-> >
-> >  #define MX51_ECSPI_INT         0x10
-> > @@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct
-> > spi_imx_data *spi_imx,
-> >                 cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
-> >         }
-> >
-> > +       if (spi->mode & SPI_MOSI_IDLE_LOW)
-> > +               cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
->
-> Kindly replace all occurrence of spi->chip_select with spi_get_chipselect(spi, 0)
-> https://github.com/torvalds/linux/commit/9e264f3f85a56cc109cc2d6010a48aa89d5c1ff1
-Thank you very much for noticing this. I have changed it for the next
-version of the patch.
->
-> > +       else
-> > +               cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
->
-> > +
-> >         if (spi->mode & SPI_CS_HIGH)
-> >                 cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
-> >         else
-> > @@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device
-> > *pdev)
-> >         spi_imx->controller->prepare_message = spi_imx_prepare_message;
-> >         spi_imx->controller->unprepare_message =
-> > spi_imx_unprepare_message;
-> >         spi_imx->controller->slave_abort = spi_imx_slave_abort;
-> > -       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH |
-> > SPI_NO_CS;
-> > +       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH
-> > | SPI_NO_CS |
-> > +                                        SPI_MOSI_IDLE_LOW;
-> >
-> >         if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
-> >             is_imx53_ecspi(spi_imx))
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
-> > 9291b2a0e8871..3ad538b317a84 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller
-> > *ctlr, struct spi_device *spi,
-> >                 spi->mode |= SPI_LSB_FIRST;
-> >         if (of_property_read_bool(nc, "spi-cs-high"))
-> >                 spi->mode |= SPI_CS_HIGH;
-> > +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
-> > +               spi->mode |= SPI_MOSI_IDLE_LOW;
-> >
-> >         /* Device DUAL/QUAD mode */
-> >         if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) { diff --git
-> > a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h index
-> > 9d5f580597039..ca56e477d1619 100644
-> > --- a/include/uapi/linux/spi/spi.h
-> > +++ b/include/uapi/linux/spi/spi.h
-> > @@ -28,6 +28,7 @@
-> >  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8 wires */
-> >  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance
-> > turnaround */
-> >  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on Rx only xfer
-> > */
-> > +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low when
-> > idle */
-> >
-> >  /*
-> >   * All the bits defined above should be covered by SPI_MODE_USER_MASK.
-> > @@ -37,6 +38,6 @@
-> >   * These bits must not overlap. A static assert check should make sure of
-> > that.
-> >   * If adding extra bits, make sure to increase the bit index below as well.
-> >   */
-> > -#define SPI_MODE_USER_MASK     (_BITUL(17) - 1)
-> > +#define SPI_MODE_USER_MASK     (_BITUL(18) - 1)
-> >
-> >  #endif /* _UAPI_SPI_H */
-> > --
-> > 2.25.1
->
+> > I had missed there are now devm_pm_runtime calls, I will switch
+> > to that. But I would like to understand the wrong order, remove
+> > will be called before the devm bits are destroyed and it seems
+> > reasonable to disable the pm_runtime before destroying the
+> > pinctrl device. What exactly would run in the wrong order here?
+> 
+> At the ->remove() stage after this call an IRQ can be fired (or on SMP
+> systems any other APIs can be called), for example. So, would it be a
+> problem to service it with PM disabled?
+> 
+> But in any case the shuffling ordering like this is prone to subtle
+> bugs. I prefer to have strict ordering if there is nothing preventing
+> from doing that way.
+
+Yeah happy enough to use devm_ here, just didn't know it existed
+and wanted to better understand your concerns as I was having
+difficulty seeing the issue.
+
+Thanks,
+Charles
