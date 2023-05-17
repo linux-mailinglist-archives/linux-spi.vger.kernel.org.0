@@ -2,103 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F3F706541
-	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 12:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2968E70658E
+	for <lists+linux-spi@lfdr.de>; Wed, 17 May 2023 12:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjEQKaz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 06:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S229669AbjEQKqi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 06:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjEQKaw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 06:30:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29FD3C1E;
-        Wed, 17 May 2023 03:30:50 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96aae59bbd6so102983866b.3;
-        Wed, 17 May 2023 03:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684319449; x=1686911449;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=HQhZP+Wp86x1Uus2oyWNXBtJ8lRewWxzTwOG8b2mWcBX7OOl8oOdFulpCWXQrc9LtN
-         mmbAl6v2a0AoUqnJS8LlAc2EpYdKgEOauo0KzYIX1+FlsTEbFhPLVLjIshf1pa/UKF5h
-         eSrEzfFvYNTobR3SeJZbr/+dPi61VG0mXTvdAvRfwzABPx45ktvI9D2ZuEUrqhxRbW0x
-         7gsYkEjU/UTfWrQgIOn4FTwPXxf9XPz+7DGXtDPEURQ4RliWFeuLIJac1ePlzCKMfLys
-         UXUm2vkyTKzjf/s+Qkh1/kURK07hytgRXq4OgWduc8BZumlatqJ780xhNAM4rb38Qg4J
-         DonQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684319449; x=1686911449;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=CGslV2WmA7JBOhzfXGQKb4O+2PLzcd13SFUh8Fow0H6Y49hMK5+9hD9Ul8yIIL7ufD
-         zsBjvG56WpZfmD05sZs1O3GwGQfH4JUjh9TMT7fkhDhsLYGYvCP38ZR1nM7osdHi9VU5
-         IuzJmdcoWftZo+KwAyCMMYxYwGx8e9Cg2buNFbepKH2pErnMr9h74I1OJ9WE2twWQpzC
-         YLihmxdbBDVUn9yA49/4nKEL3QYby9HIO0hbr6e+6ySsd1skYf2KeOsPORIBCvw+vEaJ
-         cAgJsXmVhHNUMhfpAwMotJG3vJ3HdO+Sy3Zo8BAbK/wpmz8rbuowEQQQRRh8Iga03pRD
-         7prA==
-X-Gm-Message-State: AC+VfDxq9auYZ4VhjU/2O6PkZ/u7vgwnl5qyXp0A0ysvqVdVknzoCvs5
-        YujaBwjw4/3sEzNF41FYvQqdHfUtpXb66D7+
-X-Google-Smtp-Source: ACHHUZ5YhiHXMEbXtrEPTBW0NZ0azss5SdBr4P0QAtlTBJ2bVf1F4AAtT/ScsY8/Arw9N38vG/Rp3Q==
-X-Received: by 2002:a17:907:31c9:b0:94f:6627:22b5 with SMTP id xf9-20020a17090731c900b0094f662722b5mr35712100ejb.47.1684319448765;
-        Wed, 17 May 2023 03:30:48 -0700 (PDT)
-Received: from wslxew193.fritz.box (p200300c78700c900d536eaeb32769819.dip0.t-ipconnect.de. [2003:c7:8700:c900:d536:eaeb:3276:9819])
-        by smtp.gmail.com with ESMTPSA id bu2-20020a170906a14200b0096654fdbe34sm12235758ejb.142.2023.05.17.03.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 03:30:48 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        andy.shevchenko@gmail.com, festevam@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] spi: spidev: add SPI_MOSI_IDLE_LOW mode bit
-Date:   Wed, 17 May 2023 12:30:07 +0200
-Message-Id: <20230517103007.26287-3-boerge.struempfel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517103007.26287-1-boerge.struempfel@gmail.com>
-References: <20230517103007.26287-1-boerge.struempfel@gmail.com>
+        with ESMTP id S229485AbjEQKqh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 06:46:37 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08CE97;
+        Wed, 17 May 2023 03:46:36 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6Ye5k010531;
+        Wed, 17 May 2023 05:46:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=sRGJh5o2DA79DjdFheuNkuTMul+lTmOesNItZcaV51g=;
+ b=UA1PgTpweGDIuz7gZTZM689wRyow0OwRHwYG79ojqcV3NyTleB07o+Psoy/CyQFqXStu
+ 1lsKRrxgp20KJ3mcRpV3FG0hZfcvIcqy7hDEiflmQfaR4aYVgDMRf/0o1tFDm5HGRZUR
+ 6JoOSnTAMABzdxSEyFsSNqv9b2vigI+YLF21iwLbbFnnf4iEhnsuu4Lt/NJlBIdz3Iev
+ UHehSDcGhQzZ4ent2J7AXCs/YfkWfGeWiU3sslKECe2359Pe+WWvPWte8OWq35riGKVM
+ sS8l9BKPTspdL3NQbrBkReiZkjsDWQ70vMKjphcu3K2XO/tnv6QSzxPULuG226fAiSre gA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y15g6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 05:46:31 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
+ 2023 05:46:29 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 05:46:29 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B01C511CA;
+        Wed, 17 May 2023 10:46:29 +0000 (UTC)
+Date:   Wed, 17 May 2023 10:46:29 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     "Goud, Srinivas" <srinivas.goud@amd.com>
+CC:     "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its
+ ready
+Message-ID: <20230517104629.GW68926@ediswmail.ad.cirrus.com>
+References: <20230509164153.3907694-1-ckeepax@opensource.cirrus.com>
+ <PH8PR12MB6675F6CC30254C5EED898FD5E1789@PH8PR12MB6675.namprd12.prod.outlook.com>
+ <20230515125458.GT68926@ediswmail.ad.cirrus.com>
+ <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
+X-Proofpoint-ORIG-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Allow userspace to set SPI_MOSI_IDLE_LOW mode bit using the
-SPI_IOC_WR_MODE32 ioctl.
+On Wed, May 17, 2023 at 05:24:10AM +0000, Goud, Srinivas wrote:
+> >On Mon, May 15, 2023 at 12:04:38PM +0000, Goud, Srinivas wrote:
+> >> Cadence SPI configured in Slave mode,  when threshold is half of FIFO
+> >> depth cdns_spi_read_rx_fifo() function continuously in read mode, due to
+> >this we see incorrect data received on the Master side as Slave is failed to
+> >update the TX FIFO on time.
+> >
+> >Apologies I am having a little trouble following this are you saying this part of
+> >the patch cases issues for you running in slave mode?
+> Yes, we see issue with this patch when we run in Slave mode.
+> 
+> When any master is in continuous read mode (anything > FIFO depth), 
+> with updated logic cdns_spi_read_rx_fifo() function in cdns_spi_irq
+> continuously in read loop to read complete half FIFO data.
+> due to this Slave failed to write the TX FIFO on time and result in
+> incorrect data in Master receive. 
+> Whereas in my previous patch, data read and write happening byte wise,
+> by which we are making sure data availability in TXFIFO on time.
 
-Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
----
- drivers/spi/spidev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That is a very tight system if reading 64 sequential memory locations
+is the timing difference between success and failure, Linux is
+not a real-time OS.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 39d94c850839..e50da54468ec 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -64,7 +64,7 @@ static_assert(N_SPI_MINORS > 0 && N_SPI_MINORS <= 256);
- 				| SPI_NO_CS | SPI_READY | SPI_TX_DUAL \
- 				| SPI_TX_QUAD | SPI_TX_OCTAL | SPI_RX_DUAL \
- 				| SPI_RX_QUAD | SPI_RX_OCTAL \
--				| SPI_RX_CPHA_FLIP)
-+				| SPI_RX_CPHA_FLIP | SPI_MOSI_IDLE_LOW)
- 
- struct spidev_data {
- 	dev_t			devt;
--- 
-2.25.1
+But I don't really mind moving back to a byte-wise operation. Although
+we need to avoid the issues introduced by the first attempt at that. I
+will have a look at doing a patch to put the byte-wise back in.
 
+Thanks,
+Charles
