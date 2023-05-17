@@ -2,112 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FFB707619
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 01:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93CA707656
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 01:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjEQXDr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 May 2023 19:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S229509AbjEQXU2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 May 2023 19:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjEQXDq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 19:03:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068246E88;
-        Wed, 17 May 2023 16:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684364600; x=1715900600;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2+0dwq6i5SrTU+4itFIZkMLXuGYnuIgVovKsqf7sCNE=;
-  b=bz3wfmJ8p2miQm5XNO0u2C5npXIqIHJYXvdiENkRR9G21n3fHt16Bxj9
-   1K4u2ZpupFYtYD3gkvTOUKdzaO2qwFkSXFf9aSv6IIiHUd84iZ9/fqMhY
-   pVe8BhZFsuKjUSGiTM+HIdhqxrvjmOJVActQCnCxeV9BXgsixxZ8gnYvD
-   5tpW6Xyn0cSZKTqZO6EOuiuuaX0VZLqhiS+BijATBgSISdIKqdn9S6ACc
-   i7tF25CvzgHNgL6Pa0HdU5jhrRejpOvkCLXz1eaVGOCvvwA+OaF1UOVLX
-   pB7v/2Ud9IKcLJK2J0/EQvb6Fd+chyIKPgQu+TB0GUMaqU7bKwd7kA8Oe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="417561586"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="417561586"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 16:03:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="771617280"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="771617280"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 17 May 2023 16:03:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pzQAl-000AU7-2p;
-        Thu, 18 May 2023 02:03:07 +0300
-Date:   Thu, 18 May 2023 02:03:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: [PATCH v11 3/3] spi: dw: Round of n_bytes to power of 2
-Message-ID: <ZGVdK9jQ+zxRvOze@smile.fi.intel.com>
-References: <20230512104746.1797865-1-joychakr@google.com>
- <20230512104746.1797865-4-joychakr@google.com>
+        with ESMTP id S229458AbjEQXU2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 May 2023 19:20:28 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B186A2D76;
+        Wed, 17 May 2023 16:20:26 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae51b07338so9272245ad.0;
+        Wed, 17 May 2023 16:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684365626; x=1686957626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0FGTT8QnCRYYOWleyT4irBH5JIyvwsw53gKLlMTCAtQ=;
+        b=aULJWNAMgfDlK62yhEWh0LWjt81wS7PYKGheaRXWRwVdbgfQz+Q9NpHOCIIZI/hpQp
+         16qrIGkDmWNV7fe/zVMR3IL3vstgjv/98yi6dSu7BGgKhsttgzgn/fiP1EAhhhkjKUVA
+         lH3CZH6D4KoCY0B1F1+o/MMxx4Osk9FOnxjTqCUUumQ4k9RgUyuJu7+yJYEjUkPIp3a8
+         ENo2q/zZ0XiRh59nFvvdNmZ2C9jpAxPJW3LGYNH1ByW/nedMzTMslZORY4Zvj5ZeL8Sw
+         1IvCaiPOM4aeqSD52oI6Kd1xaBCdKJhqF5fXCfmiU4OYHZKNnYq3UyJfkvwolqYxyg/J
+         bjKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684365626; x=1686957626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0FGTT8QnCRYYOWleyT4irBH5JIyvwsw53gKLlMTCAtQ=;
+        b=JqrnEFUyIWyjK4a4Rr41LwLRmJQsaX+LxZ2bhSvtJDCiCnxbHvl7sY1sHhYcDkUDiO
+         0HJCV0sA+XQZ1xVpBGujoEIrQ2axbAJPhD5N5uHjPAJ4cobE2uGs1Qr0nKsnl/slFEct
+         xJ+O4f6yBjsZEytKI5zUquqoe+q7o/XWuGMgoowodyw+3dyhGtZSbuzeaNJseUqTu6hh
+         nhZVRFUk7iW+UHs+0PW+saM05gAPkliZBoct7oqk/Hp3VH4FwbEWMmEdZyci3ohCuszr
+         4GFm9oKco4Ldq0qjwv5RO7KCs3Fp0vJAeEZNLxR0r9kYB5J3YACo3G3gvIcbwrQDb68l
+         AWsQ==
+X-Gm-Message-State: AC+VfDwKUYQSq8TalNLCk6RWY9V5JTwaiXKvqRy3bvPE69YGVeuSwEQ7
+        EqLFe72In9PoGn+n2lwrItNyLsenLc66ORv5eaw=
+X-Google-Smtp-Source: ACHHUZ7DVMIpDP0wVFvhPmg32T37MXUYBQVHIbryPEsZqhKGHHq+QWaLxPQUnrkWMUmfEn1oOMPAem/FTp/OAbNB3gA=
+X-Received: by 2002:a17:903:2287:b0:1a6:77b8:23e0 with SMTP id
+ b7-20020a170903228700b001a677b823e0mr483539plh.60.1684365625988; Wed, 17 May
+ 2023 16:20:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512104746.1797865-4-joychakr@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517223007.178432-1-boerge.struempfel@gmail.com> <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+In-Reply-To: <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date:   Thu, 18 May 2023 01:20:14 +0200
+Message-ID: <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:47:45AM +0000, Joy Chakraborty wrote:
-> n_bytes variable in the driver represents the number of bytes per word
-> that needs to be sent/copied to fifo. Bits/word can be between 8 and 32
+Thank you for your prompt feedback
 
-FIFO
+Am Do., 18. Mai 2023 um 00:43 Uhr schrieb Fabio Estevam <festevam@gmail.com=
+>:
+>
+> On Wed, May 17, 2023 at 7:30=E2=80=AFPM Boerge Struempfel
+> <boerge.struempfel@gmail.com> wrote:
+> >
+> > Some spi controller switch the mosi line to high, whenever they are
+> > idle. This may not be desired in all use cases. For example neopixel
+> > leds can get confused and flicker due to misinterpreting the idle state=
+.
+> > Therefore, we introduce a new spi-mode bit, with which the idle behavio=
+ur
+> > can be overwritten on a per device basis.
+> >
+> > Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+> >
+> >
+> > Link for versions:
+> >   v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-b=
+struempfel@ultratronik.de/
+> >   v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.s=
+truempfel@gmail.com/T/#t
+> >
+> > Changes from V3:
+> >   - Added missing paranthesis which caused builderrors
+> >
+> > Changes from V2:
+> >   - Removed the device-tree binding since this should not be managed by
+> >     the DT but by the device itself.
+> >   - Replaced all occurences of spi->chip_select with the corresponding
+> >     macro spi_get_chipselect(spi,0)
+> >
+> > Changes from V1:
+> >   - Added patch, introducing the new devicetree binding flag
+> >   - Split the generic spi part of the patch from the imx-spi specific
+> >     part
+> >   - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+> >     in the imx-spi.c modebits.
+> >   - Added the SPI_MOSI_IDLE_LOW bit to spidev
+>
+> The change log should be placed below the --- line.
+>
 
-> bits from the client but in memory they are a power of 2, same is mentioned
-> in spi.h header:
+My bad. Thanks for letting me know. Just to clarify: I put the
+changelog directly below
+the first ---? And do I then put another --- between the changelog and
+the following
+include/uapi/linux/spi/spi.h | 3 ++- line?  or is there just a
+new-line seperating them.
 
-> "
+And if you don't mind my trivial questions, am I supposed to write a
+cover letter for
+the patch-stack? I seem to find contradictory answers to this question onli=
+ne.
 
-Just a blank line is enough here.
+> > ---
+> >  include/uapi/linux/spi/spi.h | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.=
+h
+> > index 9d5f58059703..ca56e477d161 100644
+> > --- a/include/uapi/linux/spi/spi.h
+> > +++ b/include/uapi/linux/spi/spi.h
+> > @@ -28,6 +28,7 @@
+> >  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with=
+ 8 wires */
+> >  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedan=
+ce turnaround */
+> >  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on=
+ Rx only xfer */
+> > +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low =
+when idle */
+>
+> Should tools/spi/spidev_test.c be changed to include this new
+> mosi-idle-low option?
 
->  * @bits_per_word: Data transfers involve one or more words; word sizes
->  *      like eight or 12 bits are common.  In-memory wordsizes are
->  *      powers of two bytes (e.g. 20 bit samples use 32 bits).
->  *      This may be changed by the device's driver, or left at the
->  *      default (0) indicating protocol words are eight bit bytes.
->  *      The spi_transfer.bits_per_word can override this for each transfer.
-> "
+Until now I actually wasn't aware of this tool. However on first
+glance, it seems
+reasonable to add this mode bit. I can certainly add this mode bit to
+the spidev_test
+if desired.
 
-And here.
-
-> Hence, round of n_bytes to a power of 2 to avoid values like 3 which
-> would generate unalligned/odd accesses to memory/fifo.
-
-FIFO
-
-> Fixes: a51acc2400d4 ("spi: dw: Add support for 32-bits max xfer size")
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-> Tested-by: Serge Semin <fancer.lancer@gmail.com>
-
-> * tested on Baikal-T1 based system with DW SPI-looped back interface
-> transferring a chunk of data with DFS:8,12,16.
-
-This shouldn't be here. It's not a tag.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+While looking through the code, I noticed, that the latest two
+additions to the spi->mode
+(SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool. Is th=
+is
+by design, or should they then be included as well?
