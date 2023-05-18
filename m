@@ -2,122 +2,205 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164A5707EA4
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 12:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6FF708212
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 15:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjERK6Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 May 2023 06:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S230351AbjERNIN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 May 2023 09:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjERK6P (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 06:58:15 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5F31BFC;
-        Thu, 18 May 2023 03:58:07 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75774360e46so95994085a.2;
-        Thu, 18 May 2023 03:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684407486; x=1686999486;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a577LY7A2uHvmqRNQWIgZaEpX7tSIO73eW80DF91flM=;
-        b=s5ijOOMbULc3W4XmEOzGUjw/J9dXzFP3HahO+s6kJUwixCffiUjibQN8/haQT6z6Uy
-         ENVniZgvUL/CmWcXFVGIMainGW6YTw0T6bkD3CR9Laam9WFMbLSTr/5a3UEt3OIsT3aA
-         3d8kKRzOc1Kz6snmw125sy8UNDw2d0QKMfcsKu1L4rFXQr6KchyvkHjbOEragdTqdu6u
-         Wk1ccC7O1OUnHiCLucBdqo/4Fc2ekuJtVLyZE7xQ/uUqcsnYsnVYHYXG1LdmtjYgk4t/
-         rkh0/7GdIerX0kdb4o80S0AoFHQpXJK7T0oh9ylQSe7m2zPtAyGS1wmPBFVlwnNyl4Ql
-         KU6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684407486; x=1686999486;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a577LY7A2uHvmqRNQWIgZaEpX7tSIO73eW80DF91flM=;
-        b=bSnrkol/vhA3YyWUs+6wgRXhFe4w9srKwqtR4tu4LUusElqsgdDCGecO4Uo0qLj1MV
-         AQ5jvM8lDG5YNv0h+Coe7I7C3qbUw3p0alLGFUG9TwrLuxi/o9o0Opyc9ZkJXMkYUeg8
-         suDBk6l4tbqOWo9lxCP8/uvI2E1x9BwRv4s72eqsgIXavDUbj9SfqpFdVtrQ7yYrzcu/
-         ZeNppVXE/tOb0S6NxvLBhBlW3GlFEuS4ckzKy5vFPzbKP9Oua4ghFSLI9Wo34C8oRUd/
-         MK5EqUWPetoA3beyE/C2xhpLh/JGEzstrbCbKcRQt2Ue1jUSe5Z31kbJt1N/QSm2S03x
-         2mQg==
-X-Gm-Message-State: AC+VfDysLUiyvwLZYykxu4lCsFoPAe1IPtQ+KqiqC8B0+7dWo+zi7XN9
-        LAEtfO+WpW8Ou5KDeWKPDtn021NQw7IFd5+vku0=
-X-Google-Smtp-Source: ACHHUZ5pDu9wRQ1ggalDohbvPtW4L8OMglakh23ju3FpnWe0ybBnb2shAQRSij03K9b9A/cTo2Vw7mKU48AD+Yt586A=
-X-Received: by 2002:a05:6214:518b:b0:621:64c7:235f with SMTP id
- kl11-20020a056214518b00b0062164c7235fmr4272502qvb.27.1684407486519; Thu, 18
- May 2023 03:58:06 -0700 (PDT)
+        with ESMTP id S230305AbjERNIM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 09:08:12 -0400
+X-Greylist: delayed 184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 May 2023 06:07:56 PDT
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F32F1726;
+        Thu, 18 May 2023 06:07:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684415090; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=jHp5siR+mpF442a5tGnVIsTWCOu67V55rUPcoVou53WJKCWN+qTAmII+Pu7TU8ex/D
+    ySc9MtPECNPRnckq8ffAVuhWY3mWc/KQ02u7XxRUW17+KlUrEjaSL9ImXRvFPzRRWKol
+    T71KZYiJsYr4gC96Z2zjELQQK+JhoCs81WVtBkXj/p34f4eRtWIrU2t580mxujVcEXJT
+    G1ygOstO9LGws1Qvj3qMkD91qtCp2gBluqD0pMam7Bov9bdNLV95awDdWfV8in14ble1
+    n1unqDIZPTjwKjQ5sA8XcuejNLKxgoPWfLwj0xa8ta5lOfB0E+wELt4DPjZicgOir1J5
+    vQhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684415090;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
+    b=mqzczOcU5K6zxym1zhKJ27g9oD2QhWKdq3EdsIrVgkimBlyZBrFfQXOljU/+/RCH25
+    8fyIEDniNEt0KIkzKIHH2E+oULCE7lVxi86Xxji3q9xD1vzBZSLCA0ZnHQtAuPRy6RA5
+    mp/YBNaxbQNQojX/Vuj101TvU2lWPkOjNqEzIRfoWMM8pMiMKCWtYNHOyA4SA+AHGQ4Q
+    7aROCLu6uGh/wsTMaMQfrZEPLIwgMdMKzOvzgnahRlVn/TR6RG5HK5fcSfHIDd6EA4lG
+    4qUQWq23DngjEYt1c/AyhBmYspLWrfwjO5X2lGtoL9MArqlgRUtl9JEufiIUI4O0eCJ9
+    oEgw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684415090;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
+    b=bMshw8duaax9aITLuq2vz4VCipAk+DcXI85nhKezpsY8LVVBtlG6dTZcX4xYDv2/77
+    iEfY6hurG0RjWXSq97qNkyCEQa3wy8DVpAjuQIZ5+Q29Vauu12m5AUVJo5YUBubesoZQ
+    F/UB6WkPa9O3IShE+ABpnRS/tBWGNXteaXAwcjzTnnpz/RlVKxKnn0/6LgfwgpM7t6qY
+    +3YFpntevYSlXTlPUm/UBYS6X/kPC3Enjuzehl+8Xg5SVDfM4nKHl4DzPZQlGT5ra1uS
+    yGSlF8zgAfGd08Q2KSHPcJH4UaqvDx4KPt2cgkHe7+TccuiAUPOw5Rfck4vjy/IJjqzW
+    JkFA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684415090;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
+    b=yR1zUV+6SNnB74h2L/cWgn5U5zo14cpDUHP5THYm7utMH3ChNq/dMEz/+zkdzZFBlv
+    uAgFYXaxT8wdiC72HDDQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4p1/zY="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4ID4oCWf
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 18 May 2023 15:04:50 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+Date:   Thu, 18 May 2023 15:04:25 +0200
+Subject: [PATCH] spi: qup: Request DMA before enabling clocks
 MIME-Version: 1.0
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
- <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
- <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com>
- <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com> <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
-In-Reply-To: <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 18 May 2023 13:57:30 +0300
-Message-ID: <CAHp75VcP78MhmjzOCiGwfEwWwVxCHhy3qmZet0HqjPeLTc9h-A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
-To:     =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, bstruempfel@ultratronik.de,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230518-spi-qup-clk-defer-v1-1-f49fc9ca4e02@gerhold.net>
+X-B4-Tracking: v=1; b=H4sIAFgiZmQC/x2N0QrCMAwAf2Xk2UC7MhF/RXzo2tQFS60JG8LYv
+ xv2eAfH7aAkTAr3YQehjZU/zcBfBkhLbC9CzsYwujG4yd9QO+N37ZjqGzMVEswlhkRXHxwFsG6
+ OSjhLbGmxsq21muxChX/n6PE8jj/UF+p5eAAAAA==
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 18, 2023 at 3:27=E2=80=AFAM B=C3=B6rge Str=C3=BCmpfel
-<boerge.struempfel@gmail.com> wrote:
-> Am Do., 18. Mai 2023 um 01:53 Uhr schrieb Fabio Estevam <festevam@gmail.c=
-om>:
+It is usually better to request all necessary resources (clocks,
+regulators, ...) before starting to make use of them. That way they do
+not change state in case one of the resources is not available yet and
+probe deferral (-EPROBE_DEFER) is necessary. This is particularly
+important for DMA channels and IOMMUs which are not enforced by
+fw_devlink yet (unless you use fw_devlink.strict=1).
 
-...
+spi-qup does this in the wrong order, the clocks are enabled and
+disabled again when the DMA channels are not available yet.
 
+This causes issues in some cases: On most SoCs one of the SPI QUP
+clocks is shared with the UART controller. When using earlycon UART is
+actively used during boot but might not have probed yet, usually for
+the same reason (waiting for the DMA controller). In this case, the
+brief enable/disable cycle ends up gating the clock and further UART
+console output will halt the system completely.
 
-> Okay. I have begun to implement this. During this, I noticed, that if
-> I called the new option
-> "--mosi-idle-low", the alignment of the help-lines (and in the c code
-> itself) would break.
-> Should I therefore shorten the option name by using an abbreviation
-> like "--mil", which is
-> probably not very helpful as a "full option name", or should I touch
-> all the other lines and
-> insert necessary spaces, such that they are aligned once more? (And if
-> so, should I do
-> this in a seperate patch, preparing the addition of the new options?)
+Avoid this by requesting the DMA channels before changing the clock
+state.
 
-It's a user space tool where not so strict rules of commit splitting
-apply (as far as I know), I would go with indention fixes in the same
-patch that adds the option.
+Fixes: 612762e82ae6 ("spi: qup: Add DMA capabilities")
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+ drivers/spi/spi-qup.c | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
-...
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 944ef6b42bce..00e5e88e72c4 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1028,23 +1028,8 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
+-	ret = clk_prepare_enable(cclk);
+-	if (ret) {
+-		dev_err(dev, "cannot enable core clock\n");
+-		return ret;
+-	}
+-
+-	ret = clk_prepare_enable(iclk);
+-	if (ret) {
+-		clk_disable_unprepare(cclk);
+-		dev_err(dev, "cannot enable iface clock\n");
+-		return ret;
+-	}
+-
+ 	master = spi_alloc_master(dev, sizeof(struct spi_qup));
+ 	if (!master) {
+-		clk_disable_unprepare(cclk);
+-		clk_disable_unprepare(iclk);
+ 		dev_err(dev, "cannot allocate master\n");
+ 		return -ENOMEM;
+ 	}
+@@ -1092,6 +1077,19 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	spin_lock_init(&controller->lock);
+ 	init_completion(&controller->done);
+ 
++	ret = clk_prepare_enable(cclk);
++	if (ret) {
++		dev_err(dev, "cannot enable core clock\n");
++		goto error_dma;
++	}
++
++	ret = clk_prepare_enable(iclk);
++	if (ret) {
++		clk_disable_unprepare(cclk);
++		dev_err(dev, "cannot enable iface clock\n");
++		goto error_dma;
++	}
++
+ 	iomode = readl_relaxed(base + QUP_IO_M_MODES);
+ 
+ 	size = QUP_IO_M_OUTPUT_BLOCK_SIZE(iomode);
+@@ -1121,7 +1119,7 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	ret = spi_qup_set_state(controller, QUP_STATE_RESET);
+ 	if (ret) {
+ 		dev_err(dev, "cannot set RESET state\n");
+-		goto error_dma;
++		goto error_clk;
+ 	}
+ 
+ 	writel_relaxed(0, base + QUP_OPERATIONAL);
+@@ -1145,7 +1143,7 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	ret = devm_request_irq(dev, irq, spi_qup_qup_irq,
+ 			       IRQF_TRIGGER_HIGH, pdev->name, controller);
+ 	if (ret)
+-		goto error_dma;
++		goto error_clk;
+ 
+ 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+ 	pm_runtime_use_autosuspend(dev);
+@@ -1160,11 +1158,12 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 
+ disable_pm:
+ 	pm_runtime_disable(&pdev->dev);
++error_clk:
++	clk_disable_unprepare(cclk);
++	clk_disable_unprepare(iclk);
+ error_dma:
+ 	spi_qup_release_dma(master);
+ error:
+-	clk_disable_unprepare(cclk);
+-	clk_disable_unprepare(iclk);
+ 	spi_master_put(master);
+ 	return ret;
+ }
 
-> > > While looking through the code, I noticed, that the latest two
-> > > additions to the spi->mode
-> > > (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool.=
- Is this
-> > > by design, or should they then be included as well?
-> >
-> > Looks like these two are missing and would be good to get them included=
- as well.
->
-> Okay. Should this be a separate patch, or should I add the support for
-> all 3 mode bits in
-> one commit?
+---
+base-commit: 5e41763e97db00125dec847e54a1827436d34cd3
+change-id: 20230518-spi-qup-clk-defer-dfa3ce6130e3
 
-Split them logically. Are they from the same group of bits? No? then split.
+Best regards,
+-- 
+Stephan Gerhold <stephan@gerhold.net>
 
---=20
-With Best Regards,
-Andy Shevchenko
