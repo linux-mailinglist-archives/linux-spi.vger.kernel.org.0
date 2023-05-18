@@ -2,236 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2701D707E62
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 12:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164A5707EA4
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 12:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjERKqI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 May 2023 06:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        id S229920AbjERK6Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 May 2023 06:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjERKqD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 06:46:03 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D90410D8;
-        Thu, 18 May 2023 03:46:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ns9SK9wL30wTOCqtYqSkspI43Zt3BD8EmBGTJd3YKsCzNFgBSyeSjJ9Wrt6upy3ng4Qk6DtKykIA0243lUGM3QNwSHABSLl+PhkiHWlYEt/hmm4WO9Oj3Vcme9jOuYbFWQv/jWPW8x1bqKj3PYYFnwYccmG6LjfVBdNTuKSZSXFY5N6JhC1aFY/InChsRkQtkpGRWYFLN/ia9ASCCmBDaY4X3dR+wTlpD8LdA18Pzv/HVhlwbwH8pZBFvtHBLUlizZkZGDjFi+8zKigW0D9FjPoSQY88koQ2UmKlcICpM4ZedtA2isbI+7LapXWp979rE6w0B6QqZjgpKlhBgEF0LA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zgG52cfylsN99bm4Vj4x3TNKL1ezCzLg8m+LQg9FHFU=;
- b=I79Yotpw+EdyKryhgVKYxdTCoqq4S24QH88KdbdIXH5TYZ+o1eO3vxENEkr+X7tycKtE0j6IOyVRypIjMbz13UFPnw3qcV7x+0/9MI/6oAHnV5/83XQgBAX6TttOGSdQSWPF0CP9I1COHvLDQ9CQ+XJLy7fYaNxq6bgVXWbdLGTPXTOWDiTTmKjFYSwRlb2/WAu11AsHHCcLBUuhqvuxDPxo9vghjGKBveabegUrhklfPCSi5d0MZsFVD3hCR4VCmmVYGHt4to53KblMdG343srLzr+HoEIrQAL40BY7mgWcSCXm/RzwzA0eruuER07Oe6kSNsYlqx9QUKIlZoLO2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zgG52cfylsN99bm4Vj4x3TNKL1ezCzLg8m+LQg9FHFU=;
- b=Sg2mE75qykbR9+ZgDLRZee2+yups9B70qdAw9pcUZ6kdeEPsgWjGwCIMNf4DJJf26pXCZnL5D7zf/31Ubfumi2tu8XG3QN+TYshy7S1GDZFs5hRmL/E4p83G/yjUDS022iJVA3Xa885tvTrbKvQaGAYEo5ef+rskCd1Sva55HlA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DM6PR12MB4169.namprd12.prod.outlook.com (2603:10b6:5:215::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
- 2023 10:45:57 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578%4]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 10:45:56 +0000
-Message-ID: <fe90f121-3e7e-7071-f654-6d77a7a8102e@amd.com>
-Date:   Thu, 18 May 2023 12:45:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Content-Language: en-US
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
- <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1PR10CA0099.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:28::28) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+        with ESMTP id S230215AbjERK6P (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 06:58:15 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5F31BFC;
+        Thu, 18 May 2023 03:58:07 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75774360e46so95994085a.2;
+        Thu, 18 May 2023 03:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684407486; x=1686999486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a577LY7A2uHvmqRNQWIgZaEpX7tSIO73eW80DF91flM=;
+        b=s5ijOOMbULc3W4XmEOzGUjw/J9dXzFP3HahO+s6kJUwixCffiUjibQN8/haQT6z6Uy
+         ENVniZgvUL/CmWcXFVGIMainGW6YTw0T6bkD3CR9Laam9WFMbLSTr/5a3UEt3OIsT3aA
+         3d8kKRzOc1Kz6snmw125sy8UNDw2d0QKMfcsKu1L4rFXQr6KchyvkHjbOEragdTqdu6u
+         Wk1ccC7O1OUnHiCLucBdqo/4Fc2ekuJtVLyZE7xQ/uUqcsnYsnVYHYXG1LdmtjYgk4t/
+         rkh0/7GdIerX0kdb4o80S0AoFHQpXJK7T0oh9ylQSe7m2zPtAyGS1wmPBFVlwnNyl4Ql
+         KU6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684407486; x=1686999486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a577LY7A2uHvmqRNQWIgZaEpX7tSIO73eW80DF91flM=;
+        b=bSnrkol/vhA3YyWUs+6wgRXhFe4w9srKwqtR4tu4LUusElqsgdDCGecO4Uo0qLj1MV
+         AQ5jvM8lDG5YNv0h+Coe7I7C3qbUw3p0alLGFUG9TwrLuxi/o9o0Opyc9ZkJXMkYUeg8
+         suDBk6l4tbqOWo9lxCP8/uvI2E1x9BwRv4s72eqsgIXavDUbj9SfqpFdVtrQ7yYrzcu/
+         ZeNppVXE/tOb0S6NxvLBhBlW3GlFEuS4ckzKy5vFPzbKP9Oua4ghFSLI9Wo34C8oRUd/
+         MK5EqUWPetoA3beyE/C2xhpLh/JGEzstrbCbKcRQt2Ue1jUSe5Z31kbJt1N/QSm2S03x
+         2mQg==
+X-Gm-Message-State: AC+VfDysLUiyvwLZYykxu4lCsFoPAe1IPtQ+KqiqC8B0+7dWo+zi7XN9
+        LAEtfO+WpW8Ou5KDeWKPDtn021NQw7IFd5+vku0=
+X-Google-Smtp-Source: ACHHUZ5pDu9wRQ1ggalDohbvPtW4L8OMglakh23ju3FpnWe0ybBnb2shAQRSij03K9b9A/cTo2Vw7mKU48AD+Yt586A=
+X-Received: by 2002:a05:6214:518b:b0:621:64c7:235f with SMTP id
+ kl11-20020a056214518b00b0062164c7235fmr4272502qvb.27.1684407486519; Thu, 18
+ May 2023 03:58:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DM6PR12MB4169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 139c61e8-0e11-4501-c53b-08db578d0eb4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nNxcxbO1ZyA8v3QXLrLu1RZCAhkAg5XTPt+/NpY2K9pd0a7iedl6t0bIWl2fAKhfpCdB6kXY3vy24R32C8mvSL5HWebPqi1fpxgrhZBtQ+tw6zY8TjYVvVi+jF0o/WE/FvGm5CgRILU/uE8jteJoQy2YXfhJmhs2Jus4A97zvGzXtK/CYJX47unLpMFH3BLDq6iAi1qdVcLGLEGpQZSK6EYSIW9DfhMrnw3+IGegRBthtPNJnjlLfY8e5+XxahA4j7eGtYMfOg7EikxA4VfJriXXPzX9lDAjFtM3/BlAyt8LwQrdgdGoFMgFDRCHbXpaeDpIGBrN7KKsNodPddc2abXvW6O6lNz7HjxOjjE8LeuT34jAHrbE5k8hxpmGvASUrmR2opIJqNQqeuzzztu2tEjDSF5GbZ7K0FeXzeMhFK0T/PDJq9uxcEokNOPZL+1A+vqcKXuoo6F71xwiCGJD7Ah90VS2BOPUgfaFwDdRHq1ouGh9nK2g9jb39k4NJSLrC1XQgHPdqpSqTp0rDAOZVqR1YsPgAJcCRfUlBbENAFMwU8AX9OVgk28DoXsfVFb9pEK4hmaoy7VlJ0yM2/FGtKvaljAnZavCwjtNJ4bWffQlKUVBgbc4ZlSpO/9ZPgr+vvo5tg3YTDP3AHmR0xGNsg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199021)(26005)(6506007)(6512007)(53546011)(36756003)(2616005)(83380400001)(31696002)(86362001)(38100700002)(186003)(6486002)(54906003)(44832011)(7416002)(7406005)(7366002)(478600001)(2906002)(316002)(31686004)(8936002)(4326008)(8676002)(6916009)(41300700001)(5660300002)(66476007)(66946007)(66556008)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NThMaTdpK0VaRjd6M3BWbkNPYVJocmo2OFJZdEMvVThBazZqR0sxN2tMeUxT?=
- =?utf-8?B?dk4rcG1SV0pmeWcxMlhVdUxRdEhFUFVuNzkwVTJwRVFJb2FGd0RpamtwWjZy?=
- =?utf-8?B?Y2dBQVc4NFMybmNBMmdRWGJ6QWZ2QkRydnN2anBCcDYwQ2dRY1VhSXBBZitW?=
- =?utf-8?B?aGN4d2FGejB1eFhRWHQ3V0QrSkl6Y2hrNFU2RFFOY0NUSDFRMzcvUURBbW9R?=
- =?utf-8?B?MkN4cWkvejRQL2JINXJia2pUOG1TQVVyS2dxSVZtVnVSMTBxcFcvTXpPTjZQ?=
- =?utf-8?B?dG5MWFpUOTh5aDFnaXdDc05Pd1lVcUxaZTZOU2s1TlhhWVdLUENDZ3gwSzY0?=
- =?utf-8?B?WE5GYXEreHhLMTNYdmRtOWIrU2JqVEs3S3JTcTRBUGxmam1XRjQ3Qjh2d0JH?=
- =?utf-8?B?NlEvdW92WE9hK2pxZGpLN1lRV1g2MG94WVpCMWhrcTJGd1IzamRXc0MyakZJ?=
- =?utf-8?B?dmlGOGhOWnJ6d2JkS2tKb3JvZnM2TGpnVEJWamxqcXV4RTFhVVY2MmVGY2wx?=
- =?utf-8?B?aW1FVk0wYkFySnIxeXEwcUl5UkdsU2JGWEhIdS9ISEhvWDFETUp2dklCcWN5?=
- =?utf-8?B?Z25jeFR4YktLUUp6Rm5oUnpPSndKSERmL2xTeTArTXd3K1pkWjE1RVlpSXNt?=
- =?utf-8?B?N0M3VFZNQTZFK0Q3Skd4YkhzSlJ4OWFUK1JNbFFmSGp3WC9XTTYrdVpMQ2lm?=
- =?utf-8?B?bmV1STZzUGNwSGVjUkcwbjU3NjdGZmRhYit2ajZjdHFIZ3BkS3BQRkY5WHRs?=
- =?utf-8?B?czYvZHJJbFBrNGZ0YTJPbHlMdTR4dUViMGdaSHZaVEZ2ODBIcllIK0Z5NGM3?=
- =?utf-8?B?NG5zdytRY3JydXRlVjhvVTd0QzZId1oxazZGOWhzR3ZCQ0pSaDBrblRRNTdU?=
- =?utf-8?B?Z3dMd0M3L1NsbzVuRnpQWUo1R09lMTZ1K0tSTzdmdi9BNG1nVTFza0p0cFJ6?=
- =?utf-8?B?QWxualNYS3VzNjFIY0c4QTd2VC9wV3Urb3R6NzIzUnFIU01wc1hJai85Q1Ir?=
- =?utf-8?B?RjRWY3pmTXUzazlWdm5sTUs2TlNtVUtURVdXT3JzdC9RalhzaW00MnpVcGg3?=
- =?utf-8?B?bGt1UTA2aDdFdGhFQlNKbnRHVmcxMm5KcHRUYmR2dDNGbUVZN1cwSE9xL1BI?=
- =?utf-8?B?LzVzaFY0UkFZMjdUWG1xRkpJd2RFS1JXN2F6WkhlNHhzWU9pM1llbkFCb2lk?=
- =?utf-8?B?TW9OTG8rN0hQT1lFTU8yN1pYemQxcC8xcmd1Z01aNFg0MkpET1U3Mk5WcTVB?=
- =?utf-8?B?aFJjSnNIcE5zRndSZklUa0J5Njd1WC8yZnAwa2dBT1FvSEhCNDRyc1VBYUpl?=
- =?utf-8?B?RGJxMTRGWnRhbjArbnc3d2ovc2dlb0Jpa2tXMDB1czdSVVE5eFBFWFpnSTdt?=
- =?utf-8?B?cW5rbHJ5STErcHYwOG8zalZ1d3V4SUdwazhUazZGTjE2anIxRzZQUjJMVFA2?=
- =?utf-8?B?Ymw4N2hOdk9hSnk5aHREQ3VWWER1UlJiQ0NrSkg1QlFiOEloZXdSMi9LTnFK?=
- =?utf-8?B?U0JmeVhDRkVJbGNlVlVqNk91UzJabnZMWHZjN0U0Q1RxK0V5c1VobWtUdHZB?=
- =?utf-8?B?WDNjaldtZ1F4UVJkZXIzcVk0TW1KbGp0V0QxbklBS1pEeldxV01aUnNUWVZw?=
- =?utf-8?B?Z3RSWFRGYWlDb0k1b1JOUjlxWks1Ykd5V21xTE5zdlNCc1gzelViTldsbHlB?=
- =?utf-8?B?K3JXRXE2V2NETWd2VXgzb05ySVo5Mi8reXljSXlGVjVWRENOY2tzOE5sUjVR?=
- =?utf-8?B?M2sxVFdKa05CSkRjUnFaMlkrYjNJSDk3Z2ZuU3I1QlJLRmVvcFJlM1psRWNZ?=
- =?utf-8?B?T1pxQ3A2aGNnUHFmMytUVHd5VjRtSWF6eThMK1dFYUtkY1hPeXduNEQ3eHhy?=
- =?utf-8?B?NHN5Q0h3RXQrMGljMnlTUjUwQ0g3MGpnbmNHbjRWcllUQklsMUNJVUN1ZmZj?=
- =?utf-8?B?Q1VLOGM5aGt4eFMzbFM3YkJZdTluZ0wvYzNiTExydFZib1lzY0t3TEk1SEFY?=
- =?utf-8?B?cmR2b2VmQUErSVlIOS96TnVVM2F6em1sUXpmTFp1NlBobFI0d21MTGNxZ3Aw?=
- =?utf-8?B?K3UwV2JnbEpOWHlpd1E5MmhpVmYxWTlsSnh2RU9LM3F2cnVLbDQyQlNVcG9k?=
- =?utf-8?Q?OAEqqTVcjKJxC4XXXeR2O6Ti3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 139c61e8-0e11-4501-c53b-08db578d0eb4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 10:45:55.7579
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6uZrmYD6r6sRW89Dt84pAx+OxwD6OlCnhivy0DFHHJjHbPhyEpwOrBfXE7lpxyRz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4169
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
+ <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+ <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com>
+ <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com> <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
+In-Reply-To: <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 18 May 2023 13:57:30 +0300
+Message-ID: <CAHp75VcP78MhmjzOCiGwfEwWwVxCHhy3qmZet0HqjPeLTc9h-A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+To:     =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Cc:     Fabio Estevam <festevam@gmail.com>, bstruempfel@ultratronik.de,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, May 18, 2023 at 3:27=E2=80=AFAM B=C3=B6rge Str=C3=BCmpfel
+<boerge.struempfel@gmail.com> wrote:
+> Am Do., 18. Mai 2023 um 01:53 Uhr schrieb Fabio Estevam <festevam@gmail.c=
+om>:
+
+...
 
 
-On 5/17/23 16:16, Jassi Brar wrote:
-> On Tue, May 16, 2023 at 8:51 AM Michal Simek <michal.simek@amd.com> wrote:
->>
->> @xilinx.com is still working but better to switch to new amd.com after
->> AMD/Xilinx acquisition.
->>
->> Signed-off-by: Michal Simek <michal.simek@amd.com>
->> ---
->>
->>   Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
->>   Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
->>   .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
->>   Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
->>   Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
->>   .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
->>   .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
->>   Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
->>   .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
->>   Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
->>   Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
->>   .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
->>   Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
->>   .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
->>   .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
->>   .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
->>   .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
->>   Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
->>   .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
->>   .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
->>   .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
->>   Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
->>   Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
->>   Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
->>   Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
->>   Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
->>   .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
->>   29 files changed, 31 insertions(+), 31 deletions(-)
->>
-> .....
->> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> index 374ffe64016f..aeaddbf574b0 100644
->> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
->> @@ -33,7 +33,7 @@ description: |
->>                 +------------------------------------------+
->>
->>   maintainers:
->> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
->> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
->>
->>   properties:
->>     compatible:
->>
-> Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
-> 
-> Just curious, some developers' ids are left unchanged, and not all
-> devs have S.O.B.
+> Okay. I have begun to implement this. During this, I noticed, that if
+> I called the new option
+> "--mosi-idle-low", the alignment of the help-lines (and in the c code
+> itself) would break.
+> Should I therefore shorten the option name by using an abbreviation
+> like "--mil", which is
+> probably not very helpful as a "full option name", or should I touch
+> all the other lines and
+> insert necessary spaces, such that they are aligned once more? (And if
+> so, should I do
+> this in a seperate patch, preparing the addition of the new options?)
 
-I want to go over all xilinx.com emails and move that bindings to proper person 
-if that current person is no more active.
+It's a user space tool where not so strict rules of commit splitting
+apply (as far as I know), I would go with indention fixes in the same
+patch that adds the option.
 
-Thanks,
-Michal
+...
 
+> > > While looking through the code, I noticed, that the latest two
+> > > additions to the spi->mode
+> > > (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool.=
+ Is this
+> > > by design, or should they then be included as well?
+> >
+> > Looks like these two are missing and would be good to get them included=
+ as well.
+>
+> Okay. Should this be a separate patch, or should I add the support for
+> all 3 mode bits in
+> one commit?
+
+Split them logically. Are they from the same group of bits? No? then split.
+
+--=20
+With Best Regards,
+Andy Shevchenko
