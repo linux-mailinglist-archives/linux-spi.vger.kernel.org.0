@@ -2,108 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7192A708A35
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 23:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6720C708B96
+	for <lists+linux-spi@lfdr.de>; Fri, 19 May 2023 00:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjERVMv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 May 2023 17:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S230001AbjERW3V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 May 2023 18:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERVMr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 17:12:47 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7E519B;
-        Thu, 18 May 2023 14:12:46 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f40c19477so163510566b.1;
-        Thu, 18 May 2023 14:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684444364; x=1687036364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fwCXb3fk3q19qGCTHKa24w6U9eKfPUvrvysf9WTJ4BU=;
-        b=iwkF6VPKMkga/+WEV8fG/yVkrzrrI+VNiyuUAHg1JGOWKez9AL4FsMdsQv8W+qefES
-         Q3Lc7NLEEb9zpijcwsgsRo/F5rEqvbxjBfpNE9/8v5Ub8+bPQsMl5YfdndaAB69MdPsN
-         nbiJ/OCwM4A71ViOzrySkJd0xMMzrQKX8Bugq663eNqGxSObuX+0qm2AhUSbBBilXQ9W
-         /dKc4iRsjZW8830rZQiK2uRqXc7035OoPNWDu1K5pLpausyharqRV3F928xQuLqeY/6i
-         vXWZtQb5oASWlZX35my5AMele3zyXIenZOCCAnF2s7pfT6OLs4u0k3eqOD3Pv9uWnKjY
-         t9eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684444364; x=1687036364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fwCXb3fk3q19qGCTHKa24w6U9eKfPUvrvysf9WTJ4BU=;
-        b=in95AxYxdQJfongXFfuk6P+SqRM3bwTT+tBhdeh9b7xv1PiA/7CSxnzL3ooMGJkgC6
-         vpvUXPtVHBs9Q6o3uRdhFRZ7mTdd04iA0pMxUcj3W0rqowQyKg9uR4rgxstR30qDQg7a
-         089TTjlcirz0oEZFN7MLeYWzyKwWLmCzHrQtz2YXT1CHx37vAA8YWfrNnQmAbFswOLtC
-         tzMMjbCJBR57lXmsB/eYmCdFcb7+SMjSyckoppdy4cUh+2IFTRpTyfHnCYrvEAAnsI5H
-         bj2YDZ1w7pPWRGOoMYJ+FUzGdk2ozZ3WPALRSUho9q5iXMt7v6xpmZCl01RSiAbpp2LF
-         9tAg==
-X-Gm-Message-State: AC+VfDxo1mL2o+8jIcxIrr+bgW+vpzUk077uAo/TtrzMpHFnMtUOK1lZ
-        /brmZBa+vy2+CLDwXv82ZYY=
-X-Google-Smtp-Source: ACHHUZ53JeCer2PKB+m25oEFcv9u0KNWbXEekVWG+UOqzYDpisBpzOo5K/OJG+slZjH748oVe/36bg==
-X-Received: by 2002:a05:6402:396:b0:50c:cde7:285b with SMTP id o22-20020a056402039600b0050ccde7285bmr6192872edv.29.1684444364501;
-        Thu, 18 May 2023 14:12:44 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id dy1-20020a05640231e100b0050bc4600d38sm962189edb.79.2023.05.18.14.12.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 14:12:44 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 5/5] riscv: dts: allwinner: d1: Add SPI controllers node
-Date:   Thu, 18 May 2023 23:12:42 +0200
-Message-ID: <13265211.uLZWGnKmhe@jernej-laptop>
-In-Reply-To: <20230510081121.3463710-6-bigunclemax@gmail.com>
-References: <20230510081121.3463710-1-bigunclemax@gmail.com>
- <20230510081121.3463710-6-bigunclemax@gmail.com>
+        with ESMTP id S230417AbjERW3T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 18:29:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0240DE64;
+        Thu, 18 May 2023 15:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93FC365185;
+        Thu, 18 May 2023 22:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD33C43442;
+        Thu, 18 May 2023 22:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684448958;
+        bh=/T7AEYxSdRmFaQS6UOragCbvf7lT1o8mzvCzRzQ1ruw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CPpHxPtTX7IcURQiGOLxPL7pj4AnsxElOrT5pW0WSjQ7z8TS/6sxJdNA4zfLgzgik
+         LpnFFZW3GjPKJ2Lsy8V8Y0PojLjxiot4ZPzqyZyEynaDFRONAFmoc3tFtTfkFsgslv
+         flAJtiTXBV0kQSx32L4VKiC62lGYBLRzhlKlY5N7uvCSLwvo/+9SH/kCAoXZ+PMXcS
+         sqPgNSFE1lc0uypRI8U8dKULCD1BEQ7sACM7aCFDhFz4Bkff8UsbHFoXw90MantOQw
+         IhmBG5hN76t+BfxWgl6+MmnJSuo/Q60M15zrmc8HqEq/GzU/TaRjY8b5Pb3gl/CGpQ
+         +Z4BD7QxuOEEA==
+From:   Mark Brown <broonie@kernel.org>
+To:     f.fangjian@huawei.com, Yeqi Fu <asuk4.q@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230518052515.368978-1-asuk4.q@gmail.com>
+References: <20230518052515.368978-1-asuk4.q@gmail.com>
+Subject: Re: [PATCH] spi: hisi-kunpeng: Fix error checking
+Message-Id: <168444895641.494730.18173477830143130577.b4-ty@kernel.org>
+Date:   Fri, 19 May 2023 07:29:16 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dne sreda, 10. maj 2023 ob 10:11:12 CEST je Maksim Kiselev napisal(a):
-> Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
-> an optional SPI flash that connects to the SPI0 controller.
+On Thu, 18 May 2023 13:25:15 +0800, Yeqi Fu wrote:
+> The function debugfs_create_dir returns ERR_PTR if an error occurs,
+> and the appropriate way to verify for errors is to use the inline
+> function IS_ERR. The patch will substitute the null-comparison with
+> IS_ERR.
 > 
-> This controller is the same for R329/D1/R528/T113s SoCs and
-> should be supported by the sun50i-r329-spi driver.
 > 
-> So let's add its DT nodes.
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-Applied, thanks!
+Applied to
 
-Best regards,
-Jernej
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: hisi-kunpeng: Fix error checking
+      commit: 120e1aa2f2e60b55f9d20c2fe1c6144739e00dc4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
