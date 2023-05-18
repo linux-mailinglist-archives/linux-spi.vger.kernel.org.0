@@ -2,205 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6FF708212
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 15:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E0D70855B
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 17:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjERNIN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 May 2023 09:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S230300AbjERPx2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 May 2023 11:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjERNIM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 09:08:12 -0400
-X-Greylist: delayed 184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 May 2023 06:07:56 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F32F1726;
-        Thu, 18 May 2023 06:07:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684415090; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=jHp5siR+mpF442a5tGnVIsTWCOu67V55rUPcoVou53WJKCWN+qTAmII+Pu7TU8ex/D
-    ySc9MtPECNPRnckq8ffAVuhWY3mWc/KQ02u7XxRUW17+KlUrEjaSL9ImXRvFPzRRWKol
-    T71KZYiJsYr4gC96Z2zjELQQK+JhoCs81WVtBkXj/p34f4eRtWIrU2t580mxujVcEXJT
-    G1ygOstO9LGws1Qvj3qMkD91qtCp2gBluqD0pMam7Bov9bdNLV95awDdWfV8in14ble1
-    n1unqDIZPTjwKjQ5sA8XcuejNLKxgoPWfLwj0xa8ta5lOfB0E+wELt4DPjZicgOir1J5
-    vQhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684415090;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
-    b=mqzczOcU5K6zxym1zhKJ27g9oD2QhWKdq3EdsIrVgkimBlyZBrFfQXOljU/+/RCH25
-    8fyIEDniNEt0KIkzKIHH2E+oULCE7lVxi86Xxji3q9xD1vzBZSLCA0ZnHQtAuPRy6RA5
-    mp/YBNaxbQNQojX/Vuj101TvU2lWPkOjNqEzIRfoWMM8pMiMKCWtYNHOyA4SA+AHGQ4Q
-    7aROCLu6uGh/wsTMaMQfrZEPLIwgMdMKzOvzgnahRlVn/TR6RG5HK5fcSfHIDd6EA4lG
-    4qUQWq23DngjEYt1c/AyhBmYspLWrfwjO5X2lGtoL9MArqlgRUtl9JEufiIUI4O0eCJ9
-    oEgw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684415090;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
-    b=bMshw8duaax9aITLuq2vz4VCipAk+DcXI85nhKezpsY8LVVBtlG6dTZcX4xYDv2/77
-    iEfY6hurG0RjWXSq97qNkyCEQa3wy8DVpAjuQIZ5+Q29Vauu12m5AUVJo5YUBubesoZQ
-    F/UB6WkPa9O3IShE+ABpnRS/tBWGNXteaXAwcjzTnnpz/RlVKxKnn0/6LgfwgpM7t6qY
-    +3YFpntevYSlXTlPUm/UBYS6X/kPC3Enjuzehl+8Xg5SVDfM4nKHl4DzPZQlGT5ra1uS
-    yGSlF8zgAfGd08Q2KSHPcJH4UaqvDx4KPt2cgkHe7+TccuiAUPOw5Rfck4vjy/IJjqzW
-    JkFA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684415090;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=1A4pWdRSyRquDJYOJ8/0StLwGPzYcPJ+8wTjCsISdD8=;
-    b=yR1zUV+6SNnB74h2L/cWgn5U5zo14cpDUHP5THYm7utMH3ChNq/dMEz/+zkdzZFBlv
-    uAgFYXaxT8wdiC72HDDQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4p1/zY="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4ID4oCWf
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 18 May 2023 15:04:50 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Thu, 18 May 2023 15:04:25 +0200
-Subject: [PATCH] spi: qup: Request DMA before enabling clocks
+        with ESMTP id S230211AbjERPx1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 11:53:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5066B19B;
+        Thu, 18 May 2023 08:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684425206; x=1715961206;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yy5e77k3doOrxSyCFI2HBiEAmW7848CBCulkXIzrGcU=;
+  b=NRClt+o36ziN4WrPdqP0zeNJdi8bfcX5cqaPoQSLCpVsWDy+CoVFzVVl
+   jRWHLQXcL25/hWlwALbVJphYJMlRaz/r0ciN83YmcQmJXjQRGPuFZXz+N
+   dYmn3YjRCsiGWRYHTj83oGhjNsJnZ+HgCaV8CeGsPB+75QS/9mcGSfnye
+   0rE2UPsTccpmh7qzXN8n7cau4ilxmEBpXxL4TLRFjEBG1MW0C+WnZwNNk
+   j6Crxb1SJHOlxTB2vhJGV7n/3vkGNkZhhAa7ZsOeiW7iRIiBayLuTK9Ad
+   4ZK63L8jNG7d+g4QGxaw9vdLUZFThq8HucJDvKW2YHVDiFuQ6S8enG0l0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336692208"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="336692208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:53:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="702172670"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="702172670"
+Received: from nithinks-mobl1.amr.corp.intel.com (HELO [10.209.80.104]) ([10.209.80.104])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:53:23 -0700
+Message-ID: <650012a3-b455-8be5-fd6d-d0775e718e6a@linux.intel.com>
+Date:   Thu, 18 May 2023 10:16:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 06/10] mfd: cs42l43: Add support for cs42l43 core driver
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-7-ckeepax@opensource.cirrus.com>
+ <73438e58-bd96-818d-1f43-5681b0d1a1de@linaro.org>
+ <20230518102442.GZ68926@ediswmail.ad.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230518102442.GZ68926@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230518-spi-qup-clk-defer-v1-1-f49fc9ca4e02@gerhold.net>
-X-B4-Tracking: v=1; b=H4sIAFgiZmQC/x2N0QrCMAwAf2Xk2UC7MhF/RXzo2tQFS60JG8LYv
- xv2eAfH7aAkTAr3YQehjZU/zcBfBkhLbC9CzsYwujG4yd9QO+N37ZjqGzMVEswlhkRXHxwFsG6
- OSjhLbGmxsq21muxChX/n6PE8jj/UF+p5eAAAAA==
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-It is usually better to request all necessary resources (clocks,
-regulators, ...) before starting to make use of them. That way they do
-not change state in case one of the resources is not available yet and
-probe deferral (-EPROBE_DEFER) is necessary. This is particularly
-important for DMA channels and IOMMUs which are not enforced by
-fw_devlink yet (unless you use fw_devlink.strict=1).
 
-spi-qup does this in the wrong order, the clocks are enabled and
-disabled again when the DMA channels are not available yet.
+>>> +	ret = regmap_register_patch(cs42l43->regmap, cs42l43_reva_patch,
+>>> +				    ARRAY_SIZE(cs42l43_reva_patch));
+>>> +	if (ret) {
+>>> +		dev_err(cs42l43->dev, "Failed to apply register patch: %d\n", ret);
+>>> +		goto err;
+>>> +	}
+>>> +
+>>> +	pm_runtime_mark_last_busy(cs42l43->dev);
+>>> +	pm_runtime_put_autosuspend(cs42l43->dev);
+>>> +
+>>> +	ret = devm_mfd_add_devices(cs42l43->dev, PLATFORM_DEVID_NONE,
+>>> +				   cs42l43_devs, ARRAY_SIZE(cs42l43_devs),
+>>
+>> I don't why adding devices is not in probe. They use the same regmap
+>> right? So there will be no problem in probing them from MFD probe.
+> 
+> Well except SoundWire is a bit of a special boy, the hardware is
+> not necessarily available in probe, the hardware is only available
+> at some point later when the device attaches. Doing it this way all
+> of the attaching (and various detach/attach cycles the device needs
+> during configuration) are over by the time the child drivers bind, so
+> they don't all need special code to handle that.
 
-This causes issues in some cases: On most SoCs one of the SPI QUP
-clocks is shared with the UART controller. When using earlycon UART is
-actively used during boot but might not have probed yet, usually for
-the same reason (waiting for the DMA controller). In this case, the
-brief enable/disable cycle ends up gating the clock and further UART
-console output will halt the system completely.
+if the devices are added in the probe, then the regmap needs to be moved
+to cache-only and another special API would be needed to tell the MFD
+framework to turn the regmap cache-only off.
 
-Avoid this by requesting the DMA channels before changing the clock
-state.
-
-Fixes: 612762e82ae6 ("spi: qup: Add DMA capabilities")
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
- drivers/spi/spi-qup.c | 37 ++++++++++++++++++-------------------
- 1 file changed, 18 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 944ef6b42bce..00e5e88e72c4 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1028,23 +1028,8 @@ static int spi_qup_probe(struct platform_device *pdev)
- 		return -ENXIO;
- 	}
- 
--	ret = clk_prepare_enable(cclk);
--	if (ret) {
--		dev_err(dev, "cannot enable core clock\n");
--		return ret;
--	}
--
--	ret = clk_prepare_enable(iclk);
--	if (ret) {
--		clk_disable_unprepare(cclk);
--		dev_err(dev, "cannot enable iface clock\n");
--		return ret;
--	}
--
- 	master = spi_alloc_master(dev, sizeof(struct spi_qup));
- 	if (!master) {
--		clk_disable_unprepare(cclk);
--		clk_disable_unprepare(iclk);
- 		dev_err(dev, "cannot allocate master\n");
- 		return -ENOMEM;
- 	}
-@@ -1092,6 +1077,19 @@ static int spi_qup_probe(struct platform_device *pdev)
- 	spin_lock_init(&controller->lock);
- 	init_completion(&controller->done);
- 
-+	ret = clk_prepare_enable(cclk);
-+	if (ret) {
-+		dev_err(dev, "cannot enable core clock\n");
-+		goto error_dma;
-+	}
-+
-+	ret = clk_prepare_enable(iclk);
-+	if (ret) {
-+		clk_disable_unprepare(cclk);
-+		dev_err(dev, "cannot enable iface clock\n");
-+		goto error_dma;
-+	}
-+
- 	iomode = readl_relaxed(base + QUP_IO_M_MODES);
- 
- 	size = QUP_IO_M_OUTPUT_BLOCK_SIZE(iomode);
-@@ -1121,7 +1119,7 @@ static int spi_qup_probe(struct platform_device *pdev)
- 	ret = spi_qup_set_state(controller, QUP_STATE_RESET);
- 	if (ret) {
- 		dev_err(dev, "cannot set RESET state\n");
--		goto error_dma;
-+		goto error_clk;
- 	}
- 
- 	writel_relaxed(0, base + QUP_OPERATIONAL);
-@@ -1145,7 +1143,7 @@ static int spi_qup_probe(struct platform_device *pdev)
- 	ret = devm_request_irq(dev, irq, spi_qup_qup_irq,
- 			       IRQF_TRIGGER_HIGH, pdev->name, controller);
- 	if (ret)
--		goto error_dma;
-+		goto error_clk;
- 
- 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
- 	pm_runtime_use_autosuspend(dev);
-@@ -1160,11 +1158,12 @@ static int spi_qup_probe(struct platform_device *pdev)
- 
- disable_pm:
- 	pm_runtime_disable(&pdev->dev);
-+error_clk:
-+	clk_disable_unprepare(cclk);
-+	clk_disable_unprepare(iclk);
- error_dma:
- 	spi_qup_release_dma(master);
- error:
--	clk_disable_unprepare(cclk);
--	clk_disable_unprepare(iclk);
- 	spi_master_put(master);
- 	return ret;
- }
-
----
-base-commit: 5e41763e97db00125dec847e54a1827436d34cd3
-change-id: 20230518-spi-qup-clk-defer-dfa3ce6130e3
-
-Best regards,
--- 
-Stephan Gerhold <stephan@gerhold.net>
-
+But if it's the same regmap, the regmap cache is handled in the
+SoundWire update_status callback so maybe  Krzysztof's proposal does work?
