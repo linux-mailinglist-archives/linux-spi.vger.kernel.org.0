@@ -2,96 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45F970799D
-	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 07:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216CD707BB3
+	for <lists+linux-spi@lfdr.de>; Thu, 18 May 2023 10:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjERF1Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 May 2023 01:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S229726AbjERIQE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 May 2023 04:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjERF1P (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 01:27:15 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160FC359D;
-        Wed, 17 May 2023 22:26:43 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso1158850a91.1;
-        Wed, 17 May 2023 22:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684387598; x=1686979598;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3SX7vnK+KQM4ZMwTnaOC6JG3KgM54lUutokuN0ixeA=;
-        b=qqnvOc8ieLdnJaNzjhBH2+WRmpxqYZgSAE4cBA3AX3cnr6NdzEn/NwpMg/Bf76BYfj
-         bTId6cCiw5xbbUO8pxaIJGy375JglemdgmohL8mFC40D7sLFPuxvy7N2UW0OF1+FWRZc
-         d6WC2LVnowjYd+H3i3cNpC7z8HTlVjxxMCV/NC6+EFfZob1IcKmDcbj6vDGHe7wAAOca
-         4PFWECs4GVG4Z7+Yr+xN1+37Uqcmy/X3kpdJob0kh5Rp16TbTSLwSesfSW9vzOE9AF8T
-         RDvJfXLQmi7BGmA4/KmUKydeRrj+2kvskIom8AQB7ShwFQb2JGur/MjAeb5OoTmb3rYu
-         vGEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684387598; x=1686979598;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k3SX7vnK+KQM4ZMwTnaOC6JG3KgM54lUutokuN0ixeA=;
-        b=O+mK9eFXz8n21OOxh3nA2Q8AqFdYv8U5le1XDThfmJOnvX0u3VDWSsv7hcQOZ2Fpfb
-         Mrsw7HUOojQs5y5UAmoc3AavWuMBPAEt5PzVKTgNjnqzn/xwGNB1b2RSOUIPHm4/RfP5
-         MnaKEmW91wTBH1xFuqGSColOcY3D3LtrbprSkrxN4wkUCU8Oy3SahVGMpFN4/E5ZzPy8
-         p2k4TkAz8k97lyHO9k0fjxTreovEOv4dqWY3iecA3u6xE6y2umwJGqOK5qSFMPvXxUbS
-         2R7Q82ucqR8OuX68NTZ2iY5zhzen4hHuQW3CfDsogbErKca3lPswG344EZgI0pP8nche
-         pu5g==
-X-Gm-Message-State: AC+VfDyo7Pviv1EOz0Lk8258XL+OoFjPEeGRJpscvXwvbKImze0p7eSt
-        rut29jTn2Gz3iiy5507zZ34=
-X-Google-Smtp-Source: ACHHUZ7/kb6jzt1viu38lPkOl40YN4kNUl879RxNS4D9m4KK+I2IDKc6EtzP3WiBOcTqcx1MkIhi7A==
-X-Received: by 2002:a17:90a:2e12:b0:23b:2c51:6e7 with SMTP id q18-20020a17090a2e1200b0023b2c5106e7mr1386307pjd.21.1684387598008;
-        Wed, 17 May 2023 22:26:38 -0700 (PDT)
-Received: from localhost.localdomain ([111.201.128.95])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090a150900b0024e4f169931sm2704098pja.2.2023.05.17.22.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 22:26:37 -0700 (PDT)
-From:   Yeqi Fu <asuk4.q@gmail.com>
-To:     f.fangjian@huawei.com, broonie@kernel.org
-Cc:     Yeqi Fu <asuk4.q@gmail.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ivan Orlov <ivan.orlov0322@gmail.com>
-Subject: [PATCH] spi: hisi-kunpeng: Fix error checking
-Date:   Thu, 18 May 2023 13:25:15 +0800
-Message-Id: <20230518052515.368978-1-asuk4.q@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229970AbjERIQE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 May 2023 04:16:04 -0400
+Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73928E49
+        for <linux-spi@vger.kernel.org>; Thu, 18 May 2023 01:16:03 -0700 (PDT)
+Received: by mail.mahavavy.com (Postfix, from userid 1002)
+        id 2F06323497; Thu, 18 May 2023 08:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
+        t=1684397762; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
+        h=Date:From:To:Subject:From;
+        b=Rqt4fHZr/Y1w5RD3Gb4XwV296fwv3fqtUBgo25DGomjpS0aSLhihuAj+guAeIJaUI
+         1TWhMUpVN+MueEuKHmVrpjBjwWXdgK73qiY6opyT0lLiP9DPN5CTywCV9Uzh2cG04D
+         dR9Ho611FlDxwRebw3YvzJlVpAMYcRQa141ENINcIfKUJHmBDr9O0KAL0vrG4YVfA7
+         bJ85LwECOMHErh+IVoDvBqs2IPcYj3cahGPouhSo1SSK0hK/GtAN1XxDQPEPFqxJVK
+         MdqrOOjJ+Jbi/bwO0RU0rUuwcaEd2O/k6QmJmV/8gWlvY5/E4Wo1mv5ZwApPWxz7X5
+         WZn05y5ELCrRg==
+Received: by mail.mahavavy.com for <linux-spi@vger.kernel.org>; Thu, 18 May 2023 08:15:59 GMT
+Message-ID: <20230518064500-0.1.2l.4t8n.0.qfj28emgja@mahavavy.com>
+Date:   Thu, 18 May 2023 08:15:59 GMT
+From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
+        <kristian.pletanek@mahavavy.com>
+To:     <linux-spi@vger.kernel.org>
+Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
+X-Mailer: mail.mahavavy.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The function debugfs_create_dir returns ERR_PTR if an error occurs,
-and the appropriate way to verify for errors is to use the inline
-function IS_ERR. The patch will substitute the null-comparison with
-IS_ERR.
+Dobr=C3=A9 r=C3=A1no,
 
-Suggested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
----
- drivers/spi/spi-hisi-kunpeng.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
 
-diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
-index 524eadbef87b..2b4b3d2a22b8 100644
---- a/drivers/spi/spi-hisi-kunpeng.c
-+++ b/drivers/spi/spi-hisi-kunpeng.c
-@@ -169,7 +169,7 @@ static int hisi_spi_debugfs_init(struct hisi_spi *hs)
- 	master = container_of(hs->dev, struct spi_controller, dev);
- 	snprintf(name, 32, "hisi_spi%d", master->bus_num);
- 	hs->debugfs = debugfs_create_dir(name, NULL);
--	if (!hs->debugfs)
-+	if (IS_ERR(hs->debugfs))
- 		return -ENOMEM;
- 
- 	hs->regset.regs = hisi_spi_regs;
--- 
-2.37.2
+M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
+=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
+robu mezi lokalitami.
 
+Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
+ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
+=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
+=AF.
+=20
+Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
+=C3=ADj=C3=ADme strukturu detailu.
+
+Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
+
+Pozdravy
+Kristi=C3=A1n Plet=C3=A1nek
