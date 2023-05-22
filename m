@@ -2,53 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B005970B969
-	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 11:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02C670BA36
+	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 12:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjEVJwZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 May 2023 05:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S231172AbjEVKeN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 May 2023 06:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjEVJwY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 05:52:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5BB91;
-        Mon, 22 May 2023 02:52:23 -0700 (PDT)
+        with ESMTP id S229512AbjEVKeM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 06:34:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A2DDB;
+        Mon, 22 May 2023 03:34:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48B84612AE;
-        Mon, 22 May 2023 09:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7011DC433D2;
-        Mon, 22 May 2023 09:52:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EA3611D1;
+        Mon, 22 May 2023 10:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA42FC433D2;
+        Mon, 22 May 2023 10:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684749142;
-        bh=cCuzYUASC9wTSBycAfEJWLo1T1vjoKLVJEIQ28zyt2Y=;
+        s=k20201202; t=1684751650;
+        bh=FR44QPdy1xMkW9fHdAR5I46GsKRf2v19Ir7LPyBWSeM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i/I+/XyDerF5SYOUZPqvIIcBlUXCHiT1OfqS2Cdxo7HR2jEuNU/PEdnOaGwMJ29NX
-         NBDe9h1VYyyCNO+5N6FJfeN5pENxoIG5zX0m7H25NokDDzfMb69x46AKtQvWtH+j3T
-         A80X2yzRfF3RmFd7DNv36XKEdTagtkhB9wOBJoF/zRoziY1iPlOTbaclr6ix0B12vC
-         bbB8rtftcFix0hx13GQ6DsejQwTVTAxgOQ5SHpn7qITClVHJphgy7By+ngh9tEorLX
-         vWjJBjkPrh6nB2MLgEhDf3DtNrKLE+PisnKypbcFP+nGTH8dmFh8kgHbkNiYftPbS/
-         HLdgO3BiVWmXA==
-Date:   Mon, 22 May 2023 10:52:17 +0100
+        b=VuFrmj00mAhLuZNgP6U1+gS0oCLUcmB2L7d3L4LNrKgNsT3NTE5Yft7aX0RiGZJar
+         hYGmX9cRw4zc8E/P4SF8taLj916Ru1CiNK+Xz/yRQqzeIIo/O+fDT3rDEcF9QY4n2r
+         Srs7Iil4KMZkcskpAGFXt3YpLLt6CrxJxr6QVcgcez2crn+vCnH9gEzAyOcOigBEeQ
+         1ZzQoC+zaLna6O8P3Lz95+N1PpeFRP7QsnbNsqJvPM/9A9yb65xoos0t3UzxDv9unw
+         7H96IjoJu0PxsWU/SdOJC24eUIM4oPT6kiZKW1ZPfM/h6bJCHV8XF5R/ivgUANTbMk
+         rpvAeDkmSn70g==
+Date:   Mon, 22 May 2023 11:34:04 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     srinivas.goud@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH 2/2] spi: spi-cadence: Add missing kernel doc for
- clk_rate in cdns_spi
-Message-ID: <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
-References: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
- <20230518093927.711358-2-ckeepax@opensource.cirrus.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
+ spi
+Message-ID: <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KKYYSrtsy6LhuReG"
+        protocol="application/pgp-signature"; boundary="T+C3fAzlXLG5MzrQ"
 Content-Disposition: inline
-In-Reply-To: <20230518093927.711358-2-ckeepax@opensource.cirrus.com>
-X-Cookie: Close cover before striking.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+X-Cookie: A rolling stone gathers momentum.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,37 +61,31 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---KKYYSrtsy6LhuReG
+--T+C3fAzlXLG5MzrQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 18, 2023 at 10:39:27AM +0100, Charles Keepax wrote:
-> Add the missing kernel documentation to silence the build warning.
->=20
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
->=20
-> New since v1 of the series, but might as well fix this build warning
-> too.
+On Mon, May 22, 2023 at 03:10:28PM +0800, Yinbo Zhu wrote:
+> Loongson platform support spi hardware controller and this series patch
+> was to add spi driver and binding support.
 
-Sending this without the "v2" breaks threading and makes it hard to
-handle with tooling, versioning applies to the patch series, not to
-individual patches.
+To repeat what I previously asked you *please* send patches against my
+current tree, this doesn't even apply cleanly against Linus' tree never
+mind any of the branches in mine.
 
---KKYYSrtsy6LhuReG
+--T+C3fAzlXLG5MzrQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRrO1EACgkQJNaLcl1U
-h9CD6gf/fQmJ1NmAWonYtfObIJoLl1OPZYOXNnt4p4PsjRm+Usk5yCdz9+b9yMWr
-UdRT57FJ/CvaOyLiNxmHWL2s+CtyiuBLF+dCJdA0/vdWh1M6tfLStXEn5vOgnl1y
-3zZbWVUnF6xCcYwDMRws4Yo8QhEFvRXBcjOBr9NgxSweGF9p/EqyzN+CRjtYGm2I
-/8tJGQi1IqFkYt2NGWOY4s2BMusxjYETd0JFVXIP2BUAl3AMoNwBkPLfU+Agrd4L
-gngx9qrDQkLBtB/qmxsgZ68vwE4JkEKSfp5Eu7ciYw8ttG6Ym+YbebSpJ3LGLhLX
-QOyU5cY4ev0iYhvL/cwIZH2Uj+hhlA==
-=3TAR
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRrRRsACgkQJNaLcl1U
+h9DEtwf+LVV0uSPCKHxw1FhedfdqAOvXmphI8eUZK45XQ/Y68YTet8fpWeyod93Q
+CviGFkfMQGmo/Xb14dcet2FjoLikXjuEJixLSyaNPPdm0XuGxI7G6fFSsrSBubsX
+4Ix1+P/vAgyXLBMj588zsFP2jDumchsYekFirkIHq1wP8End/PblkCadRwi/RoUc
+3hnyW3JzWOFWr3V5VmdW4Ctpcc81nEfOw7Byto0/8ICCCGT2CG1hhFjRxYBWJheF
+mjlW4uEbPIyF3maMK4crREEmOdsujdlehzsg/Uns/5vmpiOwAnxEWAg684vbDwsY
+/TRHSLk9lGmuITQhM7QighmPn9bNGQ==
+=2AXo
 -----END PGP SIGNATURE-----
 
---KKYYSrtsy6LhuReG--
+--T+C3fAzlXLG5MzrQ--
