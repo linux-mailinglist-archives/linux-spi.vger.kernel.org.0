@@ -2,140 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C57D70BB4C
-	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 13:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC7270BC1C
+	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 13:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjEVLNr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 May 2023 07:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S233032AbjEVLo7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 May 2023 07:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjEVLNX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 07:13:23 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B819A6;
-        Mon, 22 May 2023 04:08:35 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75b0830e2eeso43894785a.1;
-        Mon, 22 May 2023 04:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684753714; x=1687345714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jxi3fyG/zPxjmTcYvTx1jlSTEemn9oWDhNhnAs8Y07c=;
-        b=qO/pODfdZ7sKoPrTVtTX5Sux9ZLRu1P7SW7qhrz8vktSmXbzrXPGcuCetXDrT+hXhx
-         F0+B7p6QmFo6UQly+zqyT18pnsAVqSCyGDJDRc1/d9DC/C254CjBaDdxciDHs9Fnucg3
-         a+Ij2Uhw37KHzqd/XOFUwXc9QzE5npAu7o20TxVnTZ8oFDVHNLPFAUDWzU2dHNjqZc2+
-         Z996iQdYTwmophBHPcgTIi4apuXKo22hgnecIFSzzfObB06MDnMuxh1/uJUowUPHgru+
-         j5yiR8iClEkNfZ6uduGEwQ4JpANGxNP0evjJlt3zhdAh/vGxVIt+9lGdAUWpUQEZgHJ8
-         +rFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753714; x=1687345714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jxi3fyG/zPxjmTcYvTx1jlSTEemn9oWDhNhnAs8Y07c=;
-        b=VDFXj8Bub/yyklQP7YGxyQ3TC3zeYo7/dwT/kTsMj3cBKbHTr4RKPnOFfZ1JpEL0rC
-         vc+51OshCYbbD+MOPJ/BKtkdZggn5KeCHoppcf0MU1QIugJvmIj3F6Ja0/XSFQbkMfI5
-         axdO7sAFcwsfOWOSuBu/Hf9G3tlQeTLQrh0Xk+xvzqRvLsxp2ru/Se2XF6/7HsleH07Y
-         IfG0kC737OlIlVmrzY1bzPd3Mejrjha5hAdmb0Wp0VzlECreey7CfBEOceh1tNmLpEVM
-         Gr9bqvfUYjP9vYFIDXE7hIHbA+dHYzLsoq3E2TCVFqNapX5XV9K8RTeUJ1KY70b6ivb1
-         5k7Q==
-X-Gm-Message-State: AC+VfDyj+i7V2cE0ZVKWXa1ScLr3eZ51wUe8fyX4CGZ4nBNVo5U/SxKQ
-        ts+8GRyOooiLkpDD4JF/F/3eZjoyqbIQcHAgGyo=
-X-Google-Smtp-Source: ACHHUZ7ooN5VmH1972850+wB54FS/Bu/din4JqZ1CLAqns3NfpzaHikXKxtcqobYc3FYlpnnDI1l+FHL7E6rvk4AXmE=
-X-Received: by 2002:a37:c16:0:b0:75b:23a1:d846 with SMTP id
- 22-20020a370c16000000b0075b23a1d846mr167656qkm.8.1684753714014; Mon, 22 May
- 2023 04:08:34 -0700 (PDT)
+        with ESMTP id S233075AbjEVLo6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 07:44:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 372DDB3;
+        Mon, 22 May 2023 04:44:55 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxlfC2VWtkIe0KAA--.18805S3;
+        Mon, 22 May 2023 19:44:54 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlrWxVWtkewNvAA--.55708S3;
+        Mon, 22 May 2023 19:44:53 +0800 (CST)
+Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
+ spi
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
+Date:   Mon, 22 May 2023 19:44:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230520190856.34720-1-boerge.struempfel@gmail.com>
- <20230520190856.34720-5-boerge.struempfel@gmail.com> <CAHp75VeR724n7C8hXs_7+TfvXANPZ7man3Znns8O+mBc113fYw@mail.gmail.com>
- <CAEktqcv3NEZKmxBdCjf29JbSbFfTzZB9p0yXF+btVrNYO5XU4w@mail.gmail.com>
- <CAHp75Vf37xb=yMeUM6exPaZDvrzQzwD53MGU2uR4aC0rPeTzAw@mail.gmail.com> <CAEktqcuuM=P7p-Y4k9Z+721SCA6i1QiCebWZL3BMqh6Q7jX+4A@mail.gmail.com>
-In-Reply-To: <CAEktqcuuM=P7p-Y4k9Z+721SCA6i1QiCebWZL3BMqh6Q7jX+4A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 22 May 2023 14:07:58 +0300
-Message-ID: <CAHp75VdpPDEg3aPJgSU6bKpdR=eHo=155h9qUDgXO5VQfvjjmg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] spi: spidev_test Add three missing spi mode bits
-To:     =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Cc:     bstruempfel@ultratronik.de, festevam@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxlrWxVWtkewNvAA--.55708S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Jw4rXF4DAw4DArykuFWxWFg_yoWkAFb_Cr
+        WxKay7Cw18JrWUA3Wktrs5WFyaqa4xXa1UCw4rWr17C34qvF1DJay3ua4fX3Z7AFZ5ZFsY
+        krn3CrZ3Z3W5ZjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        77CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
+        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
+        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67
+        AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
+        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
+        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 22, 2023 at 10:23=E2=80=AFAM B=C3=B6rge Str=C3=BCmpfel
-<boerge.struempfel@gmail.com> wrote:
-> Am So., 21. Mai 2023 um 21:26 Uhr schrieb Andy Shevchenko
-> <andy.shevchenko@gmail.com>:
-> > On Sun, May 21, 2023 at 2:35=E2=80=AFPM B=C3=B6rge Str=C3=BCmpfel
-> > <boerge.struempfel@gmail.com> wrote:
-> > > Am So., 21. Mai 2023 um 11:00 Uhr schrieb Andy Shevchenko
-> > > <andy.shevchenko@gmail.com>:
 
-...
 
-> > > Thanks for the suggestion. I tried coming up with a logical way of
-> > > ordering, but I am having some difficulties deciding. What do you
-> > > think of the following order?
-> > >
-> > > general device settings
-> > > " -D --device device to use (default /dev/spidev1.1)\n"
-> > > " -s --speed max speed (Hz)\n"
-> > > " -d --delay delay (usec)\n"
-> > > " -l --loop loopback\n"
-> > >
-> > > spi mode
-> > > " -H --cpha clock phase\n"
-> > > " -O --cpol clock polarity\n"
-> > > " -F --rx-cpha-flip flip CPHA on Rx only xfer\n"
-> > >
-> > > number of wires for transmission
-> > > " -2 --dual dual transfer\n"
-> > > " -4 --quad quad transfer\n"
-> > > " -8 --octal octal transfer\n"
-> > > " -3 --3wire SI/SO signals shared\n"
-> > > " -Z --3wire-hiz high impedance turnaround\n"
-> > >
-> > > additional parameters
-> > > " -b --bpw bits per word\n"
-> > > " -L --lsb least significant bit first\n"
-> > > " -C --cs-high chip select active high\n"
-> > > " -N --no-cs no chip select\n"
-> > > " -R --ready slave pulls low to pause\n"
-> > > " -M --mosi-idle-low leave mosi line low when idle\n"
-> > >
-> > > data
-> > > " -i --input input data from a file (e.g. \"test.bin\")\n"
-> > > " -o --output output data to a file (e.g. \"results.bin\")\n"
-> > > " -p Send data (e.g. \"1234\\xde\\xad\")\n"
-> > > " -S --size transfer size\n"
-> > > " -I --iter iterations\n");
-> > >
-> > > misc
-> > > " -v --verbose Verbose (show tx buffer)\n"
-> >
-> > Looks great to me, thank you for doing that!
-> >
-> You are welcome.
-> Should I only reorder the flags, or actually introduce the
-> "group"-headers to visibly distinguish the options?
+在 2023/5/22 下午6:34, Mark Brown 写道:
+> On Mon, May 22, 2023 at 03:10:28PM +0800, Yinbo Zhu wrote:
+>> Loongson platform support spi hardware controller and this series patch
+>> was to add spi driver and binding support.
+> 
+> To repeat what I previously asked you *please* send patches against my
+> current tree, this doesn't even apply cleanly against Linus' tree never
+> mind any of the branches in mine.
 
-Up to you. If you think it increases the usability I'm all for it.
+Hi Mark,
 
---=20
-With Best Regards,
-Andy Shevchenko
+I was base on following tree and branch to apply my patch then to send
+it to upstrem:
+tree: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+branch: for-next
+
+The recently patch was as follows, It seems no issue for patch apply
+them, Maybe it is the 0/2 patch issue ? this 0/2 patch wasn't a valid
+patch and it need was skipped.
+
+8f7b91d47211 spi: loongson: add bus driver for the loongson spi
+controller
+193a72146430 dt-bindings: spi: add loongson spi
+b1f4091a9eff (spi/for-next) Merge remote-tracking branch 'spi/for-6.5'
+into spi-next
+120e1aa2f2e6 (spi/for-6.5) spi: hisi-kunpeng: Fix error checking
+f2156989bf30 spi: cdns: Add compatible for AMD Pensando Elba SoC
+
+
+Thanks,
+Yinbo.
+
+
+> 
+
