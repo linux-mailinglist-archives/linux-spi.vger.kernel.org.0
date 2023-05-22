@@ -2,55 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42F670C10C
-	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 16:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE4470C116
+	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 16:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjEVO10 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 May 2023 10:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S231600AbjEVO3Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 May 2023 10:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbjEVO1V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 10:27:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21F410C4;
-        Mon, 22 May 2023 07:26:56 -0700 (PDT)
+        with ESMTP id S233252AbjEVO3O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 10:29:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D70F1;
+        Mon, 22 May 2023 07:29:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4B562361;
-        Mon, 22 May 2023 14:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABE3C433EF;
-        Mon, 22 May 2023 14:26:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8D8561941;
+        Mon, 22 May 2023 14:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D752C433EF;
+        Mon, 22 May 2023 14:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684765615;
-        bh=JaJJesILXmSASziQJChjLhKA0/pvakiuE48bkduWv+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cBkmxeC7oI/6vr6MTKWwHAwJdrK51tbu0oqaXoaS9SkOUgvKN7+pvAgTcsY9kuAbE
-         4YSyUk6FKvItBgAw1K/jVF6V+bf8T+DlbFAYj4MfUXtv27EiX/FV6s7t7uHc5ymW3U
-         O08RwWs0RCoOJSNkVVFDx46Q+39OArw8NLKbsrrIUxGcEo8ocg7xjK+ZgKtZW7jAQo
-         YB6G8x+Ftm+f/Ui55tilUt3RBT00Klfi5OIVSCHb47c4a2o9PpHMk6KRStQ3497+wn
-         TiBrDv/vLuOy22sDTpoirg6O4NG+PhmD6nyH9dDJ/3EmwGtWubl8fK0RSAejTe6EUt
-         mK4KXBlKGx0pQ==
-Date:   Mon, 22 May 2023 15:26:51 +0100
+        s=k20201202; t=1684765748;
+        bh=zgCnm5TdeQsdNTt7uR7RGxg7lgqFPJstgSHr/HbAaXM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jDVHlnjF0rqQELoJVNmHIPqbgVZhfGBJ9NtExUdj0z1a7gYBtCFEZobwLoBmxUqvk
+         bV+1EJHndfa69dIGZsSCIAmYu5ruYExSoh2mr2tmNuTCZnXtVxmLGOTsWCzqBLK94g
+         L/wnNKPOWnE8nwGeHvAIqVeDdVWztybsTJD3u+Lts45mQD/ECxqDRYnhCcBr84fX/3
+         msn1SEIiAIjr7uDb3rhEV3KbAzEysuFVVxLy+mFrhvgnJEMdOaSPOqaXP/aTFxWy6c
+         ZqarZL/9bksysjb4ClL/p0C2beAZPmkzguLceysPOeqxY0PXGoriAsN2poekkRbDfF
+         CZ4qlt1NMwQ8A==
 From:   Mark Brown <broonie@kernel.org>
 To:     Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc:     srinivas.goud@amd.com, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH 2/2] spi: spi-cadence: Add missing kernel doc for
- clk_rate in cdns_spi
-Message-ID: <14d17399-8286-4a67-a94e-16b28e065fbf@sirena.org.uk>
+In-Reply-To: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
 References: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
- <20230518093927.711358-2-ckeepax@opensource.cirrus.com>
- <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
- <20230522142106.GB68926@ediswmail.ad.cirrus.com>
+Subject: Re: [PATCH v2 1/2] spi: spi-cadence: Interleave write of TX and
+ read of RX FIFO
+Message-Id: <168476574697.614040.7701862190333374068.b4-ty@kernel.org>
+Date:   Mon, 22 May 2023 15:29:06 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qVXc52xkdTuARt7M"
-Content-Disposition: inline
-In-Reply-To: <20230522142106.GB68926@ediswmail.ad.cirrus.com>
-X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,36 +55,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 18 May 2023 10:39:26 +0100, Charles Keepax wrote:
+> When working in slave mode it seems the timing is exceedingly tight.
+> The TX FIFO can never empty, because the master is driving the clock so
+> zeros would be sent for those bytes where the FIFO is empty.
+> 
+> Return to interleaving the writing of the TX FIFO and the reading
+> of the RX FIFO to try to ensure the data is available when required.
+> 
+> [...]
 
---qVXc52xkdTuARt7M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, May 22, 2023 at 02:21:06PM +0000, Charles Keepax wrote:
-> On Mon, May 22, 2023 at 10:52:17AM +0100, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > Sending this without the "v2" breaks threading and makes it hard to
-> > handle with tooling, versioning applies to the patch series, not to
-> > individual patches.
+Thanks!
 
-> Apologies do you want me to resend?
+[1/2] spi: spi-cadence: Interleave write of TX and read of RX FIFO
+      commit: 6afe2ae8dc48e643cb9f52e86494b96942440bc6
 
-Just this patch please, the first patch is still going through CI but I
-didn't figure out how to push this into the tooling.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---qVXc52xkdTuARt7M
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRre6oACgkQJNaLcl1U
-h9AmKwf+MbtkD/RghR4yBND2geu0WCSmCVwXpa6vCmOkMJeY4Cf/bExm3UZWpDvV
-8KIGzmCZPwUTqUp5JGQp1AAzpzJLD1gcvR3rfyIlXB7tC2zzR7EB7kon+W9W/nO7
-RqHRuKT5k/bMONJAmKF0ODuyvrLtpnE0j6G2ED+dBqkNN1dnvBFmmyN/EcdJ5hd0
-ZAzHg1/apr5iBZcBgJljJtBCw1kGSn5MVUQzfmoEIsAmtDx6QktDll4tE+Mca4q8
-g2nud1DyCbfFT/WMbvVSwlT19cdJCOFwwFucSgLxSz4mbwoEulxvZTqxxJwyrkH8
-DuYNWKHR/bLergDcre6B/3qPyUleMA==
-=2lVv
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---qVXc52xkdTuARt7M--
+Thanks,
+Mark
+
