@@ -2,101 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAFD70BFC4
-	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 15:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D26A70C0EA
+	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 16:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjEVN2a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 May 2023 09:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S233762AbjEVOV2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 May 2023 10:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbjEVN2O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 09:28:14 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A0F184
-        for <linux-spi@vger.kernel.org>; Mon, 22 May 2023 06:27:47 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5621a279cbbso53795887b3.1
-        for <linux-spi@vger.kernel.org>; Mon, 22 May 2023 06:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684762061; x=1687354061;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6rHmV2hTAY2gC1dGpeMri/B4lJrdKX0lEw/Ffb/jsP8=;
-        b=oXIZKuKTsPKp5a7fOOUMjXhOh+v8MDg1ttLUdBwTNXhz6bWOAOWr2QE7MrmW/KOtua
-         jON+PkUwRxKha+Hhjl5e0pX8yqzSnBnWqpO5QKyZEJEmJk8tIo5IzLhBWtU6IiQGOJX7
-         Al1ROR8ZIO0VzQAE99nZ5N52ueA+vHiX/etX5mBCTM15dqiHlxr3WCD4iuUYonNrYJIn
-         OGfntz+9rA0dtLRttyjMfBpYfkIb/aUiEtRTVzcklbfTNse/69Jjk7wHUp2P9KhWsgUk
-         qWgSZ+QsrLThqS12wa3gIFC/CNIjTEQXzjMp5mjWX7dPwEz6dLtHkXr5E2L34EoUSqd2
-         qaNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684762061; x=1687354061;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6rHmV2hTAY2gC1dGpeMri/B4lJrdKX0lEw/Ffb/jsP8=;
-        b=kwpTTZf9nzW9Wujap8OBF0IheOu3Kx2TbyPznoH8OYbbt+DSZ/Pt8qea0zglsg12EZ
-         mYdGfgKcPkqZcGVIi0c6i7Ts09PPWYDPZC1o5Ek3tK5Q8wVtI+amqpx9icB+BQwznwHd
-         FbrJWtQdkU7zDn4fnC0CDjAlhKCu9rBhkYQ3vIbDkOMEYVVu6oZixXVKbcVCABGumt5G
-         zWa9K1j8+aaFCoO6kYUjC0WMTYOr3Fi/r0GqJVp1+8dPCKug/yNM5BaV1But92xeZIZy
-         2KXynFLP5UGSYJW7bxUFdyV0HLdwXJBSOTjmqbnC7v/RUMvawWZwOacAfNlTiRyIJssP
-         cj+w==
-X-Gm-Message-State: AC+VfDyqzxH2kSgQq6XXLawrP5eM9QyBc82J2VFGAyrqQU7ZPIviLiIj
-        yHA37ZAV8XkhJsL+xIOdxCuIgnJAJexUkmIPLYM=
-X-Google-Smtp-Source: ACHHUZ6FSMXXdymiSxA3S1TRu6jBKhzSWTUcYQgHDkaNkM+cchXDaB/roL9CXeN2V/c/5d7M/ZLsrPadudXNTopn8I4=
-X-Received: by 2002:a81:1345:0:b0:55f:5d6a:97fb with SMTP id
- 66-20020a811345000000b0055f5d6a97fbmr2106332ywt.9.1684762060920; Mon, 22 May
- 2023 06:27:40 -0700 (PDT)
+        with ESMTP id S233849AbjEVOVU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 10:21:20 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8B8DB;
+        Mon, 22 May 2023 07:21:18 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MC9ARL012027;
+        Mon, 22 May 2023 09:21:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=P6oOOqTU0O0tw6GjQb/Q/FfJZj237pQk2F7qrB9oBY4=;
+ b=i8A+YmRktbM0CdYURtI0iVhPL2qokecRjHqtNf6I7rNxLVRah5XEBsPi4hLiYgMSEQSV
+ H0fN/6nxOs7MBKjS7I5fwLsGqGMqUt6+/RaeNJDyeSfsjPKQ4ar9Zp38MDrWXUM1Q+42
+ iwrj0fbA+bTpnCabi7H7gj+mAtkAusMBTsJm7dxSTFfAmYjNH7WIxS1C724fhZxakQWX
+ mK4lOWDFmuar4jsTuDWfvvrVN8/roCAc2EPCaoMk22wxqnUPREXWOBt/178a0+3T+uoc
+ gaLc4sri9jTR70LiR9/g1PT+ydEpImRDHEJ1CDzJxGTqgfgXLnOQ1k5K+2CN4kibJ/Ts TQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qpum1243v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 09:21:08 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 22 May
+ 2023 09:21:06 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Mon, 22 May 2023 09:21:06 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B170511D4;
+        Mon, 22 May 2023 14:21:06 +0000 (UTC)
+Date:   Mon, 22 May 2023 14:21:06 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <srinivas.goud@amd.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 2/2] spi: spi-cadence: Add missing kernel doc for
+ clk_rate in cdns_spi
+Message-ID: <20230522142106.GB68926@ediswmail.ad.cirrus.com>
+References: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
+ <20230518093927.711358-2-ckeepax@opensource.cirrus.com>
+ <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:b914:b0:4c8:92e0:317e with HTTP; Mon, 22 May 2023
- 06:27:40 -0700 (PDT)
-Reply-To: wormer.amos@aol.com
-From:   Wormer Amos <gueygeuye@gmail.com>
-Date:   Mon, 22 May 2023 14:27:40 +0100
-Message-ID: <CACf2VOoRauLF0ny_emZZLzd8G-rpe0A_9nz46ZmBSSD4WUCTqg@mail.gmail.com>
-Subject: FROM AMOS,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1134 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gueygeuye[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: fKrV150Li01pYZ1hhWY_mW6R5kTP9D9h
+X-Proofpoint-ORIG-GUID: fKrV150Li01pYZ1hhWY_mW6R5kTP9D9h
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-How are you? please i want to know if you're ready for business investment
-project in
-your country because i
-need a serious business partnership with good background, kindly reply
-me to discuss details immediately. i will appreciate you to contact me
-on this email below.
+On Mon, May 22, 2023 at 10:52:17AM +0100, Mark Brown wrote:
+> On Thu, May 18, 2023 at 10:39:27AM +0100, Charles Keepax wrote:
+> > Add the missing kernel documentation to silence the build warning.
+> > 
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> > 
+> > New since v1 of the series, but might as well fix this build warning
+> > too.
+> 
+> Sending this without the "v2" breaks threading and makes it hard to
+> handle with tooling, versioning applies to the patch series, not to
+> individual patches.
 
-Thanks and awaiting for your quick response,
+Apologies do you want me to resend?
 
-Amos....
+Thanks,
+Charles
