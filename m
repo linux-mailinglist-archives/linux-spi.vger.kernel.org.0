@@ -2,105 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B394E70BF46
-	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 15:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAFD70BFC4
+	for <lists+linux-spi@lfdr.de>; Mon, 22 May 2023 15:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbjEVNKp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 May 2023 09:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S233109AbjEVN2a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 May 2023 09:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjEVNKo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 09:10:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2254292;
-        Mon, 22 May 2023 06:10:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC3F96144C;
-        Mon, 22 May 2023 13:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70FDC4339C;
-        Mon, 22 May 2023 13:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684761043;
-        bh=Q6nXsGuYfXF82B6FIh74i5ECEIvwWrfYD9ajsFfKZBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JhiC5dFtgZii/kGOkEqpVZsjEENlc24xthUKpATgER4t2rOo7aYz+8mAI8bojgu4T
-         uKrzvjYn+Y9CMKALXlJvqrLOZTApT8u9Iaoh1BsZXLcGIi3LdboT7oODyHP9BjCPhD
-         2YLjB2YwKbYaqeLp4d4OkBJAWdSr/USnRzYw2ZLPSnJgzBAb7Q9gHkvwroSdcEDqFV
-         ESec46JeLlhMbW1QI0W6T3WzEfvdCwlV4ovs79NKNlVqg6iPhZWo3NC0fnC7QT+95d
-         GNP6K8mOFH3pvyXaN7CKzBv61njnfUAqL/G0x0UIZyX7JY2e1bXHtAOrFlJrh7lrVm
-         vIlbeH950pCMA==
-Date:   Mon, 22 May 2023 14:10:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-Message-ID: <9f6672a2-4a39-4a34-9c2a-0257b05c9699@sirena.org.uk>
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
- <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
- <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
- <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
+        with ESMTP id S233950AbjEVN2O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 May 2023 09:28:14 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A0F184
+        for <linux-spi@vger.kernel.org>; Mon, 22 May 2023 06:27:47 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5621a279cbbso53795887b3.1
+        for <linux-spi@vger.kernel.org>; Mon, 22 May 2023 06:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684762061; x=1687354061;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6rHmV2hTAY2gC1dGpeMri/B4lJrdKX0lEw/Ffb/jsP8=;
+        b=oXIZKuKTsPKp5a7fOOUMjXhOh+v8MDg1ttLUdBwTNXhz6bWOAOWr2QE7MrmW/KOtua
+         jON+PkUwRxKha+Hhjl5e0pX8yqzSnBnWqpO5QKyZEJEmJk8tIo5IzLhBWtU6IiQGOJX7
+         Al1ROR8ZIO0VzQAE99nZ5N52ueA+vHiX/etX5mBCTM15dqiHlxr3WCD4iuUYonNrYJIn
+         OGfntz+9rA0dtLRttyjMfBpYfkIb/aUiEtRTVzcklbfTNse/69Jjk7wHUp2P9KhWsgUk
+         qWgSZ+QsrLThqS12wa3gIFC/CNIjTEQXzjMp5mjWX7dPwEz6dLtHkXr5E2L34EoUSqd2
+         qaNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684762061; x=1687354061;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6rHmV2hTAY2gC1dGpeMri/B4lJrdKX0lEw/Ffb/jsP8=;
+        b=kwpTTZf9nzW9Wujap8OBF0IheOu3Kx2TbyPznoH8OYbbt+DSZ/Pt8qea0zglsg12EZ
+         mYdGfgKcPkqZcGVIi0c6i7Ts09PPWYDPZC1o5Ek3tK5Q8wVtI+amqpx9icB+BQwznwHd
+         FbrJWtQdkU7zDn4fnC0CDjAlhKCu9rBhkYQ3vIbDkOMEYVVu6oZixXVKbcVCABGumt5G
+         zWa9K1j8+aaFCoO6kYUjC0WMTYOr3Fi/r0GqJVp1+8dPCKug/yNM5BaV1But92xeZIZy
+         2KXynFLP5UGSYJW7bxUFdyV0HLdwXJBSOTjmqbnC7v/RUMvawWZwOacAfNlTiRyIJssP
+         cj+w==
+X-Gm-Message-State: AC+VfDyqzxH2kSgQq6XXLawrP5eM9QyBc82J2VFGAyrqQU7ZPIviLiIj
+        yHA37ZAV8XkhJsL+xIOdxCuIgnJAJexUkmIPLYM=
+X-Google-Smtp-Source: ACHHUZ6FSMXXdymiSxA3S1TRu6jBKhzSWTUcYQgHDkaNkM+cchXDaB/roL9CXeN2V/c/5d7M/ZLsrPadudXNTopn8I4=
+X-Received: by 2002:a81:1345:0:b0:55f:5d6a:97fb with SMTP id
+ 66-20020a811345000000b0055f5d6a97fbmr2106332ywt.9.1684762060920; Mon, 22 May
+ 2023 06:27:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LylT5SjI1jBuapnp"
-Content-Disposition: inline
-In-Reply-To: <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
-X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7000:b914:b0:4c8:92e0:317e with HTTP; Mon, 22 May 2023
+ 06:27:40 -0700 (PDT)
+Reply-To: wormer.amos@aol.com
+From:   Wormer Amos <gueygeuye@gmail.com>
+Date:   Mon, 22 May 2023 14:27:40 +0100
+Message-ID: <CACf2VOoRauLF0ny_emZZLzd8G-rpe0A_9nz46ZmBSSD4WUCTqg@mail.gmail.com>
+Subject: FROM AMOS,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1134 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gueygeuye[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+How are you? please i want to know if you're ready for business investment
+project in
+your country because i
+need a serious business partnership with good background, kindly reply
+me to discuss details immediately. i will appreciate you to contact me
+on this email below.
 
---LylT5SjI1jBuapnp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks and awaiting for your quick response,
 
-On Mon, May 22, 2023 at 09:07:47PM +0800, zhuyinbo wrote:
-> =E5=9C=A8 2023/5/22 =E4=B8=8B=E5=8D=887:56, Mark Brown =E5=86=99=E9=81=93:
-
-> > What's causing problem is that you patched MAINTAINERS in both patches
-> > but also used the wrong subject line for the first patch so I was having
-> > to fix it up by hand every time.
-
-> spi series patch apply failed,  then I have a look about your spi ci
-> tree and that what I need to do is just change the title of [1/2] patch
-> like this in next version ?  Correcting the title can solve the problem
-> of patch series apply failure in your tree ? actually, I don't reproduce
-> that apply faile issue in your current spi tree and for-next branch.
-
-> spi: add loongson spi bindings
-
-That's a good title.  The patches get reordered in the mailbox when I
-rewrite the title prior to applying them.
-
---LylT5SjI1jBuapnp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRracwACgkQJNaLcl1U
-h9CKpgf+LMM6O00gE10SHDrZBRPdS+b0o9Y4hXcQsAKCjFi7yXfgasUsLgFi7nJn
-Qwve17EyC0vLxerRCqMVi1t+N9PTowFumbQKwSJRoRTiHsdu7rq75KoZZkoCg1X1
-UpGVJPiHyCTeV3OcncIBmguhM5a2XIX7JlJttk0KvCHSklOeIDB0aQmhtO2MEVb3
-jM8CGUNXGreo1aQml03BtNS/pVxx1sn+DG05GK2j/uGzQtpQObbScZHNAXDgFrIZ
-VOaIQsLcShlnHMRRvWMvP630q9+FJK8GQkbCPWTNa7iEyHg+4WvH57EVIvXkF/qV
-YD+g4W/Pa4Y6YTlWs1tZ8VieT/21kg==
-=hsT5
------END PGP SIGNATURE-----
-
---LylT5SjI1jBuapnp--
+Amos....
