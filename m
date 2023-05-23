@@ -2,93 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C93370D84C
-	for <lists+linux-spi@lfdr.de>; Tue, 23 May 2023 11:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D6070D9AC
+	for <lists+linux-spi@lfdr.de>; Tue, 23 May 2023 11:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjEWJBl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 May 2023 05:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S236244AbjEWJ55 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 May 2023 05:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236291AbjEWJBi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 May 2023 05:01:38 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00A2FE;
-        Tue, 23 May 2023 02:01:36 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34N4xakw013915;
-        Tue, 23 May 2023 04:01:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=YktBqmQZtM7nktCdMFTj23dyhlDTH14HCoDW43SGwt0=;
- b=Ov1Kw+XX8dI/lVars0SOP8Cas+nay5g1jWc7YiieY9nttR6KwUHbMYaJ+qI4XGnogpC6
- /Th+3TB2aIfX7YDhUvEixLs2CMlETucemd6kr2vH+yOzS8M92OK+NAO3FfUa+EwGj2nm
- RA2nrolj6eKBwZRTuVXuKVijgEypo7Lb6W+0O2hQC00y4t0Dk9SoghNwuCUJLWQy2rgV
- MCVA9LdXltsVY1b26L0N0kggQTRyGVOTfRaCJCIKX1g7OrLF+O/8jlxL1056R511w3ck
- LsUtUeI1aOUTPx4fhGyGcu89dSQ+EMcpwzDboFczhuW6GTdhPZpriYHbhw/iLHUngiBb Wg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qptmm3bqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 May 2023 04:01:26 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 23 May
- 2023 04:01:24 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 23 May 2023 04:01:24 -0500
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8FADD11D4;
-        Tue, 23 May 2023 09:01:24 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <srinivas.goud@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: [PATCH v3] spi: spi-cadence: Add missing kernel doc for clk_rate in cdns_spi
-Date:   Tue, 23 May 2023 10:01:24 +0100
-Message-ID: <20230523090124.3132-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230294AbjEWJ54 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 May 2023 05:57:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EF2E6;
+        Tue, 23 May 2023 02:57:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88AF262F6B;
+        Tue, 23 May 2023 09:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3D4C433D2;
+        Tue, 23 May 2023 09:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684835875;
+        bh=Lo5iC0IBKszoRhVHalozzYt7yMV352ePXrHUk7RuLkY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tCEDJ2Yef9wgjbGlDXXmOVigYGxMK1+atTQEqCdQHYU27mGwJHhOh1e0P/mPtPNuL
+         O4TgqsVsoQVRNNdwHY9/y52oNE+ETCkkm423ZwlVdIKDgWVbEQaaBvIOLy+iWu6PUy
+         dfVdbza/BqgluAKa5zarlPgRQIRW8fuZRMkfc+ecMG0QBtD+7KFQsPVZy9XpICpqt6
+         5F3pZtVuYichIEj6vmtv0aBP1NT7oZG0jjSRd3s37LAPet3eSJUQcZU1GXXfl4vrF6
+         NPakRBwbGaUb2lzw7WLaxb5JuNbIKXm9ZPTG34DpFxTzS3IGww4CmB26liqi715iYq
+         O2KAR6Sb6M/Rw==
+Date:   Tue, 23 May 2023 10:57:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
+ spi
+Message-ID: <8405acaa-4684-4b81-9839-b24d35d61013@sirena.org.uk>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+ <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
+ <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
+ <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
+ <9f6672a2-4a39-4a34-9c2a-0257b05c9699@sirena.org.uk>
+ <5bbc1f55-1e1c-8c74-f9df-2ec950091ba4@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: FVd5FCaL-vt9Z9Ek2Ign4BDia0Tzqhop
-X-Proofpoint-GUID: FVd5FCaL-vt9Z9Ek2Ign4BDia0Tzqhop
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rL8/Sd4Ohh6l6kLJ"
+Content-Disposition: inline
+In-Reply-To: <5bbc1f55-1e1c-8c74-f9df-2ec950091ba4@loongson.cn>
+X-Cookie: Beware of low-flying butterflies.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the missing kernel documentation to silence the build warning.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+--rL8/Sd4Ohh6l6kLJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Just splitting the patch out to fix my omitting v2 in the title.
+On Tue, May 23, 2023 at 10:08:25AM +0800, zhuyinbo wrote:
 
-Thanks,
-Charles
+> okay, I got it.  thanks!  and I noticed my v11 patch already exists in
+> your ci tree that contain the title change and I whether need send the
+> v12 that for fix the binding patch title ?
 
- drivers/spi/spi-cadence.c | 1 +
- 1 file changed, 1 insertion(+)
+No, it's fine.
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 26e6633693196..de8fe3c5becbb 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -102,6 +102,7 @@
-  * @regs:		Virtual address of the SPI controller registers
-  * @ref_clk:		Pointer to the peripheral clock
-  * @pclk:		Pointer to the APB clock
-+ * @clk_rate:		Reference clock frequency, taken from @ref_clk
-  * @speed_hz:		Current SPI bus clock speed in Hz
-  * @txbuf:		Pointer	to the TX buffer
-  * @rxbuf:		Pointer to the RX buffer
--- 
-2.30.2
+--rL8/Sd4Ohh6l6kLJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRsjhwACgkQJNaLcl1U
+h9AG6wf/ei9O002a1IBwIiaUxrHjJIvWYtoI+Y6hfvK10jxNALl9VbncSk89oClS
+mTRqYSNNGeOE9XxehNerydK3LvjS+nBqt+QeIbqsmbnhTcJJuintFcp6NVqP62A2
+TIw6Pj1qXTifVOFHeobsVIcywB0H2XYCi6FPF7RhfuMZj61ToQ/M/KFzsU47Vq2s
+xDQ2LM4fJ3HyQ6SvpQ7AYtX/dbsY1XSI582GodZjNV3dacGBNo32j0aJH3HzLtam
+mklx+1guw3Nwa+6XRGxsiBdPUJQexjvfLIrIKg3osp3cNqI4rPxgFds4348wb1dw
+4h7j3IeL9RyVexYCHNKGmWNPspfJcA==
+=6HnO
+-----END PGP SIGNATURE-----
+
+--rL8/Sd4Ohh6l6kLJ--
