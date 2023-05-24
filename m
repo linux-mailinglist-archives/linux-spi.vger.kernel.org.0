@@ -2,123 +2,184 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C2C70F581
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 13:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B74E70F5CB
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 14:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjEXLmR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 07:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S230214AbjEXMBE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 24 May 2023 08:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjEXLmR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 07:42:17 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE458F;
-        Wed, 24 May 2023 04:42:15 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae54b623c2so1386285ad.3;
-        Wed, 24 May 2023 04:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684928535; x=1687520535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6t/BheQqzH7C1thiA7W22M56MvUugUWYCFOmf6TXyi8=;
-        b=O8lF963QXa1rK3JIut29atBtSNYTj03rWg5RToTbICooU2WFfy2rBsu0vR1rNGbhFS
-         YrHX6cA8XiDjYwgGBZbboMerOmFh3BcswJeqK4as7vnHd80/drVCj94BW3sUhMFdmWgu
-         go+R4JDS8bXpDQAivwhpJ2rD6v4UZ6ceBorGw+yDoEKIWxBrdurX3ni1UUxADscs2PFj
-         XQBseeg6jza77HVRmnWW7BrET5UDWOkPB6I9u4RdBoapY6XCzRrEEyT8nvdFA84ECPxV
-         KPuS5UdAIx9ZA2cMQfu0nFKLk3FNQAdWg9KWNjWsghRmN00Bk+wt8hXmQ6eh6yXAYXbY
-         i75Q==
+        with ESMTP id S229531AbjEXMBD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 08:01:03 -0400
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DC99D;
+        Wed, 24 May 2023 05:01:02 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-45702d3d92cso590501e0c.1;
+        Wed, 24 May 2023 05:01:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684928535; x=1687520535;
+        d=1e100.net; s=20221208; t=1684929661; x=1687521661;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6t/BheQqzH7C1thiA7W22M56MvUugUWYCFOmf6TXyi8=;
-        b=T+5fOyZA/bWcsjDu9uMzNHG9XdfY1meRc3BPOzK3TOoatYF6q24+RkDnoc1Gbaarsg
-         gZwjETnPvIT8wIP573C6XHhsGWiSwOu9gd4ZI4a/BHxm1L6W1wVryi/anRlh7FOfyVJD
-         v47gcFpMYJx4EKPpfgYIATsyHGxoBhLLZiFAr0WCw9WeCCIs4LzbOLDS7hMrYXWp/fLa
-         Atc7jrhjAf4r+V1sgW0D4c1cJhYkzMEthsXtVjk0ACKQYZMIIlu7WNiZ94KOOsmc01or
-         cuEMdR83IEIUHGQC06DtEhWo2iCr1LU6bQvFk5/o3MGweygiCWcM1PXz9q9sQBJbTsp/
-         ocYw==
-X-Gm-Message-State: AC+VfDwoBrJtFKjvRaw1lxPY1poZG56sI8cpDXgRf3N6rJSbTizq9VGc
-        rqOPFfWilS+Z8wdCcyrBOmDyqbg1jKAz4Wrk5i++9UxzEX2pVA==
-X-Google-Smtp-Source: ACHHUZ4/LomLYl/ANxGiVFIZ7yz3yirbhchgDJXwFQC0wuMugNVhb5lNTnCy3udFOtbGYAc9uaHhI+B/s/6I5pWlsbU=
-X-Received: by 2002:a17:902:7683:b0:1a6:82ac:f277 with SMTP id
- m3-20020a170902768300b001a682acf277mr15979064pll.14.1684928535303; Wed, 24
- May 2023 04:42:15 -0700 (PDT)
+        bh=SagXwz3fZXKRM1LQINgV90wdhBsSA1/HwNIZxym3pck=;
+        b=VAd7X6kuXpEY6NtOSBEE00h5lJyxZmHNEe+0Dfj98E4o92bRmKFHz019zwPm+BwTSU
+         KcEQ8cQ93Ogg8qzwyU0vkA6KmkY1fu8ne307lc68InnvCFVawKh4YNea/AEAgjVfA0RA
+         xIZe+1niv1dXEtIEFZzrAVhhyymwlHJ21L8650NLWBbT471WSGtrzs+0GO6yoEOkhMpa
+         MduY10/aCDtL+1sOIkHlULQ0q/Rimr3PpON03uyvh4O05JnzF1+WZDMFFWBv7TbbStfU
+         pETfcv6p8ik0+E+sBGB7GjRZhV2Hcqp3WRT6uNloDF/AF0p33desQLnb0exlqd/Ny49x
+         FHtA==
+X-Gm-Message-State: AC+VfDzSv5i/86notKMcVKkiA6nWvt+KXQ56Pa4hCZjqT0bFpqmWiuP9
+        wMEjBc24gGET8PbY5Nv8u2w1n82HNiSc6w==
+X-Google-Smtp-Source: ACHHUZ5qeWSykQja7Xbx8k/tBMIJOLnAEjDaw8VeRMa1eEelBRBsMgz5dns6gT3YYYFRlWo5qMifMQ==
+X-Received: by 2002:a1f:df42:0:b0:44f:d211:2df3 with SMTP id w63-20020a1fdf42000000b0044fd2112df3mr6714924vkg.13.1684929661154;
+        Wed, 24 May 2023 05:01:01 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id 9-20020a1f1809000000b0045350f4ca42sm1891730vky.1.2023.05.24.05.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 05:01:00 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4571d25d288so579091e0c.3;
+        Wed, 24 May 2023 05:01:00 -0700 (PDT)
+X-Received: by 2002:a81:7d87:0:b0:561:7cb7:6fb4 with SMTP id
+ y129-20020a817d87000000b005617cb76fb4mr19705995ywc.7.1684929172360; Wed, 24
+ May 2023 04:52:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230524091948.41779-1-boerge.struempfel@gmail.com>
- <20230524091948.41779-3-boerge.struempfel@gmail.com> <8cc00e92-512a-f65e-ef4a-4ea859ee3e31@kontron.de>
-In-Reply-To: <8cc00e92-512a-f65e-ef4a-4ea859ee3e31@kontron.de>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Wed, 24 May 2023 13:42:04 +0200
-Message-ID: <CAEktqctAZzMifTpba5cgFoAVF_r0LmG-9kNM0mM1PhA764R-ww@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW
- mode bit
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
-        festevam@gmail.com, amit.kumar-mahapatra@amd.com,
-        broonie@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, gch981213@gmail.com
+References: <e4227418-151d-7222-b439-4ce53bf0fb81@amd.com> <20230523192858.31924-1-blarson@amd.com>
+In-Reply-To: <20230523192858.31924-1-blarson@amd.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 24 May 2023 13:52:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
+Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
+Subject: Re: [PATCH v14 6/8] arm64: dts: Add AMD Pensando Elba SoC support
+To:     Brad Larson <blarson@amd.com>
+Cc:     michal.simek@amd.com, adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        broonie@kernel.org, catalin.marinas@arm.com, conor+dt@kernel.org,
+        davidgow@google.com, devicetree@vger.kernel.org,
+        fancer.lancer@gmail.com, gerg@linux-m68k.org, gsomlo@gmail.com,
+        hal.feng@starfivetech.com, hasegawa-hitomi@fujitsu.com,
+        j.neuschaefer@gmx.net, joel@jms.id.au, kernel@esmil.dk,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, lee@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        p.zabel@pengutronix.de, rdunlap@infradead.org, robh+dt@kernel.org,
+        samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
+        zhuyinbo@loongson.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am Mi., 24. Mai 2023 um 11:47 Uhr schrieb Frieder Schrempf
-<frieder.schrempf@kontron.de>:
->
-> On 24.05.23 11:19, Boerge Struempfel wrote:
-> > By default, the spi-imx controller pulls the mosi line high, whenever i=
-t
-> > is idle. This behaviour can be inverted per CS by setting the
-> > corresponding DATA_CTL bit in the config register of the controller.
+Hi Brad,
+
+On Tue, May 23, 2023 at 9:30 PM Brad Larson <blarson@amd.com> wrote:
+> On 5/16/23 09:54, Michal Simek wrote:
+> > On 5/15/23 20:16, Brad Larson wrote:
+> >> --- /dev/null
+> >> +++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
+> >> @@ -0,0 +1,197 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> >> +/*
+> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
 > >
-> > Also, since the controller mode-bits have to be touched anyways, the
-> > SPI_CPOL and SPI_CPHA are replaced by the combined SPI_MODE_X_MASK flag=
-.
+> > 2023 and the same below.
+>
+> I'll update the copyright in the next submit
+
+Did you make any substantial changes in 2023?
+
+> >> + */
+> >> +
+> >> +/ {
+> >> +    cpus {
+> >> +            #address-cells = <2>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            cpu-map {
+> >> +                    cluster0 {
+> >> +                            core0 { cpu = <&cpu0>; };
+> >> +                            core1 { cpu = <&cpu1>; };
+> >> +                            core2 { cpu = <&cpu2>; };
+> >> +                            core3 { cpu = <&cpu3>; };
+> >> +                    };
+> >> +
+> >> +                    cluster1 {
+> >> +                            core0 { cpu = <&cpu4>; };
+> >> +                            core1 { cpu = <&cpu5>; };
+> >> +                            core2 { cpu = <&cpu6>; };
+> >> +                            core3 { cpu = <&cpu7>; };
+> >> +                    };
+> >> +
+> >> +                    cluster2 {
+> >> +                            core0 { cpu = <&cpu8>; };
+> >> +                            core1 { cpu = <&cpu9>; };
+> >> +                            core2 { cpu = <&cpu10>; };
+> >> +                            core3 { cpu = <&cpu11>; };
+> >> +                    };
+> >> +
+> >> +                    cluster3 {
+> >> +                            core0 { cpu = <&cpu12>; };
+> >> +                            core1 { cpu = <&cpu13>; };
+> >> +                            core2 { cpu = <&cpu14>; };
+> >> +                            core3 { cpu = <&cpu15>; };
+> >> +                    };
+> >> +            };
+> >> +
+> >> +            /* CLUSTER 0 */
+> >> +            cpu0: cpu@0 {
+> >> +                    device_type = "cpu";
+> >> +                    compatible = "arm,cortex-a72";
+> >> +                    reg = <0 0x0>;
 > >
-> > Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+> > Do you really need 2/0 split here. The first cell is 0 anyway.
 >
-> Thanks for working on this! We used a similar downstream patch for
-> driving NeoPixels with i.MX. I'm happy to see a proper upstream solution.
+> Yes following 64-bit system definition
+
+You mean for the 64-bit main address space?
+The CPU address space under /cpus is unrelated.
+
+> >> +++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
+> >> @@ -0,0 +1,106 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> >> +/*
+> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
+> >> + */
+> >> +
+> >> +&flash0 {
+> 0xf0000>> +     partitions {
+> >> +            compatible = "fixed-partitions";
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <1>;
+> >> +            partition@0 {
+> >> +                    label = "flash";
+> >> +                    reg = <0x10000 0xfff0000>;
+> >
+> > This doesn't fit with partition@0 above.
+> > Also size is weird.
 >
+> This is intended to not expose sector 0.
 
-Thanks for your reply. I'm glad to see that there is an interest for this
-and I'm not the only one, who is working with this.
+The unit address should still match the first reg entry
+=> partition@10000.
 
-> I also have this Python module [1] around for using spidev to drive the
-> LEDs. It would be nice to see support for SPI_MOSI_IDLE_LOW in py-spidev
-> [2] so we could use it there. Though the latter looks a bit like it is
-> not properly maintained anymore.
+Gr{oetje,eeting}s,
 
-The python modules looks interesting.
+                        Geert
 
-FYI: there is already another patch by Chuanhong Guo on the mailing
-list, which implements a proper driver for neopixel leds. It also allows
-to add them via DT and access them via sys-fs. It might be an
-interesting upstream alternative for your python module if it gets
-accepted.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-https://lore.kernel.org/lkml/20221212045558.69602-1-gch981213@gmail.com/
-
->
-> [1] https://github.com/fschrempf/py-neopixel-spidev
-> [2] https://github.com/doceme/py-spidev
->
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-
---
-Kind Regards,
-B=C3=B6rge Str=C3=BCmpfel
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
