@@ -2,42 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650FC70F3DC
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 12:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6909270F402
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 12:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbjEXKOc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 06:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S233094AbjEXKUn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 06:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjEXKOF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 06:14:05 -0400
+        with ESMTP id S233871AbjEXKUF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 06:20:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A2E65;
-        Wed, 24 May 2023 03:13:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751D3E63;
+        Wed, 24 May 2023 03:19:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1BD629C8;
-        Wed, 24 May 2023 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD94C4339B;
-        Wed, 24 May 2023 10:13:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09B2E63244;
+        Wed, 24 May 2023 10:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164C8C433EF;
+        Wed, 24 May 2023 10:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684923210;
-        bh=YBiQZnn3UE4CseHaGnob9PKsAhVchxOdPP8AumSzB48=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kK6Io4A318tO+M6jmuKFkonmmbgrosqEmC3p82hxD7GbkMs4d0x+j/5oZ9VbZfAmY
-         gogGbYl1IgncgeZ/uG1tcDSX/6An+eKCYyj3pl5As/uh7wRjwOxZ5v6GrioHuWInWl
-         xVLfw/1n65LCiXkavZ6aND+GVMmaN6rdQ9q9+pobaE2DZ9l7zs4hK+u+bYrCyx72q1
-         5DNo5p8XFiTUTQ5F1Uzz9BCmfjd6ms5XBmr84QWH4o+3L91Q1Zei72gjXdAyDdAXlv
-         ZNz2/C9+WJLxNKNNQjYTLRVSF6GDLkm+C69gIEZGXRS91OQG4yDsVxzMEUhZ8Ue73H
-         7oISuu+2ptM2g==
+        s=k20201202; t=1684923555;
+        bh=MtWBtQ6aAoXyFoAVZRww941etajSf0Pwbm9hhrT6pfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uw7G/dz0llS7lUVaJS3D/WIC2fhIKJtExPpIgjQ39YeXVmiLGXkU5Ri0nDd/oRAjX
+         MbO1fPei28wWMNb9S2cN6YRwWJozrzW0pUWKG6EXbQRR2uY6O+5VNA1t/EiVPn++UV
+         5EmwX1oe+gLkciKaBdnNVa/u9LcGxIyyYqIea6XpMNNVKmQrneaI2dSx/kPnnx4Ijm
+         LUq1nUZ+8BGqp9oTCjq7GJ6LDCVC5pYolCKy5f9f2Vx03Ih5qSsQmkQeyA/C6UdNTu
+         w9xjsQ2IquFlRofxLlUSpf2XJ9F9nk6lxXhugYHyLVHbqHDGawytYtkrbtYvg9SMMX
+         h5YfmNsf8cfYA==
+Date:   Wed, 24 May 2023 11:19:09 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.4-rc3
-Date:   Wed, 24 May 2023 11:13:17 +0100
-Message-Id: <20230524101329.ACD94C4339B@smtp.kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <39e99d0b-9a5a-446d-aed7-efee21216ec1@sirena.org.uk>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-3-zhuyinbo@loongson.cn>
+ <ZGy3b7ZfNwWoGDTu@surfacebook>
+ <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+ <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Xqg6i+1FCvZAy4Oy"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+X-Cookie: You will be divorced within a year.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -48,44 +64,48 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+--Xqg6i+1FCvZAy4Oy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Wed, May 24, 2023 at 11:42:34AM +0300, Andy Shevchenko wrote:
+> On Wed, May 24, 2023 at 10:52=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> =
+wrote:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc3
+> > >> +#define     LOONGSON_SPI_SPCR_REG   0x00
+> > >> +#define     LOONGSON_SPI_SPSR_REG   0x01
+> > >> +#define     LOONGSON_SPI_FIFO_REG   0x02
+> > >> +#define     LOONGSON_SPI_SPER_REG   0x03
+> > >> +#define     LOONGSON_SPI_PARA_REG   0x04
+> > >> +#define     LOONGSON_SPI_SFCS_REG   0x05
+> > >> +#define     LOONGSON_SPI_TIMI_REG   0x06
 
-for you to fetch changes up to 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
+> > > Where is this used outside of the main driver?
 
-  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
+> > These definitions are only used in core.c
 
-----------------------------------------------------------------
-spi: Fixes for v6.4
+> Then the obvious question, why are they located in *.h?
 
-A collection of fixes that came in since the merge window, plus an
-update to MAINTAINERS.  The Cadence fixes are coming from the addition
-of device mode support, they required a couple of incremental updates in
-order to get something that works robustly for both device and
-controller modes.
+It's absolutely fine to put them in a header file, that's a perfectly
+normal way of writing code - it helps keep the driver a bit smaller by
+putting big piles of defines in a separate file, that can help make
+things a bit more manageable.
 
-----------------------------------------------------------------
-Amit Kumar Mahapatra (1):
-      spi: dw: Replace spi->chip_select references with function calls
+--Xqg6i+1FCvZAy4Oy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Charles Keepax (3):
-      spi: spi-cadence: Avoid read of RX FIFO before its ready
-      spi: spi-cadence: Only overlap FIFO transactions in slave mode
-      spi: spi-cadence: Interleave write of TX and read of RX FIFO
+-----BEGIN PGP SIGNATURE-----
 
-Krzysztof Kozlowski (1):
-      spi: MAINTAINERS: drop Krzysztof Kozlowski from Samsung SPI
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRt5JwACgkQJNaLcl1U
+h9Ci5Af+NaHg1gQJOq8Q4R3aAaMCss64c2eb1tgoVaaTl1dAsuDyMvXBh/gZiY7Q
+a8XqU5QVk9o7HD7UpvdY3f6ZlpakU9WdUfqsSX/XCaBheAa7MISY1NGyNkAjcDOl
+hR17A+BK5REb3dlYcWsONd5fouuKl+KsOipPSOFVTeU3VJuIIlGQUFGaw74hxMsa
+LWgZHOpAiCsgCMyyeJrzNgSl62j+iOeg4SIRbumZzvFdoFQbb5wnIzEzlWLDWgBd
+vvYaqdcTlNTz5wQLjzyUDUsocO4LxXPLwJz5ljlnbji0CUzbc6h9XtUV6OoRohIE
+H+u7g0Ma8nEu/VhuZiUszak7EoXxCA==
+=SXKy
+-----END PGP SIGNATURE-----
 
-Vijaya Krishna Nivarthi (1):
-      spi: spi-geni-qcom: Select FIFO mode for chip select
-
- MAINTAINERS                 |   1 -
- drivers/spi/spi-cadence.c   | 105 +++++++++++++++++++-------------------------
- drivers/spi/spi-dw-mmio.c   |   8 ++--
- drivers/spi/spi-geni-qcom.c |   2 +
- 4 files changed, 51 insertions(+), 65 deletions(-)
+--Xqg6i+1FCvZAy4Oy--
