@@ -2,184 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B74E70F5CB
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 14:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCD770F6B9
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 14:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjEXMBE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 24 May 2023 08:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        id S234191AbjEXMmY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 08:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjEXMBD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 08:01:03 -0400
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DC99D;
-        Wed, 24 May 2023 05:01:02 -0700 (PDT)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-45702d3d92cso590501e0c.1;
-        Wed, 24 May 2023 05:01:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684929661; x=1687521661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SagXwz3fZXKRM1LQINgV90wdhBsSA1/HwNIZxym3pck=;
-        b=VAd7X6kuXpEY6NtOSBEE00h5lJyxZmHNEe+0Dfj98E4o92bRmKFHz019zwPm+BwTSU
-         KcEQ8cQ93Ogg8qzwyU0vkA6KmkY1fu8ne307lc68InnvCFVawKh4YNea/AEAgjVfA0RA
-         xIZe+1niv1dXEtIEFZzrAVhhyymwlHJ21L8650NLWBbT471WSGtrzs+0GO6yoEOkhMpa
-         MduY10/aCDtL+1sOIkHlULQ0q/Rimr3PpON03uyvh4O05JnzF1+WZDMFFWBv7TbbStfU
-         pETfcv6p8ik0+E+sBGB7GjRZhV2Hcqp3WRT6uNloDF/AF0p33desQLnb0exlqd/Ny49x
-         FHtA==
-X-Gm-Message-State: AC+VfDzSv5i/86notKMcVKkiA6nWvt+KXQ56Pa4hCZjqT0bFpqmWiuP9
-        wMEjBc24gGET8PbY5Nv8u2w1n82HNiSc6w==
-X-Google-Smtp-Source: ACHHUZ5qeWSykQja7Xbx8k/tBMIJOLnAEjDaw8VeRMa1eEelBRBsMgz5dns6gT3YYYFRlWo5qMifMQ==
-X-Received: by 2002:a1f:df42:0:b0:44f:d211:2df3 with SMTP id w63-20020a1fdf42000000b0044fd2112df3mr6714924vkg.13.1684929661154;
-        Wed, 24 May 2023 05:01:01 -0700 (PDT)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id 9-20020a1f1809000000b0045350f4ca42sm1891730vky.1.2023.05.24.05.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 05:01:00 -0700 (PDT)
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4571d25d288so579091e0c.3;
-        Wed, 24 May 2023 05:01:00 -0700 (PDT)
-X-Received: by 2002:a81:7d87:0:b0:561:7cb7:6fb4 with SMTP id
- y129-20020a817d87000000b005617cb76fb4mr19705995ywc.7.1684929172360; Wed, 24
- May 2023 04:52:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <e4227418-151d-7222-b439-4ce53bf0fb81@amd.com> <20230523192858.31924-1-blarson@amd.com>
-In-Reply-To: <20230523192858.31924-1-blarson@amd.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 24 May 2023 13:52:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
-Message-ID: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
-Subject: Re: [PATCH v14 6/8] arm64: dts: Add AMD Pensando Elba SoC support
-To:     Brad Larson <blarson@amd.com>
-Cc:     michal.simek@amd.com, adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        broonie@kernel.org, catalin.marinas@arm.com, conor+dt@kernel.org,
-        davidgow@google.com, devicetree@vger.kernel.org,
-        fancer.lancer@gmail.com, gerg@linux-m68k.org, gsomlo@gmail.com,
-        hal.feng@starfivetech.com, hasegawa-hitomi@fujitsu.com,
-        j.neuschaefer@gmx.net, joel@jms.id.au, kernel@esmil.dk,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee.jones@linaro.org, lee@kernel.org,
+        with ESMTP id S230316AbjEXMmY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 08:42:24 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626499E;
+        Wed, 24 May 2023 05:42:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 953615C0115;
+        Wed, 24 May 2023 08:42:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 24 May 2023 08:42:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684932139; x=1685018539; bh=SF
+        9JtV1APOsCbo27SIShQg4r+s7H+woBcWqX/y1Cbdo=; b=MPX0qIkeYUH3javcr4
+        0T277eOhoLBvj5MGKRxXJIC40iN498Ia5AEtM3WBjzb1WA//1gxTFLvbdzApnw7d
+        mRmcww6BJ2kmp/5HJfmi5V4VysoKZQOQkduOe+RT0ZKgAdsPnVCxGzDjaXcltVRP
+        Iv+J8G/pSOpZTBJQ09PZE4pJTOw3Nh5GEPZrwK/x/Ji10UYampQOuumbfogMXTUH
+        BbjRfAhyCvPbyU4JjPuLGMyu3OPs1L/XS7wah/8I1MneV0Xihice76gYF3MHnj17
+        kEbKC9cjnMLJOI4wYLRWJ1K09hbY+kD4RR0+VStyUxM9S84S9sTGxPguFxt9+Gbq
+        qMNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684932139; x=1685018539; bh=SF9JtV1APOsCb
+        o27SIShQg4r+s7H+woBcWqX/y1Cbdo=; b=GEkYChRQYQjJZWyxPqzR0Gap0m3Ek
+        P7uW5ACiQUPHjYZDN4BpnBHUTrx7LYVvnG/j/LnSMLu+n0cyjxlE9l3SWzyVmo0G
+        cOO/pu0PAK7dFF1oluUJf7om+KUHjXFA1RwMFBLO/987q4+KdSdTVh+zXLAaGnnL
+        iJjjqbG/EdcW3dosu6RlHPFvhjGLP5CGyYZRL2IA6idCHY62WLZeSbh4Iecm2svE
+        bREMasYi5OCbVTZVDm2tFhj3YN6fA6zJ8wrJXzDXBXZ9iehzwyFpeaP6IPzR3EB8
+        FOy3nRGEsEivNdxP2t+t3c5ya8XNnfKkJd9UlJssaPkyl6EnEcYi8WmqA==
+X-ME-Sender: <xms:KQZuZGMDoRzsCX5aXsO-r725SY22BCoE8ATFudZ5DaJl7wynb3wZug>
+    <xme:KQZuZE9_0xo0I4cJQiDdiw7TV9eLSIZnClXcQc-2S0YyZ1Bij6-jPvsGXyaCAKCe4
+    5gv8zmxl2ZL5lVcuSk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:KQZuZNSGokaxVGygwsbDOfBz_Bd3L9-Y3iQ4XDMxmb0N4YD9pmee2A>
+    <xmx:KQZuZGtMqYDh5AwRAR7d7K03DN2KXEekKnKZMl4ThXvdwkiSH52fNg>
+    <xmx:KQZuZOdvpVskFAY9an0bL1TPZKC9C3k13ZZDda7j9dBcyhc5qY_6aQ>
+    <xmx:KwZuZOAXpeVP7LyUAtIRRQ1eqAR8Cew46tqPn6kSCUE2DV6S9PP5uA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 64F50B60086; Wed, 24 May 2023 08:42:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <787582a3-51a1-494e-bfd0-b51d1117432e@app.fastmail.com>
+In-Reply-To: <20230523221132.64464-1-blarson@amd.com>
+References: <bc5118f2-8982-46ff-bc75-d0c71475e909@app.fastmail.com>
+ <20230523221132.64464-1-blarson@amd.com>
+Date:   Wed, 24 May 2023 14:41:57 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Brad Larson" <blarson@amd.com>
+Cc:     "Adrian Hunter" <adrian.hunter@intel.com>, alcooperx@gmail.com,
+        "Andy Shevchenko" <andy.shevchenko@gmail.com>,
+        brendan.higgins@linux.dev,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "David Gow" <davidgow@google.com>, devicetree@vger.kernel.org,
+        "Serge Semin" <fancer.lancer@gmail.com>,
+        "Greg Ungerer" <gerg@linux-m68k.org>, gsomlo@gmail.com,
+        "Hal Feng" <hal.feng@starfivetech.com>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Lee Jones" <lee.jones@linaro.org>, "Lee Jones" <lee@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        p.zabel@pengutronix.de, rdunlap@infradead.org, robh+dt@kernel.org,
-        samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
-        zhuyinbo@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-spi@vger.kernel.org,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Samuel Holland" <samuel@sholland.org>, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Tony Huang" <tonyhuang.sunplus@gmail.com>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>, vaishnav.a@ti.com,
+        "Walker Chen" <walker.chen@starfivetech.com>,
+        "Will Deacon" <will@kernel.org>, "Yinbo Zhu" <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC Controller
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brad,
-
-On Tue, May 23, 2023 at 9:30 PM Brad Larson <blarson@amd.com> wrote:
-> On 5/16/23 09:54, Michal Simek wrote:
-> > On 5/15/23 20:16, Brad Larson wrote:
-> >> --- /dev/null
-> >> +++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
-> >> @@ -0,0 +1,197 @@
-> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> >> +/*
-> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
-> >
-> > 2023 and the same below.
+On Wed, May 24, 2023, at 00:11, Brad Larson wrote:
+>> On Mon, May 15, 2023, at 20:16, Brad Larson wrote:
 >
-> I'll update the copyright in the next submit
-
-Did you make any substantial changes in 2023?
-
-> >> + */
-> >> +
-> >> +/ {
-> >> +    cpus {
-> >> +            #address-cells = <2>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            cpu-map {
-> >> +                    cluster0 {
-> >> +                            core0 { cpu = <&cpu0>; };
-> >> +                            core1 { cpu = <&cpu1>; };
-> >> +                            core2 { cpu = <&cpu2>; };
-> >> +                            core3 { cpu = <&cpu3>; };
-> >> +                    };
-> >> +
-> >> +                    cluster1 {
-> >> +                            core0 { cpu = <&cpu4>; };
-> >> +                            core1 { cpu = <&cpu5>; };
-> >> +                            core2 { cpu = <&cpu6>; };
-> >> +                            core3 { cpu = <&cpu7>; };
-> >> +                    };
-> >> +
-> >> +                    cluster2 {
-> >> +                            core0 { cpu = <&cpu8>; };
-> >> +                            core1 { cpu = <&cpu9>; };
-> >> +                            core2 { cpu = <&cpu10>; };
-> >> +                            core3 { cpu = <&cpu11>; };
-> >> +                    };
-> >> +
-> >> +                    cluster3 {
-> >> +                            core0 { cpu = <&cpu12>; };
-> >> +                            core1 { cpu = <&cpu13>; };
-> >> +                            core2 { cpu = <&cpu14>; };
-> >> +                            core3 { cpu = <&cpu15>; };
-> >> +                    };
-> >> +            };
-> >> +
-> >> +            /* CLUSTER 0 */
-> >> +            cpu0: cpu@0 {
-> >> +                    device_type = "cpu";
-> >> +                    compatible = "arm,cortex-a72";
-> >> +                    reg = <0 0x0>;
-> >
-> > Do you really need 2/0 split here. The first cell is 0 anyway.
+>> Also, can you explain why this needs a low-lever user interface
+>> in the first place, rather than something that can be expressed
+>> using high-level abstractions as you already do with the reset
+>> control?
+>>
+>> All of the above should be part of the changelog text to get a
+>> driver like this merged. I don't think we can get a quick
+>> solution here though, so maybe you can start by removing the
+>> ioctl side and having the rest of the driver in drivers/reset?
 >
-> Yes following 64-bit system definition
-
-You mean for the 64-bit main address space?
-The CPU address space under /cpus is unrelated.
-
-> >> +++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
-> >> @@ -0,0 +1,106 @@
-> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> >> +/*
-> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
-> >> + */
-> >> +
-> >> +&flash0 {
-> 0xf0000>> +     partitions {
-> >> +            compatible = "fixed-partitions";
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <1>;
-> >> +            partition@0 {
-> >> +                    label = "flash";
-> >> +                    reg = <0x10000 0xfff0000>;
-> >
-> > This doesn't fit with partition@0 above.
-> > Also size is weird.
+> In the original patchset I added a pensando compatible to spidev and that
+> was nacked in review and reusing some random compatible that made it into 
+> spidev was just wrong.  Further it was recommended this should be a system 
+> specific driver and don't rely on a debug driver like spidev.  I changed 
+> over to a platform specific driver and at that time I also needed to include 
+> a reset controller (emmc reset only).  I put these in drivers/mfd and 
+> drivers/reset.  Review of the device tree for this approach went back and 
+> forth to _not_ have four child nodes on the spi device each with the same 
+> compatible. Decision was to squash the child nodes into the parent and put 
+> the reset-controller there also.  One driver and since its pensando
+> specific its currently in drivers/soc/amd.
 >
-> This is intended to not expose sector 0.
+> There are five different user processes and some utilities that access the 
+> functionality in the cpld/fpga.  You're correct, its passing messages that 
+> are specific to the IP accessed via chip-select.  No Elba system will boot 
+> without this driver providing ioctl access.
 
-The unit address should still match the first reg entry
-=> partition@10000.
+Thank you for the detailed summary. Moving away from spidev and
+from mfd seems all reasonable here. I'm still a bit confused by
+why you have multiple chipselects here that are for different
+subdevices but ended with a single user interface for all of them,
+but that's not a big deal.
 
-Gr{oetje,eeting}s,
+The main bit that sticks out about this high-level design is how
+it relies on user space utilities at all to understand the message
+format. From what I understand about the actual functionality of
+this device, it most closely resembles an embedded controller that
+you might find in a laptop or server machine, and those usually
+have kernel drivers in drivers/platform/ to interact with the
+device.
 
-                        Geert
+Has anyone tried to do it like that? Maybe it would help
+to see what the full protocol and the user space side looks
+like, in order to move some or all of it into the kernel.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+     Arnd
