@@ -2,48 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA3670F391
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 11:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650FC70F3DC
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 12:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjEXJ46 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 05:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S232326AbjEXKOc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 06:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjEXJ4z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 05:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3CAA7
-        for <linux-spi@vger.kernel.org>; Wed, 24 May 2023 02:56:55 -0700 (PDT)
+        with ESMTP id S232397AbjEXKOF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 06:14:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A2E65;
+        Wed, 24 May 2023 03:13:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4BB162CA7
-        for <linux-spi@vger.kernel.org>; Wed, 24 May 2023 09:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 122BDC4339B;
-        Wed, 24 May 2023 09:56:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1BD629C8;
+        Wed, 24 May 2023 10:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD94C4339B;
+        Wed, 24 May 2023 10:13:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684922214;
-        bh=zrWlGwYzOTGuu3krMnkMfjj6rINq3CpATdv5Uv5/2+w=;
-        h=Subject:From:Date:To:From;
-        b=TS8LwldKH2vZdx3OvqufkuzaZqienPM7QsvtT8xqXgLWRtne/29xUW/VNT0txMZPL
-         rqJej4ZHmKV5j7tlmZhUADMZkACD6QIDZY6GMVP3EtmN/CrSsibDGeT1uurwqfFHjT
-         pWzFCq0Vv2H5G3gcBSs64Przdh95xWZd9g+7dGnz7A6yk7QldtO7VWWer2Sv04+k9n
-         RHIqMjmLkTC7PVGeAwNhLXT6MW690JuhUHNmrlaMTqc8W19VkW8cpNBTURPvs83dAG
-         TKXZgOMFmZGXmd0RsC9MlvjcOuN9j+dEZKQGi9GSgS6xS60lnosPwEOaWZ550n0/iF
-         04ZXolq8Xrd1g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ECC2FC4166F;
-        Wed, 24 May 2023 09:56:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168492221396.24089.17172332336440487204.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 24 May 2023 09:56:53 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1684923210;
+        bh=YBiQZnn3UE4CseHaGnob9PKsAhVchxOdPP8AumSzB48=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kK6Io4A318tO+M6jmuKFkonmmbgrosqEmC3p82hxD7GbkMs4d0x+j/5oZ9VbZfAmY
+         gogGbYl1IgncgeZ/uG1tcDSX/6An+eKCYyj3pl5As/uh7wRjwOxZ5v6GrioHuWInWl
+         xVLfw/1n65LCiXkavZ6aND+GVMmaN6rdQ9q9+pobaE2DZ9l7zs4hK+u+bYrCyx72q1
+         5DNo5p8XFiTUTQ5F1Uzz9BCmfjd6ms5XBmr84QWH4o+3L91Q1Zei72gjXdAyDdAXlv
+         ZNz2/C9+WJLxNKNNQjYTLRVSF6GDLkm+C69gIEZGXRS91OQG4yDsVxzMEUhZ8Ue73H
+         7oISuu+2ptM2g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.4-rc3
+Date:   Wed, 24 May 2023 11:13:17 +0100
+Message-Id: <20230524101329.ACD94C4339B@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,15 +48,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v6] spi: add SPI_MOSI_IDLE_LOW mode bit (2023-05-24T09:19:43)
-  Superseding: [v5] spi: add SPI_MOSI_IDLE_LOW mode bit (2023-05-20T19:08:51):
-    [v5,1/4] spi: add SPI_MOSI_IDLE_LOW mode bit
-    [v5,2/4] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
-    [v5,3/4] spi: spidev: add two new spi mode bits
-    [v5,4/4] spi: spidev_test Add three missing spi mode bits
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc3
+
+for you to fetch changes up to 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
+
+  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
+
+----------------------------------------------------------------
+spi: Fixes for v6.4
+
+A collection of fixes that came in since the merge window, plus an
+update to MAINTAINERS.  The Cadence fixes are coming from the addition
+of device mode support, they required a couple of incremental updates in
+order to get something that works robustly for both device and
+controller modes.
+
+----------------------------------------------------------------
+Amit Kumar Mahapatra (1):
+      spi: dw: Replace spi->chip_select references with function calls
+
+Charles Keepax (3):
+      spi: spi-cadence: Avoid read of RX FIFO before its ready
+      spi: spi-cadence: Only overlap FIFO transactions in slave mode
+      spi: spi-cadence: Interleave write of TX and read of RX FIFO
+
+Krzysztof Kozlowski (1):
+      spi: MAINTAINERS: drop Krzysztof Kozlowski from Samsung SPI
+
+Vijaya Krishna Nivarthi (1):
+      spi: spi-geni-qcom: Select FIFO mode for chip select
+
+ MAINTAINERS                 |   1 -
+ drivers/spi/spi-cadence.c   | 105 +++++++++++++++++++-------------------------
+ drivers/spi/spi-dw-mmio.c   |   8 ++--
+ drivers/spi/spi-geni-qcom.c |   2 +
+ 4 files changed, 51 insertions(+), 65 deletions(-)
