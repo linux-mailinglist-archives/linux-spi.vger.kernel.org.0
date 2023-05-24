@@ -2,169 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DCD70F221
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 11:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E6A70F346
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 11:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240671AbjEXJVF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 05:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S229912AbjEXJoz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 05:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240663AbjEXJVD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 05:21:03 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D33195;
-        Wed, 24 May 2023 02:20:56 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51426347bd2so521304a12.2;
-        Wed, 24 May 2023 02:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684920055; x=1687512055;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w3S98eKsmu2BFFqj9FoRZCJ7VYZdqAy52J8ICuBM5wA=;
-        b=I2E8B+EExYp0Evh1Ei1iZTtTSQh2hhyTyS+CDeeLozxgHfeVVlRRYmGiQ5V4hFuzKl
-         uD/IPQ2EdLmzKbl07uy3UnAvHmL6S3oyCBRgmHfNEB7djRY4uNW9Nj9ml29W9ym6/KhE
-         KLICc43Cb7AqC27HvTK3/5jQdSZPg/6aq1AjjgAbIOd9RrHj3lrTm6V0FLhnQe2rAwdc
-         Atk2hq3j+gnldy+Ati8DhBOUaJmvr3nT/00UKFC65JoCqaS0C3Coyh5wykzTOX4UqAs8
-         ZxSldTIvhdbqYobVq8RVBA0L4Y4enKzndB2UlzLpSXT+xng63CUJOqZ5DlU/MBIGU0i0
-         cvhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684920055; x=1687512055;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w3S98eKsmu2BFFqj9FoRZCJ7VYZdqAy52J8ICuBM5wA=;
-        b=GaC5IbepcCjYxk6EJWJY1FSlIuSqR1R74Ak0E3OsiSR4qEYr8mN7z0MPys0hwWrpQL
-         ENLcXaqz4ZKuQNlUQjXKuTevFAXzj+QYMnbTrULAWlM0zT5ld4w2Lr961aoFqkKTENdF
-         LAldDaFExQpPs2jUINnuEzokurKZqr6y+cZIFwkJ3osZvzruKLrFZzuE+1Yy9ksQ9GZJ
-         b5a0o3aw+2cVbQxmTCCE8M082yah3Kyv5mx/6Uzv8B836v30QqsnRQOHxIePfxkB+kYD
-         jjWD4ph0Pknahaq3k2NXKN7dfh888q6T28CViQouPnBC+r2D1+rSpoeyd5ZYKfNmfv/n
-         m01g==
-X-Gm-Message-State: AC+VfDz3LT1SiX1j4V+uVQLn6+n4Hom0ZoBwpSSnWc4vv7ZOTavR83p7
-        GSYa1ZYnho47G9vFM0yQIx8=
-X-Google-Smtp-Source: ACHHUZ7se64qwjasCPMUqE0Jm/aXFla0NiRJTyI+0UtLKLFcLGR3R6dR9FfIqijKkIlUCdkXv5d8yA==
-X-Received: by 2002:a17:906:4d8f:b0:94f:3bf7:dacf with SMTP id s15-20020a1709064d8f00b0094f3bf7dacfmr15858057eju.71.1684920055149;
-        Wed, 24 May 2023 02:20:55 -0700 (PDT)
-Received: from wslxew193.ultratronik.de (p200300c78700c900fd67df8b3b199594.dip0.t-ipconnect.de. [2003:c7:8700:c900:fd67:df8b:3b19:9594])
-        by smtp.gmail.com with ESMTPSA id jy22-20020a170907763600b0096fbc516a93sm4579527ejc.211.2023.05.24.02.20.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 02:20:54 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        andy.shevchenko@gmail.com, festevam@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] spi: spidev_test Add three missing spi mode bits
-Date:   Wed, 24 May 2023 11:19:48 +0200
-Message-Id: <20230524091948.41779-6-boerge.struempfel@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230524091948.41779-1-boerge.struempfel@gmail.com>
-References: <20230524091948.41779-1-boerge.struempfel@gmail.com>
+        with ESMTP id S230143AbjEXJop (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 05:44:45 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6058595;
+        Wed, 24 May 2023 02:44:41 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxyfGJ3G1ky2EAAA--.1143S3;
+        Wed, 24 May 2023 17:44:41 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqraG3G1kobRzAA--.61836S3;
+        Wed, 24 May 2023 17:44:39 +0800 (CST)
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
+ <20230524-pouncing-variable-c520e85f8db8@wendy>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
+Date:   Wed, 24 May 2023 17:44:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20230524-pouncing-variable-c520e85f8db8@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxqraG3G1kobRzAA--.61836S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kr4DGr4ftw1rGw4rAFy3twb_yoW8Aw47pa
+        47CFnxKFW0qF17ArZaga48CF4fZr93A3WUtr47Kr17Cas0g3WYqayagF98ZwsxCF18GFWU
+        ZFW0gw4UKa18ArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bf8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU8gdbUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Added the three missing spi mode bits SPI_3WIRE_HIZ, SPI_RX_CPHA_FLIP,
-and SPI_MOSI_IDLE_LOW.
 
-Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
----
- tools/spi/spidev_test.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/tools/spi/spidev_test.c b/tools/spi/spidev_test.c
-index 2d2cee339b39..9179942d7f15 100644
---- a/tools/spi/spidev_test.c
-+++ b/tools/spi/spidev_test.c
-@@ -172,7 +172,7 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
- 
- static void print_usage(const char *prog)
- {
--	printf("Usage: %s [-2348CDHILNORSbdilopsv]\n", prog);
-+	printf("Usage: %s [-2348CDFHILMNORSZbdilopsv]\n", prog);
- 	puts("general device settings:\n"
- 		 "  -D --device         device to use (default /dev/spidev1.1)\n"
- 		 "  -s --speed          max speed (Hz)\n"
-@@ -181,11 +181,13 @@ static void print_usage(const char *prog)
- 		 "spi mode:\n"
- 		 "  -H --cpha           clock phase\n"
- 		 "  -O --cpol           clock polarity\n"
-+		 "  -F --rx-cpha-flip   flip CPHA on Rx only xfer\n"
- 		 "number of wires for transmission:\n"
- 		 "  -2 --dual           dual transfer\n"
- 		 "  -4 --quad           quad transfer\n"
- 		 "  -8 --octal          octal transfer\n"
- 		 "  -3 --3wire          SI/SO signals shared\n"
-+		 "  -Z --3wire-hiz      high impedance turnaround\n"
- 		 "data:\n"
- 		 "  -i --input          input data from a file (e.g. \"test.bin\")\n"
- 		 "  -o --output         output data to a file (e.g. \"results.bin\")\n"
-@@ -198,6 +200,7 @@ static void print_usage(const char *prog)
- 		 "  -C --cs-high        chip select active high\n"
- 		 "  -N --no-cs          no chip select\n"
- 		 "  -R --ready          slave pulls low to pause\n"
-+		 "  -M --mosi-idle-low  leave mosi line low when idle\n"
- 		 "misc:\n"
- 		 "  -v --verbose        Verbose (show tx buffer)\n");
- 	exit(1);
-@@ -213,10 +216,12 @@ static void parse_opts(int argc, char *argv[])
- 			{ "loop",          0, 0, 'l' },
- 			{ "cpha",          0, 0, 'H' },
- 			{ "cpol",          0, 0, 'O' },
-+			{ "rx-cpha-flip",  0, 0, 'F' },
- 			{ "dual",          0, 0, '2' },
- 			{ "quad",          0, 0, '4' },
- 			{ "octal",         0, 0, '8' },
- 			{ "3wire",         0, 0, '3' },
-+			{ "3wire-hiz",     0, 0, 'Z' },
- 			{ "input",         1, 0, 'i' },
- 			{ "output",        1, 0, 'o' },
- 			{ "size",          1, 0, 'S' },
-@@ -226,12 +231,13 @@ static void parse_opts(int argc, char *argv[])
- 			{ "cs-high",       0, 0, 'C' },
- 			{ "no-cs",         0, 0, 'N' },
- 			{ "ready",         0, 0, 'R' },
-+			{ "mosi-idle-low", 0, 0, 'M' },
- 			{ "verbose",       0, 0, 'v' },
- 			{ NULL, 0, 0, 0 },
- 		};
- 		int c;
- 
--		c = getopt_long(argc, argv, "D:s:d:b:i:o:lHOLC3NR248p:vS:I:",
-+		c = getopt_long(argc, argv, "D:s:d:b:i:o:lHOLC3ZFMNR248p:vS:I:",
- 				lopts, NULL);
- 
- 		if (c == -1)
-@@ -274,6 +280,15 @@ static void parse_opts(int argc, char *argv[])
- 		case '3':
- 			mode |= SPI_3WIRE;
- 			break;
-+		case 'Z':
-+			mode |= SPI_3WIRE_HIZ;
-+			break;
-+		case 'F':
-+			mode |= SPI_RX_CPHA_FLIP;
-+			break;
-+		case 'M':
-+			mode |= SPI_MOSI_IDLE_LOW;
-+			break;
- 		case 'N':
- 			mode |= SPI_NO_CS;
- 			break;
--- 
-2.40.1
+在 2023/5/24 下午4:56, Conor Dooley 写道:
+> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 47 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> new file mode 100644
+>> index 000000000000..d0be6e5378d7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> @@ -0,0 +1,41 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson SPI controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-spi
+> 
+> I am sorry to jump in here at such a late stage with a (potentially)
+> trivial question. "ls2k" is the SoC family rather than a specific model
+> as far as I understand.
+> The answer is probably yes, but do all SoCs in the family have an
+> identical version of the IP?
+
+
+No, but the spi supported by this loongson spi driver are all the same
+identical version, and other type or verion spi will be supported as
+needed in the future.
+
+Thanks.
 
