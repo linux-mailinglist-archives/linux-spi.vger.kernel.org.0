@@ -2,61 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6909270F402
-	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 12:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BB570F438
+	for <lists+linux-spi@lfdr.de>; Wed, 24 May 2023 12:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbjEXKUn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 06:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S232953AbjEXK37 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 06:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjEXKUF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 06:20:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751D3E63;
-        Wed, 24 May 2023 03:19:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09B2E63244;
-        Wed, 24 May 2023 10:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164C8C433EF;
-        Wed, 24 May 2023 10:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684923555;
-        bh=MtWBtQ6aAoXyFoAVZRww941etajSf0Pwbm9hhrT6pfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uw7G/dz0llS7lUVaJS3D/WIC2fhIKJtExPpIgjQ39YeXVmiLGXkU5Ri0nDd/oRAjX
-         MbO1fPei28wWMNb9S2cN6YRwWJozrzW0pUWKG6EXbQRR2uY6O+5VNA1t/EiVPn++UV
-         5EmwX1oe+gLkciKaBdnNVa/u9LcGxIyyYqIea6XpMNNVKmQrneaI2dSx/kPnnx4Ijm
-         LUq1nUZ+8BGqp9oTCjq7GJ6LDCVC5pYolCKy5f9f2Vx03Ih5qSsQmkQeyA/C6UdNTu
-         w9xjsQ2IquFlRofxLlUSpf2XJ9F9nk6lxXhugYHyLVHbqHDGawytYtkrbtYvg9SMMX
-         h5YfmNsf8cfYA==
-Date:   Wed, 24 May 2023 11:19:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232907AbjEXK3z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 06:29:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8769A8F;
+        Wed, 24 May 2023 03:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684924194; x=1716460194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gwuUuZ5cSF78REHUiHPXnq4Vyh/npUSjZrkX4R0VIcE=;
+  b=m+ZauJ6fdJoInkRXDDeQyVLiiTTteYK6bUrYs6taxmIqZiWXx7tUQr3q
+   HyA43EwMoOVnFV+Cqmixb/n8m1KrKq9Ii3p0G8olUWxeWrvRVUO1bbqlq
+   V1Wdqjxi8K/hpahciz/EBhafn7hE0wznSu4Xo/KzGlPFQ2/H0P9Lgp+Qv
+   MViocoaA9TNqmsVidjNl4G3V5luNP9JA8mkeIla5rtPn+erJbutAU17Kq
+   IW0ruPteuUwPwF2PL6m9ywYD0mYuwtjbSuyPKv0uSvkL5u8EN/3l8I0h/
+   eyqq9jtSqWz25LXVMEIjHIsSosDd3FKhkva7l7Q0C3vJt+awlKkhlF1gX
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
+   d="asc'?scan'208";a="214671058"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 03:29:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 24 May 2023 03:29:52 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 24 May 2023 03:29:50 -0700
+Date:   Wed, 24 May 2023 11:29:28 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <39e99d0b-9a5a-446d-aed7-efee21216ec1@sirena.org.uk>
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jianmin Lv <lvjianmin@loongson.cn>,
+        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
+        <loongson-kernel@lists.loongnix.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+Message-ID: <20230524-relative-trimmer-046fb26a7764@wendy>
 References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <20230522071030.5193-3-zhuyinbo@loongson.cn>
- <ZGy3b7ZfNwWoGDTu@surfacebook>
- <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
- <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
+ <20230524-pouncing-variable-c520e85f8db8@wendy>
+ <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xqg6i+1FCvZAy4Oy"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pFaQaHu3/olulfLs"
 Content-Disposition: inline
-In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
-X-Cookie: You will be divorced within a year.
+In-Reply-To: <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +72,81 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---Xqg6i+1FCvZAy4Oy
+--pFaQaHu3/olulfLs
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 24, 2023 at 11:42:34AM +0300, Andy Shevchenko wrote:
-> On Wed, May 24, 2023 at 10:52=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> =
-wrote:
+On Wed, May 24, 2023 at 05:44:38PM +0800, zhuyinbo wrote:
+>=20
+>=20
+> =E5=9C=A8 2023/5/24 =E4=B8=8B=E5=8D=884:56, Conor Dooley =E5=86=99=E9=81=
+=93:
+> > On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+> > > Add the Loongson platform spi binding with DT schema format using
+> > > json-schema.
+> > >=20
+> > > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > ---
+> > >   .../bindings/spi/loongson,ls2k-spi.yaml       | 41 ++++++++++++++++=
++++
+> > >   MAINTAINERS                                   |  6 +++
+> > >   2 files changed, 47 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/spi/loongson,l=
+s2k-spi.yaml
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.=
+yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+> > > new file mode 100644
+> > > index 000000000000..d0be6e5378d7
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+> > > @@ -0,0 +1,41 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Loongson SPI controller
+> > > +
+> > > +maintainers:
+> > > +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/spi/spi-controller.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - loongson,ls2k-spi
+> >=20
+> > I am sorry to jump in here at such a late stage with a (potentially)
+> > trivial question. "ls2k" is the SoC family rather than a specific model
+> > as far as I understand.
+> > The answer is probably yes, but do all SoCs in the family have an
+> > identical version of the IP?
+>=20
+>=20
+> No, but the spi supported by this loongson spi driver are all the same
+> identical version, and other type or verion spi will be supported as
+> needed in the future.
 
-> > >> +#define     LOONGSON_SPI_SPCR_REG   0x00
-> > >> +#define     LOONGSON_SPI_SPSR_REG   0x01
-> > >> +#define     LOONGSON_SPI_FIFO_REG   0x02
-> > >> +#define     LOONGSON_SPI_SPER_REG   0x03
-> > >> +#define     LOONGSON_SPI_PARA_REG   0x04
-> > >> +#define     LOONGSON_SPI_SFCS_REG   0x05
-> > >> +#define     LOONGSON_SPI_TIMI_REG   0x06
+Does having a catch-all compatible make sense then when not all SoCs in
+the ls2k family will actually be able to use this driver?
+Or am I misunderstanding and all ls2k SoCs do work with this driver and
+you were talking about other, future products?
 
-> > > Where is this used outside of the main driver?
-
-> > These definitions are only used in core.c
-
-> Then the obvious question, why are they located in *.h?
-
-It's absolutely fine to put them in a header file, that's a perfectly
-normal way of writing code - it helps keep the driver a bit smaller by
-putting big piles of defines in a separate file, that can help make
-things a bit more manageable.
-
---Xqg6i+1FCvZAy4Oy
+--pFaQaHu3/olulfLs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRt5JwACgkQJNaLcl1U
-h9Ci5Af+NaHg1gQJOq8Q4R3aAaMCss64c2eb1tgoVaaTl1dAsuDyMvXBh/gZiY7Q
-a8XqU5QVk9o7HD7UpvdY3f6ZlpakU9WdUfqsSX/XCaBheAa7MISY1NGyNkAjcDOl
-hR17A+BK5REb3dlYcWsONd5fouuKl+KsOipPSOFVTeU3VJuIIlGQUFGaw74hxMsa
-LWgZHOpAiCsgCMyyeJrzNgSl62j+iOeg4SIRbumZzvFdoFQbb5wnIzEzlWLDWgBd
-vvYaqdcTlNTz5wQLjzyUDUsocO4LxXPLwJz5ljlnbji0CUzbc6h9XtUV6OoRohIE
-H+u7g0Ma8nEu/VhuZiUszak7EoXxCA==
-=SXKy
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG3nCAAKCRB4tDGHoIJi
+0lR6AQCPA3ic4UvRm1328KZoL51qPlPWTTYRJxmuXZ0y2gB0hQEA7oBZjGgPzFSy
+QjkEJA5dPiSEZcAqddQ30sdPQzebbgY=
+=O8HN
 -----END PGP SIGNATURE-----
 
---Xqg6i+1FCvZAy4Oy--
+--pFaQaHu3/olulfLs--
