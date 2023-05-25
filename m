@@ -2,71 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F717102D3
-	for <lists+linux-spi@lfdr.de>; Thu, 25 May 2023 04:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1B1710350
+	for <lists+linux-spi@lfdr.de>; Thu, 25 May 2023 05:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236092AbjEYCWs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 May 2023 22:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S232022AbjEYDeN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 May 2023 23:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjEYCWr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 22:22:47 -0400
+        with ESMTP id S229530AbjEYDeM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 May 2023 23:34:12 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9FE1D3;
-        Wed, 24 May 2023 19:22:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16C9FE2;
+        Wed, 24 May 2023 20:34:09 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Dx+fFyxm5k0LYAAA--.1801S3;
-        Thu, 25 May 2023 10:22:42 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxiPEv125kUrwAAA--.1775S3;
+        Thu, 25 May 2023 11:34:07 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxddFwxm5kKg52AA--.63824S3;
-        Thu, 25 May 2023 10:22:41 +0800 (CST)
-Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
-To:     Conor Dooley <conor.dooley@microchip.com>
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQu125kVzh2AA--.64313S3;
+        Thu, 25 May 2023 11:34:06 +0800 (CST)
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
         wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhuyinbo@loongson.cn
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
 References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <20230522071030.5193-2-zhuyinbo@loongson.cn>
- <20230524-pouncing-variable-c520e85f8db8@wendy>
- <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
- <20230524-relative-trimmer-046fb26a7764@wendy>
+ <20230522071030.5193-3-zhuyinbo@loongson.cn> <ZGy3b7ZfNwWoGDTu@surfacebook>
+ <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+ <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <99b362c2-640c-9150-26ee-e9add4483886@loongson.cn>
-Date:   Thu, 25 May 2023 10:22:40 +0800
+Message-ID: <2a72a2c2-6fda-1ea8-3b27-5623cc1132aa@loongson.cn>
+Date:   Thu, 25 May 2023 11:34:06 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20230524-relative-trimmer-046fb26a7764@wendy>
+In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxddFwxm5kKg52AA--.63824S3
+X-CM-TRANSID: AQAAf8BxoOQu125kVzh2AA--.64313S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAFW7AF4furyUtw13tFWDurg_yoW5WFyrpa
-        y7CF17GF4DtF12yrZ2qa48CrsIvr93JFyUJrsrKr1UZ3s0q3WaqF13KFs8u3Z3uF1xGFW7
-        ZFWFg3W2kF45AFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGw17Cw48WFyktrW5tw1UZFb_yoW5Cw1xpF
+        WUJa1jyr4UJrWkCw1Iqwn5Xrn2yryfJF1UWwn8tFy8Gr1qvF13Xr1UKrWa9rZ3uFs5uF48
+        Za1UXFs3CF90y3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
         kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
         F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8sL05UUUUU==
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,79 +72,133 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-在 2023/5/24 下午6:29, Conor Dooley 写道:
-> On Wed, May 24, 2023 at 05:44:38PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2023/5/24 下午4:56, Conor Dooley 写道:
->>> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
->>>> Add the Loongson platform spi binding with DT schema format using
->>>> json-schema.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
->>>>    MAINTAINERS                                   |  6 +++
->>>>    2 files changed, 47 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> new file mode 100644
->>>> index 000000000000..d0be6e5378d7
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> @@ -0,0 +1,41 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Loongson SPI controller
->>>> +
->>>> +maintainers:
->>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> +
->>>> +allOf:
->>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - loongson,ls2k-spi
->>>
->>> I am sorry to jump in here at such a late stage with a (potentially)
->>> trivial question. "ls2k" is the SoC family rather than a specific model
->>> as far as I understand.
->>> The answer is probably yes, but do all SoCs in the family have an
->>> identical version of the IP?
->>
->>
->> No, but the spi supported by this loongson spi driver are all the same
->> identical version, and other type or verion spi will be supported as
->> needed in the future.
+在 2023/5/24 下午4:42, Andy Shevchenko 写道:
+> On Wed, May 24, 2023 at 10:52 AM zhuyinbo <zhuyinbo@loongson.cn> wrote:
+>> 在 2023/5/23 下午8:54, andy.shevchenko@gmail.com 写道:
+>>> Mon, May 22, 2023 at 03:10:30PM +0800, Yinbo Zhu kirjoitti:
 > 
-> Does having a catch-all compatible make sense then when not all SoCs in
-> the ls2k family will actually be able to use this driver?
+> ...
+> 
+>>>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>>>> +                            struct spi_device *spi, struct spi_transfer *t)
+>>>> +{
+>>>> +    unsigned int hz;
+>>>> +
+>>>> +    if (t)
+>>>> +            hz = t->speed_hz;
+>>>
+>>> And if t is NULL? hz will be uninitialized. Don't you get a compiler warning?
+>>> (Always test your code with `make W=1 ...`)
+>>
+>> I always use `make W=1` and I don't find any warning, but that what you
+>> said was right and I will initial hz.
+> 
+> Note, if hz == 0 when t == NULL, you can unify that check with the below.
+> 
+>>>> +    if (hz && loongson_spi->hz != hz)
+> 
+> Something like
+> 
+>    if (t && _spi->hz != t->speed_hz)
+>      ...(..., t->speed_hz);
+> 
+> In such a case you won't need a temporary variable.
 
+okay, I got it.
 
-Yes, it is make sense as it can reduce the workload of the community.
-For the Loongson platform, the versions of spi peripherals are almost
-the same, except for a few  or individual SoCs.  And we have also
-discussed compatible internally, and we tend to define it this way.
+> 
+>>>> +            loongson_spi_set_clk(loongson_spi, hz);
+>>>> +
+>>>> +    if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
+>>>> +            loongson_spi_set_mode(loongson_spi, spi);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+> 
+> ...
+> 
+>>> Why do you use deprecated naming? Can you use spi_controller* instead of
+>>> spi_master* in all cases?
+>>
+>> It seems was a personal code style issue and I don't find the
+>> differences between spi_controller and spi_master, Using spi_controller*
+>> is also acceptable to me and I will use spi_controller* instead of
+>> spi_master* in all cases.
+> 
+> Read this section (#4) in full
+> https://kernel.org/doc/html/latest/process/coding-style.html#naming
 
-> Or am I misunderstanding and all ls2k SoCs do work with this driver and
-> you were talking about other, future products?
+okay, I got it.
 
-Actually, in 2k500 has one special type spi was only one cs and their's
-register definition was different from common type spi thus this driver
-doesn't support but this driver can support another common type spi in
-2k500.  for this special type spi I will add support as needed in the
-future.
+> 
+> ...
+> 
+>>>> +    clk = devm_clk_get_optional(dev, NULL);
+>>>> +    if (!IS_ERR(clk))
+>>>> +            spi->clk_rate = clk_get_rate(clk);
+>>>
+>>>> +    else
+>>>
+>>> Redundant. Just check for the error first as it's very usual pattern in the
+>>> Linux kernel.
+>>
+>> Like below ?
+>>
+>>           clk = devm_clk_get_optional(dev, NULL);
+>> -       if (!IS_ERR(clk))
+>> -               spi->clk_rate = clk_get_rate(clk);
+>> -       else
+>> +       if (IS_ERR(clk))
+>>                   return dev_err_probe(dev, PTR_ERR(clk), "unable to get
+>> clock\n");
+>>
+>> +       spi->clk_rate = clk_get_rate(clk);
+> 
+> Yes.
 
+okay, I got it.
+> 
+>>           loongson_spi_reginit(spi);
+> 
+>>>> +            return dev_err_probe(dev, PTR_ERR(clk), "unable to get clock\n");
+> 
+> ...
+> 
+>>>> +    ret = loongson_spi_init_master(dev, reg_base);
+>>>> +    if (ret)
+>>>> +            return dev_err_probe(dev, ret, "failed to initialize master\n");
+>>>> +
+>>>> +    return ret;
+>>>
+>>>        return 0;
+>>
+>> It seems was more appropriate that initialize ret then return ret.
+>> Do you think so ?
+> 
+> What do you mean and how does it help here?
+
+I'm sorry, I was wrong before and the ret varible seems not to be
+initialized and it always record the return value for
+loongson_spi_init_master.
+
+It seems was appropriate that use "return ret" and I don't got your
+point that in probe for use "return 0"
+
+> 
+> 
+> ...
+> 
+>>>> +#include <linux/spi/spi.h>
+>>>
+>>> This neither.
+>>
+>> That other .c file seems to need it and I will move it to other .c
+>> code file.
+> 
+> Yes, please do.
+
+okay, I got it.
 
 Thanks,
-Yinbo.
-> 
+Yinbo
 
