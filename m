@@ -2,151 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F45710636
-	for <lists+linux-spi@lfdr.de>; Thu, 25 May 2023 09:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC12D71088F
+	for <lists+linux-spi@lfdr.de>; Thu, 25 May 2023 11:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjEYHXz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 25 May 2023 03:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S240547AbjEYJR0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 May 2023 05:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjEYHXx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 May 2023 03:23:53 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC766D3;
-        Thu, 25 May 2023 00:23:49 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-ba8a0500f4aso182452276.3;
-        Thu, 25 May 2023 00:23:49 -0700 (PDT)
+        with ESMTP id S240516AbjEYJRY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 May 2023 05:17:24 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F22A19D;
+        Thu, 25 May 2023 02:17:23 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-623839d5c19so5588186d6.1;
+        Thu, 25 May 2023 02:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685006242; x=1687598242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MSSOPPh09pX4vWeBhoLFDRwZW9nZ5Myb1cfl7wwliIU=;
+        b=k6EvXFNOttKfq/rXbP9exD5k2Z7WlJQRxqkwBEv+MqMNs2XRAIQLBPcChB4r0c7lLv
+         9yGGMUYV1DL+F0SRpMlUa7bQgfUKMCsrn4p8R1fYSyRBPxqr+1rzNAMWIXGTZMYlvCTI
+         sQ5FeJCxSUDoqSGXRm+hHRgAVbhGHp1Gv9UpGJMB3xe29m4AckLVBbm0CrzFAuct+iLB
+         PgO3bXO+vhneyM0mL+4AtgNbYwgZChj3gqAqC/89ZXy0ItcxTR8G7SjwMCV/RYxbfaHS
+         sGyPMkF3DG8pggkea0urFulae9VZhktp6Sc6s0gYroW4v7WedxzPAK+as2Vdu+iLEYrG
+         rFvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684999429; x=1687591429;
+        d=1e100.net; s=20221208; t=1685006242; x=1687598242;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qwHaEVHj9rR3QnH3LqNeVcZHACKl1jAO9NgdI/o7VUY=;
-        b=HTI0Np4oLo8WUbJxOIHCs7pGc5dZaTlz1SrD2wAt6v98gBwBcpt+rasA5IT0UmHfXX
-         JqZ5USAhVWwL47gyaV6u1hd/HTrURU8tH7sIQgMITySEV/XO5rKE0fPbY7I32iybrr9Z
-         qDLAR4NhqHI25lZ5Oqvov1uDJyXt7Bv0d2jvT11ZHK8swH4DwT3/mYgXOROsk0Vq15UH
-         kUalDtzEJ2Kl4F+iSLkWyTZhGBRboPRyc4QD3kIVl8K15NrI4drEhV3c5j9RskgvR6Ie
-         UtooJvh33Nd55mNg9bCqKkK6Q0Cbcq0/XwHAwXQocMwKDsmQgqSkFzBJBeFNv37eNvfb
-         cGUQ==
-X-Gm-Message-State: AC+VfDykid+nEgQAzYzRZ8dJhZ5+rAe42YiC1xvQqICn90xED23XRmyR
-        nTYm/60ZV9Tz5MrIkOK/If3gyA6TDtrQmg==
-X-Google-Smtp-Source: ACHHUZ54iX6ByHspeRy4y89lehIiKcfj174gK6lAM3bvSLC0jQ0x94WGI/binv6kXIZRlnKTo3eZbA==
-X-Received: by 2002:a25:b08b:0:b0:ba8:1ef7:7175 with SMTP id f11-20020a25b08b000000b00ba81ef77175mr2559068ybj.54.1684999428682;
-        Thu, 25 May 2023 00:23:48 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id b124-20020a256782000000b00ba1a0346360sm149766ybc.13.2023.05.25.00.23.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 00:23:48 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-561e5014336so2004777b3.1;
-        Thu, 25 May 2023 00:23:47 -0700 (PDT)
-X-Received: by 2002:a81:a1ca:0:b0:561:d7d8:aa22 with SMTP id
- y193-20020a81a1ca000000b00561d7d8aa22mr21197961ywg.36.1684999427385; Thu, 25
- May 2023 00:23:47 -0700 (PDT)
+        bh=MSSOPPh09pX4vWeBhoLFDRwZW9nZ5Myb1cfl7wwliIU=;
+        b=DkUo80MPQQTNks8gKtpqWIQjoTQikgQKUk3L3sgEcLeoloGmbhHEzz859HyDhoiW4g
+         6KHyoUYuWF7cN7KBy3R6DNOKSaAU1I1j7fROHkowXLPBckOOjn65UyJH60pVR2XMI2Lg
+         226y8iWaACl2Oy8dwtEaWb0Zqic4ikm0FsrhXwwktrbvGjWHgEHxazGpDyXnmcr5+1NI
+         LPvgYY+zk/dKgtwdH1YksGJiVpoXw5vDlQbrj0d2xivDOwDXfBIkI5Mqhzh/3x/MaUfS
+         /M1JsQI2wwdVC9HDtSOHjmHiWYUCPNII2wtxjg9h2iXXTcZAZPKm2rbCLn4PShCYZ8zw
+         TLdQ==
+X-Gm-Message-State: AC+VfDzEY6zWOHls5tlT+TCAp+FjC/RCitcX4C+nFKSh3AmnDEn6+INN
+        gYPnV7tOpmTrY8KPtjc/SEkqxXtHlPH/hkojuGAMAaVdX/M=
+X-Google-Smtp-Source: ACHHUZ4Fu02dvgfixrEz6YPfB54tYEIwzBIOsvF4hnRLKndonIEzJBb6Df0tRkwwnrHWcTFPgIoJZJ8mqJ13hbl02mI=
+X-Received: by 2002:a05:6214:19ef:b0:61b:6e43:b20 with SMTP id
+ q15-20020a05621419ef00b0061b6e430b20mr545982qvc.42.1685006242514; Thu, 25 May
+ 2023 02:17:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-In-Reply-To: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 25 May 2023 09:23:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
-Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: mt65xx: make sure operations completed before unloading
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Leilk Liu <leilk.liu@mediatek.com>
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn> <20230522071030.5193-3-zhuyinbo@loongson.cn>
+ <ZGy3b7ZfNwWoGDTu@surfacebook> <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+ <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com> <2a72a2c2-6fda-1ea8-3b27-5623cc1132aa@loongson.cn>
+In-Reply-To: <2a72a2c2-6fda-1ea8-3b27-5623cc1132aa@loongson.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 25 May 2023 12:16:46 +0300
+Message-ID: <CAHp75VdMSM7VMFn8BDJpx2PJOR8DJtP0GF=sTECnMhz+MoSJ=Q@mail.gmail.com>
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Daniel,
+On Thu, May 25, 2023 at 6:34=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> wro=
+te:
+> =E5=9C=A8 2023/5/24 =E4=B8=8B=E5=8D=884:42, Andy Shevchenko =E5=86=99=E9=
+=81=93:
+> > On Wed, May 24, 2023 at 10:52=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn=
+> wrote:
+> >> =E5=9C=A8 2023/5/23 =E4=B8=8B=E5=8D=888:54, andy.shevchenko@gmail.com =
+=E5=86=99=E9=81=93:
+> >>> Mon, May 22, 2023 at 03:10:30PM +0800, Yinbo Zhu kirjoitti:
 
-On Mon, May 1, 2023 at 8:37 PM Daniel Golle <daniel@makrotopia.org> wrote:
-> When unloading the spi-mt65xx kernel module during an ongoing spi-mem
-> operation the kernel will Oops shortly after unloading the module.
-> This is because wait_for_completion_timeout was still running and
-> returning into the no longer loaded module:
+...
+
+> >>>> +    ret =3D loongson_spi_init_master(dev, reg_base);
+> >>>> +    if (ret)
+> >>>> +            return dev_err_probe(dev, ret, "failed to initialize ma=
+ster\n");
+> >>>> +
+> >>>> +    return ret;
+> >>>
+> >>>        return 0;
+> >>
+> >> It seems was more appropriate that initialize ret then return ret.
+> >> Do you think so ?
+> >
+> > What do you mean and how does it help here?
 >
-> Internal error: Oops: 0000000096000005 [#1] SMP
-> Modules linked in: [many, but spi-mt65xx is no longer there]
-> CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
-> Hardware name: Bananapi BPI-R3 (DT)
-> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __lock_acquire+0x18c/0x20e8
-> lr : __lock_acquire+0x9b8/0x20e8
-> sp : ffffffc009ec3400
-> x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
-> x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
-> x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
-> x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
-> x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
-> x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
-> x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
-> x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
-> x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
-> x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
-> Call trace:
->  __lock_acquire+0x18c/0x20e8
->  lock_acquire+0x100/0x2a4
->  _raw_spin_lock_irq+0x58/0x74
->  __wait_for_common+0xe0/0x1b4
->  wait_for_completion_timeout+0x1c/0x24
->  0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
->  spi_mem_exec_op+0x390/0x3ec
->  spi_mem_no_dirmap_read+0x6c/0x88
->  spi_mem_dirmap_read+0xcc/0x12c
->  spinand_read_page+0xf8/0x1dc
->  spinand_mtd_read+0x1b4/0x2fc
->  mtd_read_oob_std+0x58/0x7c
->  mtd_read_oob+0x8c/0x148
->  mtd_read+0x50/0x6c
->  ...
+> I'm sorry, I was wrong before and the ret varible seems not to be
+> initialized and it always record the return value for
+> loongson_spi_init_master.
 >
-> Prevent this by completing in mtk_spi_remove if needed.
->
-> Fixes: 9f763fd20da7 ("spi: mediatek: add spi memory support for ipm design")
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> It seems was appropriate that use "return ret" and I don't got your
+> point that in probe for use "return 0"
 
-Thanks for your patch, which is now commit 4be47a5d59cbc939 ("spi:
-mt65xx: make sure operations completed before unloading") in spi/for-next.
+In the above excerpt you will return anything except 0 with return
+dev_err_probe(); line. Why do you still need to return ret; at the end
+of the function?
 
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -1275,6 +1275,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
->         struct mtk_spi *mdata = spi_master_get_devdata(master);
->         int ret;
->
-> +       if (mdata->use_spimem && !completion_done(&mdata->spimem_done))
-> +               complete(&mdata->spimem_done);
-
-I'm afraid that is not sufficient, as the code that was waiting on the
-completion accesses hardware registers and driver-private data after
-that, and there is no guarantee all of that has completed by the time
-mtk_spi_remove() finishes.
-
-> +
->         ret = pm_runtime_resume_and_get(&pdev->dev);
->         if (ret < 0)
->                 return ret;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+With Best Regards,
+Andy Shevchenko
