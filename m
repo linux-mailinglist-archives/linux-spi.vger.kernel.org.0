@@ -2,58 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1252C7129B5
-	for <lists+linux-spi@lfdr.de>; Fri, 26 May 2023 17:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12430712AF0
+	for <lists+linux-spi@lfdr.de>; Fri, 26 May 2023 18:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbjEZPhC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 May 2023 11:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S236925AbjEZQpC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 May 2023 12:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243553AbjEZPhA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 May 2023 11:37:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5307EE52;
-        Fri, 26 May 2023 08:36:22 -0700 (PDT)
+        with ESMTP id S236898AbjEZQpB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 May 2023 12:45:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECBBDF
+        for <linux-spi@vger.kernel.org>; Fri, 26 May 2023 09:44:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F7565110;
-        Fri, 26 May 2023 15:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD58C433D2;
-        Fri, 26 May 2023 15:36:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D91726145C
+        for <linux-spi@vger.kernel.org>; Fri, 26 May 2023 16:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C39C433D2;
+        Fri, 26 May 2023 16:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685115381;
-        bh=yCh5HTW3ayVDzDP143w8WhELufxoUmboVgdJFyi38+o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LctbgrVuyr/tGYdjAO/j1n6Rmm8FQ6y3WZoV41ku617Sb1FK8sndw5juCEjJSmFJS
-         5DzmMMHZxTQI351xhtcYaQ2/Ce6yrfnqNgKRZiogEv+gNSz2smjlC7r70HUO9dK0vO
-         u5O0/rKvn3aXeMSofTyYBASG5FkMAc5w3QPy/+txUr9hIrGWtgn7QdIDcH8My2sdBq
-         UNesdKhRXMzS1+Culp1lDWtYECugXcZ7EByl/N2IlMygPf7mc9MvCBGPmVece3rbUk
-         52xyqbqKcijq7L1HOUs4ULS/1N2RZD+IgY1h69EhyW/I9XFAgeVYzL+xHSdf6v3kfv
-         QscS8pwZYXG4A==
-Date:   Fri, 26 May 2023 16:36:15 +0100
+        s=k20201202; t=1685119494;
+        bh=zZg/xYL20iIFg4vnfaHBbxE4L+6FlHKIlod4OYwKiRU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=lMQEp2AzQCzvpdKm9V9c3mjpzpddpP0knZ3BPOJDCG4vpNZGcN00YaXmF1lef/C63
+         NdOaVM13PfWoFSRU8sbIxaEvc6t2GxoEf7koZstIjWmJms/GhGJsgSnHzssGpGYd8M
+         JwvCTjhzTeLogPAeXKp73sHSuZFkols4VFPYd8h3CzMZdWYDpOhvx+2UsB3Z8GDDzq
+         DL724RmMCCmlqaNPYyt12hUtgmcV2nPiGvwwGbPDZ6pVwCq0ZgoHmhXaEqzaUVf95m
+         raQLB4a9+Qmu7FKQI1eNGpWmpaLDwRvd5zykE2g57TxWLwIWguq9saPixLjRwPgv0k
+         Rqewe8dr3gT8w==
 From:   Mark Brown <broonie@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
-References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-3-william.qiu@starfivetech.com>
+To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de
+In-Reply-To: <20230525211047.735789-1-u.kleine-koenig@pengutronix.de>
+References: <20230525211047.735789-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH] spi: Switch i2c drivers back to use .probe()
+Message-Id: <168511949335.40545.1373031844188788156.b4-ty@kernel.org>
+Date:   Fri, 26 May 2023 17:44:53 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v+3QrjJW0SnLoR7W"
-Content-Disposition: inline
-In-Reply-To: <20230526062529.46747-3-william.qiu@starfivetech.com>
-X-Cookie: A Smith & Wesson beats four aces.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,43 +53,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 25 May 2023 23:10:47 +0200, Uwe Kleine-König wrote:
+> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type"), all drivers being converted to .probe_new() and then
+> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
+> convert back to (the new) .probe() to be able to eventually drop
+> .probe_new() from struct i2c_driver.
+> 
+> 
+> [...]
 
---v+3QrjJW0SnLoR7W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, May 26, 2023 at 02:25:28PM +0800, William Qiu wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
->  	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi")) {
-> +		qspi_ahb = devm_clk_get(dev, "qspi-ahb");
-> +		if (IS_ERR(qspi_ahb)) {
-> +			dev_err(dev, "Cannot claim QSPI_AHB clock.\n");
-> +			ret = PTR_ERR(qspi_ahb);
-> +			return ret;
-> +		}
-> +
-> +		ret = clk_prepare_enable(qspi_ahb);
-> +		if (ret) {
-> +			dev_err(dev, "Cannot enable QSPI AHB clock.\n");
-> +			goto probe_clk_failed;
-> +		}
+Thanks!
 
-Nothing ever disables or unprepares this clock as far as I can tell?
-Perhaps also consider using the clk_bulk_ APIs.
+[1/1] spi: Switch i2c drivers back to use .probe()
+      commit: 3e39448ad9b29ee1beb409210812b1a3df11de3f
 
---v+3QrjJW0SnLoR7W
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRw0e4ACgkQJNaLcl1U
-h9DDjAf/R/4LWKt8MIxLgActzDmknNj+os5gInUv/NtPY46t1E8c3jR/Eg97Gwi5
-OlkkK9IGHeqfKcfWzj2JTZP+474sqV5Jss5qmQuBHcG+O8Vl63kxhlgDJi/v88Rs
-CkyE+kbTbQgjNXVoq5XmHRRJfj5ncsv74NqrldUZEsfogSW6xuidDwgbp9lHOM21
-5qZ2jLYI/JMLyu0hXO5HKofG8QcizYDmBsRrHBu/Im9RLesezvQDHpAaO2E0nl2q
-MLLFaPijxFFGpl4sivm4QBJOO66TXc/Lh8JDk+qJd9EnElYMMw9YC/qxR+8syUp/
-8kxK93togpBNaxDL4x5zo8EiNX0nBQ==
-=c3SD
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---v+3QrjJW0SnLoR7W--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
