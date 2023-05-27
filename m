@@ -2,46 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11885712B0A
-	for <lists+linux-spi@lfdr.de>; Fri, 26 May 2023 18:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C38713142
+	for <lists+linux-spi@lfdr.de>; Sat, 27 May 2023 03:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237228AbjEZQu0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 May 2023 12:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S243948AbjE0BEY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 May 2023 21:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbjEZQuZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 May 2023 12:50:25 -0400
+        with ESMTP id S243223AbjE0BEL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 May 2023 21:04:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378731B0
-        for <linux-spi@vger.kernel.org>; Fri, 26 May 2023 09:50:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627F3E4E;
+        Fri, 26 May 2023 18:03:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9158965184
-        for <linux-spi@vger.kernel.org>; Fri, 26 May 2023 16:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 040BCC433EF;
-        Fri, 26 May 2023 16:50:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 416CC654C3;
+        Sat, 27 May 2023 01:03:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847EBC433AA;
+        Sat, 27 May 2023 01:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685119821;
-        bh=eQqHz23UqExS2OR3tzFl+BFJeOvVxcqInwXor9hLpCQ=;
-        h=Subject:From:Date:To:From;
-        b=SFGTEhX08zl7Byszudjl3OiCbLIj8Juav/bHkoa3nkvV/OBO+WeOfY+fqQq+NqzNc
-         KsLKzFcnlBa0z+1gp6WI1LwPTZ/sw8dMJUa+EvRdTewHWZdNLq9K0ysjC/Rt21ncOG
-         8Nz+YRE9BduD9ThkSUw13CG9QqBxcEj2VlIir1/iK7TPFkh30hlv/PmAIroDmM+uWk
-         9jqmFfXuHyfDXOqWHLwpzJsw+gRYhw5rWUiLyVdYhxlirxES9JgWnEpX/1hzlYHBt1
-         1cJdnxLoCu8Qj439YkaOJcRyarKJJI9xa7ZJTLXy8D84zwc4AEcmGvwehmQZa7+ud7
-         775Nqtg5FrBog==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0AFEC4166F;
-        Fri, 26 May 2023 16:50:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1685149438;
+        bh=yOxFoBLmp1jeScMv79meMtTIDUcnUXDUr4oCfNwQ2AM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=etGs4LLK1h56gzqxJZ4WvvhIlyJFrF8n0D2EVtUJ/+gADZpYRlpmfOAKdCye96MFw
+         BlT9l+TCfks1y1evKD2QOAM5/B9EVgCBtzQ3jgBictWvKLB8VkyArQ4oWwTstBfA1W
+         bQHSzazdWTOhECQJCMBAeF19eo0uTbFexCV8E/6zMB4b6nWqPhG7JljzBqXGRlq1xe
+         xAcO55+mPcSwJ1tAz8jRp6sAibXG1f31kad9r1RMOnxLxHcl4KhNqJ5OUAIbJ0zn9R
+         b6An0+VPFbBPFenq9uyoKWUoDqhWqn9FXTDqIYx8jdouzN6vwCfyDdIEvAdAHDw01C
+         vwIcE4rSp1sZw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     cros-qcom-dts-watchers@chromium.org, agross@kernel.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@linaro.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org
+Cc:     mka@chromium.org, quic_vtanuku@quicinc.com,
+        quic_msavaliy@quicinc.com, dianders@chromium.org,
+        swboyd@chromium.org
+Subject: Re: (subset) [PATCH v5 0/5] spi: Add DMA mode support to spi-qcom-qspi
+Date:   Fri, 26 May 2023 18:07:33 -0700
+Message-Id: <168514964951.348612.11351632756145429472.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
+References: <1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168511982077.14795.8428669067108077192.git-patchwork-summary@kernel.org>
-Date:   Fri, 26 May 2023 16:50:20 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,22 +60,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Mon, 24 Apr 2023 15:02:36 +0530, Vijaya Krishna Nivarthi wrote:
+> There are large number of QSPI irqs that fire during boot/init and later
+> on every suspend/resume.
+> This could be made faster by doing DMA instead of PIO.
+> Below is comparison for number of interrupts raised in 2 scenarios...
+> Boot up and stabilise
+> Suspend/Resume
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied, thanks!
 
-Patch: spi: Switch i2c drivers back to use .probe()
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=751106
-  Lore link: https://lore.kernel.org/r/20230525211047.735789-1-u.kleine-koenig@pengutronix.de
+[2/5] arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
+      commit: 8164116023acb6dd600776a3391d5b0cd7699adc
+[3/5] arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
+      commit: cc406006126e89c5330ff5c75da20deb5cafedf8
+[4/5] arm64: dts: qcom: sdm845: Add stream-id of qspi to iommus
+      commit: 0aa2811cf5eb2355cd91035b4a76a6120a5c6382
 
-
-Total patches: 1
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Bjorn Andersson <andersson@kernel.org>
