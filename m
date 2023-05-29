@@ -2,86 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6DD713FF6
-	for <lists+linux-spi@lfdr.de>; Sun, 28 May 2023 21:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C66171450E
+	for <lists+linux-spi@lfdr.de>; Mon, 29 May 2023 08:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjE1T7D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 May 2023 15:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S231550AbjE2GoV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 May 2023 02:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjE1T7C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 May 2023 15:59:02 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE90AA8
-        for <linux-spi@vger.kernel.org>; Sun, 28 May 2023 12:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=UXudmQeh7gfIyadWcjx5EnvHJKgAxM35HUX3B2ZYOJo=; b=kp/ow0B9PiadbsdGqCSVgkMD6y
-        j5b/6HtGGoqbLbugxnJXFPwQd3qq3CjXnd+pBPnUR1uQjENH9Huz785s4qPN36+66bemWP7kj1zP+
-        kwM30WpMRQqN0XFM1yKMen7aAe0Gs1hWrnxUTOTDujqQ2f+ryPoYOQ81MuJ4Qmc7xix6ir+WV+AG8
-        aIuoxRbpZlj7XLuGIxTDiEOsjPoN2JeL3/DNjoagG9tmrj0x8zWpRqIMMixgfAP1B9osqYzcIJRRx
-        j357YAWqa859pPPmkhuQOemaJa+0g5egtujcS1oPurUt1WC5enBEKGbpvpOscfU6mK3800EkLzLWd
-        67X0UrKg==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1q3MXc-0005O5-HC; Sun, 28 May 2023 21:59:00 +0200
-Received: from [136.25.87.181] (helo=lars-desktop.lan)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1q3MXb-000DRD-Nz; Sun, 28 May 2023 21:59:00 +0200
-From:   Lars-Peter Clausen <lars@metafoo.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        linux-spi@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 3/3] spi: spi-sn-f-ospi: Make read-only array `width_available` static const
-Date:   Sun, 28 May 2023 12:58:30 -0700
-Message-Id: <20230528195830.164669-3-lars@metafoo.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230528195830.164669-1-lars@metafoo.de>
-References: <20230528195830.164669-1-lars@metafoo.de>
+        with ESMTP id S229669AbjE2GoU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 May 2023 02:44:20 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C316C90;
+        Sun, 28 May 2023 23:44:17 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E8A4780ED;
+        Mon, 29 May 2023 14:44:14 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 29 May
+ 2023 14:44:14 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 29 May
+ 2023 14:44:14 +0800
+Message-ID: <a09cc0c9-ef4e-120f-e61a-94f628d67e38@starfivetech.com>
+Date:   Mon, 29 May 2023 14:44:13 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26921/Sun May 28 09:22:09 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
+ StarFive JH7110 SoC
+To:     Mark Brown <broonie@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230526062529.46747-1-william.qiu@starfivetech.com>
+ <20230526062529.46747-2-william.qiu@starfivetech.com>
+ <87e9ed95-ea57-44c8-85f8-34264b5c6dde@sirena.org.uk>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <87e9ed95-ea57-44c8-85f8-34264b5c6dde@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The `width_available` array is currently placed on the
-`f_ospi_supports_op_width()` function's stack.
 
-But the array is never modified. Make it `static const`. This makes the
-code slightly smaller and more efficient.
 
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
----
- drivers/spi/spi-sn-f-ospi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2023/5/26 23:33, Mark Brown wrote:
+> On Fri, May 26, 2023 at 02:25:27PM +0800, William Qiu wrote:
+> 
+>>      then:
+>>        properties:
+>> +        clocks:
+>> +          maxItems: 3
+>> +
+>> +        clock-names:
+>> +          items:
+>> +            - const: qspi-ref
+>> +            - const: qspi-ahb
+>> +            - const: qspi-apb
+>> +
+> 
+> Are these really the names that the clocks have in the IP?  It seems
+> weird that they'd include the IP name in there and not just be ref, ahb
+> and apb.
+Hi Mark,
 
-diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
-index 691b6092fb3f..d64d3f75c726 100644
---- a/drivers/spi/spi-sn-f-ospi.c
-+++ b/drivers/spi/spi-sn-f-ospi.c
-@@ -526,7 +526,7 @@ static int f_ospi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- static bool f_ospi_supports_op_width(struct spi_mem *mem,
- 				     const struct spi_mem_op *op)
- {
--	u8 width_available[] = { 0, 1, 2, 4, 8 };
-+	static const u8 width_available[] = { 0, 1, 2, 4, 8 };
- 	u8 width_op[] = { op->cmd.buswidth, op->addr.buswidth,
- 			  op->dummy.buswidth, op->data.buswidth };
- 	bool is_match_found;
--- 
-2.30.2
+	These three clocks are the internal clocks in the IP. The AHB
+clock is the main system clock used to transfer data over the AHB bus
+between an external master and the QSPI controller. The APB clock is used
+to access the register map of the QSPI controller, perform controller and
+device configuration.service interrupts and control certain run time modes.
+The reference clock is used to serialize the data and drive the external
+SPI interface.
 
+	I'm going to change the names of these three clocks to hclk, pclk,
+and ref_clk, as defined in the data book. What do you think?
+
+	Thanks for taking time to review this patch series and give useful
+suggestions.
+
+Best regards,
+William
