@@ -2,101 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC57716B91
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94741716C12
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 20:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbjE3RuZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 13:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S232673AbjE3SPC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 14:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjE3RuY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:50:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA05B2
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 10:50:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F089861AD7
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 17:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57F8BC433EF;
-        Tue, 30 May 2023 17:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685469022;
-        bh=J/aMyQojgNvHUdQBeaZrKWMGDxEYohMj/3UigZpvLLY=;
-        h=Subject:From:Date:To:From;
-        b=DUhnq7BKQVy9YHvZsPd4RtDd+f2i398GqzlYAKorAx0KqfTyE/HGUMs1kGbOezzj/
-         xn1PJddLvACvxPcxU654NBM/aOI0Y9mNrjB3qKHuaOIe6BmKX8rG+QpDbbOh7ABkMG
-         ibLStVYvqWv5sP8VJM9pRn7bOJ859I5O3/28/i4g04xFRDV6W1cnTEWUsgyb70BGwd
-         zksc0oGtxbeYpuGsTlrmdFI6YmDzZJbS7iiV4wIaiG4W9uTLtlOJOGljIkMYP5dZd/
-         MMj4qzrfw8/VnH+Oih73KbQnk8Sf7UE51cf4+zOquMF61ovhnp4k9fLQbgUgLdS2A0
-         Ux1YjC0/XtjlQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DF88E52BF6;
-        Tue, 30 May 2023 17:50:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232605AbjE3SO7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 14:14:59 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD77EC
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 11:14:57 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53487355877so3058888a12.1
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 11:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685470496; x=1688062496;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wejmfms/MTruDYODALqcJ51ghyqKDRBVlvqid0DKdUU=;
+        b=ngR8WUfo12QEnVFptE3frRjlZIIv53yMuBehH6/yqZOlhdWodxtvmMkx4cOCKLFU1J
+         Be5nnnNc0oj+fBcVqMR42F8lJMRreGmaZWldywOfCmuKn1xMjguK+JS9revnMtiAt15k
+         E9DV64QoXxjJTIK8Z2cJOcAC1sfuuGrLrLVL8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685470496; x=1688062496;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wejmfms/MTruDYODALqcJ51ghyqKDRBVlvqid0DKdUU=;
+        b=WCW5fihtmmI95O6PNGPaHzOmGJ4aWufQR97pBqep1s5u02fgvteup0UAGMYn1Q2b3i
+         aB9BhtEbiE8APvygFK6Z1B0FCkvElUfgOl+kdGynwNvSSc32GjefA8KCL8uOF1HhIfij
+         PFjbjEx6hkY1yhMYFge0+8+4Zhl2wV8YcUQgPNGq8B5OT0fPB5hNphMU18tFO4cxCy+C
+         8cZX8kL9CSdbevEZBHKmrKVRcyVcLDXRl5UaV4T0W6YZoC5wZ2kwZ1aQ1kwWT+pdHREZ
+         VPR4EljCokDk3Wu4EqCr7RV1IMZb8DYkxnNYO7csqnabmsKO9PjY8fVjcVgX20H2onpq
+         hPlA==
+X-Gm-Message-State: AC+VfDyUOpTj7tBntOzS48iUK4w6F1oKo/+gR/DOEeq9u4jPIxB+DNUT
+        py3Z7pD+znNd+MkierDlShmKcw==
+X-Google-Smtp-Source: ACHHUZ7XQtTdVlY0DHCmMiZA+STEzORTjmprrjia5mLFvW/qUUbtteO21yEtKVNdONuLVxcpl5n8ZA==
+X-Received: by 2002:a17:90a:b298:b0:256:2ee5:aebc with SMTP id c24-20020a17090ab29800b002562ee5aebcmr3133136pjr.18.1685470496708;
+        Tue, 30 May 2023 11:14:56 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:49d0:fe41:5206:ac47])
+        by smtp.gmail.com with ESMTPSA id m10-20020a17090b068a00b0024df6bbf5d8sm9288614pjz.30.2023.05.30.11.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 11:14:56 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: spi-qcom-qspi: Add newline to PIO fallback warning
+Date:   Tue, 30 May 2023 11:13:48 -0700
+Message-ID: <20230530111348.1.Ibd1f4827e18a26dc802cd6e5ac300d83dc1bc41c@changeid>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168546902210.24129.8522546303674362083.git-patchwork-summary@kernel.org>
-Date:   Tue, 30 May 2023 17:50:22 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+A warning added in commit b5762d95607e ("spi: spi-qcom-qspi: Add DMA
+mode support") was missing a newline. Add it.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Reported-by: Stephen Boyd <swboyd@chromium.org>
+Closes: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/4573857/comment/44331d65_79128099/
+Fixes: b5762d95607e ("spi: spi-qcom-qspi: Add DMA mode support")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-Series: spi: add SPI_MOSI_IDLE_LOW mode bit
-  Submitter: Boerge Struempfel <boerge.struempfel@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=752264
-  Lore link: https://lore.kernel.org/r/20230530141641.1155691-1-boerge.struempfel@gmail.com
-    Patches: [v7,1/5] spi: add SPI_MOSI_IDLE_LOW mode bit
-             [v7,2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
-             [v7,3/5] spi: spidev: add two new spi mode bits
-             [v7,4/5] spi: spidev_test: Sorted the options into logical groups
-             [v7,5/5] spi: spidev_test Add three missing spi mode bits
+ drivers/spi/spi-qcom-qspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch: [v1] spi-dw-core.c: Fix error checking for debugfs_create_dir
-  Submitter: Osama Muhammad <osmtendev@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=749515
-  Lore link: https://lore.kernel.org/r/20230520224025.14928-1-osmtendev@gmail.com
-
-Series: [1/3] spi: spi-sn-f-ospi: Use devm_clk_get_enabled()
-  Submitter: Lars-Peter Clausen <lars@metafoo.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=751709
-  Lore link: https://lore.kernel.org/r/20230528195830.164669-1-lars@metafoo.de
-    Patches: [1/3] spi: spi-sn-f-ospi: Use devm_clk_get_enabled()
-             [2/3] spi: spi-sn-f-ospi: Use min_t instead of opencoding it
-             [3/3] spi: spi-sn-f-ospi: Make read-only array `width_available` static const
-
-Series: spi: mt65xx: Convert to platform remove callback returning void
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=752079
-  Lore link: https://lore.kernel.org/r/20230530081648.2199419-1-u.kleine-koenig@pengutronix.de
-    Patches: [v2,1/3] spi: mt65xx: Properly handle failures in .remove()
-             [v2,2/3] spi: mt65xx: Convert to platform remove callback returning void
-             [v2,3/3] spi: mt65xx: Don't disguise a "return 0" as "return ret"
-
-
-Total patches: 12
-
+diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
+index a3991e617c90..a8a683d6145c 100644
+--- a/drivers/spi/spi-qcom-qspi.c
++++ b/drivers/spi/spi-qcom-qspi.c
+@@ -445,7 +445,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
+ 				qcom_qspi_dma_xfer(ctrl);
+ 			goto exit;
+ 		}
+-		dev_warn_once(ctrl->dev, "DMA failure, falling back to PIO");
++		dev_warn_once(ctrl->dev, "DMA failure, falling back to PIO\n");
+ 		ret = 0; /* We'll retry w/ PIO */
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.41.0.rc0.172.g3f132b7071-goog
 
