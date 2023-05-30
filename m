@@ -2,135 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC115716B81
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC57716B91
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjE3RrR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 13:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S233113AbjE3RuZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 13:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjE3RrP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:47:15 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E9BB2;
-        Tue, 30 May 2023 10:47:14 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d3fdcadb8so3519792b3a.3;
-        Tue, 30 May 2023 10:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685468834; x=1688060834;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4KFcanc4CjzN6hzpjon4X1hruFFYHDR7ugE4zm99DHQ=;
-        b=OdR4Y7H6Nx7sBNTAd11PEkft3yN3efyKaIhV51v9ftLHVjNGbfszMwZosHkg5dbvth
-         fGKbqJWOkQEJBu9OgQv5/ubfry9JCPiWIKt6agjG7Z9uG13BkYg/lmLuPtIG+hdVAG/t
-         WztyPKjFqolTIx3oqTGSy0hNZ+bgyO77i/EWyvAzYxdfOPWR07on947GOAxT3K1cYvcb
-         dRauGNu4twfMxT+IxF3YuBxl3FxAjvRZnR2zhmO1CoAm7Y/bEdSRRZJFIh55JuuGY2HO
-         NLZFONHUXgPe1Yd+JHK7+pyUnZAn8kTI1QC+L6ulzm5YhZyWROjecxT8gFsQvLpmTQwL
-         jOxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685468834; x=1688060834;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4KFcanc4CjzN6hzpjon4X1hruFFYHDR7ugE4zm99DHQ=;
-        b=GsncgJ8SLyPCxvYEqb5ODhwfqwF65yYfU9CqayW6mzZEF+g2lCjX9W4opaZrjmQ8so
-         REEWpqvefH1T8s52Dl9Jw1zKx/Poh3JIRC6iiKjgFWs6uTEx8/Z2hnJc/hnyT5foSC7V
-         WIUpykHBpHCHlG75rgzTGn6k0WAGRYmLTwHspw/pTKphrkxPO55RkPwn1ptmH77y14HE
-         6pJFOCpO5IUHilskTy/SxHyNN2vx/wWp3VqPlW7iigNZjqtOIc+ezg/B62U6cesIl19c
-         61Kz+lLvro2UhdPW1+HmWXO6XEyNlDH//Y3i24GVGOU7R5Gdv1lgfSiVwS77XSkTurbv
-         /9+w==
-X-Gm-Message-State: AC+VfDy66KYeCdd3N667pwXkru2LGLsmVDwmk85bilzipetsMjktJJx3
-        qcCmXPV6/P0dRZJpcu77HTI=
-X-Google-Smtp-Source: ACHHUZ5H1oTyoutcnUo3XiPYYzwua35COz5cA3FRa6JU3oW4ADLdTbZES7lj7v/2W8drbB6s7qiXwA==
-X-Received: by 2002:a17:903:24e:b0:1af:ff02:bc19 with SMTP id j14-20020a170903024e00b001afff02bc19mr3552294plh.26.1685468834029;
-        Tue, 30 May 2023 10:47:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902b60400b001a6f7744a27sm10604029pls.87.2023.05.30.10.47.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:47:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 30 May 2023 10:47:11 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
-Message-ID: <2aaba5d8-37ad-4086-a81d-0d3e78cf5664@roeck-us.net>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S230329AbjE3RuY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:50:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA05B2
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 10:50:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F089861AD7
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 17:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57F8BC433EF;
+        Tue, 30 May 2023 17:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685469022;
+        bh=J/aMyQojgNvHUdQBeaZrKWMGDxEYohMj/3UigZpvLLY=;
+        h=Subject:From:Date:To:From;
+        b=DUhnq7BKQVy9YHvZsPd4RtDd+f2i398GqzlYAKorAx0KqfTyE/HGUMs1kGbOezzj/
+         xn1PJddLvACvxPcxU654NBM/aOI0Y9mNrjB3qKHuaOIe6BmKX8rG+QpDbbOh7ABkMG
+         ibLStVYvqWv5sP8VJM9pRn7bOJ859I5O3/28/i4g04xFRDV6W1cnTEWUsgyb70BGwd
+         zksc0oGtxbeYpuGsTlrmdFI6YmDzZJbS7iiV4wIaiG4W9uTLtlOJOGljIkMYP5dZd/
+         MMj4qzrfw8/VnH+Oih73KbQnk8Sf7UE51cf4+zOquMF61ovhnp4k9fLQbgUgLdS2A0
+         Ux1YjC0/XtjlQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DF88E52BF6;
+        Tue, 30 May 2023 17:50:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168546902210.24129.8522546303674362083.git-patchwork-summary@kernel.org>
+Date:   Tue, 30 May 2023 17:50:22 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:48:51PM +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hello:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-> 
-> ---
-> 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-> index 519b48889eb1..f0a584af1223 100644
-> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-> @@ -17,11 +17,11 @@ description: |
->  select:
->    properties:
->      $nodename:
-> -      pattern: "^watchdog(@.*|-[0-9a-f])?$"
-> +      pattern: "^watchdog(@.*|-([0-9]|[1-9][0-9]+))?$"
->  
->  properties:
->    $nodename:
-> -    pattern: "^(timer|watchdog)(@.*|-[0-9a-f])?$"
-> +    pattern: "^(timer|watchdog)(@.*|-([0-9]|[1-9][0-9]+))?$"
->  
->    timeout-sec:
->      description:
-> -- 
-> 2.34.1
-> 
+Series: spi: add SPI_MOSI_IDLE_LOW mode bit
+  Submitter: Boerge Struempfel <boerge.struempfel@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=752264
+  Lore link: https://lore.kernel.org/r/20230530141641.1155691-1-boerge.struempfel@gmail.com
+    Patches: [v7,1/5] spi: add SPI_MOSI_IDLE_LOW mode bit
+             [v7,2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
+             [v7,3/5] spi: spidev: add two new spi mode bits
+             [v7,4/5] spi: spidev_test: Sorted the options into logical groups
+             [v7,5/5] spi: spidev_test Add three missing spi mode bits
+
+Patch: [v1] spi-dw-core.c: Fix error checking for debugfs_create_dir
+  Submitter: Osama Muhammad <osmtendev@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=749515
+  Lore link: https://lore.kernel.org/r/20230520224025.14928-1-osmtendev@gmail.com
+
+Series: [1/3] spi: spi-sn-f-ospi: Use devm_clk_get_enabled()
+  Submitter: Lars-Peter Clausen <lars@metafoo.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=751709
+  Lore link: https://lore.kernel.org/r/20230528195830.164669-1-lars@metafoo.de
+    Patches: [1/3] spi: spi-sn-f-ospi: Use devm_clk_get_enabled()
+             [2/3] spi: spi-sn-f-ospi: Use min_t instead of opencoding it
+             [3/3] spi: spi-sn-f-ospi: Make read-only array `width_available` static const
+
+Series: spi: mt65xx: Convert to platform remove callback returning void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=752079
+  Lore link: https://lore.kernel.org/r/20230530081648.2199419-1-u.kleine-koenig@pengutronix.de
+    Patches: [v2,1/3] spi: mt65xx: Properly handle failures in .remove()
+             [v2,2/3] spi: mt65xx: Convert to platform remove callback returning void
+             [v2,3/3] spi: mt65xx: Don't disguise a "return 0" as "return ret"
+
+
+Total patches: 12
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
