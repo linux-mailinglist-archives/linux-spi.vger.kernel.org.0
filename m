@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF840715AF4
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 12:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E51715BE2
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 12:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjE3KDJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 06:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S231462AbjE3KeE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 06:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjE3KCz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 06:02:55 -0400
+        with ESMTP id S231611AbjE3Kdu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 06:33:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80D5F1;
-        Tue, 30 May 2023 03:02:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93B7126;
+        Tue, 30 May 2023 03:33:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 751E962CEC;
-        Tue, 30 May 2023 10:02:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F37C433D2;
-        Tue, 30 May 2023 10:02:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E4460C87;
+        Tue, 30 May 2023 10:33:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8455EC433D2;
+        Tue, 30 May 2023 10:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685440973;
-        bh=0+SGUOiDQ5nqxSY0Q4GE42XjVvbo4WQnUN2x3XBiXLI=;
+        s=k20201202; t=1685442826;
+        bh=Fln3Mnh+80acgeHumKpr0UR+mx8aRBQanCGCmvcj6dg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BDjDwm0gzNDxPM0YLaa6EZgFsIlXnTNFvV6o0KSu/QojbM+Ky9IRLH4YjxWv1RmZF
-         RoD1mt5WV7zzVXWKJ3Lu1FHO7vCrvI8sae8ZfsytrVFAflwJk/Vpmfsv4k2XjiZLsZ
-         4pCHIS7B46VZKrG+gbwV9T77tNwzcNFOabKC4rTJZIT/H6rFddYlxWWNO+rKcHMe4u
-         z0BDgHfu8aAmKX8VLs8wqozA0A832ne2fWdb4+JlhaxqtgQ7aQ2jp2jv8MfEGsIMuW
-         vckff0nz2GXQMs/eBrwymwOlz0ZnpqspZ6wfdYC9wr83dfVGY1P39+t+vv47iMcQJl
-         95OlhukAsml8A==
-Date:   Tue, 30 May 2023 11:02:48 +0100
+        b=R/yWFIcy7CFlAqu0bhA7C9Jz0Ig8CU44fogGfkgP3yLjE0WUmsYsWm+prUozHNWra
+         qMmpvQseC/lYmHINYfLFcU1JJ6DjvVzLI1H86rO+cREwqx7lfejrNfTmN0y7WHcfeH
+         BCC6OaIBiOeetzisYBi281hXqqYT1tP4ERJRiY4ZvgpRwB5Kyt2RaK3x6cC1pBLbSj
+         Fk5b5otjNFDYIG78h7BdI2VjymKekOHKrvM2gVATpabjk8JPuGM/njcEunvntfFCB3
+         NvJvr57w1udDStSh3dQjXQXPyoAV+Hgr32k1vZ/V36WbhvCkEXsuVYHdRAZFR8Y31Y
+         1vISdIHEiUh6Q==
+Date:   Tue, 30 May 2023 11:33:41 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     William Qiu <william.qiu@starfivetech.com>
 Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
@@ -41,18 +41,19 @@ Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v1 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
- StarFive JH7110 SoC
-Message-ID: <d417628d-7994-4b07-a670-ec14ad938764@sirena.org.uk>
+Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
+ StarFive JH7110 QSPI
+Message-ID: <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
 References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-2-william.qiu@starfivetech.com>
- <87e9ed95-ea57-44c8-85f8-34264b5c6dde@sirena.org.uk>
- <a09cc0c9-ef4e-120f-e61a-94f628d67e38@starfivetech.com>
+ <20230526062529.46747-3-william.qiu@starfivetech.com>
+ <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
+ <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
+ <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OStcWnmwJi2B52q7"
+        protocol="application/pgp-signature"; boundary="0IjcTOaConsRfQgO"
 Content-Disposition: inline
-In-Reply-To: <a09cc0c9-ef4e-120f-e61a-94f628d67e38@starfivetech.com>
+In-Reply-To: <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
 X-Cookie: I've read SEVEN MILLION books!!
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -65,39 +66,41 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---OStcWnmwJi2B52q7
+--0IjcTOaConsRfQgO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, May 29, 2023 at 02:44:13PM +0800, William Qiu wrote:
-> On 2023/5/26 23:33, Mark Brown wrote:
-> > On Fri, May 26, 2023 at 02:25:27PM +0800, William Qiu wrote:
+On Tue, May 30, 2023 at 10:05:38AM +0800, William Qiu wrote:
+> On 2023/5/29 14:44, William Qiu wrote:
+> > On 2023/5/26 23:36, Mark Brown wrote:
 
-> >> +        clock-names:
-> >> +          items:
-> >> +            - const: qspi-ref
-> >> +            - const: qspi-ahb
-> >> +            - const: qspi-apb
+> >> Nothing ever disables or unprepares this clock as far as I can tell?
+> >> Perhaps also consider using the clk_bulk_ APIs.
 
-> 	I'm going to change the names of these three clocks to hclk, pclk,
-> and ref_clk, as defined in the data book. What do you think?
+> > I will add in next version.
 
-That looks fine.  ref, ahb and apb would also be fine, it's just the
-qspi- prefix that I was querying.
+> 	Now I want to replace the original devm_clk_get API in the
+> driver with devm_clk_bulk_get_all API, which can achieve compatibility,
+> but it seems that it is not good for other ip with only one clock, so I
+> want to ask about that can I replace it? Or define that inside jh7110?
 
---OStcWnmwJi2B52q7
+You could always specify a different array of clocks depending on which
+compatible the driver sees, just like you'd conditionally request clocks
+individually.
+
+--0IjcTOaConsRfQgO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR1yccACgkQJNaLcl1U
-h9DfAgf5Ad6LjZ0DMJ0r5lAycWLFFFtfNyz0mTrawQwG8YBWBhOCeCcdPjjJIiUg
-NFKMOUJHcx60wG72KuRjERBeDR3xqA7KdREBspEM004CeKMYPUX4WmG9Wt4VNjtJ
-Dcrt2QUrhdx8yvc1nf83wj2bF4xxKtI31Y/6zK2dVrrloTXfne04z3Kv3snetvtc
-ZICIfgYQzb3Nzi6Uc0ib6CPNh6lEF+liqsPghw1K1TAC4dGLg9yOIxvxv2MEBKBX
-dsGCuq4W1fi1Uzm9hQFm+TqjfdKSqCdtaf4insH1t7KI8ih60bcUuKC2R/NeK8FG
-VqH2t0tD1RUh562zh4jZBFepUEaJpg==
-=SLrS
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR10QQACgkQJNaLcl1U
+h9A/Pgf+PyO6n0Sai2vAqhannyjrJNScSAcfT759fOsLtw54OcwCbpqbZa77wgiH
+PjCzh72zQSXZ0AnoaovIQ+Pfyhm+M8KSWkeP95AhiBCJQr2kbMf6zpMxJaCIwN55
+fwXAlxbea49Avm2qG2zwQOnV2b3p8qFPC76xxmHETmN/mx2p9AQFmIHZhuQcRAFM
+4B0OCyT+QQ01lSmM9kNL0dttXDSUk1DbdlqGu8LIg3IkbsI2btCTER46cD7I8aI/
+daiysOn9wEgibBlWwfDsTwmIVd1d+y1EmB3GBE0ip6StyEjNBYmBF5pEIeIyM34C
+QeXxr61Al49hA3BFWJP8vJ+bRq/c4Q==
+=tDOm
 -----END PGP SIGNATURE-----
 
---OStcWnmwJi2B52q7--
+--0IjcTOaConsRfQgO--
