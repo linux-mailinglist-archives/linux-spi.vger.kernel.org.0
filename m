@@ -2,68 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B10A716A82
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99D7716B4D
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjE3RLi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 13:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S233000AbjE3Rkw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 13:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjE3RLh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:11:37 -0400
+        with ESMTP id S233129AbjE3Rkt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:40:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C2F114;
-        Tue, 30 May 2023 10:11:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FACE11C
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 10:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77090630A7;
-        Tue, 30 May 2023 17:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A19C4339C;
-        Tue, 30 May 2023 17:11:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC66E6315B
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 17:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F2DC4339C;
+        Tue, 30 May 2023 17:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685466673;
-        bh=N6T7E2wPg+ksFvC4zTDbs7YVrQwcgW2P2fcGeKZjY20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CFXovLHe2oCMksV5jMa1XRicI4ibzn2nGkPyGMPtRnC/y08Yp1GJGpfGxkDMnPjUD
-         qZYV3T982TxPaZJbNLbkVlsLxnwdoXIr1gMYRSbBBtmyb38QYNiI0vOaHqIPHSYlny
-         f7aHQpTFYKWKABhjocGyZKtjbwZx021cztTm/1LP472sZoPdfbJIF+fQowxr3luvtO
-         vFKZWc7TtHmcGsP8e7FivPGzTjYgomj+DAEhRquGGK4SNsoZI20AB0mYJmViyDGojr
-         OgochEVNk8ky0h6j2vMHGI169NU7lgIPPHKOPvuG8aH5roBKLrYsul0Y30Tl0lzs3E
-         vdCGDlBy+9FxQ==
-Date:   Tue, 30 May 2023 18:11:06 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
-Message-ID: <20230530-banister-luxurious-d33a5d289749@spud>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+        s=k20201202; t=1685468445;
+        bh=9/VTo/U8Y27wlwxBTkPK9EJhdYwlyyuveYD1A6GQW2E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=fzt0l5QzQ9LIhT/UsnD/zi5KyBJo9G9Y55kC3Eirjp4RavaBqN+SXSCkrebQUxBGW
+         v9w2S8bTL4c3WrSeT6B+rJ8Iyva8dwc12cQtEi2d8TEr4pkJNV8O9PRGjFuPhEWXNS
+         pb6IspnYyA+l+qeaMBTlBbQ9W48hjb4WxFcQbr/WNkaD3VE1f2oUESTFyhvtRSW7ep
+         wFGm3SrRwAFWToemu3u8g8ihiFnsP86oYOCyc5pECjs2xn6J4TaX7mKukJ+xX/MkiU
+         m2eF/7gN2ETxTCPabODcGVnRYQMw3CROoBwhqP2fR5G66uZUP4oaif4mcsRiPpKLMy
+         IlDEy4FDbPPtw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+In-Reply-To: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
+References: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 0/3] spi: mt65xx: Convert to platform remove callback
+ returning void
+Message-Id: <168546844352.691057.11112317404702040826.b4-ty@kernel.org>
+Date:   Tue, 30 May 2023 18:40:43 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3drXRST+roPPVcQt"
-Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,68 +59,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 09 Mar 2023 10:47:01 +0100, Uwe Kleine-König wrote:
+> this series converts the spi-mt65xx driver to .remove_new(). While the
+> preparing patch that gets rid of an early error return is in many cases
+> a bug fix, it's not tragic here, as the early return only skips steps
+> that are not necessary after resume failed. Still rework the code flow
+> to prepare for conversion to .remove_new(). The 2nd patch actually
+> converts the driver. The third is a small nitpick cleanup the I noticed
+> while working on the driver.
+> 
+> [...]
 
---3drXRST+roPPVcQt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
-> Hi,
->=20
-> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we all=
-ow
-> only decimal numbers.  In few cases narrow the pattern to also disallow
-> multiple suffixes, e.g. "pwm-5-5".
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I figure there'll be quite a bit of stuff to fix up afterwards?
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Thanks!
+
+[1/3] spi: mt65xx: Properly handle failures in .remove()
+      commit: 22f407278ea43df46f90cece6595e5e8a0d5447c
+[2/3] spi: mt65xx: Convert to platform remove callback returning void
+      commit: df7e47196fcef5d5611caa65f91d813578cf3efd
+[3/3] spi: mt65xx: Don't disguise a "return 0" as "return ret"
+      commit: 6f089e986778d3657247fdc2b38bd38de796732b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Conor.
+Mark
 
->=20
-> No dependencies, can be applied by individual subsystems.
->=20
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
->=20
-> Link: https://lore.kernel.org/all/20221127182232.GA128974-robh@kernel.org/
->=20
-> Best regards,
-> Krzysztof
->=20
-> Krzysztof Kozlowski (7):
->   dt-bindings: phy: intel,combo-phy: restrict node name suffixes
->   dt-bindings: pwm: restrict node name suffixes
->   dt-bindings: rtc: restrict node name suffixes
->   dt-bindings: slimbus: restrict node name suffixes
->   spi: dt-bindings: restrict node name suffixes
->   dt-bindings: timestamp: restrict node name suffixes
->   dt-bindings: watchdog: restrict node name suffixes
->=20
->  Documentation/devicetree/bindings/phy/intel,combo-phy.yaml    | 2 +-
->  Documentation/devicetree/bindings/pwm/pwm.yaml                | 2 +-
->  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->  Documentation/devicetree/bindings/slimbus/slimbus.yaml        | 2 +-
->  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->  .../bindings/timestamp/hardware-timestamps-common.yaml        | 2 +-
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 4 ++--
->  7 files changed, 8 insertions(+), 8 deletions(-)
->=20
-> --=20
-> 2.34.1
->=20
-
---3drXRST+roPPVcQt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYuKgAKCRB4tDGHoIJi
-0nXKAQDamcvDwarCjeG65qUN+fBYxaI+//cyJEQB1SuuBpUTGgEAy0ivPKjui6wX
-d/shbUIhWWfohF1w8yRNuYfQATp+AAQ=
-=EmEg
------END PGP SIGNATURE-----
-
---3drXRST+roPPVcQt--
