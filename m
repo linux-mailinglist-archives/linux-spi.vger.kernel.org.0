@@ -2,100 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94741716C12
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 20:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71264716C7E
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 20:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbjE3SPC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 14:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S232209AbjE3S2u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 14:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjE3SO7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 14:14:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD77EC
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 11:14:57 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53487355877so3058888a12.1
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 11:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685470496; x=1688062496;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wejmfms/MTruDYODALqcJ51ghyqKDRBVlvqid0DKdUU=;
-        b=ngR8WUfo12QEnVFptE3frRjlZIIv53yMuBehH6/yqZOlhdWodxtvmMkx4cOCKLFU1J
-         Be5nnnNc0oj+fBcVqMR42F8lJMRreGmaZWldywOfCmuKn1xMjguK+JS9revnMtiAt15k
-         E9DV64QoXxjJTIK8Z2cJOcAC1sfuuGrLrLVL8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685470496; x=1688062496;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wejmfms/MTruDYODALqcJ51ghyqKDRBVlvqid0DKdUU=;
-        b=WCW5fihtmmI95O6PNGPaHzOmGJ4aWufQR97pBqep1s5u02fgvteup0UAGMYn1Q2b3i
-         aB9BhtEbiE8APvygFK6Z1B0FCkvElUfgOl+kdGynwNvSSc32GjefA8KCL8uOF1HhIfij
-         PFjbjEx6hkY1yhMYFge0+8+4Zhl2wV8YcUQgPNGq8B5OT0fPB5hNphMU18tFO4cxCy+C
-         8cZX8kL9CSdbevEZBHKmrKVRcyVcLDXRl5UaV4T0W6YZoC5wZ2kwZ1aQ1kwWT+pdHREZ
-         VPR4EljCokDk3Wu4EqCr7RV1IMZb8DYkxnNYO7csqnabmsKO9PjY8fVjcVgX20H2onpq
-         hPlA==
-X-Gm-Message-State: AC+VfDyUOpTj7tBntOzS48iUK4w6F1oKo/+gR/DOEeq9u4jPIxB+DNUT
-        py3Z7pD+znNd+MkierDlShmKcw==
-X-Google-Smtp-Source: ACHHUZ7XQtTdVlY0DHCmMiZA+STEzORTjmprrjia5mLFvW/qUUbtteO21yEtKVNdONuLVxcpl5n8ZA==
-X-Received: by 2002:a17:90a:b298:b0:256:2ee5:aebc with SMTP id c24-20020a17090ab29800b002562ee5aebcmr3133136pjr.18.1685470496708;
-        Tue, 30 May 2023 11:14:56 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:49d0:fe41:5206:ac47])
-        by smtp.gmail.com with ESMTPSA id m10-20020a17090b068a00b0024df6bbf5d8sm9288614pjz.30.2023.05.30.11.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 11:14:56 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: spi-qcom-qspi: Add newline to PIO fallback warning
-Date:   Tue, 30 May 2023 11:13:48 -0700
-Message-ID: <20230530111348.1.Ibd1f4827e18a26dc802cd6e5ac300d83dc1bc41c@changeid>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        with ESMTP id S229997AbjE3S2t (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 14:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9E1B2;
+        Tue, 30 May 2023 11:28:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C38B4619FE;
+        Tue, 30 May 2023 18:28:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BBCC4339E;
+        Tue, 30 May 2023 18:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685471327;
+        bh=EKx6VTVPtif3VopxDUTsogjb7XDS6ckoH87zFUChkRk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=gNq/ZsXDpV3i7lAAIj9wedxoaIHRiPa8GeMA8KY+BCc+AtgakCixsCrcHU8v2kD2S
+         qjnXa48y6IVO/aLnDPRCGY3kpkEcBd0FFnj/Q3kjZNZ0xk88kLveBEI0YD/Kp1h0pv
+         wqPhDhAOt3KWFaOqSJcfgF8JBgPb8c5uMWp6U3Xrt7eRhVp9yhDenqNBPb0QvBwIpb
+         gyzSzCAYGhIEHZu9lj61HTMaAyZxD1CClcEgLnZnW8fT6ECmvgfC7/PZYbL1KVFZ4v
+         uJkNEAot6nXMpDrNfwQgTKt/eHJTPJdb3HZtlkh3yVLR3bETuF72j3SQtRz5ujEj/a
+         wwctPjUFDTKeA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <linux@rempel-privat.de>
+In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 0/7] dt-bindings: restrict node name suffixes
+Message-Id: <168547131548.1034788.34188090441869561.b4-ty@kernel.org>
+Date:   Tue, 30 May 2023 19:28:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-A warning added in commit b5762d95607e ("spi: spi-qcom-qspi: Add DMA
-mode support") was missing a newline. Add it.
+On Tue, 30 May 2023 16:48:44 +0200, Krzysztof Kozlowski wrote:
+> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
+> only decimal numbers.  In few cases narrow the pattern to also disallow
+> multiple suffixes, e.g. "pwm-5-5".
+> 
+> No dependencies, can be applied by individual subsystems.
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> [...]
 
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Closes: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/4573857/comment/44331d65_79128099/
-Fixes: b5762d95607e ("spi: spi-qcom-qspi: Add DMA mode support")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Applied to
 
- drivers/spi/spi-qcom-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index a3991e617c90..a8a683d6145c 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -445,7 +445,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 				qcom_qspi_dma_xfer(ctrl);
- 			goto exit;
- 		}
--		dev_warn_once(ctrl->dev, "DMA failure, falling back to PIO");
-+		dev_warn_once(ctrl->dev, "DMA failure, falling back to PIO\n");
- 		ret = 0; /* We'll retry w/ PIO */
- 	}
- 
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Thanks!
+
+[5/7] spi: dt-bindings: restrict node name suffixes
+      commit: c4fb6880edc15866a530c7b8f2698ae65f80cfab
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
