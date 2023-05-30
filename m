@@ -2,66 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3FF716550
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339C37166F6
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 17:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjE3O44 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 10:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S230311AbjE3P1y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 11:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjE3O44 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 10:56:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9E4FC
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 07:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8926E63079
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 14:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E0916C4A0E7;
-        Tue, 30 May 2023 14:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685458609;
-        bh=0PdVrQfo6KOkLoKcizPMOaOmNupJDDtIlaus/gYiRf4=;
-        h=Subject:From:Date:To:From;
-        b=HxsIV583Cq/4VmiYJPXA8UEJesw6cpzztdp4H0drDf/8j6QIfgaSsuqLgsYvFKfTk
-         QhSVKgbHbIE1aTvFJoapJn/ijLqjMZXHk9TMyQsijD51xD50AWqcyWnvXXMKXx13og
-         dzFdvDRjLJdDAwt3ecsDh+8KXs8hD9pSuVZDdEsoHQPjLbvYy3sZSiNlWnPzS847SV
-         daaaMuV28u0iwXvd65x8ygOdRVJJU9xX9JWBcgRugC2tSEK/svDppHuQRhIMZrpu+A
-         vnXZ1zrQjX3CTlX2Epg8gaMCzq5IZtRgUxzIXril/M2IWsMXY2T1wlhMwSfTkcHpRN
-         W57rmOpk5gFxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2245E52BF6;
-        Tue, 30 May 2023 14:56:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231443AbjE3P1x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 11:27:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE961C7
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 08:27:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41Fd-0000cs-KF; Tue, 30 May 2023 17:27:09 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41FZ-003uHM-R0; Tue, 30 May 2023 17:27:05 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41FY-009Xf3-TU; Tue, 30 May 2023 17:27:04 +0200
+Date:   Tue, 30 May 2023 17:27:04 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
+Message-ID: <20230530152704.tbflnepnioupnkmv@pengutronix.de>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168545860979.20113.9311792377550518548.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 30 May 2023 14:56:49 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qbppmt5ki4y3pwo5"
+Content-Disposition: inline
+In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v7] spi: add SPI_MOSI_IDLE_LOW mode bit (2023-05-30T14:16:36)
-  Superseding: [v6] spi: add SPI_MOSI_IDLE_LOW mode bit (2023-05-24T09:19:43):
-    [v6,1/5] spi: add SPI_MOSI_IDLE_LOW mode bit
-    [v6,2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
-    [v6,3/5] spi: spidev: add two new spi mode bits
-    [v6,4/5] spi: spidev_test: Sorted the options into logical groups
-    [v6,5/5] spi: spidev_test Add three missing spi mode bits
 
+--qbppmt5ki4y3pwo5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Hello,
 
+On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
+> Hi,
+>=20
+> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we all=
+ow
+> only decimal numbers.  In few cases narrow the pattern to also disallow
+> multiple suffixes, e.g. "pwm-5-5".
+>=20
+> No dependencies, can be applied by individual subsystems.
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qbppmt5ki4y3pwo5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR2FcgACgkQj4D7WH0S
+/k6mKggAlnEVcB4qInHpsUcVID/g9Si5ycFYWHV3Ur9fkw4/flTJsQ0+OPpooZXI
+dpvQ7Kl9QZycIs6FZtMyK5Pgi6npW15XG8hL7k+NZq1YUw0qNt6vxH8UqSSUjIdY
+to0v66ItQ5jvqJxskCqXG5nE4c39BB6kQmV0LmVqovwRxYEc3GvRqZgOF5RBVvfY
+/WGbC2DUwy+zYVyBuAEP9D57J/iJKGXd3Axujy4SwzEJfcdq38axsICip6LF2J3I
+goisJHcTFiyiw0ATcuvUafLQDXJUta6y3tmq/SKEjej6z5Iu1p2w3iH6SZ/FTeJx
+GHPzrrwL7MzOXnIV9L0w6WsAOJBKtg==
+=/tKH
+-----END PGP SIGNATURE-----
+
+--qbppmt5ki4y3pwo5--
