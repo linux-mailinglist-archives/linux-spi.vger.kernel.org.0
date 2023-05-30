@@ -2,49 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99D7716B4D
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EA1716B4E
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 19:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjE3Rkw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 13:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S233223AbjE3Rkx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 13:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233129AbjE3Rkt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:40:49 -0400
+        with ESMTP id S233153AbjE3Rku (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 13:40:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FACE11C
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 10:40:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3516B107
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 10:40:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC66E6315B
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 17:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F2DC4339C;
-        Tue, 30 May 2023 17:40:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDFDF6315C
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 17:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB5FC433EF;
+        Tue, 30 May 2023 17:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685468445;
-        bh=9/VTo/U8Y27wlwxBTkPK9EJhdYwlyyuveYD1A6GQW2E=;
+        s=k20201202; t=1685468447;
+        bh=2ea8N67c7G2yOchRm+WL0kAMJsqs8Q3ilNqdiR2zHuM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=fzt0l5QzQ9LIhT/UsnD/zi5KyBJo9G9Y55kC3Eirjp4RavaBqN+SXSCkrebQUxBGW
-         v9w2S8bTL4c3WrSeT6B+rJ8Iyva8dwc12cQtEi2d8TEr4pkJNV8O9PRGjFuPhEWXNS
-         pb6IspnYyA+l+qeaMBTlBbQ9W48hjb4WxFcQbr/WNkaD3VE1f2oUESTFyhvtRSW7ep
-         wFGm3SrRwAFWToemu3u8g8ihiFnsP86oYOCyc5pECjs2xn6J4TaX7mKukJ+xX/MkiU
-         m2eF/7gN2ETxTCPabODcGVnRYQMw3CROoBwhqP2fR5G66uZUP4oaif4mcsRiPpKLMy
-         IlDEy4FDbPPtw==
+        b=i/Vl5v+gv/l3piJuaLKSeHoU1/AQhZIpgP8m0jLqxv9GRcTQqg9sSsje/Ea8kpkgU
+         VMY9tMcf6VMSWiWEGDCb/cbKOiK54tCfoplGMNxOGsWlMIUGjs/JROUuJ4/t4opm7o
+         vDVewVauKe0nEGBpfMCTxRbAwxL3Md/nlXUypBfmhD2jQUin2cG3dVqyLHvtbnOyTp
+         ZuRn09LfPfiMwIbIRaLlqOUPMLjfqsssusES5jDtowwUuXJIfE8yO7NJeE95/J6fRe
+         ahJJTzxf6hq1fcVQYkOktBAcoybQxvmrPJvrP98Z/pLXl3zJUT6n/u0aq8yNF303vm
+         8v53gipcwNbhg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
-References: <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 0/3] spi: mt65xx: Convert to platform remove callback
- returning void
-Message-Id: <168546844352.691057.11112317404702040826.b4-ty@kernel.org>
-Date:   Tue, 30 May 2023 18:40:43 +0100
+Cc:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230530081648.2199419-1-u.kleine-koenig@pengutronix.de>
+References: <20230530081648.2199419-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v2 0/3] spi: mt65xx: Convert to platform remove
+ callback returning void
+Message-Id: <168546844548.691057.7800675401872237520.b4-ty@kernel.org>
+Date:   Tue, 30 May 2023 18:40:45 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,14 +58,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 09 Mar 2023 10:47:01 +0100, Uwe Kleine-König wrote:
-> this series converts the spi-mt65xx driver to .remove_new(). While the
-> preparing patch that gets rid of an early error return is in many cases
-> a bug fix, it's not tragic here, as the early return only skips steps
-> that are not necessary after resume failed. Still rework the code flow
-> to prepare for conversion to .remove_new(). The 2nd patch actually
-> converts the driver. The third is a small nitpick cleanup the I noticed
-> while working on the driver.
+On Tue, 30 May 2023 10:16:45 +0200, Uwe Kleine-König wrote:
+> compared to (implicit) v1 sent in March with Message-Id:
+> <20230309094704.2568531-1-u.kleine-koenig@pengutronix.de>, I reworked
+> patch 1 on feedback by AngeloGioacchino Del Regno. Patches 2 and 3 got
+> his Reviewed-by.
+> 
+> Best regards
+> Uwe
 > 
 > [...]
 
