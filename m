@@ -2,51 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF03716F85
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 23:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51417716FBC
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 23:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjE3VQS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 17:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S232653AbjE3Va4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 17:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbjE3VQQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 17:16:16 -0400
+        with ESMTP id S230045AbjE3Vaz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 17:30:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC1107;
-        Tue, 30 May 2023 14:16:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4DE8;
+        Tue, 30 May 2023 14:30:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D55B560F71;
-        Tue, 30 May 2023 21:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F88C433D2;
-        Tue, 30 May 2023 21:16:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BB7160B74;
+        Tue, 30 May 2023 21:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869C2C433EF;
+        Tue, 30 May 2023 21:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685481365;
-        bh=L8Q39KcjX9asWMuLDLCMaq8IoG34g1EVquhTGcwvXMI=;
+        s=k20201202; t=1685482253;
+        bh=PrlL1qfJ4X4PgO5aGdikpfSveOZTNv2Z4rqYo4OiJts=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J/8HIU2MppMHomLQbzgZScvfxbtr/K8NRALIWFP0ArkgmrWWAbkfjF9NmawBJC/OL
-         UesvctGmB22SZeJWyVSFbWhR/vx+ZxS8DCt0xYucoUosbzuq1HM17mr1nXrhSreFg3
-         43t6DQHywadA5kJLLJwQLGT8vJeQ+YUExop/7H1sQGCqeCC5VEoFfhXAjvq8LaHxVi
-         gZdXmJzhNK1X7TQXiAkGPFlGpH46WWc9xvTP3e2PFXu7Ylrx1TX+3JTO3TdRkVfK1g
-         cK96dDQXjwT6wblQ5dwGEhU8spTP4y2o8oAW67x0WScI2IXJE2VR1n4rsbZpI4YGJD
-         g16QBewjjQ2Hw==
-Date:   Tue, 30 May 2023 22:16:00 +0100
+        b=iBLPvGkJZb7R3XA/E6T8YvG3XN3DGpqP+dWwEAjFyBXDGCduGXbXAq87fVbsr2MLp
+         JCRGsqL8OjIS7OoZJV8H6VAT7RvnFilBArfPFhq2v/H8IECnEiskUYB1tDdwx8Seaq
+         zzjYXil1T7WjAoNC7cVfQTKVQmZMoz42iM4N+mzCxvPPwy48NSWEbUz4NJ6ZJUqXDF
+         rWbjPpjQpkA5/r0r4F8/P1WgC3iPCgGNPbYqM5Mv2u8seoTuyTR9gh72kit3EGIMMX
+         DKOzBWAZNwrqDv73tchVsncDT35LregvMV1mNTFEr3rSan8EnhhEhfRqCBpPkh0HR6
+         4plYDAsXS+qeA==
+Date:   Tue, 30 May 2023 22:30:46 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Osama Muhammad <osmtendev@gmail.com>, linux-spi@vger.kernel.org,
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, vkoul@kernel.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] spi-dw-core.c: Fix error checking for
- debugfs_create_dir
-Message-ID: <30bcf77a-3e7c-4f13-94ab-f4efc52193dc@sirena.org.uk>
-References: <20230520224025.14928-1-osmtendev@gmail.com>
- <168546845148.691057.9965315836245052581.b4-ty@kernel.org>
- <20230530211446.foqpcfha6hjruhow@mobilestation>
+Subject: Re: [PATCH v2 5/6] spi: cs42l43: Add SPI controller support
+Message-ID: <171e2054-e41c-46a5-b478-f699909c5bd7@sirena.org.uk>
+References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
+ <20230530122112.1314458-6-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cDAaynX61SC8vgCB"
+        protocol="application/pgp-signature"; boundary="LUy+8fUc7Rrtf09J"
 Content-Disposition: inline
-In-Reply-To: <20230530211446.foqpcfha6hjruhow@mobilestation>
+In-Reply-To: <20230530122112.1314458-6-ckeepax@opensource.cirrus.com>
 X-Cookie: I've read SEVEN MILLION books!!
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,34 +63,40 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---cDAaynX61SC8vgCB
+--LUy+8fUc7Rrtf09J
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, May 31, 2023 at 12:14:46AM +0300, Serge Semin wrote:
+On Tue, May 30, 2023 at 01:21:11PM +0100, Charles Keepax wrote:
 
-> Oh, thanks. I've absolutely missed the respinned version of the patch
-> (it should have been marked as v2 though). Anyway the change looks
-> good except it introduces a redundant empty line at the tail of the
-> dw_spi_debugfs_init() function. Is it possible to rebase the branch
-> and drop the line it? If it's not I'll send an incremental cleanup
-> patch then.
+A couple of small things:
 
-I'd rather just take the incremental patch here.
+> +static unsigned int cs42l43_clock_divs[16] = {
+> +	2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+> +};
 
---cDAaynX61SC8vgCB
+Do we need to specify the size of the array?  I just had to count the
+number of initialisers :(   Should probably also be const.
+
+> +		for (; buf < block - (sizeof(u32) - 1); buf += sizeof(u32))
+> +			regmap_write(regmap, CS42L43_TX_DATA, *(const u32 *)buf);
+
+We're passing a byte stream through a u32 here - are you sure this is
+endian safe?
+
+--LUy+8fUc7Rrtf09J
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR2Z48ACgkQJNaLcl1U
-h9AaCAf/fR+F6c1cm8RkIndWTi2+HtG4GKXe+YL4jJH4nj0Yhha4dDMCOFNEYLRu
-VFfatNHD3nXeGc7JRWOeC0mMik5sMHC3GnKoKDWehBg10DxF1vXPHdC98+ARxncA
-Nr9yfNkfYeAKBENjzqUApzdeSQsbNmUQGHKuNRe/mGf20ZOJc8WyTO0A+ahvOgxP
-LoZ7JYnSeK06BPia6yta82KKxbl6nCIqHFla1QIZ/UpM0QK/TIpGsAqf+c412uXR
-547sXmW9fyka7NCyqYp81ZpNlPtRkJFOxZP+NNFCrfmZcJ8e5707PJR0Ls/FN+ak
-XYFyUyk3PeKp4kmfmRUdttxZqQIqkw==
-=UMeQ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR2awUACgkQJNaLcl1U
+h9BLMAf7B1to2LkSkIjsJGp1+2cKMbTn+WNW6z2CuH5pGIv8uv6hHT/yakD/DAtD
+xqM8doMGB7ckoPBvhosXpSmd7TODf4nrrADZEB9yL5ZgAyPl9tgk7ZrNldZUr8bV
+KBRZASEbj3MNDA4EzBe8oG7jn3vwgF+Yes6wYzvhiUkQFL1alr7u/7IQ4lJlKWTL
+hnYHrP4S/2ZbZzJO16dLz47zIYMAtERArGEfrKYdQ1rmWazZMGFJ8MwboxkC8ZMQ
+gR2K6dVAAsncxp3ruAEB520UX7td4j1tm2rcJgyNTbgXbJsn7wVZ882YEXAF24L8
+oRslOoGjnPOB9/vkdOYSL79Zyx1Xyg==
+=Yi++
 -----END PGP SIGNATURE-----
 
---cDAaynX61SC8vgCB--
+--LUy+8fUc7Rrtf09J--
