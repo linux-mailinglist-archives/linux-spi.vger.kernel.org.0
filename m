@@ -2,105 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E51715BE2
-	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 12:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D741715EEA
+	for <lists+linux-spi@lfdr.de>; Tue, 30 May 2023 14:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjE3KeE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 May 2023 06:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S230145AbjE3MVb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 May 2023 08:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjE3Kdu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 06:33:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93B7126;
-        Tue, 30 May 2023 03:33:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E4460C87;
-        Tue, 30 May 2023 10:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8455EC433D2;
-        Tue, 30 May 2023 10:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685442826;
-        bh=Fln3Mnh+80acgeHumKpr0UR+mx8aRBQanCGCmvcj6dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/yWFIcy7CFlAqu0bhA7C9Jz0Ig8CU44fogGfkgP3yLjE0WUmsYsWm+prUozHNWra
-         qMmpvQseC/lYmHINYfLFcU1JJ6DjvVzLI1H86rO+cREwqx7lfejrNfTmN0y7WHcfeH
-         BCC6OaIBiOeetzisYBi281hXqqYT1tP4ERJRiY4ZvgpRwB5Kyt2RaK3x6cC1pBLbSj
-         Fk5b5otjNFDYIG78h7BdI2VjymKekOHKrvM2gVATpabjk8JPuGM/njcEunvntfFCB3
-         NvJvr57w1udDStSh3dQjXQXPyoAV+Hgr32k1vZ/V36WbhvCkEXsuVYHdRAZFR8Y31Y
-         1vISdIHEiUh6Q==
-Date:   Tue, 30 May 2023 11:33:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
-References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-3-william.qiu@starfivetech.com>
- <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
- <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
- <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
+        with ESMTP id S229691AbjE3MVa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 May 2023 08:21:30 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E37C5;
+        Tue, 30 May 2023 05:21:29 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UBAOkI020617;
+        Tue, 30 May 2023 07:21:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=2GgFwvas2rFXV4McY7VMK9G2VCTdQUXyqwVMLSgXHI8=;
+ b=UA3y3BVM/HgEl3CvdA4HZc2gbM8jFUqQi/CiHcc0ZFNZhofB6Z4XmmYumWJtz5foHWTt
+ BKrnlyvQbPQwV5iz49jSEfT+Q9i1f2500/Suca2P+00WIbeZjJ0Dzpa8hPZSWja6uaSP
+ vv897JhneMBD31sFIKQ6pEQESlXwvsyW0HPzsJw6dO+VKSrVTxMi5mvOedE7Z2DvSEhB
+ ZeGNwSx6Hz1zgd3SWFhxnvog33uNSUBqSlXOCaudeplmUzw2v+7JIs98VR5oUkt6AOCu
+ nCi8gwPIvN09qcOjof8KSdWRBYp2Z/y93qrDEo8qe6Nk3Z8ej3UupkGWAp4dvPEb9IKm IA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90u2t5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 07:21:14 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 30 May
+ 2023 13:21:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Tue, 30 May 2023 13:21:12 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 840C745;
+        Tue, 30 May 2023 12:21:12 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>
+CC:     <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/6] Add cs42l43 PC focused SoundWire CODEC
+Date:   Tue, 30 May 2023 13:21:06 +0100
+Message-ID: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0IjcTOaConsRfQgO"
-Content-Disposition: inline
-In-Reply-To: <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
-X-Cookie: I've read SEVEN MILLION books!!
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: mDDcEAkFiQSYVCUwRek4aYj5J8slS2_p
+X-Proofpoint-ORIG-GUID: mDDcEAkFiQSYVCUwRek4aYj5J8slS2_p
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+branch.
 
---0IjcTOaConsRfQgO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Change notes are included with each patch, most of the changes are
+trivial, the notable ones are moving the IRQs out of irqchip and into
+the MFD, and moving the DT binding to sound.
 
-On Tue, May 30, 2023 at 10:05:38AM +0800, William Qiu wrote:
-> On 2023/5/29 14:44, William Qiu wrote:
-> > On 2023/5/26 23:36, Mark Brown wrote:
+Thanks,
+Charles
 
-> >> Nothing ever disables or unprepares this clock as far as I can tell?
-> >> Perhaps also consider using the clk_bulk_ APIs.
+Charles Keepax (4):
+  dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+  mfd: cs42l43: Add support for cs42l43 core driver
+  pinctrl: cs42l43: Add support for the cs42l43
+  ASoC: cs42l43: Add support for the cs42l43
 
-> > I will add in next version.
+Lucas Tanure (2):
+  soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+  spi: cs42l43: Add SPI controller support
 
-> 	Now I want to replace the original devm_clk_get API in the
-> driver with devm_clk_bulk_get_all API, which can achieve compatibility,
-> but it seems that it is not good for other ip with only one clock, so I
-> want to ask about that can I replace it? Or define that inside jh7110?
+ .../bindings/sound/cirrus,cs42l43.yaml        |  320 +++
+ MAINTAINERS                                   |    5 +
+ drivers/mfd/Kconfig                           |   23 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/cs42l43-i2c.c                     |   86 +
+ drivers/mfd/cs42l43-sdw.c                     |  213 ++
+ drivers/mfd/cs42l43.c                         | 1141 +++++++++
+ drivers/mfd/cs42l43.h                         |   23 +
+ drivers/pinctrl/cirrus/Kconfig                |   11 +
+ drivers/pinctrl/cirrus/Makefile               |    2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |  609 +++++
+ drivers/soundwire/bus.c                       |   31 +
+ drivers/soundwire/bus_type.c                  |   12 +
+ drivers/spi/Kconfig                           |    7 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-cs42l43.c                     |  279 ++
+ include/linux/mfd/cs42l43-regs.h              | 1172 +++++++++
+ include/linux/mfd/cs42l43.h                   |  102 +
+ include/linux/soundwire/sdw.h                 |    9 +
+ include/sound/cs42l43.h                       |   17 +
+ sound/soc/codecs/Kconfig                      |   16 +
+ sound/soc/codecs/Makefile                     |    4 +
+ sound/soc/codecs/cs42l43-jack.c               |  951 +++++++
+ sound/soc/codecs/cs42l43-sdw.c                |   75 +
+ sound/soc/codecs/cs42l43.c                    | 2275 +++++++++++++++++
+ sound/soc/codecs/cs42l43.h                    |  126 +
+ 26 files changed, 7513 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+ create mode 100644 drivers/mfd/cs42l43-i2c.c
+ create mode 100644 drivers/mfd/cs42l43-sdw.c
+ create mode 100644 drivers/mfd/cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43.h
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+ create mode 100644 drivers/spi/spi-cs42l43.c
+ create mode 100644 include/linux/mfd/cs42l43-regs.h
+ create mode 100644 include/linux/mfd/cs42l43.h
+ create mode 100644 include/sound/cs42l43.h
+ create mode 100644 sound/soc/codecs/cs42l43-jack.c
+ create mode 100644 sound/soc/codecs/cs42l43-sdw.c
+ create mode 100644 sound/soc/codecs/cs42l43.c
+ create mode 100644 sound/soc/codecs/cs42l43.h
 
-You could always specify a different array of clocks depending on which
-compatible the driver sees, just like you'd conditionally request clocks
-individually.
+-- 
+2.30.2
 
---0IjcTOaConsRfQgO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR10QQACgkQJNaLcl1U
-h9A/Pgf+PyO6n0Sai2vAqhannyjrJNScSAcfT759fOsLtw54OcwCbpqbZa77wgiH
-PjCzh72zQSXZ0AnoaovIQ+Pfyhm+M8KSWkeP95AhiBCJQr2kbMf6zpMxJaCIwN55
-fwXAlxbea49Avm2qG2zwQOnV2b3p8qFPC76xxmHETmN/mx2p9AQFmIHZhuQcRAFM
-4B0OCyT+QQ01lSmM9kNL0dttXDSUk1DbdlqGu8LIg3IkbsI2btCTER46cD7I8aI/
-daiysOn9wEgibBlWwfDsTwmIVd1d+y1EmB3GBE0ip6StyEjNBYmBF5pEIeIyM34C
-QeXxr61Al49hA3BFWJP8vJ+bRq/c4Q==
-=tDOm
------END PGP SIGNATURE-----
-
---0IjcTOaConsRfQgO--
