@@ -2,117 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C0A71814A
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 15:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9263718483
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 16:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbjEaNVG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 09:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S237624AbjEaOQB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 10:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjEaNVF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 09:21:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A5123;
-        Wed, 31 May 2023 06:21:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C78A63A67;
-        Wed, 31 May 2023 13:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8286BC4339B;
-        Wed, 31 May 2023 13:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685539263;
-        bh=38r927G2inyVMml0LWLz7BZPDRXvg4VePw65RoNKYtc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LdZne+qt+TBfcx78L1P/e2jFK0kSzM5OFwvU2lxOWm2TlFradzemowoi00+tmv6y0
-         sWY0vKMfcns0lX4vAY/CH6ckpM41qmMi1xxJxqhdUeryyDNpqMpv5VLXnjTFxKv5YT
-         30pidaxePH2tzlQBSPb4vfBLDSguMgjWY93t7Ya/SLeTzGPsOFra84VCLvf9MR2KbQ
-         vf2dSCmwUct0o7VADfK7uJOVALI/Hv4GXRwP19ty6V6ofqoGe4+N9AN+pZH+WtAalo
-         AsJXlkNLdL/RX27xAB+do3GU73RxNpW897H95tp6qq29koGhTPCIRNZF0s6kd6Xn8P
-         VIb+hnRbwW75g==
-Date:   Wed, 31 May 2023 14:20:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <075db1ba-e15c-4c3c-9430-99c866eca24d@sirena.org.uk>
-References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-3-william.qiu@starfivetech.com>
- <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
- <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
- <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
- <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
- <93ba0b97-45aa-e59d-1454-80c4f245acc0@starfivetech.com>
+        with ESMTP id S237621AbjEaOPq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 10:15:46 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C878718D;
+        Wed, 31 May 2023 07:13:20 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V5CpaG031404;
+        Wed, 31 May 2023 09:12:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=DfcZshtC/3kePJgZElnsMbSUMBBpHznHMh0D64IdoII=;
+ b=ApqQ+JFfSzg+1JB9vTTtQ6kONI8wr2UWK94lbyvCuEPStuZp7bhenjNYydsOQrbr5cW9
+ QOeLN+yWeBz+VuHFGE3W0W+IIpeH4c0Gz4lIMFAm+vj+RRdn7QPmycW6j08R/dHZ/qFs
+ 7ldmOfOGYsgkGbI4kSbTr7q3WdgUkBR4YdWzgzTseHkNtB5IgncTzjDVi9cxQaDFRb+K
+ QZR6u8tTT3IrbG4Q6QdABwZRbLTRkK3hJjGkmu7RqkvUhv26RrjiqdN1GM5Bl/w8a6Td
+ ep+DcqVcOsaWKRNeU7dEo9Fd0R27E4SIvL13c1KS1IMbhJ1ZFwrNnRvyt8c9MgVf+1oh tQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mvtw7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 09:12:09 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
+ 2023 15:12:07 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 15:12:07 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 598FD475;
+        Wed, 31 May 2023 14:12:07 +0000 (UTC)
+Date:   Wed, 31 May 2023 14:12:07 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>, <robh+dt@kernel.org>, <conor+dt@kernel.org>,
+        <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>, <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] dt-bindings: sound: cirrus,cs42l43: Add initial
+ DT binding
+Message-ID: <20230531141207.GJ68926@ediswmail.ad.cirrus.com>
+References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
+ <20230530122112.1314458-3-ckeepax@opensource.cirrus.com>
+ <eef819db-4de3-06fe-8fe6-b0fe87ab5d84@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="G6ktQj/BvBBSNjYO"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <93ba0b97-45aa-e59d-1454-80c4f245acc0@starfivetech.com>
-X-Cookie: Will Rogers never met you.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <eef819db-4de3-06fe-8fe6-b0fe87ab5d84@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: hIXSRhjnKWNOVq-ly_WiPUo81d5fSQGO
+X-Proofpoint-ORIG-GUID: hIXSRhjnKWNOVq-ly_WiPUo81d5fSQGO
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, May 31, 2023 at 11:02:24AM +0200, Krzysztof Kozlowski wrote:
+> On 30/05/2023 14:21, Charles Keepax wrote:
+> > +  cirrus,bias-sense-ua:
+> 
+> "ua" looks like microamp. If so, microamp instead:
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+> 
+> > +  pinctrl:
+> > +    type: object
+> > +
+> > +    allOf:
+> 
+> Drop allOf, just "$ref: ......"
+> 
+> > +      - $ref: /schemas/pinctrl/pinctrl.yaml#
+> > +
+> > +    additionalProperties: false
+> 
+> Also drop blank lines between these three above.
+> 
+> > +    patternProperties:
+> > +      "-state$":
+> 
+> Use consistent quotes, either " or ' everywhere
+> 
 
---G6ktQj/BvBBSNjYO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks, will fix those all up for v3.
 
-On Wed, May 31, 2023 at 02:19:16PM +0800, William Qiu wrote:
-> On 2023/5/30 18:33, Mark Brown wrote:
-
-> > You could always specify a different array of clocks depending on which
-> > compatible the driver sees, just like you'd conditionally request clocks
-> > individually.
-
-> 	If specify a different array of clocks depending on which compatible
-> the driver sees, since there will also be clock operations in the suspend
-> and resume interfaces, this can make the code look complicated.
-
-If you store the clock count and array in the driver data that should be
-fairly simple I think.
-
-> 	as following:
-
-> 	/* Obtain QSPI clock. */
-> 	cqspi->num_clks = devm_clk_bulk_get_all(dev, &cqspi->clks);
-> 	if (cqspi->num_clks < 0) {
-> 		dev_err(dev, "Cannot claim QSPI clock: %u\n", cqspi->num_clks);
-> 		return -EINVAL;
-> 	}
-
-> 	This way, the code will look simpler and clearer. How do you think
-> about it.
-
-I'm not clear how enable and disable would then work?
-
---G6ktQj/BvBBSNjYO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR3SbkACgkQJNaLcl1U
-h9A5YAf6AyXRsEmaDvRUFjWZZNZoMgo2EFDR0Jl7tIiuqYCoBj6JUWnZZBV7bZnq
-tVBoRN8pUEPIdzISOFwas3GYdOHZdSMagbeH2d8DZp7Cn7YTBcHKdw4otXRB+4QN
-tXJITLg7JSbzgd6gP/wfMp+q9Yyf0q+T9kRsrBTFSYuJmh6yg8CRaHrHmdomTBAB
-ZvB/TwoNFJYrvpRIJXUQC3mOviO7eQCVr9z6ZG8iwlzlxym7ZSC/rRbG2MtKlxls
-zIaL56Kwe4MQg7LgQejCY+z4ZLUdqpLb9DiVOp9bRspzRuWdRABZsdzahkgEZCbL
-C2/G7xzOwRn0cvaF+TipvT73i+QPxA==
-=6EZR
------END PGP SIGNATURE-----
-
---G6ktQj/BvBBSNjYO--
+Thanks,
+Charles
