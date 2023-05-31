@@ -2,270 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5827B717B13
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 11:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D26717D6D
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 12:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235341AbjEaJDd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 05:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S234938AbjEaKxE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 06:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjEaJDK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 05:03:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4BE138
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 02:02:41 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-970028cfb6cso1024966466b.1
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 02:02:41 -0700 (PDT)
+        with ESMTP id S232198AbjEaKw6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 06:52:58 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D08188;
+        Wed, 31 May 2023 03:52:54 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso6653783e87.3;
+        Wed, 31 May 2023 03:52:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685523747; x=1688115747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eLGOgCTdN9b0I3RzLK+qTsPeSIXwIOR+lUiYzHLyqkA=;
-        b=hl/FuLnQZIjxtgYC0n4FAzTYUV3krumKQ/xsy+UH7E/f3dgqeMgPN/5AWK3SEAbCIr
-         FI5o6PsmvyimDsqt5v5W0X8JCTWp4IIqZ8x4bJAK1WuGUur4LrMbrSLlB4RyvOnzIWpj
-         UnB3gYbhh4tVYaSM44gFg9i9Vmw/5b+wvnLAVnsq+U/bFznueJbE05QomY6GoS+Thfyi
-         92yxam3PqKLAhtN2FkiFthHuejjWHvOd2bLzYlJhwaQRKPfYLKleciRdi3ZkGUkRYYwx
-         li9VHUt3YJlo2ixD5iK57yOeNvKQ5dkacN1nQ4J0gD5U8MxsmtBUBfgxsazERnuF8oTC
-         IkKw==
+        d=gmail.com; s=20221208; t=1685530373; x=1688122373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mF96JxhPOfJm8OwVPyiERGBu/9SGI9YEMVv93ttrAE=;
+        b=K7S/m1yN1z3wihwPQ0aqTmA8KTPkPzoE4oY+Og9RwgyPhTsaOBXcjY7r2d300+ffca
+         kOLeizWVKQ6nVthj2EPf0aJSFkNGa5KAe4B/un7+eBje/DITcVV0Xd5UdvKMOLqqrGFX
+         1nOc6HcrUAFNIgZ4xd7xMUq4iLmwXgB3yDgc3N54GWlOER/f3wHDaTO3QojJ+oI7hTBl
+         msvwt1w7DAy76NtRu6/dGzXXgPoXKFpCGf1/PJXnx7Hzen6p/OuP/cavKe1B8J8U5Fzc
+         ZK3qKnDWhNH2Jde/ntE9HFFV5CpPfgJ8ohZT/gvfjPORjo6CLoEgR+hffPq2q9Y/lnC9
+         hiRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685523747; x=1688115747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eLGOgCTdN9b0I3RzLK+qTsPeSIXwIOR+lUiYzHLyqkA=;
-        b=hbzR3fc10zIAWoOx8qH410EykrrWEtxwgejffAjCmTG7IEqOJXDHMzpbL2qQVeXW+J
-         yhI4MIViWs2JKHxRZ4BB9gRemncm6b8yNXvMt/Ge6T6OKhdqLtHfIwSKsOqEvzmW28oE
-         vSToZ7diO0/EPz3/sSbREdK417P53Y5VbE5X0Ed+sHhMJVEEtwpRIv/GHHFyVzXr1hOa
-         +uvOBm/nR7o4I/Qt3MdXE6BiyepqUqbO7GZaBBINecyU9baAA94x/2A2+7oMBBhJPou1
-         MIlB9rj33/Yjb6Tm2KSOwB4cAJZNOaylPWeeftzj65j2wjkXBZ4PLZDraVQO1urrk4mU
-         g7SQ==
-X-Gm-Message-State: AC+VfDxM4Oa8mU8LHAH+94meWrht0etyCawhwHHj+4v3qYWnM2AUOXAe
-        Rwyq1XUAH2G4NJgQwdBzMEh+dQ==
-X-Google-Smtp-Source: ACHHUZ6y49DNKKcWtbOKQ31f6lJ93szs/HfhYKInuhEAs8m2uleiHDoOT2aH1n4H9RrcakuD5WjtOg==
-X-Received: by 2002:a17:907:7da5:b0:966:4d75:4a44 with SMTP id oz37-20020a1709077da500b009664d754a44mr4305321ejc.24.1685523747328;
-        Wed, 31 May 2023 02:02:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b13-20020a1709065e4d00b00965e9b435dfsm8560598eju.65.2023.05.31.02.02.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 02:02:26 -0700 (PDT)
-Message-ID: <eef819db-4de3-06fe-8fe6-b0fe87ab5d84@linaro.org>
-Date:   Wed, 31 May 2023 11:02:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/6] dt-bindings: sound: cirrus,cs42l43: Add initial DT
- binding
-Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        lee@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, vkoul@kernel.org
-Cc:     robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1685530373; x=1688122373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0mF96JxhPOfJm8OwVPyiERGBu/9SGI9YEMVv93ttrAE=;
+        b=OQLoEXiDAiGBnKweHT+Ngl/q4Apt7qML3ms8YfeWnhwR4QIPZgfHmao/mSCOXlWA6y
+         7LXhA596P5TBgc/OXFU2zZs+yU2xQ5QXBk+Yjh5VwxgYeQDYHrScsJxRogyq/lNYBAHU
+         I2KZ8g+SFgDS9uy9LsJ2USVgdO9rjGZSXT7ifeUyUm4oTU4yJ8vBk8kZJ4XDLupvJXD8
+         3qDv0TpjOVoeSxoBJewIZSpzJdHi7XCKOMs1X/kxWlRm55f0MByX8KJ8oB/sk2QZQtXx
+         RjOTW8orMBTtrdixrgavMLPzzkJvQpk+h36UW3pJzG1vSW3/xCd2p+ZKE/T+JQduNP06
+         G1xQ==
+X-Gm-Message-State: AC+VfDwaLfc6old6+wXBhGm956uIVJDKMhO3FfiRK5cYgRvmqs9kLmmL
+        B8xLLyoGVG3A8Hu8yFYCqljuxgklbLg=
+X-Google-Smtp-Source: ACHHUZ5j1XndLfbwk06LhgPRrqGIp7j60e08yFoVMYU25rWfrpw/W8XBPCZ+IWMBtNMWRfXQg7PnYg==
+X-Received: by 2002:ac2:5605:0:b0:4f4:ce78:2f17 with SMTP id v5-20020ac25605000000b004f4ce782f17mr2316420lfd.13.1685530372868;
+        Wed, 31 May 2023 03:52:52 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id z27-20020ac25dfb000000b004f13cd61ebbsm672102lfq.175.2023.05.31.03.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 03:52:52 -0700 (PDT)
+Date:   Wed, 31 May 2023 13:52:50 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Osama Muhammad <osmtendev@gmail.com>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
- <20230530122112.1314458-3-ckeepax@opensource.cirrus.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530122112.1314458-3-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1] spi-dw-core.c: Fix error checking for
+ debugfs_create_dir
+Message-ID: <20230531105250.6pd5jpngwbnbnbbc@mobilestation>
+References: <20230520224025.14928-1-osmtendev@gmail.com>
+ <168546845148.691057.9965315836245052581.b4-ty@kernel.org>
+ <20230530211446.foqpcfha6hjruhow@mobilestation>
+ <30bcf77a-3e7c-4f13-94ab-f4efc52193dc@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30bcf77a-3e7c-4f13-94ab-f4efc52193dc@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 30/05/2023 14:21, Charles Keepax wrote:
-> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> for portable applications. It provides a high dynamic range, stereo
-> DAC for headphone output, two integrated Class D amplifiers for
-> loudspeakers, and two ADCs for wired headset microphone input or
-> stereo line input. PDM inputs are provided for digital microphones.
+On Tue, May 30, 2023 at 10:16:00PM +0100, Mark Brown wrote:
+> On Wed, May 31, 2023 at 12:14:46AM +0300, Serge Semin wrote:
 > 
-> Add a YAML DT binding document for this device.
+> > Oh, thanks. I've absolutely missed the respinned version of the patch
+> > (it should have been marked as v2 though). Anyway the change looks
+> > good except it introduces a redundant empty line at the tail of the
+> > dw_spi_debugfs_init() function. Is it possible to rebase the branch
+> > and drop the line it? If it's not I'll send an incremental cleanup
+> > patch then.
 > 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> I'd rather just take the incremental patch here.
 
-Thank you for your patch. There is something to discuss/improve.
+Done. Please find the cleanup patch here:
+https://lore.kernel.org/linux-spi/20230530221725.26319-1-Sergey.Semin@baikalelectronics.ru
 
-
-> +  clocks:
-> +    items:
-> +      - description: Synchronous audio clock provided on mclk_in.
-> +
-> +  clock-names:
-> +    const: mclk
-> +
-> +  cirrus,bias-low:
-> +    type: boolean
-> +    description:
-> +      Select a 1.8V headset micbias rather than 2.8V.
-> +
-> +  cirrus,bias-sense-ua:
-
-"ua" looks like microamp. If so, microamp instead:
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Current at which the headset micbias sense clamp will engage, 0 to
-> +      disable.
-> +    enum: [ 0, 14, 23, 41, 50, 60, 68, 86, 95 ]
-> +    default: 0
-> +
-> +  cirrus,bias-ramp-ms:
-> +    description:
-> +      Time in milliseconds the hardware allows for the headset micbias to
-> +      ramp up.
-> +    enum: [ 10, 40, 90, 170 ]
-> +    default: 170
-> +
-> +  cirrus,detect-us:
-> +    description:
-> +      Time in microseconds the type detection will run for. Long values will
-> +      cause more audible effects, but give more accurate detection.
-> +    enum: [ 20, 100, 1000, 10000, 50000, 75000, 100000, 200000 ]
-> +    default: 10000
-> +
-> +  cirrus,button-automute:
-> +    type: boolean
-> +    description:
-> +      Enable the hardware automuting of decimator 1 when a headset button is
-> +      pressed.
-> +
-> +  cirrus,buttons-ohms:
-> +    description:
-> +      Impedance in Ohms for each headset button, these should be listed in
-> +      ascending order.
-> +    minItems: 1
-> +    maxItems: 6
-> +
-> +  cirrus,tip-debounce-ms:
-> +    description:
-> +      Software debounce on tip sense triggering in milliseconds.
-> +    default: 0
-> +
-> +  cirrus,tip-invert:
-> +    type: boolean
-> +    description:
-> +      Indicates tip detect polarity, inverted implies open-circuit whilst the
-> +      jack is inserted.
-> +
-> +  cirrus,tip-disable-pullup:
-> +    type: boolean
-> +    description:
-> +      Indicates if the internal pullup on the tip detect should be disabled.
-> +
-> +  cirrus,tip-fall-db-ms:
-> +    description:
-> +      Time in milliseconds a falling edge on the tip detect should be hardware
-> +      debounced for. Note the falling edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,tip-rise-db-ms:
-> +    description:
-> +      Time in milliseconds a rising edge on the tip detect should be hardware
-> +      debounced for. Note the rising edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,use-ring-sense:
-> +    type: boolean
-> +    description:
-> +      Indicates if the ring sense should be used.
-> +
-> +  cirrus,ring-invert:
-> +    type: boolean
-> +    description:
-> +      Indicates ring detect polarity, inverted implies open-circuit whilst the
-> +      jack is inserted.
-> +
-> +  cirrus,ring-disable-pullup:
-> +    type: boolean
-> +    description:
-> +      Indicates if the internal pullup on the ring detect should be disabled.
-> +
-> +  cirrus,ring-fall-db-ms:
-> +    description:
-> +      Time in milliseconds a falling edge on the ring detect should be hardware
-> +      debounced for. Note the falling edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,ring-rise-db-ms:
-> +    description:
-> +      Time in milliseconds a rising edge on the ring detect should be hardware
-> +      debounced for. Note the rising edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  pinctrl:
-> +    type: object
-> +
-> +    allOf:
-
-Drop allOf, just "$ref: ......"
-
-> +      - $ref: /schemas/pinctrl/pinctrl.yaml#
-> +
-> +    additionalProperties: false
-
-Also drop blank lines between these three above.
-
-> +
-> +    properties:
-> +      gpio-controller: true
-> +
-> +      '#gpio-cells':
-> +        const: 2
-> +
-> +      gpio-ranges:
-> +        items:
-> +          - description: A phandle to the CODEC pinctrl node
-> +            minimum: 0
-> +          - const: 0
-> +          - const: 0
-> +          - const: 3
-> +
-> +    patternProperties:
-> +      "-state$":
-
-Use consistent quotes, either " or ' everywhere
-
-> +        oneOf:
-> +          - $ref: "#/$defs/cirrus-cs42l43-state"
-> +          - patternProperties:
-> +              "-pins$":
-> +                $ref: "#/$defs/cirrus-cs42l43-state"
-> +            additionalProperties: false
-> +
-> +  spi:
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +    unevaluatedProperties: false
-
-Same comments here.
-
-> +
-> +$defs:
-> +  cirrus-cs42l43-state:
-> +    type: object
-> +
-
-
-
-Best regards,
-Krzysztof
+-Serge(y)
 
