@@ -2,115 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2DD7176BB
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 08:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8224971774C
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 08:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbjEaGTY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 02:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S234432AbjEaG53 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 02:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEaGTY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 02:19:24 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB4A9F;
-        Tue, 30 May 2023 23:19:20 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DEEC224DDBE;
-        Wed, 31 May 2023 14:19:17 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 31 May
- 2023 14:19:17 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 31 May
- 2023 14:19:16 +0800
-Message-ID: <93ba0b97-45aa-e59d-1454-80c4f245acc0@starfivetech.com>
-Date:   Wed, 31 May 2023 14:19:16 +0800
+        with ESMTP id S234219AbjEaG52 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 02:57:28 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C889124
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so5206999a12.2
+        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685516232; x=1688108232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
+        b=fMFgfFRH2oKpRqT2ngwoG7OVNjzftGze+7bCsyKX8BPD9bFqofDMAUVPCoEnQHK7YZ
+         P9GIyQhfD38i4+ZCGDARXcEYm6X5cRIC4tL5T+qbNbkgeShDMzkTLWzr9oYDt0+f+JWl
+         lHzDF1iYCMCPrdpof6K5qUxlFGUwcFYF/GLZO65/NMu6OKwhNzWz1cd/d8wdE+j3pUOz
+         lMePApuIuf6d/zdItcp1XEsmzrxB6T6pgzjGopOR1xlFS+ZkuKGA7bsqaJpY4Q6LL23f
+         uvstk79rsZFVpgFpPX5fCbzRB2qe6jaDE4E+ZywGX9/CsaInpvUDHcLgwfmb322vcwZg
+         ruCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685516232; x=1688108232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
+        b=We3gCEpcspi+g+MrrB+9B9AGfI+PkFm7UaIXWxyM3fJm6ziJ66ZmL1wRIA368VTVGJ
+         6okvI8AFHASb+XfFG48CVGo8xBHrLH+u3kFUS/lfCWgA1e7q1y2FezICIwIeviE3Wi2O
+         zNG7iGrH5jh8wQuFhVfxYEuMx/uXVwkW4ht48SJSMZs4+t/MGlL7WdNcCimEYAVmY8Zt
+         HEsDPgpM961TOVkZiBRZyARvKjn32B2oEJw/xrAvgZHIZ4FzfXCAXu1XwlVH/pmUmPGt
+         zdRT1LxM8dgcgajj5kK/kA13lxBJs49J11NIrolPtkom412wzUCztbT+puJqsljSc8N3
+         dlyw==
+X-Gm-Message-State: AC+VfDxBHi6dbRl5sC2v332Ia3F1zf8o4UNc2+5dQpDpqzRYOETZr8Zj
+        h8CTEpj/43y75MbEXfEs1gARzg==
+X-Google-Smtp-Source: ACHHUZ5x5SACtt0xW0b6cmpAiNLg6lb938Dymx8uZU0YcrSBw25hfhVk5P/RfqzyOE7B6a2bNngPfw==
+X-Received: by 2002:aa7:d591:0:b0:514:c43e:3881 with SMTP id r17-20020aa7d591000000b00514c43e3881mr277960edq.35.1685516232672;
+        Tue, 30 May 2023 23:57:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id h23-20020aa7c617000000b005147503a238sm5308899edq.17.2023.05.30.23.57.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 23:57:12 -0700 (PDT)
+Message-ID: <367c3d26-b406-9ddc-e0ca-717994ed1c4a@linaro.org>
+Date:   Wed, 31 May 2023 08:57:08 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-3-william.qiu@starfivetech.com>
- <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
- <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
- <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
- <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530-banister-luxurious-d33a5d289749@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530-banister-luxurious-d33a5d289749@spud>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 2023/5/30 18:33, Mark Brown wrote:
-> On Tue, May 30, 2023 at 10:05:38AM +0800, William Qiu wrote:
->> On 2023/5/29 14:44, William Qiu wrote:
->> > On 2023/5/26 23:36, Mark Brown wrote:
+On 30/05/2023 19:11, Conor Dooley wrote:
+> On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
+>> only decimal numbers.  In few cases narrow the pattern to also disallow
+>> multiple suffixes, e.g. "pwm-5-5".
 > 
->> >> Nothing ever disables or unprepares this clock as far as I can tell?
->> >> Perhaps also consider using the clk_bulk_ APIs.
-> 
->> > I will add in next version.
-> 
->> 	Now I want to replace the original devm_clk_get API in the
->> driver with devm_clk_bulk_get_all API, which can achieve compatibility,
->> but it seems that it is not good for other ip with only one clock, so I
->> want to ask about that can I replace it? Or define that inside jh7110?
-> 
-> You could always specify a different array of clocks depending on which
-> compatible the driver sees, just like you'd conditionally request clocks
-> individually.
-Hi Mark,
+> I figure there'll be quite a bit of stuff to fix up afterwards?
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-	If specify a different array of clocks depending on which compatible
-the driver sees, since there will also be clock operations in the suspend
-and resume interfaces, this can make the code look complicated.
-	My thoughts are as follows:
-	Modify the following code
+Quick grep shown zero fixes needed.
 
-1658	/* Obtain QSPI clock. */
-1659	cqspi->clk = devm_clk_get(dev, NULL);
-1660	if (IS_ERR(cqspi->clk)) {
-1661		dev_err(dev, "Cannot claim QSPI clock.\n");
-1662		ret = PTR_ERR(cqspi->clk);
-1663		return ret;
-1664	}
+Best regards,
+Krzysztof
 
-	as following:
-
-	/* Obtain QSPI clock. */
-	cqspi->num_clks = devm_clk_bulk_get_all(dev, &cqspi->clks);
-	if (cqspi->num_clks < 0) {
-		dev_err(dev, "Cannot claim QSPI clock: %u\n", cqspi->num_clks);
-		return -EINVAL;
-	}
-
-	This way, the code will look simpler and clearer. How do you think
-about it.
-
-Best Regards,
-William
