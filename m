@@ -2,57 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989FE717DE8
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 13:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE4717DF0
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 13:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjEaLVo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 07:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S230341AbjEaLYi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 07:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEaLVo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 07:21:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611D29F
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 04:21:43 -0700 (PDT)
+        with ESMTP id S229936AbjEaLYi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 07:24:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF93D9
+        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 04:24:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9805639BB
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 11:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5E1C433D2;
-        Wed, 31 May 2023 11:21:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF24162F8F
+        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 11:24:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 481BDC433EF;
+        Wed, 31 May 2023 11:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685532102;
-        bh=jIig24LqBUXOw9BhBCAwXCBLMwCM4ifvBRMmw72UaOs=;
+        s=k20201202; t=1685532276;
+        bh=XBCpoBDVBfkS10vvP300z3rXcXrvJjeLSpM/nAC3P9o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nt0oSV0QDocpdyfvBKaPSHDr0zI+OhWu4OH33Ty5Dp9sz1EF4NkHqnEA6gvhHPe/o
-         c7438JvOuKlLSZwgss1ki3wDl6YUwDNwa+WMmERT5sOwhAMS49XNEDALAQDgOfh29z
-         DcINBzaWAKO0FLTV8eIgoc4rd8ApfGhPIpmpjZ67YeTrO4LK7vZc3Idvw8zWZnW9IB
-         DCIKJ/aB/3kETuxW9XI28bxX6oXeD4c5tKT+ZuSgbHZWbnE8b9vzJ+6A67A7Ha46ov
-         zHkvaRkVaxuDeR1+0U/GQTvJD2q75tg6LoRNqZjdFn3UJLlr9wIATLqqyKarVKBT8i
-         dOvnQ0nVfQZOw==
-Date:   Wed, 31 May 2023 12:21:36 +0100
+        b=pDUEWxB5IFDX1T2wzmMEgcGRuVF0yRdUtWeOHCXnFjcdcbSCH0gLrp3lOifQpWkLI
+         IKGHAXfAmjg1u+m0UZ+dEYhpj5t9G7cGpsQhKI8xdlNqF6PbFj7d8TwNeivuhKIDIZ
+         yUjFIylnhPbsxQYwIr3CHnH41wYHOMvoYd36ytRxyoFgBBL9FWpdjJQx9mgVmIwwhk
+         /xv+nAR+L5ychtqFgcIMRr9cds11wSt20JyTaPyRLwjUnYygkUc2S6eXYfIs1h7kVS
+         JJCG+whujzk/hhV0G+QKP/use8V9CHZCtQ5eV9sDIlnutF8JyCclaKd8SFZteLQh99
+         1sobn2x2MrB8w==
+Date:   Wed, 31 May 2023 12:24:30 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/1] spi: spi-imx: Use dev_err_probe for failed DMA
- channel requests
-Message-ID: <d28247c1-2885-4510-a769-27d354f1cc53@sirena.org.uk>
-References: <20230418083505.466198-1-alexander.stein@ew.tq-group.com>
- <3243730.44csPzL39Z@steina-w>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-spi@vger.kernel.org, fancer.lancer@gmail.com,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
+        Jude Onyenegecha <jude.onyenegecha@codethink.co.uk>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jeegar Lakhani <jeegar.lakhani@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>
+Subject: Re: [PATCH] spi: dw: announce driver probe
+Message-ID: <da679474-5fd1-4fbc-8e22-7fe0a153ee0b@sirena.org.uk>
+References: <20230531110339.321387-1-ben.dooks@codethink.co.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8ZBUfBBgc7OsdhGG"
+        protocol="application/pgp-signature"; boundary="Sia31dGu99zrCUkC"
 Content-Disposition: inline
-In-Reply-To: <3243730.44csPzL39Z@steina-w>
+In-Reply-To: <20230531110339.321387-1-ben.dooks@codethink.co.uk>
 X-Cookie: Will Rogers never met you.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,42 +60,35 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---8ZBUfBBgc7OsdhGG
+--Sia31dGu99zrCUkC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 31, 2023 at 09:26:42AM +0200, Alexander Stein wrote:
-> Hi,
->=20
-> gentle ping.
+On Wed, May 31, 2023 at 12:03:39PM +0100, Ben Dooks wrote:
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+> It is useful to know the driver probed, so print some basic
+> info when it does, such as the spi bus name, irq, etc.
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+No, we don't want every driver spamming the logs at probe - apart from
+anything else this slows down boot.  There's already some standard
+logging from the driver core that can be turned on if needed for debug
+purposes.  If there's things being enumerated from the hardware it can
+be useful to record those but that's chip revisions and so on rather
+than things like interrupt numbers.
 
---8ZBUfBBgc7OsdhGG
+--Sia31dGu99zrCUkC
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR3LcAACgkQJNaLcl1U
-h9B6/gf/YB8/K7Vwm3MAzfAieq2m7YlStGiCz+BIw/a/KU8wqFnjdX4O3Vh1TdGH
-0ZDsfHOtfNW2GBdT0eBujriwiSqHcYFiG88ciDu0r8Q/okiPh0Uwu8TRz0Bg39zp
-lEGuldlVlEeL8zRonCtG29FIjxkVS4nrQ8PGBG5KSKJATebTcSgEoZYXmzDTZhQc
-b8aSpxd6WYjUd+JxK5DnrDIXieyVxTVsm2LKjVClK7n/36IO+TiaMipQtrdchJew
-A3W/YaMN2fwHK0pCynqwyosrs+LoeiK805F3is3a+RFhYdlLjmaO2Avz+IIyj3CR
-pJ0BzGzV+Oq3Twz/qD0KpGwqZbRziw==
-=UVES
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR3Lm4ACgkQJNaLcl1U
+h9Ax6Qf+P2H7Jk+lDc8c7KDm4KE30bQ9IOZsY/9kQYrBK/F35KsKW4tiPqUGx6Cu
+Wc0XwiGMfjLIb5+z79OpxJAU9Vi9X1BYNa100cuLb5IkGglc8ISpFzZa4brtoI3y
+cHZ+xLFnaOau/3ZbRNe3c7Y+6qhTjeNwD4v3dyxDcpmE5qJ6gu+pKTYaPOB9P8L1
+zO6F+cmMiPX1STNGhyaR1OsDDtd1mztG9UYzEXfhAdywrzXFL31bBCvG/BaFrR9z
+fLufSCsEQYd+RsGfIz//H3rLkYo+94TNmj2z7xh3ycKqdi1EdQulN15bJ166DtWe
+rsZCssnt8BAQ3y8DqCiZiOu0wAkvJg==
+=x0yL
 -----END PGP SIGNATURE-----
 
---8ZBUfBBgc7OsdhGG--
+--Sia31dGu99zrCUkC--
