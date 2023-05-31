@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E55718A68
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 21:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DE0718AC4
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 22:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjEaTrB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 15:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S230169AbjEaUGQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 16:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjEaTqw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 15:46:52 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C9D128
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 12:46:49 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fd3a658eeso885357066b.1
-        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 12:46:49 -0700 (PDT)
+        with ESMTP id S229781AbjEaUGQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 16:06:16 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612AD126
+        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 13:06:14 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so220981a12.3
+        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 13:06:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685562408; x=1688154408;
+        d=linaro.org; s=google; t=1685563573; x=1688155573;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1hKxjiaWU4gxzP5Yco0VtqcM7V2UjDrbLP5jSeYjmKA=;
-        b=VxdE5sRK9HQnrjWoJI7FPbhFdQn0cY3wm30cE+MN4eF2PhDH24eLFhpCBtlGT6t9rS
-         LbQ3sYusakJzSt47dmg1s7htuZlvLgUZEQC1pafIr4gudgmbZhZ/jk3h5+xkC4y/2ui1
-         DnSQNsMJAY4ZkEU9mnAT0fRjXrqRi080ERJQAKTrtYA6A5RN3ZAL3MnWJ7oD7BEWcrYs
-         /Igsuu3X+ob7SvjodFoVigrkIwaeT+GwbzngtSi0EIE01EtPCP+pib1dxWVCtLYNBu92
-         M8tyGtdkoN1OHUYau04H3wDYvZLi1Df9nKLzIySsB7vY9zNwFHDTIVW9fQR1e2Gf//AD
-         Q5rQ==
+        bh=88XdFTbrHk+zgo/9nKqPMnV1vAS6bpV3qe5bGBfKbI0=;
+        b=PGoUcW6+SxAtu7vhFcbSBfivY0amCpnP460PJo6/2mY9RuUP2Iz14tObAADJwd2IDc
+         lERlre9LpQDO9fA1jilp3iKM5WSG/S6+7ZjJ1DBsdB2x4VtnCxvezcWUDVAJ9jgsFO9Z
+         H4+w1J2oJvWn1+9ZmTNTjPrUAUkmvi2+M9pQgPZOG4MHtkORe61ehz4EC4mTGbUPb1bH
+         9QWa9gp7aHE3fT67NrkAE0xkPnSbnt9cOKVK5RZh2urel1SE6CbCiVJRxpAmvFoC+BGS
+         se9rk0Ogl1IbAbRUnbg9hwaNfxaApsDh4Xpjbsxpf9Zim0yrrhaUiA1gzQF51F+PDN4f
+         wciA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685562408; x=1688154408;
+        d=1e100.net; s=20221208; t=1685563573; x=1688155573;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1hKxjiaWU4gxzP5Yco0VtqcM7V2UjDrbLP5jSeYjmKA=;
-        b=OpG1sOXctX+3X+giDpAuw9KISqVojj5+/eDmkJmPWz5XF7m1RPlCvjQ+mz9f3qDp7l
-         5wzRsbaIWkJAbhjfvyZ1iPbiFL9+BeG+TVMy/l18hm5bWY41VJ5RLKHn04yrAdU6Xo2l
-         7HkkPmvdras62Pq6vtYM/f+EMMNCS4wsP1K3myhwEBDynLGOfEzcLzL9A6ck7ONEYNqK
-         h69iHe6uPiI7IY6TrueQWCYiGwUdEvHuW2gm6Bu3gTr4RmKt9VrRhzMnIcM7+l1/aokX
-         ObyRw6D3u5IqcomxlNXjSkLqdsQOJaOiGnjSA1IyMWa2NLRf8Wxk4bzFTLOZ/3XYXpWD
-         29Ew==
-X-Gm-Message-State: AC+VfDx7JcWRi9/kEXUmLGCypKtW8CMmuanUlkaVT225klFtzZb17Unb
-        A6R1RD7ktGzMNDan+y6Hab9nWQ==
-X-Google-Smtp-Source: ACHHUZ5nuz3D9s6a4n39/QN6AzlfU12FPYvQSz8eV/LpaQLXQwB9hM5KyxOa9hHlfc1Ujh5E84uUjg==
-X-Received: by 2002:a17:907:86a4:b0:973:e4c2:2bcd with SMTP id qa36-20020a17090786a400b00973e4c22bcdmr6190242ejc.18.1685562408308;
-        Wed, 31 May 2023 12:46:48 -0700 (PDT)
+        bh=88XdFTbrHk+zgo/9nKqPMnV1vAS6bpV3qe5bGBfKbI0=;
+        b=CmE41HpqPmhiIK7Lc1ZErT8F68tH/CqtRE/Zh39DObZzBiSMd8PXxJqQcdZBq2Ou68
+         eOs8AS/w1Lkhmp2NOwR/uzlD4cZZdHw6NXodcsHRpfsWSkEkEXjVnS60t6t/J5X1PFJL
+         Rt/4LQADun5MzS6tF7Q7iJnR6A6rA3atFqWh05dkil8iR8hZOxWNSDTwanovsUTZ86YH
+         xzYel1OEf74NkE2jRVFNR3tCxsmMgtM5XAxFux8IJEWAymxuKdWpicheeH9Q6Qzo/jOV
+         FAGFT46RMahuiLEycPNI7lVdENRsqg+WGJwHTmopvTlViXOvu3k68ush/3NdDc2mciZ6
+         RLcQ==
+X-Gm-Message-State: AC+VfDzfSuyMFUxBzR4xokjxC+kUXccyOeSnI3d8/BlLaOVWiXB3qiH9
+        R+PzRN4yH+Y9Fky5elejQaKDDQ==
+X-Google-Smtp-Source: ACHHUZ6KmoP6bptP/pGz93SaUyQcaMlvHz5fi8XBllRNIeD0ckXbO8Owp+k5OlkT/pW2zThiFn0soQ==
+X-Received: by 2002:a17:907:6d93:b0:959:5407:3e65 with SMTP id sb19-20020a1709076d9300b0095954073e65mr6877104ejc.55.1685563572858;
+        Wed, 31 May 2023 13:06:12 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id f19-20020a170906139300b0095fd0462695sm9399751ejc.5.2023.05.31.12.46.46
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906560d00b009603d34cfecsm9463283ejq.164.2023.05.31.13.06.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 12:46:47 -0700 (PDT)
-Message-ID: <2196dd29-93ee-00f7-65b4-ede73aa8ba77@linaro.org>
-Date:   Wed, 31 May 2023 21:46:45 +0200
+        Wed, 31 May 2023 13:06:12 -0700 (PDT)
+Message-ID: <69d355ff-90e1-09d2-d4ff-0d7dedc8addb@linaro.org>
+Date:   Wed, 31 May 2023 22:06:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -77,7 +77,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -145,38 +145,14 @@ On 25/05/2023 04:22, zhuyinbo wrote:
 > 
 > 
 > Yes, it is make sense as it can reduce the workload of the community.
-> For the Loongson platform, the versions of spi peripherals are almost
-> the same, except for a few  or individual SoCs.  And we have also
-> discussed compatible internally, and we tend to define it this way.
 
-So you have chosen different path than what's clearly recommended by
-community, existing experience and documentation:
+I missed it - that's a great comment. Hm, I don't know... Reviewing
+Loongson patches is quite a work, so I don't see here reduced workload.
 
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+Please read existing guidelines:
+https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst
 
-Family names are not accepted as specific compatibles. Whenever they
-were accepted, it lead to problems. All the time.
-
-https://lore.kernel.org/all/20220822181701.GA89665-robh@kernel.org/
-https://lore.kernel.org/all/78651e07-6b3e-4243-8e1f-fcd1dfb3ffe1@www.fastmail.com/
-https://lore.kernel.org/all/288f56ba9cfad46354203b7698babe91@walle.cc/
-https://lore.kernel.org/all/106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org/
-and many many more discussions.
-
-You should choose carefully, because we will keep NAK-ing adding
-properties to circumvent missing compatibles.
-> 
->> Or am I misunderstanding and all ls2k SoCs do work with this driver and
->> you were talking about other, future products?
-> 
-> Actually, in 2k500 has one special type spi was only one cs and their's
-> register definition was different from common type spi thus this driver
-> doesn't support but this driver can support another common type spi in
-> 2k500.  for this special type spi I will add support as needed in the
-> future.
-
-Bindings are for hardware, not driver. What does your driver support or
-does not, matters less.
+All of them.
 
 Best regards,
 Krzysztof
