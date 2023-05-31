@@ -2,111 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8224971774C
-	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 08:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B50717822
+	for <lists+linux-spi@lfdr.de>; Wed, 31 May 2023 09:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbjEaG53 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 May 2023 02:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S233407AbjEaH1C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 May 2023 03:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234219AbjEaG52 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 02:57:28 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C889124
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so5206999a12.2
-        for <linux-spi@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
+        with ESMTP id S234286AbjEaH1B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 May 2023 03:27:01 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7E6134
+        for <linux-spi@vger.kernel.org>; Wed, 31 May 2023 00:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685516232; x=1688108232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
-        b=fMFgfFRH2oKpRqT2ngwoG7OVNjzftGze+7bCsyKX8BPD9bFqofDMAUVPCoEnQHK7YZ
-         P9GIyQhfD38i4+ZCGDARXcEYm6X5cRIC4tL5T+qbNbkgeShDMzkTLWzr9oYDt0+f+JWl
-         lHzDF1iYCMCPrdpof6K5qUxlFGUwcFYF/GLZO65/NMu6OKwhNzWz1cd/d8wdE+j3pUOz
-         lMePApuIuf6d/zdItcp1XEsmzrxB6T6pgzjGopOR1xlFS+ZkuKGA7bsqaJpY4Q6LL23f
-         uvstk79rsZFVpgFpPX5fCbzRB2qe6jaDE4E+ZywGX9/CsaInpvUDHcLgwfmb322vcwZg
-         ruCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685516232; x=1688108232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
-        b=We3gCEpcspi+g+MrrB+9B9AGfI+PkFm7UaIXWxyM3fJm6ziJ66ZmL1wRIA368VTVGJ
-         6okvI8AFHASb+XfFG48CVGo8xBHrLH+u3kFUS/lfCWgA1e7q1y2FezICIwIeviE3Wi2O
-         zNG7iGrH5jh8wQuFhVfxYEuMx/uXVwkW4ht48SJSMZs4+t/MGlL7WdNcCimEYAVmY8Zt
-         HEsDPgpM961TOVkZiBRZyARvKjn32B2oEJw/xrAvgZHIZ4FzfXCAXu1XwlVH/pmUmPGt
-         zdRT1LxM8dgcgajj5kK/kA13lxBJs49J11NIrolPtkom412wzUCztbT+puJqsljSc8N3
-         dlyw==
-X-Gm-Message-State: AC+VfDxBHi6dbRl5sC2v332Ia3F1zf8o4UNc2+5dQpDpqzRYOETZr8Zj
-        h8CTEpj/43y75MbEXfEs1gARzg==
-X-Google-Smtp-Source: ACHHUZ5x5SACtt0xW0b6cmpAiNLg6lb938Dymx8uZU0YcrSBw25hfhVk5P/RfqzyOE7B6a2bNngPfw==
-X-Received: by 2002:aa7:d591:0:b0:514:c43e:3881 with SMTP id r17-20020aa7d591000000b00514c43e3881mr277960edq.35.1685516232672;
-        Tue, 30 May 2023 23:57:12 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id h23-20020aa7c617000000b005147503a238sm5308899edq.17.2023.05.30.23.57.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 23:57:12 -0700 (PDT)
-Message-ID: <367c3d26-b406-9ddc-e0ca-717994ed1c4a@linaro.org>
-Date:   Wed, 31 May 2023 08:57:08 +0200
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1685518005; x=1717054005;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HboPTvd4KDBJvfV3IAdP9GNDPpQKqLISZoGpPjntWFQ=;
+  b=clO5mWbdvt0pWOGnpFQaaZp7OdGZ64JfmIMCxf/4f9PBFrmbYeM6JzUu
+   AvsOircR3tOYz5PNkW6iQ2m7vc1/X6Xs+0QSwunx/isGihUnGsyQhcxZ1
+   SG3krDDhZB+5xvLNOhuliMg1LQv3YtQYSKB+xGzIIRxc/PDBVUJq3m2vM
+   xyRvCE2GTppv3cJdgYVUXzHLZycmMQb85Y60yDnP6MUMeIsTYXW+Pe5s/
+   QZqf1GcMdNsXUFu0Tw13yf6Wk3pKxOmK4co8x7Za28mN/6OvWYSlxGkwg
+   2d6Nf5jnt8RIPR1BLy66EIeiaamW+vRhQqOLmrmZD8I3MYzF88EXDqhsA
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
+   d="scan'208";a="31184590"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 31 May 2023 09:26:43 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 31 May 2023 09:26:43 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 31 May 2023 09:26:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1685518003; x=1717054003;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HboPTvd4KDBJvfV3IAdP9GNDPpQKqLISZoGpPjntWFQ=;
+  b=fuiZu1gNHsw57Rd/7pLWKGuY3TtX43AMVWLufImSw76wHfoZaWcuOAId
+   aBIyxX97jBz69v2tRy0oNWV+93C6YYA39Qjmyj+p1FpO4pSQukHW9cVbR
+   2c+1+UOXHIvkjZp90WWIqazvt5v7DxhscA2S7Rbtc8BxcoxNAbiczfQ56
+   nsvkNM2sb8OpKNueUCV805nhs5msZbikYCNVxaxxM/0ECz81MO1ZbsbkS
+   99F1dMiT0kZaVP1srfY+yFdiX7eNg4ztmM1ymoGSa9aVxtgOV4SY3y+dh
+   kF3PYcWuVG3bWX313FLXvWz5zJWcMBoBulXLTppM+I76Ki8OC7My3jtiK
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
+   d="scan'208";a="31184589"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 31 May 2023 09:26:43 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3C557280099;
+        Wed, 31 May 2023 09:26:43 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/1] spi: spi-imx: Use dev_err_probe for failed DMA channel requests
+Date:   Wed, 31 May 2023 09:26:42 +0200
+Message-ID: <3243730.44csPzL39Z@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230418083505.466198-1-alexander.stein@ew.tq-group.com>
+References: <20230418083505.466198-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530-banister-luxurious-d33a5d289749@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530-banister-luxurious-d33a5d289749@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 30/05/2023 19:11, Conor Dooley wrote:
-> On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
->> Hi,
->>
->> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
->> only decimal numbers.  In few cases narrow the pattern to also disallow
->> multiple suffixes, e.g. "pwm-5-5".
-> 
-> I figure there'll be quite a bit of stuff to fix up afterwards?
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Hi,
 
-Quick grep shown zero fixes needed.
+gentle ping.
 
-Best regards,
-Krzysztof
+Alexander
+
+Am Dienstag, 18. April 2023, 10:35:05 CEST schrieb Alexander Stein:
+> If dma_request_chan() fails, no error is shown nor any information is
+> shown in /sys/kernel/debug/devices_deferred if -EPROBE_DEFER is returned.
+> Use dev_err_probe to fix both problems.
+>=20
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> With this patch applied /sys/kernel/debug/devices_deferred actually
+> shows these lines on my platform:
+> 30820000.spi    spi_imx: can't get the TX DMA channel!
+> 30830000.spi    spi_imx: can't get the TX DMA channel!
+>=20
+>  drivers/spi/spi-imx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 34e5f81ec431e..b23325a3bb667 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -1318,7 +1318,7 @@ static int spi_imx_sdma_init(struct device *dev,
+> struct spi_imx_data *spi_imx, controller->dma_tx =3D dma_request_chan(dev,
+> "tx");
+>  	if (IS_ERR(controller->dma_tx)) {
+>  		ret =3D PTR_ERR(controller->dma_tx);
+> -		dev_dbg(dev, "can't get the TX DMA channel, error %d!\n",=20
+ret);
+> +		dev_err_probe(dev, ret, "can't get the TX DMA channel!
+\n");
+>  		controller->dma_tx =3D NULL;
+>  		goto err;
+>  	}
+> @@ -1327,7 +1327,7 @@ static int spi_imx_sdma_init(struct device *dev,
+> struct spi_imx_data *spi_imx, controller->dma_rx =3D dma_request_chan(dev,
+> "rx");
+>  	if (IS_ERR(controller->dma_rx)) {
+>  		ret =3D PTR_ERR(controller->dma_rx);
+> -		dev_dbg(dev, "can't get the RX DMA channel, error %d\n",=20
+ret);
+> +		dev_err_probe(dev, ret, "can't get the RX DMA channel!
+\n");
+>  		controller->dma_rx =3D NULL;
+>  		goto err;
+>  	}
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
 
