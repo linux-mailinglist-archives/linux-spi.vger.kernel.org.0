@@ -2,59 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCCE719ACD
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5D1719AE5
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjFALRf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 07:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S232584AbjFALWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 07:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjFALRe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:17:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE80124;
-        Thu,  1 Jun 2023 04:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B3A861D55;
-        Thu,  1 Jun 2023 11:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655FEC433EF;
-        Thu,  1 Jun 2023 11:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685618252;
-        bh=PQTKK4TNTGd6SkNciPTZxhjIN8KD4aPCXVFtu9urh0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IwLd9186Cl7yV6e6P5jeJ8w1Q/Vkm3zq07lBa4pxAuTmYF5jaBtrRroFxK3RG7EL7
-         nwksoTS7+n8AearzxyD/PGe5L1jK2Y51cuXKdUkoseI4vr/GdwYCFfPjSFVkx3EusD
-         LCx5CHkNsqYjPvWKrcoZQtDrpllobQnksjUWeYAPGneibLAiYaY211BxD56rmj/pWL
-         B7owhhYcDy5CPuSuWDFvMv+t+g8Dfv9YBl+gmyES0riKtFzInI/ZpuWu+nvCOaJc+Y
-         yM1FXBhNT4BuBK9sRQhJ/bUraW0JWEcunXiEB1EPFukV5sAwUOne5WanRariFYDXUU
-         UaHSy9W9hmFmw==
-Date:   Thu, 1 Jun 2023 12:17:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
-Message-ID: <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601053546.9574-18-nikita.shubin@maquefel.me>
+        with ESMTP id S232608AbjFALWw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:22:52 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16B1132
+        for <linux-spi@vger.kernel.org>; Thu,  1 Jun 2023 04:22:50 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f6b20ad49dso5616811cf.2
+        for <linux-spi@vger.kernel.org>; Thu, 01 Jun 2023 04:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685618570; x=1688210570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
+        b=eZ9To0SI50DTVI2dAf2RP1StKYs+cyEqUpAF2574fnqGhgB2TAaZ0gBa8bYXdn/j0x
+         FuBa8X6m1Y1EYf3bzxSBu2csTyMGZkE9/fuq0cSSE1h5sqzqaZhxg4bU1VFvtPSzv9lW
+         5QLOOoGgY2C/+BRg+CxZVUgRFDUMQ2vepXR8quVdyenHux1FM0wWOKni7MlZMsghXV69
+         FUODS4sK/uZiVM1aOfjh7UXurbvyBjLO3yR32V+j2o7vSqQ5w39O3/jGmJebHAl220wl
+         l2YbU4dB3dhyKQsqpA//vOIfL9sewdZswWZOJLPoyEsCk6buDMIeXHjvUR1hnxPzY0TO
+         4ZUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685618570; x=1688210570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
+        b=UwcIOmATif4n2iju7sU9RqSedoqU6jSyzRHkTzOF10SL483EH2WscTfBuL+srN7yac
+         i7zIagYsCgWcwchz9IzY/WGvAZes4iYJLdozy7/W1JLBlQwaLcbMlBdomfjMwCXb4s6j
+         F5hNRF38Wdacl3kjssn/a0DV9mL6CNgol+gYAeA7vqzs7nVRgafms9tKnA3H54HM4Ugc
+         aXC6vfo9FkhMA0YgMyHZWTuuf+TvCdpnlEkNLheqLHOvFg92RXhbV93s3HuM3/74erqq
+         WH500GywaVRx8Ud/9yCpVkGU/KzrLiSKDiKJN2sivwV7fmPDj1475iLmadSzueNbcPbt
+         I/Dw==
+X-Gm-Message-State: AC+VfDy/W3XzeZJzFekwkH8RwhJuiKauAPQAFNY3Ani9w0IiN8QqyelR
+        OW5u+8YBtETZIdiKyaBQbgCfyfaBtCY+KYMFZncgCg==
+X-Google-Smtp-Source: ACHHUZ672XhBtqgSSO+77bYpfA5o+5/XdJD5UDVXzB2ag05nisa3IUi07jZC+Cq76E6sC0H/aS/YY93daCCv9WmxO/Y=
+X-Received: by 2002:a05:622a:182a:b0:3f6:b055:81ff with SMTP id
+ t42-20020a05622a182a00b003f6b05581ffmr9265467qtc.50.1685618569842; Thu, 01
+ Jun 2023 04:22:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AKogeu+AvJwZdIqg"
-Content-Disposition: inline
-In-Reply-To: <20230601053546.9574-18-nikita.shubin@maquefel.me>
-X-Cookie: Positively no smoking.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com> <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 1 Jun 2023 13:22:49 +0200
+Message-ID: <CACRpkdb-jk50gO_Y-7NKQfLjPOH6ZwL37YsQJoJNfoqS+N8NVw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] pinctrl: cs42l43: Add support for the cs42l43
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lee@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +74,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, May 30, 2023 at 2:21=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
 
---AKogeu+AvJwZdIqg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> for portable applications. It provides a high dynamic range, stereo
+> DAC for headphone output, two integrated Class D amplifiers for
+> loudspeakers, and two ADCs for wired headset microphone input or
+> stereo line input. PDM inputs are provided for digital microphones.
+>
+> Add a basic pinctrl driver which supports driver strength for the
+> various pins, gpios, and pinmux for the 2 multi-function pins.
+>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
+This version looks acceptable to me!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> +  cirrus,ep9301-use-dma:
-> +    description: Flag indicating that the SPI should use dma
-> +    type: boolean
+I guess it will be merged with the rest.
 
-My previous feedback on this property still applies.
-
-Please don't ignore review comments, people are generally making them
-for a reason and are likely to have the same concerns if issues remain
-unaddressed.  Having to repeat the same comments can get repetitive and
-make people question the value of time spent reviewing.  If you disagree
-with the review comments that's fine but you need to reply and discuss
-your concerns so that the reviewer can understand your decisions.
-
---AKogeu+AvJwZdIqg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4fkYACgkQJNaLcl1U
-h9D2FQf+II4RWUC3YTpWqIDLH2ty9ClJoudhNuUP8oYmUpY2FZogg4DQ+r3a/Hxs
-xEA1aTgyE2Os3RTZf+OXfZgTjHInNvb5Z5/txOUdFDuYW/Xt5NMGRCfpflrS9Y1k
-NLpK/XESM3GR9+DnVJi8K44fkO9YvbuxPesZFIYAk7qFagamzOxmiqE4lvzkgPy6
-Kb7ut2Hun9ZS0odsW3MOobBFeKCPxSifpinx+UdP+hw+5D6VfsF0hEfW4kp/w/6i
-LSkMy17aTHGMgX/oXUHMX70Nx59pE1g5jz7oBT/p7WyQFvj/XGh89eM/4xuP0RM+
-Aq9Zn0YzKwEKLdBKzObjSyuC1ptLyQ==
-=bKAo
------END PGP SIGNATURE-----
-
---AKogeu+AvJwZdIqg--
+Yours,
+Linus Walleij
