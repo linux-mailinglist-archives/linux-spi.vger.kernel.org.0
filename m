@@ -2,81 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F33719BD5
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 14:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A90719C42
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 14:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjFAMTK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 08:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S232848AbjFAMg5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 08:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjFAMTJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 08:19:09 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FF9D
-        for <linux-spi@vger.kernel.org>; Thu,  1 Jun 2023 05:19:06 -0700 (PDT)
+        with ESMTP id S229589AbjFAMg4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 08:36:56 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA6F119;
+        Thu,  1 Jun 2023 05:36:55 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96f53c06babso99794066b.3;
+        Thu, 01 Jun 2023 05:36:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685621947; x=1717157947;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HN7O0TX3aeV5gYNThlIecfXBiSOKxAGzD7LMGtLTjwg=;
-  b=iB5z0oPH0nHqFSYDsX+hR1SAFYKQR/J00VEcO3PGIoLEA141IqhzIKVk
-   7z+JfGZZLIs0VogS9yTKsct2jQDucWV1ShJsQvPzgyty55y/fHVU/nFxS
-   mfcuS5XbHpPkbcRAJojsi3NWliifKhiE4yASqrztDrpyUGzrc8FE+019Q
-   Tudppwmn2vQm7IyGcywvJokeQqBX3PCxoUFk6pxoJgzUKBGQKdqsiQ9VM
-   hWRak/Lux7kYkliwFoiEUB7vJNbB3ZXKWeRN1oDtDo/jCrBEwqW1M2cI/
-   OR53cPwtWMWvZLHjfvDcBapL/qRSMv5KmZgeQnh20yLtQh7CXWdJWII/y
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,210,1681164000"; 
-   d="scan'208";a="31221690"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 01 Jun 2023 14:19:04 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 01 Jun 2023 14:19:04 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 01 Jun 2023 14:19:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685621944; x=1717157944;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HN7O0TX3aeV5gYNThlIecfXBiSOKxAGzD7LMGtLTjwg=;
-  b=B+0iCal/BBQOBrYGRqM1ey4Myyzqi+HB/lrqR0ue9J88U3Qok8mcPezO
-   vyF9Nj9/A8TdQwuy2wsMMDIrjngP+aTaMzHgCWA3nT16Rgh9gpIfEq2eA
-   +1Xs5lpl695yt4lwRYPE9H81ErZmwLFz7br1aEnLOS3IhHpod8JkcJ+8T
-   XQn4ka1lrmeRpo1WRLTMf8NzjquTKglyXA6Kky/IUBHxuj/jaWwUkJNro
-   MSZA+qzPN+fPazg+1BR3AFXJ6DCMFy81iUr1aHyH1cDRVSKEjAaMuHind
-   Rlvnpqpcl9YRjRFv+O/fkXYzNUipxvaizith2pNcq0a7YHMxgOlslascP
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,210,1681164000"; 
-   d="scan'208";a="31221689"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 01 Jun 2023 14:19:04 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C29DB280087;
-        Thu,  1 Jun 2023 14:19:03 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/1] spi: spi-imx: Use dev_err_probe for failed DMA channel requests
-Date:   Thu, 01 Jun 2023 14:19:03 +0200
-Message-ID: <8271423.NyiUUSuA9g@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAOMZO5CcD5iDkaempdxnQHx1fAgnXAmMq_0MdEq5wNgOLHcMuw@mail.gmail.com>
-References: <20230418083505.466198-1-alexander.stein@ew.tq-group.com> <CAOMZO5CcD5iDkaempdxnQHx1fAgnXAmMq_0MdEq5wNgOLHcMuw@mail.gmail.com>
+        d=gmail.com; s=20221208; t=1685623014; x=1688215014;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehHBfTfHpFq9gN1tp3vpZxZbCv0h8WUkNnRmVixaHus=;
+        b=IYocw7LtLTtELs1lzYQjnzI+3n69AYNQEshwVrvy9Prnghlr8U/plLV/F9I8cU//9g
+         Y3dhjiVb6PBaZjbXqngC3Iq07GkjEovEjrbqXve8vXuVnvRpzi3nfU3eqorEJeLYuI5/
+         S8nu1SzkkK7bD0PfKSgLnu2Rj7cS78wliniOUPnKU2bSsTvIxRgEaxLz24RMLkAypLPk
+         cCaJ64KPOLBtiW8BRSClQfZp3uoocrnUe/2PP3YDbWtdGHnfPc0ZzO5QbLqC4zeG3NDC
+         WkYTJXj1hSykRJF+vWZAvI064AtIcXHMkaOCEeB9ft3RcGitzHxbPZAlHyMhy+czzszR
+         55Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685623014; x=1688215014;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehHBfTfHpFq9gN1tp3vpZxZbCv0h8WUkNnRmVixaHus=;
+        b=JTS3TS+86XlJOICKADT0OVs/Ca5p7HOuwG8dJHGYZiVXHPOlsfOM24agEcVSSIv30I
+         TDRWXCSJ8s5CTG2VPdvasjqcrHhQu4yj3oVeB/KELmEEgKvvizQg22pREGkqpbISh0j1
+         /rTK58Ut03QnSzIXwuu7oYoBBluCzxNsXjD5kOJWBBzdq7D+xjhXOVl4lJR4yl/Pnlra
+         JnKq21IRPHAu7ggXHYZCyTbDsmwPbB6ejbhmpyAOYzoHipJ/gcRz1hrpRVdmWHLSOxpV
+         xlm6JrGpnH1R0RlKWMaXNA055lxtBkvx/gk8sbAViT4BH4WWaPlqqdEVHT1uUz3qONch
+         7HMg==
+X-Gm-Message-State: AC+VfDzKA9xV66ygHHgR1cemQvG1dKkIgr2TbV5mDSgW9OsFJDsSv7Le
+        TIkZB3fZjCLYBepCRDV8fYM=
+X-Google-Smtp-Source: ACHHUZ73F5LLoOz2NNjkClTA4o4LIKaH39YUgnRg7PnrldgoFgqlQNVX1P6hwTrbD41XmMFEXq0S9w==
+X-Received: by 2002:a17:907:25c2:b0:973:8cb7:4d81 with SMTP id ae2-20020a17090725c200b009738cb74d81mr9144506ejc.49.1685623013899;
+        Thu, 01 Jun 2023 05:36:53 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm10664574ejb.148.2023.06.01.05.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 05:36:53 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 14:36:51 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <ZHiQ44gAL3YEZPUh@orome>
+References: <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+ <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+ <ZEaWQD_QTs2usVl8@orome>
+ <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+ <ZEag1lAonYcmNFXk@orome>
+ <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <ZHhW_wFvRWInR_iM@orome>
+ <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BiFkO/AwryVjPFkW"
+Content-Disposition: inline
+In-Reply-To: <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,53 +95,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Fabio,
 
-Am Mittwoch, 31. Mai 2023, 15:14:37 CEST schrieb Fabio Estevam:
-> Hi Alexander,
+--BiFkO/AwryVjPFkW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
+> On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
 >=20
-> On Tue, Apr 18, 2023 at 5:35=E2=80=AFAM Alexander Stein
+> > any ideas on how we can best get this merged? I guess at this point it
+> > could go through either tree since the SPI dependency has been in Linus'
+> > tree since v6.4-rc1.
 >=20
-> <alexander.stein@ew.tq-group.com> wrote:
-> > If dma_request_chan() fails, no error is shown nor any information is
-> > shown in /sys/kernel/debug/devices_deferred if -EPROBE_DEFER is returne=
-d.
-> > Use dev_err_probe to fix both problems.
->=20
-> Running spi-imx without SDMA is valid and not an error, right?
+> I would expect it to go via whatever path TPM patches usually take given
+> that it's a TPM patch.
 
-That might be true, but this is not what this patch is about.
+There might have been a misunderstanding. My recollection was that you
+had said a few weeks ago that you would pick this up. Going through the
+thread again I realize that may not have been what you meant. Perhaps
+Jarkko misinterpreted this in the same way.
 
-> I am not sure I understood the real motivation for this patch.
+Jarkko, can you pick this up for v6.5?
 
-If the call to dma_request_chan() for either DMA channel 'rx' and 'tx' retu=
-rns=20
-=2DEPROBE_DEFER, spi-imx will return that error code as well. So far so goo=
-d.
-You can check /sys/kernel/debug/devices_deferred to see which devices got=20
-deferred and not probed yet.
-Without this patch spi-imx will be listed without any additional informatio=
-n=20
-about cause of the deferral. Finding the cause with no additional informati=
-on=20
-is cumbersome, it's hidden in dev_dbg().
+Thierry
 
-Using this patch additional information is provided, e.g. "can't get the TX=
-=20
-DMA channel!". So you know right away spi-imx is not probing because the DM=
-A=20
-channel is not available.
+--BiFkO/AwryVjPFkW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I hope this shows the motivation for this change.
-Best regards,
-Alexander
+-----BEGIN PGP SIGNATURE-----
 
-=2D-=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-http://www.tq-group.com/
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmR4kOMACgkQ3SOs138+
+s6GCWA//dGR7DSaUdohkzVJ5x9tBnEEhCZH9ZliQHAL6CV9h8/rs7jHZTlpmlgaa
+HUz4RPp/EMwziWPzhD6BHw8VTRqyhQhOiIRFqU9CA3x0VhClnIaH3gt6zqHSSCiC
+ie4Sn8IMKWq7ZERuwizxBiYS80x8VjWJq+DGcFP2V+DbraPL1GdsfEWbbRuwOtj2
+bqw0Uvo7wd1NCtcV/oYfv2vV7ebdsPnQ7cHmyAslmcYRzcZce0C/mYYRzr/BahkX
+nNwovE0ADj9jIma4qMgDfeVFq0IODhCSqOI+dThv7hfnL2vuV1zrbeWJ5N6jVq1j
+mV84Yq0TQDPeGgb7xXjYi22m2KF7FZAWdI/d3Ep+WOTR4r76aVYFSOO0mBaNn1f7
+BE3ZDBsRj06GHJifR8eW+Vrev0MIj5+1wvalhUiVQ8VmZt6hPirLjH8hzcUposOw
+c5as4w6IaoOeUQVl/iz0ScQg0BySTd2whg2Rk1tyYZEz+hY2ndmxF6yhz/lFK8ob
+8PtXQ+Sz/NFdPBRl/bpBzVMItOG8nT1DHsntVQZLxqt3W2B/oglUc7Fa+hZB0kN+
+LlzKZmFgYHX2jUeCYDEnmHnlyio3XqsHmkLqeeI4IJKBFTCazNXbiTJWWWSFXEkc
+qIJFEMOrUjFARVKsFbgNMD7wQ4zAYEOftP3GLpYi09SWbCCoVVI=
+=E3jj
+-----END PGP SIGNATURE-----
 
-
+--BiFkO/AwryVjPFkW--
