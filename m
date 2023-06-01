@@ -2,92 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA932719598
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 10:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06A17197B3
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 11:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjFAIaB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 04:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        id S233051AbjFAJwK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 05:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbjFAI36 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 04:29:58 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB00FB;
-        Thu,  1 Jun 2023 01:29:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f5d651170so400788266b.1;
-        Thu, 01 Jun 2023 01:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685608194; x=1688200194;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wbSQgpWmVvvf6Ger/U3E7Qya16hIjDrcHHADXFTwc44=;
-        b=il2m1cdOF4m77zGJqK9Lg9lP2TL0UqL2Zz9oqwykiomjpibxeyFFLwgmc6YZ1+thzK
-         NxaPxlijHYeGOtWV/2kOVhQqFtDCBX2Taon34XZPPxujGReVNKgravy+0IW62khIZ95c
-         VYjCBWPiKv68SvPSGGiT02fWzUeRbLswFfhBVaxKdaXfuDTmmVGMqJLJc34D3tvHbWJo
-         cvxTuO0Fal94nPLFCoRXaafA5+U6Zulu1lNguafnzAbfM5iEJvSeROCICwkBILGIx/fP
-         iM3ICYdQM5Jso3KxW1Tht8t7uJJJUvgaUJn5DkiBS09t9xoHBHnrtBui2PYt9R9hiy0V
-         oNbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685608194; x=1688200194;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wbSQgpWmVvvf6Ger/U3E7Qya16hIjDrcHHADXFTwc44=;
-        b=IM7f7t+fBDSWEqu2vFgj8TBJKrbYJXNDhPRN2kBzaTcI2pxtHx7afe0cyckwsAWgW8
-         Iy/koLZn8CrNgHSP19xRHip5/I0lzxMghEzq/ihI2H7NwzpAd3EoxIe4KHsM/u/WfWF+
-         YP3/ZmhUdbjwJlWqHUhjPHPbjdhCLXl+gVnV6L/xfr+Wke7MDcz2Ay3d0QkzZEOY9iWQ
-         RMEYmHtN5PxvWUGsKBd3bXXEbeRXlcyr/y+Fy8T0DbwextronL9nyGEk/u/puAnV/y2o
-         EaXW0r6BLbloBFRpu+O/ULoxRnLoThhKer1sWypVEHydDm9bTfX4OSu1kdHGP7vaIsdg
-         81oQ==
-X-Gm-Message-State: AC+VfDz2Pyoz2D42gxbaRVwG76uge8TVO0n/dNMzV1uL1IgCgvNzBkdi
-        WitBwn3oxQiw3WmGE1lBouybvLGx5tw=
-X-Google-Smtp-Source: ACHHUZ5btNdjWB8txv4wG4Dyh7VfDTUmHRsBSJTL75wiv9C2TdrgUmdAxHEPJXnQLbD7n9Yjn0KtOA==
-X-Received: by 2002:a17:907:9484:b0:973:e5bf:281e with SMTP id dm4-20020a170907948400b00973e5bf281emr1054612ejc.27.1685608194075;
-        Thu, 01 Jun 2023 01:29:54 -0700 (PDT)
-Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id gg26-20020a170906e29a00b00973a9d66f56sm10026127ejb.206.2023.06.01.01.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 01:29:53 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 10:29:51 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <ZHhW_wFvRWInR_iM@orome>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
- <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
- <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
- <ZEag1lAonYcmNFXk@orome>
- <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
- <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
+        with ESMTP id S232495AbjFAJwH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 05:52:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BB11D7;
+        Thu,  1 Jun 2023 02:52:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Bxy_JCanhkrz4DAA--.7169S3;
+        Thu, 01 Jun 2023 17:52:02 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axgjg3anhk7wWEAA--.16821S3;
+        Thu, 01 Jun 2023 17:51:57 +0800 (CST)
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
+ <20230524-pouncing-variable-c520e85f8db8@wendy>
+ <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
+ <20230524-relative-trimmer-046fb26a7764@wendy>
+ <99b362c2-640c-9150-26ee-e9add4483886@loongson.cn>
+ <2196dd29-93ee-00f7-65b4-ede73aa8ba77@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <1b141df2-3e31-089e-1e05-0e268b60d074@loongson.cn>
+Date:   Thu, 1 Jun 2023 17:51:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tJDrl2ClcUSMc8xJ"
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2196dd29-93ee-00f7-65b4-ede73aa8ba77@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axgjg3anhk7wWEAA--.16821S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3WF1UAr4kCF1DZw1UKw1UAwb_yoW7XF43pa
+        17CF17GF4YyF12yrZ2qa48CFWav3s3JFyDXFsrGw1UCF90qF1Yqr4xKFs8u3Z7CF1xGFW7
+        XFW0gr17KF4UAFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8sL05UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,98 +75,124 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---tJDrl2ClcUSMc8xJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 24, 2023 at 12:43:12PM +0000, Krishna Yarlagadda wrote:
-> > -----Original Message-----
-> > From: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > Sent: Wednesday, May 10, 2023 8:41 PM
-> > To: Thierry Reding <thierry.reding@gmail.com>; Mark Brown
-> > <broonie@kernel.org>
-> > Cc: Jarkko Sakkinen <jarkko@kernel.org>; jsnitsel@redhat.com;
-> > robh+dt@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
-> > krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
-> > tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Jonathan Hunter <jonathanh@nvidia.com>;
-> > Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
-> > <ldewangan@nvidia.com>
-> > Subject: RE: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-> >=20
-> >=20
-> > > -----Original Message-----
-> > > From: Thierry Reding <thierry.reding@gmail.com>
-> > > Sent: 24 April 2023 21:02
-> > > To: Mark Brown <broonie@kernel.org>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>; Krishna Yarlagadda
-> > > <kyarlagadda@nvidia.com>; jsnitsel@redhat.com; robh+dt@kernel.org;
-> > > peterhuewe@gmx.de; jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org;
-> > > linux-spi@vger.kernel.org; linux-tegra@vger.kernel.org; linux-
-> > > integrity@vger.kernel.org; linux-kernel@vger.kernel.org; Jonathan Hun=
-ter
-> > > <jonathanh@nvidia.com>; Sowjanya Komatineni
-> > > <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> > > Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-> > >
-> > > On Mon, Apr 24, 2023 at 04:18:45PM +0100, Mark Brown wrote:
-> > > > On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
-> > > >
-> > > > > Would it make sense for you to pick up patch 2/3 as well? As far =
-as I
-> > > > > can tell there's a build dependency on patch 1/3 because of the n=
-ewly
-> > > > > added SPI_TPM_HW_FLOW symbol.
-> > > >
-> > > > I'll include it in my pull request for spi this time round so it sh=
-ould
-> > > > end up in -rc1, my thinking was that I was happy with the SPI bits =
-and
-> > > > if it was in -rc1 then the TPM bits could be handled without cross =
-tree
-> > > > issues when the review was sorted (which it is now but wasn't at the
-> > > > time).  If the SPI side doesn't make -rc1 for some reason I can pic=
-k up
-> > > > the TPM bit as well, and/or do a signed tag.
-> > >
-> > > Sounds good.
-> > >
-> > > Thanks,
-> > > Thierry
-> >=20
-> > Mark,
-> > Now that SPI changes are in, can we pull this TPM change for rc2.
-> > Will this be picked into SPI or TPM list?
-> Jarkko, Mark,
-> Can we pick this change in TPM list since SPI header changes are in.
+在 2023/6/1 上午3:46, Krzysztof Kozlowski 写道:
+> On 25/05/2023 04:22, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/5/24 下午6:29, Conor Dooley 写道:
+>>> On Wed, May 24, 2023 at 05:44:38PM +0800, zhuyinbo wrote:
+>>>>
+>>>>
+>>>> 在 2023/5/24 下午4:56, Conor Dooley 写道:
+>>>>> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+>>>>>> Add the Loongson platform spi binding with DT schema format using
+>>>>>> json-schema.
+>>>>>>
+>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>> ---
+>>>>>>     .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>>>>>     MAINTAINERS                                   |  6 +++
+>>>>>>     2 files changed, 47 insertions(+)
+>>>>>>     create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..d0be6e5378d7
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> @@ -0,0 +1,41 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>> +
+>>>>>> +title: Loongson SPI controller
+>>>>>> +
+>>>>>> +maintainers:
+>>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> +
+>>>>>> +allOf:
+>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    enum:
+>>>>>> +      - loongson,ls2k-spi
+>>>>>
+>>>>> I am sorry to jump in here at such a late stage with a (potentially)
+>>>>> trivial question. "ls2k" is the SoC family rather than a specific model
+>>>>> as far as I understand.
+>>>>> The answer is probably yes, but do all SoCs in the family have an
+>>>>> identical version of the IP?
+>>>>
+>>>>
+>>>> No, but the spi supported by this loongson spi driver are all the same
+>>>> identical version, and other type or verion spi will be supported as
+>>>> needed in the future.
+>>>
+>>> Does having a catch-all compatible make sense then when not all SoCs in
+>>> the ls2k family will actually be able to use this driver?
+>>
+>>
+>> Yes, it is make sense as it can reduce the workload of the community.
+>> For the Loongson platform, the versions of spi peripherals are almost
+>> the same, except for a few  or individual SoCs.  And we have also
+>> discussed compatible internally, and we tend to define it this way.
+> 
+> So you have chosen different path than what's clearly recommended by
+> community, existing experience and documentation:
+> 
+> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+> 
+> Family names are not accepted as specific compatibles. Whenever they
+> were accepted, it lead to problems. All the time.
 
-Hey Mark, Jarkko,
 
-any ideas on how we can best get this merged? I guess at this point it
-could go through either tree since the SPI dependency has been in Linus'
-tree since v6.4-rc1.
+Thank you for your documentation and advice and the Loongson platform
+have loongson-2h (ls2h), loongson-2k (ls2k), loongson-2p (ls2p) or other
+series SoC, which loongson-2 seems to be the family name you mentioned
+and the "loongson,ls2k-spi" should be a speific compatible name.
 
-Thierry
+> 
+> https://lore.kernel.org/all/20220822181701.GA89665-robh@kernel.org/
+> https://lore.kernel.org/all/78651e07-6b3e-4243-8e1f-fcd1dfb3ffe1@www.fastmail.com/
+> https://lore.kernel.org/all/288f56ba9cfad46354203b7698babe91@walle.cc/
+> https://lore.kernel.org/all/106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org/
+> and many many more discussions.
+> 
+> You should choose carefully, because we will keep NAK-ing adding
+> properties to circumvent missing compatibles.
 
---tJDrl2ClcUSMc8xJ
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+I have read the documention and patch link that you mentioned and it
+seems to advice that We don't have wildcard names in the compatible
+string and use wildcard names that will cause issue. and the compatible
+"loongson,ls2k-spi" that wasn't a wildcard names, and if the loongson-2k
+spi controller hardware upgraded or changed the I will use
+"loongson,ls2k-spi-version" as a compatible, such as,
+"loongson,ls2k-spi-v1.1", "loongson,ls2k-spi-v1.1a" or other.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmR4Vv8ACgkQ3SOs138+
-s6Ea2A//aD5NaNndniIgOO2WjoxEOu9lY1qLgQ0/tEZFzRiILX1RXAo4oJmIl1QF
-ruHanVFdif3GT52KJMKLm18U2aMJ1+TJ20DABJq4NEjQd6oRkZvsIYhR41HLK/Ij
-ui7cAlpHhFUy9qe8L/ehN9E5mkCkoU2SlZlSwHa7YOONIWyoC0FDiCUAGUwTHyem
-nkqlEXkYXVXdFtDVyHu6M4QalSGtQ9SGkFFKxQXqcCy84pUA5o9jnQhtL/0qnM+Q
-R3SlpH97SKq0InYsNcEqVIuF5qr+jvjvr4kiDrKDMzs4uQ08lsAZO1ADMAuTU1Vv
-QrF0zpXwZsiP9bf9m6GOmvw5TW9trEiSQpcKol8QzS6Ouqc2CFDN3J4PhQ9PsOjc
-kx/LJBc4kN3WJOGnPM90IZv9Wf8FhdD6efuiTpaKBR2HojEfGLbYs0bd4ZhsDeSD
-jQcrdKrA1tKr0dOfBTiFNuKGfa/O0K8X/j9tAcEDUi+AZphe5VMZv9k4T3U+G4O5
-Gkt7G1mMMwIVJAKOqLsQDY+LSqBrfrZUL7JU7m+/VUmTA0l0LSaFzBrrWpOeP30W
-2bkrTmDchXLK65ax7yLgXcpBU0S6dCwqatQn5I550R8Qd54w+PKSiHLp+wPPWHIU
-Gk3zF2jdpwxXjKjj4aIksuBOYwUKCgzxNoMxGBqDIAOaTH/GBvo=
-=SRF2
------END PGP SIGNATURE-----
+>>
+>>> Or am I misunderstanding and all ls2k SoCs do work with this driver and
+>>> you were talking about other, future products?
+>>
+>> Actually, in 2k500 has one special type spi was only one cs and their's
+>> register definition was different from common type spi thus this driver
+>> doesn't support but this driver can support another common type spi in
+>> 2k500.  for this special type spi I will add support as needed in the
+>> future.
+> 
+> Bindings are for hardware, not driver. What does your driver support or
+> does not, matters less.
 
---tJDrl2ClcUSMc8xJ--
+
+okay, I got it, and the loongson spi bindings was for loongson spi
+controller hardware. if the spi controller hardware not changed in
+different ls2k SoC and the spi compatible should be same thus loongson
+spi compatible seems to be adhere to the bindings aggrement.
+
+Thanks
+
