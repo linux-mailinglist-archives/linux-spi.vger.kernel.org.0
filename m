@@ -2,52 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F4C719806
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 12:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93617719811
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 12:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjFAJ7o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 05:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S232452AbjFAKAV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 06:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjFAJ7V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 05:59:21 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EEB139
-        for <linux-spi@vger.kernel.org>; Thu,  1 Jun 2023 02:59:13 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96fbe7fbdd4so81303666b.3
-        for <linux-spi@vger.kernel.org>; Thu, 01 Jun 2023 02:59:13 -0700 (PDT)
+        with ESMTP id S232782AbjFAJ70 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 05:59:26 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FA818B
+        for <linux-spi@vger.kernel.org>; Thu,  1 Jun 2023 02:59:15 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso89949266b.0
+        for <linux-spi@vger.kernel.org>; Thu, 01 Jun 2023 02:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685613552; x=1688205552;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=90Gu+poX8fKoB/oDjzLzAZDuwhhlwN9OQimMwgRQWp4=;
-        b=iM8LO+FPwTHgjFORfknFCDDjXMCN2xMBI+2u+Ik/H0rhbGttDgWLwFWhgV7GidR1EJ
-         rT6uT9O6KV8yJ1zVK1wy3YY1eN2aY9T+KNEqoDB9S9q+ALh5koKj0ZcZg7K3qnr8a3TS
-         mMqOuQNhrbdoYz7kJFD4qlolN2dXiGlGU9TFlTWcjlSBIeKE+t2qyN/bJpQY/mKW9nJc
-         OWII9OiOktwbOH/ooYR18Gu5H9ENNz6JdXBobJpeBcrKbUaZcvlrqW4zd+LP3xs3nSxY
-         Q8YzxYUo4cxMOj5Rz1DEnWj27tc4Y74KZFM4ZzRujD87iDPWXQrdnu4efzE7m37QlORd
-         CT7Q==
+        d=linaro.org; s=google; t=1685613554; x=1688205554;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5gUTL11vnxpXlxWq5vLbzbP4rLUK3lP3DTT7y0ZjwjY=;
+        b=Tz8PHzxd3P6JoImzVZfGM0u/T6P315gIEMdY7tO8FaC6ffAHK7T8lYXwPvgPESVvh6
+         DNI9aXvm4jS9HaK4ECQZITBJw9T+hmUOO+qToskw3HmdUh2nxixIj34Khyr9/215EQJ7
+         cZENCpFYWsPJeeJZFb8+c8/E55l2kuePHs4rrHFYptW27H1dPzwjlmnaR5Zgx/H6Q4Ji
+         rNmvet1Nk4LP/5gIzUnULm3AlDQWHdj2YF+CKYypCl3CwhloMGpSa1MmlhaATTgfYPak
+         Dtvs2pdMyz3YVlsAkPwXTFxQRyyq3FVhfkU8U4/r8BhF+QeHh2dDx57wHg1fp1lp1L5G
+         84VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685613552; x=1688205552;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=90Gu+poX8fKoB/oDjzLzAZDuwhhlwN9OQimMwgRQWp4=;
-        b=icx7nwEHQIbQn2Rxk7haA2eXWxVqbKaEnlU4HsBw1eoeo7e+arwfYCxFqSWgYppgLh
-         gtnmGj+OlKOFUkjXedfue7yhEa+Di9G5RvdxPVEOSztKuLsa26jWDyJAhcPvCvmQMM4Y
-         OudhSvkCqMt1cK2LtFmL3ZudnpqUBS+kaDHv6id1nA3VzZALL/4udsMyGMLpS1bvUzu3
-         PlHGiN+QgDJq0FOVXgem9dAqQKmAcXuOG1B5opiF+PWDmcE5Ckh/JyS1IV7nFkMzyf9a
-         qd+8a0MrQlVDJEouawFMD8cKzLCt5gvzIexmo77YY62F7F8866IL6WsCrq3bRLkuxk59
-         gC2Q==
-X-Gm-Message-State: AC+VfDy4HC/skWyAJrpRO20pV+aZdVVTxV0beYY/TKKmARJ6xEJLxl7d
-        t6yQO5j97h3afsfmW+Mz3CtSOg==
-X-Google-Smtp-Source: ACHHUZ6Q1hQXvbyzsDG+IHmi111NeKcnhKLafRhBIRJoDPR46b5dmWgA63foRAXbsa1b46P3eS2Jzg==
-X-Received: by 2002:a17:907:7213:b0:974:1e0e:9bd4 with SMTP id dr19-20020a170907721300b009741e0e9bd4mr6983394ejc.16.1685613551711;
-        Thu, 01 Jun 2023 02:59:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685613554; x=1688205554;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5gUTL11vnxpXlxWq5vLbzbP4rLUK3lP3DTT7y0ZjwjY=;
+        b=HGhY4cSWXJdugjv6wUd542SKxMov5S1S9MGVS7SfZ1r2ZHF90lK2pBIHKf0j4FVA/A
+         ZGUcs4yKoe1KlrPkts/z5/ozCEFAbdPc2aMb+JEik6aA4+egGD8SpKF2hZfDDjyQIJkM
+         H+bxCwSmoOf728FGJP3ivCak13VeF4lQ7EDI3o1CTcQR8zlaDTh3mY6geMPRHeF6wJa0
+         ezXa0UiZcW+OvpcHkdJglX6Z1aadYrx4MYKVMzgAJxbZr0PAZpkJMw/xTwbBefsK5kaI
+         aHwz51Ds1baxT5ZZMHaK3mSkeqXmSvYwlGRRI5nA8ESLMQCzuj+hlx52T79QVPvFcRbr
+         Xx1g==
+X-Gm-Message-State: AC+VfDxms3DSjHKXkRdZRx1P4wMeh5pADQd9gaYGgEd4Yevaxs93f/T0
+        6IbLmfYompHY4amiwSdyRWfXtQ==
+X-Google-Smtp-Source: ACHHUZ4I/69J6jg295rv4mi6qZgVezEeoosgJf5jB21FRODGPlUpK10s+4Umt6GwBaU0uBaGgYM0Ig==
+X-Received: by 2002:a17:907:ea7:b0:974:1ef1:81fb with SMTP id ho39-20020a1709070ea700b009741ef181fbmr7716468ejc.22.1685613553897;
+        Thu, 01 Jun 2023 02:59:13 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1709060a8b00b00965bf86c00asm10475549ejf.143.2023.06.01.02.59.09
+        by smtp.gmail.com with ESMTPSA id y11-20020a1709060a8b00b00965bf86c00asm10475549ejf.143.2023.06.01.02.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 02:59:11 -0700 (PDT)
+        Thu, 01 Jun 2023 02:59:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,10 +65,12 @@ To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/3] spi: dt-bindings: allwinner: simplify with unevaluatedProperties
-Date:   Thu,  1 Jun 2023 11:59:06 +0200
-Message-Id: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/3] spi: dt-bindings: samsung: drop cs-gpios
+Date:   Thu,  1 Jun 2023 11:59:07 +0200
+Message-Id: <20230601095908.563865-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
+References: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,90 +83,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Remove properties already mentioned by common spi-controller.yaml and
-switch to unevaluatedProperties:false to achieve same functional effect.
-This makes the binding a bit smaller.  Similarly there is no need to
-allow additionalProperties for children, because spi-controller.yaml
-already does it.
+Remove cs-gpios because it is already mentioned by common
+spi-controller.yaml.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml  | 8 +-------
- .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml  | 8 +-------
- 2 files changed, 2 insertions(+), 14 deletions(-)
+ Documentation/devicetree/bindings/spi/samsung,spi.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-index 2155478bfc4d..a6f34bdd1d3c 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-@@ -14,9 +14,6 @@ maintainers:
-   - Maxime Ripard <mripard@kernel.org>
+diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+index e0a465d70b0a..79da99ca0e53 100644
+--- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
++++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+@@ -35,8 +35,6 @@ properties:
+     minItems: 2
+     maxItems: 3
  
- properties:
--  "#address-cells": true
--  "#size-cells": true
+-  cs-gpios: true
 -
-   compatible:
-     const: allwinner,sun4i-a10-spi
- 
-@@ -46,12 +43,9 @@ properties:
-       - const: rx
-       - const: tx
- 
--  num-cs: true
--
- patternProperties:
-   "^.*@[0-9a-f]+":
-     type: object
--    additionalProperties: true
-     properties:
-       reg:
-         items:
-@@ -71,7 +65,7 @@ required:
-   - clocks
-   - clock-names
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-index fa5260eca531..28b8ace63044 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-@@ -14,9 +14,6 @@ maintainers:
-   - Maxime Ripard <mripard@kernel.org>
- 
- properties:
--  "#address-cells": true
--  "#size-cells": true
--
-   compatible:
-     oneOf:
-       - const: allwinner,sun50i-r329-spi
-@@ -68,12 +65,9 @@ properties:
-       - const: rx
-       - const: tx
- 
--  num-cs: true
--
- patternProperties:
-   "^.*@[0-9a-f]+":
-     type: object
--    additionalProperties: true
-     properties:
-       reg:
-         items:
-@@ -93,7 +87,7 @@ required:
-   - clocks
-   - clock-names
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
+   dmas:
+     minItems: 2
+     maxItems: 2
 -- 
 2.34.1
 
