@@ -2,35 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F369719C59
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 14:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A33F719CAA
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjFAMmC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 08:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S233181AbjFAMzM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 08:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjFAMmB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 08:42:01 -0400
-X-Greylist: delayed 25448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 05:41:59 PDT
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33351137;
-        Thu,  1 Jun 2023 05:41:59 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-17.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-17.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:1b89:0:640:6638:0])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 0057A5F14B;
-        Thu,  1 Jun 2023 15:41:57 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-17.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id tfNF5f2DdSw0-Fykeqnqt;
-        Thu, 01 Jun 2023 15:41:56 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685623316;
-        bh=CuJFo+ksv+TNzCWobFFC4YBQzZRXzXYhToyTXj1R3uI=;
-        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-        b=X3GMM50E405IR1tZ8HFcM+PO4yMKaYlbasoy9HS8XSTw7FtJePX9yD43hYwu7Qfcp
-         BCPRNfYHmU5cAURMl0+D3k4cj189jRi4dRuj6zaUkDwYU8Nwgxbjx4/bNbUbsMKBYj
-         5O6Yj7wXKU2BO2c4WzUxXNcZlFGhOBh7tphCMyBM=
-Authentication-Results: mail-nwsmtp-smtp-production-main-17.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Date:   Thu, 1 Jun 2023 15:41:54 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S232252AbjFAMzL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 08:55:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA8A128;
+        Thu,  1 Jun 2023 05:55:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E878C60DBE;
+        Thu,  1 Jun 2023 12:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086C2C433D2;
+        Thu,  1 Jun 2023 12:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685624109;
+        bh=ZqxTQp6PSUQnFN/2lX8WhB9VL0uNNxw4eFDlQcou2hM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AJ6uDVxIcnDi9PdUqw02PEj1p95RcNg3MKp1wDy2TmBbS8pVmptiCPIseJN4xU9QU
+         kCgcelTnYnYjNuM9MVgFFW/yyFFlTJnCMPoHbJDdn9kHKQLlmF1rRPYLM1lQzzD5EG
+         KyDzNREX23EwoNey1cXeLk+/T8tv9lioMokqQx5kX3+zkQW8G8Y8fRcgTnBCD18yy8
+         /EKy68ttRK3uJdPkQ/ThWUGhZHitOz32UyIBcu03OMN+zwruzur0h5baKkACR6bah4
+         oEcgapiMgotduxHfGYnTsBxn2ErLhl12AP08PsIBfn0o6ZdsMq4Xr8iOJHCJAe3sd0
+         Nl6oJX4aveXvg==
+Date:   Thu, 1 Jun 2023 13:55:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -40,63 +43,76 @@ Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Kris Bahnsen <kris@embeddedts.com>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
-Message-ID: <20230601154154.57ae1b93@redslave.neermore.group>
-In-Reply-To: <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
+Message-ID: <b2fc1733-4841-42e9-8bf7-1534a5d1a1b4@sirena.org.uk>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-        <20230601053546.9574-18-nikita.shubin@maquefel.me>
-        <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+ <20230601053546.9574-18-nikita.shubin@maquefel.me>
+ <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
+ <20230601154154.57ae1b93@redslave.neermore.group>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V3JKa2O2njgMRI99"
+Content-Disposition: inline
+In-Reply-To: <20230601154154.57ae1b93@redslave.neermore.group>
+X-Cookie: Positively no smoking.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Mark!
 
-On Thu, 1 Jun 2023 12:17:27 +0100
-Mark Brown <broonie@kernel.org> wrote:
+--V3JKa2O2njgMRI99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
-> 
-> > +  cirrus,ep9301-use-dma:
-> > +    description: Flag indicating that the SPI should use dma
-> > +    type: boolean  
-> 
-> My previous feedback on this property still applies.
-> 
-> Please don't ignore review comments, people are generally making them
-> for a reason and are likely to have the same concerns if issues remain
-> unaddressed.  Having to repeat the same comments can get repetitive
-> and make people question the value of time spent reviewing.  If you
-> disagree with the review comments that's fine but you need to reply
-> and discuss your concerns so that the reviewer can understand your
-> decisions.
+On Thu, Jun 01, 2023 at 03:41:54PM +0300, Nikita Shubin wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
 
-Sorry - that was totally unintentional, i was tinkering with spi and
-got distracted on other part of this series (it's quite big for me,
-first time tinkering with a series more than 5-6 patches).
+> > > +  cirrus,ep9301-use-dma:
+> > > +    description: Flag indicating that the SPI should use dma
+> > > +    type: boolean =20
 
-> > +  cirrus,ep9301-use-dma:
+> > My previous feedback on this property still applies.
 
-The reason is that ep93xx DMA state is not quite device-tree ready at
-this moment, and clients use it with the help of:
+> > > +  cirrus,ep9301-use-dma:
 
-https://elixir.bootlin.com/linux/v6.4-rc4/source/include/linux/platform_data/dma-ep93xx.h
+> The reason is that ep93xx DMA state is not quite device-tree ready at
+> this moment, and clients use it with the help of:
 
-I was hoping to slip by without changing much in ep93xx DMA driver, so
-i can deal with it later, especially seeing it's having some quirks
-like:
+> https://elixir.bootlin.com/linux/v6.4-rc4/source/include/linux/platform_d=
+ata/dma-ep93xx.h
 
-https://elixir.bootlin.com/linux/v6.4-rc4/source/drivers/dma/ep93xx_dma.c#L471
+> I was hoping to slip by without changing much in ep93xx DMA driver, so
 
-And edb93xx and bk3 don't set use_dma with SPI for some reason.
+You're definign new ABI here, that's not a good thing to do for a
+temporary workaround.
 
-I can move "use-dma" to module parameters, if this is acceptable.
+> I can move "use-dma" to module parameters, if this is acceptable.
+
+That's less bad.  I guess you could also define the bindings for the DMA
+controller so that the properties are there then instead of properly
+using the DMA API in the clients just check to see if the DMA properties
+are present and then proceed accordingly?
+
+--V3JKa2O2njgMRI99
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4lSYACgkQJNaLcl1U
+h9DnQAf/dOQ5yJ4O/a6/eDXnlTKTJomQveH4SJUqEYc9Jr5rTiC4ZpD8YGXTKLfJ
+rh8ZtJo8V7AL5gxaaHy3elU7nGppA0IgAAvPhhw2hKYdCMMP3Yo2Lan3R7c/VK6R
+4z8kiUZM2elNvLEa5bG4cw/OGFBl4jFG/pZs7SsgBuvJ+4kU/eAqztvoAWo88FSU
+UUA4V2Zbj5ojJ9ihe8eB5WeGXCnFbSSUIEzfoicwJ30dj/fO4RKsXscp0G9gMJyn
+k/yLGSkYe171xoNnkwvOyTjsLGBgCfheKXX36+SCi5qR70cNONx5xsnstT5UJNrh
+jka8g3Gz6KZCu2BNk1BckqDOMeWwEA==
+=b0C9
+-----END PGP SIGNATURE-----
+
+--V3JKa2O2njgMRI99--
