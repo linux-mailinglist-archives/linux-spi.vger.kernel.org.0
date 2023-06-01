@@ -2,101 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F14771A302
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 17:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D332D71EE79
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 18:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbjFAPqU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 11:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S229596AbjFAQPu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 12:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbjFAPqQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 11:46:16 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3018D;
-        Thu,  1 Jun 2023 08:46:06 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f5685f902so135929266b.2;
-        Thu, 01 Jun 2023 08:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685634365; x=1688226365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IklIgLnDv67Hj1MMNmzU2HBbBaSNxYen7DB/Lbq+r38=;
-        b=Db3slDYbs6+0atRzy1FP9c6+k/n4PieWOJfpRxPPfOlhlhRN9/EVb6OgpebC5tm+qU
-         /1kNIqDBQJwn+/yA0YSSMMYinmdUsWYR7YEFJp7C7jScE0DAKIdiJXu/t2D7IRrRsKro
-         dwJoe8OMBCq2SKX+1VMlXybrPj9+uS8skJTpu570ZKFrDjL/Y9JRbvio3+9uw33GkE0P
-         eX43X/9n3T23Gbqfor5bUNgE23DERuOJdC/h58WcCUNwsTnASMuGXWJRBx1RsEt83Suy
-         hiLYFUIC5l8E4JQT4SwX8OnJBBYVJdCUhLyXoWcz/qmJJ3PC5emlc11Fd5Q4pMja9jO+
-         6TkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685634365; x=1688226365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IklIgLnDv67Hj1MMNmzU2HBbBaSNxYen7DB/Lbq+r38=;
-        b=GiT+6YPSewvYQ/vRL2fmPtkm4/uQdeM5V9I4IUO6Uu/LtSjRhEuwB3Q3p/Ax9yQQ3W
-         7J9+qxLGDlKDFSDG6Std08n3K1R7LX4R6lJInM+MpKJ/7tuVxusG6mJz8su4Q416+tE8
-         zbRf0kZSUt3UkYPqvjfF9iTA3gqwoTPZcF3WDqAU7og5z/Uk0ouMSsOtSnF/HXHXh+9E
-         pt4DT8c9lsHgMN1he/0Y6cvC2zqUIrKFotWIewhdZ9lLIg6hu5T7ysv5fc4Ep4mfaJdV
-         fJMe51QyycZygsNvZP77EWoJgafzMCfNDj4iefG8sUxZ2ru7ZfWk7ThhX2kcf5wSXdX9
-         g4Pw==
-X-Gm-Message-State: AC+VfDxEUFWa4ixGxQohjtJzASbD32qWQvCcrihjDdVSAGKPeTR98EVD
-        O/4OFXQfJy1YFxgGs8ouEr4=
-X-Google-Smtp-Source: ACHHUZ7Fbw9B2kY3i0cLSoiipzTsYASE2XF2iggqBNdNQITA9VLCljQ7MOgpw4SU2+Gba0EnHRO3hg==
-X-Received: by 2002:a17:907:7b85:b0:971:5a46:8ac8 with SMTP id ne5-20020a1709077b8500b009715a468ac8mr10300665ejc.27.1685634364702;
-        Thu, 01 Jun 2023 08:46:04 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id a8-20020a1709062b0800b00970f0e2dab2sm10601105ejg.112.2023.06.01.08.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 08:46:04 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] spi: dt-bindings: allwinner: simplify with
- unevaluatedProperties
-Date:   Thu, 01 Jun 2023 17:46:02 +0200
-Message-ID: <2226283.iZASKD2KPV@jernej-laptop>
-In-Reply-To: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
-References: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229536AbjFAQPt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 12:15:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082F1E4;
+        Thu,  1 Jun 2023 09:15:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9172164726;
+        Thu,  1 Jun 2023 16:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69FCC433EF;
+        Thu,  1 Jun 2023 16:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685636148;
+        bh=eWGdEZKINAA3oZQdXTLJRYSprRFlsOM1achzah3z79g=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Di1miZNqxPJvp8zuVYMlCvH6afVnUa46LqmK+h4/XltpNeifZPViIczfgCCbxBY2l
+         MOyLD32cJpFKO5DTyCsftOcwuL0ZBf7osuDmj3CqDGF4ZOk//QOf6S4/nsXNU8jxD4
+         iMTjuNXF1ZuDyKxaJuDKekRVE7IlE7te5dXeAilKJh2ZCDAOR57aqEfU+RVem8v5w/
+         30/mfqJ50n81HMnKz3TGlfqbSt24m2i5ulhkp7b1moLvz/X2amo5kKgb5zaPnFWTYl
+         gWuNjIK/NMMwf6BE2LpH1DOpeAso69EaUx1dVFl7uyGAaHNCdr8iVZFdm0E8UIq089
+         5jKI/ESXOkxbA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Osama Muhammad <osmtendev@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230530221725.26319-1-Sergey.Semin@baikalelectronics.ru>
+References: <20230530221725.26319-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH] spi: dw: Drop empty line from DebugFS init function
+Message-Id: <168563614666.139315.15131843196445419713.b4-ty@kernel.org>
+Date:   Thu, 01 Jun 2023 17:15:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dne =C4=8Detrtek, 01. junij 2023 ob 11:59:06 CEST je Krzysztof Kozlowski na=
-pisal(a):
-> Remove properties already mentioned by common spi-controller.yaml and
-> switch to unevaluatedProperties:false to achieve same functional effect.
-> This makes the binding a bit smaller.  Similarly there is no need to
-> allow additionalProperties for children, because spi-controller.yaml
-> already does it.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, 31 May 2023 01:17:25 +0300, Serge Semin wrote:
+> Just drop a redundant empty line from the dw_spi_debugfs_init() function
+> left in the framework of the commit 0178f1e5d984 ("spi-dw-core.c: Fix
+> error checking for debugfs_create_dir") after removing the last return
+> statement.
+> 
+> 
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Applied to
 
-Best regards,
-Jernej
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: dw: Drop empty line from DebugFS init function
+      commit: 3ecd5a728903b3057012043f98464c20cea1cdbb
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
