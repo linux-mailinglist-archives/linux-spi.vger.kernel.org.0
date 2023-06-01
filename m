@@ -2,70 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596A9719A7C
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCCE719ACD
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjFALFI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 07:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S231690AbjFALRf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 07:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjFALFH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:05:07 -0400
+        with ESMTP id S231605AbjFALRe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:17:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CF4F2;
-        Thu,  1 Jun 2023 04:05:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE80124;
+        Thu,  1 Jun 2023 04:17:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 479EC63E7D;
-        Thu,  1 Jun 2023 11:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99FF8C433EF;
-        Thu,  1 Jun 2023 11:05:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B3A861D55;
+        Thu,  1 Jun 2023 11:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655FEC433EF;
+        Thu,  1 Jun 2023 11:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685617505;
-        bh=6ICHZuj6hAIAPZMijWweUahu445gncy1I/61jiUCcnA=;
+        s=k20201202; t=1685618252;
+        bh=PQTKK4TNTGd6SkNciPTZxhjIN8KD4aPCXVFtu9urh0I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G964wP5YwTgFib8H2aeKMBgTbaXbq9ZrKUibvUuWYPHfxpR/wuy1dwTVgHbX9ZFuW
-         TbKdKzj6d+JcaSZOM5KcICPhzBEYgUUedJ0kePwsktHqAhqBqb/ZhZW33f8bI/K1dg
-         Jy+A+aQRiI9dK2JHjYM6sB5eZl+7larrUKxiZPfNLKFZsIs708oFbZNd7ioRBxQqGh
-         61qC41wN0jNhy8nUO+DuGSFAjF0223eeQSX321g277smLyLEMvR/joB/iKSoCD8QvW
-         sff74VJCTOtutSrkHtJI9xLteGYtnEAi53/0DmMRbg5PdH3zWz1Gxro1bMmHh5HZVM
-         Ki4xXZiHL+/0A==
-Date:   Thu, 1 Jun 2023 12:04:59 +0100
+        b=IwLd9186Cl7yV6e6P5jeJ8w1Q/Vkm3zq07lBa4pxAuTmYF5jaBtrRroFxK3RG7EL7
+         nwksoTS7+n8AearzxyD/PGe5L1jK2Y51cuXKdUkoseI4vr/GdwYCFfPjSFVkx3EusD
+         LCx5CHkNsqYjPvWKrcoZQtDrpllobQnksjUWeYAPGneibLAiYaY211BxD56rmj/pWL
+         B7owhhYcDy5CPuSuWDFvMv+t+g8Dfv9YBl+gmyES0riKtFzInI/ZpuWu+nvCOaJc+Y
+         yM1FXBhNT4BuBK9sRQhJ/bUraW0JWEcunXiEB1EPFukV5sAwUOne5WanRariFYDXUU
+         UaHSy9W9hmFmw==
+Date:   Thu, 1 Jun 2023 12:17:27 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
- <20230421091309.2672-3-kyarlagadda@nvidia.com>
- <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
- <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
- <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
- <ZEag1lAonYcmNFXk@orome>
- <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
- <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
- <ZHhW_wFvRWInR_iM@orome>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
+Message-ID: <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601053546.9574-18-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iD5QcbyXQ8ebAu4H"
+        protocol="application/pgp-signature"; boundary="AKogeu+AvJwZdIqg"
 Content-Disposition: inline
-In-Reply-To: <ZHhW_wFvRWInR_iM@orome>
+In-Reply-To: <20230601053546.9574-18-nikita.shubin@maquefel.me>
 X-Cookie: Positively no smoking.
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -78,32 +63,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---iD5QcbyXQ8ebAu4H
+--AKogeu+AvJwZdIqg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
+On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
 
-> any ideas on how we can best get this merged? I guess at this point it
-> could go through either tree since the SPI dependency has been in Linus'
-> tree since v6.4-rc1.
+> +  cirrus,ep9301-use-dma:
+> +    description: Flag indicating that the SPI should use dma
+> +    type: boolean
 
-I would expect it to go via whatever path TPM patches usually take given
-that it's a TPM patch.
+My previous feedback on this property still applies.
 
---iD5QcbyXQ8ebAu4H
+Please don't ignore review comments, people are generally making them
+for a reason and are likely to have the same concerns if issues remain
+unaddressed.  Having to repeat the same comments can get repetitive and
+make people question the value of time spent reviewing.  If you disagree
+with the review comments that's fine but you need to reply and discuss
+your concerns so that the reviewer can understand your decisions.
+
+--AKogeu+AvJwZdIqg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4e1oACgkQJNaLcl1U
-h9AP+wf9GVc9ULNfksPHMKBakL0c2zPNxXCiQ6doxXtRFZvlyPMBECFlubmcjHsh
-iJeBoi1TL64eSZZACGqtOY87DQIy7AEiCwJNiwDRcw6GO4O6L9+ouXnSwwiZyQjW
-n6pQ3xn+idgizbovTlTRUj1gcysznDYOmTTsAJDejM1kXvVj6NbkXntpA8T8okPT
-B9Sof6toDV5WVm0B/rhojzesL/mL1pQ+OQY1YyAYWNCn60pSWe2xFnxn57/lLzRc
-UVk6C9dIagzyEwlGdaj33JZalfYT361LqzqyzfgSA6aflRNuGCCOuMBPIyZn/3OJ
-ilzQVs7pq1OlP727XLbt5uscLtoRdA==
-=2mt+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4fkYACgkQJNaLcl1U
+h9D2FQf+II4RWUC3YTpWqIDLH2ty9ClJoudhNuUP8oYmUpY2FZogg4DQ+r3a/Hxs
+xEA1aTgyE2Os3RTZf+OXfZgTjHInNvb5Z5/txOUdFDuYW/Xt5NMGRCfpflrS9Y1k
+NLpK/XESM3GR9+DnVJi8K44fkO9YvbuxPesZFIYAk7qFagamzOxmiqE4lvzkgPy6
+Kb7ut2Hun9ZS0odsW3MOobBFeKCPxSifpinx+UdP+hw+5D6VfsF0hEfW4kp/w/6i
+LSkMy17aTHGMgX/oXUHMX70Nx59pE1g5jz7oBT/p7WyQFvj/XGh89eM/4xuP0RM+
+Aq9Zn0YzKwEKLdBKzObjSyuC1ptLyQ==
+=bKAo
 -----END PGP SIGNATURE-----
 
---iD5QcbyXQ8ebAu4H--
+--AKogeu+AvJwZdIqg--
