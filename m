@@ -2,71 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5D1719AE5
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3F2719B0A
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Jun 2023 13:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjFALWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Jun 2023 07:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S229554AbjFALij (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Jun 2023 07:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbjFALWw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:22:52 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16B1132
-        for <linux-spi@vger.kernel.org>; Thu,  1 Jun 2023 04:22:50 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f6b20ad49dso5616811cf.2
-        for <linux-spi@vger.kernel.org>; Thu, 01 Jun 2023 04:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685618570; x=1688210570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
-        b=eZ9To0SI50DTVI2dAf2RP1StKYs+cyEqUpAF2574fnqGhgB2TAaZ0gBa8bYXdn/j0x
-         FuBa8X6m1Y1EYf3bzxSBu2csTyMGZkE9/fuq0cSSE1h5sqzqaZhxg4bU1VFvtPSzv9lW
-         5QLOOoGgY2C/+BRg+CxZVUgRFDUMQ2vepXR8quVdyenHux1FM0wWOKni7MlZMsghXV69
-         FUODS4sK/uZiVM1aOfjh7UXurbvyBjLO3yR32V+j2o7vSqQ5w39O3/jGmJebHAl220wl
-         l2YbU4dB3dhyKQsqpA//vOIfL9sewdZswWZOJLPoyEsCk6buDMIeXHjvUR1hnxPzY0TO
-         4ZUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685618570; x=1688210570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
-        b=UwcIOmATif4n2iju7sU9RqSedoqU6jSyzRHkTzOF10SL483EH2WscTfBuL+srN7yac
-         i7zIagYsCgWcwchz9IzY/WGvAZes4iYJLdozy7/W1JLBlQwaLcbMlBdomfjMwCXb4s6j
-         F5hNRF38Wdacl3kjssn/a0DV9mL6CNgol+gYAeA7vqzs7nVRgafms9tKnA3H54HM4Ugc
-         aXC6vfo9FkhMA0YgMyHZWTuuf+TvCdpnlEkNLheqLHOvFg92RXhbV93s3HuM3/74erqq
-         WH500GywaVRx8Ud/9yCpVkGU/KzrLiSKDiKJN2sivwV7fmPDj1475iLmadSzueNbcPbt
-         I/Dw==
-X-Gm-Message-State: AC+VfDy/W3XzeZJzFekwkH8RwhJuiKauAPQAFNY3Ani9w0IiN8QqyelR
-        OW5u+8YBtETZIdiKyaBQbgCfyfaBtCY+KYMFZncgCg==
-X-Google-Smtp-Source: ACHHUZ672XhBtqgSSO+77bYpfA5o+5/XdJD5UDVXzB2ag05nisa3IUi07jZC+Cq76E6sC0H/aS/YY93daCCv9WmxO/Y=
-X-Received: by 2002:a05:622a:182a:b0:3f6:b055:81ff with SMTP id
- t42-20020a05622a182a00b003f6b05581ffmr9265467qtc.50.1685618569842; Thu, 01
- Jun 2023 04:22:49 -0700 (PDT)
+        with ESMTP id S229498AbjFALii (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Jun 2023 07:38:38 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBD89129;
+        Thu,  1 Jun 2023 04:38:35 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dxc_A6g3hksEQDAA--.7089S3;
+        Thu, 01 Jun 2023 19:38:34 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxMLA3g3hk+CiEAA--.17827S3;
+        Thu, 01 Jun 2023 19:38:32 +0800 (CST)
+Subject: Re: [PATCH v11 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-2-zhuyinbo@loongson.cn>
+ <20230524-pouncing-variable-c520e85f8db8@wendy>
+ <b1e3d199-de5a-f8d5-9159-4965e9e1f5ef@loongson.cn>
+ <20230524-relative-trimmer-046fb26a7764@wendy>
+ <99b362c2-640c-9150-26ee-e9add4483886@loongson.cn>
+ <69d355ff-90e1-09d2-d4ff-0d7dedc8addb@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <64773170-4cef-9acc-c2d7-f187bc484825@loongson.cn>
+Date:   Thu, 1 Jun 2023 19:38:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com> <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 1 Jun 2023 13:22:49 +0200
-Message-ID: <CACRpkdb-jk50gO_Y-7NKQfLjPOH6ZwL37YsQJoJNfoqS+N8NVw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] pinctrl: cs42l43: Add support for the cs42l43
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <69d355ff-90e1-09d2-d4ff-0d7dedc8addb@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxMLA3g3hk+CiEAA--.17827S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAFW7GFWrJr45Aw4kZrWxXrb_yoW5ZFWfpa
+        1UCFnrKF4DtF12yrZ2g3W8Cr9IvryrJF15Xr47Kr17Ar98tFyaqF1UKFn8uwn7JF18XFW7
+        XFW0gw17GF4UJrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74
+        AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzFApUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,25 +73,89 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 30, 2023 at 2:21=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
 
-> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> for portable applications. It provides a high dynamic range, stereo
-> DAC for headphone output, two integrated Class D amplifiers for
-> loudspeakers, and two ADCs for wired headset microphone input or
-> stereo line input. PDM inputs are provided for digital microphones.
->
-> Add a basic pinctrl driver which supports driver strength for the
-> various pins, gpios, and pinmux for the 2 multi-function pins.
->
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-This version looks acceptable to me!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+在 2023/6/1 上午4:06, Krzysztof Kozlowski 写道:
+> On 25/05/2023 04:22, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/5/24 下午6:29, Conor Dooley 写道:
+>>> On Wed, May 24, 2023 at 05:44:38PM +0800, zhuyinbo wrote:
+>>>>
+>>>>
+>>>> 在 2023/5/24 下午4:56, Conor Dooley 写道:
+>>>>> On Mon, May 22, 2023 at 03:10:29PM +0800, Yinbo Zhu wrote:
+>>>>>> Add the Loongson platform spi binding with DT schema format using
+>>>>>> json-schema.
+>>>>>>
+>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>> ---
+>>>>>>     .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>>>>>     MAINTAINERS                                   |  6 +++
+>>>>>>     2 files changed, 47 insertions(+)
+>>>>>>     create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..d0be6e5378d7
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> @@ -0,0 +1,41 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>> +
+>>>>>> +title: Loongson SPI controller
+>>>>>> +
+>>>>>> +maintainers:
+>>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> +
+>>>>>> +allOf:
+>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    enum:
+>>>>>> +      - loongson,ls2k-spi
+>>>>>
+>>>>> I am sorry to jump in here at such a late stage with a (potentially)
+>>>>> trivial question. "ls2k" is the SoC family rather than a specific model
+>>>>> as far as I understand.
+>>>>> The answer is probably yes, but do all SoCs in the family have an
+>>>>> identical version of the IP?
+>>>>
+>>>>
+>>>> No, but the spi supported by this loongson spi driver are all the same
+>>>> identical version, and other type or verion spi will be supported as
+>>>> needed in the future.
+>>>
+>>> Does having a catch-all compatible make sense then when not all SoCs in
+>>> the ls2k family will actually be able to use this driver?
+>>
+>>
+>> Yes, it is make sense as it can reduce the workload of the community.
+> 
+> I missed it - that's a great comment. Hm, I don't know... Reviewing
+> Loongson patches is quite a work, so I don't see here reduced workload.
 
-I guess it will be merged with the rest.
 
-Yours,
-Linus Walleij
+If we do not consider the differences in SPI hardware and consider the
+differences in SoC, it will result for each new a SoC adaptation, a new
+compatible patch needs to be submitted to the community but spi hardware
+was same and that will increase the workload of the community, It seems
+to be more appropriate that use same compatible when spi hardware was
+same and use different compatible when spi hardware was different.
+
+> 
+> Please read existing guidelines:
+> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst >
+> All of them.
+> 
+
+okay, I got it.
+
+Thanks.
+
