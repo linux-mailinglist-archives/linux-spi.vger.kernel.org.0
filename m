@@ -2,44 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDF1720F39
-	for <lists+linux-spi@lfdr.de>; Sat,  3 Jun 2023 12:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F7E71FC8C
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Jun 2023 10:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjFCK34 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 3 Jun 2023 06:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S234758AbjFBIuA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 2 Jun 2023 04:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjFCK3z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Jun 2023 06:29:55 -0400
-X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 03:29:53 PDT
-Received: from mail.webtopbits.pl (mail.webtopbits.pl [195.231.64.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B31A2
-        for <linux-spi@vger.kernel.org>; Sat,  3 Jun 2023 03:29:52 -0700 (PDT)
-Received: by mail.webtopbits.pl (Postfix, from userid 1001)
-        id 52D47A3943; Fri,  2 Jun 2023 09:40:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=webtopbits.pl;
-        s=mail; t=1685695257;
-        bh=Eh8ECMiYd4baGAwPAzhz8mhJACXX7NSRkYjh+plaY18=;
-        h=Date:From:To:Subject:From;
-        b=PIBFKKTI4CCOL4nS8/0iuQKfwqRO4d9xj+ezYb7bNP/oCftj2Uel4T5yLMD17iOx9
-         nmsjvZ0d6tknoxPPpw+TEsn/pW2nQSEABLiT08Pcz88ejMt8XizeDszDmU8lClEWfc
-         ovAlHtua8I+7ztFtf/d4suxrg0eyU58OfhHHL4fbdkHg5zZX7a4qx3qk0jWgqEYGl0
-         yZfUwD8TUCZLVkBWteGYyNDIOf1dI6heXSJkdt8PBV1ZrqEsczhl3TRxaJUV1Y07eX
-         7pP17KOMmjuGQY9nWQRMRQYe9usvxShEsW7+kbEezUgHe0qWTVa7NZu55M7xtCLkN3
-         XNSMn8f5EDfnA==
-Received: by mail.webtopbits.pl for <linux-spi@vger.kernel.org>; Fri,  2 Jun 2023 08:40:50 GMT
-Message-ID: <20230602085530-0.1.8w.5kay.0.l14caltnn6@webtopbits.pl>
-Date:   Fri,  2 Jun 2023 08:40:50 GMT
-From:   "Kamil Durjasz" <kamil.durjasz@webtopbits.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: =?UTF-8?Q?Wy=C5=BCsza_konwersja_w_e-sklepie_?=
-X-Mailer: mail.webtopbits.pl
+        with ESMTP id S234860AbjFBItk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Jun 2023 04:49:40 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE0EE59;
+        Fri,  2 Jun 2023 01:49:34 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C586D24DD54;
+        Fri,  2 Jun 2023 16:49:27 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
+ 2023 16:49:27 +0800
+Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
+ by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 2 Jun 2023 16:49:26 +0800
+From:   William Qiu <william.qiu@starfivetech.com>
+To:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>
+Subject: [PATCH v2 0/3]  Add initialization of clock for StarFive JH7110 SoC
+Date:   Fri, 2 Jun 2023 16:49:22 +0800
+Message-ID: <20230602084925.215411-1-william.qiu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,24 +54,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-w jaki spos=C3=B3b docieraj=C4=85 Pa=C5=84stwo do odbiorc=C3=B3w?
+This patchset adds initial rudimentary support for the StarFive
+Quad SPI controller driver. And this driver will be used in
+StarFive's VisionFive 2 board. In 6.4, the QSPI_AHB and QSPI_APB
+clocks changed from the default ON state to the default OFF state,
+so these clocks need to be enabled in the driver.At the same time,
+dts patch is added to this series.
 
-Tworzymy pot=C4=99=C5=BCne narz=C4=99dzia sprzeda=C5=BCy, kt=C3=B3re pozw=
-alaj=C4=85 kompleksowo rozwi=C4=85za=C4=87 problemy potencjalnych klient=C3=
-=B3w i skutecznie wp=C5=82yn=C4=85=C4=87 na ich decyzje zakupowe.=20
+Changes v1->v2:
+- Renamed the clock names.
+- Specified a different array of clocks
+- Used clk_bulk_ APIs
 
-Skupiamy si=C4=99 na Pa=C5=84stwa potrzebach zwi=C4=85zanych z obs=C5=82u=
-g=C4=85 sklepu, oczekiwaniach i planach sprzeda=C5=BCowych. Szczeg=C3=B3=C5=
-=82owo dopasowujemy grafik=C4=99, funkcjonalno=C5=9Bci, struktur=C4=99 i =
-mikrointerakcje do Pa=C5=84stwa grupy docelowej, co przek=C5=82ada si=C4=99=
- na oczekiwane rezultaty.
+The patch series is based on v6.4rc3.
 
-Ch=C4=99tnie przedstawi=C4=99 dotychczasowe realizacje, aby mogli Pa=C5=84=
-stwo przekona=C4=87 si=C4=99 o naszych mo=C5=BCliwo=C5=9Bciach. Mog=C4=99=
- si=C4=99 skontaktowa=C4=87?
+William Qiu (3):
+  dt-bindings: qspi: cdns,qspi-nor: Add clocks for StarFive JH7110 SoC
+  spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
+  riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC
 
+ .../bindings/spi/cdns,qspi-nor.yaml           | 15 +++++++--
+ .../jh7110-starfive-visionfive-2.dtsi         | 32 +++++++++++++++++++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++++
+ drivers/spi/spi-cadence-quadspi.c             | 20 ++++++++++++
+ 4 files changed, 82 insertions(+), 3 deletions(-)
 
-Pozdrawiam
-Kamil Durjasz
+--
+2.34.1
+
