@@ -2,59 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14437208BA
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Jun 2023 20:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CA57208D8
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Jun 2023 20:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbjFBSCQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Jun 2023 14:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S235957AbjFBSNH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Jun 2023 14:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236990AbjFBSCP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Jun 2023 14:02:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7ACE43;
-        Fri,  2 Jun 2023 11:02:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7081364EDE;
-        Fri,  2 Jun 2023 18:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93CBDC433EF;
-        Fri,  2 Jun 2023 18:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685728929;
-        bh=XAtF7146Gm5KAng3zs9SmmSWYFO5+S4sp3hfrNzqsaY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B1iBK/EgCQfwHC9U0wG4xOewz3AJ6+xTOkNs1hHpawt2k9fS+cK2xl6ZTPGY2ImgG
-         dCfa7dnrlhQOZDY27iJuRKwXV5h+YIUOUJfWd+jOV5/glxTMVFjgHVawB1iGecbNhu
-         ifILVn8LXQlzcY3YhiHa394KztaiybnT6XrOSVfanR2+cCas3ZxP3v17Am3URhLd2M
-         Prl/J3Z9rqu+V9MVwJE2m9UDd6U7Hx0ge8IxxFLQ1LEj5nEIXl8odUdzazYgMoBG1C
-         dwrB2nVC7/6ayXs1wpNAfSdyd4JszvWIj0qZm66/BUTF2g6uVPv0fS74AXawy4u+EA
-         ioq/wjjKnYLkA==
-Date:   Fri, 2 Jun 2023 19:02:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
- StarFive JH7110 SoC
-Message-ID: <20230602-impurity-broker-28cc27869b64@spud>
-References: <20230602084925.215411-1-william.qiu@starfivetech.com>
- <20230602084925.215411-2-william.qiu@starfivetech.com>
+        with ESMTP id S235598AbjFBSNG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Jun 2023 14:13:06 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A6A123;
+        Fri,  2 Jun 2023 11:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1685729585;
+  x=1717265585;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=Cz4/oyVTpm1XtHq2S7r1WKawWesnC6O3HFsEfsnf6Lc=;
+  b=g2JmgrUBqnRzwPqaqFHvkkUUTSoeFCFvNm7YWKOfZAy438F/CQ/MvVqo
+   M9QCSutctNpvCUTjuQPshKKEsdF0OX5Mjsquub67q+RbdZBC0/hblSXDj
+   HCydR318ZjRhC/7+qNObG8F99lO93JREPOovLNfhuFNtBW5WhYsJ5nRdv
+   N1fK0ezs4gHI5kA4UrUjr5sNqEAcZS8fwDL+hlQ1oo4Fi6JJ9yZ7pqwrv
+   3iaVRDGeeLvCRjUbH3X3EY1lNttCs0xJanFIMSNLfN7UDPHwX+a3DsobZ
+   gmQW2uE9UNiwWwrcMP5Xr4jvblzzg8g4BtASGeIQ6q3uhML8ux6H6Jb70
+   A==;
+From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Date:   Fri, 2 Jun 2023 20:12:54 +0200
+Subject: [PATCH v2] spi: spl022: Probe defer is no error
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1mtQStb3HNNyC+Nn"
-Content-Disposition: inline
-In-Reply-To: <20230602084925.215411-2-william.qiu@starfivetech.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-ID: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
+X-B4-Tracking: v=1; b=H4sIACUxemQC/3WNywqDMBBFf0Vm3SlJLCJd9T+Ki0yc1EB9MCOii
+ P/e6L7Lcx+cHZQlscKz2EF4SZrGIYO7FRA6P3wYU5sZnHGlqYzD6Wucw5YjC8a0ook11cFQxTF
+ CfpFXRhI/hO789V5nlrOYhPP+Ur2bzF3SeZTtMi/2TP9LFosWqTYUgy/Z0uPl16T3MPbQHMfxA
+ 8anScjGAAAA
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>,
+        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685729582; l=1403;
+ i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
+ bh=cVacumkzCzwk4AF23TT8WPfUhn25G7/IQ77V7w4A7lU=;
+ b=LUtrFCa49KsO2HEgsR8925P9uaWYYhbLFwAOh/H+pYcGuZyS3Nzb2lw7LgOrscmGy4KDbZMfc
+ WYHOFLuPayVDIs9kWyByhbEytIJIp/oCGsG3262RZrukAL0ebqFpt2R
+X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
+ pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,58 +62,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+When the spi controller is registered and the cs_gpiods cannot be
+assigned, causing a defer of the probe, there is an error print saying:
+"probe - problem registering spi master"
 
---1mtQStb3HNNyC+Nn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This should not be announced as an error. Print this message for all
+errors except for the probe defer.
 
-On Fri, Jun 02, 2023 at 04:49:23PM +0800, William Qiu wrote:
-> The QSPI controller needs three clock items to work properly on StarFive
-> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
-> platforms do not have this constraint.
->=20
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  .../devicetree/bindings/spi/cdns,qspi-nor.yaml    | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/D=
-ocumentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index b310069762dd..b6a27171d965 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -26,6 +26,15 @@ allOf:
->              const: starfive,jh7110-qspi
->      then:
->        properties:
-> +        clocks:
-> +          maxItems: 3
-> +
-> +        clock-names:
-> +          items:
-> +            - const: ref_clk
+Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+---
+Changes in v2:
+- Use dev_err_probe instead of standalone check with print.
+- Link to v1: https://lore.kernel.org/r/20230602-pl022-defer-fix-v1-1-b80bfca3e1b4@axis.com
+---
+ drivers/spi/spi-pl022.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Aww, I liked Mark's suggestions better.
-If you are respinning to fix the LKP reported issue w/ ignoring the result
-of enabling the clocks, could you chop the _clk off of this one?
+diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
+index 982407bc5d9f..1af75eff26b6 100644
+--- a/drivers/spi/spi-pl022.c
++++ b/drivers/spi/spi-pl022.c
+@@ -2217,8 +2217,8 @@ static int pl022_probe(struct amba_device *adev, const struct amba_id *id)
+ 	amba_set_drvdata(adev, pl022);
+ 	status = devm_spi_register_master(&adev->dev, master);
+ 	if (status != 0) {
+-		dev_err(&adev->dev,
+-			"probe - problem registering spi master\n");
++		dev_err_probe(&adev->dev, status,
++			      "problem registering spi master\n");
+ 		goto err_spi_register;
+ 	}
+ 	dev_dbg(dev, "probe succeeded\n");
 
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+change-id: 20230602-pl022-defer-fix-0f8b8c0b6eff
 
-Thanks,
-Conor.
+Best regards,
+-- 
+Mårten Lindahl <marten.lindahl@axis.com>
 
---1mtQStb3HNNyC+Nn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHounQAKCRB4tDGHoIJi
-0ovMAP4rOWvNSNrwxKPStmIgIe61T65PqjNZ69zziOQlOW0aJwEAqRT+V42af0Ph
-W6Q7Ex/+PyIMKWfrpZ7JjENsTSQnVQ8=
-=GvFA
------END PGP SIGNATURE-----
-
---1mtQStb3HNNyC+Nn--
