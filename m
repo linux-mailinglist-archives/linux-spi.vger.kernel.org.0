@@ -2,95 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1DF7201FD
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Jun 2023 14:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8544720225
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Jun 2023 14:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235901AbjFBMXG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Jun 2023 08:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S234849AbjFBMf1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Jun 2023 08:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbjFBMWx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Jun 2023 08:22:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726D1E45;
-        Fri,  2 Jun 2023 05:22:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DF9864FD4;
-        Fri,  2 Jun 2023 12:22:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D26C433EF;
-        Fri,  2 Jun 2023 12:22:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685708562;
-        bh=shNWx6PFTlZH3l3m3BnGPmtrxXFRFCsjkB9++JCK98M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=el95joKQmeHIrPzPxwzjZ6qgl0W4VWbIztz33qjwDs5PNcAqt9GHZj1DMCTz+SM7l
-         xF3m6LHnFputavM2+e8nrZIVLi5zq6YsKwNeLiIfQKU43zuTX58KR66OnHA+a2+Tdv
-         iwGBOUc1IlTI5evUTyA/9RRLL8n2APTDXzxfBzYvRioGkerCGtBRylnOLVI06lwBMg
-         HfzQoIbVfX1S20pFUzd34/vMyrUei+pEWvmZ3LvmYMtvytHnjqUm6up+iIhcwTUYgk
-         omwxAu+WUyib1tkhkR+55dEIebp7+HAh4T1+UU/DwxPuF7eta0Thy/lhhL4JeYIw7k
-         4lTEEQv0q6iZw==
-Date:   Fri, 2 Jun 2023 13:22:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S234443AbjFBMf0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Jun 2023 08:35:26 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230E918C;
+        Fri,  2 Jun 2023 05:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685709325; x=1717245325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RFn4lE0CnHg+BrpP8BhtcKygS1L2eOihwOiPLsc1C4Y=;
+  b=a4+vzQw4d8FHqp8ptwFER1BFbTbiYG2oJ+d+BfVy8OgCiaSQVpn8UnXT
+   8lUeUHxSzSGAMlpjqgmBGbwelTB2gp2RfqTwVPu5oD2LsMrKbogKj3nD5
+   s4ddlGLMPe43zImRnDyl3Lx45LyTsRo3IZvy3ry8g/D2THg8Pf/8uQ6Zj
+   CG8X5pBB0DowR/t+VqsLkcHdQ5Xsy6jQVlloAV2DP0zS6OpO5R/TVioGI
+   LRsW3onPt7o9l+iFzGgmHoIJRWZ0uSsvnpl2tR3nWYf8hJcluTmc38dP0
+   XKA+M0zJah0DZK5lOdl/N9eOlkzrSXGJx39jLplhUzhbENWll5imIRetQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353352674"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="353352674"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 05:34:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737515174"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="737515174"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Jun 2023 05:34:30 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q53zB-0000RJ-16;
+        Fri, 02 Jun 2023 12:34:29 +0000
+Date:   Fri, 2 Jun 2023 20:33:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     William Qiu <william.qiu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@ew.tq-group.com
-Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
-Message-ID: <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
-References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>
+Subject: Re: [PATCH v2 2/3] spi: cadence-quadspi: Add clock configuration for
+ StarFive JH7110 QSPI
+Message-ID: <202306022017.UbwjjWRN-lkp@intel.com>
+References: <20230602084925.215411-3-william.qiu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="46S1Pyf2fGJjRDRn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
-X-Cookie: War is an equal opportunity destroyer.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230602084925.215411-3-william.qiu@starfivetech.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi William,
 
---46S1Pyf2fGJjRDRn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Fri, Jun 02, 2023 at 01:52:00PM +0200, Matthias Schiffer wrote:
-> We have seen a number of downstream patches that allow enabling the
-> realtime feature of the SPI subsystem to reduce latency. These were
-> usually implemented for a specific SPI driver, even though the actual
-> handling of the rt flag is happening in the generic SPI controller code.
->=20
-> Introduce a generic linux,use-rt-queue flag that can be used with any
-> controller driver. The now redundant driver-specific pl022,rt flag is
-> marked as deprecated.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.4-rc4 next-20230602]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This is clearly OS specific tuning so out of scope for DT...
+url:    https://github.com/intel-lab-lkp/linux/commits/William-Qiu/dt-bindings-qspi-cdns-qspi-nor-Add-clocks-for-StarFive-JH7110-SoC/20230602-165251
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230602084925.215411-3-william.qiu%40starfivetech.com
+patch subject: [PATCH v2 2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230602/202306022017.UbwjjWRN-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6bbd49e32d407d210b6ea322696cef2e49bf3fa1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review William-Qiu/dt-bindings-qspi-cdns-qspi-nor-Add-clocks-for-StarFive-JH7110-SoC/20230602-165251
+        git checkout 6bbd49e32d407d210b6ea322696cef2e49bf3fa1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
 
---46S1Pyf2fGJjRDRn
-Content-Type: application/pgp-signature; name="signature.asc"
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
 
------BEGIN PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR53wwACgkQJNaLcl1U
-h9ATnwf8DeqEMGZX6YWquv4DiwGh9r4pUYflsXOy0mAeVMTZzGlUg4S65jr1G/lK
-Pky2kCDuOXO3NhC4sZF+l7OStNmj8JEhMdEYic3dUv5ypPKBYqDQ9RVbHTtBO6bK
-KsEjSA+xOJz0MV9P7jRQrS0UbiY2PiwZ+EuHr+FFxy8aTJ4ZUSFZlgwf6dMXnhHw
-jrkq/h9Gfey75Bn0g0WfVpXhap6CoMpkwcykfWtjxss+6GYjGJnO5iOgSoK1/hlD
-O5YLIrB6dP1uI1WnTtwoQLy5il6+k3egJ2cxHPu/IAIADtYhwly4yyTV5V8FiZV5
-+vP8P2wCBCY03hZlP+WPGi4fHFfqhQ==
-=qcmR
------END PGP SIGNATURE-----
+   drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_resume':
+>> drivers/spi/spi-cadence-quadspi.c:1873:17: warning: ignoring return value of 'clk_bulk_prepare_enable' declared with attribute 'warn_unused_result' [-Wunused-result]
+    1873 |                 clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
---46S1Pyf2fGJjRDRn--
+
+vim +1873 drivers/spi/spi-cadence-quadspi.c
+
+  1865	
+  1866	static int cqspi_resume(struct device *dev)
+  1867	{
+  1868		struct cqspi_st *cqspi = dev_get_drvdata(dev);
+  1869		struct spi_master *master = dev_get_drvdata(dev);
+  1870	
+  1871		clk_prepare_enable(cqspi->clk);
+  1872		if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
+> 1873			clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
+  1874		cqspi_wait_idle(cqspi);
+  1875		cqspi_controller_init(cqspi);
+  1876	
+  1877		cqspi->current_cs = -1;
+  1878		cqspi->sclk = 0;
+  1879	
+  1880		return spi_master_resume(master);
+  1881	}
+  1882	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
