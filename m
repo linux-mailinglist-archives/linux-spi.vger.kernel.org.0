@@ -2,135 +2,180 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A3F721858
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Jun 2023 17:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D5F7222FC
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Jun 2023 12:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjFDPyg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 4 Jun 2023 11:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S231261AbjFEKJM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Jun 2023 06:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjFDPyd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 4 Jun 2023 11:54:33 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1727BB;
-        Sun,  4 Jun 2023 08:54:31 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so5975198a12.0;
-        Sun, 04 Jun 2023 08:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685894070; x=1688486070;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TsvcyukdSS1lKPeAFb0MO21Iif9mAo0wy8+BZHk6XCA=;
-        b=r9RnHmU6Pa0FtsM/qHVFqFiCYlBYyvtIkLeKoNPRIk8smrMsqYFJGWCQjT7VU72eDe
-         BlragftM9BcqClhhfhrjXu+KMSBuqSe+KNwPFU0KBNJlL713GE9o6QJnGFo2MVVjPP+P
-         tQT4bqbQqIIjRH39Ls+d3YC1mLwWHW3tHKnUmfhzbMfPeeq5TIZAMtwSAuYi3ZYPbltW
-         zBx3Pm7HZhbXZBrcB4iAF+MkhkDQusDxPerLMNjJ9M9evb0iQB/WGEScO2q3pwVkwkGJ
-         xiks1hYnTowy+2gYSWDJ+qp4ig7OfRGINcmiTLnuJchPscxcbqDF/ro1Gt8cNoeiUHiy
-         SK0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685894070; x=1688486070;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TsvcyukdSS1lKPeAFb0MO21Iif9mAo0wy8+BZHk6XCA=;
-        b=QdjS9YW+NB/nZfOXhs5NvVuHKMm+ZsgU88hN7z3SHbZX49pfaJOf/yYd7KX5+ZJjkq
-         DXndWVuz2i+vSckuvlupYlCwVWUfOIJY/KXoHFUTjei9QO1nWUSs9Wgns+ZZ6Wx8ykLt
-         RzmpHIX3ZDUAiADbVtpMJHT0jk0uy1l1aPvSyp4MaFLgqxUob21WxbDbGnJr9zSAS+VI
-         mlWem+Cgp+TuWH1uflprDVuWcJeXnKFDYrwfvMcU9NdsA9QAn7hoDUJAuEvqa6zbow3u
-         PpPQKQdV1E/hm0aqz9nr5m+71BH70okfp6MZ4HDoXnjNwkpX8fyHWsDrSt09KHzSKQK2
-         O5Mg==
-X-Gm-Message-State: AC+VfDytwp4pLZVnnfiRdfjebawSFrLgcsIOaK272Er3P5dwV1A3LPlH
-        7s+jYlBF3kiOuaGQZZrxtwY=
-X-Google-Smtp-Source: ACHHUZ6AHXuZcLeVYAiKN3Lakw7/5eyPw2g9gXmYKU2Z87ULJVZcNauonQPfi8yZtMpFNZvTXucpWg==
-X-Received: by 2002:a17:907:6d08:b0:974:5e2c:8721 with SMTP id sa8-20020a1709076d0800b009745e2c8721mr4687955ejc.38.1685894070095;
-        Sun, 04 Jun 2023 08:54:30 -0700 (PDT)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170906111500b00974530bd213sm3241020eja.143.2023.06.04.08.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 08:54:29 -0700 (PDT)
-Message-ID: <1492a131cd474c47e2a2b14defd46284f695b0ef.camel@gmail.com>
-Subject: Re: [PATCH v1 00/43] ep93xx device tree conversion
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        with ESMTP id S229604AbjFEKJH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Jun 2023 06:09:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC008E3;
+        Mon,  5 Jun 2023 03:09:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7165B6142D;
+        Mon,  5 Jun 2023 10:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A84C433EF;
+        Mon,  5 Jun 2023 10:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685959745;
+        bh=vR126awxcUVwkB+vDMvPtCpzsX4o/jUNFWue4cfisK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jGzB5Lk8x9cx95oG26XZOnRJk3ecWXQXEE07nQpVPtV0ldNyjBH+HF+PE67Y7BaJJ
+         Rr3ULQyt++0jpBkQcUB6dtzHGzTjv3M2ialKNinB+zPSqHMhJHjuOXl09E3kIINcDr
+         ainCX7TdvicCZowvSKu0Imjn3a2HSe+PaHRV5wCbfibFHwmjxecOKX/pBzY6MMJVH9
+         PRUd1U94/aMQLLs6h2roaIwCi2wKw54+JxUdln3ex3j1eeHU3sfXSFSi3sNId2DTA1
+         A9TVGDCBa3pkug7NMMjLVIV38slENc59CTNhjtBV91E1BeYMtSxuqGpEoGjEOJorUU
+         t+ravi9eHQa2Q==
+Date:   Mon, 5 Jun 2023 12:09:02 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Le Moal <dlemoal@kernel.org>,
-        Liang Yang <liang.yang@amlogic.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
         Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
-Date:   Sun, 04 Jun 2023 17:54:27 +0200
-In-Reply-To: <20230601053546.9574-1-nikita.shubin@maquefel.me>
-References: <20230601053546.9574-1-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <ZH20PkU1WAqQ0rap@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, piyush.mehta@amd.com,
+        nava.kishore.manne@amd.com, sai.krishna.potthuri@amd.com,
+        shubhrajyoti.datta@amd.com, vishal.sagar@amd.com,
+        kalyani.akula@amd.com, bharat.kumar.gogada@amd.com,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>, Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m1s0pAgPK6Y5qfq2"
+Content-Disposition: inline
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Nikita,
 
-On Thu, 2023-06-01 at 08:33 +0300, Nikita Shubin wrote:
-> This series aims to convert ep93xx from platform to full device tree supp=
-ort.
+--m1s0pAgPK6Y5qfq2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
 >=20
-> Alexander, Kris - there are some significant changes in clk and pinctrl s=
-o can i ask you to tests all once again.
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-I have quickly tested network and sound on EDB9302 and I neither have probl=
-ems with
-these functions, nor did I spot any new error messages, overall looks good =
-to me,
-thanks for your efforts!
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
---=20
-Alexander Sverdlin.
 
+--m1s0pAgPK6Y5qfq2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9tD4ACgkQFA3kzBSg
+KbYxkhAAr/KV+7eVEy7Tyr1buRUjnSFHfeoi92WwdiRkwD3KEgGd3CGm8RFiHEH3
+xVJnR47Ii6/IU9NidYLsuN6WTYlCdGoQqY6ncEpZui1rIIZpJPEbHbw4IRrDEu+o
+/wd/3S/y3VvGjvsnBK2sbBpTOb8N10Xw084aSJTmFz8Ztzy9mZU9ub6TFxMZhWK2
+w0Unv2I6q+Yl0kEy05PAoEID7mXf33aFnz+j3iz0LtUU6nMQilQHdkfYSsec5c04
+jirw6YLgK+VBRncT55L3XKpAamfUKU7o3DY20/pPw8fSlDj2Z0aQkHM1P22cKwNF
+C1Q0epu85vIJVBW45SEBY7ccPLZuwjFNMl5Do8hRZGBtHJOxhqmRjOA3SWc0u4lx
+txwo97w+Ux9dMlS+UJhD5rWGFfF+HHqxg+M71SCOa94kg2Drs+WLHXd1NgG1YEcb
+FoHsGkzv0nvkBf0O6X3hd8tAdkks9l1370YbDSBvSXUUHxIefUNzEjvQVTdJUj0J
+y+X6CigfCUyYdoscjH8rCdA7fwbxnbeX5zSSXKKp2coIAwEl7ItMx8h8QwwQzZB2
+z/05V/3n4FekryCdpDn5/YH7k2rO6WgSN4L7n+8yDhjWtTwXPRB0XeomogN5CpGj
+T+DR5iqEdJHfmWETr4Pn7ttnc/rvH5ak5U9raBF2+SYA5p/XQGU=
+=PkRp
+-----END PGP SIGNATURE-----
+
+--m1s0pAgPK6Y5qfq2--
