@@ -2,46 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E047227FD
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Jun 2023 15:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2517229F1
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Jun 2023 16:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjFEN44 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Jun 2023 09:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S232456AbjFEOzp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Jun 2023 10:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjFEN4z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Jun 2023 09:56:55 -0400
+        with ESMTP id S232416AbjFEOzm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Jun 2023 10:55:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F047D90
-        for <linux-spi@vger.kernel.org>; Mon,  5 Jun 2023 06:56:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59B3F4;
+        Mon,  5 Jun 2023 07:55:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85C1861EE8
-        for <linux-spi@vger.kernel.org>; Mon,  5 Jun 2023 13:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7751C433EF;
-        Mon,  5 Jun 2023 13:56:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3677862672;
+        Mon,  5 Jun 2023 14:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682A3C433D2;
+        Mon,  5 Jun 2023 14:55:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685973413;
-        bh=k7t477CTpOoWeWrSfPCkbSHmZ4TpkWExtCiySIoEolM=;
-        h=Subject:From:Date:To:From;
-        b=aFwWpbFAuyHpDNnrzMowaevoTwzOuqkTad2YjSwhUuyWO5dPEVlL/Sc0R9IVV8BSb
-         Z2+CdQZpPXXGALv30MWFn+hQGYaKDIGkRSAL5LpRV5fACOxAOZ1Q3N5zaY63ktoILC
-         KgMxXovUVp90gYs9cHGyvtjy5CL6eniLOoped+/6AiMZU1ba9NzX0ETvt6sQk9opP5
-         VfRD7Fnzm9GtiV3wl+VQUbUEzHagG5xAwnFQNnswAmdQxinsQXQUHCvJZdxclboh2l
-         S28YMiPfIBJkqlgSG2IkmT5P5fRpNtXAG39haHbFpCAdJquu7zwFS8HEXuwhb5RRxO
-         2qQ/Llj+DWL1Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9EACE87232;
-        Mon,  5 Jun 2023 13:56:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1685976940;
+        bh=owVqIJcvv2ZqL/eS/5evrVaFvRAojhfCvGlWzeVYaBE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=oOkkbsfMlf8I8dusuqB0/yuYd68++W9bH9V5WFUtgGUjDnG5wJHMIjSrS4ypus3ya
+         DdlBcxLDq7HsWzqe+yGv+saq9EQzu6X/YkhUVYR45Kj2wqsj/zAoQ3Iyvc2oWez9Xt
+         4YrAG/Nm58htPQp3rb+SgUveGJr4zKTVQy6g4uHWtovAYnSuhiVnxdk14AwG/izrIN
+         lB3qOAmXvTaCya9/Nqy+YGoGz38upbuKRdq7RkDJAOdPBa6J2Sty6RmAQAEYOCeheE
+         EV0k+62D6rqbKmf5RMhGr4QL/QwA0GMSGwk1/bt2VGipkEzp0rkh4yDIeGnMSzQmWv
+         Qb+4yIOgtYAvw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+In-Reply-To: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
+References: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
+Subject: Re: [PATCH v2] spi: spl022: Probe defer is no error
+Message-Id: <168597693914.38297.2144180817294753536.b4-ty@kernel.org>
+Date:   Mon, 05 Jun 2023 15:55:39 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168597341375.6443.4729988933257882687.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 05 Jun 2023 13:56:53 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,17 +55,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Add cs42l43 PC focused SoundWire CODEC (2023-06-05T12:54:58)
-  Superseding: [v2] Add cs42l43 PC focused SoundWire CODEC (2023-05-30T12:21:06):
-    [v2,1/6] soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
-    [v2,2/6] dt-bindings: sound: cirrus,cs42l43: Add initial DT binding
-    [v2,3/6] mfd: cs42l43: Add support for cs42l43 core driver
-    [v2,4/6] pinctrl: cs42l43: Add support for the cs42l43
-    [v2,5/6] spi: cs42l43: Add SPI controller support
-    [v2,6/6] ASoC: cs42l43: Add support for the cs42l43
+On Fri, 02 Jun 2023 20:12:54 +0200, Mårten Lindahl wrote:
+> When the spi controller is registered and the cs_gpiods cannot be
+> assigned, causing a defer of the probe, there is an error print saying:
+> "probe - problem registering spi master"
+> 
+> This should not be announced as an error. Print this message for all
+> errors except for the probe defer.
+> 
+> [...]
 
+Applied to
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: spl022: Probe defer is no error
+      commit: 8098a931c080d32687aee72a1dfac98507a6034b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
