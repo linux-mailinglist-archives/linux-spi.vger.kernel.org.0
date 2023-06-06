@@ -2,97 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981A6724A50
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 19:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3262724A87
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 19:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237693AbjFFRdS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 13:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S238824AbjFFRt3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 13:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbjFFRdR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 13:33:17 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C156010FF;
-        Tue,  6 Jun 2023 10:33:16 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1c910ee19so33334361fa.3;
-        Tue, 06 Jun 2023 10:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686072795; x=1688664795;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NXKJbFz1nKDKoVlMVlm8aQEKkrV2KIiDCqPS9XhHh0=;
-        b=ZEw9yUBSxHAopkpmwxzN8xEPjxgsPjv8z8etXX4uAkXqVTLnc7Zqs/nbxm4evTnPYx
-         J+Omm0ydUBktRZTLrKqs9LiCkqeCWU3jPapWRXrILrv6PEaGJwrcLIhICnoq+JZQwdgm
-         /2NLcUAAIqvEWVR7j+Sc6GZ9DSpn2l2kgBErJV+71vHOi9nZ7Z1AQNPoBTF4C/uA54l/
-         WXZRJxlt38eemJkwDbL0qh1xoe/YdOtJc9APQDAKIouLkX+FzxMMXPv2xuMAyB/wo75h
-         rLAQg4TkRrW68a7bN187GZBhQmMZjeHy/zG3Uahh8nok66OL4MBimuetJyEB0L2cxtMg
-         1Fpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686072795; x=1688664795;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7NXKJbFz1nKDKoVlMVlm8aQEKkrV2KIiDCqPS9XhHh0=;
-        b=MqjeHcthCvAecb8OYQVCg40FlRlF5WGjtFQ/nGTlk9fnbBXVrLq1ZQA8VrE0SaKphS
-         IBiR7WutCgwFvCM85R4iHovXcEVHMTimTdYfLY0Imkfrceiw6ordLIuSgebVKFK2o0h2
-         K54aCa9qJLYPc5mzflW75ksP44vJjqTztMo88yChgB7Ag6Ig1kAP9oBOr9K0UNdFjJqp
-         kMUMKt5ApJkCqKORHoMsV65sR5zmlqciXLx8zQaMajpsTcZg/anTG+VG2tpud3j49MuN
-         4ZihUxT2ZBz9vAAtmdk6pnk9xyqRXmI5kfBvS8v3oivhAkHxpDHG41pZmhCmAoUQcNXi
-         zUKQ==
-X-Gm-Message-State: AC+VfDzAgAbyJYSrAuTAzvb/CnRGSen8XS3sw/eoMrvxoXuUcc6BCtZY
-        eHtEw3OtXPDfM6PoBtUA2os=
-X-Google-Smtp-Source: ACHHUZ6E4u1pwCQ4bGQbdToV6BQJplhi2ZNf72qvhp2dQ5/aVBqJv5anArQ6qcFH9gKG5ZLw8DKUBw==
-X-Received: by 2002:a2e:994e:0:b0:2b1:eb62:ffc8 with SMTP id r14-20020a2e994e000000b002b1eb62ffc8mr1448240ljj.6.1686072794884;
-        Tue, 06 Jun 2023 10:33:14 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id d14-20020a2e96ce000000b002a8a5afb87csm1941338ljj.20.2023.06.06.10.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 10:33:14 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 20:33:12 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Abe Kohandel <abe.kohandel@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
-Message-ID: <20230606173312.wfrowqc7irecow2s@mobilestation>
-References: <20230606145402.474866-1-abe.kohandel@intel.com>
- <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
- <20230606164040.s3ozznrkcclozugx@mobilestation>
- <7696b01e-c388-45f2-9694-e427dde84b2b@sirena.org.uk>
+        with ESMTP id S233638AbjFFRt2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 13:49:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9600910F4;
+        Tue,  6 Jun 2023 10:49:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5DB6306F;
+        Tue,  6 Jun 2023 17:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EAEC433EF;
+        Tue,  6 Jun 2023 17:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686073766;
+        bh=pgWxxc2pXaOIXxZHnc21uLoXRzmI3gMVWZH7Ahht6W8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p6CkLvGT6/u2gYsz2ZI9hsYNyI3961g9ByfPqZHHlddzADAlS4V7qRk/yYmkgO3SP
+         Ns4wZs1+t/vQI10WhNoIFVCMMalJiGq57xVqDsF1un74bOLtavajk/clxqYjx6Ppeg
+         faNiRttu1ryG+NxJHpAt0n3zClE/z8wkCsFVyj7buTX16ffEbiTcNoDpaUQZJbHnfS
+         8WuyB3/mk8DKVRcJuUClaXfoKxy8jFiVHYGdFKxyC/74go0DR5ehdHstQytcCdJW2/
+         DrtcJE4IcMvrDKUb/tEfIr5yxJx98dJ994HnlEZhu1+UYXUuFQGWf10HLGHvBJAz2k
+         CpPpcuuqYNI8g==
+Date:   Tue, 6 Jun 2023 18:49:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
+Subject: Re: [PATCH v2 0/2] spi-geni-qcom: Add new interfaces and utilise
+ them to do map/unmap in framework for SE DMA
+Message-ID: <bffedd6c-acc2-4c89-9e4d-82aa70249b57@sirena.org.uk>
+References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AcBOIuEM4L/yvJax"
 Content-Disposition: inline
-In-Reply-To: <7696b01e-c388-45f2-9694-e427dde84b2b@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:47:40PM +0100, Mark Brown wrote:
-> On Tue, Jun 06, 2023 at 07:40:40PM +0300, Serge Semin wrote:
-> 
-> > Mark, next time please wait at least for a few days before applying.
-> > Give me a chance to review.)
-> 
-> It's a trivial quirk for a platform, it seemed more hassle to wait TBH.
-> 
-> > * In this case I have had a question regarding the in-code comment
-> > which may have been needed to be fixed a bit.
-> 
 
-> That can always be fixed incrementally if there's issues.
+--AcBOIuEM4L/yvJax
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ok. I've sent my comment in that regards. Let's see what the author
-responds.
+On Wed, May 17, 2023 at 05:48:12PM +0530, Vijaya Krishna Nivarthi wrote:
+> A "known issue" during implementation of SE DMA for spi geni driver was
+> that it does DMA map/unmap internally instead of in spi framework.
+> Current patches remove this hiccup and also clean up code a bit.
 
--Serge(y)
+Given Konrad's review I'll go ahead and apply these on a branch
+(assuming my CI is happy), if there's a need to merge them into the qcom
+tree I can sign a pull request (or revert the commits).  Hopefully
+that's OK with everyone.
+
+--AcBOIuEM4L/yvJax
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/cZ8ACgkQJNaLcl1U
+h9C1MAf/b+Cz+UhbCvp93H9oihETiPDy+5bjUooM27kl60urEm1j+ViCXUDFJwE4
+ZoctmMVAUSWKbZs9Ad1iaukoiVJ52HjcmPUXu1V7KTnNNCMBUSRGA12Rt4e38G0b
+2kg8YqAo7QhHaCBmIWNoUgZfCCiezuDBX/4Y3kRUIqUZT48ymfUwMUdIMwstDfWd
+ehx+XCQkFm/qfXf735N+fg98AVVGpbdLakgSdK3BtA6eh2Et60xtckdzl32oJTYj
+RSgoM8R7nS0R0YQmf5bPpkMt4x+xcCH9/sw/wT1sPi5Dif7lH5w0DoOTwcp3x7/2
+IhFRytVhDnNzUZ3H92Phh47EoS5nnw==
+=VF1y
+-----END PGP SIGNATURE-----
+
+--AcBOIuEM4L/yvJax--
