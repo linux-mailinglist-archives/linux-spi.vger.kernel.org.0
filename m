@@ -2,55 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B34E72495A
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 18:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D34F72497E
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 18:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbjFFQkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 12:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S236037AbjFFQrt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 12:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjFFQkq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 12:40:46 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D637010C2;
-        Tue,  6 Jun 2023 09:40:44 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso2715037e87.1;
-        Tue, 06 Jun 2023 09:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686069643; x=1688661643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=norESNq/iGPk1UB7TAGxhH8PXhOkHVXlC8bXJqdAByE=;
-        b=MyU3pryKLoA3UVgvjV92Bc7JqT2MkUT3l6INkZZYfWD4Oavm1JcKHBdB3dAVTFhuCw
-         PFlgeOhj6guDRAYm1JyAWM/NB5JSM36F2PxEkOaS0TRrb7ci6dg3oiuZxkn1WEhXvWJG
-         9SCL8V3SYr7kx32iZzlr7WFRo4qDZCd2xcpkDsGy5dqsoNhqXGmA1aiQzNufBpNETM8u
-         wSUJp5XHZPXao1HlhgEgjCzNGaXxFjzD35ixfQCnBsRjrhDL8kA+HaC/2ju/wgrM2DiG
-         RMma3AtoPGJCTq/hx/qMUgQWopCZduj9rQP4keqnKErsY1mc1zqHh9fHb5MXx4LBb67m
-         xaOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686069643; x=1688661643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=norESNq/iGPk1UB7TAGxhH8PXhOkHVXlC8bXJqdAByE=;
-        b=ELjUevAHNCnceHOMUlTirY4iZSbJaDYlWPx1i+JtMHQupQVfqUffadY7TLHgPpoRXb
-         zslaNbdAgvIHIbmVa5p2Mgp2MwV8Zy4xZ1JPUfQagfAsdBsfzf9Rr0fnUnjDt6bUrxqC
-         eBOaNEsEvTth/TIwGi0M26AkL6TtyxTMk7qN+GdIyKy+By0AOPJ65QYu2LngMefhE1B6
-         QP8pKUk1+s9GsZo8lxTwXfn8FKZfeKENRkaTHxuVG6wGIwph62qabV4AVCZl9AAy5hWW
-         N8h0nmx6XP+Wtu6R8G5xk3OXkHycOBWglpi7qOcZaylDhXda8cHXxor2JlqSYgwwRWzH
-         L3wg==
-X-Gm-Message-State: AC+VfDxVo/tCyG4N0OOeFROuW9Lh1bc3WkJ5kdzkmBwwztSs9jdzKxu8
-        uZjAFVr5xO4msfnpC6H42OI=
-X-Google-Smtp-Source: ACHHUZ7Z722i/xWTtbac8UrrnqqzXTdipL6Up2noyjRPmLNyTuQ82H1SwFMmUFDND/SxWY9hWgGaSQ==
-X-Received: by 2002:ac2:4ace:0:b0:4e8:5112:1ff2 with SMTP id m14-20020ac24ace000000b004e851121ff2mr1180745lfp.27.1686069642782;
-        Tue, 06 Jun 2023 09:40:42 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id d7-20020ac24c87000000b004f252003071sm1510897lfl.37.2023.06.06.09.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 09:40:42 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 19:40:40 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S233619AbjFFQrr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 12:47:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED9E6B;
+        Tue,  6 Jun 2023 09:47:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84737630C1;
+        Tue,  6 Jun 2023 16:47:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E033FC433D2;
+        Tue,  6 Jun 2023 16:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686070065;
+        bh=h5qXADfp5iiHf5MldklfzUICOJ9UUo9FqnfqQoU50+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ravdK7JRjrbpZQJXRxpzY2TO5yOug/TyvCUu/I5jnTGVcKdN159z0lEfOVSmP67uJ
+         41MtN0iYA+OJE89RvAmHGPEo6F5Q8cr9TFu8WkRbXvRwSWM/2zATy3U2NlZx+tmuRD
+         RQzLcBpsd5vYbT22DcCu/IzfcP2W5Y5tWKAuoL28M4wdILnD10zkA561w9chFyEscf
+         1fo/fgcx1uqc1cdPxvhSgXatNaQ5YskiSMeFmFz8mL6SuUgY+2Q4M3RVCEYxbQXujU
+         27TX3Rs3gFv/WqZxEFrL8T1zsPSAQyfRfsmgNYrJubWncrxvJ2VQsi0xZdktPrtufd
+         jIxgNsLT4iY4Q==
+Date:   Tue, 6 Jun 2023 17:47:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Abe Kohandel <abe.kohandel@intel.com>,
@@ -59,72 +42,56 @@ Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
-Message-ID: <20230606164040.s3ozznrkcclozugx@mobilestation>
+Message-ID: <7696b01e-c388-45f2-9694-e427dde84b2b@sirena.org.uk>
 References: <20230606145402.474866-1-abe.kohandel@intel.com>
  <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
+ <20230606164040.s3ozznrkcclozugx@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5ishfBgfXgGNSCq9"
 Content-Disposition: inline
-In-Reply-To: <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230606164040.s3ozznrkcclozugx@mobilestation>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:24:36PM +0100, Mark Brown wrote:
-> On Tue, 06 Jun 2023 07:54:00 -0700, Abe Kohandel wrote:
-> > The Intel Mount Evans SoC's Integrated Management Complex has a DW
-> > apb_ssi_v4.02a controller. This series adds support for this controller.
-> > 
-> > No SoC level chip select override is provided and as such no DMA
-> > configuration is done for the controller.
-> > 
-> > Thanks,
-> > Abe
-> > 
-> > [...]
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Mark, next time please wait at least for a few days before applying.
-Give me a chance to review.)
+--5ishfBgfXgGNSCq9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-* In this case I have had a question regarding the in-code comment
-which may have been needed to be fixed a bit.
+On Tue, Jun 06, 2023 at 07:40:40PM +0300, Serge Semin wrote:
 
--Serge(y)
+> Mark, next time please wait at least for a few days before applying.
+> Give me a chance to review.)
 
-> 
-> Thanks!
-> 
-> [1/2] spi: dw: Add compatible for Intel Mount Evans SoC
->       commit: 0760d5d0e9f0c0e2200a0323a61d1995bb745dee
-> [2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
->       commit: 7bac98a338d63efb0b44ce4b79d53838491f00df
-> 
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
-> 
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
-> 
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
-> 
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
-> 
-> Thanks,
-> Mark
-> 
+It's a trivial quirk for a platform, it seemed more hassle to wait TBH.
+
+> * In this case I have had a question regarding the in-code comment
+> which may have been needed to be fixed a bit.
+
+That can always be fixed incrementally if there's issues.
+
+--5ishfBgfXgGNSCq9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/YysACgkQJNaLcl1U
+h9CxQAf/VtujR3HvlFC6goCYk8294SlUDYFVXzT6M6n11QIlRbX9IAfYBveFXPo4
+6LGOn1rTPQIpI3iw51jahj6D2MF9YAqz2hilaCrvdq7JQm03GT20eAeJ1aUZEtxO
+4xhoujdH2dv8bpXsZhJVPKcGOCPCxXySXKMtbv8OszgYEzLG2unYxC7PixB6BsNp
+jkTEbCSxtQGu02Rjyl2Z+I2XbUScs0L55TUc8U5etEub9yYkoWf2voaTkHU5XXnU
+V1HZMwTLCrcxFoJaV8+W4hC96NVUTf3Go/FDr5KWmaIxl4J6OVk8jXrIdcU71uUw
+4+/fLXQW2lSxoX3lCVeCIJvOfopvFQ==
+=Q3jY
+-----END PGP SIGNATURE-----
+
+--5ishfBgfXgGNSCq9--
