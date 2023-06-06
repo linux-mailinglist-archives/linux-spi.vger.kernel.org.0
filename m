@@ -2,91 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AB17246EC
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 16:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0097A724841
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 17:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbjFFOzh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 10:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S238013AbjFFPxs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 11:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238419AbjFFOyw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 10:54:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1CEE42;
-        Tue,  6 Jun 2023 07:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686063286; x=1717599286;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7tq23lNIKA2SguU6N65nqWksRBv5EvXmrFt7DAmX+o8=;
-  b=PSgC23dHuJTwuuIghhY9AZJ2gy8FAvM7QJqQI5bXB5zEjX1RfwWUrzS+
-   Q+MOkI/nvtahJfKo6n96mEw3tNfL1YGpjB3tFRnPc/6u5Ze0BNRvUPzVJ
-   vntJN9Dqg9tEOMK+mzjW+fQzNCzn1nNtgAmgAOh3IQN3bdhd7Q2qN9E66
-   2bbpy/LCa2FlZ4TG7Tj4QsIhNQlpu2fFz9+37sSIPURb1P41MdLiCoMkW
-   1lqNWjCvJ+drGrA1VZrQKXC2IYwkXE6GI+sobAlKnLuwfkRibBsPnrbJ6
-   VtzJgEeEtpgHkuCW+Hqr8Rk2S4o/3suQw0VdKHcBX9y2uGeTWCoII205w
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337050769"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="337050769"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:54:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="853480012"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="853480012"
-Received: from ekohande-desk2.vc.intel.com ([10.234.35.153])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:54:46 -0700
-From:   Abe Kohandel <abe.kohandel@intel.com>
-To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Abe Kohandel <abe.kohandel@intel.com>
-Subject: [PATCH 2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
-Date:   Tue,  6 Jun 2023 07:54:02 -0700
-Message-Id: <20230606145402.474866-3-abe.kohandel@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606145402.474866-1-abe.kohandel@intel.com>
-References: <20230606145402.474866-1-abe.kohandel@intel.com>
+        with ESMTP id S236236AbjFFPxr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 11:53:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192D10D2;
+        Tue,  6 Jun 2023 08:53:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D47661323;
+        Tue,  6 Jun 2023 15:53:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074CEC433EF;
+        Tue,  6 Jun 2023 15:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686066825;
+        bh=PcAvLu57+uPUyhNIbnTyWjEN30qr9EKto+KBv+2pxKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=efPBv2fpEdY/h4jXsv61647g0ZfryKfikn7qwuUEjMRvw5Regxy3iTZ2gfpn8GN4+
+         ncvHlHCEds4sqVys46nBRzZz/tQMQOdJWbh8oq9T97FvXbrlgUfOKaOelG81uywXaB
+         tUK2MYQ0JwdeZnaKvSs1GemHPhJPB2yoIVCR7fyXDxh0ybLiUGzyCVai7MJr/m8Mwt
+         cdEsb0ZDV8iIXJcgwnffFTkYIQg2fZi4vilpSJ8IR8EKWpFWx3qUMJkCiUeBKj1/5H
+         KBFEVyYyGZLDhBjcQv0VroEBRBfiDbEvWp9mW0rnOiSl4FP2Zp3ArB/E/7W4gGRoaW
+         7DQhbflGeLlHw==
+Date:   Tue, 6 Jun 2023 16:53:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
+        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        quic_ptalari@quicinc.com
+Subject: Re: [PATCH v2 1/2] soc: qcom: geni-se: Add interfaces
+ geni_se_tx_init_dma() and geni_se_rx_init_dma()
+Message-ID: <9dd8ac78-984e-4588-9a45-0ceb3c51845c@sirena.org.uk>
+References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1684325894-30252-2-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oIxXRhOs3lXBAO+h"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Document the DesignWare SSI controller compatible for Intel Mount Evans
-Integrated Management Complex SoC.
 
-Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
----
- Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+--oIxXRhOs3lXBAO+h
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-index 12ca108864c6..a47cb144b09f 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-@@ -74,6 +74,8 @@ properties:
-         const: intel,keembay-ssi
-       - description: Intel Thunder Bay SPI Controller
-         const: intel,thunderbay-ssi
-+      - description: Intel Mount Evans Integrated Management Complex SPI Controller
-+        const: intel,mountevans-imc-ssi
-       - description: AMD Pensando Elba SoC SPI Controller
-         const: amd,pensando-elba-spi
-       - description: Baikal-T1 SPI Controller
--- 
-2.40.1
+On Wed, May 17, 2023 at 07:18:17AM -0700, Doug Anderson wrote:
+> On Wed, May 17, 2023 at 5:18=E2=80=AFAM Vijaya Krishna Nivarthi
 
+> > The geni_se_xx_dma_prep() interfaces necessarily do DMA mapping before
+> > initiating DMA transfers. This is not suitable for spi where framework
+> > is expected to handle map/unmap.
+
+> Mark and Bjorn will have to coordinate how they want to land this,
+> since normally patch #1 would go through the Qualcomm tree and patch
+> #2 through the SPI tree. In any case:
+
+Bjorn?
+
+--oIxXRhOs3lXBAO+h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/VoIACgkQJNaLcl1U
+h9DNbAf/fh8LlkDLW/S414Dw4hRRtPWFWa3f5q+YMrH3wppUwQm3QCcDf+gxyrP2
+EAkEmr83Baazi1kD7OGICz+rMl1Jn5x9+JBPaR9TJfydd7WUT6M/Q4mNfKoGRXDA
+W7gX134fbTMD0V6oU0imcLqLZA1KFNyzEgRvR9eArYWQCXGz51NaUGnjwjgvGbF2
+ovQlhIgs9aTysO30q2+a9Hi/LqFgohqhM/L7WtV4m01NlZtVB63rkPTCyuWS2q9K
+KQNLxCWpyaa3YV+znaJpHj/iAOGwF+oxTKvCGpdVCttXv028zMLTtfori7Qzf0xY
+abNBPxbokhhGRUiGSDhyzyc5URAzBQ==
+=Cizk
+-----END PGP SIGNATURE-----
+
+--oIxXRhOs3lXBAO+h--
