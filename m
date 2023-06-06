@@ -2,56 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097A724841
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 17:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2964724908
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 18:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238013AbjFFPxs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 11:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S236737AbjFFQZP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 12:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbjFFPxr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 11:53:47 -0400
+        with ESMTP id S238506AbjFFQZB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 12:25:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192D10D2;
-        Tue,  6 Jun 2023 08:53:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D510FE;
+        Tue,  6 Jun 2023 09:24:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D47661323;
-        Tue,  6 Jun 2023 15:53:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074CEC433EF;
-        Tue,  6 Jun 2023 15:53:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A75B562862;
+        Tue,  6 Jun 2023 16:24:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DAABC433EF;
+        Tue,  6 Jun 2023 16:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686066825;
-        bh=PcAvLu57+uPUyhNIbnTyWjEN30qr9EKto+KBv+2pxKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=efPBv2fpEdY/h4jXsv61647g0ZfryKfikn7qwuUEjMRvw5Regxy3iTZ2gfpn8GN4+
-         ncvHlHCEds4sqVys46nBRzZz/tQMQOdJWbh8oq9T97FvXbrlgUfOKaOelG81uywXaB
-         tUK2MYQ0JwdeZnaKvSs1GemHPhJPB2yoIVCR7fyXDxh0ybLiUGzyCVai7MJr/m8Mwt
-         cdEsb0ZDV8iIXJcgwnffFTkYIQg2fZi4vilpSJ8IR8EKWpFWx3qUMJkCiUeBKj1/5H
-         KBFEVyYyGZLDhBjcQv0VroEBRBfiDbEvWp9mW0rnOiSl4FP2Zp3ArB/E/7W4gGRoaW
-         7DQhbflGeLlHw==
-Date:   Tue, 6 Jun 2023 16:53:39 +0100
+        s=k20201202; t=1686068679;
+        bh=W4Tp8jO+9JqisoEdQWJbb+RxEjWeGO6Ebj3B6m7pPCA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=nrr/ZR5dfX1JBaKxwqI6JBfjB+mB2pSi42JI/AOhWuf9o0OsOS52k8JgXS8rdI8y6
+         2vYNaoTtpW+NpBoEnH/1OmXSGKzv9ThUyzeoQXOvIP1tHfCnwKVaA6XDjPyWRg8dvY
+         U3ZRT462HdmSIbet9gXFc+aKZW1SCpSUfD5eEYDCHNa7tRMF483mEyNy+w4JEJE0is
+         h1/hwSTqweKkAwG8GPJOZNlO3So+SEHsyil9mK2FhoR5WQWerZri4uVgE8/HdSMWE8
+         LgwLZD9x1XfJjz/TKY8SwckJINOicGboKPdh02sbc8XKkCuIj00C9gYfRRC+AFELbe
+         SuWHZ2vhYhyKQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com,
-        quic_ptalari@quicinc.com
-Subject: Re: [PATCH v2 1/2] soc: qcom: geni-se: Add interfaces
- geni_se_tx_init_dma() and geni_se_rx_init_dma()
-Message-ID: <9dd8ac78-984e-4588-9a45-0ceb3c51845c@sirena.org.uk>
-References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
- <1684325894-30252-2-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
+To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abe Kohandel <abe.kohandel@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230606145402.474866-1-abe.kohandel@intel.com>
+References: <20230606145402.474866-1-abe.kohandel@intel.com>
+Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
+Message-Id: <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
+Date:   Tue, 06 Jun 2023 17:24:36 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oIxXRhOs3lXBAO+h"
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
-X-Cookie: Keep out of the sunlight.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,38 +58,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 06 Jun 2023 07:54:00 -0700, Abe Kohandel wrote:
+> The Intel Mount Evans SoC's Integrated Management Complex has a DW
+> apb_ssi_v4.02a controller. This series adds support for this controller.
+> 
+> No SoC level chip select override is provided and as such no DMA
+> configuration is done for the controller.
+> 
+> Thanks,
+> Abe
+> 
+> [...]
 
---oIxXRhOs3lXBAO+h
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, May 17, 2023 at 07:18:17AM -0700, Doug Anderson wrote:
-> On Wed, May 17, 2023 at 5:18=E2=80=AFAM Vijaya Krishna Nivarthi
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > The geni_se_xx_dma_prep() interfaces necessarily do DMA mapping before
-> > initiating DMA transfers. This is not suitable for spi where framework
-> > is expected to handle map/unmap.
+Thanks!
 
-> Mark and Bjorn will have to coordinate how they want to land this,
-> since normally patch #1 would go through the Qualcomm tree and patch
-> #2 through the SPI tree. In any case:
+[1/2] spi: dw: Add compatible for Intel Mount Evans SoC
+      commit: 0760d5d0e9f0c0e2200a0323a61d1995bb745dee
+[2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
+      commit: 7bac98a338d63efb0b44ce4b79d53838491f00df
 
-Bjorn?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---oIxXRhOs3lXBAO+h
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/VoIACgkQJNaLcl1U
-h9DNbAf/fh8LlkDLW/S414Dw4hRRtPWFWa3f5q+YMrH3wppUwQm3QCcDf+gxyrP2
-EAkEmr83Baazi1kD7OGICz+rMl1Jn5x9+JBPaR9TJfydd7WUT6M/Q4mNfKoGRXDA
-W7gX134fbTMD0V6oU0imcLqLZA1KFNyzEgRvR9eArYWQCXGz51NaUGnjwjgvGbF2
-ovQlhIgs9aTysO30q2+a9Hi/LqFgohqhM/L7WtV4m01NlZtVB63rkPTCyuWS2q9K
-KQNLxCWpyaa3YV+znaJpHj/iAOGwF+oxTKvCGpdVCttXv028zMLTtfori7Qzf0xY
-abNBPxbokhhGRUiGSDhyzyc5URAzBQ==
-=Cizk
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---oIxXRhOs3lXBAO+h--
+Thanks,
+Mark
+
