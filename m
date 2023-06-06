@@ -2,42 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BA47243B2
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 15:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE2F724445
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 15:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237992AbjFFNHc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 09:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
+        id S237181AbjFFNWr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 09:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238021AbjFFNHX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 09:07:23 -0400
+        with ESMTP id S238205AbjFFNWk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 09:22:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BC1728;
-        Tue,  6 Jun 2023 06:07:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E8BE78;
+        Tue,  6 Jun 2023 06:22:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A07F5632CC;
-        Tue,  6 Jun 2023 13:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB60C433D2;
-        Tue,  6 Jun 2023 13:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8C2663321;
+        Tue,  6 Jun 2023 13:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55F81C433D2;
+        Tue,  6 Jun 2023 13:22:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686056802;
-        bh=Of7kuM6rwHgcdNEnTPw4TSCttG8x0dqdHftUZ4BZnaE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V8KFe2g8NEeJs1ujHbRUJWxphr2zce5G2CGnYMUHXBl8QgnVG5sV98aZd/cRx4PN7
-         0ZpxVVnE2ozNSnwafwQR758kNBpFyBSfa1NqzQD3LNrVkidbo3kPmpo2O2f0/DRjhG
-         55nTfCH1jdsc9f3Oh+rq7RzmQIUYveZnNG9FRUtW+N4yAMDkSr81ZySeRXBCx/0xm5
-         VWx8XDI1PqGpz3lZIUS57u3rXCdVndDKc31qUDlonsj/nEAWo1KLrrNTIUANf3Qx+2
-         XlXl32CodNBzbejj/YxTt96oeiIqaIxJh0WFZ7PWVdkRmFK8Vb9z934UO2KqxR3iQN
-         zPmLBJZfAX6tQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        s=k20201202; t=1686057758;
+        bh=Jm7WtQIwjExvSjh6DAfV13p9ui1JhaD+lWKh+ZYx5tg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cSuJew/9yXPl+Ck1N7igJVKzNVQdgcDFoOVwNtWU02J3n+G+65DIBtkoGTHVlbR2o
+         5puLXA/FdV2lPYNoGadyXfXNUeNow7Thw1ox0kj8NAq1OHh3tia8bFHhM2S4V/rfgo
+         hDkffy1ujlWjw5bcFGvA+OT9+SQRiWhuFwUU/Thr6kODcwgIWeqKrGbomyBEXBfSaK
+         4DhsxzZJwmm0V7mPnHa+lSTTbawn1MwulpLTOcDhWLGJoeuRMR3qgrKYQf2J8/R6+o
+         7I3C0FgMJ+aWpYrfHYDQnueg/y2d+NZQDxa3k/9SpyBP4WHHm3vdFZe7hublkBCeau
+         Isw5h2+6WFZlQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39FD0E8722F;
+        Tue,  6 Jun 2023 13:22:38 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.4-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230606130641.AAB60C433D2@smtp.kernel.org>
+References: <20230606130641.AAB60C433D2@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230606130641.AAB60C433D2@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc5
+X-PR-Tracked-Commit-Id: 0c331fd1dccfba657129380ee084b95c1cedfbef
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a4d7d701121981e3c3fe69ade376fe9f26324161
+Message-Id: <168605775823.13551.15450007673640362051.pr-tracker-bot@kernel.org>
+Date:   Tue, 06 Jun 2023 13:22:38 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.4-rc5
-Date:   Tue, 06 Jun 2023 14:06:29 +0100
-Message-Id: <20230606130641.AAB60C433D2@smtp.kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -48,35 +61,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
+The pull request you sent on Tue, 06 Jun 2023 14:06:29 +0100:
 
-  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc5
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a4d7d701121981e3c3fe69ade376fe9f26324161
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc5
+Thank you!
 
-for you to fetch changes up to 0c331fd1dccfba657129380ee084b95c1cedfbef:
-
-  spi: qup: Request DMA before enabling clocks (2023-05-30 13:43:31 +0100)
-
-----------------------------------------------------------------
-spi: Fixes for v6.4
-
-A small collection of driver specific fixes, none of them particularly
-remarkable or severe.
-
-----------------------------------------------------------------
-Clark Wang (1):
-      spi: lpspi: disable lpspi module irq in DMA mode
-
-Daniel Golle (1):
-      spi: mt65xx: make sure operations completed before unloading
-
-Stephan Gerhold (1):
-      spi: qup: Request DMA before enabling clocks
-
- drivers/spi/spi-fsl-lpspi.c |  7 ++++++-
- drivers/spi/spi-mt65xx.c    |  3 +++
- drivers/spi/spi-qup.c       | 37 ++++++++++++++++++-------------------
- 3 files changed, 27 insertions(+), 20 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
