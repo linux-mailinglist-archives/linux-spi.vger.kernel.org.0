@@ -2,54 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2964724908
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 18:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFBF724925
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 18:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbjFFQZP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 12:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S237551AbjFFQaX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 12:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238506AbjFFQZB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 12:25:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D510FE;
-        Tue,  6 Jun 2023 09:24:40 -0700 (PDT)
+        with ESMTP id S237677AbjFFQaW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 12:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F662E40
+        for <linux-spi@vger.kernel.org>; Tue,  6 Jun 2023 09:30:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A75B562862;
-        Tue,  6 Jun 2023 16:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DAABC433EF;
-        Tue,  6 Jun 2023 16:24:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A93086358D
+        for <linux-spi@vger.kernel.org>; Tue,  6 Jun 2023 16:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C9CAC433D2;
+        Tue,  6 Jun 2023 16:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686068679;
-        bh=W4Tp8jO+9JqisoEdQWJbb+RxEjWeGO6Ebj3B6m7pPCA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nrr/ZR5dfX1JBaKxwqI6JBfjB+mB2pSi42JI/AOhWuf9o0OsOS52k8JgXS8rdI8y6
-         2vYNaoTtpW+NpBoEnH/1OmXSGKzv9ThUyzeoQXOvIP1tHfCnwKVaA6XDjPyWRg8dvY
-         U3ZRT462HdmSIbet9gXFc+aKZW1SCpSUfD5eEYDCHNa7tRMF483mEyNy+w4JEJE0is
-         h1/hwSTqweKkAwG8GPJOZNlO3So+SEHsyil9mK2FhoR5WQWerZri4uVgE8/HdSMWE8
-         LgwLZD9x1XfJjz/TKY8SwckJINOicGboKPdh02sbc8XKkCuIj00C9gYfRRC+AFELbe
-         SuWHZ2vhYhyKQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abe Kohandel <abe.kohandel@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230606145402.474866-1-abe.kohandel@intel.com>
-References: <20230606145402.474866-1-abe.kohandel@intel.com>
-Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
-Message-Id: <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
-Date:   Tue, 06 Jun 2023 17:24:36 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1686069021;
+        bh=Z2fynfsz9mcbFkMLZeA5ZINqdEQaFXed9+q4MYdxUfs=;
+        h=Subject:From:Date:To:From;
+        b=B4snJwUV1PYfTVPNZfPoQI7Cz5h/Nzl+5NLil+sS7aRqWSFc5buVqEWYAONqr4X+V
+         diIHz9wB3i19oINE0asYHSw3RrzcOVuP7mOSkbQkwcunMZpVpplqaucpQtoGZPewEa
+         dkKQ87YAOq95u3Rb9TLJtRhIVvU6bC6Al+oO1Q5m0TgyAZ4PDiFeq8WTiIKvo5uNSo
+         xrHBPRSH5/7lj28swjLEd1OQ92ULmXsIVxk0aXSqDk3qKk+ll9pV13RZzYGlqK1Thp
+         tphqyXG/1Sl7SxHQEW4eSXKb+5mgZfF5s3a2eWmtnZr29u10xTpW5AAH+0OWWB68UX
+         u1aNonVm41l7Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCA7DE8722F;
+        Tue,  6 Jun 2023 16:30:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168606902082.20943.7335328532061920589.git-patchwork-summary@kernel.org>
+Date:   Tue, 06 Jun 2023 16:30:20 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,45 +52,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 06 Jun 2023 07:54:00 -0700, Abe Kohandel wrote:
-> The Intel Mount Evans SoC's Integrated Management Complex has a DW
-> apb_ssi_v4.02a controller. This series adds support for this controller.
-> 
-> No SoC level chip select override is provided and as such no DMA
-> configuration is done for the controller.
-> 
-> Thanks,
-> Abe
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: dw: Add compatible for Intel Mount Evans SoC
+  Submitter: Abe Kohandel <abe.kohandel@intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=754506
+  Lore link: https://lore.kernel.org/r/20230606145402.474866-1-abe.kohandel@intel.com
+    Patches: [1/2] spi: dw: Add compatible for Intel Mount Evans SoC
+             [2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
 
-Thanks!
 
-[1/2] spi: dw: Add compatible for Intel Mount Evans SoC
-      commit: 0760d5d0e9f0c0e2200a0323a61d1995bb745dee
-[2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
-      commit: 7bac98a338d63efb0b44ce4b79d53838491f00df
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
