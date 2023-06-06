@@ -2,51 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4AE7245B9
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 16:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBE57245F9
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 16:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjFFOWt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 10:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S234840AbjFFOa0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 10:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237300AbjFFOWq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 10:22:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6789310C6;
-        Tue,  6 Jun 2023 07:22:45 -0700 (PDT)
+        with ESMTP id S237813AbjFFOaZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 10:30:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2108E47
+        for <linux-spi@vger.kernel.org>; Tue,  6 Jun 2023 07:30:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0037061DB8;
-        Tue,  6 Jun 2023 14:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C2BC433EF;
-        Tue,  6 Jun 2023 14:22:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13E3662B82
+        for <linux-spi@vger.kernel.org>; Tue,  6 Jun 2023 14:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D4CCC433EF;
+        Tue,  6 Jun 2023 14:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686061364;
-        bh=8njdyfIkRN8M1oyMKTTfWNf9Bc9CabdxuFYIfsE5sL8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eKSff40uFZqf3p5zk0WlMInJJbGL77vveD5/uMc3sqkZZ/QWK0M7SnnUutao2RT52
-         L4/2/zPKwzrt1Bygmv8NMaIsu9rll4rDe4aYsdU6eqsj95k9jDyDPeBo6mvVQqhzFA
-         fH18yAfFwUIsxHNlBRT2Bggk3XNeM+GHYNC8baFe6hffyEXg2rBkfnJYgm2SbOP/Qb
-         QE6HTf2wZcnn2GbJZxpXzf+J9Na1oa5a3JazFObAv6mCjZlWL15TXjsAKbysmFuDd1
-         S/X0leaqSylY9T6U139GXMDOe6DQHF0JMf4Qi3OFJrxwmA9Ho84s457tC6/8Y+l6W7
-         x5PudHyaAclRw==
-From:   Mark Brown <broonie@kernel.org>
-To:     lakshmi.sai.krishna.potthuri@xilinx.com,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230606093859.27818-1-jiasheng@iscas.ac.cn>
-References: <20230606093859.27818-1-jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] spi: cadence-quadspi: Add missing check for
- dma_set_mask
-Message-Id: <168606136320.36405.16704224342130118084.b4-ty@kernel.org>
-Date:   Tue, 06 Jun 2023 15:22:43 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1686061820;
+        bh=UxzT8C3wOzDwhzzTGd7Ey2cnel6R5zVrod4j4foaByE=;
+        h=Subject:From:Date:To:From;
+        b=bzdoM3d2JBFVya6HebOKUhXJSBUPyTPU8KLcnw/YNXDCUXttwces1lSWNlaDZ0IVX
+         kNauZYtVv8sLjShA8d4zlvQT2MoGQ4jjtrwYFCPMd/ArF61TcGjH5VmhlAiaDbo7MG
+         8p7O7bAaaW2ajyTLmBXO+78TC9ymH0ys2RXk/0CHs2eGClkgNMgGdliUi45EvHNkCG
+         EsjahsEKQgX7jD7AP/tRjqTqy1GJCS7WIrvKjbHodS35epf9Qn1AHaCopWuEBMrYgS
+         Aoh/izcIzUHdNQkpNBBw9kplOKN4hUb8OdvKxMVR8iiuQHWurMWRD52L4cIGEgU2Pi
+         pBonXmLm1NLhQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 451B0C4166F;
+        Tue,  6 Jun 2023 14:30:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168606182021.19009.12105786172019357289.git-patchwork-summary@kernel.org>
+Date:   Tue, 06 Jun 2023 14:30:20 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,36 +52,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 06 Jun 2023 17:38:59 +0800, Jiasheng Jiang wrote:
-> Add check for dma_set_mask() and return the error if it fails.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: cadence-quadspi: Add missing check for dma_set_mask
+  Submitter: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=754367
+  Lore link: https://lore.kernel.org/r/20230606093859.27818-1-jiasheng@iscas.ac.cn
 
-Thanks!
 
-[1/1] spi: cadence-quadspi: Add missing check for dma_set_mask
-      commit: 947c70a213769f60e9d5aca2bc88b50a1cfaf5a6
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
