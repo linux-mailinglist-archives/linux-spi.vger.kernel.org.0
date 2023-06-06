@@ -2,106 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B037A724292
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 14:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BA47243B2
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jun 2023 15:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjFFMoI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jun 2023 08:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S237992AbjFFNHc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jun 2023 09:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbjFFMoF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 08:44:05 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC3C1707
-        for <linux-spi@vger.kernel.org>; Tue,  6 Jun 2023 05:43:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977d4a1cf0eso370111066b.1
-        for <linux-spi@vger.kernel.org>; Tue, 06 Jun 2023 05:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686055418; x=1688647418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mK220acPIp0Asjpx7WaUgqj2OH9AJX77DYV3xxqd5iA=;
-        b=Cr+0sfqBACoG5qRB689ltZloU3SiTrSDK3yRSMTcaISF7FGdum9egCI2nWA5gxmRaK
-         daLOjhx4q2TDLeXael2GAEIpJ3MY6rNaWvlmqQtVlzOuUj52kLeOD/W/1YTEKLcvS7y6
-         RxCOX9icXKTpyNMZ5yktWxvMTafFaEOYJStoz17+gOmrKpHS5ThtoVczItCNjcUT/qPH
-         Cb8guFYO9ai5gR8ixCbF5WSDIAtUCY7PkM0kqphHq+xAi/xNUzysDaooV54ffoXgmwov
-         wd+rmvepiTVyutsV1BhxZfYw+tLcyTNzQlZtP4IHfSLG1YZqWiv9/tfxIEkWWHZibGoO
-         eqGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686055418; x=1688647418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mK220acPIp0Asjpx7WaUgqj2OH9AJX77DYV3xxqd5iA=;
-        b=ddtK5xPK7ZEzLgc61VMRmvD5hzmqRtFJUd5H1/pzA5qI1ZuZqNJh8L25mZB68IlpOY
-         vQAddajRSkmvtn8/YaY0038mXvA0Kf67zB2+g2rSqE2EcqgFul4kTd5fVB3rHh7QkfYT
-         pNoKd/a3hAW8OjMfGOJfJLM8CR6Ph6ZaHtMWMSuKvSI4iVsNxJPh9Ap4U91InY1B9Yzd
-         qZ6y4xwyeATZWnz4gZfV9MpZwNtDJ7jymeVtAqtCPMJ9WeeimkF7SuSpyo1iPL7kWFG6
-         3kT1F3BHqHI6dOWu/s+RhKoVIPOAgW6YZn32gXr3RZGOcFW0wLYAYliyc3LmiWljUI0z
-         fadw==
-X-Gm-Message-State: AC+VfDy3D183DG0rJFRpEFyD1AGoXX1RsNIKQFlJ8/8GktGcDLCMC1f9
-        jNIN9E7ynW55/SbpzYC2Q0RB2g==
-X-Google-Smtp-Source: ACHHUZ5XRAYpRQYNod5PLa/diyi4g2ViUz8nWrxI8quciVUCIMB853yrvygjxAT8AI5273ZGNyDfyg==
-X-Received: by 2002:a17:907:7b9b:b0:974:5e14:29c5 with SMTP id ne27-20020a1709077b9b00b009745e1429c5mr2615396ejc.32.1686055418440;
-        Tue, 06 Jun 2023 05:43:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z21-20020a170906815500b0096ace7ae086sm5589502ejw.174.2023.06.06.05.43.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 05:43:38 -0700 (PDT)
-Message-ID: <e148c599-8521-3264-f994-529ffc18f836@linaro.org>
-Date:   Tue, 6 Jun 2023 14:43:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
- StarFive JH7110 SoC
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230602084925.215411-1-william.qiu@starfivetech.com>
- <20230602084925.215411-2-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230602084925.215411-2-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S238021AbjFFNHX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jun 2023 09:07:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BC1728;
+        Tue,  6 Jun 2023 06:07:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A07F5632CC;
+        Tue,  6 Jun 2023 13:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB60C433D2;
+        Tue,  6 Jun 2023 13:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686056802;
+        bh=Of7kuM6rwHgcdNEnTPw4TSCttG8x0dqdHftUZ4BZnaE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V8KFe2g8NEeJs1ujHbRUJWxphr2zce5G2CGnYMUHXBl8QgnVG5sV98aZd/cRx4PN7
+         0ZpxVVnE2ozNSnwafwQR758kNBpFyBSfa1NqzQD3LNrVkidbo3kPmpo2O2f0/DRjhG
+         55nTfCH1jdsc9f3Oh+rq7RzmQIUYveZnNG9FRUtW+N4yAMDkSr81ZySeRXBCx/0xm5
+         VWx8XDI1PqGpz3lZIUS57u3rXCdVndDKc31qUDlonsj/nEAWo1KLrrNTIUANf3Qx+2
+         XlXl32CodNBzbejj/YxTt96oeiIqaIxJh0WFZ7PWVdkRmFK8Vb9z934UO2KqxR3iQN
+         zPmLBJZfAX6tQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.4-rc5
+Date:   Tue, 06 Jun 2023 14:06:29 +0100
+Message-Id: <20230606130641.AAB60C433D2@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 02/06/2023 10:49, William Qiu wrote:
-> The QSPI controller needs three clock items to work properly on StarFive
-> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
-> platforms do not have this constraint.
-> 
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+The following changes since commit 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
 
+  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
 
+are available in the Git repository at:
 
->  
-> @@ -69,9 +81,6 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> -  clocks:
-> -    maxItems: 1
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc5
 
-Properties should be defined in top-level properties. Don't remove them
-from here.
+for you to fetch changes up to 0c331fd1dccfba657129380ee084b95c1cedfbef:
 
-Best regards,
-Krzysztof
+  spi: qup: Request DMA before enabling clocks (2023-05-30 13:43:31 +0100)
 
+----------------------------------------------------------------
+spi: Fixes for v6.4
+
+A small collection of driver specific fixes, none of them particularly
+remarkable or severe.
+
+----------------------------------------------------------------
+Clark Wang (1):
+      spi: lpspi: disable lpspi module irq in DMA mode
+
+Daniel Golle (1):
+      spi: mt65xx: make sure operations completed before unloading
+
+Stephan Gerhold (1):
+      spi: qup: Request DMA before enabling clocks
+
+ drivers/spi/spi-fsl-lpspi.c |  7 ++++++-
+ drivers/spi/spi-mt65xx.c    |  3 +++
+ drivers/spi/spi-qup.c       | 37 ++++++++++++++++++-------------------
+ 3 files changed, 27 insertions(+), 20 deletions(-)
