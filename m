@@ -2,199 +2,173 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85007270B0
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 23:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EB0727229
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jun 2023 00:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjFGVoK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 17:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S233065AbjFGWyn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 18:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjFGVoI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 17:44:08 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1F11B0;
-        Wed,  7 Jun 2023 14:44:06 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f6195d2b3fso6560186e87.1;
-        Wed, 07 Jun 2023 14:44:06 -0700 (PDT)
+        with ESMTP id S233097AbjFGWyl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 18:54:41 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4843A2685
+        for <linux-spi@vger.kernel.org>; Wed,  7 Jun 2023 15:54:37 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-973bf581759so3499766b.0
+        for <linux-spi@vger.kernel.org>; Wed, 07 Jun 2023 15:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686174245; x=1688766245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xupC05x57AARfKBIM1aZnUShYcwzVxBXINlBcMbP1PY=;
-        b=iccI07MU3UKtDN0cmJm9Kv0x8X0Sxr7Xp8LMLGiP8sUn8qqeogn3I6aXVl/HsM+1Ln
-         9F0FgFAhZ+d9BT0ZkwYO9kehc9x+Xv7NRbwEjh1kjoRqAsLJ820WF4X2AdqTO4zV8Vhm
-         EPE36KhkvF+Xa8B7k7guVf9Aust6qtAOB+uCQG8+sJAMojEXYeLTwFTtSGhjQyhybPz4
-         Kkx+4lA6NCYYsIakKr4dZwTmeZrgkwtSZhozSzwpgIs2Ek3MKJYezi+32HnYo1L5+5aj
-         ANcvCknDipoFRP0bwShNiIjO9J+x46BGio1zcan20hRUlCWObsAzb7t5PUa+W7vD+YV4
-         32RQ==
+        d=gmail.com; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=WeqXDhOYObEU4Q4S3JxL3bEVQtplVvNKCfakhFkSuiLBGZe/ef388CiKUayAOmbEOV
+         ZR0I5GAxPbS54gQ7Fi+hG72GeTokI+noW1OPwtavsLtjymUzaeyKWDDpDiOtNBnLq40U
+         hKN8QzuE3yuzJvRNnur8tzVGd/WDVGu93YT1PuP86BcJTXG/Q3+EyiY1Ov5Itgxf9sfV
+         puzj8gFJzfO5zpoPQ0K3fO44i5t5qr504eako4ZleNRX8Z/LIaI8UL0On16+KpM6t7Hk
+         P05xDxotWEktWnY1d5dyENuc5li2l9dXU7CCPzvtyNY2IFMeysO2qVasevOMBOewfS/V
+         nc1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686174245; x=1688766245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xupC05x57AARfKBIM1aZnUShYcwzVxBXINlBcMbP1PY=;
-        b=aiSIhBG7DoGzlJ+4OQChIRiPyjW+D/kfaTfc9MlTer5TYKH6Ew+RzLwGrUtBKHat0x
-         7BR3DY4hBxZ6sACBCiLklnw7SFoDT357IQS31UA96fQEqc1DWdArM2QdBgXjimyOocuQ
-         AlCALbjD7YJKZhBndcR07iTqFTZr8E5bHpoO6wf2G1qwxx1o0OdV5XtXvIAPAP5LJxqN
-         mWbam/8H+XCTzIP3N2LUBLYfx0uAWqPpaPbUW2R4LH55iOGFf6MpbMZ3AonEshRP53zb
-         H1IfMeG81aXkpYMp9z1LbYQD5UEgQS2i8QtJs/zx8jTlgs1qFwwZGq41GSEfz8XzZhn2
-         mPIA==
-X-Gm-Message-State: AC+VfDy+iTXl3l4+zwywpS4Pd6yf2D4zCkdMxugnTlJla2L3buFwT9td
-        G7t6rx4Wb1faltfPzKztRSvAHfswdmo=
-X-Google-Smtp-Source: ACHHUZ5WqzIvCvIRX0JExjIZNhveN7iCZscVh4wkQjTF9LdIWnon4Gx7AO/CrL7uMS5IsJpyanW0AQ==
-X-Received: by 2002:a19:ae0e:0:b0:4f3:895f:f3f5 with SMTP id f14-20020a19ae0e000000b004f3895ff3f5mr2324877lfc.61.1686174244794;
-        Wed, 07 Jun 2023 14:44:04 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id d15-20020ac25ecf000000b004eff1f7f206sm1935030lfq.9.2023.06.07.14.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 14:44:04 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 00:44:02 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Abe Kohandel <abe.kohandel@intel.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
-Message-ID: <20230607214402.o2kfsvtn66ga7eth@mobilestation>
-References: <20230606231844.726272-1-abe.kohandel@intel.com>
- <20230607112711.alcspwuwpt7nqja7@mobilestation>
- <ZICboAIZAcnYzyJr@ekohande-desk2>
- <20230607152828.4nxefvimokamhgvu@mobilestation>
- <ZIC2FYhcm4iGzlKI@ekohande-desk2>
+        d=1e100.net; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=V9NEPeaD1p52mgZDahS/YwOvKchx8QNBXS+8YLkhjD/Cl6C49WGOW6w7iNy6UDANT4
+         Jiw2pafA3dakB9nBlLIqeMB53uwQfjD3gsAq0Lw5bLMydJbmiIZCCZCaNY9vTtVSLH6o
+         lVl+xPy2pt8LyEw99B7dkAGgIH+lYrk8+Q+MOGZf3JWHiebx/vXzFW0fR8NU9EuAZM1E
+         z4yYxB2MoiJV1QdCUreIwgBCpETX3wKDnH9bFUMQI41IZM55Pd+0PrigN/jJXIALi1c5
+         41yawFma+97IPAXM+7+t50JS6J5Cyvw8eYvuxq5YvcfKQBuvXvXeVztIj1c6L2IRdftz
+         e+jA==
+X-Gm-Message-State: AC+VfDxg6JCiawV89z/0CTpgFTBL0hfmF+HNYhkpdouDhzk+IGpNNKSQ
+        +RrFuZw6sHcFfJXcv2618FtoylBq808iOFpZeuFaFUom5Xc7+w==
+X-Google-Smtp-Source: ACHHUZ7J0yv2Uy0Ff3URHHllMh6dn7geAOftATdUjaOMCSCEm6sdR3gpAsqx+SgrMGXj3gnAhFPKaDZy027dlMN9Xtw=
+X-Received: by 2002:a17:907:783:b0:94a:6de2:ba9 with SMTP id
+ xd3-20020a170907078300b0094a6de20ba9mr6600647ejb.68.1686178474547; Wed, 07
+ Jun 2023 15:54:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIC2FYhcm4iGzlKI@ekohande-desk2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:54:33 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:54:33 -0700
+Message-ID: <CADFNGJ9M60ti_yHcUzQD8BP2Qji_qiW+6MK-iYxt_qf8B830+w@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:53:41AM -0700, Abe Kohandel wrote:
-> On 23/06/07 06:28PM, Serge Semin wrote:
-> > On Wed, Jun 07, 2023 at 08:00:48AM -0700, Abe Kohandel wrote:
-> > > On 23/06/07 02:27PM, Serge Semin wrote:
-> > > > On Tue, Jun 06, 2023 at 04:18:44PM -0700, Abe Kohandel wrote:
-> 
-> > > > > - * The Intel Mount Evans SoC's Integrated Management Complex uses the
-> > > > > - * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
-> > > > > - * provide a mechanism to override the native chip select signal.
-> > > > 
-> > > > I had nothing against this part of the comment but only about the
-> > > > second chunk of the text.
-> > > 
-> > 
-> > > Thinking about it a bit more there is nothing precluding this controller from
-> > > being used for other purposes in the future. It is configured with two chip
-> > > selects, only one of which is used today. I removed it to so it wouldn't become
-> > > inaccurate if that happens.
-> > 
-> > Ok. Regarding the number of chip-selects. You could have overwritten
-> > the dw_spi.num_cs field with value 2 then in the dw_spi_mountevans_imc_init()
-> > method. Thus having a bit safer driver for your platform.
-> 
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
-> I am currently setting dw_spi.num_cs via the num-cs property in the device
-> tree. Is one preferred over the other? I guess setting the dw_spi.num_cs in
-> code is safer than using the device tree. 
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-Strictly speaking the "num-cs" property is supposed to be used for
-generic DW APB SSI devices (compatible with the snps,dw* string) only
-since the IP-core can be synthesized with up to 16 slave select lines
-and originally it was considered as impossible to auto-detect the
-number of lines (although it's actually possible just by test-writing
-to the SER register - another idea for the driver improvement ;) ).
-Meanwhile vendor-specific implementations of the DW APB/AHB SSI
-controller are synthesized with the particular parameters values
-including the number of slave-select signals. Thus the kernel driver
-can easily infer all device parameters (like reg-io-width, num-cs,
-etc) just based on the compatible string (that's what I did in the
-spi-dw-bt1.o driver). The problem is that historically nobody cared
-about too relaxed "num-cs" utilization and now we can't update the
-driver and the bindings to strictly follow that constraint. The only
-solution is to implement the SER-writability-based auto-detection
-procedure but it isn't free of risks to break some older devices
-(though this problem can be avoided by making it optional).
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-To sum it up and answering to your question, it's preferable to
-directly initialize dw_spi.num_cs in driver if the value is known.
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-Note though that the DW APB SSI driver currently has a limitation of
-GPIO-based chip-selects usage: a total number of chip-selects must not
-exceed a number of the native chip select lines (except AMD Pensando
-Elba device). It's because in order to have the controller performing
-the SPI transfers at least one SER flag must be set. Since we can't
-predict which native CS is free from being utilized on a platform
-(SPI devices can be instantiated from user-space), the GPIO-based
-lines are activated together with the corresponding SER flag.
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
-> 
-> > > > > + * DMA-based mem ops are not configured for this device and are not tested.
-> > > > 
-> > > > * Note mem-ops is just a feature of the DW APB/AHB SSI controllers
-> > > > * which provides a way to perform write-then-read and write-only
-> > > > * transfers (see Transmit only and EEPROM read transfer modes in the
-> > > > * hw manual). It works irrespective of whether your controller has a
-> > > > * DMA-engine connected or doesn't have. Modern DW SSI controllers
-> > > > * support Enhanced SPI modes with the extended SPI-bus width
-> > > > * capability. But it's a whole another story and such modes aren't
-> > > > * currently supported by the driver.
-> > > > 
-> > > > Just a question for the sake of the discussion history. Does your
-> > > > platform have a DMA-engine synthesized to work with this DW SSI
-> > > > controller? That is does your controller has the DMA Controller
-> > > > Interface (handshake signals) connected to any DMA-engine on your
-> > > > platform? I am asking because if there is no such DMA-engine then
-> > > > the last part of your statement is just redundant since you can't test
-> > > > something which isn't supported by design.
-> > > 
-> > 
-> > > The platform does have a DMA-engine synthesized but I have been having some
-> > > challenges with getting it to work which may require some further quirks added
-> > > to the DMA driver. 
-> > 
-> > The main question is whether that DMA-engine has the handshake signals
-> > connected to the DW SSI controller. If it doesn't then adding such
-> > engine support would be a great deal of challenge indeed because a
-> > software-based handshaking interface would need to be added to the
-> > DMA-engine subsystem first. Then the DW SSI driver would need to be
-> > fixed to work with that interface. Taking a FIFO-size into account and
-> > an amount of IRQs to handle on each handshaking round, the resultant
-> > performance might get to be not worth all the efforts so a simple
-> > IRQ-based transfers implementation may work better.
-> 
-> Oh sorry, I wasn't explicit enough. The HW handshaking signals are connected to
-> the DW SSI controller so we should be able to take advantage of that
-> acceleration and not have to go through the challenging steps you have
-> outlined.
-> 
-> > > One example being the system uses 40-bit addressing but the
-> > > DMA-engine is only synthesized with 32-bit address capability and is meant to
-> > > only target a specific region of memory where it "knowns" the upper byte of the
-> > > address.
-> > 
-> > That's a pretty much well known problem. The kernel has a solution for
-> > it: DMA-mask set for the DMA-engine device (see dma_set_mask() and
-> > dma_set_mask_and_coherent()) and SWIOTLB (formerly known as bounce
-> > buffers).
-> > 
-> > Alternatively modern CPUs are normally equipped with a thing like
-> > IOMMU, which can be used to remap the limited device address space to
-> > any CPU/RAM address.
-> 
-> Thanks for all the advice Serge, much appreciated! Hopefully I can come back
-> with a patch to enable the DMA engine for this platform in the near future.
+ Contact name: John Lee Tae-seok
 
-Always welcome. Feel free to ask should any question arise on that
-journey.
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
--Serge(y)
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
 
-> 
-> Thanks,
-> Abe
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
+
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
+
+ Your full name..........
+
+ Home address:.........
+
+ Your country...........
+
+ Your city..............
+
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
