@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEBA72672B
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 19:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61172672D
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 19:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjFGRYM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 13:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S230197AbjFGRYN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 13:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjFGRYJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 13:24:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6A31FFD;
-        Wed,  7 Jun 2023 10:24:03 -0700 (PDT)
+        with ESMTP id S231697AbjFGRYL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 13:24:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F372107;
+        Wed,  7 Jun 2023 10:24:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A30863BC1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DFB63AC8;
+        Wed,  7 Jun 2023 17:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46059C4339C;
         Wed,  7 Jun 2023 17:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E68C433EF;
-        Wed,  7 Jun 2023 17:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686158641;
-        bh=aGQlmMGWqLT3KzAf24Mh9L2icJkIzcPJBAx7qmhcwQE=;
+        s=k20201202; t=1686158643;
+        bh=cYyHhjd7PB7WUP/KYCYgStoS0XkCHcCe06gZhREDRKs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KFRlZPP397UES14BvXzR+pbDlUScz/3OjSmUoF8M8wiCR0nH5y+l67xUTZ7oNBW8+
-         oAY1dtuXWrWGIQyVd3EnDUjCTSBAWN0OoKcec0ky3MuxcILFf6AcrgNoeITQZ5cO4l
-         eRLfXzx6o0e2Y8AcLYsjkn2eqX2A1n1H5ZzPQJS4BmV+bgrLv7XoGAVlehOzEfoZ1w
-         OU7YMTlI5/ca8oiau8s/gJYGA+cXmAuTkaU6EOmZ5pj6tGfYdyU5Nqz/6dYHmuMQif
-         VIEEC5vMs09ra8cL2GT0eqFZDzGs3aQWa40uLnzOfbMM6P9lf75eFjsGxyQTVmOSaZ
-         zQBv1LLXEfwrA==
+        b=SlN5BX8koTm8zvZSbaFxw5ysu0owOydUNkknrYHn/0vtKYhMvz3XuuB/6X7p+o++m
+         crxM1EUIYWyTs88YDmnS4lNb3iaKeSSv1GrRp8feUK9T7A7FfLnQ/Ou9T2ssm9AjK0
+         Yzr1V8I7s2Jeaylq05uUNfpcKYZrkPjxnJIBIk8E8arpY7hhDWxkInQhmBsExwJBuH
+         nEUg81dHELRCwJ92uQqO9O3pTEHSFsJVZ9rFH5lI0omvf7bF0itArdRHmHjVknUwo8
+         KIP5u0tqGCVPwiPyGQqcFEjoYrVWL8hF9ViFAFmZXatcBLb7XQKCuoR8XkmbBm+bmK
+         tFX0MyZq4OsFg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-In-Reply-To: <20230606012051.2139333-1-andi.shyti@kernel.org>
-References: <20230606012051.2139333-1-andi.shyti@kernel.org>
-Subject: Re: [PATCH 0/2] spi: s3c64xx: Cleanups
-Message-Id: <168615864038.61821.6026678872508499940.b4-ty@kernel.org>
-Date:   Wed, 07 Jun 2023 18:24:00 +0100
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abe Kohandel <abe.kohandel@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230606231844.726272-1-abe.kohandel@intel.com>
+References: <20230606231844.726272-1-abe.kohandel@intel.com>
+Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
+Message-Id: <168615864200.61821.4077678656518358668.b4-ty@kernel.org>
+Date:   Wed, 07 Jun 2023 18:24:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,15 +55,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 06 Jun 2023 03:20:49 +0200, Andi Shyti wrote:
-> two small cleanups in the probe function. The first puts in use
-> the managed spi master allocation while the second implements the
-> dev_err_probe() function.
+On Tue, 06 Jun 2023 16:18:44 -0700, Abe Kohandel wrote:
+> Remove a misleading comment about the DMA operations of the Intel Mount
+> Evans SoC's SPI Controller as requested by Serge.
 > 
-> Thanks,
-> Andi
 > 
-> [...]
 
 Applied to
 
@@ -71,10 +67,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: s3c64xx: Use the managed spi master allocation function
-      commit: 76fbad410c0fed0c203c22e7e5ef8455725f3338
-[2/2] spi: s3c64xx: Use dev_err_probe()
-      commit: b4f273774c8b2b7c6f5e0cb9b18a234a8ca322b4
+[1/1] spi: dw: Remove misleading comment for Mount Evans SoC
+      commit: 5b6d0b91f84cff3f28724076f93f6f9e2ef8d775
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
