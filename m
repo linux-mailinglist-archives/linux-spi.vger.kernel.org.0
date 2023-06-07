@@ -2,103 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58723725F5E
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 14:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440DC72601C
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 14:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240884AbjFGM3D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 08:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S235702AbjFGMzj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240882AbjFGM3C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 08:29:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D74E65;
-        Wed,  7 Jun 2023 05:29:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BB3663674;
-        Wed,  7 Jun 2023 12:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2275C433D2;
-        Wed,  7 Jun 2023 12:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686140939;
-        bh=QJXtZDyr4y8PqdZ+tYmaB6YEGrqj2OPQ+IO2QetYPnM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qntE2naidW5lgNM46jNKA359h4oM4obkc3y1ih7CWydCK0HNUJv7nUdqkPuK64Jca
-         b3Y/ttQ/yqcznoBQETaKQmlaX8KRXm3NfgLSajcXbqtGvJMKH0BM8leYzrGRkZ+e3K
-         00u+SQBxlg2wM45abAnSQiJDngCRMrlYT5l2zaTRRM66lW9XcFUBCUlvHqzLkT4sfG
-         VsIkfBEWL8KuYKpR3WKDfolYyvnh9MfqDoKwR8ch3jvlL8K9DlbLtAfdjvyglgEgTU
-         0aFr1qFOMyRqIUl5S1gStShurAh0VZiyRvSY1dtGgfAOkQDd6peHyB7BPQdiC3ZGqE
-         I49OxCTP9xG9w==
-From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
-In-Reply-To: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
-Subject: Re: [PATCH v2 0/2] spi-geni-qcom: Add new interfaces and utilise
- them to do map/unmap in framework for SE DMA
-Message-Id: <168614093670.28037.10566283801764735785.b4-ty@kernel.org>
-Date:   Wed, 07 Jun 2023 13:28:56 +0100
+        with ESMTP id S235621AbjFGMzi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 08:55:38 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A219BB;
+        Wed,  7 Jun 2023 05:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686142534; x=1717678534;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=NlTfIPARILjMX2tlyJqPYMnoCEVAbNRBUNl5mHBgNIg=;
+  b=WuMPGXr3PWCvj5AJ+MkcEeDpZDPLJAd59NX2yiH+g3CenjQ25jM0R3F8
+   gi5st2U1bzDdErNJNoXdN8kgc5cUL6qtWdd+jOVcLznAT6o9iYC5InOo5
+   qsLNzJL1Jw8AM+uAYYVuAzNHiixIYdEyH5TSbRwbTFGm1GapTo/JTgaHJ
+   L1iMOlRcxS6JtrgsL6Ysg3inizHep+A20EOd1W1nleFFzx4raMPN3Kt1v
+   O/FJBpJfrmzdv8aXOWbGAKZGJpsVpWNfIC/tMJOzgPIEOplG0T+nf6k01
+   x5X/Vdun65e0dq88qI306rzR0Sum0cBW4LBy79pGnm4dDV1PxH4hvvpcm
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,224,1681164000"; 
+   d="scan'208";a="31331083"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Jun 2023 14:55:31 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 07 Jun 2023 14:55:31 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 07 Jun 2023 14:55:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686142531; x=1717678531;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=NlTfIPARILjMX2tlyJqPYMnoCEVAbNRBUNl5mHBgNIg=;
+  b=k0uHsXLUB+yNxJ6ntMGsebaYdVdQRX1zEGHpnKXMH9m8L7Mvq+p+ScbI
+   u6gFQR97r7t7OBo34x/F6fumK8n9uGUj5nDvqPDTr7KH0EtJ5X4lB+MNu
+   mR9+DEXAbzFal7WfhGP6Hn7vtvZIgDqilRK5l0eu9umonYlumJG5dwS/L
+   sv+WvagJs+NMh+4dXQScHOrRsLjCWXybPw/4ZLNA5X9SM9epiLvBeEN8/
+   5jmVjMFelxj5XIsD+YFNEvdREVk25tL8fo6N3RyWrXp1L0DeF0KLIJEBW
+   qn4WMCnadLfapZMzzy+JXpl8ehnhAkXkxuPAVMQWu89A0CnSmRLkxR2mK
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,224,1681164000"; 
+   d="scan'208";a="31331082"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Jun 2023 14:55:31 +0200
+Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.20])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 366DB280082;
+        Wed,  7 Jun 2023 14:55:31 +0200 (CEST)
+Message-ID: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Date:   Wed, 07 Jun 2023 14:55:31 +0200
+In-Reply-To: <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+         <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
+         <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
+         <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 17 May 2023 17:48:12 +0530, Vijaya Krishna Nivarthi wrote:
-> A "known issue" during implementation of SE DMA for spi geni driver was
-> that it does DMA map/unmap internally instead of in spi framework.
-> Current patches remove this hiccup and also clean up code a bit.
-> 
-> Testing revealed no regressions and results with 1000 iterations of
-> reading from EC showed no loss of performance.
-> Results
-> =======
-> Before - Iteration 999, min=5.10, max=5.17, avg=5.14, ints=25129
-> After  - Iteration 999, min=5.10, max=5.20, avg=5.15, ints=25153
-> 
-> [...]
+On Tue, 2023-06-06 at 15:44 +0100, Mark Brown wrote:
+> * PGP Signed by an unknown key
+>=20
+> On Tue, Jun 06, 2023 at 04:37:08PM +0200, Linus Walleij wrote:
+> > On Fri, Jun 2, 2023 at 2:22=E2=80=AFPM Mark Brown <broonie@kernel.org> =
+wrote:
+> > > On Fri, Jun 02, 2023 at 01:52:00PM +0200, Matthias Schiffer wrote:
+>=20
+> > > > We have seen a number of downstream patches that allow enabling the
+> > > > realtime feature of the SPI subsystem to reduce latency. These were
+> > > > usually implemented for a specific SPI driver, even though the actu=
+al
+> > > > handling of the rt flag is happening in the generic SPI controller =
+code.
+>=20
+> > > > Introduce a generic linux,use-rt-queue flag that can be used with a=
+ny
+> > > > controller driver. The now redundant driver-specific pl022,rt flag =
+is
+> > > > marked as deprecated.
+>=20
+> > > This is clearly OS specific tuning so out of scope for DT...
+>=20
+> > In a sense, but to be fair anything prefixed linux,* is out of scope fo=
+r DT,
+> > Documentation/devicetree/bindings/input/matrix-keymap.yaml being
+> > the most obvious offender.
+>=20
+> That's at least a description of hardware though.  This is a performance
+> tuning thing, if it needs to be configured at all it should be
+> configured at runtime.  Some applications might see things work better,
+> some might see performance reduced and new versions might have different
+> performance characteristics and need different configuration.
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+It is not clear to me what alternative options we currently have if we
+want a setting to be effective from the very beginning, before
+userspace is running. Of course adding a cmdline option would work, but
+that seems worse than having it in the DT in every possible way.
 
-Thanks!
+I can understand not wanting such tuning in Device Trees in the kernel
+repo - I agree that these default DTs should only describe the hardware
+and it makes sense to keep OS-specific tuning out of them.
 
-[1/2] soc: qcom: geni-se: Add interfaces geni_se_tx_init_dma() and geni_se_rx_init_dma()
-      commit: 6d6e57594957ee9131bc3802dfc8657ca6f78fee
-[2/2] spi: spi-geni-qcom: Do not do DMA map/unmap inside driver, use framework instead
-      commit: 3a76c7ca9e77269dd10cf21465a055274cfa40c6
+Requiring such tuning for specific drivers or driver instances is
+however a common issue for embedded systems, which is why we are seeing
+(and occasionally writing) such patches - setting things up from
+userspace may happen too late, or may not be possible at all if a
+setting needs to be available during probe. And even when deferring
+things to userspace is possible, making things configurable at runtime
+always adds some complexity, even though it is often not a requirement
+at all for embedded systems.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Just doing this through the DT is very convenient and robust. The
+settings could be inserted into the default DT as an overlay applied
+during build or by the bootloader.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Any alternative solution we could come up with would likely add more
+complexity on the driver side, and be less convenient to use for
+developers. Overall, the rationale for not supporting such bindings in
+drivers seems much weaker to me than that for not having such settings
+in default DTs...
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Best regards,
+Matthias
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
-Thanks,
-Mark
+(ps. Sorry about our bouncing linux@ address. Should be fixed now.)
+
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
 
