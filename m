@@ -2,163 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440DC72601C
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 14:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4F272620D
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 16:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbjFGMzj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 08:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S235805AbjFGOCg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 10:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235621AbjFGMzi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 08:55:38 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A219BB;
-        Wed,  7 Jun 2023 05:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1686142534; x=1717678534;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=NlTfIPARILjMX2tlyJqPYMnoCEVAbNRBUNl5mHBgNIg=;
-  b=WuMPGXr3PWCvj5AJ+MkcEeDpZDPLJAd59NX2yiH+g3CenjQ25jM0R3F8
-   gi5st2U1bzDdErNJNoXdN8kgc5cUL6qtWdd+jOVcLznAT6o9iYC5InOo5
-   qsLNzJL1Jw8AM+uAYYVuAzNHiixIYdEyH5TSbRwbTFGm1GapTo/JTgaHJ
-   L1iMOlRcxS6JtrgsL6Ysg3inizHep+A20EOd1W1nleFFzx4raMPN3Kt1v
-   O/FJBpJfrmzdv8aXOWbGAKZGJpsVpWNfIC/tMJOzgPIEOplG0T+nf6k01
-   x5X/Vdun65e0dq88qI306rzR0Sum0cBW4LBy79pGnm4dDV1PxH4hvvpcm
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,224,1681164000"; 
-   d="scan'208";a="31331083"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 07 Jun 2023 14:55:31 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 07 Jun 2023 14:55:31 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 07 Jun 2023 14:55:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1686142531; x=1717678531;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=NlTfIPARILjMX2tlyJqPYMnoCEVAbNRBUNl5mHBgNIg=;
-  b=k0uHsXLUB+yNxJ6ntMGsebaYdVdQRX1zEGHpnKXMH9m8L7Mvq+p+ScbI
-   u6gFQR97r7t7OBo34x/F6fumK8n9uGUj5nDvqPDTr7KH0EtJ5X4lB+MNu
-   mR9+DEXAbzFal7WfhGP6Hn7vtvZIgDqilRK5l0eu9umonYlumJG5dwS/L
-   sv+WvagJs+NMh+4dXQScHOrRsLjCWXybPw/4ZLNA5X9SM9epiLvBeEN8/
-   5jmVjMFelxj5XIsD+YFNEvdREVk25tL8fo6N3RyWrXp1L0DeF0KLIJEBW
-   qn4WMCnadLfapZMzzy+JXpl8ehnhAkXkxuPAVMQWu89A0CnSmRLkxR2mK
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,224,1681164000"; 
-   d="scan'208";a="31331082"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Jun 2023 14:55:31 +0200
-Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.20])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 366DB280082;
-        Wed,  7 Jun 2023 14:55:31 +0200 (CEST)
-Message-ID: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
-Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-Date:   Wed, 07 Jun 2023 14:55:31 +0200
-In-Reply-To: <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
-References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
-         <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
-         <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
-         <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S235683AbjFGOCf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 10:02:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A20B1BE3;
+        Wed,  7 Jun 2023 07:02:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3747616B6;
+        Wed,  7 Jun 2023 14:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA386C433D2;
+        Wed,  7 Jun 2023 14:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686146553;
+        bh=hHtc9DnjpKrRzoPOZhm/tyxmqVCzPbq35+IYlssCytU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tn3FLD6kQqIAW9b3F+cEGG4Zvnwd70sE8UfCvewJatm780pmeo2735l0kx+zWnkDn
+         7v8YW2uoOUSLc9fOqeVsJjHrE7JXWzoP4RZ/bFwhHwWoCpvLv/rlMxeAc3ZEvymG9T
+         RyHaBuMSOsZjt37zCfuUr+Fe4C4qxrmCp41EH53P0V3KViBWnvMmLGAsTJJYbEH6Dv
+         +95VkQuqDX4lY8vLUGqA4+VtVX5eAJBTI0nPaUdBWXLRpsJLbJgQVUhbFGUrFp7Np+
+         2e8YgDdXwDzcC1YmpaTA/FRplyuBn48/GBIy4FyrK12d9F9kSde1My3vDqa94oBjIH
+         yOiyCZCcYVsOg==
+Date:   Wed, 7 Jun 2023 15:02:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-spi@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org, Lisa Chen <minjie.chen@geekplus.com>
+Subject: Re: [PATCH] spi: fsl-dspi: avoid SCK glitches with continuous
+ transfers
+Message-ID: <fa5896d1-6034-404b-9645-9f976283b505@sirena.org.uk>
+References: <20230529223402.1199503-1-vladimir.oltean@nxp.com>
+ <20230607120344.ui2ubzdkb6cbjm5o@skbuf>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bHT21u6gNZuO6PWi"
+Content-Disposition: inline
+In-Reply-To: <20230607120344.ui2ubzdkb6cbjm5o@skbuf>
+X-Cookie: Will Rogers never met you.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 2023-06-06 at 15:44 +0100, Mark Brown wrote:
-> * PGP Signed by an unknown key
->=20
-> On Tue, Jun 06, 2023 at 04:37:08PM +0200, Linus Walleij wrote:
-> > On Fri, Jun 2, 2023 at 2:22=E2=80=AFPM Mark Brown <broonie@kernel.org> =
-wrote:
-> > > On Fri, Jun 02, 2023 at 01:52:00PM +0200, Matthias Schiffer wrote:
->=20
-> > > > We have seen a number of downstream patches that allow enabling the
-> > > > realtime feature of the SPI subsystem to reduce latency. These were
-> > > > usually implemented for a specific SPI driver, even though the actu=
-al
-> > > > handling of the rt flag is happening in the generic SPI controller =
-code.
->=20
-> > > > Introduce a generic linux,use-rt-queue flag that can be used with a=
-ny
-> > > > controller driver. The now redundant driver-specific pl022,rt flag =
-is
-> > > > marked as deprecated.
->=20
-> > > This is clearly OS specific tuning so out of scope for DT...
->=20
-> > In a sense, but to be fair anything prefixed linux,* is out of scope fo=
-r DT,
-> > Documentation/devicetree/bindings/input/matrix-keymap.yaml being
-> > the most obvious offender.
->=20
-> That's at least a description of hardware though.  This is a performance
-> tuning thing, if it needs to be configured at all it should be
-> configured at runtime.  Some applications might see things work better,
-> some might see performance reduced and new versions might have different
-> performance characteristics and need different configuration.
 
+--bHT21u6gNZuO6PWi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is not clear to me what alternative options we currently have if we
-want a setting to be effective from the very beginning, before
-userspace is running. Of course adding a cmdline option would work, but
-that seems worse than having it in the DT in every possible way.
+On Wed, Jun 07, 2023 at 03:03:44PM +0300, Vladimir Oltean wrote:
+> On Tue, May 30, 2023 at 01:34:02AM +0300, Vladimir Oltean wrote:
 
-I can understand not wanting such tuning in Device Trees in the kernel
-repo - I agree that these default DTs should only describe the hardware
-and it makes sense to keep OS-specific tuning out of them.
+> I know you don't appreciate content-free pings, but is this patch on
+> your radar?
 
-Requiring such tuning for specific drivers or driver instances is
-however a common issue for embedded systems, which is why we are seeing
-(and occasionally writing) such patches - setting things up from
-userspace may happen too late, or may not be possible at all if a
-setting needs to be available during probe. And even when deferring
-things to userspace is possible, making things configurable at runtime
-always adds some complexity, even though it is often not a requirement
-at all for embedded systems.
+It's only been a week, please allow a reasonable time for review
+especially when there may be other people who work on the driver and
+should be given a chance to review as is the case here.  Had I not
+already put this into my CI I'd most likely give it a bit longer...
 
-Just doing this through the DT is very convenient and robust. The
-settings could be inserted into the default DT as an overlay applied
-during build or by the bootloader.
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
-Any alternative solution we could come up with would likely add more
-complexity on the driver side, and be less convenient to use for
-developers. Overall, the rationale for not supporting such bindings in
-drivers seems much weaker to me than that for not having such settings
-in default DTs...
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
 
-Best regards,
-Matthias
+--bHT21u6gNZuO6PWi
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-(ps. Sorry about our bouncing linux@ address. Should be fixed now.)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAjfMACgkQJNaLcl1U
+h9AQsAf+IWeF2fOCDp1UCLj0RfisA5ZGazbbpRaaMxtyJlFA9L/FH7DjfkUm3tt2
+e5lOws7HSYV8RKaR4IR9ZuNNZFvTEOYj4PjP4KWUgoTtzFQhqQ3yjD39M80KuFVT
+NGVzDVXkJ5zchOYXVt5X4yM0kQE9FYwisi0ndZmqAbyB0/97a/+3wYX04WNjXgpq
+u1Zfd7GgnA/eJDZx8BpuEVz7rHLnwdCnHgzDZm444goffpWSo5qF3O15pj5CHJkU
+v6YhlusYYy2F3F2/5aZjYtlXoQ01sIhzIPKCaUwFQ31cts4nF485p81xwC2ONPEW
+0BftzBc1cu2ZEunlCFfxr7yZhgbghg==
+=DcO1
+-----END PGP SIGNATURE-----
 
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-http://www.tq-group.com/
-
+--bHT21u6gNZuO6PWi--
