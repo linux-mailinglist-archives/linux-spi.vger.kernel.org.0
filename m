@@ -2,90 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1BD7262AA
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 16:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1157262C7
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 16:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240759AbjFGOVw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 10:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S239705AbjFGO2n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 10:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbjFGOVv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 10:21:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABCD1BCA;
-        Wed,  7 Jun 2023 07:21:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B62C163FF0;
-        Wed,  7 Jun 2023 14:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC328C433EF;
-        Wed,  7 Jun 2023 14:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686147709;
-        bh=C8jieTFPTbsf9bXiIj2WuYDozebdE9lj2pgU/0k568M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MHUCVX66HBImmMVu/k8/R3nf3ivqv4Men24IaG+b6dqTcXzEbPs7Qoc3etA3z6XPr
-         /wG+y2KMH0bc/LFm3qXqESSGD4geXZjkVj8LPQCLpdWIlRIO8yvgLq7vSf8hnRbklZ
-         p0MRpUPlVTwwvbbYm9d+aMqdSVU5z4dFMcfJCWKpFVyhS3Bzd0iHYL8t624Cz2O8L/
-         wnEb6uqZAD/ktqNwjbRX6f16hrDMJkplo/BJz7WYi+m8/8JtA1s5SZ/Oqh/FHiA3L6
-         kucXSC5NOAgzqe8BJvlzODUZs+Nlk9q2odEwl3bXYaSKeQHvJr7knDsqc2bIeiAQrl
-         sTCoAiixF7xmw==
-Date:   Wed, 7 Jun 2023 15:21:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S239120AbjFGO2m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 10:28:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7063A1BCC
+        for <linux-spi@vger.kernel.org>; Wed,  7 Jun 2023 07:28:40 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9786fc23505so301474366b.2
+        for <linux-spi@vger.kernel.org>; Wed, 07 Jun 2023 07:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686148119; x=1688740119;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KNzTFQxxF94FT5qrUmgwTkDFb3Tnf5DsuBjWNRQ43LI=;
+        b=mLam/SsWo9zBv5qpN9FrWcMGO0LdWoogjmc+9m4s+CaL9TqAfdCUKw147UJ+6grKLp
+         HTCB416A7kkiDhlFihM6DA4gin3IqrnPppVo2HzoQ3QmQfvrumYSwWIrbgsSdGauwkPy
+         nK7oXvSGwDR62rWLu518NjIzEIniDpZmZTv+xtU+Exe6bPBlyhxCobzsusHqMDhpGwuH
+         hGSSncGqDC8Kxwrld4uscMnwo74jlhnHQvQyhAMLmyC7IgG0NasXc1/d8WcrOnH//wVC
+         VtUx0H6g9hwAYDQ9Yog7hl0nc4fJK7D+wuM6QUQ4QpEqqRIGV/jeucIIcTl9NKmbdOqE
+         7hVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686148119; x=1688740119;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KNzTFQxxF94FT5qrUmgwTkDFb3Tnf5DsuBjWNRQ43LI=;
+        b=Niw+05847140Os1EjVMT3Q8O6hO9wwRheT4fWq9I9fef8AcgYYfmVF5qTKYiZf5Lgh
+         u9gW6CD4bzHmPmWa1MPNOXzAWrWc3KpAefEKLubFUA/GQ0HuxAQitBYmvqKfUqm8Ep0t
+         h2NaU1WiQIoL3RUJVK/E4Ejs1bA3O+rDuLQUf1vgRynHNNICWD/wBEevtpX4fPhGi0Ld
+         P+j4DcmOfleTc/rVbRkZzSk6FNN5+XvlbRVPB1w4k0mMjUex5HF+wd9RHHLvGqo46qC2
+         Bxrjto1f3knyrccWQPD+chBU/Mv4rALuRE+ZPJgJRfz7TfQIbHmJeBpE8VcH+ox+bkqK
+         H1NQ==
+X-Gm-Message-State: AC+VfDzvutPEYvMbwRqiNtTf/pR/GUzrqCFRH6WdxZKkvEa3+Fxo/0Cf
+        yQKqvPOTRzfKs/oqVLfyL9L5pw==
+X-Google-Smtp-Source: ACHHUZ4J+f2LLHLpnyQNG0mMzLhGs0Wb0TFE9kPtcaYuKcM+SQfMywkfzRPMYvbvr1nL0eiA6Bz1UA==
+X-Received: by 2002:a17:907:3f9a:b0:96f:8666:5fc4 with SMTP id hr26-20020a1709073f9a00b0096f86665fc4mr7469463ejc.50.1686148118902;
+        Wed, 07 Jun 2023 07:28:38 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id a22-20020a1709063e9600b0096637a19dccsm6911447ejj.210.2023.06.07.07.28.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 07:28:38 -0700 (PDT)
+Message-ID: <6c6ffc8e-4c98-699e-ee63-d99880aea95f@linaro.org>
+Date:   Wed, 7 Jun 2023 16:28:37 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Content-Language: en-US
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
-Message-ID: <8416d36f-ae13-43c0-8267-e86ef3c8a75a@sirena.org.uk>
 References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
  <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
  <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
  <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
  <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WJwu/n+x+jLcVhiw"
-Content-Disposition: inline
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
-X-Cookie: Keep away from edge.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---WJwu/n+x+jLcVhiw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Jun 07, 2023 at 02:55:31PM +0200, Matthias Schiffer wrote:
-
+On 07/06/2023 14:55, Matthias Schiffer wrote:
+> On Tue, 2023-06-06 at 15:44 +0100, Mark Brown wrote:
+>> * PGP Signed by an unknown key
+>>
+>> On Tue, Jun 06, 2023 at 04:37:08PM +0200, Linus Walleij wrote:
+>>> On Fri, Jun 2, 2023 at 2:22 PM Mark Brown <broonie@kernel.org> wrote:
+>>>> On Fri, Jun 02, 2023 at 01:52:00PM +0200, Matthias Schiffer wrote:
+>>
+>>>>> We have seen a number of downstream patches that allow enabling the
+>>>>> realtime feature of the SPI subsystem to reduce latency. These were
+>>>>> usually implemented for a specific SPI driver, even though the actual
+>>>>> handling of the rt flag is happening in the generic SPI controller code.
+>>
+>>>>> Introduce a generic linux,use-rt-queue flag that can be used with any
+>>>>> controller driver. The now redundant driver-specific pl022,rt flag is
+>>>>> marked as deprecated.
+>>
+>>>> This is clearly OS specific tuning so out of scope for DT...
+>>
+>>> In a sense, but to be fair anything prefixed linux,* is out of scope for DT,
+>>> Documentation/devicetree/bindings/input/matrix-keymap.yaml being
+>>> the most obvious offender.
+>>
+>> That's at least a description of hardware though.  This is a performance
+>> tuning thing, if it needs to be configured at all it should be
+>> configured at runtime.  Some applications might see things work better,
+>> some might see performance reduced and new versions might have different
+>> performance characteristics and need different configuration.
+> 
+> 
 > It is not clear to me what alternative options we currently have if we
 > want a setting to be effective from the very beginning, before
 > userspace is running. Of course adding a cmdline option would work, but
 > that seems worse than having it in the DT in every possible way.
+> 
+> I can understand not wanting such tuning in Device Trees in the kernel
+> repo - I agree that these default DTs should only describe the hardware
+> and it makes sense to keep OS-specific tuning out of them.
 
-Is it *really* that important that this be configured before userspace
-is running?  With an initramfs you'd be able to do configuration before
-even trying to mount filesystems if your primary storage is flash.  I'd
-not expect the pre-userspace period to be under particular pressure
-here.
+It is not about the sense. It's the rule and the policy. If you want to
+change the existing practice, don't do it via one patch that sneaks
+something in, but change entire practice for entire DT.
 
-Frankly I don't see the command line as being particularly worse here,
-it's more tasteful and if you're doing some device specific
-configuration it doesn't seem to make much difference.  Userspace looks
-even better though.
-
+> 
 > Requiring such tuning for specific drivers or driver instances is
 > however a common issue for embedded systems, which is why we are seeing
 > (and occasionally writing) such patches - setting things up from
@@ -94,22 +135,35 @@ even better though.
 > things to userspace is possible, making things configurable at runtime
 > always adds some complexity, even though it is often not a requirement
 > at all for embedded systems.
+> 
+> Just doing this through the DT is very convenient and robust. The
+> settings could be inserted into the default DT as an overlay applied
+> during build or by the bootloader.
+> 
+> Any alternative solution we could come up with would likely add more
+> complexity on the driver side, and be less convenient to use for
+> developers. Overall, the rationale for not supporting such bindings in
+> drivers seems much weaker to me than that for not having such settings
+> in default DTs...
 
-Using DT is all about adding complexity.
+It's not a hardware property. Do not put software choices or policies
+specific to only one OS into the DT. The DTS is used by different users,
+including other operating systems, firmwares and bootloaders.
 
---WJwu/n+x+jLcVhiw
-Content-Type: application/pgp-signature; name="signature.asc"
+Your convenience is not justification for misusing the DT. That's the
+same argument community is using since ages for every wish from someone
+there wanting something "convenient for him". Same answer for all the
+weird ABIs, weird new user-space interfaces, weird duplicated
+subsystems, many different schedulers (yeah, because why improve
+existing solution in the kernel...) etc. It's always easier for
+contributor to solve only their one problem. No, we are less interested
+in solving only your one specific problem if such solution breaks
+existing rules and consensus.
 
------BEGIN PGP SIGNATURE-----
+I think Mark was here quite explicit, but since discussion is still going:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAknYACgkQJNaLcl1U
-h9D+kAf/awycT8XVBCnr0kCiYWtoYgzT/oQXfsZKlKT9dOd7BxKN/NhDj7QIorwh
-0fNqrzEV/jfc/py4sjfMlDaf/stbPohsNrvYiNZFoFXfexH+pPAydQJdefoxYb1u
-sLPGl3r3P1BxExWtXI21mkzFZqowP/YhwkYkqC30WfE6pz6G7mbVaKiLCCklLYWo
-keBIKxcJlS8ZEZl/wTTuJnhiCfJYMuhSLJhWfJEhHoBN+ptjbP21DbSnoKCL/x0O
-KZEHcJh+sIrxfC7EXmbEl8RXp5eQJ/Ukd4usthaIZ4VCF8RqSIYVBqSVUfWiIi9j
-i++y+VulJkx0LeF7bz1tox4yaRLVLA==
-=VVkr
------END PGP SIGNATURE-----
+NAK for the linux,rt property.
 
---WJwu/n+x+jLcVhiw--
+Best regards,
+Krzysztof
+
