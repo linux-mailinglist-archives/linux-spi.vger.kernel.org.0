@@ -2,53 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4F272620D
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 16:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1BD7262AA
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jun 2023 16:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235805AbjFGOCg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 10:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S240759AbjFGOVw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Jun 2023 10:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235683AbjFGOCf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 10:02:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A20B1BE3;
-        Wed,  7 Jun 2023 07:02:34 -0700 (PDT)
+        with ESMTP id S234939AbjFGOVv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 10:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABCD1BCA;
+        Wed,  7 Jun 2023 07:21:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3747616B6;
-        Wed,  7 Jun 2023 14:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA386C433D2;
-        Wed,  7 Jun 2023 14:02:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B62C163FF0;
+        Wed,  7 Jun 2023 14:21:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC328C433EF;
+        Wed,  7 Jun 2023 14:21:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686146553;
-        bh=hHtc9DnjpKrRzoPOZhm/tyxmqVCzPbq35+IYlssCytU=;
+        s=k20201202; t=1686147709;
+        bh=C8jieTFPTbsf9bXiIj2WuYDozebdE9lj2pgU/0k568M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tn3FLD6kQqIAW9b3F+cEGG4Zvnwd70sE8UfCvewJatm780pmeo2735l0kx+zWnkDn
-         7v8YW2uoOUSLc9fOqeVsJjHrE7JXWzoP4RZ/bFwhHwWoCpvLv/rlMxeAc3ZEvymG9T
-         RyHaBuMSOsZjt37zCfuUr+Fe4C4qxrmCp41EH53P0V3KViBWnvMmLGAsTJJYbEH6Dv
-         +95VkQuqDX4lY8vLUGqA4+VtVX5eAJBTI0nPaUdBWXLRpsJLbJgQVUhbFGUrFp7Np+
-         2e8YgDdXwDzcC1YmpaTA/FRplyuBn48/GBIy4FyrK12d9F9kSde1My3vDqa94oBjIH
-         yOiyCZCcYVsOg==
-Date:   Wed, 7 Jun 2023 15:02:28 +0100
+        b=MHUCVX66HBImmMVu/k8/R3nf3ivqv4Men24IaG+b6dqTcXzEbPs7Qoc3etA3z6XPr
+         /wG+y2KMH0bc/LFm3qXqESSGD4geXZjkVj8LPQCLpdWIlRIO8yvgLq7vSf8hnRbklZ
+         p0MRpUPlVTwwvbbYm9d+aMqdSVU5z4dFMcfJCWKpFVyhS3Bzd0iHYL8t624Cz2O8L/
+         wnEb6uqZAD/ktqNwjbRX6f16hrDMJkplo/BJz7WYi+m8/8JtA1s5SZ/Oqh/FHiA3L6
+         kucXSC5NOAgzqe8BJvlzODUZs+Nlk9q2odEwl3bXYaSKeQHvJr7knDsqc2bIeiAQrl
+         sTCoAiixF7xmw==
+Date:   Wed, 7 Jun 2023 15:21:43 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     linux-spi@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Lisa Chen <minjie.chen@geekplus.com>
-Subject: Re: [PATCH] spi: fsl-dspi: avoid SCK glitches with continuous
- transfers
-Message-ID: <fa5896d1-6034-404b-9645-9f976283b505@sirena.org.uk>
-References: <20230529223402.1199503-1-vladimir.oltean@nxp.com>
- <20230607120344.ui2ubzdkb6cbjm5o@skbuf>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Message-ID: <8416d36f-ae13-43c0-8267-e86ef3c8a75a@sirena.org.uk>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+ <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
+ <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
+ <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
+ <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bHT21u6gNZuO6PWi"
+        protocol="application/pgp-signature"; boundary="WJwu/n+x+jLcVhiw"
 Content-Disposition: inline
-In-Reply-To: <20230607120344.ui2ubzdkb6cbjm5o@skbuf>
-X-Cookie: Will Rogers never met you.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
+X-Cookie: Keep away from edge.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,48 +64,52 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---bHT21u6gNZuO6PWi
+--WJwu/n+x+jLcVhiw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 07, 2023 at 03:03:44PM +0300, Vladimir Oltean wrote:
-> On Tue, May 30, 2023 at 01:34:02AM +0300, Vladimir Oltean wrote:
+On Wed, Jun 07, 2023 at 02:55:31PM +0200, Matthias Schiffer wrote:
 
-> I know you don't appreciate content-free pings, but is this patch on
-> your radar?
+> It is not clear to me what alternative options we currently have if we
+> want a setting to be effective from the very beginning, before
+> userspace is running. Of course adding a cmdline option would work, but
+> that seems worse than having it in the DT in every possible way.
 
-It's only been a week, please allow a reasonable time for review
-especially when there may be other people who work on the driver and
-should be given a chance to review as is the case here.  Had I not
-already put this into my CI I'd most likely give it a bit longer...
+Is it *really* that important that this be configured before userspace
+is running?  With an initramfs you'd be able to do configuration before
+even trying to mount filesystems if your primary storage is flash.  I'd
+not expect the pre-userspace period to be under particular pressure
+here.
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+Frankly I don't see the command line as being particularly worse here,
+it's more tasteful and if you're doing some device specific
+configuration it doesn't seem to make much difference.  Userspace looks
+even better though.
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+> Requiring such tuning for specific drivers or driver instances is
+> however a common issue for embedded systems, which is why we are seeing
+> (and occasionally writing) such patches - setting things up from
+> userspace may happen too late, or may not be possible at all if a
+> setting needs to be available during probe. And even when deferring
+> things to userspace is possible, making things configurable at runtime
+> always adds some complexity, even though it is often not a requirement
+> at all for embedded systems.
 
---bHT21u6gNZuO6PWi
+Using DT is all about adding complexity.
+
+--WJwu/n+x+jLcVhiw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAjfMACgkQJNaLcl1U
-h9AQsAf+IWeF2fOCDp1UCLj0RfisA5ZGazbbpRaaMxtyJlFA9L/FH7DjfkUm3tt2
-e5lOws7HSYV8RKaR4IR9ZuNNZFvTEOYj4PjP4KWUgoTtzFQhqQ3yjD39M80KuFVT
-NGVzDVXkJ5zchOYXVt5X4yM0kQE9FYwisi0ndZmqAbyB0/97a/+3wYX04WNjXgpq
-u1Zfd7GgnA/eJDZx8BpuEVz7rHLnwdCnHgzDZm444goffpWSo5qF3O15pj5CHJkU
-v6YhlusYYy2F3F2/5aZjYtlXoQ01sIhzIPKCaUwFQ31cts4nF485p81xwC2ONPEW
-0BftzBc1cu2ZEunlCFfxr7yZhgbghg==
-=DcO1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAknYACgkQJNaLcl1U
+h9D+kAf/awycT8XVBCnr0kCiYWtoYgzT/oQXfsZKlKT9dOd7BxKN/NhDj7QIorwh
+0fNqrzEV/jfc/py4sjfMlDaf/stbPohsNrvYiNZFoFXfexH+pPAydQJdefoxYb1u
+sLPGl3r3P1BxExWtXI21mkzFZqowP/YhwkYkqC30WfE6pz6G7mbVaKiLCCklLYWo
+keBIKxcJlS8ZEZl/wTTuJnhiCfJYMuhSLJhWfJEhHoBN+ptjbP21DbSnoKCL/x0O
+KZEHcJh+sIrxfC7EXmbEl8RXp5eQJ/Ukd4usthaIZ4VCF8RqSIYVBqSVUfWiIi9j
+i++y+VulJkx0LeF7bz1tox4yaRLVLA==
+=VVkr
 -----END PGP SIGNATURE-----
 
---bHT21u6gNZuO6PWi--
+--WJwu/n+x+jLcVhiw--
