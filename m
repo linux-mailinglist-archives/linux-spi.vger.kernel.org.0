@@ -2,173 +2,174 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EB0727229
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jun 2023 00:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50137278C8
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jun 2023 09:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjFGWyn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Jun 2023 18:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S235379AbjFHH2j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Jun 2023 03:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbjFGWyl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Jun 2023 18:54:41 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4843A2685
-        for <linux-spi@vger.kernel.org>; Wed,  7 Jun 2023 15:54:37 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-973bf581759so3499766b.0
-        for <linux-spi@vger.kernel.org>; Wed, 07 Jun 2023 15:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178475; x=1688770475;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=WeqXDhOYObEU4Q4S3JxL3bEVQtplVvNKCfakhFkSuiLBGZe/ef388CiKUayAOmbEOV
-         ZR0I5GAxPbS54gQ7Fi+hG72GeTokI+noW1OPwtavsLtjymUzaeyKWDDpDiOtNBnLq40U
-         hKN8QzuE3yuzJvRNnur8tzVGd/WDVGu93YT1PuP86BcJTXG/Q3+EyiY1Ov5Itgxf9sfV
-         puzj8gFJzfO5zpoPQ0K3fO44i5t5qr504eako4ZleNRX8Z/LIaI8UL0On16+KpM6t7Hk
-         P05xDxotWEktWnY1d5dyENuc5li2l9dXU7CCPzvtyNY2IFMeysO2qVasevOMBOewfS/V
-         nc1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178475; x=1688770475;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=V9NEPeaD1p52mgZDahS/YwOvKchx8QNBXS+8YLkhjD/Cl6C49WGOW6w7iNy6UDANT4
-         Jiw2pafA3dakB9nBlLIqeMB53uwQfjD3gsAq0Lw5bLMydJbmiIZCCZCaNY9vTtVSLH6o
-         lVl+xPy2pt8LyEw99B7dkAGgIH+lYrk8+Q+MOGZf3JWHiebx/vXzFW0fR8NU9EuAZM1E
-         z4yYxB2MoiJV1QdCUreIwgBCpETX3wKDnH9bFUMQI41IZM55Pd+0PrigN/jJXIALi1c5
-         41yawFma+97IPAXM+7+t50JS6J5Cyvw8eYvuxq5YvcfKQBuvXvXeVztIj1c6L2IRdftz
-         e+jA==
-X-Gm-Message-State: AC+VfDxg6JCiawV89z/0CTpgFTBL0hfmF+HNYhkpdouDhzk+IGpNNKSQ
-        +RrFuZw6sHcFfJXcv2618FtoylBq808iOFpZeuFaFUom5Xc7+w==
-X-Google-Smtp-Source: ACHHUZ7J0yv2Uy0Ff3URHHllMh6dn7geAOftATdUjaOMCSCEm6sdR3gpAsqx+SgrMGXj3gnAhFPKaDZy027dlMN9Xtw=
-X-Received: by 2002:a17:907:783:b0:94a:6de2:ba9 with SMTP id
- xd3-20020a170907078300b0094a6de20ba9mr6600647ejb.68.1686178474547; Wed, 07
- Jun 2023 15:54:34 -0700 (PDT)
+        with ESMTP id S235211AbjFHH2h (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 03:28:37 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D92371BEA;
+        Thu,  8 Jun 2023 00:28:28 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxL_Abg4Fk5XMAAA--.1776S3;
+        Thu, 08 Jun 2023 15:28:27 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8oVg4Fka+EGAA--.13745S2;
+        Thu, 08 Jun 2023 15:28:25 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v12 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Thu,  8 Jun 2023 15:28:17 +0800
+Message-Id: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:54:33 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:54:33 -0700
-Message-ID: <CADFNGJ9M60ti_yHcUzQD8BP2Qji_qiW+6MK-iYxt_qf8B830+w@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC8oVg4Fka+EGAA--.13745S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
+Change in v8:
+		1. Add reviewed-by information for spi bindings patch.
+		2. Fixup the uncorrect spi yaml file path in MAINTAINERS file.
+		3. Add spi_master_suspend and spi_master_resume in spi pm function.
+Change in v9:
+		1. Make spi_master_suspend go first in pm suspend.
+Change in v10:
+		1. Fix the compile issue about of_node_get and of_get_property no
+		   declaration.
+		2. set config SPI_LOONGSON_CORE invisible.
+		3. Captial "spi" in commit log and Kconfig file.
+		4. Write header files in alphabetical order.
+		5. Use clamp_val, GENMASK() and BIT() in spi clock setting.
+		6. Optimize clock and mode setting code.
+		7. Use readb_poll_timeout in loongson_spi_write_read_8bit.
+		8. Remove some useless dmesg print.
+		9. Use device_set_node replace of_node_get.
+		10. Use dev_err_probe in code.
+		11. Use devm_clk_get_optional replace devm_clk_get.
+		12. Remove SPI_NO_CS for drop 2k500 non common type spi.
+		13. Use pcim_enable_device() and pcim_iomap_regions() in spi pci
+		    driver.
+		14. Passing the remapped address in loongson_spi_init_master.
+		15. Remove the useless goto flag "err_out".
+		16. Use pci vendor id in pci_ids.h.
+		17. Use devm_platform_ioremap_resource in spi platform driver.
+		18. Remove the useless item in pci_device_id.
+		19. Remove the inned comma in of_device_id.
+		20. Add some headfile in spi_loongson.h.
+		21. Remove the useless extern for loongson_spi_init_master in
+		    spi_loongson.h.
+Change in v11:
+		1. Use spi_get_chipselect() to replace all spi->chip_select in
+		   spi driver
+Change in v12:
+		1. Reword the dt-bindings patch title.
+		2. Use a specific spi compatible in dt-bindings and spi driver.
+		3. Add Cc list for the reviewers of the previous version.
+		4. Add a static for rdiv[12] array in loongson_spi_set_clk.
+		5. Fixup the compile warning for spi HZ that reported by robot.
+		6. Use "#define LOONGSON_... BIT(0)" in readb_poll_timeout.
+		7. Add a error code return that when write spi failed.
+		8. Use spi_controller* instead of spi_master* in all cases.
+		9. Check for the error first which for clock gain.
+		10. Drop the ->remove() in spi pci driver.
+		11. Drop the comma for the terminator entry in pci_device_id.
+		12. Adjust the head file in spi driver.
+		13. Use forward declarations for device and spi_controller.
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
+Yinbo Zhu (2):
+  spi: add loongson spi bindings
+  spi: loongson: add bus driver for the loongson spi controller
 
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  41 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  26 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 275 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  55 ++++
+ drivers/spi/spi-loongson-plat.c               |  47 +++
+ drivers/spi/spi-loongson.h                    |  49 ++++
+ 8 files changed, 506 insertions(+)
 
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
+-- 
+2.20.1
 
- Contact name: John Lee Tae-seok
-
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
-
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
-
- Your full name..........
-
- Home address:.........
-
- Your country...........
-
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
