@@ -2,61 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1224727F70
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jun 2023 13:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C912F727FA5
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jun 2023 14:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbjFHLxJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Jun 2023 07:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S236136AbjFHMKn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Jun 2023 08:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbjFHLxJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 07:53:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A901FFE;
-        Thu,  8 Jun 2023 04:53:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF6A364CAB;
-        Thu,  8 Jun 2023 11:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE657C433D2;
-        Thu,  8 Jun 2023 11:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686225187;
-        bh=wwKRg32ZcZhADNX1fuChejee2tT1rwz/ID9yAF2EOxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jrku5HJZBoF1sj1SGKmxa7C1Ri9N3aZzO8g9+GgpUai7+Zgax8DDcMkuCVA6rmubQ
-         RtGuuaAeHJqTTXfseiNlcmZKJTubyQ3cWwV/zSPmXfZdjM7o92q3G/TnVZKehTUhTA
-         B+TDFwQUYU1WOhQqPjQzi616se0Z73K71LU4h3e7tZiqAaktHB+sBr12FOdg/pt1kb
-         haMCheWw2gBl4h/7RZW5r7koeTGPxbJoNIcr+MDI/a6LpoGmj8JhGcIWhePkT8+cJK
-         pVDr9qvluXmD2PwE3jiVTRqs8Fdge0gcpPwVR27BW4GjAWQwpRqIi9Ogo8oUv1kHCw
-         7R26Prr8gFm3w==
-Date:   Thu, 8 Jun 2023 12:53:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        with ESMTP id S236056AbjFHMKn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 08:10:43 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE7E210E;
+        Thu,  8 Jun 2023 05:10:40 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxDes_xYFkloQAAA--.1930S3;
+        Thu, 08 Jun 2023 20:10:39 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxReQ+xYFkq4QHAA--.24090S3;
+        Thu, 08 Jun 2023 20:10:38 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v12 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <23420735-0221-4eab-9a4e-07a6225c761a@sirena.org.uk>
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
 References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-3-zhuyinbo@loongson.cn>
- <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
- <88f19398-385e-440c-83e9-ce51ea60cc97@sirena.org.uk>
- <fa6d546f-ce92-1fe9-5400-0cb8bccf8ee5@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+ <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+ <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
+Date:   Thu, 8 Jun 2023 20:10:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S7nu9e0I23V+8Twu"
-Content-Disposition: inline
-In-Reply-To: <fa6d546f-ce92-1fe9-5400-0cb8bccf8ee5@loongson.cn>
-X-Cookie: Disk crisis, please clean up!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxReQ+xYFkq4QHAA--.24090S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,42 +64,31 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---S7nu9e0I23V+8Twu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 08, 2023 at 07:45:49PM +0800, zhuyinbo wrote:
-> =E5=9C=A8 2023/6/8 =E4=B8=8B=E5=8D=886:29, Mark Brown =E5=86=99=E9=81=93:
-> > On Thu, Jun 08, 2023 at 01:15:39PM +0300, Andy Shevchenko wrote:
-> > > On Thu, Jun 8, 2023 at 10:28=E2=80=AFAM Yinbo Zhu <zhuyinbo@loongson.=
-cn> wrote:
+在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+> On 08/06/2023 13:42, zhuyinbo wrote:
+>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> @@ -16,6 +16,7 @@ properties:
+>>      compatible:
+>>        enum:
+>>          - loongson,ls2k1000-spi
+>> +      - loongson,ls2k0500-spi
+> 
+> Aren't they compatible?
+> 
 
-> > > > This bus driver supports the Loongson SPI hardware controller in the
-> > > > Loongson platforms and supports to use DTS and PCI framework to
 
-> > Please delete unneeded context from mails when replying.  Doing this
-> > makes it much easier to find your reply in the message, helping ensure
-> > it won't be missed by people scrolling through the irrelevant quoted
-> > material.
+Are you saying that the spi driver is compatible with 2k0500 ?
+Yes.  and the 2k1000 spi hardware was same with 2k0500 common type spi
+hardware.
 
-> okay, I got it.
+but afterwards, it may be necessary to implement a clock drvier for
+2k0500, because the spi driver was use "devm_clk_get_optional()" to
+get clock and not use "of_property_read_u32(np, "clock-frequency",
+&clk)",  But this seems to have nothing to do with bindings.
 
-That was more directed at Andy than you!
 
---S7nu9e0I23V+8Twu
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
+Yinbo
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSBwRwACgkQJNaLcl1U
-h9CnWwf/ZckmmeKHGDaBEfpB7XclNw/g9H6bhJmCGrmPwl30JCya7MU3ApuN9mfz
-HHFL+V74dHUWRv7XErDcDWNcO2rXepEC0OZF7GOowHbcKqoRCtN1El9PMskRzVHD
-l6BowtnqCAtkhaLvpKAP1p7J/vE+uuCz/7l92cnqAqYldJusCVZxOxUjgal/Ikll
-SeYgn4LZo+c0gtfQ30ld/W44S6YETVxJh5VOflr4+bHo1Xb0M4A7H9N/B6TPxTJ2
-y0ELYUwLaeg1XWgrkQJ1sPFG31j0ZM6XPcTlOxaiVFbH/5UmF1z7kwrVNt1ZZbth
-SiOj8GfSzllyc17an1nz+cusKg54YQ==
-=SzRs
------END PGP SIGNATURE-----
-
---S7nu9e0I23V+8Twu--
