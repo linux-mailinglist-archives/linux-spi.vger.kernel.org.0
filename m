@@ -2,91 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAAD729166
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 09:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942FB72926D
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 10:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbjFIHls (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Jun 2023 03:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S240035AbjFIIPn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jun 2023 04:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238971AbjFIHl1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 03:41:27 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9161A2
-        for <linux-spi@vger.kernel.org>; Fri,  9 Jun 2023 00:41:26 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5664b14966bso13353187b3.1
-        for <linux-spi@vger.kernel.org>; Fri, 09 Jun 2023 00:41:26 -0700 (PDT)
+        with ESMTP id S238963AbjFIIPm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 04:15:42 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1681FDE;
+        Fri,  9 Jun 2023 01:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686296485; x=1688888485;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=agSzQAlA3vB7TiE+c7567YHsHwKsKQDGu0KW+ilGleg=;
-        b=Xg+vzYG/nkVPeYJJh1Ji+jemWww54yCeuSV8daiHhILzKn0a26GLpcqXlZ0OUYlx07
-         Ib6E6a/S+AU2+G0kFEvLaylkH8ddEDIZHdbty1OIw9dkLu18DobpppSvWmvVjGN4yF2o
-         BDSBWRNkbhN/PcVAWo0BHKv0DoDyUPJ6LN5YtRDpdlQK+iXGh9ovlpEqe2Um47Y78TGI
-         NHLnCP1oPfP2oAg3Q28jjQVNMQViOcm4jJ9aHShMsfYz9/Cjb8jgTuQdcdshRN4quaaM
-         v36ZdfN+YIwISL9osY2y0L8t48LhO5R3P19p9wO2+hSk86ZPBf5YKzukK3oKprQCuoqB
-         DvJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686296485; x=1688888485;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=agSzQAlA3vB7TiE+c7567YHsHwKsKQDGu0KW+ilGleg=;
-        b=YiK57yu+4exrbQcAPLzANd87nIZK/a2AfZeETuK4jwXsrpu6EVkx1WA02Yv0Stgn85
-         Hiwj4DcIoz0aXZkBQylfYP+1DiOdrEMDZo9aZhG3RgfpUcm/8goilrHul+2G01sjzQUU
-         sTd2t1mUuA1eT0HzsiAfnwranu5SGKnLlPpw1k4dylVB9X1GByok0eub/rIb6FAmGeRv
-         PcrYIMxvV6TlQYfb/VCM16RTW8or4xEag2GHrpAsrfDWM9RpG+6udMRKts9mCHOZ6xex
-         i0tmFzwMFeEshgJH67ZHK4jgqR32+ESd+jZi7z3y8Y/HD7Tf0aLCg6DwaZ3ATkePrQxH
-         VqwA==
-X-Gm-Message-State: AC+VfDyUflqkuES9mOyCJQ4o1yoAyYYInzmSulkpvKTla12DBWLDHy02
-        ktfpExGvu0MRJlKzFGUPHK7wSOldoL288jHjV41G3dMmfhEvJ/b5
-X-Google-Smtp-Source: ACHHUZ5jlXZ5aYo7orLGKS89d2hbatJ50uG2EaQL3Q/iP+Sg9hANlFQ5bMNtha+O/K485bvlneepJoRkjzr5dl6RBec=
-X-Received: by 2002:a25:a221:0:b0:ba7:dd71:36c7 with SMTP id
- b30-20020a25a221000000b00ba7dd7136c7mr295651ybi.63.1686296485284; Fri, 09 Jun
- 2023 00:41:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
- <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk> <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
- <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk> <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
-In-Reply-To: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 09:41:14 +0200
-Message-ID: <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686298539; x=1717834539;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mb1slm/8ZxVzVyUF3XdtLt7ptCWTNk/wjWJvkjEJas8=;
+  b=LjoiXRrnaFPlyLY3sTSW1ycLJksoiJM8kAZ6whxDIYrOJ3GjZnisflb9
+   7p+ud1ujGM3IajGr16/+1CxyZ0mKItjyFxtWhzqf3MGfVZ9ARZMYPit5r
+   7ARdaqYnz7U7U3isucGsWTU46V/ShZ/aCtYFfzsf7oB/GZoY24abSFKXQ
+   Eva5z3yJ4CAv/I8qwAADssqyCiaehrZMu5GvRXhq7U/gVu0/U6MEjtZfQ
+   /A4S+0um3xB85j4RXGpupYs5B2XjyVUplEzjixeRJ7CHnShvvfAMxTzz5
+   HKyQlyJi/r9XfmyAvBdw9opMoTbIfTkqgzwGInXa4gecCt1Joil87N60T
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31359501"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 10:15:37 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 09 Jun 2023 10:15:37 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 10:15:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686298537; x=1717834537;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mb1slm/8ZxVzVyUF3XdtLt7ptCWTNk/wjWJvkjEJas8=;
+  b=onh31Dumrcp7hd3ZCvtI/QxzmzVrYVi5X75LN/evvJSPHyAMFsR9QAFS
+   2n/AvSCXYkWc88Sm4Nh4PST1Go/VT9StacaCDw6OnXiJlWd8u7k6l7L4C
+   T0jNMIJ77QK0P1smIi5+qMrMBgMB6ydf8HtKEdcwS5XtViuBEy9QaJnmg
+   dIpDMmhDsnEoxNDi9ZdlPIPwNdPKaPBF9m5LodOWpsiuLN9Weg6CWXL/p
+   K7sH4jH+HMu4qK3yjaXEydlss4MSUB44sf3bVNKEVqPKkrMLDIXoe7y3r
+   VJlbp6Q5ngC9vgFIcA+iriOGfImLUHwWsdOARrAWzzsXOQV35u8fxcKe0
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31359500"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Jun 2023 10:15:37 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5E7DC280087;
+        Fri,  9 Jun 2023 10:15:37 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Date:   Fri, 09 Jun 2023 10:15:37 +0200
+Message-ID: <3241150.44csPzL39Z@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com> <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com> <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 2:55=E2=80=AFPM Matthias Schiffer
-<matthias.schiffer@ew.tq-group.com> wrote:
+Hi all,
 
-> It is not clear to me what alternative options we currently have if we
-> want a setting to be effective from the very beginning, before
-> userspace is running. Of course adding a cmdline option would work, but
-> that seems worse than having it in the DT in every possible way.
+Am Freitag, 9. Juni 2023, 09:41:14 CEST schrieb Linus Walleij:
+> On Wed, Jun 7, 2023 at 2:55=E2=80=AFPM Matthias Schiffer
+>=20
+> <matthias.schiffer@ew.tq-group.com> wrote:
+> > It is not clear to me what alternative options we currently have if we
+> > want a setting to be effective from the very beginning, before
+> > userspace is running. Of course adding a cmdline option would work, but
+> > that seems worse than having it in the DT in every possible way.
+>=20
+> A agree with Mark that a command line option isn't that bad. It's somethi=
+ng
+> that pertains to just the Linux kernel after all? And you can put that
+> command line option in the default device tree, in chosen, if you want.
 
-A agree with Mark that a command line option isn't that bad. It's something
-that pertains to just the Linux kernel after all? And you can put that comm=
-and
-line option in the default device tree, in chosen, if you want. No-one
-is going to
-complain about that.
+I don't like the idea of a command line enabling realtime scheduling for al=
+l=20
+instances of the SPI controller driver or even all SPI controllers. Actuall=
+y=20
+this might be worse if a non-rt SPI bus is considered for RT scheduling.
+IMHO this should be configurable per SPI controller, e.g. a sysfs attribute.
 
-Yours,
-Linus Walleij
+> No-one is going to
+> complain about that.
+
+IIRC someone (maybe Greg K-H) opposed pretty hard against (module) paramete=
+rs=20
+for (driver) configuration, but I can't find the post to back my statement.
+
+Best regards,
+Alexander
+
+> Yours,
+> Linus Walleij
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
+
