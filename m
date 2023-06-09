@@ -2,74 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5322E729CAF
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 16:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A6D729DE2
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 17:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbjFIOWu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Jun 2023 10:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S231916AbjFIPKc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jun 2023 11:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239318AbjFIOWt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 10:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663830E7;
-        Fri,  9 Jun 2023 07:22:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C74D86189D;
-        Fri,  9 Jun 2023 14:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A3DC433EF;
-        Fri,  9 Jun 2023 14:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686320568;
-        bh=PFEySzC7tACtP/XyP8fsFBTxk131P5gKr8Atqgb7dqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=toM+LEM3YozmlHZ+XBE1mBW2qo9vKIHZXnT3Z9w+O8PouVRTFEeXOiTABtgF2FYs5
-         fecRrZ7+1u0/8h1veEVKzXPEuK3WXbwX1y6RVhgFxD3Aj6c27wT8ydpqcr2+v5iyu/
-         bOdPel0xByAwm/pI5BsjqNcvB0SDjKu/cWw1xwg0egDUkV9opK9g+P1tlEswQYPPq1
-         /LYOP/IPXu3ISRFIDS4eUCfNYGrFFqfc5qMemZLjC/HLBUV9cJzyZp8hj/yqfS0Kfb
-         /kOUg9QB1Iz6M0I+HroY6Bi+E0ygI3nnP8E4Z2OleuuVMDtZczKCZnNZEm8uZZ7VxM
-         8bRuhy49tzTJw==
-Date:   Fri, 9 Jun 2023 15:22:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <3b5e149d-4d52-46f8-85f5-821aa7b99ae9@sirena.org.uk>
-References: <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
- <ZEag1lAonYcmNFXk@orome>
- <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
- <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
- <ZHhW_wFvRWInR_iM@orome>
- <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
- <ZHiQ44gAL3YEZPUh@orome>
- <c0cf893d-8bc5-4f4b-a326-bb10dd0c84de@sirena.org.uk>
- <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
+        with ESMTP id S231479AbjFIPKc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 11:10:32 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD4B6;
+        Fri,  9 Jun 2023 08:10:29 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-777b4c9e341so84869939f.0;
+        Fri, 09 Jun 2023 08:10:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686323428; x=1688915428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bgEA1Mw1A/5s3GKiOUjS2OVmsqKcYspaLT+4TG/YkK4=;
+        b=DjwNmx67BeoFLM27pn5XmdbceUPDiON3563DnauYeHwea8zuquToq281cv41H+Iak3
+         BouT0We4DQIMqblU63IGUlAEJmwAQCXkdWfAqTMfH/RJORQ+KVGABHBjU4CW/cdEnjnj
+         xNi52lIsQPf2dqRnXBuyPkY5BEQQ2mMiCMtzGvSTVbGQyrf7KnwJsfcQp2PkYSwKRo5k
+         X2yz4+pRTRgA4PCjQffFjALn4wN0QHcdxsqoc80Lt9Ms+6J3PDh5S6xDrs7PBhlZc6be
+         +M0dv6G3UnM7DQctBLOUihm8hb2nssUDhKaoWDMsJLISdOMM1OX/MKppuNnCs9srr0YQ
+         eOzw==
+X-Gm-Message-State: AC+VfDwbJncx6FYyP1722y0fC7ojnw9SgAcibTsq3LIt2DiY02DRI+QH
+        aiCOKcpSJzYwe84ichZkKg==
+X-Google-Smtp-Source: ACHHUZ6GLJF9xmiCznvrkvDAHStb1dFZWwEwBO0JSyNuKSB2A4EFN0t4aWuWCLrZCT/E+UeHUSc/ew==
+X-Received: by 2002:a92:ce11:0:b0:33a:56d6:d9a4 with SMTP id b17-20020a92ce11000000b0033a56d6d9a4mr2155501ilo.10.1686323428407;
+        Fri, 09 Jun 2023 08:10:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l5-20020a92d8c5000000b00338a1272ce1sm1147336ilo.52.2023.06.09.08.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 08:10:27 -0700 (PDT)
+Received: (nullmailer pid 986311 invoked by uid 1000);
+        Fri, 09 Jun 2023 15:10:25 -0000
+Date:   Fri, 9 Jun 2023 09:10:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-spi@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        timestamp@lists.linux.dev
+Subject: Re: [PATCH 1/7] dt-bindings: phy: intel,combo-phy: restrict node
+ name suffixes
+Message-ID: <168632342399.985906.12431431892707276555.robh@kernel.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O0OAEmr40Unwas+e"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
-X-Cookie: Tom's hungry, time to eat lunch.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +86,23 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---O0OAEmr40Unwas+e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, 30 May 2023 16:48:45 +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to:
+> 1. Only one unit address or one -N suffix,
+> 2. -N suffixes to decimal numbers.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/phy/intel,combo-phy.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-On Fri, Jun 09, 2023 at 05:19:15PM +0300, Jarkko Sakkinen wrote:
-> On Thu Jun 1, 2023 at 3:40 PM EEST, Mark Brown wrote:
-> > On Thu, Jun 01, 2023 at 02:36:51PM +0200, Thierry Reding wrote:
-> > > On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
-> > > > On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
+Acked-by: Rob Herring <robh@kernel.org>
 
-> > > Jarkko, can you pick this up for v6.5?
-
-> > No, I said that I had applied the SPI parts for v6.4 so there would be
-> > no blocker whenever people got round to reviewing the TPM side.
-
-> I'm totally cool with this: won't pick the patch then.
-
-I have no intention of applying the patch, I am expecting it to go via
-the TPM tree.
-
---O0OAEmr40Unwas+e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDNbAACgkQJNaLcl1U
-h9DFTwf/fxy+VHx3rPhTGHVI3g+3B5YfkGyIZZUUizJ4Y/FZtz0pzFEhcFBiThSp
-BDTAmG6rrS1bbseotnzkArMI0v0ts2BX+CqhaLxWAOHusEdDUS/xXXUzpZOHK6ZD
-+f7ELs4ANXHTVpYV3vDnMO0bcM/hjtljLj2GhG1FrAcEHP6l65aTrK+we6dR1kMG
-QlIIiLaq2DWTrpW9B//x8slCBbMmCNEWNnmGliBuBr83FiIPydVk8oDXlHZSfSd0
-90tNkdivHTNG9Dhs1c487cuIoirN+sevKt+ucutAk/mi1tteNzIlpVcLQoq54sOj
-0QgnqIAtXTSvNrPXRMKufHDpj3K0qA==
-=uu6t
------END PGP SIGNATURE-----
-
---O0OAEmr40Unwas+e--
