@@ -2,92 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E0B729510
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 11:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A4E72959E
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 11:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241576AbjFIJ23 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Jun 2023 05:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S241631AbjFIJlB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jun 2023 05:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241509AbjFIJ2Q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 05:28:16 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5B3C3D
-        for <linux-spi@vger.kernel.org>; Fri,  9 Jun 2023 02:22:34 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba8a0500f4aso1582697276.3
-        for <linux-spi@vger.kernel.org>; Fri, 09 Jun 2023 02:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686302547; x=1688894547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sXFu4yUMtLkQVLqZs27cGbref0m1NvZ9UABnGnW3Zcc=;
-        b=UBQAX/5uOqkq3FVbYkIpGwXDdC7zYxEj9ZCa2YkX9AgC70xteA6Ot86vmBj6fJUKLy
-         FUScht9XSfZArtomzMF3WkuN2YwxSbadDhQcju/pF0b2/byYXJ2ll5BFy3p82eg4RGay
-         zotuozoiQJnCvgaOUBrABeOjSqMQzLaqVndxuIS3txByOyXrhVHWBEGyYA7E8KDJOpAJ
-         9NAMtK6HH1f9Mj4BozJXoomHjc9rrP1ueWQ5rR0ghHMsgocsbjw4kzf9as6X+6eg8K9Z
-         SNx+K1M0kVM+qhLww01ec5m7QsZ4Y5HCzE/3n1ffcPm7yaGo5jsowvCodSuYuUOYHZIq
-         eUxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686302547; x=1688894547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sXFu4yUMtLkQVLqZs27cGbref0m1NvZ9UABnGnW3Zcc=;
-        b=R63BScQr7IuvhJehYBr69F+YiCgcyTXFyZocWKng0JDchdgIhsPWviCwhOGjllGC6H
-         7wN6bnftKK7ESm9fVv5dfG2qZ6fu2ulB2Rh0s2LEpoooOY3enza2xMzAM5H6L4WPKFNl
-         D5DlkC4IPIQUBBEdzsI0+j6Ui+6uhwdNC+7lTV1MvQOmn0GxOYaCcayCOSTojP6J2MoY
-         7iA2yg/ssw27j8XKZhPlRiKdwhCm3W2cVbG0Pzz2EzHKPSH4cWt1OsagtoTxrm1L4UdK
-         OXswKGiwZ8+bLJqVPqhIwLCtgtMUxuzDNS4/gJxKwr+Vr6Zzh3hqMjIV9eVUL0aCB9TM
-         Ogtw==
-X-Gm-Message-State: AC+VfDwMyfXRy1OeQ5nlwCCXCqPr8Oc8EHI6mYP1QIJIyZ9F4PgByRFo
-        /1cI5kTm7bZd+SHP3j+0wE5JfnOcLK+TocsrGzQVRg==
-X-Google-Smtp-Source: ACHHUZ48RvbMw1+M+7v2VlVgLESWvZ6AGC8PU94FcGcAeLzJMhza44IJ1d+WbK+hcPxCXuMt0Oxh3ZuEmfwL/Xhodm8=
-X-Received: by 2002:a25:e6cb:0:b0:bad:e86:8fda with SMTP id
- d194-20020a25e6cb000000b00bad0e868fdamr501993ybh.22.1686302547555; Fri, 09
- Jun 2023 02:22:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
- <3241150.44csPzL39Z@steina-w> <CACRpkda2yQefuUMn6Ot8Ns6nNgfC25i9nwmzwxOy5fUg=A44hQ@mail.gmail.com>
- <4784636.LvFx2qVVIh@steina-w>
-In-Reply-To: <4784636.LvFx2qVVIh@steina-w>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 11:22:16 +0200
-Message-ID: <CACRpkdb66Br+nVPiih+oQQfXokMRYXUSE4rriPykR-yA9eDAxg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        with ESMTP id S241978AbjFIJkM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 05:40:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155B24692;
+        Fri,  9 Jun 2023 02:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91B8661EAF;
+        Fri,  9 Jun 2023 09:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E175C4339E;
+        Fri,  9 Jun 2023 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686303189;
+        bh=trIw02rNBpNuNh03ZuX3RvyfOjFoCoUAyx/8izz7MTo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YEHAQ9BB2obls72irPa4Asg3hWcO+TDzK/6Bat/DyPG683k4tzD67mzmq2MyJUAeq
+         4zHWK38xDNn7MvWMslLWv0AjtvMZQ7y5YWMa7j3DttTzw6zKmCAoSnXSGkEh10aCH6
+         yt6cLXSMy8SAxhe16YiF8XrpZ6Cu6sd6WR0BKk/hkaRX85HEMJcQaFvSG7bZ2Ct8MX
+         TnMytGdNC6Rc1tBFdAP64wkQCR0DW9xQh+wFXQWqQExZ+1+9HK6WjOxasy3PrGDZE2
+         yjpzBaodywUz2yXFR5rsEcb79aTm6h1rJAB3CjsdXU7fcR3aP2bolnGNndgGMTIbta
+         3HMlrlUVFsmWA==
+Date:   Fri, 9 Jun 2023 10:33:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux@ew.tq-group.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Message-ID: <d0e644f8-462a-4d5e-8086-926b4db7327e@sirena.org.uk>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+ <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
+ <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
+ <3241150.44csPzL39Z@steina-w>
+ <CACRpkda2yQefuUMn6Ot8Ns6nNgfC25i9nwmzwxOy5fUg=A44hQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8p4tEmx13yYEDZ7S"
+Content-Disposition: inline
+In-Reply-To: <CACRpkda2yQefuUMn6Ot8Ns6nNgfC25i9nwmzwxOy5fUg=A44hQ@mail.gmail.com>
+X-Cookie: Tom's hungry, time to eat lunch.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 11:13=E2=80=AFAM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
 
-> > I fully sympathize with this problem, because I have faced
-> > similar problems myself.
->
-> You mean RT-scheduling before userspace is up? Can you elaborate the issu=
-es
-> you see?
+--8p4tEmx13yYEDZ7S
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No. But choosing block layer scheduler (BFQ for MMC cards) before userspace
-is up, which is currently done by udev scripts in eg Fedora :(
+On Fri, Jun 09, 2023 at 10:42:04AM +0200, Linus Walleij wrote:
+> On Fri, Jun 9, 2023 at 10:15=E2=80=AFAM Alexander Stein
 
-Yours,
-Linus Walleij
+> > e.g. a sysfs attribute.
+
+> But it needs to be set before userspace is up :/
+
+I'm really not clear that this is actually the case - I've not heard an
+articulated use case here.
+
+--8p4tEmx13yYEDZ7S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSC8c0ACgkQJNaLcl1U
+h9BGQgf/YB1hKO5OaW5FGz6/FKPL7YIwLHFL4+hZ3HPtQwiEtKuDApfudQ/9yrC6
+4X60YUoR93UUKBOuKFBn23/REhDYGzq6lUp+SW5yJObJs3FbMtu9ZCPAHTjpkh0H
+bx9+CX5IzlIBddOKDFCHg1N+6pP5nC2mfdSzff8H3CUvgwuVy09wL3373gf+QXAS
+KlPiZPtH8wfHgzALF4xAQpqbzZSgJ+4PRqAF0dA6Wz4C5m3hMrDSmQOpQuX2LK/X
+/QHnQ1qC+AY4d/BXXgTALaHRsCFdLKNBPT01Qe3LyVxg2ABWA9E5LpSgyggSpljF
+52858nhYb714hTCuBtyiMjcex8NVYw==
+=k8Q1
+-----END PGP SIGNATURE-----
+
+--8p4tEmx13yYEDZ7S--
