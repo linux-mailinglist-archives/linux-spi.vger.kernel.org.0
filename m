@@ -2,56 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CB8728E5B
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 05:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3E2728E72
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 05:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237753AbjFIDNZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Jun 2023 23:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S237833AbjFIDRv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Jun 2023 23:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237663AbjFIDNY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 23:13:24 -0400
+        with ESMTP id S237905AbjFIDR3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 23:17:29 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D976F30E7;
-        Thu,  8 Jun 2023 20:13:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A236B3589;
+        Thu,  8 Jun 2023 20:17:26 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxRunRmIJkr90AAA--.866S3;
-        Fri, 09 Jun 2023 11:13:21 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8CxOurFmYJk8N0AAA--.2763S3;
+        Fri, 09 Jun 2023 11:17:25 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxGOXQmIJkzJsJAA--.29907S3;
-        Fri, 09 Jun 2023 11:13:20 +0800 (CST)
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuTEmYJkHZ4JAA--.29606S3;
+        Fri, 09 Jun 2023 11:17:24 +0800 (CST)
+Subject: Re: [PATCH v12 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
         loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
 References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
- <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
- <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
- <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
- <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+ <20230608072819.25930-3-zhuyinbo@loongson.cn>
+ <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
+ <88f19398-385e-440c-83e9-ce51ea60cc97@sirena.org.uk>
+ <fa6d546f-ce92-1fe9-5400-0cb8bccf8ee5@loongson.cn>
+ <23420735-0221-4eab-9a4e-07a6225c761a@sirena.org.uk>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
-Date:   Fri, 9 Jun 2023 11:13:20 +0800
+Message-ID: <04638a1f-7e93-983c-a014-4a026309c7fa@loongson.cn>
+Date:   Fri, 9 Jun 2023 11:17:24 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+In-Reply-To: <23420735-0221-4eab-9a4e-07a6225c761a@sirena.org.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxGOXQmIJkzJsJAA--.29907S3
+X-CM-TRANSID: AQAAf8AxZuTEmYJkHZ4JAA--.29606S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
         ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
@@ -67,39 +62,27 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
-> On 08/06/2023 14:10, zhuyinbo wrote:
->>
->>
->> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
->>> On 08/06/2023 13:42, zhuyinbo wrote:
->>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> @@ -16,6 +16,7 @@ properties:
->>>>       compatible:
->>>>         enum:
->>>>           - loongson,ls2k1000-spi
->>>> +      - loongson,ls2k0500-spi
->>>
->>> Aren't they compatible?
->>>
->>
->>
->> Are you saying that the spi driver is compatible with 2k0500 ?
+在 2023/6/8 下午7:53, Mark Brown 写道:
+> On Thu, Jun 08, 2023 at 07:45:49PM +0800, zhuyinbo wrote:
+>> 在 2023/6/8 下午6:29, Mark Brown 写道:
+>>> On Thu, Jun 08, 2023 at 01:15:39PM +0300, Andy Shevchenko wrote:
+>>>> On Thu, Jun 8, 2023 at 10:28 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
 > 
-> Didn't you say this through 11 previous revisions?
-
-
-Yes, did I understand your meaning incorrectly ?
-
-Thanks,
-Yinbo
+>>>>> This bus driver supports the Loongson SPI hardware controller in the
+>>>>> Loongson platforms and supports to use DTS and PCI framework to
 > 
->> Yes.  and the 2k1000 spi hardware was same with 2k0500 common type spi
->> hardware.
->>
->> but afterwards, it may be necessary to implement a clock drvier for
->> 2k0500, because the spi driver was use "devm_clk_get_optional()" to
->> get clock and not use "of_property_read_u32(np, "clock-frequency",
->> &clk)",  But this seems to have nothing to do with bindings.
+>>> Please delete unneeded context from mails when replying.  Doing this
+>>> makes it much easier to find your reply in the message, helping ensure
+>>> it won't be missed by people scrolling through the irrelevant quoted
+>>> material.
+> 
+>> okay, I got it.
+> 
+> That was more directed at Andy than you!
+
+
+Okay, I will learn from Andy.
+
+Thanks
+> 
 
