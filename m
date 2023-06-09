@@ -2,29 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3E2728E72
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 05:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E0E729097
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 09:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237833AbjFIDRv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Jun 2023 23:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S237703AbjFIHKU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jun 2023 03:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237905AbjFIDR3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Jun 2023 23:17:29 -0400
+        with ESMTP id S236923AbjFIHKQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 03:10:16 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A236B3589;
-        Thu,  8 Jun 2023 20:17:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A46D930D1;
+        Fri,  9 Jun 2023 00:10:08 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxOurFmYJk8N0AAA--.2763S3;
-        Fri, 09 Jun 2023 11:17:25 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8CxNulP0IJkCPIAAA--.1048S3;
+        Fri, 09 Jun 2023 15:10:07 +0800 (CST)
 Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuTEmYJkHZ4JAA--.29606S3;
-        Fri, 09 Jun 2023 11:17:24 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK8pO0IJkWxQKAA--.22402S3;
+        Fri, 09 Jun 2023 15:10:06 +0800 (CST)
 Subject: Re: [PATCH v12 2/2] spi: loongson: add bus driver for the loongson
  spi controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
@@ -33,20 +32,17 @@ Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
 References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
  <20230608072819.25930-3-zhuyinbo@loongson.cn>
  <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
- <88f19398-385e-440c-83e9-ce51ea60cc97@sirena.org.uk>
- <fa6d546f-ce92-1fe9-5400-0cb8bccf8ee5@loongson.cn>
- <23420735-0221-4eab-9a4e-07a6225c761a@sirena.org.uk>
 From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <04638a1f-7e93-983c-a014-4a026309c7fa@loongson.cn>
-Date:   Fri, 9 Jun 2023 11:17:24 +0800
+Message-ID: <44239068-e0ac-1dc8-337e-fb44f5266097@loongson.cn>
+Date:   Fri, 9 Jun 2023 15:10:05 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <23420735-0221-4eab-9a4e-07a6225c761a@sirena.org.uk>
+In-Reply-To: <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxZuTEmYJkHZ4JAA--.29606S3
+X-CM-TRANSID: AQAAf8DxK8pO0IJkWxQKAA--.22402S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
         ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
@@ -62,27 +58,259 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-在 2023/6/8 下午7:53, Mark Brown 写道:
-> On Thu, Jun 08, 2023 at 07:45:49PM +0800, zhuyinbo wrote:
->> 在 2023/6/8 下午6:29, Mark Brown 写道:
->>> On Thu, Jun 08, 2023 at 01:15:39PM +0300, Andy Shevchenko wrote:
->>>> On Thu, Jun 8, 2023 at 10:28 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+在 2023/6/8 下午6:15, Andy Shevchenko 写道:
+> On Thu, Jun 8, 2023 at 10:28 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>>
+>> This bus driver supports the Loongson SPI hardware controller in the
+>> Loongson platforms and supports to use DTS and PCI framework to
 > 
->>>>> This bus driver supports the Loongson SPI hardware controller in the
->>>>> Loongson platforms and supports to use DTS and PCI framework to
-> 
->>> Please delete unneeded context from mails when replying.  Doing this
->>> makes it much easier to find your reply in the message, helping ensure
->>> it won't be missed by people scrolling through the irrelevant quoted
->>> material.
-> 
->> okay, I got it.
-> 
-> That was more directed at Andy than you!
+> the use
 
 
-Okay, I will learn from Andy.
+okay, I got it.
 
-Thanks
 > 
+>> register SPI device resources.
+> 
+> Thank you for an update. I have a few nit-picks below, but in general
+> this version is good (esp. if you address them)
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+
+
+You're welcome, I will add the reviewed-by in v13.
+
+...
+
+>> +static void loongson_spi_set_cs(struct spi_device *spi, bool val)
+>> +{
+>> +       int cs;
+>> +       struct loongson_spi *loongson_spi = spi_controller_get_devdata(spi->controller);
+>> +
+>> +       cs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG)
+>> +                                          & ~(0x11 << spi_get_chipselect(spi, 0));
+>> +       loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG,
+>> +                                      (val ? (0x11 << spi_get_chipselect(spi, 0)) :
+>> +                                      (0x1 << spi_get_chipselect(spi, 0))) | cs);
+> 
+> Can be done as
+> 
+> static void loongson_spi_set_cs(struct spi_device *spi, bool en)
+> 
+>      unsigned char mask = (BIT(4) | BIT(0)) << spi_get_chipselect(spi, 0);
+>      unsigned char val = en ? mask :  (BIT(0) << spi_get_chipselect(spi, 0));
+> 
+>      cs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG) & ~mask;
+>      loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG, val | cs);
+
+
+okay, I will do it.
+
+> 
+> (Renamed variables to be consistent with the other uses in the driver below)
+
+
+sorry, I don't got it. Are you referring to the following changes ?
+loongson_spi_set_cs(spi, 1) => loongson_spi_set_cs(spi, true)
+
+> 
+>> +}
+>> +
+>> +static void loongson_spi_set_clk(struct loongson_spi *loongson_spi, unsigned int hz)
+>> +{
+>> +       unsigned char val;
+>> +       unsigned int div, div_tmp;
+>> +       static const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+>> +
+>> +       div = clamp_val(DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz), 2, 4096);
+>> +       div_tmp = rdiv[fls(div - 1)];
+>> +       loongson_spi->spcr = (div_tmp & GENMASK(1, 0)) >> 0;
+>> +       loongson_spi->sper = (div_tmp & GENMASK(3, 2)) >> 2;
+>> +       val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+> 
+>      val &= GENMASK(1, 0);
+
+
+This seems to be "val &= ~GENMASK(1, 0);"
+
+> 
+>> +       loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, (val & ~3) |
+>> +                              loongson_spi->spcr);
+> 
+>         loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, val
+> | loongson_spi->spcr);
+
+
+okay, I got it.
+
+> 
+>> +       val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+> 
+>      val &= GENMASK(1, 0);
+
+
+This seems to be "val &= ~GENMASK(1, 0);"
+
+> 
+>> +       loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, (val & ~3) |
+>> +                              loongson_spi->sper);
+> 
+>         loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, val
+> | loongson_spi->sper);
+> 
+
+
+okay,  I got it.
+
+>> +       loongson_spi->hz = hz;
+>> +}
+>> +
+>> +static void loongson_spi_set_mode(struct loongson_spi *loongson_spi,
+>> +                                 struct spi_device *spi)
+>> +{
+>> +       unsigned char val;
+>> +
+>> +       val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+>> +       val &= ~(LOONGSON_SPI_SPCR_CPOL | LOONGSON_SPI_SPCR_CPHA);
+>> +       if (spi->mode & SPI_CPOL)
+>> +               val |= LOONGSON_SPI_SPCR_CPOL;
+>> +       if (spi->mode & SPI_CPHA)
+>> +               val |= LOONGSON_SPI_SPCR_CPHA;
+>> +
+>> +       loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, val);
+>> +       loongson_spi->mode |= spi->mode;
+>> +}
+>> +
+>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>> +                               struct spi_device *spi, struct spi_transfer *t)
+>> +{
+>> +       if (t && loongson_spi->hz != t->speed_hz)
+>> +               loongson_spi_set_clk(loongson_spi, t->speed_hz);
+>> +
+>> +       if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
+>> +               loongson_spi_set_mode(loongson_spi, spi);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int loongson_spi_setup(struct spi_device *spi)
+>> +{
+>> +       struct loongson_spi *loongson_spi;
+>> +
+>> +       loongson_spi = spi_controller_get_devdata(spi->controller);
+>> +       if (spi->bits_per_word % 8)
+>> +               return -EINVAL;
+>> +
+>> +       if (spi_get_chipselect(spi, 0) >= spi->controller->num_chipselect)
+>> +               return -EINVAL;
+>> +
+>> +       loongson_spi->hz = 0;
+>> +       loongson_spi_set_cs(spi, 1);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int loongson_spi_write_read_8bit(struct spi_device *spi, const u8 **tx_buf,
+>> +                                       u8 **rx_buf, unsigned int num)
+>> +{
+>> +       int ret;
+>> +       struct loongson_spi *loongson_spi = spi_controller_get_devdata(spi->controller);
+>> +
+>> +       if (tx_buf && *tx_buf)
+>> +               loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, *((*tx_buf)++));
+>> +       else
+>> +               loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, 0);
+> 
+> + Blank line
+
+
+okay, I will add the blank line.
+
+> 
+>> +       ret = readb_poll_timeout(loongson_spi->base + LOONGSON_SPI_SPSR_REG, loongson_spi->spsr,
+>> +                       (loongson_spi->spsr & 0x1) != LOONGSON_SPI_SPSR_RFEMPTY, 1, MSEC_PER_SEC);
+> 
+>                         (loongson_spi->spsr &
+> LOONGSON_SPI_SPSR_RFEMPTY) != LOONGSON_SPI_SPSR_RFEMPTY,
+>                         1, MSEC_PER_SEC);
+
+
+okay, I got it.
+
+> 
+>> +       if (rx_buf && *rx_buf)
+>> +               *(*rx_buf)++ = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_FIFO_REG);
+>> +       else
+>> +               loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_FIFO_REG);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static int loongson_spi_write_read(struct spi_device *spi, struct spi_transfer *xfer)
+>> +{
+>> +       int ret;
+>> +       unsigned int count;
+>> +       const u8 *tx = xfer->tx_buf;
+>> +       u8 *rx = xfer->rx_buf;
+>> +
+>> +       count = xfer->len;
+> 
+>> +
+> 
+> Unneeded blank line.
+
+
+okay, I will remove the blank line.
+
+> 
+>> +       do {
+>> +               ret = loongson_spi_write_read_8bit(spi, &tx, &rx, count);
+>> +               if (ret)
+>> +                       break;
+>> +       } while (--count);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static int loongson_spi_prepare_message(struct spi_controller *ctlr, struct spi_message *m)
+>> +{
+>> +       struct loongson_spi *loongson_spi = spi_controller_get_devdata(ctlr);
+> 
+>> +       loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
+> 
+>> +       loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, loongson_spi->para & ~1);
+> 
+> BIT(0) ?
+> LOONGSON_SPI_PARA_MEM_EN ?
+
+
+I will use LOONGSON_SPI_PARA_MEM_EN.
+
+> 
+>> +       return 0;
+>> +}
+>> +
+
+...
+
+>> +int loongson_spi_init_controller(struct device *dev, void __iomem *regs)
+>> +{
+>> +       struct spi_controller *controller;
+>> +       struct loongson_spi *spi;
+>> +       struct clk *clk;
+>> +
+>> +       controller = devm_spi_alloc_host(dev, sizeof(struct loongson_spi));
+>> +       if (controller == NULL)
+>> +               return -ENOMEM;
+>> +
+>> +       controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+> 
+>     ... = SPI_MODE_X_MASK | SPI_CS_HIGH;
+
+
+okay, I got it.
+
+
+Thanks,
+Yinbo
 
