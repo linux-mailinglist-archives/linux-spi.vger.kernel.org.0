@@ -2,79 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5808A729DE9
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 17:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C1C729DF2
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jun 2023 17:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbjFIPLj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Jun 2023 11:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        id S232498AbjFIPMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jun 2023 11:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjFIPLi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 11:11:38 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4766B6;
-        Fri,  9 Jun 2023 08:11:37 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-33b04c8f3eeso7597125ab.0;
-        Fri, 09 Jun 2023 08:11:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686323497; x=1688915497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i9Rb1e/uOkSXDB72S3Pmwrp86GlxpbraRGVRQBYFa9A=;
-        b=S8UpEWSPRJf/VAdRaI5CCuED4CbwEx9p+nVwiVfqdRGzXoVT8lZ/2jdDehQouwfzbS
-         8kT+BzfLn4avWHltbykFMPZNtIGf6b6iX1yEmXdH0aCGwbXiCjsTscrl70mzFichMLHN
-         jd8OUMbcQ83vGHeVPT2p6DP+tG09WHzGqBiKNoTwkM4YXhUkKrK3spsG5q/ywPpQmyeR
-         T55+7ErvOVxqkLjeaVBnEMBavWLJ+cPF0J7aOxmmzNaPvASzQTg3ZtuCbRmqifp0FJC9
-         zRc9Q1QHoYF8eghxwgHZViJ8SYo3ry8DHADkVQLasCwb9LXu2F/g3BJdRjqyVtU5Cttg
-         YcJA==
-X-Gm-Message-State: AC+VfDwOZixTjbKaNwrN+a1+19m/OAifPVsG/pqv8gS+2PciJA6GbSIp
-        IQl3qkWR/cItZWE1xUIShw==
-X-Google-Smtp-Source: ACHHUZ601MkzpccdrAQ864iVAYxlzaAgWUES/WkMk0l539+cvMHRtzNzn5Ol1LJOZoG08+96U43ndg==
-X-Received: by 2002:a92:c98d:0:b0:33e:7269:bb7b with SMTP id y13-20020a92c98d000000b0033e7269bb7bmr1650478iln.3.1686323496915;
-        Fri, 09 Jun 2023 08:11:36 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id y16-20020a92c750000000b0033e62b47a49sm1124240ilp.41.2023.06.09.08.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:11:36 -0700 (PDT)
-Received: (nullmailer pid 999255 invoked by uid 1000);
-        Fri, 09 Jun 2023 15:11:33 -0000
-Date:   Fri, 9 Jun 2023 09:11:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-phy@lists.infradead.org, Dipen Patel <dipenp@nvidia.com>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        timestamp@lists.linux.dev, Dilip Kota <eswara.kota@linux.intel.com>
-Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
-Message-ID: <168632349292.998946.17372740217811972226.robh@kernel.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        with ESMTP id S230047AbjFIPMo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jun 2023 11:12:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9631FEB;
+        Fri,  9 Jun 2023 08:12:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3329A61D23;
+        Fri,  9 Jun 2023 15:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C50AC433D2;
+        Fri,  9 Jun 2023 15:12:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686323562;
+        bh=AwRX4+sJnX8qUM0WeKWhJVpcwCyWlK+KKr0cZLcayF8=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=DT0PrVsfRSLlzWtU1EEG7KoHFfGKklbjpeSTzBdizF7CSJq9X9qzzwBMIK86R16Ru
+         E6VeoZtNcy6SCe8VBGU04XHaGInvs5UtAvbfKielI5nm+ovm/415DFAnc1SE7o5tgk
+         kcnQP13ESoZokKgSns5qiaNRXjt0/izxFmdVKenuOaF0vpAOVtnKWU2BSIdxf6JwnF
+         R/5eZZ5TFw+G9RYAtXoq9gEInFuxI+V7pkmm+mtI6jllQVDi7oKw1qUt6ZU3HpPU2G
+         pDRsMs3x15qFCbFNn0LP1Kq5LTBJhJax3PMgowb8P7JHaLYATBNOt640aOs/BbHE3/
+         VtZBXr6wO549A==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 09 Jun 2023 18:12:34 +0300
+Message-Id: <CT87T6F22SG0.Z8OLLVN0IZMI@suppilovahvero>
+Cc:     "Thierry Reding" <thierry.reding@gmail.com>,
+        "Krishna Yarlagadda" <kyarlagadda@nvidia.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        "Sowjanya Komatineni" <skomatineni@nvidia.com>,
+        "Laxman Dewangan" <ldewangan@nvidia.com>
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <ZEaWQD_QTs2usVl8@orome>
+ <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+ <ZEag1lAonYcmNFXk@orome>
+ <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com> <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com> <ZHhW_wFvRWInR_iM@orome> <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk> <ZHiQ44gAL3YEZPUh@orome> <c0cf893d-8bc5-4f4b-a326-bb10dd0c84de@sirena.org.uk> <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero> <3b5e149d-4d52-46f8-85f5-821aa7b99ae9@sirena.org.uk>
+In-Reply-To: <3b5e149d-4d52-46f8-85f5-821aa7b99ae9@sirena.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +70,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri Jun 9, 2023 at 5:22 PM EEST, Mark Brown wrote:
+> On Fri, Jun 09, 2023 at 05:19:15PM +0300, Jarkko Sakkinen wrote:
+> > On Thu Jun 1, 2023 at 3:40 PM EEST, Mark Brown wrote:
+> > > On Thu, Jun 01, 2023 at 02:36:51PM +0200, Thierry Reding wrote:
+> > > > On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
+> > > > > On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
+>
+> > > > Jarkko, can you pick this up for v6.5?
+>
+> > > No, I said that I had applied the SPI parts for v6.4 so there would b=
+e
+> > > no blocker whenever people got round to reviewing the TPM side.
+>
+> > I'm totally cool with this: won't pick the patch then.
+>
+> I have no intention of applying the patch, I am expecting it to go via
+> the TPM tree.
 
-On Tue, 30 May 2023 16:48:46 +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to:
-> 1. Only one unit address or one -N suffix,
-> 2. -N suffixes to decimal numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/comm=
+it/?id=3D8638bedb01ab6170d7dbd1ceaefa5e82639c432d
 
-Acked-by: Rob Herring <robh@kernel.org>
+I'll mirror publish this in my next branch (mirrored to linux-next) soon.
 
+BR, Jarkko
