@@ -2,91 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EF272BA06
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jun 2023 10:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4D772BCD6
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jun 2023 11:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjFLIQy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jun 2023 04:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S235313AbjFLJiD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Jun 2023 05:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjFLIQt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jun 2023 04:16:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32AAD
-        for <linux-spi@vger.kernel.org>; Mon, 12 Jun 2023 01:16:45 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c8423dccso1054747666b.1
-        for <linux-spi@vger.kernel.org>; Mon, 12 Jun 2023 01:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686557804; x=1689149804;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=81HGPWtAHcoj4MGq+asBDEpD8CKCjuMMVkQmG5qPgmg=;
-        b=YPOZhtA7hANwDQUmlXvVMP4eb9WKXMhJDY0KJUr9vJ7FLEbEMApwJKEXFoR1k2qUZL
-         uobhy/NjWgItNWdbzJ3WvKtks6fjR/cYgvaFQN28o85JTVx934rieLglxJbw6jQgcHlN
-         du8vBMGl55LFgsPDS5GMhlMySjIDq7lSI4oyd7v8ACvp+A/xDn9doI1oV/BHPgJj0VPa
-         JuloBQ6e7HtRyRS/Zrw3YMppdNAZvTDgMmiiwCZdK00JSBGUis/JvauWDwX6zPh/OFvU
-         gHNkO7HVkZq4gbTWP3MQm4hkNj1N1ZFQv4ARRKtOPQ1FMERdFIXs76gD91WyTcpDHM5O
-         OyQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686557804; x=1689149804;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=81HGPWtAHcoj4MGq+asBDEpD8CKCjuMMVkQmG5qPgmg=;
-        b=NhvPQ2Jh1i3Z2bqoa50s5lVzYhcZ4WEua/X9Vn40S9mjtrgI8qwuTY9lMw4H7MpyuI
-         ikLht+HDoX89Ri+FGUjAHjSc+GB3LuaNbdCzHXeX6FBCHGnxqnksJj9QlRl/lArjX6d9
-         PLa3S59pasiyMxPjTPNMuO/WPQQZBaCEkS1xTGa4+vI3klOu/rVx3PIE4lDLvihbp6fg
-         KTCMsaCVBN6efY+EGgz9wYrfMkUlYVZt+sRYHfioPG2CWw+/9TfkIRo1RG8ClU72zWy/
-         UpbBIR4Tef4bPg+Hs/VB/kQwtVuCzVea7dnjhiXSp/eHPiXI2cDM94ckzuEXdz5Wio3f
-         ga3Q==
-X-Gm-Message-State: AC+VfDzZ+oivnN//hNqdCdiDg41X2HM71oDbemuCK5+gZxbwVovdqIB3
-        nLZeGKZED4J1yVCgoZHxINAYbQ==
-X-Google-Smtp-Source: ACHHUZ4/9kW8EA3qDwmtmg1KAWHGBhqtlbWwrnPt1f23DTverEEj1APChP1sjDuvSV9n4bHt5r6e6Q==
-X-Received: by 2002:a17:907:6d16:b0:96f:a412:8b03 with SMTP id sa22-20020a1709076d1600b0096fa4128b03mr8239353ejc.5.1686557804177;
-        Mon, 12 Jun 2023 01:16:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id fi5-20020a170906da0500b00965d294e633sm4867694ejb.58.2023.06.12.01.16.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 01:16:43 -0700 (PDT)
-Message-ID: <d24f1e60-0ef3-2cb9-9675-846d861ef0c8@linaro.org>
-Date:   Mon, 12 Jun 2023 10:16:40 +0200
+        with ESMTP id S235254AbjFLJh2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jun 2023 05:37:28 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250EA618B
+        for <linux-spi@vger.kernel.org>; Mon, 12 Jun 2023 02:28:26 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:8f41:e69:ef53:9db3])
+        by michel.telenet-ops.be with bizsmtp
+        id 89UQ2A00B41JBE4069UQnQ; Mon, 12 Jun 2023 11:28:24 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q8dqa-008cV2-D4;
+        Mon, 12 Jun 2023 11:28:24 +0200
+Date:   Mon, 12 Jun 2023 11:28:24 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+cc:     linux-um@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.4-rc6
+In-Reply-To: <20230612090911.1579029-1-geert@linux-m68k.org>
+Message-ID: <9c7f3e17-c1-1a3a-7e87-9b1ea25d9d7@linux-m68k.org>
+References: <CAHk-=wgmbjQu3bVSa5JJhEymeQhkr7N3cjg-CoNLVituUnfW8w@mail.gmail.com> <20230612090911.1579029-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
- <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
- <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
- <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
- <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
- <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
- <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
- <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
- <4e30870d-86e2-8536-8e0d-aab4ce5027d2@linaro.org>
- <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/mixed; boundary="8323329-85567032-1686562104=:2054603"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,65 +42,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/06/2023 09:40, zhuyinbo wrote:
-> 
-> 
-> 在 2023/6/12 下午3:17, Krzysztof Kozlowski 写道:
->> On 12/06/2023 09:13, zhuyinbo wrote:
->>>
->>>
->>> 在 2023/6/10 上午12:45, Krzysztof Kozlowski 写道:
->>>> On 09/06/2023 05:13, zhuyinbo wrote:
->>>>>
->>>>>
->>>>> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
->>>>>> On 08/06/2023 14:10, zhuyinbo wrote:
->>>>>>>
->>>>>>>
->>>>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
->>>>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
->>>>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>>> @@ -16,6 +16,7 @@ properties:
->>>>>>>>>         compatible:
->>>>>>>>>           enum:
->>>>>>>>>             - loongson,ls2k1000-spi
->>>>>>>>> +      - loongson,ls2k0500-spi
->>>>>>>>
->>>>>>>> Aren't they compatible?
->>>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> Are you saying that the spi driver is compatible with 2k0500 ?
->>>>>>
->>>>>> Didn't you say this through 11 previous revisions?
->>>>>
->>>>>
->>>>> Yes, did I understand your meaning incorrectly ?
->>>>
->>>> If they are compatible, then they are not part of one enum. They could
->>>> not be as this would easily fail in testing of your DTS.
->>>>
->>>
->>>
->>> The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
->>> I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
->>> added it as a part of the one enum in dt-binding.
->>
->> No, because you claimed - if I understood correctly - that they are
->> compatible. Don't add fake entries to the driver.
->>
-> 
-> 
-> I'm a bit confused, and I just need to add 'loongson,ls2k0500-spi' as
-> one enum in dt-bindings, but driver don't add this entry ?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Compatibility is expressed with a list:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#compatible
-so it cannot be just one enum, but "items". There are hundreds of
-examples including example-schema.
+--8323329-85567032-1686562104=:2054603
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
+On Mon, 12 Jun 2023, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.4-rc6[1] to v6.4-rc5[3], the summaries are:
+>  - build errors: +5/-6
 
-Best regards,
-Krzysztof
+   + /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: ‘op’ is used uninitialized [-Werror=uninitialized]:  => 523:27, 564:27
 
+um-all{mod,yes}config
+
+Seen before
+(why did the type of quotes around 'op' in the compiler output change?)
+
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field ‘call_clobbered’ has incomplete type ‘pt_solution’:  => 284:22
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field ‘call_used’ has incomplete type ‘pt_solution’:  => 283:22
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: ‘gimple_call_addr_fndecl’ was not declared in this scope; did you mean ‘gimple_call_set_fndecl’?:  => 2790:10
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: ‘is_gimple_reg’ was not declared in this scope; did you mean ‘is_gimple_assign’?:  => 2556:18
+
+mipsel-gcc5/mips-allmodconfig
+
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/858fd168a95c5b9669aac8db6c14a9aeab446375/ (151 out of 152 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9561de3a55bed6bdd44a12820ba81ec416e705a7/ (151 out of 152 configs)
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
+--8323329-85567032-1686562104=:2054603--
