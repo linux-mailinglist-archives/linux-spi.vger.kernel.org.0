@@ -2,34 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE5C72B914
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jun 2023 09:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EF272BA06
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jun 2023 10:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbjFLHuc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jun 2023 03:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S229515AbjFLIQy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Jun 2023 04:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236430AbjFLHuL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jun 2023 03:50:11 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F54B10C7;
-        Mon, 12 Jun 2023 00:49:38 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cxe+rsy4Zkgo0DAA--.7674S3;
-        Mon, 12 Jun 2023 15:40:28 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeTry4Zk10EVAA--.61405S3;
-        Mon, 12 Jun 2023 15:40:27 +0800 (CST)
+        with ESMTP id S229746AbjFLIQt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jun 2023 04:16:49 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32AAD
+        for <linux-spi@vger.kernel.org>; Mon, 12 Jun 2023 01:16:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c8423dccso1054747666b.1
+        for <linux-spi@vger.kernel.org>; Mon, 12 Jun 2023 01:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686557804; x=1689149804;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=81HGPWtAHcoj4MGq+asBDEpD8CKCjuMMVkQmG5qPgmg=;
+        b=YPOZhtA7hANwDQUmlXvVMP4eb9WKXMhJDY0KJUr9vJ7FLEbEMApwJKEXFoR1k2qUZL
+         uobhy/NjWgItNWdbzJ3WvKtks6fjR/cYgvaFQN28o85JTVx934rieLglxJbw6jQgcHlN
+         du8vBMGl55LFgsPDS5GMhlMySjIDq7lSI4oyd7v8ACvp+A/xDn9doI1oV/BHPgJj0VPa
+         JuloBQ6e7HtRyRS/Zrw3YMppdNAZvTDgMmiiwCZdK00JSBGUis/JvauWDwX6zPh/OFvU
+         gHNkO7HVkZq4gbTWP3MQm4hkNj1N1ZFQv4ARRKtOPQ1FMERdFIXs76gD91WyTcpDHM5O
+         OyQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686557804; x=1689149804;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=81HGPWtAHcoj4MGq+asBDEpD8CKCjuMMVkQmG5qPgmg=;
+        b=NhvPQ2Jh1i3Z2bqoa50s5lVzYhcZ4WEua/X9Vn40S9mjtrgI8qwuTY9lMw4H7MpyuI
+         ikLht+HDoX89Ri+FGUjAHjSc+GB3LuaNbdCzHXeX6FBCHGnxqnksJj9QlRl/lArjX6d9
+         PLa3S59pasiyMxPjTPNMuO/WPQQZBaCEkS1xTGa4+vI3klOu/rVx3PIE4lDLvihbp6fg
+         KTCMsaCVBN6efY+EGgz9wYrfMkUlYVZt+sRYHfioPG2CWw+/9TfkIRo1RG8ClU72zWy/
+         UpbBIR4Tef4bPg+Hs/VB/kQwtVuCzVea7dnjhiXSp/eHPiXI2cDM94ckzuEXdz5Wio3f
+         ga3Q==
+X-Gm-Message-State: AC+VfDzZ+oivnN//hNqdCdiDg41X2HM71oDbemuCK5+gZxbwVovdqIB3
+        nLZeGKZED4J1yVCgoZHxINAYbQ==
+X-Google-Smtp-Source: ACHHUZ4/9kW8EA3qDwmtmg1KAWHGBhqtlbWwrnPt1f23DTverEEj1APChP1sjDuvSV9n4bHt5r6e6Q==
+X-Received: by 2002:a17:907:6d16:b0:96f:a412:8b03 with SMTP id sa22-20020a1709076d1600b0096fa4128b03mr8239353ejc.5.1686557804177;
+        Mon, 12 Jun 2023 01:16:44 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id fi5-20020a170906da0500b00965d294e633sm4867694ejb.58.2023.06.12.01.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 01:16:43 -0700 (PDT)
+Message-ID: <d24f1e60-0ef3-2cb9-9675-846d861ef0c8@linaro.org>
+Date:   Mon, 12 Jun 2023 10:16:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
 Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
         Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+        loongson-kernel@lists.loongnix.cn
 References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
  <20230608072819.25930-2-zhuyinbo@loongson.cn>
  <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
@@ -45,23 +78,15 @@ References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
  <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
  <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
  <4e30870d-86e2-8536-8e0d-aab4ce5027d2@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
-Date:   Mon, 12 Jun 2023 15:40:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <4e30870d-86e2-8536-8e0d-aab4ce5027d2@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxVeTry4Zk10EVAA--.61405S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,58 +94,65 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-在 2023/6/12 下午3:17, Krzysztof Kozlowski 写道:
-> On 12/06/2023 09:13, zhuyinbo wrote:
->>
->>
->> 在 2023/6/10 上午12:45, Krzysztof Kozlowski 写道:
->>> On 09/06/2023 05:13, zhuyinbo wrote:
->>>>
->>>>
->>>> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
->>>>> On 08/06/2023 14:10, zhuyinbo wrote:
->>>>>>
->>>>>>
->>>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
->>>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
->>>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>> @@ -16,6 +16,7 @@ properties:
->>>>>>>>         compatible:
->>>>>>>>           enum:
->>>>>>>>             - loongson,ls2k1000-spi
->>>>>>>> +      - loongson,ls2k0500-spi
->>>>>>>
->>>>>>> Aren't they compatible?
->>>>>>>
->>>>>>
->>>>>>
->>>>>> Are you saying that the spi driver is compatible with 2k0500 ?
+On 12/06/2023 09:40, zhuyinbo wrote:
+> 
+> 
+> 在 2023/6/12 下午3:17, Krzysztof Kozlowski 写道:
+>> On 12/06/2023 09:13, zhuyinbo wrote:
+>>>
+>>>
+>>> 在 2023/6/10 上午12:45, Krzysztof Kozlowski 写道:
+>>>> On 09/06/2023 05:13, zhuyinbo wrote:
 >>>>>
->>>>> Didn't you say this through 11 previous revisions?
+>>>>>
+>>>>> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
+>>>>>> On 08/06/2023 14:10, zhuyinbo wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+>>>>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
+>>>>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>>>> @@ -16,6 +16,7 @@ properties:
+>>>>>>>>>         compatible:
+>>>>>>>>>           enum:
+>>>>>>>>>             - loongson,ls2k1000-spi
+>>>>>>>>> +      - loongson,ls2k0500-spi
+>>>>>>>>
+>>>>>>>> Aren't they compatible?
+>>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Are you saying that the spi driver is compatible with 2k0500 ?
+>>>>>>
+>>>>>> Didn't you say this through 11 previous revisions?
+>>>>>
+>>>>>
+>>>>> Yes, did I understand your meaning incorrectly ?
 >>>>
+>>>> If they are compatible, then they are not part of one enum. They could
+>>>> not be as this would easily fail in testing of your DTS.
 >>>>
->>>> Yes, did I understand your meaning incorrectly ?
 >>>
->>> If they are compatible, then they are not part of one enum. They could
->>> not be as this would easily fail in testing of your DTS.
 >>>
+>>> The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
+>>> I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
+>>> added it as a part of the one enum in dt-binding.
 >>
+>> No, because you claimed - if I understood correctly - that they are
+>> compatible. Don't add fake entries to the driver.
 >>
->> The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
->> I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
->> added it as a part of the one enum in dt-binding.
 > 
-> No, because you claimed - if I understood correctly - that they are
-> compatible. Don't add fake entries to the driver.
 > 
+> I'm a bit confused, and I just need to add 'loongson,ls2k0500-spi' as
+> one enum in dt-bindings, but driver don't add this entry ?
+
+Compatibility is expressed with a list:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#compatible
+so it cannot be just one enum, but "items". There are hundreds of
+examples including example-schema.
 
 
-I'm a bit confused, and I just need to add 'loongson,ls2k0500-spi' as
-one enum in dt-bindings, but driver don't add this entry ?
-
-Thanks,
-Yinbo
+Best regards,
+Krzysztof
 
