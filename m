@@ -2,90 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C12A72E3B4
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 15:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4903272E860
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 18:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242549AbjFMND6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jun 2023 09:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        id S237409AbjFMQVq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jun 2023 12:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbjFMNDp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 09:03:45 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6B919B7;
-        Tue, 13 Jun 2023 06:03:41 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62dea65edb2so5658746d6.0;
-        Tue, 13 Jun 2023 06:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686661420; x=1689253420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ph8muSYdWfoSysNozHej0lspNPRmqVyqDCHut3XIIUY=;
-        b=ln4YUxRpK9f8I0HhdEpd3858fLpiCbXpocosM3zRqygyHl9hyBPjUxT+VR91cFlFvm
-         SrGpVOwRuy2qhZvkPlOGuQILYTukeFo9Bg3uC/QOod5fjB11XhE9Xk3T8NpJfEKtDTsI
-         8W9+g4X79V6llo/DMNJTA8V+NV8wYsoIpca8C5kqStEZXfEKurpdmcjz/ZRDzVDDtd1J
-         PgjHR54Hlnrb6NkJy48VfGywsN78zbALz9eiBOvMWf+TJUx91ipSjMGos8meeRi2U58C
-         iEavMOG6xrHPTZCUTGXyJojaR5nPjJ+sNOnTv/WsikKRVOprOtT9ZXgEA3X8OGfyWoWB
-         fJTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686661420; x=1689253420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ph8muSYdWfoSysNozHej0lspNPRmqVyqDCHut3XIIUY=;
-        b=PkQWidmvtEJeqqE2sejzFq6t6dAtFB4hqpMxBr/iuRsL2hcts9dZ9VLesHaC2p9kkC
-         SN43wXqXUGAZfum79VfJoURSKvTDZ4aPP3zGjG1SjLWNPQYVpB+0ae+8dRM5Iq44IZI/
-         YjAFHOPIvQL/rXcRAgbmY7PLFLiIQusf5RRHhi7fFkSHdqUjip7qjcKEsYqF0gPIQzWb
-         YPqCKJqGPe3krrYzke7O7/QuXzXrwEoUOpcZswHnB0X9DEm4kmwvN35qDuyOo4VwezL3
-         9akcBVozYRa2w68vwLdnY6viDjn2TUfH4zPFYbw8PuE4Q1xBzTeW80dtY7GDf0RWNIjw
-         GFfw==
-X-Gm-Message-State: AC+VfDxZ/P1DqeaW8hzycwsJcKZ4nGupr52Rz735mYAGcttEhRy5bd62
-        +jhncQ/7AEI33M+2ONib5tyOBUSMTdptru6RDhI=
-X-Google-Smtp-Source: ACHHUZ5nOTLhze+E2wXOckkmMBUzoKHAynMMVWwnxk/gQWe9ti2e0UBDodLfEIjcbxBl0q5mNW1fPU58CsqjOiGw3xo=
-X-Received: by 2002:a05:6214:401c:b0:62d:e73b:c4ab with SMTP id
- kd28-20020a056214401c00b0062de73bc4abmr6160647qvb.1.1686661420050; Tue, 13
- Jun 2023 06:03:40 -0700 (PDT)
+        with ESMTP id S242814AbjFMQVn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 12:21:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF8019BC;
+        Tue, 13 Jun 2023 09:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686673289; x=1718209289;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JbtrRPhXbe4+HtB+H83QtDFKeemImf7hGdkYfL6MURA=;
+  b=MkLbDnQ24IAk0HB4BnmtDvCpYgKosU0eciaBIbbs4fiXeouDy2oUDnmU
+   3K7Yno4qvnCjlHDm2S9mQ0wf6R9xZDOosoOPvAX25wMuFJ43Cdb79AvZV
+   nlcYV4c7O6VtElqFsQo0c6DdVZtxEaZgZjDZ5lMbNaRxzUh02XR9WVlLY
+   SpsudpoDNurj/vfxNsfsZK7a1PzEk8koaf16zBfD2Pg4rZnH/SJC/3C9S
+   jg4dpHiH7btcIuy8pgp+NJXaA5wCf2SqFOhcjU+5i1dLQgLjJ/UU3zbXf
+   BSNFa1gQEALK1acBA2fA4OKB8vWluRE1+OCBvRhwNVtgdHzN83mRXEq1W
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424269381"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="424269381"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 09:21:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="744737157"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="744737157"
+Received: from ekohande-desk2.vc.intel.com ([10.234.35.153])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 09:21:28 -0700
+From:   Abe Kohandel <abe.kohandel@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        Abe Kohandel <abe.kohandel@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH] spi: dw: Replace incorrect spi_get_chipselect with set
+Date:   Tue, 13 Jun 2023 09:21:03 -0700
+Message-Id: <20230613162103.569812-1-abe.kohandel@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230613075834.5219-1-zhuyinbo@loongson.cn> <20230613075834.5219-3-zhuyinbo@loongson.cn>
-In-Reply-To: <20230613075834.5219-3-zhuyinbo@loongson.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 13 Jun 2023 16:03:03 +0300
-Message-ID: <CAHp75VdtFjkyBF4K1+MOHAmp0S6RU5Cg3NYD8yGH+8FBBG0Zuw@mail.gmail.com>
-Subject: Re: [PATCH v13 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 10:58=E2=80=AFAM Yinbo Zhu <zhuyinbo@loongson.cn> w=
-rote:
+Commit 445164e8c136 ("spi: dw: Replace spi->chip_select references with
+function calls") replaced direct access to spi.chip_select with
+spi_*_chipselect calls but incorrectly replaced a set instance with a
+get instance, replace the incorrect instance.
 
-...
+Fixes: 445164e8c136 ("spi: dw: Replace spi->chip_select references with function calls")
+Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-dw-mmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index a699ce496cc5..a963bc96c223 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -292,7 +292,7 @@ static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+ 	 */
+ 	spi_set_chipselect(spi, 0, 0);
+ 	dw_spi_set_cs(spi, enable);
+-	spi_get_chipselect(spi, cs);
++	spi_set_chipselect(spi, 0, cs);
+ }
+ 
+ static int dw_spi_elba_init(struct platform_device *pdev,
+-- 
+2.40.1
 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-Just a remark for the next contribution. When you have a tag, no need
-to have a Cc for the same person, Git tools automatically add all
-tagged people to the Cc list of email.
-
---=20
-With Best Regards,
-Andy Shevchenko
