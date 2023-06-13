@@ -2,108 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDA372EB71
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 21:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6BF72ECB1
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 22:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjFMTCK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jun 2023 15:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S240729AbjFMUN3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jun 2023 16:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbjFMTCI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 15:02:08 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3DE5;
-        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62b552751so7318482e87.3;
-        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686682923; x=1689274923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
-        b=hnBQKQlz7SSBYWxjCWexy5F+WSYk+2Tqo0P3qW0WiyBfFLsPhA7shj1ApaTEocai0/
-         phin901w7E53BQMDS9I3j4x87Ix2P25wPdwNYxcrdnT7AO606nYuTpFdiirpAgcSuCln
-         sa2RlU9qK4vCofv3vsHSR4CkZKA9PQhp8BVPRGLGH5eK5152LZNW3z3qmuYRfC2f4YU4
-         wAbSbqq31G9WE+pXZBZ2csmB8Ms1v4J0DIGUm1Esa+4AidpOpvM+ydMwOu+a1ntfs70d
-         +b08gtKZirLVVu8Gw8ne9gyp8u70q0VcNOzcMbCwFUIfTDbudreWyfKozRl20TPjab/I
-         /VNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686682923; x=1689274923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
-        b=UdkspsKAqsnMN0EmPulXVrF4hPN5ZIkt6yhUSELavkUQaMKQ/baBMU0YaQYtK54MSQ
-         hviBdMxMQX1MGE6sHU+gtXvI6IjInKRjpwCUIToI41M7sV+vtU9vf45x3jvJp3BLbDuU
-         OCdJfmPC4Ft+kzV8SxciE125gXXrAtDAxveNRlRmod/n0WlSSuBP6ZJrHREJhhXqD2x2
-         eUweWsCPLWamXWalsVkftGFrBVTbJ8Dv21bJgQ3AyTITUC8e7kaF7O1uPzjdA42XtnTj
-         vGGV8YD5GdWlaOBqWcpnpiki89Mj5rukeaGZcaEkh80pwhoM0AN4IVcZBcQESaV3E52S
-         X6wA==
-X-Gm-Message-State: AC+VfDyIe7lLkcn9neDag5oU77am+OWLoTlTQDe8mVETLDvXstIbnekK
-        rQV4RSwaIk2ES2GRxEfsGTo=
-X-Google-Smtp-Source: ACHHUZ454yzSsHJTRyUrKRIQsvsXLypKDPWH6elEZzFQjXx1TGgnzhqQCL5NmUlhY3sV9DBuS6yIJA==
-X-Received: by 2002:ac2:4982:0:b0:4f6:2e4f:19c6 with SMTP id f2-20020ac24982000000b004f62e4f19c6mr6339639lfl.53.1686682923262;
-        Tue, 13 Jun 2023 12:02:03 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id q4-20020ac24a64000000b004f2532cfbc1sm1870281lfp.81.2023.06.13.12.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:02:02 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 22:02:00 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Abe Kohandel <abe.kohandel@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
+        with ESMTP id S240748AbjFMUNE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 16:13:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A7D1FF9;
+        Tue, 13 Jun 2023 13:12:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0674763A81;
+        Tue, 13 Jun 2023 20:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A76C433F0;
+        Tue, 13 Jun 2023 20:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686687169;
+        bh=lSpE3z3DCEtozgP5ySEwTV4ARJWw0/T04lDYVrx7VwI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dl9UTg/7GF6ccg5VZ4V97JI5DjbgNZPesP1X7V2GzCpekZNWgwJ+7FzpXmOMvuiEM
+         0jIQDiHUIEygA2uyBxU+NtMF/Ven4fHICQynXAh5B9m0dQY2LA6HqVNTd9nqSpyBC9
+         d9rfzODkNdD+VGkeO3awOFcIoBv1Elba/tzmPuAXffmctMYpASU8czCYFi/gRgJhTa
+         2rxFMwpv1qTSe6x7kmiM73EiCKNbDi875Abo/2oCQoMFrvLeTH6yPnjdygqSpDTBGM
+         7z013dyD8IHhx0njuwEdm2c/n9un5K3zE7LBYV7sSZW1JHnwxp4uUpBuK2O1G38arr
+         WRHmowpyO+8Pw==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Abe Kohandel <abe.kohandel@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] spi: dw: Replace incorrect spi_get_chipselect with set
-Message-ID: <20230613190200.ifuwxstc77tbeopo@mobilestation>
-References: <20230613162103.569812-1-abe.kohandel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20230613162103.569812-1-abe.kohandel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230613162103.569812-1-abe.kohandel@intel.com>
+Subject: Re: [PATCH] spi: dw: Replace incorrect spi_get_chipselect with set
+Message-Id: <168668716790.174856.4659003414906953886.b4-ty@kernel.org>
+Date:   Tue, 13 Jun 2023 21:12:47 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:21:03AM -0700, Abe Kohandel wrote:
+On Tue, 13 Jun 2023 09:21:03 -0700, Abe Kohandel wrote:
 > Commit 445164e8c136 ("spi: dw: Replace spi->chip_select references with
 > function calls") replaced direct access to spi.chip_select with
 > spi_*_chipselect calls but incorrectly replaced a set instance with a
 > get instance, replace the incorrect instance.
 > 
-> Fixes: 445164e8c136 ("spi: dw: Replace spi->chip_select references with function calls")
-> Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Indeed! Thanks for fixing this.
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
-
--Serge(y)
-
-> ---
->  drivers/spi/spi-dw-mmio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index a699ce496cc5..a963bc96c223 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -292,7 +292,7 @@ static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
->  	 */
->  	spi_set_chipselect(spi, 0, 0);
->  	dw_spi_set_cs(spi, enable);
-> -	spi_get_chipselect(spi, cs);
-> +	spi_set_chipselect(spi, 0, cs);
->  }
->  
->  static int dw_spi_elba_init(struct platform_device *pdev,
-> -- 
-> 2.40.1
-> 
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: dw: Replace incorrect spi_get_chipselect with set
+      commit: eee43699217504ba69cadefc85c6992df555e33f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
