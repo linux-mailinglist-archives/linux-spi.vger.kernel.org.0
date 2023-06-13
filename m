@@ -2,235 +2,187 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88D072DB46
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 09:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5410972DBD6
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 10:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbjFMHn0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jun 2023 03:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S240926AbjFMIAV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jun 2023 04:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240584AbjFMHnG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 03:43:06 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262911730;
-        Tue, 13 Jun 2023 00:42:47 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D7IDpk020275;
-        Tue, 13 Jun 2023 07:42:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/jnThA7BHjWqYdWXMcGO9sxX8nn+HT9Gb4SdhNturuU=;
- b=TsbYOphiPt3wtCCqsnUU9Zdd6AC2PAawFcmOynrWFSw+1bqwY3O38OdOqJWj3X3HKmSM
- xWX+UEB68gqLseHBgfo57pIxHEHxfPS7llhIaK7rsiCJHJSPmOHcwgp1IUTamwARwCQL
- AkCAooCrQFs/qtkAddte3n+PQH+YUAeXU7ICKfyBWEWPPSDRkw9IvG//q2Urlc3hgUGD
- dPbR5Fms/Ez771eV1f4/grd6XSCboYebpZRx7Gh3xR0KztmUfxyl1Z8PJjdg2gpdabmh
- sA4oyxn16XXTaULqh0+4ilV/L/d4/fPLJ7KJxJ/3L5VHh5/2MDTQdaEWrh/xLRC5Kz0b rw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6km402jn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 07:42:37 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35D7ganZ027543
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 07:42:36 GMT
-Received: from [10.218.20.114] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 00:42:32 -0700
-Message-ID: <886b1665-cbb9-e302-eb2d-b7ff9fd242a8@quicinc.com>
-Date:   Tue, 13 Jun 2023 13:12:15 +0530
+        with ESMTP id S241290AbjFMIAH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 04:00:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630BA2112;
+        Tue, 13 Jun 2023 00:59:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dxi+qyIYhkXIMEAA--.9419S3;
+        Tue, 13 Jun 2023 15:58:42 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluSsIYhkdKsYAA--.5184S2;
+        Tue, 13 Jun 2023 15:58:41 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v13 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Tue, 13 Jun 2023 15:58:32 +0800
+Message-Id: <20230613075834.5219-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] spi: spi-geni-qcom: Add SPI SLAVE mode support for
- GENI based QuPv3
-To:     Praveen Talari <quic_ptalari@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
-        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>
-References: <20230613065229.5619-1-quic_ptalari@quicinc.com>
- <20230613065229.5619-3-quic_ptalari@quicinc.com>
-Content-Language: en-US
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <20230613065229.5619-3-quic_ptalari@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fvhy8oDZ0A3JjwHWvHFMYubGKVUR2URt
-X-Proofpoint-GUID: fvhy8oDZ0A3JjwHWvHFMYubGKVUR2URt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_04,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- impostorscore=0 phishscore=0 mlxscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306130067
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxluSsIYhkdKsYAA--.5184S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
+Change in v8:
+		1. Add reviewed-by information for spi bindings patch.
+		2. Fixup the uncorrect spi yaml file path in MAINTAINERS file.
+		3. Add spi_master_suspend and spi_master_resume in spi pm function.
+Change in v9:
+		1. Make spi_master_suspend go first in pm suspend.
+Change in v10:
+		1. Fix the compile issue about of_node_get and of_get_property no
+		   declaration.
+		2. set config SPI_LOONGSON_CORE invisible.
+		3. Captial "spi" in commit log and Kconfig file.
+		4. Write header files in alphabetical order.
+		5. Use clamp_val, GENMASK() and BIT() in spi clock setting.
+		6. Optimize clock and mode setting code.
+		7. Use readb_poll_timeout in loongson_spi_write_read_8bit.
+		8. Remove some useless dmesg print.
+		9. Use device_set_node replace of_node_get.
+		10. Use dev_err_probe in code.
+		11. Use devm_clk_get_optional replace devm_clk_get.
+		12. Remove SPI_NO_CS for drop 2k500 non common type spi.
+		13. Use pcim_enable_device() and pcim_iomap_regions() in spi pci
+		    driver.
+		14. Passing the remapped address in loongson_spi_init_master.
+		15. Remove the useless goto flag "err_out".
+		16. Use pci vendor id in pci_ids.h.
+		17. Use devm_platform_ioremap_resource in spi platform driver.
+		18. Remove the useless item in pci_device_id.
+		19. Remove the inned comma in of_device_id.
+		20. Add some headfile in spi_loongson.h.
+		21. Remove the useless extern for loongson_spi_init_master in
+		    spi_loongson.h.
+Change in v11:
+		1. Use spi_get_chipselect() to replace all spi->chip_select in
+		   spi driver
+Change in v12:
+		1. Reword the dt-bindings patch title.
+		2. Use a specific spi compatible in dt-bindings and spi driver.
+		3. Add Cc list for the reviewers of the previous version.
+		4. Add a static for rdiv[12] array in loongson_spi_set_clk.
+		5. Fixup the compile warning for spi HZ that reported by robot.
+		6. Use "#define LOONGSON_... BIT(0)" in readb_poll_timeout.
+		7. Add a error code return that when write spi failed.
+		8. Use spi_controller* instead of spi_master* in all cases.
+		9. Check for the error first which for clock gain.
+		10. Drop the ->remove() in spi pci driver.
+		11. Drop the comma for the terminator entry in pci_device_id.
+		12. Adjust the head file in spi driver.
+		13. Use forward declarations for device and spi_controller.
+Change in v13:
+		1. Reword the dt-bindings patch title.
+		2. Add the items for compatible with 2k500 in dts-bindings.
+		3. Add a bit changes in commit log.
+		4. Add a Reviewed-by for spi driver patch.
+		5. Rework the function loongson_spi_set_cs.
+		6. Use GENMASK() to replace some constant in function
+		   loongson_spi_set_clk.
+		7. Add or remove some blank lines.
+		8. Use LOONGSON_SPI_PARA_MEM_EN replace a constant in
+		   loongson_spi_prepare_message.
+		9. Use SPI_MODE_X_MASK to replace "SPI_CPOL | SPI_CPHA".
+		10. Use USEC_PER_MSEC to replace MSEC_PER_SEC.
 
-On 6/13/2023 12:22 PM, Praveen Talari wrote:
-> Add SPI SLAVE mode support for GENI based QuPv3.
-> 
-> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
-> ---
->   drivers/spi/spi-geni-qcom.c | 55 +++++++++++++++++++++++++++++++++----
->   1 file changed, 49 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 206cc04bb1ed..2e3ae29e79e0 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -12,6 +12,7 @@
->   #include <linux/platform_device.h>
->   #include <linux/pm_opp.h>
->   #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->   #include <linux/soc/qcom/geni-se.h>
->   #include <linux/spi/spi.h>
->   #include <linux/spinlock.h>
-> @@ -52,6 +53,9 @@
->   #define SPI_CS_CLK_DELAY_MSK		GENMASK(19, 10)
->   #define SPI_CS_CLK_DELAY_SHFT		10
->   
-> +#define SE_SPI_SLAVE_EN				(0x2BC)
-> +#define SPI_SLAVE_EN				BIT(0)
-> +
->   /* M_CMD OP codes for SPI */
->   #define SPI_TX_ONLY		1
->   #define SPI_RX_ONLY		2
-> @@ -99,6 +103,24 @@ struct spi_geni_master {
->   	int cur_xfer_mode;
->   };
->   
-> +static struct spi_master *get_spi_master(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct spi_master *spi = platform_get_drvdata(pdev);
-> +
-> +	return spi;
-> +}
-> +
-> +static void spi_slv_setup(struct spi_geni_master *mas)
-> +{
-> +	struct geni_se *se = &mas->se;
-> +
-> +	writel(SPI_SLAVE_EN, se->base + SE_SPI_SLAVE_EN);
-> +	writel(GENI_IO_MUX_0_EN, se->base + GENI_OUTPUT_CTRL);
-> +	writel(START_TRIGGER, se->base + SE_GENI_CFG_SEQ_START);
-> +	dev_info(mas->dev, "spi slave setup done\n");
-> +}
-> +
->   static int get_spi_clk_cfg(unsigned int speed_hz,
->   			struct spi_geni_master *mas,
->   			unsigned int *clk_idx,
-> @@ -140,12 +162,18 @@ static void handle_se_timeout(struct spi_master *spi,
->   	const struct spi_transfer *xfer;
->   
->   	spin_lock_irq(&mas->lock);
-> -	reinit_completion(&mas->cancel_done);
->   	if (mas->cur_xfer_mode == GENI_SE_FIFO)
->   		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
->   
->   	xfer = mas->cur_xfer;
->   	mas->cur_xfer = NULL;
-> +
-> +	if (spi->slave) {
-> +		spin_unlock_irq(&mas->lock);
-> +		goto unmap_if_dma;
-> +	}
-> +
-> +	reinit_completion(&mas->cancel_done);
->   	geni_se_cancel_m_cmd(se);
->   	spin_unlock_irq(&mas->lock);
->   
-> @@ -541,6 +569,8 @@ static bool geni_can_dma(struct spi_controller *ctlr,
->   
->   	if (mas->cur_xfer_mode == GENI_GPI_DMA)
->   		return true;
-> +	if (ctlr->slave)
-> +		return true;
->   
->   	len = get_xfer_len_in_words(xfer, mas);
->   	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
-> @@ -619,6 +649,7 @@ static void spi_geni_release_dma_chan(struct spi_geni_master *mas)
->   
->   static int spi_geni_init(struct spi_geni_master *mas)
->   {
-> +	struct spi_master *spi = get_spi_master(mas->dev);
->   	struct geni_se *se = &mas->se;
->   	unsigned int proto, major, minor, ver;
->   	u32 spi_tx_cfg, fifo_disable;
-> @@ -627,7 +658,14 @@ static int spi_geni_init(struct spi_geni_master *mas)
->   	pm_runtime_get_sync(mas->dev);
->   
->   	proto = geni_se_read_proto(se);
-> -	if (proto != GENI_SE_SPI) {
-> +
-> +	if (spi->slave) {
-> +		if (proto != GENI_SE_SPI_SLAVE) {
-> +			dev_err(mas->dev, "Invalid proto %d\n", proto);
-> +			goto out_pm;
-> +		}
-> +		spi_slv_setup(mas);
-> +	} else if (proto != GENI_SE_SPI) {
->   		dev_err(mas->dev, "Invalid proto %d\n", proto);
->   		goto out_pm;
->   	}
-> @@ -677,9 +715,11 @@ static int spi_geni_init(struct spi_geni_master *mas)
->   	}
->   
->   	/* We always control CS manually */
-> -	spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
-> -	spi_tx_cfg &= ~CS_TOGGLE;
-> -	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
-> +	if (!spi->slave) {
-> +		spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
-> +		spi_tx_cfg &= ~CS_TOGGLE;
-> +		writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
-> +	}
->   
->   out_pm:
->   	pm_runtime_put(mas->dev);
-> @@ -1072,6 +1112,9 @@ static int spi_geni_probe(struct platform_device *pdev)
->   	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
->   	pm_runtime_enable(dev);
->   
-> +	if (device_property_read_bool(&pdev->dev, "qcom,slv-ctrl"))
+Yinbo Zhu (2):
+  spi: dt-bindings: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-Should we update this property "qcom,slv-ctrl" in device tree bindings
-as well !!
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  46 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  26 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 279 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  55 ++++
+ drivers/spi/spi-loongson-plat.c               |  47 +++
+ drivers/spi/spi-loongson.h                    |  49 +++
+ 8 files changed, 515 insertions(+)
 
+-- 
+2.20.1
 
-> +		spi->slave = true;
-> +
->   	ret = geni_icc_get(&mas->se, NULL);
->   	if (ret)
->   		goto spi_geni_probe_runtime_disable;
-> @@ -1092,7 +1135,7 @@ static int spi_geni_probe(struct platform_device *pdev)
->   	 * for dma (gsi) mode, the gsi will set cs based on params passed in
->   	 * TRE
->   	 */
-> -	if (mas->cur_xfer_mode == GENI_SE_FIFO)
-> +	if (!spi->slave && mas->cur_xfer_mode == GENI_SE_FIFO)
->   		spi->set_cs = spi_geni_set_cs;
->   
->   	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
-
--Shazad
