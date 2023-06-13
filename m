@@ -2,148 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B652372D73C
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 04:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD75572DA32
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 08:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjFMCE6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jun 2023 22:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S239932AbjFMGxj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jun 2023 02:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjFMCE4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jun 2023 22:04:56 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB0ECE55;
-        Mon, 12 Jun 2023 19:04:53 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cx+enEzodkRl0EAA--.9356S3;
-        Tue, 13 Jun 2023 10:04:52 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeTAzodkLCgYAA--.3640S3;
-        Tue, 13 Jun 2023 10:04:48 +0800 (CST)
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
- <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
- <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
- <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
- <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
- <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
- <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
- <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
- <4e30870d-86e2-8536-8e0d-aab4ce5027d2@linaro.org>
- <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
- <d24f1e60-0ef3-2cb9-9675-846d861ef0c8@linaro.org>
- <9fec9cfa-0686-91d8-cba4-91ea67243b47@loongson.cn>
- <28e776f8-1e37-79f4-5c10-a57c5cd7d4e4@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <f12dacd0-532d-c92a-19ee-9bcff2a778d9@loongson.cn>
-Date:   Tue, 13 Jun 2023 10:04:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S237542AbjFMGxh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 02:53:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4955210D4;
+        Mon, 12 Jun 2023 23:53:36 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D5PpSq021690;
+        Tue, 13 Jun 2023 06:53:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=54DHUo5WbYLCjWWOot671sFzmkPE9kMRrVQ5UIj8z8A=;
+ b=RO3q6P7c1r5ei3ldsEDOwrC8zWgGmc3xxOivnrpQZ3FoTAWGdqv0oZlXchdcCOsXcyhh
+ dq5ErJJQX5c9pQbRiGXVqDjhj14p+6V/WslAnxw+de/Z3r9P3jlMYJ/CwFm4k2bOpb/S
+ f1xr23Ulz30vUBbKsMs/KYZSgK9hPCli3O6ZSV95cK6CmxLCurM5uxUsCWS/wSBkuKxx
+ Q6ZD/6l2lET8dWayhmdKSC1D5dSub/qFjHjZ6ijojQpu1sjs3m+oqOJtLWWnshVdhyUT
+ u8h9TkwUNN9cIIKM/Da5EEJII93gIn7FzGpadzIC427oWMkZWCccTGVJ9mez8MsfLb73 EQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r69nwgwmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 06:53:24 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35D6rN1g023430
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 06:53:23 GMT
+Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 12 Jun 2023 23:53:19 -0700
+From:   Praveen Talari <quic_ptalari@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
+        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>,
+        Praveen Talari <quic_ptalari@quicinc.com>
+Subject: [PATCH 0/2] spi-geni-qcom: Add SPI SLAVE mode support for GENI based QuPv3
+Date:   Tue, 13 Jun 2023 12:22:27 +0530
+Message-ID: <20230613065229.5619-1-quic_ptalari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <28e776f8-1e37-79f4-5c10-a57c5cd7d4e4@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxNeTAzodkLCgYAA--.3640S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MKzRpWBVMBwEd6Wr1B5vJQTHOIlrX6RU
+X-Proofpoint-GUID: MKzRpWBVMBwEd6Wr1B5vJQTHOIlrX6RU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-13_03,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=410 impostorscore=0 lowpriorityscore=0 clxscore=1011
+ adultscore=0 bulkscore=0 spamscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306130061
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This series adds spi slave mode functionality to geni based Qupv3.
+The common header file contains spi slave related registers and masks.
 
+Praveen Talari (2):
+  soc: qcom: geni-se: Add SPI SLAVE mode support for GENI based QuPv3
+  spi: spi-geni-qcom: Add SPI SLAVE mode support for GENI based QuPv3
 
-在 2023/6/13 上午2:03, Krzysztof Kozlowski 写道:
-> On 12/06/2023 13:29, zhuyinbo wrote:
->>
->>
->> 在 2023/6/12 下午4:16, Krzysztof Kozlowski 写道:
->>>>>>>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
->>>>>>>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
->>>>>>>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>>>>>>> @@ -16,6 +16,7 @@ properties:
->>>>>>>>>>>>           compatible:
->>>>>>>>>>>>             enum:
->>>>>>>>>>>>               - loongson,ls2k1000-spi
->>>>>>>>>>>> +      - loongson,ls2k0500-spi
->>>>>>>>>>>
->>>>>>>>>>> Aren't they compatible?
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> Are you saying that the spi driver is compatible with 2k0500 ?
->>>>>>>>>
->>>>>>>>> Didn't you say this through 11 previous revisions?
->>>>>>>>
->>>>>>>>
->>>>>>>> Yes, did I understand your meaning incorrectly ?
->>>>>>>
->>>>>>> If they are compatible, then they are not part of one enum. They could
->>>>>>> not be as this would easily fail in testing of your DTS.
->>>>>>>
->>>>>>
->>>>>>
->>>>>> The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
->>>>>> I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
->>>>>> added it as a part of the one enum in dt-binding.
->>>>>
->>>>> No, because you claimed - if I understood correctly - that they are
->>>>> compatible. Don't add fake entries to the driver.
->>>>>
->>>>
->>>>
->>>> I'm a bit confused, and I just need to add 'loongson,ls2k0500-spi' as
->>>> one enum in dt-bindings, but driver don't add this entry ?
->>>
->>> Compatibility is expressed with a list:
->>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#compatible
->>> so it cannot be just one enum, but "items". There are hundreds of
->>> examples including example-schema.
->>
->>
->> Is it a description like the following?
->>
->>    properties:
->>      compatible:
->> -    enum:
->> -      - loongson,ls2k1000-spi
->> +    oneOf:
->> +      - enum:
->> +          - loongson,ls2k1000-spi
->> +      - items:
->> +          - enum:
->> +              - loongson,ls2k1000-spi
->> +          - const: loongson,ls2k1000-spi
-> 
-> Remove this items part - it does not make sense. Device is not
-> compatible with itself. Rest looks ok.
+ drivers/spi/spi-geni-qcom.c      | 55 ++++++++++++++++++++++++++++----
+ include/linux/soc/qcom/geni-se.h |  9 ++++++
+ 2 files changed, 58 insertions(+), 6 deletions(-)
 
-
-okay, I got it.
-
-Thanks,
-Yinbo
+-- 
+2.17.1
 
