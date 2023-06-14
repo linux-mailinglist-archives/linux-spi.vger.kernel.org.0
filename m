@@ -2,85 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163C7732297
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 00:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321037325E5
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 05:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbjFOWPV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 18:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S230120AbjFPDhR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 23:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjFOWPU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 18:15:20 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A78B2D59
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 15:14:58 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 0df2eb39-0bca-11ee-b3cf-005056bd6ce9;
-        Fri, 16 Jun 2023 01:14:54 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 16 Jun 2023 01:14:53 +0300
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, robh+dt@kernel.org, conor+dt@kernel.org,
-        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
-Message-ID: <ZIuNXQIB3j6YjYa7@surfacebook>
-References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
- <20230605125504.2570158-2-ckeepax@opensource.cirrus.com>
+        with ESMTP id S230021AbjFPDhP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 23:37:15 -0400
+X-Greylist: delayed 4212 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 20:37:14 PDT
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5681FE5
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 20:37:14 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 98070607E4; Wed, 14 Jun 2023 07:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1686732830; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=gcdcxTDTcoTRKsSJDvhHt5S9RHMf90wA8v8AV8IdUdAJY/+L6DE+EHjA8XV5ucF01
+         EPYZI0xkCp18+iN+L9NAxr5tPqQmlMnPrp/XXQKhjfeKNULmN6Tb+SYIfOVrMCBPoR
+         zqBm/1mkw7le3O7lJbAMYsXIfIww5bjsS721ZkIcPSpMnkVaQgchs6KNVlBdUz0j3O
+         EnxEZai3thH+Bbtji+6dL3DD5QdAzNmpYXGf6O965KDQPrr1TeGz1aalE79gh7Vgey
+         dJvEbmTsWfd9Ki67VDbCGBPC77utNESmXIghaE+7FoZMs5G2RTwFFiMVGJxuS2T3u+
+         Ic99BghzerA8A==
+Received: by mail.durme.pl for <linux-spi@vger.kernel.org>; Wed, 14 Jun 2023 07:56:05 GMT
+Message-ID: <20230614064501-0.1.2h.aynv.0.m4a0ilie0h@durme.pl>
+Date:   Wed, 14 Jun 2023 07:56:05 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-spi@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605125504.2570158-2-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mon, Jun 05, 2023 at 01:54:59PM +0100, Charles Keepax kirjoitti:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> 
-> Currently the in-band alerts for SoundWire peripherals can only
-> be communicated to the driver through the interrupt_callback
-> function. This however is slightly inconvient for devices that wish to
-> share IRQ handling code between SoundWire and I2C/SPI, the later would
-> normally register an IRQ handler with the IRQ subsystem. However there
-> is no reason the SoundWire in-band IRQs can not also be communicated
-> as an actual IRQ to the driver.
-> 
-> Add support for SoundWire peripherals to register a normal IRQ handler
-> to receive SoundWire in-band alerts, allowing code to be shared across
-> control buses. Note that we allow users to use both the
-> interrupt_callback and the IRQ handler, this is useful for devices which
-> must clear additional chip specific SoundWire registers that are not a
-> part of the normal IRQ flow, or the SoundWire specification.
+Dzie=C5=84 dobry,
 
-...
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-> +	bus->irq_chip.name = dev_name(bus->dev);
-> +	bus->domain = irq_domain_add_linear(NULL, SDW_MAX_DEVICES, &sdw_domain_ops, bus);
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-I'm wondering why you are not using existing fwnode, if any
-(e.g. from parent device).
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-> +	if (!bus->domain) {
-> +		dev_err(bus->dev, "Failed to add IRQ domain\n");
-> +		return -EINVAL;
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
 
+Pozdrawiam
+Krystian Wieczorek
