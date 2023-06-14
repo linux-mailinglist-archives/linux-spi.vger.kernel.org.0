@@ -2,48 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0521672ECCB
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jun 2023 22:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825F572F262
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jun 2023 04:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbjFMUUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jun 2023 16:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        id S232641AbjFNCDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jun 2023 22:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240864AbjFMUU1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 16:20:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68F82102
-        for <linux-spi@vger.kernel.org>; Tue, 13 Jun 2023 13:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10FDA602F9
-        for <linux-spi@vger.kernel.org>; Tue, 13 Jun 2023 20:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 72D52C116B6;
-        Tue, 13 Jun 2023 20:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686687619;
-        bh=UbVGpDIVjnS6xDcx6RBFMYbtNQ4FvDfIrQ4UUCtXOxU=;
-        h=Subject:From:Date:To:From;
-        b=c1OT54OM0D54iiHkG2+y4GtYrxPJfzNDfhrfZncmVNg0Y8p/UhYsYwguOBKbEhT0C
-         AEkhBMGzdMZgcl33kWzM65BvdH8l9I7dkSkOX0L6RGS0WsL/gGzFxsax9n75i89vGi
-         xeJqbi0Ne56+pNNFCXjbt+40+CMVIFDsvGFdsVrX9U3e+dMQFpvWbKLG3rPy+ftAFI
-         z6T52J++OSepbCdm0ZZ9opFGjSl4FaULu4SLZQ4Q+6aiDTLo9QmC4AqUCrnYc1JlRF
-         leY6nmts+BMtsbdZ2Sqjud8V9kXODsdGJZni9QwAwX7iqAedx0x1I5HbsoELCF7xji
-         nn3Oa158yMZow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B0DEC00446;
-        Tue, 13 Jun 2023 20:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232600AbjFNCDv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jun 2023 22:03:51 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CB68172A;
+        Tue, 13 Jun 2023 19:03:49 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxKuoEIIlkb+gEAA--.10445S3;
+        Wed, 14 Jun 2023 10:03:48 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxduQDIIlkhwMaAA--.8372S3;
+        Wed, 14 Jun 2023 10:03:47 +0800 (CST)
+Subject: Re: [PATCH v13 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230613075834.5219-1-zhuyinbo@loongson.cn>
+ <20230613075834.5219-3-zhuyinbo@loongson.cn>
+ <CAHp75VdtFjkyBF4K1+MOHAmp0S6RU5Cg3NYD8yGH+8FBBG0Zuw@mail.gmail.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <55f236d0-129e-4042-ef03-adc678a0ab3c@loongson.cn>
+Date:   Wed, 14 Jun 2023 10:03:47 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <CAHp75VdtFjkyBF4K1+MOHAmp0S6RU5Cg3NYD8yGH+8FBBG0Zuw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168668761923.25733.12460117024411508668.git-patchwork-summary@kernel.org>
-Date:   Tue, 13 Jun 2023 20:20:19 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CM-TRANSID: AQAAf8BxduQDIIlkhwMaAA--.8372S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,22 +56,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
-
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Patch: spi: dw: Replace incorrect spi_get_chipselect with set
-  Submitter: Abe Kohandel <abe.kohandel@intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=756813
-  Lore link: https://lore.kernel.org/r/20230613162103.569812-1-abe.kohandel@intel.com
 
 
-Total patches: 1
+在 2023/6/13 下午9:03, Andy Shevchenko 写道:
+> On Tue, Jun 13, 2023 at 10:58 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> 
+> ...
+> 
+>> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> Just a remark for the next contribution. When you have a tag, no need
+> to have a Cc for the same person, Git tools automatically add all
+> tagged people to the Cc list of email.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
+okay, I got it.
+
+Thanks,
+Yinbo
+> 
 
