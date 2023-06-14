@@ -2,59 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC7B72FE2A
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jun 2023 14:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A731F73083F
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jun 2023 21:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbjFNMQS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Jun 2023 08:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S236185AbjFNTas (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Jun 2023 15:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbjFNMQS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Jun 2023 08:16:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2D2189;
-        Wed, 14 Jun 2023 05:16:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DB563FFD;
-        Wed, 14 Jun 2023 12:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16384C433C0;
-        Wed, 14 Jun 2023 12:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686744976;
-        bh=KONbjq4rJQQJic1hHon1ie/Ekdj395YZ8PBC63PLpeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BRdbC8mQyi1BfZxbcfGcbdMbObXSdrsf9RwceswN5hVqwfT32GTV9pUVM4jWRBMzt
-         +wIWm2CG8RNulzEWnADIyPoNve4bgFTusHb1N1iJGc9QL58XcP7aHLEN6M/hfCzxyJ
-         baeQxARyeuLWhG1T9dQY57sbRezI+uVYUl/EqSnuU/KZh2dhnZ1ATrFRzWnYqjETom
-         XzFiXGIH5Pe/qPsV2zQcEJsqrMNYLYo80BI8ZbKeriWQcgOrzaBJEGdjltNl6+jO8O
-         wAAV4EXZT9sfwB9kP3pdoUgmW3+rFZ5D1TqMvLWq8oyl5fWpvrr1VdvnwKUKPnsJSO
-         /PLe6lNGN7dpg==
-Date:   Wed, 14 Jun 2023 13:16:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Valentin Caron <valentin.caron@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232195AbjFNTar (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Jun 2023 15:30:47 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F065106;
+        Wed, 14 Jun 2023 12:30:47 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3408899f855so6920745ab.0;
+        Wed, 14 Jun 2023 12:30:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686771046; x=1689363046;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AxMpoSEu3CVACFktb2udXJ4LI58KTtzAHuG2GDyeBD8=;
+        b=T18gxPb/sX0WdH5sAzE2GqYJ3MJ4I7LPFi6Et6djYof6phaBKsYnABXWXKzDp0EcUy
+         VinC81ZbjKFhnzc8+v+6zrXB5GGeTy45AIxlCgP9jOuoyvyT3P7cA4VraGbBmUP9miMP
+         zlG31MJBclGVs7n8dAf/rQLNXCoWW04uR9Eo6lu3hAytpXMNqLbcPAzn4OY+Sh70wWO/
+         v8UiGDVVEFTnvcfUoYLdcZaV7G4OI74UBAcYhdm7rAvGNKokbdNXQT9+pMMEOo01PtLt
+         nz/ByItvHfC4MOIjbgJPzk6/acSnR4mNyA74urypauXuvsPuvA4/vbdnig7fvf2Dilqd
+         w7bA==
+X-Gm-Message-State: AC+VfDwlSXc5eyEnk7QsQsfPN0KczsEIsK1iaWKXoEcSQv/Wqhk3/Izy
+        Q+p1rDP26TWU5Hd6YixDvw==
+X-Google-Smtp-Source: ACHHUZ7+3kuvwn5Kyo1f8vSMpErUCx9TJdaZKlDVLtLNnmOoUeV4N0K+ebUQnEgk/TYccK1/dLrO1Q==
+X-Received: by 2002:a92:ce0b:0:b0:33f:dfd1:fe4a with SMTP id b11-20020a92ce0b000000b0033fdfd1fe4amr12573037ilo.8.1686771046401;
+        Wed, 14 Jun 2023 12:30:46 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id g24-20020a056638061800b004166c24e30dsm5053594jar.32.2023.06.14.12.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 12:30:45 -0700 (PDT)
+Received: (nullmailer pid 2604138 invoked by uid 1000);
+        Wed, 14 Jun 2023 19:30:44 -0000
+Date:   Wed, 14 Jun 2023 13:30:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] spi: stm32: add spi slave mode
-Message-ID: <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
-References: <20230614102628.202936-1-valentin.caron@foss.st.com>
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Message-ID: <20230614193044.GA2595668-robh@kernel.org>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+ <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
+ <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xsbh6SZE0ffTF5Fr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230614102628.202936-1-valentin.caron@foss.st.com>
-X-Cookie: At participating locations only.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,30 +69,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Jun 06, 2023 at 04:37:08PM +0200, Linus Walleij wrote:
+> On Fri, Jun 2, 2023 at 2:22 PM Mark Brown <broonie@kernel.org> wrote:
+> > On Fri, Jun 02, 2023 at 01:52:00PM +0200, Matthias Schiffer wrote:
+> 
+> > > We have seen a number of downstream patches that allow enabling the
+> > > realtime feature of the SPI subsystem to reduce latency. These were
+> > > usually implemented for a specific SPI driver, even though the actual
+> > > handling of the rt flag is happening in the generic SPI controller code.
+> > >
+> > > Introduce a generic linux,use-rt-queue flag that can be used with any
+> > > controller driver. The now redundant driver-specific pl022,rt flag is
+> > > marked as deprecated.
+> >
+> > This is clearly OS specific tuning so out of scope for DT...
+> 
+> In a sense, but to be fair anything prefixed linux,* is out of scope for DT,
+> Documentation/devicetree/bindings/input/matrix-keymap.yaml being
+> the most obvious offender.
+> 
+> On the other hand I think the DT maintainers said it is basically fine
+> to use undocumented DT properties for this kind of thing. Having
+> completely undocumented DT properties might seem evil in another
+> sense, but I think Apple does nothing but...
 
---xsbh6SZE0ffTF5Fr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I don't don't know where you got that impression. I'm fine with them in 
+the sense that I don't look at downstream and anything goes there.
 
-On Wed, Jun 14, 2023 at 12:26:23PM +0200, Valentin Caron wrote:
-> STM32 SPI can operate in slave mode.
-> This series add this functionnality in spi-stm32 driver.
-
-The more modern terminology here is device mode.
-
---xsbh6SZE0ffTF5Fr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJr4kACgkQJNaLcl1U
-h9Ag3gf+LLqdQq0z4sfFAJOLfVZqO0E38o7KHUE8gSP6VvTWuhZpt6VCzZ9tm5+D
-KCcckmQKCsedk6yQAqjyA/udx1gKX2+M6YJzjcdBw+0IlFaar5WfhNHJSFAR6nmW
-Ygr69XT2eVRJ+Zefc9vnUyhug6FZyrb4BcjB90kTpIPkGrtQr78v+GADRbU2tMHU
-bHjD7lQ6aDYxP3kYjLfz4MHilWV9VctyCT8ryvTZ6Gr1KROhiJ3LECX9DI0QDhCr
-GwRBoaCmvNfUD77+AjuRBIyqpR8zBMH4QPoc00jxXwqJky8dLAAknbqbzH9d3czf
-jMV62p05IqlFlK/utF7MjJx1DwF6cg==
-=YvVo
------END PGP SIGNATURE-----
-
---xsbh6SZE0ffTF5Fr--
+Rob
