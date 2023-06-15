@@ -2,55 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D26731BCC
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 16:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65183731C0F
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 17:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344829AbjFOOvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 10:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S241603AbjFOPA0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 11:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344731AbjFOOvv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 10:51:51 -0400
+        with ESMTP id S239165AbjFOPAX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 11:00:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26A2962;
-        Thu, 15 Jun 2023 07:51:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE1A273D
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 08:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DC66267B;
-        Thu, 15 Jun 2023 14:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C47EC433C8;
-        Thu, 15 Jun 2023 14:51:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3D561CAA
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 15:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AEA08C433C0;
+        Thu, 15 Jun 2023 15:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686840707;
-        bh=35IP0qnBgRimZZwP/gdFMBYC6RjVrtz/V/Ojd+z4dNs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=lhvvoeomcJXsSNNPQzcw26So9kTQAKyrUIah7vPX6Vd7qwiEBWDbnoILQ7odPtHAF
-         EoVWZKPU/gzRQa7Bmz0EHCR97OoTXMMUL3pcRz0YzDbx9WgkhaSIEIa7U3BTP/4R0f
-         1AJsE2vTYNkBdM1ZxLfV581DRCCnE3ZdGeLxCjHf7zQnYhG4NBpIF9Z7vn+RTtDKne
-         pBoYLBMJzwLYrVHGZKimIa4DI94uzWrAoshuSm8lfhrBX5Gxpc+OwvzajYOWbO3A2I
-         YQak09dza+dhpiYc/8S+PEikq0n3eh56o5fbjbSRPDiZWGIUfspLkswNbfxtQA4IwY
-         uFqaLVceRfT0A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
-References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
-Subject: Re: [PATCH v2] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER
- from dma_request_chan()
-Message-Id: <168684070419.561998.2376284587741517242.b4-ty@kernel.org>
-Date:   Thu, 15 Jun 2023 15:51:44 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1686841221;
+        bh=1ThYTQpVhz5mr2SwEOcs6uH7Zu93bEYWVc4QD6yT9YA=;
+        h=Subject:From:Date:To:From;
+        b=Lcs8KC2S2FKznUOzb7oT5NOWQ+iTKN/fBRS5P+sksjgvUGVWrTerXmx/Rp80IsRhx
+         dZw56WjXk/YfUMGZT5ofB5sNTev/rd+VtydEkH/31KgPpdU9Pmy6Zd6o24XCKHcK3O
+         FoozE7gzzHqA48Xj98oF11qyn6LNJcSmyDNdmB6BUWu3tEWRsf6ey5xxyP+KLLVOXz
+         sKxhjSh60mwtzKUkn5e46rxl+VZOX93kqqVfOVgpEwF+wA5FyM+54CAOf6ce2IXh02
+         95yZZRacI9PsPm7RapNqzI5rVjPVLwFOOzyeSruN/voOnGRwtddLXMYErpFHxOfQSc
+         Bp1vJJVn0lQ4g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86D13C395E0;
+        Thu, 15 Jun 2023 15:00:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168684122148.31410.2039793487343539011.git-patchwork-summary@kernel.org>
+Date:   Thu, 15 Jun 2023 15:00:21 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,38 +53,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 15 Jun 2023 14:51:45 +0200, Neil Armstrong wrote:
-> Now spi_geni_grab_gpi_chan() errors are correctly reported, the
-> -EPROBE_DEFER error should be returned from probe in case the
-> GPI dma driver is built as module and/or not probed yet.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v2] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan()
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=757479
+  Lore link: https://lore.kernel.org/r/20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org
 
-Thanks!
 
-[1/1] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan()
-      commit: 9d7054fb3ac2e8d252aae1268f20623f244e644f
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
