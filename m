@@ -2,80 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAC3731A2E
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 15:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D26731BCC
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 16:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344488AbjFONiY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 09:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S1344829AbjFOOvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 10:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344486AbjFONiC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 09:38:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8073AB7
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 06:36:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977d7bdde43so167883766b.0
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 06:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686836179; x=1689428179;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NxhJfd2ll8nAFEQrVCzLMvEn8Jp9xjM7Kxtgv+YXz0k=;
-        b=dsjqIHaT5wS4DUA/yheEW/2GYzurEmgUgIdHq8/vnYdTrOHAuOM5AodlutyPp2pYRJ
-         L7WPq+XRdmZm+UUmGW728WTZtYZNBCJnUrTz4XR2sQq+h/myyiPXeBMI18MhZlfyPnpG
-         Y0Ja9e0CPdydOd+P1qtJ2CYne6/7V+ddBVCuWqJ1N5IFdAENJ6MvG5NSPSM4HBcpUgTH
-         ylPIm1TV3B+SArtmR0ttkf/wzafizoa9pOtEDljmAYnlKzH5aLQD88yY0BnS7m6auj9h
-         V+iG+8YD7YpbdxhfDMX58LzUmPeXtbSu4ytX2Or+cxFPY0nB9ccu5RQsMckZpf7lYy+t
-         zNHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686836179; x=1689428179;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NxhJfd2ll8nAFEQrVCzLMvEn8Jp9xjM7Kxtgv+YXz0k=;
-        b=Y66d2pIbcMp8VEXfWhuiNXE1DcR9V7yVGFeLugXYuwFznhpTFnLU8+59qkONw/grrk
-         O8yHhMmVgKvMRoNe69QjeOOhK1rD9MBkYKbSN+oAIKlTSTpxnlpCFFEELf7mG7OEMDfn
-         umttpcJ2NCyLSfJoxackCsr4kxux8PoyZ+A91qqfLO2nN+KuXx2f96swTu3M9w+OqtFy
-         VIgW9/BO9kEShpQUB4qBxRET8HhNndHeQYNhf0TLjpmxTO6GHwrpcbgnC9Pel/1/kHjs
-         Oe/4msi8mAGwNGpEAo6r9AY+oHjoisy1F1oFXgWNisjGhBD1o8dx1hs1hpCsJyi9P397
-         qrOg==
-X-Gm-Message-State: AC+VfDwPxyB0hnCPtP+7ZY0Y/FIiUEPaNsQiSxmgtBL9rTLE97AaOy8m
-        oQEh/ng1UxRwIwb1fw3DaP5BCw==
-X-Google-Smtp-Source: ACHHUZ5G2KDVI97s5jDk0HjvRJ8KLjMmTYTO6401STaAZBen4SFHRcAjha9stATuA+Qbd4ZYA9sCEw==
-X-Received: by 2002:a17:907:948a:b0:978:9235:d450 with SMTP id dm10-20020a170907948a00b009789235d450mr5096371ejc.9.1686836178947;
-        Thu, 15 Jun 2023 06:36:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u13-20020a1709064acd00b009787ad3157bsm9470074ejt.39.2023.06.15.06.36.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 06:36:18 -0700 (PDT)
-Message-ID: <479bf05e-342d-f94b-87f3-4cc0a95fb01a@linaro.org>
-Date:   Thu, 15 Jun 2023 15:36:16 +0200
+        with ESMTP id S1344731AbjFOOvv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 10:51:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26A2962;
+        Thu, 15 Jun 2023 07:51:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DC66267B;
+        Thu, 15 Jun 2023 14:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C47EC433C8;
+        Thu, 15 Jun 2023 14:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686840707;
+        bh=35IP0qnBgRimZZwP/gdFMBYC6RjVrtz/V/Ojd+z4dNs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=lhvvoeomcJXsSNNPQzcw26So9kTQAKyrUIah7vPX6Vd7qwiEBWDbnoILQ7odPtHAF
+         EoVWZKPU/gzRQa7Bmz0EHCR97OoTXMMUL3pcRz0YzDbx9WgkhaSIEIa7U3BTP/4R0f
+         1AJsE2vTYNkBdM1ZxLfV581DRCCnE3ZdGeLxCjHf7zQnYhG4NBpIF9Z7vn+RTtDKne
+         pBoYLBMJzwLYrVHGZKimIa4DI94uzWrAoshuSm8lfhrBX5Gxpc+OwvzajYOWbO3A2I
+         YQak09dza+dhpiYc/8S+PEikq0n3eh56o5fbjbSRPDiZWGIUfspLkswNbfxtQA4IwY
+         uFqaLVceRfT0A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Carpenter <error27@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
+References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
+Subject: Re: [PATCH v2] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER
+ from dma_request_chan()
+Message-Id: <168684070419.561998.2376284587741517242.b4-ty@kernel.org>
+Date:   Thu, 15 Jun 2023 15:51:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/4] dt-bindings: spi: stm32: disable spi-slave
- property for stm32f4-f7
-To:     Valentin Caron <valentin.caron@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230615075815.310261-1-valentin.caron@foss.st.com>
- <20230615075815.310261-4-valentin.caron@foss.st.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230615075815.310261-4-valentin.caron@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,18 +61,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/06/2023 09:58, Valentin Caron wrote:
-> From: Alain Volmat <alain.volmat@foss.st.com>
+On Thu, 15 Jun 2023 14:51:45 +0200, Neil Armstrong wrote:
+> Now spi_geni_grab_gpi_chan() errors are correctly reported, the
+> -EPROBE_DEFER error should be returned from probe in case the
+> GPI dma driver is built as module and/or not probed yet.
 > 
-> STM32F4 and STM32F7 can't switch to spi device mode.
-> Forbid this property with compatible "st,stm32f4-spi".
+> 
 
-Just to clarify - driver cannot switch or hardware does not support it?
+Applied to
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. (spi: dt-bindings:)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
-Krzysztof
+Thanks!
+
+[1/1] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan()
+      commit: 9d7054fb3ac2e8d252aae1268f20623f244e644f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
