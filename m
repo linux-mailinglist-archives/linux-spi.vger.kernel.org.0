@@ -2,86 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1281C7319C0
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 15:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD347319D3
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 15:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343874AbjFONUZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 09:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S240568AbjFONXN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 09:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344105AbjFONUX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 09:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3A191
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 06:20:23 -0700 (PDT)
+        with ESMTP id S240465AbjFONXM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 09:23:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7387172A;
+        Thu, 15 Jun 2023 06:23:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C4B625C4
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 13:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EE41DC433C9;
-        Thu, 15 Jun 2023 13:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 692E06317F;
+        Thu, 15 Jun 2023 13:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728D7C433C8;
+        Thu, 15 Jun 2023 13:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686835222;
-        bh=WJUxwWMi3jkyrpIDm9F0axFo1zlOM4+XYJs9uUNOl3A=;
-        h=Subject:From:Date:To:From;
-        b=I2V+0mnmghNj0SCNa2INuFxrvqgaquzeJSjIbCxDYC8vptIhqY7+3IDvxOCo9Dmva
-         HTlHrd387Tsx4yuR/W+UFePnG8lAv7zrbDjj7j3tzXqCQQtQUBGowYBm3ThjcTA1Ba
-         PRDTb/b86acVRHg1R42nT5ybgG1fONIXIV4YCkR297YrchPX5TO/Ma756N3IomtWnE
-         nB6C5AKHuPoZqY7tcMZMQhTHCo7qnGHswc5Z/sVsndrpcbUMe7ihfH716+nfiE/p7+
-         4POVBaVKPOA3gZ8WG/4kHPq6yebpBn/dJzzMTpbfEAoBT8L/chONQcC5teeoyUGRqL
-         3hk5+ZpikfgqA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C86C4C395C7;
-        Thu, 15 Jun 2023 13:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686835390;
+        bh=t6/5UDP4RwExGVEdFU2AtHIctJ/fcDBjkxLPyQsjmHs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D+/SQTuckZEp+iItMgxmneOtJMZLnJ2Wb+uQxOyWhiLuoLTg/yUA6otdRKgciz9e6
+         +5X5s/A5KhGJl11WV8R3j+6E5VOJnWoPcG21gtqTXUzT0FW+dGPhqbBASLlLgHomga
+         N6F//30/wmTtY7tuI9poQ/m0B+DMIlvPA/5KcigY/MXk3B/r9o4LyZIO9AdS+opp8+
+         +ZOFECPf3PQjrWCVuovLm8sAxii0CXNzt236i35s0EpqHPgSo7LtCLK31q7XeeGlp6
+         yNGLv3JT+LQE2zca5jDsRy9icDhbH0KBfR6QWb0HgaJaEs2BU5uH0rHMNaqKf90qYX
+         r63yamcFJF0/w==
+Message-ID: <e9634d2a-f8f9-666b-abf6-65e676205203@kernel.org>
+Date:   Thu, 15 Jun 2023 15:23:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168683522173.6025.2868770835119706736.git-patchwork-summary@kernel.org>
-Date:   Thu, 15 Jun 2023 13:20:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 2/3] spi: dt-bindings: qcom,spi-geni-qcom: Add SPI
+ SLAVE mode support for GENI based QuPv3
+To:     Praveen Talari <quic_ptalari@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+        quic_vnivarth@quicinc.com, quic_arandive@quicinc.com
+References: <20230615070706.18322-1-quic_ptalari@quicinc.com>
+ <20230615070706.18322-3-quic_ptalari@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230615070706.18322-3-quic_ptalari@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On 15/06/2023 09:07, Praveen Talari wrote:
+> Set this property to configure QUPV3 as SPI slave controller.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+1. Please use subject prefixes matching the subsystem. You can get them
+for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
+directory your patch is touching.
 
-Series: spi: stm32: add spi slave mode
-  Submitter: Valentin Caron <valentin.caron@foss.st.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=757057
-  Lore link: https://lore.kernel.org/r/20230614102628.202936-1-valentin.caron@foss.st.com
-    Patches: [v2,1/4] spi: stm32: renaming of spi_master into spi_controller
-             [v2,2/4] spi: stm32: use dmaengine_terminate_{a}sync instead of _all
-             [v2,3/4] dt-bindings: spi: stm32: disable spi-slave property for stm32f4-f7
+2. Please use scripts/get_maintainers.pl to get a list of necessary
+people and lists to CC.  It might happen, that command when run on an
+older kernel, gives you outdated entries.  Therefore please be sure you
+base your patches on recent Linux kernel.
 
-Series: spi: stm32: add spi device mode
-  Submitter: Valentin Caron <valentin.caron@foss.st.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=757363
-  Lore link: https://lore.kernel.org/r/20230615075815.310261-1-valentin.caron@foss.st.com
-    Patches: [v3,1/4] spi: stm32: renaming of spi_master into spi_controller
-             [v3,2/4] spi: stm32: use dmaengine_terminate_{a}sync instead of _all
-             [v3,3/4] dt-bindings: spi: stm32: disable spi-slave property for stm32f4-f7
-             [v3,4/4] spi: stm32: introduction of stm32h7 SPI device mode support
+You missed at least DT list (maybe more), so this won't be tested by our
+tools. Performing review on untested code might be a waste of time, thus
+I will skip this patch entirely till you follow the process allowing the
+patch to be tested.
 
+Please kindly resend and include all necessary To/Cc entries.
 
-Total patches: 7
+3. Commit msg: Don't explain what you are doing, but explain why you are
+doing and why this is needed.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> index 2e20ca313ec1..cdd6d19876d3 100644
+> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> @@ -66,6 +66,8 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  qcom,slv-ctrl:
 
+It does not look like you tested the bindings, at least after quick
+look. Please run `make dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
+
+Awesome, so you send untested, broken code skipping necessary mailing
+lists so even automation won't test it. :(
+
+Best regards,
+Krzysztof
 
