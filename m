@@ -2,63 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A69731F67
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 19:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6014D731F87
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 19:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjFORkk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 13:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S229773AbjFORzN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 13:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjFORkh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 13:40:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADB8271E;
-        Thu, 15 Jun 2023 10:40:36 -0700 (PDT)
+        with ESMTP id S234708AbjFORyv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 13:54:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1262700;
+        Thu, 15 Jun 2023 10:54:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A812161699;
-        Thu, 15 Jun 2023 17:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A11C433C0;
-        Thu, 15 Jun 2023 17:40:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6687D60BB5;
+        Thu, 15 Jun 2023 17:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25FDC433C8;
+        Thu, 15 Jun 2023 17:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686850835;
-        bh=vqU6dirgEC8/IAf15RrIFka6wBf5PWMJGHsHVuhG1i0=;
+        s=k20201202; t=1686851689;
+        bh=E095E2E+VR+02jy+1Q8NMseLgVQlZJG8SbBWQl50WwA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QRJwE12qPoIbZk/MdTsvAkT23bwzOBP63RT4WjdWZVAQP9sUeRlMJw3JrJ5DjyPqx
-         SCy+zvs1/Ovc+CtizzMuNkWp09RW9wYgApxu7B3bK+GYV6kPKsc/4lfaxJa5HVcgr1
-         uoxSLaTcvWtzXFesIgY4rQ+6Mhvl5vYE9UYHKU2mjoPkS9HA07+I/zdwP1Q86CXk3F
-         QZfkjURlR1k/oxD5nWT6z4t/K+omYNrsldwUcCat6vvGVfsfg3oZHwRsTzjO350F/z
-         La+NP4tiGhJxbEXDAAfaywliR0YnN25XRjxhPg5Oa8BU8T0Q9Z0gHfVjHGmFRsd2qy
-         dOlm5sAKels1A==
-Date:   Thu, 15 Jun 2023 18:40:28 +0100
+        b=E7FR2dghDPxJlV4F0bxJPGW1SrmbIn1uJ4woSz22XNREnGOm+aYCoUz707nKCNWmU
+         qKb6/ab+k5Urr63smCYYaFRhN7aDI6k9g11/Mk8JnsP7Ua8C9cZBXeRXfgWGpfPhX2
+         zzG4UTqTwkMHWgjCl0mYiIQ9GN2/aAcIswTIZtq2e+Y2QOMPlG5DkhMsjmGwzjLdj2
+         CH+df8Dp1v96usEm7yiPdfeF4h4kF8+mDy0kGuzfhhNwFHOD2unxXW0ZI9rqwsWmsj
+         W+3Lt3wfRuUpGQMHJEE9h9yQxAFtLWZU3ub0Kb7/eFVFG7S49V0YFtpNgre1QNUpwS
+         wJ1xmGO+RYo/g==
+Date:   Thu, 15 Jun 2023 18:54:43 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Valentin CARON <valentin.caron@foss.st.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: spi: stm32: disable spi-slave
- property for stm32f4-f7
-Message-ID: <1e831d7c-cb38-4ac3-ba53-1fbb20423202@sirena.org.uk>
-References: <20230615075815.310261-1-valentin.caron@foss.st.com>
- <20230615075815.310261-4-valentin.caron@foss.st.com>
- <479bf05e-342d-f94b-87f3-4cc0a95fb01a@linaro.org>
- <b25d30de-8a22-b5ea-e58c-78b3d55b3cac@foss.st.com>
+To:     Praveen Talari <quic_ptalari@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+        quic_vnivarth@quicinc.com, quic_arandive@quicinc.com
+Subject: Re: [PATCH v2 0/3] spi-geni-qcom: Add SPI SLAVE mode support for
+Message-ID: <7cbb220e-997f-4de5-97c8-2a2b3a9185f6@sirena.org.uk>
+References: <20230615070706.18322-1-quic_ptalari@quicinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s0RwalaAUfUSjMSq"
+        protocol="application/pgp-signature"; boundary="iZkYj92B089URvNK"
 Content-Disposition: inline
-In-Reply-To: <b25d30de-8a22-b5ea-e58c-78b3d55b3cac@foss.st.com>
+In-Reply-To: <20230615070706.18322-1-quic_ptalari@quicinc.com>
 X-Cookie: You are false data.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,37 +61,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---s0RwalaAUfUSjMSq
+--iZkYj92B089URvNK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jun 15, 2023 at 07:38:36PM +0200, Valentin CARON wrote:
-> On 6/15/23 15:36, Krzysztof Kozlowski wrote:
-> > On 15/06/2023 09:58, Valentin Caron wrote:
+On Thu, Jun 15, 2023 at 12:37:03PM +0530, Praveen Talari wrote:
+> This series adds spi slave mode functionality to geni based Qupv3.
+> The common header file contains spi slave related registers and masks.
 
-> > > STM32F4 and STM32F7 can't switch to spi device mode.
-> > > Forbid this property with compatible "st,stm32f4-spi".
+The more modern terminology here is device mode, pleaae prefer to use
+that where possible.
 
-> > Just to clarify - driver cannot switch or hardware does not support it?
-
-> Driver can't support it right now but hardware can.
-
-That shouldn't be a restriction in the DT then, please send a patch
-dropping this.
-
---s0RwalaAUfUSjMSq
+--iZkYj92B089URvNK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSLTQsACgkQJNaLcl1U
-h9CKjAf/WPDS/CcbstHeaOr6BdtAydD//XXBQyx+pfD0IPD95FHAUwMB6zSldA2z
-0J7gV535K/RlxZ+S93Tz3zSkV4lEM6K/1ytKXT1ZS7Nv/McWwey6ByuP9uHTlDWX
-thCjOJIQOFr6SwbmYsCA9loj6j1NAVuPei4t6RO7lWW3GGz93KoxexyqE9IsnEmz
-+uZZ/2Ut3PgkFoduYs3LCwuwYcRWO5/xutqVE9WAXQXduZbpiHJuRb2P4AcDx6t2
-qcuRGnZ5O+1xO+eV0r0U6GfuDb3T6vK52p/W1pkVWVQlUdC/IbBIsERAK+gfyy6j
-W1scy4S6HNlIbra4E+lhnQIQ9KH2Og==
-=URnM
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSLUGIACgkQJNaLcl1U
+h9CXwAf9FCQdRel9BXQRnVWzWs9p3Ipyttl0Iri3279Nsy2RoQM+i95fGPm0JtbT
+2jF19FPHusIbBSzfdHy51SX+c55NctHGAgdktodikBBHl2ZpXPFJG3/Hp4VG3/ty
+rE0pRx/BqEwf8A6qwrBzwtqquC1SKLzwVJmk32NacbJOSE1M8dg6npEUsqNuIz2i
+SKQRc4p7/U4iIieRDekYdu4ryQmAAYgLAPYP6tHjbhIhch3p+17yt2ZAmxk08A8w
+ztl4bxpT4dVYYGDNtajIKMuHOHtQW9FdJoa855YvP+YEt5OggpTkydR3nMOshMQm
+ELhSw+prkU337rx7xybjJ4S+Zysveg==
+=UEjY
 -----END PGP SIGNATURE-----
 
---s0RwalaAUfUSjMSq--
+--iZkYj92B089URvNK--
