@@ -2,112 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD347319D3
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 15:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAC3731A2E
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 15:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240568AbjFONXN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 09:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S1344488AbjFONiY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 09:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240465AbjFONXM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 09:23:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7387172A;
-        Thu, 15 Jun 2023 06:23:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 692E06317F;
-        Thu, 15 Jun 2023 13:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728D7C433C8;
-        Thu, 15 Jun 2023 13:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686835390;
-        bh=t6/5UDP4RwExGVEdFU2AtHIctJ/fcDBjkxLPyQsjmHs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D+/SQTuckZEp+iItMgxmneOtJMZLnJ2Wb+uQxOyWhiLuoLTg/yUA6otdRKgciz9e6
-         +5X5s/A5KhGJl11WV8R3j+6E5VOJnWoPcG21gtqTXUzT0FW+dGPhqbBASLlLgHomga
-         N6F//30/wmTtY7tuI9poQ/m0B+DMIlvPA/5KcigY/MXk3B/r9o4LyZIO9AdS+opp8+
-         +ZOFECPf3PQjrWCVuovLm8sAxii0CXNzt236i35s0EpqHPgSo7LtCLK31q7XeeGlp6
-         yNGLv3JT+LQE2zca5jDsRy9icDhbH0KBfR6QWb0HgaJaEs2BU5uH0rHMNaqKf90qYX
-         r63yamcFJF0/w==
-Message-ID: <e9634d2a-f8f9-666b-abf6-65e676205203@kernel.org>
-Date:   Thu, 15 Jun 2023 15:23:04 +0200
+        with ESMTP id S1344486AbjFONiC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 09:38:02 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8073AB7
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 06:36:21 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977d7bdde43so167883766b.0
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 06:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686836179; x=1689428179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NxhJfd2ll8nAFEQrVCzLMvEn8Jp9xjM7Kxtgv+YXz0k=;
+        b=dsjqIHaT5wS4DUA/yheEW/2GYzurEmgUgIdHq8/vnYdTrOHAuOM5AodlutyPp2pYRJ
+         L7WPq+XRdmZm+UUmGW728WTZtYZNBCJnUrTz4XR2sQq+h/myyiPXeBMI18MhZlfyPnpG
+         Y0Ja9e0CPdydOd+P1qtJ2CYne6/7V+ddBVCuWqJ1N5IFdAENJ6MvG5NSPSM4HBcpUgTH
+         ylPIm1TV3B+SArtmR0ttkf/wzafizoa9pOtEDljmAYnlKzH5aLQD88yY0BnS7m6auj9h
+         V+iG+8YD7YpbdxhfDMX58LzUmPeXtbSu4ytX2Or+cxFPY0nB9ccu5RQsMckZpf7lYy+t
+         zNHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686836179; x=1689428179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NxhJfd2ll8nAFEQrVCzLMvEn8Jp9xjM7Kxtgv+YXz0k=;
+        b=Y66d2pIbcMp8VEXfWhuiNXE1DcR9V7yVGFeLugXYuwFznhpTFnLU8+59qkONw/grrk
+         O8yHhMmVgKvMRoNe69QjeOOhK1rD9MBkYKbSN+oAIKlTSTpxnlpCFFEELf7mG7OEMDfn
+         umttpcJ2NCyLSfJoxackCsr4kxux8PoyZ+A91qqfLO2nN+KuXx2f96swTu3M9w+OqtFy
+         VIgW9/BO9kEShpQUB4qBxRET8HhNndHeQYNhf0TLjpmxTO6GHwrpcbgnC9Pel/1/kHjs
+         Oe/4msi8mAGwNGpEAo6r9AY+oHjoisy1F1oFXgWNisjGhBD1o8dx1hs1hpCsJyi9P397
+         qrOg==
+X-Gm-Message-State: AC+VfDwPxyB0hnCPtP+7ZY0Y/FIiUEPaNsQiSxmgtBL9rTLE97AaOy8m
+        oQEh/ng1UxRwIwb1fw3DaP5BCw==
+X-Google-Smtp-Source: ACHHUZ5G2KDVI97s5jDk0HjvRJ8KLjMmTYTO6401STaAZBen4SFHRcAjha9stATuA+Qbd4ZYA9sCEw==
+X-Received: by 2002:a17:907:948a:b0:978:9235:d450 with SMTP id dm10-20020a170907948a00b009789235d450mr5096371ejc.9.1686836178947;
+        Thu, 15 Jun 2023 06:36:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u13-20020a1709064acd00b009787ad3157bsm9470074ejt.39.2023.06.15.06.36.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 06:36:18 -0700 (PDT)
+Message-ID: <479bf05e-342d-f94b-87f3-4cc0a95fb01a@linaro.org>
+Date:   Thu, 15 Jun 2023 15:36:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/3] spi: dt-bindings: qcom,spi-geni-qcom: Add SPI
- SLAVE mode support for GENI based QuPv3
-To:     Praveen Talari <quic_ptalari@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-        quic_vnivarth@quicinc.com, quic_arandive@quicinc.com
-References: <20230615070706.18322-1-quic_ptalari@quicinc.com>
- <20230615070706.18322-3-quic_ptalari@quicinc.com>
+Subject: Re: [PATCH v3 3/4] dt-bindings: spi: stm32: disable spi-slave
+ property for stm32f4-f7
+To:     Valentin Caron <valentin.caron@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230615075815.310261-1-valentin.caron@foss.st.com>
+ <20230615075815.310261-4-valentin.caron@foss.st.com>
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230615070706.18322-3-quic_ptalari@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230615075815.310261-4-valentin.caron@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/06/2023 09:07, Praveen Talari wrote:
-> Set this property to configure QUPV3 as SPI slave controller.
-
-1. Please use subject prefixes matching the subsystem. You can get them
-for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
-directory your patch is touching.
-
-2. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.  It might happen, that command when run on an
-older kernel, gives you outdated entries.  Therefore please be sure you
-base your patches on recent Linux kernel.
-
-You missed at least DT list (maybe more), so this won't be tested by our
-tools. Performing review on untested code might be a waste of time, thus
-I will skip this patch entirely till you follow the process allowing the
-patch to be tested.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-3. Commit msg: Don't explain what you are doing, but explain why you are
-doing and why this is needed.
-
+On 15/06/2023 09:58, Valentin Caron wrote:
+> From: Alain Volmat <alain.volmat@foss.st.com>
 > 
-> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> index 2e20ca313ec1..cdd6d19876d3 100644
-> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> @@ -66,6 +66,8 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  qcom,slv-ctrl:
+> STM32F4 and STM32F7 can't switch to spi device mode.
+> Forbid this property with compatible "st,stm32f4-spi".
 
-It does not look like you tested the bindings, at least after quick
-look. Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
+Just to clarify - driver cannot switch or hardware does not support it?
 
-Awesome, so you send untested, broken code skipping necessary mailing
-lists so even automation won't test it. :(
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. (spi: dt-bindings:)
 
 Best regards,
 Krzysztof
