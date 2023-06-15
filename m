@@ -2,94 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D929B7311B5
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 10:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B587313A7
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jun 2023 11:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234027AbjFOIFw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 04:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S244174AbjFOJXa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 05:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFOIFu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 04:05:50 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039541AA;
-        Thu, 15 Jun 2023 01:05:48 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6XFam007602;
-        Thu, 15 Jun 2023 10:05:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=rWAsqAnk1NOFfSrch2LiFEFQGq9N0Hnm6C4sCs+M3D4=;
- b=31hrIaUG+w5OmHV87NzjL1XMuVANMHUndDS+geuV4yaGOSRyXOQRfrlPlvbdn+erMk7E
- seB4ccjWnvillD/+0LWQqybK3wYbzQ0F/izSPJp+NRdgSK5DI4Mr6gWxIxcgZOdLuUzr
- 2z9XHUE5ln/oMt3V24fhGcdbX0kC8U7nfGLX0K+IVs6YJZ39NXk2UAkJOWVsNjk5I516
- GYI+lm/SOr36nXOntV77sX9+UlnVpI66N0ucc9sf7C+sNe/62ElSfEJZfQT+6cUrnIeH
- 1FHYqTd3vTsl4+AfGLyhqFH6jw9P74Qbr16A05ZXcAY0wxa/4m5aDyF744wdhOqMPmSA KA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7s1maacb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 10:05:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 343B010002A;
-        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 27FA2216EC2;
-        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
-Received: from [10.252.8.64] (10.252.8.64) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 10:05:38 +0200
-Message-ID: <2785de74-69b2-8ebc-09c9-f834adb870c0@foss.st.com>
-Date:   Thu, 15 Jun 2023 10:05:33 +0200
+        with ESMTP id S244584AbjFOJXY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 05:23:24 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C99B2966
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 02:23:21 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f736e0c9a8so14043895e9.2
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 02:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686820999; x=1689412999;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1eJ4rnNncWrFdm7bzEMvmmaAxoGgUg9BTjanAGULWsI=;
+        b=lNkaJMTARfH1VVBY7ioewtuj5T+/397Y5tzHIR0/jHDP8W0qjTF7ROKZKBzio6ZDtM
+         wz85yYf9rauahRbspJ9s3ynh/jlbRjglnIKT+CsyjlIzWwS5TmC5AZD5xnfAUDvB/RJB
+         LggpzGXbhIzCo+neKd43+fZoTWVheIVOYJvXGAVa7hpXDQqhlY8/1yZYNRMzXkX1z0Jb
+         mfirEGq/JuIzsmUSLje77zdGGJE9e8Ym6jDOJrS1VD1W2R98ElQCo5GmEcifSBefY5ld
+         FQvcvqT4EQ8BJCGxkUbOFE9ndvWoHgK9LMbosqKz80XUC1GS5pCFuonQbF5iwsyiYn27
+         GE0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686820999; x=1689412999;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1eJ4rnNncWrFdm7bzEMvmmaAxoGgUg9BTjanAGULWsI=;
+        b=SAxhdCxJWNzCf743hOYYW3G62sUncTP+dHg/s78DD56jfWgnQTayK+/oQf1eAAUSWd
+         9AurW1w7pPYR1X2jrmoOZXyqCVvdCLaIINLaJLgNvSEh9WnVaOuVYFw6cQhY2zRvIQ/q
+         nZXBRfAJtL9z6MixCpkE2qcfTB1LCcBDfLridLmr7M4x10jGUfaJWAtWheSyp5ezS8Yk
+         iTvx4YYIMOI1hXEQ+++Lc1Spko2eFo5KG4ttaxijGlqQRVuIGGv+r/mVMyOmULI6ervN
+         jW702qAsQBkdASvYV9a6tv5uJ4R42kkVRbYElFvFo34AnsbOgITggAhoTezhZJGQffHI
+         Rq9w==
+X-Gm-Message-State: AC+VfDzeKEhmVcG6L/R1CwIvfSwgLrO+s4uhW4SWIZAlFpOFsr06Vq0K
+        qEMJ66oBpja9RFE0JQitlXCA/w==
+X-Google-Smtp-Source: ACHHUZ6C/7h2raAbsdWfbPiQPMNqx4kHVtCF3NETr54+UGit+TWqvkF/22lfW66ubm4EKfaSeLbUFA==
+X-Received: by 2002:a1c:6a18:0:b0:3f6:a966:ee8d with SMTP id f24-20020a1c6a18000000b003f6a966ee8dmr11361233wmc.26.1686820999555;
+        Thu, 15 Jun 2023 02:23:19 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id l8-20020a1c7908000000b003f7f4dc6d14sm19658140wme.14.2023.06.15.02.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 02:23:19 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Thu, 15 Jun 2023 11:23:17 +0200
+Subject: [PATCH] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from
+ dma_request_chan()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/4] spi: stm32: add spi slave mode
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230614102628.202936-1-valentin.caron@foss.st.com>
- <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
-Content-Language: en-US
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.8.64]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v1-1-6da9bf2db4a4@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAITYimQC/x2OywrCMBBFf6XM2oG0kmj9FXExiWM70DzMtCKU/
+ rvB5TlwD3cH5SqscOt2qPwRlZwa9KcOwkxpYpRnYxjMcDaut7jmIgE1Xq01uBVdK1PEl3xRi+D
+ ESfAdcsRSs2ccabwE77xlctCanpTRV0phbtW0LUuTpXLb/0/cH8fxA7kKpZqUAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1251;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=e61ddUxKVebTptBbisyS/Wr1T7LFFXf6wr3UGnWvpKY=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkitiGXiHO86mu7QvqOwC0OnKaPO//C+YLvVBvmcp7
+ ijTrhBmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIrYhgAKCRB33NvayMhJ0Y8aEA
+ CUDTxQcSCAJscYUDzIxaLaeeelc2MzGtpM/PDKENWhBEgHkYKTPuCQxxhILZ7lQj1WLEW1+x1HuqLI
+ EaR5FosiP+uwEN6bWCjS8DaqNPsh9Fovy0r1auSCYXy739hxzPOY1ANt1GVOl4TfP+WGdbL6913QH6
+ ly9qT/jClaYomhtUzTlIBOqo+fEwMI1yhtNDV4bkQww1K8Osd9cgQY29rRbkllaSS/+yQGnvIQ3ASS
+ yXxbKoPxSkMoEi+1Em5leQLktTPxGIgH8zi7mlYgk5E+OAqvAbOLj+eqRcvF6W/Y7si6dYide8wz0n
+ 3Dl921NMJi5BZlmSCszRrgK/a74zjkyLCmi7LNzqaK1uY314PIY7cEROcSw7+zkQRL10374l8BzUf3
+ sNKG+truLBNhyuQv3fRuQKr1GdPTVXtjb78ZnAJEzMr+j0kYWlseOzRMWZ/FarEDkB8CHjDcJxiihu
+ LCiTQ9Fi+WfiZ0Xz4Ny95HkGYWNia5tgGUApYckUJCKNNmkR3LlmU8J7JShx4pUO6xi/qdfNUPyA4U
+ bJj5IAXeLPW+77oz+bX130fDPS3kJpQsyQjKxjb+/UkASdEiKIsgIf7fepuO9s5t0CtQ12R7ieEVJF
+ NZ4ll5PIjYAnGdIqAUE2rybPSKLORzMspXEa+yD05nr08fQc2BFF++uThNPg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Now spi_geni_grab_gpi_chan() errors are correctly reported, the
+-EPROBE_DEFER error should be returned from probe in case the
+GPI dma driver is built as module and/or not probed yet.
 
-On 6/14/23 14:16, Mark Brown wrote:
-> On Wed, Jun 14, 2023 at 12:26:23PM +0200, Valentin Caron wrote:
->> STM32 SPI can operate in slave mode.
->> This series add this functionnality in spi-stm32 driver.
-> The more modern terminology here is device mode.
+Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
+Fixes: 6532582c353f ("spi: spi-geni-qcom: fix error handling in spi_geni_grab_gpi_chan()")
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ drivers/spi/spi-geni-qcom.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Hi Mark,
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 206cc04bb1ed..0ebcc5fe92de 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -661,7 +661,8 @@ static int spi_geni_init(struct spi_geni_master *mas)
+ 			geni_se_select_mode(se, GENI_GPI_DMA);
+ 			dev_dbg(mas->dev, "Using GPI DMA mode for SPI\n");
+ 			break;
+-		}
++		} else if (ret == -EPROBE_DEFER)
++			goto out_pm;
+ 		/*
+ 		 * in case of failure to get gpi dma channel, we can still do the
+ 		 * FIFO mode, so fallthrough
 
-Thanks for your review. I have resent a "v3" with this improvement.
+---
+base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
+change-id: 20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-9a97cb6b5ea6
 
-Regards,
-Valentin
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
