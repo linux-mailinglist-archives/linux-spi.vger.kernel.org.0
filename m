@@ -2,97 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100D0733572
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 18:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0947335C3
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 18:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjFPQJY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jun 2023 12:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S1344976AbjFPQR7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jun 2023 12:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241782AbjFPQJW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 12:09:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BB22132;
-        Fri, 16 Jun 2023 09:09:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF6E1624C5;
-        Fri, 16 Jun 2023 16:09:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38088C433C0;
-        Fri, 16 Jun 2023 16:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686931757;
-        bh=35IP0qnBgRimZZwP/gdFMBYC6RjVrtz/V/Ojd+z4dNs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=B2R4R8QoBngnYA6Pf3b/FMfmP9iwKf08axcoCmxF9kr1cL2mgaJY2WEaGG4ssIVzC
-         tqU4sCg2TOq5jO5CKSA8w5CYTc3T498aJMlEBZS+BLKZKZuq9N18yI37FdVGAiI5ZJ
-         sdG5NExepz6kWdE6MX1Y/N2d8EaFtjny7p1t8LDG1sFHDJsyysgntGfcaK2Mf+aUDE
-         PjWTHPiXzylGkpJoUWqixtz6zqk/vm/EFAmZyUcQM1yHz/xTdzYWRAH5aVEPEjHS6l
-         nfmcIGmgAe3xqXmcVG/UYNGl6zCgitDmfdpiv5u93C/vJCDTZ1sqS2H3RE2fIh2Svw
-         RmWIGD33PgVfQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
-References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v2-1-670c3d9e8c9c@linaro.org>
-Subject: Re: [PATCH v2] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER
- from dma_request_chan()
-Message-Id: <168693175488.294083.14854932147688937012.b4-ty@kernel.org>
-Date:   Fri, 16 Jun 2023 17:09:14 +0100
+        with ESMTP id S1345019AbjFPQRk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 12:17:40 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1066C46AD
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 09:15:39 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686932138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5F/RWcmHXxlm2EZb3KACT2rj6ZLFMEn3BsMLoTGYuJU=;
+        b=k+BZxRHU/qUDi2X382+shZi7QedN/LrX4yIogLVF7XFERCsvNtWGSKqpirfyqXZLwmHsI4
+        wAh21QaCznq5A07tcugVgw5qWi685loVochVk+d2iJbHv5FxlX+zuO9ChhmKIGtTS8gL7e
+        pfGKgjVrcCBB6PLUNYNKE1H8rT27biZMpzWjaqlJTitN+DhJMVYLl7FfaIqQx77uEvijhT
+        aiSBBpPjvTYdgaG+5/E4YVaH8a2a78HetByjvGWIAJuczwmIN3FZpDJ0tLbxJfzWE1UeaL
+        zjpsLw0BL4fk0YEEJzqj2SeCOrUx3v9mjg3L0hpX351Wq2Kz/mk0RWURZI94yQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E078240007;
+        Fri, 16 Jun 2023 16:15:37 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 18:15:35 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        linux-spi@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: atmel: Prevent false timeouts on long transfers
+Message-ID: <20230616181535.032bf9de@xps-13>
+In-Reply-To: <89439569-4fc3-4f5e-9392-4ed92ecb62e5@sirena.org.uk>
+References: <20230616141225.2790073-1-miquel.raynal@bootlin.com>
+        <89439569-4fc3-4f5e-9392-4ed92ecb62e5@sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 15 Jun 2023 14:51:45 +0200, Neil Armstrong wrote:
-> Now spi_geni_grab_gpi_chan() errors are correctly reported, the
-> -EPROBE_DEFER error should be returned from probe in case the
-> GPI dma driver is built as module and/or not probed yet.
-> 
-> 
+Hi Mark,
 
-Applied to
+broonie@kernel.org wrote on Fri, 16 Jun 2023 15:20:27 +0100:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> On Fri, Jun 16, 2023 at 04:12:25PM +0200, Miquel Raynal wrote:
+>=20
+> > -#define SPI_DMA_TIMEOUT		(msecs_to_jiffies(1000))
+> > +#define SPI_DMA_MIN_TIMEOUT	(msecs_to_jiffies(1000))
+> > +#define SPI_DMA_TIMEOUT_PER_10K	(msecs_to_jiffies(4)) =20
+>=20
+> Given that we know the bus speed can't we just calculate this like other
+> drivers do (we should probably add a helper TBH)?
 
-Thanks!
+I agree we should probably have some kind of easy-to-use helper to
+derive a decent timeout value. How do sound the heuristics
+proposed here to you ? That would be:
 
-[1/1] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan()
-      commit: 9d7054fb3ac2e8d252aae1268f20623f244e644f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+	timeout =3D 1s + 4ms/10k
 
 Thanks,
-Mark
-
+Miqu=C3=A8l
