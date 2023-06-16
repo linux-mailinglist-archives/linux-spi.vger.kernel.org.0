@@ -2,68 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321037325E5
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 05:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE0C7325A7
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 05:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjFPDhR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jun 2023 23:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S232839AbjFPDKX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jun 2023 23:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjFPDhP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 23:37:15 -0400
-X-Greylist: delayed 4212 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 20:37:14 PDT
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5681FE5
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jun 2023 20:37:14 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 98070607E4; Wed, 14 Jun 2023 07:56:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1686732830; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=gcdcxTDTcoTRKsSJDvhHt5S9RHMf90wA8v8AV8IdUdAJY/+L6DE+EHjA8XV5ucF01
-         EPYZI0xkCp18+iN+L9NAxr5tPqQmlMnPrp/XXQKhjfeKNULmN6Tb+SYIfOVrMCBPoR
-         zqBm/1mkw7le3O7lJbAMYsXIfIww5bjsS721ZkIcPSpMnkVaQgchs6KNVlBdUz0j3O
-         EnxEZai3thH+Bbtji+6dL3DD5QdAzNmpYXGf6O965KDQPrr1TeGz1aalE79gh7Vgey
-         dJvEbmTsWfd9Ki67VDbCGBPC77utNESmXIghaE+7FoZMs5G2RTwFFiMVGJxuS2T3u+
-         Ic99BghzerA8A==
-Received: by mail.durme.pl for <linux-spi@vger.kernel.org>; Wed, 14 Jun 2023 07:56:05 GMT
-Message-ID: <20230614064501-0.1.2h.aynv.0.m4a0ilie0h@durme.pl>
-Date:   Wed, 14 Jun 2023 07:56:05 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+        with ESMTP id S242303AbjFPDKV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jun 2023 23:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B295297F;
+        Thu, 15 Jun 2023 20:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F72626E2;
+        Fri, 16 Jun 2023 03:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51800C433CB;
+        Fri, 16 Jun 2023 03:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686885019;
+        bh=UcNvclACoiI+QJfVHv1h9Z+SJO+hTeU6RhdvVRkCTOI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ZJGtiIYJ7TPHlfIGymhLDl6Dg3Ig/nFfLvDNgqU651BiqhcUlGyaeZovuusBYyiNR
+         I3UfeyjpUx3tyNw0D7mjoYyxkEZ5VJ6z+lCHV2KdSvQ8rYjSPAtVkjlShgJeHmQjXt
+         FKsT2QBqIl298Zk82bjpt9R2xKVsSiS4w7aP9jo32MeZVA6f5dS3STo1aH1vwNY/HG
+         ly2cTQPJbAz74WGdaatx/F475sC9hw/koS3k1+ng8IvtiyInrTlUMlXZN81z9+DU8J
+         Bgop3FbVcyfvKEtWsgLjOZHpcE6CE+unGYInrbOF2BGXD5qsJq3luU1r+k0yh7okpQ
+         yrANJ2FPf9Lng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 38DBFC00446;
+        Fri, 16 Jun 2023 03:10:19 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.4-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230615114344.B63DFC433C0@smtp.kernel.org>
+References: <20230615114344.B63DFC433C0@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230615114344.B63DFC433C0@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc6
+X-PR-Tracked-Commit-Id: eee43699217504ba69cadefc85c6992df555e33f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b7feaa490b3ddeed8801ead5e92e647439ce9e65
+Message-Id: <168688501922.31465.1769445161787050980.pr-tracker-bot@kernel.org>
+Date:   Fri, 16 Jun 2023 03:10:19 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+The pull request you sent on Thu, 15 Jun 2023 12:43:36 +0100:
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc6
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b7feaa490b3ddeed8801ead5e92e647439ce9e65
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Thank you!
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam
-Krystian Wieczorek
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
