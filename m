@@ -2,73 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F93732FA8
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 13:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425D973316B
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 14:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345321AbjFPLSQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jun 2023 07:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S231286AbjFPMmZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jun 2023 08:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345308AbjFPLSO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 07:18:14 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84FE212C
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so5022005e9.0
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
+        with ESMTP id S230294AbjFPMmY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 08:42:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DEA270B
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 05:42:23 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30fba11b1ceso514291f8f.1
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 05:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686914291; x=1689506291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
-        b=xO9S4qPH++KwL3bqmpqNIouOhxbgRJ6SxHNQK/ye2vn8zyZyyVWE0A8Fp12TPe5UEm
-         auhGwcNjhXlWmq7Z/IdqpdZbQkKk8Dml+ZcRR44APMB4R0kI3zvQIXbdbpPDxieV8yy3
-         YUN8nNjIG63V6OC1046j6gB2kYhjfS3Yi4uV54gq2eRTC7+ihj6Ja8OPu3PIWiKMjPjH
-         G5wW5UmtxjC9eoDQvYkHUMmCLvuG6T8Ls2v1sidokHKLWLLYphoIclz567/lbDY8nQgm
-         MC1xP36ucCdyTuIXwAZbqlb6aX3l8SyGtYlvJdvuYY239/r5sjTXPcmnRUVtUw6qLzH9
-         u1Ug==
+        d=linaro.org; s=google; t=1686919342; x=1689511342;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v8uzMMjWe46SAmdDzMqX5YWtpFtnDiQ4smOZhMy24+I=;
+        b=Puygmex/Le/2lHcv0juVzmwfYjsnB2viZ4DBPUEA9muFiZW6tqQE8tX3Ec2ulJTDWC
+         vjt7SEaarZ2p5AOZ6iIIXjOTx/w0Jg7kfbXGs63prk3VC+FNxZM0YYfQKvHurlFrjhZQ
+         ZkOA68l0XGxifchG4gWlMi5bABIcMEtnoby2P68LXebIaWJqJ9u63kpd0AjTFRkupbid
+         LQfAgCA+/yDsW1QJx6WMS1eyPV5s6WOWNXCq8i6owvCpB7Q7UPCOcsAPXlhKmPw5XpaD
+         x+wYVh117UF5kwxHO97yS7kdtxpmiRkFsM95r2hpt1a5MMZwO1Mw7WVY4DmQrr/vaK2o
+         ldXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686914291; x=1689506291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
-        b=kffJlqCZHv9swsvug8FhOvLd0D/hT9BOrQClb/xtqbaFoqqRrB1ttGTBq90LUaJX3e
-         R6HjQ9noEzh+sYFh6I6KKoPk3RcZdigyMBjKzLxKEZ0QtfTdsO334RH4lmzRoTKOleQM
-         r5TgkeYnkRjg87CGNN+jvad2pLghm+nsR7R4nb+rNjesTX118GhwEH5QTQO4RuvywC3t
-         5+UEWbcgrYP6+ccfjrHHzaZe85/thgKAnqPab9Y/+MWRHzNmEdH1mFe51M2kiclpUDa+
-         LQIMrfmGzAtB4Rg4l0ADIiTLHJyEQbo3kn9UkDI3L7BnBEQrU0clagNfpDZo8FZV3vQB
-         IZPw==
-X-Gm-Message-State: AC+VfDzqSyxHM+66eMzlw5cvChoXOfQR+S3R9sV+y712VTyZri7Wwd41
-        tJR+oeqQ+Sm3rA6mxHNXU0vVPQ==
-X-Google-Smtp-Source: ACHHUZ4dQlbHeAuRZeLC4Y8OzZsImTHLTf2rFlPkoywMcf0wXUYdWyJ5nI7ueJAs67y7U7OWDEJTlg==
-X-Received: by 2002:a05:600c:329d:b0:3f6:eae:7417 with SMTP id t29-20020a05600c329d00b003f60eae7417mr6554134wmp.1.1686914291372;
-        Fri, 16 Jun 2023 04:18:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686919342; x=1689511342;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v8uzMMjWe46SAmdDzMqX5YWtpFtnDiQ4smOZhMy24+I=;
+        b=HqHMrr2sOrzLmzYCEjfjEORYWtJ9X0ZBje8qORUIFdruMj5ux7Yfnt93bOEfCE547r
+         spqTT1MLJj1lyn75nXN77KYG74uqfAp2seCDZMULpf0RGwVWayhSJrL+yGzNB7TqT5TS
+         A1HhzpA9EMa0ZE1q1Kwm6fuxvhB64B05RYiFVLgAw7b/KH6pCFfoHbLXpAleoGzWi7g3
+         FjB/YDrGGr9HuRpsFmRcY5uD2QxP4rOpti16671bgyxQaRV7S2BzAwuz/Roi7mTQbjXj
+         zrg3w4MHQr/YV52VxQmTbvTfguyOQGWBHTkhLTt4B8PmjEFpddsELuFAqgJoVpKQoQF0
+         rn2A==
+X-Gm-Message-State: AC+VfDwUDpHh6NcS+UN1fn/dyJ5yde/rscnwMvhY2V8E+TQMFIEbt74i
+        b36EVUc/nUSlBvXuEbCAXE/gwbAlThrIihxiKKA=
+X-Google-Smtp-Source: ACHHUZ4xjcfxF8W7l/xaBFkIpFjyeZWrqZyz8rzUO8tbnkTnoqTS96czzWFlycjxiUAdvBPtzJ8p+w==
+X-Received: by 2002:adf:f443:0:b0:30a:c35d:25d3 with SMTP id f3-20020adff443000000b0030ac35d25d3mr1577154wrp.52.1686919341826;
+        Fri, 16 Jun 2023 05:42:21 -0700 (PDT)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n16-20020a7bc5d0000000b003f739a8bcc8sm1917075wmk.19.2023.06.16.04.18.07
+        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f8f9ab6f30sm1117202wml.20.2023.06.16.05.42.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 04:18:09 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 14:18:03 +0300
+        Fri, 16 Jun 2023 05:42:20 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 15:42:15 +0300
 From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>, tools@linux.kernel.org,
-        kernel-janitors@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, smatch@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from
- dma_request_chan()
-Message-ID: <7466cb8d-85d9-4583-af2c-3616209e97e3@moroto.mountain>
-References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v1-1-6da9bf2db4a4@linaro.org>
- <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
+To:     quic_vnivarth@quicinc.com
+Cc:     linux-spi@vger.kernel.org
+Subject: [bug report] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <abc223e8-44af-40bb-a0bd-9865b393f435@moroto.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -79,20 +66,65 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:12:03PM +0300, Dan Carpenter wrote:
-> Here is the command to search for all the KTODO items added
-> in the last six months.
-> 
-> lei q https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
-> 
+Hello Vijaya Krishna Nivarthi,
 
-I guess you need the -I option here.  I'm not sure what -I does.  I had
-thought it might mean case insensitive search but that's not it.
+The patch b5762d95607e: "spi: spi-qcom-qspi: Add DMA mode support"
+from Apr 24, 2023, leads to the following Smatch static checker
+warning:
 
-lei q -I https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
+	drivers/spi/spi-qcom-qspi.c:368 qcom_qspi_setup_dma_desc()
+	warn: sleeping in atomic context
 
-Then grep ^KTODO ~/Mail/KTODO -R and cat the filename you want.
+drivers/spi/spi-qcom-qspi.c
+    336 static int qcom_qspi_setup_dma_desc(struct qcom_qspi *ctrl,
+    337                                 struct spi_transfer *xfer)
+    338 {
+    339         int ret;
+    340         struct sg_table *sgt;
+    341         dma_addr_t dma_ptr_sg;
+    342         unsigned int dma_len_sg;
+    343         int i;
+    344 
+    345         if (ctrl->n_cmd_desc) {
+    346                 dev_err(ctrl->dev, "Remnant dma buffers n_cmd_desc-%d\n", ctrl->n_cmd_desc);
+    347                 return -EIO;
+    348         }
+    349 
+    350         sgt = (ctrl->xfer.dir == QSPI_READ) ? &xfer->rx_sg : &xfer->tx_sg;
+    351         if (!sgt->nents || sgt->nents > QSPI_MAX_SG) {
+    352                 dev_warn_once(ctrl->dev, "Cannot handle %d entries in scatter list\n", sgt->nents);
+    353                 return -EAGAIN;
+    354         }
+    355 
+    356         for (i = 0; i < sgt->nents; i++) {
+    357                 dma_ptr_sg = sg_dma_address(sgt->sgl + i);
+    358                 if (!IS_ALIGNED(dma_ptr_sg, QSPI_ALIGN_REQ)) {
+    359                         dev_warn_once(ctrl->dev, "dma_address not aligned to %d\n", QSPI_ALIGN_REQ);
+    360                         return -EAGAIN;
+    361                 }
+    362         }
+    363 
+    364         for (i = 0; i < sgt->nents; i++) {
+    365                 dma_ptr_sg = sg_dma_address(sgt->sgl + i);
+    366                 dma_len_sg = sg_dma_len(sgt->sgl + i);
+    367 
+--> 368                 ret = qcom_qspi_alloc_desc(ctrl, dma_ptr_sg, dma_len_sg);
+
+The qcom_qspi_alloc_desc() is a sleeping allocation, but the caller
+qcom_qspi_transfer_one() is holding spin_lock_irqsave(&ctrl->lock, flags).
+
+    369                 if (ret)
+    370                         goto cleanup;
+    371         }
+    372         return 0;
+    373 
+    374 cleanup:
+    375         for (i = 0; i < ctrl->n_cmd_desc; i++)
+    376                 dma_pool_free(ctrl->dma_cmd_pool, ctrl->virt_cmd_desc[i],
+    377                                   ctrl->dma_cmd_desc[i]);
+    378         ctrl->n_cmd_desc = 0;
+    379         return ret;
+    380 }
 
 regards,
 dan carpenter
-
