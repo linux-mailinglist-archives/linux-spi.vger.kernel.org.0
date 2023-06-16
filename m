@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9A4732D86
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 12:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18C7732E03
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 12:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjFPKZd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jun 2023 06:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S1344647AbjFPK26 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jun 2023 06:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245181AbjFPKZb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 06:25:31 -0400
+        with ESMTP id S1344479AbjFPK2Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 06:28:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06719AC;
-        Fri, 16 Jun 2023 03:25:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1230F2;
+        Fri, 16 Jun 2023 03:26:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8832263591;
-        Fri, 16 Jun 2023 10:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D623C433CC;
-        Fri, 16 Jun 2023 10:25:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52C5B635F7;
+        Fri, 16 Jun 2023 10:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EEAC433C9;
+        Fri, 16 Jun 2023 10:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911129;
-        bh=pT6Kk/bbYFJi3YjFoIFdzBdBxD8HJ/mXykEx2UzWtU8=;
+        s=k20201202; t=1686911193;
+        bh=gizL6bQhos79Sa4PBqyA7LxHliUG6CHMwXq5ocxr7lA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=alUxE7RfaIpzF6JkUMAQ/ZcKRhANcj0V3qBDT7fEHZCXYrxDL2tIkRDdwXx13LEwq
-         I+p3OEpueawaPhB75OW4+nIG237g/vq+nLZLv0+INVRd2v+cr4zJW/xQQLYGUAkn8v
-         GLLCRaKNgqviulYxTHOpgqLSD8VA/vaBBe80w5e5igRLZJs+i42hkSFlt7SUi2ce9c
-         bZPE2d49em/1N9JInbvSE8/qKHzWgj7Hka3zW5t2vh0BMwLwN0zC60U+5Dr2QCjQCU
-         +c/gbQDkp7pR8wTBsgPCuO8P3Qtq2kiiexBzIz3mTWg9T3zCi4xCCZg/IUVojbFVRC
-         IKuQXI2e9s34A==
+        b=X/+ve3TqwnQvqrmHzMyzTSoiSfMwM/ZuLuAhmX2CvvktejrC5lNa+yH8WmZE3EcHt
+         yqmhqqO2iyds8aqi1plYO0v9+t/1WCD1x+EawdyGO8RsO2rIDtkx9YwegFBYtEX87k
+         /+NEYYkGjq1mflNvz+zoyawfz/VNQsMSnSNK/gAmQ1keZkDjXmGp6DGVk56CFiLO6O
+         TOxfY1qXHb5KupfGhKEyK0QR7xDpFuB5CYuocwpWIzDTainfe2Mw5kwwCAY2bWYH73
+         cNrlZo01EH4t/en/zjfJKBHcPxpDYVGrY2wdvg/3p5uEy1c1EI/R9zqxm2P9AI8yRe
+         73xXSzwbG1jSw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Clark Wang <xiaoning.wang@nxp.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 05/30] spi: lpspi: disable lpspi module irq in DMA mode
-Date:   Fri, 16 Jun 2023 06:24:53 -0400
-Message-Id: <20230616102521.673087-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 05/26] spi: lpspi: disable lpspi module irq in DMA mode
+Date:   Fri, 16 Jun 2023 06:26:02 -0400
+Message-Id: <20230616102625.673454-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
-References: <20230616102521.673087-1-sashal@kernel.org>
+In-Reply-To: <20230616102625.673454-1-sashal@kernel.org>
+References: <20230616102625.673454-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.8
+X-stable-base: Linux 6.1.34
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 34488de555871..457fe6bc7e41e 100644
+index e8c1c8a4c6c82..9e324d72596af 100644
 --- a/drivers/spi/spi-fsl-lpspi.c
 +++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -910,9 +910,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+@@ -905,9 +905,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
  	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
  	if (ret == -EPROBE_DEFER)
  		goto out_pm_get;
