@@ -2,148 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8878A733382
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 16:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9D773355A
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 18:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345420AbjFPOYx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jun 2023 10:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S234915AbjFPQCn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jun 2023 12:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343743AbjFPOYw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 10:24:52 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1299130E3
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 07:24:51 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30e412a852dso579595f8f.0
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 07:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686925489; x=1689517489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bx7ROQZ0eKytOMjxCt+HG5/XsSe4FTYGId7sGxzTFbA=;
-        b=iSU9IT9wDtuk77lxJO5NHE9Hxx1LNfvQvYbEimERwiyxTtYH8pKkFhbQU2R3SrWzcF
-         pvFXDTnWHdxd6guyCGhtShV3qtRa+tusfBmX+KbfyuymRFW2obHR7rO4xVzxds9Hdpj0
-         /3n2Cn9/DQh0GNhCvBRIHUvlx5bVwlc9GjqJmaQWBRZj2oHxre2D/JMQ/77ip+l6YwK/
-         sNbYduBG49rZi1X7gvpRVrCV8BOO4r1/qaZsTIPKZIi78xGuL/DQCy0FQJ2ie8SlEejD
-         Qq5JgleSCNfzgItLvmc7a7Bt9lOarQsvejSyMsZv6UOMxnVBi7W8uauUvO7PthJ2osAY
-         FPQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686925489; x=1689517489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bx7ROQZ0eKytOMjxCt+HG5/XsSe4FTYGId7sGxzTFbA=;
-        b=aLr/lF6jQOtu7lsm5fKJsu5COtQ1oXQrWi6lwV/xbkmQwadn9f/+wdzlL9VNG++Yyr
-         pQpz8h5gvGyf40oBSDYGyBfoSMmLKRXd3PB3/5xp2KgPT66hPFoy0v/GPa9pa190w9X8
-         YmfS7UVDbfRqGbQB7tpEs3GTTkZRuQxRtMajXOyUSSaIJtQM+SUvi9Li5J75vSsaDri9
-         AG1yiduFsHDEJrAqXHOYh8RuQuJ/IYcnpW7XAY1v/TnDWW0ZTvbsK8Z+UqEdHXfoX2FB
-         4PKQtpVjQnMLLIUw/RGtSSFaKKd//mV7STfzpaAQAUSRYTf2+1motUunGUsvX44sRdvW
-         Sxxg==
-X-Gm-Message-State: AC+VfDw031nUlQU6A+dIaEyoSH66bXAbUt5/nMgUoKeBgpuayP0YHQCD
-        uEhPjM2LWqfEh2MPNkXpso+CWdfZAq+bl6YJ/gk=
-X-Google-Smtp-Source: ACHHUZ5zmYOrvqRN4wv1JGPunfWr+cohHv3xD8oiWGYmwhn6VVoGZQAxGbMmpj5tSq2/8RA9R5nsrQ==
-X-Received: by 2002:a05:6000:1a43:b0:30f:cb1f:d240 with SMTP id t3-20020a0560001a4300b0030fcb1fd240mr1461804wry.32.1686925489459;
-        Fri, 16 Jun 2023 07:24:49 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e5-20020adff345000000b0030630120e56sm23960947wrp.57.2023.06.16.07.24.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 07:24:47 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 17:24:44 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     linux-spi@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [bug report] spi: spi-qcom-qspi: Add DMA mode support
-Message-ID: <78fb1d2e-6fe3-4bd3-a232-ad6be35eaf0e@kadam.mountain>
-References: <abc223e8-44af-40bb-a0bd-9865b393f435@moroto.mountain>
- <a244d741-02bb-9d74-0a6c-1f01a6eeb360@quicinc.com>
+        with ESMTP id S245660AbjFPQCf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 12:02:35 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA344204;
+        Fri, 16 Jun 2023 09:02:16 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GBVHcm018156;
+        Fri, 16 Jun 2023 11:01:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=aM4qTlg66psxyt7MvUaMTfjlMOxNt1M83BDXPCVlrdE=;
+ b=Gh3KuXRDek8q+xUxmtZtD1eBuOoymuBv7/v6TC3Q3rw9DjPFyFWQfxvt14FXP35N7ocU
+ IJzdxdCW/niSf4ilGW4rwaXVqv8impUnXd41HsmIyLPn5/O+qevvEWZma6Qc8YUbULUg
+ +2zO0FYvO7g3USZ4F4bnEjct8yrT/3exot0scjSqDSHq6bBzS+1MugdrLA/3ZjZZq0XI
+ /vKqk/l8UENa4vl3YPGB80AG19ukpvTAoAjkCO6jKUI2Sd6+N1p7Qo/jr6HRCPDduKMt
+ ETh9dJ+cdkEROG/CtJ44Mn1KG+2wSP9c8CHiZnK8XeY39bJKr0VG82wZPKhjNYH8rmCS uw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r4pk0ejjh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 11:01:58 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 16 Jun
+ 2023 17:01:56 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 16 Jun 2023 17:01:56 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AEE3615A4;
+        Fri, 16 Jun 2023 16:01:56 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 16:01:56 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <andy.shevchenko@gmail.com>
+CC:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>, <robh+dt@kernel.org>, <conor+dt@kernel.org>,
+        <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>, <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/6] soundwire: bus: Allow SoundWire peripherals to
+ register IRQ handlers
+Message-ID: <20230616160156.GT68926@ediswmail.ad.cirrus.com>
+References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
+ <20230605125504.2570158-2-ckeepax@opensource.cirrus.com>
+ <ZIuNXQIB3j6YjYa7@surfacebook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <a244d741-02bb-9d74-0a6c-1f01a6eeb360@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZIuNXQIB3j6YjYa7@surfacebook>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: g_ZbuS0378fNogebm1OeP16CyalPar6e
+X-Proofpoint-GUID: g_ZbuS0378fNogebm1OeP16CyalPar6e
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 07:42:30PM +0530, Vijaya Krishna Nivarthi wrote:
-> Hello Dan,
+On Fri, Jun 16, 2023 at 01:14:53AM +0300, andy.shevchenko@gmail.com wrote:
+> Mon, Jun 05, 2023 at 01:54:59PM +0100, Charles Keepax kirjoitti:
+> > From: Lucas Tanure <tanureal@opensource.cirrus.com>
+> > +	bus->irq_chip.name = dev_name(bus->dev);
+> > +	bus->domain = irq_domain_add_linear(NULL, SDW_MAX_DEVICES, &sdw_domain_ops, bus);
 > 
-> 
-> On 6/16/2023 6:12 PM, Dan Carpenter wrote:
-> > Hello Vijaya Krishna Nivarthi,
-> > 
-> > The patch b5762d95607e: "spi: spi-qcom-qspi: Add DMA mode support"
-> > from Apr 24, 2023, leads to the following Smatch static checker
-> > warning:
-> > 
-> > 	drivers/spi/spi-qcom-qspi.c:368 qcom_qspi_setup_dma_desc()
-> > 	warn: sleeping in atomic context
-> > 
-> > drivers/spi/spi-qcom-qspi.c
-> >      336 static int qcom_qspi_setup_dma_desc(struct qcom_qspi *ctrl,
-> >      337                                 struct spi_transfer *xfer)
-> >      338 {
-> >      339         int ret;
-> >      340         struct sg_table *sgt;
-> >      341         dma_addr_t dma_ptr_sg;
-> >      342         unsigned int dma_len_sg;
-> >      343         int i;
-> >      344
-> >      345         if (ctrl->n_cmd_desc) {
-> >      346                 dev_err(ctrl->dev, "Remnant dma buffers n_cmd_desc-%d\n", ctrl->n_cmd_desc);
-> >      347                 return -EIO;
-> >      348         }
-> >      349
-> >      350         sgt = (ctrl->xfer.dir == QSPI_READ) ? &xfer->rx_sg : &xfer->tx_sg;
-> >      351         if (!sgt->nents || sgt->nents > QSPI_MAX_SG) {
-> >      352                 dev_warn_once(ctrl->dev, "Cannot handle %d entries in scatter list\n", sgt->nents);
-> >      353                 return -EAGAIN;
-> >      354         }
-> >      355
-> >      356         for (i = 0; i < sgt->nents; i++) {
-> >      357                 dma_ptr_sg = sg_dma_address(sgt->sgl + i);
-> >      358                 if (!IS_ALIGNED(dma_ptr_sg, QSPI_ALIGN_REQ)) {
-> >      359                         dev_warn_once(ctrl->dev, "dma_address not aligned to %d\n", QSPI_ALIGN_REQ);
-> >      360                         return -EAGAIN;
-> >      361                 }
-> >      362         }
-> >      363
-> >      364         for (i = 0; i < sgt->nents; i++) {
-> >      365                 dma_ptr_sg = sg_dma_address(sgt->sgl + i);
-> >      366                 dma_len_sg = sg_dma_len(sgt->sgl + i);
-> >      367
-> > --> 368                 ret = qcom_qspi_alloc_desc(ctrl, dma_ptr_sg, dma_len_sg);
-> > 
-> > The qcom_qspi_alloc_desc() is a sleeping allocation, but the caller
-> > qcom_qspi_transfer_one() is holding spin_lock_irqsave(&ctrl->lock, flags).
-> 
-> 
-> I think We should be able to move qcom_qspi_setup_dma_desc() , and thus
-> qcom_qspi_alloc_desc(), out of critical section.
-> 
-> Right now we are looking into some issues with DMA mode transfer that have
-> showed up recently and will likely have a Fixes: patch next week.
-> 
-> Can we include this change in same series?
-> 
-> Another option is to include flags __GFP_ATOMIC in call to dma_pool_alloc()
-> and upload a Fixes: patch right away.
-> 
-> Would that work?
-> 
-> Can you please advise?
+> I'm wondering why you are not using existing fwnode, if any
+> (e.g. from parent device).
 
-This is from static analysis not testing.  It doesn't affect me at all,
-so I don't have any opinion.  I imagine that fixing it next week is
-fine.
+I think that is just an oversight, I will fixup for the next
+version.
 
-regards,
-dan carpenter
-
+Thanks,
+Charles
