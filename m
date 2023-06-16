@@ -2,99 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DBD732ECB
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 12:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F93732FA8
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jun 2023 13:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344757AbjFPKhX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jun 2023 06:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S1345321AbjFPLSQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jun 2023 07:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345234AbjFPKeY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 06:34:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDF25B96;
-        Fri, 16 Jun 2023 03:28:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E1CF6365B;
-        Fri, 16 Jun 2023 10:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE7FC433CC;
-        Fri, 16 Jun 2023 10:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911278;
-        bh=CBc4GKNO1MRLJg1eKVWqxkEoP1h79fxST86ixGuqN60=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uns5xOILdzecr/CL2OF5+fI2qDgqRwNvfVAE3ESahv5zHA3/o+jHJ0Wz1wvsYghEM
-         4uxB0L8P0AY0ILpsAv7i9KCsjR/PcXCEJDytwzgPFwUTH+2swucNeB074dOqn63GSu
-         jxaV2DXOG95nBrgVNjkwaY1Y+F2qwGPWASDWnNbESI33upgQscHZz9Nfpw8C/9COR5
-         HSD+Y91il7JvduFAJjbAPRyIK0xCfW9pYlXscZVQIQlibAydJMCw7S/QehYJVAZEGy
-         LRI386P7VteikmmCTce9YZHIW/XodRacT5AWsG9G9CP9CIW71UnO2W9UZvUimpLWLD
-         LbQ02Z0YgoTjw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Clark Wang <xiaoning.wang@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 03/14] spi: lpspi: disable lpspi module irq in DMA mode
-Date:   Fri, 16 Jun 2023 06:27:40 -0400
-Message-Id: <20230616102753.673975-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616102753.673975-1-sashal@kernel.org>
-References: <20230616102753.673975-1-sashal@kernel.org>
+        with ESMTP id S1345308AbjFPLSO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jun 2023 07:18:14 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84FE212C
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so5022005e9.0
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686914291; x=1689506291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
+        b=xO9S4qPH++KwL3bqmpqNIouOhxbgRJ6SxHNQK/ye2vn8zyZyyVWE0A8Fp12TPe5UEm
+         auhGwcNjhXlWmq7Z/IdqpdZbQkKk8Dml+ZcRR44APMB4R0kI3zvQIXbdbpPDxieV8yy3
+         YUN8nNjIG63V6OC1046j6gB2kYhjfS3Yi4uV54gq2eRTC7+ihj6Ja8OPu3PIWiKMjPjH
+         G5wW5UmtxjC9eoDQvYkHUMmCLvuG6T8Ls2v1sidokHKLWLLYphoIclz567/lbDY8nQgm
+         MC1xP36ucCdyTuIXwAZbqlb6aX3l8SyGtYlvJdvuYY239/r5sjTXPcmnRUVtUw6qLzH9
+         u1Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686914291; x=1689506291;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
+        b=kffJlqCZHv9swsvug8FhOvLd0D/hT9BOrQClb/xtqbaFoqqRrB1ttGTBq90LUaJX3e
+         R6HjQ9noEzh+sYFh6I6KKoPk3RcZdigyMBjKzLxKEZ0QtfTdsO334RH4lmzRoTKOleQM
+         r5TgkeYnkRjg87CGNN+jvad2pLghm+nsR7R4nb+rNjesTX118GhwEH5QTQO4RuvywC3t
+         5+UEWbcgrYP6+ccfjrHHzaZe85/thgKAnqPab9Y/+MWRHzNmEdH1mFe51M2kiclpUDa+
+         LQIMrfmGzAtB4Rg4l0ADIiTLHJyEQbo3kn9UkDI3L7BnBEQrU0clagNfpDZo8FZV3vQB
+         IZPw==
+X-Gm-Message-State: AC+VfDzqSyxHM+66eMzlw5cvChoXOfQR+S3R9sV+y712VTyZri7Wwd41
+        tJR+oeqQ+Sm3rA6mxHNXU0vVPQ==
+X-Google-Smtp-Source: ACHHUZ4dQlbHeAuRZeLC4Y8OzZsImTHLTf2rFlPkoywMcf0wXUYdWyJ5nI7ueJAs67y7U7OWDEJTlg==
+X-Received: by 2002:a05:600c:329d:b0:3f6:eae:7417 with SMTP id t29-20020a05600c329d00b003f60eae7417mr6554134wmp.1.1686914291372;
+        Fri, 16 Jun 2023 04:18:11 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n16-20020a7bc5d0000000b003f739a8bcc8sm1917075wmk.19.2023.06.16.04.18.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 04:18:09 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 14:18:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>, tools@linux.kernel.org,
+        kernel-janitors@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Dan Carpenter <error27@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, smatch@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from
+ dma_request_chan()
+Message-ID: <7466cb8d-85d9-4583-af2c-3616209e97e3@moroto.mountain>
+References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v1-1-6da9bf2db4a4@linaro.org>
+ <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.184
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Clark Wang <xiaoning.wang@nxp.com>
+On Thu, Jun 15, 2023 at 06:12:03PM +0300, Dan Carpenter wrote:
+> Here is the command to search for all the KTODO items added
+> in the last six months.
+> 
+> lei q https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
+> 
 
-[ Upstream commit 9728fb3ce11729aa8c276825ddf504edeb00611d ]
+I guess you need the -I option here.  I'm not sure what -I does.  I had
+thought it might mean case insensitive search but that's not it.
 
-When all bits of IER are set to 0, we still can observe the lpspi irq events
-when using DMA mode to transfer data.
+lei q -I https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
 
-So disable irq to avoid the too much irq events.
+Then grep ^KTODO ~/Mail/KTODO -R and cat the filename you want.
 
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-Link: https://lore.kernel.org/r/20230505063557.3962220-1-xiaoning.wang@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-fsl-lpspi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 5d98611dd999d..c5ff6e8c45be0 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -906,9 +906,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
- 	if (ret == -EPROBE_DEFER)
- 		goto out_pm_get;
--
- 	if (ret < 0)
- 		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-+	else
-+		/*
-+		 * disable LPSPI module IRQ when enable DMA mode successfully,
-+		 * to prevent the unexpected LPSPI module IRQ events.
-+		 */
-+		disable_irq(irq);
- 
- 	ret = devm_spi_register_controller(&pdev->dev, controller);
- 	if (ret < 0) {
--- 
-2.39.2
+regards,
+dan carpenter
 
