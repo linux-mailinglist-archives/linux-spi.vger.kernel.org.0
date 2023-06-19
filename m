@@ -2,50 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6377354C2
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jun 2023 12:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0312A73568B
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jun 2023 14:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjFSK65 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jun 2023 06:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S229942AbjFSMSF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jun 2023 08:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjFSK6g (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jun 2023 06:58:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F57B1BE
-        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 03:56:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B085560B4B
-        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 10:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26171C433C9;
-        Mon, 19 Jun 2023 10:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687172212;
-        bh=bdtUp6mFYZF0+Mo2UtHzYB+8NFKe1SnH+MpUZryyM2o=;
-        h=Subject:From:Date:To:From;
-        b=X1Bx6Z5n/h5aiUnQ5r96l/VpizRD5zVTSmBQ1kdg64O5Rh2Tt7XII3fM2VyVduqiY
-         E6M/wa+XZATlQO0L1Zx6l0tFeVQsQGSVCNhBJBEbR5ePSwLEbs+fTeye8HoGn9mPr1
-         a3KP/sF2fFndCmFZjFlfGso86O44pQop/OQrn+gEBSb9qry29oLrHC/dusi5Qw1C3G
-         2JhvSZPniVRSw6Or/0MMOuvNktRQO/m6eY1FfYNAkfV0VezSozltgZNdPmW047iYmK
-         gYgbFFEVxdyHDWPdMk3V/Cjt2PpN3liu3TDrgNlirUKlfG+C8bzOC42fZnOWMsbvBT
-         ZdRWdfC4jlDcQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 136D1C4316A;
-        Mon, 19 Jun 2023 10:56:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229542AbjFSMSE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jun 2023 08:18:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E883111D
+        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 05:18:02 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-986d871a9beso437159366b.1
+        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 05:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687177081; x=1689769081;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f3JGorfIUhRBEEat5SkdMS+cAsBErGeh9mcIh09Qj5Y=;
+        b=ftxfXuW39arEC753qySrvJyMUiTqn6xXH5WaTT1BEErA00SpJLIGp9w1kBUhU5vEJv
+         f6anxtOmKpET56EN48/cEnd0SwK+yj51n1MEtBCTPp7el9yUoItaJ6F/hFGj4gShuteI
+         BaQ1LQa6nXrDN0P5PelotjCKHziaLP6gEuIS0sK3MPkvSK5q14sHaTbIdMqqeWK4KuUP
+         Fc7Kk3JX16pEdBOl1xbceR7RizKgfzdt849uuItHQfnmyhTplWRPVWhgxectJ2aAwkrY
+         NSApPi7LL9fZJGS3slUXFwI/emASv9VZqaYzA9/0RB6ZswwB0K2OAXTimSVDYDMgSXhI
+         /C8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687177081; x=1689769081;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3JGorfIUhRBEEat5SkdMS+cAsBErGeh9mcIh09Qj5Y=;
+        b=f6rJ27dhzAXf4UZ2lizeQpLpS1qoiQ9EgtEWLdSmPXT159+ELlz9g9Tgj1ciwmdNlf
+         p5flEZa8mqqvWiP5sroIMjaE8szXIbyDmA5lxbv+2Zr35EvMxv/E2Ng47twN3k2q5Xy0
+         V/AaXncxSQo/accv1GFUzlcwibGBPlXZhvH9PPvfVIp1GvAXRTZURfINEkzS90rLQQyG
+         /ObeVWLHe9ETue2kghCEJy3j3CBTgR+loR5IkZ/3qFHL4OsJJy0kvCg4kM7bMTxdHTBn
+         fnsbUJ1/xsBeOfjMwoEzNuKuf7Z9H14R9+sq6iXmIG2POWryK6Yhrc9JaDKnsf7y3Qsk
+         RibA==
+X-Gm-Message-State: AC+VfDz+f6gQu5A6c9SGR1oRqNXdxoPznXzBo/fR38m5t8Vu/Kqq/lFC
+        NABIo2Phh1Lp2RlJbVBKwOZ2QQ==
+X-Google-Smtp-Source: ACHHUZ5dSNOSmu50TYQOnRntKgNAkfQOjYhYtzl3XEVqerIDIPhndh1rJ+XHu5SZ33ZICY6HRcEyeA==
+X-Received: by 2002:a17:907:e8b:b0:988:9b29:5647 with SMTP id ho11-20020a1709070e8b00b009889b295647mr2506074ejc.77.1687177081353;
+        Mon, 19 Jun 2023 05:18:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id qw19-20020a170906fcb300b00988c3e96294sm1029432ejb.30.2023.06.19.05.17.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 05:18:00 -0700 (PDT)
+Message-ID: <4937f9c4-a0e0-fd37-d71b-e7488b2a1062@linaro.org>
+Date:   Mon, 19 Jun 2023 14:17:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168717221207.28588.13922006433093185529.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 19 Jun 2023 10:56:52 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
+ StarFive JH7110 SoC
+Content-Language: en-US
+To:     William Qiu <william.qiu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230619083517.415597-1-william.qiu@starfivetech.com>
+ <20230619083517.415597-2-william.qiu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230619083517.415597-2-william.qiu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,17 +81,78 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Add cs42l43 PC focused SoundWire CODEC (2023-06-19T09:56:20)
-  Superseding: [v4] Add cs42l43 PC focused SoundWire CODEC (2023-06-19T08:43:23):
-    [v4,1/6] soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
-    [v4,2/6] dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
-    [v4,3/6] mfd: cs42l43: Add support for cs42l43 core driver
-    [v4,4/6] pinctrl: cs42l43: Add support for the cs42l43
-    [v4,5/6] spi: cs42l43: Add SPI controller support
-    [v4,6/6] ASoC: cs42l43: Add support for the cs42l43
+On 19/06/2023 10:35, William Qiu wrote:
+> The QSPI controller needs three clock items to work properly on StarFive
+> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
+> platforms do not have this constraint.
+> 
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/spi/cdns,qspi-nor.yaml           | 20 ++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> index b310069762dd..1b83cbb9a086 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> @@ -26,6 +26,15 @@ allOf:
+>              const: starfive,jh7110-qspi
+>      then:
+>        properties:
+> +        clocks:
+> +          maxItems: 3
+> +
+> +        clock-names:
+> +          items:
+> +            - const: ref
+> +            - const: ahb
+> +            - const: apb
+
+You are duplicating top-level property. Define the items only in one
+place. If this list is applicable to everything, then in top-level property.
+
+> +
+>          resets:
+>            minItems: 2
+>            maxItems: 3
+> @@ -38,6 +47,9 @@ allOf:
+>  
+>      else:
+>        properties:
+> +        clocks:
+> +          maxItems: 1
+
+clock-names is missing. They must be in sync with clocks. What is the
+first clock?
+
+> +
+>          resets:
+>            maxItems: 2
+>  
+> @@ -70,7 +82,13 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> -    maxItems: 1
+> +    maxItems: 3
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You did not test it before sending. minItems is missing.
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref
+> +      - const: ahb
+> +      - const: apb
+
+
+>  
+>    cdns,fifo-depth:
+>      description:
+
+Best regards,
+Krzysztof
 
