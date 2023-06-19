@@ -2,65 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA13734EDF
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jun 2023 10:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FCB734F36
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jun 2023 11:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjFSI6G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jun 2023 04:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S231135AbjFSJLS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jun 2023 05:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjFSI5n (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jun 2023 04:57:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29131704
-        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 01:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4A9760205
-        for <linux-spi@vger.kernel.org>; Mon, 19 Jun 2023 08:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59558C433B7;
-        Mon, 19 Jun 2023 08:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687165010;
-        bh=0GGJv0bgZOPE760XzJ2Y5Ax+VBUAlQ+6KCOapRHK+Ms=;
-        h=Subject:From:Date:To:From;
-        b=Emu5u0oXX0l4VTGp+3jZNFTQZlFGvfiOWHtdg8RzNxe6icydxCvfPBVpb+he3Rjfe
-         1pakKugP51HDQd4JJt0/ZXSTu/1rLqrFsIh1NPntzdDqeiQMOiBPjYJXJlntIV4Cxf
-         uFjc7fXlbMqNJcRmpHzlCh88RvDDxS4y/uGE6qM75s0xCS9kLZ/XpsbZRRqmGrz1i2
-         u/m1et6J5cXAE2xazD+STqnsfEzZepK0KNZPpFALGlzY8uDEJss+PlbXexeYbPKO98
-         Tj/srEOMp0CCEPw+Mz8IURIiLoW4G8R9YgxDWVP5Z1tk7cuzqIHTnjjiv+v27+CyrD
-         tua9velf6TxTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 463CEC4316A;
-        Mon, 19 Jun 2023 08:56:50 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231209AbjFSJLP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jun 2023 05:11:15 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AA1DA;
+        Mon, 19 Jun 2023 02:11:14 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5mUm5002763;
+        Mon, 19 Jun 2023 04:11:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=5JH2u79XU9FJBiZZx7sz7hvI5PJVGOsuiD1Cda2B7+Q=;
+ b=ogSP1REFwha/p5MoyXtk6djzYSizjnb5XoG/UTXcqMzLIJ1RO4fM6vz2X8rvr35wplCv
+ 19lg6w7mXd8juNLp/dvaplzDvq351QoqOkCQmO8rGZnSyGvJaQbDLoEXNO5LZ/8keR1Q
+ wu+j7FV086RP5bxowLDtX4wlTuuajMGo7BZf4+IwtDL29IpPW+lacXfntP102f8By5vE
+ IU0IIWkXoTZXrIocDqgBMq/jQPTKb1OffOp8hYoSjmDaUPOl1TcRVDkzPSZBNcSG5hrc
+ gcudmalxuL4DzlP83GeQF5B5BsyY2JQT6VApdaQM4cMFRKorfyBOZwXfhz7m3PtsuFCz eg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r998mhsfb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 04:11:02 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 19 Jun
+ 2023 10:11:00 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 19 Jun 2023 10:11:00 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 84E4011AA;
+        Mon, 19 Jun 2023 09:11:00 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 09:11:00 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lee Jones <lee@kernel.org>
+CC:     <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
+        <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] mfd: cs42l43: Add support for cs42l43 core driver
+Message-ID: <20230619091100.GV68926@ediswmail.ad.cirrus.com>
+References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
+ <20230605125504.2570158-4-ckeepax@opensource.cirrus.com>
+ <20230615171124.GL3635807@google.com>
+ <20230616083404.GR68926@ediswmail.ad.cirrus.com>
+ <20230619083005.GN3635807@google.com>
+ <20230619085244.GU68926@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168716501028.7700.11060864432833321045.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 19 Jun 2023 08:56:50 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230619085244.GU68926@ediswmail.ad.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: JbY1FYWJr3mYykaI4Vkm_JGdmIMtrazk
+X-Proofpoint-ORIG-GUID: JbY1FYWJr3mYykaI4Vkm_JGdmIMtrazk
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Add initialization of clock for StarFive JH7110 SoC (2023-06-19T08:35:16)
-  Superseding: [v2] Add initialization of clock for StarFive JH7110 SoC (2023-06-02T08:49:23):
-    [v2,1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for StarFive JH7110 SoC
-    [v2,2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
-    [v2,3/3] riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC
+On Mon, Jun 19, 2023 at 08:52:44AM +0000, Charles Keepax wrote:
+> On Mon, Jun 19, 2023 at 09:30:05AM +0100, Lee Jones wrote:
+> > On Fri, 16 Jun 2023, Charles Keepax wrote:
+> > > On Thu, Jun 15, 2023 at 06:11:24PM +0100, Lee Jones wrote:
+> > > > On Mon, 05 Jun 2023, Charles Keepax wrote:
+> > Can you have a little think for another way to solve this please?
+> > 
+> 
+> I will have another go at it, if memory serves the vague options
+> were:
+> 
+> 1) this approach
+> 2) some sort of horrible #include to put the defaults array in
+> both modules, although I would really prefer to avoid this one.
+> 3) dynamically allocate the regmap_configs so those two fields
+> can be filled in with non-static data.
+> 
+> If I fail to come up with an option 4 would you prefer 1 or 3?
+> Well or 2 but I really would prefer not to do 2.
+> 
 
+Well or just leave both in actually I guess perhaps that is
+simplest.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Charles
