@@ -2,58 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ED5738D48
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 19:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EE6738E34
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 20:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbjFURjJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Jun 2023 13:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S230172AbjFUSIt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Jun 2023 14:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjFURjI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 13:39:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065861BC;
-        Wed, 21 Jun 2023 10:39:08 -0700 (PDT)
+        with ESMTP id S230150AbjFUSIs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 14:08:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB9E1739;
+        Wed, 21 Jun 2023 11:08:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EBEF61654;
-        Wed, 21 Jun 2023 17:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E745EC433CB;
-        Wed, 21 Jun 2023 17:39:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97D436163E;
+        Wed, 21 Jun 2023 18:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B63DC433C0;
+        Wed, 21 Jun 2023 18:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687369146;
-        bh=DVNeAJO6Dgu8FDtvT21kR6U2wQb981RxOa6r9gYEPjA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=P84uHmlE8LtkMjgQH842tZb60Y7vCKvLbU13rb8n+/aFIovxwF6Fxza0aIl02I89b
-         m6G8uIuk7F/nFHKH5DchLTnB1IMpEGrBpfPs4Q/O49e3VrEt3wRp6J4yoAOqHS7zSp
-         gSQsfDnK91wTXdPMhWgRQHkz6tKsMaaVomNcHMNwDB+Yk1QYlM7eF7pTh8f1SPsiut
-         AZrG7Yvl8EQ1XKeaujylEi1YpX5WBt/CAcccVabCagqX12a8SUqfPgfWpZ5JRtm60M
-         riphZEVD0rAEB530sdKsl8Udh+EDjsuqK8VR1ML4vSWwzzIUhRpeINTknyNbq9ku6v
-         AXuX1DQ35uYYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6BFAE45226;
-        Wed, 21 Jun 2023 17:39:06 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.4-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230621132404.E6CB1C433C9@smtp.kernel.org>
-References: <20230621132404.E6CB1C433C9@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230621132404.E6CB1C433C9@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc7
-X-PR-Tracked-Commit-Id: 9d7054fb3ac2e8d252aae1268f20623f244e644f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2214170caabbff673935eb046a7edf4621213931
-Message-Id: <168736914680.5231.5830283319897263285.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Jun 2023 17:39:06 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1687370926;
+        bh=7X2X8ssl0I3kcuFvuGnHm5dMbraS+AchudpTPC7LNWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J4DJ+UJRtFJKhCCto+lT99MoBZ6V7nuT9q6CgeyuzKZmpw2J2ZwN1dh7AfDjnoxl6
+         sZmy8JYG0Oi/j4Fz8aguiE7LgeR1tigNX39QtlI4QWehDKb/hp+O97HLkROQqhhnnS
+         /BJQ5aHx+PgNhipWuaGW3H5+3xEECG+LEAn9Tt9hJ8+eSczQBPhHUWj68zM2LvB1dT
+         4RIMng4Q8ltmxRD4YmqUQGJGMTTti8jcL+ZKOel+bDtLkT3pMB613BlJcnvKIML36M
+         2tYLeSdWJHayagt6J+pysMSfpxj/wbWXsjhM23Qnd6mkZIzzkdNnEbtMgtrwA0wmAr
+         mrN07k1wKMBVQ==
+Date:   Wed, 21 Jun 2023 19:08:41 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Subject: Re: [PATCH 1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
+Message-ID: <20230621-bubbling-sarcastic-252180c2d8ec@spud>
+References: <20230621140944.257352-1-fabrizio.castro.jz@renesas.com>
+ <20230621140944.257352-2-fabrizio.castro.jz@renesas.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ocggzProvjUdezXp"
+Content-Disposition: inline
+In-Reply-To: <20230621140944.257352-2-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,15 +63,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Wed, 21 Jun 2023 14:23:50 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc7
+--ocggzProvjUdezXp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2214170caabbff673935eb046a7edf4621213931
+On Wed, Jun 21, 2023 at 03:09:39PM +0100, Fabrizio Castro wrote:
+> Add dt-bindings for the CSI IP found inside the RZ/V2M SoC.
 
-Thank you!
+Seems fine to me..
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+Conor.
+
+--ocggzProvjUdezXp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJM8qAAKCRB4tDGHoIJi
+0raHAQDOkiuW6YrEZdb7mRU8M4bDhlwX+R8LnXm7bFsVowSxZQD/Zuwzwdgem7MP
+yoiX0tC/2zHO15P8XdnvjxkkJzVnZQg=
+=Ppgm
+-----END PGP SIGNATURE-----
+
+--ocggzProvjUdezXp--
