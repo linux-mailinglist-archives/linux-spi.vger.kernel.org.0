@@ -2,60 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A577737B2B
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 08:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6F5737BD3
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 09:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjFUGRb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Jun 2023 02:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S231221AbjFUGrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Jun 2023 02:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjFUGRD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 02:17:03 -0400
+        with ESMTP id S229716AbjFUGqr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 02:46:47 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E019A8;
-        Tue, 20 Jun 2023 23:16:39 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901D41FF2;
+        Tue, 20 Jun 2023 23:45:15 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id AAD2224E271;
-        Wed, 21 Jun 2023 14:16:37 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 14:16:37 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id E998E24E1AC;
+        Wed, 21 Jun 2023 14:45:13 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
+ 2023 14:45:13 +0800
 Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
  (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 14:16:36 +0800
-Message-ID: <ddad3e67-05b1-e0fd-0241-fb47c5a0bbde@starfivetech.com>
-Date:   Wed, 21 Jun 2023 14:16:35 +0800
+ 2023 14:45:12 +0800
+Message-ID: <fb608232-f44d-21cf-7e0e-28829196e677@starfivetech.com>
+Date:   Wed, 21 Jun 2023 14:45:11 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Subject: Re: [PATCH v3 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
  StarFive JH7110 SoC
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         Ziv Xu <ziv.xu@starfivetech.com>
 References: <20230619083517.415597-1-william.qiu@starfivetech.com>
  <20230619083517.415597-2-william.qiu@starfivetech.com>
- <168716619573.242780.12121020614995223090.robh@kernel.org>
+ <4937f9c4-a0e0-fd37-d71b-e7488b2a1062@linaro.org>
 From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <168716619573.242780.12121020614995223090.robh@kernel.org>
+In-Reply-To: <4937f9c4-a0e0-fd37-d71b-e7488b2a1062@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX068.cuchost.com
  (172.16.6.68)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,9 +63,8 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-On 2023/6/19 17:16, Rob Herring wrote:
-> 
-> On Mon, 19 Jun 2023 16:35:15 +0800, William Qiu wrote:
+On 2023/6/19 20:17, Krzysztof Kozlowski wrote:
+> On 19/06/2023 10:35, William Qiu wrote:
 >> The QSPI controller needs three clock items to work properly on StarFive
 >> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
 >> platforms do not have this constraint.
@@ -78,37 +76,75 @@ On 2023/6/19 17:16, Rob Herring wrote:
 >>  .../bindings/spi/cdns,qspi-nor.yaml           | 20 ++++++++++++++++++-
 >>  1 file changed, 19 insertions(+), 1 deletion(-)
 >> 
+>> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> index b310069762dd..1b83cbb9a086 100644
+>> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> @@ -26,6 +26,15 @@ allOf:
+>>              const: starfive,jh7110-qspi
+>>      then:
+>>        properties:
+>> +        clocks:
+>> +          maxItems: 3
+>> +
+>> +        clock-names:
+>> +          items:
+>> +            - const: ref
+>> +            - const: ahb
+>> +            - const: apb
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> You are duplicating top-level property. Define the items only in one
+> place. If this list is applicable to everything, then in top-level property.
 > 
-> yamllint warnings/errors:
+Only in JH7110 SoC need there clocks, other platforms do not have this constraint.
+So I need to duplicating top-level property.
+>> +
+>>          resets:
+>>            minItems: 2
+>>            maxItems: 3
+>> @@ -38,6 +47,9 @@ allOf:
+>>  
+>>      else:
+>>        properties:
+>> +        clocks:
+>> +          maxItems: 1
 > 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,qspi-nor.example.dtb: spi@ff705000: clocks: [[4294967295]] is too short
-> 	from schema $id: http://devicetree.org/schemas/spi/cdns,qspi-nor.yaml#
+> clock-names is missing. They must be in sync with clocks. What is the
+> first clock?
 > 
-> doc reference errors (make refcheckdocs):
+But there are no clock-names before, should I add it?
+>> +
+>>          resets:
+>>            maxItems: 2
+>>  
+>> @@ -70,7 +82,13 @@ properties:
+>>      maxItems: 1
+>>  
+>>    clocks:
+>> -    maxItems: 1
+>> +    maxItems: 3
 > 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230619083517.415597-2-william.qiu@starfivetech.com
 > 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
+> You did not test it before sending. minItems is missing.
 > 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
+I will add it.
+As for other platforms, should I use enum to constraint the clocks?
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: ref
+>> +      - const: ahb
+>> +      - const: apb
 > 
-> pip3 install dtschema --upgrade
 > 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
+>>  
+>>    cdns,fifo-depth:
+>>      description:
 > 
-It seems that my changes are not compatible with other dts files, I'll try to
-fix it.
+> Best regards,
+> Krzysztof
+> 
+Thanks for taking time to review this patches series.
 
-Thanks for reminding.
-
-Best regards
+Best regards,
 William
