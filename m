@@ -2,114 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACB073885C
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 17:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EBC738A20
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Jun 2023 17:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbjFUPGo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Jun 2023 11:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S231734AbjFUPvq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Jun 2023 11:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbjFUPG0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 11:06:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46003A8E
-        for <linux-spi@vger.kernel.org>; Wed, 21 Jun 2023 08:00:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BC66150D
-        for <linux-spi@vger.kernel.org>; Wed, 21 Jun 2023 14:59:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097F2C433C8;
-        Wed, 21 Jun 2023 14:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687359580;
-        bh=rJbvPZyesMVVZGwgwtESLy0d3zonMwwWoM1KrbrTODo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pZc63UVndIzL8dUzV/ItfsjJSu0EVr4uUxFaVj63jdMi8MWWIwL6Jnt0lxyAXY/WA
-         C7h7KJSe7Utt3jMUj8xWLfpUn3PBmVVzyU4heK4JlPBYxobGxxkW8CAS8fqO6pzM1G
-         e7LyHGtmDWgCCcbnRp1eQA0kzJpE/zh1TN7GquyoDfRp3KItkPf/81dtO/sG6ogdxw
-         0CV8vqT2jY9vhHNG/ONCWFwW+Fzda0fNQdvVEW03GWA9SqxkbAhzwdbAoQjegh4bYQ
-         LiLT3Wlr3sJvpDog1jdsPwKbRCbli8NY6V+dunvSDV4YDPZSQFpPMCchBNf/iz5t0S
-         PGDCbaDGKgr2A==
-Date:   Wed, 21 Jun 2023 15:59:34 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-spi@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        with ESMTP id S232123AbjFUPvq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Jun 2023 11:51:46 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FE2E2
+        for <linux-spi@vger.kernel.org>; Wed, 21 Jun 2023 08:51:44 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31109cd8d8cso6013160f8f.2
+        for <linux-spi@vger.kernel.org>; Wed, 21 Jun 2023 08:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687362703; x=1689954703;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aC81hT2eRQBjkojJrQa9BM2dAGgpSMK2LXGRglIV5hw=;
+        b=mqi7fm69G1L7cEB/FeYvXqf9QyhMh1oLHnDcNBlWVNoFnHegIYS+R+ecL+9SrnZdoJ
+         omi7ZPmVm0NSXZXd2auduGsejwdcEGoF/3dwrmt9sc6SsMg0NEE0ef13Ov+KzxwA9cE3
+         BIEYV/3eYIwoyofzhRYjkFpf7O/MjWlLsiEvBmpbdHRIHqUAS9PCe8IkwS8BkAz9+zaj
+         ofXKscB/utGxvaGcm56qkL4yZUuTvE+JH827SzSlEKJTJbxtWWXbtcETz6PjMmg8gUSQ
+         qGdzas3bkJeJR+DE/gBkYgcvmL5zQc6lpOeveBlRORqlxAnRrFfzonuo6PMlT1VpdLuJ
+         ByNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687362703; x=1689954703;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aC81hT2eRQBjkojJrQa9BM2dAGgpSMK2LXGRglIV5hw=;
+        b=FHoHmsulMRWoMjuEzvPDjPmhPTRxjyGmwCg5KqLIm+ypKSEWuhMcHzR38YopJB41Ls
+         44JZggY+gv9MosQICQylamJRP2X/P5eb6vyt5u0NqimSGpS6anqJV4x1PN295E/u+CnG
+         asIsBgabYEBH6lM/kcMq83BjZWl2TLkkgLdmHzBuFlMN3kSaxQZfrgk8mOot/7XW9L38
+         vip8Ai/2YRhZyz41i3d3hzGbzfiNovgg/Ke2ld/ZW2hM/BVQDUJn20tNYCDiN4UG1Swe
+         fzqmyvnOusBf/9KmDXh5llQNVL0etoN6ERDezPSrMGUN70sr3pkhba3vxcX9i8HpqUtv
+         t9Dg==
+X-Gm-Message-State: AC+VfDw6k0gsasNIuOgp0nKahRc6+790oxwcHCvlG3O+POhwvVqYGWfd
+        hcMsyNUBUh7YcvvCgFZhqek=
+X-Google-Smtp-Source: ACHHUZ6mfiuUSKUL9T4FG0zO9eFCzfqn7gdQJ+UxFybrS+0IlVlSOIzIttkP0rZOt+iRNg6rGhm6KQ==
+X-Received: by 2002:a5d:4bc1:0:b0:311:b8d:a63b with SMTP id l1-20020a5d4bc1000000b003110b8da63bmr11474994wrt.15.1687362702797;
+        Wed, 21 Jun 2023 08:51:42 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id x1-20020a5d4441000000b00311d8c2561bsm4795824wrr.60.2023.06.21.08.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 08:51:42 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] spi: atmel: Prevent false timeouts on long
- transfers
-Message-ID: <9988258d-5797-402a-9d92-c7c9e1afa73c@sirena.org.uk>
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 3/3] spi: sun6i: Use the new helper to derive the xfer timeout
+ value
+Date:   Wed, 21 Jun 2023 17:51:40 +0200
+Message-ID: <5683683.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <20230619155349.3118420-4-miquel.raynal@bootlin.com>
 References: <20230619155349.3118420-1-miquel.raynal@bootlin.com>
- <20230619155349.3118420-3-miquel.raynal@bootlin.com>
+ <20230619155349.3118420-4-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OwDbOvhyPcaB4J+Y"
-Content-Disposition: inline
-In-Reply-To: <20230619155349.3118420-3-miquel.raynal@bootlin.com>
-X-Cookie: Printed on recycled paper.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Dne ponedeljek, 19. junij 2023 ob 17:53:49 CEST je Miquel Raynal napisal(a):
+> A helper was recently added to the core to factorize common code between
+> drivers, like the amount of time a driver should wait for a transfer to
+> happen.
+> 
+> It is of course possible to use a default value (like eg. 1s) but it is
+> way stronger to adapt this amount of time to the transfer. Indeed, long
+> transfers (eg. 4MiB) on a slow single-spi bus might take more than the
+> usual second of timeout and prevent lengthy transfers.
+> 
+> The core helper was heavily inspired by the logic applied in this
+> driver, the only difference being the minimum amount of time which was
+> enlarged from 0.1s to 0.5s.
+> 
+> Use this helper instead of open-coding it.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
---OwDbOvhyPcaB4J+Y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-On Mon, Jun 19, 2023 at 05:53:48PM +0200, Miquel Raynal wrote:
-> A slow SPI bus clocks at ~20MHz, which means it would transfer about
-> 2500 bytes per second with a single data line. Big transfers, like when
-> dealing with flashes can easily reach a few MiB. The current DMA timeout
-> is set to 1 second, which means any working transfer of about 4MiB will
-> always be cancelled.
+Best regards,
+Jernej
 
-This breaks the build:
+> ---
+>  drivers/spi/spi-sun6i.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index 23ad052528db..180094dfae19 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -422,7 +422,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+>  	reg = sun6i_spi_read(sspi, SUN6I_TFR_CTL_REG);
+>  	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg | SUN6I_TFR_CTL_XCH);
+>  
+> -	tx_time = max(tfr->len * 8 * 2 / (tfr->speed_hz / 1000), 100U);
+> +	tx_time = spi_controller_xfer_timeout(master, tfr);
+>  	start = jiffies;
+>  	timeout = wait_for_completion_timeout(&sspi->done,
+>  					      msecs_to_jiffies(tx_time));
+> 
 
-/build/stage/linux/drivers/spi/spi-atmel.c: In function =E2=80=98atmel_spi_=
-one_transfer=E2=80=99
-:
-/build/stage/linux/drivers/spi/spi-atmel.c:1338:76: error: =E2=80=98master=
-=E2=80=99 undeclared (
-first use in this function)
- 1338 |                 dma_timeout =3D msecs_to_jiffies(spi_controller_xfe=
-r_timeo
-ut(master, xfer));
-      |                                                                    =
-    =20
-   ^~~~~~
-/build/stage/linux/drivers/spi/spi-atmel.c:1338:76: note: each undeclared i=
-denti
-fier is reported only once for each function it appears in
 
---OwDbOvhyPcaB4J+Y
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTEFYACgkQJNaLcl1U
-h9ATngf/Uj6V7e+ZkPyX9brbeEyYT7qm2+ucvwQH1k6CMSZknX7UxyvvJ41YS03G
-rNZtf3du92rEIwMXHaOlBNbjWRD3lUFCDAMHc6YWsF552GIY0kuRkFe6lPcu6pPk
-ohxsOl1JHpvySD+23mKYAhtDos/9DsGcIk0LRtEXyTu9KvIdX4z3Ys/O0mVdS9jL
-xDF2J1KRTdYjXwqnM1QC+3Y8AdcRrNvwCDJYZKjRttSF8xDHzYrjfzc5DFMdXU01
-a3E2FU/W1+h+IPWLrGkfgotS0RVtncaD3hSm3DIR5Ixfxhrens66i+EpaxkP2m0t
-j/U2JbKgkmjzLRJkgzTwQDpbaRREKQ==
-=aoBA
------END PGP SIGNATURE-----
-
---OwDbOvhyPcaB4J+Y--
