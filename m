@@ -2,44 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8732739F81
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jun 2023 13:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9220373A282
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jun 2023 16:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjFVLeO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jun 2023 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S231308AbjFVOAu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jun 2023 10:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjFVLeI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jun 2023 07:34:08 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64FDF1FD8;
-        Thu, 22 Jun 2023 04:34:03 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.00,263,1681138800"; 
-   d="scan'208";a="168532787"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 22 Jun 2023 20:34:03 +0900
-Received: from mulinux.example.org (unknown [10.226.93.117])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1A28240CCB9C;
-        Thu, 22 Jun 2023 20:33:59 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-Subject: [PATCH v2 3/5] spi: Add support for Renesas CSI
-Date:   Thu, 22 Jun 2023 12:33:39 +0100
-Message-Id: <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+        with ESMTP id S231199AbjFVOAg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jun 2023 10:00:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8D3E2;
+        Thu, 22 Jun 2023 07:00:30 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MCjGig008256;
+        Thu, 22 Jun 2023 14:00:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=h2EBvV+4ERBDJFI7Nkia3mS5+PDriEEjcQlmLmcedpg=;
+ b=DqAbW5EL8hV+2GRJbEvCo3rc85U9/U2Ucg5GLB/6HZ0A96wdq9EBETWQ2Nlw0p2fmxRD
+ ROCBIUx1C37Cb61OoH2Zn420Rn3W0M0Fwxa6VyYSjf7kSY04vwZSItJAhzowyGKX+DPF
+ je2+oUPhq2tE0HkvZGwcTE5SRly/PoZqgPz6xv8CJ6dSRIeqJl4ro7eSi1xd7Dv8DRhc
+ ciL2qYhyNoYs9Ve9wbk2kyBhxEv3pyNOoVHcZ0KzRuPur50mgIouGtksofo4XtjVNzYp
+ th7nvXNAJja1n+zG+2I/kM8SwljCMvvgJm1FGtdjBNnFWVWfJD4ouM5EqfgOHMXko3As YA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcpjh8687-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:00:27 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35ME0NeT029032
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:00:25 GMT
+Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 22 Jun 2023 07:00:19 -0700
+From:   Praveen Talari <quic_ptalari@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
+        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>,
+        Praveen Talari <quic_ptalari@quicinc.com>
+Subject: [PATCH v3 0/3] spi-geni-qcom: Add SPI device mode support for GENI based QuPv3
+Date:   Thu, 22 Jun 2023 19:29:52 +0530
+Message-ID: <20230622135955.941-1-quic_ptalari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cc5Z3JJCLpA9AQ_uwlr4zXL26UHGCOAB
+X-Proofpoint-GUID: cc5Z3JJCLpA9AQ_uwlr4zXL26UHGCOAB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_10,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=709 impostorscore=0 malwarescore=0 clxscore=1011 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220118
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,724 +78,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The RZ/V2M SoC comes with the Clocked Serial Interface (CSI)
-IP, which is a master/slave SPI controller.
+This series adds spi device mode functionality to geni based Qupv3.
+The common header file contains spi slave related registers and masks.
 
-This commit adds a driver to support CSI master mode.
-
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Praveen Talari (3):
+  soc: qcom: geni-se: Add SPI Device mode support for GENI based QuPv3
+  spi: dt-bindings: qcom,spi-geni-qcom: Add SPI device mode support for
+    GENI based QuPv3
+  spi: spi-geni-qcom: Add SPI Device mode support for GENI based QuPv3
 ---
+v2 -> v3:
+- Modified commit message
+- Addressed comment on dt-binding
+	
+v1 -> v2:
+- Added dt-binding change for spi slave
+- Modified commit message
+- Addressed review comments in driver
 
-v2: edited includes in drivers/spi/spi-rzv2m-csi.c
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |  4 ++
+ drivers/spi/spi-geni-qcom.c                   | 57 +++++++++++++++++--
+ include/linux/soc/qcom/geni-se.h              |  9 +++
+ 3 files changed, 64 insertions(+), 6 deletions(-)
 
- drivers/spi/Kconfig         |   6 +
- drivers/spi/Makefile        |   1 +
- drivers/spi/spi-rzv2m-csi.c | 667 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 674 insertions(+)
- create mode 100644 drivers/spi/spi-rzv2m-csi.c
-
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 14810d24733b..abbd1fb5fbc0 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -825,6 +825,12 @@ config SPI_RSPI
- 	help
- 	  SPI driver for Renesas RSPI and QSPI blocks.
- 
-+config SPI_RZV2M_CSI
-+	tristate "Renesas RZV2M CSI controller"
-+	depends on ARCH_RENESAS || COMPILE_TEST
-+	help
-+	  SPI driver for Renesas RZ/V2M Clocked Serial Interface (CSI)
-+
- config SPI_QCOM_QSPI
- 	tristate "QTI QSPI controller"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 28c4817a8a74..080c2c1b3ec1 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -113,6 +113,7 @@ obj-$(CONFIG_SPI_RB4XX)			+= spi-rb4xx.o
- obj-$(CONFIG_MACH_REALTEK_RTL)		+= spi-realtek-rtl.o
- obj-$(CONFIG_SPI_RPCIF)			+= spi-rpc-if.o
- obj-$(CONFIG_SPI_RSPI)			+= spi-rspi.o
-+obj-$(CONFIG_SPI_RZV2M_CSI)		+= spi-rzv2m-csi.o
- obj-$(CONFIG_SPI_S3C64XX)		+= spi-s3c64xx.o
- obj-$(CONFIG_SPI_SC18IS602)		+= spi-sc18is602.o
- obj-$(CONFIG_SPI_SH)			+= spi-sh.o
-diff --git a/drivers/spi/spi-rzv2m-csi.c b/drivers/spi/spi-rzv2m-csi.c
-new file mode 100644
-index 000000000000..14ad65da930d
---- /dev/null
-+++ b/drivers/spi/spi-rzv2m-csi.c
-@@ -0,0 +1,667 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Renesas RZ/V2M Clocked Serial Interface (CSI) driver
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corporation
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/count_zeros.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/spi/spi.h>
-+
-+/* Registers */
-+#define CSI_MODE		0x00	/* CSI mode control */
-+#define CSI_CLKSEL		0x04	/* CSI clock select */
-+#define CSI_CNT			0x08	/* CSI control */
-+#define CSI_INT			0x0C	/* CSI interrupt status */
-+#define CSI_IFIFOL		0x10	/* CSI receive FIFO level display */
-+#define CSI_OFIFOL		0x14	/* CSI transmit FIFO level display */
-+#define CSI_IFIFO		0x18	/* CSI receive window */
-+#define CSI_OFIFO		0x1C	/* CSI transmit window */
-+#define CSI_FIFOTRG		0x20	/* CSI FIFO trigger level */
-+
-+/* CSI_MODE */
-+#define CSI_MODE_CSIE		BIT(7)
-+#define CSI_MODE_TRMD		BIT(6)
-+#define CSI_MODE_CCL		BIT(5)
-+#define CSI_MODE_DIR		BIT(4)
-+#define CSI_MODE_CSOT		BIT(0)
-+
-+#define CSI_MODE_SETUP		0x00000040
-+
-+/* CSI_CLKSEL */
-+#define CSI_CLKSEL_CKP		BIT(17)
-+#define CSI_CLKSEL_DAP		BIT(16)
-+#define CSI_CLKSEL_SLAVE	BIT(15)
-+#define CSI_CLKSEL_CKS		GENMASK(14, 1)
-+
-+/* CSI_CNT */
-+#define CSI_CNT_CSIRST		BIT(28)
-+#define CSI_CNT_R_TRGEN		BIT(19)
-+#define CSI_CNT_UNDER_E		BIT(13)
-+#define CSI_CNT_OVERF_E		BIT(12)
-+#define CSI_CNT_TREND_E		BIT(9)
-+#define CSI_CNT_CSIEND_E	BIT(8)
-+#define CSI_CNT_T_TRGR_E	BIT(4)
-+#define CSI_CNT_R_TRGR_E	BIT(0)
-+
-+/* CSI_INT */
-+#define CSI_INT_UNDER		BIT(13)
-+#define CSI_INT_OVERF		BIT(12)
-+#define CSI_INT_TREND		BIT(9)
-+#define CSI_INT_CSIEND		BIT(8)
-+#define CSI_INT_T_TRGR		BIT(4)
-+#define CSI_INT_R_TRGR		BIT(0)
-+
-+/* CSI_FIFOTRG */
-+#define CSI_FIFOTRG_R_TRG       GENMASK(2, 0)
-+
-+#define CSI_FIFO_SIZE_BYTES	32
-+#define CSI_FIFO_HALF_SIZE	16
-+#define CSI_EN_DIS_TIMEOUT_US	100
-+#define CSI_CKS_MAX		0x3FFF
-+
-+#define UNDERRUN_ERROR		BIT(0)
-+#define OVERFLOW_ERROR		BIT(1)
-+#define TX_TIMEOUT_ERROR	BIT(2)
-+#define RX_TIMEOUT_ERROR	BIT(3)
-+
-+#define CSI_MAX_SPI_SCKO	8000000
-+
-+struct rzv2m_csi_priv {
-+	void __iomem *base;
-+	struct clk *csiclk;
-+	struct clk *pclk;
-+	struct device *dev;
-+	struct spi_controller *controller;
-+	const u8 *txbuf;
-+	u8 *rxbuf;
-+	int buffer_len;
-+	int bytes_sent;
-+	int bytes_received;
-+	int bytes_to_transfer;
-+	int words_to_transfer;
-+	unsigned char bytes_per_word;
-+	wait_queue_head_t wait;
-+	u8 errors;
-+	u32 status;
-+};
-+
-+static const unsigned char x_trg[] = {
-+	0, 1, 1, 2, 2, 2, 2, 3,
-+	3, 3, 3, 3, 3, 3, 3, 4,
-+	4, 4, 4, 4, 4, 4, 4, 4,
-+	4, 4, 4, 4, 4, 4, 4, 5
-+};
-+
-+static const unsigned char x_trg_words[] = {
-+	1,  2,  2,  4,  4,  4,  4,  8,
-+	8,  8,  8,  8,  8,  8,  8,  16,
-+	16, 16, 16, 16, 16, 16, 16, 16,
-+	16, 16, 16, 16, 16, 16, 16, 32
-+};
-+
-+static void rzv2m_csi_reg_write_bit(const struct rzv2m_csi_priv *csi,
-+				    int reg_offs, int bit_mask, u32 value)
-+{
-+	int nr_zeros;
-+	u32 tmp;
-+
-+	nr_zeros = count_trailing_zeros(bit_mask);
-+	value <<= nr_zeros;
-+
-+	tmp = (readl(csi->base + reg_offs) & ~bit_mask) | value;
-+	writel(tmp, csi->base + reg_offs);
-+}
-+
-+static int rzv2m_csi_sw_reset(struct rzv2m_csi_priv *csi, int assert)
-+{
-+	u32 reg;
-+
-+	rzv2m_csi_reg_write_bit(csi, CSI_CNT, CSI_CNT_CSIRST, assert);
-+
-+	if (assert) {
-+		return readl_poll_timeout(csi->base + CSI_MODE, reg,
-+					  !(reg & CSI_MODE_CSOT), 0,
-+					  CSI_EN_DIS_TIMEOUT_US);
-+	}
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_start_stop_operation(const struct rzv2m_csi_priv *csi,
-+					  int enable, bool wait)
-+{
-+	u32 reg;
-+
-+	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_CSIE, enable);
-+
-+	if (!enable && wait)
-+		return readl_poll_timeout(csi->base + CSI_MODE, reg,
-+					  !(reg & CSI_MODE_CSOT), 0,
-+					  CSI_EN_DIS_TIMEOUT_US);
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_fill_txfifo(struct rzv2m_csi_priv *csi)
-+{
-+	int i;
-+
-+	if (readl(csi->base + CSI_OFIFOL))
-+		return -EIO;
-+
-+	if (csi->bytes_per_word == 2) {
-+		u16 *buf = (u16 *)csi->txbuf;
-+
-+		for (i = 0; i < csi->words_to_transfer; i++)
-+			writel(buf[i], csi->base + CSI_OFIFO);
-+	} else {
-+		u8 *buf = (u8 *)csi->txbuf;
-+
-+		for (i = 0; i < csi->words_to_transfer; i++)
-+			writel(buf[i], csi->base + CSI_OFIFO);
-+	}
-+
-+	csi->txbuf += csi->bytes_to_transfer;
-+	csi->bytes_sent += csi->bytes_to_transfer;
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_read_rxfifo(struct rzv2m_csi_priv *csi)
-+{
-+	int i;
-+
-+	if (readl(csi->base + CSI_IFIFOL) != csi->bytes_to_transfer)
-+		return -EIO;
-+
-+	if (csi->bytes_per_word == 2) {
-+		u16 *buf = (u16 *)csi->rxbuf;
-+
-+		for (i = 0; i < csi->words_to_transfer; i++)
-+			buf[i] = (u16)readl(csi->base + CSI_IFIFO);
-+	} else {
-+		u8 *buf = (u8 *)csi->rxbuf;
-+
-+		for (i = 0; i < csi->words_to_transfer; i++)
-+			buf[i] = (u8)readl(csi->base + CSI_IFIFO);
-+	}
-+
-+	csi->rxbuf += csi->bytes_to_transfer;
-+	csi->bytes_received += csi->bytes_to_transfer;
-+
-+	return 0;
-+}
-+
-+static inline void rzv2m_csi_calc_current_transfer(struct rzv2m_csi_priv *csi)
-+{
-+	int bytes_transferred = max_t(int, csi->bytes_received, csi->bytes_sent);
-+	int bytes_remaining = csi->buffer_len - bytes_transferred;
-+	int to_transfer;
-+
-+	if (csi->txbuf)
-+		/*
-+		 * Leaving a little bit of headroom in the FIFOs makes it very
-+		 * hard to raise an overflow error (which is only possible
-+		 * when IP transmits and receives at the same time).
-+		 */
-+		to_transfer = min_t(int, CSI_FIFO_HALF_SIZE, bytes_remaining);
-+	else
-+		to_transfer = min_t(int, CSI_FIFO_SIZE_BYTES, bytes_remaining);
-+
-+	if (csi->bytes_per_word == 2)
-+		to_transfer >>= 1;
-+
-+	/*
-+	 * We can only choose a trigger level from a predefined set of values.
-+	 * This will pick a value that is the greatest possible integer that's
-+	 * less than or equal to the number of bytes we need to transfer.
-+	 * This may result in multiple smaller transfers.
-+	 */
-+	csi->words_to_transfer = x_trg_words[to_transfer - 1];
-+
-+	if (csi->bytes_per_word == 2)
-+		csi->bytes_to_transfer = csi->words_to_transfer << 1;
-+	else
-+		csi->bytes_to_transfer = csi->words_to_transfer;
-+}
-+
-+static inline void rzv2m_csi_set_rx_fifo_trigger_level(struct rzv2m_csi_priv *csi)
-+{
-+	rzv2m_csi_reg_write_bit(csi, CSI_FIFOTRG, CSI_FIFOTRG_R_TRG,
-+				x_trg[csi->words_to_transfer - 1]);
-+}
-+
-+static inline void rzv2m_csi_enable_rx_trigger(struct rzv2m_csi_priv *csi,
-+					       bool enable)
-+{
-+	rzv2m_csi_reg_write_bit(csi, CSI_CNT, CSI_CNT_R_TRGEN, enable);
-+}
-+
-+static void rzv2m_csi_disable_irqs(const struct rzv2m_csi_priv *csi,
-+				   u32 enable_bits)
-+{
-+	u32 cnt = readl(csi->base + CSI_CNT);
-+
-+	writel(cnt & ~enable_bits, csi->base + CSI_CNT);
-+}
-+
-+static void rzv2m_csi_disable_all_irqs(struct rzv2m_csi_priv *csi)
-+{
-+	rzv2m_csi_disable_irqs(csi, CSI_CNT_R_TRGR_E | CSI_CNT_T_TRGR_E |
-+			       CSI_CNT_CSIEND_E | CSI_CNT_TREND_E |
-+			       CSI_CNT_OVERF_E | CSI_CNT_UNDER_E);
-+}
-+
-+static inline void rzv2m_csi_clear_irqs(struct rzv2m_csi_priv *csi, u32 irqs)
-+{
-+	writel(irqs, csi->base + CSI_INT);
-+}
-+
-+static void rzv2m_csi_clear_all_irqs(struct rzv2m_csi_priv *csi)
-+{
-+	rzv2m_csi_clear_irqs(csi, CSI_INT_UNDER | CSI_INT_OVERF |
-+			     CSI_INT_TREND | CSI_INT_CSIEND |  CSI_INT_T_TRGR |
-+			     CSI_INT_R_TRGR);
-+}
-+
-+static void rzv2m_csi_enable_irqs(struct rzv2m_csi_priv *csi, u32 enable_bits)
-+{
-+	u32 cnt = readl(csi->base + CSI_CNT);
-+
-+	writel(cnt | enable_bits, csi->base + CSI_CNT);
-+}
-+
-+static int rzv2m_csi_wait_for_interrupt(struct rzv2m_csi_priv *csi,
-+					u32 wait_mask, u32 enable_bits)
-+{
-+	int ret;
-+
-+	rzv2m_csi_enable_irqs(csi, enable_bits);
-+
-+	ret = wait_event_timeout(csi->wait,
-+				 ((csi->status & wait_mask) == wait_mask) ||
-+				 csi->errors, HZ);
-+
-+	rzv2m_csi_disable_irqs(csi, enable_bits);
-+
-+	if (csi->errors)
-+		return -EIO;
-+
-+	if (!ret)
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_wait_for_tx_empty(struct rzv2m_csi_priv *csi)
-+{
-+	int ret;
-+
-+	if (readl(csi->base + CSI_OFIFOL) == 0)
-+		return 0;
-+
-+	ret = rzv2m_csi_wait_for_interrupt(csi, CSI_INT_TREND, CSI_CNT_TREND_E);
-+
-+	if (ret == -ETIMEDOUT)
-+		csi->errors |= TX_TIMEOUT_ERROR;
-+
-+	return ret;
-+}
-+
-+static inline int rzv2m_csi_wait_for_rx_ready(struct rzv2m_csi_priv *csi)
-+{
-+	int ret;
-+
-+	if (readl(csi->base + CSI_IFIFOL) == csi->bytes_to_transfer)
-+		return 0;
-+
-+	ret = rzv2m_csi_wait_for_interrupt(csi, CSI_INT_R_TRGR,
-+					   CSI_CNT_R_TRGR_E);
-+
-+	if (ret == -ETIMEDOUT)
-+		csi->errors |= RX_TIMEOUT_ERROR;
-+
-+	return ret;
-+}
-+
-+static irqreturn_t rzv2m_csi_irq_handler(int irq, void *data)
-+{
-+	struct rzv2m_csi_priv *csi = (struct rzv2m_csi_priv *)data;
-+
-+	csi->status = readl(csi->base + CSI_INT);
-+	rzv2m_csi_disable_irqs(csi, csi->status);
-+
-+	if (csi->status & CSI_INT_OVERF)
-+		csi->errors |= OVERFLOW_ERROR;
-+	if (csi->status & CSI_INT_UNDER)
-+		csi->errors |= UNDERRUN_ERROR;
-+
-+	wake_up(&csi->wait);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void rzv2m_csi_setup_clock(struct rzv2m_csi_priv *csi, u32 spi_hz)
-+{
-+	unsigned long csiclk_rate = clk_get_rate(csi->csiclk);
-+	unsigned long pclk_rate = clk_get_rate(csi->pclk);
-+	unsigned long csiclk_rate_limit = pclk_rate >> 1;
-+	u32 cks;
-+
-+	/*
-+	 * There is a restriction on the frequency of CSICLK, it has to be <=
-+	 * PCLK / 2.
-+	 */
-+	if (csiclk_rate > csiclk_rate_limit) {
-+		clk_set_rate(csi->csiclk, csiclk_rate >> 1);
-+		csiclk_rate = clk_get_rate(csi->csiclk);
-+	} else if ((csiclk_rate << 1) <= csiclk_rate_limit) {
-+		clk_set_rate(csi->csiclk, csiclk_rate << 1);
-+		csiclk_rate = clk_get_rate(csi->csiclk);
-+	}
-+
-+	spi_hz = spi_hz > CSI_MAX_SPI_SCKO ? CSI_MAX_SPI_SCKO : spi_hz;
-+
-+	cks = DIV_ROUND_UP(csiclk_rate, spi_hz << 1);
-+	if (cks > CSI_CKS_MAX)
-+		cks = CSI_CKS_MAX;
-+
-+	dev_dbg(csi->dev, "SPI clk rate is %ldHz\n", csiclk_rate / (cks << 1));
-+
-+	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKS, cks);
-+}
-+
-+static void rzv2m_csi_setup_operating_mode(struct rzv2m_csi_priv *csi,
-+					   struct spi_transfer *t)
-+{
-+	if (t->rx_buf && !t->tx_buf)
-+		/* Reception-only mode */
-+		rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_TRMD, 0);
-+	else
-+		/* Send and receive mode */
-+		rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_TRMD, 1);
-+
-+	csi->bytes_per_word = t->bits_per_word / 8;
-+	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_CCL,
-+				csi->bytes_per_word == 2);
-+}
-+
-+static int rzv2m_csi_setup(struct spi_device *spi)
-+{
-+	struct rzv2m_csi_priv *csi = spi_controller_get_devdata(spi->controller);
-+	int ret;
-+
-+	rzv2m_csi_sw_reset(csi, 0);
-+
-+	writel(CSI_MODE_SETUP, csi->base + CSI_MODE);
-+
-+	/* Setup clock polarity and phase timing */
-+	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKP,
-+				!(spi->mode & SPI_CPOL));
-+	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_DAP,
-+				!(spi->mode & SPI_CPHA));
-+
-+	/* Setup serial data order */
-+	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_DIR,
-+				!!(spi->mode & SPI_LSB_FIRST));
-+
-+	/* Set the operation mode as master */
-+	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_SLAVE, 0);
-+
-+	/* Give the IP a SW reset */
-+	ret = rzv2m_csi_sw_reset(csi, 1);
-+	if (ret)
-+		return ret;
-+	rzv2m_csi_sw_reset(csi, 0);
-+
-+	/*
-+	 * We need to enable the communication so that the clock will settle
-+	 * for the right polarity before enabling the CS.
-+	 */
-+	rzv2m_csi_start_stop_operation(csi, 1, false);
-+	udelay(10);
-+	rzv2m_csi_start_stop_operation(csi, 0, false);
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_pio_transfer(struct rzv2m_csi_priv *csi)
-+{
-+	bool tx_completed = csi->txbuf ? false : true;
-+	bool rx_completed = csi->rxbuf ? false : true;
-+	int ret = 0;
-+
-+	/* Make sure the TX FIFO is empty */
-+	writel(0, csi->base + CSI_OFIFOL);
-+
-+	csi->bytes_sent = 0;
-+	csi->bytes_received = 0;
-+	csi->errors = 0;
-+
-+	rzv2m_csi_disable_all_irqs(csi);
-+	rzv2m_csi_clear_all_irqs(csi);
-+	rzv2m_csi_enable_rx_trigger(csi, true);
-+
-+	while (!tx_completed || !rx_completed) {
-+		/*
-+		 * Decide how many words we are going to transfer during
-+		 * this cycle (for both TX and RX), then set the RX FIFO trigger
-+		 * level accordingly. No need to set a trigger level for the
-+		 * TX FIFO, as this IP comes with an interrupt that fires when
-+		 * the TX FIFO is empty.
-+		 */
-+		rzv2m_csi_calc_current_transfer(csi);
-+		rzv2m_csi_set_rx_fifo_trigger_level(csi);
-+
-+		rzv2m_csi_enable_irqs(csi, CSI_INT_OVERF | CSI_INT_UNDER);
-+
-+		/* Make sure the RX FIFO is empty */
-+		writel(0, csi->base + CSI_IFIFOL);
-+
-+		writel(readl(csi->base + CSI_INT), csi->base + CSI_INT);
-+		csi->status = 0;
-+
-+		rzv2m_csi_start_stop_operation(csi, 1, false);
-+
-+		/* TX */
-+		if (csi->txbuf) {
-+			ret = rzv2m_csi_fill_txfifo(csi);
-+			if (ret)
-+				break;
-+
-+			ret = rzv2m_csi_wait_for_tx_empty(csi);
-+			if (ret)
-+				break;
-+
-+			if (csi->bytes_sent == csi->buffer_len)
-+				tx_completed = true;
-+		}
-+
-+		/*
-+		 * Make sure the RX FIFO contains the desired number of words.
-+		 * We then either flush its content, or we copy it onto
-+		 * csi->rxbuf.
-+		 */
-+		ret = rzv2m_csi_wait_for_rx_ready(csi);
-+		if (ret)
-+			break;
-+
-+		/* RX */
-+		if (csi->rxbuf) {
-+			rzv2m_csi_start_stop_operation(csi, 0, false);
-+
-+			ret = rzv2m_csi_read_rxfifo(csi);
-+			if (ret)
-+				break;
-+
-+			if (csi->bytes_received == csi->buffer_len)
-+				rx_completed = true;
-+		}
-+
-+		ret = rzv2m_csi_start_stop_operation(csi, 0, true);
-+		if (ret)
-+			goto pio_quit;
-+
-+		if (csi->errors) {
-+			ret = -EIO;
-+			goto pio_quit;
-+		}
-+	}
-+
-+	rzv2m_csi_start_stop_operation(csi, 0, true);
-+
-+pio_quit:
-+	rzv2m_csi_disable_all_irqs(csi);
-+	rzv2m_csi_enable_rx_trigger(csi, false);
-+	rzv2m_csi_clear_all_irqs(csi);
-+
-+	return ret;
-+}
-+
-+static int rzv2m_csi_transfer_one(struct spi_controller *controller,
-+				  struct spi_device *spi,
-+				  struct spi_transfer *transfer)
-+{
-+	struct rzv2m_csi_priv *csi = spi_controller_get_devdata(controller);
-+	struct device *dev = csi->dev;
-+	int ret;
-+
-+	csi->txbuf = transfer->tx_buf;
-+	csi->rxbuf = transfer->rx_buf;
-+	csi->buffer_len = transfer->len;
-+
-+	rzv2m_csi_setup_operating_mode(csi, transfer);
-+
-+	rzv2m_csi_setup_clock(csi, transfer->speed_hz);
-+
-+	ret = rzv2m_csi_pio_transfer(csi);
-+	if (ret) {
-+		if (csi->errors & UNDERRUN_ERROR)
-+			dev_err(dev, "Underrun error\n");
-+		if (csi->errors & OVERFLOW_ERROR)
-+			dev_err(dev, "Overflow error\n");
-+		if (csi->errors & TX_TIMEOUT_ERROR)
-+			dev_err(dev, "TX timeout error\n");
-+		if (csi->errors & RX_TIMEOUT_ERROR)
-+			dev_err(dev, "RX timeout error\n");
-+	}
-+
-+	return ret;
-+}
-+
-+static int rzv2m_csi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *controller;
-+	struct device *dev = &pdev->dev;
-+	struct rzv2m_csi_priv *csi;
-+	struct reset_control *rstc;
-+	int irq;
-+	int ret;
-+
-+	controller = devm_spi_alloc_master(dev, sizeof(*csi));
-+	if (!controller)
-+		return -ENOMEM;
-+
-+	csi = spi_controller_get_devdata(controller);
-+	platform_set_drvdata(pdev, csi);
-+
-+	csi->dev = dev;
-+	csi->controller = controller;
-+
-+	csi->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(csi->base))
-+		return PTR_ERR(csi->base);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	csi->csiclk = devm_clk_get(dev, "csiclk");
-+	if (IS_ERR(csi->csiclk))
-+		return dev_err_probe(dev, PTR_ERR(csi->csiclk),
-+				     "could not get csiclk\n");
-+
-+	csi->pclk = devm_clk_get(dev, "pclk");
-+	if (IS_ERR(csi->pclk))
-+		return dev_err_probe(dev, PTR_ERR(csi->pclk),
-+				     "could not get pclk\n");
-+
-+	rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(rstc))
-+		return dev_err_probe(dev, PTR_ERR(rstc), "Missing reset ctrl\n");
-+
-+	init_waitqueue_head(&csi->wait);
-+
-+	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
-+	controller->dev.of_node = pdev->dev.of_node;
-+	controller->bits_per_word_mask = SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
-+	controller->setup = rzv2m_csi_setup;
-+	controller->transfer_one = rzv2m_csi_transfer_one;
-+	controller->use_gpio_descriptors = true;
-+
-+	ret = devm_request_irq(dev, irq, rzv2m_csi_irq_handler, 0,
-+			       dev_name(dev), csi);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot request IRQ\n");
-+
-+	/*
-+	 * The reset also affects other HW that is not under the control
-+	 * of Linux. Therefore, all we can do is make sure the reset is
-+	 * deasserted.
-+	 */
-+	reset_control_deassert(rstc);
-+
-+	/* Make sure the IP is in SW reset state */
-+	ret = rzv2m_csi_sw_reset(csi, 1);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(csi->csiclk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "could not enable csiclk\n");
-+
-+	ret = spi_register_controller(controller);
-+	if (ret) {
-+		clk_disable_unprepare(csi->csiclk);
-+		return dev_err_probe(dev, ret, "register controller failed\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int rzv2m_csi_remove(struct platform_device *pdev)
-+{
-+	struct rzv2m_csi_priv *csi = platform_get_drvdata(pdev);
-+
-+	spi_unregister_controller(csi->controller);
-+	rzv2m_csi_sw_reset(csi, 1);
-+	clk_disable_unprepare(csi->csiclk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rzv2m_csi_match[] = {
-+	{ .compatible = "renesas,rzv2m-csi" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rzv2m_csi_match);
-+
-+static struct platform_driver rzv2m_csi_drv = {
-+	.probe = rzv2m_csi_probe,
-+	.remove = rzv2m_csi_remove,
-+	.driver = {
-+		.name = "rzv2m_csi",
-+		.of_match_table = rzv2m_csi_match,
-+	},
-+};
-+module_platform_driver(rzv2m_csi_drv);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Fabrizio Castro <castro.fabrizio.jz@renesas.com>");
-+MODULE_DESCRIPTION("Clocked Serial Interface Driver");
 -- 
-2.34.1
+2.17.1
 
