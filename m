@@ -2,113 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3242C73AB6D
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jun 2023 23:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E011573AB72
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jun 2023 23:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjFVVQw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jun 2023 17:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S230186AbjFVVSJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jun 2023 17:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjFVVQv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jun 2023 17:16:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDB7195;
-        Thu, 22 Jun 2023 14:16:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C57361903;
-        Thu, 22 Jun 2023 21:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB0EC433C8;
-        Thu, 22 Jun 2023 21:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687468609;
-        bh=xSZmrtBW6K2rFKUlZrWXt4n85rXjSVP9x5eUXJgvqlw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GWOWGlXKarrlCwefPs3N9AZYJF7/V69mjTQH5dY7oYTdXl96w80eQks0w6kb9DXIl
-         3MCXebr6FFkL4gWeuhLDUaG7BRQwdliUwS1t1ZjCI6WppJUmUC5zBZiAiMkrvO0hJ6
-         EumX4G34tn8LzfFU3hgon6XcXqgIBhiB9tz5GqPM5uU8xLYq/trbuQwq8MD4DL57Kn
-         1u11VAIytyWQGo1EFZxOY3dI2LyJB5mmVXDRWw0LkBBch3MzMpzZBGLENIxzX6NShd
-         b0PPjUcVbumaPcZVESJfw0M6DypUW8ZTmzjTosWiqDtbDqAMLKNuqQcTI1jGrSzhWK
-         alHlYpiXJv4zA==
-Date:   Thu, 22 Jun 2023 22:16:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        krzysztof.kozlowski@linaro.org, andi@etezian.org, kernel@axis.com,
-        alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        with ESMTP id S229721AbjFVVSI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jun 2023 17:18:08 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3AFF1
+        for <linux-spi@vger.kernel.org>; Thu, 22 Jun 2023 14:18:07 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1687468686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ek7fz96w8JqxmY6wCHpt2UWYO66vJbxa3jnC//WlTjA=;
+        b=GFwY1CmHPJzZcfOsrttsXnXEs24uyqga1dJa3jvYoamq1tUVLVzzl3MK4F4aNWa/X3lQSC
+        YlJMn+cRPUQZWPkoMPm/CH9AbUFdjkV2lTbXdzwd/EfMcDI0WhTpFOHmJyChUVljtzsQkl
+        mgOWCkhkoaL6xhsTkGYisIZwUrlajtJmFq55Oobm7+PQZ/5C1zYtFgoVIQBpsjPuoM/h9H
+        yprErbM1mHHBJy6PCmnls+moqzBu2NkhTFC1rbjAb+0el2TBCmmDu/8NVTgh4KDlo8cAc/
+        XI6mcivB0WX6beOpA7PBu+CdrE9P7Q4sMH1tdxm8YWvr5rxSx4Tu3o6mNyaSpg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 836B7C0002;
+        Thu, 22 Jun 2023 21:18:04 +0000 (UTC)
+Date:   Thu, 22 Jun 2023 23:18:02 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] spi: Split transfers larger than max size
-Message-ID: <ZJS6OnzRapPCboC8@finisterre.sirena.org.uk>
-References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
- <20220927112117.77599-4-vincent.whitchurch@axis.com>
- <6dff003d-c727-e4a3-b5d3-f58beb2b02cb@linux.ibm.com>
+Subject: Re: [PATCH v3 0/3] spi: Helper for deriving timeout values
+Message-ID: <20230622231802.42b38b96@xps-13>
+In-Reply-To: <2686152.mvXUDI8C0e@jernej-laptop>
+References: <20230622090634.3411468-1-miquel.raynal@bootlin.com>
+        <2686152.mvXUDI8C0e@jernej-laptop>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NQj34PwTfnw4PHDi"
-Content-Disposition: inline
-In-Reply-To: <6dff003d-c727-e4a3-b5d3-f58beb2b02cb@linux.ibm.com>
-X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Jernej,
 
---NQj34PwTfnw4PHDi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+jernej.skrabec@gmail.com wrote on Thu, 22 Jun 2023 18:46:27 +0200:
 
-On Thu, Jun 22, 2023 at 02:48:36PM -0500, Eddie James wrote:
-> On 9/27/22 06:21, Vincent Whitchurch wrote:
-> > A couple of drivers call spi_split_transfers_maxsize() from their
-> > ->prepare_message() callbacks to split transfers which are too big for
-> > them to handle.  Add support in the core to do this based on
-> > ->max_transfer_size() to avoid code duplication.
+> Dne =C4=8Detrtek, 22. junij 2023 ob 11:06:31 CEST je Miquel Raynal napisa=
+l(a):
+> > Hello,
+> >=20
+> > I recently came across an issue with the Atmel spi controller driver
+> > which would stop my transfers after a too small timeout when performing
+> > big transfers (reading a 4MiB flash in one transfer). My initial idea
+> > was to derive a the maximum amount of time a transfer would take
+> > depending on its size and use that as value to avoid erroring-out when
+> > not relevant. Mark wanted to go further by creating a core helper doing
+> > that, based on the heuristics from the sun6i driver.
+> >=20
+> > Here is a small series of 3 patches doing exactly that.
+> >=20
+> > Cheers,
+> > Miqu=C3=A8l
+> >=20
+> > Changes in v3:
+> > * Collected a tag. =20
+>=20
+> Did you? I don't see my a-b at patch 3.
 
-> I've been testing AT25 functionality in linux 6.1 and I believe this patch
-> is breaking the AT25 protocol. It will split a write command up such that
-> some of the data is in a different transfer than=A0 the write enable and
-> address. According to my understanding of the AT25 spec, that doesn't
-> work... Someone correct me if I'm wrong though. Do we need a flag to
-> enable/disable this behavior depending on the client perhaps?
+I thought I did, sorry if I missed it. Do you mind re-sending it?
 
-Could you be more specific about the manner in which you think this is
-breaking things?  The size of transfer is immaterial to the client
-device on SPI, the client will be counting clocks while the chip select
-is asserted.  How the controller chooses to split things up is really
-not particularly visible or relevant, it might bitbang things out one
-bit at a time, transfer a single word at a time or batch things up
-further.  So long as the chip select is asserted it's all the same to
-the client device.
+>=20
+> Best regards,
+> Jernej
+>=20
+> > * As my platform runs on 6.1 currently, I cherry-picked a mainline patch
+> >   changing s/master/host/ in the atmel controller driver and modified t=
+he
+> >   series to fit the new naming. I then cherry-picked my three patches a=
+nd
+> >   verified it compiled correctly against a v6.4-rc1.
+> >=20
+> > Miquel Raynal (3):
+> >   spi: Create a helper to derive adaptive timeouts
+> >   spi: atmel: Prevent false timeouts on long transfers
+> >   spi: sun6i: Use the new helper to derive the xfer timeout value
+> >=20
+> >  drivers/spi/spi-atmel.c | 18 +++++++++++-------
+> >  drivers/spi/spi-sun6i.c |  2 +-
+> >  include/linux/spi/spi.h | 17 +++++++++++++++++
+> >  3 files changed, 29 insertions(+), 8 deletions(-)
+> >=20
+> >  =20
+>=20
+>=20
+>=20
+>=20
 
-In any case this is all based on the maximum transfer size advertised by
-the conteroller driver, if the device can physically handle larger
-transfers then there's no reason for it to set a limit.  If the driver
-can't physically handle larger transfers and it does make a difference
-then the system simply won't work.
-
---NQj34PwTfnw4PHDi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSUujkACgkQJNaLcl1U
-h9CPqgf/X1FRQ/Sr3bPuUa1Qk8QD6FT06cmknaYG6mWBtbznGfhPMgnpM0ivm/2c
-FKdQxPc7eUI5mBzxjx3wsm6Agmnw3LEV7kfgrwNYBUlwMH6BcMxmQ9S6rBqhvgXj
-tBXUiGkEjui8JRRBQZKy+lYexFEp6tGeFeW6OiLYShkyIZtZQiX93RhXB8zhLglK
-TMuOVuzrJDnXG35gAaa2ws0NQDkjI+5x/gsnQqkeRKOAyf8My2euyWMi2I2MWK7z
-L2dW33I3biwLv4X0fK75Yd5IhbRNBuu+hLv1WLutJ/v2yB4MHYaljnFbwlW57ooA
-EIT4Z/A4Qgo5MQl1zHN2TEGYH8+wIg==
-=vzqY
------END PGP SIGNATURE-----
-
---NQj34PwTfnw4PHDi--
+Thanks,
+Miqu=C3=A8l
