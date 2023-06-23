@@ -2,77 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3643373B48C
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Jun 2023 12:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D035173BAAC
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Jun 2023 16:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjFWKID (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Jun 2023 06:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S232333AbjFWOwB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Jun 2023 10:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjFWKHh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Jun 2023 06:07:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F182961;
-        Fri, 23 Jun 2023 03:06:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD152619F3;
-        Fri, 23 Jun 2023 10:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0B5C433C8;
-        Fri, 23 Jun 2023 10:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687514734;
-        bh=u13o1+rrFLOmxywhCwBs2AYh1dkZZnD42oB3y8jhIpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fh+7VyxZB1iLWw7j5+UyckQsRocruM9cSwxZG9GvVHMa8SEm06fMMZ4eTxtrpmSXy
-         FmOYLwb7tc+/UkDHE9k/vuXLLiWesRnYqh2Pt5UU1C53VH03UU7i/a+x+j5ZOgCgXf
-         PWCtyZoZwnrn8tcPOHB7bzWadciBfS9s3kSdiakWyt3dX7mgMe40vCjKukoP469Uq7
-         5KK3Cn0zs2Fwkya5+kmy1/cGKnnfMkmIg46+8T3GCAiEtIs6jXgxuog1+thdql0Uwu
-         y/Jm/skSiuPnAKtWOfCXC6BPvU8Rz6faa8a5zRuex5xjVYzra7xshse/l1Q40KNNzr
-         U38C+9AV2c6BQ==
-Date:   Fri, 23 Jun 2023 11:05:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232307AbjFWOvz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Jun 2023 10:51:55 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1594E7E;
+        Fri, 23 Jun 2023 07:51:54 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-307d20548adso737801f8f.0;
+        Fri, 23 Jun 2023 07:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687531913; x=1690123913;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rJWtnTqZGQqiTeKl4r3aFL4RAd0yKamdEh9nm3JU/uE=;
+        b=nZcAJ+sOqOwPNZAQ60lFA97QCbjofCc+XbSeSieNhhuKrWMtiE/O020aJCaGZig5Lf
+         M+2Ra8MPpBVqUhcStWmEYd2ObUzA+kQ3K8H2ePAsYG1JWTf3WWXWaROYVC6t7QX+mx6J
+         ESspbYNZ8OxGO/MfZaT0ORXOyftuTisX0q5bz1doEqX176Xd3AyztjKHNHN63UimszRn
+         Dqv+xetGcZd2+R0LFeA2aONQHwXzUPMXk9dRWS8mqvQ8vpJvPrOKCvsRr9lGz/T5jW+G
+         bbfDKveX+aL7d/d/Okx6QglyYu1YT1lUbE8K9aKT4exUm3nUwLqWGufz9RjrDc1FYimv
+         EUrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687531913; x=1690123913;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rJWtnTqZGQqiTeKl4r3aFL4RAd0yKamdEh9nm3JU/uE=;
+        b=WYehHfDU/yBusayWkcf6YXa5LybZix2sh2aedojwRd6UTW49XKK3KM/R1odeuyRhiW
+         KVSNaUpOEbd+GAppbmuwVcLxCJv7YHDKBiC1C+2nNp2eQASghcc7YT5XGTcwOIRlzzMR
+         ih+jHVUyJeZkPcW5NOYK5gpRaATIGg9DBK7PxG921nwwZa1+8blKle1G+jW/3y5p8QuP
+         WckyEFqJOZWFMYq+w00HIYsuBobw4nl3xYPQuTkG3nBW8qoougT9Nc34CZXz1cLA47p4
+         xU7t/kfO1NM8ZvolWkuUtcd8ynw5VqjEMOh+s9PSOpalyx0LfVTHaV3b4I1wjfaLewYH
+         cTTg==
+X-Gm-Message-State: AC+VfDw1Yjl4MOZLfZQvSd/xwd3Ajzn4dEsLmgP0xEgm0frbRjFqSypG
+        C7fYJXqQZEj3yAAw3qgFCDY=
+X-Google-Smtp-Source: ACHHUZ4EBaf4UIgKOYCqelucvQ5eoSxiLNvK3UwYGIN9g04VxMMagZ6W8cf/YKjEZ8A8mLc9ODWWzg==
+X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr14242204wrw.47.1687531913116;
+        Fri, 23 Jun 2023 07:51:53 -0700 (PDT)
+Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id n11-20020a5d4c4b000000b003113ccbf388sm9844475wrt.13.2023.06.23.07.51.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 07:51:52 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-Subject: Re: [PATCH v2 0/5] spi: Add CSI support for Renesas RZ/V2M
-Message-ID: <ZJVuan8ddJyhU23M@finisterre.sirena.org.uk>
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
- <168748034127.332493.277333132642198960.b4-ty@kernel.org>
- <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Subject: Re: (subset) [PATCH 0/7] dt-bindings: restrict node name suffixes
+Date:   Fri, 23 Jun 2023 16:51:36 +0200
+Message-ID: <168753171977.1191890.3520383079920452323.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tNhmPaleGGTul9gb"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
-X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,51 +93,23 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---tNhmPaleGGTul9gb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 30 May 2023 16:48:44 +0200, Krzysztof Kozlowski wrote:
+> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
+> only decimal numbers.  In few cases narrow the pattern to also disallow
+> multiple suffixes, e.g. "pwm-5-5".
+> 
+> No dependencies, can be applied by individual subsystems.
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> [...]
 
-On Fri, Jun 23, 2023 at 08:49:05AM +0200, Geert Uytterhoeven wrote:
-> On Fri, Jun 23, 2023 at 2:32=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
-rote:
+Applied, thanks!
 
-> > [1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
-> >       commit: db63e7ad2895409f78a04f331f781baa7a879dd7
-> > [2/5] clk: renesas: r9a09g011: Add CSI related clocks
-> >       commit: 7c78eb3e5d30eaa217cecaa32711e41cd849d498
-> > [3/5] spi: Add support for Renesas CSI
-> >       commit: dcf92036cb3e1b7bf3472109e4290a0937b270dd
-> > [4/5] arm64: dts: renesas: r9a09g011: Add CSI nodes
-> >       commit: ef643c6b57020ee279d18636d9d967ee048dbffa
-> > [5/5] arm64: defconfig: Enable Renesas RZ/V2M CSI driver
-> >       commit: dfbd12ae0e7c761e07369f5a2d55fe06eb54ad31
->=20
-> I hoped this would have been a bug in b4 thanks, but unfortunately it
-> is not.
->=20
-> Please do not apply unreviewed clock, DTS, and defconfig patches to
-> your tree.  These are intended to go upstream through the renesas-clk
-> and clk, renesas-dt and soc, resp. renesas-defconfig and soc trees.
+[2/7] dt-bindings: pwm: restrict node name suffixes
+      commit: 05b743db9d8cc4e51b3eb77889d24ab9aa2bf169
 
-Sorry, the series was only partially copied to me so it wasn't very
-visible that there were other patches - I just saw a simple 2 patch
-series in my inbox and it's not terribly visible in the rest of the
-process that there's more patches.
-
---tNhmPaleGGTul9gb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSVbmkACgkQJNaLcl1U
-h9DFMgf/ehmxBqPaGijsQRJEGrYX5x/j1Agmk7LmRCreemyD/EaJyaB1aT3mdcoC
-7nS4KSunL13OM6AhhupjXibNhajMdQrVutiPRMQWoEOXlfTj8PU8wXCUrvlcIyMx
-DXzKAJR8GrRvHH8QiyoS0rngoyLqNrO+cU09zZeZ1oxo2tVLX5V9BmAzzvbtAOdl
-l5BpijDcQlRMLGVaZJ6NtJE4AcSZUCu3jjk96gqoIRM/GFoh4RfmL7XpqpxB/dBx
-QNXN6bRIpFOfALKmwjkM5YSD4lCVH4rd6NC8Tsu0cLzuw1OWbPUikjsQhUCcofl7
-RM/04tYgoCZb6kamopH8Ak4q8hydrA==
-=/eXQ
------END PGP SIGNATURE-----
-
---tNhmPaleGGTul9gb--
+Best regards,
+-- 
+Thierry Reding <thierry.reding@gmail.com>
