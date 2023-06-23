@@ -2,114 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D035173BAAC
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Jun 2023 16:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ED373BB17
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Jun 2023 17:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbjFWOwB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Jun 2023 10:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S232430AbjFWPIV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Jun 2023 11:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbjFWOvz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Jun 2023 10:51:55 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1594E7E;
-        Fri, 23 Jun 2023 07:51:54 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-307d20548adso737801f8f.0;
-        Fri, 23 Jun 2023 07:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687531913; x=1690123913;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJWtnTqZGQqiTeKl4r3aFL4RAd0yKamdEh9nm3JU/uE=;
-        b=nZcAJ+sOqOwPNZAQ60lFA97QCbjofCc+XbSeSieNhhuKrWMtiE/O020aJCaGZig5Lf
-         M+2Ra8MPpBVqUhcStWmEYd2ObUzA+kQ3K8H2ePAsYG1JWTf3WWXWaROYVC6t7QX+mx6J
-         ESspbYNZ8OxGO/MfZaT0ORXOyftuTisX0q5bz1doEqX176Xd3AyztjKHNHN63UimszRn
-         Dqv+xetGcZd2+R0LFeA2aONQHwXzUPMXk9dRWS8mqvQ8vpJvPrOKCvsRr9lGz/T5jW+G
-         bbfDKveX+aL7d/d/Okx6QglyYu1YT1lUbE8K9aKT4exUm3nUwLqWGufz9RjrDc1FYimv
-         EUrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687531913; x=1690123913;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rJWtnTqZGQqiTeKl4r3aFL4RAd0yKamdEh9nm3JU/uE=;
-        b=WYehHfDU/yBusayWkcf6YXa5LybZix2sh2aedojwRd6UTW49XKK3KM/R1odeuyRhiW
-         KVSNaUpOEbd+GAppbmuwVcLxCJv7YHDKBiC1C+2nNp2eQASghcc7YT5XGTcwOIRlzzMR
-         ih+jHVUyJeZkPcW5NOYK5gpRaATIGg9DBK7PxG921nwwZa1+8blKle1G+jW/3y5p8QuP
-         WckyEFqJOZWFMYq+w00HIYsuBobw4nl3xYPQuTkG3nBW8qoougT9Nc34CZXz1cLA47p4
-         xU7t/kfO1NM8ZvolWkuUtcd8ynw5VqjEMOh+s9PSOpalyx0LfVTHaV3b4I1wjfaLewYH
-         cTTg==
-X-Gm-Message-State: AC+VfDw1Yjl4MOZLfZQvSd/xwd3Ajzn4dEsLmgP0xEgm0frbRjFqSypG
-        C7fYJXqQZEj3yAAw3qgFCDY=
-X-Google-Smtp-Source: ACHHUZ4EBaf4UIgKOYCqelucvQ5eoSxiLNvK3UwYGIN9g04VxMMagZ6W8cf/YKjEZ8A8mLc9ODWWzg==
-X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr14242204wrw.47.1687531913116;
-        Fri, 23 Jun 2023 07:51:53 -0700 (PDT)
-Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d4c4b000000b003113ccbf388sm9844475wrt.13.2023.06.23.07.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 07:51:52 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S232412AbjFWPIQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Jun 2023 11:08:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303DD1BFC;
+        Fri, 23 Jun 2023 08:08:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4C3A61A91;
+        Fri, 23 Jun 2023 15:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3A4C433C0;
+        Fri, 23 Jun 2023 15:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687532891;
+        bh=3aJbXXS1dxHMwN8plKfOpCM0MRNpJNGkqLGy+rJ2hMI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=g266/4YXW1nG+ZsPTv1VlNoIknk0KWvJqNxf7LSps5gzmHyamx6YZsd39Jiff8hjx
+         2R/eTcdohWwMre7qlditLLLj90Xi8jOpvzM58isG2KPwoOFaFnQ/1O+VDLn1eXGUqT
+         c4aCRU7qSyJnYrr82+Tn6d5FtAJjBFwFhtCTQKNgPugqc+tVICQpMCu6LsT5kWNvLo
+         1SJkAE97fTgfgUinFuv67hMACP1Ry5YW/5AdQbLuQFual+yt5FWBVow7rj9apXm09O
+         cwx4g3A8d1py3P4Mea4/TPAfiC5THfmgMDJGmb+q6XR6F7453CBEeCarJlCb0sAdlI
+         bJ2tAIADPbWyg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Subject: Re: (subset) [PATCH 0/7] dt-bindings: restrict node name suffixes
-Date:   Fri, 23 Jun 2023 16:51:36 +0200
-Message-ID: <168753171977.1191890.3520383079920452323.b4-ty@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
+        <nfraprado@collabora.com>,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+In-Reply-To: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+Subject: Re: (subset) [PATCH v2 0/5] spi: Add CSI support for Renesas
+ RZ/V2M
+Message-Id: <168753288294.678655.6301529278145768890.b4-ty@kernel.org>
+Date:   Fri, 23 Jun 2023 16:08:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On Tue, 30 May 2023 16:48:44 +0200, Krzysztof Kozlowski wrote:
-> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
-> only decimal numbers.  In few cases narrow the pattern to also disallow
-> multiple suffixes, e.g. "pwm-5-5".
+On Thu, 22 Jun 2023 12:33:36 +0100, Fabrizio Castro wrote:
+> This series is to add support for the Clocked Serial Interface (CSI)
+> IP found in the Renesas RZ/V2M SoC.
 > 
-> No dependencies, can be applied by individual subsystems.
+> Thanks,
+> Fab
 > 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> v2: edited list of include files in drivers/spi/spi-rzv2m-csi.c
 > 
 > [...]
 
-Applied, thanks!
+Applied to
 
-[2/7] dt-bindings: pwm: restrict node name suffixes
-      commit: 05b743db9d8cc4e51b3eb77889d24ab9aa2bf169
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
--- 
-Thierry Reding <thierry.reding@gmail.com>
+Thanks!
+
+[1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
+      commit: db63e7ad2895409f78a04f331f781baa7a879dd7
+[3/5] spi: Add support for Renesas CSI
+      commit: dcf92036cb3e1b7bf3472109e4290a0937b270dd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
