@@ -2,127 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5669773C9FB
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 11:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0120E73CA25
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 11:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjFXJUD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 24 Jun 2023 05:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S233162AbjFXJ2v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 24 Jun 2023 05:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbjFXJUA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 05:20:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3456D1BC6
-        for <linux-spi@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d7e8dd118so596317a12.1
-        for <linux-spi@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=yQVzjTKSXVmVV9dLLVhjlfW4hSkCHaHSkFp8XKDuppCzQpGHvyVttjnWT3sZWadL6G
-         Aptg8K8aHU9euO2VsKWw8w5GNb7iZUmQN6s980dsKNw8bDt/Gg0mjyG+1qbTOWHueIrY
-         /Q6bxSUkrx10KI9Bk3ImA6gPyy5RwRLI1IVUQjGo73WdFwY+k9WU2qYNImsGMRH4LVBY
-         NGoLGDAz09o/yosqduTlRt/bCpwDw40AnKJvyTtb5EsV6kYLtwXhkQO6myiWdEiHilCp
-         eezk0kHCVcUBB/e4mc1VfkMXxJnPCuve2SWX/BdtYwhjQIOCgvko85iNcFXLb/8ecU/N
-         rm6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=RF2OBRV/VijXp4VwHuhnGkkCsn9ZcN1PPFPUGOTRti7aEmulYds+nBSt18LwW3JDUA
-         Xnvlek6V3e6H0awjgF/qqlBIQodMuBFc9uIazmBSAoOCvo9lKdHjEaGi8yRkR/4+E0CX
-         uJ4wzSQb5bo99hH3xyEz3Z6hjNijNcmVl+fH4jyougy+jbGYSSr3n/uAAevFr1Ysh/h9
-         5R5+6UnO/DJmVDhBnmvNuiBX9hQziEi6Rt2hMFdzlnuLkROmlQ7Gw/zqd5e7aM3v8wbI
-         ITueNcX+RmkeLgQhfsaR5SOQavH1bh5oXgH3uu6GhtjKeoqT2NfNQCsiW5uO6Vm3+aV+
-         ktGA==
-X-Gm-Message-State: AC+VfDz4owmKHaCqGZTqhYmfCNOU4Lb6PULplU9TMpTeCfuMbF5wNQS3
-        vy1BrlTXNjn4chF27ILK9rcn7w==
-X-Google-Smtp-Source: ACHHUZ5fG8f481PX14S7vktzFZQMA1l6HoKP1yysFPHfBvGgcLJOb2TMBp2polua7/w5jYwHHssrXQ==
-X-Received: by 2002:a17:907:987:b0:987:6372:c31f with SMTP id bf7-20020a170907098700b009876372c31fmr16230436ejc.37.1687598396633;
-        Sat, 24 Jun 2023 02:19:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p13-20020a1709060e8d00b00989065149d0sm663324ejf.86.2023.06.24.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:19:55 -0700 (PDT)
-Message-ID: <ca3b6a75-2811-6013-28cc-9f6a7854b469@linaro.org>
-Date:   Sat, 24 Jun 2023 11:19:49 +0200
+        with ESMTP id S232576AbjFXJ23 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 05:28:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F8F10FD;
+        Sat, 24 Jun 2023 02:28:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B27F260C4A;
+        Sat, 24 Jun 2023 09:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C97C433C0;
+        Sat, 24 Jun 2023 09:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687598907;
+        bh=LxXDcbLJc1zSmgzEDzBM0Y/eWiAZ7Drimq7fAAeDJRM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cd3laRtKsLBk8T2MjxZCLJ93vWD0QNIiyHG64tT0CTReINsyZ2yiZ0cyXYbelvEXR
+         Yy7Wpddh5JYC2AcPazLR/XX/ExQesued1zaY7AOUkmMSLvpaJTAzdkQ2Lqcs3w/4e3
+         HaPfRgnOpUlF54OSu7jJxPCMKd6CnClu0L1F4CnA5Jvr1R56GC7TL6w0JWlYy5dLVC
+         vXTWGn82lO2qhMBb6gg4EAhrMRVBR0CfkDrhpRL4cz8Man1yc0t9ZGlhedLmkfYqoT
+         VJhLCOSNrcl0nQZiiA7Ed0xLm+rN6XespLxso0ZuIg7pFH8Z4OmtNDGKMsu3uYbchj
+         13NTqEEAkPG9A==
+Date:   Sat, 24 Jun 2023 10:28:22 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: atmel,at91rm9200-spi: fix broken
+ sam9x7 compatible
+Message-ID: <20230624-embassy-scuff-9fdc0f150d1a@spud>
+References: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
- add sam9x60, sam9x7 compatible
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
-        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
-        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, alain.volmat@foss.st.com,
-        neil.armstrong@linaro.org, mihai.sain@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        balamanikandan.gunasundar@microchip.com,
-        manikandan.m@microchip.com, dharma.b@microchip.com,
-        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-2-varshini.rajendran@microchip.com>
- <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-In-Reply-To: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bwrTTO9opmPzEFoX"
+Content-Disposition: inline
+In-Reply-To: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24/06/2023 09:53, Krzysztof Kozlowski wrote:
-> On 23/06/2023 22:30, Varshini Rajendran wrote:
->> Add sam9x60, sam9x7 compatible string support in the schema file.
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> ---
->>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Un-acked. Actually NAK.
+--bwrTTO9opmPzEFoX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This does not match your DTS. Please test your patches before sending.
+On Sat, Jun 24, 2023 at 10:20:54AM +0200, Krzysztof Kozlowski wrote:
+> Commit a3eb95484f27 ("spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7
+> compatible") adding sam9x7 compatible did not make any sense as it added
+> new compatible into middle of existing compatible list.  The intention
+> was probably to add new set of compatibles with sam9x7 as first one.
+>=20
+> Fixes: a3eb95484f27 ("spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7 =
+compatible")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+@Varshini, this is the template to follow for the rest of the series. I
+know there's a lot of complaints while running dtbs_check for the entire
+directory, but you can isolate things to a singular binding and check
+the dts against it using:
+make dtbs_check DT_SCHEMA_FILES=3Datmel,at91rm9200-spi.yaml
+That should make it easier to see that you don't break existing dts by
+modifying the binding.
+
+Cheers,
+Conor.
+
+> ---
+>  .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml          | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.y=
+aml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> index bdc42eeacba4..58367587bfbc 100644
+> --- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> @@ -19,7 +19,10 @@ properties:
+>        - const: atmel,at91rm9200-spi
+>        - items:
+>            - const: microchip,sam9x60-spi
+> +          - const: atmel,at91rm9200-spi
+> +      - items:
+>            - const: microchip,sam9x7-spi
+> +          - const: microchip,sam9x60-spi
+>            - const: atmel,at91rm9200-spi
+> =20
+>    reg:
+> --=20
+> 2.34.1
+>=20
+
+--bwrTTO9opmPzEFoX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJa3NQAKCRB4tDGHoIJi
+0g0eAP9R9uhyfBlfuOXjh+drak8V4k0CqR/F+9JXOOjXjGIDXAD9FaRriN4gGH6z
+ykN2QwJ/0oMeGcfsAPeXfFu5o0gzDQw=
+=tkPS
+-----END PGP SIGNATURE-----
+
+--bwrTTO9opmPzEFoX--
