@@ -2,58 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699E573CC13
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 19:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED52473CC49
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 19:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjFXRky (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 24 Jun 2023 13:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S233194AbjFXRuW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 24 Jun 2023 13:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFXRkx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 13:40:53 -0400
+        with ESMTP id S230000AbjFXRuV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 13:50:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95011BC2;
-        Sat, 24 Jun 2023 10:40:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEB1BE2
+        for <linux-spi@vger.kernel.org>; Sat, 24 Jun 2023 10:50:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 455126092A;
-        Sat, 24 Jun 2023 17:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BB2C433C0;
-        Sat, 24 Jun 2023 17:40:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7493460907
+        for <linux-spi@vger.kernel.org>; Sat, 24 Jun 2023 17:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D01CEC433C8;
+        Sat, 24 Jun 2023 17:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687628450;
-        bh=5uw4ioxmxRm5FpJGvseBufZ9FdZrud/jDgdUzD+9qik=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Ovfqjm6GzxlA1TkFD9ouzjwq5Imvzuk1oQSKZi/+QyZdLMLz+OvyJHt9Yk4PQMQmP
-         UtRnFwbTm2BjTUTxb1TVz63aRvJa+wZti0VFYPoRE77+HaEXNsKZ4v2tlcrhY3hCuc
-         oA5AdDb9TB9wBxSKLI8mUEwShELHxK1P6xr0+KYzMc3q8eiMpALeb2T5BaUNl4HhEC
-         c/TMxexsR0lj4tSFmTmDBvsJDXjpXrcHlRqYW6KbobLcrgRAH/Qn//S4Tmgmed0uqY
-         rCzsBooavxI6iS21lBOLh6dvtUnbaFzrusO9V6NY9secxq7uxdVgF4i3WITgYsgG7V
-         z0gYmFNGviS2w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
-References: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] spi: dt-bindings: atmel,at91rm9200-spi: fix broken
- sam9x7 compatible
-Message-Id: <168762843922.1328079.8328118275834289222.b4-ty@kernel.org>
-Date:   Sat, 24 Jun 2023 18:40:39 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1687629019;
+        bh=zevvP5MooIPRVmoi7Ui7/LkFx4Pt0Y6vvu6LIFCbcmU=;
+        h=Subject:From:Date:To:From;
+        b=VeBcoGsY++BXskXjHbiO5F3lj3Lqdq5JvwZvZvGatNckR6JQo0FfW3RGv8Qx11uoN
+         jpgJHTBcX+Z44X8nrYpJocqT9N3s8X6xsUIrDysYZMoDAOJYgTYATkeZfnmjGtiWTQ
+         C/sjpBLz1ktHw7thzXb1Wm4qYCk0PYpKL2zcuWh9qYUcG2H6FtNWB3FcAEAMlXdbAz
+         gBWfSXzus0pQ6wywEUcEhzlkbR29clxvCMFksDHVWIna/S9lL0Q4+BepyXlFRh/OmV
+         yz0gcyr3BJIAq7qpt8wo7CQnLzkgGgnKHJSGaoz9oHt2xHySCWe9oFTuUQrF3rGb2P
+         Pt2Uumu6VoGzA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AAE64C395C7;
+        Sat, 24 Jun 2023 17:50:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168762901964.550.13378781454093080679.git-patchwork-summary@kernel.org>
+Date:   Sat, 24 Jun 2023 17:50:19 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,39 +53,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 24 Jun 2023 10:20:54 +0200, Krzysztof Kozlowski wrote:
-> Commit a3eb95484f27 ("spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7
-> compatible") adding sam9x7 compatible did not make any sense as it added
-> new compatible into middle of existing compatible list.  The intention
-> was probably to add new set of compatibles with sam9x7 as first one.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: dt-bindings: atmel,at91rm9200-spi: fix broken sam9x7 compatible
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=759968
+  Lore link: https://lore.kernel.org/r/20230624082054.37697-1-krzysztof.kozlowski@linaro.org
 
-Thanks!
 
-[1/1] spi: dt-bindings: atmel,at91rm9200-spi: fix broken sam9x7 compatible
-      commit: e884a133340a470070b2c59833c9ff87aa6517ba
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
