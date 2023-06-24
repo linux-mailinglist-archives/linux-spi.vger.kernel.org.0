@@ -2,114 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE08573CB02
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 15:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699E573CC13
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Jun 2023 19:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjFXNRV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 24 Jun 2023 09:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S231967AbjFXRky (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 24 Jun 2023 13:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbjFXNRT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 09:17:19 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE771FF0;
-        Sat, 24 Jun 2023 06:17:17 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fa71e253f2so25207285e9.0;
-        Sat, 24 Jun 2023 06:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687612636; x=1690204636;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KAYPGxSTFPjM3RqhwW9I/u0fjI7Fx45EUbdLcf3Fbbk=;
-        b=RTqZRv+kicZW7QzVJK3ZagJlTPPID3erCQjK8DbAaVPTMWw3b0mjuGV5SQVg3A7Hfp
-         kTP3MO1AV9lx1/fyLW3WpWXj4HmKkLq3zsShiKr+AZkRpIUvDHPemFoM8d6lYuJBkhVf
-         VwXLSS0PvzKxnzoIXhwxmKBAloifepGmC78ZDgEmk5MbVTY+UmUcnQs8jnP7jUKTgQ1t
-         ovA2xPB5nkCELrRww6By/LY2lIhiGufo89h+gKofzrfcx/6CnBLsCo++cVmYMzLAiVW3
-         P2v56HjmRyol/JePLMkvownV0cd+4jPAN3a3PkXbpyjqgTMgtriUwWMRfhDtyahMiisK
-         i7jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687612636; x=1690204636;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KAYPGxSTFPjM3RqhwW9I/u0fjI7Fx45EUbdLcf3Fbbk=;
-        b=QRKD+Pcjcox3UgNNFPsHHsErRw05pwQlA5aFgg2lrkjnHOaiW8jNI3epDvb+hbZIvR
-         mzn0HJVDjNnoEQ3M2wV/5ANgsp+BrDSzui9LnUvWkBH3vDqg4TKOS6/W/IUUjnLQjbpi
-         XWuApkkTQbTPnwqfbej4iQ+pcGZlc9fuC/Xc2VxVUEFNQ3UL6MhUpBnHsc3NQa4vvNUh
-         8QGjED63Ox8cspJ9uHgGNy5FUH77edXVPz2Lz2HJ5PyF+Uyh6aNM/8airSMBYk4tNXZp
-         rK7VrQ6hdFaW5eKALm0Eh6KdPR0cihUYX71IKepAYW3tiAIKJXupeou6cn0b0Vs7phhF
-         txAw==
-X-Gm-Message-State: AC+VfDwxtLs+KRi5Yb1csUX86kdX12gINmYMrA74eZvh1JE8poJSwM7d
-        gOwxfhwLovEEZ1BBArP74osk/Ucw+0tJDWW3
-X-Google-Smtp-Source: ACHHUZ6AxRD4qR+dRoN7S7SE01tpvdTdIi7AeyJugnitjFY045wLn75ojjvOMv78elsfe85Qmldkag==
-X-Received: by 2002:a05:600c:245:b0:3fa:838d:adbd with SMTP id 5-20020a05600c024500b003fa838dadbdmr1749644wmj.1.1687612635438;
-        Sat, 24 Jun 2023 06:17:15 -0700 (PDT)
-Received: from user-PC.. ([92.51.95.194])
-        by smtp.gmail.com with ESMTPSA id l1-20020a1ced01000000b003f9b0830107sm5107428wmh.41.2023.06.24.06.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 06:17:15 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229448AbjFXRkx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Jun 2023 13:40:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95011BC2;
+        Sat, 24 Jun 2023 10:40:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455126092A;
+        Sat, 24 Jun 2023 17:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BB2C433C0;
+        Sat, 24 Jun 2023 17:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687628450;
+        bh=5uw4ioxmxRm5FpJGvseBufZ9FdZrud/jDgdUzD+9qik=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=Ovfqjm6GzxlA1TkFD9ouzjwq5Imvzuk1oQSKZi/+QyZdLMLz+OvyJHt9Yk4PQMQmP
+         UtRnFwbTm2BjTUTxb1TVz63aRvJa+wZti0VFYPoRE77+HaEXNsKZ4v2tlcrhY3hCuc
+         oA5AdDb9TB9wBxSKLI8mUEwShELHxK1P6xr0+KYzMc3q8eiMpALeb2T5BaUNl4HhEC
+         c/TMxexsR0lj4tSFmTmDBvsJDXjpXrcHlRqYW6KbobLcrgRAH/Qn//S4Tmgmed0uqY
+         rCzsBooavxI6iS21lBOLh6dvtUnbaFzrusO9V6NY9secxq7uxdVgF4i3WITgYsgG7V
+         z0gYmFNGviS2w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] riscv: dts: allwinner: d1: Add QSPI pins node for pinmux PC port
-Date:   Sat, 24 Jun 2023 16:16:24 +0300
-Message-Id: <20230624131632.2972546-4-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230624131632.2972546-1-bigunclemax@gmail.com>
-References: <20230624131632.2972546-1-bigunclemax@gmail.com>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
+References: <20230624082054.37697-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] spi: dt-bindings: atmel,at91rm9200-spi: fix broken
+ sam9x7 compatible
+Message-Id: <168762843922.1328079.8328118275834289222.b4-ty@kernel.org>
+Date:   Sat, 24 Jun 2023 18:40:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add pinmux node that describes pins on PC port which required for
-QSPI mode.
+On Sat, 24 Jun 2023 10:20:54 +0200, Krzysztof Kozlowski wrote:
+> Commit a3eb95484f27 ("spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7
+> compatible") adding sam9x7 compatible did not make any sense as it added
+> new compatible into middle of existing compatible list.  The intention
+> was probably to add new set of compatibles with sam9x7 as first one.
+> 
+> 
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
----
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Applied to
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 1bb1e5cae602..9f754dd03d85 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -131,6 +131,13 @@ uart3_pb_pins: uart3-pb-pins {
- 				pins = "PB6", "PB7";
- 				function = "uart3";
- 			};
-+
-+			/omit-if-no-ref/
-+			qspi0_pc_pins: qspi0-pc-pins {
-+				pins = "PC2", "PC3", "PC4", "PC5", "PC6",
-+				       "PC7";
-+				function = "spi0";
-+			};
- 		};
- 
- 		ccu: clock-controller@2001000 {
--- 
-2.39.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: dt-bindings: atmel,at91rm9200-spi: fix broken sam9x7 compatible
+      commit: e884a133340a470070b2c59833c9ff87aa6517ba
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
