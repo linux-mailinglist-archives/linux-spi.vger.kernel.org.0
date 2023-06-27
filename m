@@ -2,75 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9853F73F5DA
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jun 2023 09:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C9B73F624
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Jun 2023 09:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjF0HkS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jun 2023 03:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S231182AbjF0Hx1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Jun 2023 03:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjF0HkR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Jun 2023 03:40:17 -0400
-X-Greylist: delayed 570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Jun 2023 00:40:11 PDT
-Received: from mail.cannich.pl (mail.cannich.pl [217.61.112.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EB4196
-        for <linux-spi@vger.kernel.org>; Tue, 27 Jun 2023 00:40:11 -0700 (PDT)
-Received: by mail.cannich.pl (Postfix, from userid 1002)
-        id 8343B82477; Tue, 27 Jun 2023 09:30:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cannich.pl; s=mail;
-        t=1687851039; bh=vLw7tptj9/vhe0wfWCIhU2ZDfOViB+L3OZb9QA7IRZw=;
-        h=Date:From:To:Subject:From;
-        b=kDcEGjILL7N5nB0ClFQ55qufJQqSEPhmo3oHcBqgYHG8/F/rtcnZdRQ94MZQV+7l+
-         pBi7MNPZUJJlDk1sL5bLyCxjPw2Ku/NNYk7bol9RY+MGlcxE/15M/cEtgCsZeWRExv
-         NrWgt6x6ujUpQuP9PgNBwFwJiZKLR8V6ncT5WTj4UYD5GK5/Q1/iHr9Dua0s2aE6Ju
-         OFPl1Ezh6HB4MB9KA61Q/FFaXxop7VmcKbL1aoQJPo8IXLZHmKMlvYKVaxDjGdjYFq
-         9mPALzSbCF/Qs/bnr/hFovA9SkuDSs7a41G+0tW4D91/Ohw0pC5OxVzMW3HRiQzIKN
-         O0Pv/o0MJJZFg==
-Received: by mail.cannich.pl for <linux-spi@vger.kernel.org>; Tue, 27 Jun 2023 07:30:34 GMT
-Message-ID: <20230627084500-0.1.15.2xhp.0.idhssy4c3w@cannich.pl>
-Date:   Tue, 27 Jun 2023 07:30:34 GMT
-From:   "Damian Zawilski" <damian.zawilski@cannich.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: Nowoczesny album  
-X-Mailer: mail.cannich.pl
+        with ESMTP id S230037AbjF0HxZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Jun 2023 03:53:25 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63D10E4;
+        Tue, 27 Jun 2023 00:53:24 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 850D0819B;
+        Tue, 27 Jun 2023 15:53:22 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 15:53:22 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Jun
+ 2023 15:53:21 +0800
+Message-ID: <60338447-db39-5d80-6f88-8d6f5dc3716b@starfivetech.com>
+Date:   Tue, 27 Jun 2023 15:53:20 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
+ StarFive JH7110 SoC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230619083517.415597-1-william.qiu@starfivetech.com>
+ <20230619083517.415597-2-william.qiu@starfivetech.com>
+ <4937f9c4-a0e0-fd37-d71b-e7488b2a1062@linaro.org>
+ <fb608232-f44d-21cf-7e0e-28829196e677@starfivetech.com>
+ <adc4d83e-5bec-b925-b55e-43ad441ad8ee@linaro.org>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <adc4d83e-5bec-b925-b55e-43ad441ad8ee@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
-
-kontaktuj=C4=99 si=C4=99 w imieniu nagradzanego na mi=C4=99dzynarodowych =
-konkursach fotografa i podr=C3=B3=C5=BCnika, kt=C3=B3ry stworzy=C5=82 pie=
-rwszy w Polsce album ze zdj=C4=99ciami z Zanzibaru.
-
-Nowocze=C5=9Bnie oprawione albumy z 132 stronami wype=C5=82nionymi fotogr=
-afiami pozna=C5=84skiego artysty, na kt=C3=B3rych dominuj=C4=85 portrety =
-kobiet oraz krajobrazy ukazuj=C4=85ce r=C3=B3=C5=BCne oblicza Zanzibaru t=
-o idealny prezent i okazja dla mi=C5=82o=C5=9Bnik=C3=B3w dalekich podr=C3=
-=B3=C5=BCy i fotografii.=20
-
-Album uzupe=C5=82niaj=C4=85 zapisy powsta=C5=82e w latach 2013-2021, kt=C3=
-=B3re s=C4=85 wynikiem obserwacji codziennego =C5=BCycia mieszka=C5=84c=C3=
-=B3w wyspy.  Do wersji premium otrzymuj=C4=85 Pa=C5=84stwo jeden z portre=
-t=C3=B3w wydrukowany na ozdobnym papierze z podpisem autora.
-
-W albumie znajd=C4=85 Pa=C5=84stwo r=C3=B3wnie=C5=BC prace nagrodzone w k=
-onkursie Viva Photo Awards 2018, na kt=C3=B3rym za cykl =E2=80=9EPo drugi=
-ej stronie raju=E2=80=9D autor otrzyma=C5=82 pierwsze miejsce w kategorii=
- =E2=80=9Ereporta=C5=BC=E2=80=9D, a tak=C5=BCe zdj=C4=99cia docenione w m=
-i=C4=99dzynarodowym konkursie IPA.
-
-Czy interesuj=C4=85 Pa=C5=84stwa prace polskiego artysty?
 
 
-Pozdrawiam
-Damian Zawilski
+On 2023/6/21 16:10, Krzysztof Kozlowski wrote:
+> On 21/06/2023 08:45, William Qiu wrote:
+>> 
+>> 
+>> On 2023/6/19 20:17, Krzysztof Kozlowski wrote:
+>>> On 19/06/2023 10:35, William Qiu wrote:
+>>>> The QSPI controller needs three clock items to work properly on StarFive
+>>>> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
+>>>> platforms do not have this constraint.
+>>>>
+>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>>>> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+>>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>>> ---
+>>>>  .../bindings/spi/cdns,qspi-nor.yaml           | 20 ++++++++++++++++++-
+>>>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>>>> index b310069762dd..1b83cbb9a086 100644
+>>>> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>>>> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>>>> @@ -26,6 +26,15 @@ allOf:
+>>>>              const: starfive,jh7110-qspi
+>>>>      then:
+>>>>        properties:
+>>>> +        clocks:
+>>>> +          maxItems: 3
+>>>> +
+>>>> +        clock-names:
+>>>> +          items:
+>>>> +            - const: ref
+>>>> +            - const: ahb
+>>>> +            - const: apb
+>>>
+>>> You are duplicating top-level property. Define the items only in one
+>>> place. If this list is applicable to everything, then in top-level property.
+>>>
+>> Only in JH7110 SoC need there clocks, other platforms do not have this constraint.
+>> So I need to duplicating top-level property.
+> 
+> You don't need, why? Why writing something twice is an answer to "JH7110
+> needs 3 clocks"? It's not related.
+> 
+> What is the clock for all other variants?
+> 
+I'll try to not duplicating top-level property.
+>>>> +
+>>>>          resets:
+>>>>            minItems: 2
+>>>>            maxItems: 3
+>>>> @@ -38,6 +47,9 @@ allOf:
+>>>>  
+>>>>      else:
+>>>>        properties:
+>>>> +        clocks:
+>>>> +          maxItems: 1
+>>>
+>>> clock-names is missing. They must be in sync with clocks. What is the
+>>> first clock?
+>>>
+>> But there are no clock-names before, should I add it?
+> 
+> Then let's just disallow it. Either you define it or you not allow it.
+> 
+Fine, I'll keep it disallow.
+>>>> +
+>>>>          resets:
+>>>>            maxItems: 2
+>>>>  
+>>>> @@ -70,7 +82,13 @@ properties:
+>>>>      maxItems: 1
+>>>>  
+>>>>    clocks:
+>>>> -    maxItems: 1
+>>>> +    maxItems: 3
+>>>
+>>>
+>>> You did not test it before sending. minItems is missing.
+>>>
+>> I will add it.
+>> As for other platforms, should I use enum to constraint the clocks?
+> 
+> What is the clock on other platforms?
+> 
+Other platforms have only one clock.
+> Best regards,
+> Krzysztof
+> 
+Thanks for taking time to review this patch series and give usefull
+suggestions.
+
+Best Regards,
+William
