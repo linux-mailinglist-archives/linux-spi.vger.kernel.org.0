@@ -2,109 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DFD73FCFD
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jun 2023 15:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D68E74107E
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Jun 2023 13:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjF0Nj2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jun 2023 09:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S229746AbjF1LzE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Jun 2023 07:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjF0Nj1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Jun 2023 09:39:27 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64832D5B
-        for <linux-spi@vger.kernel.org>; Tue, 27 Jun 2023 06:39:24 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-991f956fb5aso159817966b.0
-        for <linux-spi@vger.kernel.org>; Tue, 27 Jun 2023 06:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687873163; x=1690465163;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O2HnWTfaDhyrvrN7IFESFvW8yOVuG/8fkShyZlJdY1o=;
-        b=Z9whTEuxXKPkLsRfaRcCcbEafRicrFHWLk9nws32cYhEkiq7Um/8t8RxYwVyZ8BMsR
-         AfAEi6GqPszTI3hIscpXmrvEapft8HEcY/2QqtRQ6LLsl/iGfThtiwEn9tMRi9QTqRaX
-         dKUgXlJkjxaeaS10JpADUjSqt3ctvUxBAnFBve3Umjz48R92rOPVVHKvn5Oi95EP7PQN
-         7ey1+U0ZD81REJ9H3SBYXJuh0V4Gu0QUCnfn8BcpF6PKJ401Df/3EePF5PRY/M2yEZlP
-         bKZUx5ElvhGaqgwLEBwDhvXoT4KVZAFAw40KklkP/nu2tIYR15WgNKXYuZrRraIpAXGY
-         7YfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687873163; x=1690465163;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2HnWTfaDhyrvrN7IFESFvW8yOVuG/8fkShyZlJdY1o=;
-        b=gKmmv1/q1T+gCoukDSj8HsTGVFAviKjcHA772XSzKncKvvM3rFiVrQh2s+KKKj6sh3
-         Jpf9kg58Yr4DI8Bgbjp8z6KhujitHoddLyBNkRllcPGPHTtFGeh9n9ufSYpALPf2JPK9
-         WFniFZryNftHVdkC4MjPcFPl4yZEkkpGK/nZ4orLoOrGQ6kMpD6v9neFnISllyCHa8pN
-         quLjMXbg5evpx9Dc7eARhKMlfMo/FPJ5pxeBTXojYAtJb1K26TOxpd6MgYeqphDx4fiq
-         2U1YSXAcpmJAX1pcts8i2pcKorG3eJU61PZ5P8GsBCYjbpAT94EQ0TSIWOqn3zz6ofVB
-         4mGA==
-X-Gm-Message-State: AC+VfDx8X5PzW/yOrjFhV4XLX8W7taNRZET9aJaDGDQRDAjSX8zv3OYX
-        +oVVQ7+fqi92xRRh51V89+DOjw==
-X-Google-Smtp-Source: ACHHUZ5ldtIaI4rcBReseOqa364qcf9nr7plIe4j3DJCtNy46I6HS7F9UeXE7WhP2SxTtqfs+fX4dw==
-X-Received: by 2002:a17:906:eecb:b0:958:4c75:705e with SMTP id wu11-20020a170906eecb00b009584c75705emr24138869ejb.17.1687873163190;
-        Tue, 27 Jun 2023 06:39:23 -0700 (PDT)
-Received: from [10.230.170.72] (46-253-189-43.dynamic.monzoon.net. [46.253.189.43])
-        by smtp.gmail.com with ESMTPSA id n5-20020a170906088500b0098963eb0c3dsm4552560eje.26.2023.06.27.06.39.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 06:39:22 -0700 (PDT)
-Message-ID: <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
-Date:   Tue, 27 Jun 2023 15:39:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
- compatible
-Content-Language: en-US
-To:     Valentin Caron <valentin.caron@foss.st.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
+        with ESMTP id S231504AbjF1Lyw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jun 2023 07:54:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8D12D58;
+        Wed, 28 Jun 2023 04:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80DFA612A5;
+        Wed, 28 Jun 2023 11:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0578C433C8;
+        Wed, 28 Jun 2023 11:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687953291;
+        bh=q1YOv3qNdA94MZ7eXuxfh/I9kDvs9oI0q4Kqi3B5xWU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IXeRQ+EPmw8uIVJUyixWgarA31XTlKMjJjTq1xQdcH04jBwiX0bkTjk0LqFT2zHw4
+         s0alkDEocQ1d9Y6/L64SJjXvqgfdG2DR2ikXVQoYngEkLjjG5cQve3pNsKQSYfcBKZ
+         4czkWI19C1UkfT/KHIBZhpyZqc2eHlvpDS55peDl0mwQieUmlpFQaO53Kqq+jyhfB7
+         dCD/VfSi1sDx6xjOP4Kqd8qb8SUsZ2LURYnDYFMTW1onfxSPTq2J2ICN0DK97iAove
+         2FLmu4425Fzy/lEFGsF/pV8LrRqGIggSEvhhKb5h+H8ppzNsLCj2WSZgQosuXgaNGE
+         P75NH4inn4DUQ==
+Date:   Wed, 28 Jun 2023 12:54:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Moring <stefan.moring@technolution.nl>
+Cc:     shawnguo@kernel.org,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, "festevam@gmail.com" <festevam@gmail.com>,
+        linux-imx@nxp.com, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230627123906.147029-1-valentin.caron@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230627123906.147029-1-valentin.caron@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on transfer
+ length
+Message-ID: <d1227506-e9b0-4f75-a63b-e25e0c621c48@sirena.org.uk>
+References: <CAB3BuKAVzXWNNiYDceNCpBqBmKyEykKA3rX=cfTyz+gWaJcnkA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wUyQV1ZJoE1X237c"
+Content-Disposition: inline
+In-Reply-To: <CAB3BuKAVzXWNNiYDceNCpBqBmKyEykKA3rX=cfTyz+gWaJcnkA@mail.gmail.com>
+X-Cookie: HELLO, everybody, I'm a HUMAN!!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/06/2023 14:39, Valentin Caron wrote:
-> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
-> Stop probing if this case happens, and print an error with involved
-> compatible.
-> 
 
-...
+--wUyQV1ZJoE1X237c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->  
->  static const struct of_device_id stm32_spi_of_match[] = {
-> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
->  	struct device_node *np = pdev->dev.of_node;
->  	bool device_mode;
->  	int ret;
-> +	const char *compatible =
-> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
+On Wed, Jun 28, 2023 at 10:41:27AM +0200, Stefan Moring wrote:
 
-The goal was to replace it, so drop it.
+>   ctrl |= (spi_imx->slave_burst * 8 - 1)
+>   << MX51_ECSPI_CTRL_BL_OFFSET;
+> - else
+> - ctrl |= (spi_imx->bits_per_word - 1)
+> - << MX51_ECSPI_CTRL_BL_OFFSET;
+> + else {
+> + if (spi_imx->count >= 512)
+> + ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
 
-> +	const struct stm32_spi_cfg *cfg = (const struct stm32_spi_cfg *)
+Your patch is completely mangled and so can't be applied - please check
+your setup for sending things.
 
-Why do you need the cast? To drop the const? Are you sure it is really
-needed?
+--wUyQV1ZJoE1X237c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +		of_device_get_match_data(&pdev->dev);
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmScH4IACgkQJNaLcl1U
+h9DQzgf/dC5AgapiZMe29pBNUzhmKQsw7kc3rOFRxfBEJ07hsg00h7TdWqyZZ9hu
+xrNYElw/ImbNHoNnaErxnIeaFBnhq0tJg4djq30Ts9JPuDOayd9xU5fj9/nXfTv6
+r3pawqDMqM+IGSS0kJmg+Phwo7ABMfenLhvmMafDmcoWNpPZ8CWe2/yfaPrLUPVM
+nDtXFysFrUPfdMeppniTkz3wuukGQIi52gD7nUoOYjQlV/1s0Xhbsi3crvFLVwdt
+t32htz7tzbj8YMUbpv3HB014aNRUxyQ7sVB9wAxcQ+A4B5h0QiQvdP3V2OEhSYtE
+cuByQrnsb5Mv+mBCjQ7pVl23/S9FgQ==
+=6ueh
+-----END PGP SIGNATURE-----
+
+--wUyQV1ZJoE1X237c--
