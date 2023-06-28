@@ -2,105 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E000741641
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Jun 2023 18:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C05741A83
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Jun 2023 23:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjF1QVr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 28 Jun 2023 12:21:47 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:41392 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230304AbjF1QVq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jun 2023 12:21:46 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SD9iJ3001700;
-        Wed, 28 Jun 2023 18:21:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=cANbp4lTIZBNTyBSNmcaauw6ZYCKFuy+gZZ75QOuzgo=;
- b=J2xKykgXCi1cE3T71GEW/fHR4RPb/8j49w4V28i1v0YuvSoTYyhudjvZOexJJxlw2BMw
- HH5t+0IGtmGK2hPCcUhgmfjCwFP25xNXHrN9ByZKKK6uMxzrl0x4WOdCgGF/4lZqnTU/
- 4jRsdxBW4+Jv98tXRUZqSaaHJVuo29u7AeNZc0GSkU2u0QfQXhZNyhvfvB/nALT9p4ST
- RF09N+r13ndFQOXHRLKcGYAn2RmZCPZkTjEI0dmxK9MMfQoUpBap996H4+CZGGDBG2be
- /TdkkA4bl/MR9h8Pjn9b0kJ7wovOxnjmBHHJeKHFPrlHE//F52h82fL3+vB1TBuzhEa/ Zw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rgngn92ad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 18:21:14 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BD9D8100057;
-        Wed, 28 Jun 2023 18:21:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A0A0623152C;
-        Wed, 28 Jun 2023 18:21:12 +0200 (CEST)
-Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 28 Jun
- 2023 18:21:12 +0200
-Message-ID: <c232e3f1-b703-d8d2-7e2d-19ed3f5fc3ad@foss.st.com>
-Date:   Wed, 28 Jun 2023 18:21:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
- compatible
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        id S232055AbjF1VQ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Jun 2023 17:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232195AbjF1VJg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jun 2023 17:09:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65DC1FE4;
+        Wed, 28 Jun 2023 14:09:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B1961478;
+        Wed, 28 Jun 2023 21:09:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CAA5CC433CB;
+        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687986574;
+        bh=UnIqjbwULWzDA+/nmygU1opUXwKIqdFFriZ7oFzXiic=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ht3QRdQBiSmTzo11erLhobkg1cV8fBOO/mteJa41dc8to7BXCds5lHV3ov+bxRA/K
+         d6yP9GrKBz9Tba21XA4gMyLtVUIg0d+rFlWGP+pCTPGk56GLBTSOvFqmdTgugrCQ7k
+         R6FcshwxJTmujg5Ucb+rCL6K+TPUvJdT5pthgUgbArQpIFA0lEjvA94G7btPzMrcT6
+         tQauXdKfhFZDUj5MhiNhcqjX6hBcfSKm4tEAxa1ItRskfIuqI0cVvK+LJCBupShcuO
+         ScTIgp19r8+AurY0vZhAOkMrRYxX7JjGlcnOTyrE2DR7Kv0Q/fj8r7kT28n5oKSy2o
+         b6wij1cMhXsyg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2AAAC0C40E;
+        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI updates for v6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230626133342.B7F90C433C8@smtp.kernel.org>
+References: <20230626133342.B7F90C433C8@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230626133342.B7F90C433C8@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.5
+X-PR-Tracked-Commit-Id: e884a133340a470070b2c59833c9ff87aa6517ba
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 84fccbba93103b22044617e419ba20e1403b4a65
+Message-Id: <168798657472.29247.12962996338723774240.pr-tracker-bot@kernel.org>
+Date:   Wed, 28 Jun 2023 21:09:34 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230627123906.147029-1-valentin.caron@foss.st.com>
- <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
-Content-Language: en-US
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_11,2023-06-27_01,2023-05-22_02
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+The pull request you sent on Mon, 26 Jun 2023 14:33:33 +0100:
 
-On 6/27/23 15:39, Krzysztof Kozlowski wrote:
-> On 27/06/2023 14:39, Valentin Caron wrote:
->> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
->> Stop probing if this case happens, and print an error with involved
->> compatible.
->>
-> ...
->
->>   
->>   static const struct of_device_id stm32_spi_of_match[] = {
->> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
->>   	struct device_node *np = pdev->dev.of_node;
->>   	bool device_mode;
->>   	int ret;
->> +	const char *compatible =
->> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
-> The goal was to replace it, so drop it.
-Is is still needed for dev_err, so I can't
- > dev_err(&pdev->dev, "spi-slave not yet supported with %s\n", 
-compatible);
->
->> +	const struct stm32_spi_cfg *cfg = (const struct stm32_spi_cfg *)
-> Why do you need the cast? To drop the const? Are you sure it is really
-> needed?
-Effectively, this cast is useless, I will drop it.
->> +		of_device_get_match_data(&pdev->dev);
-> Best regards,
-> Krzysztof
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.5
 
-Thanks,
-Valentin
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/84fccbba93103b22044617e419ba20e1403b4a65
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
