@@ -2,75 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C05741A83
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Jun 2023 23:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998117420CE
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Jun 2023 09:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjF1VQ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 28 Jun 2023 17:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S231718AbjF2HPJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Jun 2023 03:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbjF1VJg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jun 2023 17:09:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65DC1FE4;
-        Wed, 28 Jun 2023 14:09:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B1961478;
-        Wed, 28 Jun 2023 21:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CAA5CC433CB;
-        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687986574;
-        bh=UnIqjbwULWzDA+/nmygU1opUXwKIqdFFriZ7oFzXiic=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ht3QRdQBiSmTzo11erLhobkg1cV8fBOO/mteJa41dc8to7BXCds5lHV3ov+bxRA/K
-         d6yP9GrKBz9Tba21XA4gMyLtVUIg0d+rFlWGP+pCTPGk56GLBTSOvFqmdTgugrCQ7k
-         R6FcshwxJTmujg5Ucb+rCL6K+TPUvJdT5pthgUgbArQpIFA0lEjvA94G7btPzMrcT6
-         tQauXdKfhFZDUj5MhiNhcqjX6hBcfSKm4tEAxa1ItRskfIuqI0cVvK+LJCBupShcuO
-         ScTIgp19r8+AurY0vZhAOkMrRYxX7JjGlcnOTyrE2DR7Kv0Q/fj8r7kT28n5oKSy2o
-         b6wij1cMhXsyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2AAAC0C40E;
-        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230626133342.B7F90C433C8@smtp.kernel.org>
-References: <20230626133342.B7F90C433C8@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230626133342.B7F90C433C8@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.5
-X-PR-Tracked-Commit-Id: e884a133340a470070b2c59833c9ff87aa6517ba
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 84fccbba93103b22044617e419ba20e1403b4a65
-Message-Id: <168798657472.29247.12962996338723774240.pr-tracker-bot@kernel.org>
-Date:   Wed, 28 Jun 2023 21:09:34 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231465AbjF2HPH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Jun 2023 03:15:07 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31322117;
+        Thu, 29 Jun 2023 00:15:06 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51dd0205b2cso618504a12.1;
+        Thu, 29 Jun 2023 00:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688022905; x=1690614905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=thvMoW85YpoDD9DqAHD+r7lZvI1+3RLNdnIDoKSwMvo=;
+        b=KUMUe3OAXpTmLkBxd7SKIOXEXv8B6k9/Ue/bVVu4DVT5n7R01OhAgnFsikqf9o3jGa
+         je/YYsQI2qptIRLB9fd6SrxQwvmh/L1Lb8cyF15dZge1aV/wxn7L70EncETjCOywrdkl
+         804uMSpUqHM1tHWHxsDTgZ9o3haSJVo8b8hKwL8yAxMRrrXqVuCNKpG/NKSrqgfwSZd6
+         0wtMs5nrXaxr4HsIhyH37U44+oy1ZqLbYkALag9u2lmW46KrKCUFlJsb3gacMmAAv7Fw
+         1IFGbXzzdc9CT7zg8sL3SZB0FeuXxCtWnH4rQqlXjG+PpOq7fRN3qPxu/TZwdmHejvvh
+         lbMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688022905; x=1690614905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=thvMoW85YpoDD9DqAHD+r7lZvI1+3RLNdnIDoKSwMvo=;
+        b=IPLxqH/sxHUSToKypw6oAc4aU62zGtcy2hPrA4JRE52fbpbb1mUUAX9IuxHAowo7up
+         etTs0PEuW3aJX0wteb8XxVeGxDWwT6TigVx2+M0WYgJqGy/yhTaN+ipxLKz+WvBALdyw
+         NTwDTTZFwBVwhvn/gPE92WyAA9fIvhcSvuI29jnoQKIUhbCWXPGsHiNZAVQZcwdPx3tY
+         uiYpny8R+PjNVJ1gxHfYqcOpxVRqdVFA41+XcwoIRNL0s9VXXV3gDodsTAdhPyFTQtOd
+         EkU9KS5VeBIsCPI2BMimevuP96ykG0cgUtqXgPzGfPSPghyMVSalnexAU0xSK6XzLqT/
+         azzA==
+X-Gm-Message-State: AC+VfDyidMSLkv6dgxxb24tm4umf7LCP9r20xojshUnSbIEl94AOCvvV
+        k5IUOvTdVN7S9P9QwFxl0w0=
+X-Google-Smtp-Source: ACHHUZ667/WX4TLVu0v9Y52VPKGHmH9wZYDu+t1Z1fZv3Lf2UV5U2MGDaqmHtKG6rTxSJTJTUhKXgw==
+X-Received: by 2002:a17:907:2d8f:b0:96a:2dd7:2ee0 with SMTP id gt15-20020a1709072d8f00b0096a2dd72ee0mr3256724ejc.5.1688022905033;
+        Thu, 29 Jun 2023 00:15:05 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id jo10-20020a170906f6ca00b0099290e2c161sm1183823ejb.89.2023.06.29.00.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 00:15:04 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: bcm63xx: fix max prepend length
+Date:   Thu, 29 Jun 2023 09:14:52 +0200
+Message-Id: <20230629071453.62024-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 26 Jun 2023 14:33:33 +0100:
+The command word is defined as following:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.5
+    /* Command */
+    #define SPI_CMD_COMMAND_SHIFT           0
+    #define SPI_CMD_DEVICE_ID_SHIFT         4
+    #define SPI_CMD_PREPEND_BYTE_CNT_SHIFT  8
+    #define SPI_CMD_ONE_BYTE_SHIFT          11
+    #define SPI_CMD_ONE_WIRE_SHIFT          12
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/84fccbba93103b22044617e419ba20e1403b4a65
+If the prepend byte count field starts at bit 8, and the next defined
+bit is SPI_CMD_ONE_BYTE at bit 11, it can be at most 3 bits wide, and
+thus the max value is 7, not 15.
 
-Thank you!
+Fixes: b17de076062a ("spi/bcm63xx: work around inability to keep CS up")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+ drivers/spi/spi-bcm63xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+index 9aecb77c3d89..07b5b71b2352 100644
+--- a/drivers/spi/spi-bcm63xx.c
++++ b/drivers/spi/spi-bcm63xx.c
+@@ -126,7 +126,7 @@ enum bcm63xx_regs_spi {
+ 	SPI_MSG_DATA_SIZE,
+ };
+ 
+-#define BCM63XX_SPI_MAX_PREPEND		15
++#define BCM63XX_SPI_MAX_PREPEND		7
+ 
+ #define BCM63XX_SPI_MAX_CS		8
+ #define BCM63XX_SPI_BUS_NUM		0
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
