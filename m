@@ -2,73 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01556742649
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Jun 2023 14:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A0B74279C
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Jun 2023 15:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjF2MX6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Jun 2023 08:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S232022AbjF2Nno (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Jun 2023 09:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbjF2MWP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Jun 2023 08:22:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890723C01
-        for <linux-spi@vger.kernel.org>; Thu, 29 Jun 2023 05:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 072796153C
-        for <linux-spi@vger.kernel.org>; Thu, 29 Jun 2023 12:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6720EC433C0;
-        Thu, 29 Jun 2023 12:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688041221;
-        bh=ttjX9qnEZ6CVwSKwOEKjmrJLUJLjOtR8XXsoXYQZ8sE=;
-        h=Subject:From:Date:To:From;
-        b=hnPyJLs53++1SQ5Ipv8RNKmpHmG1g5+Ekv6iuTvt0wPXSrc6OAJm/pDSDAVa76SuY
-         Mzr02GhYZmsqMJisgrvyuBhwnjHtHZSQxmnAM7qlB+iRHEwdf71L7ZmU3Kfd+Rs9Ng
-         amjRqm7h3xjCQJcD7oZPS0OC2vh53TD2l/R2ocjoMFYRyrnyk5V5TZIp2qw2eZ6T2g
-         9vWA3x80kivv74B3YkUOhWFK2IHsCyIU6fpMcQB9Acyp6G7fz6zDncaixiPTP5iwbt
-         TjEj6wTf/3HxG6xWKZ1anKkDrY5EpiSGKNZo+ERktFPL2/WwKWeiT9fUPPvWk7R8D9
-         238RpT9kXu46g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43F91E5381B;
-        Thu, 29 Jun 2023 12:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232037AbjF2Nnn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Jun 2023 09:43:43 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0B52681;
+        Thu, 29 Jun 2023 06:43:42 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-992ac92aed9so86202166b.3;
+        Thu, 29 Jun 2023 06:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688046220; x=1690638220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XudmxwalV4AlT0qJLqOHnMWwuiigipmsi3w0OPbf44c=;
+        b=Zhs3fgvt1G+iCtnPEYMZxQ2g9jPDRO3yYUKeQozSK4MYqD1FqZAD+nuCS5ym+L+RaI
+         duD2pbR+p9OqO0RZ7ZxLtZYd6CPenExqZnZYiuu56oq1o2LLnAquDIlc2cJMFiQP2ybs
+         e7RWYdvhlftVKPRbfklEKIRL1lBIwKpmck78AUGng5zriDs5STsE7UNui+ZJMhj01hoG
+         BeFERNcE7f2efp4qQvMMo47Kx1g24QC34yHyusdKDyl4Xof34yUtH1dcdkwRppvLj8D+
+         XOOgzJLMT4jJRHtEgeefKdHlhIV6RKaU+vGqmuDVmZSvzVCmLtcIVobTYui7jBy//qQW
+         Ytyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688046220; x=1690638220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XudmxwalV4AlT0qJLqOHnMWwuiigipmsi3w0OPbf44c=;
+        b=YlKGm8Jsja0vBzuBONJnNVpSlw+5kEPHpBsT8Jjrqx6EwIYddrUzCjiCIVLbDeJqWk
+         m+KtlCJsFYu2+DY3RtGaFQ1RDtEjxchDQQzkthPPYQ4GL6uxyXihJ0ipZ2JGQJHb1hWG
+         jC0pxgtlVq0heak9N2cXSn5k0vXnVbPe4PZoCXpgDUqlT4AzQxQt7gNfVQFZNHZ0RH9E
+         ioSBi0VoShbSVy9xe6hHbdi9gLEF0majSpxs1O01HMeeQWBOZbb1ISPpyNpbzVAikUv7
+         brvLV9bZ/pVS0IT7WVroakOjC5RYWEq24gwWjTctMtUx8Ai7CfJXaddo04Q+QevDE8u7
+         pt5w==
+X-Gm-Message-State: AC+VfDxoIjdxlFQYASKOsrR3srPPhTDq0DwBjdvx1Va4R+hwnunFoJzA
+        vmLeO2TX8fuW7rKSsXr+dDs=
+X-Google-Smtp-Source: ACHHUZ6B80u4DW25Ogg7aE+QDNQ4h9KXySc0s2UC/n0LEEN2ZYI5mYC/YoRmVKDwg0HP2sGQinr9QQ==
+X-Received: by 2002:a17:907:3f18:b0:975:942e:81d5 with SMTP id hq24-20020a1709073f1800b00975942e81d5mr39118977ejc.1.1688046220384;
+        Thu, 29 Jun 2023 06:43:40 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id bm6-20020a170906c04600b00988ae874fc3sm6894818ejb.40.2023.06.29.06.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 06:43:39 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor mspi is available
+Date:   Thu, 29 Jun 2023 15:43:05 +0200
+Message-Id: <20230629134306.95823-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168804122122.17623.7998701433537607903.git-patchwork-summary@kernel.org>
-Date:   Thu, 29 Jun 2023 12:20:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+If neither a "hif_mspi" nor "mspi" resource is present, the driver will
+just early exit in probe but still return success. Apart from not doing
+anything meaningful, this would then also lead to a null pointer access
+on removal, as platform_get_drvdata() would return NULL, which it would
+then try to dereferce when trying to unregister the spi master.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Fix this by unconditionally calling devm_ioremap_resource(), as it can
+handle a NULL res and will then return a viable ERR_PTR() if we get one.
 
-Patch: [v2] spi: spi-geni-qcom: enable SPI_CONTROLLER_MUST_TX for GPI DMA mode
-  Submitter: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=761201
-  Lore link: https://lore.kernel.org/r/20230629110039.3659309-1-dmitry.baryshkov@linaro.org
+The "return 0;" was previously a "goto qspi_resource_err;" where then
+ret was returned, but since ret was still initialized to 0 at this place
+this was a valid conversion in 63c5395bb7a9 ("spi: bcm-qspi: Fix
+use-after-free on unbind"). The issue was not introduced by this commit,
+only made more obvious.
 
+Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+Found by looking a the driver while comparing it to its bindings.
 
-Total patches: 1
+Only build tested, not runtested.
 
+ drivers/spi/spi-bcm-qspi.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index 6b46a3b67c41..d91dfbe47aa5 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -1543,13 +1543,9 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+ 						   "mspi");
+ 
+-	if (res) {
+-		qspi->base[MSPI]  = devm_ioremap_resource(dev, res);
+-		if (IS_ERR(qspi->base[MSPI]))
+-			return PTR_ERR(qspi->base[MSPI]);
+-	} else {
+-		return 0;
+-	}
++	qspi->base[MSPI]  = devm_ioremap_resource(dev, res);
++	if (IS_ERR(qspi->base[MSPI]))
++		return PTR_ERR(qspi->base[MSPI]);
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "bspi");
+ 	if (res) {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
