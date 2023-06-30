@@ -2,80 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B687440CE
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 19:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF5D7440DD
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 19:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjF3RFl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Jun 2023 13:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S232837AbjF3RIG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Jun 2023 13:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjF3REy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 13:04:54 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F051D3C30;
-        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7835bad99fbso88923439f.1;
-        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688144688; x=1690736688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDSvITIumvxU+9FeXxHNbJLwhZGzlxTTZldXnMbbHIk=;
-        b=RruGZEIVVjV37EmwLYWeUNTEgoEZLxVyAoTrlVySuNTybnB76gI/OQ9FCuN2/9xKIa
-         /zq6qEUSJBt+GMQa0gy3DnWcORqJSSV3F2ykshWOQO/zrwFxIg2/Bhhin1BGiCI9avPL
-         DGfa0NCeozfC3fESajjY7jzZgmHVOtoxupq66ZsAAbOnM5d0KcRQ4II+riFfhpttfvU9
-         wN/KA89OOtubXAhfGlBISy3/JZ/2gZU4RpCSLKGcT5Udz5G+T+N7SkzL8vvsm4nmB1dL
-         qd6nxd/KqCICTBShtvadvURwMqvZ1j03Uv3fwtDkyjLXzleSfzXZY86blQMlua+ACBFw
-         GugQ==
-X-Gm-Message-State: AC+VfDzBhSbH3SnZzUTAKg4ECB4QbCRAxibYLyG7EZpIESJMUr5BtARU
-        Do3zv4Ks4W3JpifkCe8RUQ==
-X-Google-Smtp-Source: ACHHUZ7YVGW6lKVvg7C24o8CcDQqjgMElHyuoGKVnJCWvqYKZlQzdchG5JVGPC50uiHB8TDngxV6bA==
-X-Received: by 2002:a05:6602:19d1:b0:783:5209:c01 with SMTP id ba17-20020a05660219d100b0078352090c01mr3305594iob.17.1688144687999;
-        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k5-20020a02cb45000000b0040bbcee6b57sm2373025jap.133.2023.06.30.10.04.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
-Received: (nullmailer pid 1908824 invoked by uid 1000);
-        Fri, 30 Jun 2023 17:04:44 -0000
-Date:   Fri, 30 Jun 2023 11:04:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, timestamp@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
-Message-ID: <168814464489.1908194.10092224539849073775.robh@kernel.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S232854AbjF3RIC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 13:08:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB03ABD;
+        Fri, 30 Jun 2023 10:07:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DAD5617C1;
+        Fri, 30 Jun 2023 17:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA85EC433C0;
+        Fri, 30 Jun 2023 17:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688144876;
+        bh=hrxpSi6TuuolWxR7KX8iVhhKvwNa6g0/omT/CMjj44w=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=S6muFlS64hSp57AMw20ylJybvF/6sI0y+KNfKJ5xwChdTKNyKfvlpZ1u0wtQ4rf3I
+         Yf65lolH7Ws7mXowPhA/GuNin2ITr0L739vhGsWdDtoI76bceA0GHidlSuXiBU503Y
+         q7Yfa+Vjof/dynrhj6FpW/fnQdhMvF0oYaDfaMaaCzBzJgReWmhgUxDhiWS2kf4yBh
+         Znmg4AD2T1Bv5Vi1pDo/L8m6pywAOHIOMV2e8PFXYlYvybJytfWd8uQqsx17gCypz4
+         h9faWHFFSRDIsNDFvlf7jtv6Uu1YvnpbJnuceJJvbkX2YKnD3Zg7Pl8L0TDs6gLdM0
+         oCKFaHQWKUV/Q==
+From:   Mark Brown <broonie@kernel.org>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230629134306.95823-1-jonas.gorski@gmail.com>
+References: <20230629134306.95823-1-jonas.gorski@gmail.com>
+Subject: Re: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor
+ mspi is available
+Message-Id: <168814487467.51089.16336966927742443437.b4-ty@kernel.org>
+Date:   Fri, 30 Jun 2023 18:07:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,23 +58,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 29 Jun 2023 15:43:05 +0200, Jonas Gorski wrote:
+> If neither a "hif_mspi" nor "mspi" resource is present, the driver will
+> just early exit in probe but still return success. Apart from not doing
+> anything meaningful, this would then also lead to a null pointer access
+> on removal, as platform_get_drvdata() would return NULL, which it would
+> then try to dereferce when trying to unregister the spi master.
+> 
+> Fix this by unconditionally calling devm_ioremap_resource(), as it can
+> handle a NULL res and will then return a viable ERR_PTR() if we get one.
+> 
+> [...]
 
-On Tue, 30 May 2023 16:48:51 +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+Applied to
 
-Seems watchdog patches aren't getting applied... Applied, thanks!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: bcm-qspi: return error if neither hif_mspi nor mspi is available
+      commit: 7c1f23ad34fcdace50275a6aa1e1969b41c6233f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
