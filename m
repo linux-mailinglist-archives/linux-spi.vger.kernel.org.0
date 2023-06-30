@@ -2,140 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A28A744163
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 19:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B62E744322
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 22:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjF3Rhf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Jun 2023 13:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S232284AbjF3UXo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Jun 2023 16:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjF3Rhe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 13:37:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3DB1FE4;
-        Fri, 30 Jun 2023 10:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688146653; x=1719682653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dm6Sl1OEMpFX+zHsfmQ4rudo1iU9mbzP0Adu+TolMaY=;
-  b=AzzEdiWKzJJNkTEf6Dd6CzhhXMAsVItlLhScmWNvrT3QjyjKhN0Tu/7E
-   u/6w7gKM9Rx8XHPrO0nlvIhI/51Qsuc82vr7CGEJt69eUlPY+eIfBUIw8
-   lr3iZRu8GHigaOnDOk8MFVXTevbNkqGM/rdhWjw/I2LGre+4/yTRnXxZo
-   0frZH3bHEkEVH6dpGY14qR6guFan5PtWLWnmFRLPvbwz3Lrin4qkw0BGS
-   w0MtrUfbpAHgznV8cwFPrvYauFMPfNDZIFhoNBzFhjR/MHpQegXEzbUfy
-   DlJuHipI1U/WZLoBxk94+g+Bx85OoaOhSYls0OxvcrxFMiBC16knBiCyG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352272354"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="352272354"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:37:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787789404"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="787789404"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:37:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qFI3d-001AR3-2g;
-        Fri, 30 Jun 2023 20:37:21 +0300
-Date:   Fri, 30 Jun 2023 20:37:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
+        with ESMTP id S232235AbjF3UXn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 16:23:43 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713EB2D69;
+        Fri, 30 Jun 2023 13:23:42 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3110ab7110aso2580524f8f.3;
+        Fri, 30 Jun 2023 13:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688156621; x=1690748621;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lh6GRzkrItcPLO9sSjebWiYC3C++2yaAGmp1iq4lTQQ=;
+        b=pFvt5lXJDrPne95Y1XQzuGNY+7sTAr/pgk0go1GWNfvAJvaWxAF4KRxY7o2N9zMTIv
+         6vmHW/ekTcPF9Kd1+ucOctlqPJP1UwHzuPi/pzNIbSY9n3g7wNLyIfOBphcrOJbFuQAE
+         7Psx4kMnZ4e69uUQSqJ0N80xJTArE8dy1XHuXMPoUK48MlgMhICMxX12Gab9a9RXEkEX
+         rGpvlnd2iEiPU6t7ZiFbu25iSv7i1IcXN4qipdVfsNggaf2GFGaI0tLs1F/6pFZ6CXba
+         0/dVU8N9NCr0V27KABfbV0X6fzlIJi85dPKXcoB4XPJvHvt7sn4/LjsJ93KZ1BLrNrgk
+         ZCCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688156621; x=1690748621;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lh6GRzkrItcPLO9sSjebWiYC3C++2yaAGmp1iq4lTQQ=;
+        b=bJCE1kY1nYetX5WFjbKCEtqGKLeTiNAlHpaos5HZ4m3+uIOrSfnF1x0ZAm4vFhGeeQ
+         Oy+M1yribRtOvC93d0BROSx7293w5ElGqwx1hmIgphCoZDocjeBfRvop8raA5M5vLzNG
+         azsy47iXYRT7FA7iDUNl+HhH/az37s1E2/LJoPLf3UEgKtzeNxdoks/0KrkE2ig5fz8M
+         43GFS6OhUY9oocNJ8SDI/5l/+I6OHHHmKXvVs3dkBsEwI39jMl9VAbJV6dfwHpA1qjP5
+         1B0OqXPKU2o0x20ztrC36pn/ynbiInucE+/fWT51CihCGY2fT7lcNEn+LHhNh3sHavyv
+         ks8Q==
+X-Gm-Message-State: ABy/qLZsPs2ZR5HL02rqio++oYpCZxfzr4WknvjKcFn7ekIQF0/oIXpV
+        v1a+evXvWTErM96T3RxHlO8=
+X-Google-Smtp-Source: APBJJlGfsOT+WsMtRtpg6UwUE/AtYmrQfubWNvuIOyu/m/+GTdFFNRuP7nprGlbjuKuCWpIAidF4mQ==
+X-Received: by 2002:a5d:670a:0:b0:313:eadf:b82d with SMTP id o10-20020a5d670a000000b00313eadfb82dmr2400819wru.69.1688156620892;
+        Fri, 30 Jun 2023 13:23:40 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id fa12-20020a05600c518c00b003fbb1ce274fsm81552wmb.0.2023.06.30.13.23.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 13:23:40 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZJ8S0ds4IX4wLF9V@smile.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
- <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
- <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
- <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 2/3] spi: bcm{63xx,bca}-hsspi: update my email address
+Date:   Fri, 30 Jun 2023 22:22:55 +0200
+Message-Id: <20230630202257.8449-2-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230630202257.8449-1-jonas.gorski@gmail.com>
+References: <20230630202257.8449-1-jonas.gorski@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 07:40:48AM +0000, Wu, Wentong wrote:
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Wednesday, March 15, 2023 5:10 PM
-> > On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> > > > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > > > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
+Update my email address to a working one, as the openwrt.org one is
+broken since ages.
 
-...
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+ drivers/spi/spi-bcm63xx-hsspi.c | 2 +-
+ drivers/spi/spi-bcmbca-hsspi.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > > > > You don't really seem to get any benefit from MFD. Perhaps it
-> > > > > would be more appropriate and clear if you just registered
-> > > > > auxiliary devices in this driver. Check drivers/base/auxiliary.c.
-> > > > Yes, it should be a work. I have a question.
-> > > > MFD provides the ACPI binding for sub-devices through struct
-> > > > mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> > > > If using auxiliary bus to implement the LJCA sub-devices, we need to
-> > > > do the sub-devices acpi binding manually in ljca.c.
-> > > >
-> > > > Something Like:
-> > > > adr = LJCA_ACPI_MATCH_GPIO
-> > > > adev = acpi_find_child_device(parent, adr, false);
-> > > > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
-> > > >
-> > > > Is that acceptable?
-> 
-> This actually doesn't work, look at the acpi_find_child_device(), it compares
-> the bus address specified by _ADR object, but there is no _ADR object in DSDT
-> for these three devices because the relationship between the parent and
-> children isn't bus type listed in ACPI spec, so it always return NULL.
-
-If you want to have this on ACPI enabled platform, ACPI table has to have
-the necessary bits. What you are describing is a BIOS bug _or_ somebody has
-to provide the SSDT overlay depending on the real connection of the device..
-
-> > Looks ok to me.
-> > 
-> > > Maybe you can implement this on the level of auxiliary bus.
-> > 
-> > I would actually prefer that the auxiliary bus itself does not make any
-> > assumptions regarding the whereabouts of the fwnodes at this stage. Maybe
-> > later, when(if) there are more users.
-
+diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
+index ee2528dad02d..9e218e143263 100644
+--- a/drivers/spi/spi-bcm63xx-hsspi.c
++++ b/drivers/spi/spi-bcm63xx-hsspi.c
+@@ -2,7 +2,7 @@
+  * Broadcom BCM63XX High Speed SPI Controller driver
+  *
+  * Copyright 2000-2010 Broadcom Corporation
+- * Copyright 2012-2013 Jonas Gorski <jogo@openwrt.org>
++ * Copyright 2012-2013 Jonas Gorski <jonas.gorski@gmail.com>
+  *
+  * Licensed under the GNU/GPL. See COPYING for details.
+  */
+diff --git a/drivers/spi/spi-bcmbca-hsspi.c b/drivers/spi/spi-bcmbca-hsspi.c
+index 8cbd01619789..ca1b4741e9f4 100644
+--- a/drivers/spi/spi-bcmbca-hsspi.c
++++ b/drivers/spi/spi-bcmbca-hsspi.c
+@@ -3,7 +3,7 @@
+  * Broadcom BCMBCA High Speed SPI Controller driver
+  *
+  * Copyright 2000-2010 Broadcom Corporation
+- * Copyright 2012-2013 Jonas Gorski <jogo@openwrt.org>
++ * Copyright 2012-2013 Jonas Gorski <jonas.gorski@gmail.com>
+  * Copyright 2019-2022 Broadcom Ltd
+  */
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
