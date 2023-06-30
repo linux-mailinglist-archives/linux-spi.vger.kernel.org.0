@@ -2,103 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BBD74415A
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 19:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A28A744163
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Jun 2023 19:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjF3RfY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Jun 2023 13:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S229496AbjF3Rhf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Jun 2023 13:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbjF3RfB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 13:35:01 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10E4680;
-        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-345d3c10bdfso8967775ab.2;
-        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688146471; x=1690738471;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQ94kfdEfq9RrPFyhfJUVdunZkyBAVzDUoOb8tFiC9I=;
-        b=DJc9gkx2Qj6nob9kqtEG+l+YwkxBFXyM8CaOh8ba4p4FroqnWH4MLV9xI3ZsjAbiMD
-         koSz7EW5nCy4Rijk07WqybpKcPOEYLXPzehOYJ4bi6c7BwHEFZ3aYvAgsO7ywXjE4f29
-         QMi11B8XmiBmQ39nN2LvSQ6NhgempeoNWS0kyiS5dH1RekkBHqvl+p5Yd0K2IOMu5UEn
-         N5K15JyUyhvE31i9cdFVVILterRo8vr00DDmxqL8ae9K/e/gTN8ZK7dAEj3ZsOi8PzVP
-         xzzqZKkzXa6pNGVnG3oeEQxJKo2c0c1m0WW8xs29+Q9ZnkmMuvrWjbdXewIrIH3MQbIf
-         J2wg==
-X-Gm-Message-State: AC+VfDysE37+dnvW0RJV16jsw1N5xoU4k0x3NKkITmQWpGlkHk9KEEj/
-        1D5bYXOSZ0nm3CWRMn1FcnVTTIB5sA==
-X-Google-Smtp-Source: ACHHUZ4EbUs4PS9q79isRP9O3xuyN3VlPHEnyRoBjVZ32PU31b0maNUtRwGNVSbiOr7AKyybiYfTVQ==
-X-Received: by 2002:a6b:a16:0:b0:783:694f:e791 with SMTP id z22-20020a6b0a16000000b00783694fe791mr3651652ioi.12.1688146471480;
-        Fri, 30 Jun 2023 10:34:31 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i17-20020a02ca51000000b0042af069eeefsm1830983jal.50.2023.06.30.10.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 10:34:30 -0700 (PDT)
-Received: (nullmailer pid 2074728 invoked by uid 1000);
-        Fri, 30 Jun 2023 17:34:28 -0000
-Date:   Fri, 30 Jun 2023 11:34:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-phy@lists.infradead.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        timestamp@lists.linux.dev, Vinod Koul <vkoul@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Dipen Patel <dipenp@nvidia.com>,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 6/7] dt-bindings: timestamp: restrict node name suffixes
-Message-ID: <168814645706.2074491.15762386958786625732.robh@kernel.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S231857AbjF3Rhe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Jun 2023 13:37:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3DB1FE4;
+        Fri, 30 Jun 2023 10:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688146653; x=1719682653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dm6Sl1OEMpFX+zHsfmQ4rudo1iU9mbzP0Adu+TolMaY=;
+  b=AzzEdiWKzJJNkTEf6Dd6CzhhXMAsVItlLhScmWNvrT3QjyjKhN0Tu/7E
+   u/6w7gKM9Rx8XHPrO0nlvIhI/51Qsuc82vr7CGEJt69eUlPY+eIfBUIw8
+   lr3iZRu8GHigaOnDOk8MFVXTevbNkqGM/rdhWjw/I2LGre+4/yTRnXxZo
+   0frZH3bHEkEVH6dpGY14qR6guFan5PtWLWnmFRLPvbwz3Lrin4qkw0BGS
+   w0MtrUfbpAHgznV8cwFPrvYauFMPfNDZIFhoNBzFhjR/MHpQegXEzbUfy
+   DlJuHipI1U/WZLoBxk94+g+Bx85OoaOhSYls0OxvcrxFMiBC16knBiCyG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352272354"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="352272354"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:37:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787789404"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="787789404"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:37:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qFI3d-001AR3-2g;
+        Fri, 30 Jun 2023 20:37:21 +0300
+Date:   Fri, 30 Jun 2023 20:37:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "Zhang, Lixu" <lixu.zhang@intel.com>
+Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
+Message-ID: <ZJ8S0ds4IX4wLF9V@smile.fi.intel.com>
+References: <20230312190435.3568212-1-xiang.ye@intel.com>
+ <20230312190435.3568212-2-xiang.ye@intel.com>
+ <20230313170341.GV9667@google.com>
+ <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
+ <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
+ <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
+ <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
+ <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
+ <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 07:40:48AM +0000, Wu, Wentong wrote:
+> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Sent: Wednesday, March 15, 2023 5:10 PM
+> > On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
+> > > On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
+> > > > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
+> > > > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
 
-On Tue, 30 May 2023 16:48:50 +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../bindings/timestamp/hardware-timestamps-common.yaml          | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+...
 
-Applied, thanks!
+> > > > > You don't really seem to get any benefit from MFD. Perhaps it
+> > > > > would be more appropriate and clear if you just registered
+> > > > > auxiliary devices in this driver. Check drivers/base/auxiliary.c.
+> > > > Yes, it should be a work. I have a question.
+> > > > MFD provides the ACPI binding for sub-devices through struct
+> > > > mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
+> > > > If using auxiliary bus to implement the LJCA sub-devices, we need to
+> > > > do the sub-devices acpi binding manually in ljca.c.
+> > > >
+> > > > Something Like:
+> > > > adr = LJCA_ACPI_MATCH_GPIO
+> > > > adev = acpi_find_child_device(parent, adr, false);
+> > > > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
+> > > >
+> > > > Is that acceptable?
+> 
+> This actually doesn't work, look at the acpi_find_child_device(), it compares
+> the bus address specified by _ADR object, but there is no _ADR object in DSDT
+> for these three devices because the relationship between the parent and
+> children isn't bus type listed in ACPI spec, so it always return NULL.
+
+If you want to have this on ACPI enabled platform, ACPI table has to have
+the necessary bits. What you are describing is a BIOS bug _or_ somebody has
+to provide the SSDT overlay depending on the real connection of the device..
+
+> > Looks ok to me.
+> > 
+> > > Maybe you can implement this on the level of auxiliary bus.
+> > 
+> > I would actually prefer that the auxiliary bus itself does not make any
+> > assumptions regarding the whereabouts of the fwnodes at this stage. Maybe
+> > later, when(if) there are more users.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
