@@ -2,61 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF18745D5A
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 15:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C647E745D62
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 15:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjGCNbT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Jul 2023 09:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S231627AbjGCNbY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jul 2023 09:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjGCNbS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 09:31:18 -0400
+        with ESMTP id S230503AbjGCNbU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 09:31:20 -0400
 Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5B7E60
-        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 06:31:16 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f86e6e4038so5583996e87.0
-        for <linux-spi@vger.kernel.org>; Mon, 03 Jul 2023 06:31:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E75E50
+        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 06:31:18 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso6890963e87.0
+        for <linux-spi@vger.kernel.org>; Mon, 03 Jul 2023 06:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688391075; x=1690983075;
+        d=linaro.org; s=google; t=1688391076; x=1690983076;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=n/gQKrgv9jl26df4nD8+qhw8ZnBWlEQchlmkvSgMYjQ=;
-        b=l73yEXFOeig5qdtuMpI+ALwg4IVM0aw9hMZjHVFwaUTnXiGtujvGJewYdsk1tleRB2
-         z5tITNcyfBvWbsRHjpFGGK9a0W/F52UoOdp0EWnav7IOMCgJf0zfkzpmgKx+aFVokbco
-         l3jNynIeC4wwqc+g44wcjQN5AQwMi6M5kzm90uknSp01Mkpti5/bMT90w27Ts3yD+fE7
-         MvtWhkjLwinbSN/UdfRchpILrNNaHLGs0aIZKmqq2h4ECaoHOUzA/QBvxsgLMOZ3jvvV
-         vnIyUzgheqLU2ZkOn+8epAM/lRzIhipLWJuEU6Q3oNUjF2vCHFMYhU1FA5ilKCKscZRZ
-         DmOg==
+        bh=C2RI3+66dTpZ9C4ox3q+m5S+xeRtBMTP/kVw+ytOXk4=;
+        b=inpJ0VovqtQ8g/UFm+SoVRGe0WZPBMO35cPLnHy0FdV/1Ahc3lBjK0HTKkN5e1a53W
+         lMzz63d16Vmju8Xntq635NMcGOtlkK26RKZfE02a+SZ+5G5j6LlXWNk+AXor/fJFh/pN
+         Th8+lcjm+whpcFtu8pB1mLfy4LvPWVEQQNZ9/b01qj9gBcFYxyP2uH1YY9D+fi+riJ5l
+         SeB0EJKFVju8PnKGt1NSHM3W/34IpU4/okoFWrjagX3xbAkyucyfJcZBrgoKdXxmQ0VT
+         LeLW4YpmJbj8F3Z40oqmk/DsonixOjv29pPfbwPMXvnYlPwN6NkBoTQYFHoDIcZHrvIx
+         Q+0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688391075; x=1690983075;
+        d=1e100.net; s=20221208; t=1688391076; x=1690983076;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n/gQKrgv9jl26df4nD8+qhw8ZnBWlEQchlmkvSgMYjQ=;
-        b=NHsrqth5zBH8kjab8DtgvLSY4P/eWp6a7WEodC9/IcslJ7g1aBE6kexA37Zyvk1bID
-         uWR8A2cerPEBw5mltN+Ma0W3tUAT3SQqt6TZzhG/uExDzoIe+Y2IBaq+5w5wZxbB6V8m
-         QfmjfXGWnHCDUnK2mkgk0h8CdRkUpQZ60d951N5J/hpDW/MvMYd9cqGB+rIMPBP828BD
-         PeOxuqhqlNQBaMtxgEPB15ncjK2+qkoUAGHoO/72DyxgoPSn1dz49FrUOuE6ds7/B2tn
-         pkfDs8LabGG45X1R2/y7muEmWAYDN+OWqqoOV88QJKzG88ebn6nLvfszBvFAI3UcaoRO
-         pV4w==
-X-Gm-Message-State: ABy/qLZcCbJmHIRf9HSW9J7u14knsLJOWtmR355yH95LoHDDqi1qijj3
-        B2q/NPjjSrguVm3pP5JVPvD8iA==
-X-Google-Smtp-Source: APBJJlHpPmW37wHbYhD2VatnWDTXUi9XhtZ9muHG5jeTKYozptLFtx9Ha1cNS8EAgJxO9jLR4qBMmA==
-X-Received: by 2002:a05:6512:3c87:b0:4f4:a656:2466 with SMTP id h7-20020a0565123c8700b004f4a6562466mr3914367lfv.15.1688391074973;
-        Mon, 03 Jul 2023 06:31:14 -0700 (PDT)
+        bh=C2RI3+66dTpZ9C4ox3q+m5S+xeRtBMTP/kVw+ytOXk4=;
+        b=QWcuzkcfKa+dLvytPHb1Pn5lfuTKHyEgwQARjMLZxUpIhVTPpONsZ+YcgMHcCElat2
+         PjjQ5OT8uBWYJj2gpxzYJZWstrbkXGI26G9k+DA6jpYxhr13vWVNZvM9jI/gxZxMWs+H
+         FrNCtJjTZv8MJOLINuPYxFOJu0pBsjhCUW4SDA0tviEpRmnVMDjP5zAkxFfglWFrWtbS
+         GUu1tyqXBB/bNcUwM74TIdAJrO8ng4ccPIayNPP5otVuDeib869WXpfhhNbU3FQ+bfzV
+         7SKOxFdfASI/pvmbYItWd5CJmDV2Tj3Ff9fenRt+hDoO2htkIhfsqZJvjkGMsuJ8G+mN
+         u/0Q==
+X-Gm-Message-State: ABy/qLZJbkWSrCx0vR6EQF6omdu8pJRPedopRSQKJTOGjNJ6bh8Rke+e
+        K1O7J3OcbG2YFCuoMdIIqbzKsA==
+X-Google-Smtp-Source: APBJJlGHneF9y50KLLcylEC0u5K7FX2jsNUrQKCxMZuDYkGMyEAvOfpfont9DqrFn9m11FTiJqz+5Q==
+X-Received: by 2002:a05:6512:3a7:b0:4f3:9136:9cd0 with SMTP id v7-20020a05651203a700b004f391369cd0mr6154596lfp.44.1688391076514;
+        Mon, 03 Jul 2023 06:31:16 -0700 (PDT)
 Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id ep7-20020a056512484700b004fbb1f70ceesm833417lfb.227.2023.07.03.06.31.13
+        by smtp.gmail.com with ESMTPSA id ep7-20020a056512484700b004fbb1f70ceesm833417lfb.227.2023.07.03.06.31.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 06:31:14 -0700 (PDT)
+        Mon, 03 Jul 2023 06:31:16 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 03 Jul 2023 15:31:10 +0200
-Subject: [PATCH 1/5] dt-bindings: spi: spi-geni-qcom: Allow no qup-core icc
+Date:   Mon, 03 Jul 2023 15:31:11 +0200
+Subject: [PATCH 2/5] dt-bindings: serial: geni-qcom: Allow no qup-core icc
  path
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230703-topic-8250_qup_icc-v1-1-fea39aa07525@linaro.org>
+Message-Id: <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
 References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
 In-Reply-To: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -74,16 +74,16 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688391072; l=1083;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688391072; l=1333;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=TQNTCWE+iBjVfoMqrm2paazex7hqvKkpoTz9pkEkyKc=;
- b=cStngA5XatURTQAcTPIg9usdXNHDCeFjDqHlJO5FM/ZH4iA7azJ01kuuVe06R9jsSSgwZ4aUm
- VBUl9Y1tbCiDUoxFvB6NfWRfJ1/5XpZHtnKTkXLnTdFJOWHEcbjMsUq
+ bh=PHLLf0dYHyrWiNleR3i9qlCgEBMco5J5FnlnRJYIuaA=;
+ b=01sXMPmg4hRNAhe629YzVYzm5DQTEV0QMurBwgyti7/OIjJy3QP2fMez4fgR21njikOPBYNdP
+ nTMfMisnZkeBTo+FNYNjyxjjfHD6CN/00DdYpJG5Ofwlc3CLNwE4Efu
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,35 +96,53 @@ Allow such case.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml       | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ .../bindings/serial/qcom,serial-geni-qcom.yaml     | 26 +++++++++++++++-------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-index 2e20ca313ec1..2890c4968c2a 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-@@ -49,11 +49,16 @@ properties:
-     maxItems: 3
+diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+index dd33794b3534..a0acba57bc06 100644
+--- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
++++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+@@ -25,14 +25,6 @@ properties:
+   clock-names:
+     const: se
  
-   interconnect-names:
--    minItems: 2
+-  interconnects:
+-    maxItems: 2
+-
+-  interconnect-names:
 -    items:
 -      - const: qup-core
 -      - const: qup-config
--      - const: qup-memory
-+    oneOf:
-+      - items:
-+          - const: qup-config
-+          - const: qup-memory
+-
+   interrupts:
+     minItems: 1
+     items:
+@@ -56,6 +48,24 @@ properties:
+   reg:
+     maxItems: 1
+ 
++oneOf:
++  - properties:
++      interconnects:
++        maxItems: 1
 +
-+      - minItems: 2
++      interconnect-names:
++        items:
++          - const: qup-config
++
++  - properties:
++      interconnects:
++        minItems: 2
++
++      interconnect-names:
 +        items:
 +          - const: qup-core
 +          - const: qup-config
-+          - const: qup-memory
- 
-   interrupts:
-     maxItems: 1
++
+ required:
+   - compatible
+   - clocks
 
 -- 
 2.41.0
