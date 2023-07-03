@@ -2,96 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E3B74589A
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 11:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF3F745A16
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 12:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjGCJnW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 3 Jul 2023 05:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S229727AbjGCKYE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jul 2023 06:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjGCJnW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 05:43:22 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72512CD;
-        Mon,  3 Jul 2023 02:43:21 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5702415be17so45084507b3.2;
-        Mon, 03 Jul 2023 02:43:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377400; x=1690969400;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kxia0UfgqS/oGm4ifJU+grXMEUFur2Qpj0zc6W0DlDY=;
-        b=WoAAnBr2ZuYQyBCL5/5BvkIPYG+GYZacfRjRAx+rPHEuNN9x3rFOuSgxWV6gX7nITz
-         0WURke6hFyPhVLbGY4Qg2pbuRifrbwJkSIln5RI1SLWVkClDU0kJupnvfWO4JdDq7NoQ
-         N72+9Dl68zvDngq9b3yhjTRgG9x5rZPDvWwRuLCvk4f9xASyyiRNpSucuO6rEDr4mvXO
-         ffr93VbxcV5RHZgvels/ObBRCHEOk3V34wkwlHp0PBL5nrvxQYXc2dzgZ61rOFgFhyPv
-         RndTHNO/Arb2srs+lpQ5UPk3tvkLa4lbcWZaWGVkdFo72QaWSbEwrWaz+BS9+1YOtiY9
-         Mdwg==
-X-Gm-Message-State: ABy/qLafTPn9Da5K0cxOhobhNw/0MWiRAUcgOWwu9TVRlOBmHhguTbmH
-        Bon+pbBEI4kO0LwwaYlD12w7F3QN8kfuCg==
-X-Google-Smtp-Source: APBJJlHr+Cr/g5/igmqZhM/FJRTBQd76vgobptKYG6Thi2FC+p8AfaVwf860ZAC/1zw4O4C0V6S5qQ==
-X-Received: by 2002:a0d:d48e:0:b0:56d:3d83:15cb with SMTP id w136-20020a0dd48e000000b0056d3d8315cbmr9126597ywd.44.1688377400463;
-        Mon, 03 Jul 2023 02:43:20 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id s4-20020a0dd004000000b0057399b3bd26sm5000509ywd.33.2023.07.03.02.43.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 02:43:20 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso3793395276.1;
-        Mon, 03 Jul 2023 02:43:20 -0700 (PDT)
-X-Received: by 2002:a25:7d06:0:b0:bac:f51c:b0ba with SMTP id
- y6-20020a257d06000000b00bacf51cb0bamr8618647ybc.0.1688377400127; Mon, 03 Jul
- 2023 02:43:20 -0700 (PDT)
+        with ESMTP id S229585AbjGCKYD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 06:24:03 -0400
+X-Greylist: delayed 1201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jul 2023 03:24:01 PDT
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A924BE;
+        Mon,  3 Jul 2023 03:24:01 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 6912F100009;
+        Mon,  3 Jul 2023 12:45:43 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6912F100009
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688377543;
+        bh=lcOhlx00oXE7ulbYTnPi1yKlG4AkGFl5PtjjLmrQcFU=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=o5r2wsPZPKz//+smAOsuYHKAY7/4imLKzyE8Rtm0vRj9QZY4F2/Eyq+ZZTq62p/SW
+         ESVNNyurvDOWBzve5acNzT4bPyFPZshffQpC+ZND9XCx3+87a4euA6DlKELcZv5A8a
+         PRQKSq/JhscyqrrXlKnJ41yZrkkeNtcJOwjWPELitlNGnuTxvFkdDBivz45hqs339E
+         Kor9o0X+eWYlMmVQoh6qO9TsHyeNnpjyFTasIf5ftdeNIoujocYyomn/4YlcfP/wLg
+         TfZRel/OA5YL7vB2Ya9kT+aGXLCGG+IG2R/8UeY8W50VmZu/mC7uufMgTjhGPcqf2I
+         ZYf8PPGlcGLVA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Mon,  3 Jul 2023 12:45:43 +0300 (MSK)
+Received: from CAB-WSD-0004828.sigma.sbrf.ru (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 3 Jul 2023 12:45:42 +0300
+From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
+To:     Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Subject: [PATCH v1 0/2] spi: amlogic-spifc-a1: fixes and improvements for amlogic-spifc-a1
+Date:   Mon, 3 Jul 2023 12:45:16 +0300
+Message-ID: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com> <20230622113341.657842-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230622113341.657842-2-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 11:43:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXSn9UpW_negX5PYTtg17GitU9zXGy_JN=VucB4dWn7fg@mail.gmail.com>
-Message-ID: <CAMuHMdXSn9UpW_negX5PYTtg17GitU9zXGy_JN=VucB4dWn7fg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178391 [Jul 03 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: MMKurbanov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;100.64.160.123:7.1.2;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/03 07:50:00 #21557756
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> Add dt-bindings for the CSI IP found inside the RZ/V2M SoC.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->
-> v2: no changes
+This series adds support for max_speed_hz and implement adjust_op_size()
+callback.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Martin Kurbanov (2):
+  spi: amlogic-spifc-a1: implement adjust_op_size()
+  spi: amlogic-spifc-a1: add support for max_speed_hz
 
-Gr{oetje,eeting}s,
+ drivers/spi/spi-amlogic-spifc-a1.c | 83 ++++++++++++++++--------------
+ 1 file changed, 43 insertions(+), 40 deletions(-)
 
-                        Geert
+--
+2.40.0
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
