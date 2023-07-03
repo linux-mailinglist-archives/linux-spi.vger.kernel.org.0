@@ -2,50 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678AB745FAA
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 17:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AD57463CB
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 22:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjGCPUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Jul 2023 11:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229895AbjGCUPh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jul 2023 16:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjGCPUX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 11:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AAAFD
-        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 08:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AB360F7B
-        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 15:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 864E3C433C7;
-        Mon,  3 Jul 2023 15:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688397621;
-        bh=15h7oVoInkClOkOLbxYnzFrevs7p6VzrWlod5AbtRvU=;
-        h=Subject:From:Date:To:From;
-        b=FzYqfNfxSaOL/3m0TFwVH45aNVSi01EK8NimQEG9grC+ZHbZqfifWgd/c/8/H1qOW
-         E7sUZqCjCXAiWA2HZe1nB1Zkkf66YfyWuUlydtvKgK9BRwp4OktT7kLAjouZ4tllQi
-         zLfDGt1HAmSuYiEYLBGtFbqYghFNzg063mW85ejgm1LOXS76SDZwGZdnKWR7stXP+2
-         ruJ9PW4exzG5bFJsCiPDX4cepKkdRnZVkJFOGs6KOGgPqKLAq8/9RAtldNSOwy0T3X
-         XqVFAlSAibqP6mIWh7nZuiYS+7B6wjW+1N9C9IHU2m1+gXn6HTfYdcLQw3l4sVT2l4
-         i4uiaci9c4pzA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64E1BC64457;
-        Mon,  3 Jul 2023 15:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231446AbjGCUPg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 16:15:36 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E1E73
+        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 13:15:33 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so5996888e87.1
+        for <linux-spi@vger.kernel.org>; Mon, 03 Jul 2023 13:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688415331; x=1691007331;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmxlnwW6OlUanek5Fckd1dRfjqDIwlG3Z86p0uliLOk=;
+        b=SsRnH/OMBJV2EOefcvu1Xb2yQsvdhSI2R2icQ1p/FvczfAwJVJXLbqxxVRXC/kLjpc
+         o38MR5sskA7mguUVBFOcSYtw9xKDHL8hwsHxQvHbJwSn4Hd08mhlOp8hNY/yx5bivGhV
+         DGAjN1eKwyVC+7XJcYpN+u+sxIG4NaGCmG5Ldm2n/Umf5ZEFn6mLZF25C9I69vCjHKqv
+         Pl7Ag7jK6DfrFp2DhnKorKLfOJIw9O0fovcVYNYjBiOR9vPGdkwbBwRR1FTK7wL7rzYu
+         hzJfoq1NP5km7ZR50eKzjPnUbVTEyjdcHKGz7MgaYcGpD6vpWP+6F8OnE7KRgLSqldHR
+         kIVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688415331; x=1691007331;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OmxlnwW6OlUanek5Fckd1dRfjqDIwlG3Z86p0uliLOk=;
+        b=Tudwao46vlIqzsla1AUMHTj180Mv2/mm21Y1IfitjqjVLVfT8yFculXqMGTjuHX0vl
+         XRzGYD0b+7arxrwW9dvLSrBqeLyTU4u6n2bpcYA07FyUukA9ZkS9tVlavoZ/trNjrCLL
+         LXCBiOYDirpSWqpn2T6/2HXVvyHpotK8AQwZ1SJrJxsCqiEvoMCku/mTlwjSP5AE6md0
+         N4s2+7lER/c6ymyrQ78mkNgW4Q3cao/frbD3vM6QbzAu4wgV0oeB8b5AsANPI3zs7aNy
+         bd118gtZy5J0TLbys39xnBCEwvc4NnXWKQSl7/RpTpT4L9Zyk8OTJrhIfaXHg8EIZpZf
+         zICg==
+X-Gm-Message-State: ABy/qLa+35GGT8ACpfWdhR0Ii6ctIeX8g484x6Xll3yhvKUfVo5pW5CF
+        jIrervzosgl1CgE7USR9txEd8A==
+X-Google-Smtp-Source: APBJJlHCV6QxaUZW/HE8PKjX7YHTl04DbkAPArIbQaOyoBWA0fQG8UECxLN2PRjJhO0iwXMN6tPfxw==
+X-Received: by 2002:a05:6512:4013:b0:4f9:56b8:45e5 with SMTP id br19-20020a056512401300b004f956b845e5mr4663385lfb.25.1688415331030;
+        Mon, 03 Jul 2023 13:15:31 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id w27-20020a05651204db00b004fba7edc6cesm1991365lfq.7.2023.07.03.13.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 13:15:30 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/4] Add interconnects to QUPs on SM8250
+Date:   Mon, 03 Jul 2023 22:15:24 +0200
+Message-Id: <20230703-topic-8250_qup_icc-v2-0-9ba0a9460be2@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168839762133.16555.17785465385781186413.git-patchwork-summary@kernel.org>
-Date:   Mon, 03 Jul 2023 15:20:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFwso2QC/32NQQqDMBAAvyI5NyUm1die+o8ism5XXZDEJiot4
+ t+b+oAeZ2CYTUQKTFHcsk0EWjmydwn0KRM4gOtJ8jOx0EobZZWRs58YZaUL1byWqWFEWea2rMB
+ c0BKKFLYQSbYBHA4pdcs4JjkF6vh9nB514oHj7MPnGK/5z/59rLlUsiMwVwBlC13cR3YQ/NmHX
+ tT7vn8BgyzMtsoAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688415328; l=1365;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=dPT2roZiTmdQmO/AOJA7mh/BGKezhgAf87PZ1MFFvgg=;
+ b=YYNXe31KSRcf7Lk7nGQU5Xt0Jfhyz/T8zQ6WxbFjMq5eCquktEC2yJaN7vfHXBu+lgFjrcHIa
+ A/Sq/fnZE+7Dfn0irrsXaCOk9Ng3RRcXVYrA2snsERBhkcvmRayf47M
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,22 +95,35 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+SM8250 (like SM8150 but unlike all other QUP-equipped SoCs) doesn't
+provide a qup-core path. Adjust the bindings and drivers as necessary,
+and then describe the icc paths in the device tree. This makes it possible
+for interconnect sync_state succeed so long as you don't use UFS.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- drop everything, fix icc instead of messing with bindings
+- Link to v1: https://lore.kernel.org/r/20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org
 
-Patch: spi: rzv2m-csi: Fix SoC product name
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=761951
-  Lore link: https://lore.kernel.org/r/89e9870a2c510387e4d7a863025f4d3639d4a261.1688375020.git.geert+renesas@glider.be
+---
+Konrad Dybcio (4):
+      dt-bindings: interconnect: qcom,rpmh: Add SM8250 QUP virt
+      dt-bindings: interconnect: qcom,sm8250: Add QUP virt
+      interconnect: qcom: sm8250: Fix QUP0 nodes
+      arm64: dts: qcom: sm8250: Add interconnects and power-domains to QUPs
 
+ .../bindings/interconnect/qcom,rpmh.yaml           |  18 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 286 +++++++++++++++++++++
+ drivers/interconnect/qcom/sm8250.c                 |  74 +++++-
+ drivers/interconnect/qcom/sm8250.h                 |   6 +
+ include/dt-bindings/interconnect/qcom,sm8250.h     |   7 +
+ 5 files changed, 384 insertions(+), 7 deletions(-)
+---
+base-commit: 296d53d8f84ce50ffaee7d575487058c8d437335
+change-id: 20230703-topic-8250_qup_icc-61768a34c7ec
 
-Total patches: 1
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
