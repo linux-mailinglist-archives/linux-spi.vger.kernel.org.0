@@ -2,322 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21D2745A09
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 12:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBF6745D54
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jul 2023 15:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjGCKT4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 3 Jul 2023 06:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        id S231459AbjGCNbR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jul 2023 09:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbjGCKTm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 06:19:42 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFA7D2;
-        Mon,  3 Jul 2023 03:19:39 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-56fff21c2ebso50362497b3.3;
-        Mon, 03 Jul 2023 03:19:39 -0700 (PDT)
+        with ESMTP id S230503AbjGCNbQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jul 2023 09:31:16 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BF3E54
+        for <linux-spi@vger.kernel.org>; Mon,  3 Jul 2023 06:31:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb41682472so6702026e87.2
+        for <linux-spi@vger.kernel.org>; Mon, 03 Jul 2023 06:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688391073; x=1690983073;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mmnKR6NrcH13RIboC24wgvo0cXm9uFpdKMc5Nw0n2zA=;
+        b=ScMdpPo+quZsGKt6VxpWHDSxyvsyHQTKTkDln/Nk5LM97r3ByHE8tRaLbaMvIxbS85
+         lQMOOI6mNxiq/LTabMNpFsGcPccJoVDJvShOaSrpsRAAw2GVxGZ0/hQb3kL+DOn9bPO3
+         LzzMb+6WZ9gj9hrm80XN+GiplqVeWvzt2DHlJzYUm4O3fYez/hIEfojd6aCDtOQLMyDw
+         /JST52UuE9cGQN/N23OmzKAbDBCwMaT+9FXOCFXxFcoYHA40lGBrO7AfStANI6Fie7bc
+         AybJ0M1nIfz4EcE8lNqRCIoqPrMLcwxi6MjmTcgE/1FmWXxq/MKuYPxjFySG61Pss78+
+         QEIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688379578; x=1690971578;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=otTmQa23ksdmtXKU5Wvw4W3m/LeTHlMGWSV7Ivn/a54=;
-        b=Gfbled8ZhBknK2NwkOKdhLNFWSYDyhaRzrQMV2vFTvFNFjnuOn6//11FbZlXMhEPaH
-         kTswYCsQtFjMt1xcDw1gRy8w8MewzpZgXFsm6t6DKcyn3YalpB4YKd97ILwotAch659F
-         e7jSBUDosWr1FiiJLsqvnw3nkyHwQuBxWCeUBgl5hDe3f9zSkBmgxmgatrnWR5JSJOOU
-         VvjkhUPS619SWeWAGduxVZgJNwZWqQH7dX5mgJb6GbffwFO3sjaZZ6euHpkzcucPJAQw
-         QVhVakGvwenDNaw7fUcbJ5k7GCacl2zSOom94+kNKY1+EBMS0v+DRYyopsUao1xElsrt
-         omNg==
-X-Gm-Message-State: ABy/qLYc7k8hmOR/0/E9OsfAS8P54lqhR7SalQ/Gkl3jy0Cg2sAAce13
-        9Y5Bqco0EuydiiQj1TFvy2xgxrzdkbOpOw==
-X-Google-Smtp-Source: APBJJlG2fCbFeD8/jEjYvn3pn7Ir+vTfEUTZv5f/ob5ouENJVP969GY0It3BBdqRcdkzD8e7h7Jm1A==
-X-Received: by 2002:a0d:d6c2:0:b0:577:16f7:91d9 with SMTP id y185-20020a0dd6c2000000b0057716f791d9mr8831516ywd.12.1688379578445;
-        Mon, 03 Jul 2023 03:19:38 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id v19-20020a814813000000b0054fba955474sm5016041ywa.17.2023.07.03.03.19.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 03:19:38 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-c4cb4919bb9so2021461276.3;
-        Mon, 03 Jul 2023 03:19:37 -0700 (PDT)
-X-Received: by 2002:a25:9d0f:0:b0:c1c:df23:44ec with SMTP id
- i15-20020a259d0f000000b00c1cdf2344ecmr9214702ybp.0.1688379577443; Mon, 03 Jul
- 2023 03:19:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688391073; x=1690983073;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mmnKR6NrcH13RIboC24wgvo0cXm9uFpdKMc5Nw0n2zA=;
+        b=QCS9lE/Hjm/eOBKsBzgOhL2zwKnfKCZERWPjNUJHAJ0azEQZTWFxOmLv9ws1XR0A6A
+         m5jRostW3wiN12ClUGcilkQ+SQGcV1UDVssuK7ee+MAU1mKnr9Fa40pdJPfu7/nEZjIR
+         6U/mpF/OWHaDBus7kLDa+R1HI2ZPLCO8FaGuPHNEMrmbNd2RfyaJSsDyNri8cDQwpe9E
+         rhFoSI/sZKLONk0z/IITAB3fkuS3M2msVn9ZWhBGCUpoHmqm5pUtKleE+FJpWNvlk9bU
+         zYzHy7nr6QrszZIQ+LQRo/I/ZR945gv1mXx43u6rtjkTb7nSFT0PZIcE1HHymz/hMBoE
+         g6uA==
+X-Gm-Message-State: ABy/qLZOQsnp8qryv9CUy6Ft4g84Me2Lwf1FuCsHvleMfMZLEgGwCUcI
+        f75ylpQvDgmRH2TTOvNxvrswLQ==
+X-Google-Smtp-Source: APBJJlGFdqjy8wwAOkx2KKsD9YVjv9xJFBDRdOY+uU/tTgJX7vCdJgPQj5vpQBGok4bNXDBHh5GbeQ==
+X-Received: by 2002:a05:6512:3984:b0:4fb:85b2:cf78 with SMTP id j4-20020a056512398400b004fb85b2cf78mr8856638lfu.37.1688391073559;
+        Mon, 03 Jul 2023 06:31:13 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id ep7-20020a056512484700b004fbb1f70ceesm833417lfb.227.2023.07.03.06.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 06:31:13 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/5] Add interconnects to QUPs on SM8250
+Date:   Mon, 03 Jul 2023 15:31:09 +0200
+Message-Id: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
 MIME-Version: 1.0
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com> <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 12:19:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVsYohH5FVv6r4ha0AaHRoHjNF1ErjW1FNF7ZAQR9ntxg@mail.gmail.com>
-Message-ID: <CAMuHMdVsYohH5FVv6r4ha0AaHRoHjNF1ErjW1FNF7ZAQR9ntxg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] spi: Add support for Renesas CSI
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ3NomQC/x2N0QqDMAwAf0XyvEBtp5X9yhCpMZsBqV2rMhD/f
+ WGPd3DcCYWzcIFHdULmQ4qsUaG+VUBziG9GmZTBGuuMNw63NQlhZxszfPY0CBG2tW+74O7kmUD
+ DMRTGMYdIs6ZxXxaVKfNLvv/Ts7+uH6A3bfx5AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688391072; l=1274;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=P/b9sUtVGW1aCLv/5W9/Do7IS4MZ5AYwLEHs4cWI4Yo=;
+ b=FeyN/5yDiFSyKCkhToHlIcdNwZzpYCsAzae8/E3MTmMzSSgehX8sZSykvbqgM4E5OR2o/LBXV
+ pAWX9VvkUzICzoebYDjNNIbkASbiD70Z2u/I6lHttwRFt3eIaxT4Pcp
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Fabrizio,
+SM8250 (like SM8150 but unlike all other QUP-equipped SoCs) doesn't
+provide a qup-core path. Adjust the bindings and drivers as necessary,
+and then describe the icc paths in the device tree. This makes it possible
+for interconnect sync_state succeed so long as you don't use UFS.
 
-On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The RZ/V2M SoC comes with the Clocked Serial Interface (CSI)
-> IP, which is a master/slave SPI controller.
->
-> This commit adds a driver to support CSI master mode.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->
-> v2: edited includes in drivers/spi/spi-rzv2m-csi.c
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (5):
+      dt-bindings: spi: spi-geni-qcom: Allow no qup-core icc path
+      dt-bindings: serial: geni-qcom: Allow no qup-core icc path
+      dt-bindings: i2c: qcom,i2c-geni: Allow no qup-core icc path
+      soc: qcom: geni-se: Allow any combination of icc paths
+      arm64: dts: qcom: sm8250: Add interconnects and power-domains to QUPs
 
-Thanks for your patch!
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           |  27 ++--
+ .../bindings/serial/qcom,serial-geni-qcom.yaml     |  26 ++--
+ .../bindings/spi/qcom,spi-geni-qcom.yaml           |  15 ++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 150 +++++++++++++++++++++
+ drivers/soc/qcom/qcom-geni-se.c                    |   9 +-
+ 5 files changed, 204 insertions(+), 23 deletions(-)
+---
+base-commit: 296d53d8f84ce50ffaee7d575487058c8d437335
+change-id: 20230703-topic-8250_qup_icc-61768a34c7ec
 
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -825,6 +825,12 @@ config SPI_RSPI
->         help
->           SPI driver for Renesas RSPI and QSPI blocks.
->
-> +config SPI_RZV2M_CSI
-> +       tristate "Renesas RZV2M CSI controller"
-
-RZ/V2M (patch sent)
-
-> +       depends on ARCH_RENESAS || COMPILE_TEST
-> +       help
-> +         SPI driver for Renesas RZ/V2M Clocked Serial Interface (CSI)
-> +
->  config SPI_QCOM_QSPI
->         tristate "QTI QSPI controller"
->         depends on ARCH_QCOM || COMPILE_TEST
-
-> --- /dev/null
-> +++ b/drivers/spi/spi-rzv2m-csi.c
-> @@ -0,0 +1,667 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Renesas RZ/V2M Clocked Serial Interface (CSI) driver
-> + *
-> + * Copyright (C) 2023 Renesas Electronics Corporation
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/count_zeros.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/spi/spi.h>
-> +
-> +/* Registers */
-> +#define CSI_MODE               0x00    /* CSI mode control */
-> +#define CSI_CLKSEL             0x04    /* CSI clock select */
-> +#define CSI_CNT                        0x08    /* CSI control */
-> +#define CSI_INT                        0x0C    /* CSI interrupt status */
-> +#define CSI_IFIFOL             0x10    /* CSI receive FIFO level display */
-> +#define CSI_OFIFOL             0x14    /* CSI transmit FIFO level display */
-> +#define CSI_IFIFO              0x18    /* CSI receive window */
-> +#define CSI_OFIFO              0x1C    /* CSI transmit window */
-> +#define CSI_FIFOTRG            0x20    /* CSI FIFO trigger level */
-> +
-> +/* CSI_MODE */
-> +#define CSI_MODE_CSIE          BIT(7)
-> +#define CSI_MODE_TRMD          BIT(6)
-> +#define CSI_MODE_CCL           BIT(5)
-> +#define CSI_MODE_DIR           BIT(4)
-> +#define CSI_MODE_CSOT          BIT(0)
-> +
-> +#define CSI_MODE_SETUP         0x00000040
-> +
-> +/* CSI_CLKSEL */
-> +#define CSI_CLKSEL_CKP         BIT(17)
-> +#define CSI_CLKSEL_DAP         BIT(16)
-> +#define CSI_CLKSEL_SLAVE       BIT(15)
-> +#define CSI_CLKSEL_CKS         GENMASK(14, 1)
-> +
-> +/* CSI_CNT */
-> +#define CSI_CNT_CSIRST         BIT(28)
-> +#define CSI_CNT_R_TRGEN                BIT(19)
-> +#define CSI_CNT_UNDER_E                BIT(13)
-> +#define CSI_CNT_OVERF_E                BIT(12)
-> +#define CSI_CNT_TREND_E                BIT(9)
-> +#define CSI_CNT_CSIEND_E       BIT(8)
-> +#define CSI_CNT_T_TRGR_E       BIT(4)
-> +#define CSI_CNT_R_TRGR_E       BIT(0)
-> +
-> +/* CSI_INT */
-> +#define CSI_INT_UNDER          BIT(13)
-> +#define CSI_INT_OVERF          BIT(12)
-> +#define CSI_INT_TREND          BIT(9)
-> +#define CSI_INT_CSIEND         BIT(8)
-> +#define CSI_INT_T_TRGR         BIT(4)
-> +#define CSI_INT_R_TRGR         BIT(0)
-> +
-> +/* CSI_FIFOTRG */
-> +#define CSI_FIFOTRG_R_TRG       GENMASK(2, 0)
-> +
-> +#define CSI_FIFO_SIZE_BYTES    32
-> +#define CSI_FIFO_HALF_SIZE     16
-> +#define CSI_EN_DIS_TIMEOUT_US  100
-> +#define CSI_CKS_MAX            0x3FFF
-> +
-> +#define UNDERRUN_ERROR         BIT(0)
-> +#define OVERFLOW_ERROR         BIT(1)
-> +#define TX_TIMEOUT_ERROR       BIT(2)
-> +#define RX_TIMEOUT_ERROR       BIT(3)
-> +
-> +#define CSI_MAX_SPI_SCKO       8000000
-> +
-> +struct rzv2m_csi_priv {
-> +       void __iomem *base;
-> +       struct clk *csiclk;
-> +       struct clk *pclk;
-> +       struct device *dev;
-> +       struct spi_controller *controller;
-> +       const u8 *txbuf;
-> +       u8 *rxbuf;
-> +       int buffer_len;
-> +       int bytes_sent;
-> +       int bytes_received;
-> +       int bytes_to_transfer;
-> +       int words_to_transfer;
-
-All these ints should be unsigned.
-
-> +       unsigned char bytes_per_word;
-
-3-byte gap
-
-> +       wait_queue_head_t wait;
-> +       u8 errors;
-
-3 byte gap
-
-> +       u32 status;
-> +};
-
-> +
-> +static int rzv2m_csi_fill_txfifo(struct rzv2m_csi_priv *csi)
-> +{
-> +       int i;
-
-unsigned int
-
-> +
-> +       if (readl(csi->base + CSI_OFIFOL))
-> +               return -EIO;
-> +
-> +       if (csi->bytes_per_word == 2) {
-> +               u16 *buf = (u16 *)csi->txbuf;
-
-I think you can get rid of the casts by making rxbuf a const void *.
-
-> +
-> +               for (i = 0; i < csi->words_to_transfer; i++)
-> +                       writel(buf[i], csi->base + CSI_OFIFO);
-> +       } else {
-> +               u8 *buf = (u8 *)csi->txbuf;
-> +
-> +               for (i = 0; i < csi->words_to_transfer; i++)
-> +                       writel(buf[i], csi->base + CSI_OFIFO);
-> +       }
-> +
-> +       csi->txbuf += csi->bytes_to_transfer;
-> +       csi->bytes_sent += csi->bytes_to_transfer;
-> +
-> +       return 0;
-> +}
-> +
-> +static int rzv2m_csi_read_rxfifo(struct rzv2m_csi_priv *csi)
-> +{
-> +       int i;
-> +
-> +       if (readl(csi->base + CSI_IFIFOL) != csi->bytes_to_transfer)
-> +               return -EIO;
-> +
-> +       if (csi->bytes_per_word == 2) {
-> +               u16 *buf = (u16 *)csi->rxbuf;
-
-Similar for rxbuf.
-
-> +
-> +               for (i = 0; i < csi->words_to_transfer; i++)
-> +                       buf[i] = (u16)readl(csi->base + CSI_IFIFO);
-> +       } else {
-> +               u8 *buf = (u8 *)csi->rxbuf;
-> +
-> +               for (i = 0; i < csi->words_to_transfer; i++)
-> +                       buf[i] = (u8)readl(csi->base + CSI_IFIFO);
-> +       }
-> +
-> +       csi->rxbuf += csi->bytes_to_transfer;
-> +       csi->bytes_received += csi->bytes_to_transfer;
-> +
-> +       return 0;
-> +}
-> +
-> +static inline void rzv2m_csi_calc_current_transfer(struct rzv2m_csi_priv *csi)
-> +{
-> +       int bytes_transferred = max_t(int, csi->bytes_received, csi->bytes_sent);
-> +       int bytes_remaining = csi->buffer_len - bytes_transferred;
-> +       int to_transfer;
-
-unsigned...
-
-> +
-> +       if (csi->txbuf)
-> +               /*
-> +                * Leaving a little bit of headroom in the FIFOs makes it very
-> +                * hard to raise an overflow error (which is only possible
-> +                * when IP transmits and receives at the same time).
-> +                */
-> +               to_transfer = min_t(int, CSI_FIFO_HALF_SIZE, bytes_remaining);
-> +       else
-> +               to_transfer = min_t(int, CSI_FIFO_SIZE_BYTES, bytes_remaining);
-
-Why min_t(int, ...)? Both values are int.
-
-It would be better to make both unsigned, though.
-
-> +
-> +       if (csi->bytes_per_word == 2)
-> +               to_transfer >>= 1;
-> +
-> +       /*
-> +        * We can only choose a trigger level from a predefined set of values.
-> +        * This will pick a value that is the greatest possible integer that's
-> +        * less than or equal to the number of bytes we need to transfer.
-> +        * This may result in multiple smaller transfers.
-> +        */
-> +       csi->words_to_transfer = x_trg_words[to_transfer - 1];
-> +
-> +       if (csi->bytes_per_word == 2)
-> +               csi->bytes_to_transfer = csi->words_to_transfer << 1;
-> +       else
-> +               csi->bytes_to_transfer = csi->words_to_transfer;
-> +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
