@@ -2,61 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26F27476CE
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 18:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723CD7476F5
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 18:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjGDQgK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jul 2023 12:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S231331AbjGDQlO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jul 2023 12:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjGDQgJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 12:36:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC6DF2;
-        Tue,  4 Jul 2023 09:36:08 -0700 (PDT)
+        with ESMTP id S230452AbjGDQlO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 12:41:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185010C8;
+        Tue,  4 Jul 2023 09:41:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC99612F5;
-        Tue,  4 Jul 2023 16:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB81AC433C8;
-        Tue,  4 Jul 2023 16:36:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1294B61306;
+        Tue,  4 Jul 2023 16:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E826C433C7;
+        Tue,  4 Jul 2023 16:41:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688488568;
-        bh=SpCc/weuyI1enRk2z+oPYTNzEGwpO7yEdehgY7f+AWo=;
+        s=k20201202; t=1688488872;
+        bh=uZGcW+BNNYPiMMqm5ClacCxmoqVyCYuJ9CXWf3fmoAU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PHuqBcTPhFwBuGWWekOGnA+R20jbK7lqaqwuyE7UQGbmEC3xmdVaH8gUy8+PSq2dW
-         MzJ/RgUxbPfHyW2YgQbSoMCEhuGlHSNZH0vh5y+/5Oa+J/5CNZwbsV963ZYqD0j+Ko
-         wVTpn7IPAtTb0/WswB3KvI15qMDfCVPCn56MhPfl++jKWOwm9GWBhc7TlvBmjuc7pT
-         w+0zP9tAOAtBA/dYRcPTyVifr91lh4DATbndhr5eqLXwP/51RdAEmj/68uv58EML+x
-         cnZOIMvBySTdyK3NOwehaCrIKogaGBVA753mu0SjtuinC4w0ds+hofBltK+MwYzBPJ
-         N1b6uSCjwfCug==
-Date:   Tue, 4 Jul 2023 17:36:03 +0100
+        b=sSg/a38ehv1r51sCngNXAKyvtYUXf7mwmLlZAFHvmK403Rd1HupZMxojj1RSFPkWd
+         LpJhHeXARr+R1+9T4HCQXk3/BCFimstSWzVrFhbnQlq3FsP/Fe9kIdTgxHRmaU/Zqc
+         M5ppjPkzdtfwNxKsT5jFh1H6x34hC+/VWKJccJXfbkAxX5pbvVZvxfJ/malAtvbD9e
+         eR69KV2qo7YYmyy4Lwz7nqbEkuFmPQpAjFK41cFQgG99zUVvo92mNHTfnHfj4qO2xP
+         OFubV6WVMtVyEjI7RZpq4t1Oca/bp4Rr+ajPEWKdE6HX6Hl0iNfwnSDoxVUR1H9GpR
+         S6G9q4b8aqCxg==
+Date:   Tue, 4 Jul 2023 17:41:07 +0100
 From:   Conor Dooley <conor@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        William Qiu <william.qiu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <20230704-gooey-lair-2bc45bbd163c@spud>
-References: <20230704090453.83980-1-william.qiu@starfivetech.com>
- <20230704090453.83980-3-william.qiu@starfivetech.com>
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
+Message-ID: <20230704-commute-grape-38ded99556d5@spud>
+References: <20230704092200.85401-1-william.qiu@starfivetech.com>
+ <20230704092200.85401-3-william.qiu@starfivetech.com>
+ <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
+ <eba1e868-6371-42fe-91be-bcbee54d1aff@sirena.org.uk>
+ <4afd90d9-f1bd-f40d-1c79-50fef1406ab7@linaro.org>
+ <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
+ <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
+ <41c905da-ae3e-4acb-bbfa-d33d3306824d@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oezgEO9YoqNnv0Dg"
+        protocol="application/pgp-signature"; boundary="DKLfejsgq4GdSLTL"
 Content-Disposition: inline
-In-Reply-To: <20230704090453.83980-3-william.qiu@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <41c905da-ae3e-4acb-bbfa-d33d3306824d@sirena.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,54 +70,52 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---oezgEO9YoqNnv0Dg
+--DKLfejsgq4GdSLTL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hey William,
-
-On Tue, Jul 04, 2023 at 05:04:52PM +0800, William Qiu wrote:
-> Add QSPI clock operation in device probe.
+On Tue, Jul 04, 2023 at 03:13:17PM +0100, Mark Brown wrote:
+> On Tue, Jul 04, 2023 at 03:21:30PM +0200, Krzysztof Kozlowski wrote:
+> > On 04/07/2023 15:16, Mark Brown wrote:
+> > > On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
 >=20
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@i=
-ntel.com/
-
-These Reported-by tags don't seem correct, given they were reports about
-this patch, not the reason for it - but did you actually check that you
-fixed the errors that the patch produces?
-
-This particular one seems to complain about a hunk that is still in the
-patch & the CI running on the RISC-V patchwork is complaining about it.
-
-Cheers,
-Conor.
-
-> @@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
->  	struct spi_master *master =3D dev_get_drvdata(dev);
-> =20
->  	clk_prepare_enable(cqspi->clk);
-> +	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
-> +		clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
->  	cqspi_wait_idle(cqspi);
->  	cqspi_controller_init(cqspi);
-> =20
-> --=20
-> 2.34.1
+> > >> Also see:
+> > >> "every Co-developed-by: must be immediately
+> > >> followed by a Signed-off-by: of the associated co-author."
 >=20
+> > >> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/s=
+ubmitting-patches.rst#L467
+>=20
+> > > Oh, that seems unhelpful especially with it not lining up with the DC=
+O.
+>=20
+> > I assume the intention was here that if I attribute some co-author with
+> > Co-developed-by, then I know that author, therefore I expect author to
+> > explicitly participate in DCO chain.
+>=20
+> Why?  They're not the one sending the patch out, nor are they relying on
+> someone else having certified anything.
 
---oezgEO9YoqNnv0Dg
+It's probably safe to say that StarFive owns the contributions anyway,
+so I doubt adding really makes a difference here.
+
+> > Otherwise, just drop the Co-developed-by.
+>=20
+> It seems separately useful.
+
+Yup, I'd rather have the people there if I ever have to run `git blame`
+on whatever commit this becomes.
+
+--DKLfejsgq4GdSLTL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRKcwAKCRB4tDGHoIJi
-0pUKAP4wCw+hgpLoiMvepR3gmuLN/5ClOIQW3zICq88ap7eALgD/c9nTYk9tJZ8T
-KdMpFaUJKzecsdmo6+5ZMbLvRRp2GwI=
-=yjLt
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRLowAKCRB4tDGHoIJi
+0mz6AP4jqMUl/YN3mJ7p0cJwVO9EB2gCXcFLthrQYmpc03uuVgD+MdDmxiZC8PpO
+NdZlsf5LpDIVnRlklVh8c1gWkrHdwAk=
+=uQV7
 -----END PGP SIGNATURE-----
 
---oezgEO9YoqNnv0Dg--
+--DKLfejsgq4GdSLTL--
