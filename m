@@ -2,59 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F292746DD0
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 11:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACBF746DE2
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 11:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbjGDJlg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jul 2023 05:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S231398AbjGDJo1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jul 2023 05:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjGDJlY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 05:41:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3518C
-        for <linux-spi@vger.kernel.org>; Tue,  4 Jul 2023 02:39:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-991ef0b464cso973096366b.0
-        for <linux-spi@vger.kernel.org>; Tue, 04 Jul 2023 02:39:33 -0700 (PDT)
+        with ESMTP id S231424AbjGDJoP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 05:44:15 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD4D7
+        for <linux-spi@vger.kernel.org>; Tue,  4 Jul 2023 02:43:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-992b27e1c55so619710866b.2
+        for <linux-spi@vger.kernel.org>; Tue, 04 Jul 2023 02:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688463572; x=1691055572;
+        d=linaro.org; s=google; t=1688463835; x=1691055835;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uJ0qtnupAs7ltHx9bKvNPX83TbrwpqmJjWVOcNgIVHw=;
-        b=THisYSUqeNl/i8NXmLzxvee7RSsIi+PJ0hgPODvCHhZ4VsWua0WflWx+IRCsmUXjpq
-         drjQYwXK4wZ0iZ9eujy2fYbfv37G1kGqijXN2tDkpYzQ0tdsrshyu3krVhNDDtZcTcnW
-         Gk+AHF/A9F8TXdvAvTC+djhiSteHcBAJ9tfIMHjTee96u8Op6yhuST1+1l45tlN77UA6
-         biU0qAI+2Rhv+uXDby5aRwOZI8RYkmoB6ipJp+bJlN8tTBST5qscGnJb9mjz8zMMc7/C
-         Vxd/kObQHi1VV2CGayihKXOk+Z6ycEGXdAXXSfK0mBZIr7pQ3iB954Mv7ZhS4H6qlhQD
-         EqKQ==
+        bh=2jjVOyUTnAKMRHBkOAZFEZ2Gt/AchktqGDrwDJg3g/0=;
+        b=WMnfo36Btbfm7d0ZlMf3SJM8X7nDp/s5XlMgIET7P+HRjpjlytc+l4t0U4hyXIc6+x
+         Gq/K45vYX6Ib+pOG6NTFHwtHboFXecOitRXIHT9fLbn+KifrXzVXeoj9WPOtPpec7Pn1
+         v4Wx9/tRn/1q2oAqdmyenxoo+yQydUrV/2jGrBUhcmeAGhAgKKQStcyg3ijkeuev5Ah6
+         pgzUQ6o6/21yc/7cKq47qqR3mEFNwAdDOp2Qvllun3RaKnJdbi1219c0VW6rMu5Fq9M1
+         Vq7m1lW0r9TfNqtSJrbe9cV//oa46CttOeWLHLAuKfiNhaiMMYPi8nUI6+79345jxXJR
+         BjYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688463572; x=1691055572;
+        d=1e100.net; s=20221208; t=1688463835; x=1691055835;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJ0qtnupAs7ltHx9bKvNPX83TbrwpqmJjWVOcNgIVHw=;
-        b=YCDOKR4czDPDuJr2LhbIU/0NBG6Vz5nyvL2ssKc0b66W4n8XQ5SJBqdPMQmd+bNDnU
-         rT8hYB1xS4mZMPAKEaUs5N1ugPr9uCZSxLGotoAL7nmo35uIhsApdTWdlpsPaq1C65Sf
-         GP/1srYAniyttJCVDEkZbWVlidELAakKzkG/wSjKTMt5+ZGF+QW4GjX18su3Am8RFqKF
-         kN0QQUaFsecWIO1srQc1yegW0PuTh0welkTsBDRcOt9oCGLE32knxvtevsH9Xpo4S+kr
-         1fT5VX6bvUPHMSKrs+6TNJ5f2D3JPtvOSO8y+Slj6YKR7/Eq3vhDxlqvF3+kDdY+o/vH
-         ghYg==
-X-Gm-Message-State: ABy/qLboM+n5rVgcvBOfP1+VvTgmfkq5r2Y+ymjFwpSQKfvGhPghWIZ0
-        BHNBNRqYmvtIPSAk14qS1ir5cw==
-X-Google-Smtp-Source: APBJJlER9WHFO7KniG1uIOyPZKfVSdRulKONCVGU7aNr+BQ+vjTlPTIx0JV/ZvgkeuQml/6096dhKA==
-X-Received: by 2002:a17:906:3bd3:b0:991:b7f4:31dd with SMTP id v19-20020a1709063bd300b00991b7f431ddmr10787322ejf.2.1688463572014;
-        Tue, 04 Jul 2023 02:39:32 -0700 (PDT)
+        bh=2jjVOyUTnAKMRHBkOAZFEZ2Gt/AchktqGDrwDJg3g/0=;
+        b=cZrHcCmUlGvSFP1m0Ecw10JUoyolH1l6cBIx+CaSAjiJuzMq3gmBHVh6KvbubGJBNe
+         SAS05jqSpmECMqkjaWr+EgfbJ4xSby25cOVUynkCxM4GI6hALt6ZCSPVhPTdalb8jSFb
+         1BCVKomG1fUHx8H2Vy5KzmrwuN/6BUf9zqs8jfNKupBks881EZlkRE6XHwb5N2zy88ta
+         MQJmLFyByUDdad3PBiU7wAMcdMpM9NtfOdhtk68530SEvVxDa4s4OAEvmYMDHfdnFmoo
+         1NkDQ9+CrgF0r37HXBQEvYFYLhwFQUg4MJUMVXG1WzpUiOtDcGT6JXf57cNTAWw24kpY
+         MxAw==
+X-Gm-Message-State: AC+VfDxScXpjlI2NtFMwpVszCbTqSDPANDh5ymOP2Ll0Ln0MGG7qemUT
+        h92PfbvntS5ptJ1rT+Sv1NX0KA==
+X-Google-Smtp-Source: APBJJlH2BFfowyRuGkZg/4gGurh7iScSfZUSYvUlWG8KR6PQzOga/kTW3dcg5eZE/mRNoT1lrgm9rw==
+X-Received: by 2002:a17:906:46cf:b0:98d:d26c:e13b with SMTP id k15-20020a17090646cf00b0098dd26ce13bmr9263223ejs.8.1688463835157;
+        Tue, 04 Jul 2023 02:43:55 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id gw26-20020a170906f15a00b009929d998abcsm7422613ejb.209.2023.07.04.02.39.30
+        by smtp.gmail.com with ESMTPSA id b27-20020a170906195b00b00991e2b5a27dsm10457201eje.37.2023.07.04.02.43.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 02:39:31 -0700 (PDT)
-Message-ID: <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
-Date:   Tue, 4 Jul 2023 11:39:29 +0200
+        Tue, 04 Jul 2023 02:43:54 -0700 (PDT)
+Message-ID: <552d39ee-0fa0-94c0-89b9-245e39e8586d@linaro.org>
+Date:   Tue, 4 Jul 2023 11:43:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
+Subject: Re: [PATCH v4 3/3] riscv: dts: starfive: Add QSPI controller node for
+ StarFive JH7110 SoC
 Content-Language: en-US
 To:     William Qiu <william.qiu@starfivetech.com>,
         devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
@@ -63,11 +64,11 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20230704092200.85401-1-william.qiu@starfivetech.com>
- <20230704092200.85401-3-william.qiu@starfivetech.com>
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230704090453.83980-1-william.qiu@starfivetech.com>
+ <20230704090453.83980-4-william.qiu@starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230704092200.85401-3-william.qiu@starfivetech.com>
+In-Reply-To: <20230704090453.83980-4-william.qiu@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,47 +81,35 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/07/2023 11:22, William Qiu wrote:
-> Add spi node for JH7110 SoC.
+On 04/07/2023 11:04, William Qiu wrote:
+> Add the quad spi controller node for the StarFive JH7110 SoC.
 > 
-> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-
-Missing SoB.
-
+> Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
+> Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
 > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         | 52 ++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 98 +++++++++++++++++++
->  2 files changed, 150 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index 2a6d81609284..a066d2e399c4 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -126,6 +126,20 @@ &i2c6 {
->  	status = "okay";
->  };
-> 
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_pins>;
-> +	status = "okay";
-> +
-> +	spi_dev0: spi@0 {
-> +		compatible = "st,m25p80";
-> +		pl022,com-mode = <1>;
-> +		spi-max-frequency = <10000000>;
-> +		reg = <0>;
+> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
 
-reg is always following compatible, not somewhere deep in properties.
+...
 
-> +		status = "okay";
+> +		qspi: spi@13010000 {
+> +			compatible = "starfive,jh7110-qspi", "cdns,qspi-nor";
+> +			reg = <0x0 0x13010000 0x0 0x10000>,
+> +			      <0x0 0x21000000 0x0 0x400000>;
+> +			interrupts = <25>;
+> +			clocks = <&syscrg JH7110_SYSCLK_QSPI_REF>,
+> +				 <&syscrg JH7110_SYSCLK_QSPI_AHB>,
+> +				 <&syscrg JH7110_SYSCLK_QSPI_APB>;
+> +			clock-names = "ref", "ahb", "apb";
+> +			resets = <&syscrg JH7110_SYSRST_QSPI_APB>,
+> +				 <&syscrg JH7110_SYSRST_QSPI_AHB>,
+> +				 <&syscrg JH7110_SYSRST_QSPI_REF>;
+> +			reset-names = "qspi", "qspi-ocp", "rstc_ref";
+> +			cdns,fifo-depth = <256>;
+> +			cdns,fifo-width = <4>;
+> +			cdns,trigger-address = <0x0>;
 
-okay is by default
-
-> +	};
-> +};
-
+Bus nodes are usually disabled by default and enabled when needed for
+specific boards.
 
 Best regards,
 Krzysztof
