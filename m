@@ -2,113 +2,178 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096AD7473CD
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 16:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F98747462
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 16:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjGDONa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jul 2023 10:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S229895AbjGDOry (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jul 2023 10:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjGDON1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 10:13:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325E10D5;
-        Tue,  4 Jul 2023 07:13:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 208A3611DB;
-        Tue,  4 Jul 2023 14:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E98C433C8;
-        Tue,  4 Jul 2023 14:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688480003;
-        bh=Nk5zRQ565eWa3r6Bd86j1AJU+hDJ5pUdhSqyH4FS99E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HctInVLn9PWcYJ5WhvvFXsWezBRvc5bRarfoujy6BErf4LVVxPqkU/4CBRX+T8njc
-         H8d3k6lSBsCCrZhOLMZvSAMlkL+RnMxbyLWt3Ng5GyfWd32lq9N+rvwcu4TRQnG+Eb
-         7Sg7jRLlI4m/qJ445cqtASjKBSV6SLgLfcGD/8W2c8QdvYaCshqZAJVEp6x263tlzU
-         1L9yE3PmU/eaVlCXIP9ptrS6SgyQ3KewLWvd2hc3JIMjIRMi0BMAevu89+CEk3CfIB
-         nQimzoztuJuII00XmJuYTptsyzPIlRR+kMmFxKs9QgWpVYEMbrxlOJ91YJisnKpKPe
-         20fHdfTJlDZZg==
-Date:   Tue, 4 Jul 2023 15:13:17 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
-Message-ID: <41c905da-ae3e-4acb-bbfa-d33d3306824d@sirena.org.uk>
-References: <20230704092200.85401-1-william.qiu@starfivetech.com>
- <20230704092200.85401-3-william.qiu@starfivetech.com>
- <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
- <eba1e868-6371-42fe-91be-bcbee54d1aff@sirena.org.uk>
- <4afd90d9-f1bd-f40d-1c79-50fef1406ab7@linaro.org>
- <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
- <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
+        with ESMTP id S231745AbjGDOrx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 10:47:53 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB70A10E9
+        for <linux-spi@vger.kernel.org>; Tue,  4 Jul 2023 07:47:47 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso69491595e9.1
+        for <linux-spi@vger.kernel.org>; Tue, 04 Jul 2023 07:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1688482066; x=1691074066;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=k6rR6xR0EyyuCV8C0/aqmsKu1fp3nIevUxihLbvDBzo=;
+        b=bkVss1WHg2sF32464NYGv+0Cgu6EQcPkHL5EsA5md3XjETZ8eacbo0raGubQdLpNiS
+         Ke3bgLsonqgWeJdXdVhJYqZlbkorcK9QhgDme3WaXGRWYottnxoFIWTTe7dtG1YXeke0
+         3kNWnjoDN7AUxEZJBWFzUQwebosdz9Go3DT04=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688482066; x=1691074066;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k6rR6xR0EyyuCV8C0/aqmsKu1fp3nIevUxihLbvDBzo=;
+        b=kce/XzfK653Ss1fCSbH3togquANFtHBC8y+zh+VRSgcObEkc9KGJDoXHJ/g3NdfqgG
+         g8gA9L1Be9y5wDLwxM9eSNKg0DBURggdqV0iZ60r0YCIk3mYbJ9nFMuI1c4aTol151HQ
+         cLQF2kQcGohXkSMHvEdmChI2dCBwYKyfPeU4ESMGVPKDeZSUHrcCHmAoEjzAiYbCee6o
+         ubxMBUgAvw1JP0bsRYfVyc6/XFw8wtJbsqwpJyejpBzFOAxwrgUeIEaS1wpNAhZ66VEg
+         nm25mE5vmY9cvYDzLxLA3r0JhtJx2L1/lHR/bgFxbelr5FcE6IfMeJLZCyAicxU9Gxzl
+         M7Yw==
+X-Gm-Message-State: ABy/qLazeyVAd1CMZtUuohwe6lqknuve6r4yy2dBS3ayUhs64uBTZZLZ
+        co0Aaqtj7/m2LTFXseeoKHhhow==
+X-Google-Smtp-Source: APBJJlENbF1BKk70PGy9UVxusfOSG41M4CneCPsLuQtwH0vGc1IdKm5aVdhMJbBD2l+RgDU/obiBFw==
+X-Received: by 2002:a05:6000:1364:b0:313:e922:3941 with SMTP id q4-20020a056000136400b00313e9223941mr15621533wrz.46.1688482066246;
+        Tue, 04 Jul 2023 07:47:46 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0? (2a01cb0586f567009c8c678d15a0e7e0.ipv6.abo.wanadoo.fr. [2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c229800b003fa98908014sm25087165wmf.8.2023.07.04.07.47.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 07:47:44 -0700 (PDT)
+Message-ID: <33bea073-50e1-61fa-4b08-4b059f4e69df@broadcom.com>
+Date:   Tue, 4 Jul 2023 07:47:46 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8SqqqwgXKD0N3HXB"
-Content-Disposition: inline
-In-Reply-To: <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
-X-Cookie: Memory fault - where am I?
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/3] spi: bcm{63xx,bca}-hsspi: update my email address
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        William Zhang <william.zhang@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230630202257.8449-1-jonas.gorski@gmail.com>
+ <20230630202257.8449-2-jonas.gorski@gmail.com>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230630202257.8449-2-jonas.gorski@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c830a205ffaa5d42"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+--000000000000c830a205ffaa5d42
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---8SqqqwgXKD0N3HXB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jul 04, 2023 at 03:21:30PM +0200, Krzysztof Kozlowski wrote:
-> On 04/07/2023 15:16, Mark Brown wrote:
-> > On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
 
-> >> Also see:
-> >> "every Co-developed-by: must be immediately
-> >> followed by a Signed-off-by: of the associated co-author."
+On 6/30/2023 10:22 PM, Jonas Gorski wrote:
+> Update my email address to a working one, as the openwrt.org one is
+> broken since ages.
+> 
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
-> >> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/submitting-patches.rst#L467
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
-> > Oh, that seems unhelpful especially with it not lining up with the DCO.
+--000000000000c830a205ffaa5d42
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> I assume the intention was here that if I attribute some co-author with
-> Co-developed-by, then I know that author, therefore I expect author to
-> explicitly participate in DCO chain.
-
-Why?  They're not the one sending the patch out, nor are they relying on
-someone else having certified anything.
-
-> Otherwise, just drop the Co-developed-by.
-
-It seems separately useful.
-
---8SqqqwgXKD0N3HXB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkKP0ACgkQJNaLcl1U
-h9BUCQf+MakDSushGvfaRHCWXKX9k0RiV5f+NZvtmqvrVE86MgvfZXWos/vS+mTd
-KY3WC115btHDG+rP5TdrtREdf/CKBvuZ7f/xb7CuzNrkn9cO4luF7qZKb48jqqQY
-+66UT0zca96GKUpT2RQ1HR9sMg6umR7qj2RezJOXLBgHMBwAq6aofIIGVcj1tkzi
-wKcOeluQX1g96OJjcxo/Kj42y/5kQdhMj6GmbVRoRiiMX2MiXcLbIMh15gtYgfmU
-KaP24Oeb9skgN6X8/1hja6swCSqQD2VRbX+aPSYyVncd9uDMx0Ya+7cP14Ex+W8u
-37T11N/kr/NhVOEyHpdjM628LNblHQ==
-=+ena
------END PGP SIGNATURE-----
-
---8SqqqwgXKD0N3HXB--
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL5pL3q7w8VSBchP
+aDM84u83BxnEoNSWBCsOPAagt/N5MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDcwNDE0NDc0NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDiZLF7BaEy8R3DcOBc7lF1OaJopEdDDDtA
+CtCAZRXLeBmZTedGKx0vvu+TduDoHEIPha0ACiezL44/9Xp0dZK0jmCbCW8ac5HjiOkr6/qJ8LuZ
+nStB9BeXsk62TW30/qH2Au8RMViluHH2foqgb8yiJw4HqzDVO2bmbM4ud5P3TK6iNVsT1MO9/QfN
+OK/qkIhYJtFEEc1SyZQMlLzeS2tarTcxmY/DRN9K8TGAYPdVEkbldCPiF5PXxE9Nrrj20oVeFMTQ
+54l9D8r+anjVXrrlO4GA+cORpbXlsrfdNzdXFKdSl5T7j9VNdOcPKrIy863JlDPSmMDiZp0rGIt6
+/6dP
+--000000000000c830a205ffaa5d42--
