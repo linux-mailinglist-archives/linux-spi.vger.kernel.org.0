@@ -2,61 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8FC7472A5
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 15:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096AD7473CD
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jul 2023 16:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjGDNWO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jul 2023 09:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S231572AbjGDONa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jul 2023 10:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjGDNVv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 09:21:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D51984
-        for <linux-spi@vger.kernel.org>; Tue,  4 Jul 2023 06:21:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-992f15c36fcso510896666b.3
-        for <linux-spi@vger.kernel.org>; Tue, 04 Jul 2023 06:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688476892; x=1691068892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBSF1NolQO8rskeUSMv3t8uDwxMXaGRNLk5ilo4Ryuw=;
-        b=pNiEfh7s3N/B+0ZxCLnR0kBEzaW0kSO6X8+7eP1ur1DXCI6lW6OySCKvEMl3hfKhF5
-         VNnmJuVnJfDw6Xo9akbj7qi1PsFZJ+XagzITJ9aRQmiGrVnXgPFqe5or4p4lYnNjzDa/
-         Oi3cWN0Iv2VfnqMw+3BqoFYDG+i3CKppYBkE8BMVMRm5S/5qTvMNVcB3FYhHU8l6m6ba
-         Vo8SLZJULu06uwSccIK2tEEIssQpPhph6+qdA/d7hzgDNFlE7EgndHOplSTJj8PY+sVz
-         2HsEiP5QnrE91awtaGCmnIuxp3WjX47iPO5BCXcfgf9D6uJGeddnmAOAkCuIGOekoloS
-         IDuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688476892; x=1691068892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBSF1NolQO8rskeUSMv3t8uDwxMXaGRNLk5ilo4Ryuw=;
-        b=BhUYB2EI95mnRXAv41i6gbIIcrPNoZtbO0JIVIl3PI4lV/nR+yFcTL0t9louWUIEQe
-         KMmtHYTuF9t6najpL31oapFntSaLugfVTXkr4yBck6kEOEgQSHJUwbjOv23Y8gqfsPg4
-         8r7S0q/iKNv/mO08Qhw1G9HU/pte7pDM+X/DvilRf163BTOL5eNuIxiCThlbzXQaOAkD
-         E0NoRtrFkL2o2F1bTW4YQpKMoBTyUWZB9dPFd9s4Cl6VR4NeMosbGupOfixqrGdleLVu
-         5koNtLFRaEEZNIjv88pawZPk9Smqy7gKu0Iey0nwll+0+OEr1pQn4/IvHlahiIXnRu3S
-         mV9A==
-X-Gm-Message-State: ABy/qLaZE3X6ajroFGz/U3x1tu3Qtm7P5YgJ2JJ4oPxvjU+YfK3Wtp8t
-        IfdC5qIEdvEN2389g2C+FyxgKw==
-X-Google-Smtp-Source: ACHHUZ7GruU2SMpelDGt/k32whGmAdH3xrb4LP13iZfv51rQJZeKedemsN+25543YUVb0HiPq59Phg==
-X-Received: by 2002:a17:906:af15:b0:987:9823:b9f with SMTP id lx21-20020a170906af1500b0098798230b9fmr10240987ejb.28.1688476892394;
-        Tue, 04 Jul 2023 06:21:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id r21-20020a1709067fd500b009828e26e519sm13100150ejs.122.2023.07.04.06.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 06:21:31 -0700 (PDT)
-Message-ID: <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
-Date:   Tue, 4 Jul 2023 15:21:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S231574AbjGDON1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 10:13:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325E10D5;
+        Tue,  4 Jul 2023 07:13:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 208A3611DB;
+        Tue,  4 Jul 2023 14:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E98C433C8;
+        Tue,  4 Jul 2023 14:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688480003;
+        bh=Nk5zRQ565eWa3r6Bd86j1AJU+hDJ5pUdhSqyH4FS99E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HctInVLn9PWcYJ5WhvvFXsWezBRvc5bRarfoujy6BErf4LVVxPqkU/4CBRX+T8njc
+         H8d3k6lSBsCCrZhOLMZvSAMlkL+RnMxbyLWt3Ng5GyfWd32lq9N+rvwcu4TRQnG+Eb
+         7Sg7jRLlI4m/qJ445cqtASjKBSV6SLgLfcGD/8W2c8QdvYaCshqZAJVEp6x263tlzU
+         1L9yE3PmU/eaVlCXIP9ptrS6SgyQ3KewLWvd2hc3JIMjIRMi0BMAevu89+CEk3CfIB
+         nQimzoztuJuII00XmJuYTptsyzPIlRR+kMmFxKs9QgWpVYEMbrxlOJ91YJisnKpKPe
+         20fHdfTJlDZZg==
+Date:   Tue, 4 Jul 2023 15:13:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     William Qiu <william.qiu@starfivetech.com>,
         devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
@@ -65,43 +43,72 @@ Cc:     William Qiu <william.qiu@starfivetech.com>,
         Conor Dooley <conor+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
+Message-ID: <41c905da-ae3e-4acb-bbfa-d33d3306824d@sirena.org.uk>
 References: <20230704092200.85401-1-william.qiu@starfivetech.com>
  <20230704092200.85401-3-william.qiu@starfivetech.com>
  <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
  <eba1e868-6371-42fe-91be-bcbee54d1aff@sirena.org.uk>
  <4afd90d9-f1bd-f40d-1c79-50fef1406ab7@linaro.org>
  <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8SqqqwgXKD0N3HXB"
+Content-Disposition: inline
+In-Reply-To: <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
+X-Cookie: Memory fault - where am I?
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/07/2023 15:16, Mark Brown wrote:
-> On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
-> 
->> Also see:
->> "every Co-developed-by: must be immediately
->> followed by a Signed-off-by: of the associated co-author."
-> 
->> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/submitting-patches.rst#L467
-> 
-> Oh, that seems unhelpful especially with it not lining up with the DCO.
 
-I assume the intention was here that if I attribute some co-author with
-Co-developed-by, then I know that author, therefore I expect author to
-explicitly participate in DCO chain.
+--8SqqqwgXKD0N3HXB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Otherwise, just drop the Co-developed-by.
+On Tue, Jul 04, 2023 at 03:21:30PM +0200, Krzysztof Kozlowski wrote:
+> On 04/07/2023 15:16, Mark Brown wrote:
+> > On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
 
-Best regards,
-Krzysztof
+> >> Also see:
+> >> "every Co-developed-by: must be immediately
+> >> followed by a Signed-off-by: of the associated co-author."
 
+> >> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/submitting-patches.rst#L467
+
+> > Oh, that seems unhelpful especially with it not lining up with the DCO.
+
+> I assume the intention was here that if I attribute some co-author with
+> Co-developed-by, then I know that author, therefore I expect author to
+> explicitly participate in DCO chain.
+
+Why?  They're not the one sending the patch out, nor are they relying on
+someone else having certified anything.
+
+> Otherwise, just drop the Co-developed-by.
+
+It seems separately useful.
+
+--8SqqqwgXKD0N3HXB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkKP0ACgkQJNaLcl1U
+h9BUCQf+MakDSushGvfaRHCWXKX9k0RiV5f+NZvtmqvrVE86MgvfZXWos/vS+mTd
+KY3WC115btHDG+rP5TdrtREdf/CKBvuZ7f/xb7CuzNrkn9cO4luF7qZKb48jqqQY
++66UT0zca96GKUpT2RQ1HR9sMg6umR7qj2RezJOXLBgHMBwAq6aofIIGVcj1tkzi
+wKcOeluQX1g96OJjcxo/Kj42y/5kQdhMj6GmbVRoRiiMX2MiXcLbIMh15gtYgfmU
+KaP24Oeb9skgN6X8/1hja6swCSqQD2VRbX+aPSYyVncd9uDMx0Ya+7cP14Ex+W8u
+37T11N/kr/NhVOEyHpdjM628LNblHQ==
+=+ena
+-----END PGP SIGNATURE-----
+
+--8SqqqwgXKD0N3HXB--
