@@ -2,208 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75B4748256
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 12:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B48B7482FC
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 13:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjGEKlm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 06:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S231422AbjGELhS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 5 Jul 2023 07:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjGEKlm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 06:41:42 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F7210E2
-        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 03:41:40 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id 84d40c27-1b20-11ee-abf4-005056bdd08f;
-        Wed, 05 Jul 2023 13:41:38 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 5 Jul 2023 13:41:37 +0300
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        with ESMTP id S231334AbjGELhR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 07:37:17 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1686A198E;
+        Wed,  5 Jul 2023 04:37:08 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bdd069e96b5so7281508276.2;
+        Wed, 05 Jul 2023 04:37:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688557027; x=1691149027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kIVoG4v17dHAi8V71wyhSONdUpfRCtIrSHRM3VwF7JI=;
+        b=DmbdWb9ON38EkXpnF02SCfdiTySYvhgXR74dRlFl42rJtVhs+NAoEhq+0MxtybKmbc
+         0r7AAqb7CGIiHtu68mZk8TC839xHab8LhQ37tCiYrY1T4LIVEqutgaYO3lvkaKoce2JP
+         E25jNM9w+AMQVGUNgrCO8FDXX4Y5QRDHlSgLEy65dhLOF58HSB8M0w/cCD4sYNWCBD5f
+         rBw9YH/0SdLR0y5EU6CJFV3PviiL4T+YUp9ED94rClr/qc1EJOG+04wlbl7QoH3D5bnI
+         Ao46GdQj8zIIzHEiZbA+SZIMKs+fnZgHjbhc9mUYyNAA5BY6q79dNJczbx1znRzM6BNe
+         CE5A==
+X-Gm-Message-State: ABy/qLZofFwwNyVypWV0x2wvvOYNz0wLAakEMtQcxBlcCyylXqe/z5mj
+        PSi7zzkBlF5oW6fOiyhtfRXRmWiCY3Milg==
+X-Google-Smtp-Source: APBJJlGf6Oo6X2P+loC9JZgJVpAlVChmIdYgc1NWcGb3KGPvcsVgLtnrvfEm3JXFmYThz3B91w6K3Q==
+X-Received: by 2002:a05:6902:28c:b0:c37:f855:cff4 with SMTP id v12-20020a056902028c00b00c37f855cff4mr13407380ybh.63.1688557026831;
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id d13-20020a25e60d000000b00c4eec81ac9esm1743975ybh.11.2023.07.05.04.37.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c50c797c31bso3951432276.0;
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+X-Received: by 2002:a25:6fc6:0:b0:c16:859a:9633 with SMTP id
+ k189-20020a256fc6000000b00c16859a9633mr14065137ybc.39.1688557025822; Wed, 05
+ Jul 2023 04:37:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+ <20230622113341.657842-4-fabrizio.castro.jz@renesas.com> <CAMuHMdVsYohH5FVv6r4ha0AaHRoHjNF1ErjW1FNF7ZAQR9ntxg@mail.gmail.com>
+ <ZKVE-AVDhvZyrJmj@surfacebook>
+In-Reply-To: <ZKVE-AVDhvZyrJmj@surfacebook>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Jul 2023 13:36:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUzcc0HSyOwbN4mJPRfEKcLXBU3Op=T1CGR=pFbN619Pw@mail.gmail.com>
+Message-ID: <CAMuHMdUzcc0HSyOwbN4mJPRfEKcLXBU3Op=T1CGR=pFbN619Pw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] spi: Add support for Renesas CSI
+To:     andy.shevchenko@gmail.com
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>
-Subject: Re: [PATCH v2 3/5] spi: Add support for Renesas CSI
-Message-ID: <ZKVI4XPbPXfzQa9J@surfacebook>
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
- <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Thu, Jun 22, 2023 at 12:33:39PM +0100, Fabrizio Castro kirjoitti:
-> The RZ/V2M SoC comes with the Clocked Serial Interface (CSI)
-> IP, which is a master/slave SPI controller.
-> 
-> This commit adds a driver to support CSI master mode.
+Hi Andy,
 
-Submitting Patches recommends to use imperative voice.
+On Wed, Jul 5, 2023 at 12:24 PM <andy.shevchenko@gmail.com> wrote:
+> Mon, Jul 03, 2023 at 12:19:26PM +0200, Geert Uytterhoeven kirjoitti:
+> > On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
+> > <fabrizio.castro.jz@renesas.com> wrote:
+> > > +       if (csi->txbuf)
+> > > +               /*
+> > > +                * Leaving a little bit of headroom in the FIFOs makes it very
+> > > +                * hard to raise an overflow error (which is only possible
+> > > +                * when IP transmits and receives at the same time).
+> > > +                */
+> > > +               to_transfer = min_t(int, CSI_FIFO_HALF_SIZE, bytes_remaining);
+> > > +       else
+> > > +               to_transfer = min_t(int, CSI_FIFO_SIZE_BYTES, bytes_remaining);
+> >
+> > Why min_t(int, ...)? Both values are int.
+>
+> min_t() should be used with a great care.
+>
+> > It would be better to make both unsigned, though.
+>
+> I believe you are assuming 3 (three) values and not 2 (two) under "both"
+> (one variable and two definitions).
 
-...
+:-)
 
-+ bits.h
+I meant "both numerical parametric values of each minimum operation".
 
-> +#include <linux/clk.h>
-> +#include <linux/count_zeros.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/spi/spi.h>
+Gr{oetje,eeting}s,
 
-...
-
-> +#define CSI_CKS_MAX		0x3FFF
-
-If it's limited by number of bits, i would explicitly use that information as
-(BIT(14) - 1).
-
-...
-
-> +#define CSI_MAX_SPI_SCKO	8000000
-
-Units?
-Also, HZ_PER_MHZ?
-
-...
-
-> +static const unsigned char x_trg[] = {
-> +	0, 1, 1, 2, 2, 2, 2, 3,
-> +	3, 3, 3, 3, 3, 3, 3, 4,
-> +	4, 4, 4, 4, 4, 4, 4, 4,
-> +	4, 4, 4, 4, 4, 4, 4, 5
-> +};
-> +
-> +static const unsigned char x_trg_words[] = {
-> +	1,  2,  2,  4,  4,  4,  4,  8,
-> +	8,  8,  8,  8,  8,  8,  8,  16,
-> +	16, 16, 16, 16, 16, 16, 16, 16,
-> +	16, 16, 16, 16, 16, 16, 16, 32
-> +};
-
-Why do you need tables? At the first glance these values can be easily
-calculated from indexes.
-
-...
-
-> +	rzv2m_csi_reg_write_bit(csi, CSI_CNT, CSI_CNT_CSIRST, assert);
-> +
-> +	if (assert) {
-
-	If (!assert)
-		return 0;
-
-> +		return readl_poll_timeout(csi->base + CSI_MODE, reg,
-> +					  !(reg & CSI_MODE_CSOT), 0,
-> +					  CSI_EN_DIS_TIMEOUT_US);
-> +	}
-> +
-> +	return 0;
-
-...
-
-> +	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_CSIE, enable);
-> +
-> +	if (!enable && wait)
-
-In the similar way.
-
-> +		return readl_poll_timeout(csi->base + CSI_MODE, reg,
-> +					  !(reg & CSI_MODE_CSOT), 0,
-> +					  CSI_EN_DIS_TIMEOUT_US);
-> +
-> +	return 0;
-
-...
-
-> +		for (i = 0; i < csi->words_to_transfer; i++)
-> +			writel(buf[i], csi->base + CSI_OFIFO);
-
-writesl()?
-
-...
-
-> +		for (i = 0; i < csi->words_to_transfer; i++)
-> +			buf[i] = (u16)readl(csi->base + CSI_IFIFO);
-
-readsl()?
-
-...
-
-> +		for (i = 0; i < csi->words_to_transfer; i++)
-> +			buf[i] = (u8)readl(csi->base + CSI_IFIFO);
-
-readsl()?
-
-...
-
-Yes, in read cases you would need carefully handle the buffer data.
-Or drop the idea if it looks too monsterous.
-
-...
-
-> +	ret = rzv2m_csi_wait_for_interrupt(csi, CSI_INT_TREND, CSI_CNT_TREND_E);
-
-> +
-
-Unneeded blank line.
-
-> +	if (ret == -ETIMEDOUT)
-> +		csi->errors |= TX_TIMEOUT_ERROR;
-
-...
-
-> +	struct rzv2m_csi_priv *csi = (struct rzv2m_csi_priv *)data;
-
-From/to void * does not need an explicit casting in C.
-
-...
-
-> +	/* Setup clock polarity and phase timing */
-> +	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKP,
-> +				!(spi->mode & SPI_CPOL));
-> +	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_DAP,
-> +				!(spi->mode & SPI_CPHA));
-
-Is it a must to do in a sequential writes?
-
-...
-
-> +	bool tx_completed = csi->txbuf ? false : true;
-> +	bool rx_completed = csi->rxbuf ? false : true;
-
-Ternaries are redundant in the above.
-
-...
-
-> +	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
-
-SPI_MODE_X_MASK
-
-...
-
-> +	controller->dev.of_node = pdev->dev.of_node;
-
-device_set_node();
+                        Geert
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
