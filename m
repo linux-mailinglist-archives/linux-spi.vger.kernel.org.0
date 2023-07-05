@@ -2,79 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFF2748DFB
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 21:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702BF748F04
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 22:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbjGETjm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 15:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S233761AbjGEUik (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jul 2023 16:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbjGETjk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 15:39:40 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11D1732;
-        Wed,  5 Jul 2023 12:39:38 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-345f50577d3so29125815ab.2;
-        Wed, 05 Jul 2023 12:39:38 -0700 (PDT)
+        with ESMTP id S233213AbjGEUij (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 16:38:39 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075F619A9;
+        Wed,  5 Jul 2023 13:38:38 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-34574eb05f4so29162685ab.0;
+        Wed, 05 Jul 2023 13:38:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585978; x=1691177978;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=n9XXXuHpMOQBfJPbmDE208zmHNLuLmJ5W06p0NFVR4Q=;
-        b=ersniBmhizjJuc99EwCsgydFhJ5WYMocEo29tBHvxmubbVUK+AlfvRziEwMxGMjKFa
-         mgnRc/aRTBjXc28hUfwRn5lf5kD73U3+0e7aPlqPUFc+FoogeOirN8Z6n3dlUF+0j+WL
-         IbgDx/RKGAaN8IMUnHoLOp2P8UxqxEa9+AjmTyRdwE2lDpL4gzzbi85zlihP6MILiuU/
-         TGKNIDUgXuriR0f2TBMGgUxIWbQI6ILPEAzUX5Y0nd6NEz7Lr+WjAZoH7xv3D0jXQifp
-         F84CvV9nsJ5o2JS6pmWTNoP5gsSxfy5gLoLoGOyYS7AJ8noY4bPU/mS8RRJl+aABjZAm
-         1eow==
-X-Gm-Message-State: ABy/qLbj+zQvs+ONbVPWLm2f6k/p3ugZ4zO4p16R4XFkkmuQpnRQ8Qv1
-        0Afn141UvS2QfN9VOSVYJw==
-X-Google-Smtp-Source: APBJJlHeCCgfywEkTbD8TaGxOES0xf6LHwH4LNaopQfeQ1Mlc+0XwkrXc56AMYZDW2D01Tl0iYFNfw==
-X-Received: by 2002:a92:c70d:0:b0:345:af3e:3aa8 with SMTP id a13-20020a92c70d000000b00345af3e3aa8mr110268ilp.25.1688585978167;
-        Wed, 05 Jul 2023 12:39:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688589517; x=1691181517;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZbBPc21ldDzQA1syqBYF75bRGCLVt0pgAq3ZxpJ3lYk=;
+        b=en4VS5ZhLRvLPoWYr4DiEH39DhScsArFFMemcHKSZ9ClvKAAqeZ0kDZhWhVR0oIf68
+         JxAwGk+l2zIOMu1xwYryLDUK0UclHh6OHZ+oz7rktbmKuNg9Op1miA0HwhwlYEkEIm19
+         9Qw8PRQqWp/5gFJD6hFu9UBO3dorfpeloYKZA5ii0zwJOvy51L2RJN74rdsBx+z5IM3x
+         F7PRY3G6Hp5FOMUS8Bd0jMbsnsjW1amFy5n3AxGg0d6JtWLAiXAiXxuT3qnfYsZZwf4F
+         77r04NsYH9ZITWyBR9Dil96cNKlehsr7Pjf9hZpNMqNmEaQe7EyP4zriqnQIObkX/evE
+         zeQg==
+X-Gm-Message-State: ABy/qLZZau6nBajIy+TUYMJW7SD+Bjhi0plE4LwISwee6KczhgGTGTqL
+        NovG9rkjsTwzMeFPhKBIzg==
+X-Google-Smtp-Source: APBJJlGvLnhCOIIZo2cdW0r28rwFIQGh0XG5JWZ7puIAWYgNxa1WEco6TFJC4zjGznsjCNN1W4mhnQ==
+X-Received: by 2002:a92:d68a:0:b0:345:c72d:33a5 with SMTP id p10-20020a92d68a000000b00345c72d33a5mr227931iln.19.1688589517147;
+        Wed, 05 Jul 2023 13:38:37 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id n24-20020a5e8c18000000b007835686237asm7580752ioj.27.2023.07.05.12.39.33
+        by smtp.gmail.com with ESMTPSA id z25-20020a029f19000000b0041a9022c3dasm3257155jal.118.2023.07.05.13.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:39:37 -0700 (PDT)
-Received: (nullmailer pid 1714647 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:39:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
+        Wed, 05 Jul 2023 13:38:36 -0700 (PDT)
+Received: (nullmailer pid 1858165 invoked by uid 1000);
+        Wed, 05 Jul 2023 20:38:34 -0000
+Date:   Wed, 5 Jul 2023 14:38:34 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, lee@kernel.org, davem@davemloft.net,
-        pabeni@redhat.com, linux-stm32@st-md-mailman.stormreply.com,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, alexandre.torgue@foss.st.com, will@kernel.org,
-        dmaengine@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-phy@lists.infradead.org, catalin.marinas@arm.com,
-        Oleksii Moisieiev <oleksii_moisieiev@epam.com>,
-        arnd@kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, fabrice.gasnier@foss.st.com,
-        edumazet@google.com, hugues.fruchet@foss.st.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        herbert@gondor.apana.org.au, Oleksii_Moisieiev@epam.com,
-        andi.shyti@kernel.org, linux-crypto@vger.kernel.org,
-        kuba@kernel.org, linux-mmc@vger.kernel.org, conor+dt@kernel.org,
-        olivier.moysan@foss.st.com, linux-i2c@vger.kernel.org,
-        alsa-devel@alsa-project.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, richardcochran@gmail.com,
-        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        ulf.hansson@linaro.org, arnaud.pouliquen@foss.st.com
-In-Reply-To: <20230705172759.1610753-2-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-2-gatien.chevallier@foss.st.com>
-Message-Id: <168858597047.1714514.3836923282073685393.robh@kernel.org>
-Subject: Re: [IGNORE][PATCH 01/10] dt-bindings: Document common device
- controller bindings
-Date:   Wed, 05 Jul 2023 13:39:32 -0600
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-tegra@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
+Message-ID: <168858951392.1858105.14793065413434279529.robh@kernel.org>
+References: <20230705152603.2514235-1-thierry.reding@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705152603.2514235-1-thierry.reding@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,48 +66,20 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On Wed, 05 Jul 2023 19:27:50 +0200, Gatien Chevallier wrote:
-> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+On Wed, 05 Jul 2023 17:26:01 +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Introducing of the common device controller bindings for the controller
-> provider and consumer devices. Those bindings are intended to allow
-> divided system on chip into muliple domains, that can be used to
-> configure hardware permissions.
+> Convert the Tegra SLINK bindings from the free-form text format to
+> json-schema.
 > 
-> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
+>  .../bindings/spi/nvidia,tegra20-slink.txt     | 37 --------
+>  .../bindings/spi/nvidia,tegra20-slink.yaml    | 90 +++++++++++++++++++
+>  2 files changed, 90 insertions(+), 37 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.yaml
 > 
-> Depends-on: https://lore.kernel.org/lkml/c869d2751125181a55bc8a88c96e3a892b42f37a.1668070216.git.oleksii_moisieiev@epam.com/
-> 
->  .../feature-domain-controller.yaml            | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml: title: 'Generic Domain Controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-2-gatien.chevallier@foss.st.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
