@@ -2,99 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9DF7481C4
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 12:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F3C7481D8
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 12:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjGEKNk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 06:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S230488AbjGEKR0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jul 2023 06:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjGEKNj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 06:13:39 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D11129
-        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 03:13:39 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-992af8b3b1bso736586766b.1
-        for <linux-spi@vger.kernel.org>; Wed, 05 Jul 2023 03:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688552017; x=1691144017;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=46Qd00mqgwhkkW6amCqEXLEzCc/q28cqM0GW7xvshDA=;
-        b=qibsCrO4KpO9ZjgeiZjZyLgAQYzEe92+C8F4I444hUCYeufJsgqFfVSLlg0R42BKQy
-         O2RPdMl6uFiYyojnAU4Naa9onmCUF6xtkFbAV1b2szV0OhDKZ9zXPMnkRHVvw91Td+Dl
-         paiuaWMzuaEAsFj5ef4CyOW1uoaGdMou0GMZT/4tA6DZLC6ZJQ+an9BEqNd9lpC5HJsO
-         NJZ6PQmsa0e28lRUBLDntpfejGF5xkRoqujbp6gqiDxzXc2T8xKAG3v4Y2AwpO8Iriye
-         YxLtAdNHk7OusMA8SPPUDlPp+AN7rA/g8T6RdkvJFfsoIp2RNs4arcPflSApwYkv12CY
-         Mw9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688552017; x=1691144017;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=46Qd00mqgwhkkW6amCqEXLEzCc/q28cqM0GW7xvshDA=;
-        b=iR3BS6U7k7fETUkb0XhUgUPyOU3RNmJ0QJaVGZdNwe77Dw/lQTdv7a5ArPbp51ssQ0
-         3bD/fWwoyZCbYlXGddOvIj0hHdLLJW+biVmpGHJAjJDXvAGi9GcxhLJo0gRiuDdksGFD
-         K1yqb1zic1ZKd3ozCsgCIXBebndSavS6dKW7EWfJh6Mg1DHdaoVGr9CDPw1OJ1vdrfui
-         fwZ7qPg6aBy8XeH0MMUP08YPaL9IHNYIB36hzhk9tzdG/kOHixFuAPrCpWqHJGtm/9Lb
-         wkw6oe14Tz+v39xrGzybY8cB5ahEiS/OtI+wVQQQLQnzx6VyVOK4GhRW3sfkq8MLQyec
-         DOaQ==
-X-Gm-Message-State: ABy/qLY3yXwGTIm/0wKJ2nRmIWli42zEgXjjcILE2DJcBkGTiFZeGsJz
-        OXfP1LWQ/LmCaS+DNjqUJwzCwDCFVoYziN29FiU=
-X-Google-Smtp-Source: ACHHUZ4LqMy4WTuKZFFwrHIM3bTvSr+W9VKs+ld72xR1CBzV2XwejbdeIeahzvtI/PcI8zHRoc7E4/JFSp/6SNdC5j0=
-X-Received: by 2002:a17:906:3659:b0:991:7874:ef69 with SMTP id
- r25-20020a170906365900b009917874ef69mr11948359ejb.24.1688552017444; Wed, 05
- Jul 2023 03:13:37 -0700 (PDT)
+        with ESMTP id S230242AbjGEKRZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 06:17:25 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E9122
+        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 03:17:24 -0700 (PDT)
+Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id 20f0bf1a-1b1d-11ee-a9de-005056bdf889;
+        Wed, 05 Jul 2023 13:17:22 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Wed, 5 Jul 2023 13:17:21 +0300
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru
+Subject: Re: [PATCH v1 1/2] spi: amlogic-spifc-a1: implement adjust_op_size()
+Message-ID: <ZKVDMV95gZN4oQjx@surfacebook>
+References: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
+ <20230703094518.53755-2-mmkurbanov@sberdevices.ru>
 MIME-Version: 1.0
-Received: by 2002:a17:907:7284:b0:993:8f65:f1ee with HTTP; Wed, 5 Jul 2023
- 03:13:37 -0700 (PDT)
-Reply-To: lassounadage563@gmail.com
-From:   MS NADAGE LASSOU <zubairugado@gmail.com>
-Date:   Wed, 5 Jul 2023 11:13:37 +0100
-Message-ID: <CAOp8G4ZxXLtThM_okw_yw-LJpHSJbWz2AFwOcz-69EMNB2-KJA@mail.gmail.com>
-Subject: IMMEDIATE REPLY FOR DETAILS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703094518.53755-2-mmkurbanov@sberdevices.ru>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:630 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5006]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lassounadage563[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [zubairugado[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Greetings.
+Mon, Jul 03, 2023 at 12:45:17PM +0300, Martin Kurbanov kirjoitti:
+> This enhancement eliminates the need for a loop in the
+> amlogic_spifc_a1_exec_op() function and allows the SPI core to
+> dynamically divide transactions into appropriately sized chunks.
 
-I have something important to tell you.
-i will send you the details once i hear from you.
-Thanks,
-Ms Nadage Lassou
+...
+
+> +	if (!data_size) {
+
+Why not positive check?
+
+> +		ret = amlogic_spifc_a1_request(spifc, false);
+> +	} else {
+> +		u32 mode = ilog2(op->data.buswidth);
+>  
+>  		writel(0, spifc->base + SPIFC_A1_USER_DBUF_ADDR_REG);
+>  
+>  		if (op->data.dir == SPI_MEM_DATA_IN)
+> -			ret = amlogic_spifc_a1_read(spifc,
+> -						    op->data.buf.in + off,
+> -						    block_size, dmode);
+> +			ret = amlogic_spifc_a1_read(spifc, op->data.buf.in,
+> +						    data_size, mode);
+>  		else
+> -			ret = amlogic_spifc_a1_write(spifc,
+> -						     op->data.buf.out + off,
+> -						     block_size, dmode);
+> -
+> -		nbytes -= block_size;
+> -		off += block_size;
+> -	} while (nbytes != 0 && !ret);
+> +			ret = amlogic_spifc_a1_write(spifc, op->data.buf.out,
+> +						     data_size, mode);
+> +	}
+
+...
+
+> +static int amlogic_spifc_a1_adjust_op_size(struct spi_mem *mem,
+> +					   struct spi_mem_op *op)
+> +{
+> +	op->data.nbytes = min_t(u32, op->data.nbytes, SPIFC_A1_BUFFER_SIZE);
+
+I would rather use min() for strict type checking.
+In this case it will require to have U/u suffix in the SPIFC_A1_BUFFER_SIZE
+definition.
+
+> +	return 0;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
