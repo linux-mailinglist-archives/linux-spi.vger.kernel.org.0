@@ -2,62 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA687487E1
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 17:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC817487E5
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 17:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjGEP0I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 11:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S232992AbjGEP0K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jul 2023 11:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGEP0H (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 11:26:07 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162291709;
-        Wed,  5 Jul 2023 08:26:06 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc0609cd6so68803255e9.1;
-        Wed, 05 Jul 2023 08:26:06 -0700 (PDT)
+        with ESMTP id S232994AbjGEP0I (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 11:26:08 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDE810E2;
+        Wed,  5 Jul 2023 08:26:07 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc77e769cso66664005e9.0;
+        Wed, 05 Jul 2023 08:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688570764; x=1691162764;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ktD3trqPRBszeO1CIyX9rARFTNjc+YFjSkki0gN5auA=;
-        b=mNz8ZjwJmxf+M37Nol02bndwRYIyyzL0SX/ZuT4yJ3p7RS9RVqp9hmiqH4LtHzRK1F
-         VI16mKKcAIiyqNGiVa0DpRxoNgoTAzNhUleSDkoI3M3u34RssPvxFNc93zHIoHZvUwh5
-         RgREsAWrOWRnPL8u6LCpsmlb2PyTeJRLEMvsHQ5Pmfu5mU4tOBhLbL+aPz9ZWoTkLpn3
-         ZfyC2tawHTaBBphruJhndXULikQOv6MiggnbOV7sgKdxkl9LYYZga9F8Uo+Nu/NrFY7d
-         vNudcI0uJq7tImGBmUOhAaoo/hm8o3JQy9QKNV9CwjBx9yirnTZGLdOYhP3SnDRG7bC1
-         SxRg==
+        d=gmail.com; s=20221208; t=1688570765; x=1691162765;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cqVqkKo4HpwAKfSb4wis7HAeWZqU1J/4uMHuTI41cXc=;
+        b=Fb7uL/gtWW/bCBCdYh8iBpjSJJYHLDFZIIw2dt74uHEtgJg0yMnzwBtQM1hdvXwK8L
+         FoCZJAo4CkqkU7mZlZQqXoVdse/ePkgr1w6W3rNbKsYCrh2cVmrRf/bsNszccQRpkJ1f
+         LBC36+ZZPat3O0J/fhXF/9xyXwumesYJoAvPoTgdScWow69fxoOiX94KIrWm0qDmJBLg
+         4RwrBaNSmPNJVNKi764dXwbfIwRPHTWhmF1OU/YwBDaWqKdcXO31AjlUweQuunalgAkY
+         qvNbu1SAd7ugFP2XBK8vJqrLVVbFIQpwppUkG+JPkVD+qhhUFQDHyTYj0lomgy2Yf1Dr
+         v2Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688570764; x=1691162764;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ktD3trqPRBszeO1CIyX9rARFTNjc+YFjSkki0gN5auA=;
-        b=JNrX9kgklWqdmc6/UEDZvJz7lN7hzwC2zVxkyyp8xso4GvylwmqAS/YFFCI/BhNwuV
-         LuamteqD6WjL050t5gZP3/Jiq/Emn6xP444xT/3BvbUJ8oQUb3hZXRGpGMG8t7AyMYog
-         TuSPkvpZ0Fq5ulCDlZe7hOmqLCQO/hlSEDAlVXdJU4hZ7RGCmX3KwFMEkddFfHQhNyVS
-         S+ETPjcHq6qtiiyAxQSS6iEI4e5D5h+zG5RMXMQDJFSNdc+awTtOEnzCgcM0MYX4vE9f
-         saLqbykAZpyS5N+LjLnbEN1i5cdvNOEESj89KL3sdvsbNE+Pp472A6phMrahFesoe+nZ
-         xhZA==
-X-Gm-Message-State: AC+VfDxBBGhvAgsMLxPuWx2WPfAyWzqCOsaEJdWVZUlwulOeG1OEjXC4
-        ne8YiPS8JgDNmFbj0y9kjNc=
-X-Google-Smtp-Source: ACHHUZ7zB1CNHcO2DfMQRPhEc0SwBJGJ3zXwXTVLvEZAL7IJ22NxWcH6zuZm0CemN177m1vMhXodLg==
-X-Received: by 2002:a7b:ca48:0:b0:3f9:b7cc:723 with SMTP id m8-20020a7bca48000000b003f9b7cc0723mr12919247wml.21.1688570764181;
-        Wed, 05 Jul 2023 08:26:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688570765; x=1691162765;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cqVqkKo4HpwAKfSb4wis7HAeWZqU1J/4uMHuTI41cXc=;
+        b=NQHXVlwuTW+JVv2hS0kOGWMma50rYhWTAgw6nt0fBh8qH0WnkWLQSPZa4EbXhdWeWc
+         fiG3jxTItpJwoIxj/34wU06GZZZQMSbAjhC4JGU6FJNlEyZ1OP1H54FlS9x/vhff6uxF
+         gv1nWxu4igg2a9Q46xQFQB5TbeuDoOKZVpRVHkqlOd7gKVCD4XSgcrJKnNGweENCdikU
+         10lFGLdwA76HH/z0qeIzLUB5jrQXqJ9WbLmfP5hH0u2FnU37BnmcA86ghhG95yF/MC8J
+         A1ZdFnOampHSTKLol8n2vhQKero5NtIx4ZTfbMUqgvAnUkrcW+9jZChj6OM0f28ayi3E
+         bbqw==
+X-Gm-Message-State: AC+VfDx7IontKiA/HSTh5t4t/jQfkO8fYEfclAxICmit9kNUXKcpyglE
+        XRo0AckyePjlNj8FgXcWqOo=
+X-Google-Smtp-Source: ACHHUZ7rFiTrhvNjvTgoYJtSbNZdPkdLJvbmwxLBNoFrhWJV4pxOl9jjAvJppa+VNAyYSkTReRbP9w==
+X-Received: by 2002:a7b:cb9a:0:b0:3fb:b3aa:1c8f with SMTP id m26-20020a7bcb9a000000b003fbb3aa1c8fmr14912491wmi.28.1688570765276;
+        Wed, 05 Jul 2023 08:26:05 -0700 (PDT)
 Received: from localhost (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id y4-20020a1c4b04000000b003fbe4cecc5fsm2431099wma.34.2023.07.05.08.26.03
+        by smtp.gmail.com with ESMTPSA id u22-20020a05600c00d600b003faa6ce54b2sm2477992wmm.2.2023.07.05.08.26.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 08:26:03 -0700 (PDT)
+        Wed, 05 Jul 2023 08:26:04 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
-Date:   Wed,  5 Jul 2023 17:26:01 +0200
-Message-ID: <20230705152603.2514235-1-thierry.reding@gmail.com>
+Subject: [PATCH 2/3] dt-bindings: spi: tegra-sflash: Convert to json-schema
+Date:   Wed,  5 Jul 2023 17:26:02 +0200
+Message-ID: <20230705152603.2514235-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230705152603.2514235-1-thierry.reding@gmail.com>
+References: <20230705152603.2514235-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,29 +75,29 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-Convert the Tegra SLINK bindings from the free-form text format to
-json-schema.
+Convert the Tegra SFLASH controller bindings from the free-form text
+format to json-schema.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- .../bindings/spi/nvidia,tegra20-slink.txt     | 37 --------
- .../bindings/spi/nvidia,tegra20-slink.yaml    | 90 +++++++++++++++++++
- 2 files changed, 90 insertions(+), 37 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.txt
- create mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.yaml
+ .../bindings/spi/nvidia,tegra20-sflash.txt    | 37 ---------
+ .../bindings/spi/nvidia,tegra20-sflash.yaml   | 81 +++++++++++++++++++
+ 2 files changed, 81 insertions(+), 37 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.yaml
 
-diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.txt b/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.txt
+diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.txt b/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.txt
 deleted file mode 100644
-index 40d80b93e327..000000000000
---- a/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.txt
+index c212491929b5..000000000000
+--- a/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.txt
 +++ /dev/null
 @@ -1,37 +0,0 @@
--NVIDIA Tegra20/Tegra30 SLINK controller.
+-NVIDIA Tegra20 SFLASH controller.
 -
 -Required properties:
--- compatible : should be "nvidia,tegra20-slink", "nvidia,tegra30-slink".
--- reg: Should contain SLINK registers location and length.
--- interrupts: Should contain SLINK interrupts.
+-- compatible : should be "nvidia,tegra20-sflash".
+-- reg: Should contain SFLASH registers location and length.
+-- interrupts: Should contain SFLASH interrupts.
 -- clocks : Must contain one entry, for the module clock.
 -  See ../clocks/clock-bindings.txt for details.
 -- resets : Must contain an entry for each entry in reset-names.
@@ -113,32 +116,32 @@ index 40d80b93e327..000000000000
 -
 -Example:
 -
--spi@7000d600 {
--	compatible = "nvidia,tegra20-slink";
--	reg = <0x7000d600 0x200>;
--	interrupts = <0 82 0x04>;
+-spi@7000c380 {
+-	compatible = "nvidia,tegra20-sflash";
+-	reg = <0x7000c380 0x80>;
+-	interrupts = <0 39 0x04>;
 -	spi-max-frequency = <25000000>;
 -	#address-cells = <1>;
 -	#size-cells = <0>;
--	clocks = <&tegra_car 44>;
--	resets = <&tegra_car 44>;
+-	clocks = <&tegra_car 43>;
+-	resets = <&tegra_car 43>;
 -	reset-names = "spi";
--	dmas = <&apbdma 16>, <&apbdma 16>;
+-	dmas = <&apbdma 11>, <&apbdma 11>;
 -	dma-names = "rx", "tx";
 -};
-diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.yaml
+diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.yaml
 new file mode 100644
-index 000000000000..291c25ec015d
+index 000000000000..e245bad85a25
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/nvidia,tegra20-slink.yaml
-@@ -0,0 +1,90 @@
++++ b/Documentation/devicetree/bindings/spi/nvidia,tegra20-sflash.yaml
+@@ -0,0 +1,81 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/spi/nvidia,tegra20-slink.yaml#
++$id: http://devicetree.org/schemas/spi/nvidia,tegra20-sflash.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: NVIDIA Tegra20/30 SLINK controller
++title: NVIDIA Tegra20 SFLASH controller
 +
 +maintainers:
 +  - Thierry Reding <thierry.reding@gmail.com>
@@ -146,9 +149,7 @@ index 000000000000..291c25ec015d
 +
 +properties:
 +  compatible:
-+    enum:
-+      - nvidia,tegra20-slink
-+      - nvidia,tegra30-slink
++    const: nvidia,tegra20-sflash
 +
 +  reg:
 +    maxItems: 1
@@ -178,13 +179,6 @@ index 000000000000..291c25ec015d
 +      - const: rx
 +      - const: tx
 +
-+  operating-points-v2:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  power-domains:
-+    items:
-+      - description: phandle to the core power domain
-+
 +  spi-max-frequency:
 +    description: Maximum SPI clocking speed of the controller in Hz.
 +    $ref: /schemas/types.yaml#/definitions/uint32
@@ -209,17 +203,17 @@ index 000000000000..291c25ec015d
 +    #include <dt-bindings/clock/tegra20-car.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    spi@7000d600 {
-+        compatible = "nvidia,tegra20-slink";
-+        reg = <0x7000d600 0x200>;
-+        interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
++    spi@7000c380 {
++        compatible = "nvidia,tegra20-sflash";
++        reg = <0x7000c380 0x80>;
++        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
 +        spi-max-frequency = <25000000>;
 +        #address-cells = <1>;
 +        #size-cells = <0>;
-+        clocks = <&tegra_car TEGRA20_CLK_SBC2>;
-+        resets = <&tegra_car 44>;
++        clocks = <&tegra_car TEGRA20_CLK_SPI>;
++        resets = <&tegra_car 43>;
 +        reset-names = "spi";
-+        dmas = <&apbdma 16>, <&apbdma 16>;
++        dmas = <&apbdma 11>, <&apbdma 11>;
 +        dma-names = "rx", "tx";
 +    };
 -- 
