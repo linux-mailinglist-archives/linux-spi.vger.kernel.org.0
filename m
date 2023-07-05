@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C040747BD8
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 05:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7744747BE1
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 05:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjGEDhv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jul 2023 23:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S229892AbjGEDkt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jul 2023 23:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGEDhu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 23:37:50 -0400
+        with ESMTP id S229449AbjGEDks (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jul 2023 23:40:48 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DC1A2;
-        Tue,  4 Jul 2023 20:37:45 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4C51A2;
+        Tue,  4 Jul 2023 20:40:46 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6E85B24E24B;
-        Wed,  5 Jul 2023 11:37:41 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
- 2023 11:37:41 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 080E824E01A;
+        Wed,  5 Jul 2023 11:40:45 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 11:40:45 +0800
 Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
  (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
- 2023 11:37:40 +0800
-Message-ID: <c5027d42-b9be-090d-bd43-86c9b1448c99@starfivetech.com>
-Date:   Wed, 5 Jul 2023 11:37:40 +0800
+ 2023 11:40:44 +0800
+Message-ID: <1e9dedc6-dee3-b65d-2823-0468fcb13193@starfivetech.com>
+Date:   Wed, 5 Jul 2023 11:40:43 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RESEND v1 1/2] dt-binding: spi: constrain minItems of clocks and
- clock-names
+Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
+Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
@@ -41,11 +41,10 @@ CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Linus Walleij <linus.walleij@linaro.org>
 References: <20230704092200.85401-1-william.qiu@starfivetech.com>
- <20230704092200.85401-2-william.qiu@starfivetech.com>
- <1b65e8d1-d5e1-0d6b-1248-d9683be44db8@linaro.org>
-Content-Language: en-US
+ <20230704092200.85401-3-william.qiu@starfivetech.com>
+ <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
 From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <1b65e8d1-d5e1-0d6b-1248-d9683be44db8@linaro.org>
+In-Reply-To: <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [171.223.208.138]
@@ -63,62 +62,53 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-On 2023/7/4 17:38, Krzysztof Kozlowski wrote:
-> On 04/07/2023 11:21, William Qiu wrote:
->> The SPI controller only need apb_pclk clock to work properly on JH7110 SoC,
->> so there add minItems whose value is equal to 1. Other platforms do not
->> have this constraint.
+On 2023/7/4 17:39, Krzysztof Kozlowski wrote:
+> On 04/07/2023 11:22, William Qiu wrote:
+>> Add spi node for JH7110 SoC.
 >> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 > 
-> I don't get why this is resent, but subject prefix is still wrong. It's
-> dt-bindings.
+> Missing SoB.
+> 
+It looks like that drop it is the best solution.
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         | 52 ++++++++++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 98 +++++++++++++++++++
+>>  2 files changed, 150 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index 2a6d81609284..a066d2e399c4 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -126,6 +126,20 @@ &i2c6 {
+>>  	status = "okay";
+>>  };
+>> 
+>> +&spi0 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&spi0_pins>;
+>> +	status = "okay";
+>> +
+>> +	spi_dev0: spi@0 {
+>> +		compatible = "st,m25p80";
+>> +		pl022,com-mode = <1>;
+>> +		spi-max-frequency = <10000000>;
+>> +		reg = <0>;
+> 
+> reg is always following compatible, not somewhere deep in properties.
 > 
 Will update.
->> ---
->>  Documentation/devicetree/bindings/spi/spi-pl022.yaml | 11 ++++++++---
->>  1 file changed, 8 insertions(+), 3 deletions(-)
->> 
->> diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
->> index 91e540a92faf..42bb34c39971 100644
->> --- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
->> +++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
->> @@ -11,6 +11,7 @@ maintainers:
->> 
->>  allOf:
->>    - $ref: spi-controller.yaml#
->> +  - $ref: /schemas/arm/primecell.yaml#
+>> +		status = "okay";
 > 
-> This looks unrelated, so keep it as separate commit with its own rationale.
+> okay is by default
 > 
-Because "arm,primecell-periphid"  is need in JH7110 SoC, so I added them in
-one commit, so do I need to put them in two commit?
->> 
->>  # We need a select here so we don't match all nodes with 'arm,primecell'
->>  select:
->> @@ -34,12 +35,16 @@ properties:
->>      maxItems: 1
->> 
->>    clocks:
->> +    minItems: 1
->>      maxItems: 2
->> 
->>    clock-names:
->> -    items:
->> -      - const: sspclk
->> -      - const: apb_pclk
->> +    oneOf:
->> +      - items:
->> +          - const: apb_pclk
->> +      - items:
->> +          - const: sspclk
->> +          - const: apb_pclk
+Will drop.
+>> +	};
+>> +};
 > 
-> Are you sure that your clock is APB pclk in such case?
 > 
-Yes, in JH7110 SoC is APB pclk in such case.
-
-Thanks for taking time to review this patch series.
 > Best regards,
 > Krzysztof
 > 
+Thanks for taking time to review this patch series.
