@@ -2,109 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BEE747FB7
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 10:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6BF748055
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 11:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjGEIbW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 04:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
+        id S232299AbjGEJCM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jul 2023 05:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjGEIbV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 04:31:21 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E0CA;
-        Wed,  5 Jul 2023 01:31:19 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 11D7424E1F2;
-        Wed,  5 Jul 2023 16:31:07 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
- 2023 16:31:07 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
- 2023 16:31:06 +0800
-Message-ID: <5e9ef080-085e-9135-a53c-9f9490f08ebe@starfivetech.com>
-Date:   Wed, 5 Jul 2023 16:31:05 +0800
+        with ESMTP id S232334AbjGEJCD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 05:02:03 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C68A199A
+        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 02:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1688547715; x=1720083715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2St3MLrk2aG2ULQGB2nTNOi3wjOqaquFdKHHdlBbA7s=;
+  b=cRumMkSjAmZQFbOfEJNjQJaNmMO6z+kdQ3eHp/haWhSNhoB8CMl/AVKT
+   vhK92awKkI7eLTTEZOsd0yEvIw82H5Y99Z36fUSIICsvyDZhqd0SbDdrE
+   x8xqb0oJxN2qt9L6G14ZiTxcLwUBRKmssvMzKHA6DRGJPO2ZumCEzywZ9
+   p3ZF8ucUYZHetYb3avMsSbc3sGdtW3ziUT8XWjeljEsXLSmkPIEjKpNWF
+   fOewsoaAquAWaYENHmKSiusf9dFvaAK+6sTbhB2jUwEIiBJf4IJtgIMx6
+   e7aL2V98ebExXHeizoI/DELZlilamOB3fJTuXQGnipFTIpZFrt2dJq26V
+   w==;
+X-IronPort-AV: E=Sophos;i="6.01,182,1684792800"; 
+   d="scan'208";a="31764883"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 05 Jul 2023 11:01:53 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 33B7E280087;
+        Wed,  5 Jul 2023 11:01:53 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 1/3] spi: spi-fsl-lpspi: Remove num_cs from device struct
+Date:   Wed,  5 Jul 2023 11:01:43 +0200
+Message-Id: <20230705090145.1354663-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230704090453.83980-1-william.qiu@starfivetech.com>
- <20230704090453.83980-3-william.qiu@starfivetech.com>
- <808dac44-a72c-4675-1e4a-0ed96190efb4@linaro.org>
- <90b55926-1d0c-b9c0-3020-5837e2028809@starfivetech.com>
- <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This is only used during probe() call, so there is no need to store it
+longer than that.
 
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/spi/spi-fsl-lpspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On 2023/7/5 15:23, Krzysztof Kozlowski wrote:
-> On 05/07/2023 09:04, William Qiu wrote:
->> 
->> 
->> On 2023/7/5 14:21, Krzysztof Kozlowski wrote:
->>> On 04/07/2023 11:04, William Qiu wrote:
->>>> Add QSPI clock operation in device probe.
->>>>
->>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->>>> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
->>>> Reported-by: Julia Lawall <julia.lawall@inria.fr>
->>>> Closes: https://lore.kernel.org/r/202306040644.6ZHs55x4-lkp@intel.com/
->>>
->>>
->>>>  
->>>> @@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
->>>>  	struct spi_master *master = dev_get_drvdata(dev);
->>>>  
->>>>  	clk_prepare_enable(cqspi->clk);
->>>> +	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
->>>
->>> Don't add compatible checks inside the code. It does not scale. We
->>> expect compatibles to be listed only in one place - of_device_id - and
->>> customize driver with match data / quirks / flags.
->>>
->>> Comment applies to all your diff hunks.
->>>
->> I'll use "of_device_get_match_data" to replace it. But the way I added
->> reset before is also by compatible checks. Should I change this place to 
->> "of_device_get_match_data" as well?
-> 
-> I don't know what's there, but in general driver should be written in a
-> consistent style.
->It's in line 1719, inside the "cqspi_probe", but this part of the code is
-already merged in the main line. Should I keep it in a consistent style?
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index fb68c72df171..486f4bc488fd 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -98,7 +98,6 @@ struct fsl_lpspi_data {
+ 	struct clk *clk_ipg;
+ 	struct clk *clk_per;
+ 	bool is_slave;
+-	u32 num_cs;
+ 	bool is_only_cs1;
+ 	bool is_first_byte;
+ 
+@@ -826,6 +825,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	struct spi_controller *controller;
+ 	struct resource *res;
+ 	int ret, irq;
++	u32 num_cs;
+ 	u32 temp;
+ 	bool is_slave;
+ 
+@@ -848,8 +848,8 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	fsl_lpspi->is_only_cs1 = of_property_read_bool((&pdev->dev)->of_node,
+ 						"fsl,spi-only-use-cs1-sel");
+ 	if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
+-				 &fsl_lpspi->num_cs))
+-		fsl_lpspi->num_cs = 1;
++				 &num_cs))
++		num_cs = 1;
+ 
+ 	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 32);
+ 	controller->transfer_one = fsl_lpspi_transfer_one;
+@@ -859,7 +859,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
+ 	controller->dev.of_node = pdev->dev.of_node;
+ 	controller->bus_num = pdev->id;
+-	controller->num_chipselect = fsl_lpspi->num_cs;
++	controller->num_chipselect = num_cs;
+ 	controller->slave_abort = fsl_lpspi_slave_abort;
+ 	if (!fsl_lpspi->is_slave)
+ 		controller->use_gpio_descriptors = true;
+-- 
+2.34.1
 
-Best regards,
-William
-> Best regards,
-> Krzysztof
-> 
