@@ -2,67 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8254B747E61
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 09:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BEE747FB7
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jul 2023 10:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjGEHh1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 03:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        id S229645AbjGEIbW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jul 2023 04:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjGEHhZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 03:37:25 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C210FB
-        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 00:37:22 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 67556492B8; Wed,  5 Jul 2023 07:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1688542641; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=SyvKsmCYK8th9Y177SgkIybFc/EQv9EAwj/xQrOWrhCW6Jyf1taR0jPrB/kK+DdZy
-         6nSlJP3oe7kgyMiPyRopVedE9mi6BDkLBAlAMrvZfN43ALfUuO/CRSRz1IXGwcgn+T
-         pFWXX/uot1YQmftlu2hmlSBvNuuqYu/rOkOrNEQpt5Vh6dnCktoUmF8iV1Qhl8l1cP
-         FIcHwmC/qZ+5Yd0QsiwM5/EBvcM1A85/Zbwqp7kypreagYzKow7YQACNPh04Tg6sNC
-         iviqEFbtoY1tHmDWT9PsXueA7gUHyvTPQxpzxFICNQGnM5VAfOPR6/D9tI4ZF/ksDi
-         k4E/LC/BC28AQ==
-Received: by mail.durme.pl for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 07:35:24 GMT
-Message-ID: <20230705064501-0.1.2w.cmp4.0.r2qp7vlfge@durme.pl>
-Date:   Wed,  5 Jul 2023 07:35:24 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        with ESMTP id S231989AbjGEIbV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 04:31:21 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E0CA;
+        Wed,  5 Jul 2023 01:31:19 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 11D7424E1F2;
+        Wed,  5 Jul 2023 16:31:07 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 16:31:07 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 16:31:06 +0800
+Message-ID: <5e9ef080-085e-9135-a53c-9f9490f08ebe@starfivetech.com>
+Date:   Wed, 5 Jul 2023 16:31:05 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
+ StarFive JH7110 QSPI
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230704090453.83980-1-william.qiu@starfivetech.com>
+ <20230704090453.83980-3-william.qiu@starfivetech.com>
+ <808dac44-a72c-4675-1e4a-0ed96190efb4@linaro.org>
+ <90b55926-1d0c-b9c0-3020-5837e2028809@starfivetech.com>
+ <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
-
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
-
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
-
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
-
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
 
-Pozdrawiam
-Krystian Wieczorek
+On 2023/7/5 15:23, Krzysztof Kozlowski wrote:
+> On 05/07/2023 09:04, William Qiu wrote:
+>> 
+>> 
+>> On 2023/7/5 14:21, Krzysztof Kozlowski wrote:
+>>> On 04/07/2023 11:04, William Qiu wrote:
+>>>> Add QSPI clock operation in device probe.
+>>>>
+>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>>>> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>> Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
+>>>> Reported-by: Julia Lawall <julia.lawall@inria.fr>
+>>>> Closes: https://lore.kernel.org/r/202306040644.6ZHs55x4-lkp@intel.com/
+>>>
+>>>
+>>>>  
+>>>> @@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
+>>>>  	struct spi_master *master = dev_get_drvdata(dev);
+>>>>  
+>>>>  	clk_prepare_enable(cqspi->clk);
+>>>> +	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
+>>>
+>>> Don't add compatible checks inside the code. It does not scale. We
+>>> expect compatibles to be listed only in one place - of_device_id - and
+>>> customize driver with match data / quirks / flags.
+>>>
+>>> Comment applies to all your diff hunks.
+>>>
+>> I'll use "of_device_get_match_data" to replace it. But the way I added
+>> reset before is also by compatible checks. Should I change this place to 
+>> "of_device_get_match_data" as well?
+> 
+> I don't know what's there, but in general driver should be written in a
+> consistent style.
+>It's in line 1719, inside the "cqspi_probe", but this part of the code is
+already merged in the main line. Should I keep it in a consistent style?
+
+Best regards,
+William
+> Best regards,
+> Krzysztof
+> 
