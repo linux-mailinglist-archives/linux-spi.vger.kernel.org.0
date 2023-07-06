@@ -2,164 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BC4749439
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 05:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6E67494D8
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 07:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbjGFD2l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jul 2023 23:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S232869AbjGFFHW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jul 2023 01:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbjGFD20 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jul 2023 23:28:26 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2115.outbound.protection.outlook.com [40.107.255.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF641FE0;
-        Wed,  5 Jul 2023 20:27:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h4FM8NrT1b8a7/OFTkzbZlFQ2bdSddtX+YWOdpXd/8+atYANPFkcX3e9lqSL6jGRsFxtMntcfLDABECmSEjmxCmcB92GIGMaDh01K9V/tUCGZkClZRmtWl8RUOoEZo9vjbHbNSweV2ZD0IVyIlSBmpTuYFjwUDfMfUP1Ub9YG0uzE9GfzBp15y0NhWmMzl4aJPxpZiH0a1hTobivlrUgCLwftIXgqlIwk/dkOh38N668obpEgSBJfsJkm5z063y6L2gxlY9GSCfSxfo+RaPxtoeC5lfJSN3N7yqjaE9QOQ0H3Dscq4n/vQRQmslk3+eYSiTIcAvZGQH3p9q7AMnBiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpEhsLAKRGIJgSocqGoL0oTWylJP/5TecRrwzNrP1rY=;
- b=mepAR2MgxZM/wzjmi1Ui3KKNcN40C7FVGJ033oBuluhmjEjrCuQh2wbyZHp7aQfLLjEy1Xrcs3cuVo24uUiECfRuzfs2vNvpEL+jWpWF16P6DRKc91TbUJ1iINGBxaXKrbWhLjhD2rdFssS+0WoQfDJPac/TP1YwVL2boKrIkFlfffwNNrUp5vHytgQObDknxGfMZ7iReyk7E26dGOumZWyhb/5uugqs4PDslkyh3huGQvG3uq3WicpZFiNVteuU2FS1GTbCfotpMfNHx7KMnFAsLRHvkpx0lbib/jsdFduJ2VPsuwZqx/gpJFQUwRJK8Ljc5vKoHiDalEeYkErm8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FpEhsLAKRGIJgSocqGoL0oTWylJP/5TecRrwzNrP1rY=;
- b=mhMkf8eyBl0erdPdLuWU8G4QhhVwpCtrT0Qf4tClRuHxcbprvDqIua7JHvA+cnIE+WrqaoOSTPSFzFlaCwh71jjbwTzHuBCU4V1aBQB+xydDqaZsrDS5okLsRxLeA3CtHfMYPx7hYGleFZmtjdx3ajoE5Ty9I1H1FBECkNKqJWyzwMbUDNw9eVjzfOHBv4y8zVEYoQtEkXCbI1HHHydtSro0X4lrlivsXNPDAemBfqpuwi8IzZYYMkf4m7OK0GoXLpRmhQFd8am6vJDHXQlX5lTz5zE/Cv2vXqoiLR4slZFpJ1kzmZ+kqmh7lVH04dHHUMzY3BMgSJVY3k1g0MJgxg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB5043.apcprd06.prod.outlook.com (2603:1096:4:1a6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 03:27:48 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 03:27:48 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] spi: s3c64xx: Use devm_platform_get_and_ioremap_resource()
-Date:   Thu,  6 Jul 2023 11:27:26 +0800
-Message-Id: <20230706032727.9180-7-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230706032727.9180-1-frank.li@vivo.com>
-References: <20230706032727.9180-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0174.apcprd04.prod.outlook.com (2603:1096:4::36)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        with ESMTP id S232917AbjGFFHR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jul 2023 01:07:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8021BDC;
+        Wed,  5 Jul 2023 22:07:15 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3664YPK1016968;
+        Thu, 6 Jul 2023 05:07:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5075ivWjn7+CeYd5xn8n2qxVQmk/qDsu8E702IVUmFs=;
+ b=glRPDddQcvVY/TqxUz0Firs24XHqMkH8kqAdHDpMUYUdsZztQFnGo/1KHsHu+k8rt5f7
+ +8YbL2uyyGtX7+Gom3oeNBQcv9HpoJCSUi52jNgbu7SpsuCRxexWh9jqmZws2gnWtoZ9
+ jULNi7Nc6QeuZXIY2ItiqgMkHzm+u55UUCItaKF4ai6tDbKa0eDJaCBdvMxGTugOEh9O
+ 5k3oSTkSJNHFdM/CTPX2SOEi8DaVrCBGZtXbZlPuHlPLicU+DP3sx2DcIU+mi7FG2YZl
+ GKA66BuJXORAhEMOlan9s7N5ag9E1p1XVLxETr7vVvifRrQIAFgUb0TC5+IJRm1VYu8i DQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmxy92vt6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 05:07:10 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366579JL011115
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 05:07:09 GMT
+Received: from [10.110.95.239] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 5 Jul
+ 2023 22:07:04 -0700
+Message-ID: <c9307794-c270-dc63-e9ae-329733fb5bdc@quicinc.com>
+Date:   Thu, 6 Jul 2023 10:37:00 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB5043:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e3ce505-4152-4019-1c45-08db7dd0f89d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rQ2m535yG0Yi0PIIefDI/ixhHso/3GI84srYCHS8nq5o3uc3piRNn8YBEpKIXWXAYMLdIDaBQn26nHeVrh0Wc8nOQtcYBkI8rRTmj836ofDrs2cwmSPgfN1d6AhKZ0e7KcUVMaMTEkaEeHTQGi4bjSRKmMkX47X8URSCE9zt0wkkqCnPLbHJGyU0covoqrEDNmWBC6fgX3T3FGX4eP0U/6NbeOJSomjHOuy8D5kZcgaaMEWTHgjz1xmVpk/dmsgjQUI7xZmPRj58u8MhCZy9pQB5xbrJJSclYaXDkO7eRvCdNENEH6m1CibZTU+YyG8F9bIUugylIb4ouQ3UQnZ91XgiEEVdGPRDz2Sv8ehHd4l+iXhsJJvDLIIEixlvyr1nV8APwUiLxbBF8D72msZ1Ex87cAS3Fid8c6c/4lZGn97ijuv9lApbZYZ1xdIwiMPAYU0Kxmn0R524ZERtqgFQ73lJzGeYvqhKlBtR6ijVOWgBAWNBgBJds6Hd46oa/c+R53425gCQsE8yEl+iSR7QSuutBLPVXYNahSYk3Np5ax+g4awU097iBIwbHgoyTot1ygB+unLxTqF3m5cmSQZw8Cj4C47KWEqT2DTC5qPDtbkG5Id7C5yoQqMMx/L2Ze41
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(451199021)(5660300002)(2616005)(8676002)(86362001)(8936002)(83380400001)(38100700002)(38350700002)(41300700001)(316002)(66556008)(66476007)(36756003)(4326008)(66946007)(6512007)(186003)(52116002)(110136005)(1076003)(6666004)(6486002)(478600001)(26005)(6506007)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fe9zm4KPwY4+ymEDbt5n8cPpAfRwzOv/dYUr1k4uqwdhKfcZMECMXl5j2nby?=
- =?us-ascii?Q?Nf0uUMW6hFi9Y4563luLeArlG14bUr/JX7a+NXTjS1HoEVpVJFTceS2US7wi?=
- =?us-ascii?Q?yfjOaDaqmyAslxZTZVAuYLtvPCnMB79fe30cI7iV2z2oYQv8hAuwmr4G04/H?=
- =?us-ascii?Q?fOFo3jR0qXdVI+PqnlsPGdXwehLWeYN/fvOub1GepjWByMJvqJd6MPrlo5J9?=
- =?us-ascii?Q?Y9eP9tEY85esobWsj9S265lRHs6Me2YVf1vWZL8qQ9rR9ymc1AwI3O5Kt+cn?=
- =?us-ascii?Q?oMG3HDeSgNYIW3sYLV8HBup+ru73pl6yFdh3yNo5OKlBAmC04aCCw5zJFOhs?=
- =?us-ascii?Q?8sLvW1zGupyeyo6mMxZdNCejbjly7M/+iOOU/6hwcndefWYza1bJPbomlwo7?=
- =?us-ascii?Q?H7/XA/wA9AdKPA97hdvjsAn8FUS0+SJ4P74OayyfepQxdXMihrSv6cuFk3UX?=
- =?us-ascii?Q?hl3fVu3x8vFjthNjyY50LzOu0Xp8jMwJ6SBy6N8Gc1E+wgNmuXw0x/ejRCht?=
- =?us-ascii?Q?tnJMqbvq2ZprjPA4AJZRo2Su5NXkY9Me0AZLstEEpSUIHe35L/bfvxBuG+v+?=
- =?us-ascii?Q?ulp0QSXeLsMKDts7tWvmiAcyh06IpOeEipvcM4yZoNERWFEozUdCb4xfqV/Z?=
- =?us-ascii?Q?Ell2ga8XvceN/eraQJAkYyE5WYteo5w8iI67pT5BNrqIi6jupN38eeR+lbBI?=
- =?us-ascii?Q?GStvTd25f0BsKhoHmJBg9NgpAyMQff7rhv+NdwWSuoJknWFwkGsJeygGY+LG?=
- =?us-ascii?Q?jHpNCj9w16hXoKPAyRXSms4mktWbgpXaQgS9JeXCXSTrv9blSG0M8GVdOO84?=
- =?us-ascii?Q?qBIT83S5RTOBXcTKr/Lx59yhm8Wc66QyH9RfDCFTBDamCUse8YQ5OEpI6H4d?=
- =?us-ascii?Q?ap3gcxSwZ0G3uZDP2lvSna5JTEYZOc7h8uPoKKivlpz4LpkeFRkU1VPtyYBo?=
- =?us-ascii?Q?GR0vcZg9TXn8guIfgPNpTqMr0v8o4zwHMpYKH0bOZ7heUugwS/KtFrdFtBxW?=
- =?us-ascii?Q?1C6vEh1jy1Ap8GwsGY66ia3lNamMt5IrLhm2FTYwoDCiLIP1BtHHjuvdkzvr?=
- =?us-ascii?Q?hbq6IeupTI3kTKrnVXDrdaz9u7XyKenSoMMOlQssMup8IBD61cv09YlN7qP3?=
- =?us-ascii?Q?AwP6d/w2hlvFbMlKmfzHdf0gISRWSWZMw3qqX7VW78oIxpq/1cyF/WKbS884?=
- =?us-ascii?Q?puO/kHXok+rvFKnA9zYXhZD8rI9x5fJ0TKPJZpoo9YNt66bfaNYu8V6SG7nR?=
- =?us-ascii?Q?S4oVRcYtD3hBdmA+XyirYR5wqKtGzm5lHIwQZzxmRmWYskmStHdCTOOFavXB?=
- =?us-ascii?Q?5SQt/ldyt0jWsnw9wyQ8ph963LTQwp8zjG0R/vzi6cVAoygCACt/EJFGXvAg?=
- =?us-ascii?Q?F/V3zc9ypEbw2aJwF415bluddq0Cu6Ny+iz9tVGrWwATc0sXhLtYh+6WFA99?=
- =?us-ascii?Q?nyi+f6dMcTDzmZKSgDje60hJQdkUPmHWjkApkqgaFaAsJlB2MX9VMrK+FBZr?=
- =?us-ascii?Q?rV4JnHqGbBVxr1ScD9am+zYf+oGKX/fE5PqTpA4Bvw3/XMyM1dl/myu50QjI?=
- =?us-ascii?Q?mXis8uvvTOAAXs+wHc+QxJUBZu3uLh5pleEx6MW1?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e3ce505-4152-4019-1c45-08db7dd0f89d
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 03:27:48.2411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Iwgt+agqlrKVDuHeKfcIcP4R5g5ui9hyB/OGlvK0uhjEF4NKR7aTjJDx/zD+CnyvQ0vu6zbw5B8616DvJsMD0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5043
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/3] spi: dt-bindings: qcom,spi-geni-qcom: Add SPI
+ device mode support for GENI based QuPv3
+To:     Conor Dooley <conor@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>, <quic_vnivarth@quicinc.com>,
+        <quic_arandive@quicinc.com>
+References: <20230622135955.941-1-quic_ptalari@quicinc.com>
+ <20230622135955.941-3-quic_ptalari@quicinc.com>
+ <20230622-sustained-marauding-5c6c8a76c834@spud>
+Content-Language: en-US
+From:   Praveen Talari <quic_ptalari@quicinc.com>
+In-Reply-To: <20230622-sustained-marauding-5c6c8a76c834@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3EzByZUEqgzEPNGOwmQHUV2bEv5d_4_f
+X-Proofpoint-ORIG-GUID: 3EzByZUEqgzEPNGOwmQHUV2bEv5d_4_f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_02,2023-07-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ adultscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307060044
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Hi
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/spi/spi-s3c64xx.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index fd55697144cc..ad008597c7d8 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1164,11 +1164,6 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, -ENODEV,
- 				     "Platform_data missing!\n");
- 
--	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!mem_res)
--		return dev_err_probe(&pdev->dev, -ENXIO,
--				     "Unable to get SPI MEM resource\n");
--
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return dev_err_probe(&pdev->dev, irq, "Failed to get IRQ\n");
-@@ -1185,7 +1180,6 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
- 	sdd->master = master;
- 	sdd->cntrlr_info = sci;
- 	sdd->pdev = pdev;
--	sdd->sfr_start = mem_res->start;
- 	if (pdev->dev.of_node) {
- 		ret = of_alias_get_id(pdev->dev.of_node, "spi");
- 		if (ret < 0)
-@@ -1223,9 +1217,10 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
- 	if (!is_polling(sdd))
- 		master->can_dma = s3c64xx_spi_can_dma;
- 
--	sdd->regs = devm_ioremap_resource(&pdev->dev, mem_res);
-+	sdd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &mem_res);
- 	if (IS_ERR(sdd->regs))
- 		return PTR_ERR(sdd->regs);
-+	sdd->sfr_start = mem_res->start;
- 
- 	if (sci->cfg_gpio && sci->cfg_gpio())
- 		return dev_err_probe(&pdev->dev, -EBUSY,
--- 
-2.39.0
-
+On 6/23/2023 12:35 AM, Conor Dooley wrote:
+> On Thu, Jun 22, 2023 at 07:29:54PM +0530, Praveen Talari wrote:
+>> Add a property to configure QUPv3 SE as SPI Device mode.
+>>
+>> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
+>> ---
+>> v2 -> v3:
+>> - modified commit message to use device mode instead of slave mode
+> Suitability or w/e of the property aside, I don't understand this.
+> Why not change the *property*, which has far more visibility than the
+> commit message, to use device rather than slave?
+We are going use existing property spi-slave
+>
+> Chers,
+> Conor.
+>
+>> ---
+>>   Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> index 2e20ca313ec1..5c7d0293bbf7 100644
+>> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> @@ -66,6 +66,10 @@ properties:
+>>     reg:
+>>       maxItems: 1
+>>   
+>> +  qcom,slv-ctrl:
+>> +    description: configure QUPv3 SE as Device mode
+>> +    type: boolean
+>> +
+>>   required:
+>>     - compatible
+>>     - clocks
+>> -- 
+>> 2.17.1
+>>
