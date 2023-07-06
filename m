@@ -2,81 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B470D749559
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 08:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF17A749591
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 08:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbjGFGJ2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jul 2023 02:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S233594AbjGFG2f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jul 2023 02:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbjGFGJ1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jul 2023 02:09:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C11BF0
-        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 23:08:32 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-99342a599e9so34646466b.3
-        for <linux-spi@vger.kernel.org>; Wed, 05 Jul 2023 23:08:32 -0700 (PDT)
+        with ESMTP id S233041AbjGFG2f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jul 2023 02:28:35 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449E11990
+        for <linux-spi@vger.kernel.org>; Wed,  5 Jul 2023 23:28:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-98e011f45ffso30962466b.3
+        for <linux-spi@vger.kernel.org>; Wed, 05 Jul 2023 23:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688623684; x=1691215684;
+        d=linaro.org; s=google; t=1688624911; x=1691216911;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=I7nLQR/B3UQbt+9uJMAZJaX6K0uXW7cxqOcVTi+nmsg=;
-        b=ZUKbME848xiV2hktdav+CO31kzq1MxpYSRjHlbmGTy7PBC9j30cY//SQZEm5FrXI0P
-         xSRk50aUQ0CnfXXy6O6S6z6T2LNIVIYwb2I4iwwZmHZbtgZFXpD2N9QOfSqDp/GbI2Hk
-         YAQdq+vjLAG9dz/oC21JBMx80qUiw9KBedwJK/rer/IlPSBLsiAliLQjKSGfgTh5lO7z
-         tA1DNyXmETftvdu9kmXKLPIDEyBJ5/NFBtVOKsYS6iDzG+0n/aNQ2Gi5YVDEIN652OVQ
-         hyPP9aRVTJpByJt5QExCPE6KYnaHGV3Dp/KsnsNAuhDeoQ/tmZStlWx3/nPA8drurazx
-         03lg==
+        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
+        b=dRSL6aukgIkfv+NlQasUhI0WW8PrgXzou5v2QVss3xqfKaQ4M1Yt2cin2pOZmhQd17
+         mLGsmRk6KQ96V2gbe6flKfOcIDP8C6aJ94MYdy2hTnRpIigR7o/uS07D4CETNP/87UAG
+         Te3mFVnmowcotJ+p+kvuGY85+Df/k9sYz1L9gl3LDrpMcUkuBaCO8WTequflxZTiDoTT
+         JMZMZqgL5RQtdtgjCToseEau/xKW62TMq6KzpDrpxszgG+HHnYaK/7KRjWMGum9WC1ss
+         tpYb7Y62RIr5F4RyB4vq3Q8QtCd9PUd2GSuCjupyh7ZdQj3zgjJEZ/rUnmhwmkQP56L0
+         GcnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688623684; x=1691215684;
+        d=1e100.net; s=20221208; t=1688624911; x=1691216911;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7nLQR/B3UQbt+9uJMAZJaX6K0uXW7cxqOcVTi+nmsg=;
-        b=E29LtAb4FlHCPAU9P+ZoFjTtaVNf3qI408A9xQ380YFHCaaeyPyiqlxHGgjkB6yPw9
-         725LXSVg3f5m5Se6xXe7j5fx3WuibueKjSc+awOI3SKSR+AmmBRZ8JMmf6BD4J4Cb0XC
-         humPMucEJE7VAEgXDSXyKmRD6pWTDa2Ss+yaVaVFR3tS9yIzHWNcZEzlOBJj8ODsfLb9
-         Vp6XeiH2Xz5LQ2uOOj25av7EuWIGkmtVJbDCyJTsDGYYQxVD5Ej9fxYZI45AoZEj4zjz
-         TFwPnbkZBsCiu9lJqWOlX2jCkEuI4mT+0+DaGOoq12QHSAAhcfZoQAXnlpZtGfHDrRIQ
-         +Ldg==
-X-Gm-Message-State: ABy/qLY1CugsDXyM3XHo7gggtaOVpJqm1rLIrWrv+QzJiZ9hhzWD+MsQ
-        FGa+EGqHhbe6Cpi5ILqG+9gVKQ==
-X-Google-Smtp-Source: APBJJlFDMJFx306FrGg5ohS3BhEzDqr0yb6OoJZbHqbX+RnUydpRx11+NP5dFtOybSs3/zqB/5U5Cw==
-X-Received: by 2002:a17:906:212:b0:992:a31f:f584 with SMTP id 18-20020a170906021200b00992a31ff584mr670671ejd.31.1688623684073;
-        Wed, 05 Jul 2023 23:08:04 -0700 (PDT)
+        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
+        b=F0BHoK1lY2PbLEzQqWus5sdCKCuXL4NA4xlCLsVSPeglF04dNAPQGQU/V8N2j9cUDn
+         vcdfPEK4kiifuMBbI2WFW5din2mBbX59cRfvyzaCQbYs2Ob7cYv/G9t10qEMz27+kDkq
+         IwB744+NB/wNMt0hf529i080c4iDznEQM1uPYumdknXHlZGTFlNAMo61EYW4P9KGHnT9
+         scVSBW8s/uPOcjYnpmQsghFwbk7JOWov4TAR2gHqU43mwk5n8u/5hxbf6EDn4iA1hGAq
+         3ZVEtfqGV1DSNcFULdktka5PsrXBe76wQQS0fyUTCbbhc5qdwRUUlKJWs6uaoMyX19uD
+         af5g==
+X-Gm-Message-State: ABy/qLaZFXzBIvZTtPUT5Pl0bqsMgaVRW8/6eXXzQm7feQeVPqOF+5b1
+        dHwBbSUo/5vm5Eq4RX6q3wt1Rg==
+X-Google-Smtp-Source: APBJJlEu2RGF4uBuUPfkX4wlSxPa3Cu2L5C0YRWwOysyPz8/vFYVscoSMwhTBIDQpkpak+dxq034Sw==
+X-Received: by 2002:a17:906:10cf:b0:991:8328:50e3 with SMTP id v15-20020a17090610cf00b00991832850e3mr696668ejv.9.1688624910680;
+        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x11-20020a1709064a8b00b00992dcae806bsm368577eju.5.2023.07.05.23.08.02
+        by smtp.gmail.com with ESMTPSA id lf20-20020a170906ae5400b009920e9a3a73sm372590ejb.115.2023.07.05.23.28.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 23:08:03 -0700 (PDT)
-Message-ID: <7a08dcf4-e6d4-ef60-48d2-81275a7d7a6e@linaro.org>
-Date:   Thu, 6 Jul 2023 08:08:00 +0200
+        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
+Message-ID: <e871ad32-dfa4-067d-4f2c-207ffd42aafd@linaro.org>
+Date:   Thu, 6 Jul 2023 08:28:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
- compatible
+Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
+ RIFSC
 Content-Language: en-US
-To:     Valentin CARON <valentin.caron@foss.st.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org,
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
+        Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, alexandre.torgue@foss.st.com,
+        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
+        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
+        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
+        richardcochran@gmail.com
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230627123906.147029-1-valentin.caron@foss.st.com>
- <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
- <c232e3f1-b703-d8d2-7e2d-19ed3f5fc3ad@foss.st.com>
- <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
- <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
+In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,50 +94,142 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 05/07/2023 19:16, Valentin CARON wrote:
-> Hi, Krzysztof
+On 05/07/2023 19:27, Gatien Chevallier wrote:
+> Document RIFSC (RIF security controller). RIFSC is a firewall controller
+> composed of different kinds of hardware resources.
 > 
-> On 7/1/23 10:09, Krzysztof Kozlowski wrote:
->> On 28/06/2023 18:21, Valentin CARON wrote:
->>> Hi,
->>>
->>> On 6/27/23 15:39, Krzysztof Kozlowski wrote:
->>>> On 27/06/2023 14:39, Valentin Caron wrote:
->>>>> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
->>>>> Stop probing if this case happens, and print an error with involved
->>>>> compatible.
->>>>>
->>>> ...
->>>>
->>>>>    
->>>>>    static const struct of_device_id stm32_spi_of_match[] = {
->>>>> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
->>>>>    	struct device_node *np = pdev->dev.of_node;
->>>>>    	bool device_mode;
->>>>>    	int ret;
->>>>> +	const char *compatible =
->>>>> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
->>>> The goal was to replace it, so drop it.
->>> Is is still needed for dev_err, so I can't
->> Why do you need it for dev_err? Isn't it entirely redundant?
->>
->> Best regards,
->> Krzysztof
->>
-> Only to have a clearer error message. To let know to user that spi 
-> device is not available on this device.
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
-It's obvious from the probe error.
+A nit, subject: drop second/last, redundant "device tree bindings for".
+The "dt-bindings" prefix is already stating that these are bindings. 4
+words of your 6 word subject is meaningless...
 
-> Right now, there is only one compatible where spi device can't be 
-> enable. So I could use a static message. But this is not the best if a 
-> new compatible is added.
+> ---
+>  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> new file mode 100644
+> index 000000000000..68d585ed369c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
 
-It does not make sense. Compatible changes here nothing. It does not
-matter whether your driver supports one or two devices. Not mentioning
-that errors are printed with device ID.
+Filename like compatible, unless you know list of compatibles will
+grow... but then add them.
 
-Drop this code, it's entirely useless.
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/st,stm32-rifsc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STM32 Resource isolation framework security controller bindings
+
+Drop bindings
+
+> +
+> +maintainers:
+> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
+> +
+> +description: |
+> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
+> +  designed to enforce and manage isolation of STM32 hardware resources like
+> +  memory and peripherals.
+> +
+> +  The RIFSC (RIF security controller) is composed of three sets of registers,
+> +  each managing a specific set of hardware resources:
+> +    - RISC registers associated with RISUP logic (resource isolation device unit
+> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
+> +      any security domains (secure, privilege, compartment).
+> +    - RIMC registers: associated with RIMU logic (resource isolation master
+> +      unit), assign all non RIF-aware bus master to one security domain by
+> +      setting secure, privileged and compartment information on the system bus.
+> +      Alternatively, the RISUP logic controlling the device port access to a
+> +      peripheral can assign target bus attributes to this peripheral master port
+> +      (supported attribute: CID).
+> +    - RISC registers associated with RISAL logic (resource isolation device unit
+> +      for address space - Lite version), assign address space subregions to one
+> +      security domains (secure, privilege, compartment).
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stm32mp25-rifsc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  "#feature-domain-cells":
+> +    const: 1
+> +
+> +  ranges: true
+> +
+> +  feature-domain-controller: true
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    description: Peripherals
+> +    type: object
+> +    properties:
+> +      feature-domains:
+> +        minItems: 1
+> +        maxItems: 2
+> +        description:
+> +          The first argument must always be a phandle that references to the
+> +          firewall controller of the peripheral. The second can contain the
+> +          platform specific firewall ID of the peripheral.
+
+It does not make much sense to me to have hierarchy parent-child and via
+phandle at the same time. You express the similar relationship twice.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - feature-domain-controller
+> +  - "#feature-domain-cells"
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // In this example, the usart2 device refers to rifsc as its domain
+> +    // controller.
+> +    // Access rights are verified before creating devices.
+> +
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    rifsc: rifsc-bus@42080000 {
+> +        compatible = "st,stm32mp25-rifsc";
+> +        reg = <0x42080000 0x1000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges;
+> +        feature-domain-controller;
+> +        #feature-domain-cells = <1>;
+> +
+> +        usart2: serial@400e0000 {
+> +            compatible = "st,stm32h7-uart";
+> +            reg = <0x400e0000 0x400>;
+> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&ck_flexgen_08>;
+> +            feature-domains = <&rifsc 32>;
+> +            status = "disabled";
+
+No status in the examples.
+
+> +        };
+> +    };
 
 Best regards,
 Krzysztof
