@@ -2,49 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3234B749B36
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 13:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99560749F36
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jul 2023 16:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjGFL41 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jul 2023 07:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S233231AbjGFOl3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jul 2023 10:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjGFL40 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jul 2023 07:56:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2610F5
-        for <linux-spi@vger.kernel.org>; Thu,  6 Jul 2023 04:56:25 -0700 (PDT)
+        with ESMTP id S233230AbjGFOl2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jul 2023 10:41:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCED173F;
+        Thu,  6 Jul 2023 07:41:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3026061912
-        for <linux-spi@vger.kernel.org>; Thu,  6 Jul 2023 11:56:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A721C433CA;
-        Thu,  6 Jul 2023 11:56:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFC0361984;
+        Thu,  6 Jul 2023 14:41:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF70C433C8;
+        Thu,  6 Jul 2023 14:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688644584;
-        bh=GZ++xj09HrHKwgzVZXSKGF3f9wv3fDCYGbKJhhO8Oic=;
-        h=Subject:From:Date:To:From;
-        b=T2YYEES1nxaT1iY+NjzlmoMSr8Io9bmmAJZm2tNnTOKEszhuxcU6yljB5KIxUJKxj
-         UsrmRMlM7wRz77to8h90+Bg1+lKgpBaukVoPffyJcmBWZ8Mjgy9daiznGnMFRDRFNg
-         uOqVA/cgEVSMMkNZU18ox68lrXB2SJHd+I6smPQbSGog0/fvUXezojlSaslOOiGJyi
-         hwDkp1u8TTecoZZRH5TdV+HCobb2R6L4I3PTvwtCCXzp4fO+WJ9o33SoR0ghbGiypL
-         pdS868fGyuB66L7g2Jy2WeNn6FOX5fDB24TtKx7NoAdc98HklyYN/6UaXrB8BkNCWB
-         BGKJeRJ9AhOKw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 851F9E5381B;
-        Thu,  6 Jul 2023 11:56:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168864458454.27639.18187079012107030367.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 06 Jul 2023 11:56:24 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1688654487;
+        bh=SSj2jL7JgcDOVRuXRYICBKor3PuPJrHSGUslhat/an8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MZASUC7xBWQpjVmnNV9hb7rEn3O15lzfmVov7OGMPITHEOa/1yfZjFw6LvA3Uz2oC
+         gd1c+YzHxzGD4DrJnUsXqb/P3AZvxdmVHeSjGggNmiuVlhv2YCqmgoLDHC67gzU7Zu
+         3l+KE3/srcEYvVR96khUTzwml1oxbO+C08Qzz8hwj5qQ4d8J9RV1WjDmyYno7UgawE
+         PqfekW8FDuRO0RWmsLS+0IlLJ32GNw8BG2eLplrRw0l6RrnJREUoEI5PcWwyvKEm4k
+         KiwLUrLbovCsabjuctkacYiIMR4exatISxBSCC3/5UuFMtts953EmG+gFpCC6bNPZr
+         o4MXKEmWhu00g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.5-merge-window
+Date:   Thu, 06 Jul 2023 15:41:15 +0100
+Message-Id: <20230706144126.DFF70C433C8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,13 +49,40 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: amlogic-spifc-a1: fixes and improvements for amlogic-spifc-a1 (2023-07-06T11:03:29)
-  Superseding: [v1] spi: amlogic-spifc-a1: fixes and improvements for amlogic-spifc-a1 (2023-07-03T09:45:16):
-    [v1,1/2] spi: amlogic-spifc-a1: implement adjust_op_size()
-    [v1,2/2] spi: amlogic-spifc-a1: add support for max_speed_hz
+The following changes since commit e884a133340a470070b2c59833c9ff87aa6517ba:
 
+  spi: dt-bindings: atmel,at91rm9200-spi: fix broken sam9x7 compatible (2023-06-24 12:25:34 +0100)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-merge-window
+
+for you to fetch changes up to 879a879c216a41f5403d8d3dbc204a48501912bf:
+
+  spi: bcm{63xx,bca}-hsspi: update my email address (2023-07-04 13:54:19 +0100)
+
+----------------------------------------------------------------
+spi: Fixes for v6.5
+
+A few mostly minor fixes that came in during the merge window, plus one
+administrative update for Jonas' e-mail address.  The spi-geni-qcom fix
+is more major than the others, fixing the newly added DMA support for
+large reads which trigger DMA.
+
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+      spi: spi-geni-qcom: enable SPI_CONTROLLER_MUST_TX for GPI DMA mode
+
+Geert Uytterhoeven (1):
+      spi: rzv2m-csi: Fix SoC product name
+
+Jonas Gorski (2):
+      spi: bcm-qspi: return error if neither hif_mspi nor mspi is available
+      spi: bcm{63xx,bca}-hsspi: update my email address
+
+ drivers/spi/Kconfig             |  2 +-
+ drivers/spi/spi-bcm-qspi.c      | 10 +++-------
+ drivers/spi/spi-bcm63xx-hsspi.c |  2 +-
+ drivers/spi/spi-bcmbca-hsspi.c  |  2 +-
+ drivers/spi/spi-geni-qcom.c     |  6 ++++++
+ 5 files changed, 12 insertions(+), 10 deletions(-)
