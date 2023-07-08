@@ -2,75 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7854E74BEC6
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Jul 2023 20:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED0474BF06
+	for <lists+linux-spi@lfdr.de>; Sat,  8 Jul 2023 21:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjGHSnR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Jul 2023 14:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S229699AbjGHTxQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 8 Jul 2023 15:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjGHSnR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Jul 2023 14:43:17 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4351FE1
-        for <linux-spi@vger.kernel.org>; Sat,  8 Jul 2023 11:43:16 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-78360f61ba0so130078039f.1
-        for <linux-spi@vger.kernel.org>; Sat, 08 Jul 2023 11:43:16 -0700 (PDT)
+        with ESMTP id S229454AbjGHTxQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Jul 2023 15:53:16 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393D1A8;
+        Sat,  8 Jul 2023 12:53:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-991c786369cso376613666b.1;
+        Sat, 08 Jul 2023 12:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688841795; x=1691433795;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RapVQawOljZ3WkdRWpTvGIEHTklNcouz9V8HkQ49kOY=;
-        b=S/biLuPzyjcK2rAd76KkOoRpnVdxP7HxFDzQ/O89UHM4CvBkWrc2FIa3BlBKIkSzdz
-         abI/yjBTaaNI516ASilB6qVznXmso+JXxyF7hmQqcqND9kLInNC6/uc+FJRKY8bXPm75
-         5Gsuytd40vrNbGtBTwNzA/swckN5ahFtaaHplMa47aysqgo/qVWBeK7jJJ8tUZQ89eDS
-         Vfianl6a78SYCz+oT2D+mnz6wq1VlVCD92/ChHmCcIV3OeYLvGmCmkfSXiCvwNWaXQSa
-         9Iy2seRSM/MwMd3cNZ4+OLt7hQQuSw/QHiSEaHqXBUpVQ+M7f+a2v9ajqn6HiKbgyjeU
-         q9Cw==
+        d=gmail.com; s=20221208; t=1688845993; x=1691437993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iVW/bBC+uKDhPQ3FjSGENdiWFw46dm/KEy0pvQHTDT4=;
+        b=bujg8cJ5hi3Moj0Y55nBBhHxVligDoOqGyu7ELw1EgLs08nGc+VK8AY23C2Tb58uY8
+         gMKcgxmv68em5r6JDmU32MSvoSv8llNmHQlLDjmZSeaRSxuy5x9yOeeZghPpjrThlzp4
+         cks8kC6AfWaw/gI5DEQNXi7MfKCqIzNOtUAWPHl+7mtTq+Q2f+JariKXCbpfABn2EN6J
+         b/xlrTGXhMlnJDNskZGMCrAv3JbuFSdSy/tqGoB/KUexfWXibfABfq5a+WQot7gAzwTo
+         yOHv6gQbDo5AnYztFUQ7GjzS4W6ZDUmcD9Z8hRWDQEbwUdUCYtCEwM0kuji5MEJ0m7/O
+         +1Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688841795; x=1691433795;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RapVQawOljZ3WkdRWpTvGIEHTklNcouz9V8HkQ49kOY=;
-        b=OTp1eazmv16T6n+kuHC9wlr6T3Pa5vyHa8vrT4Z3FYXxejS+nXFtOpb1G/EzBq4dTn
-         ig9Xhdx+vv7SpCYL/GyjrbiEkfzghjtdMKOGpYcAJqt6Ybj4tc1tRWkRkCfFTwD0SN55
-         Ho/KNAy3GIn6x65Qu5MNqIWbRYKmK7kXKsbW6a7lTwKNqiCyAga+GPo3XtMOCGrfPXBX
-         EZoLjokxgGlF98BYc98PDJUf97jsnx7EZiNbbIv7oHHwg41fzoGlSMQqq8JPqKipuChS
-         hskhMdm9NPcdyVgaANY6VtRVddjEYmrvPUSNSt4BLNKANp54qmT5+Qe0ChijrM4Ds7zB
-         DbrA==
-X-Gm-Message-State: ABy/qLZ6EKrmaUXPJtWbyLaI9eIYvdriIrEdHY0/ItF+xxQpyHCPEy7m
-        2xUi+Hz8xyAV8SC85/6Z95ltANF1KyWCrdTyy0k=
-X-Google-Smtp-Source: APBJJlE3F0E/uwQcELY8o7infuR/i4EFeOawN69VqImaJMFRJiEKGVoxRKiEFJlN10yJr1kGDRvZWh8HrKAb/2Ko24Y=
-X-Received: by 2002:a5e:c816:0:b0:783:39e9:e05c with SMTP id
- y22-20020a5ec816000000b0078339e9e05cmr7700786iol.19.1688841795714; Sat, 08
- Jul 2023 11:43:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688845993; x=1691437993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iVW/bBC+uKDhPQ3FjSGENdiWFw46dm/KEy0pvQHTDT4=;
+        b=QJHpjPqKSzHIZCEAljh9LyPdwsyLWZn4dvmM2nowJLbsBtn69JkaMRg7FL6hwc/+ml
+         IlF6A/Ddv8z7snW9n+e2XZfHN7JH2OG/4/n5ldqT7nPmYrkVbmuFiU0fKhJXxTpchDJ/
+         K/aA/Df1zuSAMM4yLG9gIrgDgTIz471674A72glB1y0L5U2uKLe5m1gTcymn9YlNBnAq
+         fzYYQiVjMhXFZ/WsJt9O54m3OGF/2zPw2GNBPDhFS9Cog7PbAs7wDSpKNLVHh1RzXxdM
+         LmxZ1nNSMJFOvbjxrban3r9+tmJCrAKgymEx5IvY4RZm3UQxmEgc2Axv3CR/g4UAXam6
+         dVPQ==
+X-Gm-Message-State: ABy/qLYoVabv/tGGOC3mpwv8cPaFQEVRcIU9tTHffdrWMyz3xfYdWvSx
+        ybizfgRfEvxxS/+6atYdu/k=
+X-Google-Smtp-Source: APBJJlElmJCz4iIpNX1e0yEbK+gCOYsdjagPLAiYMrYuyKy+teIi8vKCamVr85oKctgVnIoUme6Wsw==
+X-Received: by 2002:a17:906:ecae:b0:978:b94e:83dd with SMTP id qh14-20020a170906ecae00b00978b94e83ddmr5995155ejb.75.1688845992958;
+        Sat, 08 Jul 2023 12:53:12 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id hk8-20020a170906c9c800b009821ce1ea33sm3880966ejb.7.2023.07.08.12.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 12:53:12 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] MAINTAINERS: add myself for spi-bcm63xx
+Date:   Sat,  8 Jul 2023 21:53:08 +0200
+Message-Id: <20230708195309.72767-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6638:2656:b0:42b:55b5:aa37 with HTTP; Sat, 8 Jul 2023
- 11:43:15 -0700 (PDT)
-Reply-To: Dr.catherine_chan@hotmail.com
-From:   catherine chan <kassymjomarttokayev15@gmail.com>
-Date:   Sat, 8 Jul 2023 20:43:15 +0200
-Message-ID: <CA+DX0WNCQJTOrOKDRMbcA6+egm3SZjSyAPGD1xswn1gTwWOcOg@mail.gmail.com>
-Subject: Re:Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
--- 
-Hello! How are you? Please forgive me if my application is not
-acceptable by your kind person, I saw your email and I want to talk to
-you directly by mail. I would appreciate it if you could send me an
-email when you receive it.
+I noticed the driver is unclaimed. Since I was the last one doing
+substantial work on it, add me as the maintainer.
 
-Waiting for your prompt response
-Greetings,
+As it is only found in legacy products, mark it as "Odd Fixes"
+instead of "Maintained".
+
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+v1 -> v2:
+ * fix the driver's file name
+ * include the right people
+
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bc201627c2e0..2594a0643e0a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4169,6 +4169,13 @@ F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+ F:	drivers/spi/spi-bcm63xx-hsspi.c
+ F:	drivers/spi/spi-bcmbca-hsspi.c
+ 
++BROADCOM BCM6348/BCM6358 SPI controller DRIVER
++M:	Jonas Gorski <jonas.gorski@gmail.com>
++L:	linux-spi@vger.kernel.org
++S:	Odd Fixes
++F:	Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
++F:	drivers/spi/spi-bcm63xx.c
++
+ BROADCOM ETHERNET PHY DRIVERS
+ M:	Florian Fainelli <f.fainelli@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+-- 
+2.34.1
+
