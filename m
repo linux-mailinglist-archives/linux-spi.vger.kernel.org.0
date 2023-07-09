@@ -2,103 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D5774BF08
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Jul 2023 21:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A249D74C4F0
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Jul 2023 17:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjGHTxS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Jul 2023 15:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S230244AbjGIPNJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 9 Jul 2023 11:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGHTxS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Jul 2023 15:53:18 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15101A8;
-        Sat,  8 Jul 2023 12:53:16 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b70bfc8db5so34606431fa.2;
-        Sat, 08 Jul 2023 12:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688845995; x=1691437995;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kd/OTL9JJ4g0ctWvp+yQjq+k1Dv81Da3Ont6OS8gpmM=;
-        b=Pr0I5Nrju8Xex+X8hwKdCSd1RNBP95MOQ+KjwApe/SsMpvWgo5HD2EUl/7zcBUEF5M
-         TjLxObozvAopxpEu4ANPwSPeBp+DnAnuysFqGCgKT0HeUzBq+B5B3vIvwi1tFI905xhr
-         kgrQ2UMZuBq3wYlOwLVdCIxi4KWgFDMp9lqQBaCHjXIfOEtIzoUiMCl0Qled4Uq9v9b1
-         dsXBiyCdopl9Lc+Vp9RmHfj4958i5VfAkyEFzAVQAEfMJpg76M+ffPSwhcHM0punUr27
-         8g/X3iOnp4jjUJ8BKGZnU488eVaSVp2vjLEM4qIq+w7oGuvkMmFf5BbIrdY1OM+XSJxq
-         yoPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688845995; x=1691437995;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kd/OTL9JJ4g0ctWvp+yQjq+k1Dv81Da3Ont6OS8gpmM=;
-        b=NOajp7W85HoQSjUd4+qZhfO70qoEewaRFs2nwltf9BW7iTmomE4pOOxdNRNAoonHQH
-         ywId5CEa6+mXfkJuxTuUxwhjwupZUetUUu53W2uLvozWqAfBimoosQSvD+K3H9A/6XAw
-         41ZhGQlOyN+k0qeDJGbkp9x+dpMnh8HMSaMmQVrs9a6SwwsUGwtepoq/S6CYmLJWLBTK
-         cYKNalFDwbhAYzGSzm4nvncTK/yr8isDusxXf5Wkx/plGjwmWeA1ATSpewGdws1astNi
-         5AP6nHw/afjNyOcEZMuOtP1jY4J44R4QRx958Y9sjInlgMrbwqM0tXiVuZQhmJWnL8xd
-         28Ew==
-X-Gm-Message-State: ABy/qLbq5abA1TKY7rfKwQMm8TA4xwb+fHB8G2V6XB3ItfTD4F2uLZeS
-        +22XM1iohN3pnNDGqWU51Ro=
-X-Google-Smtp-Source: APBJJlGSB0ZQoCtZDNstqgsZlpSEmiwE24sW1RNE6yn3QrQl15Es+pAVRNsAVBA0EF7vnnSCwfMA1Q==
-X-Received: by 2002:a2e:b04a:0:b0:2b6:d0fc:ee18 with SMTP id d10-20020a2eb04a000000b002b6d0fcee18mr5650493ljl.19.1688845994571;
-        Sat, 08 Jul 2023 12:53:14 -0700 (PDT)
-Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
-        by smtp.gmail.com with ESMTPSA id md8-20020a170906ae8800b0098dfec235ccsm3846747ejb.47.2023.07.08.12.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 12:53:14 -0700 (PDT)
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-To:     William Zhang <william.zhang@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] mailmap: add entry for Jonas Gorski
-Date:   Sat,  8 Jul 2023 21:53:09 +0200
-Message-Id: <20230708195309.72767-2-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230708195309.72767-1-jonas.gorski@gmail.com>
-References: <20230708195309.72767-1-jonas.gorski@gmail.com>
+        with ESMTP id S230115AbjGIPNH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Jul 2023 11:13:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ACD129;
+        Sun,  9 Jul 2023 08:13:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02B6F60C0F;
+        Sun,  9 Jul 2023 15:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7125DC433CD;
+        Sun,  9 Jul 2023 15:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688915585;
+        bh=tvc5t0jTo/2AsKb4nX3c9HZPyNl0VeVsb3Bm30zrepA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OUcnfjT7O+0FbBYdBcUzgqzVrbbpEEW65IN2XQjXywJix29n8MQoEZ9+m9tAJOBRJ
+         6UBUhXMmpWyRBiMgQiI3q94ooRsAy5L2C158WKExic04zSjuv/kcCC9tL5bV7lxtnK
+         DsyOFFVNNJ33dO7cKcg/bPkopcsl54bITfv4DypdXlIw3yziGDgjpy4Vh8YcKJPZmv
+         TjEnChntwC/cdJ8jFJlVys2GdhfGEagHySk6ZR/DFcB1mtpR4nfamgBuAw/fuDv48P
+         LdNnxpQPurS5ZXANvBdpWsUsTgmtHV/1YIFiX3zBTFepV4wJ5C6IYAcVxNb7blFwjE
+         rBz2esTnHsTww==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, andi.shyti@kernel.org,
+        broonie@kernel.org, krzysztof.kozlowski@linaro.org,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.4 04/26] spi: s3c64xx: change polling mode to optional
+Date:   Sun,  9 Jul 2023 11:12:33 -0400
+Message-Id: <20230709151255.512931-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
+References: <20230709151255.512931-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.4.2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The openwrt.org email address is long defunct, but still pop ups from
-time to time when asking get_maintainer.pl. So add an entry to my
-currently used address.
+From: Jaewon Kim <jaewon02.kim@samsung.com>
 
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+[ Upstream commit d1a7718ee8dbcc488d3243d52e19c755123e0024 ]
+
+Previously, Polling mode was supported as quirk for SOC without DMA.
+To provide more flexible support for polling mode, it changed to polling
+mode when the 'dmas' property is not present in the devicetree, rather than
+using a quirk.
+
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org
+Link: https://lore.kernel.org/r/20230502062813.112434-2-jaewon02.kim@samsung.com
+Signed-off-by: Mark Brown <broonie@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v1 -> v2:
- * include the right people
+ drivers/spi/spi-s3c64xx.c                 | 4 ++--
+ include/linux/platform_data/spi-s3c64xx.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/.mailmap b/.mailmap
-index bf076bbc36b1..e1f8c928a5c2 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -237,6 +237,7 @@ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
- John Stultz <johnstul@us.ibm.com>
- <jon.toppins+linux@gmail.com> <jtoppins@cumulusnetworks.com>
- <jon.toppins+linux@gmail.com> <jtoppins@redhat.com>
-+Jonas Gorski <jonas.gorski@gmail.com> <jogo@openwrt.org>
- Jordan Crouse <jordan@cosmicpenguin.net> <jcrouse@codeaurora.org>
- <josh@joshtriplett.org> <josh@freedesktop.org>
- <josh@joshtriplett.org> <josh@kernel.org>
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 7ac17f0d18a95..5f59d6f8c8d8f 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -19,7 +19,6 @@
+ #include <linux/platform_data/spi-s3c64xx.h>
+ 
+ #define MAX_SPI_PORTS		12
+-#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
+ #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
+ #define AUTOSUSPEND_TIMEOUT	2000
+ 
+@@ -116,7 +115,7 @@
+ #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+ 
+ #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+-#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
++#define is_polling(x)	(x->cntrlr_info->polling)
+ 
+ #define RXBUSY    (1<<2)
+ #define TXBUSY    (1<<3)
+@@ -1068,6 +1067,7 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+ 	}
+ 
+ 	sci->no_cs = of_property_read_bool(dev->of_node, "no-cs-readback");
++	sci->polling = !of_property_present(dev->of_node, "dmas");
+ 
+ 	return sci;
+ }
+diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+index 3101152ce449f..1d6e6c424fc69 100644
+--- a/include/linux/platform_data/spi-s3c64xx.h
++++ b/include/linux/platform_data/spi-s3c64xx.h
+@@ -36,6 +36,7 @@ struct s3c64xx_spi_info {
+ 	int src_clk_nr;
+ 	int num_cs;
+ 	bool no_cs;
++	bool polling;
+ 	int (*cfg_gpio)(void);
+ };
+ 
 -- 
-2.34.1
+2.39.2
 
