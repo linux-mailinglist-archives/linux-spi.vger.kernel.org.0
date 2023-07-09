@@ -2,43 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA8274C4F7
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Jul 2023 17:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A02574C512
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Jul 2023 17:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGIPNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 9 Jul 2023 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S230313AbjGIPN6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 9 Jul 2023 11:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjGIPNK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Jul 2023 11:13:10 -0400
+        with ESMTP id S230115AbjGIPNq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Jul 2023 11:13:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A294128;
-        Sun,  9 Jul 2023 08:13:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A07F1709;
+        Sun,  9 Jul 2023 08:13:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C60A860C01;
-        Sun,  9 Jul 2023 15:13:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDF9C433BB;
-        Sun,  9 Jul 2023 15:13:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3DD060C1A;
+        Sun,  9 Jul 2023 15:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56163C433CD;
+        Sun,  9 Jul 2023 15:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915588;
-        bh=BexxG2lZ5WAp9/2OZ/6koNrHIJR87KMDErz2xXYCLm8=;
+        s=k20201202; t=1688915600;
+        bh=y6bziz/MvdQ+aDDDtJgCjPL8YGD7r7BVYP/dHYkzrrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hha38mNhKcrkJ5wfBJX5ROu55rO/lK8HWXajmfXU22KQW60KntqGOUi/FB8lwd98e
-         NP4zX7f2x4AwYDrQUHjNOEMJJ9T5pT+i7zhC/1gnWLpLMRFItJ/rvVDTMVOTu8aJDz
-         le915kjYx6Plxwuf67E1IQIdKUawCgPw1wdqGQccYUJVYK0a/gMby3lVE8C1vwjFhe
-         FF2qULNbIOA3FnW12bgAGTrB2yWpVnqpgdODBM6SHCwCAejPdyjzTLI/3nV23Xm90Y
-         dl8axvjQRBjZWoIDtdMZTLc3++WT/uvrXKGfFAWhK8lf1kqq1LP5Sy3a0xorJhhKnC
-         QFlukbgY5fcaQ==
+        b=D1ZGavs5GB8A60bFSMtqW1Ie1E1mhZ5H7Q1gBLxknh+F3VjVgbqanzRsGM2K132ZJ
+         EpbZMCSPFsniYYPVqD0lOkJIgy/x4O155H59GCgQowNC/wo5jYZu+IK0nB5lPaB2R1
+         Bm3FxrYJ1wFhz7kBtXUkX05VGLCtLXQP85eHyaHFtYjkDzBRzs7KvqFRrTFNt4O40R
+         LXxS2lM5VncTBUEvbZNPAR9Mfe2Dh4S1E7GJO5laHmZn1hKUZpGWyVyQnULs7C8jHJ
+         WrmkjlnLR6F+jTYLHwH347pYzRHe5YGOCwEZCQezeY3pWI9u9MXsl/GNhO1rK9/0nD
+         9ERcTq3GD26qQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brad Larson <blarson@amd.com>, Sasha Levin <sashal@kernel.org>,
-        broonie@kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 06/26] spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
-Date:   Sun,  9 Jul 2023 11:12:35 -0400
-Message-Id: <20230709151255.512931-6-sashal@kernel.org>
+Cc:     Abe Kohandel <abe.kohandel@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, fancer.lancer@gmail.com,
+        linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 14/26] spi: dw: Add compatible for Intel Mount Evans SoC
+Date:   Sun,  9 Jul 2023 11:12:43 -0400
+Message-Id: <20230709151255.512931-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -57,89 +60,79 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Brad Larson <blarson@amd.com>
+From: Abe Kohandel <abe.kohandel@intel.com>
 
-[ Upstream commit f5c2f9f9584353bc816d76a65c97dd03dc61678c ]
+[ Upstream commit 0760d5d0e9f0c0e2200a0323a61d1995bb745dee ]
 
-The AMD Pensando Elba SoC has the Cadence QSPI controller integrated.
+The Intel Mount Evans SoC's Integrated Management Complex uses the SPI
+controller for access to a NOR SPI FLASH. However, the SoC doesn't
+provide a mechanism to override the native chip select signal.
 
-The quirk CQSPI_NEEDS_APB_AHB_HAZARD_WAR is added and if enabled
-a dummy readback from the controller is performed to ensure
-synchronization.
+This driver doesn't use DMA for memory operations when a chip select
+override is not provided due to the native chip select timing behavior.
+As a result no DMA configuration is done for the controller and this
+configuration is not tested.
 
-Signed-off-by: Brad Larson <blarson@amd.com
-Link: https://lore.kernel.org/r/20230515181606.65953-8-blarson@amd.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+The controller also has an errata where a full TX FIFO can result in
+data corruption. The suggested workaround is to never completely fill
+the FIFO. The TX FIFO has a size of 32 so the fifo_len is set to 31.
+
+Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20230606145402.474866-2-abe.kohandel@intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-cadence-quadspi.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/spi/spi-dw-mmio.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 32449bef4415a..abf10f92415dc 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -40,6 +40,7 @@
- #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
- #define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
- #define CQSPI_SLOW_SRAM		BIT(4)
-+#define CQSPI_NEEDS_APB_AHB_HAZARD_WAR	BIT(5)
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index 15f5e9cb54ad4..5a38cb09a650d 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -236,6 +236,31 @@ static int dw_spi_intel_init(struct platform_device *pdev,
+ 	return 0;
+ }
  
- /* Capabilities */
- #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -90,6 +91,7 @@ struct cqspi_st {
- 	u32			pd_dev_id;
- 	bool			wr_completion;
- 	bool			slow_sram;
-+	bool			apb_ahb_hazard;
- };
- 
- struct cqspi_driver_platdata {
-@@ -1027,6 +1029,13 @@ static int cqspi_indirect_write_execute(struct cqspi_flash_pdata *f_pdata,
- 	if (cqspi->wr_delay)
- 		ndelay(cqspi->wr_delay);
- 
++/*
++ * The Intel Mount Evans SoC's Integrated Management Complex uses the
++ * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
++ * provide a mechanism to override the native chip select signal.
++ *
++ * This driver doesn't use DMA for memory operations when a chip select
++ * override is not provided due to the native chip select timing behavior.
++ * As a result no DMA configuration is done for the controller and this
++ * configuration is not tested.
++ */
++static int dw_spi_mountevans_imc_init(struct platform_device *pdev,
++				      struct dw_spi_mmio *dwsmmio)
++{
 +	/*
-+	 * If a hazard exists between the APB and AHB interfaces, perform a
-+	 * dummy readback from the controller to ensure synchronization.
++	 * The Intel Mount Evans SoC's Integrated Management Complex DW
++	 * apb_ssi_v4.02a controller has an errata where a full TX FIFO can
++	 * result in data corruption. The suggested workaround is to never
++	 * completely fill the FIFO. The TX FIFO has a size of 32 so the
++	 * fifo_len is set to 31.
 +	 */
-+	if (cqspi->apb_ahb_hazard)
-+		readl(reg_base + CQSPI_REG_INDIRECTWR);
++	dwsmmio->dws.fifo_len = 31;
 +
- 	while (remaining > 0) {
- 		size_t write_words, mod_bytes;
- 
-@@ -1754,6 +1763,8 @@ static int cqspi_probe(struct platform_device *pdev)
- 			cqspi->wr_completion = false;
- 		if (ddata->quirks & CQSPI_SLOW_SRAM)
- 			cqspi->slow_sram = true;
-+		if (ddata->quirks & CQSPI_NEEDS_APB_AHB_HAZARD_WAR)
-+			cqspi->apb_ahb_hazard = true;
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
- 					    "xlnx,versal-ospi-1.0")) {
-@@ -1888,6 +1899,10 @@ static const struct cqspi_driver_platdata jh7110_qspi = {
- 	.quirks = CQSPI_DISABLE_DAC_MODE,
- };
- 
-+static const struct cqspi_driver_platdata pensando_cdns_qspi = {
-+	.quirks = CQSPI_NEEDS_APB_AHB_HAZARD_WAR | CQSPI_DISABLE_DAC_MODE,
-+};
++	return 0;
++}
 +
- static const struct of_device_id cqspi_dt_ids[] = {
- 	{
- 		.compatible = "cdns,qspi-nor",
-@@ -1917,6 +1932,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
- 		.compatible = "starfive,jh7110-qspi",
- 		.data = &jh7110_qspi,
- 	},
+ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
+ 				   struct dw_spi_mmio *dwsmmio)
+ {
+@@ -405,6 +430,10 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
+ 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_hssi_init},
+ 	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
+ 	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
 +	{
-+		.compatible = "amd,pensando-elba-qspi",
-+		.data = &pensando_cdns_qspi,
++		.compatible = "intel,mountevans-imc-ssi",
++		.data = dw_spi_mountevans_imc_init,
 +	},
- 	{ /* end of table */ }
- };
- 
+ 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+ 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
+ 	{ .compatible = "amd,pensando-elba-spi", .data = dw_spi_elba_init},
 -- 
 2.39.2
 
