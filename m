@@ -2,46 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A249D74C4F0
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Jul 2023 17:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA8274C4F7
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Jul 2023 17:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjGIPNJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 9 Jul 2023 11:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S230289AbjGIPNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 9 Jul 2023 11:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjGIPNH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Jul 2023 11:13:07 -0400
+        with ESMTP id S230313AbjGIPNK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Jul 2023 11:13:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ACD129;
-        Sun,  9 Jul 2023 08:13:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A294128;
+        Sun,  9 Jul 2023 08:13:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02B6F60C0F;
-        Sun,  9 Jul 2023 15:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7125DC433CD;
-        Sun,  9 Jul 2023 15:13:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C60A860C01;
+        Sun,  9 Jul 2023 15:13:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDF9C433BB;
+        Sun,  9 Jul 2023 15:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915585;
-        bh=tvc5t0jTo/2AsKb4nX3c9HZPyNl0VeVsb3Bm30zrepA=;
+        s=k20201202; t=1688915588;
+        bh=BexxG2lZ5WAp9/2OZ/6koNrHIJR87KMDErz2xXYCLm8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OUcnfjT7O+0FbBYdBcUzgqzVrbbpEEW65IN2XQjXywJix29n8MQoEZ9+m9tAJOBRJ
-         6UBUhXMmpWyRBiMgQiI3q94ooRsAy5L2C158WKExic04zSjuv/kcCC9tL5bV7lxtnK
-         DsyOFFVNNJ33dO7cKcg/bPkopcsl54bITfv4DypdXlIw3yziGDgjpy4Vh8YcKJPZmv
-         TjEnChntwC/cdJ8jFJlVys2GdhfGEagHySk6ZR/DFcB1mtpR4nfamgBuAw/fuDv48P
-         LdNnxpQPurS5ZXANvBdpWsUsTgmtHV/1YIFiX3zBTFepV4wJ5C6IYAcVxNb7blFwjE
-         rBz2esTnHsTww==
+        b=Hha38mNhKcrkJ5wfBJX5ROu55rO/lK8HWXajmfXU22KQW60KntqGOUi/FB8lwd98e
+         NP4zX7f2x4AwYDrQUHjNOEMJJ9T5pT+i7zhC/1gnWLpLMRFItJ/rvVDTMVOTu8aJDz
+         le915kjYx6Plxwuf67E1IQIdKUawCgPw1wdqGQccYUJVYK0a/gMby3lVE8C1vwjFhe
+         FF2qULNbIOA3FnW12bgAGTrB2yWpVnqpgdODBM6SHCwCAejPdyjzTLI/3nV23Xm90Y
+         dl8axvjQRBjZWoIDtdMZTLc3++WT/uvrXKGfFAWhK8lf1kqq1LP5Sy3a0xorJhhKnC
+         QFlukbgY5fcaQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Sasha Levin <sashal@kernel.org>, andi.shyti@kernel.org,
-        broonie@kernel.org, krzysztof.kozlowski@linaro.org,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.4 04/26] spi: s3c64xx: change polling mode to optional
-Date:   Sun,  9 Jul 2023 11:12:33 -0400
-Message-Id: <20230709151255.512931-4-sashal@kernel.org>
+Cc:     Brad Larson <blarson@amd.com>, Sasha Levin <sashal@kernel.org>,
+        broonie@kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 06/26] spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
+Date:   Sun,  9 Jul 2023 11:12:35 -0400
+Message-Id: <20230709151255.512931-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -60,64 +57,87 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Jaewon Kim <jaewon02.kim@samsung.com>
+From: Brad Larson <blarson@amd.com>
 
-[ Upstream commit d1a7718ee8dbcc488d3243d52e19c755123e0024 ]
+[ Upstream commit f5c2f9f9584353bc816d76a65c97dd03dc61678c ]
 
-Previously, Polling mode was supported as quirk for SOC without DMA.
-To provide more flexible support for polling mode, it changed to polling
-mode when the 'dmas' property is not present in the devicetree, rather than
-using a quirk.
+The AMD Pensando Elba SoC has the Cadence QSPI controller integrated.
 
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org
-Link: https://lore.kernel.org/r/20230502062813.112434-2-jaewon02.kim@samsung.com
+The quirk CQSPI_NEEDS_APB_AHB_HAZARD_WAR is added and if enabled
+a dummy readback from the controller is performed to ensure
+synchronization.
+
+Signed-off-by: Brad Larson <blarson@amd.com
+Link: https://lore.kernel.org/r/20230515181606.65953-8-blarson@amd.com
 Signed-off-by: Mark Brown <broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-s3c64xx.c                 | 4 ++--
- include/linux/platform_data/spi-s3c64xx.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 7ac17f0d18a95..5f59d6f8c8d8f 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -19,7 +19,6 @@
- #include <linux/platform_data/spi-s3c64xx.h>
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 32449bef4415a..abf10f92415dc 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -40,6 +40,7 @@
+ #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
+ #define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
+ #define CQSPI_SLOW_SRAM		BIT(4)
++#define CQSPI_NEEDS_APB_AHB_HAZARD_WAR	BIT(5)
  
- #define MAX_SPI_PORTS		12
--#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
- #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
- #define AUTOSUSPEND_TIMEOUT	2000
+ /* Capabilities */
+ #define CQSPI_SUPPORTS_OCTAL		BIT(0)
+@@ -90,6 +91,7 @@ struct cqspi_st {
+ 	u32			pd_dev_id;
+ 	bool			wr_completion;
+ 	bool			slow_sram;
++	bool			apb_ahb_hazard;
+ };
  
-@@ -116,7 +115,7 @@
- #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+ struct cqspi_driver_platdata {
+@@ -1027,6 +1029,13 @@ static int cqspi_indirect_write_execute(struct cqspi_flash_pdata *f_pdata,
+ 	if (cqspi->wr_delay)
+ 		ndelay(cqspi->wr_delay);
  
- #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
--#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
-+#define is_polling(x)	(x->cntrlr_info->polling)
++	/*
++	 * If a hazard exists between the APB and AHB interfaces, perform a
++	 * dummy readback from the controller to ensure synchronization.
++	 */
++	if (cqspi->apb_ahb_hazard)
++		readl(reg_base + CQSPI_REG_INDIRECTWR);
++
+ 	while (remaining > 0) {
+ 		size_t write_words, mod_bytes;
  
- #define RXBUSY    (1<<2)
- #define TXBUSY    (1<<3)
-@@ -1068,6 +1067,7 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
- 	}
+@@ -1754,6 +1763,8 @@ static int cqspi_probe(struct platform_device *pdev)
+ 			cqspi->wr_completion = false;
+ 		if (ddata->quirks & CQSPI_SLOW_SRAM)
+ 			cqspi->slow_sram = true;
++		if (ddata->quirks & CQSPI_NEEDS_APB_AHB_HAZARD_WAR)
++			cqspi->apb_ahb_hazard = true;
  
- 	sci->no_cs = of_property_read_bool(dev->of_node, "no-cs-readback");
-+	sci->polling = !of_property_present(dev->of_node, "dmas");
+ 		if (of_device_is_compatible(pdev->dev.of_node,
+ 					    "xlnx,versal-ospi-1.0")) {
+@@ -1888,6 +1899,10 @@ static const struct cqspi_driver_platdata jh7110_qspi = {
+ 	.quirks = CQSPI_DISABLE_DAC_MODE,
+ };
  
- 	return sci;
- }
-diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
-index 3101152ce449f..1d6e6c424fc69 100644
---- a/include/linux/platform_data/spi-s3c64xx.h
-+++ b/include/linux/platform_data/spi-s3c64xx.h
-@@ -36,6 +36,7 @@ struct s3c64xx_spi_info {
- 	int src_clk_nr;
- 	int num_cs;
- 	bool no_cs;
-+	bool polling;
- 	int (*cfg_gpio)(void);
++static const struct cqspi_driver_platdata pensando_cdns_qspi = {
++	.quirks = CQSPI_NEEDS_APB_AHB_HAZARD_WAR | CQSPI_DISABLE_DAC_MODE,
++};
++
+ static const struct of_device_id cqspi_dt_ids[] = {
+ 	{
+ 		.compatible = "cdns,qspi-nor",
+@@ -1917,6 +1932,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
+ 		.compatible = "starfive,jh7110-qspi",
+ 		.data = &jh7110_qspi,
+ 	},
++	{
++		.compatible = "amd,pensando-elba-qspi",
++		.data = &pensando_cdns_qspi,
++	},
+ 	{ /* end of table */ }
  };
  
 -- 
