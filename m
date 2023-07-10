@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BDE74DA2B
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 17:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E0B74DA2D
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 17:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbjGJPth (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 11:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S233489AbjGJPtj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 11:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbjGJPth (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 11:49:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB2E10D;
-        Mon, 10 Jul 2023 08:49:36 -0700 (PDT)
+        with ESMTP id S233313AbjGJPti (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 11:49:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC8A11B;
+        Mon, 10 Jul 2023 08:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689004176; x=1720540176;
+  t=1689004177; x=1720540177;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KmPI7TYMCxCRb9tm8UqoN5rT6jb9j7EvGYVTFPfVpOU=;
-  b=ONMH+Cdc20lPFD9hvqe7EUHxJw40DzJZWhkcDCnj3AzfG/80vO7z9iqO
-   kfblVlW3xFXcLnpdH2WhJWfprSyQXUYzboVAeCUPNj1TPcOFoitMgSD+P
-   vvZ76sKbf9jaWeSMGeBEKSI6k2S6ije6iHorxgLJpeqZu2JGG0/mnHTXW
-   F7bOqU2upsAEnXdrfeXjGLLBj8exRoiuJxtRGcc1yvaxPmVRAPqjdogJL
-   3ZknSicOAX2+KSvZWb6ansKseUERr/DYVja24DdGt1k3g4vWzf3LNkFXr
-   lBf5QgnXEXNBnfJDAsEOgZBjJJo9KI2qUlxvOJtKUByd70kUyWLNdXMWK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361842397"
+  bh=NaAUtfuKUjWfIyo2AvU+b2/TN3c63zF3Fr8TWiuiUkI=;
+  b=BMlaC5o0O/TfujZHJtMUUqcbFgJZYIrCtpD2Ra4wkKpJ9N3SGmVWo75r
+   7KGkj0iiP6JrgOtYqseYag814HpQnJn8tNflxRD6J3mayUZ4oUmcANhke
+   ScHj1TLseo7hwt3bOFj2CIlkhwxyrGhmO6DMbID/Kn+eOpGD6Tn4kdCgn
+   LJU84N9AdpkSPoaRkFBjRmYufLTj7zuRUUetu2r0RLrqYo7TudA4fopSt
+   ZOUEC8/naB8KH5RaFFJdNTBDfnTRdgt5i05Pn4HGWkmyl6BzZ1wIIzMcd
+   KWflGK3P3UczIvJKoflx1o8fjqJ25x/EVRyk7q2Q/xmuELUBQGZSFH2Bu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="349185295"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="361842397"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 08:49:36 -0700
+   d="scan'208";a="349185295"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 08:49:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="720743958"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="844921873"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="720743958"
+   d="scan'208";a="844921873"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 10 Jul 2023 08:49:34 -0700
+  by orsmga004.jf.intel.com with ESMTP; 10 Jul 2023 08:49:35 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 77C76604; Mon, 10 Jul 2023 18:49:34 +0300 (EEST)
+        id 8BD3669A; Mon, 10 Jul 2023 18:49:34 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -93,65 +93,125 @@ Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: [PATCH v2 06/15] spi: Use sysfs_emit() to instead of s*printf()
-Date:   Mon, 10 Jul 2023 18:49:23 +0300
-Message-Id: <20230710154932.68377-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 07/15] spi: Sort headers alphabetically
+Date:   Mon, 10 Jul 2023 18:49:24 +0300
+Message-Id: <20230710154932.68377-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Sorting headers alphabetically helps locating duplicates, and
+make it easier to figure out where to insert new headers.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/spi/spi.c       | 42 ++++++++++++++++++++---------------------
+ include/linux/spi/spi.h | 14 +++++++-------
+ 2 files changed, 28 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 46cbda383228..cfb1c985d940 100644
+index cfb1c985d940..06a92a3a5746 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -64,7 +64,7 @@ modalias_show(struct device *dev, struct device_attribute *a, char *buf)
- 	if (len != -ENODEV)
- 		return len;
+@@ -4,36 +4,36 @@
+ // Copyright (C) 2005 David Brownell
+ // Copyright (C) 2008 Secret Lab Technologies Ltd.
  
--	return sprintf(buf, "%s%s\n", SPI_MODULE_PREFIX, spi->modalias);
-+	return sysfs_emit(buf, "%s%s\n", SPI_MODULE_PREFIX, spi->modalias);
- }
- static DEVICE_ATTR_RO(modalias);
+-#include <linux/kernel.h>
+-#include <linux/device.h>
+-#include <linux/init.h>
++#include <linux/acpi.h>
+ #include <linux/cache.h>
+-#include <linux/dma-mapping.h>
++#include <linux/clk/clk-conf.h>
++#include <linux/delay.h>
++#include <linux/device.h>
+ #include <linux/dmaengine.h>
++#include <linux/dma-mapping.h>
++#include <linux/export.h>
++#include <linux/gpio/consumer.h>
++#include <linux/highmem.h>
++#include <linux/idr.h>
++#include <linux/init.h>
++#include <linux/ioport.h>
++#include <linux/kernel.h>
++#include <linux/kthread.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/mutex.h>
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
+-#include <linux/clk/clk-conf.h>
+-#include <linux/slab.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/spi-mem.h>
+-#include <linux/gpio/consumer.h>
+-#include <linux/pm_runtime.h>
++#include <linux/percpu.h>
++#include <linux/platform_data/x86/apple.h>
+ #include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
+ #include <linux/property.h>
+-#include <linux/export.h>
++#include <linux/ptp_clock_kernel.h>
+ #include <linux/sched/rt.h>
++#include <linux/slab.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/spi-mem.h>
+ #include <uapi/linux/sched/types.h>
+-#include <linux/delay.h>
+-#include <linux/kthread.h>
+-#include <linux/ioport.h>
+-#include <linux/acpi.h>
+-#include <linux/highmem.h>
+-#include <linux/idr.h>
+-#include <linux/platform_data/x86/apple.h>
+-#include <linux/ptp_clock_kernel.h>
+-#include <linux/percpu.h>
  
-@@ -89,7 +89,7 @@ static ssize_t driver_override_show(struct device *dev,
- 	ssize_t len;
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/spi.h>
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 0ce1cb18a076..2026eae97329 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -6,19 +6,19 @@
+ #ifndef __LINUX_SPI_H
+ #define __LINUX_SPI_H
  
- 	device_lock(dev);
--	len = snprintf(buf, PAGE_SIZE, "%s\n", spi->driver_override ? : "");
-+	len = sysfs_emit(buf, "%s\n", spi->driver_override ? : "");
- 	device_unlock(dev);
- 	return len;
- }
-@@ -2782,8 +2782,7 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
- 	struct device *child;
++#include <linux/acpi.h>
+ #include <linux/bits.h>
++#include <linux/completion.h>
+ #include <linux/device.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/slab.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/kthread.h>
+-#include <linux/completion.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/scatterlist.h>
+-#include <linux/gpio/consumer.h>
+-
+-#include <uapi/linux/spi/spi.h>
+-#include <linux/acpi.h>
++#include <linux/slab.h>
+ #include <linux/u64_stats_sync.h>
  
- 	child = device_find_any_child(&ctlr->dev);
--	return sprintf(buf, "%s\n",
--		       child ? to_spi_device(child)->modalias : NULL);
-+	return sysfs_emit(buf, "%s\n", child ? to_spi_device(child)->modalias : NULL);
- }
- 
- static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
++#include <uapi/linux/spi/spi.h>
++
+ struct dma_chan;
+ struct software_node;
+ struct ptp_system_timestamp;
 -- 
 2.40.0.1.gaa8946217a0b
 
