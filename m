@@ -2,49 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B06E74D5C6
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 14:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A1274D760
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 15:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjGJMiO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 08:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S231786AbjGJNVu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 09:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjGJMiN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 08:38:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE7CDE;
-        Mon, 10 Jul 2023 05:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688992691; x=1720528691;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2I7Ns5P9Fqk5itIQUPMwgPj6Db+DdMBwViqY3DgUc6U=;
-  b=ZXblJpEOn8+jlXfw44vagMUmMc9v2eLeDBvGDDJd9V5ZHEqbtBXGd5Uh
-   zIxitTJ26v1PIRV/2vgEZcT1LrgTqh1Z/EvyAHLQHoPAVpPKUIXLKneTt
-   Qzbl3quDJVXAwEKmjvk3M4Rtx65evmZppagsgCItCZG9lq32X4joI2MuF
-   tRQc0WSPyuWs3NoIimL0ngNjTET0OapRqqEdzA1ulT1hUGoNtOjgHjJ3g
-   zP7oCmFbNRDcrPnqj+P4ZQwe71io3A0G00Z6t+jWPrgx8cQ2WLO4VAK8X
-   +/RNBikWvyLWV7Abt5glGuwHLczROZ/2bR00zXPEr3HF8JpCBspJx5umS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="428025533"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="428025533"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 05:38:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="755983743"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="755983743"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jul 2023 05:38:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qIq9Q-001YUr-0L;
-        Mon, 10 Jul 2023 15:38:00 +0300
-Date:   Mon, 10 Jul 2023 15:37:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S230352AbjGJNV3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 09:21:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E38C103;
+        Mon, 10 Jul 2023 06:21:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D581960FC6;
+        Mon, 10 Jul 2023 13:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94191C433C7;
+        Mon, 10 Jul 2023 13:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688995274;
+        bh=ruJlO0wimIrsDY1JgPUqCqS7prBe1pSopi+dM4yYAWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tCUvqCttiPcwuUH6oQaeDTVlt/jVMTKddukpB3Rq2NTAjbzgaXhOs+IbQKiqA2zFS
+         A9RwOziobHTKo8xtAoLCbw9/G5XP7z93lwwcMiVxafq8PiTNYdyOWz2ZmNVbJqaRu3
+         p+o7GErUG6dN3D+2vdmSUok/vpvLEP/d4e2/6uVM8lFbtbK1g1KhHRcJ+YzSNSc8aV
+         vzC9RTasZiyt6DNQvmgXjaDeqvMTkrDbkZFHHHz5OJ3MwZifaBQsXsj96SFX7XFS5/
+         2yl7VTCIzPWHRNx1uEfr8lQDSlw+D72llgC2cC8KCiu81fGygjzL2Umg2d4uKSVdv1
+         5QaNEib99pP6w==
+Date:   Mon, 10 Jul 2023 14:21:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
         <alsa-devel@alsa-project.org>, Kris Bahnsen <kris@embeddedts.com>,
@@ -74,57 +64,68 @@ Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Richard Cochran <richardcochran@gmail.com>
 Subject: Re: [PATCH v1 4/8] spi: Get rid of old SPI_MASTER_NO_.X and
  SPI_MASTER_MUST_.X
-Message-ID: <ZKv7p96D2B9vYd0J@smile.fi.intel.com>
+Message-ID: <7aff8759-cfca-47b5-b995-5260e5082c45@sirena.org.uk>
 References: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
  <20230710102751.83314-5-andriy.shevchenko@linux.intel.com>
  <1ffd5603-4140-4bf6-bfed-af70a6759bda@sirena.org.uk>
  <ZKvmkAP5ZuT6lGLN@smile.fi.intel.com>
  <ZKvnPXl9H+cQR8Ok@smile.fi.intel.com>
  <353027bf-6d2a-40de-9e18-8553864b343c@sirena.org.uk>
+ <ZKv7p96D2B9vYd0J@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Bc8mzeK4BJwaYeTa"
 Content-Disposition: inline
-In-Reply-To: <353027bf-6d2a-40de-9e18-8553864b343c@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZKv7p96D2B9vYd0J@smile.fi.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:22:59PM +0100, Mark Brown wrote:
-> On Mon, Jul 10, 2023 at 02:10:53PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 10, 2023 at 02:08:00PM +0300, Andy Shevchenko wrote:
-> > > On Mon, Jul 10, 2023 at 12:04:35PM +0100, Mark Brown wrote:
-> > > > On Mon, Jul 10, 2023 at 01:27:47PM +0300, Andy Shevchenko wrote:
-> 
-> > > > > Convert the users to SPI_CONTROLLER_NO_?X and SPI_CONTROLLER_MUST_.X
-> > > > > and kill the not used anymore definitions.
-> 
-> > > > The above is not what this change does:
-> 
-> > > How to improve it? I was sure that the form of "converting to something and
-> > > something" is clear...
-> 
-> > A wild guess, maybe you meant to split to two changes, one per each macro group?
-> 
-> No, doing TX and RX in one commit is fine.
 
-No, I meant one per _NO_ and _MUST_.
+--Bc8mzeK4BJwaYeTa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > > > > -	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
-> > > > > +	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
-> 
-> What part of the above change is replacing _NO_ with _MUST_?
+On Mon, Jul 10, 2023 at 03:37:59PM +0300, Andy Shevchenko wrote:
+> On Mon, Jul 10, 2023 at 12:22:59PM +0100, Mark Brown wrote:
+> > On Mon, Jul 10, 2023 at 02:10:53PM +0300, Andy Shevchenko wrote:
 
-None, that's why assuming the split by name should be fine.
+> > > > > > Convert the users to SPI_CONTROLLER_NO_?X and SPI_CONTROLLER_MUST_.X
+> > > > > > and kill the not used anymore definitions.
 
--- 
-With Best Regards,
-Andy Shevchenko
+...
 
+> > > > > > -	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
+> > > > > > +	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
 
+> > What part of the above change is replacing _NO_ with _MUST_?
+
+> None, that's why assuming the split by name should be fine.
+
+That's what the above changelog sounds like it's trying to do (I'm not
+sure the change itself makes sense but the first thing I ran into when
+reviewing the patch), AFIACT you're missing a "from" in the changelog?
+
+--Bc8mzeK4BJwaYeTa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsBcAACgkQJNaLcl1U
+h9BDYgf/Sarsl9t6SagewIDl2ctlFPl7f++zP6SLId0C0LErq2lPLxZKf8tzzV5x
+7mUMpK3rPcygDeYAqOKLncxnrZp/i7yix/98fZtls9IesvOQa29aRYKVSvhKnB6y
+dHoZoMBdYj1Rbo/olUcS1xjzzZ0o1VUHkLsp9rjoMW4lcz6Hu3o8GSOq1pbc9lRd
+qlCYAjMqjR9K3te5I6FICKKGnIrXm2uxuzSPZl1G7LaN0THUZGZJvcBHjhR2PcJs
+K9i9m0gJ9xsQXDOQgLTcXrm8hdSF7yQoRI3TBZ7RXzdWeO3mjNjeHGbVDRr3DMZy
+Oici+Ga3mBLzIlFlF51Tg71+BGqcoQ==
+=NWL6
+-----END PGP SIGNATURE-----
+
+--Bc8mzeK4BJwaYeTa--
