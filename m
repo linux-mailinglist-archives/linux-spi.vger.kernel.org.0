@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F1674D7C6
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 15:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D2B74D7E3
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 15:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjGJNeL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 09:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S232708AbjGJNhI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 09:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbjGJNd6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 09:33:58 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5BC129;
-        Mon, 10 Jul 2023 06:33:39 -0700 (PDT)
+        with ESMTP id S232772AbjGJNhG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 09:37:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FDBBA;
+        Mon, 10 Jul 2023 06:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688996019; x=1720532019;
+  t=1688996224; x=1720532224;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PcgdfCqBIbPTu4JqQZu5q+HYQGpr7DWOm49hDVjk5i0=;
-  b=e7qqbQY6u2HuARziO0B/Mt3VvTWem5sUQhzIDLNQIHcV4mNnKM6d2TY6
-   fYLDtt6YKPx15U7x9w+AwvXfC31dVX4rV+pS7pz6sfFnXPNrmqkHKH8Xa
-   c5PD3pnnqvo4UZ4U7CRFbd6EtMv3joaA7SXc/OGkP1m+xmBaBAJwjp4WX
-   97u45KrVE4uGafIJ8qLCO0wuwa5e953Y8H4olRcasXVSVCaQ/MhojaXMq
-   Dpl/wp6VQy/TNnAiJP/dD9gl/ZMfAR5JbaM3dxgFiKblc0U69Yjmu6wzX
-   cwmxl5Z+eyVYmkq932J3z3A+xlgCHegF7UZ3jxrNI9eNJoZKgofnBtlAc
+  bh=HA2So+NjBTWAY2fjVnTJJii4ARFTRIerq07ZS5EB7BI=;
+  b=lL8yMoGjRgzoN3XBhrpVYF+RLMxhhQixOFz9EwG1cj59h0gRqA0XjASl
+   VI4Cn7MMQ7SghYcMcpOkyHVef+Td6WqwnxbxOdgCtf2+YFkes2rR2hW+5
+   cB+mHcXP3S+kR8vAsF13RVizlSVOWSZZxQPofM1aIs4o/Td0PXQvMsrRZ
+   R+aPAyyGafJqNn4CNANvayp0w8/pJyNaEkVL4O3b00G/3hCa9sO9/T+l2
+   uAgDFDw06DQj/BC1TXLg4n9NUih1gFMgOOVDZT7ly1WpdAqodoB61F6zf
+   VDnc556JWcPAVCUORMTl3/tMoIYLkYAcNDrjkWlw13Kp6cINbRGlz2K7k
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="428037965"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="450701146"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="428037965"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 06:32:19 -0700
+   d="scan'208";a="450701146"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 06:37:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="790802176"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="894774244"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="790802176"
+   d="scan'208";a="894774244"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2023 06:32:12 -0700
+  by orsmga005.jf.intel.com with ESMTP; 10 Jul 2023 06:36:56 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qIqzq-001Z8L-0E;
-        Mon, 10 Jul 2023 16:32:10 +0300
-Date:   Mon, 10 Jul 2023 16:32:09 +0300
+        id 1qIr4P-001ZC8-1X;
+        Mon, 10 Jul 2023 16:36:53 +0300
+Date:   Mon, 10 Jul 2023 16:36:53 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+To:     Mark Brown <broonie@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
         <alsa-devel@alsa-project.org>, Kris Bahnsen <kris@embeddedts.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -55,8 +55,8 @@ Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Cc:     Radu Pirea <radu_nicolae.pirea@upb.ro>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
@@ -72,21 +72,13 @@ Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Max Filippov <jcmvbkbc@gmail.com>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v1 4/8] spi: Get rid of old SPI_MASTER_NO_.X and
- SPI_MASTER_MUST_.X
-Message-ID: <ZKwIWUeqD/otnSFM@smile.fi.intel.com>
+Subject: Re: [PATCH v1 0/8] spi: Header and core clean up and refactoring
+Message-ID: <ZKwJdb0rJCmH5cBA@smile.fi.intel.com>
 References: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
- <20230710102751.83314-5-andriy.shevchenko@linux.intel.com>
- <1ffd5603-4140-4bf6-bfed-af70a6759bda@sirena.org.uk>
- <ZKvmkAP5ZuT6lGLN@smile.fi.intel.com>
- <ZKvnPXl9H+cQR8Ok@smile.fi.intel.com>
- <353027bf-6d2a-40de-9e18-8553864b343c@sirena.org.uk>
- <ZKv7p96D2B9vYd0J@smile.fi.intel.com>
- <7aff8759-cfca-47b5-b995-5260e5082c45@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7aff8759-cfca-47b5-b995-5260e5082c45@sirena.org.uk>
+In-Reply-To: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -98,32 +90,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 02:21:05PM +0100, Mark Brown wrote:
-> On Mon, Jul 10, 2023 at 03:37:59PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 10, 2023 at 12:22:59PM +0100, Mark Brown wrote:
-> > > On Mon, Jul 10, 2023 at 02:10:53PM +0300, Andy Shevchenko wrote:
-
-...
-
-> > > > > > > Convert the users to SPI_CONTROLLER_NO_?X and SPI_CONTROLLER_MUST_.X
-> > > > > > > and kill the not used anymore definitions.
-
-...
-
-> > > > > > > -	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
-> > > > > > > +	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
+On Mon, Jul 10, 2023 at 01:27:43PM +0300, Andy Shevchenko wrote:
+> Various cleanups and refactorings of the SPI header and core parts
+> united in a single series.
 > 
-> > > What part of the above change is replacing _NO_ with _MUST_?
+> Patches 1 & 2, 5 & 6 & 8 are dependent inside each group.
 > 
-> > None, that's why assuming the split by name should be fine.
-> 
-> That's what the above changelog sounds like it's trying to do (I'm not
-> sure the change itself makes sense but the first thing I ran into when
-> reviewing the patch), AFIACT you're missing a "from" in the changelog?
+> No functional change intended.
 
-I see, I will elaborate better in v2.
-But still, I will split on per macro and add one for GPIO_SS.
-Seems to me better that way.
+I will resend the entire series.
 
 -- 
 With Best Regards,
