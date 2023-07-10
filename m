@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788CF74DC3D
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 19:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54E174DC7D
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 19:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjGJRWH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 13:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S230476AbjGJRat (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 13:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjGJRWD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 13:22:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33B10D;
-        Mon, 10 Jul 2023 10:21:58 -0700 (PDT)
+        with ESMTP id S229669AbjGJRar (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 13:30:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E48095;
+        Mon, 10 Jul 2023 10:30:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE666112F;
-        Mon, 10 Jul 2023 17:21:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7CBC433C7;
-        Mon, 10 Jul 2023 17:21:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D15E96116A;
+        Mon, 10 Jul 2023 17:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B727C433C9;
+        Mon, 10 Jul 2023 17:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689009717;
-        bh=CpTuLljbdaBkyoyitx9Zt2kT2mpNPwthrmEzA4FZh0k=;
+        s=k20201202; t=1689010245;
+        bh=8daJmCsRggn9xziEjmtzfB/+TEmSHGqfTrQOxt4tg1U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jH9O9AHymoIzZncRhS0boDcQENihuPJ9tiOMacCBW9S1HyXoS4fmk05l3yiGNAo2K
-         KI1hyt+ZX+7NEHBvWCqXjT4yNe/LtAsjRDwPWtbPDyinDXBlqwNxiz4igGDEvFujjT
-         HvuvVf7zfJpIqBT2DHBv4rYYp+mzBEGWoHelZgtBRzC5a9ODbB3jbYPRYOu+MpK8DF
-         3DKPCT3xy2bGoPblEhEFYavUFRlVpmVElN1x+riHF3GGBKfZ16h5m4CDQWCrPt/Kv/
-         vK54neWN9FR7qTjWY6hgaJiuvxPLSkqkKUC983rTnSx7XHJONotnyRARakAtXoacgn
-         BzkLNw5lEztpw==
-Date:   Mon, 10 Jul 2023 18:21:44 +0100
+        b=t2qoXUnSHuV+TbWU69K3xBxeG6UAs5r8JvEuI+8qIwEdTjDJX9HPZn++uZHMNIQaD
+         86g42vDDjo+xgTS9/scrmuWADvN0R48PLgUPQA8lzB5uIE7gczU7YsGie2UjWiD40Y
+         soETF0P1p+D4lt8Jw6O9FNAf5+tzNnhQ6U1GTpxDacTetMTQd4tHQO7p92dxIvPKDo
+         vCacGl+XShxk3g8tnOVtoXP+PJNeX8VjY17MSNUMQyZxhOaFwy902auPvHxrZTYMla
+         iILw2xA2Gbqp0/Iihh6sd5pNaL6Cxsx8tHLlJ00pYbON+m3jOCfuniILkrN7AJJX38
+         Zx5bmFaJNvHKA==
+Date:   Mon, 10 Jul 2023 18:30:32 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -85,15 +85,16 @@ Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 08/15] spi: Clean up headers
-Message-ID: <54bb9fe7-fb62-4c2e-ae36-d2c10648ee27@sirena.org.uk>
+Subject: Re: [PATCH v2 04/15] spi: Replace open coded
+ spi_controller_xfer_timeout()
+Message-ID: <cfaffa00-4b61-4d81-8675-70295844513b@sirena.org.uk>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w5h1T0k99Bnkn5Gc"
+        protocol="application/pgp-signature"; boundary="IbZ/DrTRficzGRpW"
 Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
 X-Cookie: Do you have lysdexia?
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -106,39 +107,41 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---w5h1T0k99Bnkn5Gc
+--IbZ/DrTRficzGRpW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jul 10, 2023 at 06:49:25PM +0300, Andy Shevchenko wrote:
-> There is a few things done:
-> - include only the headers we are direct user of
-> - when pointer is in use, provide a forward declaration
-> - add missing headers
-> - group generic headers and subsystem headers
-> - sort each group alphabetically
+On Mon, Jul 10, 2023 at 06:49:21PM +0300, Andy Shevchenko wrote:
 
-The previous commit was supposed to be sorting things and AFAICT did
-so...
+> Since the new spi_controller_xfer_timeout() helper appeared,
+> we may replace open coded variant in spi_transfer_wait().
 
-> +struct spi_device_id;
+> + * Assume speed to be 100 kHz if it's not defined at the time of invocation.
+> + *
 
-Why are we adding this given that there's also an inclusion of
-mod_devicetable that you didn't remove?
+You didn't mention this bit in the changelog, and I'm not 100% convinced
+it was the best idea in the first place.  It's going to result in some
+very big timeouts if it goes off, and we really should be doing
+validation much earlier in the process.
 
---w5h1T0k99Bnkn5Gc
+> +	u32 speed_hz = xfer->speed_hz ?: 100000;
+
+Not only the ternery operator, but the version without the second
+argument for extra clarity!
+
+--IbZ/DrTRficzGRpW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsPicACgkQJNaLcl1U
-h9CPUAf/RRQIrb0PfZnRSA7kc94fTv5rQbNfPboY9/94tcd2SIZjbZezvGfMuSZp
-6KHTd2Kkiwzya3J0dExwrNiIzmVrIGl+uWJWbvppEpglEeE0BNrEl1a9mRgzaQUk
-Ys7HqCSSbbtJqGSlgQAODJPS7eaPIw1ChR5Wv5B+4AlUGavA+iCrwDK+TD0dFZpQ
-ovdLIOvU+8RA2XrWSPmDSi4ywOFt9I70VxOWbR9rbfQcvXLRaJA1FOJa2ZArMhHy
-CULubdIfA4BO7mOmyLX63DXgjZqu703oW4W5RFmjc+sa9xmoSdlCYflpgXX/xSqG
-VmDSPECCeUQc9NZwlOM4i7+iPwCymQ==
-=E/m2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsQDcACgkQJNaLcl1U
+h9DEzgf/dy9EpgGVS5JKG+2sOnEEWzJ1/z92vL5sQoHWJT0M7rzfGdRlGddYvj2k
+yOJg6fvzzY2vbGoYuqkSlYi95WyUFmwqjd+BwayzJ5gH0xKRXo4MwCHKIET3z44z
+8pD55r1ow40GOeztLTsLwgiADUQSMRLm/Y33rrf2I1J+/AgrEV6V+oZnbWsmoI+I
+0QS2ZIQk8m1oDghyOmEOzW+jqJQbDR6HAP0L9dUbd/zcJK9LDXHE5hepkLjQbC6v
+oGrJJVbs+IYFbaNJrDNtxtF3JwlAtVWWSten66FG3fmreSDQwcKATVKiHWtLlhJb
+a/T8TlFW3ianwYVf2yMOEojOIbZvQw==
+=d1Us
 -----END PGP SIGNATURE-----
 
---w5h1T0k99Bnkn5Gc--
+--IbZ/DrTRficzGRpW--
