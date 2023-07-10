@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D16B74DBF1
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 19:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29F474DC12
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 19:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjGJRJT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 13:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S231195AbjGJRQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 13:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjGJRJS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 13:09:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E80C0;
-        Mon, 10 Jul 2023 10:09:17 -0700 (PDT)
+        with ESMTP id S230386AbjGJRQi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 13:16:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E25412E;
+        Mon, 10 Jul 2023 10:16:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFEFB61127;
-        Mon, 10 Jul 2023 17:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822D8C433C9;
-        Mon, 10 Jul 2023 17:09:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C457661135;
+        Mon, 10 Jul 2023 17:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607EFC433C8;
+        Mon, 10 Jul 2023 17:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689008956;
-        bh=nKZycr1bbDIhX+7r/umilV/wuLHcsLLg8WWLjNqfVGw=;
+        s=k20201202; t=1689009395;
+        bh=CgnlYd6F8QNT9n++b/k47msx5swkm6/AbNv02cH7FqM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ks7RL3h40J9Gsg6+T5tGMhXUPebOkMtv2HYbINZYkE0HBcDFe3InO0uHvSLO6Ywfd
-         z9dbScYbXDyBfN0KKzvhwsevIOZI2Wa4nTPSPcqSdIk9dVy3t4CwrMIhESNVB8EcTq
-         DHcqHiLwexT4fjkOSD7WRFfWxwr4oLox+CN38zoYAqwcwq7DLt0YYhvaSCGjOeZdC6
-         /OMp7mPT/0W9iS9bRuPwjhjEgn3ZN4a3GPUVex+MO83a5hpzqpvTmLwha1tCaAJG7B
-         IOQDzu3lMvKgzC08AKXIF8wSz30WvJ3WDseHtgBrUd0ZFYjZe2rdpVVbiRnkMjF1jV
-         sbYhTW/HyF8mg==
-Date:   Mon, 10 Jul 2023 18:09:00 +0100
+        b=nCNLRwD0ouHI8pJTPN00LKshCADBsrezjsyCWSHlUtPA86QMcTtmuANY2THapc+ya
+         rkH5tcQmXa5WkKmxP1SPoeLDBnKChb3smPLszGKE/fOJpIoKZHw2XHyVjIgwHTZ/1z
+         MufgsvMGmS7UeltSFfqOX5aakYX6Oi9D+fdx6r4xTwDjZDukvdOJHqT+HXAuPx0WPm
+         TWMpwYu5OvJq0RnyxMb5KHCGmQeKSlmlgHlItZHKy5JjIjq74cV332HHX8EX4US9YN
+         7LvxZOQBp61R6AEZ7cokvT4lucM8T0YliBj7nuBwioqSX1VDucIF209VQysfZBVMCk
+         jUIpbFJ9ng45w==
+Date:   Mon, 10 Jul 2023 18:16:22 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -85,16 +85,16 @@ Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 02/15] spi: Drop duplicate IDR allocation code in
- spi_register_controller()
-Message-ID: <97f3436a-78ca-4a94-a409-ef04bd3b593f@sirena.org.uk>
+Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
+ spi_add_device_locked()
+Message-ID: <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ugTz/0iIbXaMesMQ"
+        protocol="application/pgp-signature"; boundary="smwEq19A8LfCcchg"
 Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
 X-Cookie: Do you have lysdexia?
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -107,47 +107,61 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---ugTz/0iIbXaMesMQ
+--smwEq19A8LfCcchg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 10, 2023 at 06:49:19PM +0300, Andy Shevchenko wrote:
+On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
+> Seems by unknown reason, probably some kind of mis-rebase,
+> the commit 0c79378c0199 ("spi: add ancillary device support")
+> adds a dozen of duplicating lines of code. Drop them.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/spi/spi.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index c99ee4164f11..46cbda383228 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -712,17 +712,6 @@ EXPORT_SYMBOL_GPL(spi_add_device);
+>  static int spi_add_device_locked(struct spi_device *spi)
+>  {
+>  	struct spi_controller *ctlr =3D spi->controller;
+> -	struct device *dev =3D ctlr->dev.parent;
+> -
+> -	/* Chipselects are numbered 0..max; validate. */
+> -	if (spi_get_chipselect(spi, 0) >=3D ctlr->num_chipselect) {
+> -		dev_err(dev, "cs%d >=3D max %d\n", spi_get_chipselect(spi, 0),
+> -			ctlr->num_chipselect);
+> -		return -EINVAL;
+> -	}
+> -
+> -	/* Set the bus ID string */
+> -	spi_dev_set_name(spi);
 
-> Refactor spi_register_controller() to drop duplicate IDR allocation.
-> Instead of if-else-if branching use two sequential if:s, which allows
-> to re-use the logic of IDR allocation in all cases.
+I see that this is duplicating spi_add_device() (and we really could do
+better with code sharing there I think) but I can't immediately see
+where the duplication that's intended to be elimiated is here - where
+else in the one call path that spi_add_device_locked() has would we do
+the above?  Based on the changelog I was expecting to see some
+duplicated code in the function itself.
 
-For legibility this should have been split into a separate factoring out
-of the shared code and rewriting of the logic, that'd make it trivial to
-review.
-
-> -		mutex_lock(&board_lock);
-> -		id = idr_alloc(&spi_master_idr, ctlr, first_dynamic,
-> -			       0, GFP_KERNEL);
-> -		mutex_unlock(&board_lock);
-> -		if (WARN(id < 0, "couldn't get idr"))
-> -			return id;
-> -		ctlr->bus_num = id;
-> +		status = spi_controller_id_alloc(ctlr, first_dynamic, 0);
-> +		if (status)
-> +			return status;
-
-The original does not do the remapping of return codes that the previous
-two copies do...
-
---ugTz/0iIbXaMesMQ
+--smwEq19A8LfCcchg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsOysACgkQJNaLcl1U
-h9Bj2wf/eujSGQes7B4PBTQ3n1oBhkcL7Y24XQnkT5q6FXhb+PNy2gOUL7X4u8/s
-jewRdgc+ViUGaokkDON2TN26dLdi/+KEGq7rPGhgLMeyGSqKJx5uRaCQSSdKa2Y2
-w1zSdEXhWd9SZsgsLa18k9bVMBbmyuylLjQYrLlHktiuD4/baW1HQ5SqKICkb1Bg
-/ZdcRGqcKDfgJWnVfK4loF7rFNMRBY0rXsSdOVE3yOKeZE2uS46s2BPPN+xc7UaA
-KTSUu8JjCacwP+V70yrm4VGRb5/c0NJ++iO44yiykKNRvcJWCDemwAYhj9zV1ja/
-5l/fUqxd3+5Kv3hbc1rSnyAywM7/4g==
-=1GBL
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsPOUACgkQJNaLcl1U
+h9DBUwf9Euy3I6rYQCugpUDlBhWVoSMMz7t1ATFjPAfJAReJsl7tNz8zO3ZIBKvo
+DT0wuXofoowlS3XkS80I3NNL7wRjCktrPJnRHSBr/n15W3VCvz7cA+vkKlJdt60d
+vqLIOGnEqqPBftrOwUjsobHicO0YhL47AxOStev3fjlhFEbS0RrIpvCsVsRI1HDs
+5MalNotHe8wd+ujY4p9wUX9c2EZvSWQAE4XUBml+faspwunMGqKbjE+srfTbz+eB
+bkym8H1s/H5a/SQn5ya4y6dkDZ0jR9hz4H3HxMm4C/KgUJRnZXiIgNRtghmsQNys
+LGdv8LQz0S452H4iaGYZlWdB4IEu1w==
+=KWBr
 -----END PGP SIGNATURE-----
 
---ugTz/0iIbXaMesMQ--
+--smwEq19A8LfCcchg--
