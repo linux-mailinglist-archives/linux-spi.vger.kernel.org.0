@@ -2,193 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E18D74CFD1
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 10:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D3D74D00C
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jul 2023 10:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjGJIXP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jul 2023 04:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S229840AbjGJIgJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jul 2023 04:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbjGJIXF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 04:23:05 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1765291;
-        Mon, 10 Jul 2023 01:23:03 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A8BaDe027592;
-        Mon, 10 Jul 2023 10:22:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=GE6zkKpI6t9uY6L4iGZvQGH0DZZlhk/alBlWR2MxhUs=;
- b=G+4K12NnVLRH60fLRSLye1p6QMQOse6GHGYvmcXkLdfiDUaeFSQxdVHB8IuIaLl3hTIj
- cNhrU2X+aizJuhnIEVZGZ3AtqalmKwy1lusGnOvoDtQS3WL/XPW52RrEXjNw6EgYgYRX
- 7ykkxWK3XJLDKaZW3ywfdgnSJd28+A7BuIgG2xvGBzKbVSK1AorcTFJiX/vb2qrSUU7K
- KbGigglmesbBjV7AwerCwSCze7W6exOddeiEWGNQenh3iQE5kIdzdont68RbEOAeqajB
- dsS/sLb1eB5zRqc8iDpTZ5mswkIA4Czb8vK9LHM+wRn2Vrpy2YeSvgiltQE7LfmEfE58 LQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rre8vr37g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 10:22:23 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C00B010005A;
-        Mon, 10 Jul 2023 10:22:19 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 58FB521BF6A;
-        Mon, 10 Jul 2023 10:22:19 +0200 (CEST)
-Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 10 Jul
- 2023 10:22:18 +0200
-Message-ID: <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
-Date:   Mon, 10 Jul 2023 10:22:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
+        with ESMTP id S229751AbjGJIgF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jul 2023 04:36:05 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76598E6;
+        Mon, 10 Jul 2023 01:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688978164; x=1720514164;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=WYiA6weZnusNRqrd+xRCXu5qbtIehTQXw+b2pBpuBkI=;
+  b=pclbTClpfcju9URFr0f69t2q7mCNEr554mke3+/mCBBfRhDgQCGx8JQp
+   2k09N5NIWGueUJFXvccvtD23BI4mVwDd3QDFdy2T/3II8YCvsOoG5rPkL
+   QJv//4fWPyVTZxDk7Sc0sWwdqGnjIJQPHIjdQeu2bB9px1unjSCxwu5k6
+   c9aZp76vU+wz2/omdmITDI1MgXilPHIA/OOrxmjamQUaNTLCZbzzreW9s
+   bseid9MHNtK3IPugdJWh9oiyekG/DfQu3pJN8SQCJ3nB9M2gus7o1zTcG
+   s+X93cEWB4ydBn79I4LowyWGXns8T3/YUiF6WnODPCMTjPd4la9ImDAgy
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="234563588"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 01:36:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 10 Jul 2023 01:36:02 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 10 Jul 2023 01:36:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OCSkF87RaqR9lnYcgo1PLANvF/EUNDyW763eo3L+wtjQn/811U2Zfq0GzKD8RE+gP5Rvj3t0XpGezdQYuG2a2U5yuR2A9leosngaxUdVZx566Ts/bai9gTy0bmGv20E0isWTfKlUr07RtxIv536qOU+pQITGtVHkOQFHOjjWwIV/8+00oYtqlRvL8Uxj0iZ5duPRtxKKECyECgJ1nkXqCTrypUjd/ddTYnAtnpOIvjwNTgfQ29KD7yGcd/niXHzP53D5c+9sNkR1ZF2fc4P4fHa3lLAYUnF8jVSw1Y3qsF2fIsaVHAIj1Kd0+AVfJ5C1FxeWwoaJ8qkRJdBO3CXfdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WYiA6weZnusNRqrd+xRCXu5qbtIehTQXw+b2pBpuBkI=;
+ b=mYWRDq8ZNy/IozCZ8dRcwEOedbmCjfxDXR00skii3H8ZDTnYqTE7GtrSds02JlBcSB1R0gcYfvy7DP+M65N5JUX4bhzvy4Iz8QwgwILIhp0H55Pt4cLARxwXRuZAko8VpJupPsIDIbfxnTHnGjwIjg9nbugEflH0Vj0Q5ZjtkGu/Oq2tVEVmex43R8MIAUWWPe5FHe57Zu8zhGTA1KQRMDxJKG9kCBYyQCY75o2SPW0vVuEuW9LMFnGYGrktev7dKsjfajIBFIuLzXC5GHQKTh3hNf262X4TMIQxsmCWywKGIN7OBJT/6awCEcBqpkm6qPL7MlIi1Y+PfbcFthi8HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WYiA6weZnusNRqrd+xRCXu5qbtIehTQXw+b2pBpuBkI=;
+ b=ktupNegBGgc09kjaC4QXbO/4jEe2mcfWkiI1t4b2D4q+15iEya8ySxT5JjqtHQi9mayLXd20IX5JQ0pfC7+Lt+fLaZIsYS1GkbUCjEquI0CEi2dRTyQ4JJfYf34ZqMKS8D7jkUqsD4oPt0avq0C2WDPgAJXHOhzv++V8clbKgPo=
+Received: from SJ0PR11MB7154.namprd11.prod.outlook.com (2603:10b6:a03:48d::9)
+ by IA1PR11MB7176.namprd11.prod.outlook.com (2603:10b6:208:418::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 08:36:00 +0000
+Received: from SJ0PR11MB7154.namprd11.prod.outlook.com
+ ([fe80::5682:c38f:aada:227a]) by SJ0PR11MB7154.namprd11.prod.outlook.com
+ ([fe80::5682:c38f:aada:227a%6]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 08:36:00 +0000
+From:   <Nicolas.Ferre@microchip.com>
+To:     <tudor.ambarus@linaro.org>, <Ryan.Wanner@microchip.com>,
+        <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
- <20230706145108.GA3858320-robh@kernel.org>
- <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
- <20230707152056.GA317056-robh@kernel.org>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20230707152056.GA317056-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_05,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Add myself as a maintainer for Microchip SPI
+Thread-Topic: [PATCH] MAINTAINERS: Add myself as a maintainer for Microchip
+ SPI
+Thread-Index: AQHZswmNI3QLNXr9a0OkMq43fonpuA==
+Date:   Mon, 10 Jul 2023 08:35:59 +0000
+Message-ID: <646c6dad-0c47-f7ea-1493-8d546b80f016@microchip.com>
+References: <20230630161700.448747-1-Ryan.Wanner@microchip.com>
+ <9609c217-45b7-211b-7ec0-5e4275b1ed78@linaro.org>
+In-Reply-To: <9609c217-45b7-211b-7ec0-5e4275b1ed78@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB7154:EE_|IA1PR11MB7176:EE_
+x-ms-office365-filtering-correlation-id: 545904c5-1866-4a7a-2ef2-08db8120b055
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: s/lq3Dkkmp1VBNZnoYqSwu6tFDBeWSbv9apwqJ1sssmahGHoKQBSJ55AShyX3vXepV9M/VKRfUfYqE6nyElTAVgMeGVcRW1F1mcMj+De6hemdLmHmBfMJfjlJtTg+xc3AR1i4VUzospwV4S7exCBxZVKNYjL6bd2j+1CnVm1CbHPEVqiUQNvHqW05W7DJb2CkZV9/jP+MlspCj9s8x+vx1J1yAW+HXNea5VMSIAGwQyAj6ssEjW8/qiiH1IgWC/A6EeNLPSY3GMtSXsqGJVDeOoYE1F1fdy/eIH7YBf5jZKyLgRwl3jWZ/wdTisCD0N6GK28euHw5zDCW2JSYyGzAWTTto6K/LMgg+oYdwenMOOqN7TxBMa7Q8PUUxEdT6ukYxWoiInZaGIKfjhGcFyTlZgd184YreZW/bWfl22lJQMnIAW1hIGgDrw/yKWIod80GdWtUNbiyFXM7mqs84Gb741SKxnZ5x48zJ8GvmEgr6sumgM14PBtp5H4FyRETmTmPrx4/6fVz1pkQSVq2BT0b8/9hiSdVRVZxSUDfb9DlDKy+za/gLqV2jZFDBRuDFOki7nBJdYJhJnEXLVn2HMKh+cOGlUd/lX+v+PtUza7Lf7WET0y9IWeLvBiOLVPD5mHd+DBhaHbp6jBhaxMA+HnLj12YH8y3HWbRtybclxTQoA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB7154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(186003)(53546011)(26005)(6506007)(2616005)(966005)(6512007)(83380400001)(41300700001)(4326008)(64756008)(66446008)(2906002)(66556008)(316002)(5660300002)(66476007)(8676002)(8936002)(478600001)(66946007)(6486002)(76116006)(91956017)(110136005)(54906003)(71200400001)(36756003)(122000001)(38100700002)(31696002)(86362001)(38070700005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dkhHTko1dGpHNGtHS0dhb2puaFg3SU1kYlBCRCtab2NZaEduTkdrTjYvK3k2?=
+ =?utf-8?B?aVNBNW1MdCsrc2MrZG5paE1reU5QSXAzRGFkdmNLUzBqc3NzMEwvYVkyZDIr?=
+ =?utf-8?B?TEhIYnNrVlBBVUI5NzBzR3FRcGFkSGVONVZNY1lSUjd3bVVFeENPamZSUjg0?=
+ =?utf-8?B?elcyK0loSHJLbGthY1JqcTNzQ1FrUGVBa1hkRHNEcUlLOGlWYlY4SzRnY20z?=
+ =?utf-8?B?Mk5GYk84U2tCMERpVXArTS9zVVZVZWE2a3B2eTl0QjJ2MDdGVktWZXJBTUVT?=
+ =?utf-8?B?ODhUVG1PcHExZTVnYzA2aE5KclIyanlzV1Q2VWtDbW9XVzlWeGZkQS94cWpT?=
+ =?utf-8?B?SmRISjUvM3k1MkUzVmdLVThVc0FFQmNSZU1hSlFNNWFhazFJWFRjUk1oclNw?=
+ =?utf-8?B?bTFhL0NPMzlMa3Zqc1YyREJKU1dtNWxBa3FyMVZjUlBBZzA1M1VVY2NvZWZN?=
+ =?utf-8?B?SkwyVEIzaEtEbGNBYVF3NnFjekJQWWRZUlRFSDJuOUNnRzBvWG95d2JqaEVF?=
+ =?utf-8?B?TU83REZCaTZ1WVpCeVA5UTNZcXpYdmZwK3h0Z1dJQmtwbTZlcWd5ZmJZS1Fu?=
+ =?utf-8?B?SU1XaHI3bFE3cXBtMGtsK1UzYzRoSUcyNGN0SkZNb3N6clkvMmc5WkVCVHNJ?=
+ =?utf-8?B?VHBsUjErSjVvZGNCTlR4clllL25qcjhCQlJvOVQ1QkVMbjBSVW1wYmRoK2Ry?=
+ =?utf-8?B?d2xWdjdFc2NvakhFWkFvdkRESWxaUmEyM21ta3BBWmNZaElDdkVBSG1BQ0xS?=
+ =?utf-8?B?MnZ4TUJYZmdENEdNdGVRblhqcTRRNVZNaG9pa1g2VnllVzY2UVlvR3cwUjdp?=
+ =?utf-8?B?T09uTnRwZFdBcG5iTUNPZG5WNFd2NmhsSnBOSmlwQXArSlBOeHJSeDUvZzhm?=
+ =?utf-8?B?dlVIeDM2OXV1aXVlRytoQjlTN2cwT0RnTkJHbWk2Y1h6UXpOcE5qbzhuanhP?=
+ =?utf-8?B?YVYwdjlQdGRXZGhmVGl4ZFRxcDI1ZUd2QlBVdk15MW5ydVNYenBTTGplWkVP?=
+ =?utf-8?B?bC9jSFFoMzNqNndQQXp0TCtXK2pWR1B2QmgvUjUvV25HdEdPWStjVkdmZFc1?=
+ =?utf-8?B?Qm9kNVMxd09LdG5LTFdDR3gvbUdhVTlXNzhMcGg4T21kblVUczN2eUNtR0dO?=
+ =?utf-8?B?aktqanVNVlpJMENaWm5kR3o2UFQ5dWR1dmRCa0kxbVRxcTZLdUxNYmxUWk1S?=
+ =?utf-8?B?eTNRL1ZzTDUwc05mdjFvODEzQnVuTklxWERVYWR6ODNYcitFQXEzNENVSTBi?=
+ =?utf-8?B?OGh4Y0dlelcvQjBkaWMxMU8zTDN0RUtZRjdUS3VjVFRZUXlMUU92ZHZVK2RK?=
+ =?utf-8?B?MlNOY2V2N2lLa04wdnZIVzdIN2tyK2M3eW5qTWVIN2JTWU1JQWVZZ0g5WUJw?=
+ =?utf-8?B?aUxhZXkwTUh5WTAxSmRVM1dNWEVraVVFeStiNHMrQnVJUTdXbDBtNUZOYzZ5?=
+ =?utf-8?B?VkZlZ1U1MmQ5M1FDYW1TRS9oeXRZRmFVT09oY0RnV05zTzdRTmxzVktyQ0oy?=
+ =?utf-8?B?VzBMYXNZWTZEa2xQZWhHZk5MQldVeDNBUlpSc3AzQmtiU2UzMC82S2h4TTly?=
+ =?utf-8?B?Q29IblA5MUUyWHdraUJjcVFwdzd3WDZzYytJcjdyOEhVL0lOOXh1NVlpQi8y?=
+ =?utf-8?B?aHFQN1VHdytaNlhlUENEazVIMHcxVjFRN2I2OHlVQUtLemM4TlpLV2JoZGxx?=
+ =?utf-8?B?MndJYjA2cmNHdmhmZW5uc3ZaTEt0T1U0YkdxZUdKZEdsMTJkcXVkem1YbnBz?=
+ =?utf-8?B?UjNIcGt3OC85c0lBN3hHRUVCTC9KMkljQnZVcUhVbUFGRHlSdjhVRTMxVkJP?=
+ =?utf-8?B?cldCQVU5QVUxQzV2QThTemhKV0ZLMG5PdDhXQnN5VDk0azd6VW16dFFBUWhK?=
+ =?utf-8?B?aythdTJVVGprSVFSWmJ3WldJaGkxTGlmQmdsYzdCZm9NM0dKQy9pdWU2dFc4?=
+ =?utf-8?B?bUZRQ3BzbFFDOUlHM285MEhCYmxUOTlYb2Q5eXM0ZzlGeGRNRllhem1xaXpB?=
+ =?utf-8?B?SWp4Wko1OUxTTXl4SVhkOHpBWVRVeVVlOUl6NURaMTBxNWZtalNSeFFtQlhU?=
+ =?utf-8?B?ODk2ZVdHVnhkZVV6R1lmSGE5YVFSOTlncUJ5Y2lMcVc1MzY3WmEyS1orS1Zw?=
+ =?utf-8?Q?DEoA3m+45YAhc+ihmifQIwba4?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DBA2B504F7FDC542B068B2A6A1550652@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB7154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 545904c5-1866-4a7a-2ef2-08db8120b055
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 08:36:00.0130
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JoyJnj7xFpPQ/WWQ0+EuwImzYVo3HoYQtWbv3T0IwfID+XSWBXNt4d/a498ycPpV/Y3QzUlyEhKpdOKhAUi80KQSH+lwIQA8gq9GDnON9D8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7176
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 7/7/23 17:20, Rob Herring wrote:
-> On Fri, Jul 07, 2023 at 02:28:28PM +0200, Gatien CHEVALLIER wrote:
->> Hello Rob,
->>
->> On 7/6/23 16:51, Rob Herring wrote:
->>> On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
->>>> feature-domains is an optional property that allows a peripheral to
->>>> refer to one or more feature domain controller(s).
->>>>
->>>> Description of this property is added to all peripheral binding files of
->>>> the peripheral under the STM32 firewall controllers. It allows an accurate
->>>> representation of the hardware, where various peripherals are connected
->>>> to this firewall bus. The firewall can then check the peripheral accesses
->>>> before allowing it to probe.
->>>>
->>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->>>> ---
->>>>
->>>> Disclaimer: Some error with dtbs_check will be observed as I've
->>>> considered the property to be generic, as Rob asked
->>>>
->>>>    Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
->>>>    Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
->>>>    Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
->>>>    .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
->>>>    .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
->>>>    Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
->>>>    .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
->>>>    Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
->>>>    Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
->>>>    Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
->>>>    Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
->>>>    Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
->>>>    .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
->>>>    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
->>>>    Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
->>>>    .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
->>>>    Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
->>>>    Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
->>>>    Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
->>>>    24 files changed, 97 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
->>>> index b767ec72a999..daf8dcaef627 100644
->>>> --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
->>>> +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
->>>> @@ -50,6 +50,10 @@ properties:
->>>>      power-domains:
->>>>        maxItems: 1
->>>> +  feature-domains:
->>>> +    minItems: 1
->>>> +    maxItems: 3
->>>
->>> What are the 3 entries?
->>>
->>> Rob
->>
->> I thought I was benefiting from the description of the pattern-property in
->> the RIFSC YAML file. But yes anyway, it seems like it needs some description
->> here as the dependency does not appear in this file.
-> 
-> Humm, that should limit the maximum entries to 2, so 3 would never work
-> (if RIFSC is the parent).
-> 
->> I picked 3 as a maxItems for our ST needs, I'll give it some more thought
->> when coming back with something clearer.
-> 
-> I'd expect you have 1 entry for register bus and 1 entry for DMA bus if
-> there is one. It's block specific for how many entries, so the RIFSC
-> schema should not be setting that. You could possibly say that
-> 'feature-domains' is required for all the child nodes though.
-
-Ok, I will change to not specifying the number of entries in the
-RIFSC YAML file for V2.
-
-> 
-> Rob
-Some hardware blocks may have a firewall ID for their device part and
-another ID for their master part as well. In the end, the number of
-entries could very well vary between different platforms. And the YAML
-files are common to these platforms.
-
-This property could be used for "extra" arguments as well, that are not
-firewall IDs.
-
-What do you suggest between picking a high maxItems value that would
-(hopefully) cover all cases and not specifying maxItems at all? Or maybe
-another property dedicated to such arguments?
-
-Best regards,
-Gatien
+T24gMTAvMDcvMjAyMyBhdCAwOTo0MiwgVHVkb3IgQW1iYXJ1cyB3cm90ZToNCj4gSGksIFJ5YW4s
+DQo+IA0KPiBZb3Ugc2hvdWxkIHByb2JhYmx5IGFkZCBpbiBUby9DYyBsaW51eC1zcGlAdmdlci5r
+ZXJuZWwub3JnDQo+IGlmIHlvdSB3YW50IE1hcmsgdG8gcXVldWUgaXQuDQo+IA0KPiBPbiA2LzMw
+LzIzIDE3OjE3LCBSeWFuLldhbm5lckBtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4gRnJvbTogUnlh
+biBXYW5uZXIgPFJ5YW4uV2FubmVyQG1pY3JvY2hpcC5jb20+DQo+Pg0KPj4gVHVkb3IgaXMgbm90
+IHdpdGggTWljcm9jaGlwIGFueW1vcmUuIEkgaGF2ZSB3b3JrZWQgbGF0ZWx5DQo+PiB3aXRoIE1p
+Y3JvY2hpcCBTUEkgZHJpdmVycyByZXBsYWNpbmcgVHVkb3Igd2l0aCBteXNlbGYgYXMgdGhpcw0K
+Pj4gbWFpbnRhaW5lci4NCj4+DQo+IA0KPiBEZXNjcmliZSB5b3VyIGNoYW5nZXMgaW4gaW1wZXJh
+dGl2ZSBtb29kLg0KPiANCj4gSSBhZ3JlZSB0byBiZSByZXBsYWNlZDoNCj4gQWNrZWQtYnk6IFR1
+ZG9yIEFtYmFydXMgPHR1ZG9yLmFtYmFydXNAbGluYXJvLm9yZz4NCg0KVGhhbmtzIFR1ZG9yLiBH
+b29kIGx1Y2sgUnlhbjoNCkFja2VkLWJ5OiBOaWNvbGFzIEZlcnJlIDxuaWNvbGFzLmZlcnJlQG1p
+Y3JvY2hpcC5jb20+DQoNCk1hcmssIHBsZWFzZSB0ZWxsIHVzIGlmIHlvdSB3YW50IGEgdjIgcGF0
+Y2ggdG8gYmUgcmUtc2VudC4NCg0KQmVzdCByZWdhcmRzLA0KICAgTmljb2xhcw0KDQo+PiBTaWdu
+ZWQtb2ZmLWJ5OiBSeWFuIFdhbm5lciA8Unlhbi5XYW5uZXJAbWljcm9jaGlwLmNvbT4NCj4+IC0t
+LQ0KPj4gICBNQUlOVEFJTkVSUyB8IDIgKy0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIv
+TUFJTlRBSU5FUlMNCj4+IGluZGV4IGFkMzJkYjZjODFjYy4uODQ3OGNjODJmMTk3IDEwMDY0NA0K
+Pj4gLS0tIGEvTUFJTlRBSU5FUlMNCj4+ICsrKyBiL01BSU5UQUlORVJTDQo+PiBAQCAtMTM4ODEs
+NyArMTM4ODEsNyBAQCBUOglnaXQgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4
+L2tlcm5lbC9naXQvY29ub3IvbGludXguZ2l0Lw0KPj4gICBGOglkcml2ZXJzL3NvYy9taWNyb2No
+aXAvDQo+PiAgIA0KPj4gICBNSUNST0NISVAgU1BJIERSSVZFUg0KPj4gLU06CVR1ZG9yIEFtYmFy
+dXMgPHR1ZG9yLmFtYmFydXNAbGluYXJvLm9yZz4NCj4+ICtNOglSeWFuIFdhbm5lciA8cnlhbi53
+YW5uZXJAbWljcm9jaGlwLmNvbT4NCj4+ICAgUzoJU3VwcG9ydGVkDQo+PiAgIEY6CWRyaXZlcnMv
+c3BpL3NwaS1hdG1lbC4qDQo+PiAgIA0KPiANCg0KLS0gDQpOaWNvbGFzIEZlcnJlDQoNCg==
