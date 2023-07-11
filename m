@@ -2,122 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8048874FA25
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 23:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B3074FA8B
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jul 2023 00:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjGKVx1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 17:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S231575AbjGKWEM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 18:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjGKVx1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 17:53:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7ED170C
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 14:53:24 -0700 (PDT)
+        with ESMTP id S231689AbjGKWEJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 18:04:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA7171C;
+        Tue, 11 Jul 2023 15:04:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6349C6133D
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 21:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9C36C433C7;
-        Tue, 11 Jul 2023 21:53:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97EB3615FF;
+        Tue, 11 Jul 2023 22:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70006C433C8;
+        Tue, 11 Jul 2023 22:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689112403;
-        bh=KKKQ94mviUF/5Kkaepcyj/Fgm3jTPCwvKkPuzKop3IA=;
-        h=Subject:From:Date:To:From;
-        b=c8j4b50sroJ6HFHSNJZu7Hx9HKbak+qx2WhhafTXPlYGU1Pi0mztmu9Q9Yys8mVpS
-         tjbFZtSZwRfmsyigva9M+Sn5oOFOS299vdk9cuMzX4QqbTtgE80pk6jhV5mk7KCHaT
-         0o+rCf+Dq1/umwD5pzORIGWuhshRwba+pxGhYFTVzuOdVKIsZfC8ZUQf16Hd8okAVE
-         2RTlfgJUER4w2SpTIKUxaRzTsDu/pd8bXfcTUmHoSTkq5tSwyQAypL4R4dzDpXirB1
-         KkaGLiDw2fqvrzelGtJajtuUH7ugs5msvTDfZSCqCovKSQOd+Up3UJrZ3KlIbj3Su2
-         2ick6+Ygo9PNQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C4B0C4167B;
-        Tue, 11 Jul 2023 21:53:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1689113043;
+        bh=oBxNVJg4vSx6LNjM26ubu2NlwygUbvR3D4ABT5dk5Iw=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=KhdRHRpYv5ncqt72lmW3ddspokU1/xDMSuttpRxmaWqiVEUqS4nGB59QP/HkZyYCV
+         3ZlRvkqxNyytgnNoRiWpTYR/rbyx+tMWoCYRAIYJlyZTDiPHcy5xu/nE80+rt+JmX5
+         ctS9GW2hN8MbTv7i5Q1QtDe8C4G3T3vT6QnBEd/348pso578iM+zsG4u3URGEHx8Cy
+         1wzZ9sMpdXhu0tDBduFZxw6y3aflqDA+QM0UURdZPBPwX5SSu5UIyfotdlvbZLzeyx
+         lcxqyiG0gMCQCaAz7y0bAIGF4oj5wrr0rP1wlniGuHo6ye5ZD5HHxUY9qWFm/9U5TG
+         9XdTvaCyeObuA==
+From:   Mark Brown <broonie@kernel.org>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Stefan Moring <stefan.moring@technolution.nl>
+In-Reply-To: <20230628125406.237949-1-stefan.moring@technolution.nl>
+References: <20230628125406.237949-1-stefan.moring@technolution.nl>
+Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on
+ transfer length
+Message-Id: <168911304110.642798.9300862955272613470.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 23:04:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168911240353.27662.11849849555893127970.git-patchwork-summary@kernel.org>
-Date:   Tue, 11 Jul 2023 21:53:23 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Wed, 28 Jun 2023 14:54:06 +0200, Stefan Moring wrote:
+> IMX51 supports 4096 bit burst lengths. Using the spi transfer length
+> instead of bits_per_word increases performance significantly.
+> 
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: dt-bindings: restrict node name suffixes
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Vinod Koul <vkoul@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=752283
-  Lore link: https://lore.kernel.org/r/20230530144851.92059-1-krzysztof.kozlowski@linaro.org
-    Patches: [1/7] dt-bindings: phy: intel,combo-phy: restrict node name suffixes
-             [2/7] dt-bindings: pwm: restrict node name suffixes
-             [3/7] dt-bindings: rtc: restrict node name suffixes
-             [4/7] dt-bindings: slimbus: restrict node name suffixes
-             [6/7] dt-bindings: timestamp: restrict node name suffixes
-             [7/7] dt-bindings: watchdog: restrict node name suffixes
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Series: spi: Add DMA mode support to spi-qcom-qspi
-  Submitter: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=742649
-  Lore link: https://lore.kernel.org/r/1682328761-17517-1-git-send-email-quic_vnivarth@quicinc.com
-    Patches: [v5,1/5] spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
-             [v5,2/5] arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
-             [v5,3/5] arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
-             [v5,4/5] arm64: dts: qcom: sdm845: Add stream-id of qspi to iommus
+Thanks!
 
-Series: Fix up Nokia 770 regression
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=745924
-  Lore link: https://lore.kernel.org/r/20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org
-    Patches: [v4,1/4] Input: ads7846 - Convert to use software nodes
-             [v4,4/4] ARM: dts: Fix erroneous ADS touchscreen polarities
+[1/1] spi: Increase imx51 ecspi burst length based on transfer length
+      commit: 15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
 
-Patch: arm64: defconfig: Enable UBIFS
-  Submitter: Dhruva Gole <d-gole@ti.com>
-  Committer: Vignesh Raghavendra <vigneshr@ti.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=740401
-  Lore link: https://lore.kernel.org/r/20230417092243.967871-1-d-gole@ti.com
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Series: spi-geni-qcom: Add new interfaces and utilise them to do map/unmap in framework for SE DMA
-  Submitter: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=748416
-  Lore link: https://lore.kernel.org/r/1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com
-    Patches: [v2,1/2] soc: qcom: geni-se: Add interfaces geni_se_tx_init_dma() and geni_se_rx_init_dma()
-             [v2,2/2] spi: spi-geni-qcom: Do not do DMA map/unmap inside driver, use framework instead
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Series: Allwinner R329/D1/R528/T113s SPI support
-  Submitter: Maksim Kiselev <bigunclemax@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=746344
-  Lore link: https://lore.kernel.org/r/20230510081121.3463710-1-bigunclemax@gmail.com
-    Patches: [v5,1/5] dt-bindings: spi: sun6i: add DT bindings for Allwinner R329/D1/R528/T113s SPI
-             [v5,5/5] riscv: dts: allwinner: d1: Add SPI controllers node
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Patch: dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-  Submitter: Michal Simek <michal.simek@amd.com>
-  Committer: Michal Simek <michal.simek@amd.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=748030
-  Lore link: https://lore.kernel.org/r/f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-
-Total patches: 18
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Mark
 
