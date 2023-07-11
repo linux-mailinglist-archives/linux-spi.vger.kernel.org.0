@@ -2,55 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAF274F01A
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 15:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C55374F060
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 15:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjGKN3c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 09:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S231653AbjGKNjC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 09:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjGKN3b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 09:29:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9D318D;
-        Tue, 11 Jul 2023 06:29:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230119AbjGKNjB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 09:39:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F75EE7E;
+        Tue, 11 Jul 2023 06:38:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78FF36607010;
-        Tue, 11 Jul 2023 14:29:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689082168;
-        bh=A6Rhy91tdjux/U1OjfY+XN+em6idN9fFsp4Gj75jj3Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Bj0EFZpAy7nFby7CUTs+PEwT8vs+La8bzX9UYqF73oazR63yx2IHPPA2JHUd1crN7
-         u7PAxyRka3DqmNvhZ5M72I2mvt/zbjiS0yMalOlSuWvlx/bfnSvODSAi5oU/MRyGf3
-         aGWBbXbtkrs/c69s3IIJc3n9NU+l9N7Vq3udf22WAzHRfo+NjJu3NVNgqg/mGODjal
-         U+8BVvc+3X5TXjQn5d75fL8W+WXl0I2H6Avc6DBiihqQZ7faWNiWwtdS1K6qIpx6e4
-         KBce2lFKpLIa/z0lFI7YUxCPDHlYxhSB5sfm0e4oNH095a1OsDfr7jPiRj41PQODwj
-         CMKuG2rPGicFQ==
-Message-ID: <82a48b1c-b070-ba45-04f8-2f2bf645d893@collabora.com>
-Date:   Tue, 11 Jul 2023 15:29:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 04/15] spi: Replace open coded
- spi_controller_xfer_timeout()
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A222A614F4;
+        Tue, 11 Jul 2023 13:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C419BC433C7;
+        Tue, 11 Jul 2023 13:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689082738;
+        bh=ItxG0MufVqKsV6l67e6rahqYiXE+oNZWIixR/ZiAk7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m4h5A9eucXGEK5wiqhxNlBc101UZTB1GTSu+bNPFIqQi8lSIpgckIDopdxZ8GCXDU
+         KaYIqfFehq9XBY9C78BmSRuGAnEkoiVqck1jWN3OSijvCTDKQiEiACW+JrNNDrogva
+         3EVk5wIoKUlrmASobQlDeI0AXZVsTEb3Co/GLkxVP16Cs59Esgav2MUFclqw4fiLZW
+         IphOe5HIOtsn51q81shBdkY7+ZB7u0D1/Dnzv8i5DLtWFLx045byoaUqXj3YMCZRgP
+         Ssnb20dZBFAw4KBSQvZFSG4aJSBBBsmLSdXDHDge2m5HFHwVmkPwFjrJUGV9EZW521
+         Yi9ajN7auQ10g==
+Date:   Tue, 11 Jul 2023 14:38:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
         <alsa-devel@alsa-project.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
         Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
@@ -73,6 +67,8 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -89,40 +85,52 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 00/15] spi: Header and core clean up and refactoring
+Message-ID: <af598782-6998-4d60-b7fc-3d9aaeb0fe8f@sirena.org.uk>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
- <83c4b75a-06d7-9fca-ffa0-f2e6a6ae7aed@collabora.com>
- <e3688ce5-616a-4399-a4e3-c410a09f6a45@sirena.org.uk>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <e3688ce5-616a-4399-a4e3-c410a09f6a45@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
+ <ZK04/8UQEaNinLoK@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Fpte6ZPjzz/LFITf"
+Content-Disposition: inline
+In-Reply-To: <ZK04/8UQEaNinLoK@smile.fi.intel.com>
+X-Cookie: marriage, n.:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 11/07/23 15:05, Mark Brown ha scritto:
-> On Tue, Jul 11, 2023 at 10:28:13AM +0200, AngeloGioacchino Del Regno wrote:
->> Il 10/07/23 17:49, Andy Shevchenko ha scritto:
-> 
->>> +		ms = spi_controller_xfer_timeout(ctlr, xfer);
-> 
->> I agree on using helpers, but the logic is slightly changing here: yes it is
->> unlikely (and also probably useless) to get ms == UINT_MAX, but the helper is
->> limiting the maximum timeout value to 500mS, which may not work for some slow
->> controllers/devices.
-> 
-> The helper is limiting the *minimum* timeout value to 500ms - it's using
-> max() not min().  The idea is the other way around, that for a very fast
-> transfer we don't want to end up with such a short timeout that it false
-> triggers due to scheduling issues.
 
-After reading the code again, yeah, I've totally misread it the first time. Argh!
-Thanks! :-)
+--Fpte6ZPjzz/LFITf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jul 11, 2023 at 02:11:59PM +0300, Andy Shevchenko wrote:
+
+> Do you think patch 9 deserves to be proceeded?
+
+That one I need to think about, may as well resend it and I can think
+about the resend.
+
+--Fpte6ZPjzz/LFITf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStW1wACgkQJNaLcl1U
+h9DwCgf6A57WeIs5A+kjDx2nQTR4R6O8VfCeSUxA5+sJLtnTgMShxvODRTArEDJp
+mTB75kAcKQxMw/qNGyDzWRgUYTymPxp24jfu8cWXoEU6FoM1u7fdVIEs/3zF4VI8
+tcXZks8p77A/Xye4dlq/LB2IhJ3CctS47Q6Y+Yr6aACWkOGboS87FDNBeE+4cxcS
+nF4f4M2/d0j85zTf5tfGFaY52gS5Nf9G4MQ8/haFpUaUj2seOk+JpKeF+jqpWc+b
+fjJfrUWG8bC5u8ZfCBniq+wFRLCP6qCskkygh44lrP9yQTKxdUIRoNkcMT2kdz1H
+NguDaiHKGw9X8e6bahJyFd+NyGugwg==
+=B9iG
+-----END PGP SIGNATURE-----
+
+--Fpte6ZPjzz/LFITf--
