@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A966374EC57
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 13:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D450774EC61
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 13:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjGKLK6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 07:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S229736AbjGKLMS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 07:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjGKLK4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 07:10:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077D698;
-        Tue, 11 Jul 2023 04:10:55 -0700 (PDT)
+        with ESMTP id S229724AbjGKLMR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 07:12:17 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F959B;
+        Tue, 11 Jul 2023 04:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689073856; x=1720609856;
+  t=1689073936; x=1720609936;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=C71aeTJAOI/hMDyIcMR24A6iht2n+gbfSGfP4xzAt6Q=;
-  b=lTEdBKaqGoh2TYYIvC8GXSt7kVqoAk464mqijRUYi4NK3ltsw2JxYj+A
-   sjFKVqEd53ajVpaaUPR+1jRIfDpj8dVGVPFx02djabj/8Fm78N5YG3uj6
-   b4ebub6QZPykQ82DCaKRNzA0cxh+3S/MfJMwJrVdi5dJB6SCAyA7W+kd8
-   4+jVzbF9c91+uAwM/1HEmWDjuZ8Q3g6PejtklHFVPS8gEj61uagu8/gT/
-   ycRs2VQiYb4bdEHTrkkGwSMiZeM12sP2O1/nMRH68xpKvFhkMCGWlNkhi
-   R4F4za1L7KDZdlLba8pR69+Ys/93L7sSGwy/4LK5MTU4Wd54DvtuNlx7C
+  bh=twR4kdv8R+UGB+uDynfbksgxMKi2k7OVYCc9yUjloq8=;
+  b=KKBynze5CMpuIyfqkRGwCHesvRyiRgF8oxskHf5vbA2zYDjNImWkHPR5
+   IlyAsxeGSCKSAULjWy0gMewmiMU1sETCJnhUjgPVkPyjGow95lid5WqpF
+   LMqa4eg+LLvs9+bOx3MnwY6i69kDE/sdB1boBfjAruwfV55k0i+4qa8W5
+   OwmKNwSfbaIiUmHD2RSquE03zm3qrqQGVPyLltHCg1DjeCh6+0XtQcKxR
+   XTWD7JrU6xbO5skYm3trWSelXonfy4fkd7nye3VafhIdcLfjjcP/CRJmM
+   NcqaHyErGUx+WYtCVqZxM9GCl79RCOM8RvRKY5LkZJ6orfD40Huedk4hb
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="363454793"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="362053719"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="363454793"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 04:10:55 -0700
+   d="scan'208";a="362053719"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 04:12:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="756326203"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="845225511"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="756326203"
+   d="scan'208";a="845225511"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jul 2023 04:10:42 -0700
+  by orsmga004.jf.intel.com with ESMTP; 11 Jul 2023 04:12:02 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJBGQ-001pHZ-2T;
-        Tue, 11 Jul 2023 14:10:38 +0300
-Date:   Tue, 11 Jul 2023 14:10:38 +0300
+        id 1qJBHj-001pIO-15;
+        Tue, 11 Jul 2023 14:11:59 +0300
+Date:   Tue, 11 Jul 2023 14:11:59 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -95,15 +95,14 @@ Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 08/15] spi: Clean up headers
-Message-ID: <ZK04rjMk+LfDHcGT@smile.fi.intel.com>
+Subject: Re: [PATCH v2 00/15] spi: Header and core clean up and refactoring
+Message-ID: <ZK04/8UQEaNinLoK@smile.fi.intel.com>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
- <54bb9fe7-fb62-4c2e-ae36-d2c10648ee27@sirena.org.uk>
+ <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <54bb9fe7-fb62-4c2e-ae36-d2c10648ee27@sirena.org.uk>
+In-Reply-To: <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -115,26 +114,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:21:44PM +0100, Mark Brown wrote:
-> On Mon, Jul 10, 2023 at 06:49:25PM +0300, Andy Shevchenko wrote:
-> > There is a few things done:
-> > - include only the headers we are direct user of
-> > - when pointer is in use, provide a forward declaration
-> > - add missing headers
-> > - group generic headers and subsystem headers
-> > - sort each group alphabetically
+On Mon, Jul 10, 2023 at 06:31:12PM +0100, Mark Brown wrote:
+> On Mon, Jul 10, 2023 at 06:49:17PM +0300, Andy Shevchenko wrote:
+> > Various cleanups and refactorings of the SPI header and core parts
+> > united in a single series. It also touches drivers under SPI subsystem
+> > folder on the pure renaming purposes of some constants.
 > 
-> The previous commit was supposed to be sorting things and AFAICT did
-> so...
+> I've queued 1-3, 6-8 and 11- for CI thanks.
 
-This is about forward declaration groups.
-
-> > +struct spi_device_id;
-> 
-> Why are we adding this given that there's also an inclusion of
-> mod_devicetable that you didn't remove?
-
-Answered in the other email.
+Thank you!
+Do you think patch 9 deserves to be proceeded?
 
 -- 
 With Best Regards,
