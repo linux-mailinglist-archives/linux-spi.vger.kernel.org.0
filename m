@@ -2,51 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C1B74EF6E
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 14:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46F974EFCC
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 15:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjGKMwM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 08:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S231917AbjGKNFe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 09:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjGKMwJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 08:52:09 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BB898;
-        Tue, 11 Jul 2023 05:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689079928; x=1720615928;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fixFH5Llqroff/AhZ015VZ+OpUUgSBQ7xNlXodB8idQ=;
-  b=nXYGAZBmCt/q8vpk2hgdP5RxkOpR8+FWs2GpP++Xb4iPebpuW50dI6ld
-   HDfRX3kjPZuoHIK0bhysXuedh2zVn1qePdMpdhmLGXnkzqtifn2r2mqWp
-   FetdbMxf+0J+xg092E4vnYifUT0n/G0bNNxd8El0uHSo/uR5nGibEno3L
-   Jmh0DoL1JhHjgCOyThsiLu+Lx5951MOmIzweA3blnVnam/XYL+VDS5W11
-   d77TFNBBZMuDVEn8vhLIeozSC+mGf/A0CsbpYbEWuVsf4ImS0A7BtfzGh
-   zVehqdLyudfgZdv4w01fC+A1Q9qoiUkiVu3qCIUUXaR7zqL+C7FmjFewq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="344205663"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="344205663"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:52:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="786613329"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="786613329"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jul 2023 05:51:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJCqO-001qnp-39;
-        Tue, 11 Jul 2023 15:51:52 +0300
-Date:   Tue, 11 Jul 2023 15:51:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S231190AbjGKNFe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 09:05:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6240393;
+        Tue, 11 Jul 2023 06:05:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3617614BF;
+        Tue, 11 Jul 2023 13:05:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE23AC433C8;
+        Tue, 11 Jul 2023 13:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689080732;
+        bh=HnVEva2jdOLXu3EN/cKYarAoyETVmcXrgG0CY9KCvZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BO5Sf+xL4FaASSNsNdM5EGXByrv4WeTUxRBoPW2QNejIwlELvXTu5gKKqv4hkKhGg
+         oi3ZfR9Shzo5QwnSHTFndf8ZIVkqpTClpssosTOBH6/4HIjVrlXO3KdynsW5+Pg7kp
+         pbkKvKQx6ir3yg7CLJDoLHQzo0ewO66SzIeDifz9SCJzdBAZAn9RpEQzQEGNZHOmt+
+         6tOI/PPlmxZBFom+gGGjOjy+qrSc5cI26iueLs1Gv6DR2sYD26rubxcFZS48+8Dw/G
+         5SSyFU8wEM4MuZLWsQU4tXLcKI+0ehoZc3/OitBA10N/7/7vB38b2KMdMwG1AhcrlN
+         +CUurb7ZrrwoQ==
+Date:   Tue, 11 Jul 2023 14:05:18 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
@@ -95,43 +85,61 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 01/15] spi: Remove unneeded OF node NULL checks
-Message-ID: <ZK1QaK3Qy/mDauae@smile.fi.intel.com>
+Subject: Re: [PATCH v2 04/15] spi: Replace open coded
+ spi_controller_xfer_timeout()
+Message-ID: <e3688ce5-616a-4399-a4e3-c410a09f6a45@sirena.org.uk>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-2-andriy.shevchenko@linux.intel.com>
- <f0b9e2e4-b2c0-4336-0ec4-5afd9f1b6c72@collabora.com>
+ <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
+ <83c4b75a-06d7-9fca-ffa0-f2e6a6ae7aed@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="925w7TTgRoHZtFsT"
 Content-Disposition: inline
-In-Reply-To: <f0b9e2e4-b2c0-4336-0ec4-5afd9f1b6c72@collabora.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <83c4b75a-06d7-9fca-ffa0-f2e6a6ae7aed@collabora.com>
+X-Cookie: marriage, n.:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:12:55AM +0200, AngeloGioacchino Del Regno wrote:
+
+--925w7TTgRoHZtFsT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jul 11, 2023 at 10:28:13AM +0200, AngeloGioacchino Del Regno wrote:
 > Il 10/07/23 17:49, Andy Shevchenko ha scritto:
-> > In the couple of places the NULL check of OF node is implied by the call
-> > that takes it as a parameter. Drop the respective duplicate checks.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Validated against spi-mt65xx, spi-mt7621, spi-mtk-nor, spi-mtk-snfi;
-> 
-> Reviewed-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> # MediaTek
 
-By some reason the tag is split and I'm not sure `b4` can cope with that.
-In any case, added manually. Thank you for the review!
+> > +		ms = spi_controller_xfer_timeout(ctlr, xfer);
 
--- 
-With Best Regards,
-Andy Shevchenko
+> I agree on using helpers, but the logic is slightly changing here: yes it is
+> unlikely (and also probably useless) to get ms == UINT_MAX, but the helper is
+> limiting the maximum timeout value to 500mS, which may not work for some slow
+> controllers/devices.
 
+The helper is limiting the *minimum* timeout value to 500ms - it's using
+max() not min().  The idea is the other way around, that for a very fast
+transfer we don't want to end up with such a short timeout that it false
+triggers due to scheduling issues.
 
+--925w7TTgRoHZtFsT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmStU40ACgkQJNaLcl1U
+h9B+yQf+KBYXJ7506wC0Am0zY2LnPrpwi7/uhVWQsN9GzhBVU0RGwam2xuqmpCeo
+A3o92lqKSQPkQGllTlnuM3r4jp2qDy1/U/QJJxak+i/i8NjuVxIQQIKtnM/nRQxh
+yRpIp6WbVt+HJsdFgPS6j6r/3m1qS4eTbso7/ciwLzdRc2Yxk9SLXFteOErlAEoq
+hhR7VxhID4BE72a+1NbyuALEVGjSMYBdpddD//Qa1UsJVw1yK5HuM51CaQd9bTlo
+EtrmXMgaG9FB+lQeu2zedT6HTQQH/hOB77luYq4zGm849tw2sfBPIhqVgQtkkutv
+4hpXSMiuD+iL32PThXfathhu4xvFiQ==
+=l6sR
+-----END PGP SIGNATURE-----
+
+--925w7TTgRoHZtFsT--
