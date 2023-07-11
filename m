@@ -2,50 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E17C74EC42
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 13:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DAE74EC50
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 13:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjGKLGk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 07:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S231241AbjGKLKW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 07:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjGKLGj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 07:06:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8829B;
-        Tue, 11 Jul 2023 04:06:38 -0700 (PDT)
+        with ESMTP id S231509AbjGKLKU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 07:10:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE7798;
+        Tue, 11 Jul 2023 04:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689073598; x=1720609598;
+  t=1689073820; x=1720609820;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RVFLgj8cxsWZyvySjgaprTvsCfpSOgqQ4kC3+s/s1Fk=;
-  b=Fgb/nzHdhACg9g5her1kIIHPWeJMCqDylq1nS+bRcMWjiKxpA76/iRcO
-   sTaAJTdEfkONty+4pL+OBY1upct2eZJaa4dveqrXbk3kmo5ZJOI1SR7RY
-   0j2QKeopsLJL046lR2p7P5OwtCgGchysPywz5Pn5OutUssKFMvY8YFclT
-   n0hIv9eG7KDpQx3c8NmnCtn0Jb2aXBQQkjgMQ5RrDtFwWeKmlp8DCUnyI
-   hRoX/Qni1jMapu+3UrmVLm17GxCFKi5L9dQLNfHca7upEJ/XelTOsOMvw
-   Ah8UDbx6EyH4MprfWwiu8ZjGKMq5NdlSF/dewGDPmVUaN+1dmwFmU0erh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="450950699"
+  bh=pnPOejrtBmciSuneX2GIuca/d8m7aJiJ68yCzAIAa8Y=;
+  b=a3psuEUGflv0Lf2XwL6CQ10Tn+HqIJrcbOAhrGUGiaWliK68JL0iYiRX
+   EkmhJHwXfY3pn1Ve+rIwRjVPzL0o2smyeU1EfTMtC/GmJg7yxWwgxd5KU
+   oMZHvGwvsoh6XCSGuOFlcuDwBvOs72gSh1jHIs1qIFlyvrdPWQzX8citu
+   a/oMT4eCgInTrjUum52JysaDHJNbfaJ/bRNtxR5bOQgS46RXPC85rPVKv
+   f6j8FvYR3xEW+7eYkqK5qxSB+VwLsBCvr3BQB/fY7DgZaNaFDz5IFu+KO
+   Yd1MwdSZPVAx1XonXsIzE5egReRzXcESLYas7GDOu5dob2jwrTwAZTp6C
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344909461"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="450950699"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 04:06:38 -0700
+   d="scan'208";a="344909461"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 04:10:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="721057401"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="834644461"
 X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="721057401"
+   d="scan'208";a="834644461"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 04:06:24 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 11 Jul 2023 04:10:08 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJBCG-001pDs-2n;
-        Tue, 11 Jul 2023 14:06:20 +0300
-Date:   Tue, 11 Jul 2023 14:06:20 +0300
+        id 1qJBFs-001pGf-16;
+        Tue, 11 Jul 2023 14:10:04 +0300
+Date:   Tue, 11 Jul 2023 14:10:04 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
@@ -96,72 +95,43 @@ Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
- spi_add_device_locked()
-Message-ID: <ZK03rBqoQ0IZz617@smile.fi.intel.com>
+Subject: Re: [PATCH v2 08/15] spi: Clean up headers
+Message-ID: <ZK04jEIo9ovLzF0e@smile.fi.intel.com>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
- <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
+ <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
+ <da48f031-d93b-4a30-bad6-f80f58b35853@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
+In-Reply-To: <da48f031-d93b-4a30-bad6-f80f58b35853@sirena.org.uk>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
-> On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
-> > Seems by unknown reason, probably some kind of mis-rebase,
-> > the commit 0c79378c0199 ("spi: add ancillary device support")
-> > adds a dozen of duplicating lines of code. Drop them.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/spi/spi.c | 11 -----------
-> >  1 file changed, 11 deletions(-)
-> > 
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index c99ee4164f11..46cbda383228 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -712,17 +712,6 @@ EXPORT_SYMBOL_GPL(spi_add_device);
-> >  static int spi_add_device_locked(struct spi_device *spi)
-> >  {
-> >  	struct spi_controller *ctlr = spi->controller;
-> > -	struct device *dev = ctlr->dev.parent;
-> > -
-> > -	/* Chipselects are numbered 0..max; validate. */
-> > -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
-> > -		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
-> > -			ctlr->num_chipselect);
-> > -		return -EINVAL;
-> > -	}
-> > -
-> > -	/* Set the bus ID string */
-> > -	spi_dev_set_name(spi);
+On Tue, Jul 11, 2023 at 09:26:46AM +0100, Mark Brown wrote:
+> On Mon, Jul 10, 2023 at 06:49:25PM +0300, Andy Shevchenko wrote:
+> > There is a few things done:
+> > - include only the headers we are direct user of
+> > - when pointer is in use, provide a forward declaration
+> > - add missing headers
+> > - group generic headers and subsystem headers
+> > - sort each group alphabetically
 > 
-> I see that this is duplicating spi_add_device() (and we really could do
-> better with code sharing there I think) but I can't immediately see
-> where the duplication that's intended to be elimiated is here - where
-> else in the one call path that spi_add_device_locked() has would we do
-> the above?  Based on the changelog I was expecting to see some
-> duplicated code in the function itself.
+> This breaks an x86 allmodconfig build:
 
-Oh, by some reason Sebastian wasn't in this rather long Cc list.
-Added him.
+Yeah, it was too brave to go. That's actually the answer why I left
+mod_devicetable.h included. (However the mod_devicetable.h probably should
+stay to be similar to i2c.h.
 
-Reading again I don't see any useful explanation why that piece of code has to
-be duplicated among these two functions. It's 100% a copy.
-
-Sebastian, can you shed some light here?
+Let's postpone this one, but it's good to have the build report so we know
+which drivers are missing GPIO header to be included.
 
 -- 
 With Best Regards,
