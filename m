@@ -2,47 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE0574FAB8
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jul 2023 00:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1679074FADB
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jul 2023 00:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjGKWK5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 18:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S231949AbjGKWTh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 18:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjGKWK4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 18:10:56 -0400
+        with ESMTP id S231965AbjGKWTg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 18:19:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF28C1BCD
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 15:10:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D710170E;
+        Tue, 11 Jul 2023 15:19:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B14615FF
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 22:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D32FC433C7;
-        Tue, 11 Jul 2023 22:10:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09F7261633;
+        Tue, 11 Jul 2023 22:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F58CC433C8;
+        Tue, 11 Jul 2023 22:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689113424;
-        bh=2N45kPJGNOEMqN72lEin5gqQAjL5C2nkMosZGu2LOiE=;
-        h=Subject:From:Date:To:From;
-        b=ALfXhODh7wcPUsUTEzShhmw8RIzQPrxesoyCEXlY4NGyVLC0O7VWkULiS8YeurD7A
-         SrNmbApi3Oi5nLN5dhwXgQAIZNtGPNPsKymLdRruRQM/C80sOVH1XOPeWUfPVlLc8t
-         Lf98IdVermVDZDWf0MSe8hvjRCCDCHKgIbJknyurPPGYVNH2CjJeGPFOmkRmrCauMG
-         xa5L+N7N90YVGIhN66kcBboaWgSQzTUM2PVDhmz8gor7y7QYDnsbNsdIesiQmYjNI4
-         VKSwucGdrP6/UiL+y+ilKrYPyFBD6xvhGRYrt2Gt7kGE/+Q1WaLcl/ZJ83r/HyaLiY
-         5s6urvEXvNNjQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5974EC64458;
-        Tue, 11 Jul 2023 22:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1689113974;
+        bh=QiGw3IUmr9u/cOXBUpvP1n/R7zjakhkvbq/PAFBNEp4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oYg6NhE+Pz+v/gyFwkwdF7lFqFLPjS89DaJiIiBqzRWgCfhVDHoZjEizizD0k4UdB
+         HhJFpGwqU+s+XT7MhXwa55AgsPKIn29094qxuq6CdqWazdCB1Fl8SwoiMWrsaHxHf2
+         vPad4VT+/T/2VyQf8+D6fzv0L3GuvSGpk3hgmlA5xV+e2+43vYxOMlWlnZGDQDmtXX
+         EUne5GcZLKV8LLGIXL1G3ZckKNRNw/ei3pYfxNWgmHul6Ky5oepE+c1n6oH5atXZXf
+         PNjkGrY0UHR8P765AlVP24pS91y8Ik32a2b4y3zmchLKxyoi15fmiTNy2+e8L1Pj1u
+         a8Pdeyrx2eOHA==
+Date:   Wed, 12 Jul 2023 00:19:30 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Jaewon Kim <jaewon02.kim@samsung.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: Re: [PATCH] spi: s3c64xx: clear loopback bit after loopback test
+Message-ID: <20230711221930.2qinef626kxtthsv@intel.intel>
+References: <CGME20230711082508epcas2p3088d488035e7e2910bf087d640e9c268@epcas2p3.samsung.com>
+ <20230711082020.138165-1-jaewon02.kim@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168911342428.2660.8798110489802143652.git-patchwork-summary@kernel.org>
-Date:   Tue, 11 Jul 2023 22:10:24 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711082020.138165-1-jaewon02.kim@samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,56 +59,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Hi Jaewon,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On Tue, Jul 11, 2023 at 05:20:20PM +0900, Jaewon Kim wrote:
+> When SPI loopback transfer is performed, S3C64XX_SPI_MODE_SELF_LOOPBACK
+> bit still remained. It works as loopback even if the next transfer is
+> not spi loopback mode.
+> If not SPI_LOOP, needs to clear S3C64XX_SPI_MODE_SELF_LOOPBACK bit.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 
-Series: [1/7] spi: atmel: Use devm_platform_get_and_ioremap_resource()
-  Submitter: Yangtao Li <frank.li@vivo.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762911
-  Lore link: https://lore.kernel.org/r/20230706032727.9180-1-frank.li@vivo.com
-    Patches: [1/7] spi: atmel: Use devm_platform_get_and_ioremap_resource()
-             [2/7] spi: davinci: Use devm_platform_get_and_ioremap_resource()
-             [3/7] spi: ep93xx: Use devm_platform_get_and_ioremap_resource()
-             [4/7] spi: spi-nxp-fspi: Convert to devm_platform_ioremap_resource() and devm_platform_ioremap_resource_byname()
-             [5/7] spi: rspi: Use devm_platform_get_and_ioremap_resource()
-             [6/7] spi: tegra20-slink: Use devm_platform_get_and_ioremap_resource()
-             [7/7] spi: s3c64xx: Use devm_platform_get_and_ioremap_resource()
+with the change suggested by Chanho:
 
-Patch: [v3] spi: stm32: disable device mode with st,stm32f4-spi compatible
-  Submitter: Valentin Caron <valentin.caron@foss.st.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762980
-  Lore link: https://lore.kernel.org/r/20230706081342.468090-1-valentin.caron@foss.st.com
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-Series: [1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
-  Submitter: Thierry Reding <thierry.reding@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762757
-  Lore link: https://lore.kernel.org/r/20230705152603.2514235-1-thierry.reding@gmail.com
-    Patches: [1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
-             [2/3] dt-bindings: spi: tegra-sflash: Convert to json-schema
-             [3/3] dt-bindings: spi: Convert Tegra114 SPI to json-schema
+Mark, can you add the
 
-Patch: spi: Increase imx51 ecspi burst length based on transfer length
-  Submitter: Stefan Moring <stefan.moring@technolution.nl>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=760937
-  Lore link: https://lore.kernel.org/r/20230628125406.237949-1-stefan.moring@technolution.nl
+Fixes: ffb7bcd3b27e ("spi: s3c64xx: support loopback mode")
 
-Patch: spi: rzv2m-csi: Convert to platform remove callback returning void
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=763335
-  Lore link: https://lore.kernel.org/r/20230707071119.3394198-1-u.kleine-koenig@pengutronix.de
+tag or should Jaewon resend?
 
+Thanks,
+Andi
 
-Total patches: 13
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  drivers/spi/spi-s3c64xx.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index fd55697144cc..b6c2659a66ca 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -684,6 +684,8 @@ static int s3c64xx_spi_config(struct s3c64xx_spi_driver_data *sdd)
+>  
+>  	if ((sdd->cur_mode & SPI_LOOP) && sdd->port_conf->has_loopback)
+>  		val |= S3C64XX_SPI_MODE_SELF_LOOPBACK;
+> +	else
+> +		val &= ~S3C64XX_SPI_MODE_SELF_LOOPBACK;
+>  
+>  	writel(val, regs + S3C64XX_SPI_MODE_CFG);
+>  
+> -- 
+> 2.17.1
+> 
