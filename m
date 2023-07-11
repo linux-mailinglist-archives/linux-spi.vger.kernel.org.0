@@ -2,55 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467AD74EEF1
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 14:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A621A74EF43
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 14:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjGKMcU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 08:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S229837AbjGKMsP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 08:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjGKMcS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 08:32:18 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A80170E;
-        Tue, 11 Jul 2023 05:31:50 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b6f943383eso89454491fa.2;
-        Tue, 11 Jul 2023 05:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689078626; x=1691670626;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PF44NEqyxP0uEPvVdBdUhZoOyhnmXaRRtdBTolupizs=;
-        b=SBnTfmlUAjKWCRn3fyds5WJnq/rFhCyNY0inIr58sbmQdnr0ekqm/rRHOpDPaGy/KO
-         B5+bnED3EocI70B/1Liqfviz84UQamIYXCfhBLJdAwpngn8GsImdPLHw3RB6cx2k3qLl
-         nSGU6gtvVw3/VsXZCkMPykBjpKDuKmimIVto3O71KEXoVSR8sXs9wWBC1yWjR9VJRV7y
-         Wiz8QKW407Y9wEjIJVzHwlxfi2RJhdAg86N/DwGw/jxMsF0gA+NEhyREeEq19FirWzm/
-         TqVILtBOKMHlbGVQP5ypx9ZxmExDySMPGPYIR/gAUwwQJjSdRAbKTqb1KbxEGl8qDyoh
-         Eb8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689078626; x=1691670626;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PF44NEqyxP0uEPvVdBdUhZoOyhnmXaRRtdBTolupizs=;
-        b=Wx/jnBmhVE1jQ5jrjbbacZ8TLn5VsJx0GuztMGkwsPMDY0xnjAeu2JNICuubWKiCF0
-         8ITWeSCUoalCCG+YtJ3RKl/kcmVY2hcps7SfG5KHwLnlCol2TH29YM5C6RZabft68uyf
-         gm4aC2WfOgglcyRqMlrbjHYAmBt9S78Umm+JOHHlhCsZU+hjZEEJlaCHtaYkr7VRUU3e
-         A/83Sxsy/IrZlvPci9BcZrBOWQmwbzGsxjdZ3lEq4RZ2nCWvl7DlfTK01HMJ9WxskJ5v
-         zDsfSvkt3GXMF7yW2agAvBe5MNWI+8nrWHmqEFz1emIcVoCsfExzY+zIVNcTQ5YnAbRn
-         M56Q==
-X-Gm-Message-State: ABy/qLblTUsS/QBgwrVsGf6swtsAz/wUo3UVCAOsYgzt7kRE4yr4K4z9
-        RatHO7kuN5rQvy4h3FTfy6ecnNAhI1vMYg==
-X-Google-Smtp-Source: APBJJlEGAsotaRV20l259BaTNO1He84gEShKxa1gOSyhZTOSrSYKw2njibp5AmXp10CkNfmdPINRWg==
-X-Received: by 2002:a2e:8eca:0:b0:2b6:dc50:19ac with SMTP id e10-20020a2e8eca000000b002b6dc5019acmr13901724ljl.31.1689078625694;
-        Tue, 11 Jul 2023 05:30:25 -0700 (PDT)
-Received: from mobilestation ([85.249.18.12])
-        by smtp.gmail.com with ESMTPSA id j17-20020a2e6e11000000b002b6ee75648fsm441355ljc.12.2023.07.11.05.30.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:30:24 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 15:30:19 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229637AbjGKMsP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 08:48:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B69135;
+        Tue, 11 Jul 2023 05:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689079694; x=1720615694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nee+8F3UgjHiHBrgA29lPenNEyq01aBvrZNu0iQvTPs=;
+  b=gkXp+Uwhe4htgOPQlLvPKwEYJ87AuGK4oRDPFCl9H/4KxahunwYnzCxt
+   F5Shi4r69loeghlKwFItgM4JRNhTKAYIeC3k3n5qKRyvOjKCREg3QIwS2
+   wf3thcO/tqqYNqzv7/yv20tfFrNe6+31O3Xh5LUzwtXX8k9okVrbdyF1N
+   T/DWP0DB0gKj5dBVyNj74CCfNytKU8jmDXKzsFcngkedEGDEvDInOTeLW
+   w4WcqDxgjA/KmkKemgCgLCTm9bwkfQU0/s0CosD7fCxq3xcyJLxhIwEh0
+   FW9nDWoRdsIwwbo0z1p8qlpiYpjRDBS9WAOYjaN6QQgQ0zfPtN6eJTnrM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="430694931"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="430694931"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 05:48:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="967787376"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="967787376"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2023 05:48:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJCmb-001qkh-0z;
+        Tue, 11 Jul 2023 15:47:57 +0300
+Date:   Tue, 11 Jul 2023 15:47:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Mark Brown <broonie@kernel.org>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
@@ -59,7 +53,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
         Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
@@ -74,6 +68,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -101,18 +96,22 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 13/15] spi: Rename SPI_MASTER_GPIO_SS to
- SPI_CONTROLLER_GPIO_SS
-Message-ID: <tvm772o6uqndgyjvycv27qouqq76crpre5tyqcnanaautqjjwn@pydiwhjzhbgd>
+Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
+ spi_add_device_locked()
+Message-ID: <ZK1PfXsUJipjcCH6@smile.fi.intel.com>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-14-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
+ <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
+ <ZK03rBqoQ0IZz617@smile.fi.intel.com>
+ <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-14-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,84 +119,57 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:49:30PM +0300, Andy Shevchenko wrote:
-> Rename SPI_MASTER_GPIO_SS to SPI_CONTROLLER_GPIO_SS and
-> convert the users to SPI_CONTROLLER_GPIO_SS to follow
+On Tue, Jul 11, 2023 at 02:01:33PM +0200, Sebastian Reichel wrote:
+> On Tue, Jul 11, 2023 at 02:06:20PM +0300, Andy Shevchenko wrote:
+> > On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
+> > > On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
 
-* I'm not an expert in English, but imo the next would look a
-* bit more readable:
-* convert s/the users to SPI_CONTROLLER_GPIO_SS/the code to using SPI_CONTROLLER_GPIO_SS
+...
 
-> the new naming shema.
-
-s/shema/schema
-
+> > > > -	struct device *dev = ctlr->dev.parent;
+> > > > -
+> > > > -	/* Chipselects are numbered 0..max; validate. */
+> > > > -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
+> > > > -		dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, 0),
+> > > > -			ctlr->num_chipselect);
+> > > > -		return -EINVAL;
+> > > > -	}
+> > > > -
+> > > > -	/* Set the bus ID string */
+> > > > -	spi_dev_set_name(spi);
+> > > 
+> > > I see that this is duplicating spi_add_device() (and we really could do
+> > > better with code sharing there I think) but I can't immediately see
+> > > where the duplication that's intended to be elimiated is here - where
+> > > else in the one call path that spi_add_device_locked() has would we do
+> > > the above?  Based on the changelog I was expecting to see some
+> > > duplicated code in the function itself.
+> > 
+> > Oh, by some reason Sebastian wasn't in this rather long Cc list.
+> > Added him.
+> > 
+> > Reading again I don't see any useful explanation why that piece of code has to
+> > be duplicated among these two functions. It's 100% a copy.
+> > 
+> > Sebastian, can you shed some light here?
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-[...]
+> The patch in this thread is obviously wrong. It results in the
+> checks never beeing called for spi_add_device_locked(). The copy is
+> in spi_add_device() and those two are not calling into each other.
 
->  drivers/spi/spi-dw-core.c  | 2 +-
+Ah, now I see, I missed __ in the name.
+Thank you for opening my eyes!
 
-[...]
+> But it should be fine to move the code to the start of
+> __spi_add_device(), which allows removing the duplication. In that
+> case the code will be run with the add_lock held, which is probably
+> what I was worried about two years ago. Looking at it again, the
+> lock is held anyways in case of spi_add_device_locked().
 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index a8ba41ad4541..45f5acc26b1d 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -932,7 +932,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  	if (dws->mem_ops.exec_op)
->  		master->mem_ops = &dws->mem_ops;
->  	master->max_speed_hz = dws->max_freq;
-> -	master->flags = SPI_MASTER_GPIO_SS;
-> +	master->flags = SPI_CONTROLLER_GPIO_SS;
->  	master->auto_runtime_pm = true;
->  
->  	/* Get default rx sample delay */
+Right, I will re-do that.
 
-For the DW APB/AHB SSI driver:
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+-- 
+With Best Regards,
+Andy Shevchenko
 
--Serge(y)
 
-[...]
-
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 06a92a3a5746..bcabae98cb7c 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -995,7 +995,7 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
->  				gpiod_set_value_cansleep(spi_get_csgpiod(spi, 0), activate);
->  		}
->  		/* Some SPI masters need both GPIO CS & slave_select */
-> -		if ((spi->controller->flags & SPI_MASTER_GPIO_SS) &&
-> +		if ((spi->controller->flags & SPI_CONTROLLER_GPIO_SS) &&
->  		    spi->controller->set_cs)
->  			spi->controller->set_cs(spi, !enable);
->  	} else if (spi->controller->set_cs) {
-> @@ -3020,7 +3020,7 @@ static int spi_get_gpio_descs(struct spi_controller *ctlr)
->  
->  	ctlr->unused_native_cs = ffs(~native_cs_mask) - 1;
->  
-> -	if ((ctlr->flags & SPI_MASTER_GPIO_SS) && num_cs_gpios &&
-> +	if ((ctlr->flags & SPI_CONTROLLER_GPIO_SS) && num_cs_gpios &&
->  	    ctlr->max_native_cs && ctlr->unused_native_cs >= ctlr->max_native_cs) {
->  		dev_err(dev, "No unused native chip select available\n");
->  		return -EINVAL;
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index cdc3addfe117..43f6c3f71a76 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -578,8 +578,7 @@ struct spi_controller {
->  #define SPI_CONTROLLER_NO_TX		BIT(2)	/* Can't do buffer write */
->  #define SPI_CONTROLLER_MUST_RX		BIT(3)	/* Requires rx */
->  #define SPI_CONTROLLER_MUST_TX		BIT(4)	/* Requires tx */
-> -
-> -#define SPI_MASTER_GPIO_SS		BIT(5)	/* GPIO CS must select slave */
-> +#define SPI_CONTROLLER_GPIO_SS		BIT(5)	/* GPIO CS must select slave */
->  
->  	/* Flag indicating if the allocation of this struct is devres-managed */
->  	bool			devm_allocated;
-> -- 
-> 2.40.0.1.gaa8946217a0b
-> 
