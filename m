@@ -2,57 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D450774EC61
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 13:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395BD74ED80
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 14:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjGKLMS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 07:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S231398AbjGKMBk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 08:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjGKLMR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 07:12:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F959B;
-        Tue, 11 Jul 2023 04:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689073936; x=1720609936;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=twR4kdv8R+UGB+uDynfbksgxMKi2k7OVYCc9yUjloq8=;
-  b=KKBynze5CMpuIyfqkRGwCHesvRyiRgF8oxskHf5vbA2zYDjNImWkHPR5
-   IlyAsxeGSCKSAULjWy0gMewmiMU1sETCJnhUjgPVkPyjGow95lid5WqpF
-   LMqa4eg+LLvs9+bOx3MnwY6i69kDE/sdB1boBfjAruwfV55k0i+4qa8W5
-   OwmKNwSfbaIiUmHD2RSquE03zm3qrqQGVPyLltHCg1DjeCh6+0XtQcKxR
-   XTWD7JrU6xbO5skYm3trWSelXonfy4fkd7nye3VafhIdcLfjjcP/CRJmM
-   NcqaHyErGUx+WYtCVqZxM9GCl79RCOM8RvRKY5LkZJ6orfD40Huedk4hb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="362053719"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="362053719"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 04:12:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="845225511"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="845225511"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jul 2023 04:12:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qJBHj-001pIO-15;
-        Tue, 11 Jul 2023 14:11:59 +0300
-Date:   Tue, 11 Jul 2023 14:11:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        with ESMTP id S229583AbjGKMBj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 08:01:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F110EF;
+        Tue, 11 Jul 2023 05:01:36 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-213-212.ewe-ip-backbone.de [91.248.213.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D3D5660700F;
+        Tue, 11 Jul 2023 13:01:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689076895;
+        bh=VpEG3ri1MmPk1vvBqKyVzFd1wmdbrZrML5Y0FqY4wUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HQDJgxlTR8vo1RaEsB3D+nH2+IRG9QN4tbrCrAaA85UTPwMmgGSzMeLBmp8bq8Ej6
+         pgwZP23sqCYBHYEmhmfwkK6ZwddZDGY5nvAyjCHRxCLhh+PU1kHLVi4qEYii04KpmG
+         cZIBzK40pXQjgo62B5RaZ5YhAs3eAX9lyz/b27cO1rLw+fmbUEzB/bIkdWz6tNdnsD
+         l37m5GS8joB/wsoJ81rU7USdQhqBwTSytws8Gf8fo6kkpx4AITWu33A+o3yUYXuRI2
+         WpJS6erpP2P9LRQMv/o3BmpdZLgyRs0csbkK1sM9hkgaBX9fGW0SBkbzX/Ag+Cs0tn
+         nvbJMMzvoOh0A==
+Received: by mercury (Postfix, from userid 1000)
+        id 34BCD106765E; Tue, 11 Jul 2023 14:01:33 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 14:01:33 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
         Amit Kumar Mahapatra via Alsa-devel 
         <alsa-devel@alsa-project.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
         Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
@@ -95,38 +87,116 @@ Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 00/15] spi: Header and core clean up and refactoring
-Message-ID: <ZK04/8UQEaNinLoK@smile.fi.intel.com>
+Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
+ spi_add_device_locked()
+Message-ID: <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
+ <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
+ <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
+ <ZK03rBqoQ0IZz617@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fcthwhge3iyvg2gl"
 Content-Disposition: inline
-In-Reply-To: <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZK03rBqoQ0IZz617@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:31:12PM +0100, Mark Brown wrote:
-> On Mon, Jul 10, 2023 at 06:49:17PM +0300, Andy Shevchenko wrote:
-> > Various cleanups and refactorings of the SPI header and core parts
-> > united in a single series. It also touches drivers under SPI subsystem
-> > folder on the pure renaming purposes of some constants.
-> 
-> I've queued 1-3, 6-8 and 11- for CI thanks.
 
-Thank you!
-Do you think patch 9 deserves to be proceeded?
+--fcthwhge3iyvg2gl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi,
 
+On Tue, Jul 11, 2023 at 02:06:20PM +0300, Andy Shevchenko wrote:
+> On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
+> > On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
+> > > Seems by unknown reason, probably some kind of mis-rebase,
+> > > the commit 0c79378c0199 ("spi: add ancillary device support")
+> > > adds a dozen of duplicating lines of code. Drop them.
+> > >=20
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > ---
+> > >  drivers/spi/spi.c | 11 -----------
+> > >  1 file changed, 11 deletions(-)
+> > >=20
+> > > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > > index c99ee4164f11..46cbda383228 100644
+> > > --- a/drivers/spi/spi.c
+> > > +++ b/drivers/spi/spi.c
+> > > @@ -712,17 +712,6 @@ EXPORT_SYMBOL_GPL(spi_add_device);
+> > >  static int spi_add_device_locked(struct spi_device *spi)
+> > >  {
+> > >  	struct spi_controller *ctlr =3D spi->controller;
+> > > -	struct device *dev =3D ctlr->dev.parent;
+> > > -
+> > > -	/* Chipselects are numbered 0..max; validate. */
+> > > -	if (spi_get_chipselect(spi, 0) >=3D ctlr->num_chipselect) {
+> > > -		dev_err(dev, "cs%d >=3D max %d\n", spi_get_chipselect(spi, 0),
+> > > -			ctlr->num_chipselect);
+> > > -		return -EINVAL;
+> > > -	}
+> > > -
+> > > -	/* Set the bus ID string */
+> > > -	spi_dev_set_name(spi);
+> >=20
+> > I see that this is duplicating spi_add_device() (and we really could do
+> > better with code sharing there I think) but I can't immediately see
+> > where the duplication that's intended to be elimiated is here - where
+> > else in the one call path that spi_add_device_locked() has would we do
+> > the above?  Based on the changelog I was expecting to see some
+> > duplicated code in the function itself.
+>=20
+> Oh, by some reason Sebastian wasn't in this rather long Cc list.
+> Added him.
+>=20
+> Reading again I don't see any useful explanation why that piece of code h=
+as to
+> be duplicated among these two functions. It's 100% a copy.
+>=20
+> Sebastian, can you shed some light here?
 
+The patch in this thread is obviously wrong. It results in the
+checks never beeing called for spi_add_device_locked(). The copy is
+in spi_add_device() and those two are not calling into each other.
+
+But it should be fine to move the code to the start of
+__spi_add_device(), which allows removing the duplication. In that
+case the code will be run with the add_lock held, which is probably
+what I was worried about two years ago. Looking at it again, the
+lock is held anyways in case of spi_add_device_locked().
+
+Greetings,
+
+-- Sebastian
+
+--fcthwhge3iyvg2gl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmStRJIACgkQ2O7X88g7
++pp6dQ//QWqSMddfA8JIA4/cd4pYKRoojbIso2JQaAhIWBB48KjH/GX7xoNCH4Ig
+MRloAncuXxqH1quGGpphBRJL2bAKVRcinKKtYdwCyM6P422hjD5GqVDKOr2H1u2f
+4+wWcKeKNk5ect4iYj/kRZYYpdlJzxK1hsd7bCwBCz3I0k7rlxqIg5td7e/7Q7CC
+4bvNEtL0Ub1iB+vzDNoqNKN48Bp87xr+kM1wSDsDhPqf1TrTmxgOFIYNmy2x+XuV
+20ZRE4olEfUMFlPNNCaAurOPVZmclVstzBUwRhU7uVBH4/ZnbY02wsklP0D8SbV8
+inFOurRiLtWaRSQfkwMEF2DAp4l5a6eWVyuy5Rf0mdVmgq9bgeXFycbiYkOM6Gsz
+aQ0g5SV64PYZSwPljucB28GrWfLdDNlp693elljAeDElhbF1bqhbVozqhkyfH5Ih
+J4wpwr/DgZaW31B0V/sQVlJTIRtjAmIRgydid81aaSOzXmW0B+Pu74EU/cMNcy0f
+iSGRdSPX+eA5OPNHQWPz1RQvJOHMVrMBXTdSCeVzZdV4VSTZSv9/LL922e9qK2DB
+yGQTeUox+5d2hdcQlSmo+LQGhiZiiJ9qoVWPsWjhNwbb3fh3HCSP9X/BJHNNGzqr
+WU6SN8gRjCaL3/i5pT08DOL6WdKhn/qo8EzCnOBxloSjD2uF1Ic=
+=v6T3
+-----END PGP SIGNATURE-----
+
+--fcthwhge3iyvg2gl--
