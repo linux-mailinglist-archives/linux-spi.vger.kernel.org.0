@@ -2,108 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D3874FA97
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jul 2023 00:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE0574FAB8
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jul 2023 00:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjGKWES (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 18:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S231175AbjGKWK5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 18:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjGKWEQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 18:04:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A83170C;
-        Tue, 11 Jul 2023 15:04:15 -0700 (PDT)
+        with ESMTP id S229655AbjGKWK4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 18:10:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF28C1BCD
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 15:10:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBCD16162C;
-        Tue, 11 Jul 2023 22:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE87C433C9;
-        Tue, 11 Jul 2023 22:04:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B14615FF
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 22:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D32FC433C7;
+        Tue, 11 Jul 2023 22:10:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689113054;
-        bh=C5llUpZJ5p8wbhDynWvhQ29CDjDyt7Q1pKHQ8wc7lJg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ng5TO3uSTKD7A1zOm5t+LzfdfOYibbcx+u+hAYJUCqldUVNa01JJK5DzMDvjI2BDv
-         ozMRXJ6xumOWsH91+xvTzB4wLRAvXNwBGyPf8amjqjJyV8DXeqJWplKRyv7tdhy4kY
-         ZH4puIkrBfxUvthe92iNgFFS77e82tK8OPZdHSW98G9dbbjm5Ue9yhkNiE/15WNmE4
-         mPCWbcHFNw1NZGJFhg99Ns+n5A2WntKEMEJY0lFhP8rGJ5GMqTLYdOhF+HWDXBDMfT
-         xQMeKawhzwlkOv2tUU9bX8Pf+lv/0ka6V2arz+RAIpqA3NSoT5UwMdkMLYqqR9qCL7
-         qXS+tYGEsiWXw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Yangtao Li <frank.li@vivo.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230706032727.9180-1-frank.li@vivo.com>
-References: <20230706032727.9180-1-frank.li@vivo.com>
-Subject: Re: [PATCH 1/7] spi: atmel: Use
- devm_platform_get_and_ioremap_resource()
-Message-Id: <168911305243.642798.12211060786449791679.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 23:04:12 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1689113424;
+        bh=2N45kPJGNOEMqN72lEin5gqQAjL5C2nkMosZGu2LOiE=;
+        h=Subject:From:Date:To:From;
+        b=ALfXhODh7wcPUsUTEzShhmw8RIzQPrxesoyCEXlY4NGyVLC0O7VWkULiS8YeurD7A
+         SrNmbApi3Oi5nLN5dhwXgQAIZNtGPNPsKymLdRruRQM/C80sOVH1XOPeWUfPVlLc8t
+         Lf98IdVermVDZDWf0MSe8hvjRCCDCHKgIbJknyurPPGYVNH2CjJeGPFOmkRmrCauMG
+         xa5L+N7N90YVGIhN66kcBboaWgSQzTUM2PVDhmz8gor7y7QYDnsbNsdIesiQmYjNI4
+         VKSwucGdrP6/UiL+y+ilKrYPyFBD6xvhGRYrt2Gt7kGE/+Q1WaLcl/ZJ83r/HyaLiY
+         5s6urvEXvNNjQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5974EC64458;
+        Tue, 11 Jul 2023 22:10:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168911342428.2660.8798110489802143652.git-patchwork-summary@kernel.org>
+Date:   Tue, 11 Jul 2023 22:10:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 06 Jul 2023 11:27:20 +0800, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: [1/7] spi: atmel: Use devm_platform_get_and_ioremap_resource()
+  Submitter: Yangtao Li <frank.li@vivo.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762911
+  Lore link: https://lore.kernel.org/r/20230706032727.9180-1-frank.li@vivo.com
+    Patches: [1/7] spi: atmel: Use devm_platform_get_and_ioremap_resource()
+             [2/7] spi: davinci: Use devm_platform_get_and_ioremap_resource()
+             [3/7] spi: ep93xx: Use devm_platform_get_and_ioremap_resource()
+             [4/7] spi: spi-nxp-fspi: Convert to devm_platform_ioremap_resource() and devm_platform_ioremap_resource_byname()
+             [5/7] spi: rspi: Use devm_platform_get_and_ioremap_resource()
+             [6/7] spi: tegra20-slink: Use devm_platform_get_and_ioremap_resource()
+             [7/7] spi: s3c64xx: Use devm_platform_get_and_ioremap_resource()
 
-Thanks!
+Patch: [v3] spi: stm32: disable device mode with st,stm32f4-spi compatible
+  Submitter: Valentin Caron <valentin.caron@foss.st.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762980
+  Lore link: https://lore.kernel.org/r/20230706081342.468090-1-valentin.caron@foss.st.com
 
-[1/7] spi: atmel: Use devm_platform_get_and_ioremap_resource()
-      commit: 616a733ccaee2412cd8def29f6f106e22c3cfabb
-[2/7] spi: davinci: Use devm_platform_get_and_ioremap_resource()
-      commit: 2ae3c98b6e80f5b99afd9eafbdfab5146330dae5
-[3/7] spi: ep93xx: Use devm_platform_get_and_ioremap_resource()
-      commit: cb8ea3dd55acd191f80847488d2231a1d18ab1ed
-[4/7] spi: spi-nxp-fspi: Convert to devm_platform_ioremap_resource() and devm_platform_ioremap_resource_byname()
-      commit: 8c8e947b6be037d0a311f11688212c7d87aa5440
-[5/7] spi: rspi: Use devm_platform_get_and_ioremap_resource()
-      commit: b778d967979d7ed638fe1de8c2465ff33ace47d8
-[6/7] spi: tegra20-slink: Use devm_platform_get_and_ioremap_resource()
-      commit: 2e4ed2577936476e0e9bb9a07158e94effb86285
-[7/7] spi: s3c64xx: Use devm_platform_get_and_ioremap_resource()
-      commit: 4f81b540ccdf023b7b39432f5c0a26c7eadcc9ce
+Series: [1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=762757
+  Lore link: https://lore.kernel.org/r/20230705152603.2514235-1-thierry.reding@gmail.com
+    Patches: [1/3] dt-bindings: spi: tegra-slink: Convert to json-schema
+             [2/3] dt-bindings: spi: tegra-sflash: Convert to json-schema
+             [3/3] dt-bindings: spi: Convert Tegra114 SPI to json-schema
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: spi: Increase imx51 ecspi burst length based on transfer length
+  Submitter: Stefan Moring <stefan.moring@technolution.nl>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=760937
+  Lore link: https://lore.kernel.org/r/20230628125406.237949-1-stefan.moring@technolution.nl
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Patch: spi: rzv2m-csi: Convert to platform remove callback returning void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=763335
+  Lore link: https://lore.kernel.org/r/20230707071119.3394198-1-u.kleine-koenig@pengutronix.de
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Total patches: 13
 
-Thanks,
-Mark
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
