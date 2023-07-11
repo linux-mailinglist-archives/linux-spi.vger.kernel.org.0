@@ -2,88 +2,153 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837CE74E9F6
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 11:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB3974EC0F
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 12:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjGKJNz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 05:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S230013AbjGKK6b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 06:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjGKJNx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 05:13:53 -0400
-X-Greylist: delayed 448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jul 2023 02:13:49 PDT
-Received: from smtpout2.mo529.mail-out.ovh.net (smtpout2.mo529.mail-out.ovh.net [79.137.123.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688F4122
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 02:13:49 -0700 (PDT)
-Received: from mxplan4.mail.ovh.net (unknown [10.109.156.206])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id D3C61209BE;
-        Tue, 11 Jul 2023 09:06:19 +0000 (UTC)
-Received: from vandamme.email (37.59.142.110) by DAG5EX2.mxp4.local
- (172.16.2.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 11 Jul
- 2023 11:06:19 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-110S00441c1caea-27c1-4831-9bf8-8b99f5069e5e,
-                    42C4D1DE23A36265E4C80AD40BF611DDAC8555CF) smtp.auth=kernel-org-500524@vandamme.email
-X-OVh-ClientIp: 78.29.192.179
-From:   Ruben Vandamme <kernel-org-500524@vandamme.email>
-To:     <linux-spi@vger.kernel.org>
-CC:     Ruben Vandamme <kernel-org-500524@vandamme.email>
-Subject: [PATCH] spi: omap2-mcspi: fix memory leak on slave transfer abort
-Date:   Tue, 11 Jul 2023 11:04:33 +0200
-Message-ID: <20230711090546.654136-2-kernel-org-500524@vandamme.email>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S229468AbjGKK6a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 06:58:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DF19B;
+        Tue, 11 Jul 2023 03:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689073109; x=1720609109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lIHyBeHEaNenp9Q/l2JAcaQuyI3ymSNUAckdiFell2M=;
+  b=aSDhIFMueOPnwVS7Ho6a6OIntXPb4+TbR8av8tsm7N95ZF0HZvBNOrjE
+   6IYDKI8Noo4KEC9bjea4tOfDBZw7+Is1haF4dzE/Lhk/AH2xCsqUR7RhD
+   rw9HxOXIUWPylC8POOQphS1jmQDGgYb/JL1I3v44IvjCMzks+Q/feoNi2
+   32RjOfZWWZ5qO9zM3XX0FbQGqD3n7QxD8Zwoh/76qRnViLx8ducan/skg
+   gjgorJxdWER81EIUlIqRCqhk48WACRer5ZCZeCCnGT2JMwI370n4lDlCU
+   O2aCNRtbAJDyaNdfxwQMN+cFvv4UzNPiDwnJiAY7sDzLgZ2y6CEOfedZU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368087275"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="368087275"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 03:58:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="724404293"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="724404293"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Jul 2023 03:58:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJB4O-001p51-1q;
+        Tue, 11 Jul 2023 13:58:12 +0300
+Date:   Tue, 11 Jul 2023 13:58:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 02/15] spi: Drop duplicate IDR allocation code in
+ spi_register_controller()
+Message-ID: <ZK01xAqLc8AGFDo/@smile.fi.intel.com>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
+ <97f3436a-78ca-4a94-a409-ef04bd3b593f@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [37.59.142.110]
-X-ClientProxiedBy: DAG9EX1.mxp4.local (172.16.2.17) To DAG5EX2.mxp4.local
- (172.16.2.10)
-X-Ovh-Tracer-GUID: 305f258d-3d32-48ea-98ce-85c5b70aa114
-X-Ovh-Tracer-Id: 1984680063938802330
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgggfgtihesthekredtredttdenucfhrhhomheptfhusggvnhcugggrnhgurghmmhgvuceokhgvrhhnvghlqdhorhhgqdehtddthedvgeesvhgrnhgurghmmhgvrdgvmhgrihhlqeenucggtffrrghtthgvrhhnpeehvefggefhkeekvedutdeulefgvdeifeejgffgkeektdekudegieeltdehvdetvdenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddruddutddpjeekrddvledrudelvddrudejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehkvghrnhgvlhdqohhrghdqhedttdehvdegsehvrghnuggrmhhmvgdrvghmrghilheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhorhhgqdehtddthedvgeesvhgrnhgurghmmhgvrdgvmhgrihhlpdfovfetjfhoshhtpehmohehvdelpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_20,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97f3436a-78ca-4a94-a409-ef04bd3b593f@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In case a slave mode transfer is aborted, the scatterlists need
-to be freed before exiting the function.
+On Mon, Jul 10, 2023 at 06:09:00PM +0100, Mark Brown wrote:
+> On Mon, Jul 10, 2023 at 06:49:19PM +0300, Andy Shevchenko wrote:
+> 
+> > Refactor spi_register_controller() to drop duplicate IDR allocation.
+> > Instead of if-else-if branching use two sequential if:s, which allows
+> > to re-use the logic of IDR allocation in all cases.
+> 
+> For legibility this should have been split into a separate factoring out
+> of the shared code and rewriting of the logic, that'd make it trivial to
+> review.
 
-Signed-off-by: Ruben Vandamme <kernel-org-500524@vandamme.email>
----
- drivers/spi/spi-omap2-mcspi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Should I do that for v3?
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 8331e247bf5c..48800afc35b0 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -514,15 +514,16 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	omap2_mcspi_set_dma_req(spi, 1, 1);
- 
- 	ret = mcspi_wait_for_completion(mcspi, &mcspi_dma->dma_rx_completion);
-+
-+	for (x = 0; x < nb_sizes; x++)
-+		kfree(sg_out[x]);
-+
- 	if (ret || mcspi->slave_aborted) {
- 		dmaengine_terminate_sync(mcspi_dma->dma_rx);
- 		omap2_mcspi_set_dma_req(spi, 1, 0);
- 		return 0;
- 	}
- 
--	for (x = 0; x < nb_sizes; x++)
--		kfree(sg_out[x]);
--
- 	if (mcspi->fifo_depth > 0)
- 		return count;
- 
+> > -		mutex_lock(&board_lock);
+> > -		id = idr_alloc(&spi_master_idr, ctlr, first_dynamic,
+> > -			       0, GFP_KERNEL);
+> > -		mutex_unlock(&board_lock);
+> > -		if (WARN(id < 0, "couldn't get idr"))
+> > -			return id;
+> > -		ctlr->bus_num = id;
+> > +		status = spi_controller_id_alloc(ctlr, first_dynamic, 0);
+> > +		if (status)
+> > +			return status;
+> 
+> The original does not do the remapping of return codes that the previous
+> two copies do...
+
+Yes, I had to mention this in the commit message that in my opinion this makes
+no difference. With the dynamically allocated aliases the absence of the slot
+has the same effect as in the other cases.
+
 -- 
-2.41.0
+With Best Regards,
+Andy Shevchenko
+
 
