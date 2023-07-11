@@ -2,147 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870A274E8B6
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 10:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EFE74E8FC
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jul 2023 10:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjGKINF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jul 2023 04:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S231273AbjGKIZT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jul 2023 04:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjGKINE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 04:13:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F378FE3;
-        Tue, 11 Jul 2023 01:13:02 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6971C660700A;
-        Tue, 11 Jul 2023 09:12:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689063180;
-        bh=2+yn6FDwMd8voKMx1WPt05JiOyMTQxbLsZaEtvbtNN4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Fx8WIExUEuJPaY5MFu8knfLP/k0C26AMfNb/AvH/Fmm0WSmwyzjbdouviC0vRIt5c
-         MKvJLE8w0cLrlZEwxmbFWfOjjLGUQZgFi0o1pLWqgdMYxBGlFBGIjiNaupLZ6FnB33
-         j1HPiXlommzYaYv6ce4cvKcTdjN1ewdnVTlkRjRRehst4X7XEwQxnR9ySh21JtPk6b
-         7KLhT/OtiV9F5v6WVi5j7pxhtZflk0tkK/vKZu9Q314nRK+CtbZPcevQ7M0A64UCcq
-         2GUJjcluoW7Hk+VgSk0dx0uk8kgwhRiKCYyXOMoe3dlhEE5DcTiXTswvygvLYV31mr
-         rt/T478FT4VDw==
-Message-ID: <f0b9e2e4-b2c0-4336-0ec4-5afd9f1b6c72@collabora.com>
-Date:   Tue, 11 Jul 2023 10:12:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 01/15] spi: Remove unneeded OF node NULL checks
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S231154AbjGKIZR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jul 2023 04:25:17 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E49C
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 01:25:12 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230711082510epoutp01a4d5b5866fe685b890ec1067209f8da0~wwq1naR3i2683326833epoutp01S
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jul 2023 08:25:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230711082510epoutp01a4d5b5866fe685b890ec1067209f8da0~wwq1naR3i2683326833epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1689063910;
+        bh=+x3YgvcySm4e4OWhzCgiX503lxS9Tal1A2wn7/lnMtM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=AioBY9DPhNboTY4DImvuidDheOTLB0gsQSIvEecrpeQknmETriEcvh17yq5BAesKI
+         DPVZ05r5de0gg2NR88uIYgJv9wq7A6xBkC03nShhyZFd+NcbJ3y56RNnEjAxTCC1i/
+         oHII1++nONYMxmwNd0T2o1VlJp0T2jsartOsC4ns=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230711082509epcas2p2089503c1f234b156a89711d21ecf4415~wwq01jGLE0267302673epcas2p2l;
+        Tue, 11 Jul 2023 08:25:09 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4R0YpD4Y5Qz4x9Ps; Tue, 11 Jul
+        2023 08:25:08 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A5.35.32393.4E11DA46; Tue, 11 Jul 2023 17:25:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230711082508epcas2p3088d488035e7e2910bf087d640e9c268~wwqznTvSd0591905919epcas2p3v;
+        Tue, 11 Jul 2023 08:25:08 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230711082508epsmtrp15a884d0c37a11b08c3c3af853551c67e~wwqzmUZtC0611406114epsmtrp1L;
+        Tue, 11 Jul 2023 08:25:08 +0000 (GMT)
+X-AuditID: b6c32a48-87fff70000007e89-35-64ad11e4878e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.4D.64355.3E11DA46; Tue, 11 Jul 2023 17:25:07 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.55]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230711082507epsmtip1ec149368577a49a67b0b31a5bb4ab76c~wwqzWUhre2887328873epsmtip1e;
+        Tue, 11 Jul 2023 08:25:07 +0000 (GMT)
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-2-andriy.shevchenko@linux.intel.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230710154932.68377-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH] spi: s3c64xx: clear loopback bit after loopback test
+Date:   Tue, 11 Jul 2023 17:20:20 +0900
+Message-Id: <20230711082020.138165-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7bCmme4TwbUpBo8nK1k8mLeNzeL+1w5G
+        i6kPn7BZXN6vbbGj4Qirxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMnuwOWxaVUnm8eda3vY
+        PDYvqffo27KK0ePzJrkA1qhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
+        3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWl
+        eel6eaklVoYGBkamQIUJ2Rkft8oU3GermLDwO2MD4y3WLkZODgkBE4l1M7YwdTFycQgJ7GCU
+        +HKrmxXC+cQosfHaZhY459OuF0wwLfMnbIVK7GSUmNr0hhnC+cgo8Xbjf2aQKjYBbYnv6xeD
+        zRIRWMEose3CB7AWZoEbjBLdb0AGc3IIC7hKPJzdDzaXRUBV4u66XqBuDg5eATuJl9erIdbJ
+        S6zecIAZwt7FLrH0qi+E7SLRtmofG4QtLPHq+BZ2CFtK4mV/G5SdLdE+/Q/UpxUSFzfMhqo3
+        lpj1rJ0RZBWzgKbE+l36IKaEgLLEkVtghzEL8El0HP7LDhHmlehoE4JoVJO4P/Uc1BAZiUlH
+        VkLDxEOia2ETWFxIIFZi5aEzjBMYZWchzF/AyLiKUSy1oDg3PbXYqMAEHkfJ+bmbGMGpTMtj
+        B+Pstx/0DjEycTAeYpTgYFYS4S04uCpFiDclsbIqtSg/vqg0J7X4EKMpMLAmMkuJJucDk2le
+        SbyhiaWBiZmZobmRqYG5kjjvvda5KUIC6YklqdmpqQWpRTB9TBycUg1MFl4nZl/NW/i57Ofk
+        63LlMjkv/Pa8+rjUrPp3VMi1H3VqK1vsXz4r95kob177Ma5FJn/xy6xrKgz5Qnppy551a3TJ
+        TiloXmrXaruO2f5H2HP1vPKrs9pFZ+eIWah3eyd8dvL9kefFmKjwbNef9v0nY3YoJb6sesZj
+        y8p8J/Thm1V6TMncT1vaVf+u3S395voC54Sk6ZrLHRIOhMS81b5u/tjPm7XpuZqC2mVfrumt
+        9cKi9fYbI52FJK/cjPW+9aatzap275zjRUc620S27ldPVlSblGN5pLR090FL5w1X1uXwvnCz
+        On+z2tHU582NhXO/ma49aODGlHjg6ssNKstPPXnjHZzfxdIsc3PW11AlluKMREMt5qLiRACH
+        eIi77gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnluLIzCtJLcpLzFFi42LZdlhJTveJ4NoUgy4jiwfztrFZ3P/awWgx
+        9eETNovL+7UtdjQcYbXY+3oru8Wmx9dYLS7vmsNmMeP8PiaLxo832R24PDat6mTzuHNtD5vH
+        5iX1Hn1bVjF6fN4kF8AaxWWTkpqTWZZapG+XwJXxcatMwX22igkLvzM2MN5i7WLk5JAQMJGY
+        P2ErSxcjF4eQwHZGiU27jkAlZCSWP+tjg7CFJe63gMRBit4zStxqfsEMkmAT0Jb4vn4xWEJE
+        YBVQ9/IzjCAOs8A9RomXk74xgVQJC7hKPJzdD2azCKhK3F3XC9TNwcErYCfx8no1xAZ5idUb
+        DjBPYORZwMiwilE0taA4Nz03ucBQrzgxt7g0L10vOT93EyM4rLSCdjAuW/9X7xAjEwfjIUYJ
+        DmYlEd6Cg6tShHhTEiurUovy44tKc1KLDzFKc7AoifMq53SmCAmkJ5akZqemFqQWwWSZODil
+        Gpg6nnP31VhtNxeO+6Nzr2WRkz77l+wZfVOzm12+nc+998V6U+X39uyMYw+2HRT+oVufus7l
+        17vEjbt2HHiV9mmfx0w2qQubJRwTXYLTpq3wkPrKy3bwpcfOyo+PzFZHub1oDOC5fprBd9kD
+        nol2P0/WtjDX/OkM098+c5tAQ/l+49MLnk/m5bBNDI6zzH0ovevc94bEiati67LN7SJebN9h
+        mXnI9R3LyRKBqp36db0h2Ud/OVq8O8VvtPLLq6rcmpYTfwT7Jnfb6d7ynP1L+8Xj4KDwRTsP
+        P7BqSzy1v4nlV+a902/7/nw3WDL9jZHDtDO/VUx3LnyZGR6o2vDq/2PxaSFVdZbdMipOgisC
+        WKyUWIozEg21mIuKEwFt2bCemgIAAA==
+X-CMS-MailID: 20230711082508epcas2p3088d488035e7e2910bf087d640e9c268
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230711082508epcas2p3088d488035e7e2910bf087d640e9c268
+References: <CGME20230711082508epcas2p3088d488035e7e2910bf087d640e9c268@epcas2p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 10/07/23 17:49, Andy Shevchenko ha scritto:
-> In the couple of places the NULL check of OF node is implied by the call
-> that takes it as a parameter. Drop the respective duplicate checks.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+When SPI loopback transfer is performed, S3C64XX_SPI_MODE_SELF_LOOPBACK
+bit still remained. It works as loopback even if the next transfer is
+not spi loopback mode.
+If not SPI_LOOP, needs to clear S3C64XX_SPI_MODE_SELF_LOOPBACK bit.
 
-Validated against spi-mt65xx, spi-mt7621, spi-mtk-nor, spi-mtk-snfi;
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+---
+ drivers/spi/spi-s3c64xx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> # 
-MediaTek
-
-> ---
->   drivers/spi/spi.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 9291b2a0e887..8f3282a71c63 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -2399,9 +2399,6 @@ static void of_register_spi_devices(struct spi_controller *ctlr)
->   	struct spi_device *spi;
->   	struct device_node *nc;
->   
-> -	if (!ctlr->dev.of_node)
-> -		return;
-> -
->   	for_each_available_child_of_node(ctlr->dev.of_node, nc) {
->   		if (of_node_test_and_set_flag(nc, OF_POPULATED))
->   			continue;
-> @@ -3134,7 +3131,7 @@ int spi_register_controller(struct spi_controller *ctlr)
->   		if (WARN(id < 0, "couldn't get idr"))
->   			return id == -ENOSPC ? -EBUSY : id;
->   		ctlr->bus_num = id;
-> -	} else if (ctlr->dev.of_node) {
-> +	} else {
->   		/* Allocate dynamic bus number using Linux idr */
->   		id = of_alias_get_id(ctlr->dev.of_node, "spi");
->   		if (id >= 0) {
-
-
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index fd55697144cc..b6c2659a66ca 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -684,6 +684,8 @@ static int s3c64xx_spi_config(struct s3c64xx_spi_driver_data *sdd)
+ 
+ 	if ((sdd->cur_mode & SPI_LOOP) && sdd->port_conf->has_loopback)
+ 		val |= S3C64XX_SPI_MODE_SELF_LOOPBACK;
++	else
++		val &= ~S3C64XX_SPI_MODE_SELF_LOOPBACK;
+ 
+ 	writel(val, regs + S3C64XX_SPI_MODE_CFG);
+ 
+-- 
+2.17.1
 
