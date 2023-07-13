@@ -2,100 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA26D752165
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Jul 2023 14:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEAD7521FB
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jul 2023 14:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbjGMMjZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Jul 2023 08:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S233704AbjGMM4Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Jul 2023 08:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjGMMjY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jul 2023 08:39:24 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49592691
-        for <linux-spi@vger.kernel.org>; Thu, 13 Jul 2023 05:39:22 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso6186375e9.0
-        for <linux-spi@vger.kernel.org>; Thu, 13 Jul 2023 05:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689251961; x=1691843961;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o7hFNGhDsoWdE2O4YN92/eI74pnG6KmIvX3zGxiiC/w=;
-        b=xbQMjfJYZG5xGlH7W6WxJgCSO9B5u7zU/wqu37zOULkyPHL+nxjsCwcQBabaoBNZHc
-         79LkTqtZQV4tNueCmdjmb2jxSTFyYbz7PD30zKWi7Tto+htv3geXFknI738sJESeY9nD
-         imub6y3bVMCm5mw9dCarK+wvUuGONdC1E6R0khWlF5oRtNxhwkwSFystJFL5ULCg9Sse
-         ha2Q7RV6PTnXH0g9vqaBRugZAGv0B6Yahrl/x7GsRdJiLBzzy7eJvIn9HpO+dB6ia1Qv
-         tPsw0AzywAWaNWlpbJPzxTW5H2EmMURCzIB2ghhB47ZmnUPsTU2MusouAxS+qzl4/abE
-         UhGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689251961; x=1691843961;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7hFNGhDsoWdE2O4YN92/eI74pnG6KmIvX3zGxiiC/w=;
-        b=a2o7fwG7mndxswngoRYK02Ckl2/qiz8E8Xr7igW9T/s9qWCErKvU6Y2q7Tl7ukokFv
-         fC/hkH7qjSP6PLh3Q4tp8tEHcHtXNVjfKp8VX8KJXm21IdsfOd7R3rHtn+xmzaInJ7bS
-         9dDi65fvNHFaUgR4rZkVabe7OiIK1X7MRVI+IQzOcwoXqJeFqTLsGK+9TMlypgIiWf3s
-         h6toaQ10br3g8RHdfs66pAl1L7nfypjeBsyH6U4A7NiRmtONUVd2uzMKg71QCQjQHWb4
-         WKrvBMv2f5sWSjiGq9/JCo6//z5ZO30r/eJNM6HMQTrlQMeeje9i0R4nLO2VFH48PtUY
-         vrAA==
-X-Gm-Message-State: ABy/qLaPhE7OLZi890tMUDqASh3BJsGwFQON91S7VTAY9qrqYIT++Srx
-        ifJjkKm9trbb0aSQM0Bgys8p7A==
-X-Google-Smtp-Source: APBJJlESELdVE1fjqV5C6AI5MqR/qUJYMMbrNP3VdlOetvKF5lMSl6c1ybsvTRlGq+uNjpRK5ta+xw==
-X-Received: by 2002:a05:600c:151:b0:3fb:a46c:7eac with SMTP id w17-20020a05600c015100b003fba46c7eacmr1409580wmm.7.1689251961370;
-        Thu, 13 Jul 2023 05:39:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id f18-20020a7bcd12000000b003fa999cefc0sm7728504wmj.36.2023.07.13.05.39.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 05:39:20 -0700 (PDT)
-Message-ID: <e3fd0d3f-3fe4-2e23-2548-ecbd487e9c9f@linaro.org>
-Date:   Thu, 13 Jul 2023 14:39:19 +0200
+        with ESMTP id S232882AbjGMM4Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jul 2023 08:56:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B19A1BC9
+        for <linux-spi@vger.kernel.org>; Thu, 13 Jul 2023 05:56:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0731C6114C
+        for <linux-spi@vger.kernel.org>; Thu, 13 Jul 2023 12:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 64781C433C7;
+        Thu, 13 Jul 2023 12:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689252982;
+        bh=7Rdut50YgmL74I6Ou+u3SqyNxSR8pDcgoL828O5oiW8=;
+        h=Subject:From:Date:To:From;
+        b=FoS5hlOEWnY+2+JAim9GBAA88vYzjOWiemN7V9L0t9xgJLjNx/bG4la8ALbNy3wwF
+         VTGh0EEI3VRQsrmdq/ChqNzv7ufeSfD92xhbKtcIZAXYjto8w7RBOrK5TS49KF3QoD
+         +B2S/Ujc0J+iYrPzMdKif6IWEwdd9+8Q2zk8Bf0YjdG8PENzCWFO66VNcZ76nfCIe8
+         aHxXSYM8ET/O5SDRFj0LAr/4nFQTV2Rarw3XXS/2xpPridmGD+L/QV2rS7711SLNkT
+         0k+KZuK5rYbZphCwjXcgyg1/1L8fbcQsyj6EVMkebVW5/saWoVUi0fkZnUWqqsZPvo
+         oIM5PNMJWVJkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4973CE29F46;
+        Thu, 13 Jul 2023 12:56:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: spi: constrain minItems of clocks and
- clock-names
-To:     Mark Brown <broonie@kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20230713090015.127541-1-william.qiu@starfivetech.com>
- <20230713090015.127541-3-william.qiu@starfivetech.com>
- <c5ad1e1c-58f4-4833-b9c7-8876c1a0dc27@sirena.org.uk>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c5ad1e1c-58f4-4833-b9c7-8876c1a0dc27@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168925298229.24878.13973234711339152635.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 13 Jul 2023 12:56:22 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 13/07/2023 14:28, Mark Brown wrote:
-> On Thu, Jul 13, 2023 at 05:00:14PM +0800, William Qiu wrote:
-> 
->> The SPI controller only need apb_pclk clock to work properly on JH7110 SoC,
->> so there add minItems whose value is equal to 1. Other platforms do not
->> have this constraint.
-> 
-> Presumably this means that this is some variant of the usual pl022 IP,
+Latest series: [v6] spi-geni-qcom: Add SPI device mode support for GENI based QuPv3 (2023-07-13T11:51:43)
+  Superseding: [v5] spi-geni-qcom: Add SPI device mode support for GENI based QuPv3 (2023-07-07T05:16:34):
+    [v5,1/2] soc: qcom: geni-se: Add SPI Device mode support for GENI based QuPv3
+    [v5,2/2] spi: spi-geni-qcom: Add SPI Device mode support for GENI based QuPv3
 
-Hm, in such case this could mean we need dedicated compatible.
 
-> or that the clock is in fact present but is not modelled in your DT?
-
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
