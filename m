@@ -2,100 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F3E75436C
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jul 2023 21:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0787B754386
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jul 2023 22:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236277AbjGNTxJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jul 2023 15:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S235472AbjGNUA1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jul 2023 16:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjGNTwz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jul 2023 15:52:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EA22D57;
-        Fri, 14 Jul 2023 12:52:54 -0700 (PDT)
+        with ESMTP id S233193AbjGNUA0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jul 2023 16:00:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9CE5C
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jul 2023 13:00:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D21C661DD3;
-        Fri, 14 Jul 2023 19:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FC2C433C8;
-        Fri, 14 Jul 2023 19:52:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91EB461DD6
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jul 2023 20:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0578CC433C8;
+        Fri, 14 Jul 2023 20:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689364373;
-        bh=aCtJZwdnYdveK7w96u7CzEpfFedk2qMy8RTje+UnQ9E=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Hi4UCmMjUqaKNUHGbk3U/lIlmSPBWXeTRR082V++0rTBccTr7e0BjbyEJPJwlnE06
-         2m5o6rFGtgd5QYSUfsGNN2xFHX7nO7EMPDyIXcMowb8fHgs/kPT1qk7G/j9ojK90HR
-         rmeZJCdZn7VCuaqe94nHi3spwTSHtYVTmhhINVi1dW0SWjrRiY9OY18uQZs5y6C4V7
-         8D8UhieQq+NbYPjJX7Yfslgu8o1TJP0TxVw89O/OIiyZcgE6qd51thhZv3G6NGI7Yl
-         OLgxWCi4dCoSGx4ODOM3gQ1qmN9KDpBkoeRXdNIPmCWGn+K0tNWN3OrEfDRgBXlwSn
-         0q9ZP72SYfHqg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>
-In-Reply-To: <20230714091748.89681-1-andriy.shevchenko@linux.intel.com>
-References: <20230714091748.89681-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 0/4] spi: Header and core clean up and refactoring
-Message-Id: <168936437204.83695.7127947393052645191.b4-ty@kernel.org>
-Date:   Fri, 14 Jul 2023 20:52:52 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1689364825;
+        bh=NMuOnTY4gkbx4Kge9V9x7Kv8In/qlEZ9Qf8Jxh/L9rY=;
+        h=Subject:From:Date:To:From;
+        b=ePbqfb5zHc0jZEYWEJE89bfAwuvVxGmHUeBSdCga5fJQAAJ40XUppJJiAqa5NQVXJ
+         kPaJI8mDExvHZc/OS4CwRbv9K2E1AmqxakdyRlVHG15rs69XX0pokj7+ZnpWFIP9o2
+         /6uJNiKaWc0Le3fmqfdDW2vkOfWusPF4mVZLuwhB0+d6pI4MqTjoFBviEeAyAncJ4x
+         ozRpvUxM3TbwcK4SLe0DQnNJx0yvaYFsa86+XtOlYmN7hx5dJXFq46TuGv99/Ga7bn
+         SCWUckbRMbz0wjKjJ0f+CdfslyQSjxpvhpDtO/w9/XHSSEIdCbHf6IaII6UyJvEpdD
+         JE1vtaNj+BWjA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2C4AE1B4D6;
+        Fri, 14 Jul 2023 20:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168936482474.30217.14584334429009627787.git-patchwork-summary@kernel.org>
+Date:   Fri, 14 Jul 2023 20:00:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 14 Jul 2023 12:17:44 +0300, Andy Shevchenko wrote:
-> Various cleanups and refactorings of the SPI header and core parts
-> united in a single series. It also touches drivers under SPI subsystem
-> folder on the pure renaming purposes of some constants.
-> 
-> No functional change intended (with some subtle shortcuts which are
-> explained in the respective commit messages).
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: Header and core clean up and refactoring
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=765647
+  Lore link: https://lore.kernel.org/r/20230714091748.89681-1-andriy.shevchenko@linux.intel.com
+    Patches: [v4,1/4] spi: Remove code duplication in spi_add_device*()
+             [v4,2/4] spi: Kill spi_add_device_locked()
+             [v4,3/4] spi: Use BITS_TO_BYTES()
+             [v4,4/4] spi: Use struct_size() helper
 
-Thanks!
 
-[1/4] spi: Remove code duplication in spi_add_device*()
-      commit: 36124dea164cf684869e856b2ada23e8adab5f03
-[2/4] spi: Kill spi_add_device_locked()
-      commit: 7b5c6a545b3491fb785c75cee60e6b0c35a4de1b
-[3/4] spi: Use BITS_TO_BYTES()
-      commit: 169f5312dc46deb986e368b6828bedbedd297f6e
-[4/4] spi: Use struct_size() helper
-      commit: 75e308ffc4f0d36b895f1110ece8b77d4116fdb1
+Total patches: 4
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
