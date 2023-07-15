@@ -2,73 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6A375450C
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 00:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302097545E9
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 03:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjGNWkd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jul 2023 18:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S229788AbjGOBES (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jul 2023 21:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjGNWkd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jul 2023 18:40:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA8D3A8C
-        for <linux-spi@vger.kernel.org>; Fri, 14 Jul 2023 15:40:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C56161E0A
-        for <linux-spi@vger.kernel.org>; Fri, 14 Jul 2023 22:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 69A61C433C8;
-        Fri, 14 Jul 2023 22:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689374423;
-        bh=XtslSNq5WXJPHk0x/2dosahtE0cv+XVBhVAQp/rLUPw=;
-        h=Subject:From:Date:To:From;
-        b=f5+hu7Qn9eslnUU09pQW4gRt+omWNbU54XxCT+jl5NaP9O1KtpKzAr+dzAvLYpKpe
-         QTW0HKf7ch/Tv5FQ4m3ZphIEmQ788lq6ju7M4FBa5AJoCsE5T58KdZIPCuE5Xl1J5t
-         OzWNmcRLZ7JHy6hJM0yPdFi8SgjcF4RQRVuN9qd+BhWTwvkmHboUZ7tWQGtv5hLAYa
-         P3uo+NBN6mu+xm6hevEGXBn0/hPPRuq+kwg8JFgLgf2egnvM6iPAk8+TGuFkNUeQmd
-         k+K3KwsbTK50oSGe1Kv+/Jv8Q6OnG4T77DhJCJXAZwKTiFx2vG0tr2RZ0vwMESp9Ax
-         aJeH7hZVjcdFA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 38EAEE1B4D6;
-        Fri, 14 Jul 2023 22:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229526AbjGOBER (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jul 2023 21:04:17 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EB353A9C;
+        Fri, 14 Jul 2023 18:04:16 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,206,1684767600"; 
+   d="scan'208";a="169014684"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Jul 2023 10:04:14 +0900
+Received: from mulinux.home (unknown [10.226.92.194])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id DE3E240A10D5;
+        Sat, 15 Jul 2023 10:04:11 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 00/10] spi: rzv2m-csi: Code refactoring
+Date:   Sat, 15 Jul 2023 02:03:57 +0100
+Message-Id: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168937442315.14591.9517902765326993980.git-patchwork-summary@kernel.org>
-Date:   Fri, 14 Jul 2023 22:40:23 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Dear All,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+this series is to follow up on Geert and Andy feedback:
+https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230622113341.657842-4-fabrizio.castro.jz@renesas.com/
 
-Patch: spi: Explicitly include correct DT includes
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=765998
-  Lore link: https://lore.kernel.org/r/20230714174955.4064174-1-robh@kernel.org
+Thanks,
+Fab
 
+Fabrizio Castro (10):
+  spi: rzv2m-csi: Add missing include
+  spi: rzv2m-csi: Adopt HZ_PER_MHZ for max spi clock
+  spi: rzv2m-csi: Rework CSI_CKS_MAX definition
+  spi: rzv2m-csi: Leave readl_poll_timeout calls for last
+  spi: rzv2m-csi: Replace unnecessary ternary operators
+  spi: rzv2m-csi: Squash timing settings into one statement
+  spi: rzv2m-csi: Switch to using {read,write}s{b,w}
+  spi: rzv2m-csi: Improve data types and alignment
+  spi: rzv2m-csi: Get rid of the x_trg{_words} tables
+  spi: rzv2m-csi: Make use of device_set_node
 
-Total patches: 1
+ drivers/spi/spi-rzv2m-csi.c | 139 +++++++++++++++---------------------
+ 1 file changed, 58 insertions(+), 81 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
