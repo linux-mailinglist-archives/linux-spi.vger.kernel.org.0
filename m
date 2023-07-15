@@ -2,94 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055BB75476D
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 10:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05055754815
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 12:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjGOIAm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 15 Jul 2023 04:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S229436AbjGOKAP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 15 Jul 2023 06:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjGOIAm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 15 Jul 2023 04:00:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24A73593;
-        Sat, 15 Jul 2023 01:00:40 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-992ca792065so370725066b.2;
-        Sat, 15 Jul 2023 01:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689408039; x=1692000039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LjSF4VOKvVkLhpC37d1SJ5c0UkjYX5JYRACBex13jMs=;
-        b=Aul8Ad3eIO/Bk+g6awp7kwCX21h8hrjXxsz+siGafno3Zfzl+ZsFOM14sa2LqloKF7
-         zutYk7e0UG5CJLAL9NmP+V6WkvBD2ott2CJCcPaEumn4OTE3YNcvQpehWt6PCbJ3N+Kt
-         3Zw0APs9hv8nxP9yZwNq5mUJBIJOkWSXA+M84M1xhG1fF6LlnO7Ajega4EsAR4yDCDX8
-         607zCL15I3QVtAYPhtjnXX40ykcxFHotwAlHk7XrgfgRvGTDcTtWAON3hSzTw1FILbWv
-         9d9awG+bTe18QYBij5MCX3SriovvLT2cxM+7sGOibX3ce/7EZAF5MHNxW72dsUR+ddLb
-         38Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689408039; x=1692000039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LjSF4VOKvVkLhpC37d1SJ5c0UkjYX5JYRACBex13jMs=;
-        b=g8ATM725C636+E5eMQ8IHUcXMHzyzhIht3MBPHtZCP2jlszzQXsTdsTzHxuUOnRnQj
-         9eOqakrKjXn5EEpxCL/UeUjhKXTWHuGBhokGtuDQyfMgqS3d7RfaQtsfT26AC1P9LYyd
-         81Sy+dfN2fijb5u9NSVvmJhA2gQ19ydso96Tet1crRr2YxAW8snZJ//7ber8Me9fy5Hd
-         yqKuCmYsnakj58LQwC2ez6rgQRX/4a99RdvCyPIKCdWNmWAKWxkLul8fjmjICRkBl9KJ
-         YqenXnWh6g99TyPSnXfDZHNflEY3PPzwT2wxeTlkhRq0WG4xQTStar2xJ0GvuQN/K98i
-         QFBA==
-X-Gm-Message-State: ABy/qLbpvYhhwLxBNa2PBXkXNiKbK+ZIB/dsn+9t16d3EAYiVPFZZ+cK
-        bbcWCGp1iFff9q4SuIOIdRebGb4n/DsE3ZTSgXA=
-X-Google-Smtp-Source: APBJJlE99cxOI4FvSiq0jRKg7h4+7OKucNnznzqFMWWJcOvvrGKEui0wTkcrndRpcxrQzSR7/N9G8nSn4Wc1xbUsMyA=
-X-Received: by 2002:a17:906:4bc2:b0:988:797c:759c with SMTP id
- x2-20020a1709064bc200b00988797c759cmr5559641ejv.69.1689408039150; Sat, 15 Jul
- 2023 01:00:39 -0700 (PDT)
+        with ESMTP id S229482AbjGOKAO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 15 Jul 2023 06:00:14 -0400
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EE6132;
+        Sat, 15 Jul 2023 03:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1689415209;
+        bh=UpVM55kDs942KIyIZCbP7/8cjNZBSlpLjQ3vWtUWbAI=;
+        h=From:To:Cc:Subject:Date;
+        b=mjrS4xN36G6gqCuJ+K2TGaUmS9VWkkkW0bMCmGq9tRO/aevaEki1OQKtG8Q2O1nMa
+         O7yolZhUOZg+/3uDTF54Mnj/jOxlLaK65DzIfmrO6mmOIqYANJ/lvlEAUF8ACvhJ3U
+         KRRxk6Ntsrmv4gJUOOpJJmss/lRFDopL641hN9oM=
+Received: from KernelDevBox.byted.org ([180.184.49.4])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id D792BC5A; Sat, 15 Jul 2023 17:53:57 +0800
+X-QQ-mid: xmsmtpt1689414837tvr97vcsh
+Message-ID: <tencent_4D4974DE0CD4266C25819179B42888A3E20A@qq.com>
+X-QQ-XMAILINFO: Mdc3TkmnJyI/P5bMlDWHt42XZlbuAP7IOtLgcr56S2b6SFl47cFJLKPDw3Zd8x
+         p72EqDQVEnDzcOZQqqmhByqXK8hxcSLfaPCRg4e9rhEtnRxG3BFTa8JlgI9gUga4gTdY6aAMJgjb
+         uO73jir/95rKCRCGaMBS1O/u72LcaEqkhsUUIJ6kLCxYNCVihnxZqi1dSdGGxFTuWAWg5XhX4uYz
+         NLLFfBRIsz5lXGqeUYTGu8Z4jG49IggTtTRsuiSJy+bQ/d1GVy2Sr/YYpsGTMub3zwA4RCg3AuKE
+         vXPfbuwpaaBuWZnmDI2o8D898OVekZXDffwdFe/lPrZJ+0wzXcbfVrG9DsgsmNel4EfKZpKuScy0
+         kgy63qaTX3XM3xLqbS9tQjrUQBe9jRKGoW1BCHvte7lbUOE/v+DZckCncnuodiPdDYy8ftk5mK+a
+         e1IuXipIcPalRtYDtS4O7gr+6UQ02TU6F2uu4ld8hDT3qCOcX8nnvl9wPOmmjcabau6wnvztLXsd
+         HGDN9IOORlBtFktWBI1u5RXGBaLUSyCPdKRVtHSjS54F46u7aeCfvl3GPjRc6XdcT7WTD3NHtDQI
+         7O+mcRLN58lxMaScCByj3HR/TrITaM0Dwqe8/pbC+cbzAK+pAdzu+mcGlRzBZBsbS+A6NMiw5AQ8
+         nT5eCBk4GWKkn8Tl2kiPrGpXnrc9Ys9F5kQ41+U0pMXk91/1OK2TCZloIVnxNY27umx/1w081Ewl
+         NsZXUYuoOtFVO0JdYFUS62CwGJaXiY1RWXrk8Mr+HCK8aSRRGJOIAauFrAuRmnh/w7JBpdTRqOxK
+         7AeMQFm6VWs67FEqJ2h6gHhhxvQ5oka3tMz+LyQDEKv1xcc9gIxMg/ZB2z7j9K2beJhyTFxiO0WN
+         tea16zM+YjzZHGi3a+LKx5/SsKLjX93iF5GF3V4Pr5RuioilrEGkFEGup/sL/aNOHGtEf2ltbxNf
+         9cTN4AAnomRfGfmD5S47CFu23xOIOPYHt/GWJ0mAD0+ClDPapn8+Ruo8gCS1LwgC+KgRA07UC9Oa
+         T2La0xSw==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     ldewangan@nvidia.com
+Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH] spi: tegra20-sflash: Fix signedness bug in tegra_sflash_probe
+Date:   Sat, 15 Jul 2023 17:53:56 +0800
+X-OQ-MSGID: <20230715095356.1507787-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 15 Jul 2023 11:00:02 +0300
-Message-ID: <CAHp75VeyHYCucnxaXb5UU0x2i0ugJGqxeiBZvMqd_2qX=gGsBQ@mail.gmail.com>
-Subject: Re: [PATCH 00/10] spi: rzv2m-csi: Code refactoring
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Jul 15, 2023 at 4:04=E2=80=AFAM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
->
-> Dear All,
->
-> this series is to follow up on Geert and Andy feedback:
-> https://patchwork.kernel.org/project/linux-renesas-soc/patch/202306221133=
-41.657842-4-fabrizio.castro.jz@renesas.com/
+The "tsd->irq" variable is unsigned so this error handling
+code will not work.
 
-Thank you!
+Fix this by adding error handling statement
 
-Some comments I sent against individual patches (Suggested-by can be
-applied to many, btw), if you address them as suggested, feel free to
-add
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-to the entire series.
+Fixes: 8528547bcc33 ("spi: tegra: add spi driver for sflash controller")
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+---
+ drivers/spi/spi-tegra20-sflash.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---=20
-With Best Regards,
-Andy Shevchenko
+diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
+index 4286310628a2..4c18337de813 100644
+--- a/drivers/spi/spi-tegra20-sflash.c
++++ b/drivers/spi/spi-tegra20-sflash.c
+@@ -455,7 +455,11 @@ static int tegra_sflash_probe(struct platform_device *pdev)
+ 		goto exit_free_master;
+ 	}
+ 
+-	tsd->irq = platform_get_irq(pdev, 0);
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto exit_free_master;
++
++	tsd->irq = ret;
+ 	ret = request_irq(tsd->irq, tegra_sflash_isr, 0,
+ 			dev_name(&pdev->dev), tsd);
+ 	if (ret < 0) {
+-- 
+2.30.2
+
