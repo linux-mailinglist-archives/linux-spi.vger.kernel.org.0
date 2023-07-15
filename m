@@ -2,98 +2,219 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05055754815
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 12:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF1B75481A
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Jul 2023 12:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjGOKAP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 15 Jul 2023 06:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S230174AbjGOKCZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 15 Jul 2023 06:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGOKAO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 15 Jul 2023 06:00:14 -0400
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EE6132;
-        Sat, 15 Jul 2023 03:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1689415209;
-        bh=UpVM55kDs942KIyIZCbP7/8cjNZBSlpLjQ3vWtUWbAI=;
-        h=From:To:Cc:Subject:Date;
-        b=mjrS4xN36G6gqCuJ+K2TGaUmS9VWkkkW0bMCmGq9tRO/aevaEki1OQKtG8Q2O1nMa
-         O7yolZhUOZg+/3uDTF54Mnj/jOxlLaK65DzIfmrO6mmOIqYANJ/lvlEAUF8ACvhJ3U
-         KRRxk6Ntsrmv4gJUOOpJJmss/lRFDopL641hN9oM=
-Received: from KernelDevBox.byted.org ([180.184.49.4])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id D792BC5A; Sat, 15 Jul 2023 17:53:57 +0800
-X-QQ-mid: xmsmtpt1689414837tvr97vcsh
-Message-ID: <tencent_4D4974DE0CD4266C25819179B42888A3E20A@qq.com>
-X-QQ-XMAILINFO: Mdc3TkmnJyI/P5bMlDWHt42XZlbuAP7IOtLgcr56S2b6SFl47cFJLKPDw3Zd8x
-         p72EqDQVEnDzcOZQqqmhByqXK8hxcSLfaPCRg4e9rhEtnRxG3BFTa8JlgI9gUga4gTdY6aAMJgjb
-         uO73jir/95rKCRCGaMBS1O/u72LcaEqkhsUUIJ6kLCxYNCVihnxZqi1dSdGGxFTuWAWg5XhX4uYz
-         NLLFfBRIsz5lXGqeUYTGu8Z4jG49IggTtTRsuiSJy+bQ/d1GVy2Sr/YYpsGTMub3zwA4RCg3AuKE
-         vXPfbuwpaaBuWZnmDI2o8D898OVekZXDffwdFe/lPrZJ+0wzXcbfVrG9DsgsmNel4EfKZpKuScy0
-         kgy63qaTX3XM3xLqbS9tQjrUQBe9jRKGoW1BCHvte7lbUOE/v+DZckCncnuodiPdDYy8ftk5mK+a
-         e1IuXipIcPalRtYDtS4O7gr+6UQ02TU6F2uu4ld8hDT3qCOcX8nnvl9wPOmmjcabau6wnvztLXsd
-         HGDN9IOORlBtFktWBI1u5RXGBaLUSyCPdKRVtHSjS54F46u7aeCfvl3GPjRc6XdcT7WTD3NHtDQI
-         7O+mcRLN58lxMaScCByj3HR/TrITaM0Dwqe8/pbC+cbzAK+pAdzu+mcGlRzBZBsbS+A6NMiw5AQ8
-         nT5eCBk4GWKkn8Tl2kiPrGpXnrc9Ys9F5kQ41+U0pMXk91/1OK2TCZloIVnxNY27umx/1w081Ewl
-         NsZXUYuoOtFVO0JdYFUS62CwGJaXiY1RWXrk8Mr+HCK8aSRRGJOIAauFrAuRmnh/w7JBpdTRqOxK
-         7AeMQFm6VWs67FEqJ2h6gHhhxvQ5oka3tMz+LyQDEKv1xcc9gIxMg/ZB2z7j9K2beJhyTFxiO0WN
-         tea16zM+YjzZHGi3a+LKx5/SsKLjX93iF5GF3V4Pr5RuioilrEGkFEGup/sL/aNOHGtEf2ltbxNf
-         9cTN4AAnomRfGfmD5S47CFu23xOIOPYHt/GWJ0mAD0+ClDPapn8+Ruo8gCS1LwgC+KgRA07UC9Oa
-         T2La0xSw==
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     ldewangan@nvidia.com
-Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] spi: tegra20-sflash: Fix signedness bug in tegra_sflash_probe
-Date:   Sat, 15 Jul 2023 17:53:56 +0800
-X-OQ-MSGID: <20230715095356.1507787-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229549AbjGOKCZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 15 Jul 2023 06:02:25 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6622726;
+        Sat, 15 Jul 2023 03:02:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5216f44d881so1260005a12.1;
+        Sat, 15 Jul 2023 03:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689415342; x=1692007342;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9bOirRu6EADR4lQ+to8XFoY/uoEmIKfleVanV2j96+8=;
+        b=Ps8nmE8yOES7YE0jt2bn6eP+DPJc31u6tnebmhKJBOOug0eoGMfCw0Qiv1AAFXP4cH
+         aEmpGq/v0G9ygn1NBPJy51WCrzOGSwymWQivtv6cftJdR4NuRaV4r53PPRt7zjYMjlUq
+         GBFSXcvzGjCIAnwzkBPE9zAHLaJKdWwgydNHaMXWx3cHVkMbYqcl/7GXUL9HUcu6SHJF
+         JuIqY70DDRYtOEmHkiv2YVNXQgtSz3rJxoqdmSyWaVirR7TARxilkDrhihSu6jiim7Ye
+         tVgbEN+Tkds2uSIdF2hUKPn/0LHk/LJ9koeZZ7qnzq15RMsOw1m3M7qoagUBiR4hkFqF
+         rXFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689415342; x=1692007342;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9bOirRu6EADR4lQ+to8XFoY/uoEmIKfleVanV2j96+8=;
+        b=iII5sdk4r47ULNHSnay0lGNbdSeV7TyeUoeBqztRHTH6XrYTyrCo48dG8GjpRlfmT/
+         0OBgz2nHTyyzDAf99ON3+V4giSIJoZlyjgq7TM5fCYkQrB5MCE9vumOGAXw01amnrAnD
+         ofL5xJEiTJztVlPI7PfzebKRGSmskWvjftFswQPawftQ9MtvckT6Z0pFoA5r4i6IoYeZ
+         9mfN2KpD9/l4uaHf3i9CQCRXTzc/jNhEa2MuQjv7gq93TFeWKtOhs5ZqwM78X4Bpfvb2
+         EjAulI9q/Ou7XRMCuwYDg7SGXlwgVEEnSBwM6ZxZcqVnnLjdF0kWxBZYiDtqWTStcXxy
+         EeVQ==
+X-Gm-Message-State: ABy/qLZkzVIfvhm8P0qGk1tiLuCDspLeR9iewEz5eJHg2W5UYDV9rKt8
+        jW0VrC/vsN3/4y/MbPfGKZQ=
+X-Google-Smtp-Source: APBJJlHFdDR9Ve0U9O2+dL66w23HZjO4wRRKs6m+N/Z7kX1eYtMJ5nqBJOTDtXcf1wvq80mJ5t2QAw==
+X-Received: by 2002:a05:6402:31f4:b0:51a:5a25:6631 with SMTP id dy20-20020a05640231f400b0051a5a256631mr6854782edb.3.1689415341548;
+        Sat, 15 Jul 2023 03:02:21 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id z17-20020aa7c651000000b0051df54c6a27sm6864439edr.56.2023.07.15.03.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jul 2023 03:02:20 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: spi: convert spi-brcm63xx.txt to YAML
+Date:   Sat, 15 Jul 2023 12:02:10 +0200
+Message-Id: <20230715100211.14726-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The "tsd->irq" variable is unsigned so this error handling
-code will not work.
+Changes done during conversion:
 
-Fix this by adding error handling statement
+* added a description, lifting and adapting the limitation sentence from
+  brcm,bcm63xx-hsspi.yml
+* added appropriate compatibles for all SoCs that are supported by
+  bcm63xx/bmips
 
-Fixes: 8528547bcc33 ("spi: tegra: add spi driver for sflash controller")
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
- drivers/spi/spi-tegra20-sflash.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../bindings/spi/brcm,bcm63xx-spi.yaml        | 71 +++++++++++++++++++
+ .../devicetree/bindings/spi/spi-bcm63xx.txt   | 33 ---------
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 72 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm63xx-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
 
-diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
-index 4286310628a2..4c18337de813 100644
---- a/drivers/spi/spi-tegra20-sflash.c
-+++ b/drivers/spi/spi-tegra20-sflash.c
-@@ -455,7 +455,11 @@ static int tegra_sflash_probe(struct platform_device *pdev)
- 		goto exit_free_master;
- 	}
- 
--	tsd->irq = platform_get_irq(pdev, 0);
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto exit_free_master;
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-spi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-spi.yaml
+new file mode 100644
+index 000000000000..53e0c058b8b1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-spi.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/brcm,bcm63xx-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	tsd->irq = ret;
- 	ret = request_irq(tsd->irq, tegra_sflash_isr, 0,
- 			dev_name(&pdev->dev), tsd);
- 	if (ret < 0) {
++title: Broadcom BCM6348/BCM6358 SPI controller
++
++maintainers:
++  - Jonas Gorski <jonas.gorski@gmail.com>
++
++description: |
++  Broadcom "Low Speed" SPI controller found in many older MIPS based Broadband
++  SoCs.
++
++  This controller has a limitation that can not keep the chip select line active
++  between the SPI transfers within the same SPI message. This can terminate the
++  transaction to some SPI devices prematurely. The issue can be worked around by
++  the controller's prepend mode.
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - brcm,bcm6368-spi
++              - brcm,bcm6362-spi
++              - brcm,bcm63268-spi
++          - const: brcm,bcm6358-spi
++      - const: brcm,bcm6348-spi
++      - const: brcm,bcm6358-spi
++
++  reg:
++    items:
++      - description: main registers
++
++  clocks:
++    items:
++      - description: SPI master reference clock
++
++  clock-names:
++    items:
++      - const: spi
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi@10000800 {
++        compatible = "brcm,bcm6368-spi", "brcm,bcm6358-spi";
++        reg = <0x10000800 0x70c>;
++        interrupts = <1>;
++        clocks = <&clkctl 9>;
++        clock-names = "spi";
++        num-cs = <5>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/spi/spi-bcm63xx.txt b/Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
+deleted file mode 100644
+index 1c16f6692613..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-Binding for Broadcom BCM6348/BCM6358 SPI controller
+-
+-Required properties:
+-- compatible: must contain one of "brcm,bcm6348-spi", "brcm,bcm6358-spi".
+-- reg: Base address and size of the controllers memory area.
+-- interrupts: Interrupt for the SPI block.
+-- clocks: phandle of the SPI clock.
+-- clock-names: has to be "spi".
+-- #address-cells: <1>, as required by generic SPI binding.
+-- #size-cells: <0>, also as required by generic SPI binding.
+-
+-Optional properties:
+-- num-cs: some controllers have less than 8 cs signals. Defaults to 8
+-  if absent.
+-
+-Child nodes as per the generic SPI binding.
+-
+-Example:
+-
+-	spi@10000800 {
+-		compatible = "brcm,bcm6368-spi", "brcm,bcm6358-spi";
+-		reg = <0x10000800 0x70c>;
+-
+-		interrupts = <1>;
+-
+-		clocks = <&clkctl 9>;
+-		clock-names = "spi";
+-
+-		num-cs = <5>;
+-
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 238f50f9498e..3cb77cdb92f7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4125,7 +4125,7 @@ BROADCOM BCM6348/BCM6358 SPI controller DRIVER
+ M:	Jonas Gorski <jonas.gorski@gmail.com>
+ L:	linux-spi@vger.kernel.org
+ S:	Odd Fixes
+-F:	Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
++F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-spi.yaml
+ F:	drivers/spi/spi-bcm63xx.c
+ 
+ BROADCOM ETHERNET PHY DRIVERS
 -- 
-2.30.2
+2.34.1
 
