@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F81755FA7
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 11:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F736755FCB
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 11:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjGQJpZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 17 Jul 2023 05:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S230299AbjGQJuG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 17 Jul 2023 05:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjGQJpD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 05:45:03 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7711136;
-        Mon, 17 Jul 2023 02:45:01 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57688a146ecso43678127b3.2;
-        Mon, 17 Jul 2023 02:45:01 -0700 (PDT)
+        with ESMTP id S230095AbjGQJuG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 05:50:06 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2ED123;
+        Mon, 17 Jul 2023 02:50:04 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5700b15c12fso42988687b3.1;
+        Mon, 17 Jul 2023 02:50:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689587101; x=1692179101;
+        d=1e100.net; s=20221208; t=1689587404; x=1692179404;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=afoh1NpmNoS6kq/+Qod+BULX3Nr8A6niOrBy8Pn51tg=;
-        b=FiSi4r1vvv7Q2rrHzM0CF99xGhkfvTY9/hx4y3vbo5ZC5dKkmNLsLcSK6ii9MJdZOs
-         zciGyxkXi9Pf/HzuV0YRT/TbwFs8nlvOTxUPlzglxWtDIJPX/9boHPZLbweULVc0HOEI
-         YebKkDNzKmn/bO3BG3TuXPzcM86Hk8T57UHMHCV4ORpN0/BdEzfpKT1VTwzsraQmQHw7
-         Kj/v271qC3DeVCMHW2Ruj0SAEAjTTYGOln3ZNz2Rk9zi4XqK+MNyIfsertypXhtDtFCN
-         Pmq2Lf/Ba00dLDSoszT25qhYC5P8GmYSaELhFtX7QOjgGftoghgzKjbdOdNPCu8CNTHQ
-         5Ntg==
-X-Gm-Message-State: ABy/qLbZljWEuSI6331wuNeExFfF6FHc/Xs3JVQJNWJGNr59ZW2cKYMW
-        eNoXstgPaaAqtBgqOtE2sAw6IaBvpDMuSQ==
-X-Google-Smtp-Source: APBJJlHuufGe53dBf6IP/74kYXsNgHd6XPmLBZNXpOOjBDMkaElSZv4fWFKSAc2RftnbPTo5laWV4g==
-X-Received: by 2002:a81:83d0:0:b0:577:21ff:4d47 with SMTP id t199-20020a8183d0000000b0057721ff4d47mr10817291ywf.7.1689587100841;
-        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id k1-20020a0dfa01000000b005771bb5a25dsm3698955ywf.61.2023.07.17.02.45.00
+        bh=QamgJcpJX+0EPK7nNbsMFG2BdXvGZpu2smwa9LegFAM=;
+        b=Rz3delMOIq31VA09K9i3x7KU72Ii6zHa/DLqhkzjmCJ32pB5nBCdY6s8iLyntBKbD2
+         YG2CtBVXMmM0lOq6C6DWLMvVBy4pc0LhyczGXPOS47Z0W3ksQEXd9tRvIo5bsSGlikaO
+         ZJ+mjNBzYEsq2e+vqow231MNc+wFNchAnaOybxo/hvUz6UHl0Dt7bs01iCpMoLcWXyUx
+         Px1XgYP8Y2q4rvIKQvyGFcZr0+Itd5d4CHkeb76U9l0mpp3gs+md7jVJ8kt4/UIHJzcu
+         h9Gn/x+QjhI8zltplxDblMAWX2DPdi289stlnzphUIB6dm6RWJEQIBCed2Py573JZogG
+         5b4Q==
+X-Gm-Message-State: ABy/qLaK3FOtvkolGFvoFYcyyA+A9RPKksuDJcw08Wmld9zGHOmLeT9s
+        O3Z+tRrhj1DKcs2aIZOr+P9j5AU8bHwApw==
+X-Google-Smtp-Source: APBJJlG/+FjJqBqZSd1KAOeh8I8lrjzqJvtwXQuF4nrQebRa0M6egdxsgoAYtJ/bNOfRyCo6OQGxLg==
+X-Received: by 2002:a0d:cc94:0:b0:579:fd23:5946 with SMTP id o142-20020a0dcc94000000b00579fd235946mr11984329ywd.22.1689587404013;
+        Mon, 17 Jul 2023 02:50:04 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id w184-20020a817bc1000000b0055a07e36659sm3704731ywc.145.2023.07.17.02.50.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-cada5e4e3f6so4367535276.3;
-        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
-X-Received: by 2002:a25:3c9:0:b0:c4a:695:9fa3 with SMTP id 192-20020a2503c9000000b00c4a06959fa3mr10104144ybd.2.1689587100319;
- Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
+        Mon, 17 Jul 2023 02:50:03 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so4366643276.0;
+        Mon, 17 Jul 2023 02:50:03 -0700 (PDT)
+X-Received: by 2002:a5b:c4c:0:b0:cab:e9f8:a150 with SMTP id
+ d12-20020a5b0c4c000000b00cabe9f8a150mr10039205ybr.60.1689587403593; Mon, 17
+ Jul 2023 02:50:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com> <20230715010407.1751715-9-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230715010407.1751715-9-fabrizio.castro.jz@renesas.com>
+References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com> <20230715010407.1751715-10-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230715010407.1751715-10-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Jul 2023 11:44:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXd5-+2F0yG70urKe5xdwa9K_dg5t_t+UzQ9pJ+eD8FSA@mail.gmail.com>
-Message-ID: <CAMuHMdXd5-+2F0yG70urKe5xdwa9K_dg5t_t+UzQ9pJ+eD8FSA@mail.gmail.com>
-Subject: Re: [PATCH 08/10] spi: rzv2m-csi: Improve data types and alignment
+Date:   Mon, 17 Jul 2023 11:49:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV7KioHHXNBw-gaL1MFfqaXbYwUQrrtz9W0ynwi5RBWYQ@mail.gmail.com>
+Message-ID: <CAMuHMdV7KioHHXNBw-gaL1MFfqaXbYwUQrrtz9W0ynwi5RBWYQ@mail.gmail.com>
+Subject: Re: [PATCH 09/10] spi: rzv2m-csi: Get rid of the x_trg{_words} tables
 To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
@@ -61,7 +62,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +70,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Fabrizio,
-
-Thanks for your patch!
-
 On Sat, Jul 15, 2023 at 3:04 AM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> "unsigned int" is more appropriate than "int" for the members
-> of "struct rzv2m_csi_priv".
-
-Agreed.
-
-> Also, members "bytes_per_word" and "errors" introduce gaps
-> in the structure.
-
-While enlarging the types does get rid of the gaps, that was not the
-intent of my comment ;-)
-You can reorder fields to avoid gaps, and reduce the size of the structure.
-
-> Adjust "struct rzv2m_csi_priv" and its members usage accordingly.
-> While at it, remove the unnecessary casting of "data" to
-> "struct rzv2m_csi_priv*" in function "rzv2m_csi_irq_handler".
+> Table x_trg can be replaced with ilog2(), and table x_trg_words
+> can be replaced with rounddown_pow_of_two().
+> Replace the tables usage with the corresponding macros.
+> While at it, remove a couple of unnecessary empty lines.
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-> --- a/drivers/spi/spi-rzv2m-csi.c
-> +++ b/drivers/spi/spi-rzv2m-csi.c
-
-> @@ -88,14 +88,14 @@ struct rzv2m_csi_priv {
->         struct spi_controller *controller;
->         const void *txbuf;
->         void *rxbuf;
-> -       int buffer_len;
-> -       int bytes_sent;
-> -       int bytes_received;
-> -       int bytes_to_transfer;
-> -       int words_to_transfer;
-> -       unsigned char bytes_per_word;
-> +       unsigned int buffer_len;
-> +       unsigned int bytes_sent;
-> +       unsigned int bytes_received;
-> +       unsigned int bytes_to_transfer;
-> +       unsigned int words_to_transfer;
-> +       unsigned int bytes_per_word;
-
-bytes_per_word is calculated from spi_transfer.bits_per_word,
-so u8 was fine.
-
->         wait_queue_head_t wait;
-> -       u8 errors;
-> +       u32 errors;
-
-u8 was sufficiently large to hold all possible values.
-
->         u32 status;
->  };
->
-
-Anyway, the code should work fine, so
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
