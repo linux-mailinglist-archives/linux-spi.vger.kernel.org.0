@@ -2,117 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB4C755CEF
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 09:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EC6755ED5
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 10:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjGQHcV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jul 2023 03:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S230136AbjGQI7y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jul 2023 04:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGQHcU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 03:32:20 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3021F7
-        for <linux-spi@vger.kernel.org>; Mon, 17 Jul 2023 00:32:18 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51ff0e3d8c1so5485353a12.0
-        for <linux-spi@vger.kernel.org>; Mon, 17 Jul 2023 00:32:18 -0700 (PDT)
+        with ESMTP id S230160AbjGQI7u (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 04:59:50 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACA01BE
+        for <linux-spi@vger.kernel.org>; Mon, 17 Jul 2023 01:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689579137; x=1692171137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pv91Y/hHafEW4ZRKNw2H1A2oNIjmoAKxyQzlEUETkRE=;
-        b=zarwAJv92Xt2k7MoCvVR5lmLFy3I9K9d0x3NDKwc5FaYGmxcnYkn879V5sq2RrTIzM
-         lKNJ69TPFjFx9Xvnk3QcatXUKgOpl3sy86xTUAtPi7QMcm3hEOR0r6T61gZroWnqFZ07
-         ixekUmiwu/U5HgVF6/N4MnxN2h9t0XvPWBaEp+OEEO8KFzG0qEtzWxM/A8ubZuSAjV5T
-         c2SRCLycWpAh7EzHq7KGLfGKiiq0MF/9AbP6Uj5pD9GQejXs1sL7jCylPbc/R7H2yr4k
-         VT1Oj0d2ZxN3Dgp41vTvk1Qn/YnT6FWRglmtgNpxQyyDyXbAmVThmFADrZjJ0QMFutLr
-         AG4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689579137; x=1692171137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pv91Y/hHafEW4ZRKNw2H1A2oNIjmoAKxyQzlEUETkRE=;
-        b=cIPtqQMk2211Ny7WPa2GP3gdRaR4Sq/qpKUjB1ASulcF4WX4F5hn6lg7AjmF6Ld9kj
-         tsfwEfk8IoehrEKhRRah5J9401UQ3DRNCVpTe9ts6ihzFna58eM68i3qmPWHW9nS84rr
-         lArwv1ga4e0zyA3DIcXOt6r2N82ilEemC4URXWIabnV6VqnVXFTuVDEXQkX04j/fNIpH
-         +/OdUZJEPX3qOFvMRWBZpNDU9ghdVeihcljJyPpTXOJHPuTAy8WROdVyr7QBFkykh+6k
-         dpkMNO7gkgQmr8D4Rk5ebejun4ZdHmK+tIFQ+swbjN+TyayccFUW7Md6v2oSdY+sqMkn
-         PdNA==
-X-Gm-Message-State: ABy/qLZ9OhS4PmM4kNkxVsqto3PBc9jI+b2BI74V3KEuG9KLAJgtxNZJ
-        tdeDLV7jrpEzN0kDpVfrGJHZK5LdU7Ymysvb+LFWcg==
-X-Google-Smtp-Source: APBJJlHS++C+Il0h3Fm0PWn55t4tbwHXihF3t5QSMivrJVprA40Kdc7aHUFPuoXYPQywSjZRRSUSGg==
-X-Received: by 2002:aa7:c3d8:0:b0:51f:f1a4:edc6 with SMTP id l24-20020aa7c3d8000000b0051ff1a4edc6mr9916946edr.37.1689579137200;
-        Mon, 17 Jul 2023 00:32:17 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id e3-20020a056402088300b0051e06693590sm9437408edy.91.2023.07.17.00.32.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 00:32:16 -0700 (PDT)
-Message-ID: <8b70a042-bd9e-6c4d-dc71-07d807a1f960@linaro.org>
-Date:   Mon, 17 Jul 2023 09:32:15 +0200
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1689584388; x=1721120388;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9gRugZHOgV4c+QqZlYJH19hQNzFjnCXyL1pKBi3wnJc=;
+  b=An/f49AyeUm+nBS/FVY6BABxGz4/S82d6YL+L/dnYTT0XOvyKU2Q2cE+
+   f20J8Zy60k3GGJ1NcX0dtIJEHJBcLJiwlSWaPi1Six6a0zsfzsW3LseDc
+   iZj24lseA189dkjxnDoOUCsKFTpzg3E7fHl1ZWTAShWUYyjCGcuiP3Wn8
+   0Rjg3DhnVAIq/alx320jkuXQIxZzass6ibZ4Po6mlMPaJ1Lw27OJ7zKSp
+   yGuWpCM162IXQJyY4Nzfb9Y0qYTyTZW07XfbCFFvfKt0/8dQ/p9i2D/Xe
+   7yTHgWC41iB8VFTqNxLLp1RypeS3VW+4uDbSQyrX2307VUipYSOdmfhBV
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,211,1684792800"; 
+   d="scan'208";a="31958423"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 17 Jul 2023 10:59:47 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 02587280078;
+        Mon, 17 Jul 2023 10:59:46 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v2 1/3] spi: spi-fsl-lpspi: Remove num_cs from device struct
+Date:   Mon, 17 Jul 2023 10:59:32 +0200
+Message-Id: <20230717085934.409476-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] dt-bindings: spi: convert spi-brcm63xx.txt to YAML
-Content-Language: en-US
-To:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230715100211.14726-1-jonas.gorski@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230715100211.14726-1-jonas.gorski@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/07/2023 12:02, Jonas Gorski wrote:
-> Changes done during conversion:
-> 
-> * added a description, lifting and adapting the limitation sentence from
->   brcm,bcm63xx-hsspi.yml
-> * added appropriate compatibles for 
+This is only used during probe() call, so there is no need to store it
+longer than that.
 
-...
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Changes in v2:
+* Rebase to next-20230717
 
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm6368-spi
-> +              - brcm,bcm6362-spi
-> +              - brcm,bcm63268-spi
-> +          - const: brcm,bcm6358-spi
-> +      - const: brcm,bcm6348-spi
-> +      - const: brcm,bcm6358-spi
+ drivers/spi/spi-fsl-lpspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-These two are just enum. It's preferred syntax.
-
-> +
-> +  reg:
-> +    items:
-> +      - description: main registers
-
-Instead shorter:
-maxItems: 1
-
-With above:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index dfdcb69f66ab..0a0677f11a3d 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -97,7 +97,6 @@ struct fsl_lpspi_data {
+ 	struct clk *clk_ipg;
+ 	struct clk *clk_per;
+ 	bool is_slave;
+-	u32 num_cs;
+ 	bool is_only_cs1;
+ 	bool is_first_byte;
+ 
+@@ -825,6 +824,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	struct spi_controller *controller;
+ 	struct resource *res;
+ 	int ret, irq;
++	u32 num_cs;
+ 	u32 temp;
+ 	bool is_slave;
+ 
+@@ -847,8 +847,8 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	fsl_lpspi->is_only_cs1 = of_property_read_bool((&pdev->dev)->of_node,
+ 						"fsl,spi-only-use-cs1-sel");
+ 	if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
+-				 &fsl_lpspi->num_cs))
+-		fsl_lpspi->num_cs = 1;
++				 &num_cs))
++		num_cs = 1;
+ 
+ 	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 32);
+ 	controller->transfer_one = fsl_lpspi_transfer_one;
+@@ -858,7 +858,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
+ 	controller->dev.of_node = pdev->dev.of_node;
+ 	controller->bus_num = pdev->id;
+-	controller->num_chipselect = fsl_lpspi->num_cs;
++	controller->num_chipselect = num_cs;
+ 	controller->slave_abort = fsl_lpspi_slave_abort;
+ 	if (!fsl_lpspi->is_slave)
+ 		controller->use_gpio_descriptors = true;
+-- 
+2.34.1
 
