@@ -2,62 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F2275614F
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 13:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC12E75615E
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 13:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjGQLQA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jul 2023 07:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S230144AbjGQLTE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jul 2023 07:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGQLP7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 07:15:59 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540DCE45;
-        Mon, 17 Jul 2023 04:15:58 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99364ae9596so635104366b.1;
-        Mon, 17 Jul 2023 04:15:58 -0700 (PDT)
+        with ESMTP id S229887AbjGQLTC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 07:19:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7084E48;
+        Mon, 17 Jul 2023 04:19:00 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-993d1f899d7so635098066b.2;
+        Mon, 17 Jul 2023 04:19:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689592557; x=1692184557;
+        d=gmail.com; s=20221208; t=1689592739; x=1692184739;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gBg+se2TKplOLO7bdoST+fqCafmJ3rdJVHXdD1afWpc=;
-        b=LwywWnnUf9nrWR1QpAxn5d4V3AGNUgIQIRaJ9H+EF8jnJNowrQWIMLx1OPEwd0s1oS
-         p0+rWQG8qvof7Ung8cO6OV19GHuMhJ3HMK2OJ0mjN90bM7nFSS/lox0jxW2k9e0otUme
-         P5JK7Tv2hP+RuPQGnm0cpmNBh6j/o2d8Xjdcys3vqCEt9kCnJwTb+1BDP1mLOLWKJaxe
-         QWSwNyXkpJe1yMlQFxw5UuaxTS6mMkaJlEulNRM3ThN56z72qbv6LiHBpgdnkC79py4h
-         V4Ta9FtgjRnPY7cA7sK2M/80QB6yAaTZp6CohQa2w54fAd7ajBqNMOZUx7LM0eLrjcZ8
-         ZR6A==
+        bh=QijUibtG40+t5LDtP3Zsswxs5UnjGxpVCNjyPMZLJl8=;
+        b=iq1FnouNw8hu78GVyoQBK0Cv8f50DC2LDmg0E/jmuE7TL2mhCtlpiBtRW3xMyfbiCP
+         s7Um1pL125YQciF26uaBkmJ7Sv3OseJHp+TXcKplLPdFIksRY7LGvs4h6XDKkhAqJKDj
+         1cVJkAHafFI9I8eVtDFdAzjoVq2BV2qTegcJh80HbIKh1fcXi0mXS4gUINK9gDtvx9lb
+         1BggqdiatGURBcKH9MqIzGcMqrzDA2HmJ7LZg+Uxd42pdVngIwYZvd3bvSUzc6gp29zu
+         /wppIfELH8hKqxugJ7ig069072Mlua7HtiKIVE8l/eAqlH7Pv/Qwk3sVouIZ+OkJGU3J
+         ehGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689592557; x=1692184557;
+        d=1e100.net; s=20221208; t=1689592739; x=1692184739;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gBg+se2TKplOLO7bdoST+fqCafmJ3rdJVHXdD1afWpc=;
-        b=HVEdcXisHwk9L/c/3jqf69Ch1jbcU7hduhCUxoeiYDjgRXTfSaxxH7GJn0RWFmEuqK
-         /T0VIW/X771HClhnBSeDW6M2i+YPSTQsz3SvJMgDltAvmVlk17u4MaoPlrX4H7wV1kNu
-         tW/zRxyXxcCJZg7nrIcNA30ru0ae90Up5m5vHHC48BMX4R73UXBgkqRZhsnD+/Vh8u8A
-         WIL6YTZvhgrBXRF1eTHmIeJk5di0bG4Ex24f99Ne46SdAY0SWusCR2kgAAC2/5Tx3j3o
-         wI7HnYy6gWdCAKYFaOdoRZ5I2RqKqttUagQPsYklO/oXma2SijB+oPMCtR7ODIzXhy72
-         bTnw==
-X-Gm-Message-State: ABy/qLZN9oemFKGacrgananObTLGqoTVj6RDkrlLbJEV6O1dP8hv8YTe
-        vPnVDa5dzKj4q6/GWHsB/k0u81zAluZJEOjidkDKFwXecSM=
-X-Google-Smtp-Source: APBJJlGOwew/CPDHF3J6JBHnS20pV1qd9EE64X8GjAtKJ9VxhO3/n1sPRDTO0MzC9Gch/OWqDF7/rwy+/1yLwSBs0tM=
-X-Received: by 2002:a17:906:7397:b0:994:18c4:3303 with SMTP id
- f23-20020a170906739700b0099418c43303mr11255906ejl.18.1689592555983; Mon, 17
- Jul 2023 04:15:55 -0700 (PDT)
+        bh=QijUibtG40+t5LDtP3Zsswxs5UnjGxpVCNjyPMZLJl8=;
+        b=W46qXIbH2njzUpLEszAq3bgHyfQdUEWZ105JAZP8xBBxVbj3ebpx7hkXv+JRBaes/g
+         +ESS1577aGyyPhjT9KTZnVT0Sz/E0RPNCR9DPa2fB80mfnf2Mv9xYWEFDj9Y/3YFaeB5
+         pnyJwwE0A6jj03e+1v3rc1LbgObf6ezpmEBoN88p6m0QHkuCT2fsPUeC8ujkfRN4BapQ
+         HeRsO7z7+93eg2/5URrz6cDiFPAp9FRP9vgivlmNdjdfc5DlvMl7BsdbifPbtlqNJ80T
+         IGj1FRmbHmmSUEuIkdORJdh79d9j7dJgVG962ZrAEPop12gfCf2cXdWtUiE1vVHpxn9L
+         oCwQ==
+X-Gm-Message-State: ABy/qLYfzUUYvqzaqrV3AziMI0w5S7GfquJLC6NyGxmL0SNzwNUrYcLc
+        rXSs2K/nbCSIZEhSaMfr67T6R6NOAVy7W3j1dOw=
+X-Google-Smtp-Source: APBJJlFgxJ9kqESM2vJO7AKAUkjY4G9ICt4eSFqnKKc+eDe0rOvAKel/IRN6zzvlQGEnfjkZIXlQpd77OnW6Y8Ra2Yo=
+X-Received: by 2002:a17:906:e213:b0:992:48b7:99e3 with SMTP id
+ gf19-20020a170906e21300b0099248b799e3mr10396878ejb.63.1689592739105; Mon, 17
+ Jul 2023 04:18:59 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com>
- <20230715010407.1751715-7-fabrizio.castro.jz@renesas.com> <CAHp75VdyUhvk9JA4oW6iYjK=YdatjG3OVa0APMQrc+un2EyadQ@mail.gmail.com>
- <TYWPR01MB8775831C81B7153DB24F86C2C23BA@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYWPR01MB8775831C81B7153DB24F86C2C23BA@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+ <20230715010407.1751715-8-fabrizio.castro.jz@renesas.com> <CAMuHMdUzxQfi2w8dyF8gCitkSKkw_fRE074EUuB+tHKn8WM3=w@mail.gmail.com>
+ <TYWPR01MB8775869576E4B3F0FEFCF3DCC23BA@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYWPR01MB8775869576E4B3F0FEFCF3DCC23BA@TYWPR01MB8775.jpnprd01.prod.outlook.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 17 Jul 2023 14:15:19 +0300
-Message-ID: <CAHp75Ve7dHQVtYWvq8DjtGe+9nM_vkkmLj2-MUvwzozqOXAaTQ@mail.gmail.com>
-Subject: Re: [PATCH 06/10] spi: rzv2m-csi: Squash timing settings into one statement
+Date:   Mon, 17 Jul 2023 14:18:22 +0300
+Message-ID: <CAHp75VdNvWS04VN58r5VcSJskeVJF0g0_spSRb8f0_OP1P04QQ@mail.gmail.com>
+Subject: Re: [PATCH 07/10] spi: rzv2m-csi: Switch to using {read,write}s{b,w}
 To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Brown <broonie@kernel.org>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
@@ -77,30 +77,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 1:44=E2=80=AFPM Fabrizio Castro
+On Mon, Jul 17, 2023 at 1:36=E2=80=AFPM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > On Sat, Jul 15, 2023 at 4:04=E2=80=AFAM Fabrizio Castro
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Subject: Re: [PATCH 07/10] spi: rzv2m-csi: Switch to using
+> > {read,write}s{b,w}
+> > On Sat, Jul 15, 2023 at 3:04=E2=80=AFAM Fabrizio Castro
 > > <fabrizio.castro.jz@renesas.com> wrote:
 
 ...
 
-> > >         /* Setup clock polarity and phase timing */
-> > > -       rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKP,
-> > > -                               !(spi->mode & SPI_CPOL));
-> > > -       rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_DAP,
-> > > -                               !(spi->mode & SPI_CPHA));
-> > > +       rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_MODE,
-> > > +                               ~spi->mode & SPI_MODE_X_MASK);
+> > According to the hardware documentation[1], the access size for both
+> > the
+> > CSI_OFIFO and CSI_IFIFO registers is 32 bits, so you must use writel()
+> > resp. readl().  So please check with the hardware people first.
 > >
-> > I think this now regresses due to the absence of parentheses.
+> > [1] RZ/V2M User's Manual Hardware, Rev. 1.30.
 >
-> This looks okay to me. CSI_CLKSEL_CKP needs to contain the inverted value
-> of SPI_CPOL, and CSI_CLKSEL_DAP needs to contain the inverted value of
-> SPI_CPHA, and that happens with both use cases.
+> You are right, access is 32 bits (and although this patch works fine,
+> we should avoid accessing those regs any other way). Now I remember
+> why I decided to go for the bespoke loops in the first place, writesl
+> and readsl provide the right register access, but the wrong pointer
+> arithmetic for this use case.
+> For this patch I ended up selecting writesw/writesb/readsw/readsb to
+> get the right pointer arithmetic, but the register access is not as
+> per manual.
+>
+> I can either fallback to using the bespoke loops (I can still
+> remove the unnecessary u8* and u16* casting ;-) ), or I can add
+> new APIs for this sort of access to io.h (e.g. writesbl, writeswl,
+> readsbl, readswl, in order to get the pointer arithmetic right for
+> the type of array handled, while keeping memory access as expected).
+>
+> What are your thoughts on that?
 
-Ah, this is interchangeable since we will get the same bits in the end, ind=
-eed.
+I think that you need to use readsl() / writesl() on the custom buffer
+with something like
+
+*_sparse() / *_condence() APIs added (perhaps locally to this driver)
+as they may be reused by others in the future.
+Having all flavours of read*()/write*() does not scale in my opinion.
 
 --=20
 With Best Regards,
