@@ -2,54 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7ED755F80
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 11:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F81755FA7
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jul 2023 11:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjGQJkN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 17 Jul 2023 05:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S230144AbjGQJpZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 17 Jul 2023 05:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjGQJjz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 05:39:55 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47782171F;
-        Mon, 17 Jul 2023 02:37:48 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5703cb4bcb4so38432197b3.3;
-        Mon, 17 Jul 2023 02:37:48 -0700 (PDT)
+        with ESMTP id S229998AbjGQJpD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jul 2023 05:45:03 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7711136;
+        Mon, 17 Jul 2023 02:45:01 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57688a146ecso43678127b3.2;
+        Mon, 17 Jul 2023 02:45:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689586664; x=1692178664;
+        d=1e100.net; s=20221208; t=1689587101; x=1692179101;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RtQgiflbn9OLbHKvv9YuHhcm+jP+EsS00zgjRm84CX0=;
-        b=PE6vjWM18QjNU+9S1PdKm3iSm+e8AI8QLDZH5PSRW/jDAYZLIxj9F+bq8Q1PePaM+x
-         sr5zMkHZXF3PLMLY1SqzfbG1GyleiTHztbv/aReTxiTiE6mIGYtc+FiKihzRNpjVpPW1
-         k0apYHZJ5uhfxhpFMlBBII+oghLZdWu1Odk/gou9XwAzGObKRsPe020CqWAc+hrPlpww
-         OHYDS/ATe+x+pkNkS2RYDUnJDF1apOfQzhgRrPI8LSxRo1VE4wKY7CL9wNOzFa50mBHl
-         6ZKZ/cvbyXVQlHLmGZbSZ0mK+Mt3ySyXMxzNQYtqv9Uig8RWl5ystd1GkBimFcm+MQWE
-         HGNA==
-X-Gm-Message-State: ABy/qLYpkkASIyfvOSj9lDwBmNt3LSP+0A0bSRy0GsmBsAEaxVXAN2Yu
-        iYUNXnOMB/SCLpr0qH+BnxSjmRyYtWYn2w==
-X-Google-Smtp-Source: APBJJlGIulwPacv9ryVLdaVzWb9iBfGfrNqY0gldL/9oUQUDPHjaa0blF0RFr4VKxqLUupUOBIKFGw==
-X-Received: by 2002:a81:4757:0:b0:54f:9cd0:990 with SMTP id u84-20020a814757000000b0054f9cd00990mr10341589ywa.18.1689586664291;
-        Mon, 17 Jul 2023 02:37:44 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id w18-20020a814912000000b0057a92cd7f95sm3692975ywa.100.2023.07.17.02.37.43
+        bh=afoh1NpmNoS6kq/+Qod+BULX3Nr8A6niOrBy8Pn51tg=;
+        b=FiSi4r1vvv7Q2rrHzM0CF99xGhkfvTY9/hx4y3vbo5ZC5dKkmNLsLcSK6ii9MJdZOs
+         zciGyxkXi9Pf/HzuV0YRT/TbwFs8nlvOTxUPlzglxWtDIJPX/9boHPZLbweULVc0HOEI
+         YebKkDNzKmn/bO3BG3TuXPzcM86Hk8T57UHMHCV4ORpN0/BdEzfpKT1VTwzsraQmQHw7
+         Kj/v271qC3DeVCMHW2Ruj0SAEAjTTYGOln3ZNz2Rk9zi4XqK+MNyIfsertypXhtDtFCN
+         Pmq2Lf/Ba00dLDSoszT25qhYC5P8GmYSaELhFtX7QOjgGftoghgzKjbdOdNPCu8CNTHQ
+         5Ntg==
+X-Gm-Message-State: ABy/qLbZljWEuSI6331wuNeExFfF6FHc/Xs3JVQJNWJGNr59ZW2cKYMW
+        eNoXstgPaaAqtBgqOtE2sAw6IaBvpDMuSQ==
+X-Google-Smtp-Source: APBJJlHuufGe53dBf6IP/74kYXsNgHd6XPmLBZNXpOOjBDMkaElSZv4fWFKSAc2RftnbPTo5laWV4g==
+X-Received: by 2002:a81:83d0:0:b0:577:21ff:4d47 with SMTP id t199-20020a8183d0000000b0057721ff4d47mr10817291ywf.7.1689587100841;
+        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id k1-20020a0dfa01000000b005771bb5a25dsm3698955ywf.61.2023.07.17.02.45.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 02:37:43 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c5cf26e9669so2912523276.0;
-        Mon, 17 Jul 2023 02:37:43 -0700 (PDT)
-X-Received: by 2002:a25:adc6:0:b0:c6b:73fe:37d8 with SMTP id
- d6-20020a25adc6000000b00c6b73fe37d8mr9880481ybe.12.1689586663781; Mon, 17 Jul
- 2023 02:37:43 -0700 (PDT)
+        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-cada5e4e3f6so4367535276.3;
+        Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
+X-Received: by 2002:a25:3c9:0:b0:c4a:695:9fa3 with SMTP id 192-20020a2503c9000000b00c4a06959fa3mr10104144ybd.2.1689587100319;
+ Mon, 17 Jul 2023 02:45:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com> <20230715010407.1751715-8-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230715010407.1751715-8-fabrizio.castro.jz@renesas.com>
+References: <20230715010407.1751715-1-fabrizio.castro.jz@renesas.com> <20230715010407.1751715-9-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230715010407.1751715-9-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Jul 2023 11:37:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUzxQfi2w8dyF8gCitkSKkw_fRE074EUuB+tHKn8WM3=w@mail.gmail.com>
-Message-ID: <CAMuHMdUzxQfi2w8dyF8gCitkSKkw_fRE074EUuB+tHKn8WM3=w@mail.gmail.com>
-Subject: Re: [PATCH 07/10] spi: rzv2m-csi: Switch to using {read,write}s{b,w}
+Date:   Mon, 17 Jul 2023 11:44:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXd5-+2F0yG70urKe5xdwa9K_dg5t_t+UzQ9pJ+eD8FSA@mail.gmail.com>
+Message-ID: <CAMuHMdXd5-+2F0yG70urKe5xdwa9K_dg5t_t+UzQ9pJ+eD8FSA@mail.gmail.com>
+Subject: Re: [PATCH 08/10] spi: rzv2m-csi: Improve data types and alignment
 To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
@@ -72,56 +71,63 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Fabrizio,
 
+Thanks for your patch!
+
 On Sat, Jul 15, 2023 at 3:04 AM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> The RX/TX FIFOs implemented by the CSI IP are accessed by
-> repeatedly reading/writing the same memory address, and
-> therefore they are the ideal candidate for {read,write}s{b,w}.
-> The RZ/V2M CSI driver currently implements loops to fill up
-> the TX FIFO and empty the RX FIFO, differentiating between
-> 8-bit and 16-bit word size.
-> Switch to using {read,write}s{b,w} to get rid of the bespoke
-> loops.
+> "unsigned int" is more appropriate than "int" for the members
+> of "struct rzv2m_csi_priv".
+
+Agreed.
+
+> Also, members "bytes_per_word" and "errors" introduce gaps
+> in the structure.
+
+While enlarging the types does get rid of the gaps, that was not the
+intent of my comment ;-)
+You can reorder fields to avoid gaps, and reduce the size of the structure.
+
+> Adjust "struct rzv2m_csi_priv" and its members usage accordingly.
+> While at it, remove the unnecessary casting of "data" to
+> "struct rzv2m_csi_priv*" in function "rzv2m_csi_irq_handler".
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-
-Thanks for your patch!
 
 > --- a/drivers/spi/spi-rzv2m-csi.c
 > +++ b/drivers/spi/spi-rzv2m-csi.c
 
-> @@ -157,22 +157,15 @@ static int rzv2m_csi_start_stop_operation(const struct rzv2m_csi_priv *csi,
->
->  static int rzv2m_csi_fill_txfifo(struct rzv2m_csi_priv *csi)
->  {
-> -       int i;
-> -
->         if (readl(csi->base + CSI_OFIFOL))
->                 return -EIO;
->
-> -       if (csi->bytes_per_word == 2) {
-> -               u16 *buf = (u16 *)csi->txbuf;
-> -
-> -               for (i = 0; i < csi->words_to_transfer; i++)
-> -                       writel(buf[i], csi->base + CSI_OFIFO);
-> -       } else {
-> -               u8 *buf = (u8 *)csi->txbuf;
-> -
-> -               for (i = 0; i < csi->words_to_transfer; i++)
-> -                       writel(buf[i], csi->base + CSI_OFIFO);
-> -       }
-> +       if (csi->bytes_per_word == 2)
-> +               writesw(csi->base + CSI_OFIFO, csi->txbuf,
-> +                       csi->words_to_transfer);
-> +       else
-> +               writesb(csi->base + CSI_OFIFO, csi->txbuf,
-> +                       csi->words_to_transfer);
+> @@ -88,14 +88,14 @@ struct rzv2m_csi_priv {
+>         struct spi_controller *controller;
+>         const void *txbuf;
+>         void *rxbuf;
+> -       int buffer_len;
+> -       int bytes_sent;
+> -       int bytes_received;
+> -       int bytes_to_transfer;
+> -       int words_to_transfer;
+> -       unsigned char bytes_per_word;
+> +       unsigned int buffer_len;
+> +       unsigned int bytes_sent;
+> +       unsigned int bytes_received;
+> +       unsigned int bytes_to_transfer;
+> +       unsigned int words_to_transfer;
+> +       unsigned int bytes_per_word;
 
-According to the hardware documentation[1], the access size for both the
-CSI_OFIFO and CSI_IFIFO registers is 32 bits, so you must use writel()
-resp. readl().  So please check with the hardware people first.
+bytes_per_word is calculated from spi_transfer.bits_per_word,
+so u8 was fine.
 
-[1] RZ/V2M User's Manual Hardware, Rev. 1.30.
+>         wait_queue_head_t wait;
+> -       u8 errors;
+> +       u32 errors;
+
+u8 was sufficiently large to hold all possible values.
+
+>         u32 status;
+>  };
+>
+
+Anyway, the code should work fine, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
