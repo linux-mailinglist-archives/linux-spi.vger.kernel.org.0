@@ -2,49 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB97B7585E0
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ED67585E3
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjGRT41 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 15:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S229740AbjGRT70 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 15:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGRT40 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:56:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1B59D
-        for <linux-spi@vger.kernel.org>; Tue, 18 Jul 2023 12:56:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3428D60B37
-        for <linux-spi@vger.kernel.org>; Tue, 18 Jul 2023 19:56:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AAA7C433C8;
-        Tue, 18 Jul 2023 19:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689710184;
-        bh=0aLxgPRyrVZ7j82W+xa8xCfNLLov+lcnMFGm8avUI60=;
-        h=Subject:From:Date:To:From;
-        b=ZeB7P0nlcIGWSM7381jwPtw7PnIyHj/dKDQFkN+NPDxJDkYzvVebBUEIh7cvr+poD
-         jEmk9YaTJsxBNmfblGNfE/laneOimQul7Kl1r5x8sUpQG7qEqMJNmLKCQY7KnSehzS
-         n4jm0mEI8aNUSyZr108BbV9zIaI1rZK6hFUpUs9CuPocELy0RyeKfqtZfii3uxnJCc
-         HS85N/94pBkOiFqgE3qD8tLnzgrHnu4tMDQIMf6FuCWkMiNDUHQTa3vdBTkcgVBFzF
-         m9NMrJowjqnTOoV/gTiCLOHDdh9jPJS+wDGK6zpuqgZowP9tMQvWLrLqQfB9JUBBTi
-         Dk6uwTGUj0+Pg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C841C64458;
-        Tue, 18 Jul 2023 19:56:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229504AbjGRT7Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:59:25 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B639D;
+        Tue, 18 Jul 2023 12:59:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9926623e367so859470266b.0;
+        Tue, 18 Jul 2023 12:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689710363; x=1692302363;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wzQFRU62tvGxu9U/FBj8A0EPoudlBBKB+Wz+vTeB68g=;
+        b=YZlwfJC/Zjx+iv7hXUbIzloFGOoaRIrUVGZmOGpt9pSsqg4zT+AN2nHfnC6gqcwLUM
+         3o6mU3xkfwjpyfebd9VztdJD1KzMBkN+x2wszybwo85IhWW/KSiuKPLdR+6erZjXPZx3
+         M4ywC0iUuIEtcXKXll6P4kmMQF9aGGfqErNejEChTbLCjaZf/riqwSbOjrcqMy3sfQkn
+         Ly3WMEC5bWFpweiVHiQUz0dFR7///nKOmercGj2/z7UtAVBCBTiVLuo6mM6fsX+MBBp+
+         P9vvgAjLjvnxOIpe8+Y2FfMi7v90RWiyHy443CofGPJiPvorGSaPlvIEYzfOVuFDSl7W
+         EZTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689710363; x=1692302363;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wzQFRU62tvGxu9U/FBj8A0EPoudlBBKB+Wz+vTeB68g=;
+        b=IoOh48+YDTxcAaNidnqrQuBACm0p8WQr0E5NPNyBsIzh2zAX97IvWhw+Csz8prSIbV
+         YZbI2bxbZzbKYq5WpSdRUwkgzp2bipP37Vc+I26O/UbzAnyVfhQM5sLJSQcgnERcuZmp
+         ctA2tYp+UWr0quNr2k0+JoOklgNomB7KvGvb2VWIiFuIEnk+r4KB4DIVnuGofIJZxsF9
+         DYaOk6brVjQYJe1DxBO6QaXZfF//R657DHOWyIwKl3jqVxvMY91JFJxXZSS1zmxK4903
+         ds/oQIom/gJulqL9yITh6mchGLUgKXHSh0+mkJzFS/sQLLETMjqGeQamQckCK2WJl1WH
+         gEeA==
+X-Gm-Message-State: ABy/qLbOTCREnmoO18n03NOC1MDzjJqYZ6Y1DkUcRD2CYSnjzaSl/KXu
+        dt0vxyfRfCis4zoggQpl3q9kMWGs/lpmfnW6yHw=
+X-Google-Smtp-Source: APBJJlGFOtqJOO+QnjWhDDW2Vd4wvZXcxFdwjI9ufX7q5kFJu/XJLs4i34BPHU0jJJ48Umu2yknYlNFBilgM/T08SM8=
+X-Received: by 2002:a17:906:1059:b0:992:48b7:99e3 with SMTP id
+ j25-20020a170906105900b0099248b799e3mr533275ejj.63.1689710362897; Tue, 18 Jul
+ 2023 12:59:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168971018441.27282.342989782695419500.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 18 Jul 2023 19:56:24 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+References: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com> <20230718192453.543549-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230718192453.543549-3-fabrizio.castro.jz@renesas.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jul 2023 22:58:46 +0300
+Message-ID: <CAHp75Vc9DG69pbCACB9o6=1pFDHYUkzwi6siXNOywQ-_Uzb4vA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] spi: rzv2m-csi: Improve data types, casting and alignment
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,21 +73,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: rzv2m-csi: Code refactoring (2023-07-18T19:24:49)
-  Superseding: [v1] spi: rzv2m-csi: Code refactoring (2023-07-15T01:03:57):
-    [01/10] spi: rzv2m-csi: Add missing include
-    [02/10] spi: rzv2m-csi: Adopt HZ_PER_MHZ for max spi clock
-    [03/10] spi: rzv2m-csi: Rework CSI_CKS_MAX definition
-    [04/10] spi: rzv2m-csi: Leave readl_poll_timeout calls for last
-    [05/10] spi: rzv2m-csi: Replace unnecessary ternary operators
-    [06/10] spi: rzv2m-csi: Squash timing settings into one statement
-    [07/10] spi: rzv2m-csi: Switch to using {read,write}s{b,w}
-    [08/10] spi: rzv2m-csi: Improve data types and alignment
-    [09/10] spi: rzv2m-csi: Get rid of the x_trg{_words} tables
-    [10/10] spi: rzv2m-csi: Make use of device_set_node
+On Tue, Jul 18, 2023 at 10:25=E2=80=AFPM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+>
+> "unsigned int" is more appropriate than "int" for the members
+> of "struct rzv2m_csi_priv".
+> Using void* rather than u8* for txbuf and rxbuf allows for
+> the removal of some type casting.
+> Remove the unnecessary casting of "data" to "struct rzv2m_csi_priv*"
+> in function "rzv2m_csi_irq_handler".
+> Also, members "bytes_per_word" and "errors" introduce gaps
+> in the structure.
+> Adjust "struct rzv2m_csi_priv" and its members usage accordingly.
 
+Hmm... A bit of fancy indentation. Why is each sentence separated?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+...
 
+>         wait_queue_head_t wait;
+> -       u8 errors;
+> +       u32 errors;
+>         u32 status;
+
+As far as I understand Geert he wanted something like
+
+  u32 status;
+  u8 errors;
+
+...
+
+> -               u16 *buf =3D (u16 *)csi->txbuf;
+> +               const u16 *buf =3D csi->txbuf;
+
+> -               u8 *buf =3D (u8 *)csi->txbuf;
+> +               const u8 *buf =3D csi->txbuf;
+
+> -               u16 *buf =3D (u16 *)csi->rxbuf;
+> +               u16 *buf =3D csi->rxbuf;
+
+> -               u8 *buf =3D (u8 *)csi->rxbuf;
+> +               u8 *buf =3D csi->rxbuf;
+
+Yep, these look much better now.
+
+--=20
+With Best Regards,
+Andy Shevchenko
