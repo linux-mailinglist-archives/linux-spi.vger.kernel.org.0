@@ -2,138 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6367578BA
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 12:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCEB75795D
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 12:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjGRKBS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 06:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S231655AbjGRKiI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 06:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjGRKBG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 06:01:06 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B9B116;
-        Tue, 18 Jul 2023 03:01:02 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 4A2363BE;
-        Tue, 18 Jul 2023 12:01:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1689674460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TliMGa/AjS5CE9Jf6SZ3Vzpj2EtgwzwZjg72TLl0zqM=;
-        b=1tZ25vKAwvmo1bgrRHA025NmOefVDb6pIPqUrbYMERVCHhTLbGXhBFrA0BGs7RgMtOirHD
-        3zMKlXEtVvZGO/pQaKbZMrgkr5vfgduAnYedFZJXCCmfAvkNZlL3/aqxD1eEsBvZ/V9tHm
-        oWV1nY3Og16O8NvQ1K5Iycqnz4LoIRGM3LggtBwF8LDXzGYn/36SovjHQdsyqu4Nl4iLq3
-        DqYoTFqzSWS4Py5HODIvrWQkSGOEXd1fq2DB8OA3zZqN2O8koZKgNfUsAWSsfZsHOQ0RPq
-        Zo18n8Z3vl2RRYF2cwzIqxFq1yzoEBsZuM0V2vky8MIsGC+GKpiXXO5GcMZrAA==
+        with ESMTP id S231580AbjGRKh7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 06:37:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978BCF0;
+        Tue, 18 Jul 2023 03:37:57 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36I4uRuo001695;
+        Tue, 18 Jul 2023 10:37:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LOy8dN1LMbsCPe8GwGrP+qIqVm7Ey3w4gxhyogzgpfg=;
+ b=LLNZeg0JY3l6X0hKzNOnSDPaxZknClwT1ccScobiHuXLhGG4oVXB7wqCvyNYVYltZNcq
+ 6czvSf/dBpI+TbidXq8TzJUBo2bSStjd7khsCSWV4tIfKCMfQAYaHip4YD7bUxtvgj7B
+ qQNyMvfopOXxXShiENCm/i8YQImp/I+V0vhv5leBnNpzWwQMABbYqGekvvJnvfQrwCTe
+ NFCmdGy6MKZYfCec385UWXDcdK+Rl1ALIA51HBLuxXnuHykGKVqRwG9avVv7IQhSXKLa
+ XPrj+e1Nmg9pIkzU2eLxie0VbvVdpff4jmnwoHHWBXYTITGWYzGTpyqoDaa8A/UZmnuu fw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rwcg6se9v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jul 2023 10:37:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36IAbqOw002970
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jul 2023 10:37:52 GMT
+Received: from [10.218.15.57] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 18 Jul
+ 2023 03:37:48 -0700
+Message-ID: <d954ee43-d0cc-ef2b-8467-57883e9defd7@quicinc.com>
+Date:   Tue, 18 Jul 2023 16:07:45 +0530
 MIME-Version: 1.0
-Date:   Tue, 18 Jul 2023 12:01:00 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, saikrishna12468@gmail.com,
-        git@amd.com
-Subject: Re: [PATCH 0/3] spi: spi-cadence-quadspi: Add Rx tuning support for
- DTR mode
-In-Reply-To: <67e1d3af-d106-bd5c-f8d8-3f43a58975a0@linaro.org>
-References: <20230207060924.265789-1-sai.krishna.potthuri@amd.com>
- <67e1d3af-d106-bd5c-f8d8-3f43a58975a0@linaro.org>
-Message-ID: <85d8e122a236818b162b64b473a3fdc4@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 0/2] spi-geni-qcom: Add SPI device mode support for
+ GENI based QuPv3
+Content-Language: en-CA
+To:     Praveen Talari <quic_ptalari@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
+        <quic_arandive@quicinc.com>
+References: <20230714042203.14251-1-quic_ptalari@quicinc.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <20230714042203.14251-1-quic_ptalari@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ygdvlzfOVDxfbv9yiESlIVTV0gpXeFW7
+X-Proofpoint-GUID: ygdvlzfOVDxfbv9yiESlIVTV0gpXeFW7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-17_15,2023-07-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=587
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307180095
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2023-02-07 07:48, schrieb Tudor Ambarus:
-> On 2/7/23 06:09, Sai Krishna Potthuri wrote:
->> Enable PHY and DQS required for Xilinx Versal Octal SPI to operate in 
->> DTR
->> protocol.
->> Add and update device_id field in spi_mem structure with flash id
->> information. Xilinx Versal Octal SPI driver requires the device id
->> information to perform the Rx tuning operation. Since there is no 
->> common
->> Tuning Data Pattern defined across all vendors, controllers like 
->> Xilinx
->> Versal Octal SPI which requires Rx tuning to find out the optimal 
->> sampling
->> point for data lines, this device id information will be used as a 
->> golden
->> data.
-> 
-> Using only 6 bytes as golden pattern seems fragile, but you are aware 
-> of
-> that, as I see that you chose to read the ID 10 times to make the
-> decision whether the tap is valid or not. Other option (which is not
-> perfect) is to use SFDP data as golden pattern. If I remember
-> correctly, JESD216 suggests to use the Read SFDP cmd at 50 MHz, so it
-> won't help you much. In practice SPI NOR uses the Read SFDP command at
-> the flash's maximum speed and we haven't seen problems. But better 
-> would
-> be to use some flash OTP data maybe? I remember Pratyush has submitted 
-> a
-> phy calibration series in the past, I haven't had the chance to read 
-> his
-> proposal. Did you? How's your proposal different than his?
+Hi,
 
-And its not 6 bytes.. it's usually only three. The last three bytes will
-probably be undefined. So the might return ff or just wrap around and
-return the first three bytes again.
-
-Is there a datasheet where you can read how the calibration is done? Is 
-this
-the same for all i/o pads or individual per i/o pad?
-
-I cannot see where the op to read the id is coming from. Are you relying
-on the fact that a RDID is the first command which gets executed. If so,
-please don't.
-
-Do you calibrate only one pad? RDID (9f) is  single bit i/o, right? And
-I guess you are calibrating with the highest frequency, are
-we sure that RDID will work with any frequency (on any flash).
+LGTM...
 
 
->> The reason behind choosing this approach instead of reading the ID 
->> again
->> in the controller driver is to make it generic solution.
->> - Other controller drivers which want to use similar tuning process, 
->> they
->> will make use of this ID instead of reading the ID again in the 
->> driver.
+On 7/14/2023 9:52 AM, Praveen Talari wrote:
+> This series adds spi device mode functionality to geni based Qupv3.
+> The common header file contains spi slave related registers and masks.
+>
+> Praveen Talari (2):
+>    soc: qcom: geni-se: Add SPI Device mode support for GENI based QuPv3
+>    spi: spi-geni-qcom: Add SPI Device mode support for GENI based QuPv3
+> ---
+> v6 -> v7:
+> - Corrected author mail
+>
+> v5 -> v6:
+> - Added code comments
+> - Dropped get_spi_master api
+>
+> v4 -> v5:
+> - Addressed review comments in driver
+>
+> v3 -> v4:
+> - Used existing property spi-slave
+> - Hence dropped dt-binding changes
+>
+> v2 -> v3:
+> - Modified commit message
+> - Addressed comment on dt-binding
+>
+> v1 -> v2:
+> - Added dt-binding change for spi slave
+> - Modified commit message
+> - Addressed review comments in driver
+>
+>   drivers/spi/spi-geni-qcom.c      | 53 ++++++++++++++++++++++++++++----
+>   include/linux/soc/qcom/geni-se.h |  9 ++++++
+>   2 files changed, 56 insertions(+), 6 deletions(-)
 
-Honestly, I'm not sure this is the way to go. Pratyush proposed solution
-to have a dedicated memory area within the flash array with a know 
-pattern
-seems to make more sense, because you are calibrating on the thing you 
-are going
-to use later, that is quad/ocal read with the fastest frequency.
 
->> - Also, we can avoid hardcoding the command information and initiating 
->> the
->> transfer in the controller driver as this should happen from spi-nor.
+Reviewed-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 
-So how you know that this is a RDID instruction?
-
--michael
