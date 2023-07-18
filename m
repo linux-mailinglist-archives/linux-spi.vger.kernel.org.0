@@ -2,82 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5167572DB
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 06:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB2A75739B
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 08:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjGREiA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 00:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S229901AbjGRGGL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 02:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjGREh6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 00:37:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A02E55;
-        Mon, 17 Jul 2023 21:37:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8792061447;
-        Tue, 18 Jul 2023 04:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F5FC433C8;
-        Tue, 18 Jul 2023 04:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689655076;
-        bh=6wZPMKCBagUOFTDmVauFkFIPJOAzlX+PQYJ+0aOInqA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qK7EBTOFgzQxyna+0gJbjwtrE/V91mTwbqEQXxcuyLr4nVrQgq7BhwrrF8RWlurLO
-         zcPPJ8qbACQsOlBZ8cvAw1vFp1FHpOkCr9KD8EWj6HUTLSm0bhnbIMOSVipieEbUmG
-         39Tu/xUBhzGWOdz8zjqVih769M7Kqb9oEf0Y9vE3ywvbLw80yS+Va1KG4p3M7gX71M
-         nPJ/5FORi0UP8Y6ZJtErSo/Dd6t4trFQNR3zybgr83wS+GVDgCCOJArSGXyuSFvWBJ
-         fYWR8CFQmSGmLCTxv10kZjd7scXp1f3se+0H9tJACaWJIEFinE3C2ZY8NNlRN7exJq
-         ArBoi/e+wP23g==
-Date:   Mon, 17 Jul 2023 21:41:20 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229585AbjGRGGK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 02:06:10 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50038A6;
+        Mon, 17 Jul 2023 23:06:06 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0329224E20D;
+        Tue, 18 Jul 2023 14:06:03 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
+ 2023 14:06:03 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
+ 2023 14:06:02 +0800
+Message-ID: <6c53310c-1dc0-6623-369b-1a73fc8f63a5@starfivetech.com>
+Date:   Tue, 18 Jul 2023 14:06:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: spi: constrain minItems of clocks and
+ clock-names
+To:     Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] interconnect: qcom: sm8250: Fix QUP0 nodes
-Message-ID: <xnekcag622zywfat6zljhwt5q2boc3k2akr7uu7rezy2vkwsm7@slzdu4hm6im4>
-References: <20230703-topic-8250_qup_icc-v2-0-9ba0a9460be2@linaro.org>
- <20230703-topic-8250_qup_icc-v2-3-9ba0a9460be2@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703-topic-8250_qup_icc-v2-3-9ba0a9460be2@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20230713090015.127541-1-william.qiu@starfivetech.com>
+ <20230713090015.127541-3-william.qiu@starfivetech.com>
+ <c5ad1e1c-58f4-4833-b9c7-8876c1a0dc27@sirena.org.uk>
+ <e3fd0d3f-3fe4-2e23-2548-ecbd487e9c9f@linaro.org>
+ <20230713145724.GA3975811-robh@kernel.org>
+ <df9de3d8-09da-2b80-b2b4-626cd92fe971@starfivetech.com>
+ <9891a7e3-0fce-4d05-8ead-3c0ed155d725@sirena.org.uk>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <9891a7e3-0fce-4d05-8ead-3c0ed155d725@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 10:15:27PM +0200, Konrad Dybcio wrote:
-> The QUP0 BCM relates to some internal property of the QUPs, and should
-> be configured independently of the path to the QUP. In line with other
-> platforms expose QUP_CORE endpoints in order allow this configuration.
+
+
+On 2023/7/14 19:52, Mark Brown wrote:
+> On Fri, Jul 14, 2023 at 03:14:59PM +0800, William Qiu wrote:
+>> On 2023/7/13 22:57, Rob Herring wrote:
 > 
-> Fixes: 6df5b349491e ("interconnect: qcom: Add SM8250 interconnect provider driver")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> > I suspect that PCLK and SSPCLK are tied to the same clock source. There 
+>> > must be an SSPCLK because that is the one used to clock the SPI bus and 
+>> > we need to know the frequency of it.
+> 
+>> After communicating with colleagues in SoC FE, I learned that PCLK and
+>> SSPCLK were homologous on JH7110. He said that SSPCLK would divide the
+>> frequency internally anyway, and there was no need for external part frequency,
+>> so he directly gave them together.
+> 
+>> So, should I call this clock ssp_apb or keep it SSPCLK?
+> 
+> I'd expect this to be handled in the DTS for the SoC - connect both
+> clocks the binding requires to whatever the upstream clock is, it's not
+> clear to me that any binding change is required.
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+You mean binding two clocks, with the same clock source? Then there is no
+need to modify YAML.
 
-Regards,
-Bjorn
+Best regards,
+William
