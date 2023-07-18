@@ -2,129 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0730D7573DF
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 08:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BFE7574B6
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 08:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjGRGOo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 02:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S231491AbjGRG56 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 02:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjGRGOX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 02:14:23 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078CB2139;
-        Mon, 17 Jul 2023 23:13:24 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E33CF24E22F;
-        Tue, 18 Jul 2023 14:12:41 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
- 2023 14:12:41 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
- 2023 14:12:41 +0800
-Message-ID: <018b8bd3-ede0-d6ad-d50e-b4c959ac1660@starfivetech.com>
-Date:   Tue, 18 Jul 2023 14:12:40 +0800
+        with ESMTP id S229705AbjGRG5y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 02:57:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54B21A2;
+        Mon, 17 Jul 2023 23:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1689663473; x=1721199473;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KB6wQi2fSkHzaNEB8uUFd6EhlNuh6Xp2A6Y58nxMss0=;
+  b=D80q7/QZ3vJvftcynOekJbUHbFnM4XFUETdqyjpD17eusU/ZJA2v3RBj
+   MlB2pBWGIQjEbsiANHjJ1F1l8AQNk6R1axDHOTr/zFOMigebJmcyjCCOR
+   pBJnhI3OniJhQM6ooti4CCehcthToPKfcNYP/D52sfU9vfAoStDOw7GxK
+   BMvBYTWSTJJ+ADyeBU8BVpW/j4AUdmPDWovEbKh6Xt3M/OQFIpCV7agf1
+   cXAREcYSPXTn2DU75v844koz3Wmd19noZrpQj3SBt9K6gnhDKOpddypqr
+   pD/iwx/NuQ7lX12eHz9sBeaNyOaGYnKZGueL9I21Aw2bQ3GBRCGmnFeov
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="224388338"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jul 2023 23:57:52 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 17 Jul 2023 23:57:50 -0700
+Received: from che-lt-i66125lx.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Mon, 17 Jul 2023 23:57:39 -0700
+From:   Durai Manickam KR <durai.manickamkr@microchip.com>
+To:     <Hari.PrasathGE@microchip.com>,
+        <balamanikandan.gunasundar@microchip.com>,
+        <manikandan.m@microchip.com>, <varshini.rajendran@microchip.com>,
+        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
+        <balakrishnan.s@microchip.com>, <cristian.birsan@microchip.com>,
+        <nicolas.ferre@microchip.com>, <krzysztof.kozlowski@linaro.org>,
+        <alexandre.belloni@bootlin.com>, <davem@davemloft.net>,
+        <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
+        <Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>,
+        <andrew@lunn.ch>, <michael@walle.cc>, <jerry.ray@microchip.com>,
+        <conor+dt@kernel.org>, <jesper.nilsson@axis.com>,
+        <andre.przywara@arm.com>, <ada@thorsis.com>,
+        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
+        <gregkh@linuxfoundation.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>
+CC:     Durai Manickam KR <durai.manickamkr@microchip.com>
+Subject: [PATCHv3 0/2] update at91 usart compatible for sam9x60
+Date:   Tue, 18 Jul 2023 12:27:33 +0530
+Message-ID: <20230718065735.10187-1-durai.manickamkr@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 3/3] riscv: dts: starfive: Add QSPI controller node for
- StarFive JH7110 SoC
-Content-Language: en-US
-To:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230704090453.83980-1-william.qiu@starfivetech.com>
- <20230704090453.83980-4-william.qiu@starfivetech.com>
- <ZLV2vqycWIA5TanD@aurel32.net>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <ZLV2vqycWIA5TanD@aurel32.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+There is only one debug unit in the sam9x60 SOC and it has the chipid 
+register. So defining these dbgu compatible strings to the flexcom usart
+is not correct and causes the SOC detection failure. So removing these 
+dbgu compatible strings defined under the flexcom usart and updating 
+the yaml file accordingly.
+---
+v2 changes:
+1. Updating the dt-bindings documentation and send one more patch for
+the yaml file.
+---
+v3 change:
+1. Explained the issue in the commit message rather than in the cover
+letter. Added the detailed commit message for the changes done.
+---
+Durai Manickam KR (2):
+  dt-bindings: serial: atmel,at91-usart: update compatible for sam9x60
+  ARM: dts: at91: sam9x60: fix the SOC detection
 
+ .../bindings/serial/atmel,at91-usart.yaml     |  4 ++-
+ arch/arm/boot/dts/microchip/sam9x60.dtsi      | 26 +++++++++----------
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-On 2023/7/18 1:13, Aurelien Jarno wrote:
-> Hi,
-> 
-> On 2023-07-04 17:04, William Qiu wrote:
->> Add the quad spi controller node for the StarFive JH7110 SoC.
->> 
->> Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
->> Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         | 32 +++++++++++++++++++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++++
->>  2 files changed, 50 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index 2a6d81609284..983b683e2f27 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -126,6 +126,38 @@ &i2c6 {
->>  	status = "okay";
->>  };
->>  
->> +&qspi {
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +
->> +	nor_flash: flash@0 {
->> +		compatible = "jedec,spi-nor";
->> +		reg = <0>;
->> +		cdns,read-delay = <5>;
->> +		spi-max-frequency = <12000000>;
->> +		cdns,tshsl-ns = <1>;
->> +		cdns,tsd2d-ns = <1>;
->> +		cdns,tchsh-ns = <1>;
->> +		cdns,tslch-ns = <1>;
->> +
->> +		partitions {
->> +			compatible = "fixed-partitions";
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +
->> +			spl@0 {
->> +				reg = <0x0 0x20000>;
->> +			};
->> +			uboot@100000 {
->> +				reg = <0x100000 0x300000>;
->> +			};
->> +			data@f00000 {
->> +				reg = <0xf00000 0x100000>;
->> +			};
-> 
-> It appears that this uses the old layout for the SPI flash. The new
-> layout is described there:
-> 
-> https://doc-en.rvspace.org/VisionFive2/Boot_UG/JH7110_SDK/boot_address_allocation.html
-> 
-> Regards
-> Aurelien
-> 
-I'll take a look, and use it then.
-Thanks for your comments.
+-- 
+2.25.1
 
-Best regards,
-William
