@@ -2,44 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60ECA75857E
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB97B7585E0
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjGRTZ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 15:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S229646AbjGRT41 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 15:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjGRTZW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:25:22 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 199D81BDA;
-        Tue, 18 Jul 2023 12:25:16 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,214,1684767600"; 
-   d="scan'208";a="173456562"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 19 Jul 2023 04:25:16 +0900
-Received: from mulinux.home (unknown [10.226.93.62])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id C674C4067F07;
-        Wed, 19 Jul 2023 04:25:13 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 4/4] spi: rzv2m-csi: Make use of device_set_node
-Date:   Tue, 18 Jul 2023 20:24:53 +0100
-Message-Id: <20230718192453.543549-5-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com>
-References: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com>
+        with ESMTP id S229504AbjGRT40 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:56:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1B59D
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jul 2023 12:56:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3428D60B37
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jul 2023 19:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AAA7C433C8;
+        Tue, 18 Jul 2023 19:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689710184;
+        bh=0aLxgPRyrVZ7j82W+xa8xCfNLLov+lcnMFGm8avUI60=;
+        h=Subject:From:Date:To:From;
+        b=ZeB7P0nlcIGWSM7381jwPtw7PnIyHj/dKDQFkN+NPDxJDkYzvVebBUEIh7cvr+poD
+         jEmk9YaTJsxBNmfblGNfE/laneOimQul7Kl1r5x8sUpQG7qEqMJNmLKCQY7KnSehzS
+         n4jm0mEI8aNUSyZr108BbV9zIaI1rZK6hFUpUs9CuPocELy0RyeKfqtZfii3uxnJCc
+         HS85N/94pBkOiFqgE3qD8tLnzgrHnu4tMDQIMf6FuCWkMiNDUHQTa3vdBTkcgVBFzF
+         m9NMrJowjqnTOoV/gTiCLOHDdh9jPJS+wDGK6zpuqgZowP9tMQvWLrLqQfB9JUBBTi
+         Dk6uwTGUj0+Pg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C841C64458;
+        Tue, 18 Jul 2023 19:56:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <168971018441.27282.342989782695419500.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 18 Jul 2023 19:56:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,47 +53,21 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use device_set_node instead of assigning controller->dev.of_node
-directly because it also sets the firmware node.
+Latest series: [v2] spi: rzv2m-csi: Code refactoring (2023-07-18T19:24:49)
+  Superseding: [v1] spi: rzv2m-csi: Code refactoring (2023-07-15T01:03:57):
+    [01/10] spi: rzv2m-csi: Add missing include
+    [02/10] spi: rzv2m-csi: Adopt HZ_PER_MHZ for max spi clock
+    [03/10] spi: rzv2m-csi: Rework CSI_CKS_MAX definition
+    [04/10] spi: rzv2m-csi: Leave readl_poll_timeout calls for last
+    [05/10] spi: rzv2m-csi: Replace unnecessary ternary operators
+    [06/10] spi: rzv2m-csi: Squash timing settings into one statement
+    [07/10] spi: rzv2m-csi: Switch to using {read,write}s{b,w}
+    [08/10] spi: rzv2m-csi: Improve data types and alignment
+    [09/10] spi: rzv2m-csi: Get rid of the x_trg{_words} tables
+    [10/10] spi: rzv2m-csi: Make use of device_set_node
 
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
 
-v2: Edited the changelog and added include of property.h, according
-    to the feedback received from Andy.
-
- drivers/spi/spi-rzv2m-csi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-rzv2m-csi.c b/drivers/spi/spi-rzv2m-csi.c
-index 62575a61608a..d098aefa370d 100644
---- a/drivers/spi/spi-rzv2m-csi.c
-+++ b/drivers/spi/spi-rzv2m-csi.c
-@@ -12,6 +12,7 @@
- #include <linux/iopoll.h>
- #include <linux/log2.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/reset.h>
- #include <linux/spi/spi.h>
- #include <linux/units.h>
-@@ -589,12 +590,13 @@ static int rzv2m_csi_probe(struct platform_device *pdev)
- 	init_waitqueue_head(&csi->wait);
- 
- 	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
--	controller->dev.of_node = pdev->dev.of_node;
- 	controller->bits_per_word_mask = SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
- 	controller->setup = rzv2m_csi_setup;
- 	controller->transfer_one = rzv2m_csi_transfer_one;
- 	controller->use_gpio_descriptors = true;
- 
-+	device_set_node(&controller->dev, dev_fwnode(dev));
-+
- 	ret = devm_request_irq(dev, irq, rzv2m_csi_irq_handler, 0,
- 			       dev_name(dev), csi);
- 	if (ret)
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
