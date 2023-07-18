@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339AE758573
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FCB758576
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 21:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjGRTZG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 15:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S229709AbjGRTZM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 15:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjGRTZE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:25:04 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E99771993;
-        Tue, 18 Jul 2023 12:25:02 -0700 (PDT)
+        with ESMTP id S229749AbjGRTZJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 15:25:09 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F51D19AF;
+        Tue, 18 Jul 2023 12:25:06 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.01,214,1684767600"; 
-   d="scan'208";a="173456513"
+   d="scan'208";a="169810329"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 19 Jul 2023 04:25:02 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 19 Jul 2023 04:25:05 +0900
 Received: from mulinux.home (unknown [10.226.93.62])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2ED2740671B9;
-        Wed, 19 Jul 2023 04:24:58 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id CD2E44067F07;
+        Wed, 19 Jul 2023 04:25:02 +0900 (JST)
 From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 To:     Mark Brown <broonie@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>
@@ -31,46 +31,64 @@ Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 0/4] spi: rzv2m-csi: Code refactoring
-Date:   Tue, 18 Jul 2023 20:24:49 +0100
-Message-Id: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com>
+Subject: [PATCH v2 1/4] spi: rzv2m-csi: Squash timing settings into one statement
+Date:   Tue, 18 Jul 2023 20:24:50 +0100
+Message-Id: <20230718192453.543549-2-fabrizio.castro.jz@renesas.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com>
+References: <20230718192453.543549-1-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear All,
+Register CLKSEL hosts the configuration for both clock polarity
+and data phase, and both values can be set in one write operation.
 
-I am sending this series to follow up on the comments received
-from the first version of this series.
-The first 5 patches of the first series have been taken by Mark
-already (thanks Mark), this second version only addresses the
-remaining patches.
+Squash the clock polarity and data phase register writes into
+one statement, for efficiency.
 
-I would like to highlight that I have dropped patch
-"spi: rzv2m-csi: Switch to using {read,write}s{b,w}" for now,
-and maybe I will send a follow up patch later on.
+Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
 
-Thanks,
-Fab
+v2: No change.
 
-Fabrizio Castro (4):
-  spi: rzv2m-csi: Squash timing settings into one statement
-  spi: rzv2m-csi: Improve data types, casting and alignment
-  spi: rzv2m-csi: Get rid of the x_trg{_words} tables
-  spi: rzv2m-csi: Make use of device_set_node
+ drivers/spi/spi-rzv2m-csi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
- drivers/spi/spi-rzv2m-csi.c | 78 +++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 46 deletions(-)
-
+diff --git a/drivers/spi/spi-rzv2m-csi.c b/drivers/spi/spi-rzv2m-csi.c
+index 038f1486b7d7..faf5898bc3e0 100644
+--- a/drivers/spi/spi-rzv2m-csi.c
++++ b/drivers/spi/spi-rzv2m-csi.c
+@@ -38,6 +38,7 @@
+ /* CSI_CLKSEL */
+ #define CSI_CLKSEL_CKP		BIT(17)
+ #define CSI_CLKSEL_DAP		BIT(16)
++#define CSI_CLKSEL_MODE		(CSI_CLKSEL_CKP|CSI_CLKSEL_DAP)
+ #define CSI_CLKSEL_SLAVE	BIT(15)
+ #define CSI_CLKSEL_CKS		GENMASK(14, 1)
+ 
+@@ -408,10 +409,8 @@ static int rzv2m_csi_setup(struct spi_device *spi)
+ 	writel(CSI_MODE_SETUP, csi->base + CSI_MODE);
+ 
+ 	/* Setup clock polarity and phase timing */
+-	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKP,
+-				!(spi->mode & SPI_CPOL));
+-	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_DAP,
+-				!(spi->mode & SPI_CPHA));
++	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_MODE,
++				~spi->mode & SPI_MODE_X_MASK);
+ 
+ 	/* Setup serial data order */
+ 	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_DIR,
 -- 
 2.34.1
 
