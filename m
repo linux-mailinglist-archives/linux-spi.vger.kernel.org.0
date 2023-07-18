@@ -2,55 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB2A75739B
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 08:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0730D7573DF
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jul 2023 08:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjGRGGL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jul 2023 02:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S231481AbjGRGOo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jul 2023 02:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjGRGGK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 02:06:10 -0400
+        with ESMTP id S231448AbjGRGOX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jul 2023 02:14:23 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50038A6;
-        Mon, 17 Jul 2023 23:06:06 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078CB2139;
+        Mon, 17 Jul 2023 23:13:24 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0329224E20D;
-        Tue, 18 Jul 2023 14:06:03 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
- 2023 14:06:03 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E33CF24E22F;
+        Tue, 18 Jul 2023 14:12:41 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
+ 2023 14:12:41 +0800
 Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
  (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Jul
- 2023 14:06:02 +0800
-Message-ID: <6c53310c-1dc0-6623-369b-1a73fc8f63a5@starfivetech.com>
-Date:   Tue, 18 Jul 2023 14:06:01 +0800
+ 2023 14:12:41 +0800
+Message-ID: <018b8bd3-ede0-d6ad-d50e-b4c959ac1660@starfivetech.com>
+Date:   Tue, 18 Jul 2023 14:12:40 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: spi: constrain minItems of clocks and
- clock-names
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+Subject: Re: [PATCH v4 3/3] riscv: dts: starfive: Add QSPI controller node for
+ StarFive JH7110 SoC
+Content-Language: en-US
+To:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         "Emil Renner Berthing" <kernel@esmil.dk>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20230713090015.127541-1-william.qiu@starfivetech.com>
- <20230713090015.127541-3-william.qiu@starfivetech.com>
- <c5ad1e1c-58f4-4833-b9c7-8876c1a0dc27@sirena.org.uk>
- <e3fd0d3f-3fe4-2e23-2548-ecbd487e9c9f@linaro.org>
- <20230713145724.GA3975811-robh@kernel.org>
- <df9de3d8-09da-2b80-b2b4-626cd92fe971@starfivetech.com>
- <9891a7e3-0fce-4d05-8ead-3c0ed155d725@sirena.org.uk>
-Content-Language: en-US
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230704090453.83980-1-william.qiu@starfivetech.com>
+ <20230704090453.83980-4-william.qiu@starfivetech.com>
+ <ZLV2vqycWIA5TanD@aurel32.net>
 From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <9891a7e3-0fce-4d05-8ead-3c0ed155d725@sirena.org.uk>
+In-Reply-To: <ZLV2vqycWIA5TanD@aurel32.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [171.223.208.138]
@@ -58,8 +53,8 @@ X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
  (172.16.6.68)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,27 +63,68 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-On 2023/7/14 19:52, Mark Brown wrote:
-> On Fri, Jul 14, 2023 at 03:14:59PM +0800, William Qiu wrote:
->> On 2023/7/13 22:57, Rob Herring wrote:
+On 2023/7/18 1:13, Aurelien Jarno wrote:
+> Hi,
 > 
->> > I suspect that PCLK and SSPCLK are tied to the same clock source. There 
->> > must be an SSPCLK because that is the one used to clock the SPI bus and 
->> > we need to know the frequency of it.
+> On 2023-07-04 17:04, William Qiu wrote:
+>> Add the quad spi controller node for the StarFive JH7110 SoC.
+>> 
+>> Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
+>> Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         | 32 +++++++++++++++++++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++++
+>>  2 files changed, 50 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index 2a6d81609284..983b683e2f27 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -126,6 +126,38 @@ &i2c6 {
+>>  	status = "okay";
+>>  };
+>>  
+>> +&qspi {
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +
+>> +	nor_flash: flash@0 {
+>> +		compatible = "jedec,spi-nor";
+>> +		reg = <0>;
+>> +		cdns,read-delay = <5>;
+>> +		spi-max-frequency = <12000000>;
+>> +		cdns,tshsl-ns = <1>;
+>> +		cdns,tsd2d-ns = <1>;
+>> +		cdns,tchsh-ns = <1>;
+>> +		cdns,tslch-ns = <1>;
+>> +
+>> +		partitions {
+>> +			compatible = "fixed-partitions";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +
+>> +			spl@0 {
+>> +				reg = <0x0 0x20000>;
+>> +			};
+>> +			uboot@100000 {
+>> +				reg = <0x100000 0x300000>;
+>> +			};
+>> +			data@f00000 {
+>> +				reg = <0xf00000 0x100000>;
+>> +			};
 > 
->> After communicating with colleagues in SoC FE, I learned that PCLK and
->> SSPCLK were homologous on JH7110. He said that SSPCLK would divide the
->> frequency internally anyway, and there was no need for external part frequency,
->> so he directly gave them together.
+> It appears that this uses the old layout for the SPI flash. The new
+> layout is described there:
 > 
->> So, should I call this clock ssp_apb or keep it SSPCLK?
+> https://doc-en.rvspace.org/VisionFive2/Boot_UG/JH7110_SDK/boot_address_allocation.html
 > 
-> I'd expect this to be handled in the DTS for the SoC - connect both
-> clocks the binding requires to whatever the upstream clock is, it's not
-> clear to me that any binding change is required.
-
-You mean binding two clocks, with the same clock source? Then there is no
-need to modify YAML.
+> Regards
+> Aurelien
+> 
+I'll take a look, and use it then.
+Thanks for your comments.
 
 Best regards,
 William
