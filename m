@@ -2,77 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB33759A7D
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jul 2023 18:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC43C759E10
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jul 2023 21:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjGSQKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jul 2023 12:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S229553AbjGSTAy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jul 2023 15:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjGSQKY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jul 2023 12:10:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D97119
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 09:10:24 -0700 (PDT)
+        with ESMTP id S229492AbjGSTAy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jul 2023 15:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2D5171E;
+        Wed, 19 Jul 2023 12:00:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE81E6173F
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 16:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 00BB4C433C8;
-        Wed, 19 Jul 2023 16:10:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C0A617D8;
+        Wed, 19 Jul 2023 19:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4308C433C7;
+        Wed, 19 Jul 2023 19:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689783023;
-        bh=uZLtTx6mLmh0NWAMbqFTGYL6aQG3FpP8P1YtRC9ER4A=;
-        h=Subject:From:Date:To:From;
-        b=cIwjIKxloxVQp9+KgZGBSSFX/cigKiqV5BYFqr7aESvrdpSfHWbW/XzJOhSRiWiqh
-         Kj25XjbtodmKslzTauHbQn7rD42TtUaDSFCuffbyU0kVj0YfsrjfixtmOPL9j+6Dfi
-         pCV7lsUR2CBmsIMVlDlBAylwxK1JLEmPgt/WkUDNHvRpGyJ1r2LHnZZc7z0IwWvxSN
-         hbD50f/58E3lNPQuoR3Y7Pg28CRScNx4zE2vOK4jczKmLCgfA69leU0E8eu1QPGzT1
-         ppw9oE8Dl/GzvPBjpdD/t9mLDMvGXJOZo9+O00POcQXQdULvEmGowO8VfVHTGzlelX
-         hnvkunRidxmsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C59A5C6445A;
-        Wed, 19 Jul 2023 16:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1689793252;
+        bh=m8elIMgvNx0HITJE8wfTnOPbpAfIc6OxVFEIrgi6Ew8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DjlKZMgfXAhCiIO7wXFE/nLLfkycJD34db9ewHFpZ9oT9ADKGwF1dnYTDthUFvL9q
+         L4duYNtIxCemXki5jslS2vAAhMOgdhrFlpZrxBvGx8eqQod0lhKKmtWFzlbUtUCDpC
+         etDaMPL+oXFbmsEGkdJ8KgRACK9zXToeo3M0FA0UHF1RjXLaKupxXcPgNttkdiCPEL
+         mtdYGpBxr/gtUp+sG9k2rfwLvIpJSRaGT4UheoGgE7mlA6FiHHTctW6MUly2M3+V8x
+         DAI4aUx1iOKYyvCeIfFigHmEPXItG9RYLkP8PKJ57cOEdyEtLrxkSQiU1eMn/hp3hw
+         nFXkNu+H55+eA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Foley <pefoley2@pefoley.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Mark Brown <broonie@kernel.org>,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
+        Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH] mtd: spi-nor: avoid holes in struct spi_mem_op
+Date:   Wed, 19 Jul 2023 21:00:25 +0200
+Message-Id: <20230719190045.4007391-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168978302268.27068.788919191666288808.git-patchwork-summary@kernel.org>
-Date:   Wed, 19 Jul 2023 16:10:22 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+From: Arnd Bergmann <arnd@arndb.de>
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+gcc gets confused when -ftrivial-auto-var-init=pattern is used on sparse
+bit fields such as 'struct spi_mem_op', which caused the previous false
+positive warning about an uninitialized variable:
 
-Series: spi: rzv2m-csi: Code refactoring
-  Submitter: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=767032
-  Lore link: https://lore.kernel.org/r/20230718192453.543549-1-fabrizio.castro.jz@renesas.com
-    Patches: [v2,1/4] spi: rzv2m-csi: Squash timing settings into one statement
-             [v2,2/4] spi: rzv2m-csi: Improve data types, casting and alignment
-             [v2,3/4] spi: rzv2m-csi: Get rid of the x_trg{_words} tables
-             [v2,4/4] spi: rzv2m-csi: Make use of device_set_node
+drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]
 
+In fact, the variable is fully initialized and gcc does not see it being
+used, so the warning is entirely bogus. The problem appears to be
+a misoptimization in the initialization of single bit fields when the
+rest of the bytes are not initialized.
 
-Total patches: 4
+A previous workaround added another initialization, which ended up
+shutting up the warning in spansion.c, though it apparently still happens
+in other files as reported by Peter Foley in the gcc bugzilla. The
+workaround of adding a fake initialization seems particularly bad
+because it would set values that can never be correct but prevent the
+compiler from warning about actually missing initializations.
 
+Revert the broken workaround and instead pad the structure to only
+have bitfields that add up to full bytes, which should avoid this
+behavior in all drivers.
+
+I also filed a new bug against gcc with what I found, so this can
+hopefully be addressed in future gcc releases. At the moment, only
+gcc-12 and gcc-13 are affected.
+
+Cc: Peter Foley <pefoley2@pefoley.com>
+Cc: Pedro Falcato <pedro.falcato@gmail.com>
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110743
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108402
+Link: https://godbolt.org/z/efMMsG1Kx
+Fixes: 420c4495b5e56 ("mtd: spi-nor: spansion: make sure local struct does not contain garbage")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/mtd/spi-nor/spansion.c | 4 ++--
+ include/linux/spi/spi-mem.h    | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
+index 6d6466a3436e6..8397cf3cc3306 100644
+--- a/drivers/mtd/spi-nor/spansion.c
++++ b/drivers/mtd/spi-nor/spansion.c
+@@ -361,7 +361,7 @@ static int cypress_nor_determine_addr_mode_by_sr1(struct spi_nor *nor,
+  */
+ static int cypress_nor_set_addr_mode_nbytes(struct spi_nor *nor)
+ {
+-	struct spi_mem_op op = {};
++	struct spi_mem_op op;
+ 	u8 addr_mode;
+ 	int ret;
+ 
+@@ -492,7 +492,7 @@ s25fs256t_post_bfpt_fixup(struct spi_nor *nor,
+ 			  const struct sfdp_parameter_header *bfpt_header,
+ 			  const struct sfdp_bfpt *bfpt)
+ {
+-	struct spi_mem_op op = {};
++	struct spi_mem_op op;
+ 	int ret;
+ 
+ 	ret = cypress_nor_set_addr_mode_nbytes(nor);
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index 8e984d75f5b6c..6b0a7dc48a4b7 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -101,6 +101,7 @@ struct spi_mem_op {
+ 		u8 nbytes;
+ 		u8 buswidth;
+ 		u8 dtr : 1;
++		u8 __pad : 7;
+ 		u16 opcode;
+ 	} cmd;
+ 
+@@ -108,6 +109,7 @@ struct spi_mem_op {
+ 		u8 nbytes;
+ 		u8 buswidth;
+ 		u8 dtr : 1;
++		u8 __pad : 7;
+ 		u64 val;
+ 	} addr;
+ 
+@@ -115,12 +117,14 @@ struct spi_mem_op {
+ 		u8 nbytes;
+ 		u8 buswidth;
+ 		u8 dtr : 1;
++		u8 __pad : 7;
+ 	} dummy;
+ 
+ 	struct {
+ 		u8 buswidth;
+ 		u8 dtr : 1;
+ 		u8 ecc : 1;
++		u8 __pad : 6;
+ 		enum spi_mem_data_dir dir;
+ 		unsigned int nbytes;
+ 		union {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
