@@ -2,47 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F59D75921F
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jul 2023 11:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5883759541
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jul 2023 14:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjGSJ4d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jul 2023 05:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S229589AbjGSMiO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jul 2023 08:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjGSJ4c (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jul 2023 05:56:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD4F10D4
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 02:56:31 -0700 (PDT)
+        with ESMTP id S229563AbjGSMiO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jul 2023 08:38:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36D8E0;
+        Wed, 19 Jul 2023 05:38:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2546D6135B
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 09:56:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 586F3C433C7;
-        Wed, 19 Jul 2023 09:56:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8207060B5E;
+        Wed, 19 Jul 2023 12:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99007C433C8;
+        Wed, 19 Jul 2023 12:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689760590;
-        bh=oX6bVEc7ETcQXx1myfbUViDu9jmzW9NXu06sNDl+s/s=;
-        h=Subject:From:Date:To:From;
-        b=PKu4Qyi5VjYueWKLRPlDPvy+3jUNgMEHZiBlcwfnCxHeTecorAUhM301C6iyaacWq
-         alzBLxdx3WOC0A8xs3z1H4NSdUtFViKfFavq72Rq6Xn3lRiajwpt9D6nnvadgO/bGw
-         s2IZRjwmK402MgADWMoQZ0prG53UJiU51bHxqA7NomD5/eSzwSosqnkKhzuS6/FQM1
-         9LG1l64wEZZHqcCAcjVqQE6dYQh3sga1KsriHiWDR/q0eQZaxO3Ipv2GeWOaorrtbq
-         ky8cSqJoK43RhqPQ4nWzF4fFx63ZHeDkJ2fDBKYY4zOlnFxUe3A5rJOb29vorQ051x
-         YMFA3OJoYAvWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3EDC7C6445A;
-        Wed, 19 Jul 2023 09:56:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1689770291;
+        bh=gvZa221y3UmB7cz/txdTcrjUjmH7am2Q6n4mOrqLDRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RKcYFz3vZYv6BrMmp5ReO7LOAJFlSsoc0yjf719zcrkzJCTYdsEh5THW6g7JPuXvH
+         9oQsXw1KLW+6OZ7f9IefuL5KkxiqSedPYOz18yJb6L7LYvlvD/9iFoLJSVABZVoWUY
+         MVKjKxdfPS+jMz7sAinL40qm76Kob9CNyKs+oxAw6SduM1NEXxmzCYkTkvVpGIZdLu
+         HzEB5XKtqwqn0jJl89nhpDnsZa7ta87JaM1EJYUUdLEROB2JMppSms9B4HjOei3C9S
+         CKgWtdjtgRoEp55w1OkLn8lGcXibfXL4tqiAwzXHQm4JmzFtjpqJ6YYgeOswLiFGQi
+         PN2Srf2L1XEcw==
+Date:   Wed, 19 Jul 2023 13:38:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?546L5piOLei9r+S7tuW6leWxguaKgOacr+mDqA==?= 
+        <machel@vivo.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-rpi-kernel@lists.infradead.org" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "opensource.kernel" <opensource.kernel@vivo.com>
+Subject: Re: [PATCH v1] spi: Use dev_err_probe instead of dev_err
+Message-ID: <a7f2c3b2-2caa-4e96-b7ec-02f8566797c6@sirena.org.uk>
+References: <20230719053649.4632-1-machel@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <168976059025.29344.14281826477944197897.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 19 Jul 2023 09:56:30 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="I/YfuZGE6VAmfNI1"
+Content-Disposition: inline
+In-Reply-To: <20230719053649.4632-1-machel@vivo.com>
+X-Cookie: They just buzzed and buzzed...buzzed.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,14 +67,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Add initialization of clock for StarFive JH7110 SoC (2023-07-19T09:25:43)
-  Superseding: [v4] Add initialization of clock for StarFive JH7110 SoC (2023-07-04T09:04:50):
-    [v4,1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for StarFive JH7110 SoC
-    [v4,2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
-    [v4,3/3] riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC
 
+--I/YfuZGE6VAmfNI1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Wed, Jul 19, 2023 at 05:37:02AM +0000, =E7=8E=8B=E6=98=8E-=E8=BD=AF=E4=
+=BB=B6=E5=BA=95=E5=B1=82=E6=8A=80=E6=9C=AF=E9=83=A8 wrote:
 
+> +		ret =3D dev_err_probe(dev, PTR_ERR(ctlr->dma_tx),
+> +							"no tx-dma configuration found - not using dma mode\n");
+
+The indentation on the second line here is badly messed up, it's
+indented far too much.  Same for the rx channel.
+
+--I/YfuZGE6VAmfNI1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS32S0ACgkQJNaLcl1U
+h9CQrQf+MxLygsZm5IlNLDBkcrnKVXcq4xQZez4UK3eV+O8uw1hxUexw9fMFSxwY
+Pb2kmmuuyQdSOkGVaUoHzKpjHMkS6WsnnvJzVeluzUZUxPRF5rudPhFzwSJz/IpX
+cpRXeVfku+W3LhODKSkZMeFZu6xBxVxdFa/QIMh9SILLahbUtT0ELwK99KAoq57w
+oWp3gCPW/OTuhT7b8e5tcsm5D8jKoFnDblvk1Y0RuPD7u5Z077LZt6ZgPE4/Maee
+/gQjjWA5/3pStelNVfGkH/Hn8pCmvZrruAUBPlt5CXotqTvyu5dpIRgQjhDBK2It
+qU2I3ohxLQIDn4ulB8xOa8hkRJzj4A==
+=9g0p
+-----END PGP SIGNATURE-----
+
+--I/YfuZGE6VAmfNI1--
