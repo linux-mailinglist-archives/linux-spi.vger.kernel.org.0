@@ -2,62 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95291759E16
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jul 2023 21:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D707875A6ED
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jul 2023 08:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjGSTB6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jul 2023 15:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S231305AbjGTGun (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jul 2023 02:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjGSTB5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jul 2023 15:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C615B199A;
-        Wed, 19 Jul 2023 12:01:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 646EB617BE;
-        Wed, 19 Jul 2023 19:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC097C433C8;
-        Wed, 19 Jul 2023 19:01:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689793315;
-        bh=QCYE/Wf313d9BJewOaUale9wKUCaSWfR+2ebvrk+Vqg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W/6P30FVxHhcPraeIAO/Lc14DZpZiIFRHLyFmnuXTfj3lmyI/Ac60DY1kL0X+qiPO
-         F0Bs5fFDUrRl4LAXBsaiCdyvGAfiHweDfQsaV5c+BIOkEC4EiSptOCIpiiH6ypdmT/
-         e49NQKZTGOLoUEBB70cLzR+6hEvdBd/CLUZ12emKtprwvkyJ9Rzw6hwJcPL0Lt7ox2
-         Y/NR0O1ziMcek/dJu8Fi+YTMH59dhYs9vSPtC0ov4AuS0pi+4wim4gLO1oth82c8Dd
-         oxiWAH0cdedVdSgQ1k47/TZSuR+RmiBLNIl89q/l7eUoagJpvzdzTffPxrUCGzIVZg
-         RS9msUN9+MDfQ==
-Date:   Wed, 19 Jul 2023 20:01:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        with ESMTP id S231303AbjGTGuk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jul 2023 02:50:40 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EB72122
+        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 23:50:38 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9924ac01f98so79975766b.1
+        for <linux-spi@vger.kernel.org>; Wed, 19 Jul 2023 23:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689835836; x=1692427836;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P0g/IBsPZGY5PxZfIKc7/6gIDE3jbSDKqZLxVCtbNmM=;
+        b=Oie91okDf4TmQaL1csHvGo+xD5lYbjqxP+Y/+z633ZjSv+gZcB9UuUtkVx48D2RSKW
+         IgISxlpeI2YmFSX8NauVibHdDy9iX4npnCgThkBlcEjqvjYX1/lRDXT4pvYnBxFtpQ8J
+         ko5Z4m6YgZ729LTBXrAru3IXv4D13BpEiEQbjrx8ig1l9m/qTGqCwDB7enDhHsOTurBf
+         mzLfr34aLHxiuytOFDb/LGWeBnGk07kvoyZAa57IOqpW5L2d9pkCIvsARkakeyWVXhmI
+         x1sM8YYJKGf+eAPBzgEiQMB3J36zBRXXWhOMSr/vXpNT5vGTErpFOpOE28bjOouV6wH5
+         gx7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689835836; x=1692427836;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0g/IBsPZGY5PxZfIKc7/6gIDE3jbSDKqZLxVCtbNmM=;
+        b=ACkXSu4uenij83XGf6/V4V2gS+ZaOFUmIpXfLyqPgHuB5Rs/gx1Vfe2k37e8JHxOLi
+         k/dTB3uyg74P7tCGlS6CTXUDtYyWI9eVY6KTPC/KNKx95wWJAWTSdduRcVGZeAd7gxmU
+         o2KQfAUcYXaSGSseE0vd3TGx09G8HOnH93qqypv524LsqsZb9i8g7EgglUjqxw3KC5N8
+         Jfa2cCc3C80pUbUWKDKaFEeVP6MCuRiZLMMylqKmuFOJh86X7Mt1kwCtUH1qq6QzQ46j
+         9rYGEdTLbkjHC29BVZDKGCNPHHGnnOSaiQ8UPHj2NmHhWzOaV+gaN2F7gGWGsxSttMDo
+         7zyg==
+X-Gm-Message-State: ABy/qLbRlpEYTmIcuUKNydE88hI4dhUdug7+lJon/LvnJyKiCN4Qfl9g
+        l+jD67xRULX0SA8hWNQUXuTs+Q==
+X-Google-Smtp-Source: APBJJlG4RR2sqWSSMq1ocs/VfVSVQ/+Fb3rMHZ5K+E5BQzoA0+73UAaCItdftmgHvay9ZoHLh1P6lw==
+X-Received: by 2002:a17:907:779a:b0:99b:5689:1331 with SMTP id ky26-20020a170907779a00b0099b56891331mr575512ejc.59.1689835836589;
+        Wed, 19 Jul 2023 23:50:36 -0700 (PDT)
+Received: from [192.168.0.107] ([79.115.63.16])
+        by smtp.gmail.com with ESMTPSA id o23-20020a1709062e9700b009935aba3a9dsm225434eji.48.2023.07.19.23.50.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jul 2023 23:50:36 -0700 (PDT)
+Message-ID: <598bd9d8-249e-125c-bde3-7a63ba6dc5f7@linaro.org>
+Date:   Thu, 20 Jul 2023 07:50:33 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mtd: spi-nor: avoid holes in struct spi_mem_op
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
         Pratyush Yadav <pratyush@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Foley <pefoley2@pefoley.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Foley <pefoley2@pefoley.com>,
         Pedro Falcato <pedro.falcato@gmail.com>,
         Michael Walle <michael@walle.cc>,
+        Mark Brown <broonie@kernel.org>,
         Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
         Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: avoid holes in struct spi_mem_op
-Message-ID: <4b43fc7b-f76e-4155-ba8d-f95656b19563@sirena.org.uk>
 References: <20230719190045.4007391-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GRW3G7GoVTbacsvG"
-Content-Disposition: inline
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
 In-Reply-To: <20230719190045.4007391-1-arnd@kernel.org>
-X-Cookie: They just buzzed and buzzed...buzzed.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,33 +84,47 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---GRW3G7GoVTbacsvG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 19, 2023 at 09:00:25PM +0200, Arnd Bergmann wrote:
+On 7/19/23 20:00, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
->=20
-> gcc gets confused when -ftrivial-auto-var-init=3Dpattern is used on sparse
+> 
+> gcc gets confused when -ftrivial-auto-var-init=pattern is used on sparse
 > bit fields such as 'struct spi_mem_op', which caused the previous false
 > positive warning about an uninitialized variable:
+> 
+> drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]
+> 
+> In fact, the variable is fully initialized and gcc does not see it being
+> used, so the warning is entirely bogus. The problem appears to be
+> a misoptimization in the initialization of single bit fields when the
+> rest of the bytes are not initialized.
+> 
+> A previous workaround added another initialization, which ended up
+> shutting up the warning in spansion.c, though it apparently still happens
+> in other files as reported by Peter Foley in the gcc bugzilla. The
+> workaround of adding a fake initialization seems particularly bad
+> because it would set values that can never be correct but prevent the
+> compiler from warning about actually missing initializations.
+> 
+> Revert the broken workaround and instead pad the structure to only
+> have bitfields that add up to full bytes, which should avoid this
+> behavior in all drivers.
+> 
+> I also filed a new bug against gcc with what I found, so this can
+> hopefully be addressed in future gcc releases. At the moment, only
+> gcc-12 and gcc-13 are affected.
+> 
+> Cc: Peter Foley <pefoley2@pefoley.com>
+> Cc: Pedro Falcato <pedro.falcato@gmail.com>
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110743
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108402
+> Link: https://godbolt.org/z/efMMsG1Kx
+> Fixes: 420c4495b5e56 ("mtd: spi-nor: spansion: make sure local struct does not contain garbage")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
---GRW3G7GoVTbacsvG
-Content-Type: application/pgp-signature; name="signature.asc"
+Miquel, would you please take this through mtd/fixes?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS4MxwACgkQJNaLcl1U
-h9BnBQf+OfiP9IntksoAyNnBV4tHqOWod5rm1KLN0Mh6WbbbJ0fl84t+Dh2EKKXR
-LH5yFWEkuTlBiWWbCMdishynP3zoKIMXO5ax26ipa4v+BWxmLJAK03u642w2BBDM
-gcSmcFlbV44joYETgNQTkbsTM+3nC+/8IR5xnSmetyfwZb/4Rkg8hd2GjKn+ZNn9
-1mcif0/95BqLGtt77M1V5Kaa3/n5BDTFZpo1vzNjO5UQlWf6JngzKUL/Z0cYqkfx
-FwdqYrc7xnyKRO1II76XJ5RnkL+HsVKNizhhdOYvYDYp7ofccXP3G+GcwXWO89HA
-fcVitg7824QSVEmWpZGe7hbWYmrj6g==
-=XS2m
------END PGP SIGNATURE-----
-
---GRW3G7GoVTbacsvG--
+Cheers,
+ta
