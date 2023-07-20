@@ -2,168 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1273775B005
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jul 2023 15:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9675B0DF
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jul 2023 16:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjGTNb2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jul 2023 09:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S231739AbjGTOJr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jul 2023 10:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjGTNbK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jul 2023 09:31:10 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E812D54;
-        Thu, 20 Jul 2023 06:30:30 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b8baa836a5so5705575ad.1;
-        Thu, 20 Jul 2023 06:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689859821; x=1690464621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIe8rMdwGK8O6waPW6ElMhYZtqXBgjIAped1KS+Lxj0=;
-        b=E36Ey4hpLP1aGERgJzQAv5oQWbjP2dfI/yJ9QSqsCcAZUQqYH2EJuPmluxVpniz94+
-         SqRDS4pEtomXHfRXODYYhAlZIxAatRHID9D88YI+tj+w3vKM5JieqRypSlSHOTbf2v95
-         PUlca0W45r887uApCqi/zn/yh3GyTCCrBBW1XguZKYFarRPPHvkGdKJALW7+s9TgEir3
-         pVPeDdLYxOZSMJ8v3iGIKvATJZHgcVErXIREn7/pOR3ivfvJWVHJWWTf1p+PnK9L0sBz
-         4nG3H7SIhmhoYiEqtjnis5Ppnyac+F2VaQ2UY7v0ygr32czvJ80e2mlstFNoj9axpszx
-         inAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689859821; x=1690464621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qIe8rMdwGK8O6waPW6ElMhYZtqXBgjIAped1KS+Lxj0=;
-        b=EvNStNqhfvdCRycMNWSDldz9nJ/3UehP9f3BLfjWgQVHod1rlOEpbw+vjBfhCY3vpC
-         9jOTd/+KAo0+WXVPAtqt7PYYLCyanZ08SDuKC4qoVNLAuON+tcB3GG6O6wpKLPvfuF3c
-         fu7aMx97pSwD2QPx+fT4zIj9prUQCA32bNJvOsbcF4Z9XuKHoAX1TSBTf3Ln6rxnRn2t
-         5nO/1OI0mYcYlKu6lk1QQRdUjwF1XRXCzy3RCchjlQImLJUAJ3v/PYkBlLmRhf9SS5IU
-         Z2MRyD3tcPHkzJ9FBMcoQU855tYRxmwirM9TfurKKf91t1KNqX+1sHEiVubcpyA1xFLV
-         4nNQ==
-X-Gm-Message-State: ABy/qLZyt293PadNAyus3aBUo/Nf2dFdmQz4i+vw8Nv7LEqoq+qpump9
-        vHlgsurlu7/M4n6aYRds4KQ=
-X-Google-Smtp-Source: APBJJlFh1AyFX2+11T9yyn39CZ9ejJo7irpyerH5jDd4rJJqhGrNwsFMVrOCBzL5cXWCBiVM2usEnA==
-X-Received: by 2002:a17:903:191:b0:1b8:9b5e:65c8 with SMTP id z17-20020a170903019100b001b89b5e65c8mr25796578plg.4.1689859821611;
-        Thu, 20 Jul 2023 06:30:21 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902728c00b001b86deba2f9sm1302975pll.284.2023.07.20.06.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jul 2023 06:30:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1d8cf4f5-3004-3af1-2735-03fde48d69c7@roeck-us.net>
-Date:   Thu, 20 Jul 2023 06:30:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 32/42] wdt: ts72xx: add DT support for ts72xx
-Content-Language: en-US
-To:     nikita.shubin@maquefel.me,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-32-3d63a5f1103e@maquefel.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230605-ep93xx-v3-32-3d63a5f1103e@maquefel.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231751AbjGTOJr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jul 2023 10:09:47 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B97CF211D
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jul 2023 07:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=wlX+/bG9wtQy7OljwS
+        zIlNKS+RtdC0pslb7nMrGc1Fc=; b=QSbFuQxXVKwGw6GoepQG9woER6W4pcxwgi
+        98htsFce59H7srf/H1rYUfzvp0l4DaRDBz+MiZ1jD8/BNrxByS/Ng3r3SVp9NT1J
+        RuVWRtQkPa4ywWFPniT/jPqPOHnhFKxfrmWUHK9zJpyUg6qNa2ouHtU+xmutJDMD
+        KzqTg74Dg=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wC35ir9P7lkhylJAw--.62162S4;
+        Thu, 20 Jul 2023 22:09:05 +0800 (CST)
+From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, linux-spi@vger.kernel.org
+Cc:     Yuanjun Gong <ruc_gongyuanjun@163.com>
+Subject: [PATCH 1/1] spi: fix return value check in bcm2835_spi_probe()
+Date:   Thu, 20 Jul 2023 22:08:59 +0800
+Message-Id: <20230720140859.33883-1-ruc_gongyuanjun@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: _____wC35ir9P7lkhylJAw--.62162S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF4rZFy7Ar1UAr1DCryfWFg_yoWfWFbE9a
+        9rWrW3Gr4Ig39Fy3W5K3yrZrZ2gF4kCa10gF1ktayYqrZrGw13WayDXanxG3yDZw40yrWq
+        kF13AwsxAr13GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRNGYLPUUUUU==
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/1tbiUQKy5WDESWmp9QAAsc
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 7/20/23 04:29, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> Add OF ID match table.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+in bcm2835_spi_probe(), clk_prepare_enable() may fail, therefore,
+the return value of clk_prepare_enable() should be checked, and
+the function should return error if clk_prepare_enable() fails.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Yuanjun Gong <ruc_gongyuanjun@163.com>
+---
+ drivers/spi/spi-bcm2835.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> ---
->   drivers/watchdog/ts72xx_wdt.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
-> index 3d57670befe1..ac709dc31a65 100644
-> --- a/drivers/watchdog/ts72xx_wdt.c
-> +++ b/drivers/watchdog/ts72xx_wdt.c
-> @@ -12,6 +12,7 @@
->    */
->   
->   #include <linux/platform_device.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/module.h>
->   #include <linux/watchdog.h>
->   #include <linux/io.h>
-> @@ -160,10 +161,17 @@ static int ts72xx_wdt_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +static const struct of_device_id ts72xx_wdt_of_ids[] = {
-> +	{ .compatible = "technologic,ts7200-wdt" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ts72xx_wdt_of_ids);
-> +
->   static struct platform_driver ts72xx_wdt_driver = {
->   	.probe		= ts72xx_wdt_probe,
->   	.driver		= {
->   		.name	= "ts72xx-wdt",
-> +		.of_match_table = ts72xx_wdt_of_ids,
->   	},
->   };
->   
-> 
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 3b253da98c05..7dfa1b3bd069 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1363,7 +1363,9 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 	if (bs->irq <= 0)
+ 		return bs->irq ? bs->irq : -ENODEV;
+ 
+-	clk_prepare_enable(bs->clk);
++	err = clk_prepare_enable(bs->clk);
++	if (err)
++		return err;
+ 	bs->clk_hz = clk_get_rate(bs->clk);
+ 
+ 	err = bcm2835_dma_init(ctlr, &pdev->dev, bs);
+-- 
+2.17.1
 
