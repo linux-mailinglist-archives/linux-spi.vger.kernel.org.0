@@ -2,109 +2,238 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0598C75C725
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jul 2023 14:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9D975C78A
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jul 2023 15:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjGUMuT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jul 2023 08:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S230526AbjGUNTY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jul 2023 09:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjGUMuS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jul 2023 08:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B86510CB;
-        Fri, 21 Jul 2023 05:50:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9B9D61B1F;
-        Fri, 21 Jul 2023 12:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60618C433C9;
-        Fri, 21 Jul 2023 12:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689943816;
-        bh=O1jJbBEcaURn4zEGQ2aRZSKmYUb+p4lmuCCmyb9Qvp8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Bpu0BUiupIfVegnNJ+wLKfTgXQzT+x5YufL5i/oNwOh2vqofQ1+qvykE2sGLXeU3k
-         SwHVaXGHwMV54Sfo8803R2ogAfCwOJWMY3YpaxfPSolZDOLMd4uC3dFptoDzUFhNwm
-         8KPnr1ejSciq1YGHk4tNsZKIX7Jix4XVcXY87LrFEKi3hZNh27RlSS0k0HF+sJFIch
-         XM4/Rb9e4VMXqsLdMA0JI0kyGOhoopjAZ6WDkrcLwchl8LAUsW//x0HZ73GP7sSKUi
-         SnzU/ex/JbhZk3Te/9DVwB+ML3iJ2F/D9Zt2bMPEA5ZM+INp1bA/sPlLOPvwQDOttZ
-         MXEPn3+X7lTww==
-Received: (nullmailer pid 785149 invoked by uid 1000);
-        Fri, 21 Jul 2023 12:50:13 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Ming Qian <ming.qian@nxp.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>, linux-spi@vger.kernel.org,
+        with ESMTP id S230404AbjGUNTV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jul 2023 09:19:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4463595;
+        Fri, 21 Jul 2023 06:19:09 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="347313899"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="347313899"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 06:19:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="702053539"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="702053539"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2023 06:18:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1qMq1x-005vpD-13;
+        Fri, 21 Jul 2023 16:18:49 +0300
+Date:   Fri, 21 Jul 2023 16:18:49 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shijie Qin <shijie.qin@nxp.com>, devicetree@vger.kernel.org,
-        Zhou Peng <eagle.zhou@nxp.com>
-In-Reply-To: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
-References: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
-Message-Id: <168994381338.785121.14262858445617202831.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: media: amphion: Fix subnode pattern
-Date:   Fri, 21 Jul 2023 06:50:13 -0600
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 01/42] gpio: ep93xx: split device in multiple
+Message-ID: <ZLqFuWsxhdiP4ZjA@smile.fi.intel.com>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On Fri, 21 Jul 2023 13:10:18 +0200, Alexander Stein wrote:
-> DT nodes use dashes instead of underscore. Adjust pattern to also fix
-> warnings regarding nodes in arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+On Thu, Jul 20, 2023 at 02:29:01PM +0300, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
 > 
-> Fixes: 38ad8b32f3af ("dt-bindings: media: amphion: add amphion video codec bindings")
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This prepares ep93xx SOC gpio to convert into device tree driver:
+> - dropped banks and legacy defines
+> - split AB IRQ and make it shared
 > 
+> We are relying on IRQ number information A, B ports have single shared
+> IRQ, while F port have dedicated IRQ for each line.
+> 
+> Also we had to split single ep93xx platform_device into multiple, one
+> for each port, without this we can't do a full working transition from
+> legacy platform code into device tree capable. All GPIO_LOOKUP were
+> change to match new chip namings.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+...
 
-yamllint warnings/errors:
+> -static void ep93xx_gpio_ab_irq_handler(struct irq_desc *desc)
+> +static u32 ep93xx_gpio_ab_irq_handler(struct gpio_chip *gc)
+>  {
+> -	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+> -	struct ep93xx_gpio *epg = gpiochip_get_data(gc);
+> -	struct irq_chip *irqchip = irq_desc_get_chip(desc);
+> +	struct ep93xx_gpio_irq_chip *eic = to_ep93xx_gpio_irq_chip(gc);
+>  	unsigned long stat;
+>  	int offset;
+>  
+> -	chained_irq_enter(irqchip, desc);
+> -
+> -	/*
+> -	 * Dispatch the IRQs to the irqdomain of each A and B
+> -	 * gpiochip irqdomains depending on what has fired.
+> -	 * The tricky part is that the IRQ line is shared
+> -	 * between bank A and B and each has their own gpiochip.
+> -	 */
+> -	stat = readb(epg->base + EP93XX_GPIO_A_INT_STATUS);
+> +	stat = readb(eic->base + EP93XX_INT_STATUS_OFFSET);
+>  	for_each_set_bit(offset, &stat, 8)
+> -		generic_handle_domain_irq(epg->gc[0].gc.irq.domain,
+> -					  offset);
+> +		generic_handle_domain_irq(gc->irq.domain, offset);
+>  
+> -	stat = readb(epg->base + EP93XX_GPIO_B_INT_STATUS);
+> -	for_each_set_bit(offset, &stat, 8)
+> -		generic_handle_domain_irq(epg->gc[1].gc.irq.domain,
+> -					  offset);
+> +	return stat;
+> +}
+>  
+> -	chained_irq_exit(irqchip, desc);
+> +static irqreturn_t ep93xx_ab_irq_handler(int irq, void *dev_id)
+> +{
+> +	return IRQ_RETVAL(ep93xx_gpio_ab_irq_handler(dev_id));
+>  }
+>  
+>  static void ep93xx_gpio_f_irq_handler(struct irq_desc *desc)
+>  {
+> -	/*
+> -	 * map discontiguous hw irq range to continuous sw irq range:
+> -	 *
+> -	 *  IRQ_EP93XX_GPIO{0..7}MUX -> EP93XX_GPIO_LINE_F{0..7}
+> -	 */
+>  	struct irq_chip *irqchip = irq_desc_get_chip(desc);
+> -	unsigned int irq = irq_desc_get_irq(desc);
+> -	int port_f_idx = (irq & 7) ^ 4; /* {20..23,48..51} -> {0..7} */
+> -	int gpio_irq = EP93XX_GPIO_F_IRQ_BASE + port_f_idx;
+> +	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+> +	struct gpio_irq_chip *gic = &gc->irq;
+> +	unsigned int parent = irq_desc_get_irq(desc);
+> +	unsigned int i;
+>  
+>  	chained_irq_enter(irqchip, desc);
+> -	generic_handle_irq(gpio_irq);
+> +	for (i = 0; i < gic->num_parents; i++)
+> +		if (gic->parents[i] == parent)
+> +			break;
+> +
+> +	if (i < gic->num_parents)
+> +		generic_handle_irq(irq_find_mapping(gc->irq.domain, i));
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/amphion,vpu.example.dtb: vpu@2c000000: 'vpu_core@2d080000', 'vpu_core@2d090000', 'vpu_core@2d0a0000' do not match any of the regexes: '^mailbox@[0-9a-f]+$', '^vpu-core@[0-9a-f]+$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/media/amphion,vpu.yaml#
+Can we use
 
-doc reference errors (make refcheckdocs):
+		generic_handle_domain_irq(gc->irq.domain, i);
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230721111020.1234278-1-alexander.stein@ew.tq-group.com
+here as well?
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+>  	chained_irq_exit(irqchip, desc);
+>  }
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+...
 
-pip3 install dtschema --upgrade
+> -	int offset = d->irq & 7;
+> +	int offset = irqd_to_hwirq(d);
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+	irq_hw_number_t ?
+
+>  	irq_flow_handler_t handler;
+
+...
+
+> +	int ret, irq, i = 0;
+
+What do you need this assignment for?
+
+...
+
+> +		ret = devm_request_irq(dev, irq,
+> +				ep93xx_ab_irq_handler,
+
+It can be located on the previous line.
+
+> +				IRQF_SHARED, gc->label, gc);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "error requesting IRQ : %d\n", irq);
+
+Drop duplicating word 'error' in the message.
+Space is not needed before colon.
+
+...
+
+> +	/* TODO: replace with handle_bad_irq once we are fully hierarchical */
+
+To be pedantic: handle_bad_irq()
+
+> +	gc->label = dev_name(&pdev->dev);
+> +	if (platform_irq_count(pdev) > 0) {
+> +		dev_dbg(&pdev->dev, "setting up irqs for %s\n", dev_name(&pdev->dev));
+> +		ret = ep93xx_setup_irqs(pdev, egc);
+> +		if (ret)
+
+> +			dev_err(&pdev->dev, "setup irqs failed for %s\n", dev_name(&pdev->dev));
+
+What's the point to print dev name twice? Esp. taking into account
+gc->label assignment above. Why not use dev_err_probe() to unify
+the format of the messages from ->probe()?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
