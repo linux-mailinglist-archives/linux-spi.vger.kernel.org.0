@@ -2,201 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4D375CF0C
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jul 2023 18:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D456E75CF49
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jul 2023 18:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbjGUQ04 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jul 2023 12:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S231699AbjGUQai (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jul 2023 12:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjGUQ02 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jul 2023 12:26:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D090F46A1;
-        Fri, 21 Jul 2023 09:23:24 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="453435610"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="453435610"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 09:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="848870377"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="848870377"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2023 09:21:03 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qMssF-00CCBV-0a;
-        Fri, 21 Jul 2023 19:20:59 +0300
-Date:   Fri, 21 Jul 2023 19:20:58 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 22/42] dma: cirrus: add DT support for Cirrus EP93xx
-Message-ID: <ZLqwajir6kFLgbcm@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-22-3d63a5f1103e@maquefel.me>
+        with ESMTP id S230354AbjGUQaR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jul 2023 12:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E080830D6;
+        Fri, 21 Jul 2023 09:28:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F6FF61D2A;
+        Fri, 21 Jul 2023 16:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC39C433C8;
+        Fri, 21 Jul 2023 16:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689956808;
+        bh=iKn+OfuYg0Q2K9Wfol/dvpn8rCd3C49VeDo70O8Lqi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qL32q1cvGF+Ksf+s+pmMKZhN+4IMrRlywFKRaFA3QW21CTe1TtIChVgCHWsa6jr8j
+         inEQlmPYesd0GZUMsJsaOzhBMDjZrgYGQqVM67n3pe+seUhN8t2kZtx/YtuIqaqpTy
+         Eg6vcgfoLrokzqq657B+ssn5oTZMMCBV6DR6i95UQ14oaZsKzrliKyP6YZHmnCo3b+
+         TA5PIjYcb6hp3MkEc4sR2yORD+LTiqWkse4onxBCuKVWCnQ3lJEOIzUdRp29dF7fzp
+         4nrH0j1w71bFZcCnQTTFup+Wfc0z3RkFqkvnS3APzD+6/1fAOyEGew9Y5aFMBXArw4
+         FfNKJDL8/GoRg==
+Date:   Fri, 21 Jul 2023 17:26:41 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, vkoul@kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 0/6] Add cs42l43 PC focused SoundWire CODEC
+Message-ID: <20230721162641.GD1908841@google.com>
+References: <20230619095623.1987742-1-ckeepax@opensource.cirrus.com>
+ <168992615492.1924396.13464534208592126033.b4-ty@kernel.org>
+ <20230721075854.GA1908841@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-22-3d63a5f1103e@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230721075854.GA1908841@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:29:22PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Fri, 21 Jul 2023, Lee Jones wrote:
+
+> On Fri, 21 Jul 2023, Lee Jones wrote:
 > 
-> - drop subsys_initcall code
-> - add OF ID match table with data
-> - add of_probe for device tree
+> > On Mon, 19 Jun 2023 10:56:17 +0100, Charles Keepax wrote:
+> > > This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+> > > SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+> > > branch.
+> > > 
+> > > Thanks,
+> > > Charles
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [2/6] dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+> >       commit: e62ba8443b11f12b45c61444249458a2f8c2f4ef
+> > [3/6] mfd: cs42l43: Add support for cs42l43 core driver
+> >       commit: 843079209e1506c94fde797fc0ff914e2c9e6645
+> > [4/6] pinctrl: cs42l43: Add support for the cs42l43
+> >       commit: 85f034dd7ff0a66aded653cc91dbc406fba7cf1a
+> 
+> Pull-request to follow.
 
-...
-
-> +#include <linux/of_device.h>
-
-Why?
-
-...
-
-> +#ifdef CONFIG_OF
-
-Why this ugly ifdeffery?
-
-...
-
-> +	data = of_device_get_match_data(&pdev->dev);
-
-device_get_match_data()
-
-> +	if (!data)
-> +		return ERR_PTR(dev_err_probe(&pdev->dev, -ENODEV, "No device match found\n"));
-
-...
-
-> +	edma = devm_kzalloc(&pdev->dev,
-> +					  struct_size(edma, channels, data->num_channels),
-> +				      GFP_KERNEL);
-
-Something wrong with indentation. Not the first time, please check all your
-patches for this kind of issues.
-
-> +		return ERR_PTR(-ENOMEM);
-
-...
-
-> +		edmac->regs = devm_platform_ioremap_resource(pdev, i);
-
-No check?
-
-> +		edmac->irq = platform_get_irq(pdev, i);
-
-No check?
-
-> +		edmac->edma = edma;
-> +
-> +		edmac->clk = of_clk_get(np, i);
-
-> +
-
-Redundant blank line.
-
-Why one of devm_clk_get*() can't be called?
-
-> +		if (IS_ERR(edmac->clk)) {
-> +			dev_warn(&pdev->dev, "failed to get clock\n");
-> +			continue;
-> +		}
-
-...
-
-> +	if (platform_get_device_id(pdev))
-> +		edma = ep93xx_init_from_pdata(pdev);
-> +	else
-> +		edma = ep93xx_dma_of_probe(pdev);
-
-> +
-
-Unneeded blank line.
-
-> +	if (!edma)
-> +		return PTR_ERR(edma);
-
-...
-
-> --- a/include/linux/platform_data/dma-ep93xx.h
-> +++ b/include/linux/platform_data/dma-ep93xx.h
-
->  #include <linux/types.h>
->  #include <linux/dmaengine.h>
->  #include <linux/dma-mapping.h>
-
-> +#include <linux/of.h>
-
-property.h.
-
-...
-
-> +	if (of_device_is_compatible(dev_of_node(chan->device->dev), "cirrus,ep9301-dma-m2p"))
-> +		return true;
-> +
-
-device_is_compatible()
+Doesn't build without the Soundwire header changes.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
