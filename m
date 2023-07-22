@@ -2,124 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EDD75CFEA
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jul 2023 18:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCF875DBB3
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jul 2023 12:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjGUQn3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jul 2023 12:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S229682AbjGVKXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 22 Jul 2023 06:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjGUQnY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jul 2023 12:43:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689E3273E;
-        Fri, 21 Jul 2023 09:43:13 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="351946345"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="351946345"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 09:42:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="728169179"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="728169179"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jul 2023 09:42:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qMtDF-00Cx3r-2P;
-        Fri, 21 Jul 2023 19:42:41 +0300
-Date:   Fri, 21 Jul 2023 19:42:41 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229487AbjGVKXi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jul 2023 06:23:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D634526A2;
+        Sat, 22 Jul 2023 03:23:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EBB608CC;
+        Sat, 22 Jul 2023 10:23:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37DDC433C7;
+        Sat, 22 Jul 2023 10:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690021416;
+        bh=LVpry3JQcRfweSWVW+qHmCd7TVCS1vwarNOOKIiPAhM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AIv4wCuKGYeEXAznxf8l8vffBm9GHK8UAZAOPq1rr83YBrsqs6UF6qHk/7JM31fXS
+         GlyLFnxPcbL7aZm2u7MlIpLPxlrzhkk5QyxSJ5iqyJfCuzN5ijeCUee3gA89rZN9/H
+         2fTtWuh6wzypd8PFHUKgRMy/BA7xc03kzcDhTZJ9NHMBJiBClmOCGbNWNrATcvcoBS
+         fp4IHgCNSRTbNQA83/c8q8NCcLh0cwfQzPcEOLs/f87asO3seS11mx6A3NeytmnHKU
+         aoM3vZCZvFEaYJpDAwC3/Mkhc0JGznk18VTWjF1UD1dxME8lGaZvt5Tf2gDaUzKuiK
+         YbOsyCf1TqdVw==
+Date:   Sat, 22 Jul 2023 11:23:30 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Ming Qian <ming.qian@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 18/42] spi: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <ZLq1gQKWWE/2WCYd@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: media: amphion: Fix subnode pattern
+Message-ID: <20230722-freedom-finer-bb9ec5b4de3f@spud>
+References: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5O67FFq6sP1I1WLQ"
 Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:29:18PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> - add OF ID match table
-> 
-> Instead of platform use_dma flag - check if DT dmas property is present to
-> decide to use dma ot not.
 
-...
+--5O67FFq6sP1I1WLQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +#ifdef CONFIG_OF
+On Fri, Jul 21, 2023 at 01:10:18PM +0200, Alexander Stein wrote:
+> DT nodes use dashes instead of underscore. Adjust pattern to also fix
+> warnings regarding nodes in arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+>=20
+> Fixes: 38ad8b32f3af ("dt-bindings: media: amphion: add amphion video code=
+c bindings")
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  Documentation/devicetree/bindings/media/amphion,vpu.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/amphion,vpu.yaml b/D=
+ocumentation/devicetree/bindings/media/amphion,vpu.yaml
+> index a9d80eaeeeb6..90d273b9fdd7 100644
+> --- a/Documentation/devicetree/bindings/media/amphion,vpu.yaml
+> +++ b/Documentation/devicetree/bindings/media/amphion,vpu.yaml
+> @@ -47,7 +47,7 @@ patternProperties:
+>      $ref: ../mailbox/fsl,mu.yaml#
+> =20
+> =20
+> -  "^vpu_core@[0-9a-f]+$":
+> +  "^vpu-core@[0-9a-f]+$":
+>      description:
+>        Each core correspond a decoder or encoder, need to configure them
+>        separately. NXP i.MX8QM SoC has one decoder and two encoder, i.MX8=
+QXP SoC
 
-Why ifdeffery?
+Per the bot, you have some examples you need to update as a result.
 
-Can't it be first checked for firmware provided info and fell back to platdata?
+Thanks,
+Conor.
 
-> +static struct ep93xx_spi_info dt_spi_info;
+--5O67FFq6sP1I1WLQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-...
+-----BEGIN PGP SIGNATURE-----
 
-> +#endif
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZLuuIgAKCRB4tDGHoIJi
+0taSAQCKo+Tet5Wt2GlgR1ixWbP/Ut4IFcz4lV/NxuNARBpqkAD/Y+sZPWaywqIi
+6gz4LZbtFx4c0/8rUZETje42Zmmh1wg=
+=27sY
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--5O67FFq6sP1I1WLQ--
