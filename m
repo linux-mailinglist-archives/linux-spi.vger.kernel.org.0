@@ -2,120 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCF875DBB3
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jul 2023 12:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B7375DD47
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jul 2023 17:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjGVKXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 22 Jul 2023 06:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S229615AbjGVPt3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 22 Jul 2023 11:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGVKXi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jul 2023 06:23:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D634526A2;
-        Sat, 22 Jul 2023 03:23:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EBB608CC;
-        Sat, 22 Jul 2023 10:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37DDC433C7;
-        Sat, 22 Jul 2023 10:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690021416;
-        bh=LVpry3JQcRfweSWVW+qHmCd7TVCS1vwarNOOKIiPAhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AIv4wCuKGYeEXAznxf8l8vffBm9GHK8UAZAOPq1rr83YBrsqs6UF6qHk/7JM31fXS
-         GlyLFnxPcbL7aZm2u7MlIpLPxlrzhkk5QyxSJ5iqyJfCuzN5ijeCUee3gA89rZN9/H
-         2fTtWuh6wzypd8PFHUKgRMy/BA7xc03kzcDhTZJ9NHMBJiBClmOCGbNWNrATcvcoBS
-         fp4IHgCNSRTbNQA83/c8q8NCcLh0cwfQzPcEOLs/f87asO3seS11mx6A3NeytmnHKU
-         aoM3vZCZvFEaYJpDAwC3/Mkhc0JGznk18VTWjF1UD1dxME8lGaZvt5Tf2gDaUzKuiK
-         YbOsyCf1TqdVw==
-Date:   Sat, 22 Jul 2023 11:23:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Ming Qian <ming.qian@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: media: amphion: Fix subnode pattern
-Message-ID: <20230722-freedom-finer-bb9ec5b4de3f@spud>
-References: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S229588AbjGVPt2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jul 2023 11:49:28 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD06C1A7;
+        Sat, 22 Jul 2023 08:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1690040963;
+        bh=PNBFOjg7o3EsVn1+13sq+jz+GGQ7ZM8w4tTYDhjxZYo=;
+        h=From:To:Cc:Subject:Date;
+        b=RiOjgJXYjXTk/4Cdv/9cqhlA6q0RhfJzt8H25VE1XjHkQWepCUjzAgcCS/Y2Hs5cL
+         rM+Aaz7ugKtJmU+e7PlZ0TfW6xnREq7agfuLIWgMzr1BSc+DveEjUcim3DRGe5KPXu
+         qIWpiMn/suJp/ghpGMdiXjsgJO8KONmUMULLpFb0=
+Received: from localhost.localdomain ([220.243.131.5])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id C4F0A816; Sat, 22 Jul 2023 23:49:15 +0800
+X-QQ-mid: xmsmtpt1690040955tzlo14pwo
+Message-ID: <tencent_71FC162D589E4788C2152AAC84CD8D5C6D06@qq.com>
+X-QQ-XMAILINFO: OZyNKfa8hWsKegdNMjRht8zBupmv5rz+fjyGdrH6G3cBWhYH6H6WXJlbSFGvHn
+         89H3NJtLTaVY+GVnsgQ7vtKLDppY4P5dU6hsbsogyavp3ZlciYpbgGP8p6Us7637iNX5ogmZGZuL
+         Nf7M+wlxG4vkYhJGALLPzU4fAg1SpJG1Wwy/jkt1ivsbVOvv2yPjcVlGs3S4TvJqsfm7Gro3MINL
+         yVajRMUanIsgylVsrh/A/6TG426FvD83WW46bXX7mw3d1BE8qCy8QmULuFwZKGDlfj0k8rlX2ejc
+         jhBliTTBJzS3h+m1Mbm9/WnlnGWeRtwfqPypmWbWkkLop3XDPfBfp8387ZMV0M3gf0IAgCrvgD3/
+         UUIACTP49iibKci/o92/ujiOqF+dDVrp1RUzhN338p9/dr36lPh2LjJwt2aC6FRtP/MDkp9y9and
+         2tt87FYVL1FbzsiCFTIDzD/LKP4VQD1dGiEmLbjHLOjdu4/8bWRi/KnNyMiBVljG7t4fOrAO2tNL
+         /NibwyXCM1rKtuVsR8KPTLoSYE+KaCJaTMhLAi5tsifbQiNbIYKGQvLzXvqWRqalEyMv4ws/M4k3
+         oVwPJwgVaO7eg3SxAb2Jv4u0OjjRpvaxJ4aQRHjGAHANa/+VQ2J69iNPNgKVrSLquLOLOUpsWnTF
+         gBtDW0dkjG55rjZlsmfjkfi1WoWvXqc/ypLgpvRhpEgfp1PJsc5zizrFev/Y80oxRlmH5dXKZRjz
+         3gFfR8wXON4IQFZl0BwmM9PTbOsz3NbVJeNDTbfwi4hwZtP2hn1P3NvcyDPGYjNzKFtuMRcPFUQN
+         2sZDG9G7GFC5JFUfdvuMjy57rANAN6XFXcrM9NZc5N64kVwdNOuEUE6Xm239kt/eqK+pZFN/uCU6
+         LkZ2zn4mvm67mC2Vd2CTBQrwK1bef4xc1D4zA8gKQ6nR3MFtDjwfryC9e1xByTK02mf3i6ZOHYlf
+         ZfYQCPJRs2kSBn3FvIc/tUNhlGMFICT+IlKFaVQ0Ne/nRW9vJMLoRz1cUjdyB/hTAt7dxL8FU7iL
+         dwwN8/hw904FXCQHQqYO+n4moQsos=
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     thierry.reding@gmail.com
+Cc:     ldewangan@nvidia.com, broonie@kernel.org, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH v2] spi: tegra20-sflash: fix to check return value of platform_get_irq() in tegra_sflash_probe()
+Date:   Sat, 22 Jul 2023 23:49:09 +0800
+X-OQ-MSGID: <20230722154909.22413-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5O67FFq6sP1I1WLQ"
-Content-Disposition: inline
-In-Reply-To: <20230721111020.1234278-1-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The platform_get_irq might be failed and return a negative result. So
+there should have an error handling code.
 
---5O67FFq6sP1I1WLQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixed this by adding an error handling code.
 
-On Fri, Jul 21, 2023 at 01:10:18PM +0200, Alexander Stein wrote:
-> DT nodes use dashes instead of underscore. Adjust pattern to also fix
-> warnings regarding nodes in arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
->=20
-> Fixes: 38ad8b32f3af ("dt-bindings: media: amphion: add amphion video code=
-c bindings")
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/media/amphion,vpu.yaml b/D=
-ocumentation/devicetree/bindings/media/amphion,vpu.yaml
-> index a9d80eaeeeb6..90d273b9fdd7 100644
-> --- a/Documentation/devicetree/bindings/media/amphion,vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/amphion,vpu.yaml
-> @@ -47,7 +47,7 @@ patternProperties:
->      $ref: ../mailbox/fsl,mu.yaml#
-> =20
-> =20
-> -  "^vpu_core@[0-9a-f]+$":
-> +  "^vpu-core@[0-9a-f]+$":
->      description:
->        Each core correspond a decoder or encoder, need to configure them
->        separately. NXP i.MX8QM SoC has one decoder and two encoder, i.MX8=
-QXP SoC
+Fixes: 8528547bcc33 ("spi: tegra: add spi driver for sflash controller")
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+---
+Changes in v2:
+- reworded the commit message.
 
-Per the bot, you have some examples you need to update as a result.
+ drivers/spi/spi-tegra20-sflash.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Thanks,
-Conor.
+diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
+index 4286310628a2..0c5507473f97 100644
+--- a/drivers/spi/spi-tegra20-sflash.c
++++ b/drivers/spi/spi-tegra20-sflash.c
+@@ -455,7 +455,11 @@ static int tegra_sflash_probe(struct platform_device *pdev)
+ 		goto exit_free_master;
+ 	}
+ 
+-	tsd->irq = platform_get_irq(pdev, 0);
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto exit_free_master;
++	tsd->irq = ret;
++
+ 	ret = request_irq(tsd->irq, tegra_sflash_isr, 0,
+ 			dev_name(&pdev->dev), tsd);
+ 	if (ret < 0) {
+-- 
+2.41.0
 
---5O67FFq6sP1I1WLQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZLuuIgAKCRB4tDGHoIJi
-0taSAQCKo+Tet5Wt2GlgR1ixWbP/Ut4IFcz4lV/NxuNARBpqkAD/Y+sZPWaywqIi
-6gz4LZbtFx4c0/8rUZETje42Zmmh1wg=
-=27sY
------END PGP SIGNATURE-----
-
---5O67FFq6sP1I1WLQ--
