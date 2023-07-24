@@ -2,62 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B7375DD47
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jul 2023 17:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A382075EC39
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jul 2023 09:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjGVPt3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 22 Jul 2023 11:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S230301AbjGXHJV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jul 2023 03:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjGVPt2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jul 2023 11:49:28 -0400
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD06C1A7;
-        Sat, 22 Jul 2023 08:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1690040963;
-        bh=PNBFOjg7o3EsVn1+13sq+jz+GGQ7ZM8w4tTYDhjxZYo=;
-        h=From:To:Cc:Subject:Date;
-        b=RiOjgJXYjXTk/4Cdv/9cqhlA6q0RhfJzt8H25VE1XjHkQWepCUjzAgcCS/Y2Hs5cL
-         rM+Aaz7ugKtJmU+e7PlZ0TfW6xnREq7agfuLIWgMzr1BSc+DveEjUcim3DRGe5KPXu
-         qIWpiMn/suJp/ghpGMdiXjsgJO8KONmUMULLpFb0=
-Received: from localhost.localdomain ([220.243.131.5])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id C4F0A816; Sat, 22 Jul 2023 23:49:15 +0800
-X-QQ-mid: xmsmtpt1690040955tzlo14pwo
-Message-ID: <tencent_71FC162D589E4788C2152AAC84CD8D5C6D06@qq.com>
-X-QQ-XMAILINFO: OZyNKfa8hWsKegdNMjRht8zBupmv5rz+fjyGdrH6G3cBWhYH6H6WXJlbSFGvHn
-         89H3NJtLTaVY+GVnsgQ7vtKLDppY4P5dU6hsbsogyavp3ZlciYpbgGP8p6Us7637iNX5ogmZGZuL
-         Nf7M+wlxG4vkYhJGALLPzU4fAg1SpJG1Wwy/jkt1ivsbVOvv2yPjcVlGs3S4TvJqsfm7Gro3MINL
-         yVajRMUanIsgylVsrh/A/6TG426FvD83WW46bXX7mw3d1BE8qCy8QmULuFwZKGDlfj0k8rlX2ejc
-         jhBliTTBJzS3h+m1Mbm9/WnlnGWeRtwfqPypmWbWkkLop3XDPfBfp8387ZMV0M3gf0IAgCrvgD3/
-         UUIACTP49iibKci/o92/ujiOqF+dDVrp1RUzhN338p9/dr36lPh2LjJwt2aC6FRtP/MDkp9y9and
-         2tt87FYVL1FbzsiCFTIDzD/LKP4VQD1dGiEmLbjHLOjdu4/8bWRi/KnNyMiBVljG7t4fOrAO2tNL
-         /NibwyXCM1rKtuVsR8KPTLoSYE+KaCJaTMhLAi5tsifbQiNbIYKGQvLzXvqWRqalEyMv4ws/M4k3
-         oVwPJwgVaO7eg3SxAb2Jv4u0OjjRpvaxJ4aQRHjGAHANa/+VQ2J69iNPNgKVrSLquLOLOUpsWnTF
-         gBtDW0dkjG55rjZlsmfjkfi1WoWvXqc/ypLgpvRhpEgfp1PJsc5zizrFev/Y80oxRlmH5dXKZRjz
-         3gFfR8wXON4IQFZl0BwmM9PTbOsz3NbVJeNDTbfwi4hwZtP2hn1P3NvcyDPGYjNzKFtuMRcPFUQN
-         2sZDG9G7GFC5JFUfdvuMjy57rANAN6XFXcrM9NZc5N64kVwdNOuEUE6Xm239kt/eqK+pZFN/uCU6
-         LkZ2zn4mvm67mC2Vd2CTBQrwK1bef4xc1D4zA8gKQ6nR3MFtDjwfryC9e1xByTK02mf3i6ZOHYlf
-         ZfYQCPJRs2kSBn3FvIc/tUNhlGMFICT+IlKFaVQ0Ne/nRW9vJMLoRz1cUjdyB/hTAt7dxL8FU7iL
-         dwwN8/hw904FXCQHQqYO+n4moQsos=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     thierry.reding@gmail.com
-Cc:     ldewangan@nvidia.com, broonie@kernel.org, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH v2] spi: tegra20-sflash: fix to check return value of platform_get_irq() in tegra_sflash_probe()
-Date:   Sat, 22 Jul 2023 23:49:09 +0800
-X-OQ-MSGID: <20230722154909.22413-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S229468AbjGXHJT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jul 2023 03:09:19 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22C6138;
+        Mon, 24 Jul 2023 00:09:14 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C2E524000E;
+        Mon, 24 Jul 2023 07:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1690182552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0OTdgWQ6Vo/4tl1ZM7En0YdjITPLKGIP2IIxkkPFJRM=;
+        b=iC5ZIY44VFrCSUNoeMIdYmOyqSrlrW7N4tyY+Hq53oXBVph3jCQ5ij8fsDynsYh6NybKfF
+        47iBUwR964ggu52YB13yaU1E18wok2aDQAXdbpXfZnCVzqeybMcvNBEm04M8MJv49vz912
+        60p20TKBhztddQMV6EZbSo0vTLzFb3Ok+FWErn92iDiDFjDyPmqRh1JKdYw5xT3hwpwVlV
+        u4k2GthKUnBFuRNrRP/XoPSerupU1HIaiVySzO/QpWk35FaiLI3dwdIhQ2brWGTyOPPUCM
+        8E3/Ier83smwYkYCv/LsZ20OWFpB5I2g8A5epoX659Pa/Omr3Rckh60nqnZ+5A==
+Date:   Mon, 24 Jul 2023 09:09:02 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Andy Shevchenko <andy@kernel.org>
+Cc:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 24/42] mtd: nand: add support for ts72xx
+Message-ID: <20230724090902.679ea56d@xps-13>
+In-Reply-To: <ZLqx+Osn3gcHjUph@smile.fi.intel.com>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+        <20230605-ep93xx-v3-24-3d63a5f1103e@maquefel.me>
+        <ZLqx+Osn3gcHjUph@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,37 +99,53 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The platform_get_irq might be failed and return a negative result. So
-there should have an error handling code.
+Hi Andy,
 
-Fixed this by adding an error handling code.
+> > +static int ts72xx_nand_attach_chip(struct nand_chip *chip)
+> > +{
+> > +	switch (chip->ecc.engine_type) {
+> > +	case NAND_ECC_ENGINE_TYPE_SOFT:
+> > +		if (chip->ecc.algo =3D=3D NAND_ECC_ALGO_UNKNOWN)
+> > +			chip->ecc.algo =3D NAND_ECC_ALGO_HAMMING;
+> > +		break;
+> > +	case NAND_ECC_ENGINE_TYPE_ON_HOST:
+> > +		return -EINVAL;
+> > +	default: =20
+>=20
+> > +		break; =20
+>=20
+> Here it will return 0, is it a problem?
 
-Fixes: 8528547bcc33 ("spi: tegra: add spi driver for sflash controller")
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
-Changes in v2:
-- reworded the commit message.
+Seems ok, there are two other situations: on-die ECC engine and no ECC
+engine, both do not require any specific handling on the controller
+side.
 
- drivers/spi/spi-tegra20-sflash.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> > +	}
+> > +
+> > +	return 0;
+> > +} =20
+>=20
+> ...
+>=20
+> > +static void ts72xx_nand_remove(struct platform_device *pdev)
+> > +{
+> > +	struct ts72xx_nand_data *data =3D platform_get_drvdata(pdev);
+> > +	struct nand_chip *chip =3D &data->chip;
+> > +	int ret;
+> > +
+> > +	ret =3D mtd_device_unregister(nand_to_mtd(chip)); =20
+>=20
+> > +	WARN_ON(ret); =20
+>=20
+> Why?!  Is it like this in other MTD drivers?
 
-diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
-index 4286310628a2..0c5507473f97 100644
---- a/drivers/spi/spi-tegra20-sflash.c
-+++ b/drivers/spi/spi-tegra20-sflash.c
-@@ -455,7 +455,11 @@ static int tegra_sflash_probe(struct platform_device *pdev)
- 		goto exit_free_master;
- 	}
- 
--	tsd->irq = platform_get_irq(pdev, 0);
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto exit_free_master;
-+	tsd->irq = ret;
-+
- 	ret = request_irq(tsd->irq, tegra_sflash_isr, 0,
- 			dev_name(&pdev->dev), tsd);
- 	if (ret < 0) {
--- 
-2.41.0
+Yes, we did not yet change the internal machinery to return void, and
+we don't want people to think getting errors there is normal.
 
+> > +	nand_cleanup(chip);
+> > +} =20
+>=20
+
+Thanks,
+Miqu=C3=A8l
