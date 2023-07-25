@@ -2,134 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887427620E6
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 20:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258AA762145
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 20:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjGYSDk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jul 2023 14:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S229793AbjGYSYQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jul 2023 14:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjGYSDj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 14:03:39 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2652119
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 11:03:38 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b8ad907ba4so30470385ad.0
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 11:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690308217; x=1690913017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HRQYZPtdJ90/O/wdYsOCcbEwOxH1iCaDxABLg2VMAnc=;
-        b=O7H+ZLIoNcQEd+SafX694hZEyd6kL9iSaUGkuyFgwYR24O5btNklcnGPDRxAuZzppw
-         qv5UqwC+rlTIxCGA2BxWpYz+A5cAw4KDBZ6eGs2c96kObajRC+mwS/ZAVnk9NEZD5z4d
-         vrNIriah0F8xAYzNtiDgDB87bhkru80BZa6ro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690308217; x=1690913017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HRQYZPtdJ90/O/wdYsOCcbEwOxH1iCaDxABLg2VMAnc=;
-        b=Nyq/JfHvPnk/jVnn62PJMxXjiB1ZML3QMQBPwhjSR3IfNohkJpr12GV6Je2p4wau8p
-         3tf2o7CK7fhmRYIe1EYL9ueXy2hl5auBagsKpOhO0WiuWxGt43I3jcl6YGTyqS6/ZdSM
-         UDYr9tA8shmf3as1o81Psp6VyQxiN29X0ANGNpVQVhSU72kTNxBG7Y1V9171JNYWmXWu
-         PcfvTbFV8zeaEg+cxHDWZW9xfIi7j20mF8DPMYW6Ht2V4X/I4a5FhurWa0E2SsvPAmw8
-         lAXwNAQG4/WdW9zmsNq+W4YFGznTkOcaBv41rdHF7IuK4tC1qMkXOqApLRL6AxSUjnLw
-         GRwA==
-X-Gm-Message-State: ABy/qLbxZ/HAxq2P2ck009WP2aVKWHMO9s/qhb7MH/OnBhg8N0yteW/K
-        GzjGQUqcNsyWm6ZSDN3++/TpJw==
-X-Google-Smtp-Source: APBJJlEsqf6G0ev6P/b6k5o3OywK6DpeA91QLSmSatgQZy4Y3+LKHFLS10qE4bOW2mdt0NxUKIQVfA==
-X-Received: by 2002:a17:902:ab8e:b0:1b8:7d0d:5ac5 with SMTP id f14-20020a170902ab8e00b001b87d0d5ac5mr13716plr.50.1690308217621;
-        Tue, 25 Jul 2023 11:03:37 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:c363:4681:f5b8:301])
-        by smtp.gmail.com with ESMTPSA id jl14-20020a170903134e00b001b54a88e4a6sm11305254plb.51.2023.07.25.11.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 11:03:36 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S229478AbjGYSYP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 14:24:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047A41FC1;
+        Tue, 25 Jul 2023 11:24:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E11361862;
+        Tue, 25 Jul 2023 18:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4461C433C8;
+        Tue, 25 Jul 2023 18:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690309453;
+        bh=WnZ1MywMJ9vsHmTwWNSt2lizDXojVU7oDoLa/kmN9kU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nqGpAhZNTlIOpXKfZt/IhpyUjJVGynu7+sdfijWYrxoUBVn7xQJcqhC5ziPcA3ZkO
+         9J19kV/+wKuu9KJN8UXPgtfDp+jwdjEdHkc+i5eOZnFD7z+EpmR9yrbkEE2M5NjaSO
+         D2V0SqGwwyo5a6nn/UIqmRBZgo5dLzO178h0vjC2rBsrsoP5toThvJFjdSoKtix7LY
+         momzFRNC1nYP/8w3RqHzInJHvOaSuSf3I7dAO4HLUgOG8tH4Bwqc9z3zO2X0L0vOFl
+         482+9BTo0IiAlUMq90cLyi850nVYCzBJV5r8Nz8t/wi4jug0jY9sFLmR8XB/PNJ/Oc
+         cYgEKJ7CnSUQQ==
+Date:   Tue, 25 Jul 2023 19:24:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
 Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org
-Subject: [PATCH 2/2] spi: spi-qcom-qspi: Add mem_ops to avoid PIO for badly sized reads
-Date:   Tue, 25 Jul 2023 11:02:27 -0700
-Message-ID: <20230725110226.2.Id4a39804e01e4a06dae9b73fd2a5194c4c7ea453@changeid>
-X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-In-Reply-To: <20230725110226.1.Ia2f980fc7cd0b831e633391f0bb1272914d8f381@changeid>
+Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add mem_ops to avoid PIO for
+ badly sized reads
+Message-ID: <1e7225c2-3ac6-43d0-a1cc-e9a207d263d4@sirena.org.uk>
 References: <20230725110226.1.Ia2f980fc7cd0b831e633391f0bb1272914d8f381@changeid>
+ <20230725110226.2.Id4a39804e01e4a06dae9b73fd2a5194c4c7ea453@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SVnmq4fcVsYJnkFF"
+Content-Disposition: inline
+In-Reply-To: <20230725110226.2.Id4a39804e01e4a06dae9b73fd2a5194c4c7ea453@changeid>
+X-Cookie: Happiness is the greatest good.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In the patch ("spi: spi-qcom-qspi: Fallback to PIO for xfers that
-aren't multiples of 4 bytes") we detect reads that we can't handle
-properly and fallback to PIO mode. While that's correct behavior, we
-can do better by adding "spi_controller_mem_ops" for our
-controller. Once we do this then the caller will give us a transfer
-that's a multiple of 4-bytes so we can DMA.
 
-Fixes: b5762d95607e ("spi: spi-qcom-qspi: Add DMA mode support")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+--SVnmq4fcVsYJnkFF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- drivers/spi/spi-qcom-qspi.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On Tue, Jul 25, 2023 at 11:02:27AM -0700, Douglas Anderson wrote:
+> In the patch ("spi: spi-qcom-qspi: Fallback to PIO for xfers that
+> aren't multiples of 4 bytes") we detect reads that we can't handle
+> properly and fallback to PIO mode. While that's correct behavior, we
+> can do better by adding "spi_controller_mem_ops" for our
+> controller. Once we do this then the caller will give us a transfer
+> that's a multiple of 4-bytes so we can DMA.
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 39b4d8a8107a..b2bbcfd93637 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -659,6 +659,30 @@ static irqreturn_t qcom_qspi_irq(int irq, void *dev_id)
- 	return ret;
- }
- 
-+static int qcom_qspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
-+{
-+	/*
-+	 * If qcom_qspi_can_dma() is going to return false we don't need to
-+	 * adjust anything.
-+	 */
-+	if (op->data.nbytes <= QSPI_MAX_BYTES_FIFO)
-+		return 0;
-+
-+	/*
-+	 * When reading, the transfer needs to be a multiple of 4 bytes so
-+	 * shrink the transfer if that's not true. The caller will then do a
-+	 * second transfer to finish things up.
-+	 */
-+	if (op->data.dir == SPI_MEM_DATA_IN && (op->data.nbytes & 0x3))
-+		op->data.nbytes &= ~0x3;
-+
-+	return 0;
-+}
-+
-+static const struct spi_controller_mem_ops qcom_qspi_mem_ops = {
-+	.adjust_op_size = qcom_qspi_adjust_op_size,
-+};
-+
- static int qcom_qspi_probe(struct platform_device *pdev)
- {
- 	int ret;
-@@ -743,6 +767,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	if (of_property_read_bool(pdev->dev.of_node, "iommus"))
- 		master->can_dma = qcom_qspi_can_dma;
- 	master->auto_runtime_pm = true;
-+	master->mem_ops = &qcom_qspi_mem_ops;
- 
- 	ret = devm_pm_opp_set_clkname(&pdev->dev, "core");
- 	if (ret)
--- 
-2.41.0.487.g6d72f3e995-goog
+This is more of an optimisation for the case where we're using flash -
+if someone has hung some other hardware off the controller (which seems
+reasonable enough if they don't need it for flash) then we'll not use
+the mem_ops.
 
+--SVnmq4fcVsYJnkFF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTAE0cACgkQJNaLcl1U
+h9DQ8gf/blcWhskfPKyQA9bm9rMncitJHYBDO/9Dy0cZv3Gyau8BxK3roKUVteYh
+OsuHjDHVSXNXb6P7dPrezAsdT0bJbryFAH3truRstqLVCkrHMsTY9IPz4LWMWDoZ
+nPD+zIq46tKapKys7UM1RXQX4ai1A6Z1p2BPCHPAiQ1XVuo5dhlMOEsEdgevUSHj
+Kcw740LFPDxNwH6O2zM4XQyokUtdG6ByTEuhxsRfVjWRrIjVfwA7XDGooqfGbNDf
+c2gE3XMSTX8RQnAEPmlfagttfgf0KA/gEXAYjP/0MdsWNzfUgV28Oix+otUm1b1z
+LCPFzyGSOqu4faNxjvoXYlrhhbJjrQ==
+=XHPv
+-----END PGP SIGNATURE-----
+
+--SVnmq4fcVsYJnkFF--
